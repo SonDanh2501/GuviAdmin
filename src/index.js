@@ -7,6 +7,13 @@ import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import reducers from './redux/reducers/rootReducer';
 import rootSaga from './redux/sagas/rootSaga';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '@iconscout/react-unicons';
+
+
+
+
+
 
 const sagaMiddleware = createSagaMiddleware();
 

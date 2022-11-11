@@ -1,48 +1,47 @@
 import React,{useState ,useEffect} from 'react';
 import { useSelector, useDispatch} from 'react-redux';
-import { getCollaborator } from '../../../../redux/selectors/collaborator';
-import "./TableManageCollaborator.scss";
-import  * as actions from '../../../../redux/actions/collaborator';
+import { getCustomer } from '../../../../redux/selectors/customer';
+import "./TableManageUser.scss";
+import  * as actions from '../../../../redux/actions/customerAction';
 import { Table,Row } from 'reactstrap';
 
-export default function TableManageCollaborator() {
+export default function TableManageUser() {
      
-  const [collaborator, setCollaborator] = useState({
+  const [customer, setCustomer] = useState({
      phone: '',
      email: '',
      name: '',
-     birthday:''
+     default_address:''
   });
   const dispatch = useDispatch();
-  const collaborators = useSelector(getCollaborator);
-  console.log("<<<<<<<<<<<<<<<<<<<<CHECK COLLABORATIONS <<<<<<<<<<<<",collaborators);
+  const customers = useSelector(getCustomer);
+  console.log("<<<<<<<<<<<<< CHECK USERRRRRRRRR",customers);
 
   React.useEffect(() => {
-     dispatch(actions.getCollaborators.getCollaboratorsRequest());
+     dispatch(actions.getCustomers.getCustomersRequest());
    }, [dispatch]);
 
   
 return (
 <>
-<Table className='table-manage-collaborator'>
+<Table className='table-manage-user'>
   <thead>
   <tr>
      <th>Email</th>
      <th>Name</th>
      <th>Phone</th>
-     <th>Birthday</th>
+     <th>Address</th>
      <th>Actions</th>
 </tr>
   </thead>
-
   <tbody>
-     {collaborators && collaborators.length >0 && collaborators.map((item,index)=>{
+     {customers && customers.length >0 && customers.map((item,index)=>{
           return (
                <tr key={index} >
                     <td className="table-success"> {item.email}</td>
                     <td className="table-primary "> {item.name}</td>
                     <td className="table-secondary"> {item.phone}</td>
-                    <td className="table-danger"> {item.birthday}</td>
+                    <td className="table-danger"> {item.default_address}</td>
                     <td>											
                                                        <button
 												className="btn-edit"
@@ -60,9 +59,9 @@ return (
                </tr>
           )
      })}
+
   </tbody>
 
-  
 </Table>
 
 </>

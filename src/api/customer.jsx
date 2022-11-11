@@ -1,8 +1,6 @@
 import axiosClient from "../axios";
-import axios from "axios";
 
 export const fetchCustomers = () =>{ return axiosClient.get("/admin/customer_manager/all_items")};
-// export const fetchCustomers = () =>{ return axios.get("http://localhost:5000/admin/customer_manager/all_items")};
 export const fetchCustomerById = () =>{ return axiosClient.get("/admin/customer_manager/:id")};
 export const createCustomer = (payload) =>{return  axiosClient.post("/admin/customer_manager/create_item", payload)};
 export const updateCustomer = (payload) =>{
@@ -11,10 +9,5 @@ export const activeCustomer = (payload) =>{
   return axiosClient.post("/admin/customer_manager/acti_item/:id", payload)};
 export const deleteCustomer = (payload) =>{
   return axiosClient.post("/admin/customer_manager/delete_item/:id", payload)};
-
-
-  // Request URL: http://localhost:5000/admin/customer_manager/all_items
-  // Request URL: http://localhost:5000/admin/customer_manager/all_items
-
 
 

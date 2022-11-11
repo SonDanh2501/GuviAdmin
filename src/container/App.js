@@ -1,7 +1,7 @@
 import './App.scss';
-import Navigator from "../components/Navigator/Navigator";
+import Navigator from "../components/Navigator/Navigator.jsx";
 import { useState, useEffect } from 'react';
-import UserManage from './System/ManageUser/Customer/UserManage';
+import UserManage from './System/ManageUser/Customer/UserManage.jsx';
 import CollaboratorManage from './System/ManageUser/Collaborator/CollaboratorManage';
 
 import {

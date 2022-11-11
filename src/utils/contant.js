@@ -2,6 +2,10 @@ export const INIT_STATE = {
      customers: {
        data: [],
      },
+     collaborators: {
+       data: [],
+     },
+
 
    };
    

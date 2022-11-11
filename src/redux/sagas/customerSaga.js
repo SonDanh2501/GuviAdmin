@@ -1,11 +1,18 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
+import {
+  takeLatest,
+  call,
+  put
+} from 'redux-saga/effects';
 import * as actions from '../actions/customerAction';
-import * as api from '../../api/customer'; 
-import {getType} from '../actions/customerAction';
+import * as api from '../../api/customer.jsx';
+import {
+  getType
+} from '../actions/customerAction';
 
 function* fetchCustomersSaga() {
   try {
     const Customers = yield call(api.fetchCustomers);
+    console.log("CHECK SAGA Customers", Customers);
     yield put(actions.getCustomers.getCustomersSuccess(Customers));
   } catch (err) {
     console.error(err);

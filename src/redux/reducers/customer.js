@@ -4,10 +4,8 @@ import { getCustomers, getType, createCustomer, updateCustomer } from '../action
 export default function CustomersReducers(state = INIT_STATE.customers, action) {
   switch (action.type) {
     case getType(getCustomers.getCustomersRequest):
-      
       return {
         ...state,
-       
       };
     case getType(getCustomers.getCustomersSuccess):
       return {

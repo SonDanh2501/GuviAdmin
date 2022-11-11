@@ -1,7 +1,3 @@
-Đây là source code của phần Frontend ứng dụng MERN APP - BLOG trên kênh youtube HoleTex
-https://www.youtube.com/watch?v=khcjRUZCufs\
-
-Source code phần Backend https://github.com/holetexvn/mern-app-server
 
 # Getting Started with Create React App
 
