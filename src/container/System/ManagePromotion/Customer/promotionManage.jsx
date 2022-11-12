@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
-import "./UserManage.scss";
-import TableManageUser from "./TableManageUser.jsx";
-import { Form, Row, Col, FormGroup, Label, Input, Button } from "reactstrap";
-import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../../../../redux/actions/customerAction";
+import React from "react";
+import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
+import TableManagePromotion from "./tableManagePromotion.jsx";
+import "./PromotionManage.scss";
 
-export default function UserManage() {
+export default function PromotionManage() {
   const [users, setUsers] = React.useState({
     code_phone_area: "",
     phone: "",
@@ -13,18 +11,6 @@ export default function UserManage() {
     name: "",
     password: "",
   });
-  const dispatch = useDispatch();
-  const onSubmit = React.useCallback(() => {
-    dispatch(actions.createCustomer.createCustomerRequest(users));
-    setUsers({
-      code_phone_area: "",
-      phone: "",
-      email: "",
-      name: "",
-      password: "",
-    });
-    window.location.reload();
-  }, [users, dispatch]);
 
   return (
     <React.Fragment>
@@ -109,14 +95,12 @@ export default function UserManage() {
                       </FormGroup>
                     </Col>
                   </Row>
-                  <Button color="warning" onClick={onSubmit}>
-                    Thêm người dùng
-                  </Button>
+                  <Button color="warning">Thêm người dùng</Button>
                 </Form>
               </div>
 
               <div className="">
-                <TableManageUser />
+                <TableManagePromotion />
               </div>
             </div>
           </div>

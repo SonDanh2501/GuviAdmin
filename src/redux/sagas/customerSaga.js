@@ -1,18 +1,11 @@
-import {
-  takeLatest,
-  call,
-  put
-} from 'redux-saga/effects';
-import * as actions from '../actions/customerAction';
-import * as api from '../../api/customer.jsx';
-import {
-  getType
-} from '../actions/customerAction';
+import { takeLatest, call, put } from "redux-saga/effects";
+import * as actions from "../actions/customerAction";
+import * as api from "../../api/customer.jsx";
+import { getType } from "../actions/customerAction";
 
 function* fetchCustomersSaga() {
   try {
     const Customers = yield call(api.fetchCustomers);
-    console.log("CHECK SAGA Customers", Customers);
     yield put(actions.getCustomers.getCustomersSuccess(Customers));
   } catch (err) {
     console.error(err);
@@ -33,7 +26,9 @@ function* createCustomerSaga(action) {
 function* updateCustomerSaga(action) {
   try {
     const updatedCustomer = yield call(api.updateCustomer, action.payload);
-    yield put(actions.updateCustomer.updateCustomerSuccess(updatedCustomer.data));
+    yield put(
+      actions.updateCustomer.updateCustomerSuccess(updatedCustomer.data)
+    );
   } catch (err) {
     console.error(err);
     yield put(actions.updateCustomer.updateCustomerFailure(err));
@@ -41,9 +36,18 @@ function* updateCustomerSaga(action) {
 }
 
 function* customerSaga() {
-  yield takeLatest(getType(actions.getCustomers.getCustomersRequest), fetchCustomersSaga);
-  yield takeLatest(actions.createCustomer.createCustomerRequest, createCustomerSaga);
-  yield takeLatest(actions.updateCustomer.updateCustomerRequest, updateCustomerSaga);
+  yield takeLatest(
+    getType(actions.getCustomers.getCustomersRequest),
+    fetchCustomersSaga
+  );
+  yield takeLatest(
+    actions.createCustomer.createCustomerRequest,
+    createCustomerSaga
+  );
+  yield takeLatest(
+    actions.updateCustomer.updateCustomerRequest,
+    updateCustomerSaga
+  );
 }
 
 // generator function ES6
