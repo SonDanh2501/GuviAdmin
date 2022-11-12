@@ -1,12 +1,11 @@
-import {
-  combineReducers
-} from 'redux';
-import customer from './customer';
-import collaborator from './collaborator';
-
+import { combineReducers } from "redux";
+import customer from "./customer";
+import collaborator from "./collaborator";
+import promotion from "./promotion";
 
 const rootReducer = combineReducers({
   customer,
-  collaborator
+  collaborator,
+  promotion,
 });
-export default rootReducer
+export default rootReducer;
