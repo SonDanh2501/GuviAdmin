@@ -5,7 +5,7 @@ import {
   createCustomer,
   updateCustomer,
 } from "../actions/customerAction";
-import { getPromotion } from "../actions/promotion";
+import { createPromotions, getPromotion } from "../actions/promotion";
 
 export default function PromotionReducers(
   state = INIT_STATE.customers,

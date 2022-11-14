@@ -1,8 +1,12 @@
 import { takeLatest, call, put } from "redux-saga/effects";
-import { fetchPromotion } from "../../api/promotion";
+import {
+  createPromotion,
+  fetchPromotion,
+  getGroupCustomerPromotion,
+} from "../../api/promotion";
 
 import { getType } from "../actions/customerAction";
-import { getPromotion } from "../actions/promotion";
+import { createPromotions, getPromotion } from "../actions/promotion";
 
 function* fetchPromotionSaga() {
   try {

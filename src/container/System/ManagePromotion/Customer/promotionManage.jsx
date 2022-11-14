@@ -1,28 +1,201 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import TableManagePromotion from "./tableManagePromotion.jsx";
 import "./PromotionManage.scss";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.js";
+import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
 import { normalizeUnits } from "moment";
+import {
+  createPromotion,
+  getGroupCustomerPromotion,
+} from "../../../../api/promotion.jsx";
+import { postFile } from "../../../../api/file.jsx";
+import { Editor } from "react-draft-wysiwyg";
+import { convertToRaw, EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 export default function PromotionManage() {
-  const [formPromorion, setPromotion] = React.useState("Mã khuyến mãi");
+  const [formPromorion, setFormPromotion] = React.useState("Mã khuyến mãi");
+  const [typePromotion, setTypePromotion] = React.useState("");
+  const [formDiscount, setFormDiscount] = React.useState("Giảm trực tiếp");
+  const [discountUnit, setDiscountUnit] = React.useState("amount");
+  const [create, setCreate] = React.useState(false);
+  const [groupCustomer, setGroupCustomer] = React.useState([]);
+  const [customer, setCustomer] = React.useState([]);
   const [titleVN, setTitleVN] = React.useState("");
   const [titleEN, setTitleEN] = React.useState("");
   const [shortDescriptionVN, setShortDescriptionVN] = React.useState("");
   const [shortDescriptionEN, setShortDescriptionEN] = React.useState("");
-  const [descriptionVN, setDescriptionVN] = React.useState("");
-  const [descriptionEN, setDescriptionEN] = React.useState("");
+  const [descriptionVN, setDescriptionVN] = React.useState(
+    EditorState.createEmpty()
+  );
+  const [descriptionEN, setDescriptionEN] = React.useState(
+    EditorState.createEmpty()
+  );
   const [promoCode, setPromoCode] = React.useState("");
-  const [promoType, setPromoType] = React.useState("Đồng giá");
+  const [promoType, setPromoType] = React.useState("same_price");
   const [unitPrice, setUnitPrice] = React.useState("");
   const [minimumOrder, setMinimumOrder] = React.useState("");
   const [namebrand, setNamebrand] = React.useState("");
   const [codebrand, setCodebrand] = React.useState("");
+  const [reducedValue, setReducedValue] = React.useState(0);
+  const [maximumDiscount, setMaximumDiscount] = React.useState(0);
+  const [orderFirst, setOrderFirst] = React.useState(false);
+  const [limitedQuantity, setLimitedQuantity] = React.useState(false);
+  const [amount, setAmount] = React.useState("");
+  const [limitedDate, setLimitedDate] = React.useState(false);
+  const [startDate, setStartDate] = React.useState("");
+  const [endDate, setEndDate] = React.useState("");
+  const [isExchangePoint, setIsExchangePoint] = React.useState(false);
+  const [exchangePoint, setExchangePoint] = React.useState("");
+  const [isUsePromo, setIsUsePromo] = React.useState(false);
+  const [usePromo, setUsePromo] = React.useState("");
+  const [imgThumbnail, setImgThumbnail] = React.useState("");
+  const [imgBackground, setImgBackground] = React.useState("");
+
+  useEffect(() => {
+    getGroupCustomerPromotion()
+      .then((res) => setGroupCustomer(res.data))
+      .catch((err) => console.log(err));
+  }, []);
+
+  const onChangeThumbnail = (e) => {
+    if (e.target.files[0]) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImgThumbnail(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+
+    const formData = new FormData();
+    formData.append("file", e.target.files[0]);
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => setImgThumbnail(res))
+      .catch((err) => console.log("err", err));
+  };
+
+  const onChangeBackground = (e) => {
+    if (e.target.files[0]) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImgBackground(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    const formData = new FormData();
+    formData.append("file", e.target.files[0]);
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => setImgBackground(res))
+      .catch((err) => console.log("err", err));
+  };
 
   const onFormPromotion = (title) => {
-    setPromotion(title);
+    setFormPromotion(title);
+    if (title === "Mã khuyến mãi") {
+      setTypePromotion("code");
+    } else {
+      setTypePromotion("event");
+    }
   };
+
+  const onFormDiscount = (title) => {
+    setFormDiscount(title);
+    if (title === "Giảm trực tiếp") {
+      setDiscountUnit("amount");
+    } else {
+      setDiscountUnit("percent");
+    }
+  };
+  const onChooseMultiple = useCallback(
+    (id) => {
+      if (customer.includes(id)) {
+        setCustomer((prev) => prev.filter((p) => p !== id));
+      } else {
+        setCustomer((prev) => [...prev, id]);
+      }
+    },
+    [customer]
+  );
+
+  const onEditorVNStateChange = (editorState) => setDescriptionVN(editorState);
+
+  const onEditorENStateChange = (editorState) => setDescriptionEN(editorState);
+
+  const onCreatePromotion = useCallback(() => {
+    createPromotion({
+      title: {
+        vi: titleVN,
+        en: titleEN,
+      },
+      short_description: {
+        vi: shortDescriptionVN,
+        en: shortDescriptionEN,
+      },
+      description: {
+        vi: draftToHtml(convertToRaw(descriptionVN.getCurrentContent())),
+        en: draftToHtml(convertToRaw(descriptionEN.getCurrentContent())),
+      },
+      thumbnail: imgThumbnail,
+      image_background: imgBackground,
+      code: codebrand,
+      is_limit_date: limitedDate,
+      limit_start_date: limitedDate ? new Date(startDate).toISOString() : null,
+      limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
+      is_limit_count: limitedQuantity,
+      limit_count: limitedQuantity ? amount : 0,
+      id_group_customer: customer,
+      service_apply: [],
+      id_customer: [],
+      is_limited_use: isUsePromo,
+      limited_use: isUsePromo ? usePromo : 0,
+      type_discount: promoType,
+      type_promotion: typePromotion,
+      price_min_order: 0,
+      discount_unit: discountUnit,
+      discount_max_price: maximumDiscount,
+      discount_value: reducedValue,
+      is_delete: false,
+      is_exchange_point: isExchangePoint,
+      exchange_point: exchangePoint,
+      brand: namebrand,
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  }, [
+    titleVN,
+    titleEN,
+    shortDescriptionVN,
+    shortDescriptionEN,
+    descriptionVN,
+    descriptionEN,
+    imgThumbnail,
+    imgBackground,
+    codebrand,
+    limitedDate,
+    startDate,
+    endDate,
+    limitedQuantity,
+    amount,
+    customer,
+    isUsePromo,
+    usePromo,
+    promoType,
+    discountUnit,
+    isExchangePoint,
+    exchangePoint,
+    namebrand,
+    maximumDiscount,
+    reducedValue,
+  ]);
 
   return (
     <React.Fragment>
@@ -30,187 +203,424 @@ export default function PromotionManage() {
         <div className="user-redux-body mt-5 col-md-12">
           <div className="container">
             <div className="column">
-              <div className="form-input">
-                <Form>
-                  <Row>
-                    <Col md={4}>
-                      <h5>1. Tiêu đề</h5>
-                      <CustomTextInput
-                        label={"Tiếng Việt"}
-                        name="titleVN"
-                        placeholder="Nhập tiêu đề tiếng việt"
-                        value={titleVN}
-                        onChange={(e) => setTitleVN(e.target.value)}
-                      />
-                      <CustomTextInput
-                        label={"Tiếng Anh"}
-                        name="titleEN"
-                        placeholder="Nhập tiêu đề tiếng anh"
-                        value={titleEN}
-                        onChange={(e) => setTitleEN(e.target.value)}
-                      />
-                      <h5>2. Mô tả ngắn</h5>
-                      <CustomTextInput
-                        label={"Tiếng Việt"}
-                        placeholder="Nhập mô tả tiếng việt"
-                        value={shortDescriptionVN}
-                        type="textarea"
-                        onChange={(e) => setDescriptionVN(e.target.value)}
-                      />
-                      <CustomTextInput
-                        label={"Tiếng Anh"}
-                        placeholder="Nhập mô tả tiếng anh"
-                        type="textarea"
-                        value={shortDescriptionEN}
-                        onChange={(e) => setDescriptionEN(e.target.value)}
-                      />
-                      <h5>3. Mô tả chi tiết</h5>
-                      <CustomTextInput
-                        label={"Tiếng Việt"}
-                        placeholder="Nhập mô tả tiếng việt"
-                        value={descriptionVN}
-                        type="textarea"
-                        onChange={(e) => setDescriptionVN(e.target.value)}
-                      />
-                      <CustomTextInput
-                        label={"Tiếng Anh"}
-                        placeholder="Nhập mô tả tiếng anh"
-                        type="textarea"
-                        value={descriptionEN}
-                        onChange={(e) => setDescriptionEN(e.target.value)}
-                      />
-                      <h5>4. Thumbnail/Background</h5>
-                      <CustomTextInput
-                        label={"Thumbnail"}
-                        type="file"
-                        accept={".jpg,.png,.jpeg"}
-                        className="thumbnail"
-                      />
-                      <CustomTextInput
-                        label={"Background"}
-                        type="file"
-                        accept={".jpg,.png,.jpeg"}
-                        className="thumbnail"
-                      />
-                    </Col>
-                    <Col md={4}>
-                      <div>
-                        <h5>5.Hình thức khuyến mãi</h5>
-                        <Row>
-                          <Button
-                            className={
-                              formPromorion === "Mã khuyến mãi"
-                                ? "btn-form-promotion"
-                                : "btn-form-promotion-default"
-                            }
-                            outline
-                            onClick={() => onFormPromotion("Mã khuyến mãi")}
-                          >
-                            Mã khuyến mãi
-                          </Button>
-                          <Button
-                            className={
-                              formPromorion === "Chương trình khuyến mãi"
-                                ? "btn-form-promotion"
-                                : "btn-form-promotion-default"
-                            }
-                            outline
-                            onClick={() =>
-                              onFormPromotion("Chương trình khuyến mãi")
-                            }
-                          >
-                            Chương trình khuyến mãi
-                          </Button>
-                          {formPromorion === "Mã khuyến mãi" ? (
-                            <CustomTextInput
-                              placeholder="Nhập mã khuyến mãi"
-                              className="input-promo-code"
-                              type="text"
-                              value={promoCode}
-                              onChange={(e) => setPromoCode(e.target.value)}
-                            />
-                          ) : null}
-                        </Row>
-                      </div>
-                      <div>
-                        <h5>6. Loại khuyến mãi</h5>
+              {create && (
+                <div className="form-input">
+                  <Form>
+                    <Row>
+                      <Col md={4}>
+                        <h5>1. Tiêu đề</h5>
                         <CustomTextInput
-                          className="select-type-promo"
-                          name="select"
-                          type="select"
-                          value={promoType}
-                          onChange={(e) => setPromoType(e.target.value)}
-                          body={
-                            <>
-                              <option value={"Đồng giá"}>Đồng giá</option>
-                              <option value={"Giảm giá theo đơn đặt"}>
-                                Giảm giá theo đơn đặt
-                              </option>
-                              <option value={"Khuyến mãi từ đối tác"}>
-                                Khuyến mãi từ đối tác
-                              </option>
-                            </>
+                          label={"Tiếng Việt"}
+                          name="titleVN"
+                          placeholder="Nhập tiêu đề tiếng việt"
+                          value={titleVN}
+                          onChange={(e) => setTitleVN(e.target.value)}
+                        />
+                        <CustomTextInput
+                          label={"Tiếng Anh"}
+                          name="titleEN"
+                          placeholder="Nhập tiêu đề tiếng anh"
+                          value={titleEN}
+                          onChange={(e) => setTitleEN(e.target.value)}
+                        />
+                        <h5>2. Mô tả ngắn</h5>
+                        <CustomTextInput
+                          label={"Tiếng Việt"}
+                          placeholder="Nhập mô tả tiếng việt"
+                          value={shortDescriptionVN}
+                          type="textarea"
+                          onChange={(e) =>
+                            setShortDescriptionVN(e.target.value)
                           }
                         />
-                        {promoType === "Đồng giá" ? (
-                          <CustomTextInput
-                            label={"Đơn giá"}
-                            placeholder="Nhập đơn giá"
-                            className="input-promo-code"
-                            type="number"
-                            value={unitPrice}
-                            onChange={(e) => setUnitPrice(e.target.value)}
-                          />
-                        ) : promoType === "Giảm giá theo đơn đặt" ? (
-                          <CustomTextInput
-                            label={"Giá đơn đặt tối thiểu"}
-                            placeholder="Nhập giá"
-                            className="input-promo-code"
-                            type="number"
-                            value={minimumOrder}
-                            onChange={(e) => setMinimumOrder(e.target.value)}
-                          />
-                        ) : (
-                          <>
-                            <CustomTextInput
-                              label={"Tên đối tác"}
-                              placeholder="Nhập tên đối tác"
-                              className="input-promo-code"
-                              type="text"
-                              value={namebrand}
-                              onChange={(e) => setNamebrand(e.target.value)}
-                            />
-                            <CustomTextInput
-                              label={"Mã khuyến mãi"}
-                              placeholder="Nhập mã khuyến mãi"
-                              className="input-promo-code"
-                              type="text"
-                              value={codebrand}
-                              onChange={(e) => setCodebrand(e.target.value)}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </Col>
-                    <Col md={4}>
-                      <FormGroup>
-                        <Label for="examplePassword">Password</Label>
-                        <Input
-                          id="examplePassword"
-                          name="password"
-                          placeholder="Enter password "
-                          type="password"
+                        <CustomTextInput
+                          label={"Tiếng Anh"}
+                          placeholder="Nhập mô tả tiếng anh"
+                          type="textarea"
+                          value={shortDescriptionEN}
+                          onChange={(e) =>
+                            setShortDescriptionEN(e.target.value)
+                          }
                         />
-                      </FormGroup>
-                    </Col>
-                  </Row>
+                        <h5>3. Mô tả chi tiết</h5>
+                        <Label>Tiếng Việt</Label>
+                        <Editor
+                          editorState={descriptionVN}
+                          onEditorStateChange={onEditorVNStateChange}
+                          toolbarClassName="toolbarClassName"
+                          wrapperClassName="wrapperClassName wrapperStyle"
+                          editorClassName="editorClassName"
+                        />
+                        <Label>Tiếng Việt</Label>
 
-                  <Button color="warning">Thêm khuyến mãi</Button>
-                </Form>
-              </div>
+                        <Editor
+                          editorState={descriptionEN}
+                          onEditorStateChange={onEditorENStateChange}
+                          toolbarClassName="toolbarClassName"
+                          wrapperClassName="wrapperClassName wrapperStyle"
+                          editorClassName="editorClassName"
+                        />
+                        <h5>4. Thumbnail/Background</h5>
+                        <CustomTextInput
+                          label={"Thumbnail"}
+                          type="file"
+                          accept={".jpg,.png,.jpeg"}
+                          className="thumbnail"
+                          onChange={onChangeThumbnail}
+                        />
+                        {imgThumbnail && (
+                          <img src={imgThumbnail} className="img-thumbnail" />
+                        )}
+                        <CustomTextInput
+                          label={"Background"}
+                          type="file"
+                          accept={".jpg,.png,.jpeg"}
+                          className="thumbnail"
+                          onChange={onChangeBackground}
+                        />
+                        {imgBackground && (
+                          <img src={imgBackground} className="img-background" />
+                        )}
+                      </Col>
+                      <Col md={4}>
+                        <div>
+                          <h5>5.Hình thức khuyến mãi</h5>
+                          <Row>
+                            <Button
+                              className={
+                                formPromorion === "Mã khuyến mãi"
+                                  ? "btn-form-promotion"
+                                  : "btn-form-promotion-default"
+                              }
+                              outline
+                              onClick={() => onFormPromotion("Mã khuyến mãi")}
+                            >
+                              Mã khuyến mãi
+                            </Button>
+                            <Button
+                              className={
+                                formPromorion === "Chương trình khuyến mãi"
+                                  ? "btn-form-promotion"
+                                  : "btn-form-promotion-default"
+                              }
+                              outline
+                              onClick={() =>
+                                onFormPromotion("Chương trình khuyến mãi")
+                              }
+                            >
+                              Chương trình khuyến mãi
+                            </Button>
+                            {formPromorion === "Mã khuyến mãi" ? (
+                              <CustomTextInput
+                                placeholder="Nhập mã khuyến mãi"
+                                className="input-promo-code"
+                                type="text"
+                                value={promoCode}
+                                onChange={(e) => setPromoCode(e.target.value)}
+                              />
+                            ) : null}
+                          </Row>
+                        </div>
+                        <div>
+                          <h5>6. Loại khuyến mãi</h5>
+                          <CustomTextInput
+                            className="select-type-promo"
+                            name="select"
+                            type="select"
+                            value={promoType}
+                            onChange={(e) => setPromoType(e.target.value)}
+                            body={
+                              <>
+                                <option value={"same_price"}>Đồng giá</option>
+                                <option value={"order"}>
+                                  Giảm giá theo đơn đặt
+                                </option>
+                                <option value={"partner_promotion"}>
+                                  Khuyến mãi từ đối tác
+                                </option>
+                              </>
+                            }
+                          />
+                          {promoType === "same_price" ? (
+                            <CustomTextInput
+                              label={"Đơn giá"}
+                              placeholder="Nhập đơn giá"
+                              className="input-promo-code"
+                              type="number"
+                              value={unitPrice}
+                              onChange={(e) => setUnitPrice(e.target.value)}
+                            />
+                          ) : promoType === "order" ? (
+                            <CustomTextInput
+                              label={"Giá đơn đặt tối thiểu"}
+                              placeholder="Nhập giá"
+                              className="input-promo-code"
+                              type="number"
+                              value={minimumOrder}
+                              onChange={(e) => setMinimumOrder(e.target.value)}
+                            />
+                          ) : (
+                            <>
+                              <CustomTextInput
+                                label={"Tên đối tác"}
+                                placeholder="Nhập tên đối tác"
+                                className="input-promo-code"
+                                type="text"
+                                value={namebrand}
+                                onChange={(e) => setNamebrand(e.target.value)}
+                              />
+                              <CustomTextInput
+                                label={"Mã khuyến mãi"}
+                                placeholder="Nhập mã khuyến mãi"
+                                className="input-promo-code"
+                                type="text"
+                                value={codebrand}
+                                onChange={(e) => setCodebrand(e.target.value)}
+                              />
+                            </>
+                          )}
+                        </div>
+                        <div>
+                          <h5>7. Hình thức giảm giá</h5>
+                          <Row>
+                            <Button
+                              className={
+                                formDiscount === "Giảm trực tiếp"
+                                  ? "btn-form-promotion"
+                                  : "btn-form-promotion-default"
+                              }
+                              outline
+                              onClick={() => onFormDiscount("Giảm trực tiếp")}
+                            >
+                              Giảm trực tiếp
+                            </Button>
+                            <Button
+                              className={
+                                formDiscount === "Giảm theo phần trăm"
+                                  ? "btn-form-promotion"
+                                  : "btn-form-promotion-default"
+                              }
+                              outline
+                              onClick={() =>
+                                onFormDiscount("Giảm theo phần trăm")
+                              }
+                            >
+                              Giảm theo phần trăm
+                            </Button>
+                            {formDiscount === "Giảm trực tiếp" ? (
+                              <CustomTextInput
+                                label={"Giá giảm "}
+                                classNameForm="form-promo-discount"
+                                placeholder="VNĐ"
+                                className="input-promo-code"
+                                type="number"
+                                value={maximumDiscount}
+                                onChange={(e) =>
+                                  setMaximumDiscount(e.target.value)
+                                }
+                              />
+                            ) : (
+                              <Row className="row-discount">
+                                <CustomTextInput
+                                  label={"Giá trị giảm"}
+                                  className="input-promo-discount"
+                                  placeholder="%"
+                                  type="number"
+                                  value={reducedValue}
+                                  onChange={(e) =>
+                                    setReducedValue(e.target.value)
+                                  }
+                                />
+                                <CustomTextInput
+                                  label={"Giá giảm tối đa"}
+                                  classNameForm="form-promo-discount"
+                                  className="input-promo-discount"
+                                  placeholder="VNĐ"
+                                  type="number"
+                                  value={maximumDiscount}
+                                  onChange={(e) =>
+                                    setMaximumDiscount(e.target.value)
+                                  }
+                                />
+                              </Row>
+                            )}
+                          </Row>
+                        </div>
+                        <div>
+                          {/* <h5>8. Dịch vụ áp dụng</h5>
+                      <CustomTextInput
+                        className="select-type-promo"
+                        name="selectMulti"
+                        type="select"
+                        multiple={true}
+                        body={
+                          <>
+                            <option value={"Đồng giá"}>Giúp việc thơ</option>
+                            <option value={"Giảm giá theo đơn đặt"}>
+                              Giảm giá theo đơn đặt
+                            </option>
+                            <option value={"Khuyến mãi từ đối tác"}>
+                              Khuyến mãi từ đối tác
+                            </option>
+                          </>
+                        }
+                      /> */}
+                        </div>
+                      </Col>
+                      <Col md={4}>
+                        <div>
+                          <h5>9. Đối tượng áp dụng</h5>
+                          <Label>Nhóm khách hàng</Label>
+
+                          <CustomTextInput
+                            className="select-type-promo"
+                            name="select"
+                            type="select"
+                            value={customer}
+                            multiple={true}
+                            onChange={(e) => {
+                              onChooseMultiple(e.target.value);
+                            }}
+                            body={groupCustomer.map((item, index) => {
+                              return (
+                                <option key={index} value={item?._id}>
+                                  {item?.name}
+                                </option>
+                              );
+                            })}
+                          />
+                        </div>
+                        <div>
+                          <h5>10. Điều kiện áp dụng</h5>
+                          <FormGroup check inline>
+                            <Label check className="text-first">
+                              Đặt lần đầu
+                            </Label>
+                            <Input
+                              type="checkbox"
+                              value={orderFirst}
+                              onClick={() => setOrderFirst(!orderFirst)}
+                            />
+                          </FormGroup>
+                        </div>
+                        <div>
+                          <h5>11. Số lượng mã khuyến mãi</h5>
+                          <FormGroup check inline>
+                            <Label check className="text-first">
+                              Số lượng giới hạn
+                            </Label>
+                            <Input
+                              type="checkbox"
+                              value={limitedQuantity}
+                              onClick={() =>
+                                setLimitedQuantity(!limitedQuantity)
+                              }
+                            />
+                          </FormGroup>
+                          {limitedQuantity && (
+                            <CustomTextInput
+                              label={"Lượt sử dụng mỗi khách"}
+                              placeholder="Số lượng"
+                              className="input-promo-code"
+                              type="number"
+                              value={amount}
+                              onChange={(e) => setAmount(e.target.value)}
+                            />
+                          )}
+                        </div>
+                        <div>
+                          <h5>12. Số lần sử dụng khuyến mãi</h5>
+                          <FormGroup check inline>
+                            <Label check className="text-first">
+                              Lần sử dụng khuyến mãi
+                            </Label>
+                            <Input
+                              type="checkbox"
+                              value={isUsePromo}
+                              onClick={() => setIsUsePromo(!isUsePromo)}
+                            />
+                          </FormGroup>
+                          {isUsePromo && (
+                            <CustomTextInput
+                              label={"Lần sử dụng mỗi khách hàng"}
+                              placeholder="Số lượng"
+                              className="input-promo-code"
+                              type="number"
+                              value={usePromo}
+                              onChange={(e) => setUsePromo(e.target.value)}
+                            />
+                          )}
+                        </div>
+                        <div>
+                          <h5>13. Thời gian khuyến mãi</h5>
+                          <FormGroup check inline>
+                            <Label check className="text-first">
+                              Giới hạn ngày
+                            </Label>
+                            <Input
+                              type="checkbox"
+                              value={limitedDate}
+                              onClick={() => setLimitedDate(!limitedDate)}
+                            />
+                          </FormGroup>
+                          {limitedDate && (
+                            <>
+                              <CustomTextInput
+                                label={"Ngày bắt đầu"}
+                                placeholder="Số lượng"
+                                className="input-promo-code"
+                                type="date"
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                              />
+                              <CustomTextInput
+                                label={"Ngày kết thúc"}
+                                placeholder="Số lượng"
+                                className="input-promo-code"
+                                type="date"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                              />
+                            </>
+                          )}
+                        </div>
+                        <div>
+                          <h5>14. Điểm quy đổi</h5>
+                          <FormGroup check inline>
+                            <Label check className="text-first">
+                              Điểm quy đổi
+                            </Label>
+                            <Input
+                              type="checkbox"
+                              value={isExchangePoint}
+                              onClick={() =>
+                                setIsExchangePoint(!isExchangePoint)
+                              }
+                            />
+                          </FormGroup>
+                          {isExchangePoint && (
+                            <CustomTextInput
+                              label={"Điểm"}
+                              placeholder="Nhập số điểm"
+                              className="input-promo-code"
+                              type="number"
+                              value={exchangePoint}
+                              onChange={(e) => setExchangePoint(e.target.value)}
+                            />
+                          )}
+                        </div>
+                      </Col>
+                    </Row>
+
+                    <Button color="warning" onClick={onCreatePromotion}>
+                      Thêm khuyến mãi
+                    </Button>
+                  </Form>
+                </div>
+              )}
 
               <div className="">
-                <TableManagePromotion />
+                <TableManagePromotion setCreate={setCreate} create={create} />
               </div>
             </div>
           </div>
