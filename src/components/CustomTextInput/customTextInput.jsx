@@ -12,9 +12,11 @@ const CustomTextInput = ({
   className,
   accept,
   body,
+  classNameForm,
+  multiple = false,
 }) => {
   return (
-    <FormGroup>
+    <FormGroup className={classNameForm}>
       {label && <Label for="exampleAddress">{label}</Label>}
       <Input
         id={id}
@@ -25,6 +27,7 @@ const CustomTextInput = ({
         onChange={onChange}
         className={className}
         accept={accept}
+        multiple={multiple}
       >
         {body}{" "}
       </Input>

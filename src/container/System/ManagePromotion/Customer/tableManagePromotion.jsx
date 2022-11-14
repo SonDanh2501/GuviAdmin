@@ -5,8 +5,9 @@ import "./TableManagePromotion.scss";
 import { Media, Table } from "reactstrap";
 import { getPromotion } from "../../../../redux/actions/promotion";
 import { getPromotionSelector } from "../../../../redux/selectors/promotion";
+import moment from "moment";
 
-export default function TableManagePromotion() {
+export default function TableManagePromotion({ create, setCreate }) {
   const dispatch = useDispatch();
   const promotion = useSelector(getPromotionSelector);
   React.useEffect(() => {
@@ -25,8 +26,15 @@ export default function TableManagePromotion() {
           </tr>
         </thead>
         <tbody>
-          {promotion.length > 0 &&
+          {promotion &&
+            promotion.length > 0 &&
             promotion.map((item, index) => {
+              const dateEnd = moment(new Date(item?.limit_end_date)).format(
+                "DD/MM/YYYY"
+              );
+              const dateStart = moment(new Date(item?.limit_start_date)).format(
+                "DD/MM/YYYY"
+              );
               return (
                 <tr key={index}>
                   <th scope="row">
@@ -45,7 +53,9 @@ export default function TableManagePromotion() {
                     <a>{item?.code}</a>
                   </td>
                   <td>
-                    <a>{item?.phone}</a>
+                    <a>
+                      {item?.is_limit_date ? dateStart + "-" + dateEnd : null}
+                    </a>
                   </td>
                   <td>
                     <button className="btn-edit">
@@ -53,6 +63,12 @@ export default function TableManagePromotion() {
                     </button>
                     <button className="btn-delete">
                       <i class="uil uil-trash"></i>
+                    </button>
+                    <button
+                      className="btn-delete"
+                      onClick={() => setCreate(!create)}
+                    >
+                      <i class="uil uil-plus"></i>
                     </button>
                   </td>
                 </tr>
