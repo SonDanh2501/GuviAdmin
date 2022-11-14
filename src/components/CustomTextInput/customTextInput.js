@@ -9,6 +9,9 @@ const CustomTextInput = ({
   placeholder,
   type,
   onChange,
+  className,
+  accept,
+  body,
 }) => {
   return (
     <FormGroup>
@@ -20,7 +23,11 @@ const CustomTextInput = ({
         type={type}
         value={value}
         onChange={onChange}
-      />
+        className={className}
+        accept={accept}
+      >
+        {body}{" "}
+      </Input>
     </FormGroup>
   );
 };

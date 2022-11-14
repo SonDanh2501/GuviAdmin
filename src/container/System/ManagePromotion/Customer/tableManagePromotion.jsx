@@ -13,8 +13,6 @@ export default function TableManagePromotion() {
     dispatch(getPromotion.getPromotionRequest());
   }, [dispatch]);
 
-  console.log(promotion);
-
   return (
     <>
       <Table className="align-items-center table-flush mt-5" responsive>
