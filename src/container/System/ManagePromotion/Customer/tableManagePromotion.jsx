@@ -33,11 +33,11 @@ export default function TableManagePromotion() {
                 <tr key={index}>
                   <th scope="row">
                     <Media className="align-items-center">
-                      {/* <img
+                      <img
                         alt="..."
-                        src={item?.avatar}
+                        src={item?.thumbnail}
                         className="img_customer"
-                      /> */}
+                      />
                       <Media>
                         <span className="mb-0 text-sm">{item?.title.vi}</span>
                       </Media>

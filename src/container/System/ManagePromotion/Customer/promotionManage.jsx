@@ -2,14 +2,12 @@ import React from "react";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import TableManagePromotion from "./tableManagePromotion.jsx";
 import "./PromotionManage.scss";
+import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.js";
 
 export default function PromotionManage() {
-  const [users, setUsers] = React.useState({
-    code_phone_area: "",
-    phone: "",
-    email: "",
-    name: "",
-    password: "",
+  const [promotions, setPromotions] = React.useState({
+    titleVN: "",
+    titleEN: "",
   });
 
   return (
@@ -21,22 +19,56 @@ export default function PromotionManage() {
               <div className="">
                 <Form>
                   <Row>
-                    <Col md={6}>
-                      <FormGroup>
-                        <Label for="exampleEmail">Email</Label>
-                        <Input
-                          id="exampleEmail"
-                          name="email"
-                          placeholder="Enter your email address"
-                          type="email"
-                          value={users.email}
-                          onChange={(e) =>
-                            setUsers({ ...users, email: e.target.value })
-                          }
-                        />
-                      </FormGroup>
+                    <Col md={4}>
+                      <h5>1. Tiêu đề</h5>
+                      <CustomTextInput
+                        label={"Tiếng Việt"}
+                        placeholder="Nhập tiêu đề tiếng việt"
+                        value={promotions.titleVN}
+                        onChange={(e) =>
+                          setPromotions({
+                            ...promotions,
+                            titleVN: e.target.value,
+                          })
+                        }
+                      />
+                      <CustomTextInput
+                        label={"Tiếng Anh"}
+                        placeholder="Nhập tiêu đề tiếng anh"
+                        value={promotions.titleEN}
+                        onChange={(e) =>
+                          setPromotions({
+                            ...promotions,
+                            titleEN: e.target.value,
+                          })
+                        }
+                      />
+                      <h5>2. Tiêu đề</h5>
+                      <CustomTextInput
+                        label={"Tiếng Việt"}
+                        placeholder="Nhập tiêu đề tiếng việt"
+                        value={promotions.titleVN}
+                        onChange={(e) =>
+                          setPromotions({
+                            ...promotions,
+                            titleVN: e.target.value,
+                          })
+                        }
+                      />
+                      <CustomTextInput
+                        label={"Tiếng Anh"}
+                        placeholder="Nhập tiêu đề tiếng anh"
+                        value={promotions.titleEN}
+                        onChange={(e) =>
+                          setPromotions({
+                            ...promotions,
+                            titleEN: e.target.value,
+                          })
+                        }
+                      />
                     </Col>
-                    <Col md={6}>
+
+                    <Col md={4}>
                       <FormGroup>
                         <Label for="examplePassword">Password</Label>
                         <Input
@@ -44,58 +76,23 @@ export default function PromotionManage() {
                           name="password"
                           placeholder="Enter password "
                           type="password"
-                          value={users.password}
-                          onChange={(e) =>
-                            setUsers({ ...users, password: e.target.value })
-                          }
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="examplePassword">Password</Label>
+                        <Input
+                          id="examplePassword"
+                          name="password"
+                          placeholder="Enter password "
+                          type="password"
                         />
                       </FormGroup>
                     </Col>
                   </Row>
-                  <FormGroup>
-                    <Label for="exampleAddress">Name</Label>
-                    <Input
-                      id="exampleAddress"
-                      name="address"
-                      placeholder="Enter your name"
-                      value={users.name}
-                      onChange={(e) =>
-                        setUsers({ ...users, name: e.target.value })
-                      }
-                    />
-                  </FormGroup>
-                  <Row>
-                    <Col md={6}>
-                      <FormGroup>
-                        <Label for="exampleCity">Code phone area</Label>
-                        <Input
-                          id="exampleCity"
-                          name="city"
-                          value={users.code_phone_area}
-                          onChange={(e) =>
-                            setUsers({
-                              ...users,
-                              code_phone_area: e.target.value,
-                            })
-                          }
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md={6}>
-                      <FormGroup>
-                        <Label for="exampleCity">Phone</Label>
-                        <Input
-                          id="exampleCity"
-                          name="city"
-                          value={users.phone}
-                          onChange={(e) =>
-                            setUsers({ ...users, phone: e.target.value })
-                          }
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Button color="warning">Thêm người dùng</Button>
+
+                  <Button color="warning">Thêm khuyến mãi</Button>
                 </Form>
               </div>
 

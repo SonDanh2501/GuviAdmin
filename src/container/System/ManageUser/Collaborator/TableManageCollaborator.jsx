@@ -24,11 +24,11 @@ export default function TableManageCollaborator() {
       <Table className="table-manage-collaborator mt-5">
         <thead>
           <tr>
-            <th>Email</th>
             <th>Tên cộng tác viên</th>
+            <th>Email</th>
             <th>SĐT</th>
             <th>Ngày sinh</th>
-            <th>Giới tính</th>
+            {/* <th>Giới tính</th> */}
             <th></th>
           </tr>
         </thead>
@@ -39,10 +39,10 @@ export default function TableManageCollaborator() {
             collaborators.map((item, index) => {
               return (
                 <tr key={index}>
-                  <td> {item?.email}</td>
                   <td> {item?.name}</td>
+                  <td> {item?.email}</td>
                   <td> {item?.phone}</td>
-                  <td> {item?.birthday}</td>
+                  {/* <td> {item?.birthday}</td> */}
                   <td>
                     {item?.gender === "male"
                       ? "Nam"
