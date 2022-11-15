@@ -14,8 +14,10 @@ function* fetchCustomersSaga() {
 }
 
 function* createCustomerSaga(action) {
+  console.log("saga createNewSaga");
   try {
     const Customer = yield call(api.createCustomer, action.payload);
+    console.log("saga createNewSaga", Customer);
     yield put(actions.createCustomer.createCustomerSuccess(Customer.data));
   } catch (err) {
     console.error(err);

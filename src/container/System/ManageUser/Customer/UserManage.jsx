@@ -41,7 +41,7 @@ export default function UserManage() {
                         <Input
                           id="exampleEmail"
                           name="email"
-                          placeholder="Enter your email address"
+                          placeholder="Nhập email"
                           type="email"
                           value={users.email}
                           onChange={(e) =>
@@ -56,7 +56,7 @@ export default function UserManage() {
                         <Input
                           id="examplePassword"
                           name="password"
-                          placeholder="Enter password "
+                          placeholder="Nhập password "
                           type="password"
                           value={users.password}
                           onChange={(e) =>
@@ -67,11 +67,11 @@ export default function UserManage() {
                     </Col>
                   </Row>
                   <FormGroup>
-                    <Label for="exampleAddress">Name</Label>
+                    <Label for="exampleName">Tên khách hàng</Label>
                     <Input
-                      id="exampleAddress"
-                      name="address"
-                      placeholder="Enter your name"
+                      id="exampleName"
+                      name="name"
+                      placeholder="Nhập tên khách hàng"
                       value={users.name}
                       onChange={(e) =>
                         setUsers({ ...users, name: e.target.value })
@@ -81,10 +81,11 @@ export default function UserManage() {
                   <Row>
                     <Col md={6}>
                       <FormGroup>
-                        <Label for="exampleCity">Code phone area</Label>
+                        <Label for="exampleCodePhoneArea">Code phone area</Label>
                         <Input
-                          id="exampleCity"
-                          name="city"
+                          id="exampleCodePhoneArea"
+                      placeholder="Nhập code phone area"
+                      name="code_phone_area"
                           value={users.code_phone_area}
                           onChange={(e) =>
                             setUsers({
@@ -97,10 +98,11 @@ export default function UserManage() {
                     </Col>
                     <Col md={6}>
                       <FormGroup>
-                        <Label for="exampleCity">Phone</Label>
+                        <Label for="examplePhone">Số điện thoại</Label>
                         <Input
-                          id="exampleCity"
-                          name="city"
+                          id="examplePhone"
+                      placeholder="Nhập số điện thoại"
+                          name="phone"
                           value={users.phone}
                           onChange={(e) =>
                             setUsers({ ...users, phone: e.target.value })

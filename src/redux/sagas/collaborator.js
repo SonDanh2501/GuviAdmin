@@ -27,7 +27,7 @@ function* createCollaboratorSaga(action) {
 
   try {
     const Collaborator = yield call(api.createCollaborator, action.payload);
-    yield put(actions.createCollaborator.createCustomerSuccess(Collaborator.data));
+    yield put(actions.createCollaborator.createCollaboratorSuccess(Collaborator.data));
   } catch (err) {
     console.error(err);
     yield put(actions.createCollaborator.createCollaboratorFailure(err));
