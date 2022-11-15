@@ -1,25 +1,57 @@
+import {
+  ContentState,
+  convertFromHTML,
+  convertToRaw,
+  EditorState,
+} from "draft-js";
+import draftToHtml from "draftjs-to-html";
 import React, { useCallback, useEffect } from "react";
-import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
-import TableManagePromotion from "./tableManagePromotion.jsx";
-import "./PromotionManage.scss";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
-import { normalizeUnits } from "moment";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Button,
+  Card,
+  CardFooter,
+  CardHeader,
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+  Row,
+  Table,
+} from "reactstrap";
+import { postFile } from "../../../../api/file.jsx";
 import {
   createPromotion,
   getGroupCustomerPromotion,
+  getPromotionDetails,
 } from "../../../../api/promotion.jsx";
-import { postFile } from "../../../../api/file.jsx";
-import { Editor } from "react-draft-wysiwyg";
-import { convertToRaw, EditorState } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
+import {
+  createPromotionAction,
+  getPromotion,
+  updatePromotionAction,
+} from "../../../../redux/actions/promotion.js";
+import {
+  getPromotionSelector,
+  getTotalPromotion,
+} from "../../../../redux/selectors/promotion.js";
+import "./PromotionManage.scss";
+import TableManagePromotion from "./tableManagePromotion.jsx";
 
 export default function PromotionManage() {
   const [formPromorion, setFormPromotion] = React.useState("Mã khuyến mãi");
-  const [typePromotion, setTypePromotion] = React.useState("");
+  const [typePromotion, setTypePromotion] = React.useState("code");
   const [formDiscount, setFormDiscount] = React.useState("Giảm trực tiếp");
   const [discountUnit, setDiscountUnit] = React.useState("amount");
   const [create, setCreate] = React.useState(false);
+  const [edit, setEdit] = React.useState(false);
+  const [id, setId] = React.useState("");
   const [groupCustomer, setGroupCustomer] = React.useState([]);
   const [customer, setCustomer] = React.useState([]);
   const [titleVN, setTitleVN] = React.useState("");
@@ -52,8 +84,13 @@ export default function PromotionManage() {
   const [usePromo, setUsePromo] = React.useState("");
   const [imgThumbnail, setImgThumbnail] = React.useState("");
   const [imgBackground, setImgBackground] = React.useState("");
+  const promotion = useSelector(getPromotionSelector);
+  const total = useSelector(getTotalPromotion);
+  const dispatch = useDispatch();
+  const [data, setData] = React.useState([]);
 
   useEffect(() => {
+    dispatch(getPromotion.getPromotionRequest());
     getGroupCustomerPromotion()
       .then((res) => setGroupCustomer(res.data))
       .catch((err) => console.log(err));
@@ -131,45 +168,48 @@ export default function PromotionManage() {
   const onEditorENStateChange = (editorState) => setDescriptionEN(editorState);
 
   const onCreatePromotion = useCallback(() => {
-    createPromotion({
-      title: {
-        vi: titleVN,
-        en: titleEN,
-      },
-      short_description: {
-        vi: shortDescriptionVN,
-        en: shortDescriptionEN,
-      },
-      description: {
-        vi: draftToHtml(convertToRaw(descriptionVN.getCurrentContent())),
-        en: draftToHtml(convertToRaw(descriptionEN.getCurrentContent())),
-      },
-      thumbnail: imgThumbnail,
-      image_background: imgBackground,
-      code: codebrand,
-      is_limit_date: limitedDate,
-      limit_start_date: limitedDate ? new Date(startDate).toISOString() : null,
-      limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
-      is_limit_count: limitedQuantity,
-      limit_count: limitedQuantity ? amount : 0,
-      id_group_customer: customer,
-      service_apply: [],
-      id_customer: [],
-      is_limited_use: isUsePromo,
-      limited_use: isUsePromo ? usePromo : 0,
-      type_discount: promoType,
-      type_promotion: typePromotion,
-      price_min_order: 0,
-      discount_unit: discountUnit,
-      discount_max_price: maximumDiscount,
-      discount_value: reducedValue,
-      is_delete: false,
-      is_exchange_point: isExchangePoint,
-      exchange_point: exchangePoint,
-      brand: namebrand,
-    })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    dispatch(
+      createPromotionAction.createPromotionRequest({
+        title: {
+          vi: titleVN,
+          en: titleEN,
+        },
+        short_description: {
+          vi: shortDescriptionVN,
+          en: shortDescriptionEN,
+        },
+        description: {
+          vi: draftToHtml(convertToRaw(descriptionVN.getCurrentContent())),
+          en: draftToHtml(convertToRaw(descriptionEN.getCurrentContent())),
+        },
+        thumbnail: imgThumbnail,
+        image_background: imgBackground,
+        code: codebrand,
+        is_limit_date: limitedDate,
+        limit_start_date: limitedDate
+          ? new Date(startDate).toISOString()
+          : null,
+        limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
+        is_limit_count: limitedQuantity,
+        limit_count: limitedQuantity ? amount : 0,
+        id_group_customer: customer,
+        service_apply: [],
+        id_customer: [],
+        is_limited_use: isUsePromo,
+        limited_use: isUsePromo ? usePromo : 0,
+        type_discount: promoType,
+        type_promotion: typePromotion,
+        price_min_order: 0,
+        discount_unit: discountUnit,
+        discount_max_price: maximumDiscount,
+        discount_value: reducedValue,
+        is_delete: false,
+        is_exchange_point: isExchangePoint,
+        exchange_point: exchangePoint,
+        brand: namebrand,
+      })
+    );
+    setCreate(!create);
   }, [
     titleVN,
     titleEN,
@@ -195,6 +235,136 @@ export default function PromotionManage() {
     namebrand,
     maximumDiscount,
     reducedValue,
+    create,
+    setCreate,
+  ]);
+
+  useEffect(() => {
+    getPromotionDetails(id)
+      .then((res) => {
+        setTitleVN(res?.title?.vi);
+        setTitleEN(res?.title?.en);
+        setShortDescriptionVN(res?.short_description?.vi);
+        setShortDescriptionEN(res?.short_description?.en);
+        setDescriptionVN(
+          EditorState.createWithContent(
+            ContentState.createFromBlockArray(
+              convertFromHTML(res?.description?.vi)
+            )
+          )
+        );
+        setDescriptionEN(
+          EditorState.createWithContent(
+            ContentState.createFromBlockArray(
+              convertFromHTML(res?.description?.en)
+            )
+          )
+        );
+        setImgThumbnail(res?.thumbnail);
+        setImgBackground(res?.image_background);
+        setCodebrand(res?.code);
+        setLimitedDate(res?.is_limit_date);
+        setStartDate(
+          res?.is_limit_date
+            ? res?.limit_start_date.slice(0, res?.limit_start_date.indexOf("T"))
+            : ""
+        );
+        setEndDate(
+          res?.is_limit_date
+            ? res?.limit_end_date.slice(0, res?.limit_start_date.indexOf("T"))
+            : ""
+        );
+        setLimitedQuantity(res?.is_limit_count);
+        setAmount(res?.limit_count);
+        setCustomer(res?.id_group_customer);
+        setIsUsePromo(res?.is_limited_use);
+        setUsePromo(res?.limited_use);
+        setPromoType(res?.type_discount);
+        setTypePromotion(res?.type_promotion);
+        setDiscountUnit(res?.discount_unit);
+        setMaximumDiscount(res?.discount_max_price);
+        setReducedValue(res?.discount_value);
+        setIsExchangePoint(res?.is_exchange_point);
+        setExchangePoint(res?.exchange_point);
+        setNamebrand(res?.brand);
+        setEdit(true);
+      })
+      .catch((err) => console.log(err));
+  }, [id]);
+
+  const onEditPromotion = useCallback(() => {
+    dispatch(
+      updatePromotionAction.updatePromotionRequest({
+        id: id,
+        data: {
+          title: {
+            vi: titleVN,
+            en: titleEN,
+          },
+          short_description: {
+            vi: shortDescriptionVN,
+            en: shortDescriptionEN,
+          },
+          description: {
+            vi: draftToHtml(convertToRaw(descriptionVN.getCurrentContent())),
+            en: draftToHtml(convertToRaw(descriptionEN.getCurrentContent())),
+          },
+          thumbnail: imgThumbnail,
+          image_background: imgBackground,
+          code: codebrand,
+          is_limit_date: limitedDate,
+          limit_start_date: limitedDate
+            ? new Date(startDate).toISOString()
+            : null,
+          limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
+          is_limit_count: limitedQuantity,
+          limit_count: limitedQuantity ? amount : 0,
+          id_group_customer: customer,
+          service_apply: [],
+          id_customer: [],
+          is_limited_use: isUsePromo,
+          limited_use: isUsePromo ? usePromo : 0,
+          type_discount: promoType,
+          type_promotion: typePromotion,
+          price_min_order: 0,
+          discount_unit: discountUnit,
+          discount_max_price: maximumDiscount,
+          discount_value: reducedValue,
+          is_delete: false,
+          is_exchange_point: isExchangePoint,
+          exchange_point: exchangePoint,
+          brand: namebrand,
+        },
+      })
+    );
+    setEdit(!edit);
+  }, [
+    titleVN,
+    titleEN,
+    shortDescriptionVN,
+    shortDescriptionEN,
+    descriptionVN,
+    descriptionEN,
+    imgThumbnail,
+    imgBackground,
+    codebrand,
+    limitedDate,
+    startDate,
+    endDate,
+    limitedQuantity,
+    amount,
+    customer,
+    isUsePromo,
+    usePromo,
+    promoType,
+    discountUnit,
+    isExchangePoint,
+    exchangePoint,
+    namebrand,
+    maximumDiscount,
+    reducedValue,
+    edit,
+    setEdit,
   ]);
 
   return (
@@ -203,7 +373,7 @@ export default function PromotionManage() {
         <div className="user-redux-body mt-5 col-md-12">
           <div className="container">
             <div className="column">
-              {create && (
+              {create || edit ? (
                 <div className="form-input">
                   <Form>
                     <Row>
@@ -260,35 +430,40 @@ export default function PromotionManage() {
                           wrapperClassName="wrapperClassName wrapperStyle"
                           editorClassName="editorClassName"
                         />
-                        <h5>4. Thumbnail/Background</h5>
-                        <CustomTextInput
-                          label={"Thumbnail"}
-                          type="file"
-                          accept={".jpg,.png,.jpeg"}
-                          className="thumbnail"
-                          onChange={onChangeThumbnail}
-                        />
-                        {imgThumbnail && (
-                          <img src={imgThumbnail} className="img-thumbnail" />
-                        )}
-                        <CustomTextInput
-                          label={"Background"}
-                          type="file"
-                          accept={".jpg,.png,.jpeg"}
-                          className="thumbnail"
-                          onChange={onChangeBackground}
-                        />
-                        {imgBackground && (
-                          <img src={imgBackground} className="img-background" />
-                        )}
                       </Col>
                       <Col md={4}>
+                        <div>
+                          <h5>4. Thumbnail/Background</h5>
+                          <CustomTextInput
+                            label={"Thumbnail"}
+                            type="file"
+                            accept={".jpg,.png,.jpeg"}
+                            className="thumbnail"
+                            onChange={onChangeThumbnail}
+                          />
+                          {imgThumbnail && (
+                            <img src={imgThumbnail} className="img-thumbnail" />
+                          )}
+                          <CustomTextInput
+                            label={"Background"}
+                            type="file"
+                            accept={".jpg,.png,.jpeg"}
+                            className="thumbnail"
+                            onChange={onChangeBackground}
+                          />
+                          {imgBackground && (
+                            <img
+                              src={imgBackground}
+                              className="img-background"
+                            />
+                          )}
+                        </div>
                         <div>
                           <h5>5.Hình thức khuyến mãi</h5>
                           <Row>
                             <Button
                               className={
-                                formPromorion === "Mã khuyến mãi"
+                                typePromotion === "code"
                                   ? "btn-form-promotion"
                                   : "btn-form-promotion-default"
                               }
@@ -299,7 +474,7 @@ export default function PromotionManage() {
                             </Button>
                             <Button
                               className={
-                                formPromorion === "Chương trình khuyến mãi"
+                                typePromotion === "event"
                                   ? "btn-form-promotion"
                                   : "btn-form-promotion-default"
                               }
@@ -310,7 +485,7 @@ export default function PromotionManage() {
                             >
                               Chương trình khuyến mãi
                             </Button>
-                            {formPromorion === "Mã khuyến mãi" ? (
+                            {typePromotion === "code" ? (
                               <CustomTextInput
                                 placeholder="Nhập mã khuyến mãi"
                                 className="input-promo-code"
@@ -559,28 +734,32 @@ export default function PromotionManage() {
                             </Label>
                             <Input
                               type="checkbox"
-                              value={limitedDate}
+                              value={startDate}
                               onClick={() => setLimitedDate(!limitedDate)}
                             />
                           </FormGroup>
                           {limitedDate && (
                             <>
-                              <CustomTextInput
-                                label={"Ngày bắt đầu"}
-                                placeholder="Số lượng"
-                                className="input-promo-code"
-                                type="date"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                              />
-                              <CustomTextInput
-                                label={"Ngày kết thúc"}
-                                placeholder="Số lượng"
-                                className="input-promo-code"
-                                type="date"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                              />
+                              <FormGroup>
+                                <Label>Ngày bắt đầu</Label>
+                                <input
+                                  className="input-promo-code"
+                                  type={"date"}
+                                  defaultValue={startDate}
+                                  value={startDate}
+                                  onChange={(e) => setStartDate(e.target.value)}
+                                />
+                              </FormGroup>
+                              <FormGroup>
+                                <Label>Ngày kết thúc</Label>
+                                <input
+                                  className="input-promo-code"
+                                  type={"date"}
+                                  defaultValue={startDate}
+                                  value={endDate}
+                                  onChange={(e) => setEndDate(e.target.value)}
+                                />
+                              </FormGroup>
                             </>
                           )}
                         </div>
@@ -609,18 +788,76 @@ export default function PromotionManage() {
                             />
                           )}
                         </div>
+
+                        {create && (
+                          <Button
+                            className="btn_create_promotion"
+                            color="warning"
+                            onClick={onCreatePromotion}
+                          >
+                            Thêm khuyến mãi
+                          </Button>
+                        )}
+                        {edit && (
+                          <Button
+                            className="btn_create_promotion"
+                            color="warning"
+                            onClick={onEditPromotion}
+                          >
+                            Sửa khuyến mãi
+                          </Button>
+                        )}
                       </Col>
                     </Row>
-
-                    <Button color="warning" onClick={onCreatePromotion}>
-                      Thêm khuyến mãi
-                    </Button>
                   </Form>
                 </div>
-              )}
-
+              ) : null}
               <div className="">
-                <TableManagePromotion setCreate={setCreate} create={create} />
+                <Card className="shadow">
+                  <CardHeader className="border-0">
+                    {!create && (
+                      <Button color="info" onClick={() => setCreate(!create)}>
+                        Thêm khuyến mãi
+                      </Button>
+                    )}
+                  </CardHeader>
+                  <Table className="align-items-center table-flush" responsive>
+                    <thead className="thead-light">
+                      <tr>
+                        <th scope="col">Tên Promotion</th>
+                        <th scope="col">Mã code</th>
+                        <th scope="col">Hạn</th>
+                        <th scope="col" />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {promotion && promotion.length > 0 ? (
+                        promotion.map((e) => (
+                          <TableManagePromotion data={e} setId={setId} />
+                        ))
+                      ) : (
+                        <></>
+                      )}
+                    </tbody>
+                  </Table>
+                  <CardFooter>
+                    <nav aria-label="...">
+                      <Pagination
+                        className="pagination justify-content-end mb-0"
+                        listClassName="justify-content-end mb-0"
+                      >
+                        <PaginationItem className="active">
+                          <PaginationLink
+                            href="#pablo"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            1
+                          </PaginationLink>
+                        </PaginationItem>
+                      </Pagination>
+                    </nav>
+                  </CardFooter>
+                </Card>
               </div>
             </div>
           </div>

@@ -5,10 +5,14 @@ import {
   createCustomer,
   updateCustomer,
 } from "../actions/customerAction";
-import { createPromotions, getPromotion } from "../actions/promotion";
+import {
+  createPromotionAction,
+  createPromotions,
+  getPromotion,
+} from "../actions/promotion";
 
 export default function PromotionReducers(
-  state = INIT_STATE.customers,
+  state = INIT_STATE.promotions,
   action
 ) {
   switch (action.type) {
@@ -19,11 +23,17 @@ export default function PromotionReducers(
     case getType(getPromotion.getPromotionSuccess):
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.data,
+        totalItem: action.payload.total,
       };
     case getType(getPromotion.getPromotionFailure):
       return {
         ...state,
+      };
+    case getType(createPromotionAction.createPromotionSuccess):
+      return {
+        ...state,
+        data: [...state.data, action.payload],
       };
     default:
       return state;
