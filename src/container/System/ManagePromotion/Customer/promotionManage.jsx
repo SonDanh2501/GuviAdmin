@@ -814,12 +814,22 @@ export default function PromotionManage() {
               ) : null}
               <div className="">
                 <Card className="shadow">
-                  <CardHeader className="border-0">
-                    {!create && (
-                      <Button color="info" onClick={() => setCreate(!create)}>
-                        Thêm khuyến mãi
-                      </Button>
-                    )}
+                  <CardHeader className="border-0 card-header">
+                    <Row className="align-items-center">
+                      <Col className="text-left">
+                        {!create && (
+                          <Button
+                            color="info"
+                            onClick={() => setCreate(!create)}
+                          >
+                            Thêm khuyến mãi
+                          </Button>
+                        )}
+                      </Col>
+                      <Col>
+                        <CustomTextInput placeholder="Tìm kiếm" type="text" />
+                      </Col>
+                    </Row>
                   </CardHeader>
                   <Table className="align-items-center table-flush" responsive>
                     <thead className="thead-light">
@@ -831,7 +841,7 @@ export default function PromotionManage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {promotion && promotion.length > 0 ? (
+                      {promotion.length > 0 ? (
                         promotion.map((e) => (
                           <TableManagePromotion data={e} setId={setId} />
                         ))
