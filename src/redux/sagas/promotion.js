@@ -48,7 +48,6 @@ function* updatePromotionSaga(action) {
       action.payload.id,
       action.payload.data
     );
-    console.log(promotion);
     window.location.reload();
   } catch (err) {
     console.error(err);
