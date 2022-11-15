@@ -45,7 +45,7 @@ export default function CollaboratorManage() {
                         <Input
                           id="exampleEmail"
                           name="email"
-                          placeholder="Enter your email address"
+                          placeholder="Nhập email"
                           type="email"
                           value={collaborators.email}
                           onChange={(e) =>
@@ -63,7 +63,7 @@ export default function CollaboratorManage() {
                         <Input
                           id="examplePassword"
                           name="password"
-                          placeholder="Enter password "
+                          placeholder="Nhập password"
                           type="password"
                           value={collaborators.password}
                           onChange={(e) =>
@@ -76,12 +76,14 @@ export default function CollaboratorManage() {
                       </FormGroup>
                     </Col>
                   </Row>
+                  <Row> 
+                  <Col md={6}> 
                   <FormGroup>
-                    <Label for="exampleAddress">Name</Label>
+                  <Label for="exampleName">Tên cộng tác viên</Label>
                     <Input
-                      id="exampleAddress"
-                      name="address"
-                      placeholder="Enter your name"
+                        id="exampleName"
+                        name="name"
+                        placeholder="Nhập tên cộng tác viên"
                       value={collaborators.name}
                       onChange={(e) =>
                         setCollaborators({
@@ -91,13 +93,35 @@ export default function CollaboratorManage() {
                       }
                     />
                   </FormGroup>
+                  </Col>
+
+                  <Col md={6}>
+                      <FormGroup>
+                        <Label for="exampleCMND/CCCD">CMND/CCCD</Label>
+                        <Input
+                          id="exampleCMND/CCCD"
+                      placeholder="Nhập CMND/CCCD"
+                      name="identify"
+                          value={collaborators.identify}
+                          onChange={(e) =>
+                            setCollaborators({
+                              ...collaborators,
+                              identify: e.target.value,
+                            })
+                          }
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+              
                   <Row>
                     <Col md={6}>
                       <FormGroup>
                         <Label for="exampleCity">Code phone area</Label>
                         <Input
-                          id="exampleCity"
-                          name="city"
+                          id="exampleCodePhoneArea"
+                          placeholder="Nhập code phone area"
+                          name="code_phone_area"
                           value={collaborators.code_phone_area}
                           onChange={(e) =>
                             setCollaborators({
@@ -110,10 +134,11 @@ export default function CollaboratorManage() {
                     </Col>
                     <Col md={6}>
                       <FormGroup>
-                        <Label for="exampleCity">Phone</Label>
-                        <Input
-                          id="exampleCity"
-                          name="city"
+                      <Label for="examplePhone">Số điện thoại</Label>
+                        <Input                          
+                        id="examplePhone"
+                      placeholder="Nhập số điện thoại"
+                          name="phone"
                           value={collaborators.phone}
                           onChange={(e) =>
                             setCollaborators({
@@ -124,22 +149,7 @@ export default function CollaboratorManage() {
                         />
                       </FormGroup>
                     </Col>
-                    <Col md={6}>
-                      <FormGroup>
-                        <Label for="exampleCity">identify</Label>
-                        <Input
-                          id="exampleCity"
-                          name="city"
-                          value={collaborators.identify}
-                          onChange={(e) =>
-                            setCollaborators({
-                              ...collaborators,
-                              identify: e.target.value,
-                            })
-                          }
-                        />
-                      </FormGroup>
-                    </Col>
+                   
                   </Row>
 
                   <Button color="warning" onClick={onSubmit}>

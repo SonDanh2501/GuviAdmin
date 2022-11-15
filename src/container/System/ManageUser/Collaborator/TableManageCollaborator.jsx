@@ -55,7 +55,7 @@ export default function TableManageCollaborator() {
                       <i className="uil uil-edit-alt "></i>
                     </button>
                     <button className="btn-delete">
-                      <i class="uil uil-trash"></i>
+                      <i className="uil uil-trash"></i>
                     </button>
                   </td>
                 </tr>
