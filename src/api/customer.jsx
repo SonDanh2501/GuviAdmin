@@ -3,8 +3,8 @@ import axiosClient from "../axios";
 export const fetchCustomers = () => {
   return axiosClient.get("/admin/customer_manager/all_items");
 };
-export const fetchCustomerById = () => {
-  return axiosClient.get("/admin/customer_manager/:id");
+export const fetchCustomerById = (id) => {
+  return axiosClient.get(`/admin/customer_manager/${id}`);
 };
 export const createCustomer = (payload) => {
   return axiosClient.post("/admin/customer_manager/create_item", payload);

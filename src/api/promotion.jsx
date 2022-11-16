@@ -1,9 +1,11 @@
 import axiosClient from "../axios";
 
-export const fetchPromotion = (search) => {
-  return axiosClient.get(
-    `/admin/promotion_manager/get_list?lang=vi&search=${search}`
-  );
+export const fetchPromotion = () => {
+  return axiosClient.get(`/admin/promotion_manager/get_list`);
+};
+
+export const searchPromotion = (search) => {
+  return axiosClient.get(`/admin/promotion_manager/get_list?search=${search}`);
 };
 
 export const createPromotion = (data) => {
