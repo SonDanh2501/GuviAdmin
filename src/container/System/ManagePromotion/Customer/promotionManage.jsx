@@ -718,7 +718,7 @@ export default function PromotionManage() {
                             </Label>
                             <Input
                               type="checkbox"
-                              value={isUsePromo}
+                              defaultChecked={isUsePromo}
                               onClick={() => setIsUsePromo(!isUsePromo)}
                             />
                           </FormGroup>
