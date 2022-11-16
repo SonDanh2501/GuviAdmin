@@ -1,4 +1,4 @@
-import { createActions, createAction } from 'redux-actions';
+import { createActions, createAction } from "redux-actions";
 
 export const getType = (reduxAction) => {
   return reduxAction().type;
@@ -7,7 +7,7 @@ export const getType = (reduxAction) => {
 export const getCustomers = createActions({
   getCustomersRequest: undefined,
   getCustomersSuccess: (payload) => payload,
-  getCustomersFailure: (err) => err, 
+  getCustomersFailure: (err) => err,
 });
 
 export const createCustomer = createActions({
@@ -22,3 +22,8 @@ export const updateCustomer = createActions({
   updateCustomerFailure: (err) => err,
 });
 
+export const deleteCustomerAction = createActions({
+  deleteCustomerRequest: (payload) => payload,
+  deleteCustomerSuccess: (payload) => payload,
+  deleteCustomerFailure: (err) => err,
+});

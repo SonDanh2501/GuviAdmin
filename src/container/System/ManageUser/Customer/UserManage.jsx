@@ -1,45 +1,39 @@
-import React, { useState, useEffect } from "react";
-import "./UserManage.scss";
-import TableManageUser from "./TableManageUser.jsx";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
-  Form,
-  Row,
-  Col,
-  FormGroup,
-  Label,
-  Input,
   Button,
   Card,
-  CardHeader,
-  Table,
   CardFooter,
+  CardHeader,
+  Col,
+  Form,
   Pagination,
   PaginationItem,
   PaginationLink,
+  Row,
+  Table,
 } from "reactstrap";
-import { useSelector, useDispatch } from "react-redux";
+import { searchCustomers } from "../../../../api/customer";
+import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import {
   createCustomer,
   getCustomers,
+  updateCustomer,
 } from "../../../../redux/actions/customerAction";
 import { getCustomer } from "../../../../redux/selectors/customer";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
+import TableManageUser from "./TableManageUser.jsx";
+import "./UserManage.scss";
 
 export default function UserManage() {
-  const [users, setUsers] = React.useState({
-    code_phone_area: "",
-    phone: "",
-    email: "",
-    name: "",
-    password: "",
-  });
   const [create, setCreate] = React.useState(false);
   const [edit, setEdit] = React.useState(false);
+  const [id, setId] = React.useState("");
   const [codePhone, setCodePhone] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [dataFilter, setDataFilter] = useState([]);
   const customers = useSelector(getCustomer);
   const dispatch = useDispatch();
 
@@ -48,25 +42,48 @@ export default function UserManage() {
   }, [dispatch]);
 
   const onSubmit = React.useCallback(() => {
-    dispatch(createCustomer.createCustomerRequest(users));
-    setUsers({
-      code_phone_area: "",
-      phone: "",
-      email: "",
-      name: "",
-      password: "",
-    });
-  }, [users, dispatch]);
+    dispatch(
+      createCustomer.createCustomerRequest({
+        code_phone_area: codePhone,
+        phone: phone,
+        email: email,
+        name: name,
+        password: password,
+      })
+    );
+  }, [codePhone, phone, email, name, password, dispatch]);
 
   const setItemEdit = (itemEdit) => {
-    setUsers({
-      code_phone_area: itemEdit?.code_phone_area,
-      phone: itemEdit?.phone,
-      email: itemEdit?.email,
-      name: itemEdit?.name,
-    });
+    setCodePhone(itemEdit?.code_phone_area);
+    setPhone(itemEdit?.phone);
+    setEmail(itemEdit?.email);
+    setName(itemEdit?.name);
+    setId(itemEdit?._id);
     setEdit(true);
+    setCreate(false);
+    window.scrollTo(0, 0);
   };
+
+  const onEditCustomer = useCallback(() => {
+    dispatch(
+      updateCustomer.updateCustomerRequest({
+        id: id,
+        data: {
+          code_phone_area: codePhone,
+          phone: phone,
+          is_active: true,
+          email: email,
+          name: name,
+        },
+      })
+    );
+  }, [id, codePhone, phone, email, name]);
+
+  const handleSearch = useCallback((value) => {
+    searchCustomers(value)
+      .then((res) => setDataFilter(res))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <React.Fragment>
@@ -90,67 +107,49 @@ export default function UserManage() {
                     </Col>
                     <Col md={6}>
                       {create && (
-                        <FormGroup>
-                          <Label for="examplePassword">Password</Label>
-                          <Input
-                            id="examplePassword"
-                            name="password"
-                            placeholder="Nhập password "
-                            type="password"
-                            value={users.password}
-                            onChange={(e) =>
-                              setUsers({ ...users, password: e.target.value })
-                            }
-                          />
-                        </FormGroup>
+                        <CustomTextInput
+                          label={"Password"}
+                          id="examplePassword"
+                          name="password"
+                          placeholder="Nhập password"
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
                       )}
                     </Col>
                   </Row>
-                  <FormGroup>
-                    <Label for="exampleName">Tên khách hàng</Label>
-                    <Input
-                      id="exampleName"
-                      name="name"
-                      placeholder="Nhập tên khách hàng"
-                      value={users.name}
-                      onChange={(e) =>
-                        setUsers({ ...users, name: e.target.value })
-                      }
-                    />
-                  </FormGroup>
+                  <CustomTextInput
+                    label={"Tên khách hàng"}
+                    id="exampleName"
+                    name="name"
+                    placeholder="Nhập tên khách hàng"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
                   <Row>
                     <Col md={6}>
-                      <FormGroup>
-                        <Label for="exampleCodePhoneArea">
-                          Code phone area
-                        </Label>
-                        <Input
-                          id="exampleCodePhoneArea"
-                          placeholder="Nhập code phone area"
-                          name="code_phone_area"
-                          value={users.code_phone_area}
-                          onChange={(e) =>
-                            setUsers({
-                              ...users,
-                              code_phone_area: e.target.value,
-                            })
-                          }
-                        />
-                      </FormGroup>
+                      <CustomTextInput
+                        label={"Code phone area"}
+                        id="exampleCodePhoneArea"
+                        placeholder="Nhập code phone area"
+                        name="code_phone_area"
+                        type="text"
+                        value={codePhone}
+                        onChange={(e) => setCodePhone(e.target.value)}
+                      />
                     </Col>
                     <Col md={6}>
-                      <FormGroup>
-                        <Label for="examplePhone">Số điện thoại</Label>
-                        <Input
-                          id="examplePhone"
-                          placeholder="Nhập số điện thoại"
-                          name="phone"
-                          value={users.phone}
-                          onChange={(e) =>
-                            setUsers({ ...users, phone: e.target.value })
-                          }
-                        />
-                      </FormGroup>
+                      <CustomTextInput
+                        label={"Số điện thoại"}
+                        id="examplePhone"
+                        placeholder="Nhập số điện thoại"
+                        name="phone"
+                        type="number"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                      />
                     </Col>
                   </Row>
                   {create && (
@@ -159,7 +158,7 @@ export default function UserManage() {
                     </Button>
                   )}
                   {edit && (
-                    <Button color="warning" onClick={onSubmit}>
+                    <Button color="warning" onClick={onEditCustomer}>
                       Sửa người dùng
                     </Button>
                   )}
@@ -168,7 +167,7 @@ export default function UserManage() {
                 <></>
               )}
 
-              <div className=" mt-5">
+              <div className="mt-5">
                 <Card className="shadow">
                   <CardHeader className="border-0 card-header">
                     <Row className="align-items-center">
@@ -183,24 +182,38 @@ export default function UserManage() {
                         )}
                       </Col>
                       <Col>
-                        <CustomTextInput placeholder="Tìm kiếm" type="text" />
+                        <CustomTextInput
+                          placeholder="Tìm kiếm"
+                          type="text"
+                          onChange={(e) => handleSearch(e.target.value)}
+                        />
                       </Col>
                     </Row>
                   </CardHeader>
                   <Table className="align-items-center table-flush " responsive>
                     <thead className="thead-light">
                       <tr>
-                        <th scope="col">Tên Promotion</th>
-                        <th scope="col">Mã code</th>
-                        <th scope="col">Hạn</th>
+                        <th scope="col">Tên người dùng</th>
+                        <th scope="col">SĐT</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Ngày sinh</th>
                         <th scope="col" />
                       </tr>
                     </thead>
                     <tbody>
-                      {customers.length > 0 &&
-                        customers.map((e) => (
-                          <TableManageUser data={e} setItemEdit={setItemEdit} />
-                        ))}
+                      {dataFilter.length > 0
+                        ? dataFilter.map((e) => (
+                            <TableManageUser
+                              data={e}
+                              setItemEdit={setItemEdit}
+                            />
+                          ))
+                        : customers.map((e) => (
+                            <TableManageUser
+                              data={e}
+                              setItemEdit={setItemEdit}
+                            />
+                          ))}
                     </tbody>
                   </Table>
                   <CardFooter>

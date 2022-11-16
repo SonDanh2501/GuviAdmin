@@ -17,7 +17,7 @@ function* createCustomerSaga(action) {
   console.log("saga createNewSaga");
   try {
     const Customer = yield call(api.createCustomer, action.payload);
-    console.log("saga createNewSaga", Customer);
+    window.location.reload();
     yield put(actions.createCustomer.createCustomerSuccess(Customer.data));
   } catch (err) {
     console.error(err);
@@ -27,13 +27,35 @@ function* createCustomerSaga(action) {
 
 function* updateCustomerSaga(action) {
   try {
-    const updatedCustomer = yield call(api.updateCustomer, action.payload);
+    const updatedCustomer = yield call(
+      api.updateCustomer,
+      action.payload.id,
+      action.payload.data
+    );
+    window.location.reload();
     yield put(
       actions.updateCustomer.updateCustomerSuccess(updatedCustomer.data)
     );
   } catch (err) {
     console.error(err);
     yield put(actions.updateCustomer.updateCustomerFailure(err));
+  }
+}
+
+function* deleteCustomerSaga(action) {
+  try {
+    const deleteCustomer = yield call(
+      api.deleteCustomer,
+      action.payload.id,
+      action.payload.data
+    );
+    window.location.reload();
+    yield put(
+      actions.deleteCustomerAction.deleteCustomerSuccess(deleteCustomer.data)
+    );
+  } catch (err) {
+    console.error(err);
+    yield put(actions.deleteCustomerAction.deleteCustomerFailure(err));
   }
 }
 
@@ -49,6 +71,10 @@ function* customerSaga() {
   yield takeLatest(
     actions.updateCustomer.updateCustomerRequest,
     updateCustomerSaga
+  );
+  yield takeLatest(
+    actions.deleteCustomerAction.deleteCustomerRequest,
+    deleteCustomerSaga
   );
 }
 

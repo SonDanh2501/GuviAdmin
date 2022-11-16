@@ -1,7 +1,16 @@
-import { INIT_STATE } from '../../utils/contant';
-import { getCustomers, getType, createCustomer, updateCustomer } from '../actions/customerAction';
+import { INIT_STATE } from "../../utils/contant";
+import {
+  getCustomers,
+  getType,
+  createCustomer,
+  updateCustomer,
+  deleteCustomerAction,
+} from "../actions/customerAction";
 
-export default function CustomersReducers(state = INIT_STATE.customers, action) {
+export default function CustomersReducers(
+  state = INIT_STATE.customers,
+  action
+) {
   switch (action.type) {
     case getType(getCustomers.getCustomersRequest):
       return {
@@ -25,8 +34,12 @@ export default function CustomersReducers(state = INIT_STATE.customers, action) 
       return {
         ...state,
         data: state.data.map((customer) =>
-        customer._id === action.payload._id ? action.payload : customer
+          customer._id === action.payload._id ? action.payload : customer
         ),
+      };
+    case getType(deleteCustomerAction.deleteCustomerSuccess):
+      return {
+        ...state,
       };
     default:
       return state;

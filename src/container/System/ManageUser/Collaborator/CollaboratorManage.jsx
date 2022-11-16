@@ -1,34 +1,93 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import TableManageCollaborator from "./TableManageCollaborator.jsx";
 import "./CollaboratorManage.scss";
-import * as actions from "../../../../redux/actions/collaborator";
-import { Form, Row, Col, FormGroup, Label, Input, Button } from "reactstrap";
+import {
+  Form,
+  Row,
+  Col,
+  FormGroup,
+  Label,
+  Input,
+  Button,
+  Card,
+  CardHeader,
+  Table,
+  CardFooter,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+} from "reactstrap";
+import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
+import { getCollaborator } from "../../../../redux/selectors/collaborator";
+import {
+  createCollaborator,
+  getCollaborators,
+  updateCollaborator,
+} from "../../../../redux/actions/collaborator";
+import { searchCollaborators } from "../../../../api/collaborator.jsx";
 
 export default function CollaboratorManage() {
-  const [collaborators, setCollaborators] = React.useState({
-    code_phone_area: "",
-    phone: "",
-    email: "",
-    name: "",
-    password: "",
-    identify: "",
-  });
+  const [create, setCreate] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [id, setId] = useState("");
+  const [codePhone, setCodePhone] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [identify, setIdentify] = useState("");
+  const [dataFilter, setDataFilter] = useState([]);
   const dispatch = useDispatch();
+  const collaborator = useSelector(getCollaborator);
+
+  useEffect(() => {
+    dispatch(getCollaborators.getCollaboratorsRequest());
+  }, [dispatch]);
+
   const onSubmit = React.useCallback(() => {
     dispatch(
-      actions.createCollaborator.createCollaboratorRequest(collaborators)
+      createCollaborator.createCollaboratorRequest({
+        code_phone_area: codePhone,
+        phone: phone,
+        email: email,
+        name: name,
+        password: password,
+        identify: identify,
+      })
     );
-    setCollaborators({
-      code_phone_area: "",
-      phone: "",
-      email: "",
-      name: "",
-      password: "",
-      identify: "",
-    });
-    window.location.reload();
-  }, [collaborators, dispatch]);
+  }, [dispatch, codePhone, email, name, password, identify]);
+
+  const setItemEdit = (itemEdit) => {
+    setCodePhone(itemEdit?.code_phone_area);
+    setPhone(itemEdit?.phone);
+    setEmail(itemEdit?.email);
+    setName(itemEdit?.name);
+    setId(itemEdit?._id);
+    setEdit(true);
+    setCreate(false);
+    window.scrollTo(0, 0);
+  };
+
+  const onEditCustomer = useCallback(() => {
+    dispatch(
+      updateCollaborator.updateCollaboratorRequest({
+        id: id,
+        data: {
+          code_phone_area: codePhone,
+          phone: phone,
+          email: email,
+          name: name,
+        },
+      })
+    );
+  }, [id, codePhone, phone, email, name]);
+
+  const handleSearch = useCallback((value) => {
+    searchCollaborators(value)
+      .then((res) => setDataFilter(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <React.Fragment>
@@ -37,129 +96,179 @@ export default function CollaboratorManage() {
           <div className="container">
             <div className="column">
               <div className="">
-                <Form>
-                  <Row>
-                    <Col md={6}>
-                      <FormGroup>
-                        <Label for="exampleEmail">Email</Label>
-                        <Input
+                {create || edit ? (
+                  <Form>
+                    <Row>
+                      <Col md={6}>
+                        <CustomTextInput
+                          label={"Email"}
                           id="exampleEmail"
                           name="email"
                           placeholder="Nhập email"
                           type="email"
-                          value={collaborators.email}
-                          onChange={(e) =>
-                            setCollaborators({
-                              ...collaborators,
-                              email: e.target.value,
-                            })
-                          }
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
                         />
-                      </FormGroup>
-                    </Col>
-                    <Col md={6}>
-                      <FormGroup>
-                        <Label for="examplePassword">Password</Label>
-                        <Input
-                          id="examplePassword"
-                          name="password"
-                          placeholder="Nhập password"
-                          type="password"
-                          value={collaborators.password}
-                          onChange={(e) =>
-                            setCollaborators({
-                              ...collaborators,
-                              password: e.target.value,
-                            })
-                          }
+                      </Col>
+                      <Col md={6}>
+                        {create && (
+                          <CustomTextInput
+                            label={"Password"}
+                            id="examplePassword"
+                            name="password"
+                            placeholder="Nhập password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                          />
+                        )}
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col md={6}>
+                        <CustomTextInput
+                          label={"Tên cộng tác viên"}
+                          id="exampleName"
+                          name="name"
+                          placeholder="Nhập tên cộng tác viên"
+                          type="text"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
                         />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row> 
-                  <Col md={6}> 
-                  <FormGroup>
-                  <Label for="exampleName">Tên cộng tác viên</Label>
-                    <Input
-                        id="exampleName"
-                        name="name"
-                        placeholder="Nhập tên cộng tác viên"
-                      value={collaborators.name}
-                      onChange={(e) =>
-                        setCollaborators({
-                          ...collaborators,
-                          name: e.target.value,
-                        })
-                      }
-                    />
-                  </FormGroup>
-                  </Col>
+                      </Col>
+                      <Col md={6}>
+                        {create && (
+                          <CustomTextInput
+                            label={"CMND/CCCD"}
+                            id="exampleCMND/CCCD"
+                            placeholder="Nhập CMND/CCCD"
+                            name="identify"
+                            type="text"
+                            value={identify}
+                            onChange={(e) => setIdentify(e.target.value)}
+                          />
+                        )}
+                      </Col>
+                    </Row>
 
-                  <Col md={6}>
-                      <FormGroup>
-                        <Label for="exampleCMND/CCCD">CMND/CCCD</Label>
-                        <Input
-                          id="exampleCMND/CCCD"
-                      placeholder="Nhập CMND/CCCD"
-                      name="identify"
-                          value={collaborators.identify}
-                          onChange={(e) =>
-                            setCollaborators({
-                              ...collaborators,
-                              identify: e.target.value,
-                            })
-                          }
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-              
-                  <Row>
-                    <Col md={6}>
-                      <FormGroup>
-                        <Label for="exampleCity">Code phone area</Label>
-                        <Input
+                    <Row>
+                      <Col md={6}>
+                        <CustomTextInput
+                          label={"Code phone area"}
                           id="exampleCodePhoneArea"
                           placeholder="Nhập code phone area"
                           name="code_phone_area"
-                          value={collaborators.code_phone_area}
-                          onChange={(e) =>
-                            setCollaborators({
-                              ...collaborators,
-                              code_phone_area: e.target.value,
-                            })
-                          }
+                          type="text"
+                          value={codePhone}
+                          onChange={(e) => setCodePhone(e.target.value)}
                         />
-                      </FormGroup>
-                    </Col>
-                    <Col md={6}>
-                      <FormGroup>
-                      <Label for="examplePhone">Số điện thoại</Label>
-                        <Input                          
-                        id="examplePhone"
-                      placeholder="Nhập số điện thoại"
+                      </Col>
+                      <Col md={6}>
+                        <CustomTextInput
+                          label={"Số điện thoại"}
+                          id="examplePhone"
+                          placeholder="Nhập số điện thoại"
                           name="phone"
-                          value={collaborators.phone}
-                          onChange={(e) =>
-                            setCollaborators({
-                              ...collaborators,
-                              phone: e.target.value,
-                            })
-                          }
+                          type="number"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
                         />
-                      </FormGroup>
-                    </Col>
-                   
-                  </Row>
+                      </Col>
+                    </Row>
 
-                  <Button color="warning" onClick={onSubmit}>
-                    Thêm cộng tác viên
-                  </Button>
-                </Form>
+                    {create && (
+                      <Button color="warning" onClick={onSubmit}>
+                        Thêm cộng tác viên
+                      </Button>
+                    )}
+
+                    {edit && (
+                      <Button color="warning" onClick={onEditCustomer}>
+                        Sửa cộng tác viên
+                      </Button>
+                    )}
+                  </Form>
+                ) : (
+                  <></>
+                )}
               </div>
 
-              <div className="">
-                <TableManageCollaborator />
+              <div className="mt-5">
+                <Card className="shadow">
+                  <CardHeader className="border-0 card-header">
+                    <Row className="align-items-center">
+                      <Col className="text-left">
+                        {!create && (
+                          <Button
+                            color="info"
+                            onClick={() => {
+                              setCodePhone("");
+                              setPhone("");
+                              setEmail("");
+                              setName("");
+                              setIdentify("");
+                              setCreate(!create);
+                              setEdit(false);
+                            }}
+                          >
+                            Thêm cộng tác viên
+                          </Button>
+                        )}
+                      </Col>
+                      <Col>
+                        <CustomTextInput
+                          placeholder="Tìm kiếm"
+                          type="text"
+                          onChange={(e) => handleSearch(e.target.value)}
+                        />
+                      </Col>
+                    </Row>
+                  </CardHeader>
+                  <Table className="align-items-center table-flush " responsive>
+                    <thead className="thead-light">
+                      <tr>
+                        <th>Tên cộng tác viên</th>
+                        <th>Email</th>
+                        <th>SĐT</th>
+                        <th>Ngày sinh</th>
+                        {/* <th>Giới tính</th> */}
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {dataFilter.length > 0
+                        ? dataFilter.map((e) => (
+                            <TableManageCollaborator
+                              data={e}
+                              setItemEdit={setItemEdit}
+                            />
+                          ))
+                        : collaborator.map((e) => (
+                            <TableManageCollaborator
+                              data={e}
+                              setItemEdit={setItemEdit}
+                            />
+                          ))}
+                    </tbody>
+                  </Table>
+                  <CardFooter>
+                    <nav aria-label="...">
+                      <Pagination
+                        className="pagination justify-content-end mb-0"
+                        listClassName="justify-content-end mb-0"
+                      >
+                        <PaginationItem className="active">
+                          <PaginationLink
+                            href="#pablo"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            1
+                          </PaginationLink>
+                        </PaginationItem>
+                      </Pagination>
+                    </nav>
+                  </CardFooter>
+                </Card>
               </div>
             </div>
           </div>

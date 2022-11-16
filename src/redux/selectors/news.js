@@ -1,7 +1,1 @@
-import {
-  rootReducer
-} from '../reducers/rootReducer'
-
-export const getNews = (state) =>
-  state.news.data.data;
-
+export const getNewSelector = (state) => state.news.data.data;

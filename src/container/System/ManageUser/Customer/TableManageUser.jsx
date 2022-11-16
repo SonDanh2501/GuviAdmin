@@ -13,23 +13,43 @@ import {
   ModalFooter,
   Button,
 } from "reactstrap";
-import { deleteCustomer } from "../../../../api/customer";
+import { activeCustomer } from "../../../../api/customer";
 
 export default function TableManageUser({ data, setItemEdit }) {
-  const [customer, setCustomer] = useState({
-    phone: "",
-    email: "",
-    name: "",
-    default_address: "",
-  });
   const [modal, setModal] = React.useState(false);
+  const [modalBlock, setModalBlock] = React.useState(false);
   const dispatch = useDispatch();
-
-  const onDelete = useCallback((id) => {
-    deleteCustomer(id, { is_delete: true });
-  }, []);
   // Toggle for Modal
   const toggle = () => setModal(!modal);
+  const toggleBlock = () => setModalBlock(!modalBlock);
+  const onDelete = useCallback((id) => {
+    dispatch(
+      actions.deleteCustomerAction.deleteCustomerRequest({
+        id: id,
+        data: { is_delete: true },
+      })
+    );
+  }, []);
+
+  const blockCustomer = useCallback((id, is_active) => {
+    if (is_active === true) {
+      activeCustomer(id, { is_active: false })
+        .then((res) => {
+          setModalBlock(!modalBlock);
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    } else {
+      activeCustomer(id, { is_active: true })
+        .then((res) => {
+          setModalBlock(!modalBlock);
+
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
+
   return (
     <>
       <tr>
@@ -51,12 +71,69 @@ export default function TableManageUser({ data, setItemEdit }) {
           <a>{data?.birth_date}</a>
         </td>
         <td>
-          <button className="btn-edit" onClick={() => setItemEdit(data)}>
-            <i className="uil uil-edit-alt"></i>
-          </button>
-          <button className="btn-delete" onClick={toggle}>
-            <i className="uil uil-trash"></i>
-          </button>
+          <Row>
+            <button className="btn-edit" onClick={() => setItemEdit(data)}>
+              <i className="uil uil-edit-alt"></i>
+            </button>
+            <button className="btn-delete" onClick={toggle}>
+              <i className="uil uil-trash"></i>
+            </button>
+          </Row>
+          <Row>
+            {data?.is_active ? (
+              <button className="btn-delete" onClick={toggleBlock}>
+                <i class="uil uil-unlock"></i>
+              </button>
+            ) : (
+              <button className="btn-delete" onClick={toggleBlock}>
+                <i class="uil uil-padlock"></i>
+              </button>
+            )}
+          </Row>
+          <div>
+            <Modal isOpen={modalBlock} toggle={toggleBlock}>
+              <ModalHeader toggle={toggleBlock}>
+                {" "}
+                {data?.is_active === true
+                  ? "Khóa tài khoản khách hàng"
+                  : "Mở tài khoản khách hàng"}
+              </ModalHeader>
+              <ModalBody>
+                {data?.is_active === true
+                  ? "Bạn có muốn khóa tài khoản khách hàng"
+                  : "Bạn có muốn kích hoạt tài khoản khách hàng"}
+                <h3>{data?.name}</h3>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  onClick={() => blockCustomer(data?._id, data?.is_active)}
+                >
+                  Có
+                </Button>
+                <Button color="#ddd" onClick={toggleBlock}>
+                  Không
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </div>
+
+          <div>
+            <Modal isOpen={modal} toggle={toggle}>
+              <ModalHeader toggle={toggle}>Xóa người dùng</ModalHeader>
+              <ModalBody>
+                Bạn có chắc muốn xóa người dùng {data?.name} này không?
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onClick={() => onDelete(data?._id)}>
+                  Có
+                </Button>
+                <Button color="#ddd" onClick={toggle}>
+                  Không
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </div>
         </td>
       </tr>
     </>

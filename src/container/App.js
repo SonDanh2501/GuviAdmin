@@ -1,7 +1,13 @@
 import "./App.scss";
 import Navigator from "../components/Navigator/Navigator.jsx";
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+} from "react-router-dom";
 import UserManage from "./System/ManageUser/Customer/UserManage.jsx";
 import CollaboratorManage from "./System/ManageUser/Collaborator/CollaboratorManage.jsx";
 import PromotionManage from "./System/ManagePromotion/Customer/promotionManage";

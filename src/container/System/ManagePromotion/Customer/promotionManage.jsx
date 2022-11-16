@@ -288,6 +288,7 @@ export default function PromotionManage() {
         setExchangePoint(res?.exchange_point);
         setNamebrand(res?.brand);
         setEdit(true);
+        window.scrollTo(0, 0);
       })
       .catch((err) => console.log(err));
   }, [id]);
