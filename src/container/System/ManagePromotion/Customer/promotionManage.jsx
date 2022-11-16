@@ -680,7 +680,7 @@ export default function PromotionManage() {
                             </Label>
                             <Input
                               type="checkbox"
-                              value={orderFirst}
+                              defaultChecked={orderFirst}
                               onClick={() => setOrderFirst(!orderFirst)}
                             />
                           </FormGroup>
@@ -693,7 +693,7 @@ export default function PromotionManage() {
                             </Label>
                             <Input
                               type="checkbox"
-                              value={limitedQuantity}
+                              defaultChecked={limitedQuantity}
                               onClick={() =>
                                 setLimitedQuantity(!limitedQuantity)
                               }
@@ -741,7 +741,7 @@ export default function PromotionManage() {
                             </Label>
                             <Input
                               type="checkbox"
-                              value={startDate}
+                              defaultChecked={limitedDate}
                               onClick={() => setLimitedDate(!limitedDate)}
                             />
                           </FormGroup>
@@ -778,7 +778,7 @@ export default function PromotionManage() {
                             </Label>
                             <Input
                               type="checkbox"
-                              value={isExchangePoint}
+                              defaultChecked={isExchangePoint}
                               onClick={() =>
                                 setIsExchangePoint(!isExchangePoint)
                               }
