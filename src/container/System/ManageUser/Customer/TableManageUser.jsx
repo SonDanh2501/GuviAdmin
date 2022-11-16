@@ -15,7 +15,7 @@ import {
 } from "reactstrap";
 import { deleteCustomer } from "../../../../api/customer";
 
-export default function TableManageUser() {
+export default function TableManageUser({ data, setItemEdit }) {
   const [customer, setCustomer] = useState({
     phone: "",
     email: "",
@@ -23,12 +23,7 @@ export default function TableManageUser() {
     default_address: "",
   });
   const [modal, setModal] = React.useState(false);
-
   const dispatch = useDispatch();
-  const customers = useSelector(getCustomer);
-  React.useEffect(() => {
-    dispatch(actions.getCustomers.getCustomersRequest());
-  }, [dispatch]);
 
   const onDelete = useCallback((id) => {
     deleteCustomer(id, { is_delete: true });
@@ -37,55 +32,33 @@ export default function TableManageUser() {
   const toggle = () => setModal(!modal);
   return (
     <>
-      <Table className="align-items-center table-flush mt-5" responsive>
-        <thead className="thead-light">
-          <tr>
-            <th scope="col">Tên người dùng</th>
-            <th scope="col">SĐT</th>
-            <th scope="col">Email</th>
-            <th scope="col">Ngày sinh</th>
-            <th scope="col" />
-          </tr>
-        </thead>
-        <tbody>
-          {customers && customers.length > 0 &&
-            customers.map((item, index) => {
-              return (
-                <tr key={index}>
-                  <th scope="row">
-                    <Media className="align-items-center">
-                      <img
-                        alt="..."
-                        src={item?.avatar}
-                        className="img_customer"
-                      />
-                      <Media>
-                        <span className="mb-0 text-sm">{item?.name}</span>
-                      </Media>
-                    </Media>
-                  </th>
-                  <td>
-                    <a>{item?.phone}</a>
-                  </td>
-                  <td>
-                    <a>{item?.email}</a>
-                  </td>
-                  <td>
-                    <a>{item?.birth_date}</a>
-                  </td>
-                  <td>
-                    <button className="btn-edit">
-                      <i className="uil uil-edit-alt"></i>
-                    </button>
-                    <button className="btn-delete" onClick={toggle}>
-                      <i className="uil uil-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-        </tbody>
-      </Table>
+      <tr>
+        <th scope="row">
+          <Media className="align-items-center">
+            <img alt="..." src={data?.avatar} className="img_customer" />
+            <Media>
+              <span className="mb-0 text-sm">{data?.name}</span>
+            </Media>
+          </Media>
+        </th>
+        <td>
+          <a>{data?.phone}</a>
+        </td>
+        <td>
+          <a>{data?.email}</a>
+        </td>
+        <td>
+          <a>{data?.birth_date}</a>
+        </td>
+        <td>
+          <button className="btn-edit" onClick={() => setItemEdit(data)}>
+            <i className="uil uil-edit-alt"></i>
+          </button>
+          <button className="btn-delete" onClick={toggle}>
+            <i className="uil uil-trash"></i>
+          </button>
+        </td>
+      </tr>
     </>
   );
 }

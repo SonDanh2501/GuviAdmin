@@ -27,9 +27,9 @@ import {
 } from "reactstrap";
 import { postFile } from "../../../../api/file.jsx";
 import {
-  createPromotion,
   getGroupCustomerPromotion,
   getPromotionDetails,
+  searchPromotion,
 } from "../../../../api/promotion.jsx";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
 import {
@@ -87,7 +87,7 @@ export default function PromotionManage() {
   const promotion = useSelector(getPromotionSelector);
   const total = useSelector(getTotalPromotion);
   const dispatch = useDispatch();
-  const [data, setData] = React.useState([]);
+  const [dataFilter, setDataFilter] = React.useState([]);
 
   useEffect(() => {
     dispatch(getPromotion.getPromotionRequest());
@@ -366,6 +366,12 @@ export default function PromotionManage() {
     edit,
     setEdit,
   ]);
+
+  const handleSearch = useCallback((value) => {
+    searchPromotion(value)
+      .then((res) => setDataFilter(res?.data))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <React.Fragment>
@@ -827,7 +833,11 @@ export default function PromotionManage() {
                         )}
                       </Col>
                       <Col>
-                        <CustomTextInput placeholder="Tìm kiếm" type="text" />
+                        <CustomTextInput
+                          placeholder="Tìm kiếm"
+                          type="text"
+                          onChange={(e) => handleSearch(e.target.value)}
+                        />
                       </Col>
                     </Row>
                   </CardHeader>
@@ -841,13 +851,13 @@ export default function PromotionManage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {promotion.length > 0 ? (
-                        promotion.map((e) => (
-                          <TableManagePromotion data={e} setId={setId} />
-                        ))
-                      ) : (
-                        <></>
-                      )}
+                      {dataFilter.length > 0
+                        ? dataFilter.map((e) => (
+                            <TableManagePromotion data={e} setId={setId} />
+                          ))
+                        : promotion.map((e) => (
+                            <TableManagePromotion data={e} setId={setId} />
+                          ))}
                     </tbody>
                   </Table>
                   <CardFooter>

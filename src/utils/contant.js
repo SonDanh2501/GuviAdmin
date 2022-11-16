@@ -1,5 +1,4 @@
 export const INIT_STATE = {
-<<<<<<< Updated upstream
   customers: {
     data: [],
   },
@@ -10,24 +9,16 @@ export const INIT_STATE = {
     data: [],
     totalItem: 0,
   },
+  banners: {
+    data: [],
+  },
+  news: {
+    data: [],
+  },
+  reasons: {
+    data: [],
+  },
 };
-=======
-     customers: {
-       data: [],
-     },
-     collaborators: {
-       data: [],
-     },
-     banners: {
-       data: [],
-     },
-     news: {
-       data: [],
-     },
-     reasons: {
-       data: [],
-     },
->>>>>>> Stashed changes
 
 export const path = {
   HOME: "/",
