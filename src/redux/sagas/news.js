@@ -1,13 +1,7 @@
-import {
-  takeLatest,
-  call,
-  put
-} from 'redux-saga/effects';
-import * as actions from '../actions/news';
-import * as api from '../../api/news';
-import {
-  getType
-} from '../actions/news';
+import { takeLatest, call, put } from "redux-saga/effects";
+import * as actions from "../actions/news";
+import * as api from "../../api/news";
+import { getType } from "../actions/news";
 
 function* fetchNewsSaga() {
   try {
@@ -20,10 +14,9 @@ function* fetchNewsSaga() {
 }
 
 function* createNewSaga(action) {
-  console.log("saga createNewSaga");
   try {
     const New = yield call(api.createNew, action.payload);
-    console.log("saga createNewSaga", New);
+    window.location.reload();
     yield put(actions.createNew.createNewSuccess(New.data));
   } catch (err) {
     console.error(err);
@@ -33,7 +26,12 @@ function* createNewSaga(action) {
 
 function* updateNewSaga(action) {
   try {
-    const updatedNew = yield call(api.updateNew, action.payload);
+    const updatedNew = yield call(
+      api.updateNew,
+      action.payload.id,
+      action.payload.data
+    );
+    window.location.reload();
     yield put(actions.updateNew.updateNewSuccess(updatedNew.data));
   } catch (err) {
     console.error(err);

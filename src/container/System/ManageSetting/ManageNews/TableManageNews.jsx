@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getNews } from "../../../../redux/selectors/news";
+import { getNewSelector } from "../../../../redux/selectors/news";
 import "./TableManageNews.scss";
 import * as actions from "../../../../redux/actions/news";
 import {
-  Table,Card,CardImg,
+  Table,
+  Card,
+  CardImg,
   Row,
   Media,
   Modal,
@@ -13,135 +15,139 @@ import {
   ModalFooter,
   Button,
 } from "reactstrap";
+import { activeNew, deleteNew } from "../../../../api/news";
 
-export default function TableManageNews() {
-  const [newss, setNews] = useState({
-    phone: "",
-    email: "",
-    name: "",
-    default_address: "",
-  });
+export default function TableManageNews({ data, setItemEdit }) {
   const [modal, setModal] = React.useState(false);
-
-  const dispatch = useDispatch();
-  const news = useSelector(getNews);
-  console.log("<<<<<<<<<<<<<<<<<CHECK NEWSSSSSSSSSSSS",news);
-  React.useEffect(() => {
-    dispatch(actions.getNews.getNewsRequest());
-  }, [dispatch]);
-
-
-  // Toggle for Modal
+  const [modalBlock, setModalBlock] = React.useState(false);
   const toggle = () => setModal(!modal);
+  const toggleBlock = () => setModalBlock(!modalBlock);
+
+  const onDelete = useCallback((id) => {
+    deleteNew(id)
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const blockNew = useCallback((id, is_active) => {
+    if (is_active === true) {
+      activeNew(id, { is_active: false })
+        .then((res) => {
+          setModalBlock(!modalBlock);
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    } else {
+      activeNew(id, { is_active: true })
+        .then((res) => {
+          setModalBlock(!modalBlock);
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
+
   return (
     <>
-      <Table className="align-items-center table-flush mt-5" responsive>
-        <thead className="thead-light">
-          <tr>
-            <th scope="col">Title</th>
-            <th scope="col">Short description</th>
-            <th scope="col">URL</th>
-            <th scope="col">Type</th>
-            <th scope="col">Thumbnail</th>
-            <th scope="col" />
-          </tr>
-        </thead>
+      <tr>
+        <th scope="row" className="col-2">
+          <Media>
+            <span className="mb-0 text-sm">{data?.title}</span>
+          </Media>
+        </th>
+        <td className="col-2">
+          {/* <a>{data?.short_description}</a> */}
+          <Media>
+            <span className="mb-0 text-sm">{data?.short_description}</span>
+          </Media>
+        </td>
+        <td className="col-2">
+          <Media>
+            <span className="mb-0 text-sm">{data?.url}</span>
+          </Media>
+        </td>
 
+        <td className="col-1">
+          <span>{data?.type}</span>
+        </td>
+        <td>
+          <Card className="my-2">
+            <CardImg
+              alt="Card image cap"
+              src={data?.thumbnail}
+              style={{
+                height: 100,
+              }}
+              width="100%"
+            />
+          </Card>
+        </td>
 
-        {/* <tbody>
-          {news && news.length > 0 &&
-            news.map((item, index) => {
-              return (
-                <tr key={index}>
-                  <th scope="row">
-                    <Media className="align-items-center">
-                      <img
-                        alt="..."
-                        src={item?.thumbnail}
-                        className="img_news"
-                        width={"50px"}
-                      />
-                      <Media>
-                        <span className="mb-0 text-sm">{item?.title}</span>
-                      </Media>
-                    </Media>
-                  </th>
-                  <td>
-                    <a>{item?.short_description}</a>
-                  </td>
-                  <td>
-                    <a>{item?.url}</a>
-                  </td>
-                  <td>
-                    <a>{item?.type}</a>
-                  </td>
-                  <td>
-                    <button className="btn-edit">
-                      <i className="uil uil-edit-alt"></i>
-                    </button>
-                    <button className="btn-delete" onClick={toggle}>
-                      <i className="uil uil-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-        </tbody> */}
-
-        <tbody>
-          {news && news.length > 0 &&
-            news.map((item, index) => {
-              return (
-                <tr key={index}>
-                  <th scope="row" className="col-2">
-                      <Media>
-                        <span className="mb-0 text-sm">{item?.title}</span>
-                      </Media>
-                  </th>
-                  <td className="col-2">
-                    {/* <a>{item?.short_description}</a> */}
-                    <Media>
-                        <span className="mb-0 text-sm">{item?.short_description}</span>
-                      </Media>
-                  </td>
-                  <td className="col-2">
-                  <Media>
-                  <span className="mb-0 text-sm">{item?.url}</span>
-                      </Media>
-                  </td>
-                  
-                  <td className="col-1">
-                    <span>{item?.type}</span>
-                  </td>
-                  <td>
-                  <Card className="my-2">
-    <CardImg
-      alt="Card image cap"
-      src={item?.thumbnail}
-      style={{
-        height: 100
-      }}
-      
-      width="100%"
-    />
-</Card>
-                  </td>
-               
-                  <td>
-                    <button className="btn-edit">
-                      <i className="uil uil-edit-alt"></i>
-                    </button>
-                    <button className="btn-delete" onClick={toggle}>
-                      <i className="uil uil-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-        </tbody>
-        
-
-      </Table>
+        <td>
+          <Row>
+            <button className="btn-edit" onClick={() => setItemEdit(data)}>
+              <i className="uil uil-edit-alt"></i>
+            </button>
+            <button className="btn-delete" onClick={toggle}>
+              <i className="uil uil-trash"></i>
+            </button>
+          </Row>
+          <Row>
+            {data?.is_active ? (
+              <button className="btn-delete" onClick={toggleBlock}>
+                <i class="uil uil-unlock"></i>
+              </button>
+            ) : (
+              <button className="btn-delete" onClick={toggleBlock}>
+                <i class="uil uil-padlock"></i>
+              </button>
+            )}
+          </Row>
+          <div>
+            <Modal isOpen={modalBlock} toggle={toggleBlock}>
+              <ModalHeader toggle={toggleBlock}>
+                {" "}
+                {data?.is_active === true ? "Khóa bài viết" : "Mở bài viết"}
+              </ModalHeader>
+              <ModalBody>
+                {data?.is_active === true
+                  ? "Bạn có muốn khóa bài viết này"
+                  : "Bạn có muốn kích hoạt bài viết này"}
+                <h3>{data?.title}</h3>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  onClick={() => blockNew(data?._id, data?.is_active)}
+                >
+                  Có
+                </Button>
+                <Button color="#ddd" onClick={toggleBlock}>
+                  Không
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </div>
+          <div>
+            <Modal isOpen={modal} toggle={toggle}>
+              <ModalHeader toggle={toggle}>Xóa bài viết</ModalHeader>
+              <ModalBody>
+                Bạn có chắc muốn xóa bài viết {data?.title} này không?
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onClick={() => onDelete(data?._id)}>
+                  Có
+                </Button>
+                <Button color="#ddd" onClick={toggle}>
+                  Không
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </div>
+        </td>
+      </tr>
     </>
   );
 }

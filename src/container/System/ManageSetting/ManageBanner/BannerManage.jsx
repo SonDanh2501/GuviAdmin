@@ -1,18 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./BannerManage.scss";
 import TableManageBanner from "./TableManageBanner.jsx";
-import { Form, Row, Col, FormGroup, Label, Input, Button,Media } from "reactstrap";
+import {
+  Form,
+  Row,
+  Col,
+  FormGroup,
+  Label,
+  Input,
+  Button,
+  Card,
+  CardHeader,
+  Table,
+  CardFooter,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+} from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../../../../redux/actions/banner";
-import { postFile } from "../../../../api/file.jsx";
+import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
+import {
+  createBanner,
+  getBanners,
+  updateBanner,
+} from "../../../../redux/actions/banner";
+import { getBanner } from "../../../../redux/selectors/banner";
+import { postFile } from "../../../../api/file";
 
 export default function UserManage() {
-
-  const [imgThumbnail, setImgThumbnail] = React.useState("");
- 
-
-
-  const [Banners, setBanners] = React.useState({
+  const [create, setCreate] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [id, setId] = useState("");
+  const [title, setTitle] = useState("");
+  const [imgThumbnail, setImgThumbnail] = useState("");
+  const [imgUrl, setImgUrl] = useState("");
+  const [typeLink, setTypeLink] = useState("");
+  const [linkID, setLinkId] = useState("");
+  const [position, setPosition] = useState("");
+  const [Banners, setBanners] = useState({
     title: "",
     image: "",
     type_link: "",
@@ -20,17 +45,23 @@ export default function UserManage() {
     position: "",
   });
   const dispatch = useDispatch();
-  const onSubmit = React.useCallback(() => {
-    dispatch(actions.createBanner.createBannerRequest(Banners));
-    setBanners({
-      title: "",
-      image: "",
-      type_link: "",
-      link_id: "",
-      position: "",
-    });
-    window.location.reload();
-  }, [Banners, dispatch]);
+
+  const banners = useSelector(getBanner);
+  React.useEffect(() => {
+    dispatch(getBanners.getBannersRequest());
+  }, [dispatch]);
+
+  const onSubmit = useCallback(() => {
+    dispatch(
+      createBanner.createBannerRequest({
+        title: title,
+        image: imgThumbnail,
+        type_link: typeLink,
+        link_id: linkID,
+        position: position,
+      })
+    );
+  }, [dispatch, title, imgThumbnail, typeLink, linkID, position]);
 
   const onChangeThumbnail = (e) => {
     if (e.target.files[0]) {
@@ -40,7 +71,6 @@ export default function UserManage() {
       });
       reader.readAsDataURL(e.target.files[0]);
     }
-
     const formData = new FormData();
     formData.append("file", e.target.files[0]);
     postFile(formData, {
@@ -51,106 +81,188 @@ export default function UserManage() {
       .then((res) => setImgThumbnail(res))
       .catch((err) => console.log("err", err));
   };
+
+  const setItemEdit = (itemEdit) => {
+    setTitle(itemEdit?.title);
+    setImgThumbnail(itemEdit?.image);
+    setTypeLink(itemEdit?.type_link);
+    setLinkId(itemEdit?.link_id);
+    setPosition(itemEdit?.position);
+    setId(itemEdit?._id);
+    setEdit(true);
+    setCreate(false);
+    window.scrollTo(0, 0);
+  };
+
+  const onEditBanner = useCallback(() => {
+    dispatch(
+      updateBanner.updateBannerRequest({
+        id: id,
+        data: {
+          title: title,
+          image: imgThumbnail,
+          type_link: typeLink,
+          link_id: linkID,
+          position: position,
+        },
+      })
+    );
+  }, [id, title, imgThumbnail, typeLink, linkID, position]);
+
   return (
     <React.Fragment>
-
       <div className="user-redux-container">
         <div className="user-redux-body mt-5 col-md-12">
           <div className="container">
             <div className="column">
-              <div className="">
+              {create || edit ? (
                 <Form>
                   <Row>
                     <Col md={6}>
-                      <FormGroup>
-                        <Label for="exampleTitle">Tiêu đề</Label>
-                        <Input
-                          id="exampleTitle"
-                          name="title"
-                          placeholder="Enter your title address"
-                          type="text"
-                          value={Banners.title}
-                          onChange={(e) =>
-                            setBanners({ ...Banners, title: e.target.value })
-                          }
-                        />
-                      </FormGroup>
+                      <CustomTextInput
+                        label={"Tiêu đề"}
+                        id="exampleTitle"
+                        name="title"
+                        placeholder="Enter your title"
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                      />
                     </Col>
-                    
                     <Col md={6} className="exampleImage">
-                        <Label for="exampleImage">Hình ảnh banner</Label>
-                        <Input
-                          id="exampleImage"
-                          name="image"
-                          type="file"
-                          value={Banners.image}
-                          className = "input-group"
-                          onChange={onChangeThumbnail}
-
-                        />
+                      <Label for="exampleImage">Hình ảnh banner</Label>
+                      <Input
+                        id="exampleImage"
+                        name="image"
+                        type="file"
+                        accept={".jpg,.png,.jpeg"}
+                        className="input-group"
+                        onChange={onChangeThumbnail}
+                      />
+                      {imgThumbnail && (
+                        <img src={imgThumbnail} className="img-thumbnail" />
+                      )}
                     </Col>
-                  
-
                   </Row>
                   <Row>
                     <Col md={6}>
-                    <FormGroup>
-                    <Label for="exampleType_link">Kiểu banner</Label>
-                    <Input
-                      id="exampleType_link"
-                      name="type_link"
-                      placeholder="Enter your type link (URL or Promotion)"
-                      value={Banners.type_link}
-                      onChange={(e) =>
-                        setBanners({ ...Banners, type_link: e.target.value })
-                      }
-                    />
-                  </FormGroup>
-                  </Col>
-                  
-                  <Col md={6}>
-                  <FormGroup>
-                        <Label for="examplePosition">Position</Label>
-                        <Input
-                          id="examplePosition"
-                          name="position"
-                          placeholder="0 or 1, 2, 3, ..."
-                          value={Banners.position}
-                          onChange={(e) =>
-                            setBanners({ ...Banners, position: e.target.value })
-                          }
-                        />
-                      </FormGroup>
+                      <CustomTextInput
+                        label={"Kiểu banner"}
+                        id="exampleType_link"
+                        name="type_link"
+                        placeholder="Enter your type link (url or promotion)"
+                        type="text"
+                        value={typeLink}
+                        onChange={(e) => setTypeLink(e.target.value)}
+                      />
+                    </Col>
+                    <Col md={6}>
+                      <CustomTextInput
+                        label={"Position"}
+                        iid="examplePosition"
+                        name="position"
+                        placeholder="0 or 1, 2, 3, ..."
+                        type="number"
+                        value={position}
+                        onChange={(e) => setPosition(e.target.value)}
+                      />
                     </Col>
                   </Row>
-                
+
                   <Row>
                     <Col>
-                      <FormGroup>
-                        <Label for="examplelink_id">Link ID</Label>
-                        <Input
-                          id="examplelink_id"
-                          name="link_id"
-                          value={Banners.link_id}
-                          onChange={(e) =>
-                            setBanners({
-                              ...Banners,
-                              link_id: e.target.value,
-                            })
-                          }
-                        />
-                      </FormGroup>
+                      <CustomTextInput
+                        label={"Link ID"}
+                        id="examplelink_id"
+                        name="link_id"
+                        type="text"
+                        value={linkID}
+                        onChange={(e) => setLinkId(e.target.value)}
+                      />
                     </Col>
-                   
                   </Row>
-                  <Button color="warning" onClick={onSubmit}>
-                    Thêm Banners
-                  </Button>
+                  {create && (
+                    <Button color="warning" onClick={onSubmit}>
+                      Thêm Banners
+                    </Button>
+                  )}
+                  {edit && (
+                    <Button color="warning" onClick={onEditBanner}>
+                      Sửa Banners
+                    </Button>
+                  )}
                 </Form>
-              </div>
-
-              <div className="">
-                <TableManageBanner />
+              ) : (
+                <></>
+              )}
+              <div className="mt-5">
+                {/* <TableManageBanner /> */}
+                <Card className="shadow">
+                  <CardHeader className="border-0 card-header">
+                    <Row className="align-items-center">
+                      <Col className="text-left">
+                        {!create && (
+                          <Button
+                            color="info"
+                            onClick={() => {
+                              setTitle("");
+                              setImgThumbnail("");
+                              setTypeLink("");
+                              setLinkId("");
+                              setPosition("");
+                              setCreate(!create);
+                              setEdit(false);
+                            }}
+                          >
+                            Thêm Banners
+                          </Button>
+                        )}
+                      </Col>
+                      <Col>
+                        <CustomTextInput placeholder="Tìm kiếm" type="text" />
+                      </Col>
+                    </Row>
+                  </CardHeader>
+                  <Table className="align-items-center table-flush " responsive>
+                    <thead className="thead-light">
+                      <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Type link</th>
+                        <th scope="col">Position</th>
+                        <th scope="col">Link ID</th>
+                        <th scope="col">Banner</th>
+                        <th scope="col" />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {banners &&
+                        banners.length > 0 &&
+                        banners.map((e) => (
+                          <TableManageBanner
+                            data={e}
+                            setItemEdit={setItemEdit}
+                          />
+                        ))}
+                    </tbody>
+                  </Table>
+                  <CardFooter>
+                    <nav aria-label="...">
+                      <Pagination
+                        className="pagination justify-content-end mb-0"
+                        listClassName="justify-content-end mb-0"
+                      >
+                        <PaginationItem className="active">
+                          <PaginationLink
+                            href="#pablo"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            1
+                          </PaginationLink>
+                        </PaginationItem>
+                      </Pagination>
+                    </nav>
+                  </CardFooter>
+                </Card>
               </div>
             </div>
           </div>

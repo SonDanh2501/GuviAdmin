@@ -1,55 +1,52 @@
-import {
-     takeLatest,
-     call,
-     put
-   } from 'redux-saga/effects';
-   import * as actions from '../actions/banner';
-   import * as api from '../../api/banner';
-   import {
-     getType
-   } from '../actions/banner';
-   
-   function* fetchBannersSaga() {
-     console.log("saga Banner");
-     try {
-       const Banners = yield call(api.fetchBanners);
-       console.log("saga Banner", Banners);
-   
-       yield put(actions.getBanners.getBannersSuccess(Banners));
-     } catch (err) {
-       console.error(err);
-       yield put(actions.getBanners.getBannersFailure(err));
-     }
-   }
-   
-   function* createBannerSaga(action) {
-     console.log("saga createBannerSaga");
-   
-     try {
-       const Banner = yield call(api.createBanner, action.payload);
-       yield put(actions.createBanner.createBannerSuccess(Banner.data));
-     } catch (err) {
-       console.error(err);
-       yield put(actions.createBanner.createBannerFailure(err));
-     }
-   }
-   
-   function* updateBannerSaga(action) {
-     try {
-       const updatedBanner = yield call(api.updateBanner, action.payload);
-       yield put(actions.updateBanner.updateBannerSuccess(updatedBanner.data));
-     } catch (err) {
-       console.error(err);
-       yield put(actions.updateBanner.updateBannerFailure(err));
-     }
-   }
-   
-   function* BannerSaga() {
-     yield takeLatest(getType(actions.getBanners.getBannersRequest), fetchBannersSaga);
-     yield takeLatest(actions.createBanner.createBannerRequest, createBannerSaga);
-     yield takeLatest(actions.updateBanner.updateBannerRequest, updateBannerSaga);
-   }
-   
-   // generator function ES6
-   
-   export default BannerSaga;
+import { takeLatest, call, put } from "redux-saga/effects";
+import * as actions from "../actions/banner";
+import * as api from "../../api/banner";
+import { getType } from "../actions/banner";
+
+function* fetchBannersSaga() {
+  try {
+    const Banners = yield call(api.fetchBanners);
+    yield put(actions.getBanners.getBannersSuccess(Banners));
+  } catch (err) {
+    console.error(err);
+    yield put(actions.getBanners.getBannersFailure(err));
+  }
+}
+
+function* createBannerSaga(action) {
+  try {
+    const Banner = yield call(api.createBanner, action.payload);
+    console.log(Banner);
+    yield put(actions.createBanner.createBannerSuccess(Banner.data));
+  } catch (err) {
+    console.error(err);
+    yield put(actions.createBanner.createBannerFailure(err));
+  }
+}
+
+function* updateBannerSaga(action) {
+  try {
+    const updatedBanner = yield call(
+      api.updateBanner,
+      action.payload.id,
+      action.payload.data
+    );
+    yield put(actions.updateBanner.updateBannerSuccess(updatedBanner.data));
+  } catch (err) {
+    console.error(err);
+    yield put(actions.updateBanner.updateBannerFailure(err));
+  }
+}
+
+function* BannerSaga() {
+  yield takeLatest(
+    getType(actions.getBanners.getBannersRequest),
+    fetchBannersSaga
+  );
+  yield takeLatest(actions.createBanner.createBannerRequest, createBannerSaga);
+  yield takeLatest(actions.updateBanner.updateBannerRequest, updateBannerSaga);
+}
+
+// generator function ES6
+
+export default BannerSaga;
