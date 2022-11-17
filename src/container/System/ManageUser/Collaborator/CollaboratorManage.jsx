@@ -56,7 +56,7 @@ export default function CollaboratorManage() {
         identify: identify,
       })
     );
-  }, [dispatch, codePhone, email, name, password, identify]);
+  }, [dispatch, codePhone, email, name, password, identify, phone]);
 
   const setItemEdit = (itemEdit) => {
     setCodePhone(itemEdit?.code_phone_area);
@@ -143,7 +143,7 @@ export default function CollaboratorManage() {
                             id="exampleCMND/CCCD"
                             placeholder="Nhập CMND/CCCD"
                             name="identify"
-                            type="text"
+                            type="number"
                             value={identify}
                             onChange={(e) => setIdentify(e.target.value)}
                           />
@@ -158,9 +158,16 @@ export default function CollaboratorManage() {
                           id="exampleCodePhoneArea"
                           placeholder="Nhập code phone area"
                           name="code_phone_area"
-                          type="text"
+                          type="select"
+                          className="select-code-phone"
                           value={codePhone}
                           onChange={(e) => setCodePhone(e.target.value)}
+                          body={
+                            <>
+                              <option value={"+84"}>+84</option>
+                              <option value={"+1"}>+1</option>
+                            </>
+                          }
                         />
                       </Col>
                       <Col md={6}>
@@ -230,8 +237,8 @@ export default function CollaboratorManage() {
                         <th>Tên cộng tác viên</th>
                         <th>Email</th>
                         <th>SĐT</th>
-                        <th>Ngày sinh</th>
-                        {/* <th>Giới tính</th> */}
+                        <th>Giới tính</th>
+                        {/* <th>Ngày sinh</th> */}
                         <th></th>
                       </tr>
                     </thead>
@@ -243,7 +250,8 @@ export default function CollaboratorManage() {
                               setItemEdit={setItemEdit}
                             />
                           ))
-                        : collaborator.map((e) => (
+                        : collaborator &&
+                          collaborator.map((e) => (
                             <TableManageCollaborator
                               data={e}
                               setItemEdit={setItemEdit}

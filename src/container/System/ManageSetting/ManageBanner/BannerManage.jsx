@@ -26,6 +26,9 @@ import {
 } from "../../../../redux/actions/banner";
 import { getBanner } from "../../../../redux/selectors/banner";
 import { postFile } from "../../../../api/file";
+import { searchBanners } from "../../../../api/banner";
+import { getPromotion } from "../../../../redux/actions/promotion";
+import { getPromotionSelector } from "../../../../redux/selectors/promotion";
 
 export default function UserManage() {
   const [create, setCreate] = useState(false);
@@ -33,22 +36,16 @@ export default function UserManage() {
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [imgThumbnail, setImgThumbnail] = useState("");
-  const [imgUrl, setImgUrl] = useState("");
-  const [typeLink, setTypeLink] = useState("");
+  const [typeLink, setTypeLink] = useState("url");
   const [linkID, setLinkId] = useState("");
   const [position, setPosition] = useState("");
-  const [Banners, setBanners] = useState({
-    title: "",
-    image: "",
-    type_link: "",
-    link_id: "",
-    position: "",
-  });
+  const [dataFilter, setDataFilter] = useState([]);
   const dispatch = useDispatch();
-
+  const promotion = useSelector(getPromotionSelector);
   const banners = useSelector(getBanner);
   React.useEffect(() => {
     dispatch(getBanners.getBannersRequest());
+    dispatch(getPromotion.getPromotionRequest());
   }, [dispatch]);
 
   const onSubmit = useCallback(() => {
@@ -109,6 +106,12 @@ export default function UserManage() {
     );
   }, [id, title, imgThumbnail, typeLink, linkID, position]);
 
+  const handleSearch = useCallback((value) => {
+    searchBanners(value)
+      .then((res) => setDataFilter(res.data))
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <React.Fragment>
       <div className="user-redux-container">
@@ -150,10 +153,16 @@ export default function UserManage() {
                         label={"Kiểu banner"}
                         id="exampleType_link"
                         name="type_link"
-                        placeholder="Enter your type link (url or promotion)"
-                        type="text"
-                        value={typeLink}
+                        className="select-code-phone"
+                        type="select"
+                        defaultValue={typeLink}
                         onChange={(e) => setTypeLink(e.target.value)}
+                        body={
+                          <>
+                            <option value={"url"}>URL</option>
+                            <option value={"promotion"}>Promotion</option>
+                          </>
+                        }
                       />
                     </Col>
                     <Col md={6}>
@@ -171,14 +180,33 @@ export default function UserManage() {
 
                   <Row>
                     <Col>
-                      <CustomTextInput
-                        label={"Link ID"}
-                        id="examplelink_id"
-                        name="link_id"
-                        type="text"
-                        value={linkID}
-                        onChange={(e) => setLinkId(e.target.value)}
-                      />
+                      {typeLink !== "promotion" ? (
+                        <CustomTextInput
+                          label={"Link URL"}
+                          id="examplelink_url"
+                          name="link_url"
+                          type="text"
+                          value={linkID}
+                          onChange={(e) => setLinkId(e.target.value)}
+                        />
+                      ) : (
+                        <CustomTextInput
+                          label={"Link ID"}
+                          className="select-code-phone"
+                          id="examplelink_id"
+                          name="link_id"
+                          type="select"
+                          value={linkID}
+                          onChange={(e) => setLinkId(e.target.value)}
+                          body={promotion.map((item, index) => {
+                            return (
+                              <option key={index} value={item?._id}>
+                                {item?.title?.vi}
+                              </option>
+                            );
+                          })}
+                        />
+                      )}
                     </Col>
                   </Row>
                   {create && (
@@ -219,7 +247,11 @@ export default function UserManage() {
                         )}
                       </Col>
                       <Col>
-                        <CustomTextInput placeholder="Tìm kiếm" type="text" />
+                        <CustomTextInput
+                          placeholder="Tìm kiếm"
+                          type="text"
+                          onChange={(e) => handleSearch(e.target.value)}
+                        />
                       </Col>
                     </Row>
                   </CardHeader>
@@ -235,14 +267,20 @@ export default function UserManage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {banners &&
-                        banners.length > 0 &&
-                        banners.map((e) => (
-                          <TableManageBanner
-                            data={e}
-                            setItemEdit={setItemEdit}
-                          />
-                        ))}
+                      {dataFilter.length > 0
+                        ? dataFilter.map((e) => (
+                            <TableManageBanner
+                              data={e}
+                              setItemEdit={setItemEdit}
+                            />
+                          ))
+                        : banners &&
+                          banners.map((e) => (
+                            <TableManageBanner
+                              data={e}
+                              setItemEdit={setItemEdit}
+                            />
+                          ))}
                     </tbody>
                   </Table>
                   <CardFooter>

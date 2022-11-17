@@ -5,6 +5,9 @@ export const createBanner = (payload) => {
 export const fetchBanners = () => {
   return axiosClient.get("/admin/banner_manager/get_list");
 };
+export const searchBanners = (payload) => {
+  return axiosClient.get(`/admin/banner_manager/get_list?search=${payload}`);
+};
 export const fetchBannerById = () => {
   return axiosClient.get("//admin/banner_manager/get_detail_item/:id");
 };

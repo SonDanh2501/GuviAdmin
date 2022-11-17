@@ -16,7 +16,7 @@ function* fetchBannersSaga() {
 function* createBannerSaga(action) {
   try {
     const Banner = yield call(api.createBanner, action.payload);
-    console.log(Banner);
+    window.location.reload();
     yield put(actions.createBanner.createBannerSuccess(Banner.data));
   } catch (err) {
     console.error(err);
@@ -31,6 +31,7 @@ function* updateBannerSaga(action) {
       action.payload.id,
       action.payload.data
     );
+    window.location.reload();
     yield put(actions.updateBanner.updateBannerSuccess(updatedBanner.data));
   } catch (err) {
     console.error(err);

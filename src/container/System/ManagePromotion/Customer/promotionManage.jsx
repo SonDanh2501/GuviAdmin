@@ -338,7 +338,6 @@ export default function PromotionManage() {
         },
       })
     );
-    setEdit(!edit);
   }, [
     titleVN,
     titleEN,
@@ -567,7 +566,7 @@ export default function PromotionManage() {
                           <Row>
                             <Button
                               className={
-                                formDiscount === "Giảm trực tiếp"
+                                discountUnit === "amount"
                                   ? "btn-form-promotion"
                                   : "btn-form-promotion-default"
                               }
@@ -578,7 +577,7 @@ export default function PromotionManage() {
                             </Button>
                             <Button
                               className={
-                                formDiscount === "Giảm theo phần trăm"
+                                discountUnit === "percent"
                                   ? "btn-form-promotion"
                                   : "btn-form-promotion-default"
                               }
@@ -589,7 +588,7 @@ export default function PromotionManage() {
                             >
                               Giảm theo phần trăm
                             </Button>
-                            {formDiscount === "Giảm trực tiếp" ? (
+                            {discountUnit === "amount" ? (
                               <CustomTextInput
                                 label={"Giá giảm "}
                                 classNameForm="form-promo-discount"
@@ -819,7 +818,7 @@ export default function PromotionManage() {
                   </Form>
                 </div>
               ) : null}
-              <div className="">
+              <div className="mt-5">
                 <Card className="shadow">
                   <CardHeader className="border-0 card-header">
                     <Row className="align-items-center">
@@ -856,7 +855,8 @@ export default function PromotionManage() {
                         ? dataFilter.map((e) => (
                             <TableManagePromotion data={e} setId={setId} />
                           ))
-                        : promotion.map((e) => (
+                        : promotion &&
+                          promotion.map((e) => (
                             <TableManagePromotion data={e} setId={setId} />
                           ))}
                     </tbody>

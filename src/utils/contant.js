@@ -18,6 +18,13 @@ export const INIT_STATE = {
   reasons: {
     data: [],
   },
+  auth: {
+    token: "",
+    isCheckLogin: false,
+  },
+  service: {
+    groupService: [],
+  },
 };
 
 export const path = {
