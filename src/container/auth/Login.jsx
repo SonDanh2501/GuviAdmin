@@ -1,0 +1,110 @@
+import { Formik } from "formik";
+import { useCallback, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  FormGroup,
+  Form,
+  Input,
+  InputGroupAddon,
+  InputGroupText,
+  InputGroup,
+  Row,
+  Col,
+  Container,
+} from "reactstrap";
+import CustomTextInput from "../../components/CustomTextInput/customTextInput";
+import { loginAction } from "../../redux/actions/auth";
+import { getIsCheckLogin } from "../../redux/selectors/auth";
+import { validateLoginSchema } from "../../utils/schema";
+import "./Login.scss";
+
+const Login = () => {
+  const formikRef = useRef();
+  const dispatch = useDispatch();
+  const isCheckLogin = useSelector(getIsCheckLogin);
+  const initialValues = {
+    email: "",
+    password: "",
+  };
+
+  const onLogin = useCallback(() => {
+    dispatch(
+      loginAction.loginRequest({
+        email: formikRef?.current?.values?.email,
+        password: formikRef?.current?.values?.password,
+      })
+    );
+  }, [dispatch]);
+
+  // if (!!isCheckLogin) {
+  //   return <Redirect from="/auth/login" to="/system/user-manage" />;
+  // }
+
+  return (
+    <div className="main-content container-login">
+      <Container className="mt-8 pb-5 mt--20">
+        <Row className="justify-content-center">
+          <Col lg="5" md="7">
+            <Card className="bg-white shadow border-0">
+              <CardBody className="px-lg-5 py-lg-5">
+                <div className="text-center text-muted mb-4">
+                  <h3>Đăng nhập hệ thống Guvi</h3>
+                </div>
+                <Formik
+                  innerRef={formikRef}
+                  initialValues={initialValues}
+                  validationSchema={validateLoginSchema}
+                  validateOnChange={true}
+                  onSubmit={onLogin}
+                >
+                  {({ values, setFieldValue, errors, handleSubmit }) => {
+                    return (
+                      <Form role="form">
+                        <CustomTextInput
+                          label="Email"
+                          type="text"
+                          id="className"
+                          value={values?.email}
+                          placeholder="Nhập email đăng nhập"
+                          onChange={(text) =>
+                            setFieldValue("email", text?.target?.value)
+                          }
+                          errors={errors?.email}
+                        />
+                        <CustomTextInput
+                          label="Mật khẩu"
+                          type="password"
+                          name="password"
+                          id="examplePassword"
+                          value={values?.password}
+                          placeholder="Nhập mật khẩu"
+                          onChange={(text) =>
+                            setFieldValue("password", text.target.value)
+                          }
+                          errors={errors?.password}
+                        />
+                        <div className="text-center">
+                          <Button className="btn-login" onClick={handleSubmit}>
+                            Đăng nhập
+                          </Button>
+                        </div>
+                      </Form>
+                    );
+                  }}
+                </Formik>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
+};
+
+export default Login;

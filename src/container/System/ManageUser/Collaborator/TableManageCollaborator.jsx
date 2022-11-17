@@ -12,16 +12,19 @@ import {
 import {
   activeCollaborator,
   deleteCollaborator,
+  verifyCollaborator,
 } from "../../../../api/collaborator";
 import "./TableManageCollaborator.scss";
 
 export default function TableManageCollaborator({ data, setItemEdit }) {
   const [modal, setModal] = React.useState(false);
   const [modalBlock, setModalBlock] = React.useState(false);
+  const [modalVerify, setModalVerify] = React.useState(false);
   const dispatch = useDispatch();
   // Toggle for Modal
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
+  const toggleVerify = () => setModalVerify(!modalVerify);
 
   const onDelete = useCallback((id) => {
     deleteCollaborator(id, { is_delete: true })
@@ -47,6 +50,24 @@ export default function TableManageCollaborator({ data, setItemEdit }) {
     }
   }, []);
 
+  const onVerifyCollaborator = useCallback((id, is_verify) => {
+    if (is_verify === true) {
+      verifyCollaborator(id)
+        .then((res) => {
+          setModalVerify(!modalVerify);
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    } else {
+      verifyCollaborator(id)
+        .then((res) => {
+          setModalVerify(!modalVerify);
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
+
   return (
     <>
       <tr>
@@ -65,7 +86,13 @@ export default function TableManageCollaborator({ data, setItemEdit }) {
           <a>{data?.phone}</a>
         </td>
         <td>
-          <a>{data?.gennder}</a>
+          <a>
+            {data?.gender === "male"
+              ? "Nam"
+              : data?.gender === "female"
+              ? "Nữ"
+              : "Khác"}
+          </a>
         </td>
         <td>
           <Row>
@@ -86,7 +113,46 @@ export default function TableManageCollaborator({ data, setItemEdit }) {
                 <i class="uil uil-padlock"></i>
               </button>
             )}
+            {data?.is_verify ? (
+              <button className="btn-delete" onClick={toggleVerify}>
+                <i class="uil-toggle-on"></i>
+              </button>
+            ) : (
+              <button className="btn-delete" onClick={toggleVerify}>
+                <i class="uil-toggle-off"></i>
+              </button>
+            )}
           </Row>
+          <div>
+            <Modal isOpen={modalVerify} toggle={toggleVerify}>
+              <ModalHeader toggle={toggleVerify}>
+                {" "}
+                {data?.is_verify === true
+                  ? "Bỏ xác thực tài khoản cộng tác viên"
+                  : "Xác thực tài khoản cộng tác viên"}
+              </ModalHeader>
+              <ModalBody>
+                {data?.is_verify === true
+                  ? "Bạn có muốn bỏ xác thực tài khoản cộng tác viên"
+                  : "Bạn có muốn xác thực tài khoản cộng tác viên"}
+                <h3>{data?.name}</h3>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  onClick={() =>
+                    onVerifyCollaborator(data?._id, data?.is_verify)
+                  }
+                >
+                  Có
+                </Button>
+                <Button color="#ddd" onClick={toggleVerify}>
+                  Không
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </div>
+
           <div>
             <Modal isOpen={modalBlock} toggle={toggleBlock}>
               <ModalHeader toggle={toggleBlock}>

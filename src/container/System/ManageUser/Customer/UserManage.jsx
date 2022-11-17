@@ -135,9 +135,16 @@ export default function UserManage() {
                         id="exampleCodePhoneArea"
                         placeholder="Nhập code phone area"
                         name="code_phone_area"
-                        type="text"
+                        type="select"
+                        className="select-code-phone"
                         value={codePhone}
                         onChange={(e) => setCodePhone(e.target.value)}
+                        body={
+                          <>
+                            <option value={"+84"}>+84</option>
+                            <option value={"+1"}>+1</option>
+                          </>
+                        }
                       />
                     </Col>
                     <Col md={6}>
@@ -208,7 +215,8 @@ export default function UserManage() {
                               setItemEdit={setItemEdit}
                             />
                           ))
-                        : customers.map((e) => (
+                        : customers &&
+                          customers.map((e) => (
                             <TableManageUser
                               data={e}
                               setItemEdit={setItemEdit}

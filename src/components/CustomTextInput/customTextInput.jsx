@@ -16,6 +16,7 @@ const CustomTextInput = ({
   multiple = false,
   defaultValue,
   defaultChecked,
+  errors,
 }) => {
   return (
     <FormGroup className={classNameForm}>
@@ -35,6 +36,11 @@ const CustomTextInput = ({
       >
         {body}{" "}
       </Input>
+      {errors && (
+        <p style={{ color: "red", fontSize: 12, marginLeft: 5, marginTop: 5 }}>
+          {errors}
+        </p>
+      )}
     </FormGroup>
   );
 };

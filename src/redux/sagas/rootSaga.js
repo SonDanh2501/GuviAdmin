@@ -1,18 +1,12 @@
-import {
-  take,
-  put,
-  call,
-  fork,
-  cancel,
-  all
-} from "redux-saga/effects";
+import { take, put, call, fork, cancel, all } from "redux-saga/effects";
 import customerSaga from "./customerSaga";
 import collaboratorSaga from "./collaborator";
 import bannerSaga from "./banner";
 import promotionSaga from "./promotion";
 import newsSaga from "./news";
+import authSaga from "./auth";
+import serviceSaga from "./service";
 import ReasonSaga from "./reason";
-
 
 export default function* rootSaga() {
   yield all([
@@ -22,6 +16,7 @@ export default function* rootSaga() {
     fork(bannerSaga),
     fork(newsSaga),
     fork(ReasonSaga),
-
+    fork(authSaga),
+    fork(serviceSaga),
   ]);
 }

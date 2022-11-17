@@ -20,6 +20,9 @@ const Navigator = () => {
       <NavLink activeClassName="active" to="/settings/manage-news">
         Quản lý bài viết Guvi
       </NavLink>
+      <NavLink activeClassName="active" to="/services/manage-group-service">
+        Quản lý group-service
+      </NavLink>
       <NavLink activeClassName="active" to="/settings/manage-reason">
         Quản lý lý do huỷ việc
       </NavLink>
