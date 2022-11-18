@@ -4,6 +4,7 @@ export const INIT_STATE = {
   },
   collaborators: {
     data: [],
+    totalItem: 0,
   },
   promotions: {
     data: [],

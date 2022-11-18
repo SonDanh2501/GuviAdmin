@@ -1,34 +1,33 @@
-import React, { useState, useEffect, useCallback } from "react";
-import "./BannerManage.scss";
-import TableManageBanner from "./TableManageBanner.jsx";
+import React, { useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
-  Form,
-  Row,
-  Col,
-  FormGroup,
-  Label,
-  Input,
   Button,
   Card,
-  CardHeader,
-  Table,
   CardFooter,
+  CardHeader,
+  Col,
+  Form,
+  Input,
+  Label,
   Pagination,
   PaginationItem,
   PaginationLink,
+  Row,
+  Table,
 } from "reactstrap";
-import { useSelector, useDispatch } from "react-redux";
+import { searchBanners } from "../../../../api/banner";
+import { postFile } from "../../../../api/file";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import {
   createBanner,
   getBanners,
   updateBanner,
 } from "../../../../redux/actions/banner";
-import { getBanner } from "../../../../redux/selectors/banner";
-import { postFile } from "../../../../api/file";
-import { searchBanners } from "../../../../api/banner";
 import { getPromotion } from "../../../../redux/actions/promotion";
+import { getBanner } from "../../../../redux/selectors/banner";
 import { getPromotionSelector } from "../../../../redux/selectors/promotion";
+import "./BannerManage.scss";
+import TableManageBanner from "./TableManageBanner.jsx";
 
 export default function UserManage() {
   const [create, setCreate] = useState(false);
@@ -39,6 +38,7 @@ export default function UserManage() {
   const [typeLink, setTypeLink] = useState("url");
   const [linkID, setLinkId] = useState("");
   const [position, setPosition] = useState("");
+
   const [dataFilter, setDataFilter] = useState([]);
   const dispatch = useDispatch();
   const promotion = useSelector(getPromotionSelector);

@@ -73,7 +73,7 @@ export default function TableManageNews({ data, setItemEdit }) {
           <span>{data?.type}</span>
         </td>
         <td>
-          <Card className="my-2">
+          {/* <Card className="my-2">
             <CardImg
               alt="Card image cap"
               src={data?.thumbnail}
@@ -82,7 +82,8 @@ export default function TableManageNews({ data, setItemEdit }) {
               }}
               width="100%"
             />
-          </Card>
+          </Card> */}
+          <img src={data?.thumbnail} className="thumbnail" />
         </td>
 
         <td>

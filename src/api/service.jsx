@@ -18,3 +18,7 @@ export const updateGroupServiceApi = (id, payload) => {
 export const deleteGroupServiceApi = (id) => {
   return axiosClient.get(`/admin/group_service_manager/delete_soft/${id}`);
 };
+
+export const activeGroupServiceApi = (id) => {
+  return axiosClient.post(`/admin/group_service_manager/active/${id}`);
+};

@@ -19,13 +19,20 @@ import {
   PaginationLink,
 } from "reactstrap";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
-import { getCollaborator } from "../../../../redux/selectors/collaborator";
+import {
+  getCollaborator,
+  getCollaboratorTotal,
+} from "../../../../redux/selectors/collaborator";
 import {
   createCollaborator,
   getCollaborators,
   updateCollaborator,
 } from "../../../../redux/actions/collaborator";
-import { searchCollaborators } from "../../../../api/collaborator.jsx";
+import {
+  searchCollaborators,
+  pageCollaborators,
+} from "../../../../api/collaborator.jsx";
+import { removeVietnameseTones } from "../../../../helper/ConvertVie.js";
 
 export default function CollaboratorManage() {
   const [create, setCreate] = useState(false);
@@ -38,11 +45,16 @@ export default function CollaboratorManage() {
   const [password, setPassword] = useState("");
   const [identify, setIdentify] = useState("");
   const [dataFilter, setDataFilter] = useState([]);
+  const [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
   const dispatch = useDispatch();
   const collaborator = useSelector(getCollaborator);
+  const collaboratorTotal = useSelector(getCollaboratorTotal);
 
   useEffect(() => {
-    dispatch(getCollaborators.getCollaboratorsRequest());
+    dispatch(
+      getCollaborators.getCollaboratorsRequest({ start: 0, length: 10 })
+    );
   }, [dispatch]);
 
   const onSubmit = React.useCallback(() => {
@@ -88,6 +100,35 @@ export default function CollaboratorManage() {
       .then((res) => setDataFilter(res.data))
       .catch((err) => console.log(err));
   }, []);
+
+  const handleClick = (e, index) => {
+    e.preventDefault();
+    setCurrentPage(index);
+    if (index === 0) {
+      dispatch(
+        getCollaborators.getCollaboratorsRequest({ start: 0, length: 10 })
+      );
+    } else if (index === 1) {
+      dispatch(
+        getCollaborators.getCollaboratorsRequest({
+          start: collaborator.length,
+          length: 10,
+        })
+      );
+    }
+  };
+
+  const pageCount = collaboratorTotal / collaborator.length;
+  let pageNumbers = [];
+  for (let i = 0; i < pageCount; i++) {
+    pageNumbers.push(
+      <PaginationItem key={i} active={currentPage === i ? true : false}>
+        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
+          {i + 1}
+        </PaginationLink>
+      </PaginationItem>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -265,13 +306,20 @@ export default function CollaboratorManage() {
                         className="pagination justify-content-end mb-0"
                         listClassName="justify-content-end mb-0"
                       >
-                        <PaginationItem className="active">
+                        <PaginationItem>
                           <PaginationLink
-                            href="#pablo"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            1
-                          </PaginationLink>
+                            onClick={(e) => handleClick(e, currentPage - 1)}
+                            previous
+                            href="#"
+                          />
+                        </PaginationItem>
+                        {pageNumbers}
+                        <PaginationItem disabled={currentPage >= pageCount - 1}>
+                          <PaginationLink
+                            onClick={(e) => handleClick(e, currentPage + 1)}
+                            next
+                            href="#"
+                          />
                         </PaginationItem>
                       </Pagination>
                     </nav>
