@@ -1,23 +1,21 @@
-import "./App.scss";
-import Navigator from "../components/Navigator/Navigator.jsx";
-import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
   Redirect,
+  Route,
+  Switch,
 } from "react-router-dom";
-import UserManage from "./System/ManageUser/Customer/UserManage.jsx";
-import CollaboratorManage from "./System/ManageUser/Collaborator/CollaboratorManage.jsx";
+import Navigator from "../components/Navigator/Navigator.jsx";
+import { getIsCheckLogin } from "../redux/selectors/auth";
+import "./App.scss";
+import Login from "./auth/Login";
 import PromotionManage from "./System/ManagePromotion/Customer/promotionManage";
+import GroupServiceManage from "./System/ManageService/ManageGroupService/GroupServiceManage";
 import BannerManage from "./System/ManageSetting/ManageBanner/BannerManage";
 import NewsManage from "./System/ManageSetting/ManageNews/NewsManage";
 import ReasonManage from "./System/ManageSetting/ManageReason/ReasonManage";
-import Login from "./auth/Login";
-import { useSelector } from "react-redux";
-import { getIsCheckLogin } from "../redux/selectors/auth";
-import GroupServiceManage from "./System/ManageService/ManageGroupService/GroupServiceManage";
+import CollaboratorManage from "./System/ManageUser/Collaborator/CollaboratorManage.jsx";
+import UserManage from "./System/ManageUser/Customer/UserManage.jsx";
 
 const App = () => {
   const isCheckLogin = useSelector(getIsCheckLogin);

@@ -9,8 +9,10 @@ import {
   ModalHeader,
   Row,
 } from "reactstrap";
-import { activeBanner, deleteBanner } from "../../../../api/banner";
-import { deleteGroupServiceApi } from "../../../../api/service";
+import {
+  activeGroupServiceApi,
+  deleteGroupServiceApi,
+} from "../../../../api/service";
 import "./TableManageGroupService.scss";
 
 export default function TableManageGroupService({ data, setItemEdit }) {
@@ -27,6 +29,25 @@ export default function TableManageGroupService({ data, setItemEdit }) {
         window.location.reload();
       })
       .catch((err) => console.log(err));
+  }, []);
+
+  const blockGroupService = useCallback((id, is_active) => {
+    if (is_active === true) {
+      activeGroupServiceApi(id, { is_active: false })
+        .then((res) => {
+          setModalBlock(!modalBlock);
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    } else {
+      activeGroupServiceApi(id, { is_active: true })
+        .then((res) => {
+          setModalBlock(!modalBlock);
+
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    }
   }, []);
 
   return (
@@ -49,7 +70,7 @@ export default function TableManageGroupService({ data, setItemEdit }) {
               <i className="uil uil-edit-alt"></i>
             </button>
             <button className="btn-delete" onClick={toggle}>
-              <i className="uil uil-trash"></i>
+              <i className="uil uil-trash-alt icon-delete"></i>
             </button>
           </Row>
           <Row>
@@ -63,6 +84,33 @@ export default function TableManageGroupService({ data, setItemEdit }) {
               </button>
             )}
           </Row>
+          <div>
+            <Modal isOpen={modalBlock} toggle={toggleBlock}>
+              <ModalHeader toggle={toggleBlock}>
+                {" "}
+                {data?.is_active === true
+                  ? "Khóa GroupService"
+                  : "Mở GroupService"}
+              </ModalHeader>
+              <ModalBody>
+                {data?.is_active === true
+                  ? "Bạn có muốn khóa GroupService"
+                  : "Bạn có muốn kích hoạt GroupService này"}
+                <h3>{data?.name}</h3>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  onClick={() => blockGroupService(data?._id, data?.is_active)}
+                >
+                  Có
+                </Button>
+                <Button color="#ddd" onClick={toggleBlock}>
+                  Không
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </div>
           <div>
             <Modal isOpen={modal} toggle={toggle}>
               <ModalHeader toggle={toggle}>Xóa GroupService</ModalHeader>

@@ -4,11 +4,19 @@ import * as api from "../../api/collaborator.jsx";
 import { getType } from "../actions/collaborator";
 import { Alert } from "reactstrap";
 
-function* fetchCollaboratorsSaga() {
+function* fetchCollaboratorsSaga(action) {
   try {
-    const Collaborators = yield call(api.fetchCollaborators);
+    const resoponse = yield call(
+      api.fetchCollaborators,
+      action.payload.start,
+      action.payload.length
+    );
+
     yield put(
-      actions.getCollaborators.getCollaboratorsSuccess(Collaborators.data)
+      actions.getCollaborators.getCollaboratorsSuccess({
+        data: resoponse.data,
+        total: resoponse.totalItem,
+      })
     );
   } catch (err) {
     console.error(err);

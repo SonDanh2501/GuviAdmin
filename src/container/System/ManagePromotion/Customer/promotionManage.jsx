@@ -32,6 +32,7 @@ import {
   searchPromotion,
 } from "../../../../api/promotion.jsx";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
+import { removeVietnameseTones } from "../../../../helper/ConvertVie.js";
 import {
   createPromotionAction,
   getPromotion,
@@ -368,7 +369,7 @@ export default function PromotionManage() {
   ]);
 
   const handleSearch = useCallback((value) => {
-    searchPromotion(value)
+    searchPromotion(removeVietnameseTones(value))
       .then((res) => setDataFilter(res?.data))
       .catch((err) => console.log(err));
   }, []);

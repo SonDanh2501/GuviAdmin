@@ -1,13 +1,13 @@
-import { createActions, createAction } from 'redux-actions';
+import { createActions, createAction } from "redux-actions";
 
 export const getType = (reduxAction) => {
   return reduxAction().type;
 };
 
 export const getCollaborators = createActions({
-  getCollaboratorsRequest: undefined,
+  getCollaboratorsRequest: (payload) => payload,
   getCollaboratorsSuccess: (payload) => payload,
-  getCollaboratorsFailure: (err) => err, 
+  getCollaboratorsFailure: (err) => err,
 });
 
 export const createCollaborator = createActions({
@@ -21,4 +21,3 @@ export const updateCollaborator = createActions({
   updateCollaboratorSuccess: (payload) => payload,
   updateCollaboratorFailure: (err) => err,
 });
-

@@ -100,7 +100,7 @@ export default function TableManageCollaborator({ data, setItemEdit }) {
               <i className="uil uil-edit-alt"></i>
             </button>
             <button className="btn-delete" onClick={toggle}>
-              <i class="uil uil-trash-alt"></i>
+              <i className="uil uil-trash-alt icon-delete"></i>
             </button>
           </Row>
           <Row>
@@ -115,11 +115,11 @@ export default function TableManageCollaborator({ data, setItemEdit }) {
             )}
             {data?.is_verify ? (
               <button className="btn-delete" onClick={toggleVerify}>
-                <i class="uil-toggle-on"></i>
+                <i className="uil-toggle-on icon-on-toggle"></i>
               </button>
             ) : (
               <button className="btn-delete" onClick={toggleVerify}>
-                <i class="uil-toggle-off"></i>
+                <i className="uil-toggle-off icon-off-toggle"></i>
               </button>
             )}
           </Row>

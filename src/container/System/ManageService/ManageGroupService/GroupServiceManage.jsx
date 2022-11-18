@@ -133,7 +133,7 @@ export default function GroupServiceManage() {
   //     .then((res) => setDataFilter(res.data))
   //     .catch((err) => console.log(err));
   // }, []);
-  console.log(listGroupService);
+
   return (
     <React.Fragment>
       <div className="user-redux-container">
