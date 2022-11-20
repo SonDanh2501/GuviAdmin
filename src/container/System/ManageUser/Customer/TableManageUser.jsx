@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getCustomer } from "../../../../redux/selectors/customer";
+import { useDispatch } from "react-redux";
 import "./TableManageUser.scss";
 import * as actions from "../../../../redux/actions/customerAction";
 import {
@@ -14,10 +13,13 @@ import {
   Button,
 } from "reactstrap";
 import { activeCustomer } from "../../../../api/customer";
+import EditCustomer from "../../../../components/editCustomer/editCustomer";
 
-export default function TableManageUser({ data, setItemEdit }) {
-  const [modal, setModal] = React.useState(false);
-  const [modalBlock, setModalBlock] = React.useState(false);
+export default function TableManageUser({ data }) {
+  const [itemEdit, setItemEdit] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [modalBlock, setModalBlock] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
   const dispatch = useDispatch();
   // Toggle for Modal
   const toggle = () => setModal(!modal);
@@ -72,7 +74,13 @@ export default function TableManageUser({ data, setItemEdit }) {
         </td>
         <td>
           <Row>
-            <button className="btn-edit" onClick={() => setItemEdit(data)}>
+            <button
+              className="btn-edit"
+              onClick={() => {
+                setItemEdit(data);
+                setModalEdit(!modalEdit);
+              }}
+            >
               <i className="uil uil-edit-alt"></i>
             </button>
             <button className="btn-delete" onClick={toggle}>
@@ -133,6 +141,13 @@ export default function TableManageUser({ data, setItemEdit }) {
                 </Button>
               </ModalFooter>
             </Modal>
+          </div>
+          <div>
+            <EditCustomer
+              state={modalEdit}
+              setState={() => setModalEdit(!modalEdit)}
+              data={itemEdit}
+            />
           </div>
         </td>
       </tr>

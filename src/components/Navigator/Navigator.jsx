@@ -10,7 +10,7 @@ const Navigator = () => {
         <h3 className="name-guvi">GUVI</h3>
       </div>
       {/* <NavLink activeClassName="active" to="/" exact>Home</NavLink> */}
-      <ul className="nav nav-pills flex-column">
+      <ul className="nav nav-pills flex-column mt-5">
         <li className="nav-item">
           <NavLink className="nav-link" to="/system/user-manage">
             Quản lý người dùng

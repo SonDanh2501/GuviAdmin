@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
@@ -9,6 +10,7 @@ import Navigator from "../components/Navigator/Navigator.jsx";
 import { getIsCheckLogin } from "../redux/selectors/auth";
 import "./App.scss";
 import Login from "./auth/Login";
+import Header from "./Header/Header.jsx";
 import PromotionManage from "./System/ManagePromotion/Customer/promotionManage";
 import GroupServiceManage from "./System/ManageService/ManageGroupService/GroupServiceManage";
 import BannerManage from "./System/ManageSetting/ManageBanner/BannerManage";
@@ -18,6 +20,7 @@ import CollaboratorManage from "./System/ManageUser/Collaborator/CollaboratorMan
 import UserManage from "./System/ManageUser/Customer/UserManage.jsx";
 
 const App = () => {
+  const [hideSidebar, setHideSidebar] = useState(true);
   const isCheckLogin = useSelector(getIsCheckLogin);
 
   return (
@@ -36,10 +39,15 @@ const App = () => {
       ) : (
         <Router>
           <div className="row">
-            <div className="col-2 sidebar">
-              <Navigator />
-            </div>
-            <main className="col-10">
+            {hideSidebar && (
+              <div className="col-2 sidebar">
+                <Navigator />
+              </div>
+            )}
+            <main className={hideSidebar ? "col-10" : "col-12"}>
+              <div>
+                <Header onClick={() => setHideSidebar(!hideSidebar)} />
+              </div>
               <Switch>
                 <Route path="/system/user-manage">
                   <UserManage />

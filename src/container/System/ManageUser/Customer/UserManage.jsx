@@ -14,6 +14,7 @@ import {
   Table,
 } from "reactstrap";
 import { searchCustomers } from "../../../../api/customer";
+import AddCustomer from "../../../../components/addCustomer/addCustomer";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import {
   createCustomer,
@@ -179,14 +180,15 @@ export default function UserManage() {
                   <CardHeader className="border-0 card-header">
                     <Row className="align-items-center">
                       <Col className="text-left">
-                        {!create && (
+                        {/* {!create && (
                           <Button
                             color="info"
                             onClick={() => setCreate(!create)}
                           >
                             Thêm người dùng
                           </Button>
-                        )}
+                        )} */}
+                        <AddCustomer />
                       </Col>
                       <Col>
                         <CustomTextInput
