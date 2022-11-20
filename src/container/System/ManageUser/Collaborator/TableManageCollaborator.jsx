@@ -14,12 +14,15 @@ import {
   deleteCollaborator,
   verifyCollaborator,
 } from "../../../../api/collaborator";
+import EditCollaborator from "../../../../components/editCollaborator/editCollaborator";
 import "./TableManageCollaborator.scss";
 
-export default function TableManageCollaborator({ data, setItemEdit }) {
+export default function TableManageCollaborator({ data }) {
   const [modal, setModal] = React.useState(false);
   const [modalBlock, setModalBlock] = React.useState(false);
   const [modalVerify, setModalVerify] = React.useState(false);
+  const [modalEdit, setModalEdit] = React.useState(false);
+  const [itemEdit, setItemEdit] = React.useState([]);
   const dispatch = useDispatch();
   // Toggle for Modal
   const toggle = () => setModal(!modal);
@@ -96,7 +99,13 @@ export default function TableManageCollaborator({ data, setItemEdit }) {
         </td>
         <td>
           <Row>
-            <button className="btn-edit" onClick={() => setItemEdit(data)}>
+            <button
+              className="btn-edit"
+              onClick={() => {
+                setItemEdit(data);
+                setModalEdit(!modalEdit);
+              }}
+            >
               <i className="uil uil-edit-alt"></i>
             </button>
             <button className="btn-delete" onClick={toggle}>
@@ -196,6 +205,13 @@ export default function TableManageCollaborator({ data, setItemEdit }) {
                 </Button>
               </ModalFooter>
             </Modal>
+          </div>
+          <div>
+            <EditCollaborator
+              state={modalEdit}
+              setState={() => setModalEdit(!modalEdit)}
+              data={itemEdit}
+            />
           </div>
         </td>
       </tr>

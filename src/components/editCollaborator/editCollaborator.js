@@ -6,12 +6,15 @@ import {
   createCustomer,
   updateCustomer,
 } from "../../redux/actions/customerAction";
-import { validateAddCustomerSchema } from "../../utils/schema";
+import {
+  validateAddCollaboratorSchema,
+  validateAddCustomerSchema,
+} from "../../utils/schema";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
-import "./editCustomer.scss";
+import "./editCollaborator.scss";
 
-const EditCustomer = ({ state, setState, data }) => {
+const EditCollaborator = ({ state, setState, data }) => {
   const formikRef = useRef();
   const dispatch = useDispatch();
 
@@ -20,9 +23,10 @@ const EditCustomer = ({ state, setState, data }) => {
     phone: data?.phone,
     email: data?.email,
     name: data?.name,
+    identify: data?.identify,
   };
 
-  const editCustomer = useCallback(() => {
+  const editCollaborator = useCallback(() => {
     dispatch(
       updateCustomer.updateCustomerRequest({
         id: data?._id,
@@ -32,6 +36,7 @@ const EditCustomer = ({ state, setState, data }) => {
           email: formikRef?.current?.values?.email,
           name: formikRef?.current?.values?.name,
           password: formikRef?.current?.values?.password,
+          identify: formikRef?.current?.values?.identify,
         },
       })
     );
@@ -42,8 +47,8 @@ const EditCustomer = ({ state, setState, data }) => {
       <Formik
         innerRef={formikRef}
         initialValues={initialValues}
-        onSubmit={editCustomer}
-        validationSchema={validateAddCustomerSchema}
+        onSubmit={editCollaborator}
+        validationSchema={validateAddCollaboratorSchema}
         enableReinitialize={true}
         validateOnChange={true}
       >
@@ -56,7 +61,7 @@ const EditCustomer = ({ state, setState, data }) => {
             >
               <div className="modal-header">
                 <h3 className="modal-title" id="exampleModalLabel">
-                  Sửa khách hàng
+                  Sửa cộng tác viên
                 </h3>
                 <Button
                   data-dismiss="modal"
@@ -119,11 +124,21 @@ const EditCustomer = ({ state, setState, data }) => {
                       setFieldValue("email", text.target.value)
                     }
                   />
+                  <CustomTextInput
+                    label="CCCD/CMND"
+                    type="email"
+                    id="className"
+                    placeholder="Nhập CCCD/CMND"
+                    defaultValue={values.identify}
+                    onChange={(text) =>
+                      setFieldValue("identify", text.target.value)
+                    }
+                  />
                   <CustomButton
                     title="Sửa"
                     className="float-right btn-modal"
                     type="button"
-                    onClick={editCustomer}
+                    onClick={editCollaborator}
                   />
                 </Form>
               </div>
@@ -135,4 +150,4 @@ const EditCustomer = ({ state, setState, data }) => {
   );
 };
 
-export default EditCustomer;
+export default EditCollaborator;
