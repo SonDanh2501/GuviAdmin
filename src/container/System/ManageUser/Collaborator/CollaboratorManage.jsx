@@ -33,6 +33,7 @@ import {
   pageCollaborators,
 } from "../../../../api/collaborator.jsx";
 import { removeVietnameseTones } from "../../../../helper/ConvertVie.js";
+import AddCollaborator from "../../../../components/addCollaborator/addCollaborator.js";
 
 export default function CollaboratorManage() {
   const [create, setCreate] = useState(false);
@@ -136,7 +137,7 @@ export default function CollaboratorManage() {
         <div className="user-redux-body mt-5 col-md-12">
           <div className="container">
             <div className="column">
-              <div className="">
+              {/* <div className="">
                 {create || edit ? (
                   <Form>
                     <Row>
@@ -239,14 +240,14 @@ export default function CollaboratorManage() {
                 ) : (
                   <></>
                 )}
-              </div>
+              </div> */}
 
               <div className="mt-5">
                 <Card className="shadow">
                   <CardHeader className="border-0 card-header">
                     <Row className="align-items-center">
                       <Col className="text-left">
-                        {!create && (
+                        {/* {!create && (
                           <Button
                             color="info"
                             onClick={() => {
@@ -261,7 +262,8 @@ export default function CollaboratorManage() {
                           >
                             Thêm cộng tác viên
                           </Button>
-                        )}
+                        )} */}
+                        <AddCollaborator />
                       </Col>
                       <Col>
                         <CustomTextInput

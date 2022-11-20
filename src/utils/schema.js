@@ -25,9 +25,6 @@ const validateAddCustomerSchema = Yup.object().shape({
   phone: Yup.string()
     .matches(regexPhone, validPhoneMessage)
     .required(requiredErrorMessage),
-  email: Yup.string()
-    .matches(regexEmail, validEmailMessage)
-    .required(requiredErrorMessage),
   password: Yup.string()
     .min(8, validPasswordMessage)
     .required(requiredErrorMessage)
