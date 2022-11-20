@@ -111,7 +111,7 @@ export default function UserManage() {
       .then((res) => setDataFilter(res.data))
       .catch((err) => console.log(err));
   }, []);
-
+  console.log(banners);
   return (
     <React.Fragment>
       <div className="user-redux-container">
