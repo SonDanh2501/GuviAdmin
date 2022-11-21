@@ -31,88 +31,19 @@ import "./BannerManage.scss";
 import TableManageBanner from "./TableManageBanner.jsx";
 
 export default function UserManage() {
-  const [create, setCreate] = useState(false);
-  const [edit, setEdit] = useState(false);
-  const [id, setId] = useState("");
-  const [title, setTitle] = useState("");
-  const [imgThumbnail, setImgThumbnail] = useState("");
-  const [typeLink, setTypeLink] = useState("url");
-  const [linkID, setLinkId] = useState("");
-  const [position, setPosition] = useState("");
-
   const [dataFilter, setDataFilter] = useState([]);
   const dispatch = useDispatch();
-  const promotion = useSelector(getPromotionSelector);
   const banners = useSelector(getBanner);
   React.useEffect(() => {
     dispatch(getBanners.getBannersRequest());
-    dispatch(getPromotion.getPromotionRequest());
   }, [dispatch]);
-
-  const onSubmit = useCallback(() => {
-    dispatch(
-      createBanner.createBannerRequest({
-        title: title,
-        image: imgThumbnail,
-        type_link: typeLink,
-        link_id: linkID,
-        position: position,
-      })
-    );
-  }, [dispatch, title, imgThumbnail, typeLink, linkID, position]);
-
-  const onChangeThumbnail = (e) => {
-    if (e.target.files[0]) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        setImgThumbnail(reader.result);
-      });
-      reader.readAsDataURL(e.target.files[0]);
-    }
-    const formData = new FormData();
-    formData.append("file", e.target.files[0]);
-    postFile(formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then((res) => setImgThumbnail(res))
-      .catch((err) => console.log("err", err));
-  };
-
-  const setItemEdit = (itemEdit) => {
-    setTitle(itemEdit?.title);
-    setImgThumbnail(itemEdit?.image);
-    setTypeLink(itemEdit?.type_link);
-    setLinkId(itemEdit?.link_id);
-    setPosition(itemEdit?.position);
-    setId(itemEdit?._id);
-    setEdit(true);
-    setCreate(false);
-    window.scrollTo(0, 0);
-  };
-
-  const onEditBanner = useCallback(() => {
-    dispatch(
-      updateBanner.updateBannerRequest({
-        id: id,
-        data: {
-          title: title,
-          image: imgThumbnail,
-          type_link: typeLink,
-          link_id: linkID,
-          position: position,
-        },
-      })
-    );
-  }, [id, title, imgThumbnail, typeLink, linkID, position]);
 
   const handleSearch = useCallback((value) => {
     searchBanners(value)
       .then((res) => setDataFilter(res.data))
       .catch((err) => console.log(err));
   }, []);
-  console.log(banners);
+
   return (
     <React.Fragment>
       <div className="user-redux-container">
@@ -268,13 +199,9 @@ export default function UserManage() {
                 </thead>
                 <tbody>
                   {dataFilter.length > 0
-                    ? dataFilter.map((e) => (
-                        <TableManageBanner data={e} setItemEdit={setItemEdit} />
-                      ))
+                    ? dataFilter.map((e) => <TableManageBanner data={e} />)
                     : banners &&
-                      banners.map((e) => (
-                        <TableManageBanner data={e} setItemEdit={setItemEdit} />
-                      ))}
+                      banners.map((e) => <TableManageBanner data={e} />)}
                 </tbody>
               </Table>
               <CardFooter>

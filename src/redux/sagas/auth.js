@@ -8,7 +8,6 @@ function* loginSaga(action) {
     const response = yield call(loginApi, action.payload);
     yield put(loginAction.loginSuccess(response?.token));
   } catch (err) {
-    console.error(err);
     yield put(actions.getBanners.getBannersFailure(err));
   }
 }

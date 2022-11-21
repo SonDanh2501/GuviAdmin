@@ -193,6 +193,7 @@ const EditPromotion = ({ state, setState, data }) => {
         setIsExchangePoint(res?.is_exchange_point);
         setExchangePoint(res?.exchange_point);
         setNamebrand(res?.brand);
+        setPromoCode(res?.code);
       })
       .catch((err) => console.log(err));
   }, [data]);
@@ -216,7 +217,7 @@ const EditPromotion = ({ state, setState, data }) => {
           },
           thumbnail: imgThumbnail,
           image_background: imgBackground,
-          code: codebrand,
+          code: promoCode ? promoCode : codebrand,
           is_limit_date: limitedDate,
           limit_start_date: limitedDate
             ? new Date(startDate).toISOString()
@@ -268,6 +269,7 @@ const EditPromotion = ({ state, setState, data }) => {
     maximumDiscount,
     reducedValue,
     data,
+    promoCode,
   ]);
 
   return (
@@ -451,14 +453,16 @@ const EditPromotion = ({ state, setState, data }) => {
                           value={namebrand}
                           onChange={(e) => setNamebrand(e.target.value)}
                         />
-                        <CustomTextInput
-                          label={"Mã khuyến mãi"}
-                          placeholder="Nhập mã khuyến mãi"
-                          className="input-promo-code"
-                          type="text"
-                          value={codebrand}
-                          onChange={(e) => setCodebrand(e.target.value)}
-                        />
+                        {typePromotion === "code" ? null : (
+                          <CustomTextInput
+                            label={"Mã khuyến mãi"}
+                            placeholder="Nhập mã khuyến mãi"
+                            className="input-promo-code"
+                            type="text"
+                            value={codebrand}
+                            onChange={(e) => setCodebrand(e.target.value)}
+                          />
+                        )}
                       </>
                     )}
                   </div>
