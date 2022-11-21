@@ -73,34 +73,6 @@ const App = () => {
               </Switch>
             </main>
           </div>
-          {/* <div className="App">
-            <header className="App-header">
-              <Navigator />
-            </header>
-            <Switch>
-              <Route path="/system/user-manage">
-                <UserManage />
-              </Route>
-              <Route path="/system/collaborator-manage">
-                <CollaboratorManage />
-              </Route>
-              <Route path="/promotion/manage-promotion">
-                <PromotionManage />
-              </Route>
-              <Route path="/settings/manage-banner">
-                <BannerManage />
-              </Route>
-              <Route path="/settings/manage-news">
-                <NewsManage />
-              </Route>
-              <Route path="/services/manage-group-service">
-                <GroupServiceManage />
-              </Route>
-              <Route path="/settings/manage-reason">
-                <ReasonManage />
-              </Route>
-            </Switch>
-          </div> */}
         </Router>
       )}
     </>

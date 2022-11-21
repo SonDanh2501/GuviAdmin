@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import "./TableManagePromotion.scss";
 
@@ -13,10 +13,13 @@ import {
 import { deletePromotion } from "../../../../api/promotion";
 import moment from "moment";
 import { deletePromotionAction } from "../../../../redux/actions/promotion";
+import EditPromotion from "../../../../components/editPromotion /editPromotion";
 
-export default function TableManagePromotion({ data, setId }) {
+export default function TableManagePromotion({ data }) {
   const dispatch = useDispatch();
-  const [modal, setModal] = React.useState(false);
+  const [modal, setModal] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
+  const [itemEdit, setItemEdit] = useState([]);
   const toggle = () => setModal(!modal);
   const onDelete = useCallback((id) => {
     dispatch(deletePromotionAction.deletePromotionRequest(id));
@@ -45,7 +48,13 @@ export default function TableManagePromotion({ data, setId }) {
           <a>{data?.is_limit_date ? startDate + "-" + endDate : null}</a>
         </td>
         <td className="text-right">
-          <button className="btn-edit" onClick={() => setId(data?._id)}>
+          <button
+            className="btn-edit"
+            onClick={() => {
+              setModalEdit(!modalEdit);
+              setItemEdit(data);
+            }}
+          >
             <i className="uil uil-edit-alt"></i>
           </button>
           <button className="btn-delete" onClick={toggle}>
@@ -66,6 +75,13 @@ export default function TableManagePromotion({ data, setId }) {
                 </Button>
               </ModalFooter>
             </Modal>
+          </div>
+          <div>
+            <EditPromotion
+              state={modalEdit}
+              setState={() => setModalEdit(!modalEdit)}
+              data={itemEdit}
+            />
           </div>
         </td>
       </tr>

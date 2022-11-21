@@ -34,6 +34,7 @@ function* fetchPromotionSaga() {
 function* createPromotionSaga(action) {
   try {
     const promotion = yield call(createPromotion, action.payload);
+    window.location.reload();
     yield put(createPromotionAction.createPromotionSuccess(promotion));
   } catch (err) {
     console.error(err);
