@@ -7,6 +7,7 @@ import newsSaga from "./news";
 import authSaga from "./auth";
 import serviceSaga from "./service";
 import ReasonSaga from "./reason";
+import brandSaga from "./brand";
 
 export default function* rootSaga() {
   yield all([
@@ -18,5 +19,6 @@ export default function* rootSaga() {
     fork(ReasonSaga),
     fork(authSaga),
     fork(serviceSaga),
+    fork(brandSaga),
   ]);
 }

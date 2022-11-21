@@ -160,7 +160,7 @@ const AddPromotion = () => {
         },
         thumbnail: imgThumbnail,
         image_background: imgBackground,
-        code: codebrand,
+        code: promoCode ? promoCode : codebrand,
         is_limit_date: limitedDate,
         limit_start_date: limitedDate
           ? new Date(startDate).toISOString()
@@ -404,14 +404,16 @@ const AddPromotion = () => {
                           value={namebrand}
                           onChange={(e) => setNamebrand(e.target.value)}
                         />
-                        <CustomTextInput
-                          label={"Mã khuyến mãi"}
-                          placeholder="Nhập mã khuyến mãi"
-                          className="input-promo-code"
-                          type="text"
-                          value={codebrand}
-                          onChange={(e) => setCodebrand(e.target.value)}
-                        />
+                        {typePromotion === "code" ? null : (
+                          <CustomTextInput
+                            label={"Mã khuyến mãi"}
+                            placeholder="Nhập mã khuyến mãi"
+                            className="input-promo-code"
+                            type="text"
+                            value={codebrand}
+                            onChange={(e) => setCodebrand(e.target.value)}
+                          />
+                        )}
                       </>
                     )}
                   </div>

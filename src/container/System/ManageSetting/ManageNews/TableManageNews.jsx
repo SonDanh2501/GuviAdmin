@@ -16,10 +16,13 @@ import {
   Button,
 } from "reactstrap";
 import { activeNew, deleteNew } from "../../../../api/news";
+import EditNews from "../../../../components/editNews/editNews";
 
-export default function TableManageNews({ data, setItemEdit }) {
+export default function TableManageNews({ data }) {
   const [modal, setModal] = React.useState(false);
   const [modalBlock, setModalBlock] = React.useState(false);
+  const [modalEdit, setModalEdit] = React.useState(false);
+  const [itemEdit, setItemEdit] = React.useState([]);
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
 
@@ -73,22 +76,18 @@ export default function TableManageNews({ data, setItemEdit }) {
           <span>{data?.type}</span>
         </td>
         <td>
-          {/* <Card className="my-2">
-            <CardImg
-              alt="Card image cap"
-              src={data?.thumbnail}
-              style={{
-                height: 100,
-              }}
-              width="100%"
-            />
-          </Card> */}
           <img src={data?.thumbnail} className="thumbnail" />
         </td>
 
         <td>
           <Row>
-            <button className="btn-edit" onClick={() => setItemEdit(data)}>
+            <button
+              className="btn-edit"
+              onClick={() => {
+                setItemEdit(data);
+                setModalEdit(!modalEdit);
+              }}
+            >
               <i className="uil uil-edit-alt"></i>
             </button>
             <button className="btn-delete" onClick={toggle}>
@@ -146,6 +145,13 @@ export default function TableManageNews({ data, setItemEdit }) {
                 </Button>
               </ModalFooter>
             </Modal>
+          </div>
+          <div>
+            <EditNews
+              state={modalEdit}
+              setState={() => setModalEdit(!modalEdit)}
+              data={itemEdit}
+            />
           </div>
         </td>
       </tr>

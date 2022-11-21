@@ -8,6 +8,7 @@ import banner from "./banner";
 import news from "./news";
 import reasons from "./reason";
 import service from "./service";
+import brand from "./brand";
 import Auth from "./auth";
 
 const authPersistConfig = {
@@ -24,5 +25,6 @@ const rootReducer = combineReducers({
   reasons,
   auth: persistReducer(authPersistConfig, Auth),
   service,
+  brand,
 });
 export default rootReducer;

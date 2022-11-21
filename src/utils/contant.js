@@ -26,6 +26,9 @@ export const INIT_STATE = {
   service: {
     groupService: [],
   },
+  brand: {
+    title: "",
+  },
 };
 
 export const path = {
