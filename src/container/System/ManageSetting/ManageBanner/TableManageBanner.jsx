@@ -16,10 +16,13 @@ import {
   CardImg,
 } from "reactstrap";
 import { activeBanner, deleteBanner } from "../../../../api/banner";
+import EditBanner from "../../../../components/editBanner/editBanner";
 
-export default function TableManageBanner({ data, setItemEdit }) {
+export default function TableManageBanner({ data }) {
   const [modal, setModal] = React.useState(false);
   const [modalBlock, setModalBlock] = React.useState(false);
+  const [modalEdit, setModalEdit] = React.useState(false);
+  const [itemEdit, setItemEdit] = React.useState([]);
   const dispatch = useDispatch();
   // Toggle for Modal
   const toggle = () => setModal(!modal);
@@ -70,7 +73,7 @@ export default function TableManageBanner({ data, setItemEdit }) {
           <span>{data?.link_id}</span>
         </td>
         <td>
-          <Card className="my-2">
+          {/* <Card className="my-2">
             <CardImg
               alt="Card image cap"
               src={data?.image}
@@ -79,12 +82,19 @@ export default function TableManageBanner({ data, setItemEdit }) {
               }}
               width="100%"
             />
-          </Card>
+          </Card> */}
+          <img src={data?.image} className="img_banner" />
         </td>
 
         <td>
           <Row>
-            <button className="btn-edit" onClick={() => setItemEdit(data)}>
+            <button
+              className="btn-edit"
+              onClick={() => {
+                setItemEdit(data);
+                setModalEdit(!modalEdit);
+              }}
+            >
               <i className="uil uil-edit-alt"></i>
             </button>
             <button className="btn-delete" onClick={toggle}>
@@ -142,6 +152,13 @@ export default function TableManageBanner({ data, setItemEdit }) {
                 </Button>
               </ModalFooter>
             </Modal>
+          </div>
+          <div>
+            <EditBanner
+              state={modalEdit}
+              setState={() => setModalEdit(!modalEdit)}
+              data={itemEdit}
+            />
           </div>
         </td>
       </tr>

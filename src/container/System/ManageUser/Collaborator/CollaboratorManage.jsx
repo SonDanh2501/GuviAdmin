@@ -133,11 +133,8 @@ export default function CollaboratorManage() {
 
   return (
     <React.Fragment>
-      <div className="user-redux-container">
-        <div className="user-redux-body mt-5 col-md-12">
-          <div className="container">
-            <div className="column">
-              {/* <div className="">
+      <div className="mt-5">
+        {/* <div className="">
                 {create || edit ? (
                   <Form>
                     <Row>
@@ -241,13 +238,12 @@ export default function CollaboratorManage() {
                   <></>
                 )}
               </div> */}
-
-              <div className="mt-5">
-                <Card className="shadow">
-                  <CardHeader className="border-0 card-header">
-                    <Row className="align-items-center">
-                      <Col className="text-left">
-                        {/* {!create && (
+        <div className="mt-5">
+          <Card className="shadow">
+            <CardHeader className="border-0 card-header">
+              <Row className="align-items-center">
+                <Col className="text-left">
+                  {/* {!create && (
                           <Button
                             color="info"
                             onClick={() => {
@@ -263,73 +259,70 @@ export default function CollaboratorManage() {
                             Thêm cộng tác viên
                           </Button>
                         )} */}
-                        <AddCollaborator />
-                      </Col>
-                      <Col>
-                        <CustomTextInput
-                          placeholder="Tìm kiếm"
-                          type="text"
-                          onChange={(e) => handleSearch(e.target.value)}
-                        />
-                      </Col>
-                    </Row>
-                  </CardHeader>
-                  <Table className="align-items-center table-flush " responsive>
-                    <thead className="thead-light">
-                      <tr>
-                        <th>Tên cộng tác viên</th>
-                        <th>Email</th>
-                        <th>SĐT</th>
-                        <th>Giới tính</th>
-                        {/* <th>Ngày sinh</th> */}
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {dataFilter.length > 0
-                        ? dataFilter.map((e) => (
-                            <TableManageCollaborator
-                              data={e}
-                              setItemEdit={setItemEdit}
-                            />
-                          ))
-                        : collaborator &&
-                          collaborator.map((e) => (
-                            <TableManageCollaborator
-                              data={e}
-                              setItemEdit={setItemEdit}
-                            />
-                          ))}
-                    </tbody>
-                  </Table>
-                  <CardFooter>
-                    <nav aria-label="...">
-                      <Pagination
-                        className="pagination justify-content-end mb-0"
-                        listClassName="justify-content-end mb-0"
-                      >
-                        <PaginationItem>
-                          <PaginationLink
-                            onClick={(e) => handleClick(e, currentPage - 1)}
-                            previous
-                            href="#"
-                          />
-                        </PaginationItem>
-                        {pageNumbers}
-                        <PaginationItem disabled={currentPage >= pageCount - 1}>
-                          <PaginationLink
-                            onClick={(e) => handleClick(e, currentPage + 1)}
-                            next
-                            href="#"
-                          />
-                        </PaginationItem>
-                      </Pagination>
-                    </nav>
-                  </CardFooter>
-                </Card>
-              </div>
-            </div>
-          </div>
+                  <AddCollaborator />
+                </Col>
+                <Col>
+                  <CustomTextInput
+                    placeholder="Tìm kiếm"
+                    type="text"
+                    onChange={(e) => handleSearch(e.target.value)}
+                  />
+                </Col>
+              </Row>
+            </CardHeader>
+            <Table responsive>
+              <thead className="thead-light">
+                <tr>
+                  <th>Tên cộng tác viên</th>
+                  <th>Email</th>
+                  <th>SĐT</th>
+                  <th>Giới tính</th>
+                  {/* <th>Ngày sinh</th> */}
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {dataFilter.length > 0
+                  ? dataFilter.map((e) => (
+                      <TableManageCollaborator
+                        data={e}
+                        setItemEdit={setItemEdit}
+                      />
+                    ))
+                  : collaborator &&
+                    collaborator.map((e) => (
+                      <TableManageCollaborator
+                        data={e}
+                        setItemEdit={setItemEdit}
+                      />
+                    ))}
+              </tbody>
+            </Table>
+            <CardFooter>
+              <nav aria-label="...">
+                <Pagination
+                  className="pagination justify-content-end mb-0"
+                  listClassName="justify-content-end mb-0"
+                >
+                  <PaginationItem>
+                    <PaginationLink
+                      onClick={(e) => handleClick(e, currentPage - 1)}
+                      previous
+                      href="#"
+                    />
+                  </PaginationItem>
+                  {pageNumbers}
+                  <PaginationItem disabled={currentPage >= pageCount - 1}>
+                    <PaginationLink
+                      onClick={(e) => handleClick(e, currentPage + 1)}
+                      next
+                      href="#"
+                    />
+                  </PaginationItem>
+                </Pagination>
+              </nav>
+            </CardFooter>
+          </Card>
         </div>
       </div>
     </React.Fragment>

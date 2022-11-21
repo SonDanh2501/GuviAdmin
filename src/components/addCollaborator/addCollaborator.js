@@ -6,7 +6,7 @@ import { createCustomer } from "../../redux/actions/customerAction";
 import { validateAddCollaboratorSchema } from "../../utils/schema";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
-import "./addCustomer.scss";
+import "./addCollaborator.scss";
 
 const AddCollaborator = () => {
   const [state, setState] = useState(false);

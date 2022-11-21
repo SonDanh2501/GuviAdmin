@@ -4,7 +4,7 @@ import logo from "./logo.png";
 
 const Navigator = () => {
   return (
-    <div className="pt-3 container">
+    <div className="pt-3 container" responsive>
       <div className="div-header">
         <img src={logo} className="logo" />
         <h3 className="name-guvi">GUVI</h3>

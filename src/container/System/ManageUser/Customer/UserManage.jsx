@@ -50,63 +50,57 @@ export default function UserManage() {
 
   return (
     <React.Fragment>
-      <div className="user-redux-container">
-        <div className="user-redux-body col-md-12">
-          <div className="container">
-            <div className="mt-5">
-              <Card className="shadow">
-                <CardHeader className="border-0 card-header">
-                  <Row className="align-items-center">
-                    <Col className="text-left">
-                      <AddCustomer />
-                    </Col>
-                    <Col>
-                      <CustomTextInput
-                        placeholder="Tìm kiếm"
-                        type="text"
-                        onChange={(e) => handleSearch(e.target.value)}
-                      />
-                    </Col>
-                  </Row>
-                </CardHeader>
-                <Table className="align-items-center table-flush " responsive>
-                  <thead className="thead-light">
-                    <tr>
-                      <th scope="col">Tên người dùng</th>
-                      <th scope="col">SĐT</th>
-                      <th scope="col">Email</th>
-                      <th scope="col">Ngày sinh</th>
-                      <th scope="col" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {dataFilter.length > 0
-                      ? dataFilter.map((e) => <TableManageUser data={e} />)
-                      : customers &&
-                        customers.map((e) => <TableManageUser data={e} />)}
-                  </tbody>
-                </Table>
-                <CardFooter>
-                  <nav aria-label="...">
-                    <Pagination
-                      className="pagination justify-content-end mb-0"
-                      listClassName="justify-content-end mb-0"
-                    >
-                      <PaginationItem className="active">
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          1
-                        </PaginationLink>
-                      </PaginationItem>
-                    </Pagination>
-                  </nav>
-                </CardFooter>
-              </Card>
-            </div>
-          </div>
-        </div>
+      <div className="mt-5">
+        <Card className="shadow">
+          <CardHeader className="border-0 card-header">
+            <Row className="align-items-center">
+              <Col className="text-left">
+                <AddCustomer />
+              </Col>
+              <Col>
+                <CustomTextInput
+                  placeholder="Tìm kiếm"
+                  type="text"
+                  onChange={(e) => handleSearch(e.target.value)}
+                />
+              </Col>
+            </Row>
+          </CardHeader>
+          <Table responsive>
+            <thead className="thead-light">
+              <tr>
+                <th scope="col">Tên người dùng</th>
+                <th scope="col">SĐT</th>
+                <th scope="col">Email</th>
+                <th scope="col">Ngày sinh</th>
+                <th scope="col" />
+              </tr>
+            </thead>
+            <tbody>
+              {dataFilter.length > 0
+                ? dataFilter.map((e) => <TableManageUser data={e} />)
+                : customers &&
+                  customers.map((e) => <TableManageUser data={e} />)}
+            </tbody>
+          </Table>
+          <CardFooter>
+            <nav aria-label="...">
+              <Pagination
+                className="pagination justify-content-end mb-0"
+                listClassName="justify-content-end mb-0"
+              >
+                <PaginationItem className="active">
+                  <PaginationLink
+                    href="#pablo"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+              </Pagination>
+            </nav>
+          </CardFooter>
+        </Card>
       </div>
     </React.Fragment>
   );

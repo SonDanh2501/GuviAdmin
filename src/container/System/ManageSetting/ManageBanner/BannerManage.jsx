@@ -17,6 +17,7 @@ import {
 } from "reactstrap";
 import { searchBanners } from "../../../../api/banner";
 import { postFile } from "../../../../api/file";
+import AddBanner from "../../../../components/addBanner/addBanner";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import {
   createBanner,
@@ -115,10 +116,8 @@ export default function UserManage() {
   return (
     <React.Fragment>
       <div className="user-redux-container">
-        <div className="user-redux-body mt-5 col-md-12">
-          <div className="container">
-            <div className="column">
-              {create || edit ? (
+        <div className="column">
+          {/* {create || edit ? (
                 <Form>
                   <Row>
                     <Col md={6}>
@@ -222,14 +221,14 @@ export default function UserManage() {
                 </Form>
               ) : (
                 <></>
-              )}
-              <div className="mt-5">
-                {/* <TableManageBanner /> */}
-                <Card className="shadow">
-                  <CardHeader className="border-0 card-header">
-                    <Row className="align-items-center">
-                      <Col className="text-left">
-                        {!create && (
+              )} */}
+          <div className="mt-5">
+            {/* <TableManageBanner /> */}
+            <Card className="shadow">
+              <CardHeader className="border-0 card-header">
+                <Row className="align-items-center">
+                  <Col className="text-left">
+                    {/* {!create && (
                           <Button
                             color="info"
                             onClick={() => {
@@ -244,65 +243,58 @@ export default function UserManage() {
                           >
                             Thêm Banners
                           </Button>
-                        )}
-                      </Col>
-                      <Col>
-                        <CustomTextInput
-                          placeholder="Tìm kiếm"
-                          type="text"
-                          onChange={(e) => handleSearch(e.target.value)}
-                        />
-                      </Col>
-                    </Row>
-                  </CardHeader>
-                  <Table className="align-items-center table-flush " responsive>
-                    <thead className="thead-light">
-                      <tr>
-                        <th scope="col">Title</th>
-                        <th scope="col">Type link</th>
-                        <th scope="col">Position</th>
-                        <th scope="col">Link ID</th>
-                        <th scope="col">Banner</th>
-                        <th scope="col" />
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {dataFilter.length > 0
-                        ? dataFilter.map((e) => (
-                            <TableManageBanner
-                              data={e}
-                              setItemEdit={setItemEdit}
-                            />
-                          ))
-                        : banners &&
-                          banners.map((e) => (
-                            <TableManageBanner
-                              data={e}
-                              setItemEdit={setItemEdit}
-                            />
-                          ))}
-                    </tbody>
-                  </Table>
-                  <CardFooter>
-                    <nav aria-label="...">
-                      <Pagination
-                        className="pagination justify-content-end mb-0"
-                        listClassName="justify-content-end mb-0"
+                        )} */}
+                    <AddBanner />
+                  </Col>
+                  <Col>
+                    <CustomTextInput
+                      placeholder="Tìm kiếm"
+                      type="text"
+                      onChange={(e) => handleSearch(e.target.value)}
+                    />
+                  </Col>
+                </Row>
+              </CardHeader>
+              <Table className="align-items-center table-flush " responsive>
+                <thead className="thead-light">
+                  <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Type link</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">Link ID</th>
+                    <th scope="col">Banner</th>
+                    <th scope="col" />
+                  </tr>
+                </thead>
+                <tbody>
+                  {dataFilter.length > 0
+                    ? dataFilter.map((e) => (
+                        <TableManageBanner data={e} setItemEdit={setItemEdit} />
+                      ))
+                    : banners &&
+                      banners.map((e) => (
+                        <TableManageBanner data={e} setItemEdit={setItemEdit} />
+                      ))}
+                </tbody>
+              </Table>
+              <CardFooter>
+                <nav aria-label="...">
+                  <Pagination
+                    className="pagination justify-content-end mb-0"
+                    listClassName="justify-content-end mb-0"
+                  >
+                    <PaginationItem className="active">
+                      <PaginationLink
+                        href="#pablo"
+                        onClick={(e) => e.preventDefault()}
                       >
-                        <PaginationItem className="active">
-                          <PaginationLink
-                            href="#pablo"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            1
-                          </PaginationLink>
-                        </PaginationItem>
-                      </Pagination>
-                    </nav>
-                  </CardFooter>
-                </Card>
-              </div>
-            </div>
+                        1
+                      </PaginationLink>
+                    </PaginationItem>
+                  </Pagination>
+                </nav>
+              </CardFooter>
+            </Card>
           </div>
         </div>
       </div>
