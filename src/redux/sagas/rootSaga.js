@@ -8,6 +8,7 @@ import authSaga from "./auth";
 import serviceSaga from "./service";
 import ReasonSaga from "./reason";
 import brandSaga from "./brand";
+import feedbackSaga from "./feedback";
 
 export default function* rootSaga() {
   yield all([
@@ -20,5 +21,6 @@ export default function* rootSaga() {
     fork(authSaga),
     fork(serviceSaga),
     fork(brandSaga),
+    fork(feedbackSaga),
   ]);
 }

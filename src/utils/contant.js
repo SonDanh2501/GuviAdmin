@@ -25,9 +25,13 @@ export const INIT_STATE = {
   },
   service: {
     groupService: [],
+    services: [],
   },
   brand: {
     title: "",
+  },
+  feedback: {
+    data: [],
   },
 };
 

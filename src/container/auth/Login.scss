@@ -1,8 +1,18 @@
 .container-login {
-  height: 100%;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  width: 100%;
+  background-color: #eaaea8;
 
+  .img-logo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+  }
   .btn-login {
-    background-color: rgb(250, 158, 255);
+    background-color: #eaaea8;
     border: none;
   }
   .btn-login:hover {

@@ -8,7 +8,7 @@ import draftToHtml from "draftjs-to-html";
 import { Formik } from "formik";
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   Col,
@@ -25,6 +25,7 @@ import {
   getPromotionDetails,
 } from "../../api/promotion";
 import { updatePromotionAction } from "../../redux/actions/promotion";
+import { getService } from "../../redux/selectors/service";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./editPromotion.scss";
 
@@ -66,7 +67,9 @@ const EditPromotion = ({ state, setState, data }) => {
   const [usePromo, setUsePromo] = React.useState("");
   const [imgThumbnail, setImgThumbnail] = React.useState("");
   const [imgBackground, setImgBackground] = React.useState("");
+  const [serviceApply, setServiceApply] = useState("");
   const dispatch = useDispatch();
+  const service = useSelector(getService);
 
   useEffect(() => {
     getGroupCustomerPromotion()
@@ -194,6 +197,7 @@ const EditPromotion = ({ state, setState, data }) => {
         setExchangePoint(res?.exchange_point);
         setNamebrand(res?.brand);
         setPromoCode(res?.code);
+        setServiceApply(res?.service_apply[0]);
       })
       .catch((err) => console.log(err));
   }, [data]);
@@ -226,7 +230,7 @@ const EditPromotion = ({ state, setState, data }) => {
           is_limit_count: limitedQuantity,
           limit_count: limitedQuantity ? amount : 0,
           id_group_customer: customer,
-          service_apply: [],
+          service_apply: [serviceApply],
           id_customer: [],
           is_limited_use: isUsePromo,
           limited_use: isUsePromo ? usePromo : 0,
@@ -270,6 +274,7 @@ const EditPromotion = ({ state, setState, data }) => {
     reducedValue,
     data,
     promoCode,
+    serviceApply,
   ]);
 
   return (
@@ -547,7 +552,28 @@ const EditPromotion = ({ state, setState, data }) => {
                 </Col>
                 <Col md={4}>
                   <div>
-                    <h5>9. Đối tượng áp dụng</h5>
+                    <h5>9. Dịch vụ áp dụng</h5>
+                    <Label>Các dịch vụ</Label>
+
+                    <CustomTextInput
+                      className="select-type-promo"
+                      name="select"
+                      type="select"
+                      value={serviceApply}
+                      onChange={(e) => {
+                        setServiceApply(e.target.value);
+                      }}
+                      body={service.map((item, index) => {
+                        return (
+                          <option key={index} value={item?._id}>
+                            {item?.title?.vi}
+                          </option>
+                        );
+                      })}
+                    />
+                  </div>
+                  <div>
+                    <h5>10. Đối tượng áp dụng</h5>
                     <Label>Nhóm khách hàng</Label>
 
                     <CustomTextInput
@@ -569,7 +595,7 @@ const EditPromotion = ({ state, setState, data }) => {
                     />
                   </div>
                   <div>
-                    <h5>10. Điều kiện áp dụng</h5>
+                    <h5>11. Điều kiện áp dụng</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Đặt lần đầu
@@ -582,7 +608,7 @@ const EditPromotion = ({ state, setState, data }) => {
                     </FormGroup>
                   </div>
                   <div>
-                    <h5>11. Số lượng mã khuyến mãi</h5>
+                    <h5>12. Số lượng mã khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Số lượng giới hạn
@@ -605,7 +631,7 @@ const EditPromotion = ({ state, setState, data }) => {
                     )}
                   </div>
                   <div>
-                    <h5>12. Số lần sử dụng khuyến mãi</h5>
+                    <h5>13. Số lần sử dụng khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Lần sử dụng khuyến mãi
@@ -628,7 +654,7 @@ const EditPromotion = ({ state, setState, data }) => {
                     )}
                   </div>
                   <div>
-                    <h5>13. Thời gian khuyến mãi</h5>
+                    <h5>14. Thời gian khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Giới hạn ngày
@@ -665,7 +691,7 @@ const EditPromotion = ({ state, setState, data }) => {
                     )}
                   </div>
                   <div>
-                    <h5>14. Điểm quy đổi</h5>
+                    <h5>15. Điểm quy đổi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Điểm quy đổi

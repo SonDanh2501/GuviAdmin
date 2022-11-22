@@ -3,6 +3,7 @@ import { INIT_STATE } from "../../utils/contant";
 import {
   createGroupServiceAction,
   getGroupServiceAction,
+  getServiceAction,
   getType,
   updateGroupServiceAction,
 } from "../actions/service";
@@ -28,6 +29,19 @@ export default function ServiceReducers(state = INIT_STATE.service, action) {
         groupService: [...state.groupService, action.payload],
       };
     case getType(updateGroupServiceAction.updateGroupServiceRequest):
+      return {
+        ...state,
+      };
+    case getType(getServiceAction.getServiceRequest):
+      return {
+        ...state,
+      };
+    case getType(getServiceAction.getServiceSuccess):
+      return {
+        ...state,
+        services: action.payload,
+      };
+    case getType(getServiceAction.getServiceFailure):
       return {
         ...state,
       };

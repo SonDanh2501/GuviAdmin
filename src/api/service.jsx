@@ -1,5 +1,5 @@
 import axiosClient from "../axios";
-
+//group-service
 export const getGroupServiceApi = () => {
   return axiosClient.get("/admin/group_service_manager/get_list");
 };
@@ -21,4 +21,9 @@ export const deleteGroupServiceApi = (id) => {
 
 export const activeGroupServiceApi = (id) => {
   return axiosClient.post(`/admin/group_service_manager/active/${id}`);
+};
+
+//services
+export const getServiceApi = () => {
+  return axiosClient.get("/admin/service_manager/get_list");
 };

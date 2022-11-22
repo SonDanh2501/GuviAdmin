@@ -11,6 +11,7 @@ import { getIsCheckLogin } from "../redux/selectors/auth";
 import "./App.scss";
 import Login from "./auth/Login";
 import Header from "./Header/Header.jsx";
+import FeedbackManage from "./System/ManageFeedback/FeedbackManage.jsx";
 import PromotionManage from "./System/ManagePromotion/Customer/promotionManage";
 import GroupServiceManage from "./System/ManageService/ManageGroupService/GroupServiceManage";
 import BannerManage from "./System/ManageSetting/ManageBanner/BannerManage";
@@ -66,6 +67,9 @@ const App = () => {
                 </Route>
                 <Route path="/services/manage-group-service">
                   <GroupServiceManage />
+                </Route>
+                <Route path="/feedback/manage-feedback">
+                  <FeedbackManage />
                 </Route>
                 <Route path="/settings/manage-reason">
                   <ReasonManage />

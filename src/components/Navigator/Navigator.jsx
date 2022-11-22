@@ -1,9 +1,10 @@
 import "./Navigator.scss";
 import { Link, NavLink } from "react-router-dom";
-import logo from "./logo.png";
+
 import { useDispatch } from "react-redux";
 import { useCallback } from "react";
 import { getBrand } from "../../redux/actions/brand";
+import logo from "../../assets/images/logo.png";
 
 const Navigator = () => {
   const dispatch = useDispatch();
@@ -71,6 +72,15 @@ const Navigator = () => {
             onClick={() => changeBrand("Quản lý group-service")}
           >
             Quản lý group-service
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            className="nav-link"
+            to="/feedback/manage-feedback"
+            onClick={() => changeBrand("Quản lý phản hồi")}
+          >
+            Quản lý phản hồi
           </NavLink>
         </li>
         <li>
