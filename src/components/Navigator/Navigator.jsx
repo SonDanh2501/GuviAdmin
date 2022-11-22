@@ -13,7 +13,7 @@ const Navigator = () => {
   });
 
   return (
-    <div className="pt-3 container" responsive>
+    <div className="pt-3 container min-height-100vh" responsive>
       <div className="div-header">
         <img src={logo} className="logo" />
         <h3 className="name-guvi">GUVI</h3>
@@ -29,7 +29,7 @@ const Navigator = () => {
             Quản lý người dùng
           </NavLink>
         </li>
-        <li>
+        <li className="nav-item">
           <NavLink
             className="nav-link"
             to="/system/collaborator-manage"
@@ -38,7 +38,7 @@ const Navigator = () => {
             Quản lý CTV
           </NavLink>
         </li>
-        <li>
+        <li className="nav-item">
           <NavLink
             className="nav-link"
             to="/promotion/manage-promotion"
@@ -47,7 +47,7 @@ const Navigator = () => {
             Quản lý Promotion
           </NavLink>
         </li>
-        <li>
+        <li className="nav-item">
           <NavLink
             className="nav-link"
             to="/settings/manage-banner"
@@ -56,7 +56,7 @@ const Navigator = () => {
             Quản lý Banner
           </NavLink>
         </li>
-        <li>
+        <li className="nav-item">
           <NavLink
             className="nav-link"
             to="/settings/manage-news"
@@ -65,7 +65,7 @@ const Navigator = () => {
             Quản lý bài viết Guvi
           </NavLink>
         </li>
-        <li>
+        <li className="nav-item">
           <NavLink
             className="nav-link"
             to="/services/manage-group-service"
@@ -73,8 +73,19 @@ const Navigator = () => {
           >
             Quản lý group-service
           </NavLink>
+          {/* <ul>
+            <li className="nav-item">
+              <NavLink
+                className="nav-link"
+                to="/services/manage-group-service/service"
+                onClick={() => changeBrand("Quản lý service")}
+              >
+                Quản lý service
+              </NavLink>
+            </li>
+          </ul> */}
         </li>
-        <li>
+        <li className="nav-item">
           <NavLink
             className="nav-link"
             to="/feedback/manage-feedback"
@@ -83,17 +94,17 @@ const Navigator = () => {
             Quản lý phản hồi
           </NavLink>
         </li>
-        <li>
+        <li className="nav-item">
           <NavLink className="nav-link" to="/settings/manage-reason">
             Quản lý lý do huỷ việc
           </NavLink>
         </li>
-        <li>
+        <li className="nav-item">
           <NavLink className="nav-link" to="/notification/manage-notification">
             Quản lý thông báo
           </NavLink>
         </li>
-        <li>
+        <li className="nav-item">
           <NavLink className="nav-link" to="/adminManage/manage-admin">
             Quản lý Admin
           </NavLink>

@@ -6,20 +6,29 @@
   padding: 10px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
-  .btn-menu {
+  .menu {
+    display: flex;
+    .btn-menu {
+      width: 40px;
+      height: 40px;
+      border: none;
+      color: black;
+      background-color: #fff;
+      border-radius: 5px;
+    }
+    .text-brand {
+      font-size: large;
+      font-weight: 500;
+      color: #000;
+      margin-left: 20px;
+      margin-top: 10px;
+    }
+  }
+
+  .img-user {
     width: 40px;
     height: 40px;
-    border: none;
-    color: black;
-    background-color: #fff;
-    border-radius: 5px;
-  }
-  .text-brand {
-    font-size: large;
-    font-weight: 500;
-    color: #000;
-    margin-left: 20px;
-    margin-top: 10px;
   }
 }

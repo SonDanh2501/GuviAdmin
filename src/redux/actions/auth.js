@@ -9,3 +9,9 @@ export const loginAction = createActions({
   loginSuccess: (payload) => payload,
   loginFailure: (err) => err,
 });
+
+export const logoutAction = createActions({
+  logoutRequest: undefined,
+  logoutSuccess: (payload) => payload,
+  logoutFailure: (err) => err,
+});
