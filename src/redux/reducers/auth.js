@@ -1,5 +1,5 @@
 import { INIT_STATE } from "../../utils/contant";
-import { loginAction } from "../actions/auth";
+import { loginAction, logoutAction } from "../actions/auth";
 import { getType } from "../actions/banner";
 
 export default function LoginReducers(state = INIT_STATE.auth, action) {
@@ -11,10 +11,25 @@ export default function LoginReducers(state = INIT_STATE.auth, action) {
     case getType(loginAction.loginSuccess):
       return {
         ...state,
-        token: action.payload,
+        token: action.payload.token,
         isCheckLogin: true,
+        user: action.payload.user,
       };
     case getType(loginAction.loginFailure):
+      return {
+        ...state,
+      };
+    case getType(logoutAction.logoutRequest):
+      return {
+        ...state,
+      };
+    case getType(logoutAction.logoutSuccess):
+      return {
+        ...state,
+        token: action.payload.token,
+        isCheckLogin: false,
+      };
+    case getType(logoutAction.logoutFailure):
       return {
         ...state,
       };

@@ -1,13 +1,10 @@
-import { Formik } from "formik";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Form, Input, Label, Modal } from "reactstrap";
+import { Form, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
-import { createBanner, updateBanner } from "../../redux/actions/banner";
-import { createCustomer } from "../../redux/actions/customerAction";
+import { updateBanner } from "../../redux/actions/banner";
 import { getPromotion } from "../../redux/actions/promotion";
 import { getPromotionSelector } from "../../redux/selectors/promotion";
-import { validateAddCustomerSchema } from "../../utils/schema";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./editBanner.scss";

@@ -13,11 +13,14 @@ import {
   activeGroupServiceApi,
   deleteGroupServiceApi,
 } from "../../../../api/service";
+import EditGroupService from "../../../../components/editGroupService /editGroupService";
 import "./TableManageGroupService.scss";
 
-export default function TableManageGroupService({ data, setItemEdit }) {
+export default function TableManageGroupService({ data }) {
   const [modal, setModal] = React.useState(false);
   const [modalBlock, setModalBlock] = React.useState(false);
+  const [modalEdit, setModalEdit] = React.useState(false);
+  const [itemEdit, setItemEdit] = React.useState(false);
   const dispatch = useDispatch();
   // Toggle for Modal
   const toggle = () => setModal(!modal);
@@ -66,7 +69,13 @@ export default function TableManageGroupService({ data, setItemEdit }) {
         </td>
         <td>
           <Row>
-            <button className="btn-edit" onClick={() => setItemEdit(data)}>
+            <button
+              className="btn-edit"
+              onClick={() => {
+                setItemEdit(data);
+                setModalEdit(!modalEdit);
+              }}
+            >
               <i className="uil uil-edit-alt"></i>
             </button>
             <button className="btn-delete" onClick={toggle}>
@@ -126,6 +135,13 @@ export default function TableManageGroupService({ data, setItemEdit }) {
                 </Button>
               </ModalFooter>
             </Modal>
+          </div>
+          <div>
+            <EditGroupService
+              state={modalEdit}
+              setState={() => setModalEdit(!modalEdit)}
+              data={itemEdit}
+            />
           </div>
         </td>
       </tr>

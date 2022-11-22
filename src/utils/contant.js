@@ -22,6 +22,7 @@ export const INIT_STATE = {
   auth: {
     token: "",
     isCheckLogin: false,
+    user: {},
   },
   service: {
     groupService: [],

@@ -11,6 +11,7 @@ import rootSaga from "./redux/sagas/rootSaga";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@iconscout/react-unicons";
 import { persistStore } from "redux-persist";
+import { BrowserRouter } from "react-router-dom";
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(reducers, applyMiddleware(sagaMiddleware));
@@ -21,7 +22,9 @@ sagaMiddleware.run(rootSaga);
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </PersistGate>
   </Provider>,
   document.getElementById("root")

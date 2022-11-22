@@ -1,15 +1,9 @@
 import { Formik } from "formik";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Form, Modal } from "reactstrap";
-import {
-  createCustomer,
-  updateCustomer,
-} from "../../redux/actions/customerAction";
-import {
-  validateAddCollaboratorSchema,
-  validateAddCustomerSchema,
-} from "../../utils/schema";
+import { updateCustomer } from "../../redux/actions/customerAction";
+import { validateAddCollaboratorSchema } from "../../utils/schema";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./editCollaborator.scss";

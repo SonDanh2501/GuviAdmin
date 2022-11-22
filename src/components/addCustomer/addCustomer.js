@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Button, Form, Modal } from "reactstrap";
+import { Form, Modal } from "reactstrap";
 import { createCustomer } from "../../redux/actions/customerAction";
 import { validateAddCustomerSchema } from "../../utils/schema";
 import CustomButton from "../customButton/customButton";

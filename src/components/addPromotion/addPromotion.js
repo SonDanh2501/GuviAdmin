@@ -1,7 +1,6 @@
 import { convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import { Formik } from "formik";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,11 +15,8 @@ import {
 } from "reactstrap";
 import { postFile } from "../../api/file";
 import { getGroupCustomerPromotion } from "../../api/promotion";
-import { createCustomer } from "../../redux/actions/customerAction";
 import { createPromotionAction } from "../../redux/actions/promotion";
-import { getServiceAction } from "../../redux/actions/service";
 import { getService } from "../../redux/selectors/service";
-import { validateAddCollaboratorSchema } from "../../utils/schema";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./addPromotion.scss";
