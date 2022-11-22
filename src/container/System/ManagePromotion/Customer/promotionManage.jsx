@@ -39,6 +39,7 @@ import {
   getPromotion,
   updatePromotionAction,
 } from "../../../../redux/actions/promotion.js";
+import { getServiceAction } from "../../../../redux/actions/service.js";
 import {
   getPromotionSelector,
   getTotalPromotion,
@@ -93,6 +94,7 @@ export default function PromotionManage() {
 
   useEffect(() => {
     dispatch(getPromotion.getPromotionRequest());
+    dispatch(getServiceAction.getServiceRequest());
   }, []);
 
   const onChangeThumbnail = (e) => {

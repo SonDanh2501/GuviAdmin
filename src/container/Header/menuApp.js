@@ -74,4 +74,9 @@ export const adminMenu = [
     name: "Quản lý khuyến mãi",
     link: "/promotion/manage-promotion",
   },
+  //quản lý  Feedback
+  {
+    name: "Quản lý phản hồi",
+    link: "/feedback/manage-feedback",
+  },
 ];

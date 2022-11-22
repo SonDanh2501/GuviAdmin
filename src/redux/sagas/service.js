@@ -5,13 +5,17 @@ import { getType } from "../actions/banner";
 import {
   createGroupServiceApi,
   getGroupServiceApi,
+  getServiceApi,
   updateGroupServiceApi,
 } from "../../api/service";
 import {
   createGroupServiceAction,
   getGroupServiceAction,
+  getServiceAction,
   updateGroupServiceAction,
 } from "../actions/service";
+
+//group-service
 
 function* fetchGroupServiceSaga() {
   try {
@@ -53,6 +57,17 @@ function* updateGroupServiceSaga(action) {
   }
 }
 
+//services
+function* fetchServiceSaga() {
+  try {
+    const response = yield call(getServiceApi);
+    yield put(getServiceAction.getServiceSuccess(response.data));
+  } catch (err) {
+    console.error(err);
+    yield put(getServiceAction.getServiceFailure(err));
+  }
+}
+
 function* ServiceSaga() {
   yield takeLatest(
     getGroupServiceAction.getGroupServiceRequest,
@@ -66,6 +81,7 @@ function* ServiceSaga() {
     updateGroupServiceAction.updateGroupServiceRequest,
     updateGroupServiceSaga
   );
+  yield takeLatest(getServiceAction.getServiceRequest, fetchServiceSaga);
 }
 
 // generator function ES6
