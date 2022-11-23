@@ -79,4 +79,9 @@ export const adminMenu = [
     name: "Quản lý phản hồi",
     link: "/feedback/manage-feedback",
   },
+  //quản lý  Dashboard
+  {
+    name: "Trang chủ",
+    link: "/",
+  },
 ];

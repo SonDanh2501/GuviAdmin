@@ -36,17 +36,7 @@ import { removeVietnameseTones } from "../../../../helper/ConvertVie.js";
 import AddCollaborator from "../../../../components/addCollaborator/addCollaborator.js";
 
 export default function CollaboratorManage() {
-  const [create, setCreate] = useState(false);
-  const [edit, setEdit] = useState(false);
-  const [id, setId] = useState("");
-  const [codePhone, setCodePhone] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [identify, setIdentify] = useState("");
   const [dataFilter, setDataFilter] = useState([]);
-  const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const dispatch = useDispatch();
   const collaborator = useSelector(getCollaborator);
@@ -57,44 +47,6 @@ export default function CollaboratorManage() {
       getCollaborators.getCollaboratorsRequest({ start: 0, length: 10 })
     );
   }, [dispatch]);
-
-  const onSubmit = React.useCallback(() => {
-    dispatch(
-      createCollaborator.createCollaboratorRequest({
-        code_phone_area: codePhone,
-        phone: phone,
-        email: email,
-        name: name,
-        password: password,
-        identify: identify,
-      })
-    );
-  }, [dispatch, codePhone, email, name, password, identify, phone]);
-
-  const setItemEdit = (itemEdit) => {
-    setCodePhone(itemEdit?.code_phone_area);
-    setPhone(itemEdit?.phone);
-    setEmail(itemEdit?.email);
-    setName(itemEdit?.name);
-    setId(itemEdit?._id);
-    setEdit(true);
-    setCreate(false);
-    window.scrollTo(0, 0);
-  };
-
-  const onEditCustomer = useCallback(() => {
-    dispatch(
-      updateCollaborator.updateCollaboratorRequest({
-        id: id,
-        data: {
-          code_phone_area: codePhone,
-          phone: phone,
-          email: email,
-          name: name,
-        },
-      })
-    );
-  }, [id, codePhone, phone, email, name]);
 
   const handleSearch = useCallback((value) => {
     searchCollaborators(value)
@@ -283,18 +235,10 @@ export default function CollaboratorManage() {
               </thead>
               <tbody>
                 {dataFilter.length > 0
-                  ? dataFilter.map((e) => (
-                      <TableManageCollaborator
-                        data={e}
-                        setItemEdit={setItemEdit}
-                      />
-                    ))
+                  ? dataFilter.map((e) => <TableManageCollaborator data={e} />)
                   : collaborator &&
                     collaborator.map((e) => (
-                      <TableManageCollaborator
-                        data={e}
-                        setItemEdit={setItemEdit}
-                      />
+                      <TableManageCollaborator data={e} />
                     ))}
               </tbody>
             </Table>

@@ -29,7 +29,7 @@ export const INIT_STATE = {
     services: [],
   },
   brand: {
-    title: "",
+    title: "Trang chủ",
   },
   feedback: {
     data: [],

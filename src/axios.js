@@ -2,7 +2,7 @@ import axios from "axios";
 // import config from './config';
 
 const axiosClient = axios.create({
-  baseURL: "https://guvico-be-production.up.railway.app",
+  baseURL: "https://guvico-be-develop.up.railway.app",
   // withCredentials: true
 });
 

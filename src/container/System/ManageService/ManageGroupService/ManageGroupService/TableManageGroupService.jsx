@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Col,
@@ -12,11 +13,12 @@ import {
 import {
   activeGroupServiceApi,
   deleteGroupServiceApi,
-} from "../../../../api/service";
-import EditGroupService from "../../../../components/editGroupService /editGroupService";
+} from "../../../../../api/service";
+import EditGroupService from "../../../../../components/editGroupService /editGroupService";
 import "./TableManageGroupService.scss";
 
 export default function TableManageGroupService({ data }) {
+  const navigate = useNavigate();
   const [modal, setModal] = React.useState(false);
   const [modalBlock, setModalBlock] = React.useState(false);
   const [modalEdit, setModalEdit] = React.useState(false);
@@ -92,6 +94,16 @@ export default function TableManageGroupService({ data }) {
                 <i class="uil uil-padlock"></i>
               </button>
             )}
+            {/* <button
+              className="btn-delete"
+              onClick={() =>
+                navigate("/services/manage-group-service/manage-service", {
+                  state: { id: data?._id },
+                })
+              }
+            >
+              <i className="uil uil-ellipsis-v icon-details"></i>
+            </button> */}
           </Row>
           <div>
             <Modal isOpen={modalBlock} toggle={toggleBlock}>

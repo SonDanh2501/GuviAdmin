@@ -12,6 +12,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "@iconscout/react-unicons";
 import { persistStore } from "redux-persist";
 import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(reducers, applyMiddleware(sagaMiddleware));
@@ -24,6 +26,7 @@ ReactDOM.render(
     <PersistGate persistor={persistor}>
       <BrowserRouter>
         <App />
+        <ToastContainer />
       </BrowserRouter>
     </PersistGate>
   </Provider>,
