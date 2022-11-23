@@ -48,6 +48,8 @@ export default function UserManage() {
       .catch((err) => console.log(err));
   }, []);
 
+  console.log(dataFilter);
+
   return (
     <React.Fragment>
       <div className="mt-5">

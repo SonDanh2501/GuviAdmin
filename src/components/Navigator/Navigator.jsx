@@ -23,6 +23,15 @@ const Navigator = () => {
         <li className="nav-item">
           <NavLink
             className="nav-link"
+            to="/"
+            onClick={() => changeBrand("Trang chủ")}
+          >
+            Trang chủ
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink
+            className="nav-link"
             to="/system/user-manage"
             onClick={() => changeBrand("Quản lý người dùng")}
           >

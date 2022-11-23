@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import { useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useNavigate } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import {
   Button,
@@ -27,6 +27,7 @@ import "./Login.scss";
 
 const Login = () => {
   const formikRef = useRef();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const isCheckLogin = useSelector(getIsCheckLogin);
   const initialValues = {

@@ -12,10 +12,10 @@ import {
   Row,
   Table,
 } from "reactstrap";
-import AddGroupService from "../../../../components/addGroupService/addGroupService";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
-import { getGroupServiceAction } from "../../../../redux/actions/service";
-import { getGroupService } from "../../../../redux/selectors/service";
+import AddGroupService from "../../../../../components/addGroupService/addGroupService";
+import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
+import { getGroupServiceAction } from "../../../../../redux/actions/service";
+import { getGroupService } from "../../../../../redux/selectors/service";
 import "./GroupServiceManage.scss";
 import TableManageGroupService from "./TableManageGroupService";
 

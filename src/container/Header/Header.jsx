@@ -22,7 +22,6 @@ const Header = ({ onClick }) => {
 
   const onLogout = async () => {
     dispatch(logoutAction.logoutRequest());
-    // <Navigate replace to="/auth/login" />;
     return navigate("/auth/login");
   };
 

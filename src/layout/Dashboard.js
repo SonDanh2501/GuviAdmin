@@ -6,12 +6,14 @@ import Login from "../container/auth/Login";
 import Header from "../container/Header/Header";
 import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
 import PromotionManage from "../container/System/ManagePromotion/Customer/promotionManage";
-import GroupServiceManage from "../container/System/ManageService/ManageGroupService/GroupServiceManage";
 import NewsManage from "../container/System/ManageSetting/ManageNews/NewsManage";
 import ReasonManage from "../container/System/ManageSetting/ManageReason/ReasonManage";
 import CollaboratorManage from "../container/System/ManageUser/Collaborator/CollaboratorManage";
 import BannerManage from "../container/System/ManageSetting/ManageBanner/BannerManage";
 import UserManage from "../container/System/ManageUser/Customer/UserManage";
+import ServiceManage from "../container/System/ManageService/ManageService/ServiceManage";
+import GroupServiceManage from "../container/System/ManageService/ManageGroupService/ManageGroupService/GroupServiceManage";
+import Home from "../container/System/Dashboard/DashBoard";
 
 const Dashboard = () => {
   const [hideSidebar, setHideSidebar] = useState(true);
@@ -28,6 +30,7 @@ const Dashboard = () => {
             <Header onClick={() => setHideSidebar(!hideSidebar)} />
           </div>
           <Routes>
+            <Route path="/" element={<Home />} />
             <Route path="/system/user-manage" element={<UserManage />} />
             <Route
               path="/system/collaborator-manage"
@@ -48,6 +51,10 @@ const Dashboard = () => {
               element={<FeedbackManage />}
             />
             <Route path="/settings/manage-reason" element={<ReasonManage />} />
+            <Route
+              path="/services/manage-group-service/manage-service"
+              element={<ServiceManage />}
+            />
           </Routes>
         </main>
       </div>

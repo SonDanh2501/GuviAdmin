@@ -27,3 +27,17 @@ export const activeGroupServiceApi = (id) => {
 export const getServiceApi = () => {
   return axiosClient.get("/admin/service_manager/get_list");
 };
+
+export const getServiceByIdApi = (id) => {
+  return axiosClient.get(
+    `/admin/service_manager/get_list_service_by_group_service/${id}`
+  );
+};
+
+export const createServiceApi = (data) => {
+  return axiosClient.post(`/admin/service_manager/create_item?lang=vi`, data);
+};
+
+export const deleteServiceApi = (id) => {
+  return axiosClient.get(`/admin/service_manager/delete_soft/${id}`);
+};
