@@ -1,14 +1,20 @@
 // reactstrap components
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
+import { getTotalReportApi } from "../../../../api/statistic";
 import { formatMoney } from "../../../../helper/formatMoney";
 import { getCollaborator } from "../../../../redux/selectors/collaborator";
 import { getCustomer } from "../../../../redux/selectors/customer";
 import "./header.scss";
 
 const Header = () => {
-  const customer = useSelector(getCustomer);
-  const collaborator = useSelector(getCollaborator);
+  const [dataTotal, setDataTotal] = useState([]);
+  useEffect(() => {
+    getTotalReportApi()
+      .then((res) => setDataTotal(res))
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <>
       <div className="header pb-8  pt-md-6 gradient-header">
@@ -17,7 +23,7 @@ const Header = () => {
             {/* Card stats */}
             <Row>
               <Col lg="6" xl="3">
-                <Card className="card-stats mb-4 mb-xl-0">
+                <Card className="card-stats mb-4 mb-xl-0 card-center">
                   <CardBody>
                     <Row>
                       <div className="col">
@@ -28,20 +34,15 @@ const Header = () => {
                           Doanh thu
                         </CardTitle>
                         <span className="h5 font-weight-bold mb-0">
-                          {formatMoney(10000000)}
+                          {formatMoney(dataTotal?.total_revenue)}
                         </span>
                       </div>
-                      <Col className="col-auto">
-                        <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                          <i className="fas fa-chart-bar" />
-                        </div>
-                      </Col>
                     </Row>
                   </CardBody>
                 </Card>
               </Col>
               <Col lg="6" xl="3">
-                <Card className="card-stats mb-4 mb-xl-0">
+                <Card className="card-stats mb-4 mb-xl-0 card-center">
                   <CardBody>
                     <Row>
                       <div className="col">
@@ -51,19 +52,16 @@ const Header = () => {
                         >
                           Tổng đơn hàng
                         </CardTitle>
-                        <span className="h5 font-weight-bold mb-0">2,356</span>
+                        <span className="h5 font-weight-bold mb-0">
+                          {dataTotal?.total_order}
+                        </span>
                       </div>
-                      <Col className="col-auto">
-                        <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
-                          <i className="fas fa-chart-pie" />
-                        </div>
-                      </Col>
                     </Row>
                   </CardBody>
                 </Card>
               </Col>
               <Col lg="6" xl="3">
-                <Card className="card-stats mb-4 mb-xl-0">
+                <Card className="card-stats mb-4 mb-xl-0 card-center">
                   <CardBody>
                     <Row>
                       <div className="col">
@@ -74,14 +72,9 @@ const Header = () => {
                           Khách hàng
                         </CardTitle>
                         <span className="h5 font-weight-bold mb-0">
-                          {customer.length}
+                          {dataTotal?.total_customer}
                         </span>
                       </div>
-                      <Col className="col-auto">
-                        <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                          <i className="fas fa-users" />
-                        </div>
-                      </Col>
                     </Row>
                   </CardBody>
                 </Card>
@@ -98,14 +91,9 @@ const Header = () => {
                           Cộng tác viên
                         </CardTitle>
                         <span className="h5 font-weight-bold mb-0 ">
-                          {collaborator.length}
+                          {dataTotal?.total_collaborator}
                         </span>
                       </div>
-                      <Col className="col-auto">
-                        <div className="icon icon-shape bg-info text-white rounded-circle shadow">
-                          <i className="fas fa-percent" />
-                        </div>
-                      </Col>
                     </Row>
                   </CardBody>
                 </Card>

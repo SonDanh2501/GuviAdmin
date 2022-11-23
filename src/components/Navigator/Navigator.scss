@@ -21,21 +21,26 @@
 //     color: white;
 //   }
 // }
-.div-header{
+.div-header {
   padding: 10px;
   text-align: center;
   align-items: center;
   justify-content: center;
   display: flex;
 
-  .logo{
-    width: 50px;
-    height: 50px;
-    
+  .logo {
+    width: 120px;
+    height: 60px;
   }
-  
-  .name-guvi{
-   color: rgb(0, 0, 0);
-   margin-left: 20px;
+
+  .name-guvi {
+    color: rgb(0, 0, 0);
+    margin-left: 20px;
   }
+}
+
+.icon {
+  width: 80px !important;
+  height: 80px !important;
+  margin-right: 10px;
 }

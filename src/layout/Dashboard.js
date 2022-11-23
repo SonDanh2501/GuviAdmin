@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Route, Router, Routes, Switch } from "react-router-dom";
 import Navigator from "../components/Navigator/Navigator";
-import Login from "../container/auth/Login";
 import Header from "../container/Header/Header";
 import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
 import PromotionManage from "../container/System/ManagePromotion/Customer/promotionManage";
@@ -14,6 +13,7 @@ import UserManage from "../container/System/ManageUser/Customer/UserManage";
 import ServiceManage from "../container/System/ManageService/ManageService/ServiceManage";
 import GroupServiceManage from "../container/System/ManageService/ManageGroupService/ManageGroupService/GroupServiceManage";
 import Home from "../container/System/Dashboard/DashBoard";
+import "./Dashboard.scss";
 
 const Dashboard = () => {
   const [hideSidebar, setHideSidebar] = useState(true);

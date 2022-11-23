@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  Button,
   Card,
   CardFooter,
   CardHeader,
   Col,
-  Form,
   Pagination,
   PaginationItem,
   PaginationLink,
@@ -16,24 +14,12 @@ import {
 import { searchCustomers } from "../../../../api/customer";
 import AddCustomer from "../../../../components/addCustomer/addCustomer";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
-import {
-  createCustomer,
-  getCustomers,
-  updateCustomer,
-} from "../../../../redux/actions/customerAction";
+import { getCustomers } from "../../../../redux/actions/customerAction";
 import { getCustomer } from "../../../../redux/selectors/customer";
 import TableManageUser from "./TableManageUser.jsx";
 import "./UserManage.scss";
 
 export default function UserManage() {
-  const [create, setCreate] = React.useState(false);
-  const [edit, setEdit] = React.useState(false);
-  const [id, setId] = React.useState("");
-  const [codePhone, setCodePhone] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
   const [dataFilter, setDataFilter] = useState([]);
   const customers = useSelector(getCustomer);
   const dispatch = useDispatch();
@@ -47,8 +33,6 @@ export default function UserManage() {
       .then((res) => setDataFilter(res))
       .catch((err) => console.log(err));
   }, []);
-
-  console.log(dataFilter);
 
   return (
     <React.Fragment>
