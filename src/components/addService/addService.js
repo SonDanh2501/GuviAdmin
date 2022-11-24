@@ -38,8 +38,6 @@ const AddService = ({ id }) => {
       .catch((err) => console.log("err", err));
   };
 
-  console.log(id);
-
   const createGroupSerive = useCallback(() => {
     createServiceApi({
       title: {

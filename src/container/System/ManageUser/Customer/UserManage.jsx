@@ -52,7 +52,11 @@ export default function UserManage() {
               </Col>
             </Row>
           </CardHeader>
-          <Table responsive>
+          <Table
+            className="align-items-center table-flush"
+            responsive={true}
+            hover={true}
+          >
             <thead className="thead-light">
               <tr>
                 <th scope="col">Tên người dùng</th>

@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { useCallback, useRef } from "react";
+import React, { memo, useCallback, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Form, Modal } from "reactstrap";
 import { updateCustomer } from "../../redux/actions/customerAction";
@@ -132,4 +132,4 @@ const EditCustomer = ({ state, setState, data }) => {
   );
 };
 
-export default EditCustomer;
+export default memo(EditCustomer);

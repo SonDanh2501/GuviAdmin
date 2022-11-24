@@ -1,15 +1,30 @@
 import axios from "axios";
-// import config from './config';
-
+let token;
 const axiosClient = axios.create({
   baseURL: "https://guvico-be-develop.up.railway.app",
-  // withCredentials: true
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  },
+  timeout: 30000,
 });
+// axiosClient.interceptors.request.use(async req => {
+//   if (!token) {
+//     token = await getToken();
+//     req.headers!.Authorization = `Bearer ${token}`;
+//   }
+//   token = await getToken();
 
-axiosClient.interceptors.response.use((response) => {
-  // Thrown error for request with OK status code
-  const { data } = response;
-  return response.data;
-});
+//   req.headers!.Authorization = `Bearer ${token}`;
+//   return req;
+// });
+axiosClient.interceptors.response.use(
+  function (response) {
+    return response.data;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
 
 export default axiosClient;

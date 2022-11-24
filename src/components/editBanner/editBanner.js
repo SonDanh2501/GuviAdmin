@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
@@ -172,4 +172,4 @@ const EditBanner = ({ state, setState, data }) => {
   );
 };
 
-export default EditBanner;
+export default memo(EditBanner);

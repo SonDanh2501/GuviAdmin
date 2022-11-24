@@ -1,6 +1,6 @@
 import { convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -215,6 +215,8 @@ const AddPromotion = () => {
     maximumDiscount,
     reducedValue,
     serviceApply,
+    typePromotion,
+    promoCode,
   ]);
 
   return (
@@ -678,4 +680,4 @@ const AddPromotion = () => {
   );
 };
 
-export default AddPromotion;
+export default memo(AddPromotion);

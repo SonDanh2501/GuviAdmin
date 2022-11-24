@@ -21,7 +21,7 @@ const Dashboard = () => {
     <div className="container-fluid">
       <div className="row">
         {hideSidebar && (
-          <div className="col-2 sidebar min-height-100vh">
+          <div className="col-2 sidebar">
             <Navigator />
           </div>
         )}

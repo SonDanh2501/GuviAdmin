@@ -186,7 +186,11 @@ export default function UserManage() {
                   </Col>
                 </Row>
               </CardHeader>
-              <Table className="align-items-center table-flush " responsive>
+              <Table
+                className="align-items-center table-flush"
+                responsive={true}
+                hover={true}
+              >
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Title</th>

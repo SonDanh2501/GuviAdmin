@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { useRef, useState } from "react";
+import React, { memo, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, Modal } from "reactstrap";
 import { createCustomer } from "../../redux/actions/customerAction";
@@ -143,4 +143,4 @@ const AddCustomer = () => {
   );
 };
 
-export default AddCustomer;
+export default memo(AddCustomer);

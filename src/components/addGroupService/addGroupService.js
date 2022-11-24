@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
@@ -164,4 +164,4 @@ const AddGroupService = () => {
   );
 };
 
-export default AddGroupService;
+export default memo(AddGroupService);

@@ -6,8 +6,8 @@
   width: 100%;
   background: linear-gradient(
     90deg,
-    rgb(247, 197, 226) 34%,
-    rgb(246, 165, 212) 80%
+    rgb(255, 255, 250) 34%,
+    rgb(253, 255, 215) 80%
   );
 
   .img-logo {
@@ -18,10 +18,11 @@
   .btn-login {
     background: linear-gradient(
       90deg,
-      rgb(247, 197, 226) 34%,
-      rgb(246, 165, 212) 80%
+      rgb(255, 255, 250) 34%,
+      rgb(253, 255, 215) 80%
     );
     border: none;
+    color: black;
   }
   .btn-login:hover {
     background-color: rgb(132, 112, 244);

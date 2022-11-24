@@ -1,10 +1,11 @@
 .sidebar {
   background: linear-gradient(
     90deg,
-    rgb(247, 197, 226) 34%,
-    rgb(246, 165, 212) 80%
+    rgb(255, 255, 250) 34%,
+    rgb(253, 255, 215) 80%
   );
-  min-height: 100%;
+
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+  min-height: 910px;
 }
