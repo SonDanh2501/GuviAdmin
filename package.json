@@ -24,6 +24,7 @@
     "react-file-base64": "^1.0.3",
     "react-loading": "^2.0.3",
     "react-multi-select-component": "^4.3.4",
+    "react-native-mmkv": "^2.5.1",
     "react-redux": "^7.2.3",
     "react-router-dom": "6.4.3",
     "react-scripts": "4.0.3",

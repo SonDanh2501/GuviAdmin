@@ -5,7 +5,7 @@ export const getType = (reduxAction) => {
 };
 
 export const getNews = createActions({
-  getNewsRequest: undefined,
+  getNewsRequest: (payload) => payload,
   getNewsSuccess: (payload) => payload,
   getNewsFailure: (err) => err,
 });

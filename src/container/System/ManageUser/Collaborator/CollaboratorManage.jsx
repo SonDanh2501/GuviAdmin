@@ -1,39 +1,26 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import TableManageCollaborator from "./TableManageCollaborator.jsx";
-import "./CollaboratorManage.scss";
+import { useDispatch, useSelector } from "react-redux";
 import {
-  Form,
-  Row,
-  Col,
-  FormGroup,
-  Label,
-  Input,
-  Button,
   Card,
-  CardHeader,
-  Table,
   CardFooter,
+  CardHeader,
+  Col,
   Pagination,
   PaginationItem,
   PaginationLink,
+  Row,
+  Table,
 } from "reactstrap";
+import { searchCollaborators } from "../../../../api/collaborator.jsx";
+import AddCollaborator from "../../../../components/addCollaborator/addCollaborator.js";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
+import { getCollaborators } from "../../../../redux/actions/collaborator";
 import {
   getCollaborator,
   getCollaboratorTotal,
 } from "../../../../redux/selectors/collaborator";
-import {
-  createCollaborator,
-  getCollaborators,
-  updateCollaborator,
-} from "../../../../redux/actions/collaborator";
-import {
-  searchCollaborators,
-  pageCollaborators,
-} from "../../../../api/collaborator.jsx";
-import ReactLoading from "react-loading";
-import AddCollaborator from "../../../../components/addCollaborator/addCollaborator.js";
+import "./CollaboratorManage.scss";
+import TableManageCollaborator from "./TableManageCollaborator.jsx";
 
 export default function CollaboratorManage() {
   const [dataFilter, setDataFilter] = useState([]);
@@ -41,7 +28,6 @@ export default function CollaboratorManage() {
   const dispatch = useDispatch();
   const collaborator = useSelector(getCollaborator);
   const collaboratorTotal = useSelector(getCollaboratorTotal);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     dispatch(
@@ -58,21 +44,16 @@ export default function CollaboratorManage() {
   const handleClick = (e, index) => {
     e.preventDefault();
     setCurrentPage(index);
-    if (index === 0) {
-      dispatch(
-        getCollaborators.getCollaboratorsRequest({ start: 0, length: 10 })
-      );
-    } else if (index === 1) {
-      dispatch(
-        getCollaborators.getCollaboratorsRequest({
-          start: collaborator.length,
-          length: 10,
-        })
-      );
-    }
+    const start = index * collaborator.length;
+    dispatch(
+      getCollaborators.getCollaboratorsRequest({
+        start: start > 0 ? start : 0,
+        length: 10,
+      })
+    );
   };
 
-  const pageCount = collaboratorTotal / collaborator.length;
+  const pageCount = collaboratorTotal / 10;
   let pageNumbers = [];
   for (let i = 0; i < pageCount; i++) {
     pageNumbers.push(
@@ -119,19 +100,9 @@ export default function CollaboratorManage() {
             </thead>
             <tbody>
               {dataFilter.length > 0
-                ? dataFilter.map((e) => (
-                    <TableManageCollaborator
-                      data={e}
-                      setIsLoading={setIsLoading}
-                    />
-                  ))
+                ? dataFilter.map((e) => <TableManageCollaborator data={e} />)
                 : collaborator &&
-                  collaborator.map((e) => (
-                    <TableManageCollaborator
-                      data={e}
-                      setIsLoading={setIsLoading}
-                    />
-                  ))}
+                  collaborator.map((e) => <TableManageCollaborator data={e} />)}
             </tbody>
           </Table>
           <CardFooter>

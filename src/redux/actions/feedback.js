@@ -5,7 +5,7 @@ export const getType = (reduxAction) => {
 };
 
 export const getFeedback = createActions({
-  getFeedbackRequest: undefined,
+  getFeedbackRequest: (payload) => payload,
   getFeedbackSuccess: (payload) => payload,
   getFeedbackFailure: (err) => err,
 });

@@ -3,10 +3,19 @@ import * as actions from "../actions/customerAction";
 import * as api from "../../api/customer.jsx";
 import { getType } from "../actions/customerAction";
 
-function* fetchCustomersSaga() {
+function* fetchCustomersSaga(action) {
   try {
-    const Customers = yield call(api.fetchCustomers);
-    yield put(actions.getCustomers.getCustomersSuccess(Customers));
+    const resoponse = yield call(
+      api.fetchCustomers,
+      action.payload.start,
+      action.payload.length
+    );
+    yield put(
+      actions.getCustomers.getCustomersSuccess({
+        data: resoponse.data,
+        total: resoponse.totalItem,
+      })
+    );
   } catch (err) {
     console.error(err);
     yield put(actions.getCustomers.getCustomersFailure(err));

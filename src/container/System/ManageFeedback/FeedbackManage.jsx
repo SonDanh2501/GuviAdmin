@@ -14,16 +14,21 @@ import {
 import { searchFeedbackApi } from "../../../api/feedback";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
 import { getFeedback } from "../../../redux/actions/feedback";
-import { getFeedbacks } from "../../../redux/selectors/feedback";
+import {
+  getFeedbacks,
+  getFeedbackTotal,
+} from "../../../redux/selectors/feedback";
 import "./FeedbackManage.scss";
 import TableManageFeedback from "./TableManageFeedback";
 
 export default function FeedbackManage() {
   const [dataFilter, setDataFilter] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
   const dispatch = useDispatch();
   const listFeedback = useSelector(getFeedbacks);
+  const feedbackTotal = useSelector(getFeedbackTotal);
   React.useEffect(() => {
-    dispatch(getFeedback.getFeedbackRequest());
+    dispatch(getFeedback.getFeedbackRequest({ start: 0, length: 10 }));
   }, [dispatch]);
 
   const handleSearch = useCallback((value) => {
@@ -31,6 +36,30 @@ export default function FeedbackManage() {
       .then((res) => setDataFilter(res.data))
       .catch((err) => console.log(err));
   }, []);
+
+  const handleClick = (e, index) => {
+    e.preventDefault();
+    setCurrentPage(index);
+    const start = index * listFeedback.length;
+    dispatch(
+      getFeedback.getFeedbackRequest({
+        start: start > 0 ? start : 0,
+        length: 10,
+      })
+    );
+  };
+
+  const pageCount = feedbackTotal / 10;
+  let pageNumbers = [];
+  for (let i = 0; i < pageCount; i++) {
+    pageNumbers.push(
+      <PaginationItem key={i} active={currentPage === i ? true : false}>
+        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
+          {i + 1}
+        </PaginationLink>
+      </PaginationItem>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -72,13 +101,20 @@ export default function FeedbackManage() {
                   className="pagination justify-content-end mb-0"
                   listClassName="justify-content-end mb-0"
                 >
-                  <PaginationItem className="active">
+                  <PaginationItem>
                     <PaginationLink
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      1
-                    </PaginationLink>
+                      onClick={(e) => handleClick(e, currentPage - 1)}
+                      previous
+                      href="#"
+                    />
+                  </PaginationItem>
+                  {pageNumbers}
+                  <PaginationItem disabled={currentPage >= pageCount - 1}>
+                    <PaginationLink
+                      onClick={(e) => handleClick(e, currentPage + 1)}
+                      next
+                      href="#"
+                    />
                   </PaginationItem>
                 </Pagination>
               </nav>

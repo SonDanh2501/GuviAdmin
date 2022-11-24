@@ -3,12 +3,14 @@ import jwtDecode from "jwt-decode";
 import { call, put, takeLatest } from "redux-saga/effects";
 import { loginApi } from "../../api/auth";
 import { errorNotify, successNotify } from "../../helper/toast";
+import { setToken } from "../../helper/tokenHelper";
 import { loginAction, logoutAction } from "../actions/auth";
 import * as actions from "../actions/banner";
 
 function* loginSaga(action) {
   try {
     const response = yield call(loginApi, action.payload);
+    setToken(response?.token);
     const user = jwtDecode(response?.token);
     successNotify({
       message: "Đăng nhập thành công",

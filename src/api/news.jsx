@@ -2,8 +2,10 @@ import axiosClient from "../axios";
 export const createNew = (payload) => {
   return axiosClient.post("/admin/news_manager/create_item", payload);
 };
-export const fetchNews = () => {
-  return axiosClient.get("/admin/news_manager/get_list?type=guvilover");
+export const fetchNews = (start, length) => {
+  return axiosClient.get(
+    `/admin/news_manager/get_list?start=${start}&length=${length}`
+  );
 };
 export const fetchNewById = () => {
   return axiosClient.get("//admin/news_manager/get_detail/:id");

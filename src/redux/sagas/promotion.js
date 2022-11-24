@@ -17,9 +17,13 @@ import {
   updatePromotionAction,
 } from "../actions/promotion";
 
-function* fetchPromotionSaga() {
+function* fetchPromotionSaga(action) {
   try {
-    const promotion = yield call(fetchPromotion);
+    const promotion = yield call(
+      fetchPromotion,
+      action.payload.start,
+      action.payload.length
+    );
     yield put(
       getPromotion.getPromotionSuccess({
         data: promotion.data,

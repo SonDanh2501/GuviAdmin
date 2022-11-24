@@ -1,5 +1,5 @@
-import { INIT_STATE } from '../../utils/contant';
-import { getNews, getType, createNew, updateNew } from '../actions/news';
+import { INIT_STATE } from "../../utils/contant";
+import { getNews, getType, createNew, updateNew } from "../actions/news";
 
 export default function NewsReducers(state = INIT_STATE.news, action) {
   switch (action.type) {
@@ -10,7 +10,8 @@ export default function NewsReducers(state = INIT_STATE.news, action) {
     case getType(getNews.getNewsSuccess):
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.data,
+        totalItem: action.payload.total,
       };
     case getType(getNews.getNewsFailure):
       return {
@@ -25,7 +26,7 @@ export default function NewsReducers(state = INIT_STATE.news, action) {
       return {
         ...state,
         data: state.data.map((news) =>
-        news._id === action.payload._id ? action.payload : news
+          news._id === action.payload._id ? action.payload : news
         ),
       };
     default:

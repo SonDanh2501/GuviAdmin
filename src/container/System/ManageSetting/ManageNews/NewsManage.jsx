@@ -20,16 +20,42 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { postFile } from "../../../../api/file.jsx";
 import { createNew, getNews, updateNew } from "../../../../redux/actions/news";
-import { getNewSelector } from "../../../../redux/selectors/news";
+import { getNewSelector, getNewTotal } from "../../../../redux/selectors/news";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import AddNews from "../../../../components/addNews/addNews";
 
 export default function NewsManage() {
   const dispatch = useDispatch();
+  const [currentPage, setCurrentPage] = useState(0);
   const listNew = useSelector(getNewSelector);
+  const totalNew = useSelector(getNewTotal);
   React.useEffect(() => {
-    dispatch(getNews.getNewsRequest());
+    dispatch(getNews.getNewsRequest({ start: 0, length: 10 }));
   }, [dispatch]);
+
+  const handleClick = (e, index) => {
+    e.preventDefault();
+    setCurrentPage(index);
+    const start = index * listNew.length;
+    dispatch(
+      getNews.getNewsRequest({
+        start: start > 0 ? start : 0,
+        length: 10,
+      })
+    );
+  };
+
+  const pageCount = totalNew / 10;
+  let pageNumbers = [];
+  for (let i = 0; i < pageCount; i++) {
+    pageNumbers.push(
+      <PaginationItem key={i} active={currentPage === i ? true : false}>
+        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
+          {i + 1}
+        </PaginationLink>
+      </PaginationItem>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -81,6 +107,26 @@ export default function NewsManage() {
                       >
                         1
                       </PaginationLink>
+                    </PaginationItem>
+                  </Pagination>
+                  <Pagination
+                    className="pagination justify-content-end mb-0"
+                    listClassName="justify-content-end mb-0"
+                  >
+                    <PaginationItem>
+                      <PaginationLink
+                        onClick={(e) => handleClick(e, currentPage - 1)}
+                        previous
+                        href="#"
+                      />
+                    </PaginationItem>
+                    {pageNumbers}
+                    <PaginationItem disabled={currentPage >= pageCount - 1}>
+                      <PaginationLink
+                        onClick={(e) => handleClick(e, currentPage + 1)}
+                        next
+                        href="#"
+                      />
                     </PaginationItem>
                   </Pagination>
                 </nav>

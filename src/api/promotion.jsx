@@ -1,7 +1,9 @@
 import axiosClient from "../axios";
 
-export const fetchPromotion = () => {
-  return axiosClient.get(`/admin/promotion_manager/get_list`);
+export const fetchPromotion = (start, length) => {
+  return axiosClient.get(
+    `/admin/promotion_manager/get_list?start=${start}&length=${length}`
+  );
 };
 
 export const searchPromotion = (search) => {
