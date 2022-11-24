@@ -142,7 +142,7 @@ export default function Home() {
               />
             </BarChart>
           </Col>
-          <Col xl="4">
+          {/* <Col xl="4">
             <AreaChart
               width={500}
               height={470}
@@ -166,7 +166,7 @@ export default function Home() {
                 fill="rgb(253, 255, 215)"
               />
             </AreaChart>
-          </Col>
+          </Col> */}
         </Row>
         <Row className="mt-5 mb-5">
           <Col className="mb-5 mb-xl-0">
