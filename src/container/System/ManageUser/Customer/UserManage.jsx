@@ -15,17 +15,23 @@ import { searchCustomers } from "../../../../api/customer";
 import AddCustomer from "../../../../components/addCustomer/addCustomer";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import { getCustomers } from "../../../../redux/actions/customerAction";
-import { getCustomer } from "../../../../redux/selectors/customer";
+import {
+  getCustomer,
+  getCustomerTotalItem,
+} from "../../../../redux/selectors/customer";
 import TableManageUser from "./TableManageUser.jsx";
 import "./UserManage.scss";
 
 export default function UserManage() {
   const [dataFilter, setDataFilter] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
   const customers = useSelector(getCustomer);
+  const customerTotal = useSelector(getCustomerTotalItem);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getCustomers.getCustomersRequest());
+    dispatch(getCustomers.getCustomersRequest({ start: 0, length: 10 }));
   }, [dispatch]);
 
   const handleSearch = useCallback((value) => {
@@ -33,6 +39,30 @@ export default function UserManage() {
       .then((res) => setDataFilter(res))
       .catch((err) => console.log(err));
   }, []);
+
+  const handleClick = (e, index) => {
+    e.preventDefault();
+    setCurrentPage(index);
+    const start = index * customers.length;
+    dispatch(
+      getCustomers.getCustomersRequest({
+        start: start > 0 ? start : 0,
+        length: 10,
+      })
+    );
+  };
+
+  const pageCount = customerTotal / 10;
+  let pageNumbers = [];
+  for (let i = 0; i < pageCount; i++) {
+    pageNumbers.push(
+      <PaginationItem key={i} active={currentPage === i ? true : false}>
+        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
+          {i + 1}
+        </PaginationLink>
+      </PaginationItem>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -79,13 +109,20 @@ export default function UserManage() {
                 className="pagination justify-content-end mb-0"
                 listClassName="justify-content-end mb-0"
               >
-                <PaginationItem className="active">
+                <PaginationItem>
                   <PaginationLink
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    1
-                  </PaginationLink>
+                    onClick={(e) => handleClick(e, currentPage - 1)}
+                    previous
+                    href="#"
+                  />
+                </PaginationItem>
+                {pageNumbers}
+                <PaginationItem disabled={currentPage >= pageCount - 1}>
+                  <PaginationLink
+                    onClick={(e) => handleClick(e, currentPage + 1)}
+                    next
+                    href="#"
+                  />
                 </PaginationItem>
               </Pagination>
             </nav>

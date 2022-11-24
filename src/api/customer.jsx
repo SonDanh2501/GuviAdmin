@@ -1,7 +1,9 @@
 import axiosClient from "../axios";
 
-export const fetchCustomers = () => {
-  return axiosClient.get("/admin/customer_manager/all_items");
+export const fetchCustomers = (start, length) => {
+  return axiosClient.get(
+    `/admin/customer_manager/get_list?start=${start}&length=${length}`
+  );
 };
 export const searchCustomers = (payload) => {
   return axiosClient.get(`/admin/customer_manager/all_items?search=${payload}`);

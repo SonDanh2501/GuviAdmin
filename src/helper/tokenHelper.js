@@ -1,8 +1,10 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MMKV } from "react-native-mmkv";
+
+export const storage = new MMKV();
 
 export const getToken = async () => {
   try {
-    const jsonValue = await AsyncStorage.getItem("access_token");
+    const jsonValue = await storage.getString("access_token");
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
     // error reading value
@@ -10,11 +12,11 @@ export const getToken = async () => {
 };
 
 export const setToken = async (token) =>
-  await AsyncStorage.setItem("access_token", JSON.stringify(token));
+  await storage.set("access_token", JSON.stringify(token));
 
 export const removeToken = async () => {
   try {
-    await AsyncStorage.removeItem("access_token");
+    await storage.delete("access_token");
   } catch (e) {
     // error reading value
   }

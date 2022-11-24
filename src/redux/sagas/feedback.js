@@ -5,10 +5,19 @@ import { getType } from "../actions/reason";
 import { getFeedbackApi } from "../../api/feedback";
 import { getFeedback } from "../actions/feedback";
 
-function* fetchFeedbackSaga() {
+function* fetchFeedbackSaga(action) {
   try {
-    const response = yield call(getFeedbackApi);
-    yield put(getFeedback.getFeedbackSuccess(response.data));
+    const response = yield call(
+      getFeedbackApi,
+      action.payload.start,
+      action.payload.length
+    );
+    yield put(
+      getFeedback.getFeedbackSuccess({
+        data: response.data,
+        total: response.totalItem,
+      })
+    );
   } catch (err) {
     console.error(err);
     yield put(getFeedback.getFeedbackFailure(err));

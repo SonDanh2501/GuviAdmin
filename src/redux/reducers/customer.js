@@ -19,7 +19,8 @@ export default function CustomersReducers(
     case getType(getCustomers.getCustomersSuccess):
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.data,
+        totalItem: action.payload.total,
       };
     case getType(getCustomers.getCustomersFailure):
       return {

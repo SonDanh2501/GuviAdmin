@@ -10,7 +10,8 @@ export default function FeedbackReducers(state = INIT_STATE.feedback, action) {
     case getType(getFeedback.getFeedbackSuccess):
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.data,
+        totalItem: action.payload.total,
       };
     case getType(getFeedback.getFeedbackFailure):
       return {

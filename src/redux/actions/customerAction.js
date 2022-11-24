@@ -5,7 +5,7 @@ export const getType = (reduxAction) => {
 };
 
 export const getCustomers = createActions({
-  getCustomersRequest: undefined,
+  getCustomersRequest: (payload) => payload,
   getCustomersSuccess: (payload) => payload,
   getCustomersFailure: (err) => err,
 });

@@ -5,7 +5,7 @@ export const getType = (reduxAction) => {
 };
 
 export const getPromotion = createActions({
-  getPromotionRequest: undefined,
+  getPromotionRequest: (payload) => payload,
   getPromotionSuccess: (payload) => payload,
   getPromotionFailure: (err) => err,
 });

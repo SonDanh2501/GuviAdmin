@@ -1,6 +1,7 @@
 export const INIT_STATE = {
   customers: {
     data: [],
+    totalItem: 0,
   },
   collaborators: {
     data: [],
@@ -15,6 +16,7 @@ export const INIT_STATE = {
   },
   news: {
     data: [],
+    totalItem: 0,
   },
   reasons: {
     data: [],
@@ -33,6 +35,7 @@ export const INIT_STATE = {
   },
   feedback: {
     data: [],
+    totalItem: 0,
   },
 };
 

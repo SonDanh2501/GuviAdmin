@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -27,13 +27,15 @@ import TableManagePromotion from "./tableManagePromotion.jsx";
 
 export default function PromotionManage() {
   const promotion = useSelector(getPromotionSelector);
+  const [currentPage, setCurrentPage] = useState(0);
+
   const total = useSelector(getTotalPromotion);
   const dispatch = useDispatch();
-  const [dataFilter, setDataFilter] = React.useState([]);
+  const [dataFilter, setDataFilter] = useState([]);
 
   useEffect(() => {
     dispatch(getServiceAction.getServiceRequest());
-    dispatch(getPromotion.getPromotionRequest());
+    dispatch(getPromotion.getPromotionRequest({ start: 0, length: 10 }));
   }, []);
 
   const handleSearch = useCallback((value) => {
@@ -41,6 +43,30 @@ export default function PromotionManage() {
       .then((res) => setDataFilter(res?.data))
       .catch((err) => console.log(err));
   }, []);
+
+  const handleClick = (e, index) => {
+    e.preventDefault();
+    setCurrentPage(index);
+    const start = index * promotion.length;
+    dispatch(
+      getPromotion.getPromotionRequest({
+        start: start > 0 ? start : 0,
+        length: 10,
+      })
+    );
+  };
+
+  const pageCount = total / 10;
+  let pageNumbers = [];
+  for (let i = 0; i < pageCount; i++) {
+    pageNumbers.push(
+      <PaginationItem key={i} active={currentPage === i ? true : false}>
+        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
+          {i + 1}
+        </PaginationLink>
+      </PaginationItem>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -88,13 +114,20 @@ export default function PromotionManage() {
                   className="pagination justify-content-end mb-0"
                   listClassName="justify-content-end mb-0"
                 >
-                  <PaginationItem className="active">
+                  <PaginationItem>
                     <PaginationLink
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      1
-                    </PaginationLink>
+                      onClick={(e) => handleClick(e, currentPage - 1)}
+                      previous
+                      href="#"
+                    />
+                  </PaginationItem>
+                  {pageNumbers}
+                  <PaginationItem disabled={currentPage >= pageCount - 1}>
+                    <PaginationLink
+                      onClick={(e) => handleClick(e, currentPage + 1)}
+                      next
+                      href="#"
+                    />
                   </PaginationItem>
                 </Pagination>
               </nav>

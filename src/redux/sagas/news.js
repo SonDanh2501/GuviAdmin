@@ -3,10 +3,20 @@ import * as actions from "../actions/news";
 import * as api from "../../api/news";
 import { getType } from "../actions/news";
 
-function* fetchNewsSaga() {
+function* fetchNewsSaga(action) {
   try {
-    const News = yield call(api.fetchNews);
-    yield put(actions.getNews.getNewsSuccess(News));
+    const response = yield call(
+      api.fetchNews,
+      action.payload.start,
+      action.payload.length
+    );
+
+    yield put(
+      actions.getNews.getNewsSuccess({
+        data: response.data,
+        total: response.totalItem,
+      })
+    );
   } catch (err) {
     console.error(err);
     yield put(actions.getNews.getNewsFailure(err));
