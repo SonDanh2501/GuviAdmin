@@ -4,6 +4,7 @@ import "./DashBoard.scss";
 import Header from "./HeaderBoard/Header";
 import HomeObj from "./DashboardTable";
 import {
+  AreaChart,
   Bar,
   BarChart,
   CartesianGrid,
@@ -11,6 +12,7 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  Area,
 } from "recharts";
 
 const data = [
@@ -82,30 +84,89 @@ const dataChart = [
   },
 ];
 
+const dataAreChart = [
+  {
+    name: "Quận 1",
+    money: 2400,
+  },
+  {
+    name: "Quận 2",
+    money: 1398,
+  },
+  {
+    name: "Quận 3",
+    money: 9800,
+  },
+  {
+    name: "Quận 4",
+    money: 3908,
+  },
+  {
+    name: "Quận 5",
+    money: 4800,
+  },
+  {
+    name: "Quận 6",
+    money: 3800,
+  },
+];
+
 export default function Home() {
   return (
     <>
       <Header />
       <Container className="mt--7" fluid>
         <Row className="mt-5">
-          <BarChart
-            width={1500}
-            height={500}
-            data={dataChart}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis type="number" domain={[0, 20000]} />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="money" fill="#F6C6EA" radius={5} barSize={50} />
-          </BarChart>
+          <Col xl="8">
+            <BarChart
+              width={1000}
+              height={500}
+              data={dataChart}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis type="number" domain={[0, 20000]} />
+              <Tooltip />
+              <Legend />
+              <Bar
+                dataKey="money"
+                fill="rgb(253, 255, 215)"
+                radius={5}
+                barSize={50}
+              />
+            </BarChart>
+          </Col>
+          <Col xl="4">
+            <AreaChart
+              width={500}
+              height={470}
+              data={dataAreChart}
+              syncId="anyId"
+              margin={{
+                top: 10,
+                right: 30,
+                left: 0,
+                bottom: 0,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis type="number" domain={[0, 20000]} />
+              <Tooltip />
+              <Area
+                type="monotone"
+                dataKey="money"
+                stroke="#82ca9d"
+                fill="rgb(253, 255, 215)"
+              />
+            </AreaChart>
+          </Col>
         </Row>
         <Row className="mt-5 mb-5">
           <Col className="mb-5 mb-xl-0">

@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { useCallback, useRef, useState } from "react";
+import React, { memo, useCallback, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Form, Modal } from "reactstrap";
 import { createCustomer } from "../../redux/actions/customerAction";
@@ -155,4 +155,4 @@ const AddCollaborator = () => {
   );
 };
 
-export default AddCollaborator;
+export default memo(AddCollaborator);

@@ -6,6 +6,7 @@ import {
   getGroupCustomerPromotion,
   updatePromotion,
 } from "../../api/promotion";
+import { errorNotify, successNotify } from "../../helper/toast";
 
 import { getType } from "../actions/customerAction";
 import {
@@ -35,10 +36,16 @@ function* createPromotionSaga(action) {
   try {
     const promotion = yield call(createPromotion, action.payload);
     window.location.reload();
+    successNotify({
+      message: "Tạo khuyến mãi thành công",
+    });
     yield put(createPromotionAction.createPromotionSuccess(promotion));
   } catch (err) {
-    console.error(err);
     yield put(createPromotionAction.createPromotionFailure(err));
+    errorNotify({
+      message:
+        err.response.data[0].message || "Tạo khuyến mãi không thành công",
+    });
   }
 }
 

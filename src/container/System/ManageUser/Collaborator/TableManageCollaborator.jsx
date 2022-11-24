@@ -23,6 +23,7 @@ export default function TableManageCollaborator({ data }) {
   const [modalVerify, setModalVerify] = React.useState(false);
   const [modalEdit, setModalEdit] = React.useState(false);
   const [itemEdit, setItemEdit] = React.useState([]);
+
   const dispatch = useDispatch();
   // Toggle for Modal
   const toggle = () => setModal(!modal);

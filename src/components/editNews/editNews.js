@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, FormGroup, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
@@ -146,4 +146,4 @@ const EditNews = ({ state, setState, data }) => {
   );
 };
 
-export default EditNews;
+export default memo(EditNews);

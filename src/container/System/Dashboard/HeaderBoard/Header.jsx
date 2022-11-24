@@ -34,7 +34,11 @@ const Header = () => {
                           Doanh thu
                         </CardTitle>
                         <span className="h5 font-weight-bold mb-0">
-                          {formatMoney(dataTotal?.total_revenue)}
+                          {formatMoney(
+                            !dataTotal?.total_revenue
+                              ? 0
+                              : dataTotal?.total_revenue
+                          )}
                         </span>
                       </div>
                     </Row>
