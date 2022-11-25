@@ -2,12 +2,16 @@ import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import {
   Button,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
   Media,
   Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
   Row,
+  UncontrolledDropdown,
 } from "reactstrap";
 import {
   activeCollaborator,
@@ -58,19 +62,25 @@ export default function TableManageCollaborator({ data }) {
   }, []);
 
   const onVerifyCollaborator = useCallback((id, is_verify) => {
-    dispatch(loadingAction.loadingRequest(true));
     if (is_verify === true) {
       verifyCollaborator(id)
         .then((res) => {
+          console.log(res);
           setModalVerify(!modalVerify);
-          window.location.reload();
+          dispatch(loadingAction.loadingRequest(false));
+
+          // window.location.reload();
         })
         .catch((err) => console.log(err));
     } else {
       verifyCollaborator(id)
         .then((res) => {
+          console.log(res);
+
           setModalVerify(!modalVerify);
-          window.location.reload();
+          dispatch(loadingAction.loadingRequest(false));
+
+          // window.location.reload();
         })
         .catch((err) => console.log(err));
     }
@@ -102,8 +112,42 @@ export default function TableManageCollaborator({ data }) {
               : "Khác"}
           </a>
         </td>
-        <td>
-          <Row>
+        <td className="text-right">
+          <UncontrolledDropdown>
+            <DropdownToggle
+              className="btn-icon-only text-light"
+              href="#pablo"
+              role="button"
+              size="sm"
+              onClick={(e) => e.preventDefault()}
+            >
+              <i class="uil uil-ellipsis-v"></i>
+            </DropdownToggle>
+            <DropdownMenu className="dropdown-menu-arrow">
+              <DropdownItem
+                href="#pablo"
+                onClick={() => {
+                  setItemEdit(data);
+                  setModalEdit(!modalEdit);
+                }}
+              >
+                Chỉnh sửa
+              </DropdownItem>
+              <DropdownItem href="#pablo" onClick={toggle}>
+                Xóa
+              </DropdownItem>
+              <DropdownItem href="#pablo" onClick={toggleBlock}>
+                {data?.is_active ? " Chặn" : " Kích hoạt"}
+              </DropdownItem>
+
+              {!data?.is_verify && (
+                <DropdownItem href="#pablo" onClick={toggleVerify}>
+                  Xác thực
+                </DropdownItem>
+              )}
+            </DropdownMenu>
+          </UncontrolledDropdown>
+          {/* <Row>
             <button
               className="btn-edit"
               onClick={() => {
@@ -136,7 +180,7 @@ export default function TableManageCollaborator({ data }) {
                 <i className="uil-toggle-off icon-off-toggle"></i>
               </button>
             )}
-          </Row>
+          </Row> */}
           <div>
             <Modal isOpen={modalVerify} toggle={toggleVerify}>
               <ModalHeader toggle={toggleVerify}>

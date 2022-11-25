@@ -23,6 +23,7 @@ function* fetchCollaboratorsSaga(action) {
   } catch (err) {
     console.error(err);
     yield put(actions.getCollaborators.getCollaboratorsFailure(err));
+    // yield put(loadingAction.loadingRequest(false));
   }
 }
 
