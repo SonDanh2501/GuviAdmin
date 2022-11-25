@@ -1,12 +1,12 @@
-import "./Navigator.scss";
 import { Link, NavLink } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { useCallback } from "react";
 import { getBrand } from "../../redux/actions/brand";
 import logo from "../../assets/images/LogoS.png";
+import "./Sidebar.scss";
 
-const Navigator = () => {
+const Sidebar = () => {
   const dispatch = useDispatch();
   const changeBrand = useCallback((title) => {
     dispatch(getBrand.getBrandRequest(title));
@@ -119,4 +119,4 @@ const Navigator = () => {
   );
 };
 
-export default Navigator;
+export default Sidebar;

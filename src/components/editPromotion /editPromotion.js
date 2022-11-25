@@ -198,6 +198,7 @@ const EditPromotion = ({ state, setState, data }) => {
         setNamebrand(res?.brand);
         setPromoCode(res?.code);
         setServiceApply(res?.service_apply[0]);
+        setMinimumOrder(res?.price_min_order);
       })
       .catch((err) => console.log(err));
   }, [data]);
@@ -236,7 +237,7 @@ const EditPromotion = ({ state, setState, data }) => {
           limited_use: isUsePromo ? usePromo : 0,
           type_discount: promoType,
           type_promotion: typePromotion,
-          price_min_order: 0,
+          price_min_order: minimumOrder,
           discount_unit: discountUnit,
           discount_max_price: maximumDiscount,
           discount_value: reducedValue,
@@ -275,6 +276,7 @@ const EditPromotion = ({ state, setState, data }) => {
     data,
     promoCode,
     serviceApply,
+    minimumOrder,
   ]);
 
   return (

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Route, Router, Routes, Switch } from "react-router-dom";
-import Navigator from "../components/Navigator/Navigator";
 import Header from "../container/Header/Header";
 import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
 import PromotionManage from "../container/System/ManagePromotion/Customer/promotionManage";
@@ -14,6 +13,7 @@ import ServiceManage from "../container/System/ManageService/ManageService/Servi
 import GroupServiceManage from "../container/System/ManageService/ManageGroupService/ManageGroupService/GroupServiceManage";
 import Home from "../container/System/Dashboard/DashBoard";
 import "./Dashboard.scss";
+import Sidebar from "../components/Sidebar/Sidebar";
 
 const Dashboard = () => {
   const [hideSidebar, setHideSidebar] = useState(true);
@@ -22,7 +22,7 @@ const Dashboard = () => {
       <div className="row">
         {hideSidebar && (
           <div className="col-2 sidebar">
-            <Navigator />
+            <Sidebar />
           </div>
         )}
         <main className={hideSidebar ? "col-10" : "col-12"}>
