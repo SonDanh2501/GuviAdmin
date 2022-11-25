@@ -15,6 +15,7 @@ import {
   deleteGroupServiceApi,
 } from "../../../../../api/service";
 import EditGroupService from "../../../../../components/editGroupService /editGroupService";
+import { loadingAction } from "../../../../../redux/actions/loading";
 import "./TableManageGroupService.scss";
 
 export default function TableManageGroupService({ data }) {
@@ -29,6 +30,7 @@ export default function TableManageGroupService({ data }) {
   const toggleBlock = () => setModalBlock(!modalBlock);
 
   const onDelete = useCallback((id) => {
+    dispatch(loadingAction.loadingRequest(true));
     deleteGroupServiceApi(id)
       .then((res) => {
         window.location.reload();
@@ -37,6 +39,7 @@ export default function TableManageGroupService({ data }) {
   }, []);
 
   const blockGroupService = useCallback((id, is_active) => {
+    dispatch(loadingAction.loadingRequest(true));
     if (is_active === true) {
       activeGroupServiceApi(id, { is_active: false })
         .then((res) => {

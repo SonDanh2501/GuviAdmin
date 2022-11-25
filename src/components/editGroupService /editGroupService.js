@@ -2,6 +2,7 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
+import { loadingAction } from "../../redux/actions/loading";
 import { createGroupServiceAction } from "../../redux/actions/service";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
@@ -46,6 +47,7 @@ const EditGroupService = ({ state, setState, data }) => {
   };
 
   const createGroupSerive = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(
       createGroupServiceAction.createGroupServiceRequest({
         title: {

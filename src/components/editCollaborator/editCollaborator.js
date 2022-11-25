@@ -3,6 +3,7 @@ import React, { memo, useCallback, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Form, Modal } from "reactstrap";
 import { updateCustomer } from "../../redux/actions/customerAction";
+import { loadingAction } from "../../redux/actions/loading";
 import { validateAddCollaboratorSchema } from "../../utils/schema";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
@@ -21,6 +22,7 @@ const EditCollaborator = ({ state, setState, data }) => {
   };
 
   const editCollaborator = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(
       updateCustomer.updateCustomerRequest({
         id: data?._id,

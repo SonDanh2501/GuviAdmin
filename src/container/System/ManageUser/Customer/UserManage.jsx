@@ -14,11 +14,14 @@ import {
 import { searchCustomers } from "../../../../api/customer";
 import AddCustomer from "../../../../components/addCustomer/addCustomer";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
+import LoadingPage from "../../../../components/LoadingPage";
 import { getCustomers } from "../../../../redux/actions/customerAction";
+import { loadingAction } from "../../../../redux/actions/loading";
 import {
   getCustomer,
   getCustomerTotalItem,
 } from "../../../../redux/selectors/customer";
+import { loadingSelector } from "../../../../redux/selectors/loading";
 import TableManageUser from "./TableManageUser.jsx";
 import "./UserManage.scss";
 
@@ -31,12 +34,13 @@ export default function UserManage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(getCustomers.getCustomersRequest({ start: 0, length: 10 }));
   }, [dispatch]);
 
   const handleSearch = useCallback((value) => {
-    searchCustomers(value)
-      .then((res) => setDataFilter(res))
+    searchCustomers(value, currentPage * customers.length, 10)
+      .then((res) => setDataFilter(res.data))
       .catch((err) => console.log(err));
   }, []);
 
@@ -109,12 +113,16 @@ export default function UserManage() {
                 className="pagination justify-content-end mb-0"
                 listClassName="justify-content-end mb-0"
               >
-                <PaginationItem>
+                <PaginationItem
+                  className={currentPage === 0 ? "disabled" : "enable"}
+                >
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage - 1)}
                     previous
                     href="#"
-                  />
+                  >
+                    <i class="uil uil-previous"></i>
+                  </PaginationLink>
                 </PaginationItem>
                 {pageNumbers}
                 <PaginationItem disabled={currentPage >= pageCount - 1}>
@@ -122,7 +130,9 @@ export default function UserManage() {
                     onClick={(e) => handleClick(e, currentPage + 1)}
                     next
                     href="#"
-                  />
+                  >
+                    <i class="uil uil-step-forward"></i>
+                  </PaginationLink>
                 </PaginationItem>
               </Pagination>
             </nav>

@@ -2,6 +2,7 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, FormGroup, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
+import { loadingAction } from "../../redux/actions/loading";
 import { updateNew } from "../../redux/actions/news";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
@@ -43,6 +44,7 @@ const EditNews = ({ state, setState, data }) => {
       .catch((err) => console.log("err", err));
   };
   const onEditNews = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(
       updateNew.updateNewRequest({
         id: data?._id,

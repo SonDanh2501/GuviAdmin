@@ -13,6 +13,7 @@ import imageUser from "../../assets/images/user.png";
 import "./Header.scss";
 import { logoutAction } from "../../redux/actions/auth";
 import { useNavigate } from "react-router-dom";
+import { loadingAction } from "../../redux/actions/loading";
 
 const Header = ({ onClick }) => {
   const dispatch = useDispatch();
@@ -20,9 +21,9 @@ const Header = ({ onClick }) => {
   const user = useSelector(getUser);
   const navigate = useNavigate();
 
-  const onLogout = async () => {
-    dispatch(logoutAction.logoutRequest());
-    return navigate("/auth/login");
+  const onLogout = () => {
+    dispatch(loadingAction.loadingRequest(true));
+    dispatch(logoutAction.logoutRequest(navigate));
   };
 
   return (

@@ -14,6 +14,7 @@ import {
 import { searchFeedbackApi } from "../../../api/feedback";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
 import { getFeedback } from "../../../redux/actions/feedback";
+import { loadingAction } from "../../../redux/actions/loading";
 import {
   getFeedbacks,
   getFeedbackTotal,
@@ -28,6 +29,7 @@ export default function FeedbackManage() {
   const listFeedback = useSelector(getFeedbacks);
   const feedbackTotal = useSelector(getFeedbackTotal);
   React.useEffect(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(getFeedback.getFeedbackRequest({ start: 0, length: 10 }));
   }, [dispatch]);
 
@@ -101,12 +103,16 @@ export default function FeedbackManage() {
                   className="pagination justify-content-end mb-0"
                   listClassName="justify-content-end mb-0"
                 >
-                  <PaginationItem>
+                  <PaginationItem
+                    className={currentPage === 0 ? "disabled" : "enable"}
+                  >
                     <PaginationLink
                       onClick={(e) => handleClick(e, currentPage - 1)}
                       previous
                       href="#"
-                    />
+                    >
+                      <i class="uil uil-previous"></i>
+                    </PaginationLink>
                   </PaginationItem>
                   {pageNumbers}
                   <PaginationItem disabled={currentPage >= pageCount - 1}>
@@ -114,7 +120,9 @@ export default function FeedbackManage() {
                       onClick={(e) => handleClick(e, currentPage + 1)}
                       next
                       href="#"
-                    />
+                    >
+                      <i class="uil uil-step-forward"></i>
+                    </PaginationLink>
                   </PaginationItem>
                 </Pagination>
               </nav>

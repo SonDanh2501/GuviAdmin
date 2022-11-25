@@ -15,6 +15,7 @@ import {
   verifyCollaborator,
 } from "../../../../api/collaborator";
 import EditCollaborator from "../../../../components/editCollaborator/editCollaborator";
+import { loadingAction } from "../../../../redux/actions/loading";
 import "./TableManageCollaborator.scss";
 
 export default function TableManageCollaborator({ data }) {
@@ -31,12 +32,14 @@ export default function TableManageCollaborator({ data }) {
   const toggleVerify = () => setModalVerify(!modalVerify);
 
   const onDelete = useCallback((id) => {
+    dispatch(loadingAction.loadingRequest(true));
     deleteCollaborator(id, { is_delete: true })
       .then((res) => window.location.reload())
       .catch((err) => console.log(err));
   }, []);
 
   const blockCollaborator = useCallback((id, is_active) => {
+    dispatch(loadingAction.loadingRequest(true));
     if (is_active === true) {
       activeCollaborator(id, { is_active: false })
         .then((res) => {
@@ -55,6 +58,7 @@ export default function TableManageCollaborator({ data }) {
   }, []);
 
   const onVerifyCollaborator = useCallback((id, is_verify) => {
+    dispatch(loadingAction.loadingRequest(true));
     if (is_verify === true) {
       verifyCollaborator(id)
         .then((res) => {

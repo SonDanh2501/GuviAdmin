@@ -11,7 +11,7 @@ export const loginAction = createActions({
 });
 
 export const logoutAction = createActions({
-  logoutRequest: undefined,
+  logoutRequest: (payload) => payload,
   logoutSuccess: (payload) => payload,
   logoutFailure: (err) => err,
 });

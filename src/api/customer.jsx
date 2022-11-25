@@ -5,8 +5,10 @@ export const fetchCustomers = (start, length) => {
     `/admin/customer_manager/get_list?start=${start}&length=${length}`
   );
 };
-export const searchCustomers = (payload) => {
-  return axiosClient.get(`/admin/customer_manager/all_items?search=${payload}`);
+export const searchCustomers = (payload, start, length) => {
+  return axiosClient.get(
+    `/admin/customer_manager/get_list?search=${payload}&start=${start}&length=${length}`
+  );
 };
 export const fetchCustomerById = (id) => {
   return axiosClient.get(`/admin/customer_manager/${id}`);

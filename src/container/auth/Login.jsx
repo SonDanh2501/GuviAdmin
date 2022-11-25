@@ -1,48 +1,36 @@
 import { Formik } from "formik";
 import { useCallback, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useNavigate } from "react-router-dom";
-import { Redirect } from "react-router-dom";
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  FormGroup,
-  Form,
-  Input,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
-  Row,
-  Col,
-  Container,
-} from "reactstrap";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Button, Card, CardBody, Form } from "reactstrap";
 import logo from "../../assets/images/logo.png";
 import CustomTextInput from "../../components/CustomTextInput/customTextInput";
 import { loginAction } from "../../redux/actions/auth";
-import { getIsCheckLogin } from "../../redux/selectors/auth";
+import { loadingAction } from "../../redux/actions/loading";
 import { validateLoginSchema } from "../../utils/schema";
 import "./Login.scss";
 
 const Login = () => {
   const formikRef = useRef();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isCheckLogin = useSelector(getIsCheckLogin);
+  const navigate = useNavigate();
   const initialValues = {
     email: "",
     password: "",
   };
 
   const onLogin = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(
       loginAction.loginRequest({
-        email: formikRef?.current?.values?.email,
-        password: formikRef?.current?.values?.password,
+        data: {
+          email: formikRef?.current?.values?.email,
+          password: formikRef?.current?.values?.password,
+        },
+        naviga: navigate,
       })
     );
-  }, [dispatch]);
+  }, [dispatch, navigate]);
 
   return (
     <div className="container-login">

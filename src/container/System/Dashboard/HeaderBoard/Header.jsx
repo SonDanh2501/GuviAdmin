@@ -57,7 +57,7 @@ const Header = () => {
                           Tổng đơn hàng
                         </CardTitle>
                         <span className="h5 font-weight-bold mb-0">
-                          {dataTotal?.total_order}
+                          {!dataTotal?.total_order ? 0 : dataTotal?.total_order}
                         </span>
                       </div>
                     </Row>
@@ -76,7 +76,9 @@ const Header = () => {
                           Khách hàng
                         </CardTitle>
                         <span className="h5 font-weight-bold mb-0">
-                          {dataTotal?.total_customer}
+                          {!dataTotal?.total_customer
+                            ? 0
+                            : dataTotal?.total_customer}
                         </span>
                       </div>
                     </Row>
@@ -95,7 +97,9 @@ const Header = () => {
                           Cộng tác viên
                         </CardTitle>
                         <span className="h5 font-weight-bold mb-0 ">
-                          {dataTotal?.total_collaborator}
+                          {!dataTotal?.total_collaborator
+                            ? 0
+                            : dataTotal?.total_collaborator}
                         </span>
                       </div>
                     </Row>

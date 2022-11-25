@@ -2,6 +2,7 @@ import { takeLatest, call, put } from "redux-saga/effects";
 import * as actions from "../actions/news";
 import * as api from "../../api/news";
 import { getType } from "../actions/news";
+import { loadingAction } from "../actions/loading";
 
 function* fetchNewsSaga(action) {
   try {
@@ -17,6 +18,7 @@ function* fetchNewsSaga(action) {
         total: response.totalItem,
       })
     );
+    yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     console.error(err);
     yield put(actions.getNews.getNewsFailure(err));

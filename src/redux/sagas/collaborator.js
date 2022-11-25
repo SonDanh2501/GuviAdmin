@@ -3,6 +3,7 @@ import * as actions from "../actions/collaborator";
 import * as api from "../../api/collaborator.jsx";
 import { getType } from "../actions/collaborator";
 import { Alert } from "reactstrap";
+import { loadingAction } from "../actions/loading";
 
 function* fetchCollaboratorsSaga(action) {
   try {
@@ -18,6 +19,7 @@ function* fetchCollaboratorsSaga(action) {
         total: resoponse.totalItem,
       })
     );
+    yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     console.error(err);
     yield put(actions.getCollaborators.getCollaboratorsFailure(err));

@@ -17,6 +17,7 @@ import {
 } from "reactstrap";
 import { activeNew, deleteNew } from "../../../../api/news";
 import EditNews from "../../../../components/editNews/editNews";
+import { loadingAction } from "../../../../redux/actions/loading";
 
 export default function TableManageNews({ data }) {
   const [modal, setModal] = React.useState(false);
@@ -25,8 +26,10 @@ export default function TableManageNews({ data }) {
   const [itemEdit, setItemEdit] = React.useState([]);
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
+  const dispatch = useDispatch();
 
   const onDelete = useCallback((id) => {
+    dispatch(loadingAction.loadingRequest(true));
     deleteNew(id)
       .then((res) => {
         window.location.reload();
@@ -35,6 +38,7 @@ export default function TableManageNews({ data }) {
   }, []);
 
   const blockNew = useCallback((id, is_active) => {
+    dispatch(loadingAction.loadingRequest(true));
     if (is_active === true) {
       activeNew(id, { is_active: false })
         .then((res) => {

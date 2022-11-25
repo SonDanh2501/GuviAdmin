@@ -3,6 +3,7 @@ import React, { memo, useCallback, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Form, Modal } from "reactstrap";
 import { createCustomer } from "../../redux/actions/customerAction";
+import { loadingAction } from "../../redux/actions/loading";
 import { validateAddCollaboratorSchema } from "../../utils/schema";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
@@ -23,6 +24,7 @@ const AddCollaborator = () => {
   };
 
   const addCustomer = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(
       createCustomer.createCustomerRequest({
         code_phone_area: formikRef?.current?.values?.code_phone_area,
