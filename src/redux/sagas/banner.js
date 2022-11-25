@@ -2,13 +2,14 @@ import { takeLatest, call, put } from "redux-saga/effects";
 import * as actions from "../actions/banner";
 import * as api from "../../api/banner";
 import { getType } from "../actions/banner";
+import { loadingAction } from "../actions/loading";
 
 function* fetchBannersSaga() {
   try {
     const Banners = yield call(api.fetchBanners);
     yield put(actions.getBanners.getBannersSuccess(Banners));
+    yield put(loadingAction.loadingRequest(false));
   } catch (err) {
-    console.error(err);
     yield put(actions.getBanners.getBannersFailure(err));
   }
 }
@@ -19,7 +20,6 @@ function* createBannerSaga(action) {
     window.location.reload();
     yield put(actions.createBanner.createBannerSuccess(Banner.data));
   } catch (err) {
-    console.error(err);
     yield put(actions.createBanner.createBannerFailure(err));
   }
 }
@@ -34,7 +34,6 @@ function* updateBannerSaga(action) {
     window.location.reload();
     yield put(actions.updateBanner.updateBannerSuccess(updatedBanner.data));
   } catch (err) {
-    console.error(err);
     yield put(actions.updateBanner.updateBannerFailure(err));
   }
 }

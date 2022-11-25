@@ -6,6 +6,7 @@ import { updateCustomer } from "../../redux/actions/customerAction";
 import { validateAddCustomerSchema } from "../../utils/schema";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
+import { loadingAction } from "../../redux/actions/loading";
 import "./editCustomer.scss";
 
 const EditCustomer = ({ state, setState, data }) => {
@@ -20,6 +21,7 @@ const EditCustomer = ({ state, setState, data }) => {
   };
 
   const editCustomer = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(
       updateCustomer.updateCustomerRequest({
         id: data?._id,

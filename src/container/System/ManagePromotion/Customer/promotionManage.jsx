@@ -16,6 +16,7 @@ import { searchPromotion } from "../../../../api/promotion.jsx";
 import AddPromotion from "../../../../components/addPromotion/addPromotion.js";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
 import { removeVietnameseTones } from "../../../../helper/ConvertVie.js";
+import { loadingAction } from "../../../../redux/actions/loading.js";
 import { getPromotion } from "../../../../redux/actions/promotion.js";
 import { getServiceAction } from "../../../../redux/actions/service.js";
 import {
@@ -34,6 +35,7 @@ export default function PromotionManage() {
   const [dataFilter, setDataFilter] = useState([]);
 
   useEffect(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(getServiceAction.getServiceRequest());
     dispatch(getPromotion.getPromotionRequest({ start: 0, length: 10 }));
   }, []);
@@ -114,12 +116,16 @@ export default function PromotionManage() {
                   className="pagination justify-content-end mb-0"
                   listClassName="justify-content-end mb-0"
                 >
-                  <PaginationItem>
+                  <PaginationItem
+                    className={currentPage === 0 ? "disabled" : "enable"}
+                  >
                     <PaginationLink
                       onClick={(e) => handleClick(e, currentPage - 1)}
                       previous
                       href="#"
-                    />
+                    >
+                      <i class="uil uil-previous"></i>
+                    </PaginationLink>
                   </PaginationItem>
                   {pageNumbers}
                   <PaginationItem disabled={currentPage >= pageCount - 1}>
@@ -127,7 +133,9 @@ export default function PromotionManage() {
                       onClick={(e) => handleClick(e, currentPage + 1)}
                       next
                       href="#"
-                    />
+                    >
+                      <i class="uil uil-step-forward"></i>
+                    </PaginationLink>
                   </PaginationItem>
                 </Pagination>
               </nav>

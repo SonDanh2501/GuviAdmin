@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Form, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
 import { updateBanner } from "../../redux/actions/banner";
+import { loadingAction } from "../../redux/actions/loading";
 import { getPromotion } from "../../redux/actions/promotion";
 import { getPromotionSelector } from "../../redux/selectors/promotion";
 import CustomButton from "../customButton/customButton";
@@ -50,6 +51,7 @@ const EditBanner = ({ state, setState, data }) => {
   };
 
   const onEditBanner = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(
       updateBanner.updateBannerRequest({
         id: data?._id,

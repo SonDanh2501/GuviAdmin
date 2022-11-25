@@ -14,6 +14,7 @@ import {
   getServiceAction,
   updateGroupServiceAction,
 } from "../actions/service";
+import { loadingAction } from "../actions/loading";
 
 //group-service
 
@@ -21,6 +22,7 @@ function* fetchGroupServiceSaga() {
   try {
     const response = yield call(getGroupServiceApi);
     yield put(getGroupServiceAction.getGroupServiceSuccess(response.data));
+    yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     console.error(err);
     yield put(getGroupServiceAction.getGroupServiceFailure(err));

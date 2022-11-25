@@ -15,6 +15,7 @@ import {
 } from "reactstrap";
 import { postFile } from "../../api/file";
 import { getGroupCustomerPromotion } from "../../api/promotion";
+import { loadingAction } from "../../redux/actions/loading";
 import { createPromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
 import CustomButton from "../customButton/customButton";
@@ -27,9 +28,6 @@ const AddPromotion = () => {
   const [typePromotion, setTypePromotion] = React.useState("code");
   const [formDiscount, setFormDiscount] = React.useState("Giảm trực tiếp");
   const [discountUnit, setDiscountUnit] = React.useState("amount");
-  const [create, setCreate] = React.useState(false);
-  const [edit, setEdit] = React.useState(false);
-  const [id, setId] = React.useState("");
   const [groupCustomer, setGroupCustomer] = React.useState([]);
   const [customer, setCustomer] = React.useState([]);
   const [titleVN, setTitleVN] = React.useState("");
@@ -77,6 +75,7 @@ const AddPromotion = () => {
   }, [service]);
 
   const onChangeThumbnail = (e) => {
+    dispatch(loadingAction.loadingRequest(true));
     if (e.target.files[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -92,11 +91,15 @@ const AddPromotion = () => {
         "Content-Type": "multipart/form-data",
       },
     })
-      .then((res) => setImgThumbnail(res))
+      .then((res) => {
+        setImgThumbnail(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
       .catch((err) => console.log("err", err));
   };
 
   const onChangeBackground = (e) => {
+    dispatch(loadingAction.loadingRequest(true));
     if (e.target.files[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -111,7 +114,10 @@ const AddPromotion = () => {
         "Content-Type": "multipart/form-data",
       },
     })
-      .then((res) => setImgBackground(res))
+      .then((res) => {
+        setImgBackground(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
       .catch((err) => console.log("err", err));
   };
 
@@ -148,6 +154,7 @@ const AddPromotion = () => {
   const onEditorENStateChange = (editorState) => setDescriptionEN(editorState);
 
   const onCreatePromotion = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(
       createPromotionAction.createPromotionRequest({
         title: {

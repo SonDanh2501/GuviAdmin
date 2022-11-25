@@ -14,6 +14,7 @@ import {
 } from "reactstrap";
 import AddGroupService from "../../../../../components/addGroupService/addGroupService";
 import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
+import { loadingAction } from "../../../../../redux/actions/loading";
 import { getGroupServiceAction } from "../../../../../redux/actions/service";
 import { getGroupService } from "../../../../../redux/selectors/service";
 import "./GroupServiceManage.scss";
@@ -23,6 +24,7 @@ export default function GroupServiceManage() {
   const dispatch = useDispatch();
   const listGroupService = useSelector(getGroupService);
   React.useEffect(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(getGroupServiceAction.getGroupServiceRequest());
   }, [dispatch]);
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import "./TableManageUser.scss";
-import * as actions from "../../../../redux/actions/customerAction";
 import {
   Table,
   Row,
@@ -14,6 +13,8 @@ import {
 } from "reactstrap";
 import { activeCustomer } from "../../../../api/customer";
 import EditCustomer from "../../../../components/editCustomer/editCustomer";
+import { deleteCustomerAction } from "../../../../redux/actions/customerAction";
+import { loadingAction } from "../../../../redux/actions/loading";
 
 export default function TableManageUser({ data }) {
   const [itemEdit, setItemEdit] = useState([]);
@@ -25,8 +26,9 @@ export default function TableManageUser({ data }) {
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
   const onDelete = useCallback((id) => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(
-      actions.deleteCustomerAction.deleteCustomerRequest({
+      deleteCustomerAction.deleteCustomerRequest({
         id: id,
         data: { is_delete: true },
       })
@@ -34,6 +36,7 @@ export default function TableManageUser({ data }) {
   }, []);
 
   const blockCustomer = useCallback((id, is_active) => {
+    dispatch(loadingAction.loadingRequest(true));
     if (is_active === true) {
       activeCustomer(id, { is_active: false })
         .then((res) => {

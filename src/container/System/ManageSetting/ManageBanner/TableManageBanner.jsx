@@ -17,6 +17,7 @@ import {
 } from "reactstrap";
 import { activeBanner, deleteBanner } from "../../../../api/banner";
 import EditBanner from "../../../../components/editBanner/editBanner";
+import { loadingAction } from "../../../../redux/actions/loading";
 
 export default function TableManageBanner({ data }) {
   const [modal, setModal] = React.useState(false);
@@ -29,6 +30,7 @@ export default function TableManageBanner({ data }) {
   const toggleBlock = () => setModalBlock(!modalBlock);
 
   const onDelete = useCallback((id) => {
+    dispatch(loadingAction.loadingRequest(true));
     deleteBanner(id, { is_delete: true })
       .then((res) => {
         window.location.reload();
@@ -37,6 +39,7 @@ export default function TableManageBanner({ data }) {
   }, []);
 
   const blockBanner = useCallback((id, is_active) => {
+    dispatch(loadingAction.loadingRequest(true));
     if (is_active === true) {
       activeBanner(id, { is_active: false })
         .then((res) => {

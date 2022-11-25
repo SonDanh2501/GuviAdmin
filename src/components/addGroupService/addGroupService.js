@@ -2,6 +2,7 @@ import React, { memo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
+import { loadingAction } from "../../redux/actions/loading";
 import { createGroupServiceAction } from "../../redux/actions/service";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
@@ -19,6 +20,8 @@ const AddGroupService = () => {
 
   const dispatch = useDispatch();
   const onChangeThumbnail = (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+
     if (e.target.files[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -33,11 +36,15 @@ const AddGroupService = () => {
         "Content-Type": "multipart/form-data",
       },
     })
-      .then((res) => setImgUrl(res))
+      .then((res) => {
+        setImgUrl(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
       .catch((err) => console.log("err", err));
   };
 
   const createGroupSerive = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(
       createGroupServiceAction.createGroupServiceRequest({
         title: {

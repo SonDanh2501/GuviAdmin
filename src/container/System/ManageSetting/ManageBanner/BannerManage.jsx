@@ -24,17 +24,19 @@ import {
   getBanners,
   updateBanner,
 } from "../../../../redux/actions/banner";
+import { loadingAction } from "../../../../redux/actions/loading";
 import { getPromotion } from "../../../../redux/actions/promotion";
 import { getBanner } from "../../../../redux/selectors/banner";
 import { getPromotionSelector } from "../../../../redux/selectors/promotion";
 import "./BannerManage.scss";
 import TableManageBanner from "./TableManageBanner.jsx";
 
-export default function UserManage() {
+export default function BannerManage() {
   const [dataFilter, setDataFilter] = useState([]);
   const dispatch = useDispatch();
   const banners = useSelector(getBanner);
   React.useEffect(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(getBanners.getBannersRequest());
   }, [dispatch]);
 

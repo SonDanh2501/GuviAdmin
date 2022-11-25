@@ -2,6 +2,7 @@ import React, { memo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, FormGroup, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
+import { loadingAction } from "../../redux/actions/loading";
 import { createNew } from "../../redux/actions/news";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
@@ -18,6 +19,7 @@ const AddNews = () => {
   const dispatch = useDispatch();
 
   const onChangeThumbnail = (e) => {
+    dispatch(loadingAction.loadingRequest(true));
     if (e.target.files[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -32,11 +34,15 @@ const AddNews = () => {
         "Content-Type": "multipart/form-data",
       },
     })
-      .then((res) => setImgThumbnail(res))
+      .then((res) => {
+        setImgThumbnail(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
       .catch((err) => console.log("err", err));
   };
 
   const addNews = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(
       createNew.createNewRequest({
         title: title,

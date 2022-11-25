@@ -2,6 +2,7 @@ import { takeLatest, call, put } from "redux-saga/effects";
 import * as actions from "../actions/customerAction";
 import * as api from "../../api/customer.jsx";
 import { getType } from "../actions/customerAction";
+import { loadingAction } from "../actions/loading";
 
 function* fetchCustomersSaga(action) {
   try {
@@ -16,6 +17,7 @@ function* fetchCustomersSaga(action) {
         total: resoponse.totalItem,
       })
     );
+    yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     console.error(err);
     yield put(actions.getCustomers.getCustomersFailure(err));

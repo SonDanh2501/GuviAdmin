@@ -15,6 +15,7 @@ import { searchCollaborators } from "../../../../api/collaborator.jsx";
 import AddCollaborator from "../../../../components/addCollaborator/addCollaborator.js";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
 import { getCollaborators } from "../../../../redux/actions/collaborator";
+import { loadingAction } from "../../../../redux/actions/loading.js";
 import {
   getCollaborator,
   getCollaboratorTotal,
@@ -30,6 +31,7 @@ export default function CollaboratorManage() {
   const collaboratorTotal = useSelector(getCollaboratorTotal);
 
   useEffect(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(
       getCollaborators.getCollaboratorsRequest({ start: 0, length: 10 })
     );
@@ -111,12 +113,16 @@ export default function CollaboratorManage() {
                 className="pagination justify-content-end mb-0"
                 listClassName="justify-content-end mb-0"
               >
-                <PaginationItem>
+                <PaginationItem
+                  className={currentPage === 0 ? "disabled" : "enable"}
+                >
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage - 1)}
                     previous
                     href="#"
-                  />
+                  >
+                    <i class="uil uil-previous"></i>
+                  </PaginationLink>
                 </PaginationItem>
                 {pageNumbers}
                 <PaginationItem disabled={currentPage >= pageCount - 1}>
@@ -124,7 +130,9 @@ export default function CollaboratorManage() {
                     onClick={(e) => handleClick(e, currentPage + 1)}
                     next
                     href="#"
-                  />
+                  >
+                    <i class="uil uil-step-forward"></i>
+                  </PaginationLink>
                 </PaginationItem>
               </Pagination>
             </nav>

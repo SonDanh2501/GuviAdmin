@@ -9,6 +9,7 @@ import {
 import { errorNotify, successNotify } from "../../helper/toast";
 
 import { getType } from "../actions/customerAction";
+import { loadingAction } from "../actions/loading";
 import {
   createPromotionAction,
   createPromotions,
@@ -30,6 +31,7 @@ function* fetchPromotionSaga(action) {
         total: promotion.totalItem,
       })
     );
+    yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     console.error(err);
     yield put(getPromotion.getPromotionFailure(err));
@@ -69,9 +71,8 @@ function* updatePromotionSaga(action) {
 function* deletePromotionSaga(action) {
   try {
     const promo = yield call(deletePromotion, action.payload);
-    if (promo) {
-      window.location.reload();
-    }
+
+    window.location.reload();
   } catch (err) {
     console.error(err);
   }

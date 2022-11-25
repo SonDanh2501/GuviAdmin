@@ -37,6 +37,9 @@ export const INIT_STATE = {
     data: [],
     totalItem: 0,
   },
+  loading: {
+    loading: false,
+  },
 };
 
 export const path = {

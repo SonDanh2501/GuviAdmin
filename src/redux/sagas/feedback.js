@@ -4,6 +4,7 @@ import * as api from "../../api/reasons";
 import { getType } from "../actions/reason";
 import { getFeedbackApi } from "../../api/feedback";
 import { getFeedback } from "../actions/feedback";
+import { loadingAction } from "../actions/loading";
 
 function* fetchFeedbackSaga(action) {
   try {
@@ -18,6 +19,7 @@ function* fetchFeedbackSaga(action) {
         total: response.totalItem,
       })
     );
+    yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     console.error(err);
     yield put(getFeedback.getFeedbackFailure(err));

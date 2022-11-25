@@ -13,6 +13,7 @@ import {
 import { deletePromotion } from "../../../../api/promotion";
 import moment from "moment";
 import { deletePromotionAction } from "../../../../redux/actions/promotion";
+import { loadingAction } from "../../../../redux/actions/loading";
 import EditPromotion from "../../../../components/editPromotion /editPromotion";
 
 export default function TableManagePromotion({ data }) {
@@ -22,6 +23,7 @@ export default function TableManagePromotion({ data }) {
   const [itemEdit, setItemEdit] = useState([]);
   const toggle = () => setModal(!modal);
   const onDelete = useCallback((id) => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(deletePromotionAction.deletePromotionRequest(id));
   }, []);
 

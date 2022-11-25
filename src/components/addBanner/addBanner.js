@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Form, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
 import { createBanner } from "../../redux/actions/banner";
+import { loadingAction } from "../../redux/actions/loading";
 import { getPromotion } from "../../redux/actions/promotion";
 import { getPromotionSelector } from "../../redux/selectors/promotion";
 import CustomButton from "../customButton/customButton";
@@ -35,16 +36,22 @@ const AddBanner = () => {
     }
     const formData = new FormData();
     formData.append("file", e.target.files[0]);
+    dispatch(loadingAction.loadingRequest(true));
+
     postFile(formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     })
-      .then((res) => setImgThumbnail(res))
+      .then((res) => {
+        setImgThumbnail(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
       .catch((err) => console.log("err", err));
   };
 
   const addBanner = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(
       createBanner.createBannerRequest({
         title: title,

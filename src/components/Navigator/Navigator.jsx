@@ -65,6 +65,7 @@ const Navigator = () => {
             to="/settings/manage-banner"
             onClick={() => changeBrand("Quản lý Banner")}
           >
+            <i className="uil uil-money-bill icon"></i>
             Quản lý Banner
           </NavLink>
         </li>
@@ -84,6 +85,7 @@ const Navigator = () => {
             to="/services/manage-group-service"
             onClick={() => changeBrand("Quản lý group-service")}
           >
+            <i className="uil uil-book-reader icon"></i>
             Quản lý group-service
           </NavLink>
         </li>

@@ -136,7 +136,7 @@ export default function Home() {
               <Legend />
               <Bar
                 dataKey="money"
-                fill="rgb(253, 255, 215)"
+                fill="rgb(205, 205, 205)"
                 radius={5}
                 barSize={50}
               />

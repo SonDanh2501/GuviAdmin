@@ -6,16 +6,19 @@ import { errorNotify, successNotify } from "../../helper/toast";
 import { setToken } from "../../helper/tokenHelper";
 import { loginAction, logoutAction } from "../actions/auth";
 import * as actions from "../actions/banner";
+import { loadingAction } from "../actions/loading";
 
 function* loginSaga(action) {
   try {
-    const response = yield call(loginApi, action.payload);
+    const response = yield call(loginApi, action.payload.data);
     setToken(response?.token);
     const user = jwtDecode(response?.token);
     successNotify({
       message: "Đăng nhập thành công",
     });
+    action.payload.naviga("/");
     yield put(loginAction.loginSuccess({ token: response?.token, user: user }));
+    yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     yield put(loginAction.loginFailure(err));
     errorNotify({
@@ -23,6 +26,7 @@ function* loginSaga(action) {
         err.response.data.response[0].message ||
         "Đăng nhập không thành công, vui lòng thử lại sau.",
     });
+    yield put(loadingAction.loadingRequest(false));
   }
 }
 function* logoutSaga(action) {
@@ -31,9 +35,11 @@ function* logoutSaga(action) {
     successNotify({
       message: "Đăng xuất thành công",
     });
+    action.payload("/auth/login", { replace: true });
+    yield put(loadingAction.loadingRequest(false));
   } catch (err) {
-    console.log(err);
     yield put(logoutAction.logoutFailure(err));
+    yield put(loadingAction.loadingRequest(false));
   }
 }
 
