@@ -2,6 +2,7 @@ import { Formik } from "formik";
 import React, { memo, useCallback, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Form, Modal } from "reactstrap";
+import { updateCollaborator } from "../../redux/actions/collaborator";
 import { updateCustomer } from "../../redux/actions/customerAction";
 import { loadingAction } from "../../redux/actions/loading";
 import { validateAddCollaboratorSchema } from "../../utils/schema";
@@ -24,7 +25,7 @@ const EditCollaborator = ({ state, setState, data }) => {
   const editCollaborator = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
     dispatch(
-      updateCustomer.updateCustomerRequest({
+      updateCollaborator.updateCollaboratorRequest({
         id: data?._id,
         data: {
           code_phone_area: formikRef?.current?.values?.code_phone_area,

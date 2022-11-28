@@ -39,3 +39,7 @@ export const deleteCollaborator = (id, payload) => {
 export const verifyCollaborator = (id) => {
   return axiosClient.post(`/admin/collaborator_manager/verify_item/${id}`);
 };
+
+export const lockTimeCollaborator = (id, data) => {
+  return axiosClient.post(`/admin/collaborator_manager/lock_item/${id}`, data);
+};

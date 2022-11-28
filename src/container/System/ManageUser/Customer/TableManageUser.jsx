@@ -10,6 +10,10 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from "reactstrap";
 import { activeCustomer } from "../../../../api/customer";
 import EditCustomer from "../../../../components/editCustomer/editCustomer";
@@ -76,31 +80,28 @@ export default function TableManageUser({ data }) {
           <a>{data?.birth_date}</a>
         </td>
         <td>
-          <Row>
-            <button
-              className="btn-edit"
-              onClick={() => {
-                setItemEdit(data);
-                setModalEdit(!modalEdit);
-              }}
-            >
-              <i className="uil uil-edit-alt"></i>
-            </button>
-            <button className="btn-delete" onClick={toggle}>
-              <i className="uil uil-trash"></i>
-            </button>
-          </Row>
-          <Row>
-            {data?.is_active ? (
-              <button className="btn-delete" onClick={toggleBlock}>
-                <i class="uil uil-unlock"></i>
-              </button>
-            ) : (
-              <button className="btn-delete" onClick={toggleBlock}>
-                <i class="uil uil-padlock"></i>
-              </button>
-            )}
-          </Row>
+          <UncontrolledDropdown>
+            <DropdownToggle href="#pablo" role="button" size="sm">
+              <i class="uil uil-ellipsis-v"></i>
+            </DropdownToggle>
+            <DropdownMenu className="dropdown-menu-arrow">
+              <DropdownItem
+                href="#pablo"
+                onClick={() => {
+                  setItemEdit(data);
+                  setModalEdit(!modalEdit);
+                }}
+              >
+                Chỉnh sửa
+              </DropdownItem>
+              <DropdownItem href="#pablo" onClick={toggle}>
+                Xóa
+              </DropdownItem>
+              <DropdownItem href="#pablo" onClick={toggleBlock}>
+                {data?.is_active ? " Chặn" : " Kích hoạt"}
+              </DropdownItem>
+            </DropdownMenu>
+          </UncontrolledDropdown>
           <div>
             <Modal isOpen={modalBlock} toggle={toggleBlock}>
               <ModalHeader toggle={toggleBlock}>
