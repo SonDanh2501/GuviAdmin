@@ -24,6 +24,7 @@ import {
   getGroupCustomerPromotion,
   getPromotionDetails,
 } from "../../api/promotion";
+import { loadingAction } from "../../redux/actions/loading";
 import { updatePromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
 import CustomTextInput from "../CustomTextInput/customTextInput";
@@ -78,6 +79,7 @@ const EditPromotion = ({ state, setState, data }) => {
   }, []);
 
   const onChangeThumbnail = (e) => {
+    dispatch(loadingAction.loadingRequest(true));
     if (e.target.files[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -93,11 +95,15 @@ const EditPromotion = ({ state, setState, data }) => {
         "Content-Type": "multipart/form-data",
       },
     })
-      .then((res) => setImgThumbnail(res))
+      .then((res) => {
+        dispatch(loadingAction.loadingRequest(false));
+        setImgThumbnail(res);
+      })
       .catch((err) => console.log("err", err));
   };
 
   const onChangeBackground = (e) => {
+    dispatch(loadingAction.loadingRequest(true));
     if (e.target.files[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -112,7 +118,10 @@ const EditPromotion = ({ state, setState, data }) => {
         "Content-Type": "multipart/form-data",
       },
     })
-      .then((res) => setImgBackground(res))
+      .then((res) => {
+        setImgBackground(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
       .catch((err) => console.log("err", err));
   };
 

@@ -1,5 +1,10 @@
-import { INIT_STATE } from '../../utils/contant';
-import { getReasons, getType, createReason, updateReason } from '../actions/reason';
+import { INIT_STATE } from "../../utils/contant";
+import {
+  getReasons,
+  getType,
+  createReason,
+  updateReason,
+} from "../actions/reason";
 
 export default function ReasonsReducers(state = INIT_STATE.reasons, action) {
   switch (action.type) {
@@ -10,7 +15,8 @@ export default function ReasonsReducers(state = INIT_STATE.reasons, action) {
     case getType(getReasons.getReasonsSuccess):
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.data,
+        totalItem: action.payload.total,
       };
     case getType(getReasons.getReasonsFailure):
       return {
@@ -25,7 +31,7 @@ export default function ReasonsReducers(state = INIT_STATE.reasons, action) {
       return {
         ...state,
         data: state.data.map((reason) =>
-        reason._id === action.payload._id ? action.payload : reason
+          reason._id === action.payload._id ? action.payload : reason
         ),
       };
     default:

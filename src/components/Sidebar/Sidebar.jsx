@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { useCallback } from "react";
@@ -8,14 +8,25 @@ import "./Sidebar.scss";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
-  const changeBrand = useCallback((title) => {
+  const navigate = useNavigate();
+
+  const changeBrand = useCallback((title, brand) => {
     dispatch(getBrand.getBrandRequest(title));
+    if (brand === "home") {
+      navigate("/");
+    }
   });
 
   return (
     <div className="pt-3 container min-height-100vh" responsive>
       <div className="div-header">
-        <img src={logo} className="logo" />
+        <img
+          src={logo}
+          className="logo"
+          onClick={() => {
+            changeBrand("Trang chủ", "home");
+          }}
+        />
       </div>
       {/* <NavLink activeClassName="active" to="/" exact>Home</NavLink> */}
       <ul className="nav nav-pills flex-column mt-5">
@@ -101,6 +112,7 @@ const Sidebar = () => {
         </li>
         <li className="nav-item">
           <NavLink className="nav-link" to="/settings/manage-reason">
+            <i class="uil uil-cancel icon"></i>
             Quản lý lý do huỷ việc
           </NavLink>
         </li>

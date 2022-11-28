@@ -14,6 +14,10 @@ import {
   Button,
   Card,
   CardImg,
+  UncontrolledDropdown,
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle,
 } from "reactstrap";
 import { activeBanner, deleteBanner } from "../../../../api/banner";
 import EditBanner from "../../../../components/editBanner/editBanner";
@@ -76,45 +80,32 @@ export default function TableManageBanner({ data }) {
           <span>{data?.link_id}</span>
         </td>
         <td>
-          {/* <Card className="my-2">
-            <CardImg
-              alt="Card image cap"
-              src={data?.image}
-              style={{
-                height: 100,
-              }}
-              width="100%"
-            />
-          </Card> */}
           <img src={data?.image} className="img_banner" />
         </td>
 
         <td>
-          <Row>
-            <button
-              className="btn-edit"
-              onClick={() => {
-                setItemEdit(data);
-                setModalEdit(!modalEdit);
-              }}
-            >
-              <i className="uil uil-edit-alt"></i>
-            </button>
-            <button className="btn-delete" onClick={toggle}>
-              <i className="uil uil-trash"></i>
-            </button>
-          </Row>
-          <Row>
-            {data?.is_active ? (
-              <button className="btn-delete" onClick={toggleBlock}>
-                <i class="uil uil-unlock"></i>
-              </button>
-            ) : (
-              <button className="btn-delete" onClick={toggleBlock}>
-                <i class="uil uil-padlock"></i>
-              </button>
-            )}
-          </Row>
+          <UncontrolledDropdown>
+            <DropdownToggle href="#pablo" role="button" size="sm">
+              <i class="uil uil-ellipsis-v"></i>
+            </DropdownToggle>
+            <DropdownMenu className="dropdown-menu-arrow">
+              <DropdownItem
+                href="#pablo"
+                onClick={() => {
+                  setItemEdit(data);
+                  setModalEdit(!modalEdit);
+                }}
+              >
+                Chỉnh sửa
+              </DropdownItem>
+              <DropdownItem href="#pablo" onClick={toggle}>
+                Xóa
+              </DropdownItem>
+              <DropdownItem href="#pablo" onClick={toggleBlock}>
+                {data?.is_active ? " Chặn" : " Kích hoạt"}
+              </DropdownItem>
+            </DropdownMenu>
+          </UncontrolledDropdown>
           <div>
             <Modal isOpen={modalBlock} toggle={toggleBlock}>
               <ModalHeader toggle={toggleBlock}>

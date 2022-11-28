@@ -4,11 +4,15 @@ import { useNavigate } from "react-router-dom";
 import {
   Button,
   Col,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
   Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
   Row,
+  UncontrolledDropdown,
 } from "reactstrap";
 import {
   activeGroupServiceApi,
@@ -73,7 +77,7 @@ export default function TableManageGroupService({ data }) {
           <a>{data?.type}</a>
         </td>
         <td>
-          <Row>
+          {/* <Row>
             <button
               className="btn-edit"
               onClick={() => {
@@ -97,17 +101,30 @@ export default function TableManageGroupService({ data }) {
                 <i class="uil uil-padlock"></i>
               </button>
             )}
-            {/* <button
-              className="btn-delete"
-              onClick={() =>
-                navigate("/services/manage-group-service/manage-service", {
-                  state: { id: data?._id },
-                })
-              }
-            >
-              <i className="uil uil-ellipsis-v icon-details"></i>
-            </button> */}
-          </Row>
+         
+          </Row> */}
+          <UncontrolledDropdown>
+            <DropdownToggle href="#pablo" role="button" size="sm">
+              <i class="uil uil-ellipsis-v"></i>
+            </DropdownToggle>
+            <DropdownMenu className="dropdown-menu-arrow">
+              <DropdownItem
+                href="#pablo"
+                onClick={() => {
+                  setItemEdit(data);
+                  setModalEdit(!modalEdit);
+                }}
+              >
+                Chỉnh sửa
+              </DropdownItem>
+              <DropdownItem href="#pablo" onClick={toggle}>
+                Xóa
+              </DropdownItem>
+              <DropdownItem href="#pablo" onClick={toggleBlock}>
+                {data?.is_active ? " Chặn" : " Kích hoạt"}
+              </DropdownItem>
+            </DropdownMenu>
+          </UncontrolledDropdown>
           <div>
             <Modal isOpen={modalBlock} toggle={toggleBlock}>
               <ModalHeader toggle={toggleBlock}>

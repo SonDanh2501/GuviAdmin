@@ -393,6 +393,7 @@ const AddPromotion = () => {
                         placeholder="Nhập đơn giá"
                         className="input-promo-code"
                         type="number"
+                        min={0}
                         value={unitPrice}
                         onChange={(e) => setUnitPrice(e.target.value)}
                       />
@@ -402,6 +403,7 @@ const AddPromotion = () => {
                         placeholder="Nhập giá"
                         className="input-promo-code"
                         type="number"
+                        min={0}
                         value={minimumOrder}
                         onChange={(e) => setMinimumOrder(e.target.value)}
                       />
@@ -460,6 +462,7 @@ const AddPromotion = () => {
                           placeholder="VNĐ"
                           className="input-promo-code"
                           type="number"
+                          min={0}
                           value={maximumDiscount}
                           onChange={(e) => setMaximumDiscount(e.target.value)}
                         />
@@ -470,6 +473,7 @@ const AddPromotion = () => {
                             className="input-promo-discount"
                             placeholder="%"
                             type="number"
+                            min={0}
                             value={reducedValue}
                             onChange={(e) => setReducedValue(e.target.value)}
                           />
@@ -477,6 +481,7 @@ const AddPromotion = () => {
                             label={"Giá giảm tối đa"}
                             classNameForm="form-promo-discount"
                             className="input-promo-discount"
+                            min={0}
                             placeholder="VNĐ"
                             type="number"
                             value={maximumDiscount}
@@ -582,6 +587,7 @@ const AddPromotion = () => {
                         placeholder="Số lượng"
                         className="input-promo-code"
                         type="number"
+                        min={0}
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
                       />
@@ -604,6 +610,7 @@ const AddPromotion = () => {
                         label={"Lần sử dụng mỗi khách hàng"}
                         placeholder="Số lượng"
                         className="input-promo-code"
+                        min={0}
                         type="number"
                         value={usePromo}
                         onChange={(e) => setUsePromo(e.target.value)}
@@ -665,6 +672,7 @@ const AddPromotion = () => {
                         placeholder="Nhập số điểm"
                         className="input-promo-code"
                         type="number"
+                        min={0}
                         value={exchangePoint}
                         onChange={(e) => setExchangePoint(e.target.value)}
                       />

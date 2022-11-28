@@ -17,6 +17,7 @@ const CustomTextInput = ({
   defaultValue,
   defaultChecked,
   errors,
+  min,
 }) => {
   return (
     <FormGroup className={classNameForm}>
@@ -33,6 +34,7 @@ const CustomTextInput = ({
         multiple={multiple}
         defaultChecked={defaultChecked}
         defaultValue={defaultValue}
+        min={min}
       >
         {body}{" "}
       </Input>

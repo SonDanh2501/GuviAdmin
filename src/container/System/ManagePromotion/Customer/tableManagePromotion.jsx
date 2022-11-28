@@ -4,11 +4,15 @@ import "./TableManagePromotion.scss";
 
 import {
   Button,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
   Media,
   Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
+  UncontrolledDropdown,
 } from "reactstrap";
 import { deletePromotion } from "../../../../api/promotion";
 import moment from "moment";
@@ -50,18 +54,25 @@ export default function TableManagePromotion({ data }) {
           <a>{data?.is_limit_date ? startDate + "-" + endDate : null}</a>
         </td>
         <td className="text-right">
-          <button
-            className="btn-edit"
-            onClick={() => {
-              setModalEdit(!modalEdit);
-              setItemEdit(data);
-            }}
-          >
-            <i className="uil uil-edit-alt"></i>
-          </button>
-          <button className="btn-delete" onClick={toggle}>
-            <i class="uil uil-trash"></i>
-          </button>
+          <UncontrolledDropdown>
+            <DropdownToggle href="#pablo" role="button" size="sm">
+              <i class="uil uil-ellipsis-v"></i>
+            </DropdownToggle>
+            <DropdownMenu className="dropdown-menu-arrow">
+              <DropdownItem
+                href="#pablo"
+                onClick={() => {
+                  setModalEdit(!modalEdit);
+                  setItemEdit(data);
+                }}
+              >
+                Chỉnh sửa
+              </DropdownItem>
+              <DropdownItem href="#pablo" onClick={toggle}>
+                Xóa
+              </DropdownItem>
+            </DropdownMenu>
+          </UncontrolledDropdown>
           <div>
             <Modal isOpen={modal} toggle={toggle}>
               <ModalHeader toggle={toggle}>Xóa mã khuyến mãi</ModalHeader>

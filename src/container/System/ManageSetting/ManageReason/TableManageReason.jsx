@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getReason } from "../../../../redux/selectors/reason";
 import "./TableManageReason.scss";
-import * as actions from "../../../../redux/actions/reason";
+
 import {
   Table,
   Row,
@@ -12,84 +10,156 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from "reactstrap";
-// import { deleteReason } from "../../../../api/reason";
+import { formatMoney } from "../../../../helper/formatMoney";
+import { useDispatch } from "react-redux";
+import { loadingAction } from "../../../../redux/actions/loading";
+import { activeReason, deleteReason } from "../../../../api/reasons";
+import EditReason from "../../../../components/editReason/editReason";
 
-export default function TableManageReason() {
-  const [reason, setReason] = useState({
-    title: "",
-    description: "",
-    punish_type: "",
-    punish:"",
-    apply_user:"",
-    note:"",
-  });
+export default function TableManageReason({ data }) {
   const [modal, setModal] = React.useState(false);
-
-  const dispatch = useDispatch();
-  const reasons = useSelector(getReason);
-  console.log("CHECK >>>>>>>>>>>>>>>>>>>>>>>",reasons);
-  React.useEffect(() => {
-    dispatch(actions.getReasons.getReasonsRequest());
-  }, [dispatch]);
-
-  // const onDelete = useCallback((id) => {
-  //   deleteReason(id, { is_delete: true });
-  // }, []);
-  // Toggle for Modal
+  const [modalEdit, setModalEdit] = React.useState(false);
+  const [modalBlock, setModalBlock] = React.useState(false);
+  const [itemEdit, setItemEdit] = React.useState();
   const toggle = () => setModal(!modal);
+  const toggleBlock = () => setModalBlock(!modalBlock);
+  const dispatch = useDispatch();
+
+  const onDelete = useCallback((id) => {
+    dispatch(loadingAction.loadingRequest(true));
+    deleteReason(id, { is_delete: true })
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const blockReason = useCallback((id, is_active) => {
+    dispatch(loadingAction.loadingRequest(true));
+    if (is_active === true) {
+      activeReason(id, { is_active: false })
+        .then((res) => {
+          setModalBlock(!modalBlock);
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    } else {
+      activeReason(id, { is_active: true })
+        .then((res) => {
+          setModalBlock(!modalBlock);
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
+
   return (
     <>
-      <Table className="align-items-center table-flush mt-5" responsive>
-        <thead className="thead-light">
-          <tr>
-            <th scope="col">Lý do huỷ việc</th>
-            <th scope="col">Mô tả</th>
-            <th scope="col">Hình thức phạt (phạt tiền hoặc khoá app)</th>
-            <th scope="col">Phạt tiền / Thời gian khoá app</th>
-            <th scope="col">Đối tượng áp dụng</th>
-            <th scope="col">Ghi chú</th>
-            <th scope="col" />
-          </tr>
-        </thead>
-        <tbody>
-          { reasons &&reasons.length > 0 &&
-            reasons.map((item, index) => {
-              return (
-                <tr key={index}>
-                  <th scope="row" className="col-2">
-                      <Media>
-                        <span className="mb-0 text-sm">{item?.title.vi}</span>
-                      </Media>
-                  </th>
-                  <td  className="col-2">
-                    <a>{item?.description.vi}</a>
-                  </td>
-                  <td  className="col-1.5">
-                    <a>{item?.punish_type}</a>
-                  </td>
-                  <td >
-                    <a>{item?.punish}</a>
-                  </td>
-                  <td>
-                    <a>{item?.apply_user}</a>
-                  </td>
-                  <td>
-                    <a>{item?.note}</a>
-                  </td>
-                  <td>
-                    <button className="btn-edit">
-                      <i className="uil uil-edit-alt"></i>
-                    </button>
-                    <button className="btn-delete" onClick={toggle}>
-                      <i className="uil uil-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-        </tbody>
-      </Table>
+      <tr>
+        <th scope="row" className="col-2">
+          <Media>
+            <span className="mb-0 text-sm">{data?.title.vi}</span>
+          </Media>
+        </th>
+        <td className="col-2">
+          <a>{data?.description.vi}</a>
+        </td>
+        <td className="col-1.5">
+          <a>{data?.punish_type}</a>
+        </td>
+        <td>
+          <a>
+            {data?.punish_type === "cash"
+              ? formatMoney(data?.punish)
+              : data?.punish / (60 * 1000)}
+          </a>
+        </td>
+        <td>
+          <a>{data?.apply_user}</a>
+        </td>
+        <td>
+          <a>{data?.note}</a>
+        </td>
+        <td>
+          <UncontrolledDropdown>
+            <DropdownToggle href="#pablo" role="button" size="sm">
+              <i class="uil uil-ellipsis-v"></i>
+            </DropdownToggle>
+            <DropdownMenu className="dropdown-menu-arrow">
+              <DropdownItem
+                href="#pablo"
+                onClick={() => {
+                  setItemEdit(data);
+                  setModalEdit(!modalEdit);
+                }}
+              >
+                Chỉnh sửa
+              </DropdownItem>
+              <DropdownItem href="#pablo" onClick={toggle}>
+                Xóa
+              </DropdownItem>
+              <DropdownItem href="#pablo" onClick={toggleBlock}>
+                {data?.is_active ? " Chặn" : " Kích hoạt"}
+              </DropdownItem>
+            </DropdownMenu>
+          </UncontrolledDropdown>
+          <div>
+            <Modal isOpen={modalBlock} toggle={toggleBlock}>
+              <ModalHeader toggle={toggleBlock}>
+                {" "}
+                {data?.is_active === true
+                  ? "Khóa lí do huỷ việc"
+                  : "Mở lí do huỷ việc"}
+              </ModalHeader>
+              <ModalBody>
+                {data?.is_active === true
+                  ? "Bạn có muốn khóa lí do huỷ việc này"
+                  : "Bạn có muốn kích hoạt lí do huỷ việc này"}
+                <h3>{data?.title?.vi}</h3>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  onClick={() => blockReason(data?._id, data?.is_active)}
+                >
+                  Có
+                </Button>
+                <Button color="#ddd" onClick={toggleBlock}>
+                  Không
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </div>
+          <div>
+            <Modal isOpen={modal} toggle={toggle}>
+              <ModalHeader toggle={toggle}>Xóa lí do huỷ việc</ModalHeader>
+              <ModalBody>
+                Bạn có chắc muốn xóa lí do {data?.title?.vi} này không?
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onClick={() => onDelete(data?._id)}>
+                  Có
+                </Button>
+                <Button color="#ddd" onClick={toggle}>
+                  Không
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </div>
+          <div>
+            <EditReason
+              state={modalEdit}
+              setState={() => setModalEdit(!modalEdit)}
+              data={itemEdit}
+            />
+          </div>
+        </td>
+      </tr>
     </>
   );
 }

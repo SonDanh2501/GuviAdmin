@@ -1,149 +1,138 @@
 import React, { useState, useEffect } from "react";
 import "./ReasonManage.scss";
 import TableManageReason from "./TableManageReason.jsx";
-import { Form, Row, Col, FormGroup, Label, Input, Button } from "reactstrap";
+import {
+  Form,
+  Row,
+  Col,
+  FormGroup,
+  Label,
+  Input,
+  Button,
+  Card,
+  CardHeader,
+  Table,
+  CardFooter,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+} from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../../../redux/actions/customerAction";
+import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
+import { getReason, getReasonTotal } from "../../../../redux/selectors/reason";
+import { getReasons } from "../../../../redux/actions/reason";
+import AddReason from "../../../../components/addReason/addReason";
+import { loadingAction } from "../../../../redux/actions/loading";
 
 export default function ReasonManage() {
-  const [reasons, setReasons] = React.useState({
-    title: "",
-    description: "",
-    punish_type: "",
-    punish:"",
-    apply_user:"",
-    note:"",
-  });
   const dispatch = useDispatch();
-  const onSubmit = React.useCallback(() => {
-    dispatch(actions.createCustomer.createCustomerRequest(reasons));
-    setReasons({
-      title: "",
-      description: "",
-      punish_type: "",
-      punish:"",
-      apply_user:"",
-      note:"",
-    });
-    window.location.reload();
-  }, [reasons, dispatch]);
+  const reason = useSelector(getReason);
+  const totalReason = useSelector(getReasonTotal);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  React.useEffect(() => {
+    dispatch(loadingAction.loadingRequest(true));
+    dispatch(getReasons.getReasonsRequest({ start: 0, length: 10 }));
+  }, [dispatch]);
+
+  const handleClick = (e, index) => {
+    e.preventDefault();
+    setCurrentPage(index);
+    const start = index * reason.length;
+    dispatch(
+      getReasons.getReasonsRequest({
+        start: start > 0 ? start : 0,
+        length: 10,
+      })
+    );
+  };
+
+  const pageCount = totalReason / 10;
+  let pageNumbers = [];
+  for (let i = 0; i < pageCount; i++) {
+    pageNumbers.push(
+      <PaginationItem key={i} active={currentPage === i ? true : false}>
+        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
+          {i + 1}
+        </PaginationLink>
+      </PaginationItem>
+    );
+  }
 
   return (
     <React.Fragment>
-      <div className="reason-redux-container">
-        <div className="reason-redux-body mt-5 col-md-12">
-          <div className="container">
-            <div className="column">
-              <div className="">
-                <Form>
-                  <Row>
-                    <Col md={6}>
-                      <FormGroup>
-                        <Label for="exampleTitle">Lý do huỷ việc</Label>
-                        <Input
-                          id="exampleTitle"
-                          name="title"
-                          placeholder="Nhập lý do huỷ việc"
-                          type="text"
-                          value={reasons.title}
-                          onChange={(e) =>
-                            setReasons({ ...reasons, title: e.target.value })
-                          }
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md={6}>
-                      <FormGroup>
-                        <Label for="exampleDescription">Mô tả</Label>
-                        <Input
-                          id="exampleDescription"
-                          name="description"
-                          placeholder="Nhập mô tả "
-                          type="description"
-                          value={reasons.description}
-                          onChange={(e) =>
-                            setReasons({ ...reasons, description: e.target.value })
-                          }
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md={6}>
-
-                    <FormGroup>
-                    <Label for="examplePunishType">Hình thức phạt</Label>
-                    <Input
-                      id="examplePunishType"
-                      name="punish_type"
-                      placeholder="Nhập hình thức phạt"
-                      value={reasons.punish_type}
-                      onChange={(e) =>
-                        setReasons({ ...reasons, punish_type: e.target.value })
-                      }
-                    />
-                  </FormGroup>
-                    </Col>
-                    <Col md={6}>
-                    <FormGroup>
-                    <Label for="exampleNote">Ghi chú</Label>
-                    <Input
-                      id="exampleNote"
-                      name="note"
-                      placeholder="Nhập ghi chú"
-                      value={reasons.note}
-                      onChange={(e) =>
-                        setReasons({ ...reasons, note: e.target.value })
-                      }
-                    />
-                  </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md={6}>
-                      <FormGroup>
-                        <Label for="examplePunish">Phạt tiền / Thời gian khoá</Label>
-                        <Input
-                          id="examplePunish"
-                          name="punish"
-                          placeholder="Nhập phạt tiền / Thời gian khoá"
-                          value={reasons.punish}
-                          onChange={(e) =>
-                            setReasons({
-                              ...reasons,
-                              punish: e.target.value,
-                            })
-                          }
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md={6}>
-                      <FormGroup>
-                        <Label for="exampleApplyUser">Đối tượng áp dụng</Label>
-                        <Input
-                          id="exampleApplyUser"
-                          name="apply_user"
-                          placeholder="Nhập đối tượng áp dụng"
-                          value={reasons.apply_user}
-                          onChange={(e) =>
-                            setReasons({ ...reasons, apply_user: e.target.value })
-                          }
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Button color="warning" onClick={onSubmit}>
-                    Thêm lý do huỷ việc
-                  </Button>
-                </Form>
-              </div>
-
-              <div className="">
-                <TableManageReason/>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="reason-redux-container mt-5">
+        <Card className="shadow">
+          <CardHeader className="border-0 card-header">
+            <Row className="align-items-center">
+              <Col className="text-left">
+                <AddReason />
+              </Col>
+              <Col>
+                <CustomTextInput
+                  placeholder="Tìm kiếm"
+                  type="text"
+                  // onChange={(e) => handleSearch(e.target.value)}
+                />
+              </Col>
+            </Row>
+          </CardHeader>
+          <Table
+            className="align-items-center table-flush"
+            responsive={true}
+            hover={true}
+          >
+            <thead className="thead-light">
+              <tr>
+                <th scope="col">Lý do huỷ việc</th>
+                <th scope="col">Mô tả</th>
+                <th scope="col">Hình thức phạt (phạt tiền hoặc khoá app)</th>
+                <th scope="col">Phạt tiền / Thời gian khoá app</th>
+                <th scope="col">Đối tượng áp dụng</th>
+                <th scope="col">Ghi chú</th>
+                <th scope="col" />
+              </tr>
+            </thead>
+            <tbody>
+              {/* {dataFilter.length > 0
+                    ? dataFilter.map((e) => <TableManageBanner data={e} />)
+                    : banners &&
+                      banners.map((e) => <TableManageBanner data={e} />)} */}
+              {reason && reason.map((e) => <TableManageReason data={e} />)}
+            </tbody>
+          </Table>
+          <CardFooter>
+            <nav aria-label="...">
+              <Pagination
+                className="pagination justify-content-end mb-0"
+                listClassName="justify-content-end mb-0"
+              >
+                <PaginationItem
+                  className={currentPage === 0 ? "disabled" : "enable"}
+                >
+                  <PaginationLink
+                    onClick={(e) => handleClick(e, currentPage - 1)}
+                    previous
+                    href="#"
+                  >
+                    <i class="uil uil-previous"></i>
+                  </PaginationLink>
+                </PaginationItem>
+                {pageNumbers}
+                <PaginationItem disabled={currentPage >= pageCount - 1}>
+                  <PaginationLink
+                    onClick={(e) => handleClick(e, currentPage + 1)}
+                    next
+                    href="#"
+                  >
+                    <i class="uil uil-step-forward"></i>
+                  </PaginationLink>
+                </PaginationItem>
+              </Pagination>
+            </nav>
+          </CardFooter>
+        </Card>
       </div>
     </React.Fragment>
   );
