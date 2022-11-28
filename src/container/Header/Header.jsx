@@ -15,7 +15,7 @@ import { logoutAction } from "../../redux/actions/auth";
 import { useNavigate } from "react-router-dom";
 import { loadingAction } from "../../redux/actions/loading";
 
-const Header = ({ onClick }) => {
+const Header = ({ onClick, hideSidebar }) => {
   const dispatch = useDispatch();
   const brand = useSelector(getBrand);
   const user = useSelector(getUser);
@@ -30,7 +30,11 @@ const Header = ({ onClick }) => {
     <div className="container-header">
       <div className="menu">
         <button onClick={onClick} className="btn-menu">
-          <i class="uil uil-bars"></i>
+          {hideSidebar ? (
+            <i className="uil-arrow-circle-left icon"></i>
+          ) : (
+            <i class="uil-arrow-circle-right icon"></i>
+          )}
         </button>
         <p className="text-brand">{brand}</p>
       </div>

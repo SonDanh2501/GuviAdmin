@@ -1,11 +1,12 @@
 // reactstrap components
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
+import { Col, Container, Row } from "reactstrap";
 import { getTotalReportApi } from "../../../../api/statistic";
 import { formatMoney } from "../../../../helper/formatMoney";
-import { getCollaborator } from "../../../../redux/selectors/collaborator";
-import { getCustomer } from "../../../../redux/selectors/customer";
+import revenues from "../../../../assets/images/revenues.png";
+import add from "../../../../assets/images/add.png";
+import customer from "../../../../assets/images/customer.png";
+import collaborator from "../../../../assets/images/collaborator.png";
 import "./header.scss";
 
 const Header = () => {
@@ -23,88 +24,54 @@ const Header = () => {
             {/* Card stats */}
             <Row>
               <Col lg="6" xl="3">
-                <Card className="card-stats mb-4 mb-xl-0 card-center">
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          Doanh thu
-                        </CardTitle>
-                        <span className="h5 font-weight-bold mb-0">
-                          {formatMoney(
-                            !dataTotal?.total_revenue
-                              ? 0
-                              : dataTotal?.total_revenue
-                          )}
-                        </span>
-                      </div>
-                    </Row>
-                  </CardBody>
-                </Card>
+                <div className="card">
+                  <p className="text-title"> Doanh thu</p>
+                  <div className="div-details">
+                    <img src={revenues} className="img" />
+                    <p className="text-details">
+                      {formatMoney(
+                        !dataTotal?.total_revenue ? 0 : dataTotal?.total_revenue
+                      )}
+                    </p>
+                  </div>
+                </div>
               </Col>
               <Col lg="6" xl="3">
-                <Card className="card-stats mb-4 mb-xl-0 card-center">
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          Tổng đơn hàng
-                        </CardTitle>
-                        <span className="h5 font-weight-bold mb-0">
-                          {!dataTotal?.total_order ? 0 : dataTotal?.total_order}
-                        </span>
-                      </div>
-                    </Row>
-                  </CardBody>
-                </Card>
+                <div className="card">
+                  <p className="text-title"> Tổng đơn hàng</p>
+                  <div className="div-details">
+                    <img src={add} className="img" />
+                    <p className="text-details">
+                      {!dataTotal?.total_order ? 0 : dataTotal?.total_order}
+                    </p>
+                  </div>
+                </div>
               </Col>
               <Col lg="6" xl="3">
-                <Card className="card-stats mb-4 mb-xl-0 card-center">
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          Khách hàng
-                        </CardTitle>
-                        <span className="h5 font-weight-bold mb-0">
-                          {!dataTotal?.total_customer
-                            ? 0
-                            : dataTotal?.total_customer}
-                        </span>
-                      </div>
-                    </Row>
-                  </CardBody>
-                </Card>
+                <div className="card">
+                  <p className="text-title">Khách hàng</p>
+                  <div className="div-details">
+                    <img src={customer} className="img" />
+                    <p className="text-details">
+                      {!dataTotal?.total_customer
+                        ? 0
+                        : dataTotal?.total_customer}
+                    </p>
+                  </div>
+                </div>
               </Col>
               <Col lg="6" xl="3">
-                <Card className="card-stats mb-4 mb-xl-0 card-center">
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          Cộng tác viên
-                        </CardTitle>
-                        <span className="h5 font-weight-bold mb-0 ">
-                          {!dataTotal?.total_collaborator
-                            ? 0
-                            : dataTotal?.total_collaborator}
-                        </span>
-                      </div>
-                    </Row>
-                  </CardBody>
-                </Card>
+                <div className="card">
+                  <p className="text-title"> Cộng tác viên</p>
+                  <div className="div-details">
+                    <img src={collaborator} className="img" />
+                    <p className="text-details">
+                      {!dataTotal?.total_collaborator
+                        ? 0
+                        : dataTotal?.total_collaborator}
+                    </p>
+                  </div>
+                </div>
               </Col>
             </Row>
           </div>

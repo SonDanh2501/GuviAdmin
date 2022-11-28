@@ -134,12 +134,7 @@ export default function Home() {
               <YAxis type="number" domain={[0, 20000]} />
               <Tooltip />
               <Legend />
-              <Bar
-                dataKey="money"
-                fill="rgb(205, 205, 205)"
-                radius={5}
-                barSize={50}
-              />
+              <Bar dataKey="money" fill="#82ca9d" radius={5} barSize={50} />
             </BarChart>
           </Col>
           {/* <Col xl="4">

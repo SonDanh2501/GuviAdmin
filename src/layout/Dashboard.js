@@ -18,7 +18,7 @@ import Sidebar from "../components/Sidebar/Sidebar";
 const Dashboard = () => {
   const [hideSidebar, setHideSidebar] = useState(true);
   return (
-    <div className="container-fluid">
+    <div className="container-dashboard container-fluid">
       <div className="row">
         {hideSidebar && (
           <div className="col-2 sidebar">
@@ -27,7 +27,10 @@ const Dashboard = () => {
         )}
         <main className={hideSidebar ? "col-10" : "col-12"}>
           <div>
-            <Header onClick={() => setHideSidebar(!hideSidebar)} />
+            <Header
+              onClick={() => setHideSidebar(!hideSidebar)}
+              hideSidebar={hideSidebar}
+            />
           </div>
           <Routes>
             <Route path="/" element={<Home />} />
