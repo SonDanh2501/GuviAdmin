@@ -72,7 +72,6 @@ export default function TableManageCollaborator({ data }) {
     if (is_verify === true) {
       verifyCollaborator(id)
         .then((res) => {
-          console.log(res);
           setModalVerify(!modalVerify);
           dispatch(loadingAction.loadingRequest(false));
 
@@ -82,8 +81,6 @@ export default function TableManageCollaborator({ data }) {
     } else {
       verifyCollaborator(id)
         .then((res) => {
-          console.log(res);
-
           setModalVerify(!modalVerify);
           dispatch(loadingAction.loadingRequest(false));
 
@@ -160,7 +157,11 @@ export default function TableManageCollaborator({ data }) {
               </button>
             )}
             {data?.is_verify ? (
-              <button className="btn-delete" onClick={toggleVerify}>
+              <button
+                className="btn-delete"
+                disabled={true}
+                onClick={toggleVerify}
+              >
                 <i className="uil-toggle-on icon-on-toggle"></i>
               </button>
             ) : (

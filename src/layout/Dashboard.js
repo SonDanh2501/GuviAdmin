@@ -14,6 +14,7 @@ import GroupServiceManage from "../container/System/ManageService/ManageGroupSer
 import Home from "../container/System/Dashboard/DashBoard";
 import "./Dashboard.scss";
 import Sidebar from "../components/Sidebar/Sidebar";
+import OrderManage from "../container/System/ManageOrder/OrderManage";
 
 const Dashboard = () => {
   const [hideSidebar, setHideSidebar] = useState(true);
@@ -25,7 +26,7 @@ const Dashboard = () => {
             <Sidebar />
           </div>
         )}
-        <main className={hideSidebar ? "col-10" : "col-12"}>
+        <main className={hideSidebar ? "col-lg-10 p-0" : "col-lg-12 p-0"}>
           <div>
             <Header
               onClick={() => setHideSidebar(!hideSidebar)}
@@ -58,6 +59,7 @@ const Dashboard = () => {
               path="/services/manage-group-service/manage-service"
               element={<ServiceManage />}
             />
+            {/* <Route path="/group-order/manage-order" element={<OrderManage />} /> */}
           </Routes>
         </main>
       </div>

@@ -62,7 +62,7 @@ export default function ReasonManage() {
 
   return (
     <React.Fragment>
-      <div className="reason-redux-container mt-5">
+      <div className="mt-2 p-3">
         <Card className="shadow">
           <CardHeader className="border-0 card-header">
             <Row className="align-items-center">

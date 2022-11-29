@@ -1,3 +1,4 @@
+import { Select } from "antd";
 import {
   ContentState,
   convertFromHTML,
@@ -5,8 +6,7 @@ import {
   EditorState,
 } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import { Formik } from "formik";
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -69,6 +69,7 @@ const EditPromotion = ({ state, setState, data }) => {
   const [imgThumbnail, setImgThumbnail] = React.useState("");
   const [imgBackground, setImgBackground] = React.useState("");
   const [serviceApply, setServiceApply] = useState("");
+  const options = [];
   const dispatch = useDispatch();
   const service = useSelector(getService);
 
@@ -77,6 +78,13 @@ const EditPromotion = ({ state, setState, data }) => {
       .then((res) => setGroupCustomer(res.data))
       .catch((err) => console.log(err));
   }, []);
+
+  groupCustomer.map((item, index) => {
+    options.push({
+      label: item?.name,
+      value: item?._id,
+    });
+  });
 
   const onChangeThumbnail = (e) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -142,16 +150,9 @@ const EditPromotion = ({ state, setState, data }) => {
       setDiscountUnit("percent");
     }
   };
-  const onChooseMultiple = useCallback(
-    (id) => {
-      if (customer.includes(id)) {
-        setCustomer((prev) => prev.filter((p) => p !== id));
-      } else {
-        setCustomer((prev) => [...prev, id]);
-      }
-    },
-    [customer]
-  );
+  const handleChange = (value) => {
+    setCustomer(value);
+  };
 
   const onEditorVNStateChange = (editorState) => setDescriptionVN(editorState);
 
@@ -287,6 +288,8 @@ const EditPromotion = ({ state, setState, data }) => {
     serviceApply,
     minimumOrder,
   ]);
+
+  console.log(customer);
 
   return (
     <>
@@ -586,40 +589,20 @@ const EditPromotion = ({ state, setState, data }) => {
                   <div>
                     <h5>10. Đối tượng áp dụng</h5>
                     <Label>Nhóm khách hàng</Label>
-
-                    <CustomTextInput
-                      className="select-type-promo"
-                      name="select"
-                      type="select"
-                      value={customer}
-                      multiple={true}
-                      onChange={(e) => {
-                        onChooseMultiple(e.target.value);
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      style={{
+                        width: "100%",
                       }}
-                      body={groupCustomer.map((item, index) => {
-                        return (
-                          <option key={index} value={item?._id}>
-                            {item?.name}
-                          </option>
-                        );
-                      })}
+                      placeholder="Please select"
+                      value={customer}
+                      onChange={handleChange}
+                      options={options}
                     />
                   </div>
                   <div>
-                    <h5>11. Điều kiện áp dụng</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Đặt lần đầu
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        defaultChecked={orderFirst}
-                        onClick={() => setOrderFirst(!orderFirst)}
-                      />
-                    </FormGroup>
-                  </div>
-                  <div>
-                    <h5>12. Số lượng mã khuyến mãi</h5>
+                    <h5>11. Số lượng mã khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Số lượng giới hạn
@@ -642,7 +625,7 @@ const EditPromotion = ({ state, setState, data }) => {
                     )}
                   </div>
                   <div>
-                    <h5>13. Số lần sử dụng khuyến mãi</h5>
+                    <h5>12. Số lần sử dụng khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Lần sử dụng khuyến mãi
@@ -665,7 +648,7 @@ const EditPromotion = ({ state, setState, data }) => {
                     )}
                   </div>
                   <div>
-                    <h5>14. Thời gian khuyến mãi</h5>
+                    <h5>13. Thời gian khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Giới hạn ngày
@@ -702,7 +685,7 @@ const EditPromotion = ({ state, setState, data }) => {
                     )}
                   </div>
                   <div>
-                    <h5>15. Điểm quy đổi</h5>
+                    <h5>14. Điểm quy đổi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Điểm quy đổi

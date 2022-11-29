@@ -30,100 +30,173 @@ const Sidebar = () => {
       </div>
       {/* <NavLink activeClassName="active" to="/" exact>Home</NavLink> */}
       <ul className="nav nav-pills flex-column mt-5">
-        <li className="nav-item">
-          <NavLink
-            className="nav-link"
-            to="/"
-            onClick={() => changeBrand("Trang chủ")}
-          >
-            <i className="uil uil-estate icon"></i>
-            Trang chủ
+        <li>
+          <NavLink to="/" onClick={() => changeBrand("Trang chủ")}>
+            {({ isActive }) => (
+              <div className={isActive ? "active-link" : "unactive-link"}>
+                <i className="uil uil-estate icon"></i>
+                <a className={isActive ? "active-text" : "unactive-text"}>
+                  Trang chủ
+                </a>
+              </div>
+            )}
           </NavLink>
         </li>
-        <li className="nav-item">
+        <li>
           <NavLink
-            className="nav-link"
             to="/system/user-manage"
             onClick={() => changeBrand("Quản lý người dùng")}
           >
-            <i className="uil uil-user-square icon"></i>
-            Quản lý người dùng
+            {({ isActive }) => (
+              <div className={isActive ? "active-link" : "unactive-link"}>
+                <i className="uil uil-user-square icon"></i>
+                <a className={isActive ? "active-text" : "unactive-text"}>
+                  Quản lý người dùng
+                </a>
+              </div>
+            )}
           </NavLink>
         </li>
-        <li className="nav-item">
+        <li>
           <NavLink
-            className="nav-link"
             to="/system/collaborator-manage"
             onClick={() => changeBrand("Quản lý CTV")}
           >
-            <i className="uil uil-user-square icon"></i>
-            Quản lý CTV
+            {({ isActive }) => (
+              <div className={isActive ? "active-link" : "unactive-link"}>
+                <i className="uil uil-user-square icon"></i>
+                <a className={isActive ? "active-text" : "unactive-text"}>
+                  Quản lý CTV
+                </a>
+              </div>
+            )}
           </NavLink>
         </li>
-        <li className="nav-item">
+        <li>
           <NavLink
-            className="nav-link"
             to="/promotion/manage-promotion"
             onClick={() => changeBrand("Quản lý Promotion")}
           >
-            <i className="uil uil-pricetag-alt icon"></i>
-            Quản lý Promotion
+            {({ isActive }) => (
+              <div className={isActive ? "active-link" : "unactive-link"}>
+                <i className="uil uil-pricetag-alt icon"></i>
+                <a className={isActive ? "active-text" : "unactive-text"}>
+                  Quản lý Promotion
+                </a>
+              </div>
+            )}
           </NavLink>
         </li>
-        <li className="nav-item">
+        <li>
           <NavLink
-            className="nav-link"
             to="/settings/manage-banner"
             onClick={() => changeBrand("Quản lý Banner")}
           >
-            <i className="uil uil-money-bill icon"></i>
-            Quản lý Banner
+            {({ isActive }) => (
+              <div className={isActive ? "active-link" : "unactive-link"}>
+                <i className="uil uil-money-bill icon"></i>
+                <a className={isActive ? "active-text" : "unactive-text"}>
+                  Quản lý Banner
+                </a>
+              </div>
+            )}
           </NavLink>
         </li>
-        <li className="nav-item">
+        <li>
           <NavLink
-            className="nav-link"
             to="/settings/manage-news"
             onClick={() => changeBrand("Quản lý bài viết Guvi")}
           >
-            <i className="uil uil-postcard icon"></i>
-            Quản lý bài viết Guvi
+            {({ isActive }) => (
+              <div className={isActive ? "active-link" : "unactive-link"}>
+                <i className="uil uil-postcard icon"></i>
+                <a className={isActive ? "active-text" : "unactive-text"}>
+                  Quản lý bài viết Guvi
+                </a>
+              </div>
+            )}
           </NavLink>
         </li>
-        <li className="nav-item">
+        <li>
           <NavLink
-            className="nav-link"
             to="/services/manage-group-service"
             onClick={() => changeBrand("Quản lý group-service")}
           >
-            <i className="uil uil-book-reader icon"></i>
-            Quản lý group-service
+            {({ isActive }) => (
+              <div className={isActive ? "active-link" : "unactive-link"}>
+                <i className="uil uil-book-reader icon"></i>
+                <a className={isActive ? "active-text" : "unactive-text"}>
+                  Quản lý service
+                </a>
+              </div>
+            )}
           </NavLink>
         </li>
-        <li className="nav-item">
+        <li>
           <NavLink
-            className="nav-link"
             to="/feedback/manage-feedback"
             onClick={() => changeBrand("Quản lý phản hồi")}
           >
-            <i className="uil uil-feedback icon"></i>
-            Quản lý phản hồi
+            {({ isActive }) => (
+              <div className={isActive ? "active-link" : "unactive-link"}>
+                <i className="uil uil-feedback icon"></i>
+                <a className={isActive ? "active-text" : "unactive-text"}>
+                  Quản lý phản hồi
+                </a>
+              </div>
+            )}
           </NavLink>
         </li>
-        <li className="nav-item">
-          <NavLink className="nav-link" to="/settings/manage-reason">
-            <i class="uil uil-cancel icon"></i>
-            Quản lý lý do huỷ việc
+        <li>
+          <NavLink
+            to="/settings/manage-reason"
+            onClick={() => changeBrand("Quản lý lý do huỷ")}
+          >
+            {({ isActive }) => (
+              <div className={isActive ? "active-link" : "unactive-link"}>
+                <i class="uil uil-cancel icon"></i>
+                <a className={isActive ? "active-text" : "unactive-text"}>
+                  Quản lý lý do huỷ
+                </a>
+              </div>
+            )}
           </NavLink>
         </li>
-        <li className="nav-item">
-          <NavLink className="nav-link" to="/notification/manage-notification">
-            Quản lý thông báo
+        <li>
+          <NavLink
+            to="/group-order/manage-order"
+            onClick={() => changeBrand("Quản lý đơn hàng")}
+          >
+            {({ isActive }) => (
+              <div className={isActive ? "active-link" : "unactive-link"}>
+                <i class="uil uil-shopping-bag icon"></i>
+                <a className={isActive ? "active-text" : "unactive-text"}>
+                  Quản lý đơn hàng
+                </a>
+              </div>
+            )}
           </NavLink>
         </li>
-        <li className="nav-item">
-          <NavLink className="nav-link" to="/adminManage/manage-admin">
-            Quản lý Admin
+        <li>
+          <NavLink to="/notification/manage-notification">
+            {({ isActive }) => (
+              <div className={isActive ? "active-link" : "unactive-link"}>
+                <a className={isActive ? "active-text" : "unactive-text"}>
+                  Quản lý thông báo
+                </a>
+              </div>
+            )}
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/adminManage/manage-admin">
+            {({ isActive }) => (
+              <div className={isActive ? "active-link" : "unactive-link"}>
+                <a className={isActive ? "active-text" : "unactive-text"}>
+                  Quản lý Admin
+                </a>
+              </div>
+            )}
           </NavLink>
         </li>
       </ul>

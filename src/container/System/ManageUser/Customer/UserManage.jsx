@@ -70,7 +70,7 @@ export default function UserManage() {
 
   return (
     <React.Fragment>
-      <div className="mt-5">
+      <div className="mt-2 p-3">
         <Card className="shadow">
           <CardHeader className="border-0 card-header">
             <Row className="align-items-center">

@@ -46,7 +46,7 @@ const Header = ({ onClick, hideSidebar }) => {
                 <img alt="..." src={imageUser} className="img-user" />
               </span>
               <Media className="ml-2 d-none d-lg-block">
-                <h5 className="mb-0 color-black">{user?.name}</h5>
+                <h5 className="text-name">{user?.name}</h5>
               </Media>
             </Media>
           </DropdownToggle>

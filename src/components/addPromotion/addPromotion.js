@@ -6,6 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   Col,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
   Form,
   FormGroup,
   Input,
@@ -20,6 +24,7 @@ import { createPromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
+import { Select } from "antd";
 import "./addPromotion.scss";
 
 const AddPromotion = () => {
@@ -61,6 +66,7 @@ const AddPromotion = () => {
   const [imgThumbnail, setImgThumbnail] = React.useState("");
   const [imgBackground, setImgBackground] = React.useState("");
   const [serviceApply, setServiceApply] = useState("");
+  const options = [];
   const dispatch = useDispatch();
   const service = useSelector(getService);
 
@@ -73,6 +79,13 @@ const AddPromotion = () => {
   useEffect(() => {
     setServiceApply(service[0]?._id);
   }, [service]);
+
+  groupCustomer.map((item, index) => {
+    options.push({
+      label: item?.name,
+      value: item?._id,
+    });
+  });
 
   const onChangeThumbnail = (e) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -138,16 +151,9 @@ const AddPromotion = () => {
       setDiscountUnit("percent");
     }
   };
-  const onChooseMultiple = useCallback(
-    (id) => {
-      if (customer.includes(id)) {
-        setCustomer((prev) => prev.filter((p) => p !== id));
-      } else {
-        setCustomer((prev) => [...prev, id]);
-      }
-    },
-    [customer]
-  );
+  const handleChange = (value) => {
+    setCustomer(value);
+  };
 
   const onEditorVNStateChange = (editorState) => setDescriptionVN(editorState);
 
@@ -537,23 +543,15 @@ const AddPromotion = () => {
                   <div>
                     <h5>10. Đối tượng áp dụng</h5>
                     <Label>Nhóm khách hàng</Label>
-
-                    <CustomTextInput
-                      className="select-type-promo"
-                      name="select"
-                      type="select"
-                      value={customer}
-                      multiple={true}
-                      onChange={(e) => {
-                        onChooseMultiple(e.target.value);
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      style={{
+                        width: "100%",
                       }}
-                      body={groupCustomer.map((item, index) => {
-                        return (
-                          <option key={index} value={item?._id}>
-                            {item?.name}
-                          </option>
-                        );
-                      })}
+                      placeholder="Please select"
+                      onChange={handleChange}
+                      options={options}
                     />
                   </div>
                   <div>

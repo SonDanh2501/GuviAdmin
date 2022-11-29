@@ -61,74 +61,70 @@ export default function NewsManage() {
 
   return (
     <React.Fragment>
-      <div className="user-redux-container">
-        <div className="column">
-          <div className="mt-5">
-            <Card className="shadow">
-              <CardHeader className="border-0 card-header">
-                <Row className="align-items-center">
-                  <Col className="text-left">
-                    <AddNews />
-                  </Col>
-                  <Col>
-                    <CustomTextInput placeholder="Tìm kiếm" type="text" />
-                  </Col>
-                </Row>
-              </CardHeader>
-              <Table
-                className="align-items-center table-flush"
-                responsive={true}
-                hover={true}
+      <div className="mt-2 p-3">
+        <Card className="shadow">
+          <CardHeader className="border-0 card-header">
+            <Row className="align-items-center">
+              <Col className="text-left">
+                <AddNews />
+              </Col>
+              <Col>
+                <CustomTextInput placeholder="Tìm kiếm" type="text" />
+              </Col>
+            </Row>
+          </CardHeader>
+          <Table
+            className="align-items-center table-flush"
+            responsive={true}
+            hover={true}
+          >
+            <thead className="thead-light">
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Short description</th>
+                <th scope="col">URL</th>
+                <th scope="col">Type</th>
+                <th scope="col">Thumbnail</th>
+                <th scope="col" />
+              </tr>
+            </thead>
+            <tbody>
+              {listNew &&
+                listNew.length > 0 &&
+                listNew.map((e) => <TableManageNews data={e} />)}
+            </tbody>
+          </Table>
+          <CardFooter>
+            <nav aria-label="...">
+              <Pagination
+                className="pagination justify-content-end mb-0"
+                listClassName="justify-content-end mb-0"
               >
-                <thead className="thead-light">
-                  <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Short description</th>
-                    <th scope="col">URL</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Thumbnail</th>
-                    <th scope="col" />
-                  </tr>
-                </thead>
-                <tbody>
-                  {listNew &&
-                    listNew.length > 0 &&
-                    listNew.map((e) => <TableManageNews data={e} />)}
-                </tbody>
-              </Table>
-              <CardFooter>
-                <nav aria-label="...">
-                  <Pagination
-                    className="pagination justify-content-end mb-0"
-                    listClassName="justify-content-end mb-0"
+                <PaginationItem
+                  className={currentPage === 0 ? "disabled" : "enable"}
+                >
+                  <PaginationLink
+                    onClick={(e) => handleClick(e, currentPage - 1)}
+                    previous
+                    href="#"
                   >
-                    <PaginationItem
-                      className={currentPage === 0 ? "disabled" : "enable"}
-                    >
-                      <PaginationLink
-                        onClick={(e) => handleClick(e, currentPage - 1)}
-                        previous
-                        href="#"
-                      >
-                        <i class="uil uil-previous"></i>
-                      </PaginationLink>
-                    </PaginationItem>
-                    {pageNumbers}
-                    <PaginationItem disabled={currentPage >= pageCount - 1}>
-                      <PaginationLink
-                        onClick={(e) => handleClick(e, currentPage + 1)}
-                        next
-                        href="#"
-                      >
-                        <i class="uil uil-step-forward"></i>
-                      </PaginationLink>
-                    </PaginationItem>
-                  </Pagination>
-                </nav>
-              </CardFooter>
-            </Card>
-          </div>
-        </div>
+                    <i class="uil uil-previous"></i>
+                  </PaginationLink>
+                </PaginationItem>
+                {pageNumbers}
+                <PaginationItem disabled={currentPage >= pageCount - 1}>
+                  <PaginationLink
+                    onClick={(e) => handleClick(e, currentPage + 1)}
+                    next
+                    href="#"
+                  >
+                    <i class="uil uil-step-forward"></i>
+                  </PaginationLink>
+                </PaginationItem>
+              </Pagination>
+            </nav>
+          </CardFooter>
+        </Card>
       </div>
     </React.Fragment>
   );

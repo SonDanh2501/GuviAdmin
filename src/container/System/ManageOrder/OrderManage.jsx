@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Card,
@@ -12,53 +11,47 @@ import {
   Row,
   Table,
 } from "reactstrap";
-import { searchPromotion } from "../../../../api/promotion.jsx";
-import AddPromotion from "../../../../components/addPromotion/addPromotion.js";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
-import { removeVietnameseTones } from "../../../../helper/ConvertVie.js";
-import { loadingAction } from "../../../../redux/actions/loading.js";
-import { getPromotion } from "../../../../redux/actions/promotion.js";
-import { getServiceAction } from "../../../../redux/actions/service.js";
+import { searchFeedbackApi } from "../../../api/feedback";
+import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
+import { getFeedback } from "../../../redux/actions/feedback";
+import { loadingAction } from "../../../redux/actions/loading";
 import {
-  getPromotionSelector,
-  getTotalPromotion,
-} from "../../../../redux/selectors/promotion.js";
-import "./PromotionManage.scss";
-import TableManagePromotion from "./tableManagePromotion.jsx";
+  getFeedbacks,
+  getFeedbackTotal,
+} from "../../../redux/selectors/feedback";
+import "./OrderManage.scss";
+import TableManageOrder from "./TableManageOrder";
 
-export default function PromotionManage() {
-  const promotion = useSelector(getPromotionSelector);
-  const [currentPage, setCurrentPage] = useState(0);
-
-  const total = useSelector(getTotalPromotion);
-  const dispatch = useDispatch();
+export default function OrderManage() {
   const [dataFilter, setDataFilter] = useState([]);
-
-  useEffect(() => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const dispatch = useDispatch();
+  const listFeedback = useSelector(getFeedbacks);
+  const feedbackTotal = useSelector(getFeedbackTotal);
+  React.useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
-    dispatch(getServiceAction.getServiceRequest());
-    dispatch(getPromotion.getPromotionRequest({ start: 0, length: 10 }));
-  }, []);
+    dispatch(getFeedback.getFeedbackRequest({ start: 0, length: 10 }));
+  }, [dispatch]);
 
   const handleSearch = useCallback((value) => {
-    searchPromotion(removeVietnameseTones(value))
-      .then((res) => setDataFilter(res?.data))
+    searchFeedbackApi(value)
+      .then((res) => setDataFilter(res.data))
       .catch((err) => console.log(err));
   }, []);
 
   const handleClick = (e, index) => {
     e.preventDefault();
     setCurrentPage(index);
-    const start = index * promotion.length;
+    const start = index * listFeedback.length;
     dispatch(
-      getPromotion.getPromotionRequest({
+      getFeedback.getFeedbackRequest({
         start: start > 0 ? start : 0,
         length: 10,
       })
     );
   };
 
-  const pageCount = total / 10;
+  const pageCount = feedbackTotal / 10;
   let pageNumbers = [];
   for (let i = 0; i < pageCount; i++) {
     pageNumbers.push(
@@ -76,32 +69,31 @@ export default function PromotionManage() {
         <Card className="shadow">
           <CardHeader className="border-0 card-header">
             <Row className="align-items-center">
-              <Col className="text-left">
-                <AddPromotion />
-              </Col>
+              <Col className="text-left"></Col>
               <Col>
                 <CustomTextInput
                   placeholder="Tìm kiếm"
                   type="text"
-                  onChange={(e) => handleSearch(e.target.value)}
+                  // onChange={(e) => handleSearch(e.target.value)}
                 />
               </Col>
             </Row>
           </CardHeader>
-          <Table className="align-items-center table-flush" responsive>
+          <Table className="align-items-center table-flush " responsive>
             <thead className="thead-light">
               <tr>
-                <th scope="col">Tên Promotion</th>
-                <th scope="col">Mã code</th>
-                <th scope="col">Hạn</th>
-                <th scope="col" />
+                <th scope="col">Loại phản hồi</th>
+                <th scope="col">Nội dung</th>
+                <th scope="col">Người phản hồi</th>
+                <th scope="col">SĐT người phản hồi</th>
+                <th scope="col">Ngày phản hồi</th>
               </tr>
             </thead>
             <tbody>
               {dataFilter.length > 0
-                ? dataFilter.map((e) => <TableManagePromotion data={e} />)
-                : promotion &&
-                  promotion.map((e) => <TableManagePromotion data={e} />)}
+                ? dataFilter.map((e) => <TableManageOrder data={e} />)
+                : listFeedback &&
+                  listFeedback.map((e) => <TableManageOrder data={e} />)}
             </tbody>
           </Table>
           <CardFooter>

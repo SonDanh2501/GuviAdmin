@@ -19,6 +19,7 @@ import { activeCustomer } from "../../../../api/customer";
 import EditCustomer from "../../../../components/editCustomer/editCustomer";
 import { deleteCustomerAction } from "../../../../redux/actions/customerAction";
 import { loadingAction } from "../../../../redux/actions/loading";
+import moment from "moment";
 
 export default function TableManageUser({ data }) {
   const [itemEdit, setItemEdit] = useState([]);

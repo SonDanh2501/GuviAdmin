@@ -30,61 +30,56 @@ export default function GroupServiceManage() {
 
   return (
     <React.Fragment>
-      <div className="user-redux-container">
-        <div className="column">
-          <div className="mt-5">
-            {/* <TableManageBanner /> */}
-            <Card className="shadow">
-              <CardHeader className="border-0 card-header">
-                <Row className="align-items-center">
-                  <Col className="text-left">
-                    <AddGroupService />
-                  </Col>
-                  <Col>
-                    <CustomTextInput
-                      placeholder="Tìm kiếm"
-                      type="text"
-                      // onChange={(e) => handleSearch(e.target.value)}
-                    />
-                  </Col>
-                </Row>
-              </CardHeader>
-              <Table className="align-items-center table-flush " responsive>
-                <thead className="thead-light">
-                  <tr>
-                    <th scope="col">Image</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Type</th>
-                    <th scope="col" />
-                  </tr>
-                </thead>
-                <tbody>
-                  {listGroupService &&
-                    listGroupService.map((e) => (
-                      <TableManageGroupService data={e} />
-                    ))}
-                </tbody>
-              </Table>
-              <CardFooter>
-                <nav aria-label="...">
-                  <Pagination
-                    className="pagination justify-content-end mb-0"
-                    listClassName="justify-content-end mb-0"
+      <div className="mt-2 p-3">
+        <Card className="shadow">
+          <CardHeader className="border-0 card-header">
+            <Row className="align-items-center">
+              <Col className="text-left">
+                <AddGroupService />
+              </Col>
+              <Col>
+                <CustomTextInput
+                  placeholder="Tìm kiếm"
+                  type="text"
+                  // onChange={(e) => handleSearch(e.target.value)}
+                />
+              </Col>
+            </Row>
+          </CardHeader>
+          <Table className="align-items-center table-flush " responsive>
+            <thead className="thead-light">
+              <tr>
+                <th scope="col">Image</th>
+                <th scope="col">Title</th>
+                <th scope="col">Type</th>
+                <th scope="col" />
+              </tr>
+            </thead>
+            <tbody>
+              {listGroupService &&
+                listGroupService.map((e) => (
+                  <TableManageGroupService data={e} />
+                ))}
+            </tbody>
+          </Table>
+          <CardFooter>
+            <nav aria-label="...">
+              <Pagination
+                className="pagination justify-content-end mb-0"
+                listClassName="justify-content-end mb-0"
+              >
+                <PaginationItem className="active">
+                  <PaginationLink
+                    href="#pablo"
+                    onClick={(e) => e.preventDefault()}
                   >
-                    <PaginationItem className="active">
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        1
-                      </PaginationLink>
-                    </PaginationItem>
-                  </Pagination>
-                </nav>
-              </CardFooter>
-            </Card>
-          </div>
-        </div>
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+              </Pagination>
+            </nav>
+          </CardFooter>
+        </Card>
       </div>
       <Outlet />
     </React.Fragment>
