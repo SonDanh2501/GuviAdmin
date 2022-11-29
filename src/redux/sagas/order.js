@@ -21,6 +21,7 @@ function* fetchOrderSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     yield put(getOrder.getOrderFailure(err));
+    yield put(loadingAction.loadingRequest(false));
   }
 }
 

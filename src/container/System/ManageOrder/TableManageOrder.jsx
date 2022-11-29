@@ -11,6 +11,7 @@ import {
   Row,
 } from "reactstrap";
 import "./TableManageOrder.scss";
+import { formatMoney } from "../../../helper/formatMoney";
 
 export default function TableManageOrder({ data }) {
   const [modal, setModal] = React.useState(false);
@@ -55,21 +56,21 @@ export default function TableManageOrder({ data }) {
       <tr>
         <th scope="row" className="col-2">
           <Media>
-            <span className="mb-0 text-sm">{data?.type?.name?.vi}</span>
+            <span className="mb-0 text-sm">{data?.service?._id?.title.vi}</span>
           </Media>
         </th>
         <td className="col-0.5">
-          <a>{data?.body}</a>
+          <a>{data?.id_customer?.name}</a>
         </td>
         <td className="col-0.5">
-          <a>{data?.name}</a>
+          <a>{formatMoney(data?.final_fee)}</a>
         </td>
         <td className="col-2">
           <span>{data?.phone}</span>
         </td>
         <td className="col-2">
           <span>
-            {moment(new Date(data?.date_create)).format("DD/MM/yyy HH:mm")}
+            {moment(new Date(data?.date_work)).format("DD/MM/yyy HH:mm")}
           </span>
         </td>
         {/* <td>

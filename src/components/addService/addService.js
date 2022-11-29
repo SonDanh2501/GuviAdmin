@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { Form, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
 import { createServiceApi } from "../../api/service";
+import { loadingAction } from "../../redux/actions/loading";
 import { createGroupServiceAction } from "../../redux/actions/service";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
@@ -18,8 +19,12 @@ const AddService = ({ id }) => {
   const [descriptionEN, setDescriptionEN] = useState("");
   const [type, setType] = useState("single");
   const [position, setPosition] = useState("single");
+  const [timeMinium, setTimeMinium] = useState("");
+
+  const dispatch = useDispatch();
 
   const onChangeThumbnail = (e) => {
+    dispatch(loadingAction.loadingRequest(true));
     if (e.target.files[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -34,7 +39,10 @@ const AddService = ({ id }) => {
         "Content-Type": "multipart/form-data",
       },
     })
-      .then((res) => setImgUrl(res))
+      .then((res) => {
+        dispatch(loadingAction.loadingRequest(false));
+        setImgUrl(res);
+      })
       .catch((err) => console.log("err", err));
   };
 
@@ -54,6 +62,7 @@ const AddService = ({ id }) => {
       is_delete: false,
       position: position,
       id_group_service: id,
+      minimum_time_order: timeMinium,
     })
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
@@ -66,6 +75,7 @@ const AddService = ({ id }) => {
     type,
     position,
     id,
+    timeMinium,
   ]);
 
   return (
@@ -157,8 +167,19 @@ const AddService = ({ id }) => {
               name="position"
               placeholder="Vui lòng nhập position (0,1,2...n)"
               type="number"
+              min={0}
               value={position}
               onChange={(e) => setPosition(e.target.value)}
+            />
+            <CustomTextInput
+              label={"Thời gian đặt tối thiểu (phút)"}
+              id="examplePosition"
+              name="timeMinium"
+              placeholder="Vui lòng nhập thời gian đặt tối thiểu"
+              type="number"
+              min={0}
+              value={timeMinium}
+              onChange={(e) => setTimeMinium(e.target.value)}
             />
             <div>
               <Label for="exampleImage">Thumbnail</Label>

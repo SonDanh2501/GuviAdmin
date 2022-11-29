@@ -289,8 +289,6 @@ const EditPromotion = ({ state, setState, data }) => {
     minimumOrder,
   ]);
 
-  console.log(customer);
-
   return (
     <>
       {/* Modal */}

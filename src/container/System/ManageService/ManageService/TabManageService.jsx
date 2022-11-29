@@ -69,7 +69,7 @@ export default function TableManageService({ data }) {
         </td>
         <td>
           <Row>
-            <button
+            {/* <button
               className="btn-edit"
               onClick={() => {
                 setItemEdit(data);
@@ -77,7 +77,7 @@ export default function TableManageService({ data }) {
               }}
             >
               <i className="uil uil-edit-alt"></i>
-            </button>
+            </button> */}
             <button className="btn-delete" onClick={toggle}>
               <i className="uil uil-trash-alt icon-delete"></i>
             </button>
@@ -92,9 +92,6 @@ export default function TableManageService({ data }) {
                 <i class="uil uil-padlock"></i>
               </button>
             )}
-            <button className="btn-delete" onClick={toggle}>
-              <i className="uil uil-ellipsis-v icon-details"></i>
-            </button>
           </Row>
           <div>
             <Modal isOpen={modalBlock} toggle={toggleBlock}>

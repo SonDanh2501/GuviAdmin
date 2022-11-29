@@ -51,14 +51,15 @@ const Dashboard = () => {
               element={<GroupServiceManage />}
             />
             <Route
+              path="/services/manage-group-service/manage-service"
+              element={<ServiceManage />}
+            />
+            <Route
               path="/feedback/manage-feedback"
               element={<FeedbackManage />}
             />
             <Route path="/settings/manage-reason" element={<ReasonManage />} />
-            <Route
-              path="/services/manage-group-service/manage-service"
-              element={<ServiceManage />}
-            />
+
             <Route path="/group-order/manage-order" element={<OrderManage />} />
           </Routes>
         </main>

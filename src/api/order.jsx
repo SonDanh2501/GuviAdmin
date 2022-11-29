@@ -2,7 +2,7 @@ import axiosClient from "../axios";
 
 export const getOrderApi = (start, length) => {
   return axiosClient.get(
-    `/admin/news_manager/get_list?start=${start}&length=${length}`
+    `/admin/order_manager/get_list?start=${start}&length=${length}`
   );
 };
 // export const createNew = (payload) => {

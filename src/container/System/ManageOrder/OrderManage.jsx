@@ -14,7 +14,7 @@ import {
 import { searchFeedbackApi } from "../../../api/feedback";
 import AddOrder from "../../../components/addOrder/addOrder";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
-import { getFeedback } from "../../../redux/actions/feedback";
+import { getOrder } from "../../../redux/actions/order";
 import { loadingAction } from "../../../redux/actions/loading";
 import {
   getFeedbacks,
@@ -22,17 +22,23 @@ import {
 } from "../../../redux/selectors/feedback";
 import "./OrderManage.scss";
 import TableManageOrder from "./TableManageOrder";
+import {
+  getOrderSelector,
+  getOrderTotal,
+} from "../../../redux/selectors/order";
 
 export default function OrderManage() {
   const [dataFilter, setDataFilter] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const dispatch = useDispatch();
-  const listFeedback = useSelector(getFeedbacks);
-  const feedbackTotal = useSelector(getFeedbackTotal);
-  // React.useEffect(() => {
-  //   dispatch(loadingAction.loadingRequest(true));
-  //   dispatch(getFeedback.getFeedbackRequest({ start: 0, length: 10 }));
-  // }, [dispatch]);
+  const listOrder = useSelector(getOrderSelector);
+  const orderTotal = useSelector(getOrderTotal);
+  React.useEffect(() => {
+    dispatch(loadingAction.loadingRequest(true));
+    dispatch(getOrder.getOrderRequest({ start: 0, length: 10 }));
+  }, [dispatch]);
+
+  console.log(listOrder);
 
   // const handleSearch = useCallback((value) => {
   //   searchFeedbackApi(value)
@@ -91,10 +97,7 @@ export default function OrderManage() {
               </tr>
             </thead>
             <tbody>
-              {/* {dataFilter.length > 0
-                ? dataFilter.map((e) => <TableManageOrder data={e} />)
-                : listFeedback &&
-                  listFeedback.map((e) => <TableManageOrder data={e} />)} */}
+              {listOrder && listOrder.map((e) => <TableManageOrder data={e} />)}
             </tbody>
           </Table>
           <CardFooter>
