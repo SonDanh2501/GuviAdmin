@@ -11,6 +11,7 @@ import service from "./service";
 import brand from "./brand";
 import feedback from "./feedback";
 import loading from "./loading";
+import order from "./order";
 import Auth from "./auth";
 
 const authPersistConfig = {
@@ -30,5 +31,6 @@ const rootReducer = combineReducers({
   brand,
   feedback,
   loading,
+  order,
 });
 export default rootReducer;

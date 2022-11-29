@@ -12,6 +12,7 @@ import {
   Table,
 } from "reactstrap";
 import { searchFeedbackApi } from "../../../api/feedback";
+import AddOrder from "../../../components/addOrder/addOrder";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
 import { getFeedback } from "../../../redux/actions/feedback";
 import { loadingAction } from "../../../redux/actions/loading";
@@ -28,40 +29,40 @@ export default function OrderManage() {
   const dispatch = useDispatch();
   const listFeedback = useSelector(getFeedbacks);
   const feedbackTotal = useSelector(getFeedbackTotal);
-  React.useEffect(() => {
-    dispatch(loadingAction.loadingRequest(true));
-    dispatch(getFeedback.getFeedbackRequest({ start: 0, length: 10 }));
-  }, [dispatch]);
+  // React.useEffect(() => {
+  //   dispatch(loadingAction.loadingRequest(true));
+  //   dispatch(getFeedback.getFeedbackRequest({ start: 0, length: 10 }));
+  // }, [dispatch]);
 
-  const handleSearch = useCallback((value) => {
-    searchFeedbackApi(value)
-      .then((res) => setDataFilter(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+  // const handleSearch = useCallback((value) => {
+  //   searchFeedbackApi(value)
+  //     .then((res) => setDataFilter(res.data))
+  //     .catch((err) => console.log(err));
+  // }, []);
 
-  const handleClick = (e, index) => {
-    e.preventDefault();
-    setCurrentPage(index);
-    const start = index * listFeedback.length;
-    dispatch(
-      getFeedback.getFeedbackRequest({
-        start: start > 0 ? start : 0,
-        length: 10,
-      })
-    );
-  };
+  // const handleClick = (e, index) => {
+  //   e.preventDefault();
+  //   setCurrentPage(index);
+  //   const start = index * listFeedback.length;
+  //   dispatch(
+  //     getFeedback.getFeedbackRequest({
+  //       start: start > 0 ? start : 0,
+  //       length: 10,
+  //     })
+  //   );
+  // };
 
-  const pageCount = feedbackTotal / 10;
-  let pageNumbers = [];
-  for (let i = 0; i < pageCount; i++) {
-    pageNumbers.push(
-      <PaginationItem key={i} active={currentPage === i ? true : false}>
-        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
-          {i + 1}
-        </PaginationLink>
-      </PaginationItem>
-    );
-  }
+  // const pageCount = feedbackTotal / 10;
+  // let pageNumbers = [];
+  // for (let i = 0; i < pageCount; i++) {
+  //   pageNumbers.push(
+  //     <PaginationItem key={i} active={currentPage === i ? true : false}>
+  //       <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
+  //         {i + 1}
+  //       </PaginationLink>
+  //     </PaginationItem>
+  //   );
+  // }
 
   return (
     <React.Fragment>
@@ -69,36 +70,36 @@ export default function OrderManage() {
         <Card className="shadow">
           <CardHeader className="border-0 card-header">
             <Row className="align-items-center">
-              <Col className="text-left"></Col>
+              <Col className="text-left">{/* <AddOrder /> */}</Col>
               <Col>
-                <CustomTextInput
+                {/* <CustomTextInput
                   placeholder="Tìm kiếm"
                   type="text"
                   // onChange={(e) => handleSearch(e.target.value)}
-                />
+                /> */}
               </Col>
             </Row>
           </CardHeader>
           <Table className="align-items-center table-flush " responsive>
             <thead className="thead-light">
               <tr>
-                <th scope="col">Loại phản hồi</th>
-                <th scope="col">Nội dung</th>
-                <th scope="col">Người phản hồi</th>
-                <th scope="col">SĐT người phản hồi</th>
-                <th scope="col">Ngày phản hồi</th>
+                <th scope="col">Loại dịch vụ</th>
+                <th scope="col">Tên khách hàng</th>
+                <th scope="col">Đơn giá</th>
+                <th scope="col">Thời gian</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
-              {dataFilter.length > 0
+              {/* {dataFilter.length > 0
                 ? dataFilter.map((e) => <TableManageOrder data={e} />)
                 : listFeedback &&
-                  listFeedback.map((e) => <TableManageOrder data={e} />)}
+                  listFeedback.map((e) => <TableManageOrder data={e} />)} */}
             </tbody>
           </Table>
           <CardFooter>
             <nav aria-label="...">
-              <Pagination
+              {/* <Pagination
                 className="pagination justify-content-end mb-0"
                 listClassName="justify-content-end mb-0"
               >
@@ -123,7 +124,7 @@ export default function OrderManage() {
                     <i class="uil uil-step-forward"></i>
                   </PaginationLink>
                 </PaginationItem>
-              </Pagination>
+              </Pagination> */}
             </nav>
           </CardFooter>
         </Card>

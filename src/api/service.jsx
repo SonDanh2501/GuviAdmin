@@ -41,3 +41,9 @@ export const createServiceApi = (data) => {
 export const deleteServiceApi = (id) => {
   return axiosClient.get(`/admin/service_manager/delete_soft/${id}`);
 };
+
+//optional services
+
+export const getOptionalServiceByIdApi = (id) => {
+  return axiosClient.get(`/admin/optional_service_manager/get_detail/${id}`);
+};

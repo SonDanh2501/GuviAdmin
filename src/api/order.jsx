@@ -1,15 +1,14 @@
 import axiosClient from "../axios";
-// export const createNew = (payload) => {
-//   return axiosClient.post("/admin/news_manager/create_item", payload);
-// };
-export const getOrder = (start, length) => {
+
+export const getOrderApi = (start, length) => {
   return axiosClient.get(
     `/admin/news_manager/get_list?start=${start}&length=${length}`
   );
 };
-// export const fetchNewById = () => {
-//   return axiosClient.get("//admin/news_manager/get_detail/:id");
+// export const createNew = (payload) => {
+//   return axiosClient.post("/admin/news_manager/create_item", payload);
 // };
+
 // export const updateNew = (id, payload) => {
 //   return axiosClient.post(`/admin/news_manager/edit_item/${id}`, payload);
 // };

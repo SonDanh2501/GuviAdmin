@@ -59,7 +59,7 @@ const Dashboard = () => {
               path="/services/manage-group-service/manage-service"
               element={<ServiceManage />}
             />
-            {/* <Route path="/group-order/manage-order" element={<OrderManage />} /> */}
+            <Route path="/group-order/manage-order" element={<OrderManage />} />
           </Routes>
         </main>
       </div>

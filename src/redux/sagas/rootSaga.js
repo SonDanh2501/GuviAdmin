@@ -10,6 +10,7 @@ import ReasonSaga from "./reason";
 import brandSaga from "./brand";
 import feedbackSaga from "./feedback";
 import loadingSaga from "./loading";
+import orderSaga from "./order";
 
 export default function* rootSaga() {
   yield all([
@@ -24,5 +25,6 @@ export default function* rootSaga() {
     fork(brandSaga),
     fork(feedbackSaga),
     fork(loadingSaga),
+    fork(orderSaga),
   ]);
 }

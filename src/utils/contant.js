@@ -40,6 +40,10 @@ export const INIT_STATE = {
   loading: {
     loading: false,
   },
+  order: {
+    data: [],
+    totalItem: 0,
+  },
 };
 
 export const path = {
