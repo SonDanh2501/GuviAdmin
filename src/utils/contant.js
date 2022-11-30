@@ -44,6 +44,10 @@ export const INIT_STATE = {
     data: [],
     totalItem: 0,
   },
+  topup: {
+    data: [],
+    totalItem: 0,
+  },
 };
 
 export const path = {

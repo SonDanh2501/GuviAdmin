@@ -178,11 +178,15 @@ const Sidebar = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/notification/manage-notification">
+          <NavLink
+            to="/topup/manage-topup"
+            onClick={() => changeBrand("Quản lý nạp/rút CTV")}
+          >
             {({ isActive }) => (
               <div className={isActive ? "active-link" : "unactive-link"}>
+                <i class="uil uil-money-withdrawal icon"></i>
                 <a className={isActive ? "active-text" : "unactive-text"}>
-                  Quản lý thông báo
+                  Quản lý nạp/rút CTV
                 </a>
               </div>
             )}

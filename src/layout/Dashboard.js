@@ -15,6 +15,7 @@ import Home from "../container/System/Dashboard/DashBoard";
 import "./Dashboard.scss";
 import Sidebar from "../components/Sidebar/Sidebar";
 import OrderManage from "../container/System/ManageOrder/OrderManage";
+import TopupManage from "../container/System/ManageTopup/TopupManage";
 
 const Dashboard = () => {
   const [hideSidebar, setHideSidebar] = useState(true);
@@ -61,6 +62,7 @@ const Dashboard = () => {
             <Route path="/settings/manage-reason" element={<ReasonManage />} />
 
             <Route path="/group-order/manage-order" element={<OrderManage />} />
+            <Route path="/topup/manage-topup" element={<TopupManage />} />
           </Routes>
         </main>
       </div>
