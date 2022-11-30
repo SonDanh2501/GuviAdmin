@@ -14,19 +14,19 @@ import {
 import { searchCustomers } from "../../../../api/customer";
 import AddCustomer from "../../../../components/addCustomer/addCustomer";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
-import LoadingPage from "../../../../components/LoadingPage";
 import { getCustomers } from "../../../../redux/actions/customerAction";
 import { loadingAction } from "../../../../redux/actions/loading";
 import {
   getCustomer,
   getCustomerTotalItem,
 } from "../../../../redux/selectors/customer";
-import { loadingSelector } from "../../../../redux/selectors/loading";
 import TableManageUser from "./TableManageUser.jsx";
 import "./UserManage.scss";
 
 export default function UserManage() {
   const [dataFilter, setDataFilter] = useState([]);
+  const [totalFilter, setTotalFilter] = useState("");
+  const [valueFilter, setValueFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const customers = useSelector(getCustomer);
   const customerTotal = useSelector(getCustomerTotalItem);
@@ -38,25 +38,32 @@ export default function UserManage() {
     dispatch(getCustomers.getCustomersRequest({ start: 0, length: 10 }));
   }, [dispatch]);
 
-  const handleSearch = useCallback((value) => {
-    searchCustomers(value, currentPage * customers.length, 10)
-      .then((res) => setDataFilter(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+  const handleClick = useCallback(
+    (e, index) => {
+      e.preventDefault();
+      setCurrentPage(index);
+      const start =
+        dataFilter.length > 0
+          ? index * dataFilter.length
+          : index * customers.length;
+      dataFilter.length > 0
+        ? searchCustomers(valueFilter, start, 10)
+            .then((res) => {
+              setDataFilter(res.data);
+            })
+            .catch((err) => console.log(err))
+        : dispatch(
+            getCustomers.getCustomersRequest({
+              start: start > 0 ? start : 0,
+              length: 10,
+            })
+          );
+    },
+    [customers, dataFilter, valueFilter]
+  );
 
-  const handleClick = (e, index) => {
-    e.preventDefault();
-    setCurrentPage(index);
-    const start = index * customers.length;
-    dispatch(
-      getCustomers.getCustomersRequest({
-        start: start > 0 ? start : 0,
-        length: 10,
-      })
-    );
-  };
-
-  const pageCount = customerTotal / 10;
+  const pageCount =
+    dataFilter.length > 0 ? totalFilter / 10 : customerTotal / 10;
   let pageNumbers = [];
   for (let i = 0; i < pageCount; i++) {
     pageNumbers.push(
@@ -67,6 +74,16 @@ export default function UserManage() {
       </PaginationItem>
     );
   }
+
+  const handleSearch = useCallback((value) => {
+    setValueFilter(value);
+    searchCustomers(value, 0, 10)
+      .then((res) => {
+        setDataFilter(res.data);
+        setTotalFilter(res.totalItem);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <React.Fragment>

@@ -29,36 +29,44 @@ import TableManagePromotion from "./tableManagePromotion.jsx";
 export default function PromotionManage() {
   const promotion = useSelector(getPromotionSelector);
   const [currentPage, setCurrentPage] = useState(0);
-
+  const [totalFilter, setTotalFilter] = useState("");
+  const [valueFilter, setValueFilter] = useState("");
   const total = useSelector(getTotalPromotion);
   const dispatch = useDispatch();
   const [dataFilter, setDataFilter] = useState([]);
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
-    dispatch(getServiceAction.getServiceRequest());
+
     dispatch(getPromotion.getPromotionRequest({ start: 0, length: 10 }));
   }, []);
 
-  const handleSearch = useCallback((value) => {
-    searchPromotion(removeVietnameseTones(value))
-      .then((res) => setDataFilter(res?.data))
-      .catch((err) => console.log(err));
-  }, []);
+  const handleClick = useCallback(
+    (e, index) => {
+      e.preventDefault();
+      setCurrentPage(index);
+      const start =
+        dataFilter.length > 0
+          ? index * dataFilter.length
+          : index * promotion.length;
 
-  const handleClick = (e, index) => {
-    e.preventDefault();
-    setCurrentPage(index);
-    const start = index * promotion.length;
-    dispatch(
-      getPromotion.getPromotionRequest({
-        start: start > 0 ? start : 0,
-        length: 10,
-      })
-    );
-  };
+      dataFilter.length > 0
+        ? searchPromotion(valueFilter, start, 10)
+            .then((res) => {
+              setDataFilter(res?.data);
+            })
+            .catch((err) => console.log(err))
+        : dispatch(
+            getPromotion.getPromotionRequest({
+              start: start > 0 ? start : 0,
+              length: 10,
+            })
+          );
+    },
+    [promotion, valueFilter, dataFilter]
+  );
 
-  const pageCount = total / 10;
+  const pageCount = dataFilter.length > 0 ? totalFilter / 10 : total / 10;
   let pageNumbers = [];
   for (let i = 0; i < pageCount; i++) {
     pageNumbers.push(
@@ -69,6 +77,16 @@ export default function PromotionManage() {
       </PaginationItem>
     );
   }
+
+  const handleSearch = useCallback((value) => {
+    setValueFilter(value);
+    searchPromotion(value, 0, 10)
+      .then((res) => {
+        setDataFilter(res?.data);
+        setTotalFilter(res?.totalItem);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <React.Fragment>

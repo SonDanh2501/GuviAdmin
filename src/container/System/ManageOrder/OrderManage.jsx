@@ -11,64 +11,83 @@ import {
   Row,
   Table,
 } from "reactstrap";
-import { searchFeedbackApi } from "../../../api/feedback";
-import AddOrder from "../../../components/addOrder/addOrder";
-import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
-import { getOrder } from "../../../redux/actions/order";
 import { loadingAction } from "../../../redux/actions/loading";
-import {
-  getFeedbacks,
-  getFeedbackTotal,
-} from "../../../redux/selectors/feedback";
-import "./OrderManage.scss";
-import TableManageOrder from "./TableManageOrder";
+import { getOrder } from "../../../redux/actions/order";
 import {
   getOrderSelector,
   getOrderTotal,
 } from "../../../redux/selectors/order";
+import { getService } from "../../../redux/selectors/service";
+import "./OrderManage.scss";
+import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
+import TableManageOrder from "./TableManageOrder";
+import { filterOrderApi } from "../../../api/order";
 
 export default function OrderManage() {
   const [dataFilter, setDataFilter] = useState([]);
+  const [totalFilter, setTotalFilter] = useState();
+  const [valueFilter, setValueFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const dispatch = useDispatch();
   const listOrder = useSelector(getOrderSelector);
   const orderTotal = useSelector(getOrderTotal);
+  const service = useSelector(getService);
   React.useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
     dispatch(getOrder.getOrderRequest({ start: 0, length: 10 }));
   }, [dispatch]);
 
-  console.log(listOrder);
+  const handleClick = useCallback(
+    (e, index) => {
+      e.preventDefault();
+      setCurrentPage(index);
+      const start =
+        dataFilter.length > 0
+          ? index * dataFilter.length
+          : index * listOrder.length;
 
-  // const handleSearch = useCallback((value) => {
-  //   searchFeedbackApi(value)
-  //     .then((res) => setDataFilter(res.data))
-  //     .catch((err) => console.log(err));
-  // }, []);
+      dataFilter.length > 0
+        ? filterOrderApi(start, 10, valueFilter)
+            .then((res) => {
+              setDataFilter(res.data);
+            })
+            .catch((err) => console.log(err))
+        : dispatch(
+            getOrder.getOrderRequest({
+              start: start > 0 ? start : 0,
+              length: 10,
+            })
+          );
+    },
+    [valueFilter, dataFilter, listOrder]
+  );
 
-  // const handleClick = (e, index) => {
-  //   e.preventDefault();
-  //   setCurrentPage(index);
-  //   const start = index * listFeedback.length;
-  //   dispatch(
-  //     getFeedback.getFeedbackRequest({
-  //       start: start > 0 ? start : 0,
-  //       length: 10,
-  //     })
-  //   );
-  // };
+  const pageCount = dataFilter.length > 0 ? totalFilter / 10 : orderTotal / 10;
+  let pageNumbers = [];
+  for (let i = 0; i < pageCount; i++) {
+    pageNumbers.push(
+      <PaginationItem key={i} active={currentPage === i ? true : false}>
+        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
+          {i + 1}
+        </PaginationLink>
+      </PaginationItem>
+    );
+  }
 
-  // const pageCount = feedbackTotal / 10;
-  // let pageNumbers = [];
-  // for (let i = 0; i < pageCount; i++) {
-  //   pageNumbers.push(
-  //     <PaginationItem key={i} active={currentPage === i ? true : false}>
-  //       <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
-  //         {i + 1}
-  //       </PaginationLink>
-  //     </PaginationItem>
-  //   );
-  // }
+  const handlefilter = useCallback((value) => {
+    setValueFilter(value);
+    if (value === "filter") {
+      dispatch(getOrder.getOrderRequest({ start: 0, length: 10 }));
+      setDataFilter([]);
+    } else {
+      filterOrderApi(0, 10, value)
+        .then((res) => {
+          setDataFilter(res.data);
+          setTotalFilter(res.totalItem);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
 
   return (
     <React.Fragment>
@@ -76,7 +95,26 @@ export default function OrderManage() {
         <Card className="shadow">
           <CardHeader className="border-0 card-header">
             <Row className="align-items-center">
-              <Col className="text-left">{/* <AddOrder /> */}</Col>
+              <Col className="text-left">
+                <CustomTextInput
+                  name="select"
+                  type="select"
+                  className="filter-input"
+                  onChange={(e) => handlefilter(e.target.value)}
+                  body={
+                    <>
+                      <option value={"filter"}>Filter</option>
+                      {service.map((item, index) => {
+                        return (
+                          <option key={index} value={item?._id}>
+                            {item?.title?.vi}
+                          </option>
+                        );
+                      })}
+                    </>
+                  }
+                />
+              </Col>
               <Col>
                 {/* <CustomTextInput
                   placeholder="Tìm kiếm"
@@ -92,17 +130,23 @@ export default function OrderManage() {
                 <th scope="col">Loại dịch vụ</th>
                 <th scope="col">Tên khách hàng</th>
                 <th scope="col">Đơn giá</th>
+                <th scope="col">Tên cộng tác viên</th>
+                <th scope="col">Ngày làm</th>
                 <th scope="col">Thời gian</th>
+                <th scope="col">Trạng thái</th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
-              {listOrder && listOrder.map((e) => <TableManageOrder data={e} />)}
+              {dataFilter.length > 0
+                ? dataFilter.map((e) => <TableManageOrder data={e} />)
+                : listOrder &&
+                  listOrder.map((e) => <TableManageOrder data={e} />)}
             </tbody>
           </Table>
           <CardFooter>
             <nav aria-label="...">
-              {/* <Pagination
+              <Pagination
                 className="pagination justify-content-end mb-0"
                 listClassName="justify-content-end mb-0"
               >
@@ -127,7 +171,7 @@ export default function OrderManage() {
                     <i class="uil uil-step-forward"></i>
                   </PaginationLink>
                 </PaginationItem>
-              </Pagination> */}
+              </Pagination>
             </nav>
           </CardFooter>
         </Card>

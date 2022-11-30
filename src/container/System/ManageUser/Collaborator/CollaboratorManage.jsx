@@ -26,6 +26,8 @@ import TableManageCollaborator from "./TableManageCollaborator.jsx";
 export default function CollaboratorManage() {
   const [dataFilter, setDataFilter] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const [totalFilter, setTotalFilter] = useState("");
+  const [valueFilter, setValueFilter] = useState("");
   const dispatch = useDispatch();
   const collaborator = useSelector(getCollaborator);
   const collaboratorTotal = useSelector(getCollaboratorTotal);
@@ -37,25 +39,33 @@ export default function CollaboratorManage() {
     );
   }, [dispatch]);
 
-  const handleSearch = useCallback((value) => {
-    searchCollaborators(value)
-      .then((res) => setDataFilter(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+  const handleClick = useCallback(
+    (e, index) => {
+      e.preventDefault();
+      setCurrentPage(index);
+      const start =
+        dataFilter.length > 0
+          ? index * dataFilter.length
+          : index * collaborator.length;
 
-  const handleClick = (e, index) => {
-    e.preventDefault();
-    setCurrentPage(index);
-    const start = index * collaborator.length;
-    dispatch(
-      getCollaborators.getCollaboratorsRequest({
-        start: start > 0 ? start : 0,
-        length: 10,
-      })
-    );
-  };
+      dataFilter.length > 0
+        ? searchCollaborators(valueFilter, start, 10)
+            .then((res) => {
+              setDataFilter(res.data);
+            })
+            .catch((err) => console.log(err))
+        : dispatch(
+            getCollaborators.getCollaboratorsRequest({
+              start: start > 0 ? start : 0,
+              length: 10,
+            })
+          );
+    },
+    [collaborator, dataFilter, valueFilter]
+  );
 
-  const pageCount = collaboratorTotal / 10;
+  const pageCount =
+    dataFilter.length > 0 ? totalFilter / 10 : collaboratorTotal / 10;
   let pageNumbers = [];
   for (let i = 0; i < pageCount; i++) {
     pageNumbers.push(
@@ -66,6 +76,16 @@ export default function CollaboratorManage() {
       </PaginationItem>
     );
   }
+
+  const handleSearch = useCallback((value) => {
+    setValueFilter(value);
+    searchCollaborators(value, 0, 10)
+      .then((res) => {
+        setDataFilter(res.data);
+        setTotalFilter(res.totalItem);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <React.Fragment>

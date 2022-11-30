@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Card, CardHeader, Col, Container, Row, Table } from "reactstrap";
 import "./DashBoard.scss";
 import Header from "./HeaderBoard/Header";
@@ -14,6 +14,11 @@ import {
   YAxis,
   Area,
 } from "recharts";
+import { getDayReportApi } from "../../../api/statistic";
+import { DatePicker, Space } from "antd";
+import moment from "moment";
+import { formatDayVN } from "../../../helper/formatDayVN";
+const { RangePicker } = DatePicker;
 
 const data = [
   {
@@ -37,50 +42,42 @@ const dataChart = [
   {
     name: "Tháng 1",
     money: 2400,
+    job: 1,
   },
   {
     name: "Tháng 2",
     money: 1398,
+    job: 7,
   },
   {
     name: "Tháng 3",
     money: 9800,
+    job: 8634,
   },
   {
     name: "Tháng 4",
     money: 3908,
+    job: 2,
   },
   {
     name: "Tháng 5",
     money: 4800,
+    job: 1,
   },
   {
     name: "Tháng 6",
     money: 3800,
+    job: 90,
   },
   {
     name: "Tháng 7",
     money: 4300,
+    job: 234,
   },
   {
     name: "Tháng 8",
     money: 4300,
-  },
-  {
-    name: "Tháng 9",
-    money: 4300,
-  },
-  {
-    name: "Tháng 10",
-    money: 11300,
-  },
-  {
-    name: "Tháng 11",
-    money: 4300,
-  },
-  {
-    name: "Tháng 12",
-    money: 4300,
+    job: 2436,
   },
 ];
 
@@ -112,16 +109,64 @@ const dataAreChart = [
 ];
 
 export default function Home() {
+  const [arrResult, setArrResult] = useState([]);
+  const [day, setDay] = useState([]);
+  const dataDay = [];
+  useEffect(() => {
+    getDayReportApi(
+      moment(new Date(2022, 10, 1)).toISOString(),
+      moment(new Date()).toISOString()
+    )
+      .then((res) => {
+        setArrResult(res.arrResult);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  function getDates(startDate, stopDate) {
+    var dateArray = [];
+    var currentDate = moment(startDate);
+    var stopDate = moment(stopDate);
+    while (currentDate <= stopDate) {
+      dateArray.push(moment(currentDate).format("YYYY-MM-DD"));
+      currentDate = moment(currentDate).add(1, "days");
+    }
+    return setDay(dateArray);
+  }
+
+  arrResult.map((item, index) => {
+    dataDay.push({
+      money: item?.total_income,
+      job: item?.total_job,
+    });
+  });
+
+  const onChange = useCallback((start, end) => {
+    const dayStart = moment(start).toISOString();
+    const dayEnd = moment(end).toISOString();
+    getDayReportApi(dayStart, dayEnd)
+      .then((res) => {
+        setArrResult(res.arrResult);
+      })
+      .catch((err) => console.log(err));
+
+    getDates(dayStart, dayEnd);
+  }, []);
+
   return (
     <>
       <Header />
       <Container className="mt--7" fluid>
         <Row className="mt-5">
           <Col xl="8">
+            <RangePicker
+              onChange={(e) => onChange(e[0]?.$d, e[1]?.$d)}
+              style={{ marginBottom: 10 }}
+            />
             <BarChart
               width={1000}
               height={500}
-              data={dataChart}
+              data={dataDay}
               margin={{
                 top: 5,
                 right: 30,
@@ -131,10 +176,11 @@ export default function Home() {
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
-              <YAxis type="number" domain={[0, 20000]} />
+              <YAxis type="number" domain={[0, 5000000]} />
               <Tooltip />
               <Legend />
-              <Bar dataKey="money" fill="#82ca9d" radius={5} barSize={50} />
+              <Bar dataKey="money" fill="#82ca9d" radius={5} barSize={25} />
+              <Bar dataKey="job" fill="#82ca53" radius={5} barSize={25} />
             </BarChart>
           </Col>
           {/* <Col xl="4">

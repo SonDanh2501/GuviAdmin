@@ -6,8 +6,10 @@ export const fetchPromotion = (start, length) => {
   );
 };
 
-export const searchPromotion = (search) => {
-  return axiosClient.get(`/admin/promotion_manager/get_list?search=${search}`);
+export const searchPromotion = (search, start, length) => {
+  return axiosClient.get(
+    `/admin/promotion_manager/get_list?search=${search}&start=${start}&length=${length}`
+  );
 };
 
 export const createPromotion = (data) => {

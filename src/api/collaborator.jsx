@@ -8,9 +8,9 @@ export const fetchCollaborators = (start, length) => {
   );
 };
 
-export const searchCollaborators = (payload) => {
+export const searchCollaborators = (payload, start, length) => {
   return axiosClient.get(
-    `/admin/collaborator_manager/get_list_item?search=${payload}`
+    `/admin/collaborator_manager/get_list_item?search=${payload}&start=${start}&length=${length}`
   );
 };
 
