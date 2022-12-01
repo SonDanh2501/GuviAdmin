@@ -214,6 +214,43 @@ const EditPromotion = ({ state, setState, data }) => {
   }, [data]);
 
   const onEditPromotion = useCallback(() => {
+    // console.log({
+    //   title: {
+    //     vi: titleVN,
+    //     en: titleEN,
+    //   },
+    //   short_description: {
+    //     vi: shortDescriptionVN,
+    //     en: shortDescriptionEN,
+    //   },
+    //   description: {
+    //     vi: draftToHtml(convertToRaw(descriptionVN.getCurrentContent())),
+    //     en: draftToHtml(convertToRaw(descriptionEN.getCurrentContent())),
+    //   },
+    //   thumbnail: imgThumbnail,
+    //   image_background: imgBackground,
+    //   code: promoCode ? promoCode : codebrand,
+    //   is_limit_date: limitedDate,
+    //   limit_start_date: limitedDate ? new Date(startDate).toISOString() : null,
+    //   limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
+    //   is_limit_count: limitedQuantity,
+    //   limit_count: limitedQuantity ? amount : 0,
+    //   id_group_customer: customer,
+    //   service_apply: [serviceApply],
+    //   id_customer: [],
+    //   is_limited_use: isUsePromo,
+    //   limited_use: isUsePromo ? usePromo : 0,
+    //   type_discount: promoType,
+    //   type_promotion: typePromotion,
+    //   price_min_order: minimumOrder,
+    //   discount_unit: discountUnit,
+    //   discount_max_price: maximumDiscount,
+    //   discount_value: reducedValue,
+    //   is_delete: false,
+    //   is_exchange_point: isExchangePoint,
+    //   exchange_point: exchangePoint,
+    //   brand: namebrand,
+    // });
     dispatch(
       updatePromotionAction.updatePromotionRequest({
         id: data?._id,

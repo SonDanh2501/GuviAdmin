@@ -3,6 +3,7 @@ import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import {
   Button,
+  Col,
   Media,
   Modal,
   ModalBody,
@@ -12,10 +13,19 @@ import {
 } from "reactstrap";
 import "./TableManageTopup.scss";
 import { formatMoney } from "../../../helper/formatMoney";
+import EditPopup from "../../../components/editTopup/editTopup";
 
 export default function TableManageTopup({ data }) {
   const [modal, setModal] = React.useState(false);
-  const [modalBlock, setModalBlock] = React.useState(false);
+  const [modalConfirm, setModalConfirm] = React.useState(false);
+  const [modalEdit, setModalEdit] = React.useState(false);
+  const [itemEdit, setItemEdit] = React.useState([]);
+
+  const toggleConfirm = () => setModalConfirm(!modalConfirm);
+  const toggleEdit = () => setModalEdit(!modalEdit);
+  const toggle = () => setModal(!modal);
+
+  const onConfirm = useCallback((id) => {}, []);
 
   return (
     <>
@@ -39,52 +49,49 @@ export default function TableManageTopup({ data }) {
             {moment(new Date(data?.date_created)).format("DD/MM/yyy HH:mm")}
           </span>
         </td>
-        {/* <td>
+        <td>
           <Row>
+            {!data?.is_verify_money && (
+              <button className="btn-confirm" onClick={toggleConfirm}>
+                Duyệt lệnh
+              </button>
+            )}
             <button
               className="btn-edit"
               onClick={() => {
+                toggleEdit();
                 setItemEdit(data);
-                setModalEdit(!modalEdit);
               }}
             >
               <i className="uil uil-edit-alt"></i>
             </button>
+
             <button className="btn-delete" onClick={toggle}>
               <i className="uil uil-trash"></i>
             </button>
           </Row>
-          <Row>
-            {data?.is_active ? (
-              <button className="btn-delete" onClick={toggleBlock}>
-                <i class="uil uil-unlock"></i>
-              </button>
-            ) : (
-              <button className="btn-delete" onClick={toggleBlock}>
-                <i class="uil uil-padlock"></i>
-              </button>
-            )}
-          </Row>
+
           <div>
-            <Modal isOpen={modalBlock} toggle={toggleBlock}>
-              <ModalHeader toggle={toggleBlock}>
-                {" "}
-                {data?.is_active === true ? "Khóa banners" : "Mở banners"}
+            <Modal isOpen={modalConfirm} toggle={toggleConfirm}>
+              <ModalHeader toggle={toggleConfirm}>
+                Duyệt lệnh nạp tiền
               </ModalHeader>
               <ModalBody>
-                {data?.is_active === true
-                  ? "Bạn có muốn khóa banner này"
-                  : "Bạn có muốn kích hoạt banner này"}
-                <h3>{data?.title}</h3>
+                <>
+                  <h4>Bạn có muốn duyệt lệnh nạp tiền cho :</h4>
+                  <div className="body-modal">
+                    <a>CTV: {data?.id_collaborator?.name}</a>
+                    <a>SĐT: {data?.id_collaborator?.phone}</a>
+                    <a>Số tiền: {formatMoney(data?.money)}</a>
+                    <a>Nội dung: {data?.transfer_note}</a>
+                  </div>
+                </>
               </ModalBody>
               <ModalFooter>
-                <Button
-                  color="primary"
-                  // onClick={() => blockBanner(data?._id, data?.is_active)}
-                >
+                <Button color="primary" onClick={() => onConfirm(data?._id)}>
                   Có
                 </Button>
-                <Button color="#ddd" onClick={toggleBlock}>
+                <Button color="#ddd" onClick={toggleConfirm}>
                   Không
                 </Button>
               </ModalFooter>
@@ -92,9 +99,15 @@ export default function TableManageTopup({ data }) {
           </div>
           <div>
             <Modal isOpen={modal} toggle={toggle}>
-              <ModalHeader toggle={toggle}>Xóa banner</ModalHeader>
+              <ModalHeader toggle={toggle}>Xóa giao dịch</ModalHeader>
               <ModalBody>
-                Bạn có chắc muốn xóa banner {data?.title} này không?
+                <a>
+                  Bạn có chắc muốn xóa giao dịch của cộng tác viên
+                  <a className="text-name-modal">
+                    {data?.id_collaborator?.name}
+                  </a>
+                  này không?
+                </a>
               </ModalBody>
               <ModalFooter>
                 <Button color="primary">Có</Button>
@@ -104,7 +117,14 @@ export default function TableManageTopup({ data }) {
               </ModalFooter>
             </Modal>
           </div>
-        </td> */}
+          <div>
+            <EditPopup
+              item={itemEdit}
+              state={modalEdit}
+              setState={toggleEdit}
+            />
+          </div>
+        </td>
       </tr>
     </>
   );

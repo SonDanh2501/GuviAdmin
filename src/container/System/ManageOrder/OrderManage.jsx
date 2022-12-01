@@ -21,13 +21,14 @@ import { getService } from "../../../redux/selectors/service";
 import "./OrderManage.scss";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
 import TableManageOrder from "./TableManageOrder";
-import { filterOrderApi } from "../../../api/order";
+import { filterOrderApi, searchOrderApi } from "../../../api/order";
 
 export default function OrderManage() {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState();
   const [valueFilter, setValueFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
+  const [search, setSearch] = useState(false);
   const dispatch = useDispatch();
   const listOrder = useSelector(getOrderSelector);
   const orderTotal = useSelector(getOrderTotal);
@@ -46,7 +47,14 @@ export default function OrderManage() {
           ? index * dataFilter.length
           : index * listOrder.length;
 
-      dataFilter.length > 0
+      dataFilter.length > 0 && search
+        ? searchOrderApi(start, 10, valueFilter)
+            .then((res) => {
+              setDataFilter(res.data);
+              setTotalFilter(res.totalItem);
+            })
+            .catch((err) => console.log(err))
+        : dataFilter.length > 0
         ? filterOrderApi(start, 10, valueFilter)
             .then((res) => {
               setDataFilter(res.data);
@@ -75,6 +83,7 @@ export default function OrderManage() {
   }
 
   const handlefilter = useCallback((value) => {
+    setSearch(false);
     setValueFilter(value);
     if (value === "filter") {
       dispatch(getOrder.getOrderRequest({ start: 0, length: 10 }));
@@ -87,6 +96,17 @@ export default function OrderManage() {
         })
         .catch((err) => console.log(err));
     }
+  }, []);
+
+  const handleSearch = useCallback((value) => {
+    setValueFilter(value);
+    setSearch(true);
+    searchOrderApi(0, 10, value)
+      .then((res) => {
+        setDataFilter(res.data);
+        setTotalFilter(res.totalItem);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
@@ -116,11 +136,11 @@ export default function OrderManage() {
                 />
               </Col>
               <Col>
-                {/* <CustomTextInput
+                <CustomTextInput
                   placeholder="Tìm kiếm"
                   type="text"
-                  // onChange={(e) => handleSearch(e.target.value)}
-                /> */}
+                  onChange={(e) => handleSearch(e.target.value)}
+                />
               </Col>
             </Row>
           </CardHeader>

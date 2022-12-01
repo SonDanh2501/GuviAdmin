@@ -292,7 +292,10 @@ export default function TableManageCollaborator({ data }) {
             <Modal isOpen={modal} toggle={toggle}>
               <ModalHeader toggle={toggle}>Xóa cộng tác viên</ModalHeader>
               <ModalBody>
-                Bạn có chắc muốn xóa cộng tác viên {data?.name} này không?
+                <a>
+                  Bạn có chắc muốn xóa cộng tác viên
+                  <a className="text-name-modal">{data?.name}</a> này không?
+                </a>
               </ModalBody>
               <ModalFooter>
                 <Button color="primary" onClick={() => onDelete(data?._id)}>

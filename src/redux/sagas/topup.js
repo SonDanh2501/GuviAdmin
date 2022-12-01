@@ -22,6 +22,7 @@ function* fetchTopupCollaboratorSaga(action) {
     );
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
+    yield put(loadingAction.loadingRequest(false));
     yield put(getTopupCollaborator.getTopupCollaboratorFailure(err));
   }
 }

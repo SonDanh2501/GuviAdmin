@@ -5,8 +5,9 @@ import { useCallback } from "react";
 import { getBrand } from "../../redux/actions/brand";
 import logo from "../../assets/images/LogoS.png";
 import "./Sidebar.scss";
+import { Input } from "reactstrap";
 
-const Sidebar = () => {
+const Sidebar = ({ onChangeColor }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -192,6 +193,21 @@ const Sidebar = () => {
             )}
           </NavLink>
         </li>
+        {/* <li>
+          <NavLink
+            to="/topup/manage-topup-customer"
+            onClick={() => changeBrand("Quản lý nạp KH")}
+          >
+            {({ isActive }) => (
+              <div className={isActive ? "active-link" : "unactive-link"}>
+                <i class="uil uil-money-withdrawal icon"></i>
+                <a className={isActive ? "active-text" : "unactive-text"}>
+                  Quản lý nạp point KH
+                </a>
+              </div>
+            )}
+          </NavLink>
+        </li> */}
         <li>
           <NavLink to="/adminManage/manage-admin">
             {({ isActive }) => (
@@ -204,6 +220,16 @@ const Sidebar = () => {
           </NavLink>
         </li>
       </ul>
+      <div>
+        <Input
+          id="exampleColor"
+          name="color"
+          placeholder="color placeholder"
+          type="color"
+          className="input-color"
+          onChange={(e) => onChangeColor(e.target.value)}
+        />
+      </div>
     </div>
   );
 };

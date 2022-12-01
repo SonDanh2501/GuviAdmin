@@ -19,12 +19,17 @@ import TopupManage from "../container/System/ManageTopup/TopupManage";
 
 const Dashboard = () => {
   const [hideSidebar, setHideSidebar] = useState(true);
+  const [color, setColor] = useState("");
+
+  const onColor = (e) => {
+    setColor(e);
+  };
   return (
     <div className="container-dashboard container-fluid">
       <div className="row">
         {hideSidebar && (
-          <div className="col-2 sidebar">
-            <Sidebar />
+          <div className="col-2 sidebar" style={{ backgroundColor: color }}>
+            <Sidebar color={color} onChangeColor={(e) => onColor(e)} />
           </div>
         )}
         <main className={hideSidebar ? "col-lg-10 p-0" : "col-lg-12 p-0"}>
@@ -32,6 +37,7 @@ const Dashboard = () => {
             <Header
               onClick={() => setHideSidebar(!hideSidebar)}
               hideSidebar={hideSidebar}
+              color={color}
             />
           </div>
           <Routes>

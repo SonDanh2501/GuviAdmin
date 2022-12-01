@@ -18,3 +18,10 @@ export const TopupMoneyCollaboratorApi = (id, data) => {
     data
   );
 };
+
+export const updateMoneyCollaboratorApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/collaborator_manager/top_up/${id}?lang=vi`,
+    data
+  );
+};

@@ -139,7 +139,11 @@ export default function TableManageReason({ data }) {
             <Modal isOpen={modal} toggle={toggle}>
               <ModalHeader toggle={toggle}>Xóa lí do huỷ việc</ModalHeader>
               <ModalBody>
-                Bạn có chắc muốn xóa lí do {data?.title?.vi} này không?
+                <a>
+                  Bạn có chắc muốn xóa lí do{" "}
+                  <a className="text-name-modal"> {data?.title?.vi} </a>này
+                  không?
+                </a>
               </ModalBody>
               <ModalFooter>
                 <Button color="primary" onClick={() => onDelete(data?._id)}>

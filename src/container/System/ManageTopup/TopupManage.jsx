@@ -52,7 +52,7 @@ export default function TopupManage() {
     setCurrentPage(index);
     const start = index * listCollaborators.length;
     dispatch(
-      getFeedback.getFeedbackRequest({
+      getTopupCollaborator.getTopupCollaboratorRequest({
         start: start > 0 ? start : 0,
         length: 10,
       })

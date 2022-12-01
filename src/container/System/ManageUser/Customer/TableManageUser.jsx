@@ -135,7 +135,10 @@ export default function TableManageUser({ data }) {
             <Modal isOpen={modal} toggle={toggle}>
               <ModalHeader toggle={toggle}>Xóa người dùng</ModalHeader>
               <ModalBody>
-                Bạn có chắc muốn xóa người dùng {data?.name} này không?
+                <a>
+                  Bạn có chắc muốn xóa người dùng{" "}
+                  <a className="text-name-modal">{data?.name}</a> này không?
+                </a>
               </ModalBody>
               <ModalFooter>
                 <Button color="primary" onClick={() => onDelete(data?._id)}>

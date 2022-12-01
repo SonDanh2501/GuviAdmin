@@ -77,7 +77,11 @@ export default function TableManagePromotion({ data }) {
             <Modal isOpen={modal} toggle={toggle}>
               <ModalHeader toggle={toggle}>Xóa mã khuyến mãi</ModalHeader>
               <ModalBody>
-                Bạn có chắc muốn xóa mã {data?.title?.vi} này không?
+                <a>
+                  Bạn có chắc muốn xóa mã khuyến mãi{" "}
+                  <a className="text-name-modal">{data?.title?.vi}</a> này
+                  không?
+                </a>
               </ModalBody>
               <ModalFooter>
                 <Button color="primary" onClick={() => onDelete(data?._id)}>

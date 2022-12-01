@@ -114,7 +114,7 @@ export default function Home() {
   const dataDay = [];
   useEffect(() => {
     getDayReportApi(
-      moment(new Date(2022, 10, 1)).toISOString(),
+      moment(new Date(2022, 11, 1)).toISOString(),
       moment(new Date()).toISOString()
     )
       .then((res) => {
@@ -176,7 +176,7 @@ export default function Home() {
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
-              <YAxis type="number" domain={[0, 5000000]} />
+              <YAxis type="number" domain={[0, 2000000]} />
               <Tooltip />
               <Legend />
               <Bar dataKey="money" fill="#82ca9d" radius={5} barSize={25} />

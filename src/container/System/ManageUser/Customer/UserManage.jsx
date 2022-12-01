@@ -108,7 +108,7 @@ export default function UserManage() {
             responsive={true}
             hover={true}
           >
-            <thead className="thead-light">
+            <thead>
               <tr>
                 <th scope="col">Tên người dùng</th>
                 <th scope="col">SĐT</th>
@@ -135,7 +135,6 @@ export default function UserManage() {
                 >
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage - 1)}
-                    previous
                     href="#"
                   >
                     <i class="uil uil-previous"></i>
@@ -145,7 +144,6 @@ export default function UserManage() {
                 <PaginationItem disabled={currentPage >= pageCount - 1}>
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage + 1)}
-                    next
                     href="#"
                   >
                     <i class="uil uil-step-forward"></i>

@@ -135,7 +135,10 @@ export default function TableManageBanner({ data }) {
             <Modal isOpen={modal} toggle={toggle}>
               <ModalHeader toggle={toggle}>Xóa banner</ModalHeader>
               <ModalBody>
-                Bạn có chắc muốn xóa banner {data?.title} này không?
+                <a>
+                  Bạn có chắc muốn xóa banner{" "}
+                  <a className="text-name-modal">{data?.title}</a> này không?
+                </a>
               </ModalBody>
               <ModalFooter>
                 <Button color="primary" onClick={() => onDelete(data?._id)}>

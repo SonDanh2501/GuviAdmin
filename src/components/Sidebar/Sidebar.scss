@@ -29,8 +29,8 @@
   display: flex;
 
   .logo {
-    width: "5%";
-    height: 60px;
+    width: 100px;
+    height: 38pxpx;
   }
 
   .name-guvi {
@@ -60,7 +60,7 @@
 .unactive-link {
   width: "10%";
   height: 40px;
-  background-color: rgb(255, 255, 255);
+  background-color: "transparent" !important;
   padding: 10px;
   display: flex;
   border-radius: 5px;
@@ -69,4 +69,11 @@
     text-decoration: none !important;
     color: rgb(0, 0, 0);
   }
+}
+
+.input-color {
+  width: 50px;
+  height: 30px;
+  border: none;
+  background-color: transparent;
 }
