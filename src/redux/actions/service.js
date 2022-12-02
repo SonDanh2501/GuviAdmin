@@ -5,7 +5,7 @@ export const getType = (reduxAction) => {
 };
 //group-service
 export const getGroupServiceAction = createActions({
-  getGroupServiceRequest: undefined,
+  getGroupServiceRequest: (payload) => payload,
   getGroupServiceSuccess: (payload) => payload,
   getGroupServiceFailure: (err) => err,
 });

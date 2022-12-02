@@ -1,3 +1,4 @@
+import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,20 +12,15 @@ import {
   Row,
   Table,
 } from "reactstrap";
-import { searchFeedbackApi } from "../../../api/feedback";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
-import { getFeedback } from "../../../redux/actions/feedback";
 import { loadingAction } from "../../../redux/actions/loading";
-import {
-  getFeedbacks,
-  getFeedbackTotal,
-} from "../../../redux/selectors/feedback";
 import "./TopupManage.scss";
 
+import { searchTopupCollaboratorApi } from "../../../api/topup";
 import AddTopup from "../../../components/addTopup/addTopup";
+import Withdraw from "../../../components/withdraw/withdraw";
 import { getTopupCollaborator } from "../../../redux/actions/topup";
 import { getTopupCTV, totalTopupCTV } from "../../../redux/selectors/topup";
-import { searchTopupCollaboratorApi } from "../../../api/topup";
 import TableManageTopup from "./TableManageTopup";
 
 export default function TopupManage() {
@@ -41,12 +37,14 @@ export default function TopupManage() {
     );
   }, [dispatch]);
 
-  const handleSearch = useCallback((value) => {
-    searchTopupCollaboratorApi(value, 0, 10)
-      .then((res) => setDataFilter(res.data))
-      .catch((err) => console.log(err));
-  }, []);
-
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      searchTopupCollaboratorApi(value, 0, 10)
+        .then((res) => setDataFilter(res.data))
+        .catch((err) => console.log(err));
+    }, 1000),
+    []
+  );
   const handleClick = (e, index) => {
     e.preventDefault();
     setCurrentPage(index);
@@ -77,8 +75,13 @@ export default function TopupManage() {
         <Card className="shadow">
           <CardHeader className="border-0 card-header">
             <Row className="align-items-center">
-              <Col className="text-left">
-                <AddTopup />
+              <Col className="text-left add">
+                <div>
+                  <AddTopup />
+                </div>
+                <div className="withdraw">
+                  <Withdraw />
+                </div>
               </Col>
               <Col>
                 <CustomTextInput

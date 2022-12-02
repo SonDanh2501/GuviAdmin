@@ -1,3 +1,4 @@
+import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,10 +16,9 @@ import {
 import { searchPromotion } from "../../../../api/promotion.jsx";
 import AddPromotion from "../../../../components/addPromotion/addPromotion.js";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
-import { removeVietnameseTones } from "../../../../helper/ConvertVie.js";
 import { loadingAction } from "../../../../redux/actions/loading.js";
 import { getPromotion } from "../../../../redux/actions/promotion.js";
-import { getServiceAction } from "../../../../redux/actions/service.js";
+
 import {
   getPromotionSelector,
   getTotalPromotion,
@@ -78,15 +78,18 @@ export default function PromotionManage() {
     );
   }
 
-  const handleSearch = useCallback((value) => {
-    setValueFilter(value);
-    searchPromotion(value, 0, 10)
-      .then((res) => {
-        setDataFilter(res?.data);
-        setTotalFilter(res?.totalItem);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      setValueFilter(value);
+      searchPromotion(value, 0, 10)
+        .then((res) => {
+          setDataFilter(res?.data);
+          setTotalFilter(res?.totalItem);
+        })
+        .catch((err) => console.log(err));
+    }, 1000),
+    []
+  );
 
   return (
     <React.Fragment>

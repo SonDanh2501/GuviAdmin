@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import {
@@ -16,17 +16,55 @@ import AddGroupService from "../../../../../components/addGroupService/addGroupS
 import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import { getGroupServiceAction } from "../../../../../redux/actions/service";
-import { getGroupService } from "../../../../../redux/selectors/service";
+import {
+  getGroupService,
+  getGroupServiceTotal,
+} from "../../../../../redux/selectors/service";
 import "./GroupServiceManage.scss";
 import TableManageGroupService from "./TableManageGroupService";
 
 export default function GroupServiceManage() {
   const dispatch = useDispatch();
+  const [dataFilter, setDataFilter] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(0);
   const listGroupService = useSelector(getGroupService);
+  const totalGroupService = useSelector(getGroupServiceTotal);
   React.useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
-    dispatch(getGroupServiceAction.getGroupServiceRequest());
+    dispatch(getGroupServiceAction.getGroupServiceRequest(0, 10));
   }, [dispatch]);
+
+  const handleClick = useCallback(
+    (e, index) => {
+      e.preventDefault();
+      setCurrentPage(index);
+      const start =
+        dataFilter.length > 0
+          ? index * dataFilter.length
+          : index * listGroupService.length;
+
+      dispatch(
+        getGroupServiceAction.getGroupServiceRequest({
+          start: start > 0 ? start : 0,
+          length: 10,
+        })
+      );
+    },
+    [dataFilter]
+  );
+
+  const pageCount = totalGroupService / 10;
+  let pageNumbers = [];
+  for (let i = 0; i < pageCount; i++) {
+    pageNumbers.push(
+      <PaginationItem key={i} active={currentPage === i ? true : false}>
+        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
+          {i + 1}
+        </PaginationLink>
+      </PaginationItem>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -38,11 +76,11 @@ export default function GroupServiceManage() {
                 <AddGroupService />
               </Col>
               <Col>
-                <CustomTextInput
+                {/* <CustomTextInput
                   placeholder="Tìm kiếm"
                   type="text"
-                  // onChange={(e) => handleSearch(e.target.value)}
-                />
+                  onChange={(e) => handleSearch(e.target.value)}
+                /> */}
               </Col>
             </Row>
           </CardHeader>
@@ -68,12 +106,23 @@ export default function GroupServiceManage() {
                 className="pagination justify-content-end mb-0"
                 listClassName="justify-content-end mb-0"
               >
-                <PaginationItem className="active">
+                <PaginationItem
+                  className={currentPage === 0 ? "disabled" : "enable"}
+                >
                   <PaginationLink
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
+                    onClick={(e) => handleClick(e, currentPage - 1)}
+                    href="#"
                   >
-                    1
+                    <i class="uil uil-previous"></i>
+                  </PaginationLink>
+                </PaginationItem>
+                {pageNumbers}
+                <PaginationItem disabled={currentPage >= pageCount - 1}>
+                  <PaginationLink
+                    onClick={(e) => handleClick(e, currentPage + 1)}
+                    href="#"
+                  >
+                    <i class="uil uil-step-forward"></i>
                   </PaginationLink>
                 </PaginationItem>
               </Pagination>

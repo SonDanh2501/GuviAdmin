@@ -1,7 +1,9 @@
 import axiosClient from "../axios";
 //group-service
-export const getGroupServiceApi = () => {
-  return axiosClient.get("/admin/group_service_manager/get_list");
+export const getGroupServiceApi = (start, length) => {
+  return axiosClient.get(
+    `/admin/group_service_manager/get_list?start=${start}&length=${length}`
+  );
 };
 
 export const createGroupServiceApi = (payload) => {

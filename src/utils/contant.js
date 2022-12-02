@@ -13,6 +13,7 @@ export const INIT_STATE = {
   },
   banners: {
     data: [],
+    totalItem: 0,
   },
   news: {
     data: [],
@@ -28,6 +29,7 @@ export const INIT_STATE = {
   },
   service: {
     groupService: [],
+    groupServiceTotal: 0,
     services: [],
   },
   brand: {

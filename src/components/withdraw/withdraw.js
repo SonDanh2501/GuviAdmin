@@ -1,34 +1,27 @@
 import { Select } from "antd";
 import { validateYupSchema } from "formik";
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, FormGroup, Input, Label, List, Modal } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
 import { postFile } from "../../api/file";
-import {
-  TopupMoneyCollaboratorApi,
-  updateMoneyCollaboratorApi,
-} from "../../api/topup";
+import { TopupMoneyCollaboratorApi } from "../../api/topup";
 import { loadingAction } from "../../redux/actions/loading";
 import { createNew } from "../../redux/actions/news";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
-import "./editTopup.scss";
+import "./withdraw.scss";
 
-const EditTopup = ({ state, setState, item }) => {
+const Withdraw = () => {
+  const [state, setState] = useState(false);
   const [money, setMoney] = useState("");
   const [note, setNote] = useState("");
   const [data, setData] = useState([]);
   const [name, setName] = useState("");
+  const [errorName, setErrorName] = useState("");
+  const [errorMoney, setErrorMoney] = useState("");
   const [id, setId] = useState("");
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    setName(item?.id_collaborator?.name);
-    setId(item?._id);
-    setMoney(item?.money);
-    setNote(item?.transfer_note);
-  }, [item]);
 
   const searchCollaborator = useCallback((value) => {
     setName(value);
@@ -38,22 +31,34 @@ const EditTopup = ({ state, setState, item }) => {
     setId("");
   }, []);
 
-  console.log(id);
-
-  const editMoney = useCallback(() => {
-    dispatch(loadingAction.loadingRequest(true));
-    updateMoneyCollaboratorApi(id, {
-      money: money,
-      transfer_note: note,
-    })
-      .then((res) => {
-        window.location.reload();
+  const onWithdraw = useCallback(() => {
+    if (name === "" || money === "") {
+      !name
+        ? setErrorName("Vui lòng nhập thông tin")
+        : setErrorMoney("Vui lòng nhập số tiền cần nạp");
+    } else {
+      dispatch(loadingAction.loadingRequest(true));
+      TopupMoneyCollaboratorApi(id, {
+        money: money,
+        transfer_note: note,
       })
-      .catch((err) => console.log(err));
-  }, [id, money, note]);
+        .then((res) => {
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [id, money, note, name]);
 
   return (
     <>
+      {/* Button trigger modal */}
+      <CustomButton
+        title="Rút tiền"
+        className="btn-modal"
+        type="button"
+        onClick={() => setState(!state)}
+      />
+      {/* Modal */}
       <Modal
         className="modal-dialog-centered"
         isOpen={state}
@@ -61,7 +66,7 @@ const EditTopup = ({ state, setState, item }) => {
       >
         <div className="modal-header">
           <h3 className="modal-title" id="exampleModalLabel">
-            Sửa
+            Rút tiền
           </h3>
           <button className="btn-close" onClick={() => setState(!state)}>
             <i className="uil uil-times-square"></i>
@@ -70,12 +75,13 @@ const EditTopup = ({ state, setState, item }) => {
         <div className="modal-body">
           <Form>
             <div>
-              <Label>Cộng tác viên</Label>
+              <Label>(*)Cộng tác viên</Label>
               <Input
                 placeholder="Tìm kiếm theo số điện thoại"
                 value={name}
                 onChange={(e) => searchCollaborator(e.target.value)}
               />
+              {errorName && <a className="error">{errorName}</a>}
               {data.length > 0 && (
                 <List type={"unstyled"} className="list-item">
                   {data?.map((item, index) => {
@@ -98,7 +104,7 @@ const EditTopup = ({ state, setState, item }) => {
             </div>
 
             <CustomTextInput
-              label={"Nhập số tiền"}
+              label={"(*) Nhập số tiền"}
               id="exampleMoney"
               name="money"
               placeholder="Vui lòng nhập số tiền"
@@ -107,6 +113,7 @@ const EditTopup = ({ state, setState, item }) => {
               min={0}
               value={money}
               onChange={(e) => setMoney(e.target.value)}
+              errors={errorMoney}
             />
             <CustomTextInput
               label={"Nhập nội dung"}
@@ -119,10 +126,10 @@ const EditTopup = ({ state, setState, item }) => {
               onChange={(e) => setNote(e.target.value)}
             />
             <CustomButton
-              title="Sửa"
+              title="Rút"
               className="float-right btn-modal"
               type="button"
-              onClick={editMoney}
+              // onClick={addMoney}
             />
           </Form>
         </div>
@@ -131,4 +138,4 @@ const EditTopup = ({ state, setState, item }) => {
   );
 };
 
-export default memo(EditTopup);
+export default memo(Withdraw);

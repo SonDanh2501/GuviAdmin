@@ -1,13 +1,13 @@
-import { createActions, createAction } from 'redux-actions';
+import { createActions, createAction } from "redux-actions";
 
 export const getType = (reduxAction) => {
   return reduxAction().type;
 };
 
 export const getBanners = createActions({
-  getBannersRequest: undefined,
+  getBannersRequest: (payload) => payload,
   getBannersSuccess: (payload) => payload,
-  getBannersFailure: (err) => err, 
+  getBannersFailure: (err) => err,
 });
 
 export const createBanner = createActions({
@@ -21,4 +21,3 @@ export const updateBanner = createActions({
   updateBannerSuccess: (payload) => payload,
   updateBannerFailure: (err) => err,
 });
-

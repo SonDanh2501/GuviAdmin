@@ -45,7 +45,10 @@ const AddPopup = () => {
         .then((res) => {
           window.location.reload();
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          dispatch(loadingAction.loadingRequest(false));
+          console.log(err);
+        });
     }
   }, [id, money, note, name]);
 

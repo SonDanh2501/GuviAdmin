@@ -20,6 +20,7 @@ import {
   getFeedbackTotal,
 } from "../../../redux/selectors/feedback";
 import "./FeedbackManage.scss";
+import _debounce from "lodash/debounce";
 import TableManageFeedback from "./TableManageFeedback";
 
 export default function FeedbackManage() {
@@ -33,11 +34,14 @@ export default function FeedbackManage() {
     dispatch(getFeedback.getFeedbackRequest({ start: 0, length: 10 }));
   }, [dispatch]);
 
-  const handleSearch = useCallback((value) => {
-    searchFeedbackApi(value)
-      .then((res) => setDataFilter(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      searchFeedbackApi(value)
+        .then((res) => setDataFilter(res.data))
+        .catch((err) => console.log(err));
+    }, 1000),
+    []
+  );
 
   const handleClick = (e, index) => {
     e.preventDefault();
@@ -72,7 +76,7 @@ export default function FeedbackManage() {
               <Col className="text-left"></Col>
               <Col>
                 <CustomTextInput
-                  placeholder="Tìm kiếm"
+                  placeholder="Tìm kiếm theo tên hoặc số điện thoại"
                   type="text"
                   onChange={(e) => handleSearch(e.target.value)}
                 />

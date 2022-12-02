@@ -4,12 +4,23 @@ import * as api from "../../api/banner";
 import { getType } from "../actions/banner";
 import { loadingAction } from "../actions/loading";
 
-function* fetchBannersSaga() {
+function* fetchBannersSaga(action) {
   try {
-    const Banners = yield call(api.fetchBanners);
-    yield put(actions.getBanners.getBannersSuccess(Banners));
+    const response = yield call(
+      api.fetchBanners,
+      action.payload.start,
+      action.payload.length
+    );
+    yield put(
+      actions.getBanners.getBannersSuccess({
+        data: response.data,
+        total: response.totalItem,
+      })
+    );
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
+    yield put(loadingAction.loadingRequest(false));
+
     yield put(actions.getBanners.getBannersFailure(err));
   }
 }

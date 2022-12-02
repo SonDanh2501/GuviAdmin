@@ -18,13 +18,23 @@ import { loadingAction } from "../actions/loading";
 
 //group-service
 
-function* fetchGroupServiceSaga() {
+function* fetchGroupServiceSaga(action) {
   try {
-    const response = yield call(getGroupServiceApi);
-    yield put(getGroupServiceAction.getGroupServiceSuccess(response.data));
+    const response = yield call(
+      getGroupServiceApi,
+      action.payload.start,
+      action.payload.length
+    );
+    yield put(
+      getGroupServiceAction.getGroupServiceSuccess({
+        data: response.data,
+        total: response.totalItem,
+      })
+    );
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     console.error(err);
+    yield put(loadingAction.loadingRequest(false));
     yield put(getGroupServiceAction.getGroupServiceFailure(err));
   }
 }

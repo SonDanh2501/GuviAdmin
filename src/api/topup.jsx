@@ -20,8 +20,19 @@ export const TopupMoneyCollaboratorApi = (id, data) => {
 };
 
 export const updateMoneyCollaboratorApi = (id, data) => {
+  return axiosClient.post(`/admin/collaborator_manager/edit_trans/${id}`, data);
+};
+
+export const verifyMoneyCollaboratorApi = (id, data) => {
   return axiosClient.post(
-    `/admin/collaborator_manager/top_up/${id}?lang=vi`,
+    `/admin/collaborator_manager/verify_trans/${id}?lang=vi`,
+    data
+  );
+};
+
+export const deleteMoneyCollaboratorApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/collaborator_manager/delete_trans/${id}?lang=vi`,
     data
   );
 };

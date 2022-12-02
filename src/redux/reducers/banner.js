@@ -1,5 +1,10 @@
-import { INIT_STATE } from '../../utils/contant';
-import { getBanners, getType, createBanner, updateBanner } from '../actions/banner';
+import { INIT_STATE } from "../../utils/contant";
+import {
+  getBanners,
+  getType,
+  createBanner,
+  updateBanner,
+} from "../actions/banner";
 
 export default function BannersReducers(state = INIT_STATE.banners, action) {
   switch (action.type) {
@@ -10,7 +15,8 @@ export default function BannersReducers(state = INIT_STATE.banners, action) {
     case getType(getBanners.getBannersSuccess):
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.data,
+        totalItem: action.payload.total,
       };
     case getType(getBanners.getBannersFailure):
       return {
@@ -25,7 +31,7 @@ export default function BannersReducers(state = INIT_STATE.banners, action) {
       return {
         ...state,
         data: state.data.map((banner) =>
-        banner._id === action.payload._id ? action.payload : banner
+          banner._id === action.payload._id ? action.payload : banner
         ),
       };
     default:

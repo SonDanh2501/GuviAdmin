@@ -17,7 +17,8 @@ export default function ServiceReducers(state = INIT_STATE.service, action) {
     case getType(getGroupServiceAction.getGroupServiceSuccess):
       return {
         ...state,
-        groupService: action.payload,
+        groupService: action.payload.data,
+        groupServiceTotal: action.payload.total,
       };
     case getType(getGroupServiceAction.getGroupServiceFailure):
       return {

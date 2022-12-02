@@ -16,6 +16,7 @@ import AddCustomer from "../../../../components/addCustomer/addCustomer";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import { getCustomers } from "../../../../redux/actions/customerAction";
 import { loadingAction } from "../../../../redux/actions/loading";
+import _debounce from "lodash/debounce";
 import {
   getCustomer,
   getCustomerTotalItem,
@@ -75,15 +76,18 @@ export default function UserManage() {
     );
   }
 
-  const handleSearch = useCallback((value) => {
-    setValueFilter(value);
-    searchCustomers(value, 0, 10)
-      .then((res) => {
-        setDataFilter(res.data);
-        setTotalFilter(res.totalItem);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      setValueFilter(value);
+      searchCustomers(value, 0, 10)
+        .then((res) => {
+          setDataFilter(res.data);
+          setTotalFilter(res.totalItem);
+        })
+        .catch((err) => console.log(err));
+    }, 1000),
+    []
+  );
 
   return (
     <React.Fragment>

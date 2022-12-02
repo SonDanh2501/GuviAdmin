@@ -14,18 +14,43 @@ import {
 import "./TableManageTopup.scss";
 import { formatMoney } from "../../../helper/formatMoney";
 import EditPopup from "../../../components/editTopup/editTopup";
+import {
+  deleteMoneyCollaboratorApi,
+  verifyMoneyCollaboratorApi,
+} from "../../../api/topup";
+import { loadingAction } from "../../../redux/actions/loading";
 
 export default function TableManageTopup({ data }) {
   const [modal, setModal] = React.useState(false);
   const [modalConfirm, setModalConfirm] = React.useState(false);
   const [modalEdit, setModalEdit] = React.useState(false);
   const [itemEdit, setItemEdit] = React.useState([]);
-
+  const dispatch = useDispatch();
   const toggleConfirm = () => setModalConfirm(!modalConfirm);
   const toggleEdit = () => setModalEdit(!modalEdit);
   const toggle = () => setModal(!modal);
 
-  const onConfirm = useCallback((id) => {}, []);
+  const onDelete = useCallback((id) => {
+    dispatch(loadingAction.loadingRequest(true));
+    deleteMoneyCollaboratorApi(id, { is_delete: true })
+      .then((res) => window.location.reload())
+      .catch((err) => {
+        console.log(err);
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  }, []);
+
+  const onConfirm = useCallback((id) => {
+    dispatch(loadingAction.loadingRequest(true));
+    verifyMoneyCollaboratorApi(id, { is_verify_money: true })
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        dispatch(loadingAction.loadingRequest(false));
+        console.log(err);
+      });
+  }, []);
 
   return (
     <>
@@ -56,15 +81,17 @@ export default function TableManageTopup({ data }) {
                 Duyệt lệnh
               </button>
             )}
-            <button
-              className="btn-edit"
-              onClick={() => {
-                toggleEdit();
-                setItemEdit(data);
-              }}
-            >
-              <i className="uil uil-edit-alt"></i>
-            </button>
+            {!data?.is_verify_money && (
+              <button
+                className="btn-edit"
+                onClick={() => {
+                  toggleEdit();
+                  setItemEdit(data);
+                }}
+              >
+                <i className="uil uil-edit-alt"></i>
+              </button>
+            )}
 
             <button className="btn-delete" onClick={toggle}>
               <i className="uil uil-trash"></i>
@@ -110,7 +137,9 @@ export default function TableManageTopup({ data }) {
                 </a>
               </ModalBody>
               <ModalFooter>
-                <Button color="primary">Có</Button>
+                <Button color="primary" onClick={() => onDelete(data?._id)}>
+                  Có
+                </Button>
                 <Button color="#ddd" onClick={toggle}>
                   Không
                 </Button>

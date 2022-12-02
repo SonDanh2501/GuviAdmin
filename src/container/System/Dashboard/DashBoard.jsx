@@ -1,5 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Card, CardHeader, Col, Container, Row, Table } from "reactstrap";
+import {
+  Card,
+  CardHeader,
+  Col,
+  Container,
+  Input,
+  Row,
+  Table,
+} from "reactstrap";
 import "./DashBoard.scss";
 import Header from "./HeaderBoard/Header";
 import HomeObj from "./DashboardTable";
@@ -111,6 +119,7 @@ const dataAreChart = [
 export default function Home() {
   const [arrResult, setArrResult] = useState([]);
   const [day, setDay] = useState([]);
+  const [type, setType] = useState("");
   const dataDay = [];
   useEffect(() => {
     getDayReportApi(
@@ -142,6 +151,7 @@ export default function Home() {
   });
 
   const onChange = useCallback((start, end) => {
+    console.log(start, end);
     const dayStart = moment(start).toISOString();
     const dayEnd = moment(end).toISOString();
     getDayReportApi(dayStart, dayEnd)
@@ -159,7 +169,20 @@ export default function Home() {
       <Container className="mt--7" fluid>
         <Row className="mt-5">
           <Col xl="8">
+            <Input
+              name="select"
+              className="type-select"
+              type="select"
+              onChange={(e) => setType(e.target.value)}
+            >
+              <>
+                <option value="">Chọn kiểu</option>
+                <option value="day">Ngày</option>
+                <option value="week">Tuần</option>
+              </>
+            </Input>
             <RangePicker
+              picker={type}
               onChange={(e) => onChange(e[0]?.$d, e[1]?.$d)}
               style={{ marginBottom: 10 }}
             />

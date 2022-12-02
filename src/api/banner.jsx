@@ -2,8 +2,10 @@ import axiosClient from "../axios";
 export const createBanner = (payload) => {
   return axiosClient.post("/admin/banner_manager/create_item", payload);
 };
-export const fetchBanners = () => {
-  return axiosClient.get("/admin/banner_manager/get_list");
+export const fetchBanners = (start, length) => {
+  return axiosClient.get(
+    `/admin/banner_manager/get_list?start=${start}&length=${length}`
+  );
 };
 export const searchBanners = (payload) => {
   return axiosClient.get(`/admin/banner_manager/get_list?search=${payload}`);
