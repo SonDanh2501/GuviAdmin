@@ -90,14 +90,14 @@ export default function TopupManage() {
             </Row>
           </CardHeader>
           <Table className="align-items-center table-flush " responsive>
-            <thead className="thead-light">
+            <thead>
               <tr>
-                <th scope="col">Tên cộng tác viên</th>
-                <th scope="col">Số tiền</th>
-                <th scope="col">Nạp/rút</th>
-                <th scope="col">Nội dung</th>
-                <th scope="col">Ngày nạp</th>
-                <th scope="col"></th>
+                <th>Tên cộng tác viên</th>
+                <th>Số tiền</th>
+                <th>Nạp/rút</th>
+                <th>Nội dung</th>
+                <th>Ngày nạp</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -118,7 +118,6 @@ export default function TopupManage() {
                 >
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage - 1)}
-                    previous
                     href="#"
                   >
                     <i class="uil uil-previous"></i>
@@ -128,7 +127,6 @@ export default function TopupManage() {
                 <PaginationItem disabled={currentPage >= pageCount - 1}>
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage + 1)}
-                    next
                     href="#"
                   >
                     <i class="uil uil-step-forward"></i>

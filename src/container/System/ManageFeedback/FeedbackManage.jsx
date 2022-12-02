@@ -80,13 +80,13 @@ export default function FeedbackManage() {
             </Row>
           </CardHeader>
           <Table className="align-items-center table-flush " responsive>
-            <thead className="thead-light">
+            <thead>
               <tr>
-                <th scope="col">Loại phản hồi</th>
-                <th scope="col">Nội dung</th>
-                <th scope="col">Người phản hồi</th>
-                <th scope="col">SĐT người phản hồi</th>
-                <th scope="col">Ngày phản hồi</th>
+                <th>Loại phản hồi</th>
+                <th>Nội dung</th>
+                <th>Người phản hồi</th>
+                <th>SĐT người phản hồi</th>
+                <th>Ngày phản hồi</th>
               </tr>
             </thead>
             <tbody>
@@ -107,7 +107,6 @@ export default function FeedbackManage() {
                 >
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage - 1)}
-                    previous
                     href="#"
                   >
                     <i class="uil uil-previous"></i>
@@ -117,7 +116,6 @@ export default function FeedbackManage() {
                 <PaginationItem disabled={currentPage >= pageCount - 1}>
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage + 1)}
-                    next
                     href="#"
                   >
                     <i class="uil uil-step-forward"></i>

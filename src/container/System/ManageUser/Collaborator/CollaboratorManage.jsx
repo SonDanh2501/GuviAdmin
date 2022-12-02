@@ -110,7 +110,7 @@ export default function CollaboratorManage() {
             responsive={true}
             hover={true}
           >
-            <thead className="thead-light">
+            <thead>
               <tr>
                 <th>Tên cộng tác viên</th>
                 <th>Email</th>
@@ -138,7 +138,6 @@ export default function CollaboratorManage() {
                 >
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage - 1)}
-                    previous
                     href="#"
                   >
                     <i class="uil uil-previous"></i>
@@ -148,7 +147,6 @@ export default function CollaboratorManage() {
                 <PaginationItem disabled={currentPage >= pageCount - 1}>
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage + 1)}
-                    next
                     href="#"
                   >
                     <i class="uil uil-step-forward"></i>

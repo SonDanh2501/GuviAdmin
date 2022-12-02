@@ -107,12 +107,12 @@ export default function PromotionManage() {
             </Row>
           </CardHeader>
           <Table className="align-items-center table-flush" responsive>
-            <thead className="thead-light">
+            <thead>
               <tr>
-                <th scope="col">Tên Promotion</th>
-                <th scope="col">Mã code</th>
-                <th scope="col">Hạn</th>
-                <th scope="col" />
+                <th>Tên Promotion</th>
+                <th>Mã code</th>
+                <th>Hạn</th>
+                <th />
               </tr>
             </thead>
             <tbody>
@@ -133,7 +133,6 @@ export default function PromotionManage() {
                 >
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage - 1)}
-                    previous
                     href="#"
                   >
                     <i class="uil uil-previous"></i>
@@ -143,7 +142,6 @@ export default function PromotionManage() {
                 <PaginationItem disabled={currentPage >= pageCount - 1}>
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage + 1)}
-                    next
                     href="#"
                   >
                     <i class="uil uil-step-forward"></i>

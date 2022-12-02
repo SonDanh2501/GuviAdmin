@@ -83,15 +83,15 @@ export default function ReasonManage() {
             responsive={true}
             hover={true}
           >
-            <thead className="thead-light">
+            <thead>
               <tr>
-                <th scope="col">Lý do huỷ việc</th>
-                <th scope="col">Mô tả</th>
-                <th scope="col">Hình thức phạt (phạt tiền hoặc khoá app)</th>
-                <th scope="col">Phạt tiền / Thời gian khoá app</th>
-                <th scope="col">Đối tượng áp dụng</th>
-                <th scope="col">Ghi chú</th>
-                <th scope="col" />
+                <th>Lý do huỷ việc</th>
+                <th>Mô tả</th>
+                <th>Hình thức phạt (phạt tiền hoặc khoá app)</th>
+                <th>Phạt tiền / Thời gian khoá app</th>
+                <th>Đối tượng áp dụng</th>
+                <th>Ghi chú</th>
+                <th />
               </tr>
             </thead>
             <tbody>
@@ -113,7 +113,6 @@ export default function ReasonManage() {
                 >
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage - 1)}
-                    previous
                     href="#"
                   >
                     <i class="uil uil-previous"></i>
@@ -123,7 +122,6 @@ export default function ReasonManage() {
                 <PaginationItem disabled={currentPage >= pageCount - 1}>
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage + 1)}
-                    next
                     href="#"
                   >
                     <i class="uil uil-step-forward"></i>

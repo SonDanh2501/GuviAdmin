@@ -145,16 +145,16 @@ export default function OrderManage() {
             </Row>
           </CardHeader>
           <Table className="align-items-center table-flush " responsive>
-            <thead className="thead-light">
+            <thead>
               <tr>
-                <th scope="col">Loại dịch vụ</th>
-                <th scope="col">Tên khách hàng</th>
-                <th scope="col">Đơn giá</th>
-                <th scope="col">Tên cộng tác viên</th>
-                <th scope="col">Ngày làm</th>
-                <th scope="col">Thời gian</th>
-                <th scope="col">Trạng thái</th>
-                <th scope="col"></th>
+                <th>Loại dịch vụ</th>
+                <th>Tên khách hàng</th>
+                <th>Đơn giá</th>
+                <th>Tên cộng tác viên</th>
+                <th>Ngày làm</th>
+                <th>Thời gian</th>
+                <th>Trạng thái</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -175,7 +175,6 @@ export default function OrderManage() {
                 >
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage - 1)}
-                    previous
                     href="#"
                   >
                     <i class="uil uil-previous"></i>
@@ -185,7 +184,6 @@ export default function OrderManage() {
                 <PaginationItem disabled={currentPage >= pageCount - 1}>
                   <PaginationLink
                     onClick={(e) => handleClick(e, currentPage + 1)}
-                    next
                     href="#"
                   >
                     <i class="uil uil-step-forward"></i>
