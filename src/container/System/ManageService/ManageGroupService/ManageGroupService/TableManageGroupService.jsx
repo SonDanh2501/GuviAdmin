@@ -18,7 +18,8 @@ import {
   activeGroupServiceApi,
   deleteGroupServiceApi,
 } from "../../../../../api/service";
-import EditGroupService from "../../../../../components/editGroupService /editGroupService";
+import EditGroupService from "../../../../../components/editGroupService/editGroupService";
+
 import { loadingAction } from "../../../../../redux/actions/loading";
 import "./TableManageGroupService.scss";
 
