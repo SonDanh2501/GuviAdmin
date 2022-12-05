@@ -1,5 +1,9 @@
 import { INIT_STATE } from "../../utils/contant";
-import { getTopupCollaborator, getType } from "../actions/topup";
+import {
+  getTopupCollaborator,
+  getTopupCustomer,
+  getType,
+} from "../actions/topup";
 
 export default function TopupReducers(state = INIT_STATE.topup, action) {
   switch (action.type) {
@@ -14,6 +18,20 @@ export default function TopupReducers(state = INIT_STATE.topup, action) {
         totalItem: action.payload.total,
       };
     case getType(getTopupCollaborator.getTopupCollaboratorFailure):
+      return {
+        ...state,
+      };
+    case getType(getTopupCustomer.getTopupCustomerRequest):
+      return {
+        ...state,
+      };
+    case getType(getTopupCustomer.getTopupCustomerSuccess):
+      return {
+        ...state,
+        dataCustomer: action.payload.data,
+        totalItemCustomer: action.payload.total,
+      };
+    case getType(getTopupCustomer.getTopupCustomerFailure):
       return {
         ...state,
       };

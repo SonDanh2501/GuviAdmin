@@ -1,7 +1,9 @@
 import axiosClient from "../axios";
 
-export const getTotalReportApi = () => {
-  return axiosClient.get("/admin/report_mananger/get_general_total_report");
+export const getTotalReportApi = (startDate, endDate) => {
+  return axiosClient.get(
+    `/admin/report_mananger/get_general_total_report?start_date=${startDate}&end_date=${endDate}`
+  );
 };
 
 export const getDayReportApi = (start, end) => {

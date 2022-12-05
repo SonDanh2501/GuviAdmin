@@ -49,6 +49,8 @@ export const INIT_STATE = {
   topup: {
     data: [],
     totalItem: 0,
+    dataCustomer: [],
+    totalItemCustomer: 0,
   },
 };
 

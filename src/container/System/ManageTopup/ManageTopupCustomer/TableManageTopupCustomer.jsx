@@ -11,16 +11,18 @@ import {
   ModalHeader,
   Row,
 } from "reactstrap";
-import "./TableManageTopup.scss";
-import { formatMoney } from "../../../helper/formatMoney";
-import EditPopup from "../../../components/editTopup/editTopup";
+import "./TableManageTopupCustomer.scss";
+import { formatMoney } from "../../../../helper/formatMoney";
+import EditPopup from "../../../../components/editTopup/editTopup";
 import {
   deleteMoneyCollaboratorApi,
+  deleteMoneyCustomerApi,
   verifyMoneyCollaboratorApi,
-} from "../../../api/topup";
-import { loadingAction } from "../../../redux/actions/loading";
+  verifyMoneyCustomerApi,
+} from "../../../../api/topup";
+import { loadingAction } from "../../../../redux/actions/loading";
 
-export default function TableManageTopup({ data }) {
+export default function TableManageTopupCustomer({ data }) {
   const [modal, setModal] = React.useState(false);
   const [modalConfirm, setModalConfirm] = React.useState(false);
   const [modalEdit, setModalEdit] = React.useState(false);
@@ -32,7 +34,7 @@ export default function TableManageTopup({ data }) {
 
   const onDelete = useCallback((id) => {
     dispatch(loadingAction.loadingRequest(true));
-    deleteMoneyCollaboratorApi(id, { is_delete: true })
+    deleteMoneyCustomerApi(id, { is_delete: true })
       .then((res) => window.location.reload())
       .catch((err) => {
         console.log(err);
@@ -42,7 +44,7 @@ export default function TableManageTopup({ data }) {
 
   const onConfirm = useCallback((id) => {
     dispatch(loadingAction.loadingRequest(true));
-    verifyMoneyCollaboratorApi(id, { is_verify_money: true })
+    verifyMoneyCustomerApi(id, { is_verify_money: true })
       .then((res) => {
         window.location.reload();
       })
@@ -57,14 +59,14 @@ export default function TableManageTopup({ data }) {
       <tr>
         <th scope="row" className="col-2">
           <Media>
-            <span className="mb-0 text-sm">{data?.id_collaborator?.name}</span>
+            <span className="mb-0 text-sm">{data?.id_customer?.name}</span>
           </Media>
         </th>
         <td className="col-0.5">
           <a>{formatMoney(data?.money)}</a>
         </td>
         <td className="col-0.5">
-          <a>{data?.withdraw}</a>
+          <a>{data?.type_transfer === "top_up" ? "Nạp" : "Rút"}</a>
         </td>
         <td className="col-2">
           <span>{data?.transfer_note}</span>
@@ -107,8 +109,8 @@ export default function TableManageTopup({ data }) {
                 <>
                   <h4>Bạn có muốn duyệt lệnh nạp tiền cho :</h4>
                   <div className="body-modal">
-                    <a>CTV: {data?.id_collaborator?.name}</a>
-                    <a>SĐT: {data?.id_collaborator?.phone}</a>
+                    <a>Khách hàng: {data?.id_customer?.name}</a>
+                    <a>SĐT: {data?.id_customer?.phone}</a>
                     <a>Số tiền: {formatMoney(data?.money)}</a>
                     <a>Nội dung: {data?.transfer_note}</a>
                   </div>
@@ -129,10 +131,8 @@ export default function TableManageTopup({ data }) {
               <ModalHeader toggle={toggle}>Xóa giao dịch</ModalHeader>
               <ModalBody>
                 <a>
-                  Bạn có chắc muốn xóa giao dịch của cộng tác viên
-                  <a className="text-name-modal">
-                    {data?.id_collaborator?.name}
-                  </a>
+                  Bạn có chắc muốn xóa giao dịch của khách hàng
+                  <a className="text-name-modal">{data?.id_customer?.name}</a>
                   này không?
                 </a>
               </ModalBody>

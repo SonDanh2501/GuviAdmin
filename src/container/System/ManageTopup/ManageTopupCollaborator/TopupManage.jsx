@@ -12,16 +12,16 @@ import {
   Row,
   Table,
 } from "reactstrap";
-import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
-import { loadingAction } from "../../../redux/actions/loading";
+import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
+import { loadingAction } from "../../../../redux/actions/loading";
 import "./TopupManage.scss";
 
-import { searchTopupCollaboratorApi } from "../../../api/topup";
-import AddTopup from "../../../components/addTopup/addTopup";
-import Withdraw from "../../../components/withdraw/withdraw";
-import { getTopupCollaborator } from "../../../redux/actions/topup";
-import { getTopupCTV, totalTopupCTV } from "../../../redux/selectors/topup";
+import AddTopup from "../../../../components/addTopup/addTopup";
+import Withdraw from "../../../../components/withdraw/withdraw";
+import { getTopupCollaborator } from "../../../../redux/actions/topup";
+import { getTopupCTV, totalTopupCTV } from "../../../../redux/selectors/topup";
 import TableManageTopup from "./TableManageTopup";
+import { searchTopupCollaboratorApi } from "../../../../api/topup";
 
 export default function TopupManage() {
   const [dataFilter, setDataFilter] = useState([]);

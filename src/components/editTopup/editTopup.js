@@ -38,8 +38,6 @@ const EditTopup = ({ state, setState, item }) => {
     setId("");
   }, []);
 
-  console.log(id);
-
   const editMoney = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
     updateMoneyCollaboratorApi(id, {

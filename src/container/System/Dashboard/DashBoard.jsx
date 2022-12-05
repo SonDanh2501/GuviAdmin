@@ -21,6 +21,7 @@ import {
   XAxis,
   YAxis,
   Area,
+  ResponsiveContainer,
 } from "recharts";
 import { getDayReportApi } from "../../../api/statistic";
 import { DatePicker, Space } from "antd";
@@ -167,71 +168,48 @@ export default function Home() {
     <>
       <Header />
       <Container className="mt--7" fluid>
-        <Row className="mt-5">
-          <Col xl="8">
-            <Input
-              name="select"
-              className="type-select"
-              type="select"
-              onChange={(e) => setType(e.target.value)}
-            >
-              <>
-                <option value="">Chọn kiểu</option>
-                <option value="day">Ngày</option>
-                <option value="week">Tuần</option>
-              </>
-            </Input>
-            <RangePicker
-              picker={type}
-              onChange={(e) => onChange(e[0]?.$d, e[1]?.$d)}
-              style={{ marginBottom: 10 }}
-            />
-            <BarChart
-              width={1000}
-              height={500}
-              data={dataDay}
-              margin={{
-                top: 5,
-                right: 30,
-                left: 20,
-                bottom: 5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis type="number" domain={[0, 2000000]} />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="money" fill="#82ca9d" radius={5} barSize={25} />
-              <Bar dataKey="job" fill="#82ca53" radius={5} barSize={25} />
-            </BarChart>
-          </Col>
-          {/* <Col xl="4">
-            <AreaChart
-              width={500}
-              height={470}
-              data={dataAreChart}
-              syncId="anyId"
-              margin={{
-                top: 10,
-                right: 30,
-                left: 0,
-                bottom: 0,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis type="number" domain={[0, 20000]} />
-              <Tooltip />
-              <Area
-                type="monotone"
-                dataKey="money"
-                stroke="#82ca9d"
-                fill="rgb(253, 255, 215)"
-              />
-            </AreaChart>
-          </Col> */}
-        </Row>
+        <div className="mt-5 chart">
+          <Input
+            name="select"
+            className="type-select"
+            type="select"
+            onChange={(e) => setType(e.target.value)}
+          >
+            <>
+              <option value="">Chọn kiểu</option>
+              <option value="day">Ngày</option>
+              <option value="week">Tuần</option>
+            </>
+          </Input>
+          <RangePicker
+            picker={type}
+            onChange={(e) => onChange(e[0]?.$d, e[1]?.$d)}
+            style={{ marginBottom: 10 }}
+          />
+          <div style={{ height: 500, width: 1000 }}>
+            <ResponsiveContainer>
+              <BarChart
+                width={1000}
+                height={500}
+                data={dataDay}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis type="number" domain={[0, 2000000]} />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="money" fill="#82ca9d" radius={5} barSize={25} />
+                <Bar dataKey="job" fill="#82ca53" radius={5} barSize={25} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
         <Row className="mt-5 mb-5">
           <Col className="mb-5 mb-xl-0">
             <Card className="shadow">

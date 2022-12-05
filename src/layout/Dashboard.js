@@ -15,7 +15,10 @@ import Home from "../container/System/Dashboard/DashBoard";
 import "./Dashboard.scss";
 import Sidebar from "../components/Sidebar/Sidebar";
 import OrderManage from "../container/System/ManageOrder/OrderManage";
-import TopupManage from "../container/System/ManageTopup/TopupManage";
+import TopupManage from "../container/System/ManageTopup/ManageTopupCollaborator/TopupManage";
+import TopupCustomerManage from "../container/System/ManageTopup/ManageTopupCustomer/TopupCustomerManage";
+import ManageConfiguration from "../container/System/ManageConfiguration/ManageConfiguration";
+import Profile from "../container/System/Profiles/Profile";
 
 const Dashboard = () => {
   const [hideSidebar, setHideSidebar] = useState(true);
@@ -44,6 +47,10 @@ const Dashboard = () => {
             <Route path="/" element={<Home />} />
             <Route path="/system/user-manage" element={<UserManage />} />
             <Route
+              path="/system/user-manage/details-customer"
+              element={<Profile />}
+            />
+            <Route
               path="/system/collaborator-manage"
               element={<CollaboratorManage />}
             />
@@ -69,6 +76,14 @@ const Dashboard = () => {
 
             <Route path="/group-order/manage-order" element={<OrderManage />} />
             <Route path="/topup/manage-topup" element={<TopupManage />} />
+            <Route
+              path="/topup/manage-topup-customer"
+              element={<TopupCustomerManage />}
+            />
+            <Route
+              path="/adminManage/manage-configuration"
+              element={<ManageConfiguration />}
+            />
           </Routes>
         </main>
       </div>

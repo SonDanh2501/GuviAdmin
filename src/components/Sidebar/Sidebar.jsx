@@ -52,7 +52,7 @@ const Sidebar = ({ onChangeColor }) => {
               <div className={isActive ? "active-link" : "unactive-link"}>
                 <i className="uil uil-user-square icon"></i>
                 <a className={isActive ? "active-text" : "unactive-text"}>
-                  Quản lý người dùng
+                  Quản lý khách hàng
                 </a>
               </div>
             )}
@@ -193,21 +193,18 @@ const Sidebar = ({ onChangeColor }) => {
             )}
           </NavLink>
         </li>
-        {/* <li>
-          <NavLink
-            to="/topup/manage-topup-customer"
-            onClick={() => changeBrand("Quản lý nạp KH")}
-          >
+        <li>
+          <NavLink to="/topup/manage-topup-customer">
             {({ isActive }) => (
               <div className={isActive ? "active-link" : "unactive-link"}>
                 <i class="uil uil-money-withdrawal icon"></i>
                 <a className={isActive ? "active-text" : "unactive-text"}>
-                  Quản lý nạp point KH
+                  Quản lý nạp điểm KH
                 </a>
               </div>
             )}
           </NavLink>
-        </li> */}
+        </li>
         <li>
           <NavLink to="/adminManage/manage-admin">
             {({ isActive }) => (
@@ -230,6 +227,17 @@ const Sidebar = ({ onChangeColor }) => {
           onChange={(e) => onChangeColor(e.target.value)}
         />
       </div>
+
+      <NavLink to="/adminManage/manage-configuration">
+        {({ isActive }) => (
+          <div className={isActive ? "active-link" : "unactive-link"}>
+            <a className={isActive ? "active-text" : "unactive-text"}>
+              <i class="uil uil-setting icon"></i>
+              Cấu hình
+            </a>
+          </div>
+        )}
+      </NavLink>
     </div>
   );
 };

@@ -1,23 +1,48 @@
 // reactstrap components
-import { useEffect, useState } from "react";
-import { Col, Container, Row } from "reactstrap";
+import { useCallback, useEffect, useState } from "react";
+import { Col, Container, Input, Row } from "reactstrap";
 import { getTotalReportApi } from "../../../../api/statistic";
 import { formatMoney } from "../../../../helper/formatMoney";
 import revenues from "../../../../assets/images/revenues.png";
 import add from "../../../../assets/images/add.png";
 import customer from "../../../../assets/images/customer.png";
 import collaborator from "../../../../assets/images/collaborator.png";
-import "./header.scss";
+import "./headerBoard.scss";
+import moment from "moment";
 
 const Header = () => {
   const [dataTotal, setDataTotal] = useState([]);
   useEffect(() => {
-    getTotalReportApi()
+    getTotalReportApi("", "")
       .then((res) => setDataTotal(res))
       .catch((err) => console.log(err));
   }, []);
+
+  const onChangeReport = useCallback((day) => {
+    const start = moment().startOf("day").toISOString();
+    const end = moment().endOf("day").toISOString();
+    if (day === "day") {
+      getTotalReportApi(start, end)
+        .then((res) => setDataTotal(res))
+        .catch((err) => console.log(err));
+    } else {
+      getTotalReportApi("", "")
+        .then((res) => setDataTotal(res))
+        .catch((err) => console.log(err));
+    }
+  }, []);
   return (
-    <>
+    <div className="container-header-board">
+      <Input
+        name="selectType"
+        type="select"
+        className="selectType"
+        onChange={(e) => onChangeReport(e.target.value)}
+      >
+        <option value="all">Tổng</option>
+        <option value="day">Ngày hôm nay</option>
+      </Input>
+
       <div className="header pb-8  pt-md-6 gradient-header">
         <Container fluid>
           <div className="header-body">
@@ -77,7 +102,7 @@ const Header = () => {
           </div>
         </Container>
       </div>
-    </>
+    </div>
   );
 };
 

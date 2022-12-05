@@ -4,18 +4,19 @@ import React, { memo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, FormGroup, Input, Label, List, Modal } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
+import { searchCustomers } from "../../api/customer";
 import { postFile } from "../../api/file";
 import {
   TopupMoneyCollaboratorApi,
-  withdrawMoneyCollaboratorApi,
+  TopupMoneyCustomerApi,
 } from "../../api/topup";
 import { loadingAction } from "../../redux/actions/loading";
 import { createNew } from "../../redux/actions/news";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
-import "./withdraw.scss";
+import "./addTopupCustomer.scss";
 
-const Withdraw = () => {
+const AddTopupCustomer = () => {
   const [state, setState] = useState(false);
   const [money, setMoney] = useState("");
   const [note, setNote] = useState("");
@@ -28,27 +29,30 @@ const Withdraw = () => {
 
   const searchCollaborator = useCallback((value) => {
     setName(value);
-    searchCollaborators(value)
+    searchCustomers(value)
       .then((res) => setData(res.data))
       .catch((err) => console.log(err));
     setId("");
   }, []);
 
-  const onWithdraw = useCallback(() => {
+  const addMoney = useCallback(() => {
     if (name === "" || money === "") {
       !name
         ? setErrorName("Vui lòng nhập thông tin")
         : setErrorMoney("Vui lòng nhập số tiền cần nạp");
     } else {
       dispatch(loadingAction.loadingRequest(true));
-      withdrawMoneyCollaboratorApi(id, {
+      TopupMoneyCustomerApi(id, {
         money: money,
         transfer_note: note,
       })
         .then((res) => {
           window.location.reload();
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          dispatch(loadingAction.loadingRequest(false));
+          console.log(err);
+        });
     }
   }, [id, money, note, name]);
 
@@ -56,7 +60,7 @@ const Withdraw = () => {
     <>
       {/* Button trigger modal */}
       <CustomButton
-        title="Rút tiền"
+        title="Nạp tiền"
         className="btn-modal"
         type="button"
         onClick={() => setState(!state)}
@@ -69,7 +73,7 @@ const Withdraw = () => {
       >
         <div className="modal-header">
           <h3 className="modal-title" id="exampleModalLabel">
-            Rút tiền
+            Nạp tiền
           </h3>
           <button className="btn-close" onClick={() => setState(!state)}>
             <i className="uil uil-times-square"></i>
@@ -78,7 +82,7 @@ const Withdraw = () => {
         <div className="modal-body">
           <Form>
             <div>
-              <Label>(*)Cộng tác viên</Label>
+              <Label>(*)Khách hàng</Label>
               <Input
                 placeholder="Tìm kiếm theo số điện thoại"
                 value={name}
@@ -129,10 +133,10 @@ const Withdraw = () => {
               onChange={(e) => setNote(e.target.value)}
             />
             <CustomButton
-              title="Rút"
+              title="Nạp "
               className="float-right btn-modal"
               type="button"
-              onClick={onWithdraw}
+              onClick={addMoney}
             />
           </Form>
         </div>
@@ -141,4 +145,4 @@ const Withdraw = () => {
   );
 };
 
-export default memo(Withdraw);
+export default memo(AddTopupCustomer);

@@ -1,26 +1,4 @@
-// .topnav {
-//   overflow: hidden;
-//   background-color: #747474;
-
-//   a {
-//     float: left;
-//     color: #f2f2f2;
-//     text-align: center;
-//     padding: 14px 16px;
-//     text-decoration: none;
-//     font-size: 17px;
-//   }
-
-//   a:hover {
-//     background-color: #ddd;
-//     color: black;
-//   }
-
-//   a.active {
-//     background-color: #feaee6;
-//     color: white;
-//   }
-// }
+$font-01: "Oxygen", sans-serif;
 .div-header {
   padding: 10px;
   text-align: center;
@@ -55,6 +33,7 @@
   .active-text {
     text-decoration: none !important;
     color: rgb(0, 0, 0);
+    font-family: $font-01;
   }
 }
 .unactive-link {
@@ -68,6 +47,7 @@
   .unactive-text {
     text-decoration: none !important;
     color: rgb(0, 0, 0);
+    font-family: $font-01;
   }
 }
 

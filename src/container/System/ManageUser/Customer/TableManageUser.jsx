@@ -20,6 +20,8 @@ import EditCustomer from "../../../../components/editCustomer/editCustomer";
 import { deleteCustomerAction } from "../../../../redux/actions/customerAction";
 import { loadingAction } from "../../../../redux/actions/loading";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import { formatMoney } from "../../../../helper/formatMoney";
 
 export default function TableManageUser({ data }) {
   const [itemEdit, setItemEdit] = useState([]);
@@ -27,6 +29,7 @@ export default function TableManageUser({ data }) {
   const [modalBlock, setModalBlock] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   // Toggle for Modal
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
@@ -59,6 +62,7 @@ export default function TableManageUser({ data }) {
         .catch((err) => console.log(err));
     }
   }, []);
+  const phone = data?.phone.slice(0, 7);
 
   return (
     <>
@@ -72,13 +76,26 @@ export default function TableManageUser({ data }) {
           </Media>
         </th>
         <td>
-          <a>{data?.phone}</a>
+          <a>{phone + "***"}</a>
+        </td>
+        <td className="default_address">
+          <a>{!data?.default_address ? "Chưa có" : data?.default_address}</a>
         </td>
         <td>
-          <a>{data?.email}</a>
+          <a>{data?.totalService}</a>
         </td>
         <td>
-          <a>{data?.birth_date}</a>
+          <button
+            className="btn-service"
+            onClick={() => {
+              console.log("eee");
+            }}
+          >
+            {data?.totalService}
+          </button>
+        </td>
+        <td>
+          <a>{formatMoney(data?.total_price)}</a>
         </td>
         <td>
           <UncontrolledDropdown>
@@ -100,6 +117,15 @@ export default function TableManageUser({ data }) {
               </DropdownItem>
               <DropdownItem href="#pablo" onClick={toggleBlock}>
                 {data?.is_active ? " Chặn" : " Kích hoạt"}
+              </DropdownItem>
+              <DropdownItem
+                onClick={() =>
+                  navigate("/system/user-manage/details-customer", {
+                    state: { data: data },
+                  })
+                }
+              >
+                Chi tiết
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>

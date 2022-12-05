@@ -21,12 +21,10 @@ function* loginSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     yield put(loginAction.loginFailure(err));
-    errorNotify({
-      message:
-        err.response.data.response[0].message ||
-        "Đăng nhập không thành công, vui lòng thử lại sau.",
-    });
     yield put(loadingAction.loadingRequest(false));
+    errorNotify({
+      message: err || "Đăng nhập không thành công, vui lòng thử lại sau.",
+    });
   }
 }
 function* logoutSaga(action) {

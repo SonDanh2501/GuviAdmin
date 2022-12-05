@@ -9,3 +9,9 @@ export const getTopupCollaborator = createActions({
   getTopupCollaboratorSuccess: (payload) => payload,
   getTopupCollaboratorFailure: (err) => err,
 });
+
+export const getTopupCustomer = createActions({
+  getTopupCustomerRequest: (payload) => payload,
+  getTopupCustomerSuccess: (payload) => payload,
+  getTopupCustomerFailure: (err) => err,
+});
