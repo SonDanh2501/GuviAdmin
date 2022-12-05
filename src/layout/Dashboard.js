@@ -31,11 +31,11 @@ const Dashboard = () => {
     <div className="container-dashboard container-fluid">
       <div className="row">
         {hideSidebar && (
-          <div className="col-2 sidebar" style={{ backgroundColor: color }}>
+          <div className="sidebar" style={{ backgroundColor: color }}>
             <Sidebar color={color} onChangeColor={(e) => onColor(e)} />
           </div>
         )}
-        <main className={hideSidebar ? "col-lg-10 p-0" : "col-lg-12 p-0"}>
+        <main className={hideSidebar ? "main p-0" : "main-full p-0"}>
           <div>
             <Header
               onClick={() => setHideSidebar(!hideSidebar)}

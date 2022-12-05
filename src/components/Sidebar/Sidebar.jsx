@@ -82,7 +82,7 @@ const Sidebar = ({ onChangeColor }) => {
               <div className={isActive ? "active-link" : "unactive-link"}>
                 <i className="uil uil-pricetag-alt icon"></i>
                 <a className={isActive ? "active-text" : "unactive-text"}>
-                  Quản lý Promotion
+                  Quản lý khuyến mãi
                 </a>
               </div>
             )}
@@ -127,7 +127,7 @@ const Sidebar = ({ onChangeColor }) => {
               <div className={isActive ? "active-link" : "unactive-link"}>
                 <i className="uil uil-book-reader icon"></i>
                 <a className={isActive ? "active-text" : "unactive-text"}>
-                  Quản lý service
+                  Quản lý dịch vụ
                 </a>
               </div>
             )}
@@ -157,7 +157,7 @@ const Sidebar = ({ onChangeColor }) => {
               <div className={isActive ? "active-link" : "unactive-link"}>
                 <i class="uil uil-cancel icon"></i>
                 <a className={isActive ? "active-text" : "unactive-text"}>
-                  Quản lý lý do huỷ
+                  Quản lý nguyên nhân huỷ
                 </a>
               </div>
             )}

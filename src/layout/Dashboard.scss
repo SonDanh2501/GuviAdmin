@@ -4,10 +4,15 @@
 
   .sidebar {
     background-color: white;
-
-    // border-top-right-radius: 10px;
-    // border-bottom-right-radius: 10px;
     min-height: 910px;
     box-shadow: 1px 1px #e6e6e6;
+    width: 15%;
+  }
+
+  .main {
+    width: 85%;
+  }
+  .main-full {
+    width: 100%;
   }
 }
