@@ -24,8 +24,6 @@ const Profile = () => {
   const { data } = state || {};
   const [rank, setRank] = useState("");
 
-  console.log(data);
-
   useEffect(() => {
     if (data?.rank_point < 100) {
       setRank("Thành viên");
@@ -116,7 +114,12 @@ const Profile = () => {
                           id="input-email"
                           type="email"
                           value={
-                            data?.birth_date ? data?.birth_date : "Chưa có"
+                            data?.birth_date
+                              ? data?.birth_date.slice(
+                                  0,
+                                  data?.birth_date.indexOf("T")
+                                )
+                              : "Chưa có"
                           }
                           disabled={true}
                         />

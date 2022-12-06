@@ -67,7 +67,14 @@ export default function TableManageUser({ data }) {
   return (
     <>
       <tr>
-        <th scope="row">
+        <th
+          scope="row"
+          onClick={() =>
+            navigate("/system/user-manage/details-customer", {
+              state: { data: data },
+            })
+          }
+        >
           <Media className="align-items-center">
             <img alt="..." src={data?.avatar} className="img_customer" />
             <Media>
@@ -117,15 +124,6 @@ export default function TableManageUser({ data }) {
               </DropdownItem>
               <DropdownItem href="#pablo" onClick={toggleBlock}>
                 {data?.is_active ? " Chặn" : " Kích hoạt"}
-              </DropdownItem>
-              <DropdownItem
-                onClick={() =>
-                  navigate("/system/user-manage/details-customer", {
-                    state: { data: data },
-                  })
-                }
-              >
-                Chi tiết
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
