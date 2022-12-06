@@ -1,6 +1,7 @@
 import moment from "moment";
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Col,
@@ -34,7 +35,7 @@ export default function TableManageCollaborator({ data }) {
   const [modalEdit, setModalEdit] = React.useState(false);
   const [itemEdit, setItemEdit] = React.useState([]);
   const [timeValue, setTimeValue] = React.useState("");
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   // Toggle for Modal
   const toggle = () => setModal(!modal);
@@ -122,7 +123,14 @@ export default function TableManageCollaborator({ data }) {
   return (
     <>
       <tr>
-        <th scope="row">
+        <th
+          scope="row"
+          onClick={() =>
+            navigate("/system/collaborator-manage/details-collaborator", {
+              state: { data: data },
+            })
+          }
+        >
           <Media className="align-items-center">
             <img alt="..." src={data?.avatar} className="img_customer" />
             <Media>
@@ -131,20 +139,22 @@ export default function TableManageCollaborator({ data }) {
           </Media>
         </th>
         <td>
-          <a>{data?.email}</a>
-        </td>
-        <td>
           <a>{data?.phone}</a>
         </td>
         <td>
-          <a>
-            {data?.gender === "male"
-              ? "Nam"
-              : data?.gender === "female"
-              ? "Nữ"
-              : "Khác"}
-          </a>
+          {data?.is_verify ? (
+            <div>
+              <i class="uil uil-circle icon-verify"></i>
+              <a className="text-verify">Đã xác thực</a>
+            </div>
+          ) : (
+            <div>
+              <i class="uil uil-circle icon-nonverify"></i>
+              <a className="text-nonverify">Chưa xác thực</a>
+            </div>
+          )}
         </td>
+
         <td className="text-right">
           <UncontrolledDropdown>
             {!data?.is_lock_time ? (
@@ -174,7 +184,6 @@ export default function TableManageCollaborator({ data }) {
             </DropdownToggle>
             <DropdownMenu className="dropdown-menu-arrow">
               <DropdownItem
-                href="#pablo"
                 onClick={() => {
                   setItemEdit(data);
                   setModalEdit(!modalEdit);
@@ -182,10 +191,8 @@ export default function TableManageCollaborator({ data }) {
               >
                 Chỉnh sửa
               </DropdownItem>
-              <DropdownItem href="#pablo" onClick={toggle}>
-                Xóa
-              </DropdownItem>
-              <DropdownItem href="#pablo" onClick={toggleBlock}>
+              <DropdownItem onClick={toggle}>Xóa</DropdownItem>
+              <DropdownItem onClick={toggleBlock}>
                 {data?.is_active ? " Chặn" : " Kích hoạt"}
               </DropdownItem>
             </DropdownMenu>

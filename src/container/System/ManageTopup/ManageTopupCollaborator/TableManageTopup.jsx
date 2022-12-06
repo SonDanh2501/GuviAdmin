@@ -64,7 +64,17 @@ export default function TableManageTopup({ data }) {
           <a>{formatMoney(data?.money)}</a>
         </td>
         <td className="col-0.5">
-          <a>{data?.type_transfer === "top_up" ? "Nạp" : "Rút"}</a>
+          {data?.type_transfer === "top_up" ? (
+            <div>
+              <i class="uil uil-money-insert icon-topup"></i>
+              <a className="text-topup">Nạp</a>
+            </div>
+          ) : (
+            <div>
+              <i class="uil uil-money-withdraw icon-withdraw"></i>
+              <a className="text-withdraw">Rút</a>
+            </div>
+          )}
         </td>
         <td className="col-2">
           <span>{data?.transfer_note}</span>

@@ -1,0 +1,33 @@
+.col-check {
+  display: flex;
+}
+
+.col-img {
+  display: flex;
+  .input-file {
+    border: none;
+    width: 35%;
+  }
+  .img-thumbnail {
+    width: 150px !important;
+    height: 70px !important;
+  }
+
+  .img-thumbnail:hover {
+    transform: scale(5);
+  }
+}
+
+.btn-update {
+  float: right;
+  background-color: bisque;
+  border: none;
+  color: black;
+}
+
+.btn-update:hover {
+  float: right;
+  background-color: rgb(209, 235, 250);
+  border: none;
+  color: black;
+}

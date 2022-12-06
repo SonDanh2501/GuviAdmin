@@ -30,11 +30,10 @@ const Header = ({ onClick, hideSidebar, color }) => {
     <div className="container-header">
       <div className="menu">
         <button onClick={onClick} className="btn-menu">
-          {hideSidebar ? (
-            <i className="uil-arrow-circle-left icon"></i>
-          ) : (
-            <i class="uil-arrow-circle-right icon"></i>
-          )}
+          <i
+            style={{ width: 40, height: 40 }}
+            class="uil uil-align-justify"
+          ></i>
         </button>
         {/* <p className="text-brand">{brand}</p> */}
       </div>

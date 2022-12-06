@@ -113,9 +113,8 @@ export default function CollaboratorManage() {
             <thead>
               <tr>
                 <th>Tên cộng tác viên</th>
-                <th>Email</th>
                 <th>SĐT</th>
-                <th>Giới tính</th>
+                <th>Tình trạng</th>
                 {/* <th>Ngày sinh</th> */}
                 <th></th>
               </tr>

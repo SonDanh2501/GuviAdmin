@@ -18,7 +18,10 @@ import OrderManage from "../container/System/ManageOrder/OrderManage";
 import TopupManage from "../container/System/ManageTopup/ManageTopupCollaborator/TopupManage";
 import TopupCustomerManage from "../container/System/ManageTopup/ManageTopupCustomer/TopupCustomerManage";
 import ManageConfiguration from "../container/System/ManageConfiguration/ManageConfiguration";
-import Profile from "../container/System/Profiles/Profile";
+import Profile from "../container/System/ManageUser/Customer/Profiles/Profile";
+import ProfileCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/ProfileCollaborator";
+import ManageSetting from "../container/System/ManageSetting";
+import ManageTopup from "../container/System/ManageTopup";
 
 const Dashboard = () => {
   const [hideSidebar, setHideSidebar] = useState(true);
@@ -55,11 +58,14 @@ const Dashboard = () => {
               element={<CollaboratorManage />}
             />
             <Route
-              path="/promotion/manage-promotion"
-              element={<PromotionManage />}
+              path="/system/collaborator-manage/details-collaborator"
+              element={<ProfileCollaborator />}
             />
-            <Route path="/settings/manage-banner" element={<BannerManage />} />
-            <Route path="/settings/manage-news" element={<NewsManage />} />
+            <Route
+              path="/promotion/manage-setting"
+              element={<ManageSetting />}
+            />
+
             <Route
               path="/services/manage-group-service"
               element={<GroupServiceManage />}
@@ -72,17 +78,16 @@ const Dashboard = () => {
               path="/feedback/manage-feedback"
               element={<FeedbackManage />}
             />
-            <Route path="/settings/manage-reason" element={<ReasonManage />} />
-
             <Route path="/group-order/manage-order" element={<OrderManage />} />
-            <Route path="/topup/manage-topup" element={<TopupManage />} />
-            <Route
-              path="/topup/manage-topup-customer"
-              element={<TopupCustomerManage />}
-            />
+            <Route path="/topup/manage-topup" element={<ManageTopup />} />
+
             <Route
               path="/adminManage/manage-configuration"
               element={<ManageConfiguration />}
+            />
+            <Route
+              path="/adminManage/manage-configuration/manage-reason"
+              element={<ReasonManage />}
             />
           </Routes>
         </main>

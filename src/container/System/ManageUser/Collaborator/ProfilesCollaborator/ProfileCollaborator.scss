@@ -1,0 +1,51 @@
+.headerCard {
+  border: none;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  background-color: transparent;
+  .rounded-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50px;
+  }
+}
+
+// .row-heading {
+//   display: flex;
+//   flex-direction: row;
+//   width: 100%;
+//   align-items: center;
+//   justify-content: space-between;
+//   margin-top: 20px;
+//   .col-heading {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//   }
+// }
+
+.btn-default {
+  background-color: white;
+  border: 1px solid rgb(216, 216, 216);
+  color: black;
+  margin-right: 10px;
+}
+
+.btn-select {
+  background-color: bisque;
+  border: 1px solid rgb(216, 216, 216);
+  color: black;
+  margin-right: 10px;
+}
+
+.gender {
+  display: flex;
+  flex-direction: column;
+
+  .select-gender {
+    border-color: rgb(220, 220, 220);
+    height: 38px;
+    border-radius: 5px;
+  }
+}
