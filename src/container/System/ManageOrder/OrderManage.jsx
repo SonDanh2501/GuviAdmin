@@ -9,7 +9,6 @@ import {
   PaginationItem,
   PaginationLink,
   Row,
-  Table,
 } from "reactstrap";
 import { loadingAction } from "../../../redux/actions/loading";
 import { getOrder } from "../../../redux/actions/order";
@@ -20,11 +19,13 @@ import {
 import { getService } from "../../../redux/selectors/service";
 import "./OrderManage.scss";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
-import TableManageOrder from "./TableManageOrder";
+import { Table } from "antd";
 import { filterOrderApi, searchOrderApi } from "../../../api/order";
+import { formatMoney } from "../../../helper/formatMoney";
 
 export default function OrderManage() {
   const [dataFilter, setDataFilter] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [totalFilter, setTotalFilter] = useState();
   const [valueFilter, setValueFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
@@ -37,6 +38,83 @@ export default function OrderManage() {
     dispatch(loadingAction.loadingRequest(true));
     dispatch(getOrder.getOrderRequest({ start: 0, length: 10 }));
   }, [dispatch]);
+
+  const timeWork = (data) => {
+    const start = data?.date_work?.indexOf("T");
+    const timeStart = data?.date_work?.slice(start + 1, start + 6);
+
+    const timeEnd =
+      Number(timeStart?.slice(0, 2)) +
+      data?.total_estimate +
+      timeStart?.slice(2, 5);
+
+    return timeStart + "-" + timeEnd;
+  };
+
+  const columns = [
+    {
+      title: "Loại dịch vụ",
+      dataIndex: ["service", "_id", "title", "vi"],
+    },
+    {
+      title: "Tên khách hàng",
+      dataIndex: ["id_customer", "name"],
+    },
+    {
+      title: "Đơn giá",
+      key: "action",
+      render: (data) => <a>{formatMoney(data.final_fee)}</a>,
+    },
+    {
+      title: "Tên cộng tác viên",
+      key: "action",
+      render: (record) => (
+        <a>
+          {!record?.id_collaborator ? "Chưa có" : record?.id_collaborator?.name}
+        </a>
+      ),
+    },
+    {
+      title: "Ngày làm",
+      key: "action",
+      render: (data) => (
+        <a>{data?.date_work.slice(0, data?.date_work.indexOf("T"))}</a>
+      ),
+    },
+    {
+      title: "Thời gian",
+      key: "action",
+      render: (data) => <a>{timeWork(data)}</a>,
+    },
+    {
+      title: "Trạng thái",
+      key: "action",
+      render: (data) => (
+        <a
+          style={{
+            color:
+              data?.status === "pending"
+                ? "orange"
+                : data?.status === "confirm"
+                ? "green"
+                : data?.status === "doing"
+                ? "greenyellow"
+                : "red",
+          }}
+        >
+          {data?.status === "pending"
+            ? "Đang chờ làm"
+            : data?.status === "confirm"
+            ? "Đã nhận"
+            : data?.status === "doing"
+            ? "Đang làm"
+            : data?.status === "done"
+            ? "Kết thúc"
+            : "Đã huỷ"}
+        </a>
+      ),
+    },
+  ];
 
   const handleClick = useCallback(
     (e, index) => {
@@ -136,15 +214,15 @@ export default function OrderManage() {
                 />
               </Col>
               <Col>
-                <CustomTextInput
+                {/* <CustomTextInput
                   placeholder="Tìm kiếm"
                   type="text"
                   onChange={(e) => handleSearch(e.target.value)}
-                />
+                /> */}
               </Col>
             </Row>
           </CardHeader>
-          <Table className="align-items-center table-flush " responsive>
+          {/* <Table className="align-items-center table-flush " responsive>
             <thead>
               <tr>
                 <th>Loại dịch vụ</th>
@@ -163,7 +241,19 @@ export default function OrderManage() {
                 : listOrder &&
                   listOrder.map((e) => <TableManageOrder data={e} />)}
             </tbody>
-          </Table>
+          </Table> */}
+          <Table
+            columns={columns}
+            dataSource={dataFilter.length > 0 ? dataFilter : listOrder}
+            pagination={false}
+            rowKey={(record) => record._id}
+            rowSelection={{
+              selectedRowKeys,
+              onChange: (selectedRowKeys, selectedRows) => {
+                setSelectedRowKeys(selectedRowKeys);
+              },
+            }}
+          />
           <CardFooter>
             <nav aria-label="...">
               <Pagination

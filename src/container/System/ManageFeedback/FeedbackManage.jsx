@@ -9,7 +9,6 @@ import {
   PaginationItem,
   PaginationLink,
   Row,
-  Table,
 } from "reactstrap";
 import { searchFeedbackApi } from "../../../api/feedback";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
@@ -21,11 +20,39 @@ import {
 } from "../../../redux/selectors/feedback";
 import "./FeedbackManage.scss";
 import _debounce from "lodash/debounce";
-import TableManageFeedback from "./TableManageFeedback";
+import { Table } from "antd";
+import moment from "moment";
+
+const columns = [
+  {
+    title: "Loại phản hồi",
+    dataIndex: ["type", "name", "vi"],
+  },
+  {
+    title: "Nội dung",
+    dataIndex: "body",
+  },
+  {
+    title: "Người phản hồi",
+    dataIndex: "name",
+  },
+  {
+    title: "SĐT người phản hồi",
+    dataIndex: "phone",
+  },
+  {
+    title: "Ngày phản hồi",
+    key: "action",
+    render: (data) => (
+      <a>{moment(new Date(data?.date_create)).format("DD/MM/yyy HH:mm")}</a>
+    ),
+  },
+];
 
 export default function FeedbackManage() {
   const [dataFilter, setDataFilter] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const dispatch = useDispatch();
   const listFeedback = useSelector(getFeedbacks);
   const feedbackTotal = useSelector(getFeedbackTotal);
@@ -83,7 +110,7 @@ export default function FeedbackManage() {
               </Col>
             </Row>
           </CardHeader>
-          <Table className="align-items-center table-flush " responsive>
+          {/* <Table className="align-items-center table-flush " responsive>
             <thead>
               <tr>
                 <th>Loại phản hồi</th>
@@ -99,7 +126,19 @@ export default function FeedbackManage() {
                 : listFeedback &&
                   listFeedback.map((e) => <TableManageFeedback data={e} />)}
             </tbody>
-          </Table>
+          </Table> */}
+          <Table
+            columns={columns}
+            dataSource={dataFilter.length > 0 ? dataFilter : listFeedback}
+            pagination={false}
+            rowKey={(record) => record._id}
+            rowSelection={{
+              selectedRowKeys,
+              onChange: (selectedRowKeys, selectedRows) => {
+                setSelectedRowKeys(selectedRowKeys);
+              },
+            }}
+          />
           <CardFooter>
             <nav aria-label="...">
               <Pagination
