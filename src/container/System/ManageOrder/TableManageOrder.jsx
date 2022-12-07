@@ -46,6 +46,18 @@ export default function TableManageOrder({ data }) {
     data?.total_estimate +
     timeStart?.slice(2, 5);
 
+  const timeWork = (data) => {
+    const start = data?.date_work?.indexOf("T");
+    const timeStart = data?.date_work?.slice(start + 1, start + 6);
+
+    const timeEnd =
+      Number(timeStart?.slice(0, 2)) +
+      data?.total_estimate +
+      timeStart?.slice(2, 5);
+
+    return timeStart + "-" + timeEnd;
+  };
+
   return (
     <>
       <tr>

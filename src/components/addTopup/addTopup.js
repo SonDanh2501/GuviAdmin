@@ -1,13 +1,10 @@
-import { Select } from "antd";
-import { validateYupSchema } from "formik";
 import React, { memo, useCallback, useState } from "react";
+import IntlCurrencyInput from "react-intl-currency-input";
 import { useDispatch } from "react-redux";
-import { Form, FormGroup, Input, Label, List, Modal } from "reactstrap";
+import { Form, Input, Label, List, Modal } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
-import { postFile } from "../../api/file";
 import { TopupMoneyCollaboratorApi } from "../../api/topup";
 import { loadingAction } from "../../redux/actions/loading";
-import { createNew } from "../../redux/actions/news";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./addTopup.scss";
@@ -51,6 +48,25 @@ const AddPopup = () => {
         });
     }
   }, [id, money, note, name]);
+
+  const currencyConfig = {
+    locale: "vi",
+    formats: {
+      number: {
+        BRL: {
+          style: "currency",
+          currency: "VND",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        },
+      },
+    },
+  };
+
+  const handleChange = (event, value) => {
+    event.preventDefault();
+    setMoney(value);
+  };
 
   return (
     <>
@@ -106,18 +122,17 @@ const AddPopup = () => {
               )}
             </div>
 
-            <CustomTextInput
-              label={"(*) Nhập số tiền"}
-              id="exampleMoney"
-              name="money"
-              placeholder="Vui lòng nhập số tiền"
-              classNameForm="input-money"
-              type="number"
-              min={0}
-              value={money}
-              onChange={(e) => setMoney(e.target.value)}
-              errors={errorMoney}
-            />
+            <div className="div-money">
+              <Label>(*) Nhập số tiền</Label>
+              <IntlCurrencyInput
+                className="input-money"
+                currency="BRL"
+                config={currencyConfig}
+                onChange={handleChange}
+                value={money}
+              />
+            </div>
+
             <CustomTextInput
               label={"Nhập nội dung"}
               id="exampleNote"

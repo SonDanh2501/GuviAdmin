@@ -4,7 +4,7 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, FormGroup, Input, Label, List, Modal } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
-import { postFile } from "../../api/file";
+import IntlCurrencyInput from "react-intl-currency-input";
 import {
   TopupMoneyCollaboratorApi,
   updateMoneyCollaboratorApi,
@@ -49,6 +49,25 @@ const EditTopup = ({ state, setState, item }) => {
       })
       .catch((err) => console.log(err));
   }, [id, money, note]);
+
+  const currencyConfig = {
+    locale: "vi",
+    formats: {
+      number: {
+        BRL: {
+          style: "currency",
+          currency: "VND",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        },
+      },
+    },
+  };
+
+  const handleChange = (event, value) => {
+    event.preventDefault();
+    setMoney(value);
+  };
 
   return (
     <>
@@ -95,17 +114,17 @@ const EditTopup = ({ state, setState, item }) => {
               )}
             </div>
 
-            <CustomTextInput
-              label={"Nhập số tiền"}
-              id="exampleMoney"
-              name="money"
-              placeholder="Vui lòng nhập số tiền"
-              classNameForm="input-money"
-              type="number"
-              min={0}
-              value={money}
-              onChange={(e) => setMoney(e.target.value)}
-            />
+            <div className="div-money">
+              <Label>(*) Nhập số tiền</Label>
+              <IntlCurrencyInput
+                className="input-money"
+                currency="BRL"
+                config={currencyConfig}
+                onChange={handleChange}
+                value={money}
+              />
+            </div>
+
             <CustomTextInput
               label={"Nhập nội dung"}
               id="exampleNote"

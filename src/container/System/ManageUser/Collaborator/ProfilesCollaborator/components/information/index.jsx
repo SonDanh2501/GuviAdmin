@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button, Col, Form, Input, Label, Row } from "reactstrap";
+import { updateInformationCollaboratorApi } from "../../../../../../../api/collaborator";
 import CustomTextInput from "../../../../../../../components/CustomTextInput/customTextInput";
 import "./index.scss";
 
 const Information = ({ data }) => {
-  const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [gender, setGender] = useState("other");
   const [birthday, setBirthday] = useState("");
@@ -21,6 +21,36 @@ const Information = ({ data }) => {
     setName(data?.name);
     setGender(data?.gender);
   }, [data]);
+
+  console.log(new Date(birthday));
+
+  const updateInformation = useCallback(() => {
+    updateInformationCollaboratorApi(data?._id, {
+      gender: gender,
+      full_name: name,
+      birthday: "string",
+      permanent_address: resident,
+      temporary_address: staying,
+      folk: ethnic,
+      religion: religion,
+      edu_level: level,
+      identity_number: number,
+      identity_place: issued,
+      identity_date: issuedDay,
+    });
+  }, [
+    gender,
+    name,
+    resident,
+    staying,
+    ethnic,
+    religion,
+    level,
+    number,
+    issued,
+    issuedDay,
+    data,
+  ]);
 
   return (
     <>
@@ -111,10 +141,22 @@ const Information = ({ data }) => {
             <Col lg="6">
               <CustomTextInput
                 label={"Trình độ văn hoá"}
-                placeholder="Nhập thông tin"
-                type="text"
+                className="select"
+                type="select"
                 value={level}
                 onChange={(e) => setLevel(e.target.value)}
+                body={
+                  <>
+                    <option>Chọn trình độ văn hoá</option>
+                    <option value={"5/12"}>5/12</option>
+                    <option value={"9/12"}>9/12</option>
+                    <option value={"12/12"}>12/12</option>
+                    <option value={"Cao đẳng"}>Cao đẳng</option>
+                    <option value={"Đại học"}>Đại học</option>
+                    <option value={"Thạc sĩ"}>Thạc sĩ</option>
+                    <option value={"Tiến sĩ"}>Tiến sĩ</option>
+                  </>
+                }
               />
             </Col>
           </Row>
@@ -125,7 +167,7 @@ const Information = ({ data }) => {
               <CustomTextInput
                 label={"Số CCCD/CMND"}
                 placeholder="Nhập thông tin"
-                type="text"
+                type="number"
                 value={number}
                 onChange={(e) => setNumber(e.target.value)}
               />
@@ -147,7 +189,7 @@ const Information = ({ data }) => {
                 placeholder="Nhập thông tin"
                 type="date"
                 value={issuedDay}
-                onChange={(e) => setIssued(e.target.value)}
+                onChange={(e) => setIssuedDay(e.target.value)}
               />
             </Col>
           </Row>

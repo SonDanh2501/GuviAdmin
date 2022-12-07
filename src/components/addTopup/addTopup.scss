@@ -18,7 +18,9 @@
 }
 
 .input-money {
-  margin-top: 10px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  height: 35px;
 }
 
 .select-code-phone {
@@ -38,4 +40,10 @@
 .error {
   color: red;
   font-size: 12px;
+}
+
+.div-money {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
 }

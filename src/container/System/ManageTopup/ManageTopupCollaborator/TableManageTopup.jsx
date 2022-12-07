@@ -111,11 +111,17 @@ export default function TableManageTopup({ data }) {
           <div>
             <Modal isOpen={modalConfirm} toggle={toggleConfirm}>
               <ModalHeader toggle={toggleConfirm}>
-                Duyệt lệnh nạp tiền
+                {data?.type_transfer === "top_up"
+                  ? "Duyệt lệnh nạp tiền"
+                  : " Duyệt lệnh rút tiền"}
               </ModalHeader>
               <ModalBody>
                 <>
-                  <h4>Bạn có muốn duyệt lệnh nạp tiền cho :</h4>
+                  <h4>
+                    {data?.type_transfer === "top_up"
+                      ? "Bạn có muốn duyệt lệnh nạp tiền cho :"
+                      : " Bạn có muốn duyệt lệnh rút tiền cho :"}
+                  </h4>
                   <div className="body-modal">
                     <a>CTV: {data?.id_collaborator?.name}</a>
                     <a>SĐT: {data?.id_collaborator?.phone}</a>
