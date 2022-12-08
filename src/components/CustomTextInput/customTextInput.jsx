@@ -18,6 +18,8 @@ const CustomTextInput = ({
   defaultChecked,
   errors,
   min,
+  maxLength,
+  max,
   title,
 }) => {
   return (
@@ -36,6 +38,8 @@ const CustomTextInput = ({
         defaultChecked={defaultChecked}
         defaultValue={defaultValue}
         min={min}
+        maxLength={maxLength}
+        max={max}
         title={title}
       >
         {body}{" "}

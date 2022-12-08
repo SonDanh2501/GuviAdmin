@@ -1,19 +1,31 @@
+import { Space, Dropdown, Table } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  Button,
   Card,
   CardFooter,
   CardHeader,
   Col,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   Pagination,
   PaginationItem,
   PaginationLink,
   Row,
-  Table,
 } from "reactstrap";
-import { searchCollaborators } from "../../../../api/collaborator.jsx";
+import {
+  activeCollaborator,
+  deleteCollaborator,
+  lockTimeCollaborator,
+  searchCollaborators,
+  verifyCollaborator,
+} from "../../../../api/collaborator.jsx";
 import AddCollaborator from "../../../../components/addCollaborator/addCollaborator.js";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
+import EditCollaborator from "../../../../components/editCollaborator/editCollaborator.js";
 import { getCollaborators } from "../../../../redux/actions/collaborator";
 import { loadingAction } from "../../../../redux/actions/loading.js";
 import {
@@ -21,13 +33,29 @@ import {
   getCollaboratorTotal,
 } from "../../../../redux/selectors/collaborator";
 import "./CollaboratorManage.scss";
-import TableManageCollaborator from "./TableManageCollaborator.jsx";
+import { LockOutlined, UnlockOutlined } from "@ant-design/icons";
+import { UilAirplay } from "@iconscout/react-unicons";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 export default function CollaboratorManage() {
   const [dataFilter, setDataFilter] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalFilter, setTotalFilter] = useState("");
   const [valueFilter, setValueFilter] = useState("");
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [itemEdit, setItemEdit] = React.useState([]);
+  const [modal, setModal] = React.useState(false);
+  const [modalBlock, setModalBlock] = React.useState(false);
+  const [modalVerify, setModalVerify] = React.useState(false);
+  const [modalLockTime, setModalLockTime] = React.useState(false);
+  const [modalEdit, setModalEdit] = React.useState(false);
+  const [timeValue, setTimeValue] = React.useState("");
+  const toggle = () => setModal(!modal);
+  const toggleBlock = () => setModalBlock(!modalBlock);
+  const toggleVerify = () => setModalVerify(!modalVerify);
+  const toggleLockTime = () => setModalLockTime(!modalLockTime);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const collaborator = useSelector(getCollaborator);
   const collaboratorTotal = useSelector(getCollaboratorTotal);
@@ -87,6 +115,194 @@ export default function CollaboratorManage() {
       .catch((err) => console.log(err));
   }, []);
 
+  const onDelete = useCallback((id) => {
+    dispatch(loadingAction.loadingRequest(true));
+    deleteCollaborator(id, { is_delete: true })
+      .then((res) => window.location.reload())
+      .catch((err) => console.log(err));
+  }, []);
+
+  const blockCollaborator = useCallback((id, is_active) => {
+    dispatch(loadingAction.loadingRequest(true));
+    if (is_active === true) {
+      activeCollaborator(id, { is_active: false })
+        .then((res) => {
+          setModalBlock(!modalBlock);
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    } else {
+      activeCollaborator(id, { is_active: true })
+        .then((res) => {
+          setModalBlock(!modalBlock);
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
+
+  const onLockTimeCollaborator = useCallback(
+    (id, is_lock_time) => {
+      dispatch(loadingAction.loadingRequest(true));
+      if (is_lock_time === true) {
+        lockTimeCollaborator(id, { is_lock_time: false })
+          .then((res) => {
+            setModalLockTime(!modalLockTime);
+            dispatch(loadingAction.loadingRequest(false));
+
+            window.location.reload();
+          })
+          .catch((err) => console.log(err));
+      } else {
+        lockTimeCollaborator(id, {
+          is_lock_time: true,
+          lock_time: moment(new Date(timeValue)).toISOString(),
+        })
+          .then((res) => {
+            setModalLockTime(!modalLockTime);
+            dispatch(loadingAction.loadingRequest(false));
+
+            window.location.reload();
+          })
+          .catch((err) => console.log(err));
+      }
+    },
+    [timeValue, dispatch]
+  );
+  const onVerifyCollaborator = useCallback((id, is_verify) => {
+    if (is_verify === true) {
+      verifyCollaborator(id)
+        .then((res) => {
+          setModalVerify(!modalVerify);
+          dispatch(loadingAction.loadingRequest(false));
+
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    } else {
+      verifyCollaborator(id)
+        .then((res) => {
+          setModalVerify(!modalVerify);
+          dispatch(loadingAction.loadingRequest(false));
+
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
+
+  const items = [
+    {
+      key: "1",
+      label: (
+        <a
+          onClick={() => {
+            setModalEdit(!modalEdit);
+          }}
+        >
+          Chỉnh sửa
+        </a>
+      ),
+    },
+    {
+      key: "2",
+      label: <a onClick={toggle}>Xoá</a>,
+    },
+  ];
+
+  const columns = [
+    {
+      title: "Tên cộng tác viên",
+      render: (data) => {
+        return (
+          <div
+            onClick={() =>
+              navigate("/system/collaborator-manage/details-collaborator", {
+                state: { id: data?._id },
+              })
+            }
+          >
+            <img className="img_customer" src={data?.avatar} />
+            <a>{data.name}</a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "SĐT",
+      dataIndex: "phone",
+    },
+    {
+      title: "Tình trạng",
+      render: (data) => {
+        return (
+          <>
+            {data?.is_verify ? (
+              <div>
+                <i class="uil uil-circle icon-verify"></i>
+                <a className="text-verify">Đã xác thực</a>
+              </div>
+            ) : (
+              <div>
+                <i class="uil uil-circle icon-nonverify"></i>
+                <a className="text-nonverify">Chưa xác thực</a>
+              </div>
+            )}
+          </>
+        );
+      },
+    },
+    {
+      key: "action",
+      render: (data) => (
+        <Space size="middle">
+          <div>
+            {data?.is_active ? (
+              <UnlockOutlined className="icon-unlock" onClick={toggleBlock} />
+            ) : (
+              <LockOutlined className="icon-lock" onClick={toggleBlock} />
+            )}
+          </div>
+          <div>
+            {!data?.is_lock_time ? (
+              <button className="btn-delete" onClick={toggleLockTime}>
+                <i className="uil uil-stopwatch icon-time-on"></i>
+              </button>
+            ) : (
+              <button className="btn-delete" onClick={toggleLockTime}>
+                <i className="uil uil-stopwatch-slash icon-time-off"></i>
+              </button>
+            )}
+          </div>
+          <div>
+            {data?.is_verify ? (
+              <button
+                className="btn-delete"
+                disabled={true}
+                onClick={toggleVerify}
+              >
+                <i className="uil-toggle-on icon-on-toggle"></i>
+              </button>
+            ) : (
+              <button className="btn-delete" onClick={toggleVerify}>
+                <i className="uil-toggle-off icon-off-toggle"></i>
+              </button>
+            )}
+          </div>
+          <Dropdown
+            menu={{
+              items,
+            }}
+          >
+            <a>
+              <i class="uil uil-ellipsis-v"></i>
+            </a>
+          </Dropdown>
+        </Space>
+      ),
+    },
+  ];
+
   return (
     <React.Fragment>
       <div className="mt-2 p-3">
@@ -105,7 +321,7 @@ export default function CollaboratorManage() {
               </Col>
             </Row>
           </CardHeader>
-          <Table
+          {/* <Table
             className="align-items-center table-flush"
             responsive={true}
             hover={true}
@@ -115,7 +331,7 @@ export default function CollaboratorManage() {
                 <th>Tên cộng tác viên</th>
                 <th>SĐT</th>
                 <th>Tình trạng</th>
-                {/* <th>Ngày sinh</th> */}
+              
                 <th></th>
               </tr>
             </thead>
@@ -125,7 +341,26 @@ export default function CollaboratorManage() {
                 : collaborator &&
                   collaborator.map((e) => <TableManageCollaborator data={e} />)}
             </tbody>
-          </Table>
+          </Table> */}
+          <Table
+            columns={columns}
+            dataSource={dataFilter.length > 0 ? dataFilter : collaborator}
+            pagination={false}
+            rowKey={(record) => record._id}
+            rowSelection={{
+              selectedRowKeys,
+              onChange: (selectedRowKeys, selectedRows) => {
+                setSelectedRowKeys(selectedRowKeys);
+              },
+            }}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  setItemEdit(record);
+                },
+              };
+            }}
+          />
           <CardFooter>
             <nav aria-label="...">
               <Pagination
@@ -155,6 +390,130 @@ export default function CollaboratorManage() {
             </nav>
           </CardFooter>
         </Card>
+        <div>
+          <Modal isOpen={modalLockTime} toggle={toggleLockTime}>
+            <ModalHeader toggle={toggleLockTime}>
+              {" "}
+              {itemEdit?.is_lock_time === false
+                ? "Khóa tài khoản cộng tác viên"
+                : "Mở tài khoản cộng tác viên"}
+            </ModalHeader>
+            <ModalBody>
+              {itemEdit?.is_lock_time === false
+                ? "Bạn có muốn khóa tài khoản cộng tác viên"
+                : "Bạn có muốn kích hoạt tài khoản cộng tác viên"}
+              <h3>{itemEdit?.name}</h3>
+              {itemEdit?.is_lock_time === false && (
+                <CustomTextInput
+                  label={"*Thời gian khoá (hh:mm)"}
+                  type="datetime-local"
+                  name="time"
+                  className="text-input"
+                  onChange={(e) => setTimeValue(e.target.value)}
+                />
+              )}
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color="primary"
+                onClick={() =>
+                  onLockTimeCollaborator(itemEdit?._id, itemEdit?.is_lock_time)
+                }
+              >
+                Có
+              </Button>
+              <Button color="#ddd" onClick={toggleLockTime}>
+                Không
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+        <div>
+          <Modal isOpen={modalVerify} toggle={toggleVerify}>
+            <ModalHeader toggle={toggleVerify}>
+              {" "}
+              {itemEdit?.is_verify === true
+                ? "Bỏ xác thực tài khoản cộng tác viên"
+                : "Xác thực tài khoản cộng tác viên"}
+            </ModalHeader>
+            <ModalBody>
+              {itemEdit?.is_verify === true
+                ? "Bạn có muốn bỏ xác thực tài khoản cộng tác viên"
+                : "Bạn có muốn xác thực tài khoản cộng tác viên"}
+              <h3>{itemEdit?.name}</h3>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color="primary"
+                onClick={() =>
+                  onVerifyCollaborator(itemEdit?._id, itemEdit?.is_verify)
+                }
+              >
+                Có
+              </Button>
+              <Button color="#ddd" onClick={toggleVerify}>
+                Không
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+
+        <div>
+          <Modal isOpen={modalBlock} toggle={toggleBlock}>
+            <ModalHeader toggle={toggleBlock}>
+              {" "}
+              {itemEdit?.is_active === true
+                ? "Khóa tài khoản cộng tác viên"
+                : "Mở tài khoản cộng tác viên"}
+            </ModalHeader>
+            <ModalBody>
+              {itemEdit?.is_active === true
+                ? "Bạn có muốn khóa tài khoản cộng tác viên"
+                : "Bạn có muốn kích hoạt tài khoản cộng tác viên"}
+              <h3>{itemEdit?.name}</h3>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color="primary"
+                onClick={() =>
+                  blockCollaborator(itemEdit?._id, itemEdit?.is_active)
+                }
+              >
+                Có
+              </Button>
+              <Button color="#ddd" onClick={toggleBlock}>
+                Không
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+
+        <div>
+          <Modal isOpen={modal} toggle={toggle}>
+            <ModalHeader toggle={toggle}>Xóa cộng tác viên</ModalHeader>
+            <ModalBody>
+              <a>
+                Bạn có chắc muốn xóa cộng tác viên
+                <a className="text-name-modal">{itemEdit?.name}</a> này không?
+              </a>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
+                Có
+              </Button>
+              <Button color="#ddd" onClick={toggle}>
+                Không
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+        <div>
+          <EditCollaborator
+            state={modalEdit}
+            setState={() => setModalEdit(!modalEdit)}
+            data={itemEdit}
+          />
+        </div>
       </div>
     </React.Fragment>
   );

@@ -1,12 +1,14 @@
-import { Tabs } from "antd";
+import { Image, Tabs } from "antd";
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
+import { getCollaboratorsById } from "../../../../../api/collaborator";
 import { postFile } from "../../../../../api/file";
 import user from "../../../../../assets/images/user.png";
 import { loadingAction } from "../../../../../redux/actions/loading";
+import Activity from "./components/activity";
 import Document from "./components/documents";
 import Information from "./components/information";
 import "./ProfileCollaborator.scss";
@@ -14,9 +16,23 @@ import "./ProfileCollaborator.scss";
 
 const ProfileCollaborator = () => {
   const { state } = useLocation();
-  const { data } = state || {};
+  const { id } = state || {};
+  const [data, setData] = useState({
+    avatar: "",
+    birthday: "2000-06-07T00:00:00.000Z",
+    identity_date: "2020-11-12T00:00:00.000Z",
+  });
+  const dispatch = useDispatch();
 
-  const age = moment().diff(data?.birthday, "years");
+  useEffect(() => {
+    dispatch(loadingAction.loadingRequest(true));
+    getCollaboratorsById(id)
+      .then((res) => {
+        setData(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => console.log(err));
+  }, [id]);
 
   return (
     <>
@@ -26,35 +42,25 @@ const ProfileCollaborator = () => {
           <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
             <Card className="card-profile shadow">
               <CardHeader className="headerCard">
-                <img
-                  alt="..."
-                  className="rounded-circle"
+                <Image
+                  style={{
+                    with: 200,
+                    height: 200,
+                    backgroundColor: "transparent",
+                  }}
                   src={data?.avatar ? data?.avatar : user}
+                  className="rounded-circle"
                 />
               </CardHeader>
               <CardBody>
                 <div className="text-center">
                   <h3>
                     {data?.name}{" "}
-                    <span className="font-weight-light">,{age} tuổi</span>
+                    <span className="font-weight-light">
+                      ,{moment().diff(data?.birthday, "years")} tuổi
+                    </span>
                   </h3>
                 </div>
-                {/* <div className="row-heading">
-                  <div className="col-heading">
-                    <span className="heading">{formatMoney(data?.cash)}</span>
-                    <span className="description">G-point</span>
-                  </div>
-                  <div className="col-heading">
-                    <span className="heading">{rank}</span>
-                    <span className="description">Member point</span>
-                  </div>
-                  <div className="col-heading">
-                    <span className="heading">
-                      {formatMoney(data?.total_price)}
-                    </span>
-                    <span className="description">Total Price</span>
-                  </div>
-                </div> */}
               </CardBody>
             </Card>
           </Col>
@@ -69,7 +75,7 @@ const ProfileCollaborator = () => {
                     <Document />
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Hoạt động" key="3">
-                    Content of Tab Pane 3
+                    <Activity id={id} />
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Lịch sử tài khoản" key="4">
                     Content of Tab Pane 3

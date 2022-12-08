@@ -26,7 +26,10 @@ import {
 import { getDayReportApi } from "../../../api/statistic";
 import { DatePicker, Space } from "antd";
 import moment from "moment";
+import Highcharts from "highcharts";
+import ReactHighcharts from "highcharts-react-official";
 import { formatDayVN } from "../../../helper/formatDayVN";
+
 const { RangePicker } = DatePicker;
 
 const data = [
@@ -45,75 +48,6 @@ const data = [
     time: "16:00",
     address: "Ho chi Minh",
     progress: "Hoàn thành",
-  },
-];
-const dataChart = [
-  {
-    name: "Tháng 1",
-    money: 2400,
-    job: 1,
-  },
-  {
-    name: "Tháng 2",
-    money: 1398,
-    job: 7,
-  },
-  {
-    name: "Tháng 3",
-    money: 9800,
-    job: 8634,
-  },
-  {
-    name: "Tháng 4",
-    money: 3908,
-    job: 2,
-  },
-  {
-    name: "Tháng 5",
-    money: 4800,
-    job: 1,
-  },
-  {
-    name: "Tháng 6",
-    money: 3800,
-    job: 90,
-  },
-  {
-    name: "Tháng 7",
-    money: 4300,
-    job: 234,
-  },
-  {
-    name: "Tháng 8",
-    money: 4300,
-    job: 2436,
-  },
-];
-
-const dataAreChart = [
-  {
-    name: "Quận 1",
-    money: 2400,
-  },
-  {
-    name: "Quận 2",
-    money: 1398,
-  },
-  {
-    name: "Quận 3",
-    money: 9800,
-  },
-  {
-    name: "Quận 4",
-    money: 3908,
-  },
-  {
-    name: "Quận 5",
-    money: 4800,
-  },
-  {
-    name: "Quận 6",
-    money: 3800,
   },
 ];
 
@@ -145,10 +79,7 @@ export default function Home() {
   }
 
   arrResult.map((item, index) => {
-    dataDay.push({
-      money: item?.total_income,
-      job: item?.total_job,
-    });
+    dataDay.push([item?.total_income]);
   });
 
   const onChange = useCallback((start, end) => {
@@ -163,6 +94,41 @@ export default function Home() {
 
     getDates(dayStart, dayEnd);
   }, []);
+
+  const options = {
+    chart: {
+      type: "column",
+      width: 1000,
+      height: 500,
+    },
+    title: {
+      text: "Thống kê",
+    },
+    xAxis: {
+      type: "total_income",
+      labels: {
+        style: {
+          fontSize: "13px",
+          fontFamily: "Verdana, sans-serif",
+        },
+      },
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: "Tiền",
+      },
+    },
+    legend: {
+      enabled: false,
+    },
+    series: [
+      {
+        name: "Tiền",
+        data: dataDay,
+      },
+    ],
+  };
 
   return (
     <>
@@ -187,7 +153,7 @@ export default function Home() {
             style={{ marginBottom: 10 }}
           />
           <div style={{ height: 500, width: 1000 }}>
-            <ResponsiveContainer>
+            {/* <ResponsiveContainer>
               <BarChart
                 width={1000}
                 height={500}
@@ -207,7 +173,8 @@ export default function Home() {
                 <Bar dataKey="money" fill="#82ca9d" radius={5} barSize={25} />
                 <Bar dataKey="job" fill="#82ca53" radius={5} barSize={25} />
               </BarChart>
-            </ResponsiveContainer>
+            </ResponsiveContainer> */}
+            <ReactHighcharts highcharts={Highcharts} options={options} />
           </div>
         </div>
         <Row className="mt-5 mb-5">

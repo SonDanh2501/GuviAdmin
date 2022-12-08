@@ -127,7 +127,7 @@ export default function TableManageCollaborator({ data }) {
           scope="row"
           onClick={() =>
             navigate("/system/collaborator-manage/details-collaborator", {
-              state: { data: data },
+              state: { id: data?._id },
             })
           }
         >

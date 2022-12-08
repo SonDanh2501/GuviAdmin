@@ -8,6 +8,12 @@ export const fetchCollaborators = (start, length) => {
   );
 };
 
+export const getCollaboratorsById = (id, start, length) => {
+  return axiosClient.get(
+    `/admin/collaborator_manager/get_detail/${id}?start=${start}&length=${length}`
+  );
+};
+
 export const searchCollaborators = (payload, start, length) => {
   return axiosClient.get(
     `/admin/collaborator_manager/get_list_item?search=${payload}&start=${start}&length=${length}`
@@ -48,5 +54,11 @@ export const updateInformationCollaboratorApi = (id, data) => {
   return axiosClient.post(
     `/admin/collaborator_manager/edit_personal_information/${id}`,
     data
+  );
+};
+
+export const getHistoryActivityCollaborator = (id, start, length) => {
+  return axiosClient.get(
+    `admin/collaborator_manager/get_history_activity/${id}?start=${start}&length=${length}`
   );
 };

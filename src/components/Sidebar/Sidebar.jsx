@@ -131,22 +131,6 @@ const Sidebar = ({ onChangeColor }) => {
             )}
           </NavLink>
         </li>
-        {/* <li>
-          <NavLink
-            to="/settings/manage-reason"
-            onClick={() => changeBrand("Quản lý lý do huỷ")}
-          >
-            {({ isActive }) => (
-              <div className={isActive ? "active-link" : "unactive-link"}>
-                <i class="uil uil-cancel icon"></i>
-                <a className={isActive ? "active-text" : "unactive-text"}>
-                  Quản lý nguyên nhân huỷ
-                </a>
-              </div>
-            )}
-          </NavLink>
-        </li> */}
-
         <li>
           <NavLink to="/topup/manage-topup">
             {({ isActive }) => (
@@ -154,6 +138,18 @@ const Sidebar = ({ onChangeColor }) => {
                 <i class="uil uil-money-withdrawal icon"></i>
                 <a className={isActive ? "active-text" : "unactive-text"}>
                   Tài chính
+                </a>
+              </div>
+            )}
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/report/manage-report">
+            {({ isActive }) => (
+              <div className={isActive ? "active-link" : "unactive-link"}>
+                <i class="uil uil-cancel icon"></i>
+                <a className={isActive ? "active-text" : "unactive-text"}>
+                  Báo cáo
                 </a>
               </div>
             )}
