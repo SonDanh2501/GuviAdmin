@@ -1,3 +1,4 @@
+import { Image } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
@@ -149,7 +150,11 @@ const Document = () => {
                     onChange={onChangeIdentifyBefore}
                   />
                   {imgIdentifyBefore && (
-                    <img src={imgIdentifyBefore} className="img-thumbnail" />
+                    <Image
+                      width={150}
+                      src={imgIdentifyBefore}
+                      className={"img-thumbnail"}
+                    />
                   )}
                 </div>
               </FormGroup>
@@ -165,7 +170,11 @@ const Document = () => {
                     onChange={onChangeIdentifyAfter}
                   />
                   {imgIdentifyAfter && (
-                    <img src={imgIdentifyAfter} className="img-thumbnail" />
+                    <Image
+                      width={150}
+                      src={imgIdentifyAfter}
+                      className={"img-thumbnail"}
+                    />
                   )}
                 </div>
               </FormGroup>

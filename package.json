@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ant-design/charts": "^1.4.2",
+    "@ant-design/icons": "^4.8.0",
     "@iconscout/react-unicons": "^1.1.6",
     "@material-ui/icons": "^4.11.2",
     "@testing-library/jest-dom": "^5.11.10",
@@ -16,6 +16,7 @@
     "draftjs-to-html": "^0.9.1",
     "filereader": "^0.10.3",
     "formik": "^2.2.9",
+    "highcharts-react-official": "^3.1.0",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",

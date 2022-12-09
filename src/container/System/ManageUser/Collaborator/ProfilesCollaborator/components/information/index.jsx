@@ -1,7 +1,10 @@
+import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Button, Col, Form, Input, Label, Row } from "reactstrap";
 import { updateInformationCollaboratorApi } from "../../../../../../../api/collaborator";
 import CustomTextInput from "../../../../../../../components/CustomTextInput/customTextInput";
+import { loadingAction } from "../../../../../../../redux/actions/loading";
 import "./index.scss";
 
 const Information = ({ data }) => {
@@ -16,19 +19,40 @@ const Information = ({ data }) => {
   const [number, setNumber] = useState("");
   const [issued, setIssued] = useState("");
   const [issuedDay, setIssuedDay] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setName(data?.name);
+    const birthdayD = data?.birthday.slice(0, data?.birthday.indexOf("T"));
+    const identityD = !data?.identity_date
+      ? ""
+      : data?.identity_date.slice(0, data?.identity_date.indexOf("T"));
+    setName(data?.full_name);
     setGender(data?.gender);
+    setBirthday(birthdayD);
+    setResident(data?.permanent_address);
+    setStaying(data?.temporary_address);
+    setEthnic(data?.folk);
+    setReligion(data?.religion);
+    setLevel(data?.edu_level);
+    setNumber(data?.identity_number);
+    setIssued(data?.identity_place);
+    setIssuedDay(identityD);
   }, [data]);
 
-  console.log(new Date(birthday));
+  const onChangeNumberIndentity = (value) => {
+    if (value.target.value <= 999999999990) {
+      setNumber(value.target.value);
+    }
+  };
 
   const updateInformation = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
+    const day = moment(new Date(birthday)).toISOString();
+    const indentityDay = moment(new Date(issuedDay)).toISOString();
     updateInformationCollaboratorApi(data?._id, {
       gender: gender,
       full_name: name,
-      birthday: "string",
+      birthday: day,
       permanent_address: resident,
       temporary_address: staying,
       folk: ethnic,
@@ -36,8 +60,12 @@ const Information = ({ data }) => {
       edu_level: level,
       identity_number: number,
       identity_place: issued,
-      identity_date: issuedDay,
-    });
+      identity_date: indentityDay,
+    })
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => console.log(err));
   }, [
     gender,
     name,
@@ -50,6 +78,7 @@ const Information = ({ data }) => {
     issued,
     issuedDay,
     data,
+    birthday,
   ]);
 
   return (
@@ -169,7 +198,8 @@ const Information = ({ data }) => {
                 placeholder="Nhập thông tin"
                 type="number"
                 value={number}
-                onChange={(e) => setNumber(e.target.value)}
+                min={0}
+                onChange={(e) => onChangeNumberIndentity(e)}
               />
             </Col>
           </Row>
@@ -194,7 +224,9 @@ const Information = ({ data }) => {
             </Col>
           </Row>
         </div>
-        <Button className="btn-update">Cập nhật</Button>
+        <Button className="btn-update" onClick={updateInformation}>
+          Cập nhật
+        </Button>
       </Form>
     </>
   );
