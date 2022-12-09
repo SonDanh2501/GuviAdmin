@@ -1,59 +1,128 @@
-$font-01: "Oxygen", sans-serif;
-.div-header {
-  padding: 10px;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  display: flex;
+$font-01: "Roboto", sans-serif;
 
-  .logo {
-    width: 100px;
-    height: 38pxpx;
+.container-sidebar {
+  padding-top: 20px;
+
+  .div-header {
+    padding: 10px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+
+    .logo {
+      width: 100px;
+      height: 38pxpx;
+    }
+
+    .name-guvi {
+      color: rgb(0, 0, 0);
+      margin-left: 20px;
+    }
   }
 
-  .name-guvi {
-    color: rgb(0, 0, 0);
-    margin-left: 20px;
+  .icon {
+    margin-right: 20px;
+    color: black;
   }
-}
 
-.icon {
-  margin-right: 20px;
-  color: black;
-}
-
-.active-link {
-  width: "10%";
-  height: 40px;
-  background-color: bisque;
-  padding: 10px;
-  display: flex;
-  border-radius: 5px;
-
-  .active-text {
-    text-decoration: none !important;
-    color: rgb(0, 0, 0);
-    font-family: $font-01;
+  .icon-right {
+    color: black;
+    display: flex;
+    margin-left: 25%;
+    margin-top: 2px;
   }
-}
-.unactive-link {
-  width: "10%";
-  height: 40px;
-  background-color: "transparent" !important;
-  padding: 10px;
-  display: flex;
-  border-radius: 5px;
 
-  .unactive-text {
-    text-decoration: none !important;
-    color: rgb(0, 0, 0);
-    font-family: $font-01;
+  .active-link {
+    width: "10%";
+    height: 60px;
+    background-color: #e6e8f4;
+    padding: 20px 30px;
+    display: flex;
+    text-decoration: none;
+
+    .active-text {
+      text-decoration: none !important;
+      color: rgb(0, 0, 0);
+      font-family: $font-01;
+    }
   }
-}
+  .unactive-link {
+    width: "10%";
+    height: 60px;
+    background-color: "transparent" !important;
+    padding: 20px 30px;
+    display: flex;
+    border-bottom: 1px solid #e6e8f4;
 
-.input-color {
-  width: 50px;
-  height: 30px;
-  border: none;
-  background-color: transparent;
+    .unactive-text {
+      text-decoration: none !important;
+      color: rgb(0, 0, 0);
+      font-family: $font-01;
+    }
+  }
+
+  .nav {
+    .active-link-nav {
+      width: "10%";
+      height: 60px;
+      padding: 20px 60px 20px 40px;
+      display: flex;
+      text-decoration: none;
+
+      .active-text-nav {
+        text-decoration: none !important;
+        color: rgb(0, 0, 0);
+        font-weight: 600;
+        font-family: $font-01;
+      }
+    }
+    .unactive-link-nav {
+      width: "10%";
+      height: 60px;
+      background-color: "transparent" !important;
+      padding: 20px 60px 20px 40px;
+      display: flex;
+
+      .unactive-text-nav {
+        text-decoration: none !important;
+        color: rgb(0, 0, 0);
+        font-family: $font-01;
+      }
+    }
+  }
+
+  .configuration {
+    position: absolute;
+    width: 15.2%;
+
+    .active-link-configuration {
+      width: "10%";
+      height: 60px;
+      background-color: #e6e8f4;
+      padding: 20px 30px;
+      display: flex;
+      text-decoration: none;
+
+      .active-text-configuration {
+        text-decoration: none !important;
+        color: rgb(0, 0, 0);
+        font-family: $font-01;
+      }
+    }
+    .unactive-link-configuration {
+      width: "10%";
+      height: 60px;
+      background-color: "transparent" !important;
+      padding: 20px 30px;
+      display: flex;
+      border: 1px solid #e6e8f4;
+
+      .unactive-text-configuration {
+        text-decoration: none !important;
+        color: rgb(0, 0, 0);
+        font-family: $font-01;
+      }
+    }
+  }
 }

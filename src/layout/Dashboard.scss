@@ -1,18 +1,17 @@
 .container-dashboard {
-  background-color: rgba(220, 220, 220, 0.667);
   min-height: 910px;
+  width: 100%;
+  padding: 0px;
+  background-color: #eef3f5;
 
   .sidebar {
     background-color: white;
-    min-height: 910px;
+    height: 90vh;
     box-shadow: 1px 1px #e6e6e6;
     width: 15%;
   }
 
   .main {
     width: 85%;
-  }
-  .main-full {
-    width: 100%;
   }
 }

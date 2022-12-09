@@ -1,16 +1,341 @@
-.chart {
-  background-color: white;
-  width: 65%;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 6px 3px 6px 3px #d2d2d2;
+.container-dash {
+  width: 99%;
+  padding-left: 40px;
+  padding-right: 40px;
 
-  .type-select {
-    width: 110px;
-    min-height: 32px;
-    border-radius: 8px;
-    margin-right: 5px;
-    border-color: rgb(211, 211, 211);
-    color: rgb(204, 204, 204);
+  .chart {
+    min-height: 656px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 2px #e8e8e8;
+    background-color: white;
+
+    .type-select {
+      width: 110px;
+      min-height: 32px;
+      border-radius: 8px;
+      margin-right: 5px;
+      border-color: rgb(211, 211, 211);
+      color: rgb(204, 204, 204);
+    }
+
+    .label-persen-active {
+      color: black;
+      font-weight: 600;
+      font-size: 18px;
+      font-family: "Roboto", sans-serif;
+    }
+
+    .label-active {
+      color: black;
+      font-weight: 600;
+      font-size: 30px;
+      font-family: "Roboto", sans-serif;
+    }
+    .div-persen {
+      display: flex;
+      align-items: center;
+
+      .label-persen {
+        color: black;
+        font-weight: 600;
+        font-size: 30px;
+        font-family: "Roboto", sans-serif;
+      }
+      .label-total {
+        color: #d0d1d2;
+        font-weight: 200;
+        font-size: 14px;
+        font-family: "Roboto", sans-serif;
+        margin-left: 20px;
+      }
+    }
+    .progress-persent {
+      padding-right: 50px;
+    }
+    .div-container-on {
+      display: flex;
+      justify-content: space-between;
+      padding-left: 20px;
+      padding-right: 50px;
+
+      .div-on {
+        display: flex;
+        flex-direction: row;
+
+        .line-on {
+          width: 30px;
+          height: 4px;
+          background-color: #00b4d8;
+          border-radius: 5px;
+          margin-top: 10px;
+          margin-right: 20px;
+        }
+        .line-off {
+          width: 30px;
+          height: 4px;
+          background-color: #e6e8f4;
+          border-radius: 5px;
+          margin-top: 10px;
+          margin-right: 20px;
+        }
+        .total-div-on {
+          display: flex;
+          flex-direction: column;
+
+          .text-on {
+            color: #d0d1d2;
+            font-weight: 200;
+            font-size: 14px;
+            font-family: "Roboto", sans-serif;
+          }
+          .text-total-on {
+            color: black;
+            font-weight: 500;
+            font-size: 14px;
+            font-family: "Roboto", sans-serif;
+          }
+        }
+      }
+    }
+  }
+
+  .div-connect-service {
+    background-color: white;
+    min-height: 347px;
+    border-radius: 15px;
+
+    .div-progress {
+      min-height: 228px;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+    }
+
+    .div-progress-text {
+      .title-progress {
+        text-align: center;
+        color: black;
+        font-weight: 600;
+        font-size: 18px;
+        font-family: "Roboto", sans-serif;
+      }
+    }
+
+    .div-success {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-left: 15%;
+
+      .square {
+        width: 20px;
+        height: 20px;
+        background-color: #48cae4;
+        border-radius: 5px;
+      }
+      .text-success-square {
+        color: black;
+        font-weight: 500;
+        font-size: 14px;
+        font-family: "Roboto", sans-serif;
+        margin: 3px 0px 0px 10px;
+      }
+      .unsquare {
+        width: 20px;
+        height: 20px;
+        background-color: #e6e8f4;
+        border-radius: 5px;
+      }
+    }
+  }
+
+  .div-top-collaborator {
+    background-color: white;
+    min-height: 294px;
+    border-radius: 15px;
+    margin-top: 15px;
+
+    .text-top {
+      text-align: center;
+      color: black;
+      font-weight: 600;
+      font-size: 18px;
+      font-family: "Roboto", sans-serif;
+      padding-top: 10px;
+    }
+
+    .level-ctv1 {
+      display: flex;
+      background-color: #023e8a;
+      height: 38px;
+      margin-left: 25px;
+      margin-right: 25px;
+      border-radius: 5px 5px 5px 0px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 10px 0px 10px;
+      .text-level {
+        color: white;
+        font-weight: normal;
+        font-size: 11px;
+        font-family: "Roboto", sans-serif;
+      }
+    }
+
+    .level-ctv2 {
+      display: flex;
+      height: 38px;
+      background-color: #0077b6;
+      margin-left: 25px;
+      margin-right: 50px;
+      border-radius: 0px 5px 5px 0px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 10px 0px 10px;
+      .text-level {
+        color: white;
+        font-weight: normal;
+        font-size: 11px;
+        font-family: "Roboto", sans-serif;
+      }
+    }
+
+    .level-ctv3 {
+      display: flex;
+      height: 38px;
+      background-color: #0096c7;
+      margin-left: 25px;
+      margin-right: 75px;
+      border-radius: 0px 5px 5px 0px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 10px 0px 10px;
+      .text-level {
+        color: white;
+        font-weight: normal;
+        font-size: 11px;
+        font-family: "Roboto", sans-serif;
+      }
+    }
+    .level-ctv4 {
+      display: flex;
+      height: 38px;
+      background-color: #00b4d8;
+      margin-left: 25px;
+      margin-right: 100px;
+      border-radius: 0px 5px 5px 0px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 10px 0px 10px;
+      .text-level {
+        color: white;
+        font-weight: normal;
+        font-size: 11px;
+        font-family: "Roboto", sans-serif;
+      }
+    }
+    .level-ctv5 {
+      display: flex;
+      height: 38px;
+      background-color: #48cae4;
+      margin-left: 25px;
+      margin-right: 125px;
+      border-radius: 0px 5px 5px 5px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 10px 0px 10px;
+      .text-level {
+        color: white;
+        font-weight: normal;
+        font-size: 11px;
+        font-family: "Roboto", sans-serif;
+      }
+    }
+
+    .div-seemore {
+      display: flex;
+      float: right;
+      padding: 10px;
+      margin-top: 10px;
+    }
+  }
+
+  .label-service {
+    color: black;
+    font-weight: 600;
+    font-size: 27px;
+    font-family: "Roboto", sans-serif;
+  }
+
+  .div-action {
+    display: flex;
+    flex-direction: column;
+
+    .btn-click {
+      background-color: #3bbe7f;
+      border: none;
+      border-radius: 5px;
+      color: white;
+    }
+
+    .btn-details {
+      background-color: #0075ff;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      margin-top: 2px;
+    }
+  }
+
+  .div-entries {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+
+    .select-entries {
+      width: 50px;
+      height: 30px;
+      margin-left: 10px;
+      border: 1px solid rgb(211, 211, 211);
+      border-radius: 5px;
+    }
+  }
+
+  .div-column-service {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .div-chart-pie {
+    background-color: white;
+    border-radius: 15px;
+    padding: 10px;
+
+    .div-chart-progress {
+      display: flex;
+    }
+  }
+
+  .col-activity {
+    background-color: white;
+    border-radius: 15px;
+    min-height: 345px;
+
+    .label-activity {
+      color: black;
+      font-weight: 600;
+      font-size: 27px;
+      font-family: "Roboto", sans-serif;
+      text-decoration: none;
+      text-align: center;
+      padding-top: 20px;
+    }
+  }
+
+  .div-list {
+    display: flex;
+    flex-direction: row;
   }
 }
