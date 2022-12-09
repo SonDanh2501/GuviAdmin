@@ -33,7 +33,7 @@ const Header = () => {
   }, []);
   return (
     <div className="container-header-board">
-      <Input
+      {/* <Input
         name="selectType"
         type="select"
         className="selectType"
@@ -41,66 +41,67 @@ const Header = () => {
       >
         <option value="all">Tổng</option>
         <option value="day">Ngày hôm nay</option>
-      </Input>
+      </Input> */}
 
-      <div className="header pb-8  pt-md-6 gradient-header">
-        <Container fluid>
+      <div className="header pb-8  pt-md-6">
+        <div>
           <div className="header-body">
             {/* Card stats */}
             <Row>
               <Col lg="6" xl="3">
                 <div className="card">
-                  <p className="text-title"> Doanh thu</p>
+                  <img src={customer} className="img" />
                   <div className="div-details">
-                    <img src={revenues} className="img" />
-                    <p className="text-details">
-                      {formatMoney(
-                        !dataTotal?.total_revenue ? 0 : dataTotal?.total_revenue
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </Col>
-              <Col lg="6" xl="3">
-                <div className="card">
-                  <p className="text-title"> Tổng đơn hàng</p>
-                  <div className="div-details">
-                    <img src={add} className="img" />
-                    <p className="text-details">
-                      {!dataTotal?.total_order ? 0 : dataTotal?.total_order}
-                    </p>
-                  </div>
-                </div>
-              </Col>
-              <Col lg="6" xl="3">
-                <div className="card">
-                  <p className="text-title">Khách hàng</p>
-                  <div className="div-details">
-                    <img src={customer} className="img" />
-                    <p className="text-details">
+                    <a className="text-title">Khách hàng</a>
+                    <a className="text-detail">
                       {!dataTotal?.total_customer
                         ? 0
                         : dataTotal?.total_customer}
-                    </p>
+                    </a>
                   </div>
                 </div>
               </Col>
               <Col lg="6" xl="3">
                 <div className="card">
-                  <p className="text-title"> Cộng tác viên</p>
+                  <img src={collaborator} className="img" />
                   <div className="div-details">
-                    <img src={collaborator} className="img" />
-                    <p className="text-details">
+                    <a className="text-title"> Cộng tác viên</a>
+                    <a className="text-detail">
                       {!dataTotal?.total_collaborator
                         ? 0
                         : dataTotal?.total_collaborator}
-                    </p>
+                    </a>
+                  </div>
+                </div>
+              </Col>
+
+              <Col lg="6" xl="3">
+                <div className="card">
+                  <img src={add} className="img" />
+                  <div className="div-details">
+                    <a className="text-title"> Tổng đơn hàng</a>
+                    <a className="text-detail">
+                      {!dataTotal?.total_order ? 0 : dataTotal?.total_order}
+                    </a>
+                  </div>
+                </div>
+              </Col>
+              <Col lg="6" xl="3">
+                <div className="card">
+                  <img src={revenues} className="img" />
+                  <div className="div-details">
+                    <a className="text-title"> Doanh thu</a>
+                    <a className="text-detail">
+                      {formatMoney(
+                        !dataTotal?.total_revenue ? 0 : dataTotal?.total_revenue
+                      )}
+                    </a>
                   </div>
                 </div>
               </Col>
             </Row>
           </div>
-        </Container>
+        </div>
       </div>
     </div>
   );

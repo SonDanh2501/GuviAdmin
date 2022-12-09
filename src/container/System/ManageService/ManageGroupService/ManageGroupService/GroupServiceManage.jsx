@@ -31,7 +31,7 @@ export default function GroupServiceManage() {
   const listGroupService = useSelector(getGroupService);
   const totalGroupService = useSelector(getGroupServiceTotal);
   React.useEffect(() => {
-    dispatch(loadingAction.loadingRequest(true));
+    // dispatch(loadingAction.loadingRequest(true));
     dispatch(getGroupServiceAction.getGroupServiceRequest(0, 10));
   }, [dispatch]);
 

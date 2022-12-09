@@ -31,21 +31,17 @@ const Dashboard = () => {
     setColor(e);
   };
   return (
-    <div className="container-dashboard container-fluid">
+    <div className="container-dashboard">
+      <Header />
+
       <div className="row">
         {hideSidebar && (
           <div className="sidebar" style={{ backgroundColor: color }}>
             <Sidebar color={color} onChangeColor={(e) => onColor(e)} />
           </div>
         )}
-        <main className={hideSidebar ? "main p-0" : "main-full p-0"}>
-          <div>
-            <Header
-              onClick={() => setHideSidebar(!hideSidebar)}
-              hideSidebar={hideSidebar}
-              color={color}
-            />
-          </div>
+        {/* <main className={hideSidebar ? "main p-0" : "main-full p-0"}> */}
+        <main className="main">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/system/user-manage" element={<UserManage />} />

@@ -35,7 +35,7 @@ export default function OrderManage() {
   const orderTotal = useSelector(getOrderTotal);
   const service = useSelector(getService);
   React.useEffect(() => {
-    dispatch(loadingAction.loadingRequest(true));
+    // dispatch(loadingAction.loadingRequest(true));
     dispatch(getOrder.getOrderRequest({ start: 0, length: 10 }));
   }, [dispatch]);
 

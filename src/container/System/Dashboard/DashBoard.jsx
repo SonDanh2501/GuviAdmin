@@ -1,34 +1,24 @@
+import { DatePicker, List, Progress, Steps } from "antd";
+import Highcharts from "highcharts";
+import ReactHighcharts from "highcharts-react-official";
+import PieChart from "highcharts-react-official";
+import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   Card,
+  CardBody,
+  CardFooter,
   CardHeader,
   Col,
-  Container,
   Input,
   Row,
-  Table,
 } from "reactstrap";
-import "./DashBoard.scss";
-import Header from "./HeaderBoard/Header";
-import HomeObj from "./DashboardTable";
-import {
-  AreaChart,
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Legend,
-  Tooltip,
-  XAxis,
-  YAxis,
-  Area,
-  ResponsiveContainer,
-} from "recharts";
+import { Table } from "antd";
 import { getDayReportApi } from "../../../api/statistic";
-import { DatePicker, Space } from "antd";
-import moment from "moment";
-import Highcharts from "highcharts";
-import ReactHighcharts from "highcharts-react-official";
-import { formatDayVN } from "../../../helper/formatDayVN";
+import "./DashBoard.scss";
+import HomeObj from "./DashboardTable";
+import Header from "./HeaderBoard/Header";
+import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
 
 const { RangePicker } = DatePicker;
 
@@ -36,17 +26,19 @@ const data = [
   {
     id: 1,
     name: "Nguyễn Tam Kiều Công",
-    service: "Giúp việc theo giờ",
-    time: "16:00",
-    address: "Ho chi Minh",
+    service: "Giúp việc theo giờ ",
+    time: "31/12/2022",
+    address: "Hồ Chí Minh",
+    collaborator: "Tam Kiều Công",
     progress: "Hoàn thành",
   },
   {
     id: 2,
     name: "Nguyễn Tam Kiều Công",
-    service: "Giúp việc cố định",
-    time: "16:00",
-    address: "Ho chi Minh",
+    service: "Giúp việc theo giờ ",
+    time: "31/12/2022",
+    address: "Hồ Chí Minh",
+    collaborator: "Tam Kiều Công",
     progress: "Hoàn thành",
   },
 ];
@@ -99,7 +91,7 @@ export default function Home() {
     chart: {
       type: "column",
       width: 1000,
-      height: 500,
+      height: 300,
     },
     title: {
       text: "Thống kê",
@@ -130,86 +122,344 @@ export default function Home() {
     ],
   };
 
-  return (
-    <>
-      <Header />
-      <Container className="mt--7" fluid>
-        <div className="mt-5 chart">
-          <Input
-            name="select"
-            className="type-select"
-            type="select"
-            onChange={(e) => setType(e.target.value)}
-          >
-            <>
-              <option value="">Chọn kiểu</option>
-              <option value="day">Ngày</option>
-              <option value="week">Tuần</option>
-            </>
-          </Input>
-          <RangePicker
-            picker={type}
-            onChange={(e) => onChange(e[0]?.$d, e[1]?.$d)}
-            style={{ marginBottom: 10 }}
-          />
-          <div style={{ height: 500, width: 1000 }}>
-            {/* <ResponsiveContainer>
-              <BarChart
-                width={1000}
-                height={500}
-                data={dataDay}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis type="number" domain={[0, 2000000]} />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="money" fill="#82ca9d" radius={5} barSize={25} />
-                <Bar dataKey="job" fill="#82ca53" radius={5} barSize={25} />
-              </BarChart>
-            </ResponsiveContainer> */}
-            <ReactHighcharts highcharts={Highcharts} options={options} />
+  const optionPie = {
+    chart: {
+      type: "pie",
+      width: 700,
+      height: 300,
+    },
+    title: {
+      text: "",
+    },
+    series: [
+      {
+        name: "Gases",
+        data: [
+          {
+            name: "GIÚP VIỆC THEO GIỜ/4 GIỜ",
+            y: 0.9,
+            color: "#BAE6FD",
+          },
+          {
+            name: "GIÚP VIỆC THEO GIỜ/3 GIỜ",
+            y: 78.1,
+            color: "#F477EF",
+          },
+          {
+            name: "GIÚP VIỆC THEO GIỜ/2 GIỜ",
+            y: 20.9,
+            color: "#FCD34D",
+          },
+          {
+            name: "Khác",
+            y: 0.1,
+            color: "#2ACB9E",
+          },
+        ],
+      },
+    ],
+  };
+
+  const columns = [
+    {
+      title: "Khách hàng",
+      render: (data) => {
+        return (
+          <a className="text-name" onClick={() => {}}>
+            {data.name}
+          </a>
+        );
+      },
+    },
+    {
+      title: "Dịch vụ",
+      render: (data) => {
+        return (
+          <div className="div-column-service">
+            <a>{data.service}</a>
+            <a>08:00-10:00</a>
           </div>
+        );
+      },
+    },
+    {
+      title: "Thời gian",
+      render: (data) => {
+        return (
+          <div className="div-column-service">
+            <a>{data.time}</a>
+            <a>Thứ bảy</a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Địa điểm",
+      render: (data) => {
+        return (
+          <div className="div-column-service">
+            <a>{data.address}</a>
+            <a>45 Lê Lợi, Phường Bến Thành, Qu...</a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Cộng tác viên",
+      dataIndex: "collaborator",
+    },
+    {
+      title: "Tiến độ",
+      dataIndex: "progress",
+    },
+    {
+      title: "Hành động",
+      key: "action",
+      render: (data) => {
+        return (
+          <div className="div-action">
+            <button className="btn-click">Thao tác</button>
+            <button className="btn-details">Chi tiết</button>
+          </div>
+        );
+      },
+    },
+  ];
+
+  return (
+    <div className="container-dash">
+      <Header />
+      <div>
+        <div className="mt-4">
+          <Row>
+            <Col lg="9">
+              <div className="chart">
+                <Input
+                  name="select"
+                  className="type-select"
+                  type="select"
+                  onChange={(e) => setType(e.target.value)}
+                >
+                  <>
+                    <option value="">Chọn kiểu</option>
+                    <option value="day">Ngày</option>
+                    <option value="week">Tuần</option>
+                  </>
+                </Input>
+                <RangePicker
+                  picker={type}
+                  onChange={(e) => onChange(e[0]?.$d, e[1]?.$d)}
+                  style={{ marginBottom: 10 }}
+                />
+                <ReactHighcharts highcharts={Highcharts} options={options} />
+
+                <Row>
+                  <Col lg="7" className="pl-4">
+                    <p className="label-persen-active">Phần trăm hoạt động</p>
+                    <div className="div-persen">
+                      <p className="label-persen">49%</p>
+                      <p className="label-total">Tổng</p>
+                    </div>
+                    <Progress
+                      percent={49}
+                      showInfo={false}
+                      strokeColor={"#48CAE4"}
+                      className="progress-persent"
+                      strokeWidth={15}
+                    />
+                    <div className="div-container-on">
+                      <div className="div-on">
+                        <div className="line-on" />
+                        <div className="total-div-on">
+                          <a className="text-on">Online</a>
+                          <a className="text-total-on">2,113</a>
+                        </div>
+                      </div>
+
+                      <div className="div-on">
+                        <div className="line-off" />
+                        <div className="total-div-on">
+                          <a className="text-on">Ofline</a>
+                          <a className="text-total-on">2,113</a>
+                        </div>
+                      </div>
+                    </div>
+                  </Col>
+                  <Col lg="5">
+                    <p className="label-persen-active">Active Users</p>
+                    <p className="label-active">2154</p>
+                    <div>
+                      <Progress
+                        percent={66}
+                        strokeWidth={10}
+                        strokeColor={"#48CAE4"}
+                        className="progress-persent"
+                      />
+                      <a>Hồ Chí Minh</a>
+                    </div>
+                    {/* <div>
+                      <Progress
+                        percent={73}
+                        strokeWidth={10}
+                        strokeColor={"#48CAE4"}
+                        className="progress-persent"
+                      />
+                      <a>Đà Nẵng</a>
+                    </div>
+                    <div>
+                      <Progress
+                        percent={20}
+                        strokeWidth={10}
+                        strokeColor={"#48CAE4"}
+                        className="progress-persent"
+                      />
+                      <a>Hà Nội</a>
+                    </div> */}
+                  </Col>
+                </Row>
+              </div>
+            </Col>
+            <Col lg="3">
+              <div className="div-connect-service">
+                <div className="div-progress">
+                  <Progress
+                    type="dashboard"
+                    percent={75}
+                    gapDegree={5}
+                    strokeColor={"#48CAE4"}
+                    strokeWidth={20}
+                  />
+                </div>
+                <div className="div-progress-text">
+                  <p className="title-progress">Tỉ lệ dịch vụ kết nối</p>
+                </div>
+                <div className="div-success">
+                  <a className="square" />
+                  <p className="text-success-square">Hoàn thành</p>
+                </div>
+                <div className="div-success">
+                  <a className="unsquare" />
+                  <p className="text-success-square">Chưa hoàn thành</p>
+                </div>
+              </div>
+              <div className="div-top-collaborator">
+                <p className="text-top">Top CTV</p>
+                <div className="level-ctv1">
+                  <p className="text-level">Nguyễn Công Kiều Tam</p>
+                  <p className="text-level">15.000.000đ</p>
+                </div>
+                <div className="level-ctv2">
+                  <p className="text-level">Nguyễn Công Kiều Tam</p>
+                  <p className="text-level">15.000.000đ</p>
+                </div>
+                <div className="level-ctv3">
+                  <p className="text-level">Nguyễn Công Kiều Tam</p>
+                  <p className="text-level">15.000.000đ</p>
+                </div>
+                <div className="level-ctv4">
+                  <p className="text-level">Nguyễn Công Kiều Tam</p>
+                  <p className="text-level">15.000.000đ</p>
+                </div>
+                <div className="level-ctv5">
+                  <p className="text-level">Nguyễn Công Kiều Tam</p>
+                  <p className="text-level">15.000.000đ</p>
+                </div>
+                <div className="div-seemore">
+                  <p>Xem chi tiết</p>
+                  <i class="uil uil-angle-right"></i>
+                </div>
+              </div>
+            </Col>
+          </Row>
         </div>
-        <Row className="mt-5 mb-5">
+        <p className="label-service">DỊCH VỤ GẦN NHẤT</p>
+        <Row className=" mb-5">
           <Col className="mb-5 mb-xl-0">
             <Card className="shadow">
-              <CardHeader className="border-0">
-                <Row className="align-items-center">
-                  <div className="col">
-                    <h3 className="mb-0">Thông tin dịch vụ gần nhất</h3>
-                  </div>
-                </Row>
-              </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
-                <thead className="thead-light">
-                  <tr>
-                    <th scope="col">Khách hàng</th>
-                    <th scope="col">Dịch vụ yêu cầu</th>
-                    <th scope="col">Thời gian</th>
-                    <th scope="col">Địa điểm</th>
-                    <th scope="col">Tiến độ</th>
-                    <th scope="col" />
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.length > 0 ? (
-                    data.map((e) => <HomeObj {...e} />)
-                  ) : (
-                    <></>
-                  )}
-                </tbody>
-              </Table>
+              <CardBody>
+                <Table columns={columns} dataSource={data} pagination={false} />
+              </CardBody>
+              <div className="div-entries">
+                <CustomTextInput
+                  label={"Hiện"}
+                  type="select"
+                  className={"select-entries"}
+                  body={
+                    <>
+                      <option value={"5"}>5</option>
+                      <option value={"5"}>10</option>
+                      <option value={"5"}>15</option>
+                    </>
+                  }
+                />
+              </div>
             </Card>
           </Col>
         </Row>
-      </Container>
-    </>
+        <div>
+          <Row>
+            <Col lg="9">
+              <div className="div-chart-pie">
+                <div>
+                  <a>TOP DỊCH VỤ</a>
+                </div>
+                <Row>
+                  <Col>
+                    <PieChart highcharts={Highcharts} options={optionPie} />
+                  </Col>
+                  <Col className="mt-5">
+                    <div>
+                      <Progress
+                        percent={66}
+                        strokeWidth={10}
+                        strokeColor={"#48CAE4"}
+                      />
+                      <a>Hồ Chí Minh</a>
+                    </div>
+                    {/* <div>
+                      <Progress
+                        percent={66}
+                        strokeWidth={10}
+                        strokeColor={"#48CAE4"}
+                      />
+                      <a>Hồ Chí Minh</a>
+                    </div>
+                    <div>
+                      <Progress
+                        percent={66}
+                        strokeWidth={10}
+                        strokeColor={"#48CAE4"}
+                      />
+                      <a>Hồ Chí Minh</a>
+                    </div> */}
+                  </Col>
+                </Row>
+              </div>
+            </Col>
+            <Col lg="3">
+              <div className="col-activity">
+                <p className="label-activity">Hoạt động</p>
+                <List
+                  itemLayout="horizontal"
+                  dataSource={[1, 2, 3]}
+                  renderItem={(item) => {
+                    return (
+                      <div className="div-list">
+                        <div className="div-line">
+                          <div className="circle" />
+                        </div>
+                        <div>
+                          <a>Lê</a>
+                        </div>
+                      </div>
+                    );
+                  }}
+                />
+              </div>
+            </Col>
+          </Row>
+        </div>
+      </div>
+    </div>
   );
 }
