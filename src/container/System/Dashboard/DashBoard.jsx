@@ -16,7 +16,6 @@ import {
 import { Table } from "antd";
 import { getDayReportApi } from "../../../api/statistic";
 import "./DashBoard.scss";
-import HomeObj from "./DashboardTable";
 import Header from "./HeaderBoard/Header";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
 
