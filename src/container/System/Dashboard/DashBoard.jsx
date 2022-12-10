@@ -1,23 +1,16 @@
-import { DatePicker, List, Progress, Steps } from "antd";
+import { DatePicker, List, Progress, Table } from "antd";
 import Highcharts from "highcharts";
-import ReactHighcharts from "highcharts-react-official";
-import PieChart from "highcharts-react-official";
+import {
+  default as PieChart,
+  default as ReactHighcharts,
+} from "highcharts-react-official";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Col,
-  Input,
-  Row,
-} from "reactstrap";
-import { Table } from "antd";
+import { Card, CardBody, Col, Input, Row } from "reactstrap";
 import { getDayReportApi } from "../../../api/statistic";
+import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
 import "./DashBoard.scss";
 import Header from "./HeaderBoard/Header";
-import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
 
 const { RangePicker } = DatePicker;
 

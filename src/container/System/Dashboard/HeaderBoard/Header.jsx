@@ -1,14 +1,14 @@
 // reactstrap components
-import { useCallback, useEffect, useState } from "react";
-import { Col, Container, Input, Row } from "reactstrap";
-import { getTotalReportApi } from "../../../../api/statistic";
-import { formatMoney } from "../../../../helper/formatMoney";
-import revenues from "../../../../assets/images/revenues.png";
-import add from "../../../../assets/images/add.png";
-import customer from "../../../../assets/images/customer.png";
-import collaborator from "../../../../assets/images/collaborator.png";
-import "./headerBoard.scss";
 import moment from "moment";
+import { useCallback, useEffect, useState } from "react";
+import { Col, Row } from "reactstrap";
+import { getTotalReportApi } from "../../../../api/statistic";
+import add from "../../../../assets/images/add.png";
+import collaborator from "../../../../assets/images/collaborator.png";
+import customer from "../../../../assets/images/customer.png";
+import revenues from "../../../../assets/images/revenues.png";
+import { formatMoney } from "../../../../helper/formatMoney";
+import "./headerBoard.scss";
 
 const Header = () => {
   const [dataTotal, setDataTotal] = useState([]);

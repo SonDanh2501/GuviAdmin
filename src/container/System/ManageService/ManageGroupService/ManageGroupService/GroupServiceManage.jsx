@@ -13,8 +13,6 @@ import {
   Table,
 } from "reactstrap";
 import AddGroupService from "../../../../../components/addGroupService/addGroupService";
-import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
-import { loadingAction } from "../../../../../redux/actions/loading";
 import { getGroupServiceAction } from "../../../../../redux/actions/service";
 import {
   getGroupService,
