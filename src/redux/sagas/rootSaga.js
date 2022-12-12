@@ -12,6 +12,7 @@ import feedbackSaga from "./feedback";
 import loadingSaga from "./loading";
 import orderSaga from "./order";
 import topupSaga from "./topup";
+import statisticSaga from "./statistic";
 
 export default function* rootSaga() {
   yield all([
@@ -28,5 +29,6 @@ export default function* rootSaga() {
     fork(loadingSaga),
     fork(orderSaga),
     fork(topupSaga),
+    fork(statisticSaga),
   ]);
 }

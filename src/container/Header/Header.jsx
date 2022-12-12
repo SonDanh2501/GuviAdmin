@@ -15,6 +15,7 @@ import { logoutAction } from "../../redux/actions/auth";
 import { useNavigate } from "react-router-dom";
 import { loadingAction } from "../../redux/actions/loading";
 import Logo from "../../assets/images/LogoS.png";
+import { CaretDownOutlined } from "@ant-design/icons";
 
 const Header = ({ onClick }) => {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ const Header = ({ onClick }) => {
               <Media className="ml-2 d-none d-lg-block">
                 <h5 className="text-name">{user?.name}</h5>
               </Media>
-              <i class="uil uil-angle-down  icon-down"></i>
+              <CaretDownOutlined className="icon-down" />
             </Media>
           </DropdownToggle>
           <DropdownMenu className="dropdown-menu-arrow" right>

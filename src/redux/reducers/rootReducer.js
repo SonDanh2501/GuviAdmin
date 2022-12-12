@@ -13,6 +13,7 @@ import feedback from "./feedback";
 import loading from "./loading";
 import order from "./order";
 import topup from "./topup";
+import statistic from "./statistic";
 import Auth from "./auth";
 
 const authPersistConfig = {
@@ -34,5 +35,6 @@ const rootReducer = combineReducers({
   loading,
   order,
   topup,
+  statistic,
 });
 export default rootReducer;

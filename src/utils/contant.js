@@ -52,6 +52,10 @@ export const INIT_STATE = {
     dataCustomer: [],
     totalItemCustomer: 0,
   },
+  statistic: {
+    historyActivity: [],
+    lastestService: [],
+  },
 };
 
 export const path = {

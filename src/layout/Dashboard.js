@@ -1,27 +1,21 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { Route, Router, Routes, Switch } from "react-router-dom";
-import Header from "../container/Header/Header";
-import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
-import PromotionManage from "../container/System/ManagePromotion/Customer/promotionManage";
-import NewsManage from "../container/System/ManageSetting/ManageNews/NewsManage";
-import ReasonManage from "../container/System/ManageSetting/ManageReason/ReasonManage";
-import CollaboratorManage from "../container/System/ManageUser/Collaborator/CollaboratorManage";
-import BannerManage from "../container/System/ManageSetting/ManageBanner/BannerManage";
-import UserManage from "../container/System/ManageUser/Customer/UserManage";
-import ServiceManage from "../container/System/ManageService/ManageService/ServiceManage";
-import GroupServiceManage from "../container/System/ManageService/ManageGroupService/ManageGroupService/GroupServiceManage";
-import Home from "../container/System/Dashboard/DashBoard";
-import "./Dashboard.scss";
+import { Route, Routes } from "react-router-dom";
 import Sidebar from "../components/Sidebar/Sidebar";
-import OrderManage from "../container/System/ManageOrder/OrderManage";
-import TopupManage from "../container/System/ManageTopup/ManageTopupCollaborator/TopupManage";
-import TopupCustomerManage from "../container/System/ManageTopup/ManageTopupCustomer/TopupCustomerManage";
+import Header from "../container/Header/Header";
+import Home from "../container/System/Dashboard/DashBoard";
 import ManageConfiguration from "../container/System/ManageConfiguration/ManageConfiguration";
-import Profile from "../container/System/ManageUser/Customer/Profiles/Profile";
-import ProfileCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/ProfileCollaborator";
+import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
+import ManageOrder from "../container/System/ManageOrder";
+import GroupServiceManage from "../container/System/ManageService/ManageGroupService/ManageGroupService/GroupServiceManage";
+import ServiceManage from "../container/System/ManageService/ManageService/ServiceManage";
 import ManageSetting from "../container/System/ManageSetting";
+import ReasonManage from "../container/System/ManageSetting/ManageReason/ReasonManage";
 import ManageTopup from "../container/System/ManageTopup";
+import CollaboratorManage from "../container/System/ManageUser/Collaborator/CollaboratorManage";
+import ProfileCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/ProfileCollaborator";
+import Profile from "../container/System/ManageUser/Customer/Profiles/Profile";
+import UserManage from "../container/System/ManageUser/Customer/UserManage";
+import "./Dashboard.scss";
 
 const Dashboard = () => {
   const [hideSidebar, setHideSidebar] = useState(true);
@@ -74,7 +68,15 @@ const Dashboard = () => {
               path="/feedback/manage-feedback"
               element={<FeedbackManage />}
             />
-            <Route path="/group-order/manage-order" element={<OrderManage />} />
+            <Route path="/group-order/manage-order" element={<ManageOrder />} />
+            <Route
+              path="/group-order/manage-order/details-collaborator"
+              element={<ProfileCollaborator />}
+            />
+            <Route
+              path="/group-order/manage-order/all"
+              element={<ManageOrder />}
+            />
             <Route path="/topup/manage-topup" element={<ManageTopup />} />
 
             <Route

@@ -321,7 +321,7 @@
   .col-activity {
     background-color: white;
     border-radius: 15px;
-    min-height: 345px;
+    min-height: 370px;
 
     .label-activity {
       color: black;
@@ -331,6 +331,15 @@
       text-decoration: none;
       text-align: center;
       padding-top: 20px;
+    }
+
+    .div-seemore {
+      display: flex;
+      float: right;
+      margin-top: 10px;
+      padding-right: 10px;
+      background-color: transparent;
+      border: none;
     }
   }
 
@@ -352,9 +361,46 @@
 
       .line-vertical {
         width: 1px;
-        min-height: 20px;
+        min-height: 70px;
         background-color: #d0d1d2;
         margin-left: 2px;
+      }
+    }
+
+    .div-details-activity {
+      display: flex;
+      flex-direction: column;
+      margin-left: 20px;
+      margin-top: -5px;
+
+      .text-date-activity {
+        color: black;
+        font-weight: bold;
+        font-size: 11px;
+        font-family: "Roboto", sans-serif;
+        text-decoration: none;
+        .text-time-activity {
+          color: #aeaeae;
+          font-weight: 200;
+          font-size: 11px;
+          font-family: "Roboto", sans-serif;
+          text-decoration: none;
+        }
+      }
+      .text-content-activity {
+        color: black;
+        font-weight: 200;
+        font-size: 11px;
+        font-family: "Roboto", sans-serif;
+        text-decoration: none;
+      }
+
+      .text-brand-activity {
+        color: 0096C7;
+        font-weight: 200;
+        font-size: 11px;
+        font-family: "Roboto", sans-serif;
+        text-decoration: none;
       }
     }
   }

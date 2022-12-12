@@ -1,14 +1,20 @@
-import { DatePicker, List, Progress, Table } from "antd";
-// import Highcharts from "highcharts";
-// import {
-//   default as PieChart,
-//   default as ReactHighcharts,
-// } from "highcharts-react-official";
+import { DatePicker, FloatButton, List, Progress, Table } from "antd";
+
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Card, CardBody, Col, Input, Row } from "reactstrap";
-import { getDayReportApi } from "../../../api/statistic";
+
+import {
+  getActiveUserApi,
+  getConnectionServicePercentApi,
+  getDayReportApi,
+  getHistoryActivityApi,
+} from "../../../api/statistic";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
+import { getHistoryActivity } from "../../../redux/actions/statistic";
+import { getHistoryActivitys } from "../../../redux/selectors/statistic";
 import "./DashBoard.scss";
 import Header from "./HeaderBoard/Header";
 
@@ -40,6 +46,10 @@ export default function Home() {
   const [day, setDay] = useState([]);
   const [type, setType] = useState("");
   const dataDay = [];
+  const [connectionService, setConnectionService] = useState([]);
+  const [activeUsser, setActiveUsser] = useState([]);
+  const historyActivity = useSelector(getHistoryActivitys);
+  const dispatch = useDispatch();
   useEffect(() => {
     getDayReportApi(
       moment(new Date(2022, 11, 1)).toISOString(),
@@ -49,6 +59,12 @@ export default function Home() {
         setArrResult(res.arrResult);
       })
       .catch((err) => console.log(err));
+
+    getConnectionServicePercentApi()
+      .then((res) => setConnectionService(res))
+      .catch((err) => console.log(err));
+
+    dispatch(getHistoryActivity.getHistoryActivityRequest());
   }, []);
 
   function getDates(startDate, stopDate) {
@@ -61,10 +77,6 @@ export default function Home() {
     }
     return setDay(dateArray);
   }
-
-  arrResult.map((item, index) => {
-    dataDay.push([item?.total_income]);
-  });
 
   const onChange = useCallback((start, end) => {
     console.log(start, end);
@@ -110,44 +122,6 @@ export default function Home() {
       {
         name: "Tiền",
         data: dataDay,
-      },
-    ],
-  };
-
-  const optionPie = {
-    chart: {
-      type: "pie",
-      width: 700,
-      height: 300,
-    },
-    title: {
-      text: "",
-    },
-    series: [
-      {
-        name: "Gases",
-        data: [
-          {
-            name: "GIÚP VIỆC THEO GIỜ/4 GIỜ",
-            y: 0.9,
-            color: "#BAE6FD",
-          },
-          {
-            name: "GIÚP VIỆC THEO GIỜ/3 GIỜ",
-            y: 78.1,
-            color: "#F477EF",
-          },
-          {
-            name: "GIÚP VIỆC THEO GIỜ/2 GIỜ",
-            y: 20.9,
-            color: "#FCD34D",
-          },
-          {
-            name: "Khác",
-            y: 0.1,
-            color: "#2ACB9E",
-          },
-        ],
       },
     ],
   };
@@ -243,17 +217,17 @@ export default function Home() {
                   onChange={(e) => onChange(e[0]?.$d, e[1]?.$d)}
                   style={{ marginBottom: 10 }}
                 />
-                {/* <ReactHighcharts highcharts={Highcharts} options={options} /> */}
-
                 <Row>
                   <Col lg="7" className="pl-4">
                     <p className="label-persen-active">Phần trăm hoạt động</p>
                     <div className="div-persen">
-                      <p className="label-persen">49%</p>
+                      <p className="label-persen">
+                        {activeUsser?.donePercent}%
+                      </p>
                       <p className="label-total">Tổng</p>
                     </div>
                     <Progress
-                      percent={49}
+                      percent={activeUsser?.donePercent}
                       showInfo={false}
                       strokeColor={"#48CAE4"}
                       className="progress-persent"
@@ -264,7 +238,9 @@ export default function Home() {
                         <div className="line-on" />
                         <div className="total-div-on">
                           <a className="text-on">Online</a>
-                          <a className="text-total-on">2,113</a>
+                          <a className="text-total-on">
+                            {activeUsser?.ActiveUsers}
+                          </a>
                         </div>
                       </div>
 
@@ -272,13 +248,15 @@ export default function Home() {
                         <div className="line-off" />
                         <div className="total-div-on">
                           <a className="text-on">Ofline</a>
-                          <a className="text-total-on">2,113</a>
+                          <a className="text-total-on">
+                            {activeUsser?.OfflineUsers}
+                          </a>
                         </div>
                       </div>
                     </div>
                   </Col>
                   <Col lg="5">
-                    <p className="label-persen-active">Active Users</p>
+                    {/* <p className="label-persen-active">Active Users</p>
                     <p className="label-active">2154</p>
                     <div>
                       <Progress
@@ -288,7 +266,7 @@ export default function Home() {
                         className="progress-persent"
                       />
                       <a>Hồ Chí Minh</a>
-                    </div>
+                    </div> */}
                     {/* <div>
                       <Progress
                         percent={73}
@@ -316,7 +294,7 @@ export default function Home() {
                 <div className="div-progress">
                   <Progress
                     type="dashboard"
-                    percent={75}
+                    percent={connectionService?.donePercent}
                     gapDegree={5}
                     strokeColor={"#48CAE4"}
                     strokeWidth={20}
@@ -396,9 +374,7 @@ export default function Home() {
                   <a>TOP DỊCH VỤ</a>
                 </div>
                 <Row>
-                  <Col>
-                    {/* <PieChart highcharts={Highcharts} options={optionPie} /> */}
-                  </Col>
+                  <Col></Col>
                   <Col className="mt-5">
                     <div>
                       <Progress
@@ -433,26 +409,51 @@ export default function Home() {
                 <p className="label-activity">Hoạt động</p>
                 <List
                   itemLayout="horizontal"
-                  dataSource={[1, 2, 3]}
-                  renderItem={(item) => {
+                  dataSource={historyActivity}
+                  renderItem={(item, index) => {
                     return (
-                      <div className="div-list">
+                      <div className="div-list" key={index}>
                         <div className="div-line">
                           <div className="circle" />
                           <div className="line-vertical" />
                         </div>
-                        <div>
-                          <a>Lê</a>
+                        <div className="div-details-activity">
+                          <a className="text-date-activity">
+                            {moment(new Date(item?.date_create)).format(
+                              "DD/MM/YYYY"
+                            )}
+                          </a>
+                          <a className="text-date-activity">
+                            {item?.admin_action}
+                            <a className="text-time-activity">
+                              -{" "}
+                              {moment(new Date(item?.date_create)).format(
+                                "HH:MM"
+                              )}
+                            </a>
+                          </a>
+                          <a className="text-content-activity">
+                            {item?.title_admin}
+                          </a>
+                          <a className="text-brand-activity">Nguyễn Mai Thuý</a>
                         </div>
                       </div>
                     );
                   }}
                 />
+                <button
+                  className="div-seemore"
+                  onClick={() => console.log("kk")}
+                >
+                  <p>Xem chi tiết</p>
+                  <i class="uil uil-angle-right"></i>
+                </button>
               </div>
             </Col>
           </Row>
         </div>
       </div>
+      <FloatButton.BackTop />
     </div>
   );
 }

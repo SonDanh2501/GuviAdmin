@@ -37,7 +37,7 @@ const ProfileCollaborator = () => {
   return (
     <>
       {/* Page content */}
-      <Container className="mt--7" fluid>
+      <Container className="mt-5" fluid>
         <Row>
           <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
             <Card className="card-profile shadow">
