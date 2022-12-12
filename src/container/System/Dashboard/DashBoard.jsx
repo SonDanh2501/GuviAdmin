@@ -1,9 +1,9 @@
 import { DatePicker, List, Progress, Table } from "antd";
-import Highcharts from "highcharts";
-import {
-  default as PieChart,
-  default as ReactHighcharts,
-} from "highcharts-react-official";
+// import Highcharts from "highcharts";
+// import {
+//   default as PieChart,
+//   default as ReactHighcharts,
+// } from "highcharts-react-official";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { Card, CardBody, Col, Input, Row } from "reactstrap";
@@ -243,7 +243,7 @@ export default function Home() {
                   onChange={(e) => onChange(e[0]?.$d, e[1]?.$d)}
                   style={{ marginBottom: 10 }}
                 />
-                <ReactHighcharts highcharts={Highcharts} options={options} />
+                {/* <ReactHighcharts highcharts={Highcharts} options={options} /> */}
 
                 <Row>
                   <Col lg="7" className="pl-4">
@@ -397,7 +397,7 @@ export default function Home() {
                 </div>
                 <Row>
                   <Col>
-                    <PieChart highcharts={Highcharts} options={optionPie} />
+                    {/* <PieChart highcharts={Highcharts} options={optionPie} /> */}
                   </Col>
                   <Col className="mt-5">
                     <div>
@@ -439,6 +439,7 @@ export default function Home() {
                       <div className="div-list">
                         <div className="div-line">
                           <div className="circle" />
+                          <div className="line-vertical" />
                         </div>
                         <div>
                           <a>Lê</a>
