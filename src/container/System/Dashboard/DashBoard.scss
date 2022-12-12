@@ -337,5 +337,25 @@
   .div-list {
     display: flex;
     flex-direction: row;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    .div-line {
+      flex-direction: column;
+
+      .circle {
+        width: 5px;
+        height: 5px;
+        background-color: gray;
+        border-radius: 5px;
+      }
+
+      .line-vertical {
+        width: 1px;
+        min-height: 20px;
+        background-color: #d0d1d2;
+        margin-left: 2px;
+      }
+    }
   }
 }
