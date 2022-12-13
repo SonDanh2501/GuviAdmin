@@ -33,7 +33,7 @@
     "react-scripts": "4.0.3",
     "react-toastify": "4.1",
     "reactstrap": "^9.1.5",
-    "recharts": "^2.1.16",
+    "recharts": "^2.2.0",
     "redux": "^4.0.5",
     "redux-actions": "^2.6.5",
     "redux-persist": "^6.0.0",

@@ -11,7 +11,19 @@ export const getHistoryActivity = createActions({
 });
 
 export const getLastestService = createActions({
-  getLastestServiceRequest: undefined,
+  getLastestServiceRequest: (payload) => payload,
   getLastestServiceSuccess: (payload) => payload,
   getLastestServiceFailure: (err) => err,
+});
+
+export const getActiveUser = createActions({
+  getActiveUserRequest: undefined,
+  getActiveUserSuccess: (payload) => payload,
+  getActiveUserFailure: (err) => err,
+});
+
+export const getServiceConnect = createActions({
+  getServiceConnectRequest: undefined,
+  getServiceConnectSuccess: (payload) => payload,
+  getServiceConnectFailure: (err) => err,
 });

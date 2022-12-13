@@ -38,6 +38,10 @@ const Dashboard = () => {
         <main className="main">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route
+              path="/details-collaborator"
+              element={<ProfileCollaborator />}
+            />
             <Route path="/system/user-manage" element={<UserManage />} />
             <Route
               path="/system/user-manage/details-customer"

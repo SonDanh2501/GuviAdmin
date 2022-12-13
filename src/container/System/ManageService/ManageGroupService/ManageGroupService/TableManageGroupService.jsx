@@ -79,7 +79,7 @@ export default function TableManageGroupService({ data }) {
           <a>{data?.type}</a>
         </td>
         <td>
-          <UncontrolledDropdown>
+          {/* <UncontrolledDropdown>
             <DropdownToggle href="#pablo" role="button" size="sm">
               <i class="uil uil-ellipsis-v"></i>
             </DropdownToggle>
@@ -99,18 +99,9 @@ export default function TableManageGroupService({ data }) {
               <DropdownItem href="#pablo" onClick={toggleBlock}>
                 {data?.is_active ? " Chặn" : " Kích hoạt"}
               </DropdownItem>
-              {/* <DropdownItem
-                href="#pablo"
-                onClick={() =>
-                  navigate("/services/manage-group-service/manage-service", {
-                    state: { id: data?._id },
-                  })
-                }
-              >
-                Chi tiết
-              </DropdownItem> */}
+              
             </DropdownMenu>
-          </UncontrolledDropdown>
+          </UncontrolledDropdown> */}
           <div>
             <Modal isOpen={modalBlock} toggle={toggleBlock}>
               <ModalHeader toggle={toggleBlock}>

@@ -1,3 +1,4 @@
+import { Dropdown, Empty, Skeleton, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -17,7 +18,6 @@ import {
   PaginationLink,
   Row,
 } from "reactstrap";
-import { Dropdown, Space, Table } from "antd";
 import { searchPromotion } from "../../../../api/promotion.jsx";
 import AddPromotion from "../../../../components/addPromotion/addPromotion.js";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
@@ -27,13 +27,13 @@ import {
   getPromotion,
 } from "../../../../redux/actions/promotion.js";
 
+import moment from "moment";
+import EditPromotion from "../../../../components/editPromotion /editPromotion.js";
 import {
   getPromotionSelector,
   getTotalPromotion,
 } from "../../../../redux/selectors/promotion.js";
 import "./PromotionManage.scss";
-import moment from "moment";
-import EditPromotion from "../../../../components/editPromotion /editPromotion.js";
 
 export default function PromotionManage() {
   const promotion = useSelector(getPromotionSelector);
@@ -49,7 +49,7 @@ export default function PromotionManage() {
   const [modal, setModal] = React.useState(false);
   const toggle = () => setModal(!modal);
   useEffect(() => {
-    dispatch(loadingAction.loadingRequest(true));
+    // dispatch(loadingAction.loadingRequest(true));
 
     dispatch(getPromotion.getPromotionRequest({ start: 0, length: 10 }));
   }, []);
@@ -227,6 +227,10 @@ export default function PromotionManage() {
                   setItemEdit(record);
                 },
               };
+            }}
+            locale={{
+              emptyText:
+                promotion.length > 0 ? <Empty /> : <Skeleton active={true} />,
             }}
           />
           <CardFooter>

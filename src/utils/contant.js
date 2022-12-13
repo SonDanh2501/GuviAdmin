@@ -55,6 +55,8 @@ export const INIT_STATE = {
   statistic: {
     historyActivity: [],
     lastestService: [],
+    activeUser: [],
+    serviceConnect: [],
   },
 };
 

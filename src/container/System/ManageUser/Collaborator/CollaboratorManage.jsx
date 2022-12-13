@@ -1,4 +1,4 @@
-import { Space, Dropdown, Table } from "antd";
+import { Space, Dropdown, Table, Empty, Skeleton } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -61,7 +61,7 @@ export default function CollaboratorManage() {
   const collaboratorTotal = useSelector(getCollaboratorTotal);
 
   useEffect(() => {
-    dispatch(loadingAction.loadingRequest(true));
+    // dispatch(loadingAction.loadingRequest(true));
     dispatch(
       getCollaborators.getCollaboratorsRequest({ start: 0, length: 10 })
     );
@@ -359,6 +359,14 @@ export default function CollaboratorManage() {
                   setItemEdit(record);
                 },
               };
+            }}
+            locale={{
+              emptyText:
+                collaborator.length > 0 ? (
+                  <Empty />
+                ) : (
+                  <Skeleton active={true} />
+                ),
             }}
           />
           <CardFooter>

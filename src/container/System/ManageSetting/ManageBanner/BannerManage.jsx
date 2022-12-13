@@ -39,7 +39,7 @@ export default function BannerManage() {
   const banners = useSelector(getBanner);
   const totalBanner = useSelector(getBannerTotal);
   React.useEffect(() => {
-    dispatch(loadingAction.loadingRequest(true));
+    // dispatch(loadingAction.loadingRequest(true));
     dispatch(getBanners.getBannersRequest(0, 10));
   }, [dispatch]);
 

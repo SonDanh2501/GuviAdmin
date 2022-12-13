@@ -24,6 +24,12 @@ export const getHistoryActivityApi = () => {
   return axiosClient.get(`/admin/statistic/history_activity?lang=vi`);
 };
 
-export const getLastestServiceApi = () => {
-  return axiosClient.get(`/admin/statistic/lastest_services?lang=vi`);
+export const getLastestServiceApi = (start, length) => {
+  return axiosClient.get(
+    `/admin/statistic/lastest_services?start=${start}&length=${length}`
+  );
+};
+
+export const getTopServiceApi = () => {
+  return axiosClient.get(`/admin/statistic/top_services?lang=vi`);
 };

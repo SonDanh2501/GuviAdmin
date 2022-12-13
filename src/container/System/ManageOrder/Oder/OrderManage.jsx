@@ -28,15 +28,12 @@ export default function OrderManage({ data, total }) {
   const navigate = useNavigate();
 
   const timeWork = (data) => {
-    const start = data?.date_work?.indexOf("T");
-    const timeStart = data?.date_work?.slice(start + 1, start + 6);
+    const start = moment(new Date(data.date_work)).format("HH:mm");
 
     const timeEnd =
-      Number(timeStart?.slice(0, 2)) +
-      data?.total_estimate +
-      timeStart?.slice(2, 5);
+      Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
 
-    return timeStart + " - " + timeEnd;
+    return start + " - " + timeEnd;
   };
 
   const items = [
@@ -64,7 +61,7 @@ export default function OrderManage({ data, total }) {
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
             </a>
             <a className="text-create">
-              {moment(new Date(data?.date_create)).format("HH:MM")}
+              {moment(new Date(data?.date_create)).format("HH:mm")}
             </a>
           </div>
         );
