@@ -35,7 +35,7 @@ export default function UserManage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadingAction.loadingRequest(true));
+    // dispatch(loadingAction.loadingRequest(true));
     dispatch(getCustomers.getCustomersRequest({ start: 0, length: 10 }));
   }, [dispatch]);
 

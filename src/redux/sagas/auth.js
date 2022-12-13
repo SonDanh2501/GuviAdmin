@@ -31,7 +31,7 @@ function* logoutSaga(action) {
   try {
     yield put(logoutAction.logoutSuccess({ token: " " }));
     successNotify({
-      message: "Đăng xuất thành công",
+      message: "Đã đăng xuất",
     });
     action.payload("/auth/login", { replace: true });
     yield put(loadingAction.loadingRequest(false));

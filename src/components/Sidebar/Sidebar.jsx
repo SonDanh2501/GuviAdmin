@@ -63,7 +63,7 @@ const Sidebar = ({ onChangeColor }) => {
           <Collapse isOpen={!collapsed}>
             <Nav className="nav" navbar>
               <NavItem>
-                <NavLink to="/group-order/manage-order">
+                <NavLink to="/group-order/manage-order/all">
                   {({ isActive }) => (
                     <div
                       className={
@@ -83,7 +83,7 @@ const Sidebar = ({ onChangeColor }) => {
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/group-order/manage/doing">
+                <NavLink to="/group-order/manage-order/doing">
                   {({ isActive }) => (
                     <div
                       className={
@@ -103,7 +103,7 @@ const Sidebar = ({ onChangeColor }) => {
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/group-order/order/done">
+                <NavLink to="/group-order/manage-order/done">
                   {({ isActive }) => (
                     <div
                       className={

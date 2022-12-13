@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Empty, Skeleton, Table } from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -49,7 +49,7 @@ export default function TopupCustomerManage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadingAction.loadingRequest(true));
+    // dispatch(loadingAction.loadingRequest(true));
     dispatch(
       getTopupCustomer.getTopupCustomerRequest({ start: 0, length: 10 })
     );
@@ -236,6 +236,14 @@ export default function TopupCustomerManage() {
                   setItemEdit(record);
                 },
               };
+            }}
+            locale={{
+              emptyText:
+                listCustomer.length > 0 ? (
+                  <Empty />
+                ) : (
+                  <Skeleton active={true} />
+                ),
             }}
           />
           <CardFooter>

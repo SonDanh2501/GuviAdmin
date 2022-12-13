@@ -1,45 +1,80 @@
-import { DatePicker, List, Progress, Table } from "antd";
-// import Highcharts from "highcharts";
-// import {
-//   default as PieChart,
-//   default as ReactHighcharts,
-// } from "highcharts-react-official";
+import {
+  DatePicker,
+  Empty,
+  FloatButton,
+  List,
+  Progress,
+  Skeleton,
+  Table,
+} from "antd";
+
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Card, CardBody, Col, Input, Row } from "reactstrap";
-import { getDayReportApi } from "../../../api/statistic";
+
+import {
+  getActiveUserApi,
+  getConnectionServicePercentApi,
+  getDayReportApi,
+  getHistoryActivityApi,
+  getTopServiceApi,
+} from "../../../api/statistic";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
+import { formatDayVN } from "../../../helper/formatDayVN";
+import {
+  getActiveUser,
+  getHistoryActivity,
+  getLastestService,
+  getServiceConnect,
+} from "../../../redux/actions/statistic";
+import {
+  getActiveUsers,
+  getHistoryActivitys,
+  getLastestServices,
+  getServiceConnects,
+} from "../../../redux/selectors/statistic";
 import "./DashBoard.scss";
 import Header from "./HeaderBoard/Header";
-
+import "moment/locale/vi";
+import { useNavigate } from "react-router-dom";
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { getServiceAction } from "../../../redux/actions/service";
+moment.locale("vi");
 const { RangePicker } = DatePicker;
 
 const data = [
-  {
-    id: 1,
-    name: "Nguyễn Tam Kiều Công",
-    service: "Giúp việc theo giờ ",
-    time: "31/12/2022",
-    address: "Hồ Chí Minh",
-    collaborator: "Tam Kiều Công",
-    progress: "Hoàn thành",
-  },
-  {
-    id: 2,
-    name: "Nguyễn Tam Kiều Công",
-    service: "Giúp việc theo giờ ",
-    time: "31/12/2022",
-    address: "Hồ Chí Minh",
-    collaborator: "Tam Kiều Công",
-    progress: "Hoàn thành",
-  },
+  { name: "Group A", value: 400 },
+  { name: "Group B", value: 300 },
+  { name: "Group C", value: 300 },
+  { name: "Group D", value: 100 },
 ];
+const COLORS = ["#BAE6FD", " #F477EF", "#FCD34D", "#2ACB9E"];
 
 export default function Home() {
   const [arrResult, setArrResult] = useState([]);
+  const [dataTopService, setDataTopService] = useState([]);
   const [day, setDay] = useState([]);
   const [type, setType] = useState("");
   const dataDay = [];
+  const [numberData, setNumberData] = useState(5);
+  const historyActivity = useSelector(getHistoryActivitys);
+  const activeUser = useSelector(getActiveUsers);
+  const lastestService = useSelector(getLastestServices);
+  const connectionService = useSelector(getServiceConnects);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   useEffect(() => {
     getDayReportApi(
       moment(new Date(2022, 11, 1)).toISOString(),
@@ -49,6 +84,12 @@ export default function Home() {
         setArrResult(res.arrResult);
       })
       .catch((err) => console.log(err));
+    dispatch(getServiceConnect.getServiceConnectRequest());
+    dispatch(getHistoryActivity.getHistoryActivityRequest());
+    dispatch(getActiveUser.getActiveUserRequest());
+    dispatch(
+      getLastestService.getLastestServiceRequest({ start: 0, length: 5 })
+    );
   }, []);
 
   function getDates(startDate, stopDate) {
@@ -61,10 +102,6 @@ export default function Home() {
     }
     return setDay(dateArray);
   }
-
-  arrResult.map((item, index) => {
-    dataDay.push([item?.total_income]);
-  });
 
   const onChange = useCallback((start, end) => {
     console.log(start, end);
@@ -79,77 +116,13 @@ export default function Home() {
     getDates(dayStart, dayEnd);
   }, []);
 
-  const options = {
-    chart: {
-      type: "column",
-      width: 1000,
-      height: 300,
-    },
-    title: {
-      text: "Thống kê",
-    },
-    xAxis: {
-      type: "total_income",
-      labels: {
-        style: {
-          fontSize: "13px",
-          fontFamily: "Verdana, sans-serif",
-        },
-      },
-    },
-    yAxis: {
-      min: 0,
-      title: {
-        text: "Tiền",
-      },
-    },
-    legend: {
-      enabled: false,
-    },
-    series: [
-      {
-        name: "Tiền",
-        data: dataDay,
-      },
-    ],
-  };
+  const timeWork = (data) => {
+    const start = moment(new Date(data.date_work)).format("HH:mm");
 
-  const optionPie = {
-    chart: {
-      type: "pie",
-      width: 700,
-      height: 300,
-    },
-    title: {
-      text: "",
-    },
-    series: [
-      {
-        name: "Gases",
-        data: [
-          {
-            name: "GIÚP VIỆC THEO GIỜ/4 GIỜ",
-            y: 0.9,
-            color: "#BAE6FD",
-          },
-          {
-            name: "GIÚP VIỆC THEO GIỜ/3 GIỜ",
-            y: 78.1,
-            color: "#F477EF",
-          },
-          {
-            name: "GIÚP VIỆC THEO GIỜ/2 GIỜ",
-            y: 20.9,
-            color: "#FCD34D",
-          },
-          {
-            name: "Khác",
-            y: 0.1,
-            color: "#2ACB9E",
-          },
-        ],
-      },
-    ],
+    const timeEnd =
+      Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
+
+    return start + " - " + timeEnd;
   };
 
   const columns = [
@@ -157,8 +130,8 @@ export default function Home() {
       title: "Khách hàng",
       render: (data) => {
         return (
-          <a className="text-name" onClick={() => {}}>
-            {data.name}
+          <a className="text-collaborator" onClick={() => {}}>
+            {data?.id_customer?.name}
           </a>
         );
       },
@@ -168,8 +141,12 @@ export default function Home() {
       render: (data) => {
         return (
           <div className="div-column-service">
-            <a>{data.service}</a>
-            <a>08:00-10:00</a>
+            <a className="text-service">
+              {data?.service?._id?.kind === "giup_viec_theo_gio"
+                ? "Giúp việc theo giờ"
+                : "Giúp việc cố định"}
+            </a>
+            <a className="text-service">{timeWork(data)}</a>
           </div>
         );
       },
@@ -179,8 +156,12 @@ export default function Home() {
       render: (data) => {
         return (
           <div className="div-column-service">
-            <a>{data.time}</a>
-            <a>Thứ bảy</a>
+            <a className="text-service">
+              {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
+            </a>
+            <a className="text-service">
+              {moment(new Date(data?.date_work)).lang("de").format("dddd")}
+            </a>
           </div>
         );
       },
@@ -190,19 +171,61 @@ export default function Home() {
       render: (data) => {
         return (
           <div className="div-column-service">
-            <a>{data.address}</a>
-            <a>45 Lê Lợi, Phường Bến Thành, Qu...</a>
+            <a className="text-address">{data?.address}</a>
           </div>
         );
       },
     },
     {
       title: "Cộng tác viên",
-      dataIndex: "collaborator",
+      render: (data) => {
+        return (
+          <div>
+            {!data?.id_collaborator ? (
+              <a>Đang tìm kiếm</a>
+            ) : (
+              <a
+                onClick={() =>
+                  navigate("/details-collaborator", {
+                    state: { id: data?.id_collaborator?._id },
+                  })
+                }
+                className="text-collaborator"
+              >
+                {data?.id_collaborator.name}
+              </a>
+            )}
+          </div>
+        );
+      },
     },
     {
       title: "Tiến độ",
-      dataIndex: "progress",
+      render: (data) => (
+        <a
+          className={
+            data?.status === "pending"
+              ? "text-pending"
+              : data?.status === "confirm"
+              ? "text-confirm"
+              : data?.status === "doing"
+              ? "text-doing"
+              : data?.status === "done"
+              ? "text-done"
+              : "text-cancel"
+          }
+        >
+          {data?.status === "pending"
+            ? "Đang chờ làm"
+            : data?.status === "confirm"
+            ? "Đã nhận"
+            : data?.status === "doing"
+            ? "Đang làm"
+            : data?.status === "done"
+            ? "Hoàn thành"
+            : "Đã huỷ"}
+        </a>
+      ),
     },
     {
       title: "Hành động",
@@ -217,6 +240,12 @@ export default function Home() {
       },
     },
   ];
+
+  const onChangeNumberData = useCallback((number) => {
+    dispatch(
+      getLastestService.getLastestServiceRequest({ start: 0, length: number })
+    );
+  }, []);
 
   return (
     <div className="container-dash">
@@ -233,7 +262,6 @@ export default function Home() {
                   onChange={(e) => setType(e.target.value)}
                 >
                   <>
-                    <option value="">Chọn kiểu</option>
                     <option value="day">Ngày</option>
                     <option value="week">Tuần</option>
                   </>
@@ -243,17 +271,39 @@ export default function Home() {
                   onChange={(e) => onChange(e[0]?.$d, e[1]?.$d)}
                   style={{ marginBottom: 10 }}
                 />
-                {/* <ReactHighcharts highcharts={Highcharts} options={options} /> */}
-
+                <div>
+                  <AreaChart
+                    width={1000}
+                    height={400}
+                    data={arrResult}
+                    margin={{
+                      top: 10,
+                      right: 30,
+                      left: 0,
+                      bottom: 0,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis />
+                    <YAxis dataKey="total_income" fontSize={12} />
+                    <Tooltip />
+                    <Area
+                      type="monotone"
+                      dataKey="total_income"
+                      stroke="#00CF3A"
+                      fill="#00CF3A"
+                    />
+                  </AreaChart>
+                </div>
                 <Row>
                   <Col lg="7" className="pl-4">
                     <p className="label-persen-active">Phần trăm hoạt động</p>
                     <div className="div-persen">
-                      <p className="label-persen">49%</p>
+                      <p className="label-persen">{activeUser?.donePercent}%</p>
                       <p className="label-total">Tổng</p>
                     </div>
                     <Progress
-                      percent={49}
+                      percent={activeUser?.donePercent}
                       showInfo={false}
                       strokeColor={"#48CAE4"}
                       className="progress-persent"
@@ -264,7 +314,9 @@ export default function Home() {
                         <div className="line-on" />
                         <div className="total-div-on">
                           <a className="text-on">Online</a>
-                          <a className="text-total-on">2,113</a>
+                          <a className="text-total-on">
+                            {activeUser?.ActiveUsers}
+                          </a>
                         </div>
                       </div>
 
@@ -272,13 +324,15 @@ export default function Home() {
                         <div className="line-off" />
                         <div className="total-div-on">
                           <a className="text-on">Ofline</a>
-                          <a className="text-total-on">2,113</a>
+                          <a className="text-total-on">
+                            {activeUser?.OfflineUsers}
+                          </a>
                         </div>
                       </div>
                     </div>
                   </Col>
                   <Col lg="5">
-                    <p className="label-persen-active">Active Users</p>
+                    {/* <p className="label-persen-active">Active Users</p>
                     <p className="label-active">2154</p>
                     <div>
                       <Progress
@@ -288,7 +342,7 @@ export default function Home() {
                         className="progress-persent"
                       />
                       <a>Hồ Chí Minh</a>
-                    </div>
+                    </div> */}
                     {/* <div>
                       <Progress
                         percent={73}
@@ -316,10 +370,11 @@ export default function Home() {
                 <div className="div-progress">
                   <Progress
                     type="dashboard"
-                    percent={75}
+                    percent={connectionService.donePercent}
                     gapDegree={5}
                     strokeColor={"#48CAE4"}
-                    strokeWidth={20}
+                    strokeWidth={15}
+                    width={150}
                   />
                 </div>
                 <div className="div-progress-text">
@@ -369,18 +424,31 @@ export default function Home() {
           <Col className="mb-5 mb-xl-0">
             <Card className="shadow">
               <CardBody>
-                <Table columns={columns} dataSource={data} pagination={false} />
+                <Table
+                  columns={columns}
+                  dataSource={lastestService}
+                  pagination={false}
+                  locale={{
+                    emptyText:
+                      lastestService.length > 0 ? (
+                        <Empty />
+                      ) : (
+                        <Skeleton active={true} />
+                      ),
+                  }}
+                />
               </CardBody>
               <div className="div-entries">
                 <CustomTextInput
                   label={"Hiện"}
                   type="select"
                   className={"select-entries"}
+                  onChange={(e) => onChangeNumberData(e.target.value)}
                   body={
                     <>
                       <option value={"5"}>5</option>
-                      <option value={"5"}>10</option>
-                      <option value={"5"}>15</option>
+                      <option value={"10"}>10</option>
+                      <option value={"20"}>20</option>
                     </>
                   }
                 />
@@ -397,7 +465,47 @@ export default function Home() {
                 </div>
                 <Row>
                   <Col>
-                    {/* <PieChart highcharts={Highcharts} options={optionPie} /> */}
+                    <div className="div-pieChart">
+                      <div>
+                        <div className="div-service-hours">
+                          <div className="div-towhours" />
+                          <a>2 Giờ</a>
+                        </div>
+                        <div className="div-service-hours">
+                          <div className="div-threehours" />
+                          <a>3 Giờ</a>
+                        </div>
+                        <div className="div-service-hours">
+                          <div className="div-fourhours" />
+                          <a>4 Giờ</a>
+                        </div>
+                        <div className="div-service-hours">
+                          <div className="div-different" />
+                          <a>Khác</a>
+                        </div>
+                      </div>
+                      <div>
+                        <PieChart width={300} height={320}>
+                          <Pie
+                            data={data}
+                            cx={120}
+                            cy={200}
+                            innerRadius={60}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            paddingAngle={5}
+                            dataKey="value"
+                          >
+                            {data.map((entry, index) => (
+                              <Cell
+                                key={`cell-${index}`}
+                                fill={COLORS[index % COLORS.length]}
+                              />
+                            ))}
+                          </Pie>
+                        </PieChart>
+                      </div>
+                    </div>
                   </Col>
                   <Col className="mt-5">
                     <div>
@@ -433,26 +541,51 @@ export default function Home() {
                 <p className="label-activity">Hoạt động</p>
                 <List
                   itemLayout="horizontal"
-                  dataSource={[1, 2, 3]}
-                  renderItem={(item) => {
+                  dataSource={historyActivity}
+                  renderItem={(item, index) => {
                     return (
-                      <div className="div-list">
+                      <div className="div-list" key={index}>
                         <div className="div-line">
                           <div className="circle" />
                           <div className="line-vertical" />
                         </div>
-                        <div>
-                          <a>Lê</a>
+                        <div className="div-details-activity">
+                          <a className="text-date-activity">
+                            {moment(new Date(item?.date_create)).format(
+                              "DD/MM/YYYY"
+                            )}
+                          </a>
+                          <a className="text-date-activity">
+                            {item?.admin_action}
+                            <a className="text-time-activity">
+                              -{" "}
+                              {moment(new Date(item?.date_create)).format(
+                                "HH:MM"
+                              )}
+                            </a>
+                          </a>
+                          <a className="text-content-activity">
+                            {item?.title_admin}
+                          </a>
+                          <a className="text-brand-activity">Nguyễn Mai Thuý</a>
                         </div>
                       </div>
                     );
                   }}
                 />
+                <button
+                  className="div-seemore"
+                  onClick={() => console.log("kk")}
+                >
+                  <p>Xem chi tiết</p>
+                  <i class="uil uil-angle-right"></i>
+                </button>
               </div>
             </Col>
           </Row>
         </div>
       </div>
+      <FloatButton.BackTop />
     </div>
   );
 }

@@ -19,7 +19,7 @@ import {
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import { loadingAction } from "../../../../redux/actions/loading";
 import "./TopupManage.scss";
-import { Table } from "antd";
+import { Empty, Skeleton, Table } from "antd";
 import AddTopup from "../../../../components/addTopup/addTopup";
 import Withdraw from "../../../../components/withdraw/withdraw";
 import { getTopupCollaborator } from "../../../../redux/actions/topup";
@@ -52,7 +52,7 @@ export default function TopupManage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadingAction.loadingRequest(true));
+    // dispatch(loadingAction.loadingRequest(true));
     dispatch(
       getTopupCollaborator.getTopupCollaboratorRequest({ start: 0, length: 10 })
     );
@@ -242,6 +242,14 @@ export default function TopupManage() {
                   setItemEdit(record);
                 },
               };
+            }}
+            locale={{
+              emptyText:
+                listCollaborators.length > 0 ? (
+                  <Empty />
+                ) : (
+                  <Skeleton active={true} />
+                ),
             }}
           />
           <CardFooter>

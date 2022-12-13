@@ -234,6 +234,10 @@
         font-weight: normal;
         font-size: 11px;
         font-family: "Roboto", sans-serif;
+        width: 77px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
     .level-ctv5 {
@@ -251,6 +255,10 @@
         font-weight: normal;
         font-size: 11px;
         font-family: "Roboto", sans-serif;
+        width: 66px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
 
@@ -313,6 +321,41 @@
     border-radius: 15px;
     padding: 10px;
 
+    .div-pieChart {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .div-service-hours {
+        display: flex;
+        align-items: center;
+        .div-towhours {
+          width: 40px;
+          height: 10px;
+          background-color: #fcd34d;
+          margin-right: 10px;
+        }
+        .div-threehours {
+          width: 40px;
+          height: 10px;
+          background-color: #f477ef;
+          margin-right: 10px;
+        }
+        .div-fourhours {
+          width: 40px;
+          height: 10px;
+          background-color: #bae6fd;
+          margin-right: 10px;
+        }
+        .div-different {
+          width: 40px;
+          height: 10px;
+          background-color: #2acb9e;
+          margin-right: 10px;
+        }
+      }
+    }
+
     .div-chart-progress {
       display: flex;
     }
@@ -321,7 +364,7 @@
   .col-activity {
     background-color: white;
     border-radius: 15px;
-    min-height: 345px;
+    min-height: 370px;
 
     .label-activity {
       color: black;
@@ -331,6 +374,16 @@
       text-decoration: none;
       text-align: center;
       padding-top: 20px;
+    }
+
+    .div-seemore {
+      display: flex;
+      float: right;
+      margin-top: 10px;
+      padding-right: 10px;
+      padding-bottom: 10px;
+      background-color: transparent;
+      border: none;
     }
   }
 
@@ -352,10 +405,126 @@
 
       .line-vertical {
         width: 1px;
-        min-height: 20px;
+        min-height: 70px;
         background-color: #d0d1d2;
         margin-left: 2px;
       }
     }
+
+    .div-details-activity {
+      display: flex;
+      flex-direction: column;
+      margin-left: 20px;
+      margin-top: -5px;
+
+      .text-date-activity {
+        color: black;
+        font-weight: bold;
+        font-size: 11px;
+        font-family: "Roboto", sans-serif;
+        text-decoration: none;
+        .text-time-activity {
+          color: #aeaeae;
+          font-weight: 200;
+          font-size: 11px;
+          font-family: "Roboto", sans-serif;
+          text-decoration: none;
+        }
+      }
+      .text-content-activity {
+        color: black;
+        font-weight: 200;
+        font-size: 11px;
+        font-family: "Roboto", sans-serif;
+        text-decoration: none;
+        width: 200px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .text-brand-activity {
+        color: 0096C7;
+        font-weight: 200;
+        font-size: 11px;
+        font-family: "Roboto", sans-serif;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .text-pending {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #ece200;
+  }
+
+  .text-confirm {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #023e8a;
+  }
+
+  .text-doing {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #023e8a;
+  }
+
+  .text-cancel {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #ff0000;
+  }
+  .text-done {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #00cf3a;
+  }
+  .text-address {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: black;
+    width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .text-service {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #11263c;
+  }
+
+  .text-collaborator {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    text-decoration-line: underline;
+    color: #023e8a;
   }
 }

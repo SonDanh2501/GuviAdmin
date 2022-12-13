@@ -20,7 +20,7 @@ import {
 } from "../../../redux/selectors/feedback";
 import "./FeedbackManage.scss";
 import _debounce from "lodash/debounce";
-import { Table } from "antd";
+import { Empty, Skeleton, Table } from "antd";
 import moment from "moment";
 
 const columns = [
@@ -57,7 +57,7 @@ export default function FeedbackManage() {
   const listFeedback = useSelector(getFeedbacks);
   const feedbackTotal = useSelector(getFeedbackTotal);
   React.useEffect(() => {
-    dispatch(loadingAction.loadingRequest(true));
+    // dispatch(loadingAction.loadingRequest(true));
     dispatch(getFeedback.getFeedbackRequest({ start: 0, length: 10 }));
   }, [dispatch]);
 
