@@ -3,6 +3,7 @@ import * as actions from "../actions/customerAction";
 import * as api from "../../api/customer.jsx";
 import { getType } from "../actions/customerAction";
 import { loadingAction } from "../actions/loading";
+import { errorNotify, successNotify } from "../../helper/toast";
 
 function* fetchCustomersSaga(action) {
   try {
@@ -21,6 +22,7 @@ function* fetchCustomersSaga(action) {
   } catch (err) {
     console.error(err);
     yield put(actions.getCustomers.getCustomersFailure(err));
+    yield put(loadingAction.loadingRequest(false));
   }
 }
 
@@ -31,8 +33,11 @@ function* createCustomerSaga(action) {
     window.location.reload();
     yield put(actions.createCustomer.createCustomerSuccess(Customer.data));
   } catch (err) {
-    console.error(err);
+    errorNotify({
+      message: err,
+    });
     yield put(actions.createCustomer.createCustomerFailure(err));
+    yield put(loadingAction.loadingRequest(false));
   }
 }
 
@@ -48,8 +53,11 @@ function* updateCustomerSaga(action) {
       actions.updateCustomer.updateCustomerSuccess(updatedCustomer.data)
     );
   } catch (err) {
-    console.error(err);
+    errorNotify({
+      message: err,
+    });
     yield put(actions.updateCustomer.updateCustomerFailure(err));
+    yield put(loadingAction.loadingRequest(false));
   }
 }
 
@@ -65,8 +73,11 @@ function* deleteCustomerSaga(action) {
       actions.deleteCustomerAction.deleteCustomerSuccess(deleteCustomer.data)
     );
   } catch (err) {
-    console.error(err);
+    errorNotify({
+      message: err,
+    });
     yield put(actions.deleteCustomerAction.deleteCustomerFailure(err));
+    yield put(loadingAction.loadingRequest(false));
   }
 }
 

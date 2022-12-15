@@ -15,11 +15,14 @@ import { logoutAction } from "../../redux/actions/auth";
 import { useNavigate } from "react-router-dom";
 import { loadingAction } from "../../redux/actions/loading";
 import Logo from "../../assets/images/LogoS.png";
-import { CaretDownOutlined } from "@ant-design/icons";
+import { BellOutlined, CaretDownOutlined } from "@ant-design/icons";
+import { Space, Dropdown, List, Avatar } from "antd";
+import { useState } from "react";
 
-const Header = ({ onClick }) => {
+const Header = () => {
   const dispatch = useDispatch();
-  const brand = useSelector(getBrand);
+  const [data, setDate] = useState([]);
+  const [status, setStatus] = useState(false);
   const user = useSelector(getUser);
   const navigate = useNavigate();
 
@@ -39,7 +42,8 @@ const Header = ({ onClick }) => {
         </button> */}
         <img src={Logo} className="img-logo" />
       </div>
-      <Nav className="align-items-center d-none d-md-flex" navbar>
+
+      <div className="nav">
         <UncontrolledDropdown nav>
           <DropdownToggle className="pr-0" nav>
             <Media className="align-items-center">
@@ -60,7 +64,27 @@ const Header = ({ onClick }) => {
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>
-      </Nav>
+        <div className="div-noti" onClick={() => setStatus(!status)}>
+          {data.length > 0 && <div className="dot-noti" />}
+          <BellOutlined className="icon" />
+        </div>
+
+        {status && (
+          <div className="list">
+            <List
+              itemLayout="horizontal"
+              dataSource={[1, 2, 3, 4]}
+              renderItem={(item) => {
+                return (
+                  <div onClick={() => setStatus(false)}>
+                    <a>Lee Minh dang</a>
+                  </div>
+                );
+              }}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

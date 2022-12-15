@@ -11,6 +11,18 @@
     box-shadow: 2px #e8e8e8;
     background-color: white;
 
+    .div-date {
+      width: 40%;
+      margin-bottom: 10px;
+
+      .input-picker {
+        width: 100px;
+      }
+      .picker {
+        width: 300px;
+      }
+    }
+
     .type-select {
       width: 110px;
       min-height: 32px;
@@ -286,6 +298,8 @@
       border: none;
       border-radius: 5px;
       color: white;
+      width: 75px;
+      height: 21px;
     }
 
     .btn-details {
@@ -516,6 +530,7 @@
     font-size: 14px;
     line-height: 16px;
     color: #11263c;
+    text-transform: capitalize;
   }
 
   .text-collaborator {

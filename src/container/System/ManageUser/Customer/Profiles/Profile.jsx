@@ -54,8 +54,10 @@ const Profile = () => {
               <CardBody>
                 <div className="text-center">
                   <h3>
-                    {data?.name}{" "}
-                    <span className="font-weight-light">,{age} tuổi</span>
+                    {data?.name},{" "}
+                    <span className="font-weight-light">
+                      {!data.birth_date ? "" : age + "tuổi"}
+                    </span>
                   </h3>
                 </div>
                 <div className="row-heading">

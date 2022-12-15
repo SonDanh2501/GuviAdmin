@@ -8,6 +8,7 @@ import { getPromotion } from "../../redux/actions/promotion";
 import { getPromotionSelector } from "../../redux/selectors/promotion";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
+import { errorNotify } from "../../helper/toast";
 import "./addBanner.scss";
 
 const AddBanner = () => {
@@ -47,7 +48,12 @@ const AddBanner = () => {
         setImgThumbnail(res);
         dispatch(loadingAction.loadingRequest(false));
       })
-      .catch((err) => console.log("err", err));
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
   };
 
   const addBanner = useCallback(() => {

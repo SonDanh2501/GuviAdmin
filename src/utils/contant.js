@@ -57,6 +57,8 @@ export const INIT_STATE = {
     lastestService: [],
     activeUser: [],
     serviceConnect: [],
+    topCollaborator: [],
+    totalTopCollaborator: 0,
   },
 };
 

@@ -40,13 +40,56 @@
     height: 40px;
   }
 
-  .text-name {
-    color: rgb(255, 255, 255);
-    font-weight: 300;
-    font-size: 20px;
-  }
+  .nav {
+    display: flex;
+    margin-right: 20px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 10%;
+    height: 40px;
 
-  .icon-down {
-    color: white;
+    .text-name {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 21px;
+      color: #ffffff;
+      margin-right: 5px;
+    }
+
+    .icon-down {
+      color: white;
+    }
+
+    .div-noti {
+      width: 20px;
+      position: relative;
+
+      .icon {
+        color: white;
+      }
+
+      .dot-noti {
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+        background-color: white;
+        position: absolute;
+        right: 1.8%;
+        top: 3.2%;
+      }
+    }
+
+    .list {
+      background-color: rgb(255, 255, 255);
+      z-index: 100;
+      position: absolute;
+      right: 1%;
+      top: 6%;
+      border-radius: 10px;
+      padding: 10px;
+    }
   }
 }

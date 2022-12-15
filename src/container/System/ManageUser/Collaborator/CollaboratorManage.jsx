@@ -34,7 +34,8 @@ import {
 } from "../../../../redux/selectors/collaborator";
 import "./CollaboratorManage.scss";
 import { LockOutlined, UnlockOutlined } from "@ant-design/icons";
-import { UilAirplay } from "@iconscout/react-unicons";
+import { errorNotify } from "../../../../helper/toast";
+
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 
@@ -112,14 +113,23 @@ export default function CollaboratorManage() {
         setDataFilter(res.data);
         setTotalFilter(res.totalItem);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+      });
   }, []);
 
   const onDelete = useCallback((id) => {
     dispatch(loadingAction.loadingRequest(true));
     deleteCollaborator(id, { is_delete: true })
       .then((res) => window.location.reload())
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        dispatch(loadingAction.loadingRequest(false));
+        errorNotify({
+          message: err,
+        });
+      });
   }, []);
 
   const blockCollaborator = useCallback((id, is_active) => {
@@ -130,14 +140,24 @@ export default function CollaboratorManage() {
           setModalBlock(!modalBlock);
           window.location.reload();
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          dispatch(loadingAction.loadingRequest(false));
+          errorNotify({
+            message: err,
+          });
+        });
     } else {
       activeCollaborator(id, { is_active: true })
         .then((res) => {
           setModalBlock(!modalBlock);
           window.location.reload();
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          dispatch(loadingAction.loadingRequest(false));
+          errorNotify({
+            message: err,
+          });
+        });
     }
   }, []);
 
@@ -149,10 +169,14 @@ export default function CollaboratorManage() {
           .then((res) => {
             setModalLockTime(!modalLockTime);
             dispatch(loadingAction.loadingRequest(false));
-
             window.location.reload();
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            dispatch(loadingAction.loadingRequest(false));
+            errorNotify({
+              message: err,
+            });
+          });
       } else {
         lockTimeCollaborator(id, {
           is_lock_time: true,
@@ -161,10 +185,14 @@ export default function CollaboratorManage() {
           .then((res) => {
             setModalLockTime(!modalLockTime);
             dispatch(loadingAction.loadingRequest(false));
-
             window.location.reload();
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            dispatch(loadingAction.loadingRequest(false));
+            errorNotify({
+              message: err,
+            });
+          });
       }
     },
     [timeValue, dispatch]
@@ -175,35 +203,43 @@ export default function CollaboratorManage() {
         .then((res) => {
           setModalVerify(!modalVerify);
           dispatch(loadingAction.loadingRequest(false));
-
           window.location.reload();
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          dispatch(loadingAction.loadingRequest(false));
+          errorNotify({
+            message: err,
+          });
+        });
     } else {
       verifyCollaborator(id)
         .then((res) => {
           setModalVerify(!modalVerify);
           dispatch(loadingAction.loadingRequest(false));
-
           window.location.reload();
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          dispatch(loadingAction.loadingRequest(false));
+          errorNotify({
+            message: err,
+          });
+        });
     }
   }, []);
 
   const items = [
-    {
-      key: "1",
-      label: (
-        <a
-          onClick={() => {
-            setModalEdit(!modalEdit);
-          }}
-        >
-          Chỉnh sửa
-        </a>
-      ),
-    },
+    // {
+    //   key: "1",
+    //   label: (
+    //     <a
+    //       onClick={() => {
+    //         setModalEdit(!modalEdit);
+    //       }}
+    //     >
+    //       Chỉnh sửa
+    //     </a>
+    //   ),
+    // },
     {
       key: "2",
       label: <a onClick={toggle}>Xoá</a>,

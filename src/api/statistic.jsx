@@ -33,3 +33,9 @@ export const getLastestServiceApi = (start, length) => {
 export const getTopServiceApi = () => {
   return axiosClient.get(`/admin/statistic/top_services?lang=vi`);
 };
+
+export const getTopCollaboratorApi = (startDate, endDate, start, length) => {
+  return axiosClient.get(
+    `/admin/statistic/top_collaborators?start_date=${startDate}&end_date=${endDate}&start=${start}&lenght=${length}`
+  );
+};

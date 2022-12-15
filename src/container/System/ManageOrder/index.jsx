@@ -3,7 +3,7 @@ import { ExportCSV } from "../../../helper/export";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
 
 import "./index.scss";
-import OrderManage from "./Oder/OrderManage";
+import OrderManage from "./Order/OrderManage";
 import { UilEllipsisH, UilFileExport } from "@iconscout/react-unicons";
 import {
   getOrderSelector,
@@ -11,16 +11,17 @@ import {
 } from "../../../redux/selectors/order";
 import { getOrder } from "../../../redux/actions/order";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const ManageOrder = () => {
   const dispatch = useDispatch();
   const listOrder = useSelector(getOrderSelector);
   const orderTotal = useSelector(getOrderTotal);
+  const [status, setStatus] = useState("all");
 
   useEffect(() => {
     // dispatch(loadingAction.loadingRequest(true));
-    dispatch(getOrder.getOrderRequest({ start: 0, length: 10 }));
+    dispatch(getOrder.getOrderRequest({ start: 0, length: 10, status: "all" }));
   }, [dispatch]);
 
   const items = [
@@ -34,6 +35,31 @@ const ManageOrder = () => {
       key: "0",
     },
   ];
+
+  const onChangeTab = (active) => {
+    console.log(active);
+    if (active === "2") {
+      dispatch(
+        getOrder.getOrderRequest({ start: 0, length: 10, status: "pending" })
+      );
+    } else if (active === "3") {
+      dispatch(
+        getOrder.getOrderRequest({ start: 0, length: 10, status: "doing" })
+      );
+    } else if (active === "5") {
+      dispatch(
+        getOrder.getOrderRequest({ start: 0, length: 10, status: "cancel" })
+      );
+    } else if (active === "6") {
+      dispatch(
+        getOrder.getOrderRequest({ start: 0, length: 10, status: "done" })
+      );
+    } else if (active === "1") {
+      dispatch(
+        getOrder.getOrderRequest({ start: 0, length: 10, status: "all" })
+      );
+    }
+  };
   return (
     <>
       <div className="div-header">
@@ -60,15 +86,23 @@ const ManageOrder = () => {
       </div>
 
       <div className="div-container">
-        <Tabs defaultActiveKey="1" size="large">
+        <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
           <Tabs.TabPane tab="TẤT CẢ" key="1">
             <OrderManage data={listOrder} total={orderTotal} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="ĐANG CHỜ" key="2"></Tabs.TabPane>
-          <Tabs.TabPane tab="CHƯA HOÀN TẤT" key="3"></Tabs.TabPane>
+          <Tabs.TabPane tab="ĐANG CHỜ" key="2">
+            <OrderManage data={listOrder} total={orderTotal} />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="CHƯA HOÀN TẤT" key="3">
+            <OrderManage data={listOrder} total={orderTotal} />
+          </Tabs.TabPane>
           <Tabs.TabPane tab="ĐÃ HẾT HẠN" key="4"></Tabs.TabPane>
-          <Tabs.TabPane tab="VIỆC ĐÃ HUỶ" key="5"></Tabs.TabPane>
-          <Tabs.TabPane tab="HOÀN TẤT" key="6"></Tabs.TabPane>
+          <Tabs.TabPane tab="VIỆC ĐÃ HUỶ" key="5">
+            <OrderManage data={listOrder} total={orderTotal} />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="HOÀN TẤT" key="6">
+            <OrderManage data={listOrder} total={orderTotal} />
+          </Tabs.TabPane>
         </Tabs>
       </div>
     </>

@@ -10,7 +10,8 @@ function* fetchOrderSaga(action) {
     const response = yield call(
       getOrderApi,
       action.payload.start,
-      action.payload.length
+      action.payload.length,
+      action.payload.status
     );
     yield put(
       getOrder.getOrderSuccess({

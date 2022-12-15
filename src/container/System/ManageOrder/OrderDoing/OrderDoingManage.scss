@@ -113,3 +113,39 @@
   height: 30px;
   border-radius: 5px;
 }
+.div-header {
+  display: flex;
+  padding-left: 40px;
+  margin-top: 20px;
+
+  .title-cv {
+    color: black;
+    font-weight: 400;
+    font-size: 24px;
+    font-family: "Roboto", sans-serif;
+    text-decoration: none;
+    margin-top: 5px;
+  }
+
+  .field-search {
+    height: 48px;
+    width: 506px;
+    margin-left: 28px;
+  }
+
+  .dropdown-export {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    background-color: #e0e0e0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    margin-left: 20px;
+    margin-top: 5px;
+
+    .icon-menu {
+      color: black;
+    }
+  }
+}
