@@ -49,7 +49,7 @@ const Sidebar = ({ onChangeColor }) => {
               <div className={isActive ? "active-link" : "unactive-link"}>
                 <i class="uil uil-shopping-bag icon"></i>
                 <a className={isActive ? "active-text" : "unactive-text"}>
-                  GUVI JOBS
+                  GUVIJOBS
                 </a>
                 {collapsed ? (
                   <i class="uil uil-angle-right icon-right"></i>

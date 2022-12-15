@@ -2,6 +2,7 @@ import React, { memo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
+import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
 import { createGroupServiceAction } from "../../redux/actions/service";
 import CustomButton from "../customButton/customButton";
@@ -40,7 +41,12 @@ const AddGroupService = () => {
         setImgUrl(res);
         dispatch(loadingAction.loadingRequest(false));
       })
-      .catch((err) => console.log("err", err));
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
   };
 
   const createGroupSerive = useCallback(() => {

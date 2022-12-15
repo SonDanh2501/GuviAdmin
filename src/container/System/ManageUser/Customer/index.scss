@@ -1,0 +1,15 @@
+.div-header {
+  display: flex;
+  padding-left: 40px;
+  padding-right: 40px;
+  margin-top: 20px;
+
+  .title-cv {
+    color: black;
+    font-weight: 400;
+    font-size: 24px;
+    font-family: "Roboto", sans-serif;
+    text-decoration: none;
+    margin-top: 5px;
+  }
+}

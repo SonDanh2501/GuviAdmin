@@ -27,3 +27,9 @@ export const getServiceConnect = createActions({
   getServiceConnectSuccess: (payload) => payload,
   getServiceConnectFailure: (err) => err,
 });
+
+export const getTopCollaborator = createActions({
+  getTopCollaboratorRequest: (payload) => payload,
+  getTopCollaboratorSuccess: (payload) => payload,
+  getTopCollaboratorFailure: (err) => err,
+});

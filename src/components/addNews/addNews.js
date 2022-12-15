@@ -6,6 +6,7 @@ import { loadingAction } from "../../redux/actions/loading";
 import { createNew } from "../../redux/actions/news";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
+import { errorNotify } from "../../helper/toast";
 import "./addNews.scss";
 
 const AddNews = () => {
@@ -38,7 +39,12 @@ const AddNews = () => {
         setImgThumbnail(res);
         dispatch(loadingAction.loadingRequest(false));
       })
-      .catch((err) => console.log("err", err));
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
   };
 
   const addNews = useCallback(() => {
