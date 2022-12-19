@@ -35,11 +35,11 @@ const Login = () => {
 
   return (
     <div className="container-login">
-      <Card className="bg-white shadow border-0">
+      <Card className="bg-white shadow border-0 card">
         <CardBody className="px-lg-5 py-lg-5">
-          <div className="text-center text-muted mb-4">
+          <div className="text-muted mb-4 div-head">
             <img src={logo} className="img-logo" />
-            <h3>Đăng nhập hệ thống Guvi</h3>
+            <a className="title-login">Đăng nhập hệ thống Guvi</a>
           </div>
           <Formik
             innerRef={formikRef}
@@ -51,38 +51,32 @@ const Login = () => {
             {({ values, setFieldValue, errors, handleSubmit }) => {
               return (
                 <Form role="form">
-                  <CustomTextInput
-                    label="Email"
-                    type="text"
-                    id="className"
-                    value={values?.email}
-                    placeholder="Nhập email đăng nhập"
-                    onChange={(text) =>
-                      setFieldValue("email", text?.target?.value)
-                    }
-                    errors={errors?.email}
-                  />
-                  {/* <CustomTextInput
-                    label="Mật khẩu"
-                    type="password"
-                    name="password"
-                    id="examplePassword"
-                    value={values?.password}
-                    placeholder="Nhập mật khẩu"
-                    onChange={(text) =>
-                      setFieldValue("password", text.target.value)
-                    }
-                    errors={errors?.password}
-                  /> */}
-                  <Input.Password
-                    placeholder="Nhập mật khẩu"
-                    className="input-pass"
-                    value={values?.password}
-                    onChange={(text) =>
-                      setFieldValue("password", text.target.value)
-                    }
-                  />
-                  <a className="error">{errors?.password}</a>
+                  <div>
+                    <label>Email</label>
+                    <Input
+                      placeholder="Nhập email"
+                      className="input-pass"
+                      value={values?.email}
+                      onChange={(text) =>
+                        setFieldValue("email", text.target.value)
+                      }
+                    />
+                    <a className="error">{errors?.email}</a>
+                  </div>
+
+                  <div>
+                    <label>Password</label>
+                    <Input.Password
+                      placeholder="Nhập mật khẩu"
+                      className="input-pass"
+                      value={values?.password}
+                      onChange={(text) =>
+                        setFieldValue("password", text.target.value)
+                      }
+                    />
+                    <a className="error">{errors?.password}</a>
+                  </div>
+
                   <div className="text-center">
                     <Button className="btn-login" onClick={handleSubmit}>
                       Đăng nhập

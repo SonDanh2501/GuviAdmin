@@ -105,7 +105,7 @@ export default function TableManageService({ data }) {
                 {data?.is_active === true
                   ? "Bạn có muốn khóa GroupService"
                   : "Bạn có muốn kích hoạt GroupService này"}
-                <h3>{data?.name}</h3>
+                <h3>{data?.full_name}</h3>
               </ModalBody>
               <ModalFooter>
                 <Button

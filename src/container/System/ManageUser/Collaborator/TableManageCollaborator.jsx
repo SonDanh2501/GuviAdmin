@@ -134,7 +134,7 @@ export default function TableManageCollaborator({ data }) {
           <Media className="align-items-center">
             <img alt="..." src={data?.avatar} className="img_customer" />
             <Media>
-              <span className="mb-0 text-sm">{data?.name}</span>
+              <span className="mb-0 text-sm">{data?.full_name}</span>
             </Media>
           </Media>
         </th>
@@ -210,7 +210,7 @@ export default function TableManageCollaborator({ data }) {
                 {data?.is_verify === true
                   ? "Bạn có muốn bỏ xác thực tài khoản cộng tác viên"
                   : "Bạn có muốn xác thực tài khoản cộng tác viên"}
-                <h3>{data?.name}</h3>
+                <h3>{data?.full_name}</h3>
               </ModalBody>
               <ModalFooter>
                 <Button
@@ -240,7 +240,7 @@ export default function TableManageCollaborator({ data }) {
                 {data?.is_active === true
                   ? "Bạn có muốn khóa tài khoản cộng tác viên"
                   : "Bạn có muốn kích hoạt tài khoản cộng tác viên"}
-                <h3>{data?.name}</h3>
+                <h3>{data?.full_name}</h3>
               </ModalBody>
               <ModalFooter>
                 <Button
@@ -268,7 +268,7 @@ export default function TableManageCollaborator({ data }) {
                 {data?.is_lock_time === false
                   ? "Bạn có muốn khóa tài khoản cộng tác viên"
                   : "Bạn có muốn kích hoạt tài khoản cộng tác viên"}
-                <h3>{data?.name}</h3>
+                <h3>{data?.full_name}</h3>
                 {data?.is_lock_time === false && (
                   <CustomTextInput
                     label={"*Thời gian khoá (hh:mm)"}
@@ -301,7 +301,8 @@ export default function TableManageCollaborator({ data }) {
               <ModalBody>
                 <a>
                   Bạn có chắc muốn xóa cộng tác viên
-                  <a className="text-name-modal">{data?.name}</a> này không?
+                  <a className="text-name-modal">{data?.full_name}</a> này
+                  không?
                 </a>
               </ModalBody>
               <ModalFooter>
