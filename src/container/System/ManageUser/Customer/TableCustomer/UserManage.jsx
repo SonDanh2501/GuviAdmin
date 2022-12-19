@@ -6,7 +6,6 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Pagination,
   PaginationItem,
   PaginationLink,
 } from "reactstrap";
@@ -17,7 +16,7 @@ import {
   MoreOutlined,
   UnlockOutlined,
 } from "@ant-design/icons";
-import { Dropdown, Empty, Skeleton, Space, Table } from "antd";
+import { Dropdown, Empty, Skeleton, Space, Table, Pagination } from "antd";
 import _debounce from "lodash/debounce";
 import { useNavigate } from "react-router-dom";
 import { activeCustomer, searchCustomers } from "../../../../../api/customer";
@@ -42,7 +41,7 @@ export default function UserManage() {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState("");
   const [valueFilter, setValueFilter] = useState("");
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const [modal, setModal] = useState(false);
@@ -125,18 +124,25 @@ export default function UserManage() {
     [customers, dataFilter, valueFilter]
   );
 
-  const pageCount =
-    dataFilter.length > 0 ? totalFilter / 10 : customerTotal / 10;
-  let pageNumbers = [];
-  for (let i = 0; i < pageCount; i++) {
-    pageNumbers.push(
-      <PaginationItem key={i} active={currentPage === i ? true : false}>
-        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
-          {i + 1}
-        </PaginationLink>
-      </PaginationItem>
-    );
-  }
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const start =
+      dataFilter.length > 0
+        ? page * dataFilter.length - dataFilter.length
+        : page * customers.length - customers.length;
+    dataFilter.length > 0
+      ? searchCustomers(valueFilter, start, 10)
+          .then((res) => {
+            setDataFilter(res.data);
+          })
+          .catch((err) => console.log(err))
+      : dispatch(
+          getCustomers.getCustomersRequest({
+            start: start > 0 ? start : 0,
+            length: 10,
+          })
+        );
+  };
 
   const handleSearch = useCallback(
     _debounce((value) => {
@@ -339,33 +345,16 @@ export default function UserManage() {
           }}
         />
 
-        <div className="mt-1">
-          <p>Tổng: {dataFilter.length > 0 ? totalFilter : customerTotal}</p>
-          <Pagination
-            className="pagination justify-content-end mb-0"
-            listClassName="justify-content-end mb-0"
-            aria-label="Page navigation example"
-          >
-            <PaginationItem
-              className={currentPage === 0 ? "disabled" : "enable"}
-            >
-              <PaginationLink
-                onClick={(e) => handleClick(e, currentPage - 1)}
-                href="#"
-              >
-                <i class="uil uil-previous"></i>
-              </PaginationLink>
-            </PaginationItem>
-            {pageNumbers}
-            <PaginationItem disabled={currentPage >= pageCount - 1}>
-              <PaginationLink
-                onClick={(e) => handleClick(e, currentPage + 1)}
-                href="#"
-              >
-                <i class="uil uil-step-forward"></i>
-              </PaginationLink>
-            </PaginationItem>
-          </Pagination>
+        <div className="mt-1 div-pagination p-2">
+          <a>Tổng: {dataFilter.length > 0 ? totalFilter : customerTotal}</a>
+          <div>
+            <Pagination
+              current={currentPage}
+              onChange={onChange}
+              total={dataFilter.length > 0 ? totalFilter : customerTotal}
+              showSizeChanger={false}
+            />
+          </div>
         </div>
         <div>
           <Modal isOpen={modal} toggle={toggle}>

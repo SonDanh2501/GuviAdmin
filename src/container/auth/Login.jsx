@@ -1,3 +1,4 @@
+import { Input } from "antd";
 import { Formik } from "formik";
 import { useCallback, useRef } from "react";
 import { useDispatch } from "react-redux";
@@ -61,7 +62,7 @@ const Login = () => {
                     }
                     errors={errors?.email}
                   />
-                  <CustomTextInput
+                  {/* <CustomTextInput
                     label="Mật khẩu"
                     type="password"
                     name="password"
@@ -72,7 +73,16 @@ const Login = () => {
                       setFieldValue("password", text.target.value)
                     }
                     errors={errors?.password}
+                  /> */}
+                  <Input.Password
+                    placeholder="Nhập mật khẩu"
+                    className="input-pass"
+                    value={values?.password}
+                    onChange={(text) =>
+                      setFieldValue("password", text.target.value)
+                    }
                   />
+                  <a className="error">{errors?.password}</a>
                   <div className="text-center">
                     <Button className="btn-login" onClick={handleSubmit}>
                       Đăng nhập

@@ -1,30 +1,18 @@
-import React, { useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  Card,
-  CardFooter,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-} from "reactstrap";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { getOrder } from "../../../../redux/actions/order";
 
-import "./OrderManage.scss";
-import { Empty, Skeleton, Space, Table, Dropdown } from "antd";
-import { filterOrderApi, searchOrderApi } from "../../../../api/order";
-import { formatDayVN } from "../../../../helper/formatDayVN";
-import moment from "moment";
-import { useNavigate } from "react-router-dom";
 import { UilEllipsisV } from "@iconscout/react-unicons";
+import { Dropdown, Empty, Pagination, Skeleton, Space, Table } from "antd";
+import moment from "moment";
 import vi from "moment/locale/vi";
+import { useNavigate } from "react-router-dom";
+import "./OrderManage.scss";
 
-export default function OrderManage({ data, total }) {
+export default function OrderManage({ data, total, status }) {
   const [dataFilter, setDataFilter] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [totalFilter, setTotalFilter] = useState();
-  const [valueFilter, setValueFilter] = useState("");
-  const [currentPage, setCurrentPage] = useState(0);
-  const [search, setSearch] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -77,7 +65,13 @@ export default function OrderManage({ data, total }) {
       render: (data) => {
         return (
           <div className="div-service">
-            <a className="text-service">{data?.service?._id?.title?.vi}</a>
+            <a className="text-service">
+              {data?.service?._id?.kind === "giup_viec_co_dinh"
+                ? "Giúp việc cố định"
+                : data?.service?._id?.kind === "giup_viec_theo_gio"
+                ? "Giúp việc theo giờ"
+                : "Tổng vệ sinh"}{" "}
+            </a>
             <a className="text-service">{timeWork(data)}</a>
           </div>
         );
@@ -173,74 +167,17 @@ export default function OrderManage({ data, total }) {
     },
   ];
 
-  const handleClick = useCallback(
-    (e, index) => {
-      e.preventDefault();
-      setCurrentPage(index);
-      const start =
-        dataFilter.length > 0 ? index * dataFilter.length : index * data.length;
-
-      dataFilter.length > 0 && search
-        ? searchOrderApi(start, 10, valueFilter)
-            .then((res) => {
-              setDataFilter(res.data);
-              setTotalFilter(res.totalItem);
-            })
-            .catch((err) => console.log(err))
-        : dataFilter.length > 0
-        ? filterOrderApi(start, 10, valueFilter)
-            .then((res) => {
-              setDataFilter(res.data);
-            })
-            .catch((err) => console.log(err))
-        : dispatch(
-            getOrder.getOrderRequest({
-              start: start > 0 ? start : 0,
-              length: 10,
-            })
-          );
-    },
-    [valueFilter, dataFilter, data]
-  );
-
-  const pageCount = dataFilter.length > 0 ? totalFilter / 10 : total / 10;
-  let pageNumbers = [];
-  for (let i = 0; i < pageCount; i++) {
-    pageNumbers.push(
-      <PaginationItem key={i} active={currentPage === i ? true : false}>
-        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
-          {i + 1}
-        </PaginationLink>
-      </PaginationItem>
-    );
-  }
-
-  const handlefilter = useCallback((value) => {
-    setSearch(false);
-    setValueFilter(value);
-    if (value === "filter") {
-      dispatch(getOrder.getOrderRequest({ start: 0, length: 10 }));
-      setDataFilter([]);
-    } else {
-      filterOrderApi(0, 10, value)
-        .then((res) => {
-          setDataFilter(res.data);
-          setTotalFilter(res.totalItem);
-        })
-        .catch((err) => console.log(err));
-    }
-  }, []);
-
-  const handleSearch = useCallback((value) => {
-    setValueFilter(value);
-    setSearch(true);
-    searchOrderApi(0, 10, value)
-      .then((res) => {
-        setDataFilter(res.data);
-        setTotalFilter(res.totalItem);
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const start = page * data.length - data.length;
+    dispatch(
+      getOrder.getOrderRequest({
+        start: start > 0 ? start : 0,
+        length: 10,
+        status: status,
       })
-      .catch((err) => console.log(err));
-  }, []);
+    );
+  };
 
   return (
     <React.Fragment>
@@ -249,9 +186,9 @@ export default function OrderManage({ data, total }) {
           columns={columns}
           dataSource={dataFilter.length > 0 ? dataFilter : data}
           pagination={false}
-          locale={{
-            emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
-          }}
+          // locale={{
+          //   emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
+          // }}
           rowKey={(record) => record._id}
           rowSelection={{
             selectedRowKeys,
@@ -261,32 +198,16 @@ export default function OrderManage({ data, total }) {
           }}
         />
 
-        <div className="mt-2">
-          <p>Tổng: {total}</p>
-          <Pagination
-            className="pagination justify-content-end mb-0"
-            listClassName="justify-content-end mb-0"
-          >
-            <PaginationItem
-              className={currentPage === 0 ? "disabled" : "enable"}
-            >
-              <PaginationLink
-                onClick={(e) => handleClick(e, currentPage - 1)}
-                href="#"
-              >
-                <i class="uil uil-previous"></i>
-              </PaginationLink>
-            </PaginationItem>
-            {pageNumbers}
-            <PaginationItem disabled={currentPage >= pageCount - 1}>
-              <PaginationLink
-                onClick={(e) => handleClick(e, currentPage + 1)}
-                href="#"
-              >
-                <i class="uil uil-step-forward"></i>
-              </PaginationLink>
-            </PaginationItem>
-          </Pagination>
+        <div className="mt-2 div-pagination p-2">
+          <a>Tổng: {total}</a>
+          <div>
+            <Pagination
+              current={currentPage}
+              onChange={onChange}
+              total={total}
+              showSizeChanger={false}
+            />
+          </div>
         </div>
       </div>
     </React.Fragment>

@@ -1,12 +1,22 @@
+import { CameraOutlined } from "@material-ui/icons";
 import { Image, Tabs } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  Row,
+  Input,
+} from "reactstrap";
 import { getCollaboratorsById } from "../../../../../api/collaborator";
 import { postFile } from "../../../../../api/file";
 import user from "../../../../../assets/images/user.png";
+import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import Activity from "./components/activity";
 import Document from "./components/documents";
@@ -22,6 +32,7 @@ const ProfileCollaborator = () => {
     birthday: "2000-06-07T00:00:00.000Z",
     identity_date: "2020-11-12T00:00:00.000Z",
   });
+  const [img, setImg] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -33,6 +44,35 @@ const ProfileCollaborator = () => {
       })
       .catch((err) => console.log(err));
   }, [id]);
+
+  const onChangeThumbnail = (e) => {
+    if (e.target.files[0]) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImg(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    const formData = new FormData();
+    formData.append("file", e.target.files[0]);
+    dispatch(loadingAction.loadingRequest(true));
+
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        setImg(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
 
   return (
     <>
@@ -48,18 +88,29 @@ const ProfileCollaborator = () => {
                     height: 200,
                     backgroundColor: "transparent",
                   }}
-                  src={data?.avatar ? data?.avatar : user}
+                  src={img ? img : data?.avatar ? data?.avatar : user}
                   className="rounded-circle"
+                />
+                <label for="choose-image">
+                  <CameraOutlined /> Chọn ảnh khác
+                </label>
+                <input
+                  name="image"
+                  type="file"
+                  placeholder=""
+                  accept={".jpg,.png,.jpeg"}
+                  id="choose-image"
+                  onChange={onChangeThumbnail}
                 />
               </CardHeader>
               <CardBody>
                 <div className="text-center">
-                  <h3>
-                    {data?.name}{" "}
+                  <a className="text-name">
+                    {data?.full_name}{" "}
                     <span className="font-weight-light">
                       ,{moment().diff(data?.birthday, "years")} tuổi
                     </span>
-                  </h3>
+                  </a>
                 </div>
               </CardBody>
             </Card>
@@ -69,7 +120,7 @@ const ProfileCollaborator = () => {
               <CardBody>
                 <Tabs defaultActiveKey="1">
                   <Tabs.TabPane tab="Thông tin cơ bản" key="1">
-                    <Information data={data} />
+                    <Information data={data} image={img} />
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Tài liệu" key="2">
                     <Document />
