@@ -11,6 +11,11 @@
     box-shadow: 2px #e8e8e8;
     background-color: white;
 
+    .areaChart {
+      width: 100%;
+      height: 500px;
+    }
+
     .div-date {
       width: 40%;
       margin-bottom: 10px;
@@ -339,6 +344,14 @@
       display: flex;
       flex-direction: row;
       align-items: center;
+
+      .div-chart-de {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 80%;
+        height: 20%;
+      }
 
       .div-service-hours {
         display: flex;

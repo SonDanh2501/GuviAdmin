@@ -1,37 +1,23 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  Card,
-  CardFooter,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-} from "reactstrap";
+import { useDispatch } from "react-redux";
+import { Card, CardFooter } from "reactstrap";
 import { getOrder } from "../../../../redux/actions/order";
 
-import "./OrderDoingManage.scss";
-import { Empty, Skeleton, Space, Table, Dropdown } from "antd";
-import {
-  filterOrderApi,
-  getOrderApi,
-  searchOrderApi,
-} from "../../../../api/order";
-import { formatDayVN } from "../../../../helper/formatDayVN";
+import { UilEllipsisV } from "@iconscout/react-unicons";
+import { Dropdown, Empty, Pagination, Skeleton, Space, Table } from "antd";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { UilEllipsisV } from "@iconscout/react-unicons";
-import {
-  getOrderSelector,
-  getOrderTotal,
-} from "../../../../redux/selectors/order";
+import { getOrderApi, searchOrderApi } from "../../../../api/order";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
+import { formatDayVN } from "../../../../helper/formatDayVN";
+import "./OrderDoingManage.scss";
 
 export default function OrderDoingManage() {
   const [dataFilter, setDataFilter] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [totalFilter, setTotalFilter] = useState();
   const [valueFilter, setValueFilter] = useState("");
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -190,63 +176,33 @@ export default function OrderDoingManage() {
     },
   ];
 
-  const handleClick = useCallback(
-    (e, index) => {
-      e.preventDefault();
-      setCurrentPage(index);
-      const start =
-        dataFilter.length > 0 ? index * dataFilter.length : index * data.length;
+  // const handleClick = useCallback(
+  //   (e, index) => {
+  //     e.preventDefault();
+  //     setCurrentPage(index);
+  //     const start =
+  //       dataFilter.length > 0 ? index * dataFilter.length : index * data.length;
 
-      dataFilter.length > 0 && search
-        ? searchOrderApi(start, 10, valueFilter, "doing")
-            .then((res) => {
-              setDataFilter(res.data);
-              setTotalFilter(res.totalItem);
-            })
-            .catch((err) => console.log(err))
-        : dataFilter.length > 0
-        ? filterOrderApi(start, 10, valueFilter)
-            .then((res) => {
-              setDataFilter(res.data);
-            })
-            .catch((err) => console.log(err))
-        : getOrderApi(start > 0 ? start : 0, 10, "doing").then((res) => {
-            setData(res.data);
-            setTotal(res.totalItem);
-          });
-    },
-    [valueFilter, dataFilter, data]
-  );
-
-  const pageCount = dataFilter.length > 0 ? totalFilter / 10 : total / 10;
-  let pageNumbers = [];
-  for (let i = 0; i < pageCount; i++) {
-    pageNumbers.push(
-      <PaginationItem key={i} active={currentPage === i ? true : false}>
-        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
-          {i + 1}
-        </PaginationLink>
-      </PaginationItem>
-    );
-  }
-
-  const handlefilter = useCallback((value) => {
-    setSearch(false);
-    setValueFilter(value);
-    if (value === "filter") {
-      dispatch(
-        getOrder.getOrderRequest({ start: 0, length: 10, status: "doing" })
-      );
-      setDataFilter([]);
-    } else {
-      filterOrderApi(0, 10, value)
-        .then((res) => {
-          setDataFilter(res.data);
-          setTotalFilter(res.totalItem);
-        })
-        .catch((err) => console.log(err));
-    }
-  }, []);
+  //     dataFilter.length > 0 && search
+  //       ? searchOrderApi(start, 10, valueFilter, "doing")
+  //           .then((res) => {
+  //             setDataFilter(res.data);
+  //             setTotalFilter(res.totalItem);
+  //           })
+  //           .catch((err) => console.log(err))
+  //       : dataFilter.length > 0
+  //       ? filterOrderApi(start, 10, valueFilter)
+  //           .then((res) => {
+  //             setDataFilter(res.data);
+  //           })
+  //           .catch((err) => console.log(err))
+  //       : getOrderApi(start > 0 ? start : 0, 10, "doing").then((res) => {
+  //           setData(res.data);
+  //           setTotal(res.totalItem);
+  //         });
+  //   },
+  //   [valueFilter, dataFilter, data]
+  // );
 
   const handleSearch = useCallback((value) => {
     setValueFilter(value);
@@ -258,6 +214,18 @@ export default function OrderDoingManage() {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const start = page * data.length - data.length;
+    dispatch(
+      getOrder.getOrderRequest({
+        start: start > 0 ? start : 0,
+        length: 10,
+        status: "doing",
+      })
+    );
+  };
 
   return (
     <React.Fragment>
@@ -271,15 +239,15 @@ export default function OrderDoingManage() {
             onChange={(e) => handleSearch(e.target.value)}
           />
         </div>
-        <Card className="shadow">
+        <div className="shadow">
           <Table
             columns={columns}
             dataSource={dataFilter.length > 0 ? dataFilter : data}
             pagination={false}
-            locale={{
-              emptyText:
-                data.length > 0 ? <Empty /> : <Skeleton active={true} />,
-            }}
+            // locale={{
+            //   emptyText:
+            //     data.length > 0 ? <Empty /> : <Skeleton active={true} />,
+            // }}
             rowKey={(record) => record._id}
             rowSelection={{
               selectedRowKeys,
@@ -288,36 +256,19 @@ export default function OrderDoingManage() {
               },
             }}
           />
-          <CardFooter>
+
+          <div className="mt-2 div-pagination p-2">
+            <a>Tổng: {total}</a>
             <div>
-              <p>Tổng: {total}</p>
               <Pagination
-                className="pagination justify-content-end mb-0"
-                listClassName="justify-content-end mb-0"
-              >
-                <PaginationItem
-                  className={currentPage === 0 ? "disabled" : "enable"}
-                >
-                  <PaginationLink
-                    onClick={(e) => handleClick(e, currentPage - 1)}
-                    href="#"
-                  >
-                    <i class="uil uil-previous"></i>
-                  </PaginationLink>
-                </PaginationItem>
-                {pageNumbers}
-                <PaginationItem disabled={currentPage >= pageCount - 1}>
-                  <PaginationLink
-                    onClick={(e) => handleClick(e, currentPage + 1)}
-                    href="#"
-                  >
-                    <i class="uil uil-step-forward"></i>
-                  </PaginationLink>
-                </PaginationItem>
-              </Pagination>
+                current={currentPage}
+                onChange={onChange}
+                total={total}
+                showSizeChanger={false}
+              />
             </div>
-          </CardFooter>
-        </Card>
+          </div>
+        </div>
       </div>
     </React.Fragment>
   );

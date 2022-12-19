@@ -1,27 +1,17 @@
+import { Pagination, Table } from "antd";
+import _debounce from "lodash/debounce";
+import moment from "moment";
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Card,
-  CardFooter,
-  CardHeader,
-  Col,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  Row,
-} from "reactstrap";
+import { Card, CardHeader, Col, Row } from "reactstrap";
 import { searchFeedbackApi } from "../../../api/feedback";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
 import { getFeedback } from "../../../redux/actions/feedback";
-import { loadingAction } from "../../../redux/actions/loading";
 import {
   getFeedbacks,
   getFeedbackTotal,
 } from "../../../redux/selectors/feedback";
 import "./FeedbackManage.scss";
-import _debounce from "lodash/debounce";
-import { Empty, Skeleton, Table } from "antd";
-import moment from "moment";
 
 const columns = [
   {
@@ -51,7 +41,8 @@ const columns = [
 
 export default function FeedbackManage() {
   const [dataFilter, setDataFilter] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [totalFilter, setTotalFilter] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const dispatch = useDispatch();
   const listFeedback = useSelector(getFeedbacks);
@@ -64,16 +55,18 @@ export default function FeedbackManage() {
   const handleSearch = useCallback(
     _debounce((value) => {
       searchFeedbackApi(value)
-        .then((res) => setDataFilter(res.data))
+        .then((res) => {
+          setDataFilter(res.data);
+          setTotalFilter(res.totalItem);
+        })
         .catch((err) => console.log(err));
     }, 1000),
     []
   );
 
-  const handleClick = (e, index) => {
-    e.preventDefault();
-    setCurrentPage(index);
-    const start = index * listFeedback.length;
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const start = page * listFeedback.length - listFeedback.length;
     dispatch(
       getFeedback.getFeedbackRequest({
         start: start > 0 ? start : 0,
@@ -81,19 +74,6 @@ export default function FeedbackManage() {
       })
     );
   };
-
-  const pageCount = feedbackTotal / 10;
-  let pageNumbers = [];
-  for (let i = 0; i < pageCount; i++) {
-    pageNumbers.push(
-      <PaginationItem key={i} active={currentPage === i ? true : false}>
-        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
-          {i + 1}
-        </PaginationLink>
-      </PaginationItem>
-    );
-  }
-
   return (
     <React.Fragment>
       <div className="mt-2 p-3">
@@ -139,34 +119,17 @@ export default function FeedbackManage() {
               },
             }}
           />
-          <CardFooter>
-            <nav aria-label="...">
+          <div className="div-pagination p-2">
+            <a>Tổng: {dataFilter.length > 0 ? totalFilter : feedbackTotal}</a>
+            <div>
               <Pagination
-                className="pagination justify-content-end mb-0"
-                listClassName="justify-content-end mb-0"
-              >
-                <PaginationItem
-                  className={currentPage === 0 ? "disabled" : "enable"}
-                >
-                  <PaginationLink
-                    onClick={(e) => handleClick(e, currentPage - 1)}
-                    href="#"
-                  >
-                    <i class="uil uil-previous"></i>
-                  </PaginationLink>
-                </PaginationItem>
-                {pageNumbers}
-                <PaginationItem disabled={currentPage >= pageCount - 1}>
-                  <PaginationLink
-                    onClick={(e) => handleClick(e, currentPage + 1)}
-                    href="#"
-                  >
-                    <i class="uil uil-step-forward"></i>
-                  </PaginationLink>
-                </PaginationItem>
-              </Pagination>
-            </nav>
-          </CardFooter>
+                current={currentPage}
+                onChange={onChange}
+                total={dataFilter.length > 0 ? totalFilter : feedbackTotal}
+                showSizeChanger={false}
+              />
+            </div>
+          </div>
         </Card>
       </div>
     </React.Fragment>

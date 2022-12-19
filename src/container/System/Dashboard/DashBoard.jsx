@@ -15,7 +15,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { Card, CardBody, Col, Row } from "reactstrap";
-
 import { getDayReportApi } from "../../../api/statistic";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
 import {
@@ -43,6 +42,7 @@ import {
   Cell,
   Pie,
   PieChart,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -285,28 +285,34 @@ export default function Home() {
                   </div>
                 </div>
                 <div>
-                  <AreaChart
-                    width={1000}
-                    height={400}
-                    data={arrResult}
-                    margin={{
-                      top: 10,
-                      right: 30,
-                      left: 0,
-                      bottom: 0,
-                    }}
+                  <ResponsiveContainer
+                    width={"100%"}
+                    height={350}
+                    min-width={350}
                   >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis />
-                    <YAxis dataKey="total_income" fontSize={12} />
-                    <Tooltip />
-                    <Area
-                      type="monotone"
-                      dataKey="total_income"
-                      stroke="#00CF3A"
-                      fill="#00CF3A"
-                    />
-                  </AreaChart>
+                    <AreaChart
+                      width={window.screen.height / 1.2}
+                      height={400}
+                      data={arrResult}
+                      margin={{
+                        top: 10,
+                        right: 30,
+                        left: 0,
+                        bottom: 0,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis />
+                      <YAxis dataKey="total_income" fontSize={12} />
+                      <Tooltip />
+                      <Area
+                        type="monotone"
+                        dataKey="total_income"
+                        stroke="#00CF3A"
+                        fill="#00CF3A"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
                 </div>
                 <Row>
                   <Col lg="7" className="pl-4">
@@ -383,7 +389,11 @@ export default function Home() {
                 <div className="div-progress">
                   <Progress
                     type="dashboard"
-                    percent={connectionService.donePercent}
+                    percent={
+                      !connectionService?.donePercent
+                        ? 0
+                        : connectionService?.donePercent
+                    }
                     gapDegree={5}
                     strokeColor={"#48CAE4"}
                     strokeWidth={15}
@@ -481,8 +491,6 @@ export default function Home() {
                     </p>
                   </div>
                   <div className="div-seemore">
-                    {/* <p>Xem chi tiết</p>
-                  <i class="uil uil-angle-right"></i> */}
                     <MoreTopCollaborator />
                   </div>
                 </div>
@@ -499,14 +507,14 @@ export default function Home() {
                   columns={columns}
                   dataSource={lastestService}
                   pagination={false}
-                  locale={{
-                    emptyText:
-                      lastestService.length > 0 ? (
-                        <Empty />
-                      ) : (
-                        <Skeleton active={true} />
-                      ),
-                  }}
+                  // locale={{
+                  //   emptyText:
+                  //     lastestService.length > 0 ? (
+                  //       <Empty />
+                  //     ) : (
+                  //       <Skeleton active={true} />
+                  //     ),
+                  // }}
                 />
               </CardBody>
               <div className="div-entries">
@@ -555,7 +563,7 @@ export default function Home() {
                           <a>Khác</a>
                         </div>
                       </div>
-                      <div>
+                      <div className="div-chart-de">
                         <PieChart width={300} height={320}>
                           <Pie
                             data={data}

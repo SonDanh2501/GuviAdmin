@@ -37,24 +37,28 @@ const ManageOrder = () => {
   ];
 
   const onChangeTab = (active) => {
-    console.log(active);
     if (active === "2") {
+      setStatus("pending");
       dispatch(
         getOrder.getOrderRequest({ start: 0, length: 10, status: "pending" })
       );
     } else if (active === "3") {
+      setStatus("doing");
       dispatch(
         getOrder.getOrderRequest({ start: 0, length: 10, status: "doing" })
       );
     } else if (active === "5") {
+      setStatus("cancel");
       dispatch(
         getOrder.getOrderRequest({ start: 0, length: 10, status: "cancel" })
       );
     } else if (active === "6") {
+      setStatus("done");
       dispatch(
         getOrder.getOrderRequest({ start: 0, length: 10, status: "done" })
       );
     } else if (active === "1") {
+      setStatus("all");
       dispatch(
         getOrder.getOrderRequest({ start: 0, length: 10, status: "all" })
       );
@@ -88,20 +92,20 @@ const ManageOrder = () => {
       <div className="div-container">
         <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
           <Tabs.TabPane tab="TẤT CẢ" key="1">
-            <OrderManage data={listOrder} total={orderTotal} />
+            <OrderManage data={listOrder} total={orderTotal} status={status} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="ĐANG CHỜ" key="2">
-            <OrderManage data={listOrder} total={orderTotal} />
+            <OrderManage data={listOrder} total={orderTotal} status={status} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="CHƯA HOÀN TẤT" key="3">
-            <OrderManage data={listOrder} total={orderTotal} />
+            <OrderManage data={listOrder} total={orderTotal} status={status} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="ĐÃ HẾT HẠN" key="4"></Tabs.TabPane>
           <Tabs.TabPane tab="VIỆC ĐÃ HUỶ" key="5">
-            <OrderManage data={listOrder} total={orderTotal} />
+            <OrderManage data={listOrder} total={orderTotal} status={status} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="HOÀN TẤT" key="6">
-            <OrderManage data={listOrder} total={orderTotal} />
+            <OrderManage data={listOrder} total={orderTotal} status={status} />
           </Tabs.TabPane>
         </Tabs>
       </div>

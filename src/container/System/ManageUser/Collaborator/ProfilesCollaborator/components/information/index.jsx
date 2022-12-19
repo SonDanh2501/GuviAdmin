@@ -1,16 +1,18 @@
+import { DatePicker } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Col, Form, Input, Label, Row } from "reactstrap";
 import { updateInformationCollaboratorApi } from "../../../../../../../api/collaborator";
 import CustomTextInput from "../../../../../../../components/CustomTextInput/customTextInput";
+import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import "./index.scss";
 
-const Information = ({ data }) => {
+const Information = ({ data, image }) => {
   const [name, setName] = useState("");
   const [gender, setGender] = useState("other");
-  const [birthday, setBirthday] = useState("");
+  const [birthday, setBirthday] = useState("2022-01-20T00:00:00.000Z");
   const [resident, setResident] = useState("");
   const [staying, setStaying] = useState("");
   const [ethnic, setEthnic] = useState("");
@@ -49,6 +51,7 @@ const Information = ({ data }) => {
     dispatch(loadingAction.loadingRequest(true));
     const day = moment(new Date(birthday)).toISOString();
     const indentityDay = moment(new Date(issuedDay)).toISOString();
+
     updateInformationCollaboratorApi(data?._id, {
       gender: gender,
       full_name: name,
@@ -61,11 +64,17 @@ const Information = ({ data }) => {
       identity_number: number,
       identity_place: issued,
       identity_date: indentityDay,
+      avatar: image,
     })
       .then((res) => {
         window.location.reload();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
   }, [
     gender,
     name,
@@ -79,6 +88,7 @@ const Information = ({ data }) => {
     issuedDay,
     data,
     birthday,
+    image,
   ]);
 
   return (

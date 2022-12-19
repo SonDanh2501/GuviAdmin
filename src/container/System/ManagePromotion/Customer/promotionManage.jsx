@@ -1,4 +1,4 @@
-import { Dropdown, Empty, Skeleton, Space, Table } from "antd";
+import { Dropdown, Empty, Skeleton, Space, Table, Pagination } from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -13,9 +13,6 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
   Row,
 } from "reactstrap";
 import { searchPromotion } from "../../../../api/promotion.jsx";
@@ -37,7 +34,7 @@ import "./PromotionManage.scss";
 
 export default function PromotionManage() {
   const promotion = useSelector(getPromotionSelector);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalFilter, setTotalFilter] = useState("");
   const [valueFilter, setValueFilter] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -59,42 +56,25 @@ export default function PromotionManage() {
     dispatch(deletePromotionAction.deletePromotionRequest(id));
   }, []);
 
-  const handleClick = useCallback(
-    (e, index) => {
-      e.preventDefault();
-      setCurrentPage(index);
-      const start =
-        dataFilter.length > 0
-          ? index * dataFilter.length
-          : index * promotion.length;
-
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const start =
       dataFilter.length > 0
-        ? searchPromotion(valueFilter, start, 10)
-            .then((res) => {
-              setDataFilter(res?.data);
-            })
-            .catch((err) => console.log(err))
-        : dispatch(
-            getPromotion.getPromotionRequest({
-              start: start > 0 ? start : 0,
-              length: 10,
-            })
-          );
-    },
-    [promotion, valueFilter, dataFilter]
-  );
-
-  const pageCount = dataFilter.length > 0 ? totalFilter / 10 : total / 10;
-  let pageNumbers = [];
-  for (let i = 0; i < pageCount; i++) {
-    pageNumbers.push(
-      <PaginationItem key={i} active={currentPage === i ? true : false}>
-        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
-          {i + 1}
-        </PaginationLink>
-      </PaginationItem>
-    );
-  }
+        ? page * dataFilter.length - dataFilter.length
+        : page * promotion.length - promotion.length;
+    dataFilter.length > 0
+      ? searchPromotion(valueFilter, start, 10)
+          .then((res) => {
+            setDataFilter(res.data);
+          })
+          .catch((err) => console.log(err))
+      : dispatch(
+          getPromotion.getPromotionRequest({
+            start: start > 0 ? start : 0,
+            length: 10,
+          })
+        );
+  };
 
   const handleSearch = useCallback(
     _debounce((value) => {
@@ -194,22 +174,6 @@ export default function PromotionManage() {
               </Col>
             </Row>
           </CardHeader>
-          {/* <Table className="align-items-center table-flush" responsive>
-            <thead>
-              <tr>
-                <th>Tên Promotion</th>
-                <th>Mã code</th>
-                <th>Hạn</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {dataFilter.length > 0
-                ? dataFilter.map((e) => <TableManagePromotion data={e} />)
-                : promotion &&
-                  promotion.map((e) => <TableManagePromotion data={e} />)}
-            </tbody>
-          </Table> */}
           <Table
             columns={columns}
             dataSource={dataFilter.length > 0 ? dataFilter : promotion}
@@ -233,34 +197,17 @@ export default function PromotionManage() {
                 promotion.length > 0 ? <Empty /> : <Skeleton active={true} />,
             }}
           />
-          <CardFooter>
-            <nav aria-label="...">
+          <div className="div-pagination p-2">
+            <a>Tổng: {dataFilter.length > 0 ? totalFilter : total}</a>
+            <div>
               <Pagination
-                className="pagination justify-content-end mb-0"
-                listClassName="justify-content-end mb-0"
-              >
-                <PaginationItem
-                  className={currentPage === 0 ? "disabled" : "enable"}
-                >
-                  <PaginationLink
-                    onClick={(e) => handleClick(e, currentPage - 1)}
-                    href="#"
-                  >
-                    <i class="uil uil-previous"></i>
-                  </PaginationLink>
-                </PaginationItem>
-                {pageNumbers}
-                <PaginationItem disabled={currentPage >= pageCount - 1}>
-                  <PaginationLink
-                    onClick={(e) => handleClick(e, currentPage + 1)}
-                    href="#"
-                  >
-                    <i class="uil uil-step-forward"></i>
-                  </PaginationLink>
-                </PaginationItem>
-              </Pagination>
-            </nav>
-          </CardFooter>
+                current={currentPage}
+                onChange={onChange}
+                total={dataFilter.length > 0 ? totalFilter : total}
+                showSizeChanger={false}
+              />
+            </div>
+          </div>
         </Card>
         <div>
           <EditPromotion

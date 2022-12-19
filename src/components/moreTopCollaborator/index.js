@@ -1,11 +1,11 @@
 import { Drawer, List, DatePicker, Input, Select } from "antd";
-
 import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { formatMoney } from "../../helper/formatMoney";
 import { getTopCollaborator } from "../../redux/actions/statistic";
 import { getTopCollaborators } from "../../redux/selectors/statistic";
+import { getTopCollaboratorApi } from "../../api/statistic";
 import "./index.scss";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -14,6 +14,7 @@ const MoreTopCollaborator = () => {
   const dispatch = useDispatch();
   const topCollaborator = useSelector(getTopCollaborators);
   const [typeDate, setTypeDate] = useState("day");
+  const [data, setData] = useState([]);
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -37,15 +38,18 @@ const MoreTopCollaborator = () => {
   const onChangeDate = useCallback((start, end) => {
     const dayStart = moment(start).toISOString();
     const dayEnd = moment(end).toISOString();
-    dispatch(
-      getTopCollaborator.getTopCollaboratorRequest({
-        startDate: dayStart,
-        endDate: dayEnd,
-        start: 0,
-        length: 10,
-      })
-    );
-  });
+    // dispatch(
+    //   getTopCollaborator.getTopCollaboratorRequest({
+    //     startDate: dayStart,
+    //     endDate: dayEnd,
+    //     start: 0,
+    //     length: 10,
+    //   })
+    // );
+    getTopCollaboratorApi(dayStart, dayEnd, 0, 10)
+      .then((res) => setData(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <>
@@ -81,7 +85,7 @@ const MoreTopCollaborator = () => {
             </div>
           </div>
           <List
-            dataSource={topCollaborator}
+            dataSource={data.length > 0 ? data : topCollaborator}
             loadMore={isLoadMore}
             renderItem={(item) => {
               return (
