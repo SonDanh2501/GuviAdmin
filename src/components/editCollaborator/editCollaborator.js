@@ -18,7 +18,7 @@ const EditCollaborator = ({ state, setState, data }) => {
     code_phone_area: data?.code_phone_area,
     phone: data?.phone,
     email: data?.email,
-    name: data?.name,
+    name: data?.full_name,
     identify: data?.identify,
   };
 

@@ -193,7 +193,7 @@ export default function UserManage() {
               className="img_customer"
               src={data?.avatar ? data?.avatar : user}
             />
-            <a className="text-name"> {data.name}</a>
+            <a className="text-name"> {data.full_name}</a>
           </div>
         );
       },

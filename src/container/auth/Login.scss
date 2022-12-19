@@ -10,11 +10,32 @@
     rgb(253, 255, 215) 80%
   );
 
-  .img-logo {
-    width: 100px;
-    height: 100px;
-    border-radius: 50px;
+  .card {
+    width: 30%;
+    min-height: 300px;
+    border-radius: 15px;
+
+    .div-head {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .img-logo {
+        width: 100px;
+        height: 100px;
+        border-radius: 50px;
+      }
+
+      .title-login {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 28px;
+        color: #11263c;
+      }
+    }
   }
+
   .btn-login {
     background-color: #f9aa87;
     border: none;
