@@ -11,7 +11,7 @@ export const searchCustomers = (payload, start, length) => {
   );
 };
 export const fetchCustomerById = (id) => {
-  return axiosClient.get(`/admin/customer_manager/${id}`);
+  return axiosClient.get(`/admin/customer_manager/get_detail/${id}`);
 };
 export const createCustomer = (payload) => {
   return axiosClient.post("/admin/customer_manager/create_item", payload);

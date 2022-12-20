@@ -11,7 +11,7 @@
   );
 
   .card {
-    width: 30%;
+    width: 25%;
     min-height: 300px;
     border-radius: 15px;
 
@@ -32,6 +32,8 @@
         font-size: 24px;
         line-height: 28px;
         color: #11263c;
+        margin-top: 5px;
+        text-decoration: none;
       }
     }
   }

@@ -17,12 +17,20 @@ import {
 import { formatMoney } from "../../../../../helper/formatMoney";
 import user from "../../../../../assets/images/user.png";
 import "./Profile.scss";
+import { fetchCustomerById } from "../../../../../api/customer";
 // core components
 
 const Profile = () => {
   const { state } = useLocation();
-  const { data } = state || {};
+  const { id } = state || {};
   const [rank, setRank] = useState("");
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetchCustomerById(id)
+      .then((res) => setData(res))
+      .catch((err) => console.log(err));
+  }, [id]);
 
   useEffect(() => {
     if (data?.rank_point < 100) {
@@ -35,10 +43,11 @@ const Profile = () => {
       setRank("Kim cương");
     }
   }, [data]);
-  const age = moment().diff(data?.birth_date, "years");
+
+  const age = moment().diff(data?.birthday, "years");
 
   return (
-    <>
+    <div className="mt-2">
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
@@ -56,7 +65,7 @@ const Profile = () => {
                   <h3>
                     {data?.full_name},{" "}
                     <span className="font-weight-light">
-                      {!data.birth_date ? "" : age + "tuổi"}
+                      {!data.birthday ? "" : age + "tuổi"}
                     </span>
                   </h3>
                 </div>
@@ -116,10 +125,9 @@ const Profile = () => {
                           id="input-email"
                           type="email"
                           value={
-                            data?.birth_date
-                              ? data?.birth_date.slice(
-                                  0,
-                                  data?.birth_date.indexOf("T")
+                            data?.birthday
+                              ? moment(new Date(data?.birthday)).format(
+                                  "DD/MM/YYYY"
                                 )
                               : "Chưa có"
                           }
@@ -160,7 +168,7 @@ const Profile = () => {
           </Col>
         </Row>
       </Container>
-    </>
+    </div>
   );
 };
 
