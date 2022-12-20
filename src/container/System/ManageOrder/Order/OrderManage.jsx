@@ -58,7 +58,7 @@ export default function OrderManage({ data, total, status }) {
     },
     {
       title: "Tên khách hàng",
-      dataIndex: ["id_customer", "name"],
+      dataIndex: ["id_customer", "full_name"],
     },
     {
       title: "Dịch vụ",

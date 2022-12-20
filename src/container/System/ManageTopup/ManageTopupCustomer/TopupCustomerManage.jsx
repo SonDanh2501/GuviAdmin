@@ -99,7 +99,7 @@ export default function TopupCustomerManage() {
   const columns = [
     {
       title: "Tên khách hàng",
-      dataIndex: ["id_customer", "name"],
+      dataIndex: ["id_customer", "full_name"],
     },
     {
       title: "Số tiền",

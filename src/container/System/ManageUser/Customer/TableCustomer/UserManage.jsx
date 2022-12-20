@@ -185,14 +185,14 @@ export default function UserManage() {
           <div
             onClick={() =>
               navigate("/system/user-manage/details-customer", {
-                state: { data: data },
+                state: { id: data?._id },
               })
             }
           >
-            <img
+            {/* <img
               className="img_customer"
               src={data?.avatar ? data?.avatar : user}
-            />
+            /> */}
             <a className="text-name"> {data.full_name}</a>
           </div>
         );
@@ -219,7 +219,9 @@ export default function UserManage() {
     },
     {
       title: "Tổng Đơn Đã Đặt",
+      render: (data) => <a className="text-address">{data?.total_order}</a>,
       width: "10%",
+      align: "center",
     },
     {
       title: "Đơn Dịch Vụ gần nhất",
@@ -231,12 +233,13 @@ export default function UserManage() {
       render: (data) => (
         <a className="text-address">{formatMoney(data?.total_price)}</a>
       ),
+      align: "center",
       width: "10%",
     },
     {
       key: "action",
       width: "10%",
-
+      align: "center",
       render: (data) => (
         <Space size="middle">
           <div>

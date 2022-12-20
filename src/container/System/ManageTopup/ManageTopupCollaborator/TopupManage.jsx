@@ -103,7 +103,7 @@ export default function TopupManage() {
   const columns = [
     {
       title: "Tên cộng tác viên",
-      dataIndex: ["id_collaborator", "name"],
+      dataIndex: ["id_collaborator", "full_name"],
     },
     {
       title: "Số tiền",
