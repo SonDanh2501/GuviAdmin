@@ -143,7 +143,7 @@ const AddCollaborator = () => {
                 />
                 <CustomButton
                   title="Thêm"
-                  className="float-right btn-add"
+                  className="float-left btn-add"
                   type="button"
                   onClick={handleSubmit}
                 />

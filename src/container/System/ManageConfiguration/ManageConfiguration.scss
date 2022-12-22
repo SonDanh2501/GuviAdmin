@@ -1,14 +1,15 @@
 .container-configuration {
   width: 98, 5%;
   background-color: white;
-  min-height: 90%;
+  min-height: 50%;
   margin: 10px;
-  padding: 10px;
+  padding: 20px;
   border-radius: 5px;
 
   .btn {
     background-color: bisque;
     border: none;
     color: black;
+    box-shadow: 2px 3px 5px rgb(177, 177, 177);
   }
 }

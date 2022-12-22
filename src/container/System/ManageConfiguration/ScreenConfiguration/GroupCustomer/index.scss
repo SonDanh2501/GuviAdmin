@@ -1,0 +1,18 @@
+.content {
+  background-color: white;
+  width: 100%;
+  min-height: 20%;
+  margin-left: 10px;
+  border-radius: 5px;
+
+  .table {
+    .text-name {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 300;
+      font-size: 14px;
+      color: black;
+      text-transform: capitalize;
+    }
+  }
+}

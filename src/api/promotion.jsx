@@ -16,8 +16,10 @@ export const createPromotion = (data) => {
   return axiosClient.post("/admin/promotion_manager/create_item?lang=vi", data);
 };
 
-export const getGroupCustomerPromotion = () => {
-  return axiosClient.get("/admin/group_customer_mamager/get_list");
+export const getGroupCustomerApi = (start, length) => {
+  return axiosClient.get(
+    `/admin/group_customer_mamager/get_list?start=${start}&length=${length}`
+  );
 };
 
 export const deletePromotion = (params) => {

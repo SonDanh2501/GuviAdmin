@@ -114,7 +114,7 @@ const AddBanner = () => {
                 onChange={onChangeThumbnail}
               />
               {imgThumbnail && (
-                <img src={imgThumbnail} className="img-thumbnail" />
+                <img src={imgThumbnail} className="img-banner" />
               )}
             </div>
             <CustomTextInput

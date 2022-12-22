@@ -240,7 +240,7 @@ export default function CollaboratorManage() {
             }
           >
             <img className="img_customer" src={data?.avatar} />
-            <a>{data.name}</a>
+            <a>{data?.full_name}</a>
           </div>
         );
       },
@@ -248,9 +248,11 @@ export default function CollaboratorManage() {
     {
       title: "SĐT",
       dataIndex: "phone",
+      align: "center",
     },
     {
       title: "Tình trạng",
+      align: "center",
       render: (data) => {
         return (
           <>
@@ -271,6 +273,7 @@ export default function CollaboratorManage() {
     },
     {
       key: "action",
+      align: "center",
       render: (data) => (
         <Space size="middle">
           <div>
@@ -310,6 +313,7 @@ export default function CollaboratorManage() {
             menu={{
               items,
             }}
+            placement="bottom"
           >
             <a>
               <i class="uil uil-ellipsis-v"></i>
@@ -412,7 +416,7 @@ export default function CollaboratorManage() {
               {itemEdit?.is_lock_time === false
                 ? "Bạn có muốn khóa tài khoản cộng tác viên"
                 : "Bạn có muốn kích hoạt tài khoản cộng tác viên"}
-              <h3>{itemEdit?.name}</h3>
+              <h3>{itemEdit?.full_name}</h3>
               {itemEdit?.is_lock_time === false && (
                 <CustomTextInput
                   label={"*Thời gian khoá (hh:mm)"}
@@ -450,7 +454,7 @@ export default function CollaboratorManage() {
               {itemEdit?.is_verify === true
                 ? "Bạn có muốn bỏ xác thực tài khoản cộng tác viên"
                 : "Bạn có muốn xác thực tài khoản cộng tác viên"}
-              <h3>{itemEdit?.name}</h3>
+              <h3>{itemEdit?.full_name}</h3>
             </ModalBody>
             <ModalFooter>
               <Button
@@ -480,7 +484,7 @@ export default function CollaboratorManage() {
               {itemEdit?.is_active === true
                 ? "Bạn có muốn khóa tài khoản cộng tác viên"
                 : "Bạn có muốn kích hoạt tài khoản cộng tác viên"}
-              <h3>{itemEdit?.name}</h3>
+              <h3>{itemEdit?.full_name}</h3>
             </ModalBody>
             <ModalFooter>
               <Button
@@ -504,7 +508,8 @@ export default function CollaboratorManage() {
             <ModalBody>
               <a>
                 Bạn có chắc muốn xóa cộng tác viên
-                <a className="text-name-modal">{itemEdit?.name}</a> này không?
+                <a className="text-name-modal">{itemEdit?.full_name}</a> này
+                không?
               </a>
             </ModalBody>
             <ModalFooter>

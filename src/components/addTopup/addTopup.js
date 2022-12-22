@@ -1,3 +1,4 @@
+import { Drawer } from "antd";
 import React, { memo, useCallback, useState } from "react";
 import IntlCurrencyInput from "react-intl-currency-input";
 import { useDispatch } from "react-redux";
@@ -19,6 +20,14 @@ const AddPopup = () => {
   const [errorMoney, setErrorMoney] = useState("");
   const [id, setId] = useState("");
   const dispatch = useDispatch();
+
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = ({ data }) => {
+    setOpen(false);
+  };
 
   const searchCollaborator = useCallback((value) => {
     setName(value);
@@ -70,27 +79,22 @@ const AddPopup = () => {
 
   return (
     <>
-      {/* Button trigger modal */}
       <CustomButton
         title="Nạp tiền"
-        className="btn-modal"
+        className="btn-add"
         type="button"
-        onClick={() => setState(!state)}
+        // onClick={() => setState(!state)}
+        onClick={showDrawer}
       />
-      {/* Modal */}
-      <Modal
-        className="modal-dialog-centered"
-        isOpen={state}
-        toggle={() => setState(!state)}
+      <Drawer
+        title="Nạp tiền cộng tác viên"
+        width={500}
+        onClose={onClose}
+        open={open}
+        bodyStyle={{
+          paddingBottom: 80,
+        }}
       >
-        <div className="modal-header">
-          <h3 className="modal-title" id="exampleModalLabel">
-            Nạp tiền
-          </h3>
-          <button className="btn-close" onClick={() => setState(!state)}>
-            <i className="uil uil-times-square"></i>
-          </button>
-        </div>
         <div className="modal-body">
           <Form>
             <div>
@@ -144,14 +148,14 @@ const AddPopup = () => {
               onChange={(e) => setNote(e.target.value)}
             />
             <CustomButton
-              title="Nạp "
-              className="float-right btn-modal"
+              title="Nạp tiền"
+              className="float-left btn-add"
               type="button"
               onClick={addMoney}
             />
           </Form>
         </div>
-      </Modal>
+      </Drawer>
     </>
   );
 };

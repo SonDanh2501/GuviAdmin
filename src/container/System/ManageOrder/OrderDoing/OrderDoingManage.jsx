@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Card, CardFooter } from "reactstrap";
 import { getOrder } from "../../../../redux/actions/order";
-
+import _debounce from "lodash/debounce";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import { Dropdown, Empty, Pagination, Skeleton, Space, Table } from "antd";
 import moment from "moment";
@@ -13,16 +13,15 @@ import { formatDayVN } from "../../../../helper/formatDayVN";
 import "./OrderDoingManage.scss";
 
 export default function OrderDoingManage() {
-  const [dataFilter, setDataFilter] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [totalFilter, setTotalFilter] = useState();
-  const [valueFilter, setValueFilter] = useState("");
+  const [dataSearch, setDataSearch] = useState([]);
+  const [totalSearch, setTotalSearch] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [search, setSearch] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
+  const [valueSearch, setValueSearch] = useState("");
 
   useEffect(() => {
     getOrderApi(0, 10, "doing").then((res) => {
@@ -166,6 +165,7 @@ export default function OrderDoingManage() {
             menu={{
               items,
             }}
+            placement="bottom"
           >
             <div>
               <UilEllipsisV />
@@ -176,55 +176,39 @@ export default function OrderDoingManage() {
     },
   ];
 
-  // const handleClick = useCallback(
-  //   (e, index) => {
-  //     e.preventDefault();
-  //     setCurrentPage(index);
-  //     const start =
-  //       dataFilter.length > 0 ? index * dataFilter.length : index * data.length;
-
-  //     dataFilter.length > 0 && search
-  //       ? searchOrderApi(start, 10, valueFilter, "doing")
-  //           .then((res) => {
-  //             setDataFilter(res.data);
-  //             setTotalFilter(res.totalItem);
-  //           })
-  //           .catch((err) => console.log(err))
-  //       : dataFilter.length > 0
-  //       ? filterOrderApi(start, 10, valueFilter)
-  //           .then((res) => {
-  //             setDataFilter(res.data);
-  //           })
-  //           .catch((err) => console.log(err))
-  //       : getOrderApi(start > 0 ? start : 0, 10, "doing").then((res) => {
-  //           setData(res.data);
-  //           setTotal(res.totalItem);
-  //         });
-  //   },
-  //   [valueFilter, dataFilter, data]
-  // );
-
-  const handleSearch = useCallback((value) => {
-    setValueFilter(value);
-    setSearch(true);
-    searchOrderApi(0, 10, value)
-      .then((res) => {
-        setDataFilter(res.data);
-        setTotalFilter(res.totalItem);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      setValueSearch(value);
+      searchOrderApi(0, 10, value, "doing")
+        .then((res) => {
+          setDataSearch(res.data);
+          setTotalSearch(res.totalItem);
+        })
+        .catch((err) => console.log(err));
+    }, 1000),
+    []
+  );
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * data.length - data.length;
-    dispatch(
-      getOrder.getOrderRequest({
-        start: start > 0 ? start : 0,
-        length: 10,
-        status: "doing",
-      })
-    );
+    const start =
+      dataSearch.length > 0
+        ? page * dataSearch.length - dataSearch.length
+        : page * data.length - data.length;
+    dataSearch.length > 0
+      ? searchOrderApi(0, 10, valueSearch, "doing")
+          .then((res) => {
+            setDataSearch(res.data);
+            setTotalSearch(res.totalItem);
+          })
+          .catch((err) => console.log(err))
+      : dispatch(
+          getOrder.getOrderRequest({
+            start: start > 0 ? start : 0,
+            length: 10,
+            status: "doing",
+          })
+        );
   };
 
   return (
@@ -242,7 +226,7 @@ export default function OrderDoingManage() {
         <div className="shadow">
           <Table
             columns={columns}
-            dataSource={dataFilter.length > 0 ? dataFilter : data}
+            dataSource={dataSearch.length > 0 ? dataSearch : data}
             pagination={false}
             // locale={{
             //   emptyText:
@@ -258,12 +242,12 @@ export default function OrderDoingManage() {
           />
 
           <div className="mt-2 div-pagination p-2">
-            <a>Tổng: {total}</a>
+            <a>Tổng: {totalSearch > 0 ? totalSearch : total}</a>
             <div>
               <Pagination
                 current={currentPage}
                 onChange={onChange}
-                total={total}
+                total={totalSearch > 0 ? totalSearch : total}
                 showSizeChanger={false}
               />
             </div>

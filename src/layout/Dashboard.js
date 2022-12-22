@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import Header from "../container/Header/Header";
 import Home from "../container/System/Dashboard/DashBoard";
 import ManageConfiguration from "../container/System/ManageConfiguration/ManageConfiguration";
+import GroupCustomerManage from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer";
 import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
 import ManageOrder from "../container/System/ManageOrder";
 import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDoingManage";
@@ -97,6 +98,10 @@ const Dashboard = () => {
             <Route
               path="/adminManage/manage-configuration/manage-reason"
               element={<ReasonManage />}
+            />
+            <Route
+              path="/adminManage/manage-configuration/manage-group-customer"
+              element={<GroupCustomerManage />}
             />
           </Routes>
         </main>

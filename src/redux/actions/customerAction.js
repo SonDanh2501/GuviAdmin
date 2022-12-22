@@ -10,6 +10,12 @@ export const getCustomers = createActions({
   getCustomersFailure: (err) => err,
 });
 
+export const getGroupCustomers = createActions({
+  getGroupCustomersRequest: (payload) => payload,
+  getGroupCustomersSuccess: (payload) => payload,
+  getGroupCustomersFailure: (err) => err,
+});
+
 export const createCustomer = createActions({
   createCustomerRequest: (payload) => payload,
   createCustomerSuccess: (payload) => payload,

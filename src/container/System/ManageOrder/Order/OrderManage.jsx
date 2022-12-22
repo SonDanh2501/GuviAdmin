@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { getOrder } from "../../../../redux/actions/order";
+import { getOrder, searchOrder } from "../../../../redux/actions/order";
 
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import { Dropdown, Empty, Pagination, Skeleton, Space, Table } from "antd";
@@ -8,8 +8,10 @@ import moment from "moment";
 import vi from "moment/locale/vi";
 import { useNavigate } from "react-router-dom";
 import "./OrderManage.scss";
+import { searchOrderApi } from "../../../../api/order";
 
-export default function OrderManage({ data, total, status }) {
+export default function OrderManage(props) {
+  const { data, total, status, dataSearch, value } = props;
   const [dataFilter, setDataFilter] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -114,7 +116,7 @@ export default function OrderManage({ data, total, status }) {
               }
               className="text-collaborator"
             >
-              {data?.id_collaborator?.name}
+              {data?.id_collaborator?.full_name}
             </a>
           )}
         </>
@@ -157,6 +159,7 @@ export default function OrderManage({ data, total, status }) {
             menu={{
               items,
             }}
+            placement="bottom"
           >
             <div>
               <UilEllipsisV />
@@ -170,13 +173,22 @@ export default function OrderManage({ data, total, status }) {
   const onChange = (page) => {
     setCurrentPage(page);
     const start = page * data.length - data.length;
-    dispatch(
-      getOrder.getOrderRequest({
-        start: start > 0 ? start : 0,
-        length: 10,
-        status: status,
-      })
-    );
+    dataSearch.length > 0
+      ? dispatch(
+          searchOrder.searchOrderRequest({
+            start: start,
+            length: 10,
+            status: status,
+            value: value,
+          })
+        )
+      : dispatch(
+          getOrder.getOrderRequest({
+            start: start > 0 ? start : 0,
+            length: 10,
+            status: status,
+          })
+        );
   };
 
   return (
