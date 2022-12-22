@@ -1,5 +1,5 @@
 import { CameraOutlined } from "@material-ui/icons";
-import { Image, Tabs } from "antd";
+import { FloatButton, Image, Tabs } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -140,6 +140,7 @@ const ProfileCollaborator = () => {
           </Col>
         </Row>
       </Container>
+      <FloatButton.BackTop />
     </>
   );
 };

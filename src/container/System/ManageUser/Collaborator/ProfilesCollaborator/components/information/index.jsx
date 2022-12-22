@@ -21,6 +21,7 @@ const Information = ({ data, image }) => {
   const [number, setNumber] = useState("");
   const [issued, setIssued] = useState("");
   const [issuedDay, setIssuedDay] = useState("");
+  const [imgUrl, setImgUrl] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -39,6 +40,7 @@ const Information = ({ data, image }) => {
     setNumber(data?.identity_number);
     setIssued(data?.identity_place);
     setIssuedDay(identityD);
+    setImgUrl(data?.avatar);
   }, [data]);
 
   const onChangeNumberIndentity = (value) => {
@@ -64,7 +66,7 @@ const Information = ({ data, image }) => {
       identity_number: number,
       identity_place: issued,
       identity_date: indentityDay,
-      avatar: image,
+      avatar: image ? image : imgUrl,
     })
       .then((res) => {
         window.location.reload();
@@ -89,6 +91,7 @@ const Information = ({ data, image }) => {
     data,
     birthday,
     image,
+    imgUrl,
   ]);
 
   return (

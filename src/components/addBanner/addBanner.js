@@ -10,6 +10,7 @@ import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import { errorNotify } from "../../helper/toast";
 import "./addBanner.scss";
+import { Drawer } from "antd";
 
 const AddBanner = () => {
   const [state, setState] = useState(false);
@@ -18,10 +19,17 @@ const AddBanner = () => {
   const [typeLink, setTypeLink] = useState("url");
   const [linkID, setLinkId] = useState("");
   const [position, setPosition] = useState("");
-
   const [dataFilter, setDataFilter] = useState([]);
   const dispatch = useDispatch();
   const promotion = useSelector(getPromotionSelector);
+
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = ({ data }) => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     dispatch(getPromotion.getPromotionRequest());
@@ -74,24 +82,21 @@ const AddBanner = () => {
       {/* Button trigger modal */}
       <CustomButton
         title="Thêm banner"
-        className="btn-modal"
+        className="btn-add"
         type="button"
-        onClick={() => setState(!state)}
+        // onClick={() => setState(!state)}
+        onClick={showDrawer}
       />
-      {/* Modal */}
-      <Modal
-        className="modal-dialog-centered"
-        isOpen={state}
-        toggle={() => setState(!state)}
+
+      <Drawer
+        title="Thêm banner"
+        width={500}
+        onClose={onClose}
+        open={open}
+        bodyStyle={{
+          paddingBottom: 80,
+        }}
       >
-        <div className="modal-header">
-          <h3 className="modal-title" id="exampleModalLabel">
-            Thêm banner
-          </h3>
-          <button className="btn-close" onClick={() => setState(!state)}>
-            <i className="uil uil-times-square"></i>
-          </button>
-        </div>
         <div className="modal-body">
           <Form>
             <CustomTextInput
@@ -173,13 +178,13 @@ const AddBanner = () => {
 
             <CustomButton
               title="Thêm"
-              className="float-right btn-modal"
+              className="float-left btn-add"
               type="button"
               onClick={addBanner}
             />
           </Form>
         </div>
-      </Modal>
+      </Drawer>
     </>
   );
 };

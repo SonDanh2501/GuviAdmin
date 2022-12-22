@@ -45,6 +45,7 @@ const Dashboard = () => {
               path="/details-collaborator"
               element={<ProfileCollaborator />}
             />
+            <Route path="/details-customer" element={<Profile />} />
             <Route path="/system/user-manage" element={<ManageCustomer />} />
             <Route
               path="/system/user-manage/details-customer"

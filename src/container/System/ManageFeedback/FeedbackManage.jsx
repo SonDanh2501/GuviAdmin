@@ -24,7 +24,7 @@ const columns = [
   },
   {
     title: "Người phản hồi",
-    dataIndex: "name",
+    dataIndex: "full_name",
   },
   {
     title: "SĐT người phản hồi",
