@@ -18,6 +18,7 @@ import { formatMoney } from "../../../../../helper/formatMoney";
 import user from "../../../../../assets/images/user.png";
 import "./Profile.scss";
 import { fetchCustomerById } from "../../../../../api/customer";
+import { FloatButton } from "antd";
 // core components
 
 const Profile = () => {
@@ -168,6 +169,7 @@ const Profile = () => {
           </Col>
         </Row>
       </Container>
+      <FloatButton.BackTop />
     </div>
   );
 };
