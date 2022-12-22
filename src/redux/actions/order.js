@@ -9,3 +9,9 @@ export const getOrder = createActions({
   getOrderSuccess: (payload) => payload,
   getOrderFailure: (err) => err,
 });
+
+export const searchOrder = createActions({
+  searchOrderRequest: (payload) => payload,
+  searchOrderSuccess: (payload) => payload,
+  searchOrderFailure: (err) => err,
+});

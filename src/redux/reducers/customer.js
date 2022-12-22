@@ -5,6 +5,7 @@ import {
   createCustomer,
   updateCustomer,
   deleteCustomerAction,
+  getGroupCustomers,
 } from "../actions/customerAction";
 
 export default function CustomersReducers(
@@ -39,6 +40,20 @@ export default function CustomersReducers(
         ),
       };
     case getType(deleteCustomerAction.deleteCustomerSuccess):
+      return {
+        ...state,
+      };
+    case getType(getGroupCustomers.getGroupCustomersRequest):
+      return {
+        ...state,
+      };
+    case getType(getGroupCustomers.getGroupCustomersSuccess):
+      return {
+        ...state,
+        groupCustomer: action.payload.data,
+        totalGroupCustomer: action.payload.total,
+      };
+    case getType(getGroupCustomers.getGroupCustomersFailure):
       return {
         ...state,
       };

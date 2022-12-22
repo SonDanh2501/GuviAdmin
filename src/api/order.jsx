@@ -12,8 +12,12 @@ export const filterOrderApi = (start, length, payload) => {
   );
 };
 
-export const searchOrderApi = (start, length, payload, status) => {
+export const searchOrderApi = (start, length, status, value) => {
   return axiosClient.get(
-    `/admin/order_manager/get_list?start=${start}&length=${length}&search=${payload}&&status=${status}`
+    `/admin/statistic/job_lists?start=${start}&length=${length}&status=${status}&search=${value}`
   );
+};
+
+export const getOrderDetailApi = (id) => {
+  return axiosClient.get(`/admin/order_manager/get_detail/${id}`);
 };

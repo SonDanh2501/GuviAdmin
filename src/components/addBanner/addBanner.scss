@@ -12,13 +12,16 @@
   box-shadow: 1px 3px 1px #b6b5ab;
 }
 
-.img-thumbnail {
-  width: 1000px;
+.img-banner {
+  width: 100%;
   height: 100px;
+  margin-bottom: 20px;
+  border-radius: 5px;
 }
 
 .input-group {
   margin-bottom: 10px;
+  border: none;
 }
 
 .select-code-phone {

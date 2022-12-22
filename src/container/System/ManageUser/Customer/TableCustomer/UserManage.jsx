@@ -193,7 +193,7 @@ export default function UserManage() {
               className="img_customer"
               src={data?.avatar ? data?.avatar : user}
             /> */}
-            <a className="text-name"> {data.full_name}</a>
+            <a className="text-name"> {data?.full_name}</a>
           </div>
         );
       },
@@ -225,8 +225,21 @@ export default function UserManage() {
     },
     {
       title: "Đơn Dịch Vụ gần nhất",
-      render: (data) => <a className="text-id-order"></a>,
+      render: (data) => {
+        return (
+          <>
+            {data?.id_order ? (
+              <a className="text-id-order" onClick={() => console.log("ffff")}>
+                {data?.id_order}
+              </a>
+            ) : (
+              <a className="text-address">Không có</a>
+            )}
+          </>
+        );
+      },
       width: "20%",
+      align: "center",
     },
     {
       title: " Tổng",
@@ -365,7 +378,8 @@ export default function UserManage() {
             <ModalBody>
               <a>
                 Bạn có chắc muốn xóa người dùng{" "}
-                <a className="text-name-modal">{itemEdit?.name}</a> này không?
+                <a className="text-name-modal">{itemEdit?.full_name}</a> này
+                không?
               </a>
             </ModalBody>
             <ModalFooter>
@@ -390,7 +404,7 @@ export default function UserManage() {
               {itemEdit?.is_active === true
                 ? "Bạn có muốn khóa tài khoản khách hàng"
                 : "Bạn có muốn kích hoạt tài khoản khách hàng"}
-              <h3>{itemEdit?.name}</h3>
+              <h3>{itemEdit?.full_name}</h3>
             </ModalBody>
             <ModalFooter>
               <Button

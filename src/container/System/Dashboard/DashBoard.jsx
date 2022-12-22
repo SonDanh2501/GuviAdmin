@@ -139,7 +139,7 @@ export default function Home() {
       render: (data) => {
         return (
           <a className="text-collaborator" onClick={() => {}}>
-            {data?.id_customer?.name}
+            {data?.id_customer?.full_name}
           </a>
         );
       },
@@ -259,7 +259,7 @@ export default function Home() {
     <div className="container-dash">
       <Header />
       <div>
-        <div className="mt-4">
+        <div className="mt-4 mb-4">
           <Row>
             <Col lg="9">
               <div className="chart">

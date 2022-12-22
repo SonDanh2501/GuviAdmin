@@ -103,7 +103,7 @@ export default function TopupManage() {
   const columns = [
     {
       title: "Tên cộng tác viên",
-      dataIndex: ["id_collaborator", "full_name"],
+      dataIndex: ["id_collaborator", "name"],
     },
     {
       title: "Số tiền",
@@ -143,25 +143,32 @@ export default function TopupManage() {
     {
       title: "",
       key: "action",
+      align: "center",
       render: (data) => {
         return (
           <>
-            {!data?.is_verify_money && (
-              <button className="btn-confirm" onClick={toggleConfirm}>
-                Duyệt lệnh
-              </button>
-            )}
-            {!data?.is_verify_money && (
-              <button
-                className="btn-edit"
-                onClick={() => {
-                  toggleEdit();
-                  setItemEdit(data);
-                }}
-              >
-                <i className="uil uil-edit-alt"></i>
-              </button>
-            )}
+            {!data?.is_verify_money &&
+              (data?.status === "cancel" ? (
+                <a className="text-cancel">Đã huỷ</a>
+              ) : (
+                <button className="btn-confirm" onClick={toggleConfirm}>
+                  Duyệt lệnh
+                </button>
+              ))}
+            {!data?.is_verify_money &&
+              (data?.status === "cancel" ? (
+                <></>
+              ) : (
+                <button
+                  className="btn-edit"
+                  onClick={() => {
+                    toggleEdit();
+                    setItemEdit(data);
+                  }}
+                >
+                  <i className="uil uil-edit-alt"></i>
+                </button>
+              ))}
 
             <button className="btn-delete" onClick={toggle}>
               <i className="uil uil-trash"></i>

@@ -4,6 +4,7 @@ import * as api from "../../api/customer.jsx";
 import { getType } from "../actions/customerAction";
 import { loadingAction } from "../actions/loading";
 import { errorNotify, successNotify } from "../../helper/toast";
+import { getGroupCustomer, getGroupCustomerApi } from "../../api/promotion";
 
 function* fetchCustomersSaga(action) {
   try {
@@ -20,7 +21,9 @@ function* fetchCustomersSaga(action) {
     );
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
-    console.error(err);
+    errorNotify({
+      message: err,
+    });
     yield put(actions.getCustomers.getCustomersFailure(err));
     yield put(loadingAction.loadingRequest(false));
   }
@@ -81,6 +84,29 @@ function* deleteCustomerSaga(action) {
   }
 }
 
+function* fetchGroupCustomersSaga(action) {
+  try {
+    const resoponse = yield call(
+      getGroupCustomerApi,
+      action.payload.start,
+      action.payload.length
+    );
+    yield put(
+      actions.getGroupCustomers.getGroupCustomersSuccess({
+        data: resoponse.data,
+        total: resoponse.totalItem,
+      })
+    );
+    yield put(loadingAction.loadingRequest(false));
+  } catch (err) {
+    errorNotify({
+      message: err,
+    });
+    yield put(actions.getGroupCustomers.getGroupCustomersFailure(err));
+    yield put(loadingAction.loadingRequest(false));
+  }
+}
+
 function* customerSaga() {
   yield takeLatest(
     getType(actions.getCustomers.getCustomersRequest),
@@ -97,6 +123,10 @@ function* customerSaga() {
   yield takeLatest(
     actions.deleteCustomerAction.deleteCustomerRequest,
     deleteCustomerSaga
+  );
+  yield takeLatest(
+    actions.getGroupCustomers.getGroupCustomersRequest,
+    fetchGroupCustomersSaga
   );
 }
 
