@@ -4,36 +4,32 @@ import {
   FloatButton,
   List,
   Progress,
+  Select,
   Skeleton,
   Table,
+  Input,
 } from "antd";
 
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { Card, CardBody, Col, Input, Row } from "reactstrap";
-
-import {
-  getActiveUserApi,
-  getConnectionServicePercentApi,
-  getDayReportApi,
-  getHistoryActivityApi,
-  getTopServiceApi,
-} from "../../../api/statistic";
+import { Card, CardBody, Col, Row } from "reactstrap";
+import { getDayReportApi } from "../../../api/statistic";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
-import { formatDayVN } from "../../../helper/formatDayVN";
 import {
   getActiveUser,
   getHistoryActivity,
   getLastestService,
   getServiceConnect,
+  getTopCollaborator,
 } from "../../../redux/actions/statistic";
 import {
   getActiveUsers,
   getHistoryActivitys,
   getLastestServices,
   getServiceConnects,
+  getTopCollaborators,
 } from "../../../redux/selectors/statistic";
 import "./DashBoard.scss";
 import Header from "./HeaderBoard/Header";
@@ -46,13 +42,17 @@ import {
   Cell,
   Pie,
   PieChart,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
-import { getServiceAction } from "../../../redux/actions/service";
+import DrawerDetails from "./DrawerDetails";
+import { formatMoney } from "../../../helper/formatMoney";
+import MoreTopCollaborator from "../../../components/moreTopCollaborator";
 moment.locale("vi");
 const { RangePicker } = DatePicker;
+const { Option } = Select;
 
 const data = [
   { name: "Group A", value: 400 },
@@ -66,13 +66,14 @@ export default function Home() {
   const [arrResult, setArrResult] = useState([]);
   const [dataTopService, setDataTopService] = useState([]);
   const [day, setDay] = useState([]);
-  const [type, setType] = useState("");
+  const [type, setType] = useState("day");
   const dataDay = [];
   const [numberData, setNumberData] = useState(5);
   const historyActivity = useSelector(getHistoryActivitys);
   const activeUser = useSelector(getActiveUsers);
   const lastestService = useSelector(getLastestServices);
   const connectionService = useSelector(getServiceConnects);
+  const topCollaborator = useSelector(getTopCollaborators);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
@@ -90,6 +91,14 @@ export default function Home() {
     dispatch(
       getLastestService.getLastestServiceRequest({ start: 0, length: 5 })
     );
+    dispatch(
+      getTopCollaborator.getTopCollaboratorRequest({
+        startDate: moment().startOf("month").toISOString(),
+        endDate: moment().endOf("month").toISOString(),
+        start: 0,
+        length: 10,
+      })
+    );
   }, []);
 
   function getDates(startDate, stopDate) {
@@ -104,7 +113,6 @@ export default function Home() {
   }
 
   const onChange = useCallback((start, end) => {
-    console.log(start, end);
     const dayStart = moment(start).toISOString();
     const dayEnd = moment(end).toISOString();
     getDayReportApi(dayStart, dayEnd)
@@ -130,8 +138,15 @@ export default function Home() {
       title: "Khách hàng",
       render: (data) => {
         return (
-          <a className="text-collaborator" onClick={() => {}}>
-            {data?.id_customer?.name}
+          <a
+            className="text-collaborator"
+            onClick={() =>
+              navigate("/details-customer", {
+                state: { id: data?.id_customer?._id },
+              })
+            }
+          >
+            {data?.id_customer?.full_name}
           </a>
         );
       },
@@ -160,7 +175,7 @@ export default function Home() {
               {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
             </a>
             <a className="text-service">
-              {moment(new Date(data?.date_work)).lang("de").format("dddd")}
+              {moment(new Date(data?.date_work)).lang("VI").format("dddd")}
             </a>
           </div>
         );
@@ -192,7 +207,7 @@ export default function Home() {
                 }
                 className="text-collaborator"
               >
-                {data?.id_collaborator.name}
+                {data?.id_collaborator.full_name}
               </a>
             )}
           </div>
@@ -234,7 +249,7 @@ export default function Home() {
         return (
           <div className="div-action">
             <button className="btn-click">Thao tác</button>
-            <button className="btn-details">Chi tiết</button>
+            <DrawerDetails id={data?._id} />
           </div>
         );
       },
@@ -251,49 +266,60 @@ export default function Home() {
     <div className="container-dash">
       <Header />
       <div>
-        <div className="mt-4">
+        <div className="mt-4 mb-4">
           <Row>
             <Col lg="9">
               <div className="chart">
-                <Input
-                  name="select"
-                  className="type-select"
-                  type="select"
-                  onChange={(e) => setType(e.target.value)}
-                >
-                  <>
-                    <option value="day">Ngày</option>
-                    <option value="week">Tuần</option>
-                  </>
-                </Input>
-                <RangePicker
-                  picker={type}
-                  onChange={(e) => onChange(e[0]?.$d, e[1]?.$d)}
-                  style={{ marginBottom: 10 }}
-                />
-                <div>
-                  <AreaChart
-                    width={1000}
-                    height={400}
-                    data={arrResult}
-                    margin={{
-                      top: 10,
-                      right: 30,
-                      left: 0,
-                      bottom: 0,
-                    }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis />
-                    <YAxis dataKey="total_income" fontSize={12} />
-                    <Tooltip />
-                    <Area
-                      type="monotone"
-                      dataKey="total_income"
-                      stroke="#00CF3A"
-                      fill="#00CF3A"
+                <div className="div-date">
+                  <Input.Group compact>
+                    <Select
+                      defaultValue={type}
+                      onChange={(e) => setType(e)}
+                      className="input-picker"
+                    >
+                      <Option value="day">Ngày</Option>
+                      <Option value="week">Tuần </Option>
+                      <Option value="month">Tháng</Option>
+                      <Option value="quarter">Quý</Option>
+                    </Select>
+                  </Input.Group>
+                  <div>
+                    <RangePicker
+                      picker={type}
+                      className="picker"
+                      onChange={(e) => onChange(e[0]?.$d, e[1]?.$d)}
                     />
-                  </AreaChart>
+                  </div>
+                </div>
+                <div>
+                  <ResponsiveContainer
+                    width={"100%"}
+                    height={350}
+                    min-width={350}
+                  >
+                    <AreaChart
+                      width={window.screen.height / 1.2}
+                      height={400}
+                      data={arrResult}
+                      margin={{
+                        top: 10,
+                        right: 30,
+                        left: 0,
+                        bottom: 0,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis />
+                      <YAxis dataKey="total_income" fontSize={12} />
+                      <Tooltip />
+                      <Area
+                        type="monotone"
+                        dataKey="total_income"
+                        stroke="#00CF3A"
+                        fill="#00CF3A"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
                 </div>
                 <Row>
                   <Col lg="7" className="pl-4">
@@ -370,7 +396,11 @@ export default function Home() {
                 <div className="div-progress">
                   <Progress
                     type="dashboard"
-                    percent={connectionService.donePercent}
+                    percent={
+                      !connectionService?.donePercent
+                        ? 0
+                        : connectionService?.donePercent
+                    }
                     gapDegree={5}
                     strokeColor={"#48CAE4"}
                     strokeWidth={15}
@@ -389,33 +419,105 @@ export default function Home() {
                   <p className="text-success-square">Chưa hoàn thành</p>
                 </div>
               </div>
-              <div className="div-top-collaborator">
-                <p className="text-top">Top CTV</p>
-                <div className="level-ctv1">
-                  <p className="text-level">Nguyễn Công Kiều Tam</p>
-                  <p className="text-level">15.000.000đ</p>
+              {topCollaborator.length > 0 && (
+                <div className="div-top-collaborator">
+                  <p className="text-top">Top CTV</p>
+                  <div
+                    className="level-ctv1"
+                    onClick={() =>
+                      navigate("/details-collaborator", {
+                        state: { id: topCollaborator[0]?._id?.id_collaborator },
+                      })
+                    }
+                  >
+                    <p className="text-level">
+                      {topCollaborator[0]?._id?.name}
+                    </p>
+                    <p className="text-level">
+                      {formatMoney(topCollaborator[0]?.sumIncome)}
+                    </p>
+                  </div>
+                  {topCollaborator.length > 1 && (
+                    <div
+                      className="level-ctv2"
+                      onClick={() =>
+                        navigate("/details-collaborator", {
+                          state: {
+                            id: topCollaborator[1]?._id?.id_collaborator,
+                          },
+                        })
+                      }
+                    >
+                      <p className="text-level">
+                        {topCollaborator[1]?._id?.name}
+                      </p>
+                      <p className="text-level">
+                        {formatMoney(topCollaborator[1]?.sumIncome)}
+                      </p>
+                    </div>
+                  )}
+                  {topCollaborator.length > 2 && (
+                    <div
+                      className="level-ctv3"
+                      onClick={() =>
+                        navigate("/details-collaborator", {
+                          state: {
+                            id: topCollaborator[2]?._id?.id_collaborator,
+                          },
+                        })
+                      }
+                    >
+                      <p className="text-level">
+                        {topCollaborator[2]?._id?.name}
+                      </p>
+                      <p className="text-level">
+                        {formatMoney(topCollaborator[2]?.sumIncome)}
+                      </p>
+                    </div>
+                  )}
+                  {topCollaborator.length > 3 && (
+                    <div
+                      className="level-ctv4"
+                      onClick={() =>
+                        navigate("/details-collaborator", {
+                          state: {
+                            id: topCollaborator[3]?._id?.id_collaborator,
+                          },
+                        })
+                      }
+                    >
+                      <p className="text-level">
+                        {topCollaborator[3]?._id?.name}
+                      </p>
+                      <p className="text-level">
+                        {formatMoney(topCollaborator[3]?.sumIncome)}
+                      </p>
+                    </div>
+                  )}
+                  {topCollaborator.length > 4 && (
+                    <div
+                      className="level-ctv5"
+                      onClick={() =>
+                        navigate("/details-collaborator", {
+                          state: {
+                            id: topCollaborator[4]?._id?.id_collaborator,
+                          },
+                        })
+                      }
+                    >
+                      <p className="text-level">
+                        {topCollaborator[4]?._id?.name}
+                      </p>
+                      <p className="text-level">
+                        {formatMoney(topCollaborator[4]?.sumIncome)}
+                      </p>
+                    </div>
+                  )}
+                  <div className="div-seemore">
+                    <MoreTopCollaborator />
+                  </div>
                 </div>
-                <div className="level-ctv2">
-                  <p className="text-level">Nguyễn Công Kiều Tam</p>
-                  <p className="text-level">15.000.000đ</p>
-                </div>
-                <div className="level-ctv3">
-                  <p className="text-level">Nguyễn Công Kiều Tam</p>
-                  <p className="text-level">15.000.000đ</p>
-                </div>
-                <div className="level-ctv4">
-                  <p className="text-level">Nguyễn Công Kiều Tam</p>
-                  <p className="text-level">15.000.000đ</p>
-                </div>
-                <div className="level-ctv5">
-                  <p className="text-level">Nguyễn Công Kiều Tam</p>
-                  <p className="text-level">15.000.000đ</p>
-                </div>
-                <div className="div-seemore">
-                  <p>Xem chi tiết</p>
-                  <i class="uil uil-angle-right"></i>
-                </div>
-              </div>
+              )}
             </Col>
           </Row>
         </div>
@@ -428,14 +530,14 @@ export default function Home() {
                   columns={columns}
                   dataSource={lastestService}
                   pagination={false}
-                  locale={{
-                    emptyText:
-                      lastestService.length > 0 ? (
-                        <Empty />
-                      ) : (
-                        <Skeleton active={true} />
-                      ),
-                  }}
+                  // locale={{
+                  //   emptyText:
+                  //     lastestService.length > 0 ? (
+                  //       <Empty />
+                  //     ) : (
+                  //       <Skeleton active={true} />
+                  //     ),
+                  // }}
                 />
               </CardBody>
               <div className="div-entries">
@@ -484,7 +586,7 @@ export default function Home() {
                           <a>Khác</a>
                         </div>
                       </div>
-                      <div>
+                      <div className="div-chart-de">
                         <PieChart width={300} height={320}>
                           <Pie
                             data={data}

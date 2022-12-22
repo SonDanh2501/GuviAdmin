@@ -4,8 +4,10 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import Header from "../container/Header/Header";
 import Home from "../container/System/Dashboard/DashBoard";
 import ManageConfiguration from "../container/System/ManageConfiguration/ManageConfiguration";
+import GroupCustomerManage from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer";
 import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
 import ManageOrder from "../container/System/ManageOrder";
+import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDoingManage";
 import GroupServiceManage from "../container/System/ManageService/ManageGroupService/ManageGroupService/GroupServiceManage";
 import ServiceManage from "../container/System/ManageService/ManageService/ServiceManage";
 import ManageSetting from "../container/System/ManageSetting";
@@ -13,8 +15,9 @@ import ReasonManage from "../container/System/ManageSetting/ManageReason/ReasonM
 import ManageTopup from "../container/System/ManageTopup";
 import CollaboratorManage from "../container/System/ManageUser/Collaborator/CollaboratorManage";
 import ProfileCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/ProfileCollaborator";
+import ManageCustomer from "../container/System/ManageUser/Customer";
 import Profile from "../container/System/ManageUser/Customer/Profiles/Profile";
-import UserManage from "../container/System/ManageUser/Customer/UserManage";
+
 import "./Dashboard.scss";
 
 const Dashboard = () => {
@@ -42,7 +45,8 @@ const Dashboard = () => {
               path="/details-collaborator"
               element={<ProfileCollaborator />}
             />
-            <Route path="/system/user-manage" element={<UserManage />} />
+            <Route path="/details-customer" element={<Profile />} />
+            <Route path="/system/user-manage" element={<ManageCustomer />} />
             <Route
               path="/system/user-manage/details-customer"
               element={<Profile />}
@@ -81,6 +85,11 @@ const Dashboard = () => {
               path="/group-order/manage-order/all"
               element={<ManageOrder />}
             />
+            <Route
+              path="/group-order/manage-order/doing"
+              element={<OrderDoingManage />}
+            />
+
             <Route path="/topup/manage-topup" element={<ManageTopup />} />
 
             <Route
@@ -90,6 +99,10 @@ const Dashboard = () => {
             <Route
               path="/adminManage/manage-configuration/manage-reason"
               element={<ReasonManage />}
+            />
+            <Route
+              path="/adminManage/manage-configuration/manage-group-customer"
+              element={<GroupCustomerManage />}
             />
           </Routes>
         </main>

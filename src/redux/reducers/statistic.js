@@ -4,6 +4,7 @@ import {
   getHistoryActivity,
   getLastestService,
   getServiceConnect,
+  getTopCollaborator,
   getType,
 } from "../actions/statistic";
 
@@ -61,6 +62,20 @@ export default function StatisticReducers(
         serviceConnect: action.payload,
       };
     case getType(getServiceConnect.getServiceConnectFailure):
+      return {
+        ...state,
+      };
+    case getType(getTopCollaborator.getTopCollaboratorRequest):
+      return {
+        ...state,
+      };
+    case getType(getTopCollaborator.getTopCollaboratorSuccess):
+      return {
+        ...state,
+        topCollaborator: action.payload.data,
+        totalTopCollaborator: action.payload.total,
+      };
+    case getType(getTopCollaborator.getTopCollaboratorFailure):
       return {
         ...state,
       };

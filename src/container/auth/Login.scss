@@ -10,21 +10,53 @@
     rgb(253, 255, 215) 80%
   );
 
-  .img-logo {
-    width: 100px;
-    height: 100px;
-    border-radius: 50px;
+  .card {
+    width: 25%;
+    min-height: 300px;
+    border-radius: 15px;
+
+    .div-head {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .img-logo {
+        width: 100px;
+        height: 100px;
+        border-radius: 50px;
+      }
+
+      .title-login {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 28px;
+        color: #11263c;
+        margin-top: 5px;
+        text-decoration: none;
+      }
+    }
   }
+
   .btn-login {
-    background: linear-gradient(
-      90deg,
-      rgb(255, 255, 250) 34%,
-      rgb(253, 255, 215) 80%
-    );
+    background-color: #f9aa87;
     border: none;
     color: black;
+    margin-top: 10px;
+    color: white;
   }
   .btn-login:hover {
     background-color: rgb(132, 112, 244);
+  }
+
+  .input-pass {
+    height: 38px;
+    border-radius: 5px;
+    border: 1px solid rgb(190, 189, 189);
+  }
+
+  .error {
+    color: red;
+    font-size: 12px;
   }
 }

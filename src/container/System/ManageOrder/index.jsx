@@ -1,27 +1,50 @@
 import { Space, Tabs, Dropdown } from "antd";
 import { ExportCSV } from "../../../helper/export";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
-
+import _debounce from "lodash/debounce";
 import "./index.scss";
-import OrderManage from "./Oder/OrderManage";
+import OrderManage from "./Order/OrderManage";
 import { UilEllipsisH, UilFileExport } from "@iconscout/react-unicons";
 import {
   getOrderSelector,
   getOrderTotal,
+  searchOrderSelector,
+  searchOrderTotal,
 } from "../../../redux/selectors/order";
-import { getOrder } from "../../../redux/actions/order";
+import { getOrder, searchOrder } from "../../../redux/actions/order";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { searchOrderApi } from "../../../api/order";
 
 const ManageOrder = () => {
+  const [status, setStatus] = useState("all");
+  const [dataSearch, setDataSearch] = useState([]);
+  const [totalSearch, setTotalSearch] = useState(0);
+  const [valueSearch, setValueSearch] = useState("");
+
   const dispatch = useDispatch();
   const listOrder = useSelector(getOrderSelector);
   const orderTotal = useSelector(getOrderTotal);
+  const listOrderSearch = useSelector(searchOrderSelector);
+  const totalOrderSearch = useSelector(searchOrderTotal);
 
   useEffect(() => {
-    // dispatch(loadingAction.loadingRequest(true));
-    dispatch(getOrder.getOrderRequest({ start: 0, length: 10 }));
+    dispatch(getOrder.getOrderRequest({ start: 0, length: 10, status: "all" }));
   }, [dispatch]);
+
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      dispatch(
+        searchOrder.searchOrderRequest({
+          start: 0,
+          length: 10,
+          status: status,
+          value: value,
+        })
+      );
+    }, 1000),
+    [status]
+  );
 
   const items = [
     {
@@ -34,6 +57,75 @@ const ManageOrder = () => {
       key: "0",
     },
   ];
+
+  const onChangeTab = (active) => {
+    if (active === "2") {
+      setStatus("pending");
+      dispatch(
+        searchOrder.searchOrderRequest({
+          start: 0,
+          length: 10,
+          status: "pending",
+          value: "",
+        })
+      );
+      dispatch(
+        getOrder.getOrderRequest({ start: 0, length: 10, status: "pending" })
+      );
+    } else if (active === "3") {
+      setStatus("doing");
+      dispatch(
+        searchOrder.searchOrderRequest({
+          start: 0,
+          length: 10,
+          status: "doing",
+          value: "",
+        })
+      );
+      dispatch(
+        getOrder.getOrderRequest({ start: 0, length: 10, status: "doing" })
+      );
+    } else if (active === "5") {
+      setStatus("cancel");
+      dispatch(
+        searchOrder.searchOrderRequest({
+          start: 0,
+          length: 10,
+          status: "cancel",
+          value: "",
+        })
+      );
+      dispatch(
+        getOrder.getOrderRequest({ start: 0, length: 10, status: "cancel" })
+      );
+    } else if (active === "6") {
+      setStatus("done");
+      dispatch(
+        searchOrder.searchOrderRequest({
+          start: 0,
+          length: 10,
+          status: "done",
+          value: "",
+        })
+      );
+      dispatch(
+        getOrder.getOrderRequest({ start: 0, length: 10, status: "done" })
+      );
+    } else if (active === "1") {
+      setStatus("all");
+      dispatch(
+        searchOrder.searchOrderRequest({
+          start: 0,
+          length: 10,
+          status: "all",
+          value: "",
+        })
+      );
+      dispatch(
+        getOrder.getOrderRequest({ start: 0, length: 10, status: "all" })
+      );
+    }
+  };
   return (
     <>
       <div className="div-header">
@@ -42,7 +134,10 @@ const ManageOrder = () => {
           placeholder="Tìm kiếm"
           type="text"
           className="field-search"
-          //   onChange={(e) => handleSearch(e.target.value)}
+          onChange={(e) => {
+            handleSearch(e.target.value);
+            setValueSearch(e.target.value);
+          }}
         />
         <Dropdown
           menu={{
@@ -60,15 +155,53 @@ const ManageOrder = () => {
       </div>
 
       <div className="div-container">
-        <Tabs defaultActiveKey="1" size="large">
+        <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
           <Tabs.TabPane tab="TẤT CẢ" key="1">
-            <OrderManage data={listOrder} total={orderTotal} />
+            <OrderManage
+              data={listOrderSearch.length > 0 ? listOrderSearch : listOrder}
+              total={totalOrderSearch > 0 ? totalOrderSearch : orderTotal}
+              dataSearch={listOrderSearch}
+              value={valueSearch}
+              status={status}
+            />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="ĐANG CHỜ" key="2"></Tabs.TabPane>
-          <Tabs.TabPane tab="CHƯA HOÀN TẤT" key="3"></Tabs.TabPane>
+          <Tabs.TabPane tab="ĐANG CHỜ" key="2">
+            <OrderManage
+              data={listOrderSearch.length > 0 ? listOrderSearch : listOrder}
+              total={totalOrderSearch > 0 ? totalOrderSearch : orderTotal}
+              value={valueSearch}
+              dataSearch={listOrderSearch}
+              status={status}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="CHƯA HOÀN TẤT" key="3">
+            <OrderManage
+              data={listOrderSearch.length > 0 ? listOrderSearch : listOrder}
+              total={totalOrderSearch > 0 ? totalOrderSearch : orderTotal}
+              dataSearch={listOrderSearch}
+              value={valueSearch}
+              status={status}
+            />
+          </Tabs.TabPane>
           <Tabs.TabPane tab="ĐÃ HẾT HẠN" key="4"></Tabs.TabPane>
-          <Tabs.TabPane tab="VIỆC ĐÃ HUỶ" key="5"></Tabs.TabPane>
-          <Tabs.TabPane tab="HOÀN TẤT" key="6"></Tabs.TabPane>
+          <Tabs.TabPane tab="VIỆC ĐÃ HUỶ" key="5">
+            <OrderManage
+              data={listOrderSearch.length > 0 ? listOrderSearch : listOrder}
+              total={totalOrderSearch > 0 ? totalOrderSearch : orderTotal}
+              dataSearch={listOrderSearch}
+              value={valueSearch}
+              status={status}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="HOÀN TẤT" key="6">
+            <OrderManage
+              data={listOrderSearch.length > 0 ? listOrderSearch : listOrder}
+              total={totalOrderSearch > 0 ? totalOrderSearch : orderTotal}
+              dataSearch={listOrderSearch}
+              value={valueSearch}
+              status={status}
+            />
+          </Tabs.TabPane>
         </Tabs>
       </div>
     </>

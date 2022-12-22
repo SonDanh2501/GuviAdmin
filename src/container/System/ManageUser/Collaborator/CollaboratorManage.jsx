@@ -1,4 +1,4 @@
-import { Space, Dropdown, Table, Empty, Skeleton } from "antd";
+import { Space, Dropdown, Table, Empty, Skeleton, Pagination } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,7 +11,6 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Pagination,
   PaginationItem,
   PaginationLink,
   Row,
@@ -34,13 +33,14 @@ import {
 } from "../../../../redux/selectors/collaborator";
 import "./CollaboratorManage.scss";
 import { LockOutlined, UnlockOutlined } from "@ant-design/icons";
-import { UilAirplay } from "@iconscout/react-unicons";
+import { errorNotify } from "../../../../helper/toast";
+
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 
 export default function CollaboratorManage() {
   const [dataFilter, setDataFilter] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalFilter, setTotalFilter] = useState("");
   const [valueFilter, setValueFilter] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -67,43 +67,25 @@ export default function CollaboratorManage() {
     );
   }, [dispatch]);
 
-  const handleClick = useCallback(
-    (e, index) => {
-      e.preventDefault();
-      setCurrentPage(index);
-      const start =
-        dataFilter.length > 0
-          ? index * dataFilter.length
-          : index * collaborator.length;
-
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const start =
       dataFilter.length > 0
-        ? searchCollaborators(valueFilter, start, 10)
-            .then((res) => {
-              setDataFilter(res.data);
-            })
-            .catch((err) => console.log(err))
-        : dispatch(
-            getCollaborators.getCollaboratorsRequest({
-              start: start > 0 ? start : 0,
-              length: 10,
-            })
-          );
-    },
-    [collaborator, dataFilter, valueFilter]
-  );
-
-  const pageCount =
-    dataFilter.length > 0 ? totalFilter / 10 : collaboratorTotal / 10;
-  let pageNumbers = [];
-  for (let i = 0; i < pageCount; i++) {
-    pageNumbers.push(
-      <PaginationItem key={i} active={currentPage === i ? true : false}>
-        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
-          {i + 1}
-        </PaginationLink>
-      </PaginationItem>
-    );
-  }
+        ? page * dataFilter.length - dataFilter.length
+        : page * collaborator.length - collaborator.length;
+    dataFilter.length > 0
+      ? searchCollaborators(valueFilter, start, 10)
+          .then((res) => {
+            setDataFilter(res.data);
+          })
+          .catch((err) => console.log(err))
+      : dispatch(
+          getCollaborators.getCollaboratorsRequest({
+            start: start > 0 ? start : 0,
+            length: 10,
+          })
+        );
+  };
 
   const handleSearch = useCallback((value) => {
     setValueFilter(value);
@@ -112,14 +94,23 @@ export default function CollaboratorManage() {
         setDataFilter(res.data);
         setTotalFilter(res.totalItem);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+      });
   }, []);
 
   const onDelete = useCallback((id) => {
     dispatch(loadingAction.loadingRequest(true));
     deleteCollaborator(id, { is_delete: true })
       .then((res) => window.location.reload())
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        dispatch(loadingAction.loadingRequest(false));
+        errorNotify({
+          message: err,
+        });
+      });
   }, []);
 
   const blockCollaborator = useCallback((id, is_active) => {
@@ -130,14 +121,24 @@ export default function CollaboratorManage() {
           setModalBlock(!modalBlock);
           window.location.reload();
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          dispatch(loadingAction.loadingRequest(false));
+          errorNotify({
+            message: err,
+          });
+        });
     } else {
       activeCollaborator(id, { is_active: true })
         .then((res) => {
           setModalBlock(!modalBlock);
           window.location.reload();
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          dispatch(loadingAction.loadingRequest(false));
+          errorNotify({
+            message: err,
+          });
+        });
     }
   }, []);
 
@@ -149,10 +150,14 @@ export default function CollaboratorManage() {
           .then((res) => {
             setModalLockTime(!modalLockTime);
             dispatch(loadingAction.loadingRequest(false));
-
             window.location.reload();
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            dispatch(loadingAction.loadingRequest(false));
+            errorNotify({
+              message: err,
+            });
+          });
       } else {
         lockTimeCollaborator(id, {
           is_lock_time: true,
@@ -161,10 +166,14 @@ export default function CollaboratorManage() {
           .then((res) => {
             setModalLockTime(!modalLockTime);
             dispatch(loadingAction.loadingRequest(false));
-
             window.location.reload();
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            dispatch(loadingAction.loadingRequest(false));
+            errorNotify({
+              message: err,
+            });
+          });
       }
     },
     [timeValue, dispatch]
@@ -175,35 +184,43 @@ export default function CollaboratorManage() {
         .then((res) => {
           setModalVerify(!modalVerify);
           dispatch(loadingAction.loadingRequest(false));
-
           window.location.reload();
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          dispatch(loadingAction.loadingRequest(false));
+          errorNotify({
+            message: err,
+          });
+        });
     } else {
       verifyCollaborator(id)
         .then((res) => {
           setModalVerify(!modalVerify);
           dispatch(loadingAction.loadingRequest(false));
-
           window.location.reload();
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          dispatch(loadingAction.loadingRequest(false));
+          errorNotify({
+            message: err,
+          });
+        });
     }
   }, []);
 
   const items = [
-    {
-      key: "1",
-      label: (
-        <a
-          onClick={() => {
-            setModalEdit(!modalEdit);
-          }}
-        >
-          Chỉnh sửa
-        </a>
-      ),
-    },
+    // {
+    //   key: "1",
+    //   label: (
+    //     <a
+    //       onClick={() => {
+    //         setModalEdit(!modalEdit);
+    //       }}
+    //     >
+    //       Chỉnh sửa
+    //     </a>
+    //   ),
+    // },
     {
       key: "2",
       label: <a onClick={toggle}>Xoá</a>,
@@ -223,7 +240,7 @@ export default function CollaboratorManage() {
             }
           >
             <img className="img_customer" src={data?.avatar} />
-            <a>{data.name}</a>
+            <a>{data?.full_name}</a>
           </div>
         );
       },
@@ -231,9 +248,11 @@ export default function CollaboratorManage() {
     {
       title: "SĐT",
       dataIndex: "phone",
+      align: "center",
     },
     {
       title: "Tình trạng",
+      align: "center",
       render: (data) => {
         return (
           <>
@@ -254,6 +273,7 @@ export default function CollaboratorManage() {
     },
     {
       key: "action",
+      align: "center",
       render: (data) => (
         <Space size="middle">
           <div>
@@ -293,6 +313,7 @@ export default function CollaboratorManage() {
             menu={{
               items,
             }}
+            placement="bottom"
           >
             <a>
               <i class="uil uil-ellipsis-v"></i>
@@ -369,34 +390,19 @@ export default function CollaboratorManage() {
                 ),
             }}
           />
-          <CardFooter>
-            <nav aria-label="...">
+          <div className="div-pagination p-2">
+            <a>
+              Tổng: {dataFilter.length > 0 ? totalFilter : collaboratorTotal}
+            </a>
+            <div>
               <Pagination
-                className="pagination justify-content-end mb-0"
-                listClassName="justify-content-end mb-0"
-              >
-                <PaginationItem
-                  className={currentPage === 0 ? "disabled" : "enable"}
-                >
-                  <PaginationLink
-                    onClick={(e) => handleClick(e, currentPage - 1)}
-                    href="#"
-                  >
-                    <i class="uil uil-previous"></i>
-                  </PaginationLink>
-                </PaginationItem>
-                {pageNumbers}
-                <PaginationItem disabled={currentPage >= pageCount - 1}>
-                  <PaginationLink
-                    onClick={(e) => handleClick(e, currentPage + 1)}
-                    href="#"
-                  >
-                    <i class="uil uil-step-forward"></i>
-                  </PaginationLink>
-                </PaginationItem>
-              </Pagination>
-            </nav>
-          </CardFooter>
+                current={currentPage}
+                onChange={onChange}
+                total={dataFilter.length > 0 ? totalFilter : collaboratorTotal}
+                showSizeChanger={false}
+              />
+            </div>
+          </div>
         </Card>
         <div>
           <Modal isOpen={modalLockTime} toggle={toggleLockTime}>
@@ -410,7 +416,7 @@ export default function CollaboratorManage() {
               {itemEdit?.is_lock_time === false
                 ? "Bạn có muốn khóa tài khoản cộng tác viên"
                 : "Bạn có muốn kích hoạt tài khoản cộng tác viên"}
-              <h3>{itemEdit?.name}</h3>
+              <h3>{itemEdit?.full_name}</h3>
               {itemEdit?.is_lock_time === false && (
                 <CustomTextInput
                   label={"*Thời gian khoá (hh:mm)"}
@@ -448,7 +454,7 @@ export default function CollaboratorManage() {
               {itemEdit?.is_verify === true
                 ? "Bạn có muốn bỏ xác thực tài khoản cộng tác viên"
                 : "Bạn có muốn xác thực tài khoản cộng tác viên"}
-              <h3>{itemEdit?.name}</h3>
+              <h3>{itemEdit?.full_name}</h3>
             </ModalBody>
             <ModalFooter>
               <Button
@@ -478,7 +484,7 @@ export default function CollaboratorManage() {
               {itemEdit?.is_active === true
                 ? "Bạn có muốn khóa tài khoản cộng tác viên"
                 : "Bạn có muốn kích hoạt tài khoản cộng tác viên"}
-              <h3>{itemEdit?.name}</h3>
+              <h3>{itemEdit?.full_name}</h3>
             </ModalBody>
             <ModalFooter>
               <Button
@@ -502,7 +508,8 @@ export default function CollaboratorManage() {
             <ModalBody>
               <a>
                 Bạn có chắc muốn xóa cộng tác viên
-                <a className="text-name-modal">{itemEdit?.name}</a> này không?
+                <a className="text-name-modal">{itemEdit?.full_name}</a> này
+                không?
               </a>
             </ModalBody>
             <ModalFooter>

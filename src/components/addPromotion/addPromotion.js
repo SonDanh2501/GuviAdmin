@@ -18,7 +18,7 @@ import {
   Row,
 } from "reactstrap";
 import { postFile } from "../../api/file";
-import { getGroupCustomerPromotion } from "../../api/promotion";
+import { getGroupCustomerApi } from "../../api/promotion";
 import { loadingAction } from "../../redux/actions/loading";
 import { createPromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
@@ -26,6 +26,11 @@ import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import { Select } from "antd";
 import "./addPromotion.scss";
+import { getGroupCustomers } from "../../redux/actions/customerAction";
+import {
+  getGroupCustomerTotalItem,
+  getGroupCustomer,
+} from "../../redux/selectors/customer";
 
 const AddPromotion = () => {
   const [state, setState] = useState(false);
@@ -71,7 +76,7 @@ const AddPromotion = () => {
   const service = useSelector(getService);
 
   useEffect(() => {
-    getGroupCustomerPromotion()
+    getGroupCustomerApi(0, 10)
       .then((res) => setGroupCustomer(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -237,7 +242,7 @@ const AddPromotion = () => {
       {/* Button trigger modal */}
       <CustomButton
         title="Thêm khuyến mãi"
-        className="btn-modal"
+        className="btn-add"
         type="button"
         onClick={() => setState(!state)}
       />
@@ -682,7 +687,7 @@ const AddPromotion = () => {
                     )}
                   </div>
                   <Button
-                    className="btn_create_promotion"
+                    className="btn_add"
                     color="warning"
                     onClick={onCreatePromotion}
                   >

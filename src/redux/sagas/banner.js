@@ -3,6 +3,7 @@ import * as actions from "../actions/banner";
 import * as api from "../../api/banner";
 import { getType } from "../actions/banner";
 import { loadingAction } from "../actions/loading";
+import { errorNotify } from "../../helper/toast";
 
 function* fetchBannersSaga(action) {
   try {
@@ -20,7 +21,9 @@ function* fetchBannersSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     yield put(loadingAction.loadingRequest(false));
-
+    errorNotify({
+      message: err,
+    });
     yield put(actions.getBanners.getBannersFailure(err));
   }
 }
@@ -31,6 +34,10 @@ function* createBannerSaga(action) {
     window.location.reload();
     yield put(actions.createBanner.createBannerSuccess(Banner.data));
   } catch (err) {
+    errorNotify({
+      message: err,
+    });
+    yield put(loadingAction.loadingRequest(false));
     yield put(actions.createBanner.createBannerFailure(err));
   }
 }
@@ -46,6 +53,10 @@ function* updateBannerSaga(action) {
     yield put(actions.updateBanner.updateBannerSuccess(updatedBanner.data));
   } catch (err) {
     yield put(actions.updateBanner.updateBannerFailure(err));
+    yield put(loadingAction.loadingRequest(false));
+    errorNotify({
+      message: err,
+    });
   }
 }
 

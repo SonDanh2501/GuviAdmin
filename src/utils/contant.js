@@ -2,6 +2,8 @@ export const INIT_STATE = {
   customers: {
     data: [],
     totalItem: 0,
+    groupCustomer: [],
+    totalGroupCustomer: 0,
   },
   collaborators: {
     data: [],
@@ -45,6 +47,8 @@ export const INIT_STATE = {
   order: {
     data: [],
     totalItem: 0,
+    dataSearch: [],
+    totalDataSearch: 0,
   },
   topup: {
     data: [],
@@ -57,6 +61,8 @@ export const INIT_STATE = {
     lastestService: [],
     activeUser: [],
     serviceConnect: [],
+    topCollaborator: [],
+    totalTopCollaborator: 0,
   },
 };
 

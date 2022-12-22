@@ -1,16 +1,11 @@
-import { Select } from "antd";
-import { validateYupSchema } from "formik";
+import { Drawer } from "antd";
 import React, { memo, useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Form, FormGroup, Input, Label, List, Modal } from "reactstrap";
-import { searchCollaborators } from "../../api/collaborator";
 import IntlCurrencyInput from "react-intl-currency-input";
-import {
-  TopupMoneyCollaboratorApi,
-  withdrawMoneyCollaboratorApi,
-} from "../../api/topup";
+import { useDispatch } from "react-redux";
+import { Form, Input, Label, List } from "reactstrap";
+import { searchCollaborators } from "../../api/collaborator";
+import { withdrawMoneyCollaboratorApi } from "../../api/topup";
 import { loadingAction } from "../../redux/actions/loading";
-import { createNew } from "../../redux/actions/news";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./withdraw.scss";
@@ -25,6 +20,13 @@ const Withdraw = () => {
   const [errorMoney, setErrorMoney] = useState("");
   const [id, setId] = useState("");
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = ({ data }) => {
+    setOpen(false);
+  };
 
   const searchCollaborator = useCallback((value) => {
     setName(value);
@@ -76,24 +78,21 @@ const Withdraw = () => {
       {/* Button trigger modal */}
       <CustomButton
         title="Rút tiền"
-        className="btn-modal"
+        className="btn-add"
         type="button"
-        onClick={() => setState(!state)}
+        // onClick={() => setState(!state)}
+        onClick={showDrawer}
       />
-      {/* Modal */}
-      <Modal
-        className="modal-dialog-centered"
-        isOpen={state}
-        toggle={() => setState(!state)}
+
+      <Drawer
+        title="Rút tiền cộng tác viên"
+        width={500}
+        onClose={onClose}
+        open={open}
+        bodyStyle={{
+          paddingBottom: 80,
+        }}
       >
-        <div className="modal-header">
-          <h3 className="modal-title" id="exampleModalLabel">
-            Rút tiền
-          </h3>
-          <button className="btn-close" onClick={() => setState(!state)}>
-            <i className="uil uil-times-square"></i>
-          </button>
-        </div>
         <div className="modal-body">
           <Form>
             <div>
@@ -146,14 +145,14 @@ const Withdraw = () => {
               onChange={(e) => setNote(e.target.value)}
             />
             <CustomButton
-              title="Rút"
-              className="float-right btn-modal"
+              title="Rút tiền"
+              className="float-left btn-add"
               type="button"
               onClick={onWithdraw}
             />
           </Form>
         </div>
-      </Modal>
+      </Drawer>
     </>
   );
 };

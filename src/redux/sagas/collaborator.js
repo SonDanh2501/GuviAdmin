@@ -4,6 +4,7 @@ import * as api from "../../api/collaborator.jsx";
 import { getType } from "../actions/collaborator";
 import { Alert } from "reactstrap";
 import { loadingAction } from "../actions/loading";
+import { errorNotify } from "../../helper/toast";
 
 function* fetchCollaboratorsSaga(action) {
   try {
@@ -21,9 +22,11 @@ function* fetchCollaboratorsSaga(action) {
     );
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
-    console.error(err);
+    errorNotify({
+      message: err,
+    });
     yield put(actions.getCollaborators.getCollaboratorsFailure(err));
-    // yield put(loadingAction.loadingRequest(false));
+    yield put(loadingAction.loadingRequest(false));
   }
 }
 
@@ -35,7 +38,11 @@ function* createCollaboratorSaga(action) {
       actions.createCollaborator.createCollaboratorSuccess(Collaborator.data)
     );
   } catch (err) {
+    errorNotify({
+      message: err,
+    });
     yield put(actions.createCollaborator.createCollaboratorFailure(err));
+    yield put(loadingAction.loadingRequest(false));
   }
 }
 
@@ -53,8 +60,11 @@ function* updateCollaboratorSaga(action) {
       )
     );
   } catch (err) {
-    console.error(err);
+    errorNotify({
+      message: err,
+    });
     yield put(actions.updateCollaborator.updateCollaboratorFailure(err));
+    yield put(loadingAction.loadingRequest(false));
   }
 }
 

@@ -1,16 +1,17 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { getOrderApi } from "../../api/order";
+import { getOrderApi, searchOrderApi } from "../../api/order";
 
 import { getType } from "../actions/banner";
 import { loadingAction } from "../actions/loading";
-import { getOrder } from "../actions/order";
+import { getOrder, searchOrder } from "../actions/order";
 
 function* fetchOrderSaga(action) {
   try {
     const response = yield call(
       getOrderApi,
       action.payload.start,
-      action.payload.length
+      action.payload.length,
+      action.payload.status
     );
     yield put(
       getOrder.getOrderSuccess({
@@ -25,34 +26,31 @@ function* fetchOrderSaga(action) {
   }
 }
 
-// function* createBannerSaga(action) {
-//   try {
-//     const Banner = yield call(api.createBanner, action.payload);
-//     window.location.reload();
-//     yield put(actions.createBanner.createBannerSuccess(Banner.data));
-//   } catch (err) {
-//     yield put(actions.createBanner.createBannerFailure(err));
-//   }
-// }
-
-// function* updateBannerSaga(action) {
-//   try {
-//     const updatedBanner = yield call(
-//       api.updateBanner,
-//       action.payload.id,
-//       action.payload.data
-//     );
-//     window.location.reload();
-//     yield put(actions.updateBanner.updateBannerSuccess(updatedBanner.data));
-//   } catch (err) {
-//     yield put(actions.updateBanner.updateBannerFailure(err));
-//   }
-// }
+function* searchOrderSaga(action) {
+  try {
+    const response = yield call(
+      searchOrderApi,
+      action.payload.start,
+      action.payload.length,
+      action.payload.status,
+      action.payload.value
+    );
+    yield put(
+      searchOrder.searchOrderSuccess({
+        data: response.data,
+        total: response.totalItem,
+      })
+    );
+    yield put(loadingAction.loadingRequest(false));
+  } catch (err) {
+    yield put(searchOrder.searchOrderFailure(err));
+    yield put(loadingAction.loadingRequest(false));
+  }
+}
 
 function* OrderSaga() {
   yield takeLatest(getType(getOrder.getOrderRequest), fetchOrderSaga);
-  // yield takeLatest(actions.createBanner.createBannerRequest, createBannerSaga);
-  // yield takeLatest(actions.updateBanner.updateBannerRequest, updateBannerSaga);
+  yield takeLatest(searchOrder.searchOrderRequest, searchOrderSaga);
 }
 
 // generator function ES6

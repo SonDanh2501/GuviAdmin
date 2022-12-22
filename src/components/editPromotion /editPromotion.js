@@ -21,7 +21,8 @@ import {
 } from "reactstrap";
 import { postFile } from "../../api/file";
 import {
-  getGroupCustomerPromotion,
+  getGroupCustomer,
+  getGroupCustomerApi,
   getPromotionDetails,
 } from "../../api/promotion";
 import { loadingAction } from "../../redux/actions/loading";
@@ -74,7 +75,7 @@ const EditPromotion = ({ state, setState, data }) => {
   const service = useSelector(getService);
 
   useEffect(() => {
-    getGroupCustomerPromotion()
+    getGroupCustomerApi(0, 10)
       .then((res) => setGroupCustomer(res.data))
       .catch((err) => console.log(err));
   }, []);

@@ -1,0 +1,21 @@
+.btn-see-more {
+  border: none;
+  background-color: transparent;
+}
+
+.div-item {
+  padding: 20px;
+  border-bottom: 1px solid rgb(221, 221, 221);
+  display: flex;
+  justify-content: space-between;
+}
+
+.div-date {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+
+  .picker {
+    width: 300px;
+  }
+}

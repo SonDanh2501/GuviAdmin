@@ -15,6 +15,14 @@ const ManageConfiguration = () => {
         >
           Nguyên nhân huỷ
         </Button>
+        <Button
+          className="btn ml-5"
+          onClick={() => {
+            navigate("/adminManage/manage-configuration/manage-group-customer");
+          }}
+        >
+          Nhóm khách hàng
+        </Button>
       </div>
     </div>
   );

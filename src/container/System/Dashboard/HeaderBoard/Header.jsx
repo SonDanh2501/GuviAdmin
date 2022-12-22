@@ -17,20 +17,6 @@ const Header = () => {
       .then((res) => setDataTotal(res))
       .catch((err) => console.log(err));
   }, []);
-
-  const onChangeReport = useCallback((day) => {
-    const start = moment().startOf("day").toISOString();
-    const end = moment().endOf("day").toISOString();
-    if (day === "day") {
-      getTotalReportApi(start, end)
-        .then((res) => setDataTotal(res))
-        .catch((err) => console.log(err));
-    } else {
-      getTotalReportApi("", "")
-        .then((res) => setDataTotal(res))
-        .catch((err) => console.log(err));
-    }
-  }, []);
   return (
     <div className="container-header-board">
       {/* <Input

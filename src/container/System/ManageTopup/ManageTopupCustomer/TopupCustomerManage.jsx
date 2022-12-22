@@ -1,44 +1,40 @@
-import { Empty, Skeleton, Table } from "antd";
+import { Empty, Pagination, Skeleton, Table } from "antd";
 import _debounce from "lodash/debounce";
+import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   Card,
-  CardFooter,
   CardHeader,
   Col,
   Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
   Row,
 } from "reactstrap";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
-import { loadingAction } from "../../../../redux/actions/loading";
-import "./TopupCustomerManage.scss";
-import { getTopupCustomer } from "../../../../redux/actions/topup";
-import EditPopup from "../../../../components/editTopup/editTopup";
-import moment from "moment";
 import {
   deleteMoneyCustomerApi,
   searchTopupCustomerApi,
   verifyMoneyCustomerApi,
 } from "../../../../api/topup";
 import AddTopupCustomer from "../../../../components/addTopupCustomer/addTopupCustomer";
+import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
+import EditPopup from "../../../../components/editTopup/editTopup";
 import { formatMoney } from "../../../../helper/formatMoney";
+import { loadingAction } from "../../../../redux/actions/loading";
+import { getTopupCustomer } from "../../../../redux/actions/topup";
 import { getTopupKH, totalTopupKH } from "../../../../redux/selectors/topup";
+import "./TopupCustomerManage.scss";
 
 export default function TopupCustomerManage() {
   const [dataFilter, setDataFilter] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [totalFilter, setTotalFilter] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
   const listCustomer = useSelector(getTopupKH);
   const totalCustomer = useSelector(totalTopupKH);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-
   const [itemEdit, setItemEdit] = React.useState([]);
   const [modal, setModal] = React.useState(false);
   const [modalConfirm, setModalConfirm] = React.useState(false);
@@ -80,15 +76,18 @@ export default function TopupCustomerManage() {
   const handleSearch = useCallback(
     _debounce((value) => {
       searchTopupCustomerApi(value, 0, 10)
-        .then((res) => setDataFilter(res.data))
+        .then((res) => {
+          setDataFilter(res.data);
+          setTotalFilter(res.totalItem);
+        })
         .catch((err) => console.log(err));
     }, 1000),
     []
   );
-  const handleClick = (e, index) => {
-    e.preventDefault();
-    setCurrentPage(index);
-    const start = index * listCustomer.length;
+
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const start = page * listCustomer.length - listCustomer.length;
     dispatch(
       getTopupCustomer.getTopupCustomerRequest({
         start: start > 0 ? start : 0,
@@ -97,22 +96,10 @@ export default function TopupCustomerManage() {
     );
   };
 
-  const pageCount = totalCustomer / 10;
-  let pageNumbers = [];
-  for (let i = 0; i < pageCount; i++) {
-    pageNumbers.push(
-      <PaginationItem key={i} active={currentPage === i ? true : false}>
-        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
-          {i + 1}
-        </PaginationLink>
-      </PaginationItem>
-    );
-  }
-
   const columns = [
     {
-      title: "Tên cộng tác viên",
-      dataIndex: ["id_customer", "name"],
+      title: "Tên khách hàng",
+      dataIndex: ["id_customer", "full_name"],
     },
     {
       title: "Số tiền",
@@ -246,34 +233,17 @@ export default function TopupCustomerManage() {
                 ),
             }}
           />
-          <CardFooter>
-            <nav aria-label="...">
+          <div className="div-pagination p-2">
+            <a>Tổng: {dataFilter.length > 0 ? totalFilter : totalCustomer}</a>
+            <div>
               <Pagination
-                className="pagination justify-content-end mb-0"
-                listClassName="justify-content-end mb-0"
-              >
-                <PaginationItem
-                  className={currentPage === 0 ? "disabled" : "enable"}
-                >
-                  <PaginationLink
-                    onClick={(e) => handleClick(e, currentPage - 1)}
-                    href="#"
-                  >
-                    <i class="uil uil-previous"></i>
-                  </PaginationLink>
-                </PaginationItem>
-                {pageNumbers}
-                <PaginationItem disabled={currentPage >= pageCount - 1}>
-                  <PaginationLink
-                    onClick={(e) => handleClick(e, currentPage + 1)}
-                    href="#"
-                  >
-                    <i class="uil uil-step-forward"></i>
-                  </PaginationLink>
-                </PaginationItem>
-              </Pagination>
-            </nav>
-          </CardFooter>
+                current={currentPage}
+                onChange={onChange}
+                total={dataFilter.length > 0 ? totalFilter : totalCustomer}
+                showSizeChanger={false}
+              />
+            </div>
+          </div>
         </Card>
         <div>
           <Modal isOpen={modalConfirm} toggle={toggleConfirm}>

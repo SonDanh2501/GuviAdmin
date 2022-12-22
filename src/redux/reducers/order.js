@@ -1,5 +1,5 @@
 import { INIT_STATE } from "../../utils/contant";
-import { getOrder, getType } from "../actions/order";
+import { getOrder, getType, searchOrder } from "../actions/order";
 
 export default function OrderReducers(state = INIT_STATE.order, action) {
   switch (action.type) {
@@ -14,6 +14,20 @@ export default function OrderReducers(state = INIT_STATE.order, action) {
         totalItem: action.payload.total,
       };
     case getType(getOrder.getOrderFailure):
+      return {
+        ...state,
+      };
+    case getType(searchOrder.searchOrderRequest):
+      return {
+        ...state,
+      };
+    case getType(searchOrder.searchOrderSuccess):
+      return {
+        ...state,
+        dataSearch: action.payload.data,
+        totalDataSearch: action.payload.total,
+      };
+    case getType(searchOrder.searchOrderFailure):
       return {
         ...state,
       };
