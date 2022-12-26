@@ -1,18 +1,16 @@
-import { Space, Dropdown, Table, Empty, Skeleton, Pagination } from "antd";
+import { LockOutlined } from "@ant-design/icons";
+import { Dropdown, Empty, Pagination, Skeleton, Space, Table } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   Card,
-  CardFooter,
   CardHeader,
   Col,
   Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
-  PaginationItem,
-  PaginationLink,
   Row,
 } from "reactstrap";
 import {
@@ -25,6 +23,7 @@ import {
 import AddCollaborator from "../../../../components/addCollaborator/addCollaborator.js";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
 import EditCollaborator from "../../../../components/editCollaborator/editCollaborator.js";
+import { errorNotify } from "../../../../helper/toast";
 import { getCollaborators } from "../../../../redux/actions/collaborator";
 import { loadingAction } from "../../../../redux/actions/loading.js";
 import {
@@ -32,8 +31,12 @@ import {
   getCollaboratorTotal,
 } from "../../../../redux/selectors/collaborator";
 import "./CollaboratorManage.scss";
-import { LockOutlined, UnlockOutlined } from "@ant-design/icons";
-import { errorNotify } from "../../../../helper/toast";
+import unlock from "../../../../assets/images/unlocked.png";
+import lock from "../../../../assets/images/lock.png";
+import onToggle from "../../../../assets/images/on-button.png";
+import offToggle from "../../../../assets/images/off-button.png";
+import watch from "../../../../assets/images/watch.png";
+import stopWatch from "../../../../assets/images/stop-watch.png";
 
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
@@ -179,6 +182,7 @@ export default function CollaboratorManage() {
     [timeValue, dispatch]
   );
   const onVerifyCollaborator = useCallback((id, is_verify) => {
+    dispatch(loadingAction.loadingRequest(true));
     if (is_verify === true) {
       verifyCollaborator(id)
         .then((res) => {
@@ -278,35 +282,35 @@ export default function CollaboratorManage() {
         <Space size="middle">
           <div>
             {data?.is_active ? (
-              <UnlockOutlined className="icon-unlock" onClick={toggleBlock} />
+              <img className="img-unlock" src={unlock} onClick={toggleBlock} />
             ) : (
-              <LockOutlined className="icon-lock" onClick={toggleBlock} />
+              <img className="img-unlock" src={lock} onClick={toggleBlock} />
             )}
           </div>
           <div>
             {!data?.is_lock_time ? (
-              <button className="btn-delete" onClick={toggleLockTime}>
-                <i className="uil uil-stopwatch icon-time-on"></i>
-              </button>
+              <img src={watch} className="img-watch" onClick={toggleLockTime} />
             ) : (
-              <button className="btn-delete" onClick={toggleLockTime}>
-                <i className="uil uil-stopwatch-slash icon-time-off"></i>
-              </button>
+              <img
+                src={stopWatch}
+                className="img-watch"
+                onClick={toggleLockTime}
+              />
             )}
           </div>
           <div>
             {data?.is_verify ? (
-              <button
-                className="btn-delete"
-                disabled={true}
+              <img
+                src={onToggle}
+                className="img-toggle"
                 onClick={toggleVerify}
-              >
-                <i className="uil-toggle-on icon-on-toggle"></i>
-              </button>
+              />
             ) : (
-              <button className="btn-delete" onClick={toggleVerify}>
-                <i className="uil-toggle-off icon-off-toggle"></i>
-              </button>
+              <img
+                src={offToggle}
+                className="img-toggle"
+                onClick={toggleVerify}
+              />
             )}
           </div>
           <Dropdown

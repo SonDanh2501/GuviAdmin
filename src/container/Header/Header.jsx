@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { loadingAction } from "../../redux/actions/loading";
 import Logo from "../../assets/images/LogoS.png";
 import { BellOutlined, CaretDownOutlined } from "@ant-design/icons";
-import { Space, Dropdown, List, Avatar } from "antd";
+import { Space, Dropdown, List } from "antd";
 import { useState } from "react";
 
 const Header = () => {
@@ -31,6 +31,13 @@ const Header = () => {
     dispatch(logoutAction.logoutRequest(navigate));
   };
 
+  const items = [
+    {
+      label: <a onClick={onLogout}>Logout</a>,
+      key: "0",
+    },
+  ];
+
   return (
     <div className="container-header">
       <div className="menu">
@@ -44,26 +51,19 @@ const Header = () => {
       </div>
 
       <div className="nav">
-        <UncontrolledDropdown nav>
-          <DropdownToggle className="pr-0" nav>
-            <Media className="align-items-center">
-              {/* <span className="avatar avatar-sm rounded-circle">
-                <img alt="..." src={imageUser} className="img-user" />
-              </span> */}
-              <Media className="ml-2 d-none d-lg-block">
-                <h5 className="text-name">{user?.name}</h5>
-              </Media>
+        <Dropdown
+          menu={{
+            items,
+          }}
+          trigger={["click"]}
+        >
+          <a onClick={(e) => e.preventDefault()}>
+            <Space>
+              <a className="text-name">{user?.name}</a>
               <CaretDownOutlined className="icon-down" />
-            </Media>
-          </DropdownToggle>
-          <DropdownMenu className="dropdown-menu-arrow" right>
-            <DropdownItem divider />
-            <DropdownItem href="#pablo" onClick={onLogout}>
-              <i className="ni ni-user-run" />
-              <span>Logout</span>
-            </DropdownItem>
-          </DropdownMenu>
-        </UncontrolledDropdown>
+            </Space>
+          </a>
+        </Dropdown>
         <div className="div-noti" onClick={() => setStatus(!status)}>
           {data.length > 0 && <div className="dot-noti" />}
           <BellOutlined className="icon" />
