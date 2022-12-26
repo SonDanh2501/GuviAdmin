@@ -20,7 +20,8 @@ import { Dropdown, Empty, Skeleton, Space, Table, Pagination } from "antd";
 import _debounce from "lodash/debounce";
 import { useNavigate } from "react-router-dom";
 import { activeCustomer, searchCustomers } from "../../../../../api/customer";
-import user from "../../../../../assets/images/user.png";
+import unlock from "../../../../../assets/images/unlocked.png";
+import lock from "../../../../../assets/images/lock.png";
 import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
 import EditCustomer from "../../../../../components/editCustomer/editCustomer";
 import { formatMoney } from "../../../../../helper/formatMoney";
@@ -257,9 +258,9 @@ export default function UserManage() {
         <Space size="middle">
           <div>
             {data?.is_active ? (
-              <UnlockOutlined className="icon-unlock" onClick={toggleBlock} />
+              <img className="img-unlock" src={unlock} onClick={toggleBlock} />
             ) : (
-              <LockOutlined className="icon-lock" onClick={toggleBlock} />
+              <img className="img-unlock" src={lock} onClick={toggleBlock} />
             )}
           </div>
           <Dropdown
