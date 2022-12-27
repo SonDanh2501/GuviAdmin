@@ -34,6 +34,7 @@ import { formatMoney } from "../../../../helper/formatMoney";
 export default function TopupManage() {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState();
+  const [valueSearch, setValueSearch] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const listCollaborators = useSelector(getTopupCTV);
   const totalCollaborators = useSelector(totalTopupCTV);
@@ -79,6 +80,7 @@ export default function TopupManage() {
 
   const handleSearch = useCallback(
     _debounce((value) => {
+      setValueSearch(value);
       searchTopupCollaboratorApi(value, 0, 10)
         .then((res) => {
           setDataFilter(res.data);
@@ -91,13 +93,23 @@ export default function TopupManage() {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * listCollaborators.length - listCollaborators.length;
-    dispatch(
-      getTopupCollaborator.getTopupCollaboratorRequest({
-        start: start > 0 ? start : 0,
-        length: 10,
-      })
-    );
+    const start =
+      dataFilter.length > 0
+        ? page * dataFilter.length - dataFilter.length
+        : page * listCollaborators.length - listCollaborators.length;
+    dataFilter.length > 0
+      ? searchTopupCollaboratorApi(valueSearch, 0, 10)
+          .then((res) => {
+            setDataFilter(res.data);
+            setTotalFilter(res.totalItem);
+          })
+          .catch((err) => console.log(err))
+      : dispatch(
+          getTopupCollaborator.getTopupCollaboratorRequest({
+            start: start > 0 ? start : 0,
+            length: 10,
+          })
+        );
   };
 
   const columns = [
@@ -222,7 +234,7 @@ export default function TopupManage() {
           </Table> */}
           <Table
             columns={columns}
-            dataSource={listCollaborators}
+            dataSource={dataFilter.length > 0 ? dataFilter : listCollaborators}
             pagination={false}
             rowKey={(record) => record._id}
             rowSelection={{

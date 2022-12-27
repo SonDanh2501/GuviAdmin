@@ -65,7 +65,7 @@ const AddNews = () => {
       {/* Button trigger modal */}
       <CustomButton
         title="Thêm bài viết"
-        className="btn-modal"
+        className="btn-add"
         type="button"
         onClick={() => setState(!state)}
       />
@@ -144,7 +144,7 @@ const AddNews = () => {
 
             <CustomButton
               title="Thêm"
-              className="float-right btn-modal"
+              className="float-right btn-add"
               type="button"
               onClick={addNews}
             />

@@ -8,10 +8,8 @@ export const fetchCollaborators = (start, length) => {
   );
 };
 
-export const getCollaboratorsById = (id, start, length) => {
-  return axiosClient.get(
-    `/admin/collaborator_manager/get_detail/${id}?start=${start}&length=${length}`
-  );
+export const getCollaboratorsById = (id) => {
+  return axiosClient.get(`/admin/collaborator_manager/get_detail/${id}`);
 };
 
 export const searchCollaborators = (payload, start, length) => {

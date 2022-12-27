@@ -31,6 +31,7 @@ import "./TopupCustomerManage.scss";
 export default function TopupCustomerManage() {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState();
+  const [valueSearch, setValueSearch] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const listCustomer = useSelector(getTopupKH);
   const totalCustomer = useSelector(totalTopupKH);
@@ -75,6 +76,7 @@ export default function TopupCustomerManage() {
 
   const handleSearch = useCallback(
     _debounce((value) => {
+      setValueSearch(value);
       searchTopupCustomerApi(value, 0, 10)
         .then((res) => {
           setDataFilter(res.data);
@@ -87,13 +89,24 @@ export default function TopupCustomerManage() {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * listCustomer.length - listCustomer.length;
-    dispatch(
-      getTopupCustomer.getTopupCustomerRequest({
-        start: start > 0 ? start : 0,
-        length: 10,
-      })
-    );
+    const start =
+      dataFilter.length > 0
+        ? page * dataFilter.length - dataFilter.length
+        : page * listCustomer.length - listCustomer.length;
+
+    dataFilter.length > 0
+      ? searchTopupCustomerApi(valueSearch, 0, 10)
+          .then((res) => {
+            setDataFilter(res.data);
+            setTotalFilter(res.totalItem);
+          })
+          .catch((err) => console.log(err))
+      : dispatch(
+          getTopupCustomer.getTopupCustomerRequest({
+            start: start > 0 ? start : 0,
+            length: 10,
+          })
+        );
   };
 
   const columns = [
@@ -208,7 +221,7 @@ export default function TopupCustomerManage() {
           </Table> */}
           <Table
             columns={columns}
-            dataSource={listCustomer}
+            dataSource={dataFilter.length > 0 ? dataFilter : listCustomer}
             pagination={false}
             rowKey={(record) => record._id}
             rowSelection={{

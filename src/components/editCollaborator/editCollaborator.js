@@ -31,7 +31,7 @@ const EditCollaborator = ({ state, setState, data }) => {
           code_phone_area: formikRef?.current?.values?.code_phone_area,
           phone: formikRef?.current?.values?.phone,
           email: formikRef?.current?.values?.email,
-          name: formikRef?.current?.values?.name,
+          full_name: formikRef?.current?.values?.name,
           password: formikRef?.current?.values?.password,
           identify: formikRef?.current?.values?.identify,
         },
