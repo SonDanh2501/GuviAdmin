@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Header from "../container/Header/Header";
 import Home from "../container/System/Dashboard/DashBoard";
+import DetailsOrder from "../container/System/DetailsOrder";
 import ManageConfiguration from "../container/System/ManageConfiguration/ManageConfiguration";
 import GroupCustomerManage from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer";
 import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
@@ -41,6 +42,8 @@ const Dashboard = () => {
         <main className="main">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/details-order" element={<DetailsOrder />} />
+
             <Route
               path="/details-collaborator"
               element={<ProfileCollaborator />}

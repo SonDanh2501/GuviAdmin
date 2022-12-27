@@ -15,6 +15,7 @@ import { getOrder, searchOrder } from "../../../redux/actions/order";
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useEffect, useState } from "react";
 import { searchOrderApi } from "../../../api/order";
+import AddOrder from "./DrawerAddOrder";
 
 const ManageOrder = () => {
   const [status, setStatus] = useState("all");
@@ -152,6 +153,7 @@ const ManageOrder = () => {
             </Space>
           </a>
         </Dropdown>
+        <AddOrder />
       </div>
 
       <div className="div-container">

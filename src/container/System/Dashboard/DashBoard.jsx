@@ -249,7 +249,16 @@ export default function Home() {
         return (
           <div className="div-action">
             <button className="btn-click">Thao tác</button>
-            <DrawerDetails id={data?._id} />
+            <button
+              className="btn-details"
+              onClick={() =>
+                navigate("/details-order", {
+                  state: { id: data?._id },
+                })
+              }
+            >
+              Chi tiết
+            </button>
           </div>
         );
       },
@@ -422,97 +431,101 @@ export default function Home() {
               {topCollaborator.length > 0 && (
                 <div className="div-top-collaborator">
                   <p className="text-top">Top CTV</p>
-                  <div
-                    className="level-ctv1"
-                    onClick={() =>
-                      navigate("/details-collaborator", {
-                        state: { id: topCollaborator[0]?._id?.id_collaborator },
-                      })
-                    }
-                  >
-                    <p className="text-level">
-                      {topCollaborator[0]?._id?.name}
-                    </p>
-                    <p className="text-level">
-                      {formatMoney(topCollaborator[0]?.sumIncome)}
-                    </p>
+                  <div className="level">
+                    <div
+                      className="level-ctv1"
+                      onClick={() =>
+                        navigate("/details-collaborator", {
+                          state: {
+                            id: topCollaborator[0]?._id?.id_collaborator,
+                          },
+                        })
+                      }
+                    >
+                      <p className="text-level">
+                        {topCollaborator[0]?._id?.name}
+                      </p>
+                      <p className="text-level">
+                        {formatMoney(topCollaborator[0]?.sumIncome)}
+                      </p>
+                    </div>
+                    {topCollaborator.length > 1 && (
+                      <div
+                        className="level-ctv2"
+                        onClick={() =>
+                          navigate("/details-collaborator", {
+                            state: {
+                              id: topCollaborator[1]?._id?.id_collaborator,
+                            },
+                          })
+                        }
+                      >
+                        <p className="text-level">
+                          {topCollaborator[1]?._id?.name}
+                        </p>
+                        <p className="text-level">
+                          {formatMoney(topCollaborator[1]?.sumIncome)}
+                        </p>
+                      </div>
+                    )}
+                    {topCollaborator.length > 2 && (
+                      <div
+                        className="level-ctv3"
+                        onClick={() =>
+                          navigate("/details-collaborator", {
+                            state: {
+                              id: topCollaborator[2]?._id?.id_collaborator,
+                            },
+                          })
+                        }
+                      >
+                        <p className="text-level">
+                          {topCollaborator[2]?._id?.name}
+                        </p>
+                        <p className="text-level">
+                          {formatMoney(topCollaborator[2]?.sumIncome)}
+                        </p>
+                      </div>
+                    )}
+                    {topCollaborator.length > 3 && (
+                      <div
+                        className="level-ctv4"
+                        onClick={() =>
+                          navigate("/details-collaborator", {
+                            state: {
+                              id: topCollaborator[3]?._id?.id_collaborator,
+                            },
+                          })
+                        }
+                      >
+                        <p className="text-level">
+                          {topCollaborator[3]?._id?.name}
+                        </p>
+                        <p className="text-level">
+                          {formatMoney(topCollaborator[3]?.sumIncome)}
+                        </p>
+                      </div>
+                    )}
+                    {topCollaborator.length > 4 && (
+                      <div
+                        className="level-ctv5"
+                        onClick={() =>
+                          navigate("/details-collaborator", {
+                            state: {
+                              id: topCollaborator[4]?._id?.id_collaborator,
+                            },
+                          })
+                        }
+                      >
+                        <p className="text-level">
+                          {topCollaborator[4]?._id?.name}
+                        </p>
+                        <p className="text-level">
+                          {formatMoney(topCollaborator[4]?.sumIncome)}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                  {topCollaborator.length > 1 && (
-                    <div
-                      className="level-ctv2"
-                      onClick={() =>
-                        navigate("/details-collaborator", {
-                          state: {
-                            id: topCollaborator[1]?._id?.id_collaborator,
-                          },
-                        })
-                      }
-                    >
-                      <p className="text-level">
-                        {topCollaborator[1]?._id?.name}
-                      </p>
-                      <p className="text-level">
-                        {formatMoney(topCollaborator[1]?.sumIncome)}
-                      </p>
-                    </div>
-                  )}
-                  {topCollaborator.length > 2 && (
-                    <div
-                      className="level-ctv3"
-                      onClick={() =>
-                        navigate("/details-collaborator", {
-                          state: {
-                            id: topCollaborator[2]?._id?.id_collaborator,
-                          },
-                        })
-                      }
-                    >
-                      <p className="text-level">
-                        {topCollaborator[2]?._id?.name}
-                      </p>
-                      <p className="text-level">
-                        {formatMoney(topCollaborator[2]?.sumIncome)}
-                      </p>
-                    </div>
-                  )}
-                  {topCollaborator.length > 3 && (
-                    <div
-                      className="level-ctv4"
-                      onClick={() =>
-                        navigate("/details-collaborator", {
-                          state: {
-                            id: topCollaborator[3]?._id?.id_collaborator,
-                          },
-                        })
-                      }
-                    >
-                      <p className="text-level">
-                        {topCollaborator[3]?._id?.name}
-                      </p>
-                      <p className="text-level">
-                        {formatMoney(topCollaborator[3]?.sumIncome)}
-                      </p>
-                    </div>
-                  )}
-                  {topCollaborator.length > 4 && (
-                    <div
-                      className="level-ctv5"
-                      onClick={() =>
-                        navigate("/details-collaborator", {
-                          state: {
-                            id: topCollaborator[4]?._id?.id_collaborator,
-                          },
-                        })
-                      }
-                    >
-                      <p className="text-level">
-                        {topCollaborator[4]?._id?.name}
-                      </p>
-                      <p className="text-level">
-                        {formatMoney(topCollaborator[4]?.sumIncome)}
-                      </p>
-                    </div>
-                  )}
                   <div className="div-seemore">
                     <MoreTopCollaborator />
                   </div>
