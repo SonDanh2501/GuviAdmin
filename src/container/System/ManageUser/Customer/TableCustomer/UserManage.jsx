@@ -268,6 +268,7 @@ export default function UserManage() {
               items,
             }}
             placement="bottom"
+            trigger={["click"]}
           >
             <a>
               <MoreOutlined className="icon-more" />

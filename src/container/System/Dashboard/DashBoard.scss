@@ -317,6 +317,8 @@
       border-radius: 5px;
       color: white;
       margin-top: 2px;
+      width: 75px;
+      height: 21px;
     }
   }
 
@@ -468,10 +470,9 @@
         font-size: 11px;
         font-family: "Roboto", sans-serif;
         text-decoration: none;
-        width: 200px;
+        width: 290px;
         overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+        white-space: pre-wrap;
       }
 
       .text-brand-activity {

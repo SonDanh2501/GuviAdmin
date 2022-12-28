@@ -96,7 +96,7 @@ const DetailsOrder = () => {
               </a>
             </a>
             <a className="title">
-              Địa điểm:{" "}
+              Tổng tiền:{" "}
               <a className="text-service">{formatMoney(data?.final_fee)}</a>
             </a>
             <a className="title">

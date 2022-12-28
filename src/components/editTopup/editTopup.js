@@ -32,9 +32,13 @@ const EditTopup = ({ state, setState, item }) => {
 
   const searchCollaborator = useCallback((value) => {
     setName(value);
-    searchCollaborators(value)
-      .then((res) => setData(res.data))
-      .catch((err) => console.log(err));
+    if (value) {
+      searchCollaborators(value)
+        .then((res) => setData(res.data))
+        .catch((err) => console.log(err));
+    } else {
+      setData([]);
+    }
     setId("");
   }, []);
 

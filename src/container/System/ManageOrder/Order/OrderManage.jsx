@@ -9,11 +9,13 @@ import vi from "moment/locale/vi";
 import { useNavigate } from "react-router-dom";
 import "./OrderManage.scss";
 import { searchOrderApi } from "../../../../api/order";
+import EditOrder from "../DrawerEditOrder";
 
 export default function OrderManage(props) {
   const { data, total, status, dataSearch, value } = props;
   const [dataFilter, setDataFilter] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [item, setItem] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,18 +32,13 @@ export default function OrderManage(props) {
   const items = [
     {
       key: "1",
-      label: <a>Chỉnh sửa</a>,
-    },
-    {
-      key: "2",
-      label: <a>Xem chi tiết</a>,
+      label: <EditOrder idOrder={item?._id} />,
     },
   ];
 
   const columns = [
     {
       title: "Mã",
-      // dataIndex: "_id",
       render: (data) => {
         return (
           <a
@@ -174,6 +171,7 @@ export default function OrderManage(props) {
               items,
             }}
             placement="bottom"
+            trigger={["click"]}
           >
             <div>
               <UilEllipsisV />
@@ -221,6 +219,13 @@ export default function OrderManage(props) {
             onChange: (selectedRowKeys, selectedRows) => {
               setSelectedRowKeys(selectedRowKeys);
             },
+          }}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setItem(record);
+              },
+            };
           }}
         />
 

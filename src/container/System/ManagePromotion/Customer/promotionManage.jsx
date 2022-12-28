@@ -146,6 +146,8 @@ export default function PromotionManage() {
             menu={{
               items,
             }}
+            trigger={["click"]}
+            placement="bottom"
           >
             <a>
               <i class="uil uil-ellipsis-v"></i>
