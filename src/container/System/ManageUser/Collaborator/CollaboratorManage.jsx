@@ -318,6 +318,7 @@ export default function CollaboratorManage() {
               items,
             }}
             placement="bottom"
+            trigger={["click"]}
           >
             <a>
               <i class="uil uil-ellipsis-v"></i>

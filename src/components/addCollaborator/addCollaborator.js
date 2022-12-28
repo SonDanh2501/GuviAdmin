@@ -97,8 +97,8 @@ const AddCollaborator = () => {
                   body={
                     <>
                       <option value="">Chọn mã vùng</option>
-                      <option value="Nam">+84</option>
-                      <option value="Nữ">+1</option>
+                      <option value="+84">+84</option>
+                      <option value="+1">+1</option>
                     </>
                   }
                   errors={errors?.code_phone_area}

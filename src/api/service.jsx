@@ -49,3 +49,7 @@ export const deleteServiceApi = (id) => {
 export const getOptionalServiceByIdApi = (id) => {
   return axiosClient.get(`/admin/optional_service_manager/get_detail/${id}`);
 };
+
+export const getExtendOptionalServiceApi = (id) => {
+  return axiosClient.get(`/admin/extend_optional_manager/get_list?lang=vi`);
+};

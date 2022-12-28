@@ -108,7 +108,9 @@ const ProfileCollaborator = () => {
                   <a className="text-name">
                     {data?.full_name}{" "}
                     <span className="font-weight-light">
-                      ,{moment().diff(data?.birthday, "years")} tuổi
+                      {!data?.birthday
+                        ? ""
+                        : moment().diff(data?.birthday, "years") + "tuổi "}
                     </span>
                   </a>
                 </div>

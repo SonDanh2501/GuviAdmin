@@ -25,7 +25,9 @@ const Information = ({ data, image }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const birthdayD = data?.birthday.slice(0, data?.birthday.indexOf("T"));
+    const birthdayD = !data?.birthday
+      ? ""
+      : data?.birthday.slice(0, data?.birthday.indexOf("T"));
     const identityD = !data?.identity_date
       ? ""
       : data?.identity_date.slice(0, data?.identity_date.indexOf("T"));

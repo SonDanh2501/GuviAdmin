@@ -47,7 +47,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import DrawerDetails from "./DrawerDetails";
 import { formatMoney } from "../../../helper/formatMoney";
 import MoreTopCollaborator from "../../../components/moreTopCollaborator";
 moment.locale("vi");
@@ -673,6 +672,11 @@ export default function Home() {
                           <a className="text-date-activity">
                             {item?.admin_action}
                             <a className="text-time-activity">
+                              {item?.id_collaborator
+                                ? item?.id_collaborator?.name
+                                : item?.id_customer
+                                ? item?.id_customer?.name
+                                : item?.id_admin_action}{" "}
                               -{" "}
                               {moment(new Date(item?.date_create)).format(
                                 "HH:MM"
@@ -682,7 +686,6 @@ export default function Home() {
                           <a className="text-content-activity">
                             {item?.title_admin}
                           </a>
-                          <a className="text-brand-activity">Nguyễn Mai Thuý</a>
                         </div>
                       </div>
                     );

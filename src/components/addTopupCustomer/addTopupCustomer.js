@@ -32,9 +32,13 @@ const AddTopupCustomer = () => {
 
   const searchCollaborator = useCallback((value) => {
     setName(value);
-    searchCustomers(value)
-      .then((res) => setData(res.data))
-      .catch((err) => console.log(err));
+    if (value) {
+      searchCustomers(value)
+        .then((res) => setData(res.data))
+        .catch((err) => console.log(err));
+    } else {
+      setData([]);
+    }
     setId("");
   }, []);
 
