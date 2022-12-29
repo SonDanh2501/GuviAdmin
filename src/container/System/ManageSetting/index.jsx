@@ -6,7 +6,7 @@ import NewsManage from "./ManageNews/NewsManage";
 
 const ManageSetting = () => {
   return (
-    <div className="div-container">
+    <div className="div-container-promotion">
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="Quản lý khuyến mãi" key="1">
           <PromotionManage />

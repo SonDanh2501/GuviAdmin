@@ -25,6 +25,7 @@ import {
   Table,
   Pagination,
   Input,
+  FloatButton,
 } from "antd";
 import _debounce from "lodash/debounce";
 import { useNavigate } from "react-router-dom";
@@ -67,7 +68,7 @@ export default function UserManage() {
 
   useEffect(() => {
     // dispatch(loadingAction.loadingRequest(true));
-    dispatch(getCustomers.getCustomersRequest({ start: 0, length: 10 }));
+    dispatch(getCustomers.getCustomersRequest({ start: 0, length: 20 }));
   }, [dispatch]);
 
   const onDelete = useCallback((id) => {
@@ -110,30 +111,6 @@ export default function UserManage() {
     }
   }, []);
 
-  const handleClick = useCallback(
-    (e, index) => {
-      e.preventDefault();
-      setCurrentPage(index);
-      const start =
-        dataFilter.length > 0
-          ? index * dataFilter.length
-          : index * customers.length;
-      dataFilter.length > 0
-        ? searchCustomers(valueFilter, start, 10)
-            .then((res) => {
-              setDataFilter(res.data);
-            })
-            .catch((err) => console.log(err))
-        : dispatch(
-            getCustomers.getCustomersRequest({
-              start: start > 0 ? start : 0,
-              length: 10,
-            })
-          );
-    },
-    [customers, dataFilter, valueFilter]
-  );
-
   const onChange = (page) => {
     setCurrentPage(page);
     const start =
@@ -141,7 +118,7 @@ export default function UserManage() {
         ? page * dataFilter.length - dataFilter.length
         : page * customers.length - customers.length;
     dataFilter.length > 0
-      ? searchCustomers(valueFilter, start, 10)
+      ? searchCustomers(valueFilter, start, 20)
           .then((res) => {
             setDataFilter(res.data);
           })
@@ -149,7 +126,7 @@ export default function UserManage() {
       : dispatch(
           getCustomers.getCustomersRequest({
             start: start > 0 ? start : 0,
-            length: 10,
+            length: 20,
           })
         );
   };
@@ -157,7 +134,7 @@ export default function UserManage() {
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueFilter(value);
-      searchCustomers(value, 0, 10)
+      searchCustomers(value, 0, 20)
         .then((res) => {
           setDataFilter(res.data);
           setTotalFilter(res.totalItem);
@@ -239,7 +216,14 @@ export default function UserManage() {
         return (
           <>
             {data?.id_order ? (
-              <a className="text-id-order" onClick={() => console.log("ffff")}>
+              <a
+                className="text-id-order"
+                onClick={() =>
+                  navigate("/details-order", {
+                    state: { id: data?.id_order },
+                  })
+                }
+              >
                 {data?.id_order}
               </a>
             ) : (
@@ -366,6 +350,7 @@ export default function UserManage() {
               onChange={onChange}
               total={dataFilter.length > 0 ? totalFilter : customerTotal}
               showSizeChanger={false}
+              pageSize={20}
             />
           </div>
         </div>
@@ -425,6 +410,7 @@ export default function UserManage() {
             data={itemEdit}
           />
         </div>
+        <FloatButton.BackTop />
       </div>
     </React.Fragment>
   );

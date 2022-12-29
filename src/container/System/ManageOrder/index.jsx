@@ -1,4 +1,4 @@
-import { Space, Tabs, Dropdown, Input } from "antd";
+import { Space, Tabs, Dropdown, Input, FloatButton } from "antd";
 import { ExportCSV } from "../../../helper/export";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
 import _debounce from "lodash/debounce";
@@ -31,7 +31,7 @@ const ManageOrder = () => {
   const totalOrderSearch = useSelector(searchOrderTotal);
 
   useEffect(() => {
-    dispatch(getOrder.getOrderRequest({ start: 0, length: 10, status: "all" }));
+    dispatch(getOrder.getOrderRequest({ start: 0, length: 20, status: "all" }));
   }, [dispatch]);
 
   const handleSearch = useCallback(
@@ -39,7 +39,7 @@ const ManageOrder = () => {
       dispatch(
         searchOrder.searchOrderRequest({
           start: 0,
-          length: 10,
+          length: 20,
           status: status,
           value: value,
         })
@@ -66,65 +66,65 @@ const ManageOrder = () => {
       dispatch(
         searchOrder.searchOrderRequest({
           start: 0,
-          length: 10,
+          length: 20,
           status: "pending",
           value: "",
         })
       );
       dispatch(
-        getOrder.getOrderRequest({ start: 0, length: 10, status: "pending" })
+        getOrder.getOrderRequest({ start: 0, length: 20, status: "pending" })
       );
     } else if (active === "3") {
       setStatus("doing");
       dispatch(
         searchOrder.searchOrderRequest({
           start: 0,
-          length: 10,
+          length: 20,
           status: "doing",
           value: "",
         })
       );
       dispatch(
-        getOrder.getOrderRequest({ start: 0, length: 10, status: "doing" })
+        getOrder.getOrderRequest({ start: 0, length: 20, status: "doing" })
       );
     } else if (active === "5") {
       setStatus("cancel");
       dispatch(
         searchOrder.searchOrderRequest({
           start: 0,
-          length: 10,
+          length: 20,
           status: "cancel",
           value: "",
         })
       );
       dispatch(
-        getOrder.getOrderRequest({ start: 0, length: 10, status: "cancel" })
+        getOrder.getOrderRequest({ start: 0, length: 20, status: "cancel" })
       );
     } else if (active === "6") {
       setStatus("done");
       dispatch(
         searchOrder.searchOrderRequest({
           start: 0,
-          length: 10,
+          length: 20,
           status: "done",
           value: "",
         })
       );
       dispatch(
-        getOrder.getOrderRequest({ start: 0, length: 10, status: "done" })
+        getOrder.getOrderRequest({ start: 0, length: 20, status: "done" })
       );
     } else if (active === "1") {
       setStatus("all");
       dispatch(
         searchOrder.searchOrderRequest({
           start: 0,
-          length: 10,
+          length: 20,
           status: "all",
           value: "",
         })
       );
       dispatch(
-        getOrder.getOrderRequest({ start: 0, length: 10, status: "all" })
+        getOrder.getOrderRequest({ start: 0, length: 20, status: "all" })
       );
     }
   };
@@ -218,6 +218,7 @@ const ManageOrder = () => {
             />
           </Tabs.TabPane>
         </Tabs>
+        <FloatButton.BackTop />
       </div>
     </>
   );

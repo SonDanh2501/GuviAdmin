@@ -242,7 +242,7 @@ const AddPromotion = () => {
       {/* Button trigger modal */}
       <CustomButton
         title="Thêm khuyến mãi"
-        className="btn-add"
+        className="btn-add-promotion"
         type="button"
         onClick={() => setState(!state)}
       />

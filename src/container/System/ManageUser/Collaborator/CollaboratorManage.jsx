@@ -2,6 +2,7 @@ import { LockOutlined, SearchOutlined } from "@ant-design/icons";
 import {
   Dropdown,
   Empty,
+  FloatButton,
   Input,
   Pagination,
   Skeleton,
@@ -74,7 +75,7 @@ export default function CollaboratorManage() {
   useEffect(() => {
     // dispatch(loadingAction.loadingRequest(true));
     dispatch(
-      getCollaborators.getCollaboratorsRequest({ start: 0, length: 10 })
+      getCollaborators.getCollaboratorsRequest({ start: 0, length: 20 })
     );
   }, [dispatch]);
 
@@ -85,7 +86,7 @@ export default function CollaboratorManage() {
         ? page * dataFilter.length - dataFilter.length
         : page * collaborator.length - collaborator.length;
     dataFilter.length > 0
-      ? searchCollaborators(valueFilter, start, 10)
+      ? searchCollaborators(valueFilter, start, 20)
           .then((res) => {
             setDataFilter(res.data);
           })
@@ -93,14 +94,14 @@ export default function CollaboratorManage() {
       : dispatch(
           getCollaborators.getCollaboratorsRequest({
             start: start > 0 ? start : 0,
-            length: 10,
+            length: 20,
           })
         );
   };
 
   const handleSearch = useCallback((value) => {
     setValueFilter(value);
-    searchCollaborators(value, 0, 10)
+    searchCollaborators(value, 0, 20)
       .then((res) => {
         setDataFilter(res.data);
         setTotalFilter(res.totalItem);
@@ -389,6 +390,7 @@ export default function CollaboratorManage() {
                 onChange={onChange}
                 total={dataFilter.length > 0 ? totalFilter : collaboratorTotal}
                 showSizeChanger={false}
+                pageSize={20}
               />
             </div>
           </div>
@@ -519,6 +521,7 @@ export default function CollaboratorManage() {
             data={itemEdit}
           />
         </div>
+        <FloatButton.BackTop />
       </div>
     </React.Fragment>
   );
