@@ -48,23 +48,22 @@ function* createPromotionSaga(action) {
     yield put(createPromotionAction.createPromotionSuccess(promotion));
   } catch (err) {
     yield put(createPromotionAction.createPromotionFailure(err));
+    yield put(loadingAction.loadingRequest(false));
     errorNotify({
-      message:
-        err.response.data[0].message || "Tạo khuyến mãi không thành công",
+      message: err || "Tạo khuyến mãi không thành công",
     });
   }
 }
 
 function* updatePromotionSaga(action) {
   try {
-    const promotion = yield call(
-      updatePromotion,
-      action.payload.id,
-      action.payload.data
-    );
-    window.location.reload();
+    yield call(updatePromotion, action.payload.id, action.payload.data);
+    // window.location.reload();
   } catch (err) {
-    console.error(err);
+    errorNotify({
+      message: err,
+    });
+    yield put(loadingAction.loadingRequest(false));
   }
 }
 

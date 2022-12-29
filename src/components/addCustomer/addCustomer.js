@@ -49,7 +49,7 @@ const AddCustomer = () => {
       {/* Button trigger modal */}
       <CustomButton
         title="Thêm khách hàng"
-        className="btn-add"
+        className="btn-add-customer"
         type="button"
         // onClick={() => setState(!state)}
         onClick={showDrawer}

@@ -4,6 +4,13 @@
   padding-right: 40px;
   margin-top: 20px;
 
+  .div-add-export {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
   .title-cv {
     color: black;
     font-weight: 400;
@@ -27,8 +34,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 5px;
-    margin-left: 20px;
-    margin-top: 5px;
+    box-shadow: 2px 3px 2px rgb(216, 216, 216);
 
     .icon-menu {
       color: black;

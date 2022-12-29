@@ -1,5 +1,13 @@
-import { LockOutlined } from "@ant-design/icons";
-import { Dropdown, Empty, Pagination, Skeleton, Space, Table } from "antd";
+import { LockOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  Dropdown,
+  Empty,
+  Input,
+  Pagination,
+  Skeleton,
+  Space,
+  Table,
+} from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -332,42 +340,18 @@ export default function CollaboratorManage() {
   return (
     <React.Fragment>
       <div className="mt-2 p-3">
-        <Card className="shadow">
-          <CardHeader className="border-0 card-header">
-            <Row className="align-items-center">
-              <Col className="text-left">
-                <AddCollaborator />
-              </Col>
-              <Col>
-                <CustomTextInput
-                  placeholder="Tìm kiếm"
-                  type="text"
-                  onChange={(e) => handleSearch(e.target.value)}
-                />
-              </Col>
-            </Row>
-          </CardHeader>
-          {/* <Table
-            className="align-items-center table-flush"
-            responsive={true}
-            hover={true}
-          >
-            <thead>
-              <tr>
-                <th>Tên cộng tác viên</th>
-                <th>SĐT</th>
-                <th>Tình trạng</th>
-              
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {dataFilter.length > 0
-                ? dataFilter.map((e) => <TableManageCollaborator data={e} />)
-                : collaborator &&
-                  collaborator.map((e) => <TableManageCollaborator data={e} />)}
-            </tbody>
-          </Table> */}
+        <div className="div-header-colla">
+          <Input
+            placeholder="Tìm kiếm"
+            type="text"
+            className="input-search"
+            prefix={<SearchOutlined />}
+            onChange={(e) => handleSearch(e.target.value)}
+          />
+
+          <AddCollaborator />
+        </div>
+        <div className="div-table mt-3">
           <Table
             columns={columns}
             dataSource={dataFilter.length > 0 ? dataFilter : collaborator}
@@ -408,7 +392,8 @@ export default function CollaboratorManage() {
               />
             </div>
           </div>
-        </Card>
+        </div>
+
         <div>
           <Modal isOpen={modalLockTime} toggle={toggleLockTime}>
             <ModalHeader toggle={toggleLockTime}>

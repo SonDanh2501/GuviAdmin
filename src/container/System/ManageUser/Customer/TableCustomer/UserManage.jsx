@@ -14,9 +14,18 @@ import {
   FilterOutlined,
   LockOutlined,
   MoreOutlined,
+  SearchOutlined,
   UnlockOutlined,
 } from "@ant-design/icons";
-import { Dropdown, Empty, Skeleton, Space, Table, Pagination } from "antd";
+import {
+  Dropdown,
+  Empty,
+  Skeleton,
+  Space,
+  Table,
+  Pagination,
+  Input,
+} from "antd";
 import _debounce from "lodash/debounce";
 import { useNavigate } from "react-router-dom";
 import { activeCustomer, searchCustomers } from "../../../../../api/customer";
@@ -301,20 +310,6 @@ export default function UserManage() {
   return (
     <React.Fragment>
       <div>
-        {/* <CardHeader className="border-0 card-header">
-            <Row className="align-items-center">
-              <Col className="text-left">
-                <AddCustomer />
-              </Col>
-              <Col>
-                <CustomTextInput
-                  placeholder="Tìm kiếm"
-                  type="text"
-                  onChange={(e) => handleSearch(e.target.value)}
-                />
-              </Col>
-            </Row>
-          </CardHeader> */}
         <div className="div-header">
           <Dropdown
             menu={{ items: itemFilter }}
@@ -328,40 +323,40 @@ export default function UserManage() {
               </Space>
             </a>
           </Dropdown>
-
-          <CustomTextInput
+          <Input
             placeholder="Tìm kiếm"
             type="text"
-            classNameForm="input-search"
-            className="input"
+            className="input-search"
+            prefix={<SearchOutlined />}
             onChange={(e) => handleSearch(e.target.value)}
           />
-          <AddCustomer />
         </div>
 
-        <Table
-          columns={columns}
-          dataSource={dataFilter.length > 0 ? dataFilter : customers}
-          pagination={false}
-          rowKey={(record) => record._id}
-          rowSelection={{
-            selectedRowKeys,
-            onChange: (selectedRowKeys, selectedRows) => {
-              setSelectedRowKeys(selectedRowKeys);
-            },
-          }}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                setItemEdit(record);
+        <div className="mt-3">
+          <Table
+            columns={columns}
+            dataSource={dataFilter.length > 0 ? dataFilter : customers}
+            pagination={false}
+            rowKey={(record) => record._id}
+            rowSelection={{
+              selectedRowKeys,
+              onChange: (selectedRowKeys, selectedRows) => {
+                setSelectedRowKeys(selectedRowKeys);
               },
-            };
-          }}
-          locale={{
-            emptyText:
-              customers.length > 0 ? <Empty /> : <Skeleton active={true} />,
-          }}
-        />
+            }}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  setItemEdit(record);
+                },
+              };
+            }}
+            locale={{
+              emptyText:
+                customers.length > 0 ? <Empty /> : <Skeleton active={true} />,
+            }}
+          />
+        </div>
 
         <div className="mt-1 div-pagination p-2">
           <a>Tổng: {dataFilter.length > 0 ? totalFilter : customerTotal}</a>

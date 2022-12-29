@@ -52,7 +52,7 @@ const AddCollaborator = () => {
       {/* Button trigger modal */}
       <CustomButton
         title="Thêm cộng tác viên"
-        className="btn-add"
+        className="btn-add-collaborator"
         type="button"
         onClick={showDrawer}
         // onClick={() => setState(!state)}

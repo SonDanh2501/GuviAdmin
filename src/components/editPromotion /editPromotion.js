@@ -215,6 +215,8 @@ const EditPromotion = ({ state, setState, data }) => {
   }, [data]);
 
   const onEditPromotion = useCallback(() => {
+    // dispatch(loadingAction.loadingRequest(true));
+
     // console.log({
     //   title: {
     //     vi: titleVN,
@@ -249,7 +251,7 @@ const EditPromotion = ({ state, setState, data }) => {
     //   discount_value: reducedValue,
     //   is_delete: false,
     //   is_exchange_point: isExchangePoint,
-    //   exchange_point: exchangePoint,
+    //   exchange_point: isExchangePoint ? exchangePoint : 0,
     //   brand: namebrand,
     // });
     dispatch(
@@ -291,7 +293,7 @@ const EditPromotion = ({ state, setState, data }) => {
           discount_value: reducedValue,
           is_delete: false,
           is_exchange_point: isExchangePoint,
-          exchange_point: exchangePoint,
+          exchange_point: isExchangePoint ? exchangePoint : 0,
           brand: namebrand,
         },
       })
