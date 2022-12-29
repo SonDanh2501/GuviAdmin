@@ -82,7 +82,7 @@ const AddBanner = () => {
       {/* Button trigger modal */}
       <CustomButton
         title="Thêm banner"
-        className="btn-add"
+        className="btn-add-banner"
         type="button"
         // onClick={() => setState(!state)}
         onClick={showDrawer}

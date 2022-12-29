@@ -1,50 +1,74 @@
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Button,
-  Card,
-  CardFooter,
-  CardHeader,
-  Col,
-  Form,
-  Input,
-  Label,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  Row,
-  Table,
-} from "reactstrap";
 import { searchBanners } from "../../../../api/banner";
-import { postFile } from "../../../../api/file";
+import { UilEllipsisV } from "@iconscout/react-unicons";
+import { SearchOutlined } from "@ant-design/icons";
 import AddBanner from "../../../../components/addBanner/addBanner";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
-import {
-  createBanner,
-  getBanners,
-  updateBanner,
-} from "../../../../redux/actions/banner";
-import { loadingAction } from "../../../../redux/actions/loading";
+import { getBanners } from "../../../../redux/actions/banner";
 import { getPromotion } from "../../../../redux/actions/promotion";
 import { getBanner, getBannerTotal } from "../../../../redux/selectors/banner";
-import { getPromotionSelector } from "../../../../redux/selectors/promotion";
 import "./BannerManage.scss";
-import TableManageBanner from "./TableManageBanner.jsx";
 import _debounce from "lodash/debounce";
+import { Dropdown, Image, Pagination, Space, Table, Input } from "antd";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+import EditBanner from "../../../../components/editBanner/editBanner";
+import { activeBanner, deleteBanner } from "../../../../api/banner";
+import { loadingAction } from "../../../../redux/actions/loading";
+import unlock from "../../../../assets/images/unlocked.png";
+import lock from "../../../../assets/images/lock.png";
 
 export default function BannerManage() {
   const [dataFilter, setDataFilter] = useState([]);
-  const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState(0);
+  const [totalFilter, setTotalFilter] = useState(0);
+  const [valueSearch, setValueSearch] = useState("");
+  const [modalEdit, setModalEdit] = React.useState(false);
+  const [modalBlock, setModalBlock] = React.useState(false);
+  const [modal, setModal] = React.useState(false);
+  const [itemEdit, setItemEdit] = React.useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const toggle = () => setModal(!modal);
+  const toggleBlock = () => setModalBlock(!modalBlock);
   const banners = useSelector(getBanner);
   const totalBanner = useSelector(getBannerTotal);
+  const dispatch = useDispatch();
   React.useEffect(() => {
     // dispatch(loadingAction.loadingRequest(true));
     dispatch(getBanners.getBannersRequest(0, 10));
   }, [dispatch]);
 
+  const onDelete = useCallback((id) => {
+    dispatch(loadingAction.loadingRequest(true));
+    deleteBanner(id, { is_delete: true })
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const blockBanner = useCallback((id, is_active) => {
+    dispatch(loadingAction.loadingRequest(true));
+    if (is_active === true) {
+      activeBanner(id, { is_active: false })
+        .then((res) => {
+          setModalBlock(!modalBlock);
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    } else {
+      activeBanner(id, { is_active: true })
+        .then((res) => {
+          setModalBlock(!modalBlock);
+
+          window.location.reload();
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
+
   const handleSearch = useCallback(
     _debounce((value) => {
+      setValueSearch(value);
       searchBanners(value)
         .then((res) => setDataFilter(res.data))
         .catch((err) => console.log(err));
@@ -52,105 +76,196 @@ export default function BannerManage() {
     []
   );
 
-  const handleClick = useCallback(
-    (e, index) => {
-      e.preventDefault();
-      setCurrentPage(index);
-      const start =
-        dataFilter.length > 0
-          ? index * dataFilter.length
-          : index * banners.length;
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const start =
+      dataFilter.length > 0
+        ? page * dataFilter.length - dataFilter.length
+        : page * banners.length - banners.length;
 
-      dispatch(
-        getPromotion.getPromotionRequest({
-          start: start > 0 ? start : 0,
-          length: 10,
-        })
-      );
+    dataFilter.length > 0
+      ? searchBanners(valueSearch)
+          .then((res) => {
+            setDataFilter(res.data);
+            setTotalFilter(res.totalItem);
+          })
+          .catch((err) => console.log(err))
+      : dispatch(
+          getPromotion.getPromotionRequest({
+            start: start > 0 ? start : 0,
+            length: 10,
+          })
+        );
+  };
+
+  const items = [
+    {
+      key: "1",
+      label: (
+        <a
+          onClick={() => {
+            setModalEdit(!modalEdit);
+          }}
+        >
+          Chỉnh sửa
+        </a>
+      ),
     },
-    [dataFilter]
-  );
+    {
+      key: "2",
+      label: <a onClick={toggle}> Xoá</a>,
+    },
+  ];
 
-  const pageCount = totalBanner / 10;
-  let pageNumbers = [];
-  for (let i = 0; i < pageCount; i++) {
-    pageNumbers.push(
-      <PaginationItem key={i} active={currentPage === i ? true : false}>
-        <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
-          {i + 1}
-        </PaginationLink>
-      </PaginationItem>
-    );
-  }
+  const columns = [
+    {
+      title: "Tên banner",
+      dataIndex: ["title"],
+    },
+    {
+      title: "Type link",
+      dataIndex: ["type_link"],
+    },
+    {
+      title: "Position",
+      dataIndex: "position",
+    },
+    {
+      title: "Link ID",
+      dataIndex: "link_id",
+    },
+    {
+      title: "Hình",
+      render: (data) => {
+        return <Image src={data?.image} style={{ width: 300, height: 100 }} />;
+      },
+    },
+    {
+      title: "",
+      key: "action",
+      render: (data) => (
+        <Space size="middle">
+          {data?.is_active ? (
+            <img className="img-unlock" src={unlock} onClick={toggleBlock} />
+          ) : (
+            <img className="img-unlock" src={lock} onClick={toggleBlock} />
+          )}
+
+          <Dropdown
+            menu={{
+              items,
+            }}
+            placement="bottom"
+            trigger={["click"]}
+          >
+            <a className="icon-menu">
+              <UilEllipsisV />
+            </a>
+          </Dropdown>
+        </Space>
+      ),
+    },
+  ];
 
   return (
     <React.Fragment>
       <div className="mt-2 p-3">
-        <Card className="shadow">
-          <CardHeader className="border-0 card-header">
-            <Row className="align-items-center">
-              <Col className="text-left">
-                <AddBanner />
-              </Col>
-              <Col>
-                <CustomTextInput
-                  placeholder="Tìm kiếm"
-                  type="text"
-                  onChange={(e) => handleSearch(e.target.value)}
-                />
-              </Col>
-            </Row>
-          </CardHeader>
+        <div className="div-header-banner">
+          <Input
+            placeholder="Tìm kiếm"
+            type="text"
+            className="field-search"
+            prefix={<SearchOutlined />}
+            onChange={(e) => handleSearch(e.target.value)}
+          />
+          <AddBanner />
+        </div>
+        <div className="mt-3">
           <Table
-            className="align-items-center table-flush"
-            responsive={true}
-            hover={true}
-          >
-            <thead className="thead-light">
-              <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Type link</th>
-                <th scope="col">Position</th>
-                <th scope="col">Link ID</th>
-                <th scope="col">Banner</th>
-                <th scope="col" />
-              </tr>
-            </thead>
-            <tbody>
-              {dataFilter.length > 0
-                ? dataFilter.map((e) => <TableManageBanner data={e} />)
-                : banners && banners.map((e) => <TableManageBanner data={e} />)}
-            </tbody>
-          </Table>
-          <CardFooter>
-            <nav aria-label="...">
+            columns={columns}
+            dataSource={banners}
+            pagination={false}
+            rowKey={(record) => record._id}
+            rowSelection={{
+              selectedRowKeys,
+              onChange: (selectedRowKeys, selectedRows) => {
+                setSelectedRowKeys(selectedRowKeys);
+              },
+            }}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  setItemEdit(record);
+                },
+              };
+            }}
+          />
+          <div className="mt-2 div-pagination p-2">
+            <a>Tổng: {totalFilter > 0 ? totalFilter : totalBanner}</a>
+            <div>
               <Pagination
-                className="pagination justify-content-end mb-0"
-                listClassName="justify-content-end mb-0"
+                current={currentPage}
+                onChange={onChange}
+                total={totalFilter > 0 ? totalFilter : totalBanner}
+                showSizeChanger={false}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <EditBanner
+            state={modalEdit}
+            setState={() => setModalEdit(!modalEdit)}
+            data={itemEdit}
+          />
+        </div>
+
+        <div>
+          <Modal isOpen={modal} toggle={toggle}>
+            <ModalHeader toggle={toggle}>Xóa banner</ModalHeader>
+            <ModalBody>
+              <a>
+                Bạn có chắc muốn xóa banner{" "}
+                <a className="text-name-modal">{itemEdit?.title}</a> này không?
+              </a>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
+                Có
+              </Button>
+              <Button color="#ddd" onClick={toggle}>
+                Không
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+
+        <div>
+          <Modal isOpen={modalBlock} toggle={toggleBlock}>
+            <ModalHeader toggle={toggleBlock}>
+              {" "}
+              {itemEdit?.is_active === true ? "Khóa banners" : "Mở banners"}
+            </ModalHeader>
+            <ModalBody>
+              {itemEdit?.is_active === true
+                ? "Bạn có muốn khóa banner này"
+                : "Bạn có muốn kích hoạt banner này"}
+              <h3>{itemEdit?.title}</h3>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color="primary"
+                onClick={() => blockBanner(itemEdit?._id, itemEdit?.is_active)}
               >
-                <PaginationItem
-                  className={currentPage === 0 ? "disabled" : "enable"}
-                >
-                  <PaginationLink
-                    onClick={(e) => handleClick(e, currentPage - 1)}
-                    href="#"
-                  >
-                    <i class="uil uil-previous"></i>
-                  </PaginationLink>
-                </PaginationItem>
-                {pageNumbers}
-                <PaginationItem disabled={currentPage >= pageCount - 1}>
-                  <PaginationLink
-                    onClick={(e) => handleClick(e, currentPage + 1)}
-                    href="#"
-                  >
-                    <i class="uil uil-step-forward"></i>
-                  </PaginationLink>
-                </PaginationItem>
-              </Pagination>
-            </nav>
-          </CardFooter>
-        </Card>
+                Có
+              </Button>
+              <Button color="#ddd" onClick={toggleBlock}>
+                Không
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
       </div>
     </React.Fragment>
   );

@@ -672,11 +672,11 @@ export default function Home() {
                           <a className="text-date-activity">
                             {item?.admin_action}
                             <a className="text-time-activity">
-                              {item?.id_collaborator
+                              {/* {item?.id_collaborator
                                 ? item?.id_collaborator?.name
                                 : item?.id_customer
                                 ? item?.id_customer?.name
-                                : item?.id_admin_action?.name}
+                                : item?.id_admin_action?.name} */}
                               -{" "}
                               {moment(new Date(item?.date_create)).format(
                                 "HH:MM"

@@ -1,37 +1,19 @@
-import {
-  Dropdown,
-  Empty,
-  Skeleton,
-  Space,
-  Table,
-  Pagination,
-  Input,
-} from "antd";
+import { UilEllipsisV } from "@iconscout/react-unicons";
+import { Dropdown, Input, Pagination, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Button,
-  Card,
-  CardFooter,
-  CardHeader,
-  Col,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Row,
-} from "reactstrap";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { searchPromotion } from "../../../../api/promotion.jsx";
 import AddPromotion from "../../../../components/addPromotion/addPromotion.js";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
 import { loadingAction } from "../../../../redux/actions/loading.js";
 import {
   deletePromotionAction,
   getPromotion,
 } from "../../../../redux/actions/promotion.js";
 
+import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import EditPromotion from "../../../../components/editPromotion /editPromotion.js";
 import {
@@ -39,7 +21,6 @@ import {
   getTotalPromotion,
 } from "../../../../redux/selectors/promotion.js";
 import "./PromotionManage.scss";
-import { SearchOutlined } from "@ant-design/icons";
 
 export default function PromotionManage() {
   const promotion = useSelector(getPromotionSelector);
@@ -143,7 +124,11 @@ export default function PromotionManage() {
         const endDate = moment(new Date(data?.limit_end_date)).format(
           "DD/MM/YYYY"
         );
-        return <a>{data?.is_limit_date ? startDate + "-" + endDate : null}</a>;
+        return (
+          <a>
+            {data?.is_limit_date ? startDate + "-" + endDate : "Không có hạn"}
+          </a>
+        );
       },
     },
     {
@@ -158,8 +143,8 @@ export default function PromotionManage() {
             trigger={["click"]}
             placement="bottom"
           >
-            <a>
-              <i class="uil uil-ellipsis-v"></i>
+            <a style={{ color: "black" }}>
+              <UilEllipsisV />
             </a>
           </Dropdown>
         </Space>
@@ -180,38 +165,40 @@ export default function PromotionManage() {
           />
           <AddPromotion />
         </div>
-        <Table
-          columns={columns}
-          dataSource={dataFilter.length > 0 ? dataFilter : promotion}
-          pagination={false}
-          rowKey={(record) => record._id}
-          rowSelection={{
-            selectedRowKeys,
-            onChange: (selectedRowKeys, selectedRows) => {
-              setSelectedRowKeys(selectedRowKeys);
-            },
-          }}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                setItemEdit(record);
+        <div className="mt-3">
+          <Table
+            columns={columns}
+            dataSource={dataFilter.length > 0 ? dataFilter : promotion}
+            pagination={false}
+            rowKey={(record) => record._id}
+            rowSelection={{
+              selectedRowKeys,
+              onChange: (selectedRowKeys, selectedRows) => {
+                setSelectedRowKeys(selectedRowKeys);
               },
-            };
-          }}
-          // locale={{
-          //   emptyText:
-          //     promotion.length > 0 ? <Empty /> : <Skeleton active={true} />,
-          // }}
-        />
-        <div className="div-pagination p-2">
-          <a>Tổng: {dataFilter.length > 0 ? totalFilter : total}</a>
-          <div>
-            <Pagination
-              current={currentPage}
-              onChange={onChange}
-              total={dataFilter.length > 0 ? totalFilter : total}
-              showSizeChanger={false}
-            />
+            }}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  setItemEdit(record);
+                },
+              };
+            }}
+            // locale={{
+            //   emptyText:
+            //     promotion.length > 0 ? <Empty /> : <Skeleton active={true} />,
+            // }}
+          />
+          <div className="div-pagination p-2">
+            <a>Tổng: {dataFilter.length > 0 ? totalFilter : total}</a>
+            <div>
+              <Pagination
+                current={currentPage}
+                onChange={onChange}
+                total={dataFilter.length > 0 ? totalFilter : total}
+                showSizeChanger={false}
+              />
+            </div>
           </div>
         </div>
 

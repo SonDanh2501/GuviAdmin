@@ -204,7 +204,7 @@ export default function OrderManage(props) {
       ? dispatch(
           searchOrder.searchOrderRequest({
             start: start,
-            length: 10,
+            length: 20,
             status: status,
             value: value,
           })
@@ -212,7 +212,7 @@ export default function OrderManage(props) {
       : dispatch(
           getOrder.getOrderRequest({
             start: start > 0 ? start : 0,
-            length: 10,
+            length: 20,
             status: status,
           })
         );
@@ -252,6 +252,7 @@ export default function OrderManage(props) {
               onChange={onChange}
               total={total}
               showSizeChanger={false}
+              pageSize={20}
             />
           </div>
         </div>

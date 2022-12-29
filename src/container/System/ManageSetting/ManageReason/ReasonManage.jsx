@@ -225,10 +225,10 @@ export default function ReasonManage() {
                 },
               };
             }}
-            locale={{
-              emptyText:
-                reason.length > 0 ? <Empty /> : <Skeleton active={true} />,
-            }}
+            // locale={{
+            //   emptyText:
+            //     reason.length > 0 ? <Empty /> : <Skeleton active={true} />,
+            // }}
           />
           <div className="mt-2 div-pagination p-2">
             <a>Tổng: {totalReason}</a>
