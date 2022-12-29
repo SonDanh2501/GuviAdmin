@@ -34,7 +34,22 @@ export default function OrderManage(props) {
       key: "1",
       label: <EditOrder idOrder={item?._id} />,
     },
+    {
+      key: "2",
+      label: (
+        <a
+          onClick={() =>
+            navigate("/details-order", {
+              state: { id: item?._id },
+            })
+          }
+        >
+          Xem chi tiết
+        </a>
+      ),
+    },
   ];
+  console.log(item);
 
   const columns = [
     {

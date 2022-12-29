@@ -96,3 +96,18 @@
 .icon-lock {
   color: orangered;
 }
+
+.div-table {
+  background-color: white;
+  border-radius: 10px;
+}
+
+.div-header-colla {
+  display: flex;
+  flex-direction: row;
+
+  .input-search {
+    height: 48px;
+    width: 70%;
+  }
+}

@@ -72,7 +72,7 @@ const AddGroupService = () => {
       {/* Button trigger modal */}
       <CustomButton
         title="Thêm group-service"
-        className="btn-modal"
+        className="btn-add-service"
         type="button"
         onClick={() => setState(!state)}
       />
@@ -166,7 +166,7 @@ const AddGroupService = () => {
 
             <CustomButton
               title="Thêm"
-              className="float-right btn-modal"
+              className="float-right btn-add-service"
               type="button"
               onClick={createGroupSerive}
             />

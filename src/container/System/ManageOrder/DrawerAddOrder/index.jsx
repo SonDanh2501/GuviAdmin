@@ -70,8 +70,8 @@ const AddOrder = () => {
   const timeW = dateWork + "T" + timeWork + ".000Z";
   return (
     <>
-      <Button className="btn-add" onClick={showDrawer}>
-        Thêm đơn
+      <Button className="btn-add-order" onClick={showDrawer}>
+        Tạo dịch vụ
       </Button>
       <Drawer
         title="Thêm order"

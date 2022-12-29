@@ -1,4 +1,12 @@
-import { Dropdown, Empty, Skeleton, Space, Table, Pagination } from "antd";
+import {
+  Dropdown,
+  Empty,
+  Skeleton,
+  Space,
+  Table,
+  Pagination,
+  Input,
+} from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -31,6 +39,7 @@ import {
   getTotalPromotion,
 } from "../../../../redux/selectors/promotion.js";
 import "./PromotionManage.scss";
+import { SearchOutlined } from "@ant-design/icons";
 
 export default function PromotionManage() {
   const promotion = useSelector(getPromotionSelector);
@@ -161,56 +170,51 @@ export default function PromotionManage() {
   return (
     <React.Fragment>
       <div className="mt-2 p-3">
-        <Card className="shadow">
-          <CardHeader className="border-0 card-header">
-            <Row className="align-items-center">
-              <Col className="text-left">
-                <AddPromotion />
-              </Col>
-              <Col>
-                <CustomTextInput
-                  placeholder="Tìm kiếm"
-                  type="text"
-                  onChange={(e) => handleSearch(e.target.value)}
-                />
-              </Col>
-            </Row>
-          </CardHeader>
-          <Table
-            columns={columns}
-            dataSource={dataFilter.length > 0 ? dataFilter : promotion}
-            pagination={false}
-            rowKey={(record) => record._id}
-            rowSelection={{
-              selectedRowKeys,
-              onChange: (selectedRowKeys, selectedRows) => {
-                setSelectedRowKeys(selectedRowKeys);
-              },
-            }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  setItemEdit(record);
-                },
-              };
-            }}
-            locale={{
-              emptyText:
-                promotion.length > 0 ? <Empty /> : <Skeleton active={true} />,
-            }}
+        <div className="div-header-promotion">
+          <Input
+            placeholder="Tìm kiếm"
+            type="text"
+            className="input-search"
+            prefix={<SearchOutlined />}
+            onChange={(e) => handleSearch(e.target.value)}
           />
-          <div className="div-pagination p-2">
-            <a>Tổng: {dataFilter.length > 0 ? totalFilter : total}</a>
-            <div>
-              <Pagination
-                current={currentPage}
-                onChange={onChange}
-                total={dataFilter.length > 0 ? totalFilter : total}
-                showSizeChanger={false}
-              />
-            </div>
+          <AddPromotion />
+        </div>
+        <Table
+          columns={columns}
+          dataSource={dataFilter.length > 0 ? dataFilter : promotion}
+          pagination={false}
+          rowKey={(record) => record._id}
+          rowSelection={{
+            selectedRowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
+              setSelectedRowKeys(selectedRowKeys);
+            },
+          }}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setItemEdit(record);
+              },
+            };
+          }}
+          // locale={{
+          //   emptyText:
+          //     promotion.length > 0 ? <Empty /> : <Skeleton active={true} />,
+          // }}
+        />
+        <div className="div-pagination p-2">
+          <a>Tổng: {dataFilter.length > 0 ? totalFilter : total}</a>
+          <div>
+            <Pagination
+              current={currentPage}
+              onChange={onChange}
+              total={dataFilter.length > 0 ? totalFilter : total}
+              showSizeChanger={false}
+            />
           </div>
-        </Card>
+        </div>
+
         <div>
           <EditPromotion
             state={modalEdit}

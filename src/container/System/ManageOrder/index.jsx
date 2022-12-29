@@ -1,4 +1,4 @@
-import { Space, Tabs, Dropdown } from "antd";
+import { Space, Tabs, Dropdown, Input } from "antd";
 import { ExportCSV } from "../../../helper/export";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
 import _debounce from "lodash/debounce";
@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useEffect, useState } from "react";
 import { searchOrderApi } from "../../../api/order";
 import AddOrder from "./DrawerAddOrder";
+import { SearchOutlined } from "@ant-design/icons";
 
 const ManageOrder = () => {
   const [status, setStatus] = useState("all");
@@ -131,7 +132,7 @@ const ManageOrder = () => {
     <>
       <div className="div-header">
         <a className="title-cv">Danh sách công việc</a>
-        <CustomTextInput
+        {/* <CustomTextInput
           placeholder="Tìm kiếm"
           type="text"
           className="field-search"
@@ -139,21 +140,33 @@ const ManageOrder = () => {
             handleSearch(e.target.value);
             setValueSearch(e.target.value);
           }}
-        />
-        <Dropdown
-          menu={{
-            items,
+        /> */}
+        <Input
+          placeholder="Tìm kiếm"
+          type="text"
+          className="field-search"
+          prefix={<SearchOutlined />}
+          onChange={(e) => {
+            handleSearch(e.target.value);
+            setValueSearch(e.target.value);
           }}
-          trigger={["click"]}
-          className="dropdown-export"
-        >
-          <a onClick={(e) => e.preventDefault()}>
-            <Space>
-              <UilEllipsisH className="icon-menu" />
-            </Space>
-          </a>
-        </Dropdown>
-        <AddOrder />
+        />
+        <div className="div-add-export">
+          <Dropdown
+            menu={{
+              items,
+            }}
+            trigger={["click"]}
+            className="dropdown-export"
+          >
+            <a onClick={(e) => e.preventDefault()}>
+              <Space>
+                <UilEllipsisH className="icon-menu" />
+              </Space>
+            </a>
+          </Dropdown>
+          <AddOrder />
+        </div>
       </div>
 
       <div className="div-container">

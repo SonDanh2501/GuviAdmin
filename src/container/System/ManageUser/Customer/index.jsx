@@ -4,14 +4,16 @@ import "./index.scss";
 
 import { useDispatch } from "react-redux";
 import UserManage from "./TableCustomer/UserManage";
+import AddCustomer from "../../../../components/addCustomer/addCustomer";
 
 const ManageCustomer = () => {
   const dispatch = useDispatch();
 
   return (
     <>
-      <div className="div-header">
+      <div className="div-header-customer">
         <a className="title-cv">Danh sách khách hàng</a>
+        <AddCustomer />
       </div>
 
       <div className="div-container">

@@ -676,7 +676,7 @@ export default function Home() {
                                 ? item?.id_collaborator?.name
                                 : item?.id_customer
                                 ? item?.id_customer?.name
-                                : item?.id_admin_action}{" "}
+                                : item?.id_admin_action?.name}
                               -{" "}
                               {moment(new Date(item?.date_create)).format(
                                 "HH:MM"
