@@ -301,22 +301,25 @@ const AddPromotion = () => {
                   />
                   <h5>3. Mô tả chi tiết</h5>
                   <Label>Tiếng Việt</Label>
-                  <Editor
-                    editorState={descriptionVN}
-                    onEditorStateChange={onEditorVNStateChange}
-                    toolbarClassName="toolbarClassName"
-                    wrapperClassName="wrapperClassName wrapperStyle"
-                    editorClassName="editorClassName"
-                  />
+                  <div className="form-description">
+                    <Editor
+                      editorState={descriptionVN}
+                      onEditorStateChange={onEditorVNStateChange}
+                      toolbarClassName="toolbarClassName"
+                      wrapperClassName="wrapperClassName wrapperStyle"
+                      editorClassName="editorClassName"
+                    />
+                  </div>
                   <Label>Tiếng Việt</Label>
-
-                  <Editor
-                    editorState={descriptionEN}
-                    onEditorStateChange={onEditorENStateChange}
-                    toolbarClassName="toolbarClassName"
-                    wrapperClassName="wrapperClassName wrapperStyle"
-                    editorClassName="editorClassName"
-                  />
+                  <div className="form-description">
+                    <Editor
+                      editorState={descriptionEN}
+                      onEditorStateChange={onEditorENStateChange}
+                      toolbarClassName="toolbarClassName"
+                      wrapperClassName="wrapperClassName wrapperStyle"
+                      editorClassName="editorClassName"
+                    />
+                  </div>
                 </Col>
                 <Col md={4}>
                   <div>
@@ -325,7 +328,7 @@ const AddPromotion = () => {
                       label={"Thumbnail"}
                       type="file"
                       accept={".jpg,.png,.jpeg"}
-                      className="thumbnail"
+                      className="input-upload"
                       onChange={onChangeThumbnail}
                     />
                     {imgThumbnail && (
@@ -335,7 +338,7 @@ const AddPromotion = () => {
                       label={"Background"}
                       type="file"
                       accept={".jpg,.png,.jpeg"}
-                      className="thumbnail"
+                      className="input-upload"
                       onChange={onChangeBackground}
                     />
                     {imgBackground && (
@@ -372,7 +375,7 @@ const AddPromotion = () => {
                       {typePromotion === "code" ? (
                         <CustomTextInput
                           placeholder="Nhập mã khuyến mãi"
-                          className="input-promo-code"
+                          className="input-promo"
                           type="text"
                           value={promoCode}
                           onChange={(e) => setPromoCode(e.target.value)}
@@ -470,9 +473,8 @@ const AddPromotion = () => {
                         {discountUnit === "amount" ? (
                           <CustomTextInput
                             label={"Giá giảm "}
-                            classNameForm="form-promo-discount"
+                            classNameForm="input-promo-amount"
                             placeholder="VNĐ"
-                            className="input-promo-code"
                             type="number"
                             min={0}
                             value={maximumDiscount}
@@ -483,6 +485,7 @@ const AddPromotion = () => {
                             <CustomTextInput
                               label={"Giá trị giảm"}
                               className="input-promo-discount"
+                              classNameForm="form-discount"
                               placeholder="%"
                               type="number"
                               min={0}
@@ -491,8 +494,8 @@ const AddPromotion = () => {
                             />
                             <CustomTextInput
                               label={"Giá giảm tối đa"}
-                              classNameForm="form-promo-discount"
                               className="input-promo-discount"
+                              classNameForm="form-discount"
                               min={0}
                               placeholder="VNĐ"
                               type="number"

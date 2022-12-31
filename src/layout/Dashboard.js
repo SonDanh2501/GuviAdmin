@@ -14,7 +14,7 @@ import ServiceManage from "../container/System/ManageService/ManageService/Servi
 import ManageSetting from "../container/System/ManageSetting";
 import ReasonManage from "../container/System/ManageSetting/ManageReason/ReasonManage";
 import ManageTopup from "../container/System/ManageTopup";
-import CollaboratorManage from "../container/System/ManageUser/Collaborator/CollaboratorManage";
+import ManageCollaborator from "../container/System/ManageUser/Collaborator";
 import ProfileCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/ProfileCollaborator";
 import ManageCustomer from "../container/System/ManageUser/Customer";
 import Profile from "../container/System/ManageUser/Customer/Profiles/Profile";
@@ -56,7 +56,7 @@ const Dashboard = () => {
             />
             <Route
               path="/system/collaborator-manage"
-              element={<CollaboratorManage />}
+              element={<ManageCollaborator />}
             />
             <Route
               path="/system/collaborator-manage/details-collaborator"

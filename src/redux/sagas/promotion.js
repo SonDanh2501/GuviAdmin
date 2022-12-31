@@ -58,7 +58,7 @@ function* createPromotionSaga(action) {
 function* updatePromotionSaga(action) {
   try {
     yield call(updatePromotion, action.payload.id, action.payload.data);
-    // window.location.reload();
+    window.location.reload();
   } catch (err) {
     errorNotify({
       message: err,

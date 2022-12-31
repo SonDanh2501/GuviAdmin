@@ -21,3 +21,10 @@ export const searchOrderApi = (start, length, status, value) => {
 export const getOrderDetailApi = (id) => {
   return axiosClient.get(`/admin/order_manager/get_detail/${id}`);
 };
+
+export const addCollaboratorToOrderApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/collaborator_manager/add_collaborator_to_order/${id}?lang=vi`,
+    data
+  );
+};

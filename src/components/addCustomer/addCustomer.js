@@ -48,7 +48,7 @@ const AddCustomer = () => {
     <>
       {/* Button trigger modal */}
       <CustomButton
-        title="Thêm khách hàng"
+        title="Tạo khách hàng"
         className="btn-add-customer"
         type="button"
         // onClick={() => setState(!state)}
@@ -66,7 +66,7 @@ const AddCustomer = () => {
         {({ values, setFieldValue, errors, handleSubmit }) => {
           return (
             <Drawer
-              title="Thêm khách hàng"
+              title="Tạo khách hàng"
               width={500}
               onClose={onClose}
               open={open}

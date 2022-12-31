@@ -32,7 +32,8 @@ export default function OrderManage(props) {
   const items = [
     {
       key: "1",
-      label: <EditOrder idOrder={item?._id} />,
+      label:
+        item?.status === "cancel" ? <></> : <EditOrder idOrder={item?._id} />,
     },
     {
       key: "2",
@@ -49,7 +50,6 @@ export default function OrderManage(props) {
       ),
     },
   ];
-  console.log(item);
 
   const columns = [
     {

@@ -1,3 +1,4 @@
+import { Image } from "antd";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Input, Label, Modal } from "reactstrap";
@@ -32,6 +33,8 @@ const EditBanner = ({ state, setState, data }) => {
   }, [data]);
 
   const onChangeThumbnail = (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+
     if (e.target.files[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -46,8 +49,13 @@ const EditBanner = ({ state, setState, data }) => {
         "Content-Type": "multipart/form-data",
       },
     })
-      .then((res) => setImgThumbnail(res))
-      .catch((err) => console.log("err", err));
+      .then((res) => {
+        dispatch(loadingAction.loadingRequest(false));
+        setImgThumbnail(res);
+      })
+      .catch((err) => {
+        dispatch(loadingAction.loadingRequest(false));
+      });
   };
 
   const onEditBanner = useCallback(() => {
@@ -104,7 +112,7 @@ const EditBanner = ({ state, setState, data }) => {
                 onChange={onChangeThumbnail}
               />
               {imgThumbnail && (
-                <img src={imgThumbnail} className="img-thumbnail" />
+                <Image src={imgThumbnail} className="img-thumbnail-banner" />
               )}
             </div>
             <CustomTextInput
@@ -163,7 +171,7 @@ const EditBanner = ({ state, setState, data }) => {
 
             <CustomButton
               title="Sửa"
-              className="float-right btn-modal"
+              className="float-right btn-edit-banner"
               type="button"
               onClick={onEditBanner}
             />

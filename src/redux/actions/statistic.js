@@ -5,7 +5,7 @@ export const getType = (reduxAction) => {
 };
 
 export const getHistoryActivity = createActions({
-  getHistoryActivityRequest: undefined,
+  getHistoryActivityRequest: (payload) => payload,
   getHistoryActivitySuccess: (payload) => payload,
   getHistoryActivityFailure: (err) => err,
 });

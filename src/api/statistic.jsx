@@ -20,8 +20,10 @@ export const getActiveUserApi = () => {
   return axiosClient.get(`/admin/statistic/active_users?lang=vi`);
 };
 
-export const getHistoryActivityApi = () => {
-  return axiosClient.get(`/admin/statistic/history_activity?lang=vi`);
+export const getHistoryActivityApi = (start, length) => {
+  return axiosClient.get(
+    `/admin/statistic/history_activity?start=${start}&lenght=${length}`
+  );
 };
 
 export const getLastestServiceApi = (start, length) => {

@@ -22,7 +22,11 @@ import {
 
 function* getHistoryActivitySaga(action) {
   try {
-    const response = yield call(getHistoryActivityApi);
+    const response = yield call(
+      getHistoryActivityApi,
+      action.payload.start,
+      action.payload.length
+    );
     yield put(getHistoryActivity.getHistoryActivitySuccess(response.data));
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {

@@ -49,6 +49,7 @@ import {
 } from "recharts";
 import { formatMoney } from "../../../helper/formatMoney";
 import MoreTopCollaborator from "../../../components/moreTopCollaborator";
+import MoreActivity from "./MoreActivity";
 moment.locale("vi");
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -85,7 +86,9 @@ export default function Home() {
       })
       .catch((err) => console.log(err));
     dispatch(getServiceConnect.getServiceConnectRequest());
-    dispatch(getHistoryActivity.getHistoryActivityRequest());
+    dispatch(
+      getHistoryActivity.getHistoryActivityRequest({ start: 0, length: 20 })
+    );
     dispatch(getActiveUser.getActiveUserRequest());
     dispatch(
       getLastestService.getLastestServiceRequest({ start: 0, length: 5 })
@@ -655,7 +658,7 @@ export default function Home() {
                 <p className="label-activity">Hoạt động</p>
                 <List
                   itemLayout="horizontal"
-                  dataSource={historyActivity}
+                  dataSource={historyActivity.slice(0, 3)}
                   renderItem={(item, index) => {
                     return (
                       <div className="div-list" key={index}>
@@ -684,20 +687,19 @@ export default function Home() {
                             </a>
                           </a>
                           <a className="text-content-activity">
-                            {item?.title_admin}
+                            {item?.id_customer
+                              ? item?.title_admin.replace(
+                                  item?.id_customer?._id,
+                                  item?.id_customer?.name
+                                )
+                              : item?.title_admin}
                           </a>
                         </div>
                       </div>
                     );
                   }}
                 />
-                <button
-                  className="div-seemore"
-                  onClick={() => console.log("kk")}
-                >
-                  <p>Xem chi tiết</p>
-                  <i class="uil uil-angle-right"></i>
-                </button>
+                {/* <MoreActivity /> */}
               </div>
             </Col>
           </Row>

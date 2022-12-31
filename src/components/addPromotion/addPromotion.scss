@@ -25,12 +25,55 @@
   width: 40px;
 }
 
-.thumbnail {
-  width: 200px !important;
-  height: 40px !important;
+.input-upload {
+  border: none;
 }
 
-.img-thumbnail {
-  width: 200px;
+.img-background {
+  width: 300px;
+  height: 100px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.input-promo {
+  margin-left: 20px;
+}
+
+.form-description {
+  border: 1px solid rgb(208, 208, 208);
+  border-radius: 5px;
+}
+
+.btn-form-promotion {
+  background-color: plum;
+  border: none;
+  color: white;
+  margin-bottom: 10px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  margin-left: 20px;
+}
+
+.btn-form-promotion-default {
+  margin-right: 10px;
+  color: rgb(0, 0, 0);
+  margin-bottom: 10px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  margin-left: 20px;
+}
+
+.select-type-promo {
   height: 40px;
+  border-radius: 8px;
+  border: 1px solid rgb(206, 205, 205);
+}
+
+.input-promo-amount {
+  margin-left: 20px;
+}
+.form-discount {
+  margin-left: 30px;
+}
+.input-promo-discount {
+  width: 100px;
 }

@@ -1,0 +1,16 @@
+.div-header-collaborator {
+  display: flex;
+  flex-direction: row;
+  padding-left: 40px;
+  padding-right: 40px;
+  margin-top: 20px;
+  justify-content: space-between;
+
+  .title-cv {
+    color: black;
+    font-weight: 400;
+    font-size: 24px;
+    font-family: "Roboto", sans-serif;
+    text-decoration: none;
+  }
+}
