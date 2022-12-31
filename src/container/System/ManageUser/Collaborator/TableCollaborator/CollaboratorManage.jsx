@@ -1,4 +1,4 @@
-import { LockOutlined, SearchOutlined } from "@ant-design/icons";
+import { FilterOutlined, SearchOutlined } from "@ant-design/icons";
 import {
   Dropdown,
   Empty,
@@ -11,41 +11,31 @@ import {
 } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Button,
-  Card,
-  CardHeader,
-  Col,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Row,
-} from "reactstrap";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   activeCollaborator,
   deleteCollaborator,
   lockTimeCollaborator,
   searchCollaborators,
   verifyCollaborator,
-} from "../../../../api/collaborator.jsx";
-import AddCollaborator from "../../../../components/addCollaborator/addCollaborator.js";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput.jsx";
-import EditCollaborator from "../../../../components/editCollaborator/editCollaborator.js";
-import { errorNotify } from "../../../../helper/toast";
-import { getCollaborators } from "../../../../redux/actions/collaborator";
-import { loadingAction } from "../../../../redux/actions/loading.js";
+} from "../../../../../api/collaborator.jsx";
+import lock from "../../../../../assets/images/lock.png";
+import offToggle from "../../../../../assets/images/off-button.png";
+import onToggle from "../../../../../assets/images/on-button.png";
+import stopWatch from "../../../../../assets/images/stop-watch.png";
+import unlock from "../../../../../assets/images/unlocked.png";
+import watch from "../../../../../assets/images/watch.png";
+import AddCollaborator from "../../../../../components/addCollaborator/addCollaborator.js";
+import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput.jsx";
+import EditCollaborator from "../../../../../components/editCollaborator/editCollaborator.js";
+import { errorNotify } from "../../../../../helper/toast";
+import { getCollaborators } from "../../../../../redux/actions/collaborator";
+import { loadingAction } from "../../../../../redux/actions/loading.js";
 import {
   getCollaborator,
   getCollaboratorTotal,
-} from "../../../../redux/selectors/collaborator";
+} from "../../../../../redux/selectors/collaborator";
 import "./CollaboratorManage.scss";
-import unlock from "../../../../assets/images/unlocked.png";
-import lock from "../../../../assets/images/lock.png";
-import onToggle from "../../../../assets/images/on-button.png";
-import offToggle from "../../../../assets/images/off-button.png";
-import watch from "../../../../assets/images/watch.png";
-import stopWatch from "../../../../assets/images/stop-watch.png";
 
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
@@ -222,25 +212,34 @@ export default function CollaboratorManage() {
   }, []);
 
   const items = [
-    // {
-    //   key: "1",
-    //   label: (
-    //     <a
-    //       onClick={() => {
-    //         setModalEdit(!modalEdit);
-    //       }}
-    //     >
-    //       Chỉnh sửa
-    //     </a>
-    //   ),
-    // },
+    {
+      key: "1",
+      label: itemEdit?.is_active ? (
+        <a onClick={toggleBlock}>Chặn</a>
+      ) : (
+        <a onClick={toggleBlock}>Kích hoạt</a>
+      ),
+    },
     {
       key: "2",
+      label: !itemEdit?.is_lock_time ? (
+        <a onClick={toggleLockTime}>Khoá</a>
+      ) : (
+        <a onClick={toggleLockTime}>Mở khoá</a>
+      ),
+    },
+    {
+      key: "3",
       label: <a onClick={toggle}>Xoá</a>,
     },
   ];
 
   const columns = [
+    {
+      title: "Mã CTV",
+      render: (data) => <a className="text-id">{data?._id}</a>,
+      width: "15%",
+    },
     {
       title: "Tên cộng tác viên",
       render: (data) => {
@@ -253,32 +252,45 @@ export default function CollaboratorManage() {
             }
           >
             <img className="img_customer" src={data?.avatar} />
-            <a>{data?.full_name}</a>
+            <a className="text-name">{data?.full_name}</a>
           </div>
+        );
+      },
+      width: "20%",
+    },
+    {
+      title: "SĐT",
+      render: (data) => <a className="text-phone">{data?.phone}</a>,
+      align: "center",
+      width: "10%",
+    },
+    {
+      title: "Trạng thái",
+      align: "center",
+      render: (data) => {
+        return (
+          <>
+            {data?.is_lock_time ? (
+              <a className="text-lock-time">{data?.lock_time}</a>
+            ) : data?.is_active ? (
+              <a className="text-verify">Đang hoạt động</a>
+            ) : (
+              <a className="text-nonverify">Chưa hoạt động</a>
+            )}
+          </>
         );
       },
     },
     {
-      title: "SĐT",
-      dataIndex: "phone",
-      align: "center",
-    },
-    {
-      title: "Tình trạng",
+      title: "Tài khoản",
       align: "center",
       render: (data) => {
         return (
           <>
             {data?.is_verify ? (
-              <div>
-                <i class="uil uil-circle icon-verify"></i>
-                <a className="text-verify">Đã xác thực</a>
-              </div>
+              <a className="text-verify">Đã xác thực</a>
             ) : (
-              <div>
-                <i class="uil uil-circle icon-nonverify"></i>
-                <a className="text-nonverify">Chưa xác thực</a>
-              </div>
+              <a className="text-nonverify">Chưa xác thực</a>
             )}
           </>
         );
@@ -289,14 +301,14 @@ export default function CollaboratorManage() {
       align: "center",
       render: (data) => (
         <Space size="middle">
-          <div>
+          {/* <div>
             {data?.is_active ? (
               <img className="img-unlock" src={unlock} onClick={toggleBlock} />
             ) : (
               <img className="img-unlock" src={lock} onClick={toggleBlock} />
             )}
-          </div>
-          <div>
+          </div> */}
+          {/* <div>
             {!data?.is_lock_time ? (
               <img src={watch} className="img-watch" onClick={toggleLockTime} />
             ) : (
@@ -306,7 +318,7 @@ export default function CollaboratorManage() {
                 onClick={toggleLockTime}
               />
             )}
-          </div>
+          </div> */}
           <div>
             {data?.is_verify ? (
               <img
@@ -338,10 +350,41 @@ export default function CollaboratorManage() {
     },
   ];
 
+  const itemFilter = [
+    {
+      key: "1",
+      label: (
+        <a
+        // onClick={() => {
+        //   setModalEdit(!modalEdit);
+        // }}
+        >
+          Khách hàng thân thiết
+        </a>
+      ),
+    },
+    {
+      key: "2",
+      label: <a>Khách hàng sinh nhật</a>,
+    },
+  ];
+
   return (
     <React.Fragment>
       <div className="mt-2 p-3">
         <div className="div-header-colla">
+          <Dropdown
+            menu={{ items: itemFilter }}
+            trigger={["click"]}
+            className="dropdown"
+          >
+            <a onClick={(e) => e.preventDefault()}>
+              <Space>
+                <FilterOutlined className="icon" />
+                <a className="text-filter">Thêm điều kiện lọc</a>
+              </Space>
+            </a>
+          </Dropdown>
           <Input
             placeholder="Tìm kiếm"
             type="text"
@@ -349,8 +392,6 @@ export default function CollaboratorManage() {
             prefix={<SearchOutlined />}
             onChange={(e) => handleSearch(e.target.value)}
           />
-
-          <AddCollaborator />
         </div>
         <div className="div-table mt-3">
           <Table

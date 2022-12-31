@@ -51,7 +51,7 @@ const AddCollaborator = () => {
     <>
       {/* Button trigger modal */}
       <CustomButton
-        title="Thêm cộng tác viên"
+        title="Tạo cộng tác viên"
         className="btn-add-collaborator"
         type="button"
         onClick={showDrawer}
@@ -79,7 +79,7 @@ const AddCollaborator = () => {
             >
               <Form>
                 <CustomTextInput
-                  label="Tên cộng tác viên"
+                  label="Tạo cộng tác viên"
                   type="text"
                   id="className"
                   placeholder="Nhập tên cộng tác viên"
@@ -121,7 +121,7 @@ const AddCollaborator = () => {
                 />
                 <CustomTextInput
                   label="CCCD/CMND"
-                  type="text"
+                  type="number"
                   id="className"
                   placeholder="Nhập CCCD/CMND"
                   onChange={(text) =>

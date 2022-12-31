@@ -215,45 +215,7 @@ const EditPromotion = ({ state, setState, data }) => {
   }, [data]);
 
   const onEditPromotion = useCallback(() => {
-    // dispatch(loadingAction.loadingRequest(true));
-
-    // console.log({
-    //   title: {
-    //     vi: titleVN,
-    //     en: titleEN,
-    //   },
-    //   short_description: {
-    //     vi: shortDescriptionVN,
-    //     en: shortDescriptionEN,
-    //   },
-    //   description: {
-    //     vi: draftToHtml(convertToRaw(descriptionVN.getCurrentContent())),
-    //     en: draftToHtml(convertToRaw(descriptionEN.getCurrentContent())),
-    //   },
-    //   thumbnail: imgThumbnail,
-    //   image_background: imgBackground,
-    //   code: promoCode ? promoCode : codebrand,
-    //   is_limit_date: limitedDate,
-    //   limit_start_date: limitedDate ? new Date(startDate).toISOString() : null,
-    //   limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
-    //   is_limit_count: limitedQuantity,
-    //   limit_count: limitedQuantity ? amount : 0,
-    //   id_group_customer: customer,
-    //   service_apply: [serviceApply],
-    //   id_customer: [],
-    //   is_limited_use: isUsePromo,
-    //   limited_use: isUsePromo ? usePromo : 0,
-    //   type_discount: promoType,
-    //   type_promotion: typePromotion,
-    //   price_min_order: minimumOrder,
-    //   discount_unit: discountUnit,
-    //   discount_max_price: maximumDiscount,
-    //   discount_value: reducedValue,
-    //   is_delete: false,
-    //   is_exchange_point: isExchangePoint,
-    //   exchange_point: isExchangePoint ? exchangePoint : 0,
-    //   brand: namebrand,
-    // });
+    dispatch(loadingAction.loadingRequest(true));
     dispatch(
       updatePromotionAction.updatePromotionRequest({
         id: data?._id,
@@ -385,22 +347,25 @@ const EditPromotion = ({ state, setState, data }) => {
                   />
                   <h5>3. Mô tả chi tiết</h5>
                   <Label>Tiếng Việt</Label>
-                  <Editor
-                    editorState={descriptionVN}
-                    onEditorStateChange={onEditorVNStateChange}
-                    toolbarClassName="toolbarClassName"
-                    wrapperClassName="wrapperClassName wrapperStyle"
-                    editorClassName="editorClassName"
-                  />
-                  <Label>Tiếng Việt</Label>
-
-                  <Editor
-                    editorState={descriptionEN}
-                    onEditorStateChange={onEditorENStateChange}
-                    toolbarClassName="toolbarClassName"
-                    wrapperClassName="wrapperClassName wrapperStyle"
-                    editorClassName="editorClassName"
-                  />
+                  <div className="form-description">
+                    <Editor
+                      editorState={descriptionVN}
+                      onEditorStateChange={onEditorVNStateChange}
+                      toolbarClassName="toolbarClassName"
+                      wrapperClassName="wrapperClassName wrapperStyle"
+                      editorClassName="editorClassName"
+                    />
+                  </div>
+                  <Label>Tiếng Anh</Label>
+                  <div className="form-description">
+                    <Editor
+                      editorState={descriptionEN}
+                      onEditorStateChange={onEditorENStateChange}
+                      toolbarClassName="toolbarClassName"
+                      wrapperClassName="wrapperClassName wrapperStyle"
+                      editorClassName="editorClassName"
+                    />
+                  </div>
                 </Col>
                 <Col md={4}>
                   <div>
@@ -409,7 +374,7 @@ const EditPromotion = ({ state, setState, data }) => {
                       label={"Thumbnail"}
                       type="file"
                       accept={".jpg,.png,.jpeg"}
-                      className="thumbnail"
+                      className="input-upload"
                       onChange={onChangeThumbnail}
                     />
                     {imgThumbnail && (
@@ -419,7 +384,7 @@ const EditPromotion = ({ state, setState, data }) => {
                       label={"Background"}
                       type="file"
                       accept={".jpg,.png,.jpeg"}
-                      className="thumbnail"
+                      className="input-upload"
                       onChange={onChangeBackground}
                     />
                     {imgBackground && (
@@ -456,7 +421,7 @@ const EditPromotion = ({ state, setState, data }) => {
                       {typePromotion === "code" ? (
                         <CustomTextInput
                           placeholder="Nhập mã khuyến mãi"
-                          className="input-promo-code"
+                          className="input-promo"
                           type="text"
                           value={promoCode}
                           onChange={(e) => setPromoCode(e.target.value)}
@@ -552,9 +517,8 @@ const EditPromotion = ({ state, setState, data }) => {
                         {discountUnit === "amount" ? (
                           <CustomTextInput
                             label={"Giá giảm "}
-                            classNameForm="form-promo-discount"
                             placeholder="VNĐ"
-                            className="input-promo-code"
+                            classNameForm="input-promo-amount"
                             type="number"
                             value={maximumDiscount}
                             onChange={(e) => setMaximumDiscount(e.target.value)}
@@ -564,6 +528,7 @@ const EditPromotion = ({ state, setState, data }) => {
                             <CustomTextInput
                               label={"Giá trị giảm"}
                               className="input-promo-discount"
+                              classNameForm="form-discount"
                               placeholder="%"
                               type="number"
                               value={reducedValue}
@@ -571,7 +536,7 @@ const EditPromotion = ({ state, setState, data }) => {
                             />
                             <CustomTextInput
                               label={"Giá giảm tối đa"}
-                              classNameForm="form-promo-discount"
+                              classNameForm="form-discount"
                               className="input-promo-discount"
                               placeholder="VNĐ"
                               type="number"

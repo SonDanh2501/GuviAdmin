@@ -1,14 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, DatePicker, Drawer, Input, List } from "antd";
 import "./index.scss";
-
 import { searchCollaborators } from "../../../../api/collaborator";
 import { errorNotify } from "../../../../helper/toast";
+import { addCollaboratorToOrderApi } from "../../../../api/order";
+import { useDispatch } from "react-redux";
+import { loadingAction } from "../../../../redux/actions/loading";
 const EditOrder = ({ idOrder }) => {
   const [open, setOpen] = useState(false);
   const [dataFilter, setDataFilter] = useState([]);
   const [name, setName] = useState("");
   const [id, setId] = useState("");
+  const dispatch = useDispatch();
   const showDrawer = () => {
     setOpen(true);
   };
@@ -35,6 +38,20 @@ const EditOrder = ({ idOrder }) => {
     setId("");
   }, []);
 
+  const addCollaboratorToOrder = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
+    addCollaboratorToOrderApi(id, { idOrder: idOrder })
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  }, [id, idOrder]);
+
   return (
     <>
       <a className="text-add" onClick={showDrawer}>
@@ -51,7 +68,7 @@ const EditOrder = ({ idOrder }) => {
           <div>
             <a className="label">Cộng tác viên</a>
             <Input
-              placeholder="Tìm kiếm theo số điện thoại"
+              placeholder="Tìm kiếm theo tên hoặc số điện thoại số điện thoại"
               value={name}
               type="text"
               onChange={(e) => handleSearch(e.target.value)}
@@ -67,11 +84,11 @@ const EditOrder = ({ idOrder }) => {
                       value={item?._id}
                       onClick={(e) => {
                         setId(e.target.value);
-                        setName(item?.name);
+                        setName(item?.full_name);
                         setDataFilter([]);
                       }}
                     >
-                      {item?.name}
+                      {item?.full_name}
                     </option>
                   );
                 })}
@@ -79,7 +96,9 @@ const EditOrder = ({ idOrder }) => {
             )}
           </div>
 
-          <Button className="btn-add">Chỉnh sửa</Button>
+          <Button className="btn-add" onClick={addCollaboratorToOrder}>
+            Chỉnh sửa
+          </Button>
         </div>
       </Drawer>
     </>

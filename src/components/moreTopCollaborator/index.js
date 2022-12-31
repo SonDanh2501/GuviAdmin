@@ -87,11 +87,14 @@ const MoreTopCollaborator = () => {
           <List
             dataSource={data.length > 0 ? data : topCollaborator}
             loadMore={isLoadMore}
-            renderItem={(item) => {
+            renderItem={(item, index) => {
               return (
                 <div className="div-item">
-                  <a>{item?._id?.name}</a>
-                  <a>{formatMoney(item?.sumIncome)}</a>
+                  <div>
+                    <a className="text-number">{index + 1}.</a>
+                    <a className="text-name">{item?._id?.name}</a>
+                  </div>
+                  <a className="text-number">{formatMoney(item?.sumIncome)}</a>
                 </div>
               );
             }}

@@ -6,6 +6,7 @@ let token;
 getToken().then((res) => (token = res));
 
 // baseURL: 'https://guvico-be-production.up.railway.app'
+// https://server.guvico.com/
 
 const axiosClient = axios.create({
   baseURL: "https://guvico-be-production.up.railway.app",
@@ -21,7 +22,6 @@ axiosClient.interceptors.request.use(async (req) => {
     req.headers.Authorization = `Bearer ${token}`;
   }
   token = await getToken();
-
   req.headers.Authorization = `Bearer ${token}`;
   return req;
 });

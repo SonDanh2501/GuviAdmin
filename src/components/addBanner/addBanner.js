@@ -10,7 +10,7 @@ import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import { errorNotify } from "../../helper/toast";
 import "./addBanner.scss";
-import { Drawer } from "antd";
+import { Drawer, Image } from "antd";
 
 const AddBanner = () => {
   const [state, setState] = useState(false);
@@ -119,7 +119,7 @@ const AddBanner = () => {
                 onChange={onChangeThumbnail}
               />
               {imgThumbnail && (
-                <img src={imgThumbnail} className="img-banner" />
+                <Image src={imgThumbnail} className="img-thumbnail-banner" />
               )}
             </div>
             <CustomTextInput
