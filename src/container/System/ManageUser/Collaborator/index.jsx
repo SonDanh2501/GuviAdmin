@@ -14,7 +14,7 @@ const ManageCollaborator = () => {
         <AddCollaborator />
       </div>
 
-      <div className="div-container">
+      <div className="div-container-collaborator">
         <Tabs defaultActiveKey="1" size="large">
           <Tabs.TabPane tab="Tất cả Cộng Tác Viên" key="1">
             <CollaboratorManage />

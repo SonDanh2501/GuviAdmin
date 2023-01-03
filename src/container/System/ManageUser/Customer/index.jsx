@@ -16,7 +16,7 @@ const ManageCustomer = () => {
         <AddCustomer />
       </div>
 
-      <div className="div-container">
+      <div className="div-container-customer">
         <Tabs defaultActiveKey="1" size="large">
           <Tabs.TabPane tab="Tất cả Khách Hàng" key="1">
             <UserManage />
