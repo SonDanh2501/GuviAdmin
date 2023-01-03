@@ -78,7 +78,7 @@ export default function Home() {
   const dispatch = useDispatch();
   useEffect(() => {
     getDayReportApi(
-      moment(new Date(2022, 11, 1)).toISOString(),
+      moment().startOf("month").toISOString(),
       moment(new Date()).toISOString()
     )
       .then((res) => {

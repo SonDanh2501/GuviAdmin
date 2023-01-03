@@ -15,7 +15,7 @@ import {
 
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
-import EditPromotion from "../../../../components/editPromotion /editPromotion.js";
+import EditPromotion from "../../../../components/editPromotion/editPromotion.js";
 import {
   getPromotionSelector,
   getTotalPromotion,
