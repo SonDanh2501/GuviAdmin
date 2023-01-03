@@ -438,7 +438,7 @@
 
       .line-vertical {
         width: 1px;
-        min-height: 70px;
+        min-height: 100%;
         background-color: #d0d1d2;
         margin-left: 2px;
       }
@@ -473,6 +473,7 @@
         width: 290px;
         overflow: hidden;
         white-space: pre-wrap;
+        margin-bottom: 10px;
       }
 
       .text-brand-activity {

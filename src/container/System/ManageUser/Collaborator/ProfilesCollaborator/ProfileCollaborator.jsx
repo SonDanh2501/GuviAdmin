@@ -106,12 +106,11 @@ const ProfileCollaborator = () => {
               <CardBody>
                 <div className="text-center">
                   <a className="text-name">
-                    {data?.full_name}{" "}
-                    <span className="font-weight-light">
-                      {!data?.birthday
-                        ? ""
-                        : moment().diff(data?.birthday, "years") + "tuổi "}
-                    </span>
+                    {data?.full_name}
+                    {"-"}
+                    {!data?.birthday
+                      ? ""
+                      : moment().diff(data?.birthday, "years") + " " + "tuổi "}
                   </a>
                 </div>
               </CardBody>

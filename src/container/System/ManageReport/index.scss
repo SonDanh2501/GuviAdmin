@@ -1,0 +1,25 @@
+.div-header-report {
+  display: flex;
+  flex-direction: row;
+  padding-left: 20px;
+  padding-right: 40px;
+  margin-top: 20px;
+  justify-content: space-between;
+
+  .title-header {
+    color: black;
+    font-weight: 400;
+    font-size: 24px;
+    font-family: "Roboto", sans-serif;
+    text-decoration: none;
+  }
+}
+
+.div-container-report {
+  background-color: white;
+  border-radius: 15px;
+  width: 99%;
+  min-height: 20%;
+  margin: 10px;
+  padding: 10px;
+}

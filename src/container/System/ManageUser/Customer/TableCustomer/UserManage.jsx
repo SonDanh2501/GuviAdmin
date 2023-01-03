@@ -46,7 +46,6 @@ import {
   getCustomerTotalItem,
 } from "../../../../../redux/selectors/customer";
 import "./UserManage.scss";
-import AddCustomer from "../../../../../components/addCustomer/addCustomer";
 
 export default function UserManage() {
   const [dataFilter, setDataFilter] = useState([]);
@@ -166,7 +165,7 @@ export default function UserManage() {
   const columns = [
     {
       title: "Khách hàng",
-      width: "15%",
+      width: "20%",
       render: (data) => {
         return (
           <div
@@ -191,7 +190,7 @@ export default function UserManage() {
         const phone = data?.phone.slice(0, 7);
         return <a className="text-phone">{phone + "***"}</a>;
       },
-      width: "10%",
+      width: "15%",
     },
     {
       title: "Địa Chỉ",
@@ -207,7 +206,7 @@ export default function UserManage() {
     {
       title: "Tổng Đơn Đã Đặt",
       render: (data) => <a className="text-address">{data?.total_order}</a>,
-      width: "10%",
+      width: "15%",
       align: "center",
     },
     {

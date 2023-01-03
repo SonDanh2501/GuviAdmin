@@ -99,7 +99,6 @@ export default function TableManageGroupService({ data }) {
               <DropdownItem href="#pablo" onClick={toggleBlock}>
                 {data?.is_active ? " Chặn" : " Kích hoạt"}
               </DropdownItem>
-              
             </DropdownMenu>
           </UncontrolledDropdown> */}
           <div>
