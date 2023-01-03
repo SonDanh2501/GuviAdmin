@@ -64,11 +64,8 @@ const COLORS = ["#BAE6FD", " #F477EF", "#FCD34D", "#2ACB9E"];
 
 export default function Home() {
   const [arrResult, setArrResult] = useState([]);
-  const [dataTopService, setDataTopService] = useState([]);
   const [day, setDay] = useState([]);
   const [type, setType] = useState("day");
-  const dataDay = [];
-  const [numberData, setNumberData] = useState(5);
   const historyActivity = useSelector(getHistoryActivitys);
   const activeUser = useSelector(getActiveUsers);
   const lastestService = useSelector(getLastestServices);
@@ -660,6 +657,30 @@ export default function Home() {
                   itemLayout="horizontal"
                   dataSource={historyActivity.slice(0, 3)}
                   renderItem={(item, index) => {
+                    const subject = item?.id_customer
+                      ? item?.title_admin.replace(
+                          item?.id_customer?._id,
+                          item?.id_customer?.full_name
+                        )
+                      : item?.id_admin_action
+                      ? item?.title_admin.replace(
+                          item?.id_admin_action?._id,
+                          item?.id_admin_action?.full_name
+                        )
+                      : item?.title_admin.replace(
+                          item?.id_collaborator?._id,
+                          item?.id_collaborator?.full_name
+                        );
+
+                    const predicate = item?.id_customer
+                      ? subject?.replace(
+                          item?.id_customer?._id,
+                          item?.id_customer?.full_name
+                        )
+                      : subject?.replace(
+                          item?.id_collaborator?._id,
+                          item?.id_collaborator?.full_name
+                        );
                     return (
                       <div className="div-list" key={index}>
                         <div className="div-line">
@@ -670,30 +691,12 @@ export default function Home() {
                           <a className="text-date-activity">
                             {moment(new Date(item?.date_create)).format(
                               "DD/MM/YYYY"
+                            )}{" "}
+                            {moment(new Date(item?.date_create)).format(
+                              "HH:MM"
                             )}
                           </a>
-                          <a className="text-date-activity">
-                            {item?.admin_action}
-                            <a className="text-time-activity">
-                              {/* {item?.id_collaborator
-                                ? item?.id_collaborator?.name
-                                : item?.id_customer
-                                ? item?.id_customer?.name
-                                : item?.id_admin_action?.name} */}
-                              -{" "}
-                              {moment(new Date(item?.date_create)).format(
-                                "HH:MM"
-                              )}
-                            </a>
-                          </a>
-                          <a className="text-content-activity">
-                            {item?.id_customer
-                              ? item?.title_admin.replace(
-                                  item?.id_customer?._id,
-                                  item?.id_customer?.name
-                                )
-                              : item?.title_admin}
-                          </a>
+                          <a className="text-content-activity">{predicate}</a>
                         </div>
                       </div>
                     );

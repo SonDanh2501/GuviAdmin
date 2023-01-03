@@ -3,7 +3,10 @@ import { useDispatch } from "react-redux";
 import { Form, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
 import { loadingAction } from "../../redux/actions/loading";
-import { createGroupServiceAction } from "../../redux/actions/service";
+import {
+  createGroupServiceAction,
+  updateGroupServiceAction,
+} from "../../redux/actions/service";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./editGroupService.scss";
@@ -46,23 +49,35 @@ const EditGroupService = ({ state, setState, data }) => {
       .catch((err) => console.log("err", err));
   };
 
-  const createGroupSerive = useCallback(() => {
+  const editGroupSerive = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
     dispatch(
-      createGroupServiceAction.createGroupServiceRequest({
-        title: {
-          vi: titleVN,
-          en: titleEN,
+      updateGroupServiceAction.updateGroupServiceRequest({
+        id: data?._id,
+        data: {
+          title: {
+            vi: titleVN,
+            en: titleEN,
+          },
+          description: {
+            vi: descriptionVN,
+            en: descriptionEN,
+          },
+          thumbnail: imgUrl,
+          type: type,
         },
-        description: {
-          vi: descriptionVN,
-          en: descriptionEN,
-        },
-        thumbnail: imgUrl,
-        type: type,
       })
     );
-  }, [dispatch, titleVN, titleEN, descriptionVN, descriptionEN, imgUrl, type]);
+  }, [
+    dispatch,
+    titleVN,
+    titleEN,
+    descriptionVN,
+    descriptionEN,
+    imgUrl,
+    type,
+    data,
+  ]);
 
   return (
     <>
@@ -73,7 +88,7 @@ const EditGroupService = ({ state, setState, data }) => {
       >
         <div className="modal-header">
           <h4 className="modal-title" id="exampleModalLabel">
-            Thêm Group-service
+            Sửa Group-service
           </h4>
           <button className="btn-close" onClick={() => setState(!state)}>
             <i className="uil uil-times-square"></i>
@@ -157,7 +172,7 @@ const EditGroupService = ({ state, setState, data }) => {
               title="Thêm"
               className="float-right btn-modal"
               type="button"
-              onClick={createGroupSerive}
+              onClick={editGroupSerive}
             />
           </Form>
         </div>

@@ -9,6 +9,7 @@ import GroupCustomerManage from "../container/System/ManageConfiguration/ScreenC
 import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
 import ManageOrder from "../container/System/ManageOrder";
 import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDoingManage";
+import ManageReport from "../container/System/ManageReport";
 import GroupServiceManage from "../container/System/ManageService/ManageGroupService/ManageGroupService/GroupServiceManage";
 import ServiceManage from "../container/System/ManageService/ManageService/ServiceManage";
 import ManageSetting from "../container/System/ManageSetting";
@@ -106,6 +107,11 @@ const Dashboard = () => {
             <Route
               path="/adminManage/manage-configuration/manage-group-customer"
               element={<GroupCustomerManage />}
+            />
+            <Route path="/report/manage-report" element={<ManageReport />} />
+            <Route
+              path="/report/manage-report/all"
+              element={<ManageReport />}
             />
           </Routes>
         </main>

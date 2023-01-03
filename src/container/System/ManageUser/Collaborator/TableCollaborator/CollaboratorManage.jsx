@@ -19,13 +19,11 @@ import {
   searchCollaborators,
   verifyCollaborator,
 } from "../../../../../api/collaborator.jsx";
-import lock from "../../../../../assets/images/lock.png";
 import offToggle from "../../../../../assets/images/off-button.png";
 import onToggle from "../../../../../assets/images/on-button.png";
-import stopWatch from "../../../../../assets/images/stop-watch.png";
-import unlock from "../../../../../assets/images/unlocked.png";
-import watch from "../../../../../assets/images/watch.png";
-import AddCollaborator from "../../../../../components/addCollaborator/addCollaborator.js";
+import online from "../../../../../assets/images/online.svg";
+import offline from "../../../../../assets/images/offline.svg";
+import pending from "../../../../../assets/images/pending.svg";
 import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput.jsx";
 import EditCollaborator from "../../../../../components/editCollaborator/editCollaborator.js";
 import { errorNotify } from "../../../../../helper/toast";
@@ -251,8 +249,8 @@ export default function CollaboratorManage() {
               })
             }
           >
-            <img className="img_customer" src={data?.avatar} />
-            <a className="text-name">{data?.full_name}</a>
+            <img className="img_collaborator" src={data?.avatar} />
+            <a className="text-name-collaborator">{data?.full_name}</a>
           </div>
         );
       },
@@ -265,17 +263,31 @@ export default function CollaboratorManage() {
       width: "10%",
     },
     {
+      title: "Khu vực yêu thích",
+    },
+    {
       title: "Trạng thái",
       align: "center",
       render: (data) => {
         return (
           <>
-            {data?.is_lock_time ? (
-              <a className="text-lock-time">{data?.lock_time}</a>
+            {!data?.is_verify ? (
+              <div>
+                <img src={pending} />
+                <a className="text-pending">Pending</a>
+              </div>
+            ) : data?.is_lock_time ? (
+              <a className="text-lock-time">Block{data?.lock_time}</a>
             ) : data?.is_active ? (
-              <a className="text-verify">Đang hoạt động</a>
+              <div>
+                <img src={online} />
+                <a className="text-online">Online</a>
+              </div>
             ) : (
-              <a className="text-nonverify">Chưa hoạt động</a>
+              <div>
+                <img src={offline} />
+                <a className="text-offline">Offline</a>
+              </div>
             )}
           </>
         );
@@ -301,24 +313,6 @@ export default function CollaboratorManage() {
       align: "center",
       render: (data) => (
         <Space size="middle">
-          {/* <div>
-            {data?.is_active ? (
-              <img className="img-unlock" src={unlock} onClick={toggleBlock} />
-            ) : (
-              <img className="img-unlock" src={lock} onClick={toggleBlock} />
-            )}
-          </div> */}
-          {/* <div>
-            {!data?.is_lock_time ? (
-              <img src={watch} className="img-watch" onClick={toggleLockTime} />
-            ) : (
-              <img
-                src={stopWatch}
-                className="img-watch"
-                onClick={toggleLockTime}
-              />
-            )}
-          </div> */}
           <div>
             {data?.is_verify ? (
               <img

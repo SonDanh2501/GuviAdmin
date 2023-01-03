@@ -275,7 +275,7 @@ const Sidebar = ({ onChangeColor }) => {
           <Collapse isOpen={!collapsedReport}>
             <Nav className="nav" navbar>
               <NavItem>
-                <NavLink to="/report/manage-report">
+                <NavLink to="/report/manage-report/all">
                   {({ isActive }) => (
                     <div
                       className={

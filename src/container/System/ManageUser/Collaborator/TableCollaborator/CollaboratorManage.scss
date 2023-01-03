@@ -40,15 +40,22 @@
 .text-id {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 16px;
   color: #19202c;
 }
 
-.text-name {
+.img_collaborator {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  margin-right: 5px;
+}
+
+.text-name-collaborator {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 14px;
   text-decoration-line: underline;
   color: #023e8a !important;
@@ -70,6 +77,34 @@
   font-size: 14px;
   line-height: 16px;
 }
+
+.text-online {
+  color: #00cf3a !important;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+.text-offline {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #979797;
+  margin-left: 5px;
+}
+
+.text-pending {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #f7941d;
+  margin-left: 5px;
+}
+
 .icon-verify {
   color: #00cf3a !important;
   font-family: "Roboto";
