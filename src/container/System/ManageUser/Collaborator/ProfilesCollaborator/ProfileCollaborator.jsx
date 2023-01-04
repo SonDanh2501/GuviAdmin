@@ -20,7 +20,9 @@ import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import Activity from "./components/activity";
 import Document from "./components/documents";
+import History from "./components/history";
 import Information from "./components/information";
+import WithdrawTopup from "./components/withdrawTopup";
 import "./ProfileCollaborator.scss";
 // core components
 
@@ -77,7 +79,7 @@ const ProfileCollaborator = () => {
   return (
     <>
       {/* Page content */}
-      <Container className="mt-5" fluid>
+      <Container className="mt-3" fluid>
         <Row>
           <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
             <Card className="card-profile shadow">
@@ -130,10 +132,10 @@ const ProfileCollaborator = () => {
                     <Activity id={id} />
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Lịch sử tài khoản" key="4">
-                    Content of Tab Pane 3
+                    <History id={id} />
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Yêu cầu nạp/rút" key="5">
-                    Content of Tab Pane 3
+                    <WithdrawTopup id={id} />
                   </Tabs.TabPane>
                 </Tabs>
               </CardBody>

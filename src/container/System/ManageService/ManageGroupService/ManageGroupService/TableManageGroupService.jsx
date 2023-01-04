@@ -79,7 +79,7 @@ export default function TableManageGroupService({ data }) {
           <a>{data?.type}</a>
         </td>
         <td>
-          {/* <UncontrolledDropdown>
+          <UncontrolledDropdown>
             <DropdownToggle href="#pablo" role="button" size="sm">
               <i class="uil uil-ellipsis-v"></i>
             </DropdownToggle>
@@ -100,25 +100,27 @@ export default function TableManageGroupService({ data }) {
                 {data?.is_active ? " Chặn" : " Kích hoạt"}
               </DropdownItem>
             </DropdownMenu>
-          </UncontrolledDropdown> */}
+          </UncontrolledDropdown>
           <div>
             <Modal isOpen={modalBlock} toggle={toggleBlock}>
               <ModalHeader toggle={toggleBlock}>
                 {" "}
-                {data?.is_active === true
+                {itemEdit?.is_active === true
                   ? "Khóa GroupService"
                   : "Mở GroupService"}
               </ModalHeader>
               <ModalBody>
-                {data?.is_active === true
+                {itemEdit?.is_active === true
                   ? "Bạn có muốn khóa GroupService"
                   : "Bạn có muốn kích hoạt GroupService này"}
-                <h3>{data?.full_name}</h3>
+                <h3>{itemEdit?.full_name}</h3>
               </ModalBody>
               <ModalFooter>
                 <Button
                   color="primary"
-                  onClick={() => blockGroupService(data?._id, data?.is_active)}
+                  onClick={() =>
+                    blockGroupService(itemEdit?._id, itemEdit?.is_active)
+                  }
                 >
                   Có
                 </Button>

@@ -22,7 +22,7 @@ export const getActiveUserApi = () => {
 
 export const getHistoryActivityApi = (start, length) => {
   return axiosClient.get(
-    `/admin/statistic/history_activity?start=${start}&lenght=${length}`
+    `/admin/statistic/history_activity?start=${start}&length=${length}`
   );
 };
 
@@ -38,6 +38,6 @@ export const getTopServiceApi = () => {
 
 export const getTopCollaboratorApi = (startDate, endDate, start, length) => {
   return axiosClient.get(
-    `/admin/statistic/top_collaborators?start_date=${startDate}&end_date=${endDate}&start=${start}&lenght=${length}`
+    `/admin/statistic/top_collaborators?start_date=${startDate}&end_date=${endDate}&start=${start}&length=${length}`
   );
 };

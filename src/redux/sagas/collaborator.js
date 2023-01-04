@@ -11,13 +11,14 @@ function* fetchCollaboratorsSaga(action) {
     const resoponse = yield call(
       api.fetchCollaborators,
       action.payload.start,
-      action.payload.length
+      action.payload.length,
+      action.payload.type
     );
 
     yield put(
       actions.getCollaborators.getCollaboratorsSuccess({
         data: resoponse.data,
-        total: resoponse.totalItem,
+        total: resoponse.totalItems,
       })
     );
     yield put(loadingAction.loadingRequest(false));

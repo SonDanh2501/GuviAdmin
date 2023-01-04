@@ -2,12 +2,15 @@ import { List, Pagination } from "antd";
 import moment from "moment";
 import { memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getHistoryActivityCollaborator } from "../../../../../../../api/collaborator";
+import {
+  getHistoryActivityCollaborator,
+  getHistoryCollaborator,
+} from "../../../../../../../api/collaborator";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import "./index.scss";
 
-const Activity = ({ id }) => {
+const History = ({ id }) => {
   const [data, setData] = useState([]);
   const [totalData, setTotalData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,7 +18,7 @@ const Activity = ({ id }) => {
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
-    getHistoryActivityCollaborator(id, 0, 10)
+    getHistoryCollaborator(id, 0, 10)
       .then((res) => {
         setData(res.data);
         setTotalData(res.totalItem);
@@ -86,7 +89,6 @@ const Activity = ({ id }) => {
           item?.id_reason_cancel?._id,
           item?.id_reason_cancel?.name
         );
-
     return (
       <div className="div-listItem">
         <div className="div-list">
@@ -118,4 +120,4 @@ const Activity = ({ id }) => {
   );
 };
 
-export default memo(Activity);
+export default memo(History);

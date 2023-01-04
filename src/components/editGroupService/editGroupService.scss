@@ -1,11 +1,12 @@
-.btn-modal {
-  background-color: #17a2b8;
-  border: none !important;
+.btn-edit-service {
+  width: 15%px;
+  height: 40px;
+  border: none;
   border-radius: 5px;
-  height: 35px;
-  -webkit-box-shadow: 1px 3px 1px #b6b5ab;
-  -moz-box-shadow: 1px 3px 1px #b6b5ab;
-  box-shadow: 1px 3px 1px #b6b5ab;
+  background-color: #48cae4 !important;
+  color: white;
+  margin-left: 20px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
 }
 
 .img-thumbnail {

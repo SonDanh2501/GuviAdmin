@@ -426,7 +426,7 @@ const AddPromotion = () => {
                         <CustomTextInput
                           label={"Tên đối tác"}
                           placeholder="Nhập tên đối tác"
-                          className="input-promo-code"
+                          className="input-promo-brand"
                           type="text"
                           value={namebrand}
                           onChange={(e) => setNamebrand(e.target.value)}
@@ -532,27 +532,30 @@ const AddPromotion = () => {
                   </div>
                 </Col>
                 <Col md={4}>
-                  <div>
-                    <h5>9. Dịch vụ áp dụng</h5>
-                    <Label>Các dịch vụ</Label>
+                  {promoType !== "partner_promotion" && (
+                    <div>
+                      <h5>9. Dịch vụ áp dụng</h5>
+                      <Label>Các dịch vụ</Label>
 
-                    <CustomTextInput
-                      className="select-type-promo"
-                      name="select"
-                      type="select"
-                      value={serviceApply}
-                      onChange={(e) => {
-                        setServiceApply(e.target.value);
-                      }}
-                      body={service.map((item, index) => {
-                        return (
-                          <option key={index} value={item?._id}>
-                            {item?.title?.vi}
-                          </option>
-                        );
-                      })}
-                    />
-                  </div>
+                      <CustomTextInput
+                        className="select-type-promo"
+                        name="select"
+                        type="select"
+                        value={serviceApply}
+                        onChange={(e) => {
+                          setServiceApply(e.target.value);
+                        }}
+                        body={service.map((item, index) => {
+                          return (
+                            <option key={index} value={item?._id}>
+                              {item?.title?.vi}
+                            </option>
+                          );
+                        })}
+                      />
+                    </div>
+                  )}
+
                   <div>
                     <h5>10. Đối tượng áp dụng</h5>
                     <Label>Nhóm khách hàng</Label>
@@ -594,7 +597,6 @@ const AddPromotion = () => {
                     </FormGroup>
                     {limitedQuantity && (
                       <CustomTextInput
-                        label={"Lượt sử dụng mỗi khách"}
                         placeholder="Số lượng"
                         className="input-promo-code"
                         type="number"
@@ -618,7 +620,6 @@ const AddPromotion = () => {
                     </FormGroup>
                     {isUsePromo && (
                       <CustomTextInput
-                        label={"Lần sử dụng mỗi khách hàng"}
                         placeholder="Số lượng"
                         className="input-promo-code"
                         min={0}

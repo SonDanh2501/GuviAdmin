@@ -38,7 +38,9 @@ import "./CollaboratorManage.scss";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 
-export default function CollaboratorManage() {
+export default function CollaboratorManage(props) {
+  const { data, total, status } = props;
+
   const [dataFilter, setDataFilter] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalFilter, setTotalFilter] = useState("");
@@ -57,22 +59,13 @@ export default function CollaboratorManage() {
   const toggleLockTime = () => setModalLockTime(!modalLockTime);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const collaborator = useSelector(getCollaborator);
-  const collaboratorTotal = useSelector(getCollaboratorTotal);
-
-  useEffect(() => {
-    // dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      getCollaborators.getCollaboratorsRequest({ start: 0, length: 20 })
-    );
-  }, [dispatch]);
 
   const onChange = (page) => {
     setCurrentPage(page);
     const start =
       dataFilter.length > 0
         ? page * dataFilter.length - dataFilter.length
-        : page * collaborator.length - collaborator.length;
+        : page * data.length - data.length;
     dataFilter.length > 0
       ? searchCollaborators(valueFilter, start, 20)
           .then((res) => {
@@ -83,6 +76,7 @@ export default function CollaboratorManage() {
           getCollaborators.getCollaboratorsRequest({
             start: start > 0 ? start : 0,
             length: 20,
+            type: status,
           })
         );
   };
@@ -270,14 +264,22 @@ export default function CollaboratorManage() {
       align: "center",
       render: (data) => {
         return (
-          <>
+          <div>
             {!data?.is_verify ? (
               <div>
                 <img src={pending} />
                 <a className="text-pending">Pending</a>
               </div>
             ) : data?.is_lock_time ? (
-              <a className="text-lock-time">Block{data?.lock_time}</a>
+              <div>
+                <div>
+                  <img src={pending} />
+                  <a className="text-lock-time">Block</a>
+                </div>
+                <a className="text-lock-time">
+                  Còn lại {moment().from(moment(data?.lock_time), "days")}
+                </a>
+              </div>
             ) : data?.is_active ? (
               <div>
                 <img src={online} />
@@ -289,7 +291,7 @@ export default function CollaboratorManage() {
                 <a className="text-offline">Offline</a>
               </div>
             )}
-          </>
+          </div>
         );
       },
     },
@@ -390,7 +392,7 @@ export default function CollaboratorManage() {
         <div className="div-table mt-3">
           <Table
             columns={columns}
-            dataSource={dataFilter.length > 0 ? dataFilter : collaborator}
+            dataSource={dataFilter.length > 0 ? dataFilter : data}
             pagination={false}
             rowKey={(record) => record._id}
             rowSelection={{
@@ -408,22 +410,16 @@ export default function CollaboratorManage() {
             }}
             locale={{
               emptyText:
-                collaborator.length > 0 ? (
-                  <Empty />
-                ) : (
-                  <Skeleton active={true} />
-                ),
+                data.length > 0 ? <Empty /> : <Skeleton active={true} />,
             }}
           />
           <div className="div-pagination p-2">
-            <a>
-              Tổng: {dataFilter.length > 0 ? totalFilter : collaboratorTotal}
-            </a>
+            <a>Tổng: {dataFilter.length > 0 ? totalFilter : total}</a>
             <div>
               <Pagination
                 current={currentPage}
                 onChange={onChange}
-                total={dataFilter.length > 0 ? totalFilter : collaboratorTotal}
+                total={dataFilter.length > 0 ? totalFilter : total}
                 showSizeChanger={false}
                 pageSize={20}
               />
