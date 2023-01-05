@@ -55,8 +55,8 @@ const EditPromotion = ({ state, setState, data }) => {
   const [minimumOrder, setMinimumOrder] = React.useState("");
   const [namebrand, setNamebrand] = React.useState("");
   const [codebrand, setCodebrand] = React.useState("");
-  const [reducedValue, setReducedValue] = React.useState(0);
-  const [maximumDiscount, setMaximumDiscount] = React.useState(0);
+  const [reducedValue, setReducedValue] = React.useState();
+  const [maximumDiscount, setMaximumDiscount] = React.useState();
   const [orderFirst, setOrderFirst] = React.useState(false);
   const [limitedQuantity, setLimitedQuantity] = React.useState(false);
   const [amount, setAmount] = React.useState("");
@@ -623,7 +623,6 @@ const EditPromotion = ({ state, setState, data }) => {
                     </FormGroup>
                     {limitedQuantity && (
                       <CustomTextInput
-                        label={"Lượt sử dụng mỗi khách"}
                         placeholder="Số lượng"
                         className="input-promo-code"
                         type="number"
@@ -646,7 +645,6 @@ const EditPromotion = ({ state, setState, data }) => {
                     </FormGroup>
                     {isUsePromo && (
                       <CustomTextInput
-                        label={"Lần sử dụng mỗi khách hàng"}
                         placeholder="Số lượng"
                         className="input-promo-code"
                         type="number"
@@ -706,7 +704,6 @@ const EditPromotion = ({ state, setState, data }) => {
                     </FormGroup>
                     {isExchangePoint && (
                       <CustomTextInput
-                        label={"Điểm"}
                         placeholder="Nhập số điểm"
                         className="input-promo-code"
                         type="number"

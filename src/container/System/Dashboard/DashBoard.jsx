@@ -657,29 +657,56 @@ export default function Home() {
                   itemLayout="horizontal"
                   dataSource={historyActivity.slice(0, 3)}
                   renderItem={(item, index) => {
-                    const subject = item?.id_customer
-                      ? item?.title_admin.replace(
-                          item?.id_customer?._id,
-                          item?.id_customer?.full_name
-                        )
-                      : item?.id_admin_action
+                    const subject = item?.id_admin_action
                       ? item?.title_admin.replace(
                           item?.id_admin_action?._id,
                           item?.id_admin_action?.full_name
                         )
-                      : item?.title_admin.replace(
+                      : item?.id_collaborator
+                      ? item?.title_admin.replace(
                           item?.id_collaborator?._id,
                           item?.id_collaborator?.full_name
-                        );
-
-                    const predicate = item?.id_customer
-                      ? subject?.replace(
+                        )
+                      : item?.id_customer
+                      ? item?.title_admin.replace(
                           item?.id_customer?._id,
                           item?.id_customer?.full_name
                         )
-                      : subject?.replace(
+                      : "";
+
+                    const predicate = item?.id_collaborator
+                      ? subject.replace(
                           item?.id_collaborator?._id,
                           item?.id_collaborator?.full_name
+                        )
+                      : item?.id_customer
+                      ? subject.replace(
+                          item?.id_customer?._id,
+                          item?.id_customer?.full_name
+                        )
+                      : item?.id_admin_action
+                      ? subject.replace(
+                          item?.id_admin_action?._id,
+                          item?.id_admin_action?.full_name
+                        )
+                      : subject.replace(
+                          item?.id_transistion_collaborator?._id,
+                          item?.id_transistion_collaborator?.transfer_note
+                        );
+
+                    const object = item?.id_transistion_collaborator
+                      ? predicate.replace(
+                          item?.id_transistion_collaborator?._id,
+                          item?.id_transistion_collaborator?.transfer_note
+                        )
+                      : item?.id_transistion_customer
+                      ? predicate.replace(
+                          item?.id_transistion_customer?._id,
+                          item?.id_transistion_customer?.transfer_note
+                        )
+                      : predicate.replace(
+                          item?.id_reason_cancel?._id,
+                          item?.id_reason_cancel?.title.vi
                         );
                     return (
                       <div className="div-list" key={index}>
@@ -696,7 +723,7 @@ export default function Home() {
                               "HH:MM"
                             )}
                           </a>
-                          <a className="text-content-activity">{predicate}</a>
+                          <a className="text-content-activity">{object}</a>
                         </div>
                       </div>
                     );

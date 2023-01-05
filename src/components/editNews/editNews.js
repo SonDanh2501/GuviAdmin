@@ -2,6 +2,7 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, FormGroup, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
+import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
 import { updateNew } from "../../redux/actions/news";
 import CustomButton from "../customButton/customButton";
@@ -41,7 +42,12 @@ const EditNews = ({ state, setState, data }) => {
       },
     })
       .then((res) => setImgThumbnail(res))
-      .catch((err) => console.log("err", err));
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
   };
   const onEditNews = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));

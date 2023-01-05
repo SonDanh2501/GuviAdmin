@@ -12,9 +12,9 @@ export const getCollaboratorsById = (id) => {
   return axiosClient.get(`/admin/collaborator_manager/get_detail/${id}`);
 };
 
-export const searchCollaborators = (payload, start, length) => {
+export const searchCollaborators = (start, length, type, payload) => {
   return axiosClient.get(
-    `/admin/collaborator_manager/get_list_item?search=${payload}&start=${start}&length=${length}`
+    `/admin/collaborator_manager/get_collaborator_by_type?start=${start}&length=${length}&collaborator_type=${type}&search=${payload}`
   );
 };
 

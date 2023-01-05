@@ -2,27 +2,12 @@ import { MoreOutlined } from "@ant-design/icons";
 import { Dropdown, Empty, Skeleton, Space, Table } from "antd";
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet } from "react-router-dom";
-import {
-  Button,
-  Card,
-  CardFooter,
-  CardHeader,
-  Col,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  Row,
-} from "reactstrap";
+import { Outlet, useNavigate } from "react-router-dom";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   activeGroupServiceApi,
   deleteGroupServiceApi,
 } from "../../../../../api/service";
-import AddGroupService from "../../../../../components/addGroupService/addGroupService";
 import EditGroupService from "../../../../../components/editGroupService/editGroupService";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import { getGroupServiceAction } from "../../../../../redux/actions/service";
@@ -31,7 +16,6 @@ import {
   getGroupServiceTotal,
 } from "../../../../../redux/selectors/service";
 import "./GroupServiceManage.scss";
-import TableManageGroupService from "./TableManageGroupService";
 
 export default function GroupServiceManage() {
   const dispatch = useDispatch();
@@ -44,6 +28,7 @@ export default function GroupServiceManage() {
   const [currentPage, setCurrentPage] = useState(0);
   const listGroupService = useSelector(getGroupService);
   const totalGroupService = useSelector(getGroupServiceTotal);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     // dispatch(loadingAction.loadingRequest(true));
@@ -116,7 +101,7 @@ export default function GroupServiceManage() {
       render: (data) => {
         return (
           <div>
-            <img className="img_customer" src={data?.thumbnail} />
+            <img className="img-customer-service" src={data?.thumbnail} />
           </div>
         );
       },
@@ -137,28 +122,28 @@ export default function GroupServiceManage() {
       key: "action",
       width: "10%",
       align: "center",
-      render: (data) => (
-        <Space size="middle">
-          <Dropdown
-            menu={{
-              items,
-            }}
-            placement="bottom"
-            trigger={["click"]}
-          >
-            <a>
-              <MoreOutlined className="icon-more" />
-            </a>
-          </Dropdown>
-        </Space>
-      ),
+      // render: (data) => (
+      //   <Space size="middle">
+      //     <Dropdown
+      //       menu={{
+      //         items,
+      //       }}
+      //       placement="bottom"
+      //       trigger={["click"]}
+      //     >
+      //       <a>
+      //         <MoreOutlined className="icon-more" />
+      //       </a>
+      //     </Dropdown>
+      //   </Space>
+      // ),
     },
   ];
 
   return (
     <React.Fragment>
       <div className="mt-2 p-3">
-        <a> Tất cả dịch vụ</a>
+        <a className="label-service"> Tất cả dịch vụ</a>
         <div className="mt-3">
           <Table
             columns={columns}
@@ -175,6 +160,9 @@ export default function GroupServiceManage() {
               return {
                 onClick: (event) => {
                   setItemEdit(record);
+                  navigate("/services/manage-group-service/manage-service", {
+                    state: { id: record?._id },
+                  });
                 },
               };
             }}

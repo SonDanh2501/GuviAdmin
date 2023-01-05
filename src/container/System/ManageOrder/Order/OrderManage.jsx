@@ -199,7 +199,10 @@ export default function OrderManage(props) {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * data.length - data.length;
+    const start =
+      dataSearch.length > 0
+        ? page * dataSearch.length - dataSearch.length
+        : page * data.length - data.length;
     dataSearch.length > 0
       ? dispatch(
           searchOrder.searchOrderRequest({

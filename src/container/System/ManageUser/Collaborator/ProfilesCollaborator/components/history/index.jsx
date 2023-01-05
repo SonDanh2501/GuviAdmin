@@ -44,7 +44,12 @@ const History = ({ id }) => {
   };
 
   const renderItem = (item) => {
-    const subject = item?.id_collaborator
+    const subject = item?.id_admin_action
+      ? item?.title_admin.replace(
+          item?.id_admin_action?._id,
+          item?.id_admin_action?.full_name
+        )
+      : item?.id_collaborator
       ? item?.title_admin.replace(
           item?.id_collaborator?._id,
           item?.id_collaborator?.full_name
@@ -54,10 +59,7 @@ const History = ({ id }) => {
           item?.id_customer?._id,
           item?.id_customer?.full_name
         )
-      : item?.title_admin.replace(
-          item?.id_admin_action?._id,
-          item?.id_admin_action?.full_name
-        );
+      : "";
     const predicate = item?.id_collaborator
       ? subject.replace(
           item?.id_collaborator?._id,
@@ -87,7 +89,7 @@ const History = ({ id }) => {
         )
       : predicate.replace(
           item?.id_reason_cancel?._id,
-          item?.id_reason_cancel?.name
+          item?.id_reason_cancel?.title?.vi
         );
     return (
       <div className="div-listItem">

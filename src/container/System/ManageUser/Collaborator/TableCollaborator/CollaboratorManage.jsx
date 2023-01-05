@@ -67,9 +67,10 @@ export default function CollaboratorManage(props) {
         ? page * dataFilter.length - dataFilter.length
         : page * data.length - data.length;
     dataFilter.length > 0
-      ? searchCollaborators(valueFilter, start, 20)
+      ? searchCollaborators(start, 20, status, valueFilter)
           .then((res) => {
             setDataFilter(res.data);
+            setTotalFilter(res.totalItems);
           })
           .catch((err) => console.log(err))
       : dispatch(
@@ -81,19 +82,22 @@ export default function CollaboratorManage(props) {
         );
   };
 
-  const handleSearch = useCallback((value) => {
-    setValueFilter(value);
-    searchCollaborators(value, 0, 20)
-      .then((res) => {
-        setDataFilter(res.data);
-        setTotalFilter(res.totalItem);
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
+  const handleSearch = useCallback(
+    (value) => {
+      setValueFilter(value);
+      searchCollaborators(0, 20, status, value)
+        .then((res) => {
+          setDataFilter(res.data);
+          setTotalFilter(res.totalItems);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
         });
-      });
-  }, []);
+    },
+    [status]
+  );
 
   const onDelete = useCallback((id) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -229,7 +233,18 @@ export default function CollaboratorManage(props) {
   const columns = [
     {
       title: "Mã CTV",
-      render: (data) => <a className="text-id">{data?._id}</a>,
+      render: (data) => (
+        <a
+          className="text-id"
+          onClick={() =>
+            navigate("/system/collaborator-manage/details-collaborator", {
+              state: { id: data?._id },
+            })
+          }
+        >
+          {data?._id}
+        </a>
+      ),
       width: "15%",
     },
     {
@@ -276,9 +291,9 @@ export default function CollaboratorManage(props) {
                   <img src={pending} />
                   <a className="text-lock-time">Block</a>
                 </div>
-                <a className="text-lock-time">
+                {/* <a className="text-lock-time">
                   Còn lại {moment().from(moment(data?.lock_time), "days")}
-                </a>
+                </a> */}
               </div>
             ) : data?.is_active ? (
               <div>
@@ -349,19 +364,7 @@ export default function CollaboratorManage(props) {
   const itemFilter = [
     {
       key: "1",
-      label: (
-        <a
-        // onClick={() => {
-        //   setModalEdit(!modalEdit);
-        // }}
-        >
-          Khách hàng thân thiết
-        </a>
-      ),
-    },
-    {
-      key: "2",
-      label: <a>Khách hàng sinh nhật</a>,
+      label: <a>Khách hàng thân thiết</a>,
     },
   ];
 
@@ -414,12 +417,12 @@ export default function CollaboratorManage(props) {
             }}
           />
           <div className="div-pagination p-2">
-            <a>Tổng: {dataFilter.length > 0 ? totalFilter : total}</a>
+            <a>Tổng: {totalFilter > 0 ? totalFilter : total}</a>
             <div>
               <Pagination
                 current={currentPage}
                 onChange={onChange}
-                total={dataFilter.length > 0 ? totalFilter : total}
+                total={totalFilter > 0 ? totalFilter : total}
                 showSizeChanger={false}
                 pageSize={20}
               />

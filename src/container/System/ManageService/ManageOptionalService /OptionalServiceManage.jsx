@@ -13,9 +13,9 @@ import AddService from "../../../../components/addService/addService";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import { loadingAction } from "../../../../redux/actions/loading";
 
-import "./ServiceManage.scss";
+import "./OptionalServiceManage.scss";
 
-export default function ServiceManage() {
+export default function OptionalServiceManage() {
   const { state } = useLocation();
   const { id } = state || {};
   const [data, setData] = useState([]);
@@ -29,9 +29,9 @@ export default function ServiceManage() {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    getServiceByIdApi(id)
-      .then((res) => setData(res.data))
-      .catch((err) => console.log(err));
+    // getServiceByIdApi(id)
+    //   .then((res) => setData(res.data))
+    //   .catch((err) => console.log(err));
   }, [id]);
 
   const onDelete = useCallback((id) => {
