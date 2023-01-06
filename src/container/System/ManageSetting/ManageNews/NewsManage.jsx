@@ -131,33 +131,33 @@ export default function NewsManage() {
 
   const columns = [
     {
-      title: "Title",
+      title: "Tiêu đề",
       dataIndex: ["title"],
       width: "20%",
     },
     {
-      title: "Short description",
+      title: "Mô tả ngắn",
       dataIndex: ["short_description"],
       width: "30%",
     },
     {
-      title: "URL",
+      title: "Link bài viết",
       dataIndex: "url",
     },
     {
-      title: "Type",
+      title: "Loại tin",
       dataIndex: "type",
     },
     {
-      title: "Image",
+      title: "Hình ",
       render: (data) => {
         return (
           <Image src={data?.thumbnail} style={{ width: 100, height: 100 }} />
         );
       },
+      align: "center",
     },
     {
-      title: "",
       key: "action",
       render: (data) => (
         <Space size="middle">

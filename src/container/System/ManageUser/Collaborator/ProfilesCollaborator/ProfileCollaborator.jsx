@@ -14,7 +14,7 @@ import {
   Input,
 } from "reactstrap";
 import { getCollaboratorsById } from "../../../../../api/collaborator";
-import { postFile } from "../../../../../api/file";
+import { getDistrictApi, postFile } from "../../../../../api/file";
 import user from "../../../../../assets/images/user.png";
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
@@ -35,6 +35,7 @@ const ProfileCollaborator = () => {
     identity_date: "2020-11-12T00:00:00.000Z",
   });
   const [img, setImg] = useState("");
+  const [dataDistrict, setDataDistrict] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -45,6 +46,14 @@ const ProfileCollaborator = () => {
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => console.log(err));
+
+    getDistrictApi()
+      .then((res) => {
+        setDataDistrict(res?.aministrative_division[0]?.districts);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [id]);
 
   const onChangeThumbnail = (e) => {
@@ -106,7 +115,7 @@ const ProfileCollaborator = () => {
                 />
               </CardHeader>
               <CardBody>
-                <div className="text-center">
+                <div className="text-body">
                   <a className="text-name">
                     {data?.full_name}
                     {"-"}

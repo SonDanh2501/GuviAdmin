@@ -34,7 +34,7 @@ import "./editPromotion.scss";
 const EditPromotion = ({ state, setState, data }) => {
   const [formPromorion, setFormPromotion] = React.useState("Mã khuyến mãi");
   const [typePromotion, setTypePromotion] = React.useState("code");
-  const [formDiscount, setFormDiscount] = React.useState("Giảm trực tiếp");
+  const [formDiscount, setFormDiscount] = React.useState("amount");
   const [discountUnit, setDiscountUnit] = React.useState("amount");
   const [create, setCreate] = React.useState(false);
   const [groupCustomer, setGroupCustomer] = React.useState([]);
@@ -50,7 +50,7 @@ const EditPromotion = ({ state, setState, data }) => {
     EditorState.createEmpty()
   );
   const [promoCode, setPromoCode] = React.useState("");
-  const [promoType, setPromoType] = React.useState("same_price");
+  const [promoType, setPromoType] = React.useState("order");
   const [unitPrice, setUnitPrice] = React.useState("");
   const [minimumOrder, setMinimumOrder] = React.useState("");
   const [namebrand, setNamebrand] = React.useState("");
@@ -145,11 +145,14 @@ const EditPromotion = ({ state, setState, data }) => {
 
   const onFormDiscount = (title) => {
     setFormDiscount(title);
-    if (title === "Giảm trực tiếp") {
+    if (title === "amount") {
       setDiscountUnit("amount");
     } else {
       setDiscountUnit("percent");
     }
+    // else {
+    //   setDiscountUnit("same_price");
+    // }
   };
   const handleChange = (value) => {
     setCustomer(value);
@@ -439,7 +442,7 @@ const EditPromotion = ({ state, setState, data }) => {
                       onChange={(e) => setPromoType(e.target.value)}
                       body={
                         <>
-                          <option value={"same_price"}>Đồng giá</option>
+                          {/* <option value={"same_price"}>Đồng giá</option> */}
                           <option value={"order"}>Giảm giá theo đơn đặt</option>
                           <option value={"partner_promotion"}>
                             Khuyến mãi từ đối tác
@@ -447,16 +450,17 @@ const EditPromotion = ({ state, setState, data }) => {
                         </>
                       }
                     />
-                    {promoType === "same_price" ? (
+                    {/* {promoType === "same_price" ? (
                       <CustomTextInput
                         label={"Đơn giá"}
                         placeholder="Nhập đơn giá"
                         className="input-promo-code"
                         type="number"
-                        value={unitPrice}
-                        onChange={(e) => setUnitPrice(e.target.value)}
+                        value={maximumDiscount}
+                        onChange={(e) => setMaximumDiscount(e.target.value)}
                       />
-                    ) : promoType === "order" ? (
+                    ) : */}
+                    {promoType === "order" ? (
                       <CustomTextInput
                         label={"Giá đơn đặt tối thiểu"}
                         placeholder="Nhập giá"
@@ -495,58 +499,85 @@ const EditPromotion = ({ state, setState, data }) => {
                         <Button
                           className={
                             discountUnit === "amount"
-                              ? "btn-form-promotion"
-                              : "btn-form-promotion-default"
+                              ? "btn-form-same-promotion"
+                              : "btn-form-same-promotion-default"
                           }
                           outline
-                          onClick={() => onFormDiscount("Giảm trực tiếp")}
+                          onClick={() => onFormDiscount("amount")}
                         >
                           Giảm trực tiếp
                         </Button>
                         <Button
                           className={
                             discountUnit === "percent"
-                              ? "btn-form-promotion"
-                              : "btn-form-promotion-default"
+                              ? "btn-form-same-promotion"
+                              : "btn-form-same-promotion-default"
                           }
                           outline
-                          onClick={() => onFormDiscount("Giảm theo phần trăm")}
+                          onClick={() => onFormDiscount("percent")}
                         >
                           Giảm theo phần trăm
                         </Button>
-                        {discountUnit === "amount" ? (
-                          <CustomTextInput
-                            label={"Giá giảm "}
-                            placeholder="VNĐ"
-                            classNameForm="input-promo-amount"
-                            type="number"
-                            value={maximumDiscount}
-                            onChange={(e) => setMaximumDiscount(e.target.value)}
-                          />
-                        ) : (
-                          <Row className="row-discount">
+                        {/* <Button
+                          className={
+                            discountUnit === "same_price"
+                              ? "btn-form-same-promotion"
+                              : "btn-form-same-promotion-default"
+                          }
+                          outline
+                          onClick={() => onFormDiscount("same_price")}
+                        >
+                          Đồng giá
+                        </Button> */}
+                        {
+                          discountUnit === "amount" ? (
                             <CustomTextInput
-                              label={"Giá trị giảm"}
-                              className="input-promo-discount"
-                              classNameForm="form-discount"
-                              placeholder="%"
-                              type="number"
-                              value={reducedValue}
-                              onChange={(e) => setReducedValue(e.target.value)}
-                            />
-                            <CustomTextInput
-                              label={"Giá giảm tối đa"}
-                              classNameForm="form-discount"
-                              className="input-promo-discount"
+                              label={"Giá giảm "}
                               placeholder="VNĐ"
+                              classNameForm="input-promo-amount"
                               type="number"
                               value={maximumDiscount}
                               onChange={(e) =>
                                 setMaximumDiscount(e.target.value)
                               }
                             />
-                          </Row>
-                        )}
+                          ) : (
+                            <Row className="row-discount">
+                              <CustomTextInput
+                                label={"Giá trị giảm"}
+                                className="input-promo-discount"
+                                classNameForm="form-discount"
+                                placeholder="%"
+                                type="number"
+                                value={reducedValue}
+                                onChange={(e) =>
+                                  setReducedValue(e.target.value)
+                                }
+                              />
+                              <CustomTextInput
+                                label={"Giá giảm tối đa"}
+                                classNameForm="form-discount"
+                                className="input-promo-discount"
+                                placeholder="VNĐ"
+                                type="number"
+                                value={maximumDiscount}
+                                onChange={(e) =>
+                                  setMaximumDiscount(e.target.value)
+                                }
+                              />
+                            </Row>
+                          )
+                          // : (
+                          //   <CustomTextInput
+                          //     label={"Đơn giá"}
+                          //     placeholder="Nhập đơn giá"
+                          //     classNameForm="input-promo-amount"
+                          //     type="number"
+                          //     value={maximumDiscount}
+                          //     onChange={(e) => setMaximumDiscount(e.target.value)}
+                          //   />
+                          // )
+                        }
                       </Row>
                     </div>
                   )}

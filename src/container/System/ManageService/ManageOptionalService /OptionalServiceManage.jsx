@@ -107,21 +107,21 @@ export default function OptionalServiceManage() {
     {
       key: "action",
       align: "center",
-      // render: (data) => (
-      //   <Space size="middle">
-      //     <Dropdown
-      //       menu={{
-      //         items,
-      //       }}
-      //       placement="bottom"
-      //       trigger={["click"]}
-      //     >
-      //       <a>
-      //         <MoreOutlined className="icon-more" />
-      //       </a>
-      //     </Dropdown>
-      //   </Space>
-      // ),
+      render: (data) => (
+        <Space size="middle">
+          <Dropdown
+            menu={{
+              items,
+            }}
+            placement="bottom"
+            trigger={["click"]}
+          >
+            <a>
+              <MoreOutlined className="icon-more" />
+            </a>
+          </Dropdown>
+        </Space>
+      ),
     },
   ];
 

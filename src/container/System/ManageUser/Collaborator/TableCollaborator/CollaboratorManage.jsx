@@ -37,6 +37,7 @@ import "./CollaboratorManage.scss";
 
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
+import { getDistrictApi } from "../../../../../api/file.jsx";
 
 export default function CollaboratorManage(props) {
   const { data, total, status } = props;
@@ -270,9 +271,6 @@ export default function CollaboratorManage(props) {
       render: (data) => <a className="text-phone">{data?.phone}</a>,
       align: "center",
       width: "10%",
-    },
-    {
-      title: "Khu vực yêu thích",
     },
     {
       title: "Trạng thái",

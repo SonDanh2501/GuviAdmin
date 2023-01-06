@@ -1,7 +1,7 @@
 import { MoreOutlined } from "@ant-design/icons";
 import { Dropdown, Image, Space, Table } from "antd";
 import React, { useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Outlet, useLocation } from "react-router-dom";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
@@ -9,8 +9,7 @@ import {
   deleteServiceApi,
   getServiceByIdApi,
 } from "../../../../api/service";
-import AddService from "../../../../components/addService/addService";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
+import EditService from "../../../../components/editService/editService";
 import { loadingAction } from "../../../../redux/actions/loading";
 
 import "./ServiceManage.scss";
@@ -74,19 +73,22 @@ export default function ServiceManage() {
   }, []);
 
   const items = [
-    {
-      key: "1",
-      label: itemEdit?.is_active ? (
-        <a onClick={toggleBlock}>Chặn</a>
-      ) : (
-        <a onClick={toggleBlock}>Kích hoạt</a>
-      ),
-    },
-
+    // {
+    //   key: "1",
+    //   label: itemEdit?.is_active ? (
+    //     <a onClick={toggleBlock}>Chặn</a>
+    //   ) : (
+    //     <a onClick={toggleBlock}>Kích hoạt</a>
+    //   ),
+    // },
     {
       key: "2",
-      label: <a onClick={toggle}>Xoá</a>,
+      label: <EditService data={itemEdit} />,
     },
+    // {
+    //   key: "3",
+    //   label: <a onClick={toggle}>Xoá</a>,
+    // },
   ];
 
   const columns = [
@@ -107,21 +109,21 @@ export default function ServiceManage() {
     {
       key: "action",
       align: "center",
-      // render: (data) => (
-      //   <Space size="middle">
-      //     <Dropdown
-      //       menu={{
-      //         items,
-      //       }}
-      //       placement="bottom"
-      //       trigger={["click"]}
-      //     >
-      //       <a>
-      //         <MoreOutlined className="icon-more" />
-      //       </a>
-      //     </Dropdown>
-      //   </Space>
-      // ),
+      render: (data) => (
+        <Space size="middle">
+          <Dropdown
+            menu={{
+              items,
+            }}
+            placement="bottom"
+            trigger={["click"]}
+          >
+            <a>
+              <MoreOutlined className="icon-more" />
+            </a>
+          </Dropdown>
+        </Space>
+      ),
     },
   ];
 

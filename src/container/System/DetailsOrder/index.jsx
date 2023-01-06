@@ -1,4 +1,4 @@
-import { Button, Col, FloatButton, Image, Row } from "antd";
+import { Button, Col, FloatButton, Image, Popconfirm, Row } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -18,6 +18,8 @@ const DetailsOrder = () => {
   const { id } = state || {};
   const [data, setData] = useState([]);
   const [modal, setModal] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const dispatch = useDispatch();
 
   const toggle = () => setModal(!modal);
@@ -46,7 +48,10 @@ const DetailsOrder = () => {
     return start + " - " + timeEnd;
   };
 
-  const onCancelJob = useCallback(() => {
+  const showPopconfirm = () => {
+    setOpen(true);
+  };
+  const handleOk = () => {
     dispatch(loadingAction.loadingRequest(true));
     changeStatusOrderApi(id, { status: "cancel" })
       .then((res) => {
@@ -59,7 +64,10 @@ const DetailsOrder = () => {
         });
         dispatch(loadingAction.loadingRequest(false));
       });
-  }, [id]);
+  };
+  const handleCancel = () => {
+    setOpen(false);
+  };
 
   return (
     <div className="div-container">
@@ -166,23 +174,27 @@ const DetailsOrder = () => {
           </Col>
         )}
       </Row>
-
+      {/* 
       <Button className="btn-cancel" onClick={toggle}>
         Huỷ việc
-      </Button>
-      <FloatButton.BackTop />
+      </Button> */}
 
-      <div>
-        <Modal isOpen={modal}>
-          <ModalHeader>Bạn có muốn huỷ việc</ModalHeader>
-          <ModalFooter>
-            <Button color={"primary"} onClick={onCancelJob}>
-              Có
-            </Button>
-            <Button onClick={toggle}>Không</Button>
-          </ModalFooter>
-        </Modal>
-      </div>
+      <Popconfirm
+        title="Bạn có muốn huỷ việc"
+        // description="Open Popconfirm with async logic"
+        open={open}
+        onConfirm={handleOk}
+        okButtonProps={{
+          loading: confirmLoading,
+        }}
+        onCancel={handleCancel}
+      >
+        <Button className="btn-cancel" onClick={showPopconfirm}>
+          Huỷ việc
+        </Button>
+      </Popconfirm>
+
+      <FloatButton.BackTop />
     </div>
   );
 };
