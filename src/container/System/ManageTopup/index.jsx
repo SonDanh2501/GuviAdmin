@@ -2,7 +2,7 @@ import { Tabs } from "antd";
 
 import TopupManage from "./ManageTopupCollaborator/TopupManage";
 import TopupCustomerManage from "./ManageTopupCustomer/TopupCustomerManage";
-import "./index.scss";
+import "./styles.scss";
 
 const ManageTopup = () => {
   return (

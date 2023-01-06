@@ -104,7 +104,7 @@ export default function PromotionManage() {
       render: (data) => {
         return (
           <>
-            <img className="img_customer" src={data?.thumbnail} />
+            <img className="img-customer-promotion" src={data?.thumbnail} />
             <a>{data.title.vi}</a>
           </>
         );

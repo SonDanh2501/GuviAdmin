@@ -1,11 +1,82 @@
 import { FloatButton, Tabs } from "antd";
 import "./index.scss";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CollaboratorManage from "./TableCollaborator/CollaboratorManage";
 import AddCollaborator from "../../../../components/addCollaborator/addCollaborator";
+import { useEffect, useState } from "react";
+import { getCollaborators } from "../../../../redux/actions/collaborator";
+import {
+  getCollaborator,
+  getCollaboratorTotal,
+} from "../../../../redux/selectors/collaborator";
 
 const ManageCollaborator = () => {
+  const [status, setStatus] = useState("");
+  const collaborator = useSelector(getCollaborator);
+  const collaboratorTotal = useSelector(getCollaboratorTotal);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    // dispatch(loadingAction.loadingRequest(true));
+    dispatch(
+      getCollaborators.getCollaboratorsRequest({
+        start: 0,
+        length: 20,
+        type: "",
+      })
+    );
+  }, [dispatch]);
+
+  const onChangeTab = (active) => {
+    if (active === "2") {
+      setStatus("online");
+    } else if (active === "3") {
+      setStatus("locked");
+      dispatch(
+        getCollaborators.getCollaboratorsRequest({
+          start: 0,
+          length: 20,
+          type: "locked",
+        })
+      );
+    } else if (active === "4") {
+      setStatus("verify");
+      dispatch(
+        getCollaborators.getCollaboratorsRequest({
+          start: 0,
+          length: 20,
+          type: "verify",
+        })
+      );
+    } else if (active === "5") {
+      setStatus("not_verify");
+      dispatch(
+        getCollaborators.getCollaboratorsRequest({
+          start: 0,
+          length: 20,
+          type: "not_verify",
+        })
+      );
+    } else if (active === "6") {
+      setStatus("birthday");
+      dispatch(
+        getCollaborators.getCollaboratorsRequest({
+          start: 0,
+          length: 20,
+          type: "birthday",
+        })
+      );
+    } else {
+      setStatus("");
+      dispatch(
+        getCollaborators.getCollaboratorsRequest({
+          start: 0,
+          length: 20,
+          type: "",
+        })
+      );
+    }
+  };
 
   return (
     <>
@@ -15,15 +86,43 @@ const ManageCollaborator = () => {
       </div>
 
       <div className="div-container-collaborator">
-        <Tabs defaultActiveKey="1" size="large">
+        <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
           <Tabs.TabPane tab="Tất cả Cộng Tác Viên" key="1">
-            <CollaboratorManage />
+            <CollaboratorManage
+              data={collaborator}
+              total={collaboratorTotal}
+              status={status}
+            />
           </Tabs.TabPane>
           <Tabs.TabPane tab="CTV Đang Hoạt Động" key="2"></Tabs.TabPane>
-          <Tabs.TabPane tab="CTV Đã Khoá" key="3"></Tabs.TabPane>
-          <Tabs.TabPane tab="CTV Đã Xác Thực" key="4"></Tabs.TabPane>
-          <Tabs.TabPane tab="CTV Chưa Xác Thực" key="5"></Tabs.TabPane>
-          <Tabs.TabPane tab="Sinh Nhật Trong Tháng" key="6"></Tabs.TabPane>
+          <Tabs.TabPane tab="CTV Đã Khoá" key="3">
+            <CollaboratorManage
+              data={collaborator}
+              total={collaboratorTotal}
+              status={status}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="CTV Đã Xác Thực" key="4">
+            <CollaboratorManage
+              data={collaborator}
+              total={collaboratorTotal}
+              status={status}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="CTV Chưa Xác Thực" key="5">
+            <CollaboratorManage
+              data={collaborator}
+              total={collaboratorTotal}
+              status={status}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Sinh Nhật Trong Tháng" key="6">
+            <CollaboratorManage
+              data={collaborator}
+              total={collaboratorTotal}
+              status={status}
+            />
+          </Tabs.TabPane>
         </Tabs>
       </div>
       <FloatButton.BackTop />

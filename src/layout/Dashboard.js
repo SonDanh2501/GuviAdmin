@@ -5,6 +5,7 @@ import Header from "../container/Header/Header";
 import Home from "../container/System/Dashboard/DashBoard";
 import DetailsOrder from "../container/System/DetailsOrder";
 import ManageConfiguration from "../container/System/ManageConfiguration/ManageConfiguration";
+import AppCustomer from "../container/System/ManageConfiguration/ScreenConfiguration/AppCustomer";
 import GroupCustomerManage from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer";
 import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
 import ManageOrder from "../container/System/ManageOrder";
@@ -97,6 +98,16 @@ const Dashboard = () => {
             <Route path="/topup/manage-topup" element={<ManageTopup />} />
 
             <Route
+              path="/adminManage/manage-configuration/manage-group-customer"
+              element={<GroupCustomerManage />}
+            />
+            <Route path="/report/manage-report" element={<ManageReport />} />
+            <Route
+              path="/report/manage-report/all"
+              element={<ManageReport />}
+            />
+
+            <Route
               path="/adminManage/manage-configuration"
               element={<ManageConfiguration />}
             />
@@ -105,13 +116,8 @@ const Dashboard = () => {
               element={<ReasonManage />}
             />
             <Route
-              path="/adminManage/manage-configuration/manage-group-customer"
-              element={<GroupCustomerManage />}
-            />
-            <Route path="/report/manage-report" element={<ManageReport />} />
-            <Route
-              path="/report/manage-report/all"
-              element={<ManageReport />}
+              path="/adminManage/manage-configuration/manage-app-customer"
+              element={<AppCustomer />}
             />
           </Routes>
         </main>

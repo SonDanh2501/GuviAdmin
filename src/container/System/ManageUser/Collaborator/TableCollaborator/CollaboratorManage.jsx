@@ -37,8 +37,11 @@ import "./CollaboratorManage.scss";
 
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
+import { getDistrictApi } from "../../../../../api/file.jsx";
 
-export default function CollaboratorManage() {
+export default function CollaboratorManage(props) {
+  const { data, total, status } = props;
+
   const [dataFilter, setDataFilter] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalFilter, setTotalFilter] = useState("");
@@ -57,49 +60,45 @@ export default function CollaboratorManage() {
   const toggleLockTime = () => setModalLockTime(!modalLockTime);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const collaborator = useSelector(getCollaborator);
-  const collaboratorTotal = useSelector(getCollaboratorTotal);
-
-  useEffect(() => {
-    // dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      getCollaborators.getCollaboratorsRequest({ start: 0, length: 20 })
-    );
-  }, [dispatch]);
 
   const onChange = (page) => {
     setCurrentPage(page);
     const start =
       dataFilter.length > 0
         ? page * dataFilter.length - dataFilter.length
-        : page * collaborator.length - collaborator.length;
+        : page * data.length - data.length;
     dataFilter.length > 0
-      ? searchCollaborators(valueFilter, start, 20)
+      ? searchCollaborators(start, 20, status, valueFilter)
           .then((res) => {
             setDataFilter(res.data);
+            setTotalFilter(res.totalItems);
           })
           .catch((err) => console.log(err))
       : dispatch(
           getCollaborators.getCollaboratorsRequest({
             start: start > 0 ? start : 0,
             length: 20,
+            type: status,
           })
         );
   };
 
-  const handleSearch = useCallback((value) => {
-    setValueFilter(value);
-    searchCollaborators(value, 0, 20)
-      .then((res) => {
-        setDataFilter(res.data);
-        setTotalFilter(res.totalItem);
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
+  const handleSearch = useCallback(
+    (value) => {
+      setValueFilter(value);
+      searchCollaborators(0, 20, status, value)
+        .then((res) => {
+          setDataFilter(res.data);
+          setTotalFilter(res.totalItems);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
         });
-      });
-  }, []);
+    },
+    [status]
+  );
 
   const onDelete = useCallback((id) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -235,7 +234,18 @@ export default function CollaboratorManage() {
   const columns = [
     {
       title: "Mã CTV",
-      render: (data) => <a className="text-id">{data?._id}</a>,
+      render: (data) => (
+        <a
+          className="text-id"
+          onClick={() =>
+            navigate("/system/collaborator-manage/details-collaborator", {
+              state: { id: data?._id },
+            })
+          }
+        >
+          {data?._id}
+        </a>
+      ),
       width: "15%",
     },
     {
@@ -263,21 +273,26 @@ export default function CollaboratorManage() {
       width: "10%",
     },
     {
-      title: "Khu vực yêu thích",
-    },
-    {
       title: "Trạng thái",
       align: "center",
       render: (data) => {
         return (
-          <>
+          <div>
             {!data?.is_verify ? (
               <div>
                 <img src={pending} />
                 <a className="text-pending">Pending</a>
               </div>
             ) : data?.is_lock_time ? (
-              <a className="text-lock-time">Block{data?.lock_time}</a>
+              <div>
+                <div>
+                  <img src={pending} />
+                  <a className="text-lock-time">Block</a>
+                </div>
+                {/* <a className="text-lock-time">
+                  Còn lại {moment().from(moment(data?.lock_time), "days")}
+                </a> */}
+              </div>
             ) : data?.is_active ? (
               <div>
                 <img src={online} />
@@ -289,7 +304,7 @@ export default function CollaboratorManage() {
                 <a className="text-offline">Offline</a>
               </div>
             )}
-          </>
+          </div>
         );
       },
     },
@@ -347,19 +362,7 @@ export default function CollaboratorManage() {
   const itemFilter = [
     {
       key: "1",
-      label: (
-        <a
-        // onClick={() => {
-        //   setModalEdit(!modalEdit);
-        // }}
-        >
-          Khách hàng thân thiết
-        </a>
-      ),
-    },
-    {
-      key: "2",
-      label: <a>Khách hàng sinh nhật</a>,
+      label: <a>Khách hàng thân thiết</a>,
     },
   ];
 
@@ -390,7 +393,7 @@ export default function CollaboratorManage() {
         <div className="div-table mt-3">
           <Table
             columns={columns}
-            dataSource={dataFilter.length > 0 ? dataFilter : collaborator}
+            dataSource={dataFilter.length > 0 ? dataFilter : data}
             pagination={false}
             rowKey={(record) => record._id}
             rowSelection={{
@@ -408,22 +411,16 @@ export default function CollaboratorManage() {
             }}
             locale={{
               emptyText:
-                collaborator.length > 0 ? (
-                  <Empty />
-                ) : (
-                  <Skeleton active={true} />
-                ),
+                data.length > 0 ? <Empty /> : <Skeleton active={true} />,
             }}
           />
           <div className="div-pagination p-2">
-            <a>
-              Tổng: {dataFilter.length > 0 ? totalFilter : collaboratorTotal}
-            </a>
+            <a>Tổng: {totalFilter > 0 ? totalFilter : total}</a>
             <div>
               <Pagination
                 current={currentPage}
                 onChange={onChange}
-                total={dataFilter.length > 0 ? totalFilter : collaboratorTotal}
+                total={totalFilter > 0 ? totalFilter : total}
                 showSizeChanger={false}
                 pageSize={20}
               />

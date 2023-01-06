@@ -43,7 +43,9 @@ export default function BannerManage() {
       .then((res) => {
         window.location.reload();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        dispatch(loadingAction.loadingRequest(false));
+      });
   }, []);
 
   const blockBanner = useCallback((id, is_active) => {
@@ -54,7 +56,9 @@ export default function BannerManage() {
           setModalBlock(!modalBlock);
           window.location.reload();
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          dispatch(loadingAction.loadingRequest(false));
+        });
     } else {
       activeBanner(id, { is_active: true })
         .then((res) => {
@@ -62,7 +66,9 @@ export default function BannerManage() {
 
           window.location.reload();
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          dispatch(loadingAction.loadingRequest(false));
+        });
     }
   }, []);
 

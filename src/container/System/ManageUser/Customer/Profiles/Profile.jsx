@@ -64,7 +64,7 @@ const Profile = () => {
               <CardBody>
                 <div className="text-center">
                   <h3>
-                    {data?.full_name},{" "}
+                    {data?.full_name}{" "}
                     <span className="font-weight-light">
                       {!data.birthday ? "" : age + "tuổi"}
                     </span>
@@ -157,6 +157,23 @@ const Profile = () => {
                               ? "Khác"
                               : "Chưa có"
                           }
+                          disabled={true}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-last-name"
+                        >
+                          Số điện thoại
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-last-name"
+                          type="text"
+                          value={data?.phone}
                           disabled={true}
                         />
                       </FormGroup>

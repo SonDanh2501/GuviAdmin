@@ -23,6 +23,15 @@ const ManageConfiguration = () => {
         >
           Nhóm khách hàng
         </Button>
+
+        <Button
+          className="btn ml-5"
+          onClick={() => {
+            navigate("/adminManage/manage-configuration/manage-app-customer");
+          }}
+        >
+          Cấu hình app Khách hàng
+        </Button>
       </div>
     </div>
   );

@@ -19,3 +19,9 @@ export const activeNew = (id, payload) => {
 export const deleteNew = (id) => {
   return axiosClient.get(`/admin/news_manager/delete/${id}`);
 };
+
+export const searchNew = (start, length, search) => {
+  return axiosClient.get(
+    `/admin/news_manager/get_list?start=${start}&length=${length}&search=${search}`
+  );
+};

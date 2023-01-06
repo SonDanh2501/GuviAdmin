@@ -31,6 +31,8 @@ const EditGroupService = ({ state, setState, data }) => {
     setType(data?.type);
   }, [data]);
   const onChangeThumbnail = (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+
     if (e.target.files[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -45,8 +47,13 @@ const EditGroupService = ({ state, setState, data }) => {
         "Content-Type": "multipart/form-data",
       },
     })
-      .then((res) => setImgUrl(res))
-      .catch((err) => console.log("err", err));
+      .then((res) => {
+        dispatch(loadingAction.loadingRequest(false));
+        setImgUrl(res);
+      })
+      .catch((err) => {
+        dispatch(loadingAction.loadingRequest(false));
+      });
   };
 
   const editGroupSerive = useCallback(() => {
@@ -170,7 +177,7 @@ const EditGroupService = ({ state, setState, data }) => {
 
             <CustomButton
               title="Thêm"
-              className="float-right btn-modal"
+              className="float-right btn-edit-service"
               type="button"
               onClick={editGroupSerive}
             />

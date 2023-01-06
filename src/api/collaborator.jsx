@@ -2,9 +2,9 @@ import axiosClient from "../axios";
 export const createCollaborator = (payload) => {
   return axiosClient.post("/admin/collaborator_manager/create_item", payload);
 };
-export const fetchCollaborators = (start, length) => {
+export const fetchCollaborators = (start, length, type) => {
   return axiosClient.get(
-    `/admin/collaborator_manager/get_list_item?start=${start}&length=${length}`
+    `/admin/collaborator_manager/get_collaborator_by_type?start=${start}&length=${length}&collaborator_type=${type}`
   );
 };
 
@@ -12,9 +12,9 @@ export const getCollaboratorsById = (id) => {
   return axiosClient.get(`/admin/collaborator_manager/get_detail/${id}`);
 };
 
-export const searchCollaborators = (payload, start, length) => {
+export const searchCollaborators = (start, length, type, payload) => {
   return axiosClient.get(
-    `/admin/collaborator_manager/get_list_item?search=${payload}&start=${start}&length=${length}`
+    `/admin/collaborator_manager/get_collaborator_by_type?start=${start}&length=${length}&collaborator_type=${type}&search=${payload}`
   );
 };
 
@@ -58,5 +58,17 @@ export const updateInformationCollaboratorApi = (id, data) => {
 export const getHistoryActivityCollaborator = (id, start, length) => {
   return axiosClient.get(
     `admin/collaborator_manager/get_history_activity/${id}?start=${start}&length=${length}`
+  );
+};
+
+export const getHistoryCollaborator = (id, start, length) => {
+  return axiosClient.get(
+    `admin/collaborator_manager/get_history_collaborator/${id}?start=${start}&length=${length}`
+  );
+};
+
+export const getTopupWithdrawCollaborator = (id, start, length) => {
+  return axiosClient.get(
+    `admin/collaborator_manager/get_request_topup_withdraw/${id}?start=${start}&length=${length}`
   );
 };

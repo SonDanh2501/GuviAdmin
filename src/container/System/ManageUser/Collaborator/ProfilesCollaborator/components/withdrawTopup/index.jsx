@@ -2,12 +2,15 @@ import { List, Pagination } from "antd";
 import moment from "moment";
 import { memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getHistoryActivityCollaborator } from "../../../../../../../api/collaborator";
+import {
+  getHistoryActivityCollaborator,
+  getTopupWithdrawCollaborator,
+} from "../../../../../../../api/collaborator";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import "./index.scss";
 
-const Activity = ({ id }) => {
+const WithdrawTopup = ({ id }) => {
   const [data, setData] = useState([]);
   const [totalData, setTotalData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,7 +18,7 @@ const Activity = ({ id }) => {
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
-    getHistoryActivityCollaborator(id, 0, 10)
+    getTopupWithdrawCollaborator(id, 0, 10)
       .then((res) => {
         setData(res.data);
         setTotalData(res.totalItem);
@@ -41,12 +44,7 @@ const Activity = ({ id }) => {
   };
 
   const renderItem = (item) => {
-    const subject = item?.id_admin_action
-      ? item?.title_admin.replace(
-          item?.id_admin_action?._id,
-          item?.id_admin_action?.full_name
-        )
-      : item?.id_collaborator
+    const subject = item?.id_collaborator
       ? item?.title_admin.replace(
           item?.id_collaborator?._id,
           item?.id_collaborator?.full_name
@@ -56,8 +54,10 @@ const Activity = ({ id }) => {
           item?.id_customer?._id,
           item?.id_customer?.full_name
         )
-      : "";
-
+      : item?.title_admin.replace(
+          item?.id_admin_action?._id,
+          item?.id_admin_action?.full_name
+        );
     const predicate = item?.id_collaborator
       ? subject.replace(
           item?.id_collaborator?._id,
@@ -87,7 +87,7 @@ const Activity = ({ id }) => {
         )
       : predicate.replace(
           item?.id_reason_cancel?._id,
-          item?.id_reason_cancel?.title?.vi
+          item?.id_reason_cancel?.name
         );
 
     return (
@@ -121,4 +121,4 @@ const Activity = ({ id }) => {
   );
 };
 
-export default memo(Activity);
+export default memo(WithdrawTopup);

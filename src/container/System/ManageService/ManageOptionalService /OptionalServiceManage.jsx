@@ -1,7 +1,7 @@
 import { MoreOutlined } from "@ant-design/icons";
 import { Dropdown, Image, Space, Table } from "antd";
 import React, { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useLocation } from "react-router-dom";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
@@ -9,12 +9,13 @@ import {
   deleteServiceApi,
   getServiceByIdApi,
 } from "../../../../api/service";
-import EditService from "../../../../components/editService/editService";
+import AddService from "../../../../components/addService/addService";
+import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import { loadingAction } from "../../../../redux/actions/loading";
 
-import "./ServiceManage.scss";
+import "./OptionalServiceManage.scss";
 
-export default function ServiceManage() {
+export default function OptionalServiceManage() {
   const { state } = useLocation();
   const { id } = state || {};
   const [data, setData] = useState([]);
@@ -28,9 +29,9 @@ export default function ServiceManage() {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    getServiceByIdApi(id)
-      .then((res) => setData(res.data))
-      .catch((err) => console.log(err));
+    // getServiceByIdApi(id)
+    //   .then((res) => setData(res.data))
+    //   .catch((err) => console.log(err));
   }, [id]);
 
   const onDelete = useCallback((id) => {
@@ -73,22 +74,19 @@ export default function ServiceManage() {
   }, []);
 
   const items = [
-    // {
-    //   key: "1",
-    //   label: itemEdit?.is_active ? (
-    //     <a onClick={toggleBlock}>Chặn</a>
-    //   ) : (
-    //     <a onClick={toggleBlock}>Kích hoạt</a>
-    //   ),
-    // },
+    {
+      key: "1",
+      label: itemEdit?.is_active ? (
+        <a onClick={toggleBlock}>Chặn</a>
+      ) : (
+        <a onClick={toggleBlock}>Kích hoạt</a>
+      ),
+    },
+
     {
       key: "2",
-      label: <EditService data={itemEdit} />,
+      label: <a onClick={toggle}>Xoá</a>,
     },
-    // {
-    //   key: "3",
-    //   label: <a onClick={toggle}>Xoá</a>,
-    // },
   ];
 
   const columns = [

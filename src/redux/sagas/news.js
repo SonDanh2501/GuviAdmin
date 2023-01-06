@@ -3,6 +3,7 @@ import * as actions from "../actions/news";
 import * as api from "../../api/news";
 import { getType } from "../actions/news";
 import { loadingAction } from "../actions/loading";
+import { errorNotify } from "../../helper/toast";
 
 function* fetchNewsSaga(action) {
   try {
@@ -31,7 +32,10 @@ function* createNewSaga(action) {
     window.location.reload();
     yield put(actions.createNew.createNewSuccess(New.data));
   } catch (err) {
-    console.error(err);
+    errorNotify({
+      message: err,
+    });
+    yield put(loadingAction.loadingRequest(false));
     yield put(actions.createNew.createNewFailure(err));
   }
 }
@@ -46,7 +50,10 @@ function* updateNewSaga(action) {
     window.location.reload();
     yield put(actions.updateNew.updateNewSuccess(updatedNew.data));
   } catch (err) {
-    console.error(err);
+    errorNotify({
+      message: err,
+    });
+    yield put(loadingAction.loadingRequest(false));
     yield put(actions.updateNew.updateNewFailure(err));
   }
 }

@@ -1,11 +1,12 @@
-import { Col, FloatButton, Image, Row } from "antd";
+import { Button, Col, FloatButton, Image, Popconfirm, Row } from "antd";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { Modal, ModalFooter, ModalHeader } from "reactstrap";
 import { getCollaboratorsById } from "../../../api/collaborator";
 import { fetchCustomerById } from "../../../api/customer";
-import { getOrderDetailApi } from "../../../api/order";
+import { changeStatusOrderApi, getOrderDetailApi } from "../../../api/order";
 import user from "../../../assets/images/user.png";
 import { formatMoney } from "../../../helper/formatMoney";
 import { errorNotify } from "../../../helper/toast";
@@ -16,7 +17,12 @@ const DetailsOrder = () => {
   const { state } = useLocation();
   const { id } = state || {};
   const [data, setData] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const dispatch = useDispatch();
+
+  const toggle = () => setModal(!modal);
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -40,6 +46,27 @@ const DetailsOrder = () => {
       Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
 
     return start + " - " + timeEnd;
+  };
+
+  const showPopconfirm = () => {
+    setOpen(true);
+  };
+  const handleOk = () => {
+    dispatch(loadingAction.loadingRequest(true));
+    changeStatusOrderApi(id, { status: "cancel" })
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        setModal(!modal);
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+  const handleCancel = () => {
+    setOpen(false);
   };
 
   return (
@@ -147,6 +174,26 @@ const DetailsOrder = () => {
           </Col>
         )}
       </Row>
+      {/* 
+      <Button className="btn-cancel" onClick={toggle}>
+        Huỷ việc
+      </Button> */}
+
+      <Popconfirm
+        title="Bạn có muốn huỷ việc"
+        // description="Open Popconfirm with async logic"
+        open={open}
+        onConfirm={handleOk}
+        okButtonProps={{
+          loading: confirmLoading,
+        }}
+        onCancel={handleCancel}
+      >
+        <Button className="btn-cancel" onClick={showPopconfirm}>
+          Huỷ việc
+        </Button>
+      </Popconfirm>
+
       <FloatButton.BackTop />
     </div>
   );

@@ -28,3 +28,10 @@ export const addCollaboratorToOrderApi = (id, data) => {
     data
   );
 };
+
+export const changeStatusOrderApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/order_manager/change_status_order/${id}`,
+    data
+  );
+};

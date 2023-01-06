@@ -62,6 +62,23 @@
   margin-left: 20px;
 }
 
+.btn-form-same-promotion {
+  background-color: plum;
+  border: none;
+  color: white;
+  margin-bottom: 10px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  margin-left: 20px;
+}
+
+.btn-form-same-promotions-default {
+  margin-right: 10px;
+  color: rgb(0, 0, 0);
+  margin-bottom: 10px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  margin-left: 20px;
+}
+
 .select-type-promo {
   height: 40px;
   border-radius: 8px;
@@ -76,4 +93,8 @@
 }
 .input-promo-discount {
   width: 100px;
+}
+
+.input-promo-brand {
+  text-transform: uppercase;
 }

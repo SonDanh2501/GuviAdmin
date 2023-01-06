@@ -174,7 +174,7 @@ const Sidebar = ({ onChangeColor }) => {
           <Collapse isOpen={!collapsedService}>
             <Nav className="nav" navbar>
               <NavItem>
-                <NavLink to="/services/manage-group-service">
+                <NavLink to="/services/manage-group-service/all">
                   {({ isActive }) => (
                     <div
                       className={
@@ -194,7 +194,7 @@ const Sidebar = ({ onChangeColor }) => {
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/services/manage-service/doing">
+                <NavLink to="/services/manage-group-service/doing">
                   {({ isActive }) => (
                     <div
                       className={

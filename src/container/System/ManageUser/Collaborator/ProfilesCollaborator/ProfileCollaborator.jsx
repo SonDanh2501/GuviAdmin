@@ -14,13 +14,15 @@ import {
   Input,
 } from "reactstrap";
 import { getCollaboratorsById } from "../../../../../api/collaborator";
-import { postFile } from "../../../../../api/file";
+import { getDistrictApi, postFile } from "../../../../../api/file";
 import user from "../../../../../assets/images/user.png";
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import Activity from "./components/activity";
 import Document from "./components/documents";
+import History from "./components/history";
 import Information from "./components/information";
+import WithdrawTopup from "./components/withdrawTopup";
 import "./ProfileCollaborator.scss";
 // core components
 
@@ -33,6 +35,7 @@ const ProfileCollaborator = () => {
     identity_date: "2020-11-12T00:00:00.000Z",
   });
   const [img, setImg] = useState("");
+  const [dataDistrict, setDataDistrict] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -43,6 +46,14 @@ const ProfileCollaborator = () => {
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => console.log(err));
+
+    getDistrictApi()
+      .then((res) => {
+        setDataDistrict(res?.aministrative_division[0]?.districts);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [id]);
 
   const onChangeThumbnail = (e) => {
@@ -77,7 +88,7 @@ const ProfileCollaborator = () => {
   return (
     <>
       {/* Page content */}
-      <Container className="mt-5" fluid>
+      <Container className="mt-3" fluid>
         <Row>
           <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
             <Card className="card-profile shadow">
@@ -104,7 +115,7 @@ const ProfileCollaborator = () => {
                 />
               </CardHeader>
               <CardBody>
-                <div className="text-center">
+                <div className="text-body">
                   <a className="text-name">
                     {data?.full_name}
                     {"-"}
@@ -130,10 +141,10 @@ const ProfileCollaborator = () => {
                     <Activity id={id} />
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Lịch sử tài khoản" key="4">
-                    Content of Tab Pane 3
+                    <History id={id} />
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Yêu cầu nạp/rút" key="5">
-                    Content of Tab Pane 3
+                    <WithdrawTopup id={id} />
                   </Tabs.TabPane>
                 </Tabs>
               </CardBody>
