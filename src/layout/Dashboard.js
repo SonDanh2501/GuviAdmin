@@ -5,6 +5,7 @@ import Header from "../container/Header/Header";
 import Home from "../container/System/Dashboard/DashBoard";
 import DetailsOrder from "../container/System/DetailsOrder";
 import ManageConfiguration from "../container/System/ManageConfiguration/ManageConfiguration";
+import AppCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/AppCollaborator";
 import AppCustomer from "../container/System/ManageConfiguration/ScreenConfiguration/AppCustomer";
 import GroupCustomerManage from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer";
 import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
@@ -118,6 +119,10 @@ const Dashboard = () => {
             <Route
               path="/adminManage/manage-configuration/manage-app-customer"
               element={<AppCustomer />}
+            />
+            <Route
+              path="/adminManage/manage-configuration/manage-app-collaborator"
+              element={<AppCollaborator />}
             />
           </Routes>
         </main>

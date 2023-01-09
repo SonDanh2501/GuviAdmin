@@ -47,7 +47,8 @@ import {
 } from "../../../../../redux/selectors/customer";
 import "./UserManage.scss";
 
-export default function UserManage() {
+export default function UserManage(props) {
+  const { data, total, status } = props;
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState("");
   const [valueFilter, setValueFilter] = useState("");
@@ -64,11 +65,6 @@ export default function UserManage() {
   const customerTotal = useSelector(getCustomerTotalItem);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    // dispatch(loadingAction.loadingRequest(true));
-    dispatch(getCustomers.getCustomersRequest({ start: 0, length: 20 }));
-  }, [dispatch]);
 
   const onDelete = useCallback((id) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -115,9 +111,9 @@ export default function UserManage() {
     const start =
       dataFilter.length > 0
         ? page * dataFilter.length - dataFilter.length
-        : page * customers.length - customers.length;
+        : page * data.length - data.length;
     dataFilter.length > 0
-      ? searchCustomers(valueFilter, start, 20)
+      ? searchCustomers(start, 20, status, valueFilter)
           .then((res) => {
             setDataFilter(res.data);
           })
@@ -126,6 +122,7 @@ export default function UserManage() {
           getCustomers.getCustomersRequest({
             start: start > 0 ? start : 0,
             length: 20,
+            type: status,
           })
         );
   };
@@ -133,7 +130,7 @@ export default function UserManage() {
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueFilter(value);
-      searchCustomers(value, 0, 20)
+      searchCustomers(0, 20, status, value)
         .then((res) => {
           setDataFilter(res.data);
           setTotalFilter(res.totalItem);
@@ -318,7 +315,7 @@ export default function UserManage() {
         <div className="mt-3">
           <Table
             columns={columns}
-            dataSource={dataFilter.length > 0 ? dataFilter : customers}
+            dataSource={dataFilter.length > 0 ? dataFilter : data}
             pagination={false}
             rowKey={(record) => record._id}
             rowSelection={{
@@ -334,20 +331,20 @@ export default function UserManage() {
                 },
               };
             }}
-            locale={{
-              emptyText:
-                customers.length > 0 ? <Empty /> : <Skeleton active={true} />,
-            }}
+            // locale={{
+            //   emptyText:
+            //     customers.length > 0 ? <Empty /> : <Skeleton active={true} />,
+            // }}
           />
         </div>
 
         <div className="mt-1 div-pagination p-2">
-          <a>Tổng: {dataFilter.length > 0 ? totalFilter : customerTotal}</a>
+          <a>Tổng: {dataFilter.length > 0 ? totalFilter : total}</a>
           <div>
             <Pagination
               current={currentPage}
               onChange={onChange}
-              total={dataFilter.length > 0 ? totalFilter : customerTotal}
+              total={dataFilter.length > 0 ? totalFilter : total}
               showSizeChanger={false}
               pageSize={20}
             />

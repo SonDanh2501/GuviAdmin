@@ -16,32 +16,27 @@
     color: #25213b;
   }
 
-  .div-body {
-    display: flex;
-    flex-direction: row;
+  .form-input {
+    margin-top: 50px;
+  }
 
-    .form-input {
-      margin-top: 50px;
-    }
+  .form-input-distance {
+    margin-top: 10px;
+  }
 
-    .input-version {
-      width: 300px;
-    }
+  .input-version {
+    width: 300px;
+  }
 
-    .input-image {
-      border: none;
-      width: 300px;
-    }
+  .input-image {
+    border: none;
+    width: 300px;
+  }
 
-    .img-background-header {
-      width: 400px;
-      height: 150px;
-      border-radius: 10px;
-    }
-
-    .div-col-right {
-      margin-left: 100px;
-    }
+  .img-background-header {
+    width: 400px;
+    height: 150px;
+    border-radius: 10px;
   }
 
   .btn-update {

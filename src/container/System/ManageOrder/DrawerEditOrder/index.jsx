@@ -22,7 +22,7 @@ const EditOrder = ({ idOrder }) => {
   const handleSearch = useCallback((value) => {
     setName(value);
     if (value) {
-      searchCollaborators(value, 0, 10)
+      searchCollaborators(0, 10, "all", value)
         .then((res) => {
           setDataFilter(res.data);
         })

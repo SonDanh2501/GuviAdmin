@@ -116,6 +116,11 @@ const DetailsOrder = () => {
             <a className="title">
               Địa điểm: <a className="text-service">{data?.address}</a>
             </a>
+            {data?.note && (
+              <a className="title">
+                Ghi chú: <a className="text-service">{data?.note}</a>
+              </a>
+            )}
             <a className="title">
               Thanh toán:{" "}
               <a className="text-service">
@@ -179,20 +184,22 @@ const DetailsOrder = () => {
         Huỷ việc
       </Button> */}
 
-      <Popconfirm
-        title="Bạn có muốn huỷ việc"
-        // description="Open Popconfirm with async logic"
-        open={open}
-        onConfirm={handleOk}
-        okButtonProps={{
-          loading: confirmLoading,
-        }}
-        onCancel={handleCancel}
-      >
-        <Button className="btn-cancel" onClick={showPopconfirm}>
-          Huỷ việc
-        </Button>
-      </Popconfirm>
+      {data?.status === "pending" || data?.status === "confirm" ? (
+        <Popconfirm
+          title="Bạn có muốn huỷ việc"
+          // description="Open Popconfirm with async logic"
+          open={open}
+          onConfirm={handleOk}
+          okButtonProps={{
+            loading: confirmLoading,
+          }}
+          onCancel={handleCancel}
+        >
+          <Button className="btn-cancel" onClick={showPopconfirm}>
+            Huỷ việc
+          </Button>
+        </Popconfirm>
+      ) : null}
 
       <FloatButton.BackTop />
     </div>

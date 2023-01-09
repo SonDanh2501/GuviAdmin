@@ -11,12 +11,13 @@ function* fetchCustomersSaga(action) {
     const resoponse = yield call(
       api.fetchCustomers,
       action.payload.start,
-      action.payload.length
+      action.payload.length,
+      action.payload.type
     );
     yield put(
       actions.getCustomers.getCustomersSuccess({
         data: resoponse.data,
-        total: resoponse.totalItem,
+        total: resoponse.totalItems,
       })
     );
     yield put(loadingAction.loadingRequest(false));

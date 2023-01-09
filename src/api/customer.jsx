@@ -1,13 +1,13 @@
 import axiosClient from "../axios";
 
-export const fetchCustomers = (start, length) => {
+export const fetchCustomers = (start, length, type) => {
   return axiosClient.get(
-    `/admin/customer_manager/get_list?start=${start}&length=${length}`
+    `/admin/customer_manager/get_customer_by_type?&start=${start}&length=${length}&customer_type=${type}`
   );
 };
-export const searchCustomers = (payload, start, length) => {
+export const searchCustomers = (start, length, type, payload) => {
   return axiosClient.get(
-    `/admin/customer_manager/get_list?search=${payload}&start=${start}&length=${length}`
+    `/admin/customer_manager/get_customer_by_type?&start=${start}&length=${length}&customer_type=${type}&search=${payload}`
   );
 };
 export const fetchCustomerById = (id) => {

@@ -1,10 +1,11 @@
-import { Drawer, Select } from "antd";
+import { Drawer, Select, DatePicker } from "antd";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Col, Form, Input, Label, Modal, Row } from "reactstrap";
 import { getDistrictApi } from "../../api/file";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./editService.scss";
+const { RangePicker } = DatePicker;
 
 const EditService = ({ data }) => {
   const [titleVN, setTitleVN] = useState("");
@@ -13,7 +14,8 @@ const EditService = ({ data }) => {
   const [descriptionEN, setDescriptionEN] = useState("");
   const [priceArea, setPriceArea] = useState("");
   const [dataDistrict, setDataDistrict] = useState([]);
-  const [district, setDistrict] = useState([{}]);
+  const [district, setDistrict] = useState([]);
+
   const options = [];
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -50,8 +52,6 @@ const EditService = ({ data }) => {
   const handleChange = (value) => {
     setDistrict(value);
   };
-
-  console.log(district);
 
   return (
     <>
@@ -136,6 +136,18 @@ const EditService = ({ data }) => {
                   type="text"
                   value={priceArea}
                   onChange={(e) => setPriceArea(e.target.value)}
+                />
+              </Col>
+              <Col lg="6">
+                <h5>Theo ngày lễ</h5>
+                <h6 className="mt-2">Ngày</h6>
+                <RangePicker showTime />
+                <CustomTextInput
+                  label={"Giá tiền"}
+                  id="exampleTitle"
+                  name="title"
+                  placeholder="Giá tiền"
+                  type="text"
                 />
               </Col>
             </Row>

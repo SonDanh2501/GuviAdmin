@@ -2,12 +2,77 @@ import { FloatButton, Tabs } from "antd";
 
 import "./index.scss";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UserManage from "./TableCustomer/UserManage";
 import AddCustomer from "../../../../components/addCustomer/addCustomer";
+import { getCustomers } from "../../../../redux/actions/customerAction";
+import {
+  getCustomer,
+  getCustomerTotalItem,
+} from "../../../../redux/selectors/customer";
+import { useEffect, useState } from "react";
 
 const ManageCustomer = () => {
+  const [status, setStatus] = useState("");
+  const customers = useSelector(getCustomer);
+  const customerTotal = useSelector(getCustomerTotalItem);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      getCustomers.getCustomersRequest({ start: 0, length: 20, type: "all" })
+    );
+  }, [dispatch]);
+
+  const onChangeTab = (active) => {
+    if (active === "2") {
+      setStatus("member");
+      dispatch(
+        getCustomers.getCustomersRequest({
+          start: 0,
+          length: 20,
+          type: "member",
+        })
+      );
+    } else if (active === "3") {
+      setStatus("silver");
+      dispatch(
+        getCustomers.getCustomersRequest({
+          start: 0,
+          length: 20,
+          type: "silver",
+        })
+      );
+    } else if (active === "4") {
+      setStatus("gold");
+      dispatch(
+        getCustomers.getCustomersRequest({ start: 0, length: 20, type: "gold" })
+      );
+    } else if (active === "5") {
+      setStatus("platinum");
+      dispatch(
+        getCustomers.getCustomersRequest({
+          start: 0,
+          length: 20,
+          type: "platinum",
+        })
+      );
+    } else if (active === "6") {
+      setStatus("birthday");
+      dispatch(
+        getCustomers.getCustomersRequest({
+          start: 0,
+          length: 20,
+          type: "birthday",
+        })
+      );
+    } else {
+      setStatus("all");
+      dispatch(
+        getCustomers.getCustomersRequest({ start: 0, length: 20, type: "" })
+      );
+    }
+  };
 
   return (
     <>
@@ -17,15 +82,49 @@ const ManageCustomer = () => {
       </div>
 
       <div className="div-container-customer">
-        <Tabs defaultActiveKey="1" size="large">
+        <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
           <Tabs.TabPane tab="Tất cả Khách Hàng" key="1">
-            <UserManage />
+            <UserManage
+              data={customers}
+              total={customerTotal}
+              status={status}
+            />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Khách hàng Thành Viên" key="2"></Tabs.TabPane>
-          <Tabs.TabPane tab="Khách hàng Bạc" key="3"></Tabs.TabPane>
-          <Tabs.TabPane tab="Khách hàng Vàng" key="4"></Tabs.TabPane>
-          <Tabs.TabPane tab="Khách hàng Bạch Kim" key="5"></Tabs.TabPane>
-          <Tabs.TabPane tab="Sinh Nhật Trong Tháng" key="6"></Tabs.TabPane>
+          <Tabs.TabPane tab="Khách hàng Thành Viên" key="2">
+            <UserManage
+              data={customers}
+              total={customerTotal}
+              status={status}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Khách hàng Bạc" key="3">
+            <UserManage
+              data={customers}
+              total={customerTotal}
+              status={status}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Khách hàng Vàng" key="4">
+            <UserManage
+              data={customers}
+              total={customerTotal}
+              status={status}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Khách hàng Bạch Kim" key="5">
+            <UserManage
+              data={customers}
+              total={customerTotal}
+              status={status}
+            />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Sinh Nhật Trong Tháng" key="6">
+            <UserManage
+              data={customers}
+              total={customerTotal}
+              status={status}
+            />
+          </Tabs.TabPane>
         </Tabs>
       </div>
       <FloatButton.BackTop />
