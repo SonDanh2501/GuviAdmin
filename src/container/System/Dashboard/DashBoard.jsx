@@ -717,10 +717,7 @@ export default function Home() {
                         <div className="div-details-activity">
                           <a className="text-date-activity">
                             {moment(new Date(item?.date_create)).format(
-                              "DD/MM/YYYY"
-                            )}{" "}
-                            {moment(new Date(item?.date_create)).format(
-                              "HH:MM"
+                              "DD/MM/YYYY HH:MM"
                             )}
                           </a>
                           <a className="text-content-activity">{object}</a>
@@ -729,7 +726,7 @@ export default function Home() {
                     );
                   }}
                 />
-                {/* <MoreActivity /> */}
+                <MoreActivity />
               </div>
             </Col>
           </Row>

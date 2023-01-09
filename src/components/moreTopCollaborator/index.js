@@ -89,7 +89,7 @@ const MoreTopCollaborator = () => {
             loadMore={isLoadMore}
             renderItem={(item, index) => {
               return (
-                <div className="div-item">
+                <div className="div-item-collaborator">
                   <div>
                     <a className="text-number">{index + 1}.</a>
                     <a className="text-name">{item?._id?.name}</a>
