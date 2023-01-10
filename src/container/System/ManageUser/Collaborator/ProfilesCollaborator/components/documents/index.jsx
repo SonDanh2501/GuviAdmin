@@ -1,22 +1,26 @@
 import { Image } from "antd";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
-import { postFile } from "../../../../../../../api/file";
+import { updateDocumentCollaboratorApi } from "../../../../../../../api/collaborator";
+import { postFile, postMutipleFile } from "../../../../../../../api/file";
 import CustomTextInput from "../../../../../../../components/CustomTextInput/customTextInput";
+import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import "./index.scss";
 
-const Document = () => {
+const Document = ({ data }) => {
   const [deal, setDeal] = useState(false);
   const [identify, setIdentify] = useState(false);
   const [information, setInformation] = useState(false);
   const [certification, setCertification] = useState(false);
+  const [registration, setRegistration] = useState(false);
   const [valueDeal, setSetValueDeal] = useState("");
-  const [imgIdentifyBefore, setImgIdentifyBefore] = useState("");
-  const [imgIdentifyAfter, setImgIdentifyAfter] = useState("");
+  const [imgIdentifyFronsite, setImgIdentifyFronsite] = useState("");
+  const [imgIdentifyBacksite, setImgIdentifyBacksite] = useState("");
   const [imgInformation, setImgInformation] = useState([]);
   const [imgCertification, setImgCertification] = useState("");
+  const [imgRegistration, setImgRegistration] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -25,7 +29,7 @@ const Document = () => {
     if (e.target.files[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
-        setImgIdentifyBefore(reader.result);
+        setImgIdentifyFronsite(reader.result);
       });
       reader.readAsDataURL(e.target.files[0]);
     }
@@ -37,7 +41,7 @@ const Document = () => {
       },
     })
       .then((res) => {
-        setImgIdentifyBefore(res);
+        setImgIdentifyFronsite(res);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => console.log("err", err));
@@ -47,7 +51,7 @@ const Document = () => {
     if (e.target.files[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
-        setImgIdentifyAfter(reader.result);
+        setImgIdentifyBacksite(reader.result);
       });
       reader.readAsDataURL(e.target.files[0]);
     }
@@ -59,10 +63,58 @@ const Document = () => {
       },
     })
       .then((res) => {
-        setImgIdentifyAfter(res);
+        setImgIdentifyBacksite(res);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => console.log("err", err));
+  };
+
+  const onChangeInformation = (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+    const fileLength = e.target.files.length;
+    const formData = new FormData();
+    for (var i = 0; i < fileLength; i++) {
+      formData.append("images", e.target.files[i]);
+    }
+    postMutipleFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        setImgInformation(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+
+  const onChangeRegistration = (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+    const fileLength = e.target.files.length;
+    const formData = new FormData();
+    for (var i = 0; i < fileLength; i++) {
+      formData.append("images", e.target.files[i]);
+    }
+    postMutipleFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        setImgRegistration(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
   };
 
   const onChangeCertification = (e) => {
@@ -88,22 +140,16 @@ const Document = () => {
       .catch((err) => console.log("err", err));
   };
 
-  const onChangeInformation = (e) => {
-    const fileLength = e.target.files.length;
-    const formData = new FormData();
-    for (var i = 0; i < fileLength; i++) {
-      formData.append("images", e.target.files[i]);
-    }
-    postFile(formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+  const onUpdateDocument = useCallback(() => {
+    updateDocumentCollaboratorApi(data?._id, {
+      document_code: deal,
+      is_identity: identify,
+      identity_frontside: imgIdentifyFronsite,
+      identity_backside: imgIdentifyFronsite,
     })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => console.log("err", err));
-  };
+      .then((res) => {})
+      .catch((err) => {});
+  }, [data, deal, identify, imgIdentifyFronsite, imgIdentifyFronsite]);
 
   return (
     <>
@@ -149,10 +195,10 @@ const Document = () => {
                     name="thumbnail"
                     onChange={onChangeIdentifyBefore}
                   />
-                  {imgIdentifyBefore && (
+                  {imgIdentifyFronsite && (
                     <Image
                       width={150}
-                      src={imgIdentifyBefore}
+                      src={imgIdentifyFronsite}
                       className={"img-thumbnail"}
                     />
                   )}
@@ -169,10 +215,10 @@ const Document = () => {
                     name="thumbnail"
                     onChange={onChangeIdentifyAfter}
                   />
-                  {imgIdentifyAfter && (
+                  {imgIdentifyBacksite && (
                     <Image
                       width={150}
-                      src={imgIdentifyAfter}
+                      src={imgIdentifyBacksite}
                       className={"img-thumbnail"}
                     />
                   )}
@@ -191,7 +237,7 @@ const Document = () => {
               <a>Sơ yếu lí lịch</a>
             </Col>
             <Col lg="8">
-              <FormGroup>
+              <div className="div-infomation">
                 <Label for="exampleThumbnail">Hình ảnh</Label>
                 <div className="col-img">
                   <input
@@ -202,11 +248,18 @@ const Document = () => {
                     multiple
                     onChange={onChangeInformation}
                   />
-                  {/* {imgIdentifyBefore && (
-                    <img src={imgIdentifyBefore} className="img-thumbnail" />
-                  )} */}
+                  <div>
+                    {imgInformation.map((item) => {
+                      return (
+                        <Image
+                          src={item}
+                          className="img-thumbnail-infomation"
+                        />
+                      );
+                    })}
+                  </div>
                 </div>
-              </FormGroup>
+              </div>
             </Col>
           </Row>
           <hr />
@@ -214,13 +267,13 @@ const Document = () => {
             <Col lg="4" className="col-check">
               <CustomTextInput
                 type="checkbox"
-                defaultChecked={information}
-                onChange={(e) => setInformation(e.target.value)}
+                defaultChecked={registration}
+                onChange={(e) => setRegistration(e.target.value)}
               />
               <a>Sổ hổ khẩu</a>
             </Col>
             <Col lg="8">
-              <FormGroup>
+              <div className="div-infomation">
                 <Label for="exampleThumbnail">Hình ảnh</Label>
                 <div className="col-img">
                   <input
@@ -229,13 +282,20 @@ const Document = () => {
                     name="files"
                     accept=".jpg, .jpeg, .png"
                     multiple
-                    onChange={(e) => console.log(e.target.files)}
+                    onChange={onChangeRegistration}
                   />
-                  {imgIdentifyBefore && (
-                    <img src={imgIdentifyBefore} className="img-thumbnail" />
-                  )}
+                  <div>
+                    {imgRegistration.map((item) => {
+                      return (
+                        <Image
+                          src={item}
+                          className="img-thumbnail-infomation"
+                        />
+                      );
+                    })}
+                  </div>
                 </div>
-              </FormGroup>
+              </div>
             </Col>
           </Row>
           <hr />

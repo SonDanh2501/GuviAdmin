@@ -121,6 +121,23 @@ const DetailsOrder = () => {
                 Ghi chú: <a className="text-service">{data?.note}</a>
               </a>
             )}
+
+            <a className="title">
+              Dịch vụ thêm:{" "}
+              {data?.service?.optional_service.map((item) => {
+                return (
+                  <a>
+                    {item?._id?.type === "multi_select_horizontal_thumbnail"
+                      ? item?.extend_optional?.map((item) => (
+                          <a className="text-add-service">
+                            - {item?.title?.vi}
+                          </a>
+                        ))
+                      : null}
+                  </a>
+                );
+              })}
+            </a>
             <a className="title">
               Thanh toán:{" "}
               <a className="text-service">

@@ -19,6 +19,7 @@ import {
   Modal,
   Row,
 } from "reactstrap";
+import { fetchCustomers } from "../../api/customer";
 import { postFile } from "../../api/file";
 import {
   getGroupCustomer,
@@ -37,7 +38,11 @@ const EditPromotion = ({ state, setState, data }) => {
   const [formDiscount, setFormDiscount] = React.useState("amount");
   const [discountUnit, setDiscountUnit] = React.useState("amount");
   const [create, setCreate] = React.useState(false);
+  const [dataGroupCustomer, setDataGroupCustomer] = React.useState([]);
+  const [isGroupCustomer, setIsGroupCustomer] = React.useState(false);
   const [groupCustomer, setGroupCustomer] = React.useState([]);
+  const [dataCustomer, setDataCustomer] = React.useState([]);
+  const [isCustomer, setIsCustomer] = React.useState(false);
   const [customer, setCustomer] = React.useState([]);
   const [titleVN, setTitleVN] = React.useState(data?.title?.vi);
   const [titleEN, setTitleEN] = React.useState(data?.title?.en);
@@ -70,19 +75,34 @@ const EditPromotion = ({ state, setState, data }) => {
   const [imgThumbnail, setImgThumbnail] = React.useState("");
   const [imgBackground, setImgBackground] = React.useState("");
   const [serviceApply, setServiceApply] = useState("");
+  const [dateExchange, setDateExchange] = useState();
+
   const options = [];
+  const optionsCustomer = [];
+
   const dispatch = useDispatch();
   const service = useSelector(getService);
 
   useEffect(() => {
     getGroupCustomerApi(0, 10)
-      .then((res) => setGroupCustomer(res.data))
+      .then((res) => setDataGroupCustomer(res.data))
+      .catch((err) => console.log(err));
+
+    fetchCustomers(0, 100, "all")
+      .then((res) => setDataCustomer(res?.data))
       .catch((err) => console.log(err));
   }, []);
 
-  groupCustomer.map((item, index) => {
+  dataGroupCustomer.map((item, index) => {
     options.push({
       label: item?.name,
+      value: item?._id,
+    });
+  });
+
+  dataCustomer.map((item, index) => {
+    optionsCustomer.push({
+      label: item?.full_name,
       value: item?._id,
     });
   });
@@ -155,6 +175,10 @@ const EditPromotion = ({ state, setState, data }) => {
     // }
   };
   const handleChange = (value) => {
+    setGroupCustomer(value);
+  };
+
+  const handleChangeCustomer = (value) => {
     setCustomer(value);
   };
 
@@ -199,7 +223,10 @@ const EditPromotion = ({ state, setState, data }) => {
         );
         setLimitedQuantity(res?.is_limit_count);
         setAmount(res?.limit_count);
-        setCustomer(res?.id_group_customer);
+        setIsGroupCustomer(res?.is_id_group_customer);
+        setGroupCustomer(res?.id_group_customer);
+        setIsCustomer(res?.is_id_customer);
+        setCustomer(res?.id_customer);
         setIsUsePromo(res?.is_limited_use);
         setUsePromo(res?.limited_use);
         setPromoType(res?.type_discount);
@@ -213,6 +240,7 @@ const EditPromotion = ({ state, setState, data }) => {
         setPromoCode(res?.code);
         setServiceApply(res?.service_apply[0]);
         setMinimumOrder(res?.price_min_order);
+        setDateExchange(res?.exp_date_exchange);
       })
       .catch((err) => console.log(err));
   }, [data]);
@@ -245,7 +273,10 @@ const EditPromotion = ({ state, setState, data }) => {
           limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
           is_limit_count: limitedQuantity,
           limit_count: limitedQuantity ? amount : 0,
-          id_group_customer: customer,
+          is_id_group_customer: isGroupCustomer,
+          id_group_customer: groupCustomer,
+          is_id_customer: isCustomer,
+          id_customer: customer,
           service_apply: [serviceApply],
           id_customer: [],
           is_limited_use: isUsePromo,
@@ -260,6 +291,7 @@ const EditPromotion = ({ state, setState, data }) => {
           is_exchange_point: isExchangePoint,
           exchange_point: isExchangePoint ? exchangePoint : 0,
           brand: namebrand,
+          exp_date_exchange: dateExchange,
         },
       })
     );
@@ -278,6 +310,9 @@ const EditPromotion = ({ state, setState, data }) => {
     endDate,
     limitedQuantity,
     amount,
+    isGroupCustomer,
+    groupCustomer,
+    isCustomer,
     customer,
     isUsePromo,
     usePromo,
@@ -292,6 +327,7 @@ const EditPromotion = ({ state, setState, data }) => {
     promoCode,
     serviceApply,
     minimumOrder,
+    dateExchange,
   ]);
 
   return (
@@ -627,18 +663,53 @@ const EditPromotion = ({ state, setState, data }) => {
                   </div>
                   <div>
                     <h5>10. Đối tượng áp dụng</h5>
-                    <Label>Nhóm khách hàng</Label>
-                    <Select
-                      mode="multiple"
-                      allowClear
-                      style={{
-                        width: "100%",
-                      }}
-                      placeholder="Please select"
-                      value={customer}
-                      onChange={handleChange}
-                      options={options}
-                    />
+                    <FormGroup check inline>
+                      <Label check className="text-first">
+                        Nhóm khách hàng
+                      </Label>
+                      <Input
+                        type="checkbox"
+                        className="ml-2"
+                        defaultChecked={isGroupCustomer}
+                        onClick={() => setIsGroupCustomer(!isGroupCustomer)}
+                      />
+                    </FormGroup>
+                    {isGroupCustomer && (
+                      <Select
+                        mode="multiple"
+                        allowClear
+                        style={{
+                          width: "100%",
+                        }}
+                        placeholder="Please select"
+                        value={groupCustomer}
+                        onChange={handleChange}
+                        options={options}
+                      />
+                    )}
+                    <FormGroup check inline>
+                      <Label check className="text-first">
+                        Áp dụng cho khách hàng
+                      </Label>
+                      <Input
+                        type="checkbox"
+                        className="ml-2"
+                        defaultChecked={isCustomer}
+                        onClick={() => setIsCustomer(!isCustomer)}
+                      />
+                    </FormGroup>
+                    {isCustomer && (
+                      <Select
+                        mode="tags"
+                        style={{
+                          width: "100%",
+                        }}
+                        tokenSeparators={[","]}
+                        placeholder="Please select"
+                        onChange={handleChangeCustomer}
+                        options={optionsCustomer}
+                      />
+                    )}
                   </div>
                   <div>
                     <h5>11. Số lượng mã khuyến mãi</h5>
@@ -742,6 +813,18 @@ const EditPromotion = ({ state, setState, data }) => {
                         onChange={(e) => setExchangePoint(e.target.value)}
                       />
                     )}
+                  </div>
+                  <div>
+                    <h5 className="mt-2">15. Thời gian sử dụng sau khi đổi</h5>
+
+                    <CustomTextInput
+                      placeholder="Nhập số ngày (1,2,3...,n"
+                      className="input-promo-code"
+                      type="number"
+                      min={0}
+                      value={dateExchange}
+                      onChange={(e) => setDateExchange(e.target.value)}
+                    />
                   </div>
                   <Button
                     className="btn_create_promotion"

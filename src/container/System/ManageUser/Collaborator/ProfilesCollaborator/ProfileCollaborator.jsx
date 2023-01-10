@@ -135,7 +135,7 @@ const ProfileCollaborator = () => {
                     <Information data={data} image={img} />
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Tài liệu" key="2">
-                    <Document />
+                    <Document data={data} />
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Hoạt động" key="3">
                     <Activity id={id} />

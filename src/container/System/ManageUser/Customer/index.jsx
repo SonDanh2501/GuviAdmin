@@ -69,7 +69,7 @@ const ManageCustomer = () => {
     } else {
       setStatus("all");
       dispatch(
-        getCustomers.getCustomersRequest({ start: 0, length: 20, type: "" })
+        getCustomers.getCustomersRequest({ start: 0, length: 20, type: "all" })
       );
     }
   };
