@@ -655,7 +655,7 @@ export default function Home() {
                 <p className="label-activity">Hoạt động</p>
                 <List
                   itemLayout="horizontal"
-                  dataSource={historyActivity.slice(0, 3)}
+                  dataSource={historyActivity.slice(0, 4)}
                   renderItem={(item, index) => {
                     const subject = item?.id_admin_action
                       ? item?.title_admin.replace(
@@ -674,7 +674,12 @@ export default function Home() {
                         )
                       : "";
 
-                    const predicate = item?.id_collaborator
+                    const predicate = item?.id_promotion
+                      ? subject.replace(
+                          item?.id_promotion?._id,
+                          item?.id_promotion?.title
+                        )
+                      : item?.id_collaborator
                       ? subject.replace(
                           item?.id_collaborator?._id,
                           item?.id_collaborator?.full_name
@@ -689,10 +694,17 @@ export default function Home() {
                           item?.id_admin_action?._id,
                           item?.id_admin_action?.full_name
                         )
-                      : subject.replace(
+                      : item?.id_transistion_collaborator
+                      ? subject.replace(
                           item?.id_transistion_collaborator?._id,
                           item?.id_transistion_collaborator?.transfer_note
-                        );
+                        )
+                      : item?.id_transistion_customer
+                      ? subject.replace(
+                          item?.id_transistion_customer?._id,
+                          item?.id_transistion_customer?.transfer_note
+                        )
+                      : "";
 
                     const object = item?.id_transistion_collaborator
                       ? predicate.replace(

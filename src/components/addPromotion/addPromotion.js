@@ -1,3 +1,4 @@
+import { Select } from "antd";
 import { convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import React, { memo, useCallback, useEffect, useState } from "react";
@@ -6,10 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   Col,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
   Form,
   FormGroup,
   Input,
@@ -17,6 +14,7 @@ import {
   Modal,
   Row,
 } from "reactstrap";
+import { fetchCustomers } from "../../api/customer";
 import { postFile } from "../../api/file";
 import { getGroupCustomerApi } from "../../api/promotion";
 import { loadingAction } from "../../redux/actions/loading";
@@ -24,13 +22,7 @@ import { createPromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
-import { Select } from "antd";
 import "./addPromotion.scss";
-import { getGroupCustomers } from "../../redux/actions/customerAction";
-import {
-  getGroupCustomerTotalItem,
-  getGroupCustomer,
-} from "../../redux/selectors/customer";
 
 const AddPromotion = () => {
   const [state, setState] = useState(false);
@@ -38,7 +30,11 @@ const AddPromotion = () => {
   const [typePromotion, setTypePromotion] = React.useState("code");
   const [formDiscount, setFormDiscount] = React.useState("amount");
   const [discountUnit, setDiscountUnit] = React.useState("amount");
+  const [dataGroupCustomer, setDataGroupCustomer] = React.useState([]);
+  const [isGroupCustomer, setIsGroupCustomer] = React.useState(false);
   const [groupCustomer, setGroupCustomer] = React.useState([]);
+  const [dataCustomer, setDataCustomer] = React.useState([]);
+  const [isCustomer, setIsCustomer] = React.useState(false);
   const [customer, setCustomer] = React.useState([]);
   const [titleVN, setTitleVN] = React.useState("");
   const [titleEN, setTitleEN] = React.useState("");
@@ -58,7 +54,6 @@ const AddPromotion = () => {
   const [codebrand, setCodebrand] = React.useState("");
   const [reducedValue, setReducedValue] = React.useState(0);
   const [maximumDiscount, setMaximumDiscount] = React.useState(0);
-  const [orderFirst, setOrderFirst] = React.useState(false);
   const [limitedQuantity, setLimitedQuantity] = React.useState(false);
   const [amount, setAmount] = React.useState("");
   const [limitedDate, setLimitedDate] = React.useState(false);
@@ -71,13 +66,20 @@ const AddPromotion = () => {
   const [imgThumbnail, setImgThumbnail] = React.useState("");
   const [imgBackground, setImgBackground] = React.useState("");
   const [serviceApply, setServiceApply] = useState("");
+  const [dateExchange, setDateExchange] = useState();
   const options = [];
+  const optionsCustomer = [];
   const dispatch = useDispatch();
+
   const service = useSelector(getService);
 
   useEffect(() => {
     getGroupCustomerApi(0, 10)
-      .then((res) => setGroupCustomer(res.data))
+      .then((res) => setDataGroupCustomer(res.data))
+      .catch((err) => console.log(err));
+
+    fetchCustomers(0, 100, "all")
+      .then((res) => setDataCustomer(res?.data))
       .catch((err) => console.log(err));
   }, []);
 
@@ -85,9 +87,16 @@ const AddPromotion = () => {
     setServiceApply(service[0]?._id);
   }, [service]);
 
-  groupCustomer.map((item, index) => {
+  dataGroupCustomer.map((item, index) => {
     options.push({
       label: item?.name,
+      value: item?._id,
+    });
+  });
+
+  dataCustomer.map((item, index) => {
+    optionsCustomer.push({
+      label: item?.full_name,
       value: item?._id,
     });
   });
@@ -160,8 +169,14 @@ const AddPromotion = () => {
     // }
   };
   const handleChange = (value) => {
+    setGroupCustomer(value);
+  };
+
+  const handleChangeCustomer = (value) => {
     setCustomer(value);
   };
+
+  console.log(customer);
 
   const onEditorVNStateChange = (editorState) => setDescriptionVN(editorState);
 
@@ -193,14 +208,16 @@ const AddPromotion = () => {
         limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
         is_limit_count: limitedQuantity,
         limit_count: limitedQuantity ? amount : 0,
-        id_group_customer: customer,
+        is_id_group_customer: isGroupCustomer,
+        id_group_customer: groupCustomer,
+        is_id_customer: isCustomer,
+        id_customer: customer,
         service_apply: [serviceApply],
-        id_customer: [],
         is_limited_use: isUsePromo,
         limited_use: isUsePromo ? usePromo : 0,
         type_discount: promoType,
         type_promotion: typePromotion,
-        price_min_order: 0,
+        price_min_order: minimumOrder,
         discount_unit: discountUnit,
         discount_max_price: maximumDiscount,
         discount_value: reducedValue,
@@ -208,6 +225,7 @@ const AddPromotion = () => {
         is_exchange_point: isExchangePoint,
         exchange_point: exchangePoint,
         brand: namebrand,
+        exp_date_exchange: dateExchange,
       })
     );
   }, [
@@ -225,6 +243,9 @@ const AddPromotion = () => {
     endDate,
     limitedQuantity,
     amount,
+    isGroupCustomer,
+    groupCustomer,
+    isCustomer,
     customer,
     isUsePromo,
     usePromo,
@@ -238,6 +259,8 @@ const AddPromotion = () => {
     serviceApply,
     typePromotion,
     promoCode,
+    dateExchange,
+    minimumOrder,
   ]);
 
   return (
@@ -541,27 +564,6 @@ const AddPromotion = () => {
                       </Row>
                     </div>
                   )}
-
-                  <div>
-                    {/* <h5>8. Dịch vụ áp dụng</h5>
-                      <CustomTextInput
-                        className="select-type-promo"
-                        name="selectMulti"
-                        type="select"
-                        multiple={true}
-                        body={
-                          <>
-                            <option value={"Đồng giá"}>Giúp việc thơ</option>
-                            <option value={"Giảm giá theo đơn đặt"}>
-                              Giảm giá theo đơn đặt
-                            </option>
-                            <option value={"Khuyến mãi từ đối tác"}>
-                              Khuyến mãi từ đối tác
-                            </option>
-                          </>
-                        }
-                      /> */}
-                  </div>
                 </Col>
                 <Col md={4}>
                   {promoType !== "partner_promotion" && (
@@ -590,39 +592,64 @@ const AddPromotion = () => {
 
                   <div>
                     <h5>10. Đối tượng áp dụng</h5>
-                    <Label>Nhóm khách hàng</Label>
-                    <Select
-                      mode="multiple"
-                      allowClear
-                      style={{
-                        width: "100%",
-                      }}
-                      placeholder="Please select"
-                      onChange={handleChange}
-                      options={options}
-                    />
-                  </div>
-                  <div>
-                    <h5>11. Điều kiện áp dụng</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
-                        Đặt lần đầu
+                        Nhóm khách hàng
                       </Label>
                       <Input
                         type="checkbox"
-                        defaultChecked={orderFirst}
-                        onClick={() => setOrderFirst(!orderFirst)}
+                        className="ml-2"
+                        defaultChecked={isGroupCustomer}
+                        onClick={() => setIsGroupCustomer(!isGroupCustomer)}
                       />
                     </FormGroup>
+
+                    {isGroupCustomer && (
+                      <Select
+                        mode="multiple"
+                        allowClear
+                        style={{
+                          width: "100%",
+                        }}
+                        placeholder="Please select"
+                        onChange={handleChange}
+                        options={options}
+                      />
+                    )}
+                    <FormGroup check inline>
+                      <Label check className="text-first">
+                        Áp dụng cho khách hàng
+                      </Label>
+                      <Input
+                        type="checkbox"
+                        className="ml-2"
+                        defaultChecked={isCustomer}
+                        onClick={() => setIsCustomer(!isCustomer)}
+                      />
+                    </FormGroup>
+                    {isCustomer && (
+                      <Select
+                        mode="tags"
+                        style={{
+                          width: "100%",
+                        }}
+                        tokenSeparators={[","]}
+                        placeholder="Please select"
+                        onChange={handleChangeCustomer}
+                        options={optionsCustomer}
+                      />
+                    )}
                   </div>
+
                   <div>
-                    <h5>12. Số lượng mã khuyến mãi</h5>
+                    <h5 className="mt-2">11. Số lượng mã khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Số lượng giới hạn
                       </Label>
                       <Input
                         type="checkbox"
+                        className="ml-2"
                         defaultChecked={limitedQuantity}
                         onClick={() => setLimitedQuantity(!limitedQuantity)}
                       />
@@ -639,13 +666,14 @@ const AddPromotion = () => {
                     )}
                   </div>
                   <div>
-                    <h5>13. Số lần sử dụng khuyến mãi</h5>
+                    <h5 className="mt-2">12. Số lần sử dụng khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Lần sử dụng khuyến mãi
                       </Label>
                       <Input
                         type="checkbox"
+                        className="ml-2"
                         defaultChecked={isUsePromo}
                         onClick={() => setIsUsePromo(!isUsePromo)}
                       />
@@ -662,13 +690,14 @@ const AddPromotion = () => {
                     )}
                   </div>
                   <div>
-                    <h5>14. Thời gian khuyến mãi</h5>
+                    <h5 className="mt-2">13. Thời gian khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Giới hạn ngày
                       </Label>
                       <Input
                         type="checkbox"
+                        className="ml-2"
                         defaultChecked={limitedDate}
                         onClick={() => setLimitedDate(!limitedDate)}
                       />
@@ -699,13 +728,14 @@ const AddPromotion = () => {
                     )}
                   </div>
                   <div>
-                    <h5>15. Điểm quy đổi</h5>
+                    <h5 className="mt-2">14. Điểm quy đổi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Điểm quy đổi
                       </Label>
                       <Input
                         type="checkbox"
+                        className="ml-2"
                         defaultChecked={isExchangePoint}
                         onClick={() => setIsExchangePoint(!isExchangePoint)}
                       />
@@ -721,6 +751,18 @@ const AddPromotion = () => {
                         onChange={(e) => setExchangePoint(e.target.value)}
                       />
                     )}
+                  </div>
+                  <div>
+                    <h5 className="mt-2">15. Thời gian sử dụng sau khi đổi</h5>
+
+                    <CustomTextInput
+                      placeholder="Nhập số ngày (1,2,3...,n"
+                      className="input-promo-code"
+                      type="number"
+                      min={0}
+                      value={dateExchange}
+                      onChange={(e) => setDateExchange(e.target.value)}
+                    />
                   </div>
                   <Button
                     className="btn_add"

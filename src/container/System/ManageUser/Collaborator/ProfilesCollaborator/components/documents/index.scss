@@ -27,3 +27,16 @@
   border: none;
   color: black;
 }
+
+.div-infomation {
+  display: flex;
+  flex-direction: column;
+
+  .img-thumbnail-infomation {
+    width: 150px;
+    height: 70px;
+    margin: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+  }
+}

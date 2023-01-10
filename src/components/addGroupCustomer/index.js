@@ -1,18 +1,23 @@
-import { Drawer } from "antd";
-import React, { memo, useCallback, useState } from "react";
-import IntlCurrencyInput from "react-intl-currency-input";
+import { Button, Drawer, Input, Radio } from "antd";
+import React, { memo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Form, Input, Label, List, Modal } from "reactstrap";
-import { searchCollaborators } from "../../api/collaborator";
-import { TopupMoneyCollaboratorApi } from "../../api/topup";
-import { loadingAction } from "../../redux/actions/loading";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./index.scss";
 
 const AddGroupCustomer = () => {
-  const [name, setName] = useState("");
-  const [decription, setDecription] = useState("");
+  const [value, setValue] = useState("and");
+  const [conditionLevel, setConditionLevel] = useState([
+    {
+      condition: [
+        {
+          kind: "",
+          value: "",
+          operator: "",
+        },
+      ],
+    },
+  ]);
   const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
@@ -23,18 +28,22 @@ const AddGroupCustomer = () => {
     setOpen(false);
   };
 
+  const onChange = (e) => {
+    setValue(e.target.value);
+  };
+
   return (
     <>
       <CustomButton
         title="Thêm nhóm khách hàng"
-        className="btn-add"
+        className="btn-add-group-ctm"
         type="button"
         // onClick={() => setState(!state)}
         onClick={showDrawer}
       />
       <Drawer
         title="Thêm nhóm khách hàng"
-        width={500}
+        width={600}
         onClose={onClose}
         open={open}
         bodyStyle={{
@@ -42,25 +51,41 @@ const AddGroupCustomer = () => {
         }}
       >
         <div className="modal-body">
-          <Form>
-            <CustomTextInput
-              label="Tên nhóm khách hàng"
-              placeholder="Vui lòng nhập thông tin"
-              type="text"
-              onChange={(e) => setName(e.target.value)}
-            />
-            <CustomTextInput
-              label="Chi tiết"
-              placeholder="Vui lòng nhập thông tin"
-              type="text"
-              onChange={(e) => setDecription(e.target.value)}
-            />
-            <CustomButton
-              title="Thêm"
-              className="float-left btn-add"
-              type="button"
-            />
-          </Form>
+          <Radio.Group onChange={onChange} value={value}>
+            <Radio value={"and"}>And</Radio>
+            <Radio value={"or"}>Or</Radio>
+          </Radio.Group>
+
+          <div>
+            {conditionLevel.map((item) => {
+              return (
+                <>
+                  {item?.condition.map((i) => {
+                    return (
+                      <>
+                        <CustomTextInput
+                          label="Kind"
+                          body={
+                            <>
+                              <option value={"total_order"}>
+                                Tổng đơn đặt
+                              </option>
+                              <option value={"gender"}>Giới tính</option>
+                              <option value={"rank_point"}>Hạng điểm</option>
+                            </>
+                          }
+                        />
+                        <CustomTextInput label="Value" />
+                        <CustomTextInput label="Operater" />
+                      </>
+                    );
+                  })}
+                </>
+              );
+            })}
+          </div>
+
+          <Button>Add New Condition</Button>
         </div>
       </Drawer>
     </>

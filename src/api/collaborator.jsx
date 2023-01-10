@@ -55,6 +55,13 @@ export const updateInformationCollaboratorApi = (id, data) => {
   );
 };
 
+export const updateDocumentCollaboratorApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/collaborator_manager/edit_personal_document/${id}`,
+    data
+  );
+};
+
 export const getHistoryActivityCollaborator = (id, start, length) => {
   return axiosClient.get(
     `admin/collaborator_manager/get_history_activity/${id}?start=${start}&length=${length}`
