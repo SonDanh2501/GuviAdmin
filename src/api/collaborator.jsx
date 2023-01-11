@@ -18,9 +18,6 @@ export const searchCollaborators = (start, length, type, payload) => {
   );
 };
 
-export const fetchCollaboratorById = () => {
-  return axiosClient.get("/admin/collaborator_manager/:id");
-};
 export const updateCollaborator = (id, payload) => {
   return axiosClient.post(
     `/admin/collaborator_manager/edit_item/${id}`,

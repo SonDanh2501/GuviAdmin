@@ -22,6 +22,7 @@ const CustomTextInput = ({
   max,
   title,
   disabled,
+  onClick,
 }) => {
   return (
     <FormGroup className={classNameForm}>
@@ -47,6 +48,7 @@ const CustomTextInput = ({
         max={max}
         title={title}
         disabled={disabled}
+        onClick={onClick}
       >
         {body}{" "}
       </Input>
