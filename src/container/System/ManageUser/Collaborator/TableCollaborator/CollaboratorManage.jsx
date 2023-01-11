@@ -330,11 +330,7 @@ export default function CollaboratorManage(props) {
         <Space size="middle">
           <div>
             {data?.is_verify ? (
-              <img
-                src={onToggle}
-                className="img-toggle"
-                onClick={toggleVerify}
-              />
+              <img src={onToggle} className="img-toggle" />
             ) : (
               <img
                 src={offToggle}

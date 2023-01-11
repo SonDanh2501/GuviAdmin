@@ -25,3 +25,9 @@ export const activeCustomer = (id, payload) => {
 export const deleteCustomer = (id, payload) => {
   return axiosClient.post(`/admin/customer_manager/delete_item/${id}`, payload);
 };
+
+export const getOrderByCustomers = (id, start, length) => {
+  return axiosClient.get(
+    `/admin/order_manager/get_order_by_customer/${id}?&start=${start}&length=${length}`
+  );
+};

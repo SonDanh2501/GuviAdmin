@@ -1,14 +1,7 @@
-.headerCard {
-  border: none;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  background-color: transparent;
-  .rounded-circle {
-    width: 200px;
-    height: 200px;
-    border-radius: 50px;
-  }
+.avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50px;
 }
 
 .row-heading {

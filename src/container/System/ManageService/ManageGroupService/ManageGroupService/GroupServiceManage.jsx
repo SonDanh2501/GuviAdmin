@@ -80,18 +80,18 @@ export default function GroupServiceManage() {
         </a>
       ),
     },
-    {
-      key: "2",
-      label: itemEdit?.is_active ? (
-        <a onClick={toggleBlock}>Chặn</a>
-      ) : (
-        <a onClick={toggleBlock}>Kích hoạt</a>
-      ),
-    },
-    {
-      key: "3",
-      label: <a onClick={toggle}>Xoá</a>,
-    },
+    // {
+    //   key: "2",
+    //   label: itemEdit?.is_active ? (
+    //     <a onClick={toggleBlock}>Chặn</a>
+    //   ) : (
+    //     <a onClick={toggleBlock}>Kích hoạt</a>
+    //   ),
+    // },
+    // {
+    //   key: "3",
+    //   label: <a onClick={toggle}>Xoá</a>,
+    // },
   ];
 
   const columns = [
@@ -122,21 +122,21 @@ export default function GroupServiceManage() {
       key: "action",
       width: "10%",
       align: "center",
-      // render: (data) => (
-      //   <Space size="middle">
-      //     <Dropdown
-      //       menu={{
-      //         items,
-      //       }}
-      //       placement="bottom"
-      //       trigger={["click"]}
-      //     >
-      //       <a>
-      //         <MoreOutlined className="icon-more" />
-      //       </a>
-      //     </Dropdown>
-      //   </Space>
-      // ),
+      render: (data) => (
+        <Space size="middle">
+          <Dropdown
+            menu={{
+              items,
+            }}
+            placement="bottom"
+            trigger={["click"]}
+          >
+            <a>
+              <MoreOutlined className="icon-more" />
+            </a>
+          </Dropdown>
+        </Space>
+      ),
     },
   ];
 
@@ -160,9 +160,9 @@ export default function GroupServiceManage() {
               return {
                 onClick: (event) => {
                   setItemEdit(record);
-                  navigate("/services/manage-group-service/manage-service", {
-                    state: { id: record?._id },
-                  });
+                  // navigate("/services/manage-group-service/manage-service", {
+                  //   state: { id: record?._id },
+                  // });
                 },
               };
             }}
