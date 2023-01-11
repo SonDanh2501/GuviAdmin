@@ -20,7 +20,7 @@ import ManageTopup from "../container/System/ManageTopup";
 import ManageCollaborator from "../container/System/ManageUser/Collaborator";
 import ProfileCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/ProfileCollaborator";
 import ManageCustomer from "../container/System/ManageUser/Customer";
-import Profile from "../container/System/ManageUser/Customer/Profiles/Profile";
+import Profiles from "../container/System/ManageUser/Customer/Profiles";
 
 import "./Dashboard.scss";
 
@@ -51,11 +51,11 @@ const Dashboard = () => {
               path="/details-collaborator"
               element={<ProfileCollaborator />}
             />
-            <Route path="/details-customer" element={<Profile />} />
+            <Route path="/details-customer" element={<Profiles />} />
             <Route path="/system/user-manage" element={<ManageCustomer />} />
             <Route
               path="/system/user-manage/details-customer"
-              element={<Profile />}
+              element={<Profiles />}
             />
             <Route
               path="/system/collaborator-manage"
