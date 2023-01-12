@@ -67,6 +67,7 @@ const AddPromotion = () => {
   const [imgBackground, setImgBackground] = React.useState("");
   const [serviceApply, setServiceApply] = useState("");
   const [dateExchange, setDateExchange] = useState();
+  const [position, setPosition] = useState();
   const options = [];
   const optionsCustomer = [];
   const dispatch = useDispatch();
@@ -176,8 +177,6 @@ const AddPromotion = () => {
     setCustomer(value);
   };
 
-  console.log(customer);
-
   const onEditorVNStateChange = (editorState) => setDescriptionVN(editorState);
 
   const onEditorENStateChange = (editorState) => setDescriptionEN(editorState);
@@ -224,8 +223,9 @@ const AddPromotion = () => {
         is_delete: false,
         is_exchange_point: isExchangePoint,
         exchange_point: exchangePoint,
-        brand: namebrand,
+        brand: namebrand.toUpperCase(),
         exp_date_exchange: dateExchange,
+        position: position,
       })
     );
   }, [
@@ -261,6 +261,7 @@ const AddPromotion = () => {
     promoCode,
     dateExchange,
     minimumOrder,
+    position,
   ]);
 
   return (
@@ -754,7 +755,6 @@ const AddPromotion = () => {
                   </div>
                   <div>
                     <h5 className="mt-2">15. Thời gian sử dụng sau khi đổi</h5>
-
                     <CustomTextInput
                       placeholder="Nhập số ngày (1,2,3...,n"
                       className="input-promo-code"
@@ -762,6 +762,18 @@ const AddPromotion = () => {
                       min={0}
                       value={dateExchange}
                       onChange={(e) => setDateExchange(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <h5 className="mt-2">16. Thứ tự hiện thị</h5>
+
+                    <CustomTextInput
+                      placeholder="Nhập số thứ tự (1,2,3...,n"
+                      className="input-promo-code"
+                      type="number"
+                      min={0}
+                      value={position}
+                      onChange={(e) => setPosition(e.target.value)}
                     />
                   </div>
                   <Button

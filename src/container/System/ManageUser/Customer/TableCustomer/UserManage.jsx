@@ -140,6 +140,8 @@ export default function UserManage(props) {
     []
   );
 
+  console.log(status);
+
   const items = [
     {
       key: "1",
