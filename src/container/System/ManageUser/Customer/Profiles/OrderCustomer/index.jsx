@@ -26,7 +26,7 @@ export default function OrderCustomer() {
     getOrderByCustomers(id, 0, 20)
       .then((res) => {
         setData(res?.data);
-        setTotal(res?.total);
+        setTotal(res?.totalItem);
       })
       .catch((err) => {
         console.log(err);
@@ -250,7 +250,7 @@ export default function OrderCustomer() {
         />
 
         <div className="mt-2 div-pagination p-2">
-          {/* <a>Tổng: {total}</a> */}
+          <a>Tổng: {total}</a>
           <div>
             <Pagination
               current={currentPage}

@@ -22,6 +22,10 @@ const AppCustomer = () => {
   const [maxGold, setMaxGold] = useState();
   const [minPlatimun, setMinPlatinum] = useState();
   const [maxPlatinum, setMaxPlatinum] = useState();
+  const [ratioMember, setRatioMember] = useState();
+  const [ratioSilver, setRatioSilver] = useState();
+  const [ratioGold, setRatioGold] = useState();
+  const [ratioPlatinum, setRatioPlatinum] = useState();
 
   const dispatch = useDispatch();
 
@@ -38,7 +42,10 @@ const AppCustomer = () => {
         setMaxGold(res?.rank_gold_max_point);
         setMinPlatinum(res?.rank_platinum_minium_point);
         setMaxPlatinum(res?.rank_platinum_max_point);
-
+        setRatioMember(res?.ratio_of_price_to_point_member);
+        setRatioSilver(res?.ratio_of_price_to_point_silver);
+        setRatioGold(res?.ratio_of_price_to_point_gold);
+        setRatioPlatinum(res?.ratio_of_price_to_point_platium);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -88,6 +95,10 @@ const AppCustomer = () => {
       rank_silver_max_point: maxSilver,
       rank_platinum_minium_point: minPlatimun,
       rank_platinum_max_point: maxPlatinum,
+      ratio_of_price_to_point_member: ratioMember,
+      ratio_of_price_to_point_silver: ratioSilver,
+      ratio_of_price_to_point_gold: ratioGold,
+      ratio_of_price_to_point_platium: ratioPlatinum,
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
@@ -103,6 +114,10 @@ const AppCustomer = () => {
             setMaxGold(res?.rank_gold_max_point);
             setMinPlatinum(res?.rank_platimun_minium_point);
             setMaxPlatinum(res?.rank_platinum_max_point);
+            setRatioMember(res?.ratio_of_price_to_point_member);
+            setRatioSilver(res?.ratio_of_price_to_point_silver);
+            setRatioGold(res?.ratio_of_price_to_point_gold);
+            setRatioPlatinum(res?.ratio_of_price_to_point_platium);
           })
           .catch((err) => {
             dispatch(loadingAction.loadingRequest(false));
@@ -128,6 +143,10 @@ const AppCustomer = () => {
     maxGold,
     minPlatimun,
     maxPlatinum,
+    ratioMember,
+    ratioSilver,
+    ratioGold,
+    ratioPlatinum,
   ]);
 
   return (
@@ -172,29 +191,12 @@ const AppCustomer = () => {
             // onChange={(e) => setMaxMember(e.target.value)}
           />
           <CustomTextInput
-            label={"Điểm tối đa thành Member"}
-            classNameForm="form-input"
-            type="number"
-            value={maxMember}
-            onChange={(e) => setMaxMember(e.target.value)}
-          />
-          <CustomTextInput
             label={"Điểm tối thiểu thành Silver"}
             classNameForm="form-input"
             type="number"
             value={minSilver}
             onChange={(e) => setMinSilver(e.target.value)}
           />
-          <CustomTextInput
-            label={"Điểm tối đa thành Silver"}
-            classNameForm="form-input"
-            type="number"
-            value={maxSilver}
-            onChange={(e) => setMaxSilver(e.target.value)}
-          />
-        </div>
-
-        <div className="div-col-right">
           <CustomTextInput
             label={"Điểm tối thiểu thành Gold"}
             classNameForm="form-input"
@@ -203,25 +205,77 @@ const AppCustomer = () => {
             onChange={(e) => setMinGold(e.target.value)}
           />
           <CustomTextInput
-            label={"Điểm tối đa thành Gold"}
-            classNameForm="form-input"
-            type="number"
-            value={maxGold}
-            onChange={(e) => setMaxGold(e.target.value)}
-          />
-          <CustomTextInput
             label={"Điểm tối thiểu thành Platinum"}
             classNameForm="form-input"
             type="number"
             value={minPlatimun}
             onChange={(e) => setMinPlatinum(e.target.value)}
           />
+        </div>
+
+        <div className="div-col-right">
+          <CustomTextInput
+            label={"Điểm tối đa thành Member"}
+            classNameForm="form-input"
+            type="number"
+            value={maxMember}
+            onChange={(e) => setMaxMember(e.target.value)}
+          />
+          <CustomTextInput
+            label={"Điểm tối đa thành Silver"}
+            classNameForm="form-input"
+            type="number"
+            value={maxSilver}
+            onChange={(e) => setMaxSilver(e.target.value)}
+          />
+
+          <CustomTextInput
+            label={"Điểm tối đa thành Gold"}
+            classNameForm="form-input"
+            type="number"
+            value={maxGold}
+            onChange={(e) => setMaxGold(e.target.value)}
+          />
+
           <CustomTextInput
             label={"Điểm tối đa thành Platinum"}
             classNameForm="form-input"
             type="number"
             value={maxPlatinum}
             onChange={(e) => setMaxPlatinum(e.target.value)}
+          />
+        </div>
+
+        <div className="div-col-right">
+          <CustomTextInput
+            label={"Tỉ lệ quy đổi thành viên (10,000 VNĐ)"}
+            classNameForm="form-input"
+            type="number"
+            value={ratioMember}
+            onChange={(e) => setRatioMember(e.target.value)}
+          />
+          <CustomTextInput
+            label={"Tỉ lệ quy đổi thành viên Silver (10,000 VNĐ)"}
+            classNameForm="form-input"
+            type="number"
+            value={ratioSilver}
+            onChange={(e) => setRatioSilver(e.target.value)}
+          />
+
+          <CustomTextInput
+            label={"Tỉ lệ quy đổi thành viên Silver (10,000 VNĐ)"}
+            classNameForm="form-input"
+            type="number"
+            value={ratioGold}
+            onChange={(e) => setRatioGold(e.target.value)}
+          />
+
+          <CustomTextInput
+            label={"Tỉ lệ quy đổi thành viên Silver (10,000 VNĐ)"}
+            classNameForm="form-input"
+            type="number"
+            value={ratioPlatinum}
+            onChange={(e) => setRatioPlatinum(e.target.value)}
           />
         </div>
       </div>

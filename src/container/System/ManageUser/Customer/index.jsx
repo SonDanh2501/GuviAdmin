@@ -20,7 +20,7 @@ const ManageCustomer = () => {
 
   useEffect(() => {
     dispatch(
-      getCustomers.getCustomersRequest({ start: 0, length: 20, type: "all" })
+      getCustomers.getCustomersRequest({ start: 0, length: 20, type: "" })
     );
   }, [dispatch]);
 
@@ -67,9 +67,9 @@ const ManageCustomer = () => {
         })
       );
     } else {
-      setStatus("all");
+      setStatus("");
       dispatch(
-        getCustomers.getCustomersRequest({ start: 0, length: 20, type: "all" })
+        getCustomers.getCustomersRequest({ start: 0, length: 20, type: "" })
       );
     }
   };

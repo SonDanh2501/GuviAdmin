@@ -36,32 +36,40 @@ const AddBanner = () => {
   }, [dispatch]);
 
   const onChangeThumbnail = (e) => {
-    if (e.target.files[0]) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        setImgThumbnail(reader.result);
-      });
-      reader.readAsDataURL(e.target.files[0]);
-    }
-    const formData = new FormData();
-    formData.append("file", e.target.files[0]);
-    dispatch(loadingAction.loadingRequest(true));
+    const files = e.target.files;
+    const getSizeImage = files[0].size;
 
-    postFile(formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then((res) => {
-        setImgThumbnail(res);
-        dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
+    if (getSizeImage > 1024 * 1024) {
+      dispatch(loadingAction.loadingRequest(false));
+      alert("Kích thước lớn hơn 1MB vui lòng chọn nhỏ hơn 1MB");
+    } else {
+      if (e.target.files[0]) {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          setImgThumbnail(reader.result);
         });
-        dispatch(loadingAction.loadingRequest(false));
-      });
+        reader.readAsDataURL(e.target.files[0]);
+      }
+      const formData = new FormData();
+      formData.append("file", e.target.files[0]);
+      dispatch(loadingAction.loadingRequest(true));
+
+      postFile(formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((res) => {
+          setImgThumbnail(res);
+          dispatch(loadingAction.loadingRequest(false));
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
+        });
+    }
   };
 
   const addBanner = useCallback(() => {

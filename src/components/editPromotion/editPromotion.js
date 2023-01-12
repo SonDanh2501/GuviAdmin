@@ -76,6 +76,7 @@ const EditPromotion = ({ state, setState, data }) => {
   const [imgBackground, setImgBackground] = React.useState("");
   const [serviceApply, setServiceApply] = useState("");
   const [dateExchange, setDateExchange] = useState();
+  const [position, setPosition] = useState();
 
   const options = [];
   const optionsCustomer = [];
@@ -241,6 +242,7 @@ const EditPromotion = ({ state, setState, data }) => {
         setServiceApply(res?.service_apply[0]);
         setMinimumOrder(res?.price_min_order);
         setDateExchange(res?.exp_date_exchange);
+        setPosition(res?.position);
       })
       .catch((err) => console.log(err));
   }, [data]);
@@ -290,8 +292,9 @@ const EditPromotion = ({ state, setState, data }) => {
           is_delete: false,
           is_exchange_point: isExchangePoint,
           exchange_point: isExchangePoint ? exchangePoint : 0,
-          brand: namebrand,
+          brand: namebrand.toUpperCase(),
           exp_date_exchange: dateExchange,
+          position: position,
         },
       })
     );
@@ -328,6 +331,7 @@ const EditPromotion = ({ state, setState, data }) => {
     serviceApply,
     minimumOrder,
     dateExchange,
+    position,
   ]);
 
   return (
@@ -510,7 +514,7 @@ const EditPromotion = ({ state, setState, data }) => {
                         <CustomTextInput
                           label={"Tên đối tác"}
                           placeholder="Nhập tên đối tác"
-                          className="input-promo-code"
+                          className="input-promo-brand"
                           type="text"
                           value={namebrand}
                           onChange={(e) => setNamebrand(e.target.value)}
@@ -816,7 +820,6 @@ const EditPromotion = ({ state, setState, data }) => {
                   </div>
                   <div>
                     <h5 className="mt-2">15. Thời gian sử dụng sau khi đổi</h5>
-
                     <CustomTextInput
                       placeholder="Nhập số ngày (1,2,3...,n"
                       className="input-promo-code"
@@ -824,6 +827,17 @@ const EditPromotion = ({ state, setState, data }) => {
                       min={0}
                       value={dateExchange}
                       onChange={(e) => setDateExchange(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <h5 className="mt-2">16. Thứ tự hiện thị</h5>
+                    <CustomTextInput
+                      placeholder="Nhập số thứ tự (1,2,3...,n"
+                      className="input-promo-code"
+                      type="number"
+                      min={0}
+                      value={position}
+                      onChange={(e) => setPosition(e.target.value)}
                     />
                   </div>
                   <Button
