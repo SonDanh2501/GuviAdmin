@@ -55,10 +55,10 @@ const EditOrder = ({ idOrder }) => {
   return (
     <>
       <a className="text-add" onClick={showDrawer}>
-        Chỉnh sửa
+        Thêm CTV
       </a>
       <Drawer
-        title="Chỉnh sửa"
+        title="Thêm Cộng tác viên"
         placement="right"
         onClose={onClose}
         width={500}

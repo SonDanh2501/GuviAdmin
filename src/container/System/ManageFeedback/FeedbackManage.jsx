@@ -3,6 +3,7 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Card, CardHeader, Col, Row } from "reactstrap";
 import { searchFeedbackApi } from "../../../api/feedback";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
@@ -13,32 +14,6 @@ import {
 } from "../../../redux/selectors/feedback";
 import "./FeedbackManage.scss";
 
-const columns = [
-  {
-    title: "Loại phản hồi",
-    dataIndex: ["type", "name", "vi"],
-  },
-  {
-    title: "Nội dung",
-    dataIndex: "body",
-  },
-  {
-    title: "Người phản hồi",
-    dataIndex: "full_name",
-  },
-  {
-    title: "SĐT người phản hồi",
-    dataIndex: "phone",
-  },
-  {
-    title: "Ngày phản hồi",
-    key: "action",
-    render: (data) => (
-      <a>{moment(new Date(data?.date_create)).format("DD/MM/yyy HH:mm")}</a>
-    ),
-  },
-];
-
 export default function FeedbackManage() {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState();
@@ -47,6 +22,8 @@ export default function FeedbackManage() {
   const dispatch = useDispatch();
   const listFeedback = useSelector(getFeedbacks);
   const feedbackTotal = useSelector(getFeedbackTotal);
+  const navigate = useNavigate();
+
   React.useEffect(() => {
     // dispatch(loadingAction.loadingRequest(true));
     dispatch(getFeedback.getFeedbackRequest({ start: 0, length: 10 }));
@@ -74,6 +51,45 @@ export default function FeedbackManage() {
       })
     );
   };
+
+  const columns = [
+    {
+      title: "Loại phản hồi",
+      dataIndex: ["type", "name", "vi"],
+    },
+    {
+      title: "Nội dung",
+      dataIndex: "body",
+    },
+    {
+      title: "Người phản hồi",
+      render: (data) => {
+        return (
+          <a
+            onClick={() =>
+              navigate("/details-customer", {
+                state: { id: data?._id },
+              })
+            }
+          >
+            {data?.full_name}
+          </a>
+        );
+      },
+    },
+    {
+      title: "SĐT người phản hồi",
+      dataIndex: "phone",
+    },
+    {
+      title: "Ngày phản hồi",
+      key: "action",
+      render: (data) => (
+        <a>{moment(new Date(data?.date_create)).format("DD/MM/yyy HH:mm")}</a>
+      ),
+    },
+  ];
+
   return (
     <React.Fragment>
       <div className="mt-2 p-3">

@@ -22,6 +22,7 @@ const Information = ({ data, image }) => {
   const [issued, setIssued] = useState("");
   const [issuedDay, setIssuedDay] = useState("");
   const [imgUrl, setImgUrl] = useState("");
+  const [phone, setPhone] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -43,6 +44,7 @@ const Information = ({ data, image }) => {
     setIssued(data?.identity_place);
     setIssuedDay(identityD);
     setImgUrl(data?.avatar);
+    setPhone(data?.phone);
   }, [data]);
 
   const onChangeNumberIndentity = (value) => {
@@ -136,6 +138,15 @@ const Information = ({ data, image }) => {
                 type="date"
                 value={birthday}
                 onChange={(e) => setBirthday(e.target.value)}
+              />
+            </Col>
+            <Col lg="6">
+              <CustomTextInput
+                label={"SĐT liên hệ"}
+                type="number"
+                value={phone}
+                disabled={true}
+                // onChange={(e) => setBirthday(e.target.value)}
               />
             </Col>
           </Row>

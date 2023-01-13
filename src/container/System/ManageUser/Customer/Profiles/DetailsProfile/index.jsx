@@ -83,9 +83,9 @@ const DetailsProfile = () => {
             </div>
           </Col>
           <Col className="order-xl-1" xl="8">
-            <h3 className="">Thông tin</h3>
             <div className="pl-lg-4">
               <Col lg="6">
+                <h3 className="">Thông tin</h3>
                 <FormGroup>
                   <label className="form-control-label" htmlFor="input-email">
                     Email
@@ -98,8 +98,7 @@ const DetailsProfile = () => {
                     disabled={true}
                   />
                 </FormGroup>
-              </Col>
-              <Col lg="6">
+
                 <FormGroup>
                   <label className="form-control-label" htmlFor="input-email">
                     Ngày sinh
@@ -116,8 +115,7 @@ const DetailsProfile = () => {
                     disabled={true}
                   />
                 </FormGroup>
-              </Col>
-              <Col lg="6">
+
                 <FormGroup>
                   <label
                     className="form-control-label"
@@ -141,8 +139,7 @@ const DetailsProfile = () => {
                     disabled={true}
                   />
                 </FormGroup>
-              </Col>
-              <Col lg="6">
+
                 <FormGroup>
                   <label
                     className="form-control-label"
@@ -158,6 +155,20 @@ const DetailsProfile = () => {
                     disabled={true}
                   />
                 </FormGroup>
+              </Col>
+              <Col lg="6">
+                <h3 className="">Điểm thưởng</h3>
+                <FormGroup>
+                  <label className="form-control-label">Point</label>
+                  <Input
+                    className="form-control-alternative"
+                    id="input-email"
+                    type="email"
+                    placeholder="Nhập số điểm thưởng"
+                  />
+                </FormGroup>
+
+                <Button className="btn-update-point">Cập nhật</Button>
               </Col>
             </div>
           </Col>

@@ -31,6 +31,8 @@ const ManageCollaborator = () => {
     if (active === "2") {
       setStatus("online");
     } else if (active === "3") {
+      setStatus("offline");
+    } else if (active === "4") {
       setStatus("locked");
       dispatch(
         getCollaborators.getCollaboratorsRequest({
@@ -39,7 +41,7 @@ const ManageCollaborator = () => {
           type: "locked",
         })
       );
-    } else if (active === "4") {
+    } else if (active === "5") {
       setStatus("verify");
       dispatch(
         getCollaborators.getCollaboratorsRequest({
@@ -48,22 +50,13 @@ const ManageCollaborator = () => {
           type: "verify",
         })
       );
-    } else if (active === "5") {
+    } else if (active === "6") {
       setStatus("not_verify");
       dispatch(
         getCollaborators.getCollaboratorsRequest({
           start: 0,
           length: 20,
           type: "not_verify",
-        })
-      );
-    } else if (active === "6") {
-      setStatus("birthday");
-      dispatch(
-        getCollaborators.getCollaboratorsRequest({
-          start: 0,
-          length: 20,
-          type: "birthday",
         })
       );
     } else {
@@ -94,29 +87,23 @@ const ManageCollaborator = () => {
               status={status}
             />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="CTV Đang Hoạt Động" key="2"></Tabs.TabPane>
-          <Tabs.TabPane tab="CTV Đã Khoá" key="3">
+          <Tabs.TabPane tab="CTV Đang Online" key="2"></Tabs.TabPane>
+          <Tabs.TabPane tab="CTV Đang Offline" key="3"></Tabs.TabPane>
+          <Tabs.TabPane tab="CTV Đã Khoá" key="4">
             <CollaboratorManage
               data={collaborator}
               total={collaboratorTotal}
               status={status}
             />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="CTV Đã Xác Thực" key="4">
+          <Tabs.TabPane tab="CTV Đã Xác Thực" key="5">
             <CollaboratorManage
               data={collaborator}
               total={collaboratorTotal}
               status={status}
             />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="CTV Chưa Xác Thực" key="5">
-            <CollaboratorManage
-              data={collaborator}
-              total={collaboratorTotal}
-              status={status}
-            />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Sinh Nhật Trong Tháng" key="6">
+          <Tabs.TabPane tab="CTV Chưa Xác Thực" key="6">
             <CollaboratorManage
               data={collaborator}
               total={collaboratorTotal}
