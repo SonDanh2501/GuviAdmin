@@ -32,7 +32,7 @@ const AddPopup = () => {
   const searchCollaborator = useCallback((value) => {
     setName(value);
     if (value) {
-      searchCollaborators(value)
+      searchCollaborators(0, 100, "", value)
         .then((res) => setData(res.data))
         .catch((err) => console.log(err));
     } else {
@@ -118,7 +118,7 @@ const AddPopup = () => {
                         value={item?._id}
                         onClick={(e) => {
                           setId(e.target.value);
-                          setName(item?.name);
+                          setName(item?.full_name);
                           setData([]);
                         }}
                       >

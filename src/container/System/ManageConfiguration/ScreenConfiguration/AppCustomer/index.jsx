@@ -263,7 +263,7 @@ const AppCustomer = () => {
           />
 
           <CustomTextInput
-            label={"Tỉ lệ quy đổi thành viên Silver (10,000 VNĐ)"}
+            label={"Tỉ lệ quy đổi thành viên Gold (10,000 VNĐ)"}
             classNameForm="form-input"
             type="number"
             value={ratioGold}
@@ -271,7 +271,7 @@ const AppCustomer = () => {
           />
 
           <CustomTextInput
-            label={"Tỉ lệ quy đổi thành viên Silver (10,000 VNĐ)"}
+            label={"Tỉ lệ quy đổi thành viên Platinum (10,000 VNĐ)"}
             classNameForm="form-input"
             type="number"
             value={ratioPlatinum}

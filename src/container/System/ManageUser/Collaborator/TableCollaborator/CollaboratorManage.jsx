@@ -264,7 +264,7 @@ export default function CollaboratorManage(props) {
           </div>
         );
       },
-      width: "20%",
+      width: "30%",
     },
     {
       title: "SĐT",

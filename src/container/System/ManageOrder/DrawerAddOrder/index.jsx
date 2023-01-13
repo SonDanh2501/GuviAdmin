@@ -28,7 +28,10 @@ const AddOrder = () => {
 
   useEffect(() => {
     getExtendOptionalServiceApi()
-      .then((res) => setExtendService(res?.data))
+      .then((res) => {
+        console.log(res);
+        setExtendService(res?.data);
+      })
       .catch((err) => console.log(err));
   }, []);
 
@@ -87,22 +90,6 @@ const AddOrder = () => {
             placeholder="Vui lòng nhập địa chỉ"
             onChange={(e) => setAddress(e.target.value)}
           />
-
-          {/* <CustomTextInput
-            label="Thời lượng"
-            type="select"
-            onChange={(e) => console.log(e.target)}
-            className="select-input"
-            body={extendService.slice(0, 3).map((item) => {
-              return (
-                <>
-                  <option value={[item]}>
-                    {item?.title.vi}/ {item?.description.vi}
-                  </option>
-                </>
-              );
-            })}
-          /> */}
           <div className="div-add-service">
             <a className="label">Thời lượng</a>
             <div className="div-service">

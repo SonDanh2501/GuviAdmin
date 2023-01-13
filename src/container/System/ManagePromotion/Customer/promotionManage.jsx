@@ -111,6 +111,10 @@ export default function PromotionManage() {
       },
     },
     {
+      title: "Position",
+      dataIndex: "position",
+    },
+    {
       title: "Mã code",
       dataIndex: "code",
     },

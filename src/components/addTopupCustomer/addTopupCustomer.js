@@ -33,7 +33,7 @@ const AddTopupCustomer = () => {
   const searchCollaborator = useCallback((value) => {
     setName(value);
     if (value) {
-      searchCustomers(value)
+      searchCustomers(0, 100, "", value)
         .then((res) => setData(res.data))
         .catch((err) => console.log(err));
     } else {
