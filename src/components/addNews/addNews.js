@@ -8,6 +8,7 @@ import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import { errorNotify } from "../../helper/toast";
 import "./addNews.scss";
+import resizeFile from "../../helper/resizer";
 
 const AddNews = () => {
   const [state, setState] = useState(false);
@@ -19,15 +20,9 @@ const AddNews = () => {
 
   const dispatch = useDispatch();
 
-  const onChangeThumbnail = (e) => {
+  const onChangeThumbnail = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
-    const files = e.target.files;
-    const getSizeImage = files[0].size;
-
-    if (getSizeImage > 1024 * 1024) {
-      dispatch(loadingAction.loadingRequest(false));
-      alert("Kích thước lớn hơn 1MB vui lòng chọn nhỏ hơn 1MB");
-    } else {
+    try {
       if (e.target.files[0]) {
         const reader = new FileReader();
         reader.addEventListener("load", () => {
@@ -35,8 +30,10 @@ const AddNews = () => {
         });
         reader.readAsDataURL(e.target.files[0]);
       }
+      const file = e.target.files[0];
+      const image = await resizeFile(file);
       const formData = new FormData();
-      formData.append("file", e.target.files[0]);
+      formData.append("file", image);
       postFile(formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -52,6 +49,8 @@ const AddNews = () => {
           });
           dispatch(loadingAction.loadingRequest(false));
         });
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -137,7 +136,7 @@ const AddNews = () => {
               }
             />
             <FormGroup>
-              <Label for="exampleThumbnail">Thumbnail</Label>
+              <Label for="exampleThumbnail">Thumbnail (171px * 171px)</Label>
               <Input
                 id="exampleThumbnail"
                 type="file"

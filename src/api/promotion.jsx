@@ -35,3 +35,7 @@ export const getPromotionDetails = (id) => {
 export const updatePromotion = (id, data) => {
   return axiosClient.post(`/admin/promotion_manager/edit_item/${id}`, data);
 };
+
+export const activePromotion = (id, data) => {
+  return axiosClient.post(`/admin/promotion_manager/active/${id}`, data);
+};

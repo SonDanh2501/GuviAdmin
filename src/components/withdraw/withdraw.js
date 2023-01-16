@@ -112,11 +112,11 @@ const Withdraw = () => {
                         value={item?._id}
                         onClick={(e) => {
                           setId(e.target.value);
-                          setName(item?.name);
+                          setName(item?.full_name);
                           setData([]);
                         }}
                       >
-                        {item?.name}
+                        {item?.full_name}
                       </option>
                     );
                   })}

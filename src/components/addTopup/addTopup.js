@@ -122,7 +122,7 @@ const AddPopup = () => {
                           setData([]);
                         }}
                       >
-                        {item?.name}
+                        {item?.full_name}
                       </option>
                     );
                   })}

@@ -9,8 +9,10 @@ import { getPromotionSelector } from "../../redux/selectors/promotion";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import { errorNotify } from "../../helper/toast";
+
 import "./addBanner.scss";
 import { Drawer, Image } from "antd";
+import resizeFile from "../../helper/resizer";
 
 const AddBanner = () => {
   const [state, setState] = useState(false);
@@ -35,14 +37,9 @@ const AddBanner = () => {
     dispatch(getPromotion.getPromotionRequest());
   }, [dispatch]);
 
-  const onChangeThumbnail = (e) => {
-    const files = e.target.files;
-    const getSizeImage = files[0].size;
-
-    if (getSizeImage > 1024 * 1024) {
-      dispatch(loadingAction.loadingRequest(false));
-      alert("Kích thước lớn hơn 1MB vui lòng chọn nhỏ hơn 1MB");
-    } else {
+  const onChangeThumbnail = async (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+    try {
       if (e.target.files[0]) {
         const reader = new FileReader();
         reader.addEventListener("load", () => {
@@ -50,10 +47,10 @@ const AddBanner = () => {
         });
         reader.readAsDataURL(e.target.files[0]);
       }
+      const file = e.target.files[0];
+      const image = await resizeFile(file);
       const formData = new FormData();
-      formData.append("file", e.target.files[0]);
-      dispatch(loadingAction.loadingRequest(true));
-
+      formData.append("file", image);
       postFile(formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -69,6 +66,8 @@ const AddBanner = () => {
           });
           dispatch(loadingAction.loadingRequest(false));
         });
+    } catch (err) {
+      console.log(err);
     }
   };
 
