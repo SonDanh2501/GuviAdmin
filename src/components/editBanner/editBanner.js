@@ -3,6 +3,8 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
+import resizeFile from "../../helper/resizer";
+import { errorNotify } from "../../helper/toast";
 import { updateBanner } from "../../redux/actions/banner";
 import { loadingAction } from "../../redux/actions/loading";
 import { getPromotion } from "../../redux/actions/promotion";
@@ -32,30 +34,38 @@ const EditBanner = ({ state, setState, data }) => {
     setPosition(data?.position);
   }, [data]);
 
-  const onChangeThumbnail = (e) => {
+  const onChangeThumbnail = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
-
-    if (e.target.files[0]) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        setImgThumbnail(reader.result);
-      });
-      reader.readAsDataURL(e.target.files[0]);
-    }
-    const formData = new FormData();
-    formData.append("file", e.target.files[0]);
-    postFile(formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then((res) => {
-        dispatch(loadingAction.loadingRequest(false));
-        setImgThumbnail(res);
+    try {
+      if (e.target.files[0]) {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          setImgThumbnail(reader.result);
+        });
+        reader.readAsDataURL(e.target.files[0]);
+      }
+      const file = e.target.files[0];
+      const image = await resizeFile(file);
+      const formData = new FormData();
+      formData.append("file", image);
+      postFile(formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
-      .catch((err) => {
-        dispatch(loadingAction.loadingRequest(false));
-      });
+        .then((res) => {
+          setImgThumbnail(res);
+          dispatch(loadingAction.loadingRequest(false));
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const onEditBanner = useCallback(() => {

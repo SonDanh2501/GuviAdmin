@@ -142,7 +142,14 @@ export default function NewsManage() {
     },
     {
       title: "Link bài viết",
-      dataIndex: "url",
+      render: (data) => {
+        return (
+          <a>
+            {" "}
+            {data?.url.length > 60 ? data?.url.slice(0, 60) + "..." : data?.url}
+          </a>
+        );
+      },
     },
     {
       title: "Loại tin",

@@ -17,6 +17,8 @@ import {
 import { fetchCustomers } from "../../api/customer";
 import { postFile } from "../../api/file";
 import { getGroupCustomerApi } from "../../api/promotion";
+import resizeFile from "../../helper/resizer";
+import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
 import { createPromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
@@ -102,51 +104,72 @@ const AddPromotion = () => {
     });
   });
 
-  const onChangeThumbnail = (e) => {
+  const onChangeThumbnail = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
-    if (e.target.files[0]) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        setImgThumbnail(reader.result);
-      });
-      reader.readAsDataURL(e.target.files[0]);
-    }
-
-    const formData = new FormData();
-    formData.append("file", e.target.files[0]);
-    postFile(formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then((res) => {
-        setImgThumbnail(res);
-        dispatch(loadingAction.loadingRequest(false));
+    try {
+      if (e.target.files[0]) {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          setImgThumbnail(reader.result);
+        });
+        reader.readAsDataURL(e.target.files[0]);
+      }
+      const file = e.target.files[0];
+      const image = await resizeFile(file);
+      const formData = new FormData();
+      formData.append("file", image);
+      postFile(formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
-      .catch((err) => console.log("err", err));
+        .then((res) => {
+          setImgThumbnail(res);
+          dispatch(loadingAction.loadingRequest(false));
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const onChangeBackground = (e) => {
+  const onChangeBackground = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
-    if (e.target.files[0]) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        setImgBackground(reader.result);
-      });
-      reader.readAsDataURL(e.target.files[0]);
-    }
-    const formData = new FormData();
-    formData.append("file", e.target.files[0]);
-    postFile(formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then((res) => {
-        setImgBackground(res);
-        dispatch(loadingAction.loadingRequest(false));
+    try {
+      if (e.target.files[0]) {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          setImgBackground(reader.result);
+        });
+        reader.readAsDataURL(e.target.files[0]);
+      }
+      const file = e.target.files[0];
+      const image = await resizeFile(file);
+      const formData = new FormData();
+      formData.append("file", image);
+      postFile(formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
-      .catch((err) => console.log("err", err));
+        .then((res) => {
+          setImgBackground(res);
+          dispatch(loadingAction.loadingRequest(false));
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const onFormPromotion = (title) => {

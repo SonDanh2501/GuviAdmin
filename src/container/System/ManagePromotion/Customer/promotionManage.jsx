@@ -5,7 +5,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { searchPromotion } from "../../../../api/promotion.jsx";
+import {
+  activePromotion,
+  searchPromotion,
+} from "../../../../api/promotion.jsx";
 import AddPromotion from "../../../../components/addPromotion/addPromotion.js";
 import { loadingAction } from "../../../../redux/actions/loading.js";
 import {
@@ -33,8 +36,10 @@ export default function PromotionManage() {
   const [dataFilter, setDataFilter] = useState([]);
   const [itemEdit, setItemEdit] = React.useState([]);
   const [modalEdit, setModalEdit] = React.useState(false);
+  const [modalActive, setModalActive] = React.useState(false);
   const [modal, setModal] = React.useState(false);
   const toggle = () => setModal(!modal);
+  const toggleActive = () => setModalActive(!modalActive);
   useEffect(() => {
     // dispatch(loadingAction.loadingRequest(true));
 
@@ -44,6 +49,26 @@ export default function PromotionManage() {
   const onDelete = useCallback((id) => {
     dispatch(loadingAction.loadingRequest(true));
     dispatch(deletePromotionAction.deletePromotionRequest(id));
+  }, []);
+
+  const onActive = useCallback((id, is_active) => {
+    if (is_active) {
+      activePromotion(id, { is_active: false })
+        .then((res) => {
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      activePromotion(id, { is_active: true })
+        .then((res) => {
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   const onChange = (page) => {
@@ -94,6 +119,14 @@ export default function PromotionManage() {
     },
     {
       key: "2",
+      label: itemEdit?.is_active ? (
+        <a onClick={toggleActive}>Ẩn</a>
+      ) : (
+        <a onClick={toggleActive}>Hiện</a>
+      ),
+    },
+    {
+      key: "3",
       label: <a onClick={toggle}>Xoá</a>,
     },
   ];
@@ -228,6 +261,33 @@ export default function PromotionManage() {
                 Có
               </Button>
               <Button color="#ddd" onClick={toggle}>
+                Không
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+        <div>
+          <Modal isOpen={modalActive} toggle={toggleActive}>
+            <ModalHeader>
+              {itemEdit?.is_active ? "Ẩn khuyến mãi" : "Mã khuyến mãi"}
+            </ModalHeader>
+            <ModalBody>
+              <a>
+                {itemEdit?.is_active
+                  ? "Bạn có chắc muốn ẩn mã khuyến mãi"
+                  : "Bạn có chắc muốn hiện mã khuyến mãi"}
+
+                <a className="text-name-modal">{itemEdit?.title?.vi}</a>
+              </a>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color="primary"
+                onClick={() => onActive(itemEdit?._id, itemEdit?.is_active)}
+              >
+                Có
+              </Button>
+              <Button color="#ddd" onClick={toggleActive}>
                 Không
               </Button>
             </ModalFooter>

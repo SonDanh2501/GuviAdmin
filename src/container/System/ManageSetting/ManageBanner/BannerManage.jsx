@@ -138,7 +138,15 @@ export default function BannerManage() {
     },
     {
       title: "Link ID",
-      dataIndex: "link_id",
+      render: (data) => {
+        return (
+          <a className="text-link">
+            {data?.link_id.length > 60
+              ? data?.link_id.slice(0, 60) + "..."
+              : data?.link_id}
+          </a>
+        );
+      },
     },
     {
       title: "Hình",

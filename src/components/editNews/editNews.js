@@ -2,6 +2,7 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, FormGroup, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
+import resizeFile from "../../helper/resizer";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
 import { updateNew } from "../../redux/actions/news";
@@ -26,28 +27,38 @@ const EditNews = ({ state, setState, data }) => {
     setType(data?.type);
   }, [data]);
 
-  const onChangeThumbnail = (e) => {
-    if (e.target.files[0]) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        setImgThumbnail(reader.result);
-      });
-      reader.readAsDataURL(e.target.files[0]);
-    }
-    const formData = new FormData();
-    formData.append("file", e.target.files[0]);
-    postFile(formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then((res) => setImgThumbnail(res))
-      .catch((err) => {
-        errorNotify({
-          message: err,
+  const onChangeThumbnail = async (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+    try {
+      if (e.target.files[0]) {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          setImgThumbnail(reader.result);
         });
-        dispatch(loadingAction.loadingRequest(false));
-      });
+        reader.readAsDataURL(e.target.files[0]);
+      }
+      const file = e.target.files[0];
+      const image = await resizeFile(file);
+      const formData = new FormData();
+      formData.append("file", image);
+      postFile(formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((res) => {
+          setImgThumbnail(res);
+          dispatch(loadingAction.loadingRequest(false));
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
   const onEditNews = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
