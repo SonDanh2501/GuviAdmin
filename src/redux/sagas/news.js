@@ -47,6 +47,7 @@ function* updateNewSaga(action) {
       action.payload.id,
       action.payload.data
     );
+
     window.location.reload();
     yield put(actions.updateNew.updateNewSuccess(updatedNew.data));
   } catch (err) {

@@ -111,20 +111,7 @@ const EditBanner = ({ state, setState, data }) => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
-            <div>
-              <Label for="exampleImage">Hình ảnh banner</Label>
-              <Input
-                id="exampleImage"
-                name="image"
-                type="file"
-                accept={".jpg,.png,.jpeg"}
-                className="input-group"
-                onChange={onChangeThumbnail}
-              />
-              {imgThumbnail && (
-                <Image src={imgThumbnail} className="img-thumbnail-banner" />
-              )}
-            </div>
+
             <CustomTextInput
               label={"Kiểu banner"}
               id="exampleType_link"
@@ -178,6 +165,22 @@ const EditBanner = ({ state, setState, data }) => {
               value={position}
               onChange={(e) => setPosition(e.target.value)}
             />
+
+            <div>
+              <a className="label">Hình ảnh 360px * 137px, tỉ lệ 2,62</a>
+
+              <Input
+                id="exampleImage"
+                name="image"
+                type="file"
+                accept={".jpg,.png,.jpeg"}
+                className="input-group"
+                onChange={onChangeThumbnail}
+              />
+              {imgThumbnail && (
+                <Image src={imgThumbnail} className="img-thumbnail-banner" />
+              )}
+            </div>
 
             <CustomButton
               title="Sửa"

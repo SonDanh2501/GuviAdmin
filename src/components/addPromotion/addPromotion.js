@@ -375,7 +375,7 @@ const AddPromotion = () => {
                   <div>
                     <h5>4. Thumbnail/Background</h5>
                     <CustomTextInput
-                      label={"Thumbnail"}
+                      label={"Thumbnail 160px * 170px"}
                       type="file"
                       accept={".jpg,.png,.jpeg"}
                       className="input-upload"
@@ -385,7 +385,7 @@ const AddPromotion = () => {
                       <img src={imgThumbnail} className="img-thumbnail" />
                     )}
                     <CustomTextInput
-                      label={"Background"}
+                      label={"Background 414px * 200px"}
                       type="file"
                       accept={".jpg,.png,.jpeg"}
                       className="input-upload"

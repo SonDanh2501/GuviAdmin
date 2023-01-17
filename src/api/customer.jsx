@@ -31,3 +31,10 @@ export const getOrderByCustomers = (id, start, length) => {
     `/admin/order_manager/get_order_by_customer/${id}?&start=${start}&length=${length}`
   );
 };
+
+export const updatePointCustomer = (id, payload) => {
+  return axiosClient.post(
+    `/admin/customer_manager/edit_point_and_rank_point/${id}?lang=vi`,
+    payload
+  );
+};

@@ -156,6 +156,11 @@ export default function NewsManage() {
       dataIndex: "type",
     },
     {
+      title: "Position",
+      dataIndex: "position",
+      align: "center",
+    },
+    {
       title: "Hình ",
       render: (data) => {
         return (

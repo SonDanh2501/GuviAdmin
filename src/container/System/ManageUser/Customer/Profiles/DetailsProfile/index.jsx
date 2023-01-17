@@ -17,8 +17,12 @@ import {
 import { formatMoney } from "../../../../../../helper/formatMoney";
 import user from "../../../../../../assets/images/user.png";
 import "./index.scss";
-import { fetchCustomerById } from "../../../../../../api/customer";
+import {
+  fetchCustomerById,
+  updatePointCustomer,
+} from "../../../../../../api/customer";
 import { FloatButton, Image } from "antd";
+import { errorNotify } from "../../../../../../helper/toast";
 // core components
 
 const DetailsProfile = () => {
@@ -26,6 +30,8 @@ const DetailsProfile = () => {
   const { id } = state || {};
   const [rank, setRank] = useState("");
   const [data, setData] = useState([]);
+  const [point, setPoint] = useState();
+  const [rankPoint, setRankPoint] = useState();
 
   useEffect(() => {
     fetchCustomerById(id)
@@ -43,7 +49,24 @@ const DetailsProfile = () => {
     } else {
       setRank("Kim cương");
     }
+    setPoint(data?.point);
+    setRankPoint(data?.rank_point);
   }, [data]);
+
+  const updateRankPoint = () => {
+    updatePointCustomer(data?._id, {
+      point: point,
+      rank_point: rankPoint,
+    })
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+      });
+  };
 
   const age = moment().diff(data?.birthday, "years");
 
@@ -163,12 +186,27 @@ const DetailsProfile = () => {
                   <Input
                     className="form-control-alternative"
                     id="input-email"
-                    type="email"
+                    type="number"
                     placeholder="Nhập số điểm thưởng"
+                    value={point}
+                    onChange={(e) => setPoint(e.target.value)}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <label className="form-control-label">Rank Point</label>
+                  <Input
+                    className="form-control-alternative"
+                    id="input-email"
+                    type="number"
+                    placeholder="Nhập số điểm thăng hạng"
+                    value={rankPoint}
+                    onChange={(e) => setRankPoint(e.target.value)}
                   />
                 </FormGroup>
 
-                <Button className="btn-update-point">Cập nhật</Button>
+                <Button className="btn-update-point" onClick={updateRankPoint}>
+                  Cập nhật
+                </Button>
               </Col>
             </div>
           </Col>

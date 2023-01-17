@@ -10,6 +10,8 @@ import { postFile } from "../../../../../api/file";
 import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
+import resizeFile from "../../../../../helper/resizer";
+
 import "./styles.scss";
 
 const AppCustomer = () => {
@@ -54,33 +56,38 @@ const AppCustomer = () => {
       });
   }, []);
 
-  const onChangeBackground = (e) => {
-    if (e.target.files[0]) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        setImgThumbnail(reader.result);
-      });
-      reader.readAsDataURL(e.target.files[0]);
-    }
-    const formData = new FormData();
-    formData.append("file", e.target.files[0]);
+  const onChangeBackground = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
-
-    postFile(formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then((res) => {
-        setImgThumbnail(res);
-        dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
+    try {
+      if (e.target.files[0]) {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          setImgThumbnail(reader.result);
         });
-        dispatch(loadingAction.loadingRequest(false));
-      });
+        reader.readAsDataURL(e.target.files[0]);
+      }
+      const file = e.target.files[0];
+      const image = await resizeFile(file);
+      const formData = new FormData();
+      formData.append("file", image);
+      postFile(formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((res) => {
+          setImgThumbnail(res);
+          dispatch(loadingAction.loadingRequest(false));
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const updateApp = useCallback(() => {

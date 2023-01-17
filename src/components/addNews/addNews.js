@@ -17,6 +17,7 @@ const AddNews = () => {
   const [url, setUrl] = useState("");
   const [shortDescription, setShortDescription] = useState("");
   const [imgThumbnail, setImgThumbnail] = useState("");
+  const [position, setPosition] = useState("");
 
   const dispatch = useDispatch();
 
@@ -63,9 +64,10 @@ const AddNews = () => {
         thumbnail: imgThumbnail,
         url: url,
         type: type,
+        position: position,
       })
     );
-  }, [dispatch, title, shortDescription, imgThumbnail, url, type]);
+  }, [dispatch, title, shortDescription, imgThumbnail, url, type, position]);
 
   return (
     <>
@@ -135,8 +137,19 @@ const AddNews = () => {
                 </>
               }
             />
+            <CustomTextInput
+              label={"Position"}
+              id="exampleURL"
+              name="URL"
+              placeholder="Vui lòng nhập position"
+              type="text"
+              value={position}
+              onChange={(e) => setPosition(e.target.value)}
+            />
             <FormGroup>
-              <Label for="exampleThumbnail">Thumbnail (171px * 171px)</Label>
+              <Label for="exampleThumbnail">
+                Thumbnail 171px * 171px, tỉ lệ 1:1
+              </Label>
               <Input
                 id="exampleThumbnail"
                 type="file"

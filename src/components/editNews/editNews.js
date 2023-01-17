@@ -16,6 +16,7 @@ const EditNews = ({ state, setState, data }) => {
   const [url, setUrl] = useState("");
   const [shortDescription, setShortDescription] = useState("");
   const [imgThumbnail, setImgThumbnail] = useState("");
+  const [position, setPosition] = useState("");
 
   const dispatch = useDispatch();
 
@@ -25,6 +26,7 @@ const EditNews = ({ state, setState, data }) => {
     setImgThumbnail(data?.thumbnail);
     setUrl(data?.url);
     setType(data?.type);
+    setPosition(data?.position);
   }, [data]);
 
   const onChangeThumbnail = async (e) => {
@@ -71,10 +73,11 @@ const EditNews = ({ state, setState, data }) => {
           thumbnail: imgThumbnail,
           url: url,
           type: type,
+          position: position,
         },
       })
     );
-  }, [data, title, shortDescription, imgThumbnail, url, type]);
+  }, [data, title, shortDescription, imgThumbnail, url, type, position]);
 
   return (
     <>
@@ -138,14 +141,26 @@ const EditNews = ({ state, setState, data }) => {
                 </>
               }
             />
+            <CustomTextInput
+              label={"Position"}
+              id="exampleURL"
+              name="URL"
+              placeholder="Vui lòng nhập position"
+              type="number"
+              value={position}
+              onChange={(e) => setPosition(e.target.value)}
+            />
             <FormGroup>
-              <Label for="exampleThumbnail">Thumbnail</Label>
+              <Label for="exampleThumbnail">
+                Thumbnail 171px * 171px, tỉ lệ 1:1
+              </Label>
               <Input
                 id="exampleThumbnail"
                 type="file"
                 accept={".jpg,.png,.jpeg"}
                 name="thumbnail"
                 onChange={onChangeThumbnail}
+                className="choose-thumbnail"
               />
               {imgThumbnail && (
                 <img src={imgThumbnail} className="img-thumbnail" />
@@ -154,7 +169,7 @@ const EditNews = ({ state, setState, data }) => {
 
             <CustomButton
               title="Sửa"
-              className="float-right btn-modal"
+              className="float-right btn-modal-new"
               type="button"
               onClick={onEditNews}
             />
