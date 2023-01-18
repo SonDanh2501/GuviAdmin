@@ -677,7 +677,7 @@ export default function Home() {
                     const predicate = item?.id_promotion
                       ? subject.replace(
                           item?.id_promotion?._id,
-                          item?.id_promotion?.title
+                          item?.id_promotion?.title?.vi
                         )
                       : item?.id_collaborator
                       ? subject.replace(
@@ -718,7 +718,7 @@ export default function Home() {
                         )
                       : predicate.replace(
                           item?.id_reason_cancel?._id,
-                          item?.id_reason_cancel?.title.vi
+                          item?.id_reason_cancel?.title?.vi
                         );
                     return (
                       <div className="div-list" key={index}>

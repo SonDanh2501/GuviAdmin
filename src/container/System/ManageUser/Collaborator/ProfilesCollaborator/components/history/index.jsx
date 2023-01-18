@@ -60,7 +60,10 @@ const History = ({ id }) => {
           item?.id_customer?.full_name
         )
       : "";
-    const predicate = item?.id_collaborator
+
+    const predicate = item?.id_promotion
+      ? subject.replace(item?.id_promotion?._id, item?.id_promotion?.title?.vi)
+      : item?.id_collaborator
       ? subject.replace(
           item?.id_collaborator?._id,
           item?.id_collaborator?.full_name
@@ -72,10 +75,17 @@ const History = ({ id }) => {
           item?.id_admin_action?._id,
           item?.id_admin_action?.full_name
         )
-      : subject.replace(
+      : item?.id_transistion_collaborator
+      ? subject.replace(
           item?.id_transistion_collaborator?._id,
           item?.id_transistion_collaborator?.transfer_note
-        );
+        )
+      : item?.id_transistion_customer
+      ? subject.replace(
+          item?.id_transistion_customer?._id,
+          item?.id_transistion_customer?.transfer_note
+        )
+      : "";
 
     const object = item?.id_transistion_collaborator
       ? predicate.replace(
