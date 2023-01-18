@@ -537,7 +537,7 @@ export default function Home() {
         <Row className=" mb-5">
           <Col className="mb-5 mb-xl-0">
             <Card className="shadow">
-              <CardBody>
+              <CardBody className="sm:bg-red-500">
                 <Table
                   columns={columns}
                   dataSource={lastestService}

@@ -72,7 +72,7 @@ export default function OrderDoingManage() {
     },
     {
       title: "Tên khách hàng",
-      dataIndex: ["id_customer", "name"],
+      dataIndex: ["id_customer", "full_name"],
     },
     {
       title: "Dịch vụ",
@@ -122,7 +122,7 @@ export default function OrderDoingManage() {
               }
               className="text-collaborator"
             >
-              {data?.id_collaborator?.name}
+              {data?.id_collaborator?.full_name}
             </a>
           )}
         </>

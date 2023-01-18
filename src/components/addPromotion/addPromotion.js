@@ -81,7 +81,7 @@ const AddPromotion = () => {
       .then((res) => setDataGroupCustomer(res.data))
       .catch((err) => console.log(err));
 
-    fetchCustomers(0, 100, "all")
+    fetchCustomers(0, 200, "")
       .then((res) => setDataCustomer(res?.data))
       .catch((err) => console.log(err));
   }, []);
@@ -653,14 +653,22 @@ const AddPromotion = () => {
                     </FormGroup>
                     {isCustomer && (
                       <Select
-                        mode="tags"
                         style={{
                           width: "100%",
                         }}
-                        tokenSeparators={[","]}
-                        placeholder="Please select"
+                        placeholder="Chọn khách hàng"
                         onChange={handleChangeCustomer}
                         options={optionsCustomer}
+                        filterOption={(input, option) =>
+                          (option?.label ?? "").includes(input)
+                        }
+                        filterSort={(optionA, optionB) =>
+                          (optionA?.label ?? "")
+                            .toLowerCase()
+                            .localeCompare((optionB?.label ?? "").toLowerCase())
+                        }
+                        optionFilterProp="children"
+                        showSearch
                       />
                     )}
                   </div>

@@ -32,7 +32,7 @@ const Dashboard = () => {
     setColor(e);
   };
   return (
-    <div className="container-dashboard">
+    <div className="container-dashboard lg:bg-red">
       <Header />
 
       <div className="row">
