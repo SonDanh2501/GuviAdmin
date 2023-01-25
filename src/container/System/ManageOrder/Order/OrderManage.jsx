@@ -86,7 +86,10 @@ export default function OrderManage(props) {
     },
     {
       title: "Tên khách hàng",
-      dataIndex: ["id_customer", "full_name"],
+      // dataIndex: ["id_customer", "full_name"],
+      render: (data) => {
+        return <a>{data?.id_customer?.full_name}</a>;
+      },
     },
     {
       title: "Dịch vụ",
