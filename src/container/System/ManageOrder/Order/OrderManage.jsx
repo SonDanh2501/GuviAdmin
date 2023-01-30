@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import "./OrderManage.scss";
 import { searchOrderApi } from "../../../../api/order";
 import EditOrder from "../DrawerEditOrder";
+import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
 
 export default function OrderManage(props) {
   const { data, total, status, dataSearch, value } = props;
@@ -32,11 +33,19 @@ export default function OrderManage(props) {
   const items = [
     {
       key: "1",
-      label:
-        item?.status === "cancel" ? <></> : <EditOrder idOrder={item?._id} />,
+      label: <EditOrder data={item} />,
     },
     {
       key: "2",
+      label:
+        item?.status === "cancel" || item?.status === "done" ? (
+          <></>
+        ) : (
+          <AddCollaboratorOrder idOrder={item?._id} />
+        ),
+    },
+    {
+      key: "3",
       label: (
         <a
           onClick={() =>
@@ -88,7 +97,17 @@ export default function OrderManage(props) {
       title: "Tên khách hàng",
       // dataIndex: ["id_customer", "full_name"],
       render: (data) => {
-        return <a>{data?.id_customer?.full_name}</a>;
+        return (
+          <a
+            onClick={() =>
+              navigate("/group-order/manage-order/details-customer", {
+                state: { id: data?.id_customer?._id },
+              })
+            }
+          >
+            {data?.id_customer?.full_name}
+          </a>
+        );
       },
     },
     {
@@ -158,7 +177,7 @@ export default function OrderManage(props) {
         <a
           className={
             data?.status === "pending"
-              ? "text-pending"
+              ? "text-pending-order"
               : data?.status === "confirm"
               ? "text-confirm"
               : data?.status === "doing"

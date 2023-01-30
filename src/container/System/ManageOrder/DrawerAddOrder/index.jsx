@@ -11,6 +11,8 @@ import {
 import moment from "moment";
 const AddOrder = () => {
   const [address, setAddress] = useState("");
+  const [lat, setLat] = useState("");
+  const [long, setLong] = useState("");
   const [note, setNote] = useState("");
   const [time, setTime] = useState({});
   const [extraService, setExtraService] = useState("");
@@ -68,9 +70,8 @@ const AddOrder = () => {
     }
   };
 
-  console.log(time);
-
   const timeW = dateWork + "T" + timeWork + ".000Z";
+
   return (
     <>
       <Button className="btn-add-order" onClick={showDrawer}>
@@ -89,6 +90,18 @@ const AddOrder = () => {
             type="text"
             placeholder="Vui lòng nhập địa chỉ"
             onChange={(e) => setAddress(e.target.value)}
+          />
+          <CustomTextInput
+            label="Nhập kinh độ"
+            type="text"
+            placeholder="Vui lòng nhập kinh độ"
+            onChange={(e) => setLat(e.target.value)}
+          />
+          <CustomTextInput
+            label="Nhập vĩ độ"
+            type="text"
+            placeholder="Vui lòng nhập vĩ độ"
+            onChange={(e) => setLong(e.target.value)}
           />
           <div className="div-add-service">
             <a className="label">Thời lượng</a>
