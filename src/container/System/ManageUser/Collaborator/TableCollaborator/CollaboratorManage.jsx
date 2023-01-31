@@ -264,7 +264,24 @@ export default function CollaboratorManage(props) {
           </div>
         );
       },
-      width: "30%",
+      width: "25%",
+    },
+    {
+      title: "Ngày tạo",
+      render: (data) => {
+        return (
+          <div className="div-create-ctv">
+            <a className="text-create-ctv">
+              {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
+            </a>
+            <a className="text-create-ctv">
+              {moment(new Date(data?.date_create)).format("HH:mm")}
+            </a>
+          </div>
+        );
+      },
+      align: "center",
+      width: "10%",
     },
     {
       title: "SĐT",

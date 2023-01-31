@@ -98,3 +98,29 @@
   margin-left: 5px;
   margin-right: 5px;
 }
+
+.div-create {
+  display: flex;
+  flex-direction: column;
+
+  .text-create {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #6e6893;
+  }
+}
+
+.hide-phone {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .btn-eyes {
+    background-color: transparent;
+    border: none;
+    color: #000000;
+  }
+}

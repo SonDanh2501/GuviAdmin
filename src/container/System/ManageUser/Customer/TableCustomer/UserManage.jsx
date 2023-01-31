@@ -46,23 +46,23 @@ import {
   getCustomerTotalItem,
 } from "../../../../../redux/selectors/customer";
 import "./UserManage.scss";
+import moment from "moment";
 
 export default function UserManage(props) {
   const { data, total, status } = props;
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState("");
   const [valueFilter, setValueFilter] = useState("");
+  const [hidePhone, setHidePhone] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [rowIndex, setRowIndex] = useState();
   const [itemEdit, setItemEdit] = useState([]);
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
-
-  const customers = useSelector(getCustomer);
-  const customerTotal = useSelector(getCustomerTotalItem);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -183,9 +183,37 @@ export default function UserManage(props) {
     },
     {
       title: "Số điện thoại",
-      render: (data) => {
+      render: (data, record, index) => {
         const phone = data?.phone.slice(0, 7);
-        return <a className="text-phone">{phone + "***"}</a>;
+        return (
+          <div className="hide-phone">
+            <a className="text-phone">
+              {rowIndex === index
+                ? hidePhone
+                  ? data?.phone
+                  : phone + "***"
+                : phone + "***"}
+            </a>
+            <a
+              className="btn-eyes"
+              onClick={() =>
+                rowIndex === index
+                  ? setHidePhone(!hidePhone)
+                  : setHidePhone(false)
+              }
+            >
+              {rowIndex === index ? (
+                hidePhone ? (
+                  <i class="uil uil-eye"></i>
+                ) : (
+                  <i class="uil uil-eye-slash"></i>
+                )
+              ) : (
+                <i class="uil uil-eye-slash"></i>
+              )}
+            </a>
+          </div>
+        );
       },
       width: "15%",
     },
@@ -199,6 +227,22 @@ export default function UserManage(props) {
         </a>
       ),
       width: "25%",
+    },
+    {
+      title: "Ngày tạo",
+      render: (data) => {
+        return (
+          <div className="div-create">
+            <a className="text-create">
+              {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
+            </a>
+            <a className="text-create">
+              {moment(new Date(data?.date_create)).format("HH:mm")}
+            </a>
+          </div>
+        );
+      },
+      width: "10%",
     },
     {
       title: "Tổng Đơn Đã Đặt",
@@ -328,6 +372,7 @@ export default function UserManage(props) {
               return {
                 onClick: (event) => {
                   setItemEdit(record);
+                  setRowIndex(rowIndex);
                 },
               };
             }}
