@@ -33,7 +33,7 @@ export default function OrderManage(props) {
   const items = [
     {
       key: "1",
-      label: <EditOrder data={item} />,
+      label: <EditOrder id={item?._id} />,
     },
     {
       key: "2",

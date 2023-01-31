@@ -303,7 +303,6 @@ const EditPromotion = ({ state, setState, data }) => {
           is_id_customer: isCustomer,
           id_customer: customer,
           service_apply: [serviceApply],
-          id_customer: [],
           is_limited_use: isUsePromo,
           limited_use: isUsePromo ? usePromo : 0,
           type_discount: promoType,
@@ -743,6 +742,7 @@ const EditPromotion = ({ state, setState, data }) => {
                         }
                         optionFilterProp="children"
                         showSearch
+                        value={customer}
                       />
                     )}
                   </div>

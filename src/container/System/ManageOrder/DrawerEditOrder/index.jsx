@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, DatePicker, Drawer, List } from "antd";
+import { Button, DatePicker, Drawer, Input, List } from "antd";
 import "./index.scss";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import { DATA_TIME_TOTAL } from "../../../../api/fakeData";
@@ -10,7 +10,10 @@ import {
 } from "../../../../api/service";
 import moment from "moment";
 import dayjs from "dayjs";
-const EditOrder = ({ data }) => {
+import { searchCollaborators } from "../../../../api/collaborator";
+import { errorNotify } from "../../../../helper/toast";
+import { getOrderDetailApi } from "../../../../api/order";
+const EditOrder = ({ id }) => {
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState("");
   const [long, setLong] = useState("");
@@ -21,6 +24,9 @@ const EditOrder = ({ data }) => {
   const [timeWork, setTimeWork] = useState("");
   const [extendService, setExtendService] = useState([]);
   const [mutipleSelected, setMutipleSelected] = useState([]);
+  const [dataFilter, setDataFilter] = useState([]);
+  const [name, setName] = useState("");
+  const [idCollaborator, setIdCollaborator] = useState("");
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -30,13 +36,23 @@ const EditOrder = ({ data }) => {
   };
 
   useEffect(() => {
-    setAddress(data?.address);
-    setLat(data?.lat);
-    setLong(data?.lng);
-    setDateWork(data?.date_work.slice(0, 10));
-    setTimeWork(data?.date_work.slice(11, 19));
-    setNote(data?.note);
-  }, [data]);
+    getOrderDetailApi(id)
+      .then((res) => {
+        setAddress(res?.address);
+        setLat(res?.lat);
+        setLong(res?.lng);
+        setDateWork(res?.date_work.slice(0, 10));
+        setTimeWork(res?.date_work.slice(11, 19));
+        setNote(res?.note);
+        setName(res?.id_collaborator?.full_name);
+        setIdCollaborator(res?.id_collaborator?._id);
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+      });
+  }, [id]);
 
   useEffect(() => {
     getExtendOptionalServiceApi()
@@ -81,6 +97,25 @@ const EditOrder = ({ data }) => {
   };
 
   const timeW = dateWork + "T" + timeWork + ".000Z";
+
+  const handleSearch = useCallback((value) => {
+    setName(value);
+    if (value) {
+      searchCollaborators(0, 10, "all", value)
+        .then((res) => {
+          setDataFilter(res.data);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+        });
+    } else {
+      setDataFilter([]);
+    }
+
+    setIdCollaborator("");
+  }, []);
 
   return (
     <>
@@ -231,6 +266,38 @@ const EditOrder = ({ data }) => {
               })}
             </div>
           </div>
+
+          <div>
+            <a className="label">Cộng tác viên</a>
+            <Input
+              placeholder="Tìm kiếm theo tên hoặc số điện thoại số điện thoại"
+              value={name}
+              type="text"
+              onChange={(e) => handleSearch(e.target.value)}
+              className="input"
+            />
+            {/* {errorName && <a className="error">{errorName}</a>} */}
+            {dataFilter.length > 0 && (
+              <List type={"unstyled"} className="list-item">
+                {dataFilter?.map((item, index) => {
+                  return (
+                    <option
+                      key={index}
+                      value={item?._id}
+                      onClick={(e) => {
+                        setIdCollaborator(e.target.value);
+                        setName(item?.full_name);
+                        setDataFilter([]);
+                      }}
+                    >
+                      {item?.full_name}
+                    </option>
+                  );
+                })}
+              </List>
+            )}
+          </div>
+
           <CustomTextInput
             label="Ghi chú"
             type="textarea"
