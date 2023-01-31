@@ -61,6 +61,20 @@
   color: #023e8a !important;
 }
 
+.div-create-ctv {
+  display: flex;
+  flex-direction: column;
+
+  .text-create-ctv {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #6e6893;
+  }
+}
+
 .text-phone {
   font-family: "Roboto";
   font-style: normal;

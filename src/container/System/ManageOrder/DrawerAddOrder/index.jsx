@@ -74,7 +74,7 @@ const AddOrder = () => {
 
   const timeNow = Number(new Date().toTimeString().slice(0, 2)) + 3;
 
-  console.log(timeNow);
+  const dayNow = new Date().toISOString().slice(0, 10);
 
   return (
     <>
@@ -203,7 +203,7 @@ const AddOrder = () => {
             {/* <DatePicker format={dateFormat} onChange={onChange} /> */}
             <div className="div-hours">
               {DATA_TIME_TOTAL.map((item) => {
-                const timeChose = item?.title?.slice(0, 2);
+                const timeChosse = item?.title?.slice(0, 2);
                 return (
                   <Button
                     className={
@@ -212,7 +212,13 @@ const AddOrder = () => {
                         : "select-time-default"
                     }
                     onClick={() => onChangeTime(item.time)}
-                    disabled={timeNow >= timeChose ? true : false}
+                    disabled={
+                      dateWork === dayNow
+                        ? timeNow >= timeChosse
+                          ? true
+                          : false
+                        : false
+                    }
                   >
                     {item.title}
                   </Button>
