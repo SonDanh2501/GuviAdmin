@@ -280,7 +280,6 @@ export default function CollaboratorManage(props) {
           </div>
         );
       },
-      align: "center",
       width: "10%",
     },
     {

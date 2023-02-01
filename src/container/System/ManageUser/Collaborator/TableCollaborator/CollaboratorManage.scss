@@ -62,7 +62,7 @@
 }
 
 .div-create-ctv {
-  display: flex;
+  display: flex !important;
   flex-direction: column;
 
   .text-create-ctv {
@@ -71,7 +71,7 @@
     font-weight: 500;
     font-size: 14px;
     line-height: 16px;
-    color: #6e6893;
+    color: #000000;
   }
 }
 

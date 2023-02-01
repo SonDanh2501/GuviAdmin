@@ -1,5 +1,5 @@
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import { Dropdown, Input, Pagination, Space, Table } from "antd";
+import { Dropdown, Input, notification, Pagination, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -24,6 +24,8 @@ import {
   getTotalPromotion,
 } from "../../../../redux/selectors/promotion.js";
 import "./PromotionManage.scss";
+import onToggle from "../../../../assets/images/on-button.png";
+import offToggle from "../../../../assets/images/off-button.png";
 
 export default function PromotionManage() {
   const promotion = useSelector(getPromotionSelector);
@@ -40,6 +42,7 @@ export default function PromotionManage() {
   const [modal, setModal] = React.useState(false);
   const toggle = () => setModal(!modal);
   const toggleActive = () => setModalActive(!modalActive);
+  const [api, contextHolder] = notification.useNotification();
   useEffect(() => {
     // dispatch(loadingAction.loadingRequest(true));
 
@@ -104,6 +107,15 @@ export default function PromotionManage() {
     []
   );
 
+  const openNotificationWithIcon = () => {
+    api.warning({
+      message: "Mã đã quá hạn!!!",
+      description:
+        "Bật hoạt động cho mã này cần gia hạn thêm ngày cho mã khuyến mãi.",
+      duration: 10,
+    });
+  };
+
   const items = [
     {
       key: "1",
@@ -117,16 +129,16 @@ export default function PromotionManage() {
         </a>
       ),
     },
+    // {
+    //   key: "2",
+    //   label: itemEdit?.is_active ? (
+    //     <a onClick={toggleActive}>Ẩn</a>
+    //   ) : (
+    //     <a onClick={toggleActive}>Hiện</a>
+    //   ),
+    // },
     {
       key: "2",
-      label: itemEdit?.is_active ? (
-        <a onClick={toggleActive}>Ẩn</a>
-      ) : (
-        <a onClick={toggleActive}>Hiện</a>
-      ),
-    },
-    {
-      key: "3",
       label: <a onClick={toggle}>Xoá</a>,
     },
   ];
@@ -151,6 +163,7 @@ export default function PromotionManage() {
       title: "Mã code",
       dataIndex: "code",
     },
+
     {
       title: "Hạn",
       key: "action",
@@ -166,6 +179,48 @@ export default function PromotionManage() {
             {data?.is_limit_date ? startDate + "-" + endDate : "Không có hạn"}
           </a>
         );
+      },
+    },
+    {
+      title: "Bật/tắt",
+      render: (data) => {
+        var date =
+          data?.limit_end_date && moment(data?.limit_end_date.slice(0, 10));
+        var now = moment();
+        return (
+          <div>
+            {contextHolder}
+            {data?.is_active ? (
+              <img
+                src={onToggle}
+                className="img-toggle"
+                onClick={toggleActive}
+              />
+            ) : (
+              <div>
+                {date < now ? (
+                  <img
+                    src={offToggle}
+                    className="img-toggle"
+                    onClick={() => openNotificationWithIcon("warning")}
+                  />
+                ) : (
+                  <img
+                    src={offToggle}
+                    className="img-toggle"
+                    onClick={toggleActive}
+                  />
+                )}
+              </div>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      title: "Trạng thái",
+      render: (data) => {
+        return <div></div>;
       },
     },
     {
