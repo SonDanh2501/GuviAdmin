@@ -51,7 +51,7 @@ const AddPromotion = () => {
   const [promoCode, setPromoCode] = React.useState("");
   const [promoType, setPromoType] = React.useState("order");
   const [unitPrice, setUnitPrice] = React.useState("");
-  const [minimumOrder, setMinimumOrder] = React.useState("");
+  const [minimumOrder, setMinimumOrder] = React.useState();
   const [namebrand, setNamebrand] = React.useState("");
   const [codebrand, setCodebrand] = React.useState("");
   const [reducedValue, setReducedValue] = React.useState(0);
