@@ -242,13 +242,13 @@ export default function UserManage(props) {
       width: "10%",
     },
     {
-      title: "Tổng Đơn Đã Đặt",
+      title: "Tổng Đơn",
       render: (data) => <a className="text-address">{data?.total_order}</a>,
       width: "15%",
       align: "center",
     },
     {
-      title: "Đơn Dịch Vụ gần nhất",
+      title: "Đơn gần nhất",
       render: (data) => {
         return (
           <>
@@ -286,13 +286,13 @@ export default function UserManage(props) {
       align: "center",
       render: (data) => (
         <Space size="middle">
-          <div>
+          {/* <div>
             {data?.is_active ? (
               <img className="img-unlock" src={unlock} onClick={toggleBlock} />
             ) : (
               <img className="img-unlock" src={lock} onClick={toggleBlock} />
             )}
-          </div>
+          </div> */}
           <Dropdown
             menu={{
               items,
