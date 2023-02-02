@@ -3,7 +3,10 @@ import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Col, Form, Input, Label, Row } from "reactstrap";
-import { updateInformationCollaboratorApi } from "../../../../../../../api/collaborator";
+import {
+  getCollaboratorsById,
+  updateInformationCollaboratorApi,
+} from "../../../../../../../api/collaborator";
 import CustomTextInput from "../../../../../../../components/CustomTextInput/customTextInput";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";

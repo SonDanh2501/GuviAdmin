@@ -80,6 +80,7 @@ export default function Home() {
     )
       .then((res) => {
         setArrResult(res.arrResult);
+        getDates(res?.arrResult?.date_start, res?.arrResult?.date_end);
       })
       .catch((err) => console.log(err));
     dispatch(getServiceConnect.getServiceConnectRequest());
@@ -672,6 +673,11 @@ export default function Home() {
                           item?.id_customer?._id,
                           item?.id_customer?.full_name
                         )
+                      : item?.id_order
+                      ? item?.title_admin.replace(
+                          item?.id_order?._id,
+                          item?.id_order?._id
+                        )
                       : "";
 
                     const predicate = item?.id_promotion
@@ -703,6 +709,11 @@ export default function Home() {
                       ? subject.replace(
                           item?.id_transistion_customer?._id,
                           item?.id_transistion_customer?.transfer_note
+                        )
+                      : item?.id_order
+                      ? item?.title_admin.replace(
+                          item?.id_order?._id,
+                          item?.id_order?._id
                         )
                       : "";
 

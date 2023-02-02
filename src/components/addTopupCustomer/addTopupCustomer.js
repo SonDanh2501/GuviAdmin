@@ -34,7 +34,13 @@ const AddTopupCustomer = () => {
     setName(value);
     if (value) {
       searchCustomers(0, 100, "", value)
-        .then((res) => setData(res.data))
+        .then((res) => {
+          if (value === "") {
+            setData([]);
+          } else {
+            setData(res.data);
+          }
+        })
         .catch((err) => console.log(err));
     } else {
       setData([]);

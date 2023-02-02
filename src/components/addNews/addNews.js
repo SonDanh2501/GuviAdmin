@@ -154,7 +154,7 @@ const AddNews = () => {
                 id="exampleThumbnail"
                 type="file"
                 accept={".jpg,.png,.jpeg"}
-                name="thumbnail"
+                className="chosse-image"
                 onChange={onChangeThumbnail}
               />
               {imgThumbnail && (

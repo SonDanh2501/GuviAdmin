@@ -1,7 +1,8 @@
+import { Layout } from "antd";
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Sidebar from "../components/Sidebar/Sidebar";
-import Header from "../container/Header/Header";
+import HeaderBar from "../container/Header/Header";
 import Home from "../container/System/Dashboard/DashBoard";
 import DetailsOrder from "../container/System/DetailsOrder";
 import ManageConfiguration from "../container/System/ManageConfiguration/ManageConfiguration";
@@ -23,6 +24,7 @@ import ManageCustomer from "../container/System/ManageUser/Customer";
 import Profiles from "../container/System/ManageUser/Customer/Profiles";
 
 import "./Dashboard.scss";
+const { Header, Content, Sider } = Layout;
 
 const Dashboard = () => {
   const [hideSidebar, setHideSidebar] = useState(true);
@@ -32,106 +34,230 @@ const Dashboard = () => {
     setColor(e);
   };
   return (
-    <div className="container-dashboard lg:bg-red">
-      <Header />
+    // <div className="container-dashboard lg:bg-red">
+    //   <Header />
 
-      <div className="row">
-        {hideSidebar && (
-          <div className="sidebar" style={{ backgroundColor: color }}>
-            <Sidebar color={color} onChangeColor={(e) => onColor(e)} />
-          </div>
-        )}
-        {/* <main className={hideSidebar ? "main p-0" : "main-full p-0"}> */}
-        <main className="main">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/details-order" element={<DetailsOrder />} />
+    //   <div className="row">
+    //     {hideSidebar && (
+    //       <div className="sidebar" style={{ backgroundColor: color }}>
+    //         <Sidebar color={color} onChangeColor={(e) => onColor(e)} />
+    //       </div>
+    //     )}
+    //     {/* <main className={hideSidebar ? "main p-0" : "main-full p-0"}> */}
+    //     <main className="main">
+    //       <Routes>
+    //         <Route path="/" element={<Home />} />
+    //         <Route path="/details-order" element={<DetailsOrder />} />
 
-            <Route
-              path="/details-collaborator"
-              element={<ProfileCollaborator />}
-            />
-            <Route path="/details-customer" element={<Profiles />} />
-            <Route path="/system/user-manage" element={<ManageCustomer />} />
-            <Route
-              path="/system/user-manage/details-customer"
-              element={<Profiles />}
-            />
-            <Route
-              path="/system/collaborator-manage"
-              element={<ManageCollaborator />}
-            />
-            <Route
-              path="/system/collaborator-manage/details-collaborator"
-              element={<ProfileCollaborator />}
-            />
-            <Route
-              path="/promotion/manage-setting"
-              element={<ManageSetting />}
-            />
+    //         <Route
+    //           path="/details-collaborator"
+    //           element={<ProfileCollaborator />}
+    //         />
+    //         <Route path="/details-customer" element={<Profiles />} />
+    //         <Route path="/system/user-manage" element={<ManageCustomer />} />
+    //         <Route
+    //           path="/system/user-manage/details-customer"
+    //           element={<Profiles />}
+    //         />
+    //         <Route
+    //           path="/system/collaborator-manage"
+    //           element={<ManageCollaborator />}
+    //         />
+    //         <Route
+    //           path="/system/collaborator-manage/details-collaborator"
+    //           element={<ProfileCollaborator />}
+    //         />
+    //         <Route
+    //           path="/promotion/manage-setting"
+    //           element={<ManageSetting />}
+    //         />
 
-            <Route
-              path="/services/manage-group-service"
-              element={<GroupServiceManage />}
-            />
-            <Route
-              path="/services/manage-group-service/manage-service"
-              element={<ServiceManage />}
-            />
-            <Route
-              path="/feedback/manage-feedback"
-              element={<FeedbackManage />}
-            />
-            <Route path="/group-order/manage-order" element={<ManageOrder />} />
-            <Route
-              path="/group-order/manage-order/details-collaborator"
-              element={<ProfileCollaborator />}
-            />
-            <Route
-              path="/group-order/manage-order/details-customer"
-              element={<Profiles />}
-            />
-            <Route
-              path="/group-order/manage-order/all"
-              element={<ManageOrder />}
-            />
-            <Route
-              path="/group-order/manage-order/doing"
-              element={<OrderDoingManage />}
-            />
+    //         <Route
+    //           path="/services/manage-group-service"
+    //           element={<GroupServiceManage />}
+    //         />
+    //         <Route
+    //           path="/services/manage-group-service/manage-service"
+    //           element={<ServiceManage />}
+    //         />
+    //         <Route
+    //           path="/feedback/manage-feedback"
+    //           element={<FeedbackManage />}
+    //         />
+    //         <Route path="/group-order/manage-order" element={<ManageOrder />} />
+    //         <Route
+    //           path="/group-order/manage-order/details-collaborator"
+    //           element={<ProfileCollaborator />}
+    //         />
+    //         <Route
+    //           path="/group-order/manage-order/details-customer"
+    //           element={<Profiles />}
+    //         />
+    //         <Route
+    //           path="/group-order/manage-order/all"
+    //           element={<ManageOrder />}
+    //         />
+    //         <Route
+    //           path="/group-order/manage-order/doing"
+    //           element={<OrderDoingManage />}
+    //         />
 
-            <Route path="/topup/manage-topup" element={<ManageTopup />} />
+    //         <Route path="/topup/manage-topup" element={<ManageTopup />} />
 
-            <Route
-              path="/adminManage/manage-configuration/manage-group-customer"
-              element={<GroupCustomerManage />}
-            />
-            <Route path="/report/manage-report" element={<ManageReport />} />
-            <Route
-              path="/report/manage-report/all"
-              element={<ManageReport />}
-            />
+    //         <Route
+    //           path="/adminManage/manage-configuration/manage-group-customer"
+    //           element={<GroupCustomerManage />}
+    //         />
+    //         <Route path="/report/manage-report" element={<ManageReport />} />
+    //         <Route
+    //           path="/report/manage-report/all"
+    //           element={<ManageReport />}
+    //         />
 
-            <Route
-              path="/adminManage/manage-configuration"
-              element={<ManageConfiguration />}
-            />
-            <Route
-              path="/adminManage/manage-configuration/manage-reason"
-              element={<ReasonManage />}
-            />
-            <Route
-              path="/adminManage/manage-configuration/manage-app-customer"
-              element={<AppCustomer />}
-            />
-            <Route
-              path="/adminManage/manage-configuration/manage-app-collaborator"
-              element={<AppCollaborator />}
-            />
-          </Routes>
-        </main>
-      </div>
-    </div>
+    //         <Route
+    //           path="/adminManage/manage-configuration"
+    //           element={<ManageConfiguration />}
+    //         />
+    //         <Route
+    //           path="/adminManage/manage-configuration/manage-reason"
+    //           element={<ReasonManage />}
+    //         />
+    //         <Route
+    //           path="/adminManage/manage-configuration/manage-app-customer"
+    //           element={<AppCustomer />}
+    //         />
+    //         <Route
+    //           path="/adminManage/manage-configuration/manage-app-collaborator"
+    //           element={<AppCollaborator />}
+    //         />
+    //       </Routes>
+    //     </main>
+    //   </div>
+    // </div>
+    <Layout>
+      <Header
+        style={{
+          background: "#0f157f",
+        }}
+      >
+        <HeaderBar />
+      </Header>
+      <Layout>
+        <Sider
+          width={250}
+          style={{
+            background: "white",
+          }}
+        >
+          <Sidebar />
+        </Sider>
+        <Layout
+          style={{
+            padding: "24px 24px",
+          }}
+        >
+          <Content
+            style={{
+              padding: 24,
+              margin: 0,
+              minHeight: 280,
+              background: "white",
+              borderRadius: 4,
+            }}
+          >
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/details-order" element={<DetailsOrder />} />
+
+              <Route
+                path="/details-collaborator"
+                element={<ProfileCollaborator />}
+              />
+              <Route path="/details-customer" element={<Profiles />} />
+              <Route path="/system/user-manage" element={<ManageCustomer />} />
+              <Route
+                path="/system/user-manage/details-customer"
+                element={<Profiles />}
+              />
+              <Route
+                path="/system/collaborator-manage"
+                element={<ManageCollaborator />}
+              />
+              <Route
+                path="/system/collaborator-manage/details-collaborator"
+                element={<ProfileCollaborator />}
+              />
+              <Route
+                path="/promotion/manage-setting"
+                element={<ManageSetting />}
+              />
+
+              <Route
+                path="/services/manage-group-service"
+                element={<GroupServiceManage />}
+              />
+              <Route
+                path="/services/manage-group-service/manage-service"
+                element={<ServiceManage />}
+              />
+              <Route
+                path="/feedback/manage-feedback"
+                element={<FeedbackManage />}
+              />
+              <Route
+                path="/group-order/manage-order"
+                element={<ManageOrder />}
+              />
+              <Route
+                path="/group-order/manage-order/details-collaborator"
+                element={<ProfileCollaborator />}
+              />
+              <Route
+                path="/group-order/manage-order/details-customer"
+                element={<Profiles />}
+              />
+              <Route
+                path="/group-order/manage-order/all"
+                element={<ManageOrder />}
+              />
+              <Route
+                path="/group-order/manage-order/doing"
+                element={<OrderDoingManage />}
+              />
+
+              <Route path="/topup/manage-topup" element={<ManageTopup />} />
+
+              <Route
+                path="/adminManage/manage-configuration/manage-group-customer"
+                element={<GroupCustomerManage />}
+              />
+              <Route path="/report/manage-report" element={<ManageReport />} />
+              <Route
+                path="/report/manage-report/all"
+                element={<ManageReport />}
+              />
+
+              <Route
+                path="/adminManage/manage-configuration"
+                element={<ManageConfiguration />}
+              />
+              <Route
+                path="/adminManage/manage-configuration/manage-reason"
+                element={<ReasonManage />}
+              />
+              <Route
+                path="/adminManage/manage-configuration/manage-app-customer"
+                element={<AppCustomer />}
+              />
+              <Route
+                path="/adminManage/manage-configuration/manage-app-collaborator"
+                element={<AppCollaborator />}
+              />
+            </Routes>
+          </Content>
+        </Layout>
+      </Layout>
+    </Layout>
   );
 };
 

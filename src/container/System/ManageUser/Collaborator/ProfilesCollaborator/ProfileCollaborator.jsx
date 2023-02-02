@@ -16,6 +16,7 @@ import {
 import { getCollaboratorsById } from "../../../../../api/collaborator";
 import { getDistrictApi, postFile } from "../../../../../api/file";
 import user from "../../../../../assets/images/user.png";
+import resizeFile from "../../../../../helper/resizer";
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import Activity from "./components/activity";
@@ -56,7 +57,7 @@ const ProfileCollaborator = () => {
       });
   }, [id]);
 
-  const onChangeThumbnail = (e) => {
+  const onChangeThumbnail = async (e) => {
     if (e.target.files[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -64,9 +65,10 @@ const ProfileCollaborator = () => {
       });
       reader.readAsDataURL(e.target.files[0]);
     }
+    const file = e.target.files[0];
+    const image = await resizeFile(file);
     const formData = new FormData();
-    formData.append("file", e.target.files[0]);
-    dispatch(loadingAction.loadingRequest(true));
+    formData.append("file", image);
 
     postFile(formData, {
       headers: {
@@ -135,7 +137,7 @@ const ProfileCollaborator = () => {
                     <Information data={data} image={img} />
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Tài liệu" key="2">
-                    <Document data={data} />
+                    <Document id={data?._id} />
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Hoạt động" key="3">
                     <Activity id={id} />

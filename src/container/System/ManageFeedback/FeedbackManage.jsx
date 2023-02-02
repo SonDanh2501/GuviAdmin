@@ -26,7 +26,7 @@ export default function FeedbackManage() {
 
   React.useEffect(() => {
     // dispatch(loadingAction.loadingRequest(true));
-    dispatch(getFeedback.getFeedbackRequest({ start: 0, length: 10 }));
+    dispatch(getFeedback.getFeedbackRequest({ start: 0, length: 20 }));
   }, [dispatch]);
 
   const handleSearch = useCallback(
@@ -47,7 +47,7 @@ export default function FeedbackManage() {
     dispatch(
       getFeedback.getFeedbackRequest({
         start: start > 0 ? start : 0,
-        length: 10,
+        length: 20,
       })
     );
   };
@@ -143,6 +143,7 @@ export default function FeedbackManage() {
                 onChange={onChange}
                 total={dataFilter.length > 0 ? totalFilter : feedbackTotal}
                 showSizeChanger={false}
+                pageSize={20}
               />
             </div>
           </div>
