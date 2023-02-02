@@ -144,7 +144,7 @@ const Dashboard = () => {
       </Header>
       <Layout>
         <Sider
-          width={250}
+          width={230}
           style={{
             background: "white",
           }}
