@@ -33,7 +33,13 @@ const AddPopup = () => {
     setName(value);
     if (value) {
       searchCollaborators(0, 100, "", value)
-        .then((res) => setData(res.data))
+        .then((res) => {
+          if (value === "") {
+            setData([]);
+          } else {
+            setData(res.data);
+          }
+        })
         .catch((err) => console.log(err));
     } else {
       setData([]);

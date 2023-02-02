@@ -30,8 +30,14 @@ const Withdraw = () => {
 
   const searchCollaborator = useCallback((value) => {
     setName(value);
-    searchCollaborators(value)
-      .then((res) => setData(res.data))
+    searchCollaborators(0, 100, "", value)
+      .then((res) => {
+        if (value === "") {
+          setData([]);
+        } else {
+          setData(res.data);
+        }
+      })
       .catch((err) => console.log(err));
     setId("");
   }, []);

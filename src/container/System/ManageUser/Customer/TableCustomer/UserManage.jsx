@@ -41,10 +41,6 @@ import {
   getCustomers,
 } from "../../../../../redux/actions/customerAction";
 import { loadingAction } from "../../../../../redux/actions/loading";
-import {
-  getCustomer,
-  getCustomerTotalItem,
-} from "../../../../../redux/selectors/customer";
 import "./UserManage.scss";
 import moment from "moment";
 
@@ -61,6 +57,7 @@ export default function UserManage(props) {
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
+  const [conditionFilter, setConditionFilter] = useState("");
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
   const navigate = useNavigate();
@@ -317,9 +314,9 @@ export default function UserManage(props) {
       key: "1",
       label: (
         <a
-        // onClick={() => {
-        //   setModalEdit(!modalEdit);
-        // }}
+          onClick={() => {
+            setConditionFilter("Khách hàng thân thiết");
+          }}
         >
           Khách hàng thân thiết
         </a>
@@ -327,7 +324,15 @@ export default function UserManage(props) {
     },
     {
       key: "2",
-      label: <a>Khách hàng sinh nhật</a>,
+      label: (
+        <a
+          onClick={() => {
+            setConditionFilter("Khách hàng sinh nhật");
+          }}
+        >
+          Khách hàng sinh nhật
+        </a>
+      ),
     },
   ];
 
@@ -343,7 +348,9 @@ export default function UserManage(props) {
             <a onClick={(e) => e.preventDefault()}>
               <Space>
                 <FilterOutlined className="icon" />
-                <a className="text-filter">Thêm điều kiện lọc</a>
+                <a className="text-filter">
+                  {conditionFilter ? conditionFilter : "Thêm điều kiện lọc"}
+                </a>
               </Space>
             </a>
           </Dropdown>

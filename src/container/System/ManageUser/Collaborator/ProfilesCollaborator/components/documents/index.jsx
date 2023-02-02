@@ -1,4 +1,4 @@
-import { Image } from "antd";
+import { Checkbox, Image } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
@@ -12,7 +12,7 @@ import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import "./index.scss";
 
-const Document = ({ data }) => {
+const Document = ({ id }) => {
   const [deal, setDeal] = useState(false);
   const [identify, setIdentify] = useState(false);
   const [information, setInformation] = useState(false);
@@ -28,18 +28,30 @@ const Document = ({ data }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setDeal(data?.is_document_code);
-    setSetValueDeal(data?.document_code);
-    setIdentify(data?.is_identity);
-    setImgIdentifyFronsite(data?.identity_frontside);
-    setImgIdentifyBacksite(data?.identity_backside);
-    setInformation(data?.is_personal_infor);
-    setImgInformation(data?.personal_infor_image);
-    setRegistration(data?.is_household_book);
-    setImgRegistration(data?.household_book_image);
-    setCertification(data?.is_behaviour);
-    setImgCertification(data?.behaviour_image);
-  }, []);
+    dispatch(loadingAction.loadingRequest(true));
+
+    getCollaboratorsById(id)
+      .then((res) => {
+        setDeal(res?.is_document_code);
+        setSetValueDeal(res?.document_code);
+        setIdentify(res?.is_identity);
+        setImgIdentifyFronsite(res?.identity_frontside);
+        setImgIdentifyBacksite(res?.identity_backside);
+        setInformation(res?.is_personal_infor);
+        setImgInformation(res?.personal_infor_image);
+        setRegistration(res?.is_household_book);
+        setImgRegistration(res?.household_book_image);
+        setCertification(res?.is_behaviour);
+        setImgCertification(res?.behaviour_image);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  }, [id]);
 
   const onChangeIdentifyBefore = (e) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -61,7 +73,12 @@ const Document = ({ data }) => {
         setImgIdentifyFronsite(res);
         dispatch(loadingAction.loadingRequest(false));
       })
-      .catch((err) => console.log("err", err));
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
   };
   const onChangeIdentifyAfter = (e) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -83,7 +100,12 @@ const Document = ({ data }) => {
         setImgIdentifyBacksite(res);
         dispatch(loadingAction.loadingRequest(false));
       })
-      .catch((err) => console.log("err", err));
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
   };
 
   const onChangeInformation = (e) => {
@@ -154,12 +176,17 @@ const Document = ({ data }) => {
         setImgCertification(res);
         dispatch(loadingAction.loadingRequest(false));
       })
-      .catch((err) => console.log("err", err));
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
   };
 
   const onUpdateDocument = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-    updateDocumentCollaboratorApi(data?._id, {
+    updateDocumentCollaboratorApi(id, {
       is_document_code: deal,
       document_code: valueDeal,
       is_identity: identify,
@@ -174,6 +201,21 @@ const Document = ({ data }) => {
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
+        getCollaboratorsById(id)
+          .then((res) => {
+            setDeal(res?.is_document_code);
+            setSetValueDeal(res?.document_code);
+            setIdentify(res?.is_identity);
+            setImgIdentifyFronsite(res?.identity_frontside);
+            setImgIdentifyBacksite(res?.identity_backside);
+            setInformation(res?.is_personal_infor);
+            setImgInformation(res?.personal_infor_image);
+            setRegistration(res?.is_household_book);
+            setImgRegistration(res?.household_book_image);
+            setCertification(res?.is_behaviour);
+            setImgCertification(res?.behaviour_image);
+          })
+          .catch((e) => console.log(e));
       })
       .catch((err) => {
         errorNotify({
@@ -181,21 +223,21 @@ const Document = ({ data }) => {
         });
         dispatch(loadingAction.loadingRequest(false));
       });
-    console.log({
-      is_document_code: deal,
-      document_code: valueDeal,
-      is_identity: identify,
-      identity_frontside: imgIdentifyFronsite,
-      identity_backside: imgIdentifyBacksite,
-      is_personal_infor: information,
-      personal_infor_image: imgInformation,
-      is_household_book: registration,
-      household_book_image: imgRegistration,
-      is_behaviour: certification,
-      behaviour_image: imgCertification,
-    });
+    // console.log({
+    //   is_document_code: deal,
+    //   document_code: valueDeal,
+    //   is_identity: identify,
+    //   identity_frontside: imgIdentifyFronsite,
+    //   identity_backside: imgIdentifyBacksite,
+    //   is_personal_infor: information,
+    //   personal_infor_image: imgInformation,
+    //   is_household_book: registration,
+    //   household_book_image: imgRegistration,
+    //   is_behaviour: certification,
+    //   behaviour_image: imgCertification,
+    // });
   }, [
-    data,
+    id,
     deal,
     valueDeal,
     identify,
@@ -215,12 +257,12 @@ const Document = ({ data }) => {
         <div className="pl-lg-5">
           <Row>
             <Col lg="4" className="col-check">
-              <Input
-                type="checkbox"
-                defaultChecked={deal}
-                onClick={() => setDeal(!deal)}
-              />
-              <a>Thoả thuận hợp tác</a>
+              <Checkbox
+                checked={deal}
+                onChange={(e) => setDeal(e.target.checked)}
+              >
+                Thoả thuận hợp tác
+              </Checkbox>
             </Col>
             <Col lg="8">
               <CustomTextInput
@@ -234,12 +276,12 @@ const Document = ({ data }) => {
           <hr />
           <Row>
             <Col lg="4" className="col-check">
-              <Input
-                type="checkbox"
-                defaultChecked={identify}
-                onClick={() => setIdentify(!identify)}
-              />
-              <a>CMND/CCCD</a>
+              <Checkbox
+                checked={identify}
+                onChange={(e) => setIdentify(e.target.checked)}
+              >
+                CMND/CCCD
+              </Checkbox>
             </Col>
             <Col lg="8">
               <FormGroup>
@@ -287,12 +329,12 @@ const Document = ({ data }) => {
           <hr />
           <Row>
             <Col lg="4" className="col-check">
-              <Input
-                type="checkbox"
-                defaultChecked={information}
-                onClick={(e) => setInformation(!information)}
-              />
-              <a>Sơ yếu lí lịch</a>
+              <Checkbox
+                checked={information}
+                onChange={(e) => setInformation(e.target.checked)}
+              >
+                Sơ yếu lí lịch
+              </Checkbox>
             </Col>
             <Col lg="8">
               <div className="div-infomation">
@@ -324,12 +366,12 @@ const Document = ({ data }) => {
           <hr />
           <Row>
             <Col lg="4" className="col-check">
-              <Input
-                type="checkbox"
-                defaultChecked={registration}
-                onClick={() => setRegistration(!registration)}
-              />
-              <a>Sổ hổ khẩu</a>
+              <Checkbox
+                checked={registration}
+                onChange={(e) => setRegistration(e.target.checked)}
+              >
+                Sổ hổ khẩu
+              </Checkbox>
             </Col>
             <Col lg="8">
               <div className="div-infomation">
@@ -361,12 +403,12 @@ const Document = ({ data }) => {
           <hr />
           <Row>
             <Col lg="4" className="col-check">
-              <Input
-                type="checkbox"
-                defaultChecked={certification}
-                onClick={() => setCertification(!certification)}
-              />
-              <a>Giấy xác nhận hạnh kiểm</a>
+              <Checkbox
+                checked={certification}
+                onChange={(e) => setCertification(e.target.checked)}
+              >
+                Giấy xác nhận hạnh kiểm
+              </Checkbox>
             </Col>
             <Col lg="8">
               <FormGroup>
@@ -380,7 +422,7 @@ const Document = ({ data }) => {
                     onChange={onChangeCertification}
                   />
                   {imgCertification && (
-                    <img src={imgCertification} className="img-thumbnail" />
+                    <Image src={imgCertification} className="img-thumbnail" />
                   )}
                 </div>
               </FormGroup>
