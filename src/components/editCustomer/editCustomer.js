@@ -120,7 +120,7 @@ const EditCustomer = ({ state, setState, data }) => {
                   />
                   <CustomButton
                     title="Sửa"
-                    className="float-right btn-modal"
+                    className="float-right btn-modal-customer"
                     type="button"
                     onClick={editCustomer}
                   />

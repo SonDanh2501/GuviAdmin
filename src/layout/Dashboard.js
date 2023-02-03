@@ -1,4 +1,5 @@
 import { Layout } from "antd";
+import { Footer } from "antd/es/layout/layout";
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Sidebar from "../components/Sidebar/Sidebar";
