@@ -1,22 +1,13 @@
-import { Pagination, Table } from "antd";
-import React, { useEffect, useState } from "react";
+import { Table } from "antd";
+import React, { useEffect } from "react";
 import { getReportCollaborator } from "../../../../api/report";
 import "./index.scss";
 
-const ReportManager = () => {
-  const [dataFilter, setDataFilter] = useState([]);
-  const [totalFilter, setTotalFilter] = useState("");
-  const [valueFilter, setValueFilter] = useState("");
-  const [hidePhone, setHidePhone] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    getReportCollaborator()
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  }, []);
-
+const DetailReportManager = () => {
   const columns = [
+    {
+      title: "Giờ",
+    },
     {
       title: "Mã CTV",
     },
@@ -62,15 +53,8 @@ const ReportManager = () => {
       <div className="mt-3">
         <Table columns={columns} pagination={false} />
       </div>
-      <Pagination
-        current={currentPage}
-        // onChange={onChange}
-        // total={dataFilter.length > 0 ? totalFilter : total}
-        showSizeChanger={false}
-        pageSize={20}
-      />
     </div>
   );
 };
 
-export default ReportManager;
+export default DetailReportManager;

@@ -198,12 +198,20 @@ export default function PromotionManage() {
               />
             ) : (
               <div>
-                {date < now ? (
-                  <img
-                    src={offToggle}
-                    className="img-toggle"
-                    onClick={() => openNotificationWithIcon("warning")}
-                  />
+                {data?.is_limit_date ? (
+                  date < now ? (
+                    <img
+                      src={offToggle}
+                      className="img-toggle"
+                      onClick={() => openNotificationWithIcon("warning")}
+                    />
+                  ) : (
+                    <img
+                      src={offToggle}
+                      className="img-toggle"
+                      onClick={toggleActive}
+                    />
+                  )
                 ) : (
                   <img
                     src={offToggle}
@@ -220,7 +228,21 @@ export default function PromotionManage() {
     {
       title: "Trạng thái",
       render: (data) => {
-        return <div></div>;
+        return (
+          <div>
+            {data?.status === "upcoming" ? (
+              <a style={{ color: "green" }}>Sắp diễn ra</a>
+            ) : data?.status === "doing" ? (
+              <a style={{ color: "green" }}>Đang diễn ra</a>
+            ) : data?.status === "out_of_stock" ? (
+              <a style={{ color: "red" }}>Hết số lượng</a>
+            ) : data?.status === "out_of_date" ? (
+              <a style={{ color: "red" }}>Hết hạn</a>
+            ) : (
+              <a style={{ color: "red" }}>Kết thúc</a>
+            )}
+          </div>
+        );
       },
     },
     {

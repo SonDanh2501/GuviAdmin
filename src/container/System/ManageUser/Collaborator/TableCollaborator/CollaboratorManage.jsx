@@ -258,6 +258,7 @@ export default function CollaboratorManage(props) {
                 state: { id: data?._id },
               })
             }
+            className="div-collaborator"
           >
             <img className="img_collaborator" src={data?.avatar} />
             <a className="text-name-collaborator">{data?.full_name}</a>

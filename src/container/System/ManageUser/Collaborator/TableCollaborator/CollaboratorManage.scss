@@ -45,20 +45,26 @@
   color: #19202c;
 }
 
-.img_collaborator {
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
-  margin-right: 5px;
-}
+.div-collaborator {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
-.text-name-collaborator {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  text-decoration-line: underline;
-  color: #023e8a !important;
+  .img_collaborator {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    margin-right: 5px;
+  }
+
+  .text-name-collaborator {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    text-decoration-line: underline;
+    color: #023e8a !important;
+  }
 }
 
 .div-create-ctv {
@@ -72,6 +78,7 @@
     font-size: 14px;
     line-height: 16px;
     color: #000000;
+    text-decoration: none;
   }
 }
 
@@ -81,6 +88,7 @@
   font-weight: 400;
   font-size: 14px;
   color: #023e8a !important;
+  text-decoration: none !important;
 }
 
 .text-verify {
@@ -90,6 +98,7 @@
   font-weight: 600;
   font-size: 14px;
   line-height: 16px;
+  text-decoration: none !important;
 }
 
 .text-online {
@@ -99,6 +108,7 @@
   font-weight: 600;
   font-size: 14px;
   margin-left: 5px;
+  text-decoration: none !important;
 }
 
 .text-offline {
@@ -117,6 +127,7 @@
   font-size: 14px;
   color: #f7941d !important;
   margin-left: 5px;
+  text-decoration: none !important;
 }
 
 .icon-verify {
@@ -126,6 +137,7 @@
   font-weight: 600;
   font-size: 14px;
   line-height: 16px;
+  text-decoration: none !important;
 }
 
 .text-lock-time {
@@ -135,6 +147,7 @@
   font-size: 14px;
   color: #f7941d;
   margin-left: 5px;
+  text-decoration: none !important;
 }
 
 .text-nonverify {
