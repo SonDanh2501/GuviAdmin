@@ -9,6 +9,7 @@ import {
   Select,
   Skeleton,
   Space,
+  Spin,
   Table,
 } from "antd";
 import moment from "moment";
@@ -32,6 +33,7 @@ const ReportManager = () => {
   const [type, setType] = useState("day");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -248,6 +250,7 @@ const ReportManager = () => {
   ];
 
   const onChange = (page) => {
+    setIsLoading(true);
     setCurrentPage(page);
     const start =
       dataFilter.length > 0
@@ -257,12 +260,14 @@ const ReportManager = () => {
     dataFilter.length > 0
       ? filterReportCollaborator(start, 20, startDate, endDate)
           .then((res) => {
+            setIsLoading(false);
             setDataFilter(res?.data);
             setTotalFilter(res?.totalItem);
           })
           .catch((err) => console.log(err))
       : getReportCollaborator(start > 0 ? start : 0, 20)
           .then((res) => {
+            setIsLoading(false);
             setData(res?.data);
             setTotal(res?.totalItem);
           })
@@ -270,10 +275,12 @@ const ReportManager = () => {
   };
 
   const onChangeFilter = useCallback((start, end) => {
+    setIsLoading(true);
     const dayStart = moment(start).toISOString();
     const dayEnd = moment(end).toISOString();
     filterReportCollaborator(0, 20, dayStart, dayEnd)
       .then((res) => {
+        setIsLoading(false);
         setDataFilter(res?.data);
         setTotalFilter(res?.totalItem);
       })
@@ -329,6 +336,7 @@ const ReportManager = () => {
           />
         </div>
       </div>
+      {isLoading && <Spin className="loading" size="large" />}
     </div>
   );
 };

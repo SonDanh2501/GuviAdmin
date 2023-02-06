@@ -1,6 +1,6 @@
 import { Input } from "antd";
 import { Formik } from "formik";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, CardBody, Form } from "reactstrap";
@@ -15,23 +15,27 @@ const Login = () => {
   const formikRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const initialValues = {
-    email: "",
-    password: "",
-  };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const onLogin = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
     dispatch(
       loginAction.loginRequest({
         data: {
-          email: formikRef?.current?.values?.email,
-          password: formikRef?.current?.values?.password,
+          email: email,
+          password: password,
         },
         naviga: navigate,
       })
     );
-  }, [dispatch, navigate]);
+  }, [dispatch, navigate, email, password]);
+
+  const handlePress = (e) => {
+    if (e.key === 13) {
+      onLogin();
+    }
+  };
 
   return (
     <div className="container-login">
@@ -41,51 +45,34 @@ const Login = () => {
             <img src={logo} className="img-logo" />
             <a className="title-login">Đăng nhập hệ thống Guvi</a>
           </div>
-          <Formik
-            innerRef={formikRef}
-            initialValues={initialValues}
-            validationSchema={validateLoginSchema}
-            validateOnChange={true}
-            onSubmit={onLogin}
-          >
-            {({ values, setFieldValue, errors, handleSubmit }) => {
-              return (
-                <Form role="form">
-                  <div>
-                    <label>Email</label>
-                    <Input
-                      placeholder="Nhập email"
-                      className="input-pass"
-                      value={values?.email}
-                      onChange={(text) =>
-                        setFieldValue("email", text.target.value)
-                      }
-                    />
-                    <a className="error">{errors?.email}</a>
-                  </div>
+          <Form role="form" onSubmit={onLogin}>
+            <div>
+              <label>Email</label>
+              <Input
+                placeholder="Nhập email"
+                className="input-pass"
+                value={email}
+                type="email"
+                onChange={(text) => setEmail(text.target.value)}
+              />
+            </div>
 
-                  <div>
-                    <label>Password</label>
-                    <Input.Password
-                      placeholder="Nhập mật khẩu"
-                      className="input-pass"
-                      value={values?.password}
-                      onChange={(text) =>
-                        setFieldValue("password", text.target.value)
-                      }
-                    />
-                    <a className="error">{errors?.password}</a>
-                  </div>
+            <div>
+              <label>Password</label>
+              <Input.Password
+                placeholder="Nhập mật khẩu"
+                className="input-pass"
+                value={password}
+                onChange={(text) => setPassword(text.target.value)}
+              />
+            </div>
 
-                  <div className="text-center">
-                    <Button className="btn-login" onClick={handleSubmit}>
-                      Đăng nhập
-                    </Button>
-                  </div>
-                </Form>
-              );
-            }}
-          </Formik>
+            <div className="text-center">
+              <Button className="btn-login" onClick={onLogin}>
+                Đăng nhập
+              </Button>
+            </div>
+          </Form>
         </CardBody>
       </Card>
     </div>
