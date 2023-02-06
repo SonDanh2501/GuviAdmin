@@ -1,0 +1,47 @@
+.div-title-column {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .btn-question {
+    border: none;
+    background-color: transparent;
+    width: 10px;
+    height: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-question {
+    color: aqua;
+    margin-left: 10px;
+  }
+}
+
+.text-money {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000;
+  text-decoration: none !important;
+}
+
+.div-content {
+  width: 160px;
+
+  .text-content {
+    color: #000000;
+    font-family: "Roboto";
+    font-style: normal;
+    font-size: 14px;
+  }
+}
+
+.div-date {
+  display: flex;
+  flex-direction: row;
+  width: 25%;
+}

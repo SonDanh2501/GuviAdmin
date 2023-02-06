@@ -14,7 +14,6 @@ const ManageReport = () => {
           <Tabs.TabPane tab="Cộng tác viên" key="1">
             <ReportManager />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Khách hàng" key="2"></Tabs.TabPane>
         </Tabs>
       </div>
     </>

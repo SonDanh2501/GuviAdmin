@@ -12,6 +12,12 @@ export const searchPromotion = (search, start, length) => {
   );
 };
 
+export const filterPromotion = (status, start, length) => {
+  return axiosClient.get(
+    `/admin/promotion_manager/get_list?status=${status}&start=${start}&length=${length}`
+  );
+};
+
 export const createPromotion = (data) => {
   return axiosClient.post("/admin/promotion_manager/create_item?lang=vi", data);
 };

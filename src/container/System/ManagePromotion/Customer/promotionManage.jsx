@@ -1,5 +1,13 @@
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import { Dropdown, Input, notification, Pagination, Space, Table } from "antd";
+import {
+  Dropdown,
+  Input,
+  notification,
+  Pagination,
+  Select,
+  Space,
+  Table,
+} from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -7,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   activePromotion,
+  filterPromotion,
   searchPromotion,
 } from "../../../../api/promotion.jsx";
 import AddPromotion from "../../../../components/addPromotion/addPromotion.js";
@@ -30,11 +39,14 @@ import offToggle from "../../../../assets/images/off-button.png";
 export default function PromotionManage() {
   const promotion = useSelector(getPromotionSelector);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalSearch, setTotalSearch] = useState("");
+  const [valueSearch, setValueSearch] = useState("");
   const [totalFilter, setTotalFilter] = useState("");
   const [valueFilter, setValueFilter] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const total = useSelector(getTotalPromotion);
   const dispatch = useDispatch();
+  const [dataSearch, setDataSearch] = useState([]);
   const [dataFilter, setDataFilter] = useState([]);
   const [itemEdit, setItemEdit] = React.useState([]);
   const [modalEdit, setModalEdit] = React.useState(false);
@@ -44,8 +56,6 @@ export default function PromotionManage() {
   const toggleActive = () => setModalActive(!modalActive);
   const [api, contextHolder] = notification.useNotification();
   useEffect(() => {
-    // dispatch(loadingAction.loadingRequest(true));
-
     dispatch(getPromotion.getPromotionRequest({ start: 0, length: 10 }));
   }, []);
 
@@ -77,13 +87,22 @@ export default function PromotionManage() {
   const onChange = (page) => {
     setCurrentPage(page);
     const start =
-      dataFilter.length > 0
+      dataSearch.length > 0
+        ? page * dataSearch.length - dataSearch.length
+        : dataFilter.length > 0
         ? page * dataFilter.length - dataFilter.length
         : page * promotion.length - promotion.length;
-    dataFilter.length > 0
+    dataSearch.length > 0
+      ? searchPromotion(valueSearch, start, 10)
+          .then((res) => {
+            setDataSearch(res.data);
+          })
+          .catch((err) => console.log(err))
+      : dataFilter.length > 0
       ? searchPromotion(valueFilter, start, 10)
           .then((res) => {
-            setDataFilter(res.data);
+            setDataSearch(res?.data);
+            setTotalSearch(res?.totalItem);
           })
           .catch((err) => console.log(err))
       : dispatch(
@@ -96,16 +115,26 @@ export default function PromotionManage() {
 
   const handleSearch = useCallback(
     _debounce((value) => {
-      setValueFilter(value);
+      setValueSearch(value);
       searchPromotion(value, 0, 10)
         .then((res) => {
-          setDataFilter(res?.data);
-          setTotalFilter(res?.totalItem);
+          setDataSearch(res?.data);
+          setTotalSearch(res?.totalItem);
         })
         .catch((err) => console.log(err));
     }, 1000),
     []
   );
+
+  const handleChange = (value) => {
+    setValueFilter(value);
+    filterPromotion(value, 0, 10)
+      .then((res) => {
+        setDataFilter(res?.data);
+        setTotalFilter(res?.totalItem);
+      })
+      .catch((err) => console.log(err));
+  };
 
   const openNotificationWithIcon = () => {
     api.warning({
@@ -129,14 +158,6 @@ export default function PromotionManage() {
         </a>
       ),
     },
-    // {
-    //   key: "2",
-    //   label: itemEdit?.is_active ? (
-    //     <a onClick={toggleActive}>Ẩn</a>
-    //   ) : (
-    //     <a onClick={toggleActive}>Hiện</a>
-    //   ),
-    // },
     {
       key: "2",
       label: <a onClick={toggle}>Xoá</a>,
@@ -270,6 +291,19 @@ export default function PromotionManage() {
     <React.Fragment>
       <div className="mt-2 p-3">
         <div className="div-header-promotion">
+          <Select
+            defaultValue="Lọc theo trạng thái"
+            size={"large"}
+            style={{ width: 190 }}
+            onChange={handleChange}
+            options={[
+              { value: "", label: "Lọc theo trạng thái" },
+              { value: "upcoming", label: "Sắp diễn ra" },
+              { value: "doing", label: "Đang diễn ra" },
+              { value: "out_of_stock ", label: "Hết số lượng" },
+              { value: "out_of_date", label: "Hết hạn" },
+            ]}
+          />
           <Input
             placeholder="Tìm kiếm"
             type="text"
@@ -282,7 +316,13 @@ export default function PromotionManage() {
         <div className="mt-3">
           <Table
             columns={columns}
-            dataSource={dataFilter.length > 0 ? dataFilter : promotion}
+            dataSource={
+              dataSearch.length > 0
+                ? dataSearch
+                : dataFilter.length > 0
+                ? dataFilter
+                : promotion
+            }
             pagination={false}
             rowKey={(record) => record._id}
             rowSelection={{
@@ -304,12 +344,25 @@ export default function PromotionManage() {
             // }}
           />
           <div className="div-pagination p-2">
-            <a>Tổng: {dataFilter.length > 0 ? totalFilter : total}</a>
+            <a>
+              Tổng:{" "}
+              {dataSearch.length > 0
+                ? totalSearch
+                : dataFilter.length > 0
+                ? totalFilter
+                : total}
+            </a>
             <div>
               <Pagination
                 current={currentPage}
                 onChange={onChange}
-                total={dataFilter.length > 0 ? totalFilter : total}
+                total={
+                  dataSearch.length > 0
+                    ? totalSearch
+                    : dataFilter.length > 0
+                    ? totalFilter
+                    : total
+                }
                 showSizeChanger={false}
               />
             </div>
