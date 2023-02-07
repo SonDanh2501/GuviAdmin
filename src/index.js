@@ -18,7 +18,7 @@ import rootSaga from "./redux/sagas/rootSaga";
 import { loadingSelector } from "./redux/selectors/loading";
 
 const sagaMiddleware = createSagaMiddleware();
-const store = createStore(reducers, applyMiddleware(sagaMiddleware));
+export const store = createStore(reducers, applyMiddleware(sagaMiddleware));
 
 export const persistor = persistStore(store);
 sagaMiddleware.run(rootSaga);

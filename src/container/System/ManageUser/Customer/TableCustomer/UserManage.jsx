@@ -1,38 +1,17 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  PaginationItem,
-  PaginationLink,
-} from "reactstrap";
+import React, { useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
 import {
   FilterOutlined,
-  LockOutlined,
   MoreOutlined,
   SearchOutlined,
-  UnlockOutlined,
 } from "@ant-design/icons";
-import {
-  Dropdown,
-  Empty,
-  Skeleton,
-  Space,
-  Table,
-  Pagination,
-  Input,
-  FloatButton,
-} from "antd";
+import { Dropdown, FloatButton, Input, Pagination, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
+import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { activeCustomer, searchCustomers } from "../../../../../api/customer";
-import unlock from "../../../../../assets/images/unlocked.png";
-import lock from "../../../../../assets/images/lock.png";
-import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
 import EditCustomer from "../../../../../components/editCustomer/editCustomer";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
@@ -42,7 +21,6 @@ import {
 } from "../../../../../redux/actions/customerAction";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import "./UserManage.scss";
-import moment from "moment";
 
 export default function UserManage(props) {
   const { data, total, status } = props;
@@ -196,7 +174,7 @@ export default function UserManage(props) {
               onClick={() =>
                 rowIndex === index
                   ? setHidePhone(!hidePhone)
-                  : setHidePhone(false)
+                  : setHidePhone(!hidePhone)
               }
             >
               {rowIndex === index ? (

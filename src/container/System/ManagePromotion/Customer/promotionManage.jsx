@@ -302,6 +302,7 @@ export default function PromotionManage() {
               { value: "doing", label: "Đang diễn ra" },
               { value: "out_of_stock ", label: "Hết số lượng" },
               { value: "out_of_date", label: "Hết hạn" },
+              { value: "done", label: "Kết thúc" },
             ]}
           />
           <Input

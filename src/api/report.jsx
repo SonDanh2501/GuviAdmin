@@ -17,6 +17,12 @@ export const filterReportCollaborator = (
   );
 };
 
+export const searchReportCollaborator = (start, length, search) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_collaborator?lang=vi&start=${start}&length=${length}&search=${search}`
+  );
+};
+
 export const getReportCollaboratorDetails = (id, start, length) => {
   return axiosClient.get(
     `/admin/report_mananger/report_collaborator/get_detail/${id}?start=${start}&length=${length}`

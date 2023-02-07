@@ -1,3 +1,4 @@
+import { SearchOutlined } from "@ant-design/icons";
 import {
   Button,
   DatePicker,
@@ -18,8 +19,11 @@ import { useNavigate } from "react-router-dom";
 import {
   filterReportCollaborator,
   getReportCollaborator,
+  searchReportCollaborator,
 } from "../../../../api/report";
 import { formatMoney } from "../../../../helper/formatMoney";
+import _debounce from "lodash/debounce";
+
 import "./index.scss";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -27,6 +31,9 @@ const { Option } = Select;
 const ReportManager = () => {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState("");
+  const [dataSearch, setDataSearch] = useState([]);
+  const [totalSearch, setTotalSearch] = useState("");
+  const [valueSearch, setValueSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
@@ -79,16 +86,16 @@ const ReportManager = () => {
           </a>
         );
       },
-      width: "15%",
+      width: "12%",
     },
     {
-      title: "Số ca làm",
+      title: "Số ca",
       dataIndex: "total_order",
       align: "center",
-      width: "7%",
+      width: "5%",
     },
     {
-      title: "Doanh thu",
+      title: "Doanh số",
       align: "right",
       render: (data) => {
         return (
@@ -101,12 +108,66 @@ const ReportManager = () => {
       title: () => {
         const content = (
           <div className="div-content">
+            <p className="text-content">Phí dịch vụ trả Cộng tác viên.</p>
+          </div>
+        );
+        return (
+          <div className="div-title-column">
+            <a style={{ textAlign: "center" }}>Phí dịch vụ</a>
+            <Popover content={content} placement="bottom">
+              <Button className="btn-question">
+                <i class="uil uil-question-circle icon-question"></i>
+              </Button>
+            </Popover>
+          </div>
+        );
+      },
+      align: "right",
+      render: (data) => {
+        return (
+          <a className="text-money">
+            {formatMoney(data?.total_collabotator_fee)}
+          </a>
+        );
+      },
+      width: "9%",
+    },
+    {
+      title: () => {
+        const content = (
+          <div className="div-content">
+            <p className="text-content">
+              Doanh thu = Doanh số (-) Phí dịch vụ trả CTV
+            </p>
+          </div>
+        );
+        return (
+          <div className="div-title-column">
+            <a style={{ textAlign: "center" }}>Doanh thu</a>
+            <Popover content={content} placement="bottom">
+              <Button className="btn-question">
+                <i class="uil uil-question-circle icon-question"></i>
+              </Button>
+            </Popover>
+          </div>
+        );
+      },
+      width: "6%",
+      align: "right",
+      render: (data) => {
+        return <a className="text-money">{formatMoney(data?.total_income)}</a>;
+      },
+    },
+    {
+      title: () => {
+        const content = (
+          <div className="div-content">
             <p className="text-content">Tổng số tiền giảm giá</p>
           </div>
         );
         return (
           <div className="div-title-column">
-            <a>Giảm giá</a>
+            <a style={{ textAlign: "center" }}>Giảm giá</a>
             <Popover content={content} placement="bottom">
               <Button className="btn-question">
                 <i class="uil uil-question-circle icon-question"></i>
@@ -135,7 +196,7 @@ const ReportManager = () => {
         );
         return (
           <div className="div-title-column">
-            <a>Doanh thu thuần</a>
+            <a style={{ textAlign: "center" }}>Doanh thu thuần</a>
             <Popover content={content} placement="bottom">
               <Button className="btn-question">
                 <i class="uil uil-question-circle icon-question"></i>
@@ -153,18 +214,28 @@ const ReportManager = () => {
       width: "12%",
     },
     {
+      title: "Phí áp dụng",
+      width: "9%",
+      render: (data) => {
+        return (
+          <a className="text-money">{formatMoney(data?.total_serviceFee)}</a>
+        );
+      },
+      align: "right",
+    },
+    {
       title: () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Tổng tiền trên dịch vụ. Tổng hoá đơn = Doanh thu thuần (+) Phí Hệ
-              thống.
+              Tổng tiền trên dịch vụ. Tổng hoá đơn = Doanh thu thuần (+) Phí áp
+              dụng.
             </p>
           </div>
         );
         return (
           <div className="div-title-column">
-            <a>Tổng</a>
+            <a style={{ textAlign: "center" }}>Tổng hoá đơn</a>
             <Popover content={content} placement="bottom">
               <Button className="btn-question">
                 <i class="uil uil-question-circle icon-question"></i>
@@ -179,33 +250,20 @@ const ReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_order_fee)}</a>
         );
       },
-      width: "7%",
-    },
-    {
-      title: "Phí dịch vụ trả CTV",
-      align: "right",
-      render: (data) => {
-        return (
-          <a className="text-money">
-            {formatMoney(data?.total_collabotator_fee)}
-          </a>
-        );
-      },
-      width: "12%",
+      width: "10%",
     },
     {
       title: () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Tông lợi nhuận từ các dịch vụ. Tổng lợi nhuận = Doanh thu thuần
-              (-) Phí CTV.
+              Lợi nhuận = Doanh thu (+) Phí áp dụng (-) Giảm giá.
             </p>
           </div>
         );
         return (
           <div className="div-title-column">
-            <a>Tổng lợi nhuận</a>
+            <a style={{ textAlign: "center" }}>Lợi nhuận</a>
             <Popover content={content} placement="bottom">
               <Button className="btn-question">
                 <i class="uil uil-question-circle icon-question"></i>
@@ -222,20 +280,20 @@ const ReportManager = () => {
           </a>
         );
       },
-      width: "12%",
+      width: "9%",
     },
     {
       title: () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              %lợi nhuận = Tổng lợi nhuận (/) Doanh thu thuần.
+              % lợi nhuận = Tổng lợi nhuận (/) Doanh thu thuần.
             </p>
           </div>
         );
         return (
           <div className="div-title-column">
-            <a>% lợi nhuận</a>
+            <a style={{ textAlign: "center" }}>% lợi nhuận</a>
             <Popover content={content} placement="bottom">
               <Button className="btn-question">
                 <i class="uil uil-question-circle icon-question"></i>
@@ -255,6 +313,8 @@ const ReportManager = () => {
     const start =
       dataFilter.length > 0
         ? page * dataFilter.length - dataFilter.length
+        : dataSearch.length > 0
+        ? page * dataSearch.length - dataSearch.length
         : page * data.length - data.length;
 
     dataFilter.length > 0
@@ -263,6 +323,13 @@ const ReportManager = () => {
             setIsLoading(false);
             setDataFilter(res?.data);
             setTotalFilter(res?.totalItem);
+          })
+          .catch((err) => console.log(err))
+      : dataSearch.length > 0
+      ? searchReportCollaborator(0, 20, valueSearch)
+          .then((res) => {
+            setDataSearch(res.data);
+            setTotalSearch(res.totalItem);
           })
           .catch((err) => console.log(err))
       : getReportCollaborator(start > 0 ? start : 0, 20)
@@ -289,9 +356,27 @@ const ReportManager = () => {
     setEndDate(dayEnd);
   }, []);
 
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      setIsLoading(true);
+      setValueSearch(value);
+      searchReportCollaborator(0, 20, value)
+        .then((res) => {
+          setDataSearch(res.data);
+          setTotalSearch(res.totalItem);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoading(false);
+        });
+    }, 1000),
+    []
+  );
+
   return (
     <div>
-      <div>
+      <div className="div-header">
         <div className="div-date">
           <Input.Group compact>
             <Select
@@ -313,24 +398,50 @@ const ReportManager = () => {
             />
           </div>
         </div>
+        <Input
+          placeholder="Tìm kiếm"
+          type="text"
+          className="input-search-report"
+          prefix={<SearchOutlined />}
+          onChange={(e) => handleSearch(e.target.value)}
+        />
       </div>
       <div className="mt-3">
         <Table
           columns={columns}
           pagination={false}
-          dataSource={dataFilter.length > 0 ? dataFilter : data}
+          dataSource={
+            dataFilter.length > 0
+              ? dataFilter
+              : dataSearch.length > 0
+              ? dataSearch
+              : data
+          }
           locale={{
             emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
           }}
         />
       </div>
       <div className="mt-2 div-pagination p-2">
-        <a>Tổng: {totalFilter > 0 ? totalFilter : total}</a>
+        <a>
+          Tổng:{" "}
+          {totalFilter > 0
+            ? totalFilter
+            : totalSearch > 0
+            ? totalSearch
+            : total}
+        </a>
         <div>
           <Pagination
             current={currentPage}
             onChange={onChange}
-            total={totalFilter > 0 ? totalFilter : total}
+            total={
+              totalFilter > 0
+                ? totalFilter
+                : totalSearch > 0
+                ? totalSearch
+                : total
+            }
             showSizeChanger={false}
             pageSize={20}
           />

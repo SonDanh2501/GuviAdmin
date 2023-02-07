@@ -45,7 +45,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    width: 200px;
+    width: auto;
     height: auto;
 
     .text-name {
@@ -61,6 +61,7 @@
 
     .icon-down {
       color: white;
+      margin-right: 10px;
     }
 
     .div-noti {

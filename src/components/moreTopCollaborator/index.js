@@ -92,7 +92,7 @@ const MoreTopCollaborator = () => {
                 <div className="div-item-collaborator">
                   <div>
                     <a className="text-number">{index + 1}.</a>
-                    <a className="text-name">{item?._id?.name}</a>
+                    <a className="text-name">{item?._id?.full_name}</a>
                   </div>
                   <a className="text-number">{formatMoney(item?.sumIncome)}</a>
                 </div>

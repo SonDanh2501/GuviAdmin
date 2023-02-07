@@ -18,6 +18,7 @@ import Logo from "../../assets/images/LogoS.png";
 import { BellOutlined, CaretDownOutlined } from "@ant-design/icons";
 import { Space, Dropdown, List } from "antd";
 import { useState } from "react";
+import { removeToken } from "../../helper/tokenHelper";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   const onLogout = () => {
+    removeToken();
     dispatch(loadingAction.loadingRequest(true));
     dispatch(logoutAction.logoutRequest(navigate));
   };

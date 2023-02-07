@@ -17,14 +17,16 @@ function* loginSaga(action) {
     successNotify({
       message: "Đăng nhập thành công",
     });
-    if (user.role == "admin") {
+    if (user.role === "admin") {
       action.payload.naviga("/");
-    } else if (user.role == "marketing" || user.role == "marketing-manager") {
+    } else if (user.role === "marketing" || user.role === "marketing-manager") {
       action.payload.naviga("/promotion/manage-setting");
-    } else if (user.role == "support_customer") {
+    } else if (user.role === "support_customer") {
       action.payload.naviga("/group-order/manage-order");
-    } else if (user.role == "accountant") {
+    } else if (user.role === "accountant") {
       action.payload.naviga("/topup/manage-topup");
+    } else if (user.role === "support") {
+      action.payload.naviga("/group-order/manage-order");
     }
     yield put(loginAction.loginSuccess({ token: response?.token, user: user }));
     yield put(loadingAction.loadingRequest(false));

@@ -23,6 +23,7 @@ import Activity from "./components/activity";
 import Document from "./components/documents";
 import History from "./components/history";
 import Information from "./components/information";
+import Review from "./components/review";
 import WithdrawTopup from "./components/withdrawTopup";
 import "./ProfileCollaborator.scss";
 // core components
@@ -147,6 +148,9 @@ const ProfileCollaborator = () => {
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Yêu cầu nạp/rút" key="5">
                     <WithdrawTopup id={id} />
+                  </Tabs.TabPane>
+                  <Tabs.TabPane tab="Đánh giá" key="6">
+                    <Review />
                   </Tabs.TabPane>
                 </Tabs>
               </CardBody>

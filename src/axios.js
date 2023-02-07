@@ -1,12 +1,14 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { getToken } from "./helper/tokenHelper";
+import { store } from ".";
+import { getToken, removeToken } from "./helper/tokenHelper";
+import { logoutAction } from "./redux/actions/auth";
 
 let token;
 getToken().then((res) => (token = res));
 
 // baseURL: 'https://guvico-be-production.up.railway.app'
 // https://server.guvico.com/
+// https://guvico-be-develop.up.railway.app
 
 const axiosClient = axios.create({
   baseURL: "https://guvico-be-develop.up.railway.app",
@@ -30,6 +32,11 @@ axiosClient.interceptors.response.use(
     return response.data;
   },
   function (error) {
+    if (error?.response.status === 401 && token) {
+      removeToken();
+      window.location = "/auth/login";
+      store.dispatch(logoutAction.logoutRequest());
+    }
     return Promise.reject(error?.response.data[0].message);
   }
 );

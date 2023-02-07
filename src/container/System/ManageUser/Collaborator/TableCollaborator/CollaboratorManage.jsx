@@ -9,8 +9,8 @@ import {
   Space,
   Table,
 } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   activeCollaborator,
@@ -20,24 +20,19 @@ import {
   verifyCollaborator,
 } from "../../../../../api/collaborator.jsx";
 import offToggle from "../../../../../assets/images/off-button.png";
+import offline from "../../../../../assets/images/offline.svg";
 import onToggle from "../../../../../assets/images/on-button.png";
 import online from "../../../../../assets/images/online.svg";
-import offline from "../../../../../assets/images/offline.svg";
 import pending from "../../../../../assets/images/pending.svg";
 import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput.jsx";
 import EditCollaborator from "../../../../../components/editCollaborator/editCollaborator.js";
 import { errorNotify } from "../../../../../helper/toast";
 import { getCollaborators } from "../../../../../redux/actions/collaborator";
 import { loadingAction } from "../../../../../redux/actions/loading.js";
-import {
-  getCollaborator,
-  getCollaboratorTotal,
-} from "../../../../../redux/selectors/collaborator";
 import "./CollaboratorManage.scss";
 
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { getDistrictApi } from "../../../../../api/file.jsx";
 
 export default function CollaboratorManage(props) {
   const { data, total, status } = props;

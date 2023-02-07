@@ -443,7 +443,7 @@ export default function Home() {
                       }
                     >
                       <p className="text-level">
-                        {topCollaborator[0]?._id?.name}
+                        {topCollaborator[0]?._id?.full_name}
                       </p>
                       <p className="text-level">
                         {formatMoney(topCollaborator[0]?.sumIncome)}
