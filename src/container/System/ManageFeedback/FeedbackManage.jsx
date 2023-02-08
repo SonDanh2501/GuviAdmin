@@ -106,34 +106,17 @@ export default function FeedbackManage() {
               </Col>
             </Row>
           </CardHeader>
-          {/* <Table className="align-items-center table-flush " responsive>
-            <thead>
-              <tr>
-                <th>Loại phản hồi</th>
-                <th>Nội dung</th>
-                <th>Người phản hồi</th>
-                <th>SĐT người phản hồi</th>
-                <th>Ngày phản hồi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dataFilter.length > 0
-                ? dataFilter.map((e) => <TableManageFeedback data={e} />)
-                : listFeedback &&
-                  listFeedback.map((e) => <TableManageFeedback data={e} />)}
-            </tbody>
-          </Table> */}
           <Table
             columns={columns}
             dataSource={dataFilter.length > 0 ? dataFilter : listFeedback}
             pagination={false}
-            rowKey={(record) => record._id}
-            rowSelection={{
-              selectedRowKeys,
-              onChange: (selectedRowKeys, selectedRows) => {
-                setSelectedRowKeys(selectedRowKeys);
-              },
-            }}
+            // rowKey={(record) => record._id}
+            // rowSelection={{
+            //   selectedRowKeys,
+            //   onChange: (selectedRowKeys, selectedRows) => {
+            //     setSelectedRowKeys(selectedRowKeys);
+            //   },
+            // }}
           />
           <div className="div-pagination p-2">
             <a>Tổng: {dataFilter.length > 0 ? totalFilter : feedbackTotal}</a>

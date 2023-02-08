@@ -376,7 +376,7 @@ const ReportManager = () => {
 
   return (
     <div>
-      <div className="div-header">
+      <div className="div-header-report">
         <div className="div-date">
           <Input.Group compact>
             <Select

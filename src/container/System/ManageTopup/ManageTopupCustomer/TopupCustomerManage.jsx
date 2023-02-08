@@ -237,14 +237,14 @@ export default function TopupCustomerManage() {
                 },
               };
             }}
-            locale={{
-              emptyText:
-                listCustomer.length > 0 ? (
-                  <Empty />
-                ) : (
-                  <Skeleton active={true} />
-                ),
-            }}
+            // locale={{
+            //   emptyText:
+            //     listCustomer.length > 0 ? (
+            //       <Empty />
+            //     ) : (
+            //       <Skeleton active={true} />
+            //     ),
+            // }}
           />
           <div className="div-pagination p-2">
             <a>Tổng: {dataFilter.length > 0 ? totalFilter : totalCustomer}</a>

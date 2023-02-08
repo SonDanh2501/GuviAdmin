@@ -116,12 +116,16 @@ export default function PromotionManage() {
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueSearch(value);
-      searchPromotion(value, 0, 10)
-        .then((res) => {
-          setDataSearch(res?.data);
-          setTotalSearch(res?.totalItem);
-        })
-        .catch((err) => console.log(err));
+      if (value !== "") {
+        searchPromotion(value, 0, 10)
+          .then((res) => {
+            setDataSearch(res?.data);
+            setTotalSearch(res?.totalItem);
+          })
+          .catch((err) => console.log(err));
+      } else {
+        setDataSearch([]);
+      }
     }, 1000),
     []
   );
