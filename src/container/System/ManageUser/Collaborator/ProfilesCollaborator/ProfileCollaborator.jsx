@@ -119,6 +119,9 @@ const ProfileCollaborator = () => {
               </CardHeader>
               <CardBody>
                 <div className="text-body">
+                  {data?.password_default && (
+                    <a>Mật khẩu mặc định: {data?.password_default}</a>
+                  )}
                   <a className="text-name">
                     {data?.full_name}
                     {"-"}

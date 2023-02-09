@@ -102,7 +102,7 @@ const ReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_gross_income)}</a>
         );
       },
-      width: "7%",
+      width: "8%",
     },
     {
       title: () => {

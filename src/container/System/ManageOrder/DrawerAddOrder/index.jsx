@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, DatePicker, Drawer, List } from "antd";
+import { Button, DatePicker, Drawer, List, Row } from "antd";
 import "./index.scss";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import { DATA_TIME_TOTAL } from "../../../../api/fakeData";
@@ -95,18 +95,21 @@ const AddOrder = () => {
             placeholder="Vui lòng nhập địa chỉ"
             onChange={(e) => setAddress(e.target.value)}
           />
-          <CustomTextInput
-            label="Nhập kinh độ"
-            type="text"
-            placeholder="Vui lòng nhập kinh độ"
-            onChange={(e) => setLat(e.target.value)}
-          />
-          <CustomTextInput
-            label="Nhập vĩ độ"
-            type="text"
-            placeholder="Vui lòng nhập vĩ độ"
-            onChange={(e) => setLong(e.target.value)}
-          />
+          <Row>
+            <CustomTextInput
+              label="Nhập kinh độ"
+              type="text"
+              placeholder="Vui lòng nhập kinh độ"
+              onChange={(e) => setLat(e.target.value)}
+            />
+            <CustomTextInput
+              classNameForm="input-long"
+              label="Nhập vĩ độ"
+              type="text"
+              placeholder="Vui lòng nhập vĩ độ"
+              onChange={(e) => setLong(e.target.value)}
+            />
+          </Row>
           <div className="div-add-service">
             <a className="label">Thời lượng</a>
             <div className="div-service">
