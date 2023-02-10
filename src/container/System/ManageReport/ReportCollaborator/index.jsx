@@ -25,6 +25,7 @@ import { formatMoney } from "../../../../helper/formatMoney";
 import _debounce from "lodash/debounce";
 
 import "./index.scss";
+import LoadingPagination from "../../../../components/paginationLoading";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -324,21 +325,28 @@ const ReportManager = () => {
             setDataFilter(res?.data);
             setTotalFilter(res?.totalItem);
           })
-          .catch((err) => console.log(err))
+          .catch((err) => {
+            setIsLoading(false);
+          })
       : dataSearch.length > 0
       ? searchReportCollaborator(0, 20, valueSearch)
           .then((res) => {
+            setIsLoading(false);
             setDataSearch(res.data);
             setTotalSearch(res.totalItem);
           })
-          .catch((err) => console.log(err))
+          .catch((err) => {
+            setIsLoading(false);
+          })
       : getReportCollaborator(start > 0 ? start : 0, 20)
           .then((res) => {
             setIsLoading(false);
             setData(res?.data);
             setTotal(res?.totalItem);
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            setIsLoading(false);
+          });
   };
 
   const onChangeFilter = useCallback((start, end) => {
@@ -367,7 +375,6 @@ const ReportManager = () => {
           setIsLoading(false);
         })
         .catch((err) => {
-          console.log(err);
           setIsLoading(false);
         });
     }, 1000),
@@ -447,7 +454,7 @@ const ReportManager = () => {
           />
         </div>
       </div>
-      {isLoading && <Spin className="loading" size="large" />}
+      {isLoading && <LoadingPagination />}
     </div>
   );
 };

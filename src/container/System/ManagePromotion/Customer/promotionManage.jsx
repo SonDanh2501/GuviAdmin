@@ -35,9 +35,11 @@ import {
 import "./PromotionManage.scss";
 import onToggle from "../../../../assets/images/on-button.png";
 import offToggle from "../../../../assets/images/off-button.png";
+import LoadingPagination from "../../../../components/paginationLoading/index.jsx";
 
 export default function PromotionManage() {
   const promotion = useSelector(getPromotionSelector);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalSearch, setTotalSearch] = useState("");
   const [valueSearch, setValueSearch] = useState("");
@@ -116,14 +118,20 @@ export default function PromotionManage() {
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueSearch(value);
+      setIsLoading(true);
       if (value !== "") {
         searchPromotion(value, 0, 10)
           .then((res) => {
+            setIsLoading(false);
+
             setDataSearch(res?.data);
             setTotalSearch(res?.totalItem);
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            setIsLoading(false);
+          });
       } else {
+        setIsLoading(false);
         setDataSearch([]);
       }
     }, 1000),
@@ -132,12 +140,16 @@ export default function PromotionManage() {
 
   const handleChange = (value) => {
     setValueFilter(value);
+    setIsLoading(true);
     filterPromotion(value, 0, 10)
       .then((res) => {
+        setIsLoading(false);
         setDataFilter(res?.data);
         setTotalFilter(res?.totalItem);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setIsLoading(false);
+      });
   };
 
   const openNotificationWithIcon = () => {
@@ -304,7 +316,7 @@ export default function PromotionManage() {
               { value: "", label: "Lọc theo trạng thái" },
               { value: "upcoming", label: "Sắp diễn ra" },
               { value: "doing", label: "Đang diễn ra" },
-              { value: "out_of_stock ", label: "Hết số lượng" },
+              { value: "out_of_stock", label: "Hết số lượng" },
               { value: "out_of_date", label: "Hết hạn" },
               { value: "done", label: "Kết thúc" },
             ]}
@@ -428,6 +440,7 @@ export default function PromotionManage() {
             </ModalFooter>
           </Modal>
         </div>
+        {isLoading && <LoadingPagination />}
       </div>
     </React.Fragment>
   );

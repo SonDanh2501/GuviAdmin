@@ -21,6 +21,7 @@ import {
 } from "../../../../../redux/actions/customerAction";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import "./UserManage.scss";
+import LoadingPagination from "../../../../../components/paginationLoading";
 
 export default function UserManage(props) {
   const { data, total, status } = props;
@@ -36,6 +37,7 @@ export default function UserManage(props) {
   const [modalBlock, setModalBlock] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
   const [conditionFilter, setConditionFilter] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
   const navigate = useNavigate();
@@ -83,6 +85,7 @@ export default function UserManage(props) {
 
   const onChange = (page) => {
     setCurrentPage(page);
+
     const start =
       dataFilter.length > 0
         ? page * dataFilter.length - dataFilter.length
@@ -92,7 +95,7 @@ export default function UserManage(props) {
           .then((res) => {
             setDataFilter(res.data);
           })
-          .catch((err) => console.log(err))
+          .catch((err) => {})
       : dispatch(
           getCustomers.getCustomersRequest({
             start: start > 0 ? start : 0,
@@ -105,12 +108,16 @@ export default function UserManage(props) {
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueFilter(value);
+      setIsLoading(true);
       searchCustomers(0, 20, status, value)
         .then((res) => {
+          setIsLoading(false);
           setDataFilter(res.data);
           setTotalFilter(res.totalItem);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setIsLoading(false);
+        });
     }, 1000),
     []
   );
@@ -437,6 +444,7 @@ export default function UserManage(props) {
           />
         </div>
         <FloatButton.BackTop />
+        {isLoading && <LoadingPagination />}
       </div>
     </React.Fragment>
   );
