@@ -354,6 +354,7 @@ const EditPromotion = ({ state, setState, data }) => {
     minimumOrder,
     dateExchange,
     position,
+    typePromotion,
   ]);
 
   return (
