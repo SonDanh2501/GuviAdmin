@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import {
   getHistoryActivityCollaborator,
   getHistoryCollaborator,
+  getHistoryCollaboratorRemainder,
 } from "../../../../../../../api/collaborator";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
@@ -18,7 +19,7 @@ const History = ({ id }) => {
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
-    getHistoryCollaborator(id, 0, 10)
+    getHistoryCollaboratorRemainder(id, 0, 10)
       .then((res) => {
         setData(res.data);
         setTotalData(res.totalItem);

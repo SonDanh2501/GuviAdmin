@@ -76,3 +76,12 @@ export const getTopupWithdrawCollaborator = (id, start, length) => {
     `admin/collaborator_manager/get_request_topup_withdraw/${id}?start=${start}&length=${length}`
   );
 };
+
+export const getHistoryCollaboratorRemainder = (id, start, length) => {
+  return axiosClient.get(
+    `admin/collaborator_manager/get_history_remainder/${id}?start=${start}&length=${length}`
+  );
+};
+
+
+
