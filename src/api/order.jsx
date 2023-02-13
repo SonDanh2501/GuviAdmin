@@ -24,14 +24,7 @@ export const getOrderDetailApi = (id) => {
 
 export const addCollaboratorToOrderApi = (id, data) => {
   return axiosClient.post(
-    `/admin/collaborator_manager/add_collaborator_to_order/${id}?lang=vi`,
-    data
-  );
-};
-
-export const changeStatusOrderApi = (id, data) => {
-  return axiosClient.post(
-    `/admin/order_manager/change_status_order/${id}`,
+    `/admin/order_manager/add_collaborator_to_order/${id}?lang=vi`,
     data
   );
 };
@@ -43,6 +36,13 @@ export const createOrderApi = (data) => {
 export const checkCodePromotionOrderApi = (id, data) => {
   return axiosClient.post(
     `/admin/promotion_manager/check_code_promotion/${id}?lang=vi`,
+    data
+  );
+};
+
+export const changeStatusOrderApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/order_manager/change_status_order/${id}?lang=vi`,
     data
   );
 };

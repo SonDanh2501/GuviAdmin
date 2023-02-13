@@ -30,8 +30,10 @@ import {
   verifyMoneyCollaboratorApi,
 } from "../../../../api/topup";
 import { formatMoney } from "../../../../helper/formatMoney";
+import LoadingPagination from "../../../../components/paginationLoading";
 
 export default function TopupManage() {
+  const [isLoading, setIsLoading] = useState(false);
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState();
   const [valueSearch, setValueSearch] = useState();
@@ -80,13 +82,17 @@ export default function TopupManage() {
 
   const handleSearch = useCallback(
     _debounce((value) => {
+      setIsLoading(true);
       setValueSearch(value);
       searchTopupCollaboratorApi(value, 0, 10)
         .then((res) => {
           setDataFilter(res.data);
           setTotalFilter(res.totalItem);
+          setIsLoading(false);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setIsLoading(false);
+        });
     }, 1000),
     []
   );
@@ -330,6 +336,7 @@ export default function TopupManage() {
         <div>
           <EditPopup item={itemEdit} state={modalEdit} setState={toggleEdit} />
         </div>
+        {isLoading && <LoadingPagination />}
       </div>
     </React.Fragment>
   );

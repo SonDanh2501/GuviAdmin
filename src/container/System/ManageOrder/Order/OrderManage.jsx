@@ -31,21 +31,21 @@ export default function OrderManage(props) {
   };
 
   const items = [
+    // {
+    //   key: "1",
+    //   label: <EditOrder id={item?._id} />,
+    // },
     {
       key: "1",
-      label: <EditOrder id={item?._id} />,
-    },
-    {
-      key: "2",
       label:
-        item?.status === "cancel" || item?.status === "done" ? (
-          <></>
-        ) : (
+        item?.status === "pending" ? (
           <AddCollaboratorOrder idOrder={item?._id} />
+        ) : (
+          <></>
         ),
     },
     {
-      key: "3",
+      key: "2",
       label: (
         <a
           onClick={() =>

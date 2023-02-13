@@ -19,6 +19,7 @@ import {
   createOrderApi,
 } from "../../../../api/order";
 import { loadingAction } from "../../../../redux/actions/loading";
+import LoadingPagination from "../../../../components/paginationLoading";
 const AddOrder = () => {
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState("");
@@ -119,6 +120,7 @@ const AddOrder = () => {
       .catch((err) => console.log(err));
 
     setServiceApply(e.target.value);
+    setPriceOrder();
   };
 
   const onChangeExtraService = (value) => {
@@ -185,7 +187,7 @@ const AddOrder = () => {
 
   const checkPromotion = useCallback(
     (code) => {
-      dispatch(loadingAction.loadingRequest(true));
+      setIsLoading(true);
       checkCodePromotionOrderApi(id, {
         id_customer: id,
         token: accessToken.toString(),
@@ -199,14 +201,14 @@ const AddOrder = () => {
         code_promotion: code,
       })
         .then((res) => {
-          dispatch(loadingAction.loadingRequest(false));
+          setIsLoading(false);
           setCodePromotion(code);
         })
         .catch((err) => {
           errorNotify({
             message: err,
           });
-          dispatch(loadingAction.loadingRequest(false));
+          setIsLoading(false);
         });
     },
     [id, lat, long, address, timeWork, dateWork, mutipleSelected, time]
@@ -492,6 +494,8 @@ const AddOrder = () => {
             <Button onClick={onCreateOrder}>Đăng việc</Button>
           </div>
         )}
+
+        {isLoading && <LoadingPagination />}
       </Drawer>
     </>
   );

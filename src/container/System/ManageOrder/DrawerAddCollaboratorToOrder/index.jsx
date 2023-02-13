@@ -40,7 +40,7 @@ const AddCollaboratorOrder = ({ idOrder }) => {
 
   const addCollaboratorToOrder = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-    addCollaboratorToOrderApi(id, { idOrder: idOrder })
+    addCollaboratorToOrderApi(idOrder, { id_collaborator: id })
       .then((res) => {
         window.location.reload();
       })

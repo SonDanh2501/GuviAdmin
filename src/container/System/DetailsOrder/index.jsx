@@ -19,6 +19,7 @@ const DetailsOrder = () => {
   const [data, setData] = useState([]);
   const [modal, setModal] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openStatus, setOpenStatus] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const dispatch = useDispatch();
 
@@ -51,9 +52,29 @@ const DetailsOrder = () => {
   const showPopconfirm = () => {
     setOpen(true);
   };
+
+  const showPopStatusconfirm = () => {
+    setOpenStatus(true);
+  };
+
   const handleOk = () => {
     dispatch(loadingAction.loadingRequest(true));
     changeStatusOrderApi(id, { status: "cancel" })
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        setModal(!modal);
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+
+  const handleChangeStatus = () => {
+    dispatch(loadingAction.loadingRequest(true));
+    changeStatusOrderApi(id, { status: "next" })
       .then((res) => {
         window.location.reload();
       })
@@ -214,6 +235,27 @@ const DetailsOrder = () => {
         >
           <Button className="btn-cancel" onClick={showPopconfirm}>
             Huỷ việc
+          </Button>
+        </Popconfirm>
+      ) : null}
+
+      {data?.status === "doing" || data?.status === "confirm" ? (
+        <Popconfirm
+          title="Bạn có chuyển trạng thái công việc"
+          // description="Open Popconfirm with async logic"
+          open={openStatus}
+          onConfirm={handleChangeStatus}
+          okButtonProps={{
+            loading: confirmLoading,
+          }}
+          onCancel={handleCancel}
+        >
+          <Button className="btn-cancel" onClick={showPopStatusconfirm}>
+            {data?.status === "confirm"
+              ? "Bắt đầu ca làm"
+              : data?.status === "doing"
+              ? "Hoàn thành ca làm"
+              : ""}
           </Button>
         </Popconfirm>
       ) : null}
