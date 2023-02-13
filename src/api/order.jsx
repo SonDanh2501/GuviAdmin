@@ -35,3 +35,14 @@ export const changeStatusOrderApi = (id, data) => {
     data
   );
 };
+
+export const createOrderApi = (data) => {
+  return axiosClient.post(`/admin/group-order-manager/create`, data);
+};
+
+export const checkCodePromotionOrderApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/promotion_manager/check_code_promotion/${id}?lang=vi`,
+    data
+  );
+};

@@ -54,15 +54,6 @@ const EditOrder = ({ id }) => {
       });
   }, [id]);
 
-  useEffect(() => {
-    getExtendOptionalServiceApi()
-      .then((res) => {
-        console.log(res);
-        setExtendService(res?.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
   const dateFormat = "YYYY-MM-DD";
 
   const onChange = (date, dateString) => {

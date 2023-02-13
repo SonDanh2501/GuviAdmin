@@ -50,6 +50,27 @@ export const getOptionalServiceByIdApi = (id) => {
   return axiosClient.get(`/admin/optional_service_manager/get_detail/${id}`);
 };
 
-export const getExtendOptionalServiceApi = (id) => {
-  return axiosClient.get(`/admin/extend_optional_manager/get_list?lang=vi`);
+export const getOptionalServiceByServiceApi = (id) => {
+  return axiosClient.get(
+    `/admin/optional_service_manager/get_list_optional_service_by_service/${id}`
+  );
+};
+
+export const getExtendOptionalByOptionalServiceApi = (id) => {
+  return axiosClient.get(
+    `/admin/extend_optional_manager/get_list_extend_optional_by_optional_service/${id}`
+  );
+};
+
+export const getPromotionByCustomerApi = (id) => {
+  return axiosClient.get(
+    `/admin/promotion_manager/code_available/${id}?brand=guvi`
+  );
+};
+
+export const getCalculateFeeApi = (data) => {
+  return axiosClient.post(
+    `/admin/group-order-manager/calculate_fee_group_order`,
+    data
+  );
 };
