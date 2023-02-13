@@ -36,6 +36,8 @@ const EditTopup = ({ state, setState, item }) => {
       searchCollaborators(value)
         .then((res) => setData(res.data))
         .catch((err) => console.log(err));
+    } else if (id) {
+      setData([]);
     } else {
       setData([]);
     }

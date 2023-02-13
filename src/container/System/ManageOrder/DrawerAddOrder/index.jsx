@@ -40,6 +40,7 @@ const AddOrder = () => {
   const [serviceApply, setServiceApply] = useState("");
   const [promotionCustomer, setPromotionCustomer] = useState([]);
   const [priceOrder, setPriceOrder] = useState();
+  const [discount, setDiscount] = useState(0);
   const [codePromotion, setCodePromotion] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -57,10 +58,10 @@ const AddOrder = () => {
       .then((res) => {
         getExtendOptionalByOptionalServiceApi(res.data[0]?._id)
           .then((res) => setExtendService(res?.data))
-          .catch((err) => console.log(err));
+          .catch((err) => {});
         getExtendOptionalByOptionalServiceApi(res.data[1]?._id)
           .then((res) => setAddService(res?.data))
-          .catch((err) => console.log(err));
+          .catch((err) => {});
       })
       .catch((err) => console.log(err));
     setServiceApply(service[0]?._id);
@@ -112,10 +113,10 @@ const AddOrder = () => {
       .then((res) => {
         getExtendOptionalByOptionalServiceApi(res.data[0]?._id)
           .then((res) => setExtendService(res?.data))
-          .catch((err) => console.log(err));
+          .catch((err) => {});
         getExtendOptionalByOptionalServiceApi(res.data[1]?._id)
           .then((res) => setAddService(res?.data))
-          .catch((err) => console.log(err));
+          .catch((err) => {});
       })
       .catch((err) => console.log(err));
 
@@ -149,6 +150,8 @@ const AddOrder = () => {
             message: err,
           });
         });
+    } else if (id) {
+      setDataFilter([]);
     } else {
       setDataFilter([]);
     }
@@ -180,7 +183,6 @@ const AddOrder = () => {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
         setIsLoading(false);
       });
   }, [lat, long, address, timeWork, dateWork, mutipleSelected, time]);
@@ -203,6 +205,7 @@ const AddOrder = () => {
         .then((res) => {
           setIsLoading(false);
           setCodePromotion(code);
+          setDiscount(res?.discount);
         })
         .catch((err) => {
           errorNotify({
@@ -490,7 +493,9 @@ const AddOrder = () => {
         )}
         {priceOrder && (
           <div className="div-footer mt-5">
-            <a className="text-price">Giá: {formatMoney(priceOrder)} </a>
+            <a className="text-price">
+              Giá: {formatMoney(priceOrder - discount)}{" "}
+            </a>
             <Button onClick={onCreateOrder}>Đăng việc</Button>
           </div>
         )}

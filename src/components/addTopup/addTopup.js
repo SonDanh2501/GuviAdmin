@@ -41,6 +41,8 @@ const AddPopup = () => {
           }
         })
         .catch((err) => console.log(err));
+    } else if (id) {
+      setData([]);
     } else {
       setData([]);
     }
