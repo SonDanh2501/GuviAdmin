@@ -91,7 +91,7 @@ const DetailsProfile = () => {
             <div className="row-heading">
               <div className="col-heading">
                 <span className="heading">{formatMoney(data?.cash)}</span>
-                <span className="description">G-point</span>
+                <span className="description">G-pay</span>
               </div>
               <div className="col-heading">
                 <span className="heading">{rank}</span>

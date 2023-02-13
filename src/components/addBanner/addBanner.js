@@ -13,6 +13,7 @@ import { errorNotify } from "../../helper/toast";
 import "./addBanner.scss";
 import { Drawer, Image } from "antd";
 import resizeFile from "../../helper/resizer";
+import { getService } from "../../redux/selectors/service";
 
 const AddBanner = () => {
   const [state, setState] = useState(false);
@@ -24,7 +25,7 @@ const AddBanner = () => {
   const [dataFilter, setDataFilter] = useState([]);
   const dispatch = useDispatch();
   const promotion = useSelector(getPromotionSelector);
-
+  const service = useSelector(getService);
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -128,11 +129,12 @@ const AddBanner = () => {
                 <>
                   <option value={"url"}>URL</option>
                   <option value={"promotion"}>Promotion</option>
+                  <option value={"service"}>Service</option>
                 </>
               }
             />
             <div>
-              {typeLink !== "promotion" ? (
+              {typeLink === "url" ? (
                 <CustomTextInput
                   label={"Link URL"}
                   id="examplelink_url"
@@ -140,6 +142,23 @@ const AddBanner = () => {
                   type="text"
                   value={linkID}
                   onChange={(e) => setLinkId(e.target.value)}
+                />
+              ) : typeLink === "promotion" ? (
+                <CustomTextInput
+                  label={"Link ID"}
+                  className="select-code-phone"
+                  id="examplelink_id"
+                  name="link_id"
+                  type="select"
+                  value={linkID}
+                  onChange={(e) => setLinkId(e.target.value)}
+                  body={promotion.map((item, index) => {
+                    return (
+                      <option key={index} value={item?._id}>
+                        {item?.title?.vi}
+                      </option>
+                    );
+                  })}
                 />
               ) : (
                 <CustomTextInput
@@ -150,7 +169,7 @@ const AddBanner = () => {
                   type="select"
                   value={linkID}
                   onChange={(e) => setLinkId(e.target.value)}
-                  body={promotion.map((item, index) => {
+                  body={service.map((item, index) => {
                     return (
                       <option key={index} value={item?._id}>
                         {item?.title?.vi}
