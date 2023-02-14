@@ -223,19 +223,6 @@ const Document = ({ id }) => {
         });
         dispatch(loadingAction.loadingRequest(false));
       });
-    // console.log({
-    //   is_document_code: deal,
-    //   document_code: valueDeal,
-    //   is_identity: identify,
-    //   identity_frontside: imgIdentifyFronsite,
-    //   identity_backside: imgIdentifyBacksite,
-    //   is_personal_infor: information,
-    //   personal_infor_image: imgInformation,
-    //   is_household_book: registration,
-    //   household_book_image: imgRegistration,
-    //   is_behaviour: certification,
-    //   behaviour_image: imgCertification,
-    // });
   }, [
     id,
     deal,
@@ -250,6 +237,17 @@ const Document = ({ id }) => {
     certification,
     imgCertification,
   ]);
+
+  const removeItemInfomation = (item) => {
+    const newArray = imgInformation.filter((i) => i !== item);
+
+    return setImgInformation(newArray);
+  };
+
+  const removeItemRegistration = (item) => {
+    const newArray = imgRegistration.filter((i) => i !== item);
+    return setImgRegistration(newArray);
+  };
 
   return (
     <>
@@ -296,11 +294,17 @@ const Document = ({ id }) => {
                     onChange={onChangeIdentifyBefore}
                   />
                   {imgIdentifyFronsite && (
-                    <Image
-                      width={150}
-                      src={imgIdentifyFronsite}
-                      className={"img-thumbnail"}
-                    />
+                    <div className="div-img-thumbnail">
+                      <i
+                        class="uil uil-times-circle"
+                        onClick={() => setImgIdentifyFronsite("")}
+                      />
+                      <Image
+                        width={150}
+                        src={imgIdentifyFronsite}
+                        className={"img-thumbnail"}
+                      />
+                    </div>
                   )}
                 </div>
               </FormGroup>
@@ -316,11 +320,17 @@ const Document = ({ id }) => {
                     onChange={onChangeIdentifyAfter}
                   />
                   {imgIdentifyBacksite && (
-                    <Image
-                      width={150}
-                      src={imgIdentifyBacksite}
-                      className={"img-thumbnail"}
-                    />
+                    <div className="div-img-thumbnail">
+                      <i
+                        class="uil uil-times-circle"
+                        onClick={() => setImgIdentifyBacksite("")}
+                      />
+                      <Image
+                        width={150}
+                        src={imgIdentifyBacksite}
+                        className={"img-thumbnail"}
+                      />
+                    </div>
                   )}
                 </div>
               </FormGroup>
@@ -348,14 +358,20 @@ const Document = ({ id }) => {
                     multiple
                     onChange={onChangeInformation}
                   />
-                  <div>
+                  <div className="div-thumbnail-infomation">
                     {imgInformation.length > 0 &&
                       imgInformation.map((item) => {
                         return (
-                          <Image
-                            src={item}
-                            className="img-thumbnail-infomation"
-                          />
+                          <div className="div-item-thumbnail-infomation">
+                            <i
+                              class="uil uil-times-circle"
+                              onClick={() => removeItemInfomation(item)}
+                            ></i>
+                            <Image
+                              src={item}
+                              className="img-thumbnail-infomation"
+                            />
+                          </div>
                         );
                       })}
                   </div>
@@ -385,14 +401,20 @@ const Document = ({ id }) => {
                     multiple
                     onChange={onChangeRegistration}
                   />
-                  <div>
+                  <div className="div-thumbnail-infomation">
                     {imgRegistration.length > 0 &&
                       imgRegistration.map((item) => {
                         return (
-                          <Image
-                            src={item}
-                            className="img-thumbnail-infomation"
-                          />
+                          <div className="div-item-thumbnail-infomation">
+                            <i
+                              class="uil uil-times-circle"
+                              onClick={() => removeItemRegistration(item)}
+                            ></i>
+                            <Image
+                              src={item}
+                              className="img-thumbnail-infomation"
+                            />
+                          </div>
                         );
                       })}
                   </div>
@@ -422,7 +444,13 @@ const Document = ({ id }) => {
                     onChange={onChangeCertification}
                   />
                   {imgCertification && (
-                    <Image src={imgCertification} className="img-thumbnail" />
+                    <div className="div-img-thumbnail">
+                      <i
+                        class="uil uil-times-circle"
+                        onClick={() => setImgCertification("")}
+                      />
+                      <Image src={imgCertification} className="img-thumbnail" />
+                    </div>
                   )}
                 </div>
               </FormGroup>

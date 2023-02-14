@@ -29,3 +29,10 @@ export const DATA_TIME_TOTAL = [
   { id: 27, title: "19:30", time: "12:30:00", estimate: 3 },
   { id: 28, title: "20:00", time: "13:00:00", estimate: 3 },
 ];
+
+export const DATA_PAYMENT = [
+  { label: "Tiền mặt", value: "cash" },
+  { label: "Thẻ visa", value: "visa" },
+  { label: "Ví momo", value: "momo" },
+  { label: "G-pay", value: "point" },
+];

@@ -20,6 +20,7 @@ import {
   Row,
 } from "reactstrap";
 import { fetchCustomers } from "../../api/customer";
+import { DATA_PAYMENT } from "../../api/fakeData";
 import { postFile } from "../../api/file";
 import {
   getGroupCustomer,
@@ -79,7 +80,8 @@ const EditPromotion = ({ state, setState, data }) => {
   const [serviceApply, setServiceApply] = useState("");
   const [dateExchange, setDateExchange] = useState();
   const [position, setPosition] = useState();
-
+  const [isPaymentMethod, setIsPaymentMethod] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState([]);
   const options = [];
   const optionsCustomer = [];
 
@@ -206,6 +208,9 @@ const EditPromotion = ({ state, setState, data }) => {
     setCustomer(value);
   };
 
+  const handleChangePaymentMethod = (value) => {
+    setPaymentMethod(value);
+  };
   const onEditorVNStateChange = (editorState) => setDescriptionVN(editorState);
 
   const onEditorENStateChange = (editorState) => setDescriptionEN(editorState);
@@ -266,6 +271,8 @@ const EditPromotion = ({ state, setState, data }) => {
         setMinimumOrder(res?.price_min_order);
         setDateExchange(res?.exp_date_exchange);
         setPosition(res?.position);
+        setIsPaymentMethod(res?.is_payment_method);
+        setPaymentMethod(res?.payment_method);
       })
       .catch((err) => console.log(err));
   }, [data]);
@@ -317,6 +324,8 @@ const EditPromotion = ({ state, setState, data }) => {
           brand: namebrand.toUpperCase(),
           exp_date_exchange: dateExchange,
           position: position,
+          is_payment_method: isPaymentMethod,
+          payment_method: paymentMethod,
         },
       })
     );
@@ -355,6 +364,8 @@ const EditPromotion = ({ state, setState, data }) => {
     dateExchange,
     position,
     typePromotion,
+    isPaymentMethod,
+    paymentMethod,
   ]);
 
   return (
@@ -420,6 +431,7 @@ const EditPromotion = ({ state, setState, data }) => {
                       toolbarClassName="toolbarClassName"
                       wrapperClassName="wrapperClassName wrapperStyle"
                       editorClassName="editorClassName"
+                      editorStyle={{ color: "black" }}
                     />
                   </div>
                   <Label>Tiếng Anh</Label>
@@ -430,6 +442,7 @@ const EditPromotion = ({ state, setState, data }) => {
                       toolbarClassName="toolbarClassName"
                       wrapperClassName="wrapperClassName wrapperStyle"
                       editorClassName="editorClassName"
+                      editorStyle={{ color: "black" }}
                     />
                   </div>
                 </Col>
@@ -851,7 +864,35 @@ const EditPromotion = ({ state, setState, data }) => {
                     )}
                   </div>
                   <div>
-                    <h5 className="mt-2">15. Thời gian sử dụng sau khi đổi</h5>
+                    <h5 className="mt-2">15. Phương thức thanh toán</h5>
+                    <FormGroup check inline>
+                      <Label check className="text-first">
+                        Thanh toán
+                      </Label>
+                      <Input
+                        type="checkbox"
+                        className="ml-2"
+                        defaultChecked={isPaymentMethod}
+                        onClick={() => setIsPaymentMethod(!isPaymentMethod)}
+                      />
+                    </FormGroup>
+
+                    {isPaymentMethod && (
+                      <Select
+                        mode="multiple"
+                        allowClear
+                        style={{
+                          width: "100%",
+                        }}
+                        placeholder="Please select"
+                        value={paymentMethod}
+                        onChange={handleChangePaymentMethod}
+                        options={DATA_PAYMENT}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    <h5 className="mt-2">16. Thời gian sử dụng sau khi đổi</h5>
                     <CustomTextInput
                       placeholder="Nhập số ngày (1,2,3...,n"
                       className="input-promo-code"
@@ -862,7 +903,7 @@ const EditPromotion = ({ state, setState, data }) => {
                     />
                   </div>
                   <div>
-                    <h5 className="mt-2">16. Thứ tự hiện thị</h5>
+                    <h5 className="mt-2">17. Thứ tự hiện thị</h5>
                     <CustomTextInput
                       placeholder="Nhập số thứ tự (1,2,3...,n"
                       className="input-promo-code"

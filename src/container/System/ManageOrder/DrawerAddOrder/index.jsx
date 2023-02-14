@@ -483,7 +483,7 @@ const AddOrder = () => {
                       onClick={() => checkPromotion(item?.code)}
                     >
                       <a className="text-code">{item?.code}</a>
-                      <a>{item?.title?.vi}</a>
+                      <a className="text-title-promotion">{item?.title?.vi}</a>
                     </div>
                   );
                 })}

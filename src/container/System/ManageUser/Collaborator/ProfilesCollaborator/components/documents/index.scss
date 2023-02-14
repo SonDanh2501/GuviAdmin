@@ -8,9 +8,15 @@
     border: none;
     width: 35%;
   }
-  .img-thumbnail {
-    width: 150px !important;
-    height: 70px !important;
+
+  .div-img-thumbnail {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    .img-thumbnail {
+      width: 150px !important;
+      height: 70px !important;
+    }
   }
 }
 
@@ -32,11 +38,24 @@
   display: flex;
   flex-direction: column;
 
-  .img-thumbnail-infomation {
-    width: 150px;
-    height: 70px;
-    margin: 5px;
-    border: 1px solid black;
-    border-radius: 5px;
+  .div-thumbnail-infomation {
+    display: flex;
+    flex-direction: row;
+    width: 70%;
+    flex-wrap: wrap;
+
+    .div-item-thumbnail-infomation {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      .img-thumbnail-infomation {
+        width: 150px;
+        height: 70px;
+        margin: 0px 6px;
+        border: 1px solid black;
+        border-radius: 5px;
+      }
+    }
   }
 }

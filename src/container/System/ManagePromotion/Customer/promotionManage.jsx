@@ -101,7 +101,7 @@ export default function PromotionManage() {
           })
           .catch((err) => console.log(err))
       : dataFilter.length > 0
-      ? searchPromotion(valueFilter, start, 10)
+      ? filterPromotion(valueFilter, start, 10)
           .then((res) => {
             setDataSearch(res?.data);
             setTotalSearch(res?.totalItem);

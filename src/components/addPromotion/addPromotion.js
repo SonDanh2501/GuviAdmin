@@ -15,6 +15,7 @@ import {
   Row,
 } from "reactstrap";
 import { fetchCustomers } from "../../api/customer";
+import { DATA_PAYMENT } from "../../api/fakeData";
 import { postFile } from "../../api/file";
 import { getGroupCustomerApi } from "../../api/promotion";
 import resizeFile from "../../helper/resizer";
@@ -70,6 +71,8 @@ const AddPromotion = () => {
   const [serviceApply, setServiceApply] = useState("");
   const [dateExchange, setDateExchange] = useState();
   const [position, setPosition] = useState();
+  const [isPaymentMethod, setIsPaymentMethod] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState([]);
   const options = [];
   const optionsCustomer = [];
   const dispatch = useDispatch();
@@ -200,6 +203,10 @@ const AddPromotion = () => {
     setCustomer(value);
   };
 
+  const handleChangePaymentMethod = (value) => {
+    setPaymentMethod(value);
+  };
+
   const onEditorVNStateChange = (editorState) => setDescriptionVN(editorState);
 
   const onEditorENStateChange = (editorState) => setDescriptionEN(editorState);
@@ -249,6 +256,8 @@ const AddPromotion = () => {
         brand: namebrand.toUpperCase(),
         exp_date_exchange: dateExchange,
         position: position,
+        is_payment_method: isPaymentMethod,
+        payment_method: paymentMethod,
       })
     );
   }, [
@@ -285,6 +294,8 @@ const AddPromotion = () => {
     dateExchange,
     minimumOrder,
     position,
+    isPaymentMethod,
+    paymentMethod,
   ]);
 
   return (
@@ -358,6 +369,7 @@ const AddPromotion = () => {
                       toolbarClassName="toolbarClassName"
                       wrapperClassName="wrapperClassName wrapperStyle"
                       editorClassName="editorClassName"
+                      editorStyle={{ color: "black" }}
                     />
                   </div>
                   <Label>Tiếng Việt</Label>
@@ -368,6 +380,7 @@ const AddPromotion = () => {
                       toolbarClassName="toolbarClassName"
                       wrapperClassName="wrapperClassName wrapperStyle"
                       editorClassName="editorClassName"
+                      editorStyle={{ color: "black" }}
                     />
                   </div>
                 </Col>
@@ -785,7 +798,34 @@ const AddPromotion = () => {
                     )}
                   </div>
                   <div>
-                    <h5 className="mt-2">15. Thời gian sử dụng sau khi đổi</h5>
+                    <h5 className="mt-2">15. Phương thức thanh toán</h5>
+                    <FormGroup check inline>
+                      <Label check className="text-first">
+                        Thanh toán
+                      </Label>
+                      <Input
+                        type="checkbox"
+                        className="ml-2"
+                        defaultChecked={isPaymentMethod}
+                        onClick={() => setIsPaymentMethod(!isPaymentMethod)}
+                      />
+                    </FormGroup>
+
+                    {isPaymentMethod && (
+                      <Select
+                        mode="multiple"
+                        allowClear
+                        style={{
+                          width: "100%",
+                        }}
+                        placeholder="Please select"
+                        onChange={handleChangePaymentMethod}
+                        options={DATA_PAYMENT}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    <h5 className="mt-2">16. Thời gian sử dụng sau khi đổi</h5>
                     <CustomTextInput
                       placeholder="Nhập số ngày (1,2,3...,n"
                       className="input-promo-code"
@@ -796,8 +836,7 @@ const AddPromotion = () => {
                     />
                   </div>
                   <div>
-                    <h5 className="mt-2">16. Thứ tự hiện thị</h5>
-
+                    <h5 className="mt-2">17. Thứ tự hiện thị</h5>
                     <CustomTextInput
                       placeholder="Nhập số thứ tự (1,2,3...,n"
                       className="input-promo-code"
