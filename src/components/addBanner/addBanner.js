@@ -22,11 +22,12 @@ const AddBanner = () => {
   const [typeLink, setTypeLink] = useState("url");
   const [linkID, setLinkId] = useState("");
   const [position, setPosition] = useState("");
-  const [dataFilter, setDataFilter] = useState([]);
+  const [kindService, setKindService] = useState("giup_viec_co_dinh");
   const dispatch = useDispatch();
   const promotion = useSelector(getPromotionSelector);
   const service = useSelector(getService);
   const [open, setOpen] = useState(false);
+
   const showDrawer = () => {
     setOpen(true);
   };
@@ -81,9 +82,10 @@ const AddBanner = () => {
         type_link: typeLink,
         link_id: linkID,
         position: position,
+        kind: kindService,
       })
     );
-  }, [dispatch, title, imgThumbnail, typeLink, linkID, position]);
+  }, [dispatch, title, imgThumbnail, typeLink, linkID, position, kindService]);
 
   return (
     <>
@@ -168,7 +170,15 @@ const AddBanner = () => {
                   name="link_id"
                   type="select"
                   value={linkID}
-                  onChange={(e) => setLinkId(e.target.value)}
+                  onChange={(e) => {
+                    if (e.target.value === "6321598ea6c81260452bf4f5") {
+                      setLinkId(e.target.value);
+                      setKindService("giup_viec_theo_gio");
+                    } else if (e.target.value === "63215877a6c81260452bf4f0") {
+                      setLinkId(e.target.value);
+                      setKindService("giup_viec_co_dinh");
+                    }
+                  }}
                   body={service.map((item, index) => {
                     return (
                       <option key={index} value={item?._id}>

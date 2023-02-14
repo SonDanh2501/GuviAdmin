@@ -9,6 +9,7 @@ import { updateBanner } from "../../redux/actions/banner";
 import { loadingAction } from "../../redux/actions/loading";
 import { getPromotion } from "../../redux/actions/promotion";
 import { getPromotionSelector } from "../../redux/selectors/promotion";
+import { getService } from "../../redux/selectors/service";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./editBanner.scss";
@@ -19,9 +20,10 @@ const EditBanner = ({ state, setState, data }) => {
   const [typeLink, setTypeLink] = useState("url");
   const [linkID, setLinkId] = useState("");
   const [position, setPosition] = useState("");
+  const [kindService, setKindService] = useState("giup_viec_co_dinh");
   const dispatch = useDispatch();
   const promotion = useSelector(getPromotionSelector);
-
+  const service = useSelector(getService);
   useEffect(() => {
     dispatch(getPromotion.getPromotionRequest());
   }, [dispatch]);
@@ -32,6 +34,13 @@ const EditBanner = ({ state, setState, data }) => {
     setTypeLink(data?.type_link);
     setLinkId(data?.link_id);
     setPosition(data?.position);
+    setKindService(
+      data?.link_id === "6321598ea6c81260452bf4f5"
+        ? "giup_viec_theo_gio"
+        : data?.link_id === "63215877a6c81260452bf4f0"
+        ? "giup_viec_co_dinh"
+        : ""
+    );
   }, [data]);
 
   const onChangeThumbnail = async (e) => {
@@ -79,10 +88,11 @@ const EditBanner = ({ state, setState, data }) => {
           type_link: typeLink,
           link_id: linkID,
           position: position,
+          kind: kindService,
         },
       })
     );
-  }, [data, title, imgThumbnail, typeLink, linkID, position]);
+  }, [data, title, imgThumbnail, typeLink, linkID, position, kindService]);
 
   return (
     <>
@@ -124,11 +134,12 @@ const EditBanner = ({ state, setState, data }) => {
                 <>
                   <option value={"url"}>URL</option>
                   <option value={"promotion"}>Promotion</option>
+                  <option value={"service"}>Service</option>
                 </>
               }
             />
             <div>
-              {typeLink !== "promotion" ? (
+              {typeLink === "url" ? (
                 <CustomTextInput
                   label={"Link URL"}
                   id="examplelink_url"
@@ -136,6 +147,31 @@ const EditBanner = ({ state, setState, data }) => {
                   type="text"
                   value={linkID}
                   onChange={(e) => setLinkId(e.target.value)}
+                />
+              ) : typeLink === "promotion" ? (
+                <CustomTextInput
+                  label={"Link ID"}
+                  className="select-code-phone"
+                  id="examplelink_id"
+                  name="link_id"
+                  type="select"
+                  value={linkID}
+                  onChange={(e) => {
+                    if (e.target.value === "6321598ea6c81260452bf4f5") {
+                      setLinkId(e.target.value);
+                      setKindService("giup_viec_theo_gio");
+                    } else if (e.target.value === "63215877a6c81260452bf4f0") {
+                      setLinkId(e.target.value);
+                      setKindService("giup_viec_co_dinh");
+                    }
+                  }}
+                  body={promotion.map((item, index) => {
+                    return (
+                      <option key={index} value={item?._id}>
+                        {item?.title?.vi}
+                      </option>
+                    );
+                  })}
                 />
               ) : (
                 <CustomTextInput
@@ -146,7 +182,7 @@ const EditBanner = ({ state, setState, data }) => {
                   type="select"
                   value={linkID}
                   onChange={(e) => setLinkId(e.target.value)}
-                  body={promotion.map((item, index) => {
+                  body={service.map((item, index) => {
                     return (
                       <option key={index} value={item?._id}>
                         {item?.title?.vi}

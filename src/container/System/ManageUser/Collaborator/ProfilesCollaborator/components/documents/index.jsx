@@ -262,14 +262,16 @@ const Document = ({ id }) => {
                 Thoả thuận hợp tác
               </Checkbox>
             </Col>
-            <Col lg="8">
-              <CustomTextInput
-                label="Mã hồ sơ"
-                placeholder={"Nhập mã hồ sơ"}
-                value={valueDeal}
-                onChange={(e) => setSetValueDeal(e.target.value)}
-              />
-            </Col>
+            {deal && (
+              <Col lg="8">
+                <CustomTextInput
+                  label="Mã hồ sơ"
+                  placeholder={"Nhập mã hồ sơ"}
+                  value={valueDeal}
+                  onChange={(e) => setSetValueDeal(e.target.value)}
+                />
+              </Col>
+            )}
           </Row>
           <hr />
           <Row>
@@ -281,60 +283,62 @@ const Document = ({ id }) => {
                 CMND/CCCD
               </Checkbox>
             </Col>
-            <Col lg="8">
-              <FormGroup>
-                <Label for="exampleThumbnail">CCCD/CMND mặt trước</Label>
-                <div className="col-img">
-                  <Input
-                    id="exampleThumbnail"
-                    type="file"
-                    className="input-file"
-                    accept={".jpg,.png,.jpeg"}
-                    name="thumbnail"
-                    onChange={onChangeIdentifyBefore}
-                  />
-                  {imgIdentifyFronsite && (
-                    <div className="div-img-thumbnail">
-                      <i
-                        class="uil uil-times-circle"
-                        onClick={() => setImgIdentifyFronsite("")}
-                      />
-                      <Image
-                        width={150}
-                        src={imgIdentifyFronsite}
-                        className={"img-thumbnail"}
-                      />
-                    </div>
-                  )}
-                </div>
-              </FormGroup>
-              <FormGroup>
-                <Label for="exampleThumbnail">CCCD/CMND mặt sau</Label>
-                <div className="col-img">
-                  <Input
-                    id="exampleThumbnail"
-                    type="file"
-                    className="input-file"
-                    accept={".jpg,.png,.jpeg"}
-                    name="thumbnail"
-                    onChange={onChangeIdentifyAfter}
-                  />
-                  {imgIdentifyBacksite && (
-                    <div className="div-img-thumbnail">
-                      <i
-                        class="uil uil-times-circle"
-                        onClick={() => setImgIdentifyBacksite("")}
-                      />
-                      <Image
-                        width={150}
-                        src={imgIdentifyBacksite}
-                        className={"img-thumbnail"}
-                      />
-                    </div>
-                  )}
-                </div>
-              </FormGroup>
-            </Col>
+            {identify && (
+              <Col lg="8">
+                <FormGroup>
+                  <Label for="exampleThumbnail">CCCD/CMND mặt trước</Label>
+                  <div className="col-img">
+                    <Input
+                      id="exampleThumbnail"
+                      type="file"
+                      className="input-file"
+                      accept={".jpg,.png,.jpeg"}
+                      name="thumbnail"
+                      onChange={onChangeIdentifyBefore}
+                    />
+                    {imgIdentifyFronsite && (
+                      <div className="div-img-thumbnail">
+                        <i
+                          class="uil uil-times-circle"
+                          onClick={() => setImgIdentifyFronsite("")}
+                        />
+                        <Image
+                          width={150}
+                          src={imgIdentifyFronsite}
+                          className={"img-thumbnail"}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="exampleThumbnail">CCCD/CMND mặt sau</Label>
+                  <div className="col-img">
+                    <Input
+                      id="exampleThumbnail"
+                      type="file"
+                      className="input-file"
+                      accept={".jpg,.png,.jpeg"}
+                      name="thumbnail"
+                      onChange={onChangeIdentifyAfter}
+                    />
+                    {imgIdentifyBacksite && (
+                      <div className="div-img-thumbnail">
+                        <i
+                          class="uil uil-times-circle"
+                          onClick={() => setImgIdentifyBacksite("")}
+                        />
+                        <Image
+                          width={150}
+                          src={imgIdentifyBacksite}
+                          className={"img-thumbnail"}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </FormGroup>
+              </Col>
+            )}
           </Row>
           <hr />
           <Row>
@@ -346,38 +350,40 @@ const Document = ({ id }) => {
                 Sơ yếu lí lịch
               </Checkbox>
             </Col>
-            <Col lg="8">
-              <div className="div-infomation">
-                <Label for="exampleThumbnail">Hình ảnh</Label>
-                <div className="col-img">
-                  <input
-                    type="file"
-                    id="files"
-                    name="files"
-                    accept=".jpg, .jpeg, .png"
-                    multiple
-                    onChange={onChangeInformation}
-                  />
-                  <div className="div-thumbnail-infomation">
-                    {imgInformation.length > 0 &&
-                      imgInformation.map((item) => {
-                        return (
-                          <div className="div-item-thumbnail-infomation">
-                            <i
-                              class="uil uil-times-circle"
-                              onClick={() => removeItemInfomation(item)}
-                            ></i>
-                            <Image
-                              src={item}
-                              className="img-thumbnail-infomation"
-                            />
-                          </div>
-                        );
-                      })}
+            {information && (
+              <Col lg="8">
+                <div className="div-infomation">
+                  <Label for="exampleThumbnail">Hình ảnh</Label>
+                  <div className="col-img">
+                    <input
+                      type="file"
+                      id="files"
+                      name="files"
+                      accept=".jpg, .jpeg, .png"
+                      multiple
+                      onChange={onChangeInformation}
+                    />
+                    <div className="div-thumbnail-infomation">
+                      {imgInformation.length > 0 &&
+                        imgInformation.map((item) => {
+                          return (
+                            <div className="div-item-thumbnail-infomation">
+                              <i
+                                class="uil uil-times-circle"
+                                onClick={() => removeItemInfomation(item)}
+                              ></i>
+                              <Image
+                                src={item}
+                                className="img-thumbnail-infomation"
+                              />
+                            </div>
+                          );
+                        })}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Col>
+              </Col>
+            )}
           </Row>
           <hr />
           <Row>
@@ -389,38 +395,40 @@ const Document = ({ id }) => {
                 Sổ hổ khẩu
               </Checkbox>
             </Col>
-            <Col lg="8">
-              <div className="div-infomation">
-                <Label for="exampleThumbnail">Hình ảnh</Label>
-                <div className="col-img">
-                  <input
-                    type="file"
-                    id="files"
-                    name="files"
-                    accept=".jpg, .jpeg, .png"
-                    multiple
-                    onChange={onChangeRegistration}
-                  />
-                  <div className="div-thumbnail-infomation">
-                    {imgRegistration.length > 0 &&
-                      imgRegistration.map((item) => {
-                        return (
-                          <div className="div-item-thumbnail-infomation">
-                            <i
-                              class="uil uil-times-circle"
-                              onClick={() => removeItemRegistration(item)}
-                            ></i>
-                            <Image
-                              src={item}
-                              className="img-thumbnail-infomation"
-                            />
-                          </div>
-                        );
-                      })}
+            {registration && (
+              <Col lg="8">
+                <div className="div-infomation">
+                  <Label for="exampleThumbnail">Hình ảnh</Label>
+                  <div className="col-img">
+                    <input
+                      type="file"
+                      id="files"
+                      name="files"
+                      accept=".jpg, .jpeg, .png"
+                      multiple
+                      onChange={onChangeRegistration}
+                    />
+                    <div className="div-thumbnail-infomation">
+                      {imgRegistration.length > 0 &&
+                        imgRegistration.map((item) => {
+                          return (
+                            <div className="div-item-thumbnail-infomation">
+                              <i
+                                class="uil uil-times-circle"
+                                onClick={() => removeItemRegistration(item)}
+                              ></i>
+                              <Image
+                                src={item}
+                                className="img-thumbnail-infomation"
+                              />
+                            </div>
+                          );
+                        })}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Col>
+              </Col>
+            )}
           </Row>
           <hr />
           <Row>
@@ -432,29 +440,34 @@ const Document = ({ id }) => {
                 Giấy xác nhận hạnh kiểm
               </Checkbox>
             </Col>
-            <Col lg="8">
-              <FormGroup>
-                <Label for="exampleThumbnail">Hình ảnh</Label>
-                <div className="col-img">
-                  <input
-                    type="file"
-                    id="files"
-                    name="files"
-                    accept=".jpg, .jpeg, .png"
-                    onChange={onChangeCertification}
-                  />
-                  {imgCertification && (
-                    <div className="div-img-thumbnail">
-                      <i
-                        class="uil uil-times-circle"
-                        onClick={() => setImgCertification("")}
-                      />
-                      <Image src={imgCertification} className="img-thumbnail" />
-                    </div>
-                  )}
-                </div>
-              </FormGroup>
-            </Col>
+            {certification && (
+              <Col lg="8">
+                <FormGroup>
+                  <Label for="exampleThumbnail">Hình ảnh</Label>
+                  <div className="col-img">
+                    <input
+                      type="file"
+                      id="files"
+                      name="files"
+                      accept=".jpg, .jpeg, .png"
+                      onChange={onChangeCertification}
+                    />
+                    {imgCertification && (
+                      <div className="div-img-thumbnail">
+                        <i
+                          class="uil uil-times-circle"
+                          onClick={() => setImgCertification("")}
+                        />
+                        <Image
+                          src={imgCertification}
+                          className="img-thumbnail"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </FormGroup>
+              </Col>
+            )}
           </Row>
         </div>
         <Button className="btn-update" onClick={onUpdateDocument}>
