@@ -49,6 +49,20 @@
   text-decoration: none !important;
 }
 
+.text-id {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 16px;
+  color: black;
+  width: 200px !important;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-decoration: none !important;
+}
+
 .icon-unlock {
   color: rgb(43, 159, 121);
 }

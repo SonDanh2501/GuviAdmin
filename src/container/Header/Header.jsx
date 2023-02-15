@@ -61,7 +61,7 @@ const Header = () => {
         >
           <a onClick={(e) => e.preventDefault()}>
             <Space>
-              <a className="text-name">{user?.name}</a>
+              <a className="text-name">{user?.full_name}</a>
               <CaretDownOutlined className="icon-down" />
             </Space>
           </a>

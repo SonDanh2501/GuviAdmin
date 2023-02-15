@@ -38,13 +38,7 @@ const validateAddCollaboratorSchema = Yup.object().shape({
   phone: Yup.string()
     .matches(regexPhone, validPhoneMessage)
     .required(requiredErrorMessage),
-  email: Yup.string()
-    .matches(regexEmail, validEmailMessage)
-    .required(requiredErrorMessage),
-  password: Yup.string()
-    .min(8, validPasswordMessage)
-    .required(requiredErrorMessage)
-    .matches(regexPassword, validPasswordMessage),
+  email: Yup.string(),
   name: Yup.string().required(requiredErrorMessage),
   identify: Yup.string().required(requiredErrorMessage),
 });

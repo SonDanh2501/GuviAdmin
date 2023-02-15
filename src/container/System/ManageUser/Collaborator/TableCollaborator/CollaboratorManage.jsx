@@ -238,10 +238,10 @@ export default function CollaboratorManage(props) {
             })
           }
         >
-          {data?._id}
+          {data?.id_view}
         </a>
       ),
-      width: "15%",
+      width: "10%",
     },
     {
       title: "Tên cộng tác viên",

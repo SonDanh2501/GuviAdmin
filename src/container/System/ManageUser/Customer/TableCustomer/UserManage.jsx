@@ -143,6 +143,27 @@ export default function UserManage(props) {
 
   const columns = [
     {
+      title: "Mã",
+      width: "10%",
+      render: (data) => {
+        return (
+          <div
+            onClick={() =>
+              navigate("/system/user-manage/details-customer", {
+                state: { id: data?._id },
+              })
+            }
+          >
+            {/* <img
+              className="img_customer"
+              src={data?.avatar ? data?.avatar : user}
+            /> */}
+            <a className="text-id"> {data?.id_view}</a>
+          </div>
+        );
+      },
+    },
+    {
       title: "Khách hàng",
       width: "20%",
       render: (data) => {
@@ -262,7 +283,7 @@ export default function UserManage(props) {
       render: (data) => (
         <a className="text-address">{formatMoney(data?.total_price)}</a>
       ),
-      align: "center",
+      align: "right",
       width: "10%",
     },
     {

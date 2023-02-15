@@ -701,6 +701,18 @@ const Sidebar = ({ onChangeColor }) => {
               )}
             </NavLink>
           </li>
+          <li>
+            <NavLink to="/topup/manage-topup">
+              {({ isActive }) => (
+                <div className={isActive ? "active-link" : "unactive-link"}>
+                  <i class="uil uil-money-withdrawal icon"></i>
+                  <a className={isActive ? "active-text" : "unactive-text"}>
+                    Sổ Quỹ
+                  </a>
+                </div>
+              )}
+            </NavLink>
+          </li>
         </ul>
       ) : (
         <></>
