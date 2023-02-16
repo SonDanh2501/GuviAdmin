@@ -95,7 +95,6 @@ const AddCustomer = () => {
                     <>
                       <option value="">Chọn mã vùng</option>
                       <option value="Nam">+84</option>
-                      <option value="Nữ">+1</option>
                     </>
                   }
                   errors={errors?.code_phone_area}

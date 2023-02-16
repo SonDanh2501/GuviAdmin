@@ -256,14 +256,14 @@ export default function TopupManage() {
                 },
               };
             }}
-            locale={{
-              emptyText:
-                listCollaborators.length > 0 ? (
-                  <Empty />
-                ) : (
-                  <Skeleton active={true} />
-                ),
-            }}
+            // locale={{
+            //   emptyText:
+            //     listCollaborators.length > 0 ? (
+            //       <Empty />
+            //     ) : (
+            //       <Skeleton active={true} />
+            //     ),
+            // }}
           />
           <div className="div-pagination p-2">
             <a>

@@ -20,6 +20,7 @@ import resizeFile from "../../../../../helper/resizer";
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import Activity from "./components/activity";
+import BankAccount from "./components/bankAccount";
 import Document from "./components/documents";
 import History from "./components/history";
 import Information from "./components/information";
@@ -154,6 +155,9 @@ const ProfileCollaborator = () => {
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Đánh giá" key="6">
                     <Review />
+                  </Tabs.TabPane>
+                  <Tabs.TabPane tab="Tài khoản ngân hàng" key="7">
+                    <BankAccount id={data?._id} />
                   </Tabs.TabPane>
                 </Tabs>
               </CardBody>

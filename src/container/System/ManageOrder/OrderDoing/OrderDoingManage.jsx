@@ -53,7 +53,20 @@ export default function OrderDoingManage() {
   const columns = [
     {
       title: "Mã",
-      dataIndex: "_id",
+      render: (data) => {
+        return (
+          <a
+            className="text-id"
+            onClick={() =>
+              navigate("/details-order", {
+                state: { id: data?._id },
+              })
+            }
+          >
+            {data?.id_view}
+          </a>
+        );
+      },
     },
     {
       title: "Ngày tạo",

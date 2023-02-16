@@ -83,5 +83,9 @@ export const getHistoryCollaboratorRemainder = (id, start, length) => {
   );
 };
 
-
-
+export const editAccountBankCollaborator = (id, data) => {
+  return axiosClient.post(
+    `/admin/collaborator_manager/edit_account_bank/${id}?lang=vi`,
+    data
+  );
+};

@@ -73,7 +73,7 @@ export default function OrderManage(props) {
               })
             }
           >
-            {data?._id}
+            {data?.id_view}
           </a>
         );
       },

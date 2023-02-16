@@ -11,7 +11,7 @@ getToken().then((res) => (token = res));
 // https://guvico-be-develop.up.railway.app
 
 const axiosClient = axios.create({
-  baseURL: "https://guvico-be-develop.up.railway.app",
+  baseURL: "https://server.guvico.com",
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
