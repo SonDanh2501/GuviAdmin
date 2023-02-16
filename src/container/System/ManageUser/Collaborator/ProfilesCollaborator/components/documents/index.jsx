@@ -130,7 +130,12 @@ const Document = ({ id }) => {
       },
     })
       .then((res) => {
-        setImgInformation(res);
+        if (imgInformation.length > 0) {
+          const newImg = imgInformation.concat(res);
+          setImgInformation(newImg);
+        } else {
+          setImgInformation(res);
+        }
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -155,7 +160,12 @@ const Document = ({ id }) => {
       },
     })
       .then((res) => {
-        setImgRegistration(res);
+        if (imgRegistration.length > 0) {
+          const newImg = imgRegistration.concat(res);
+          setImgRegistration(newImg);
+        } else {
+          setImgRegistration(res);
+        }
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -180,7 +190,12 @@ const Document = ({ id }) => {
       },
     })
       .then((res) => {
-        setImgCertification(res);
+        if (imgCertification.length > 0) {
+          const newImg = imgCertification.concat(res);
+          setImgCertification(newImg);
+        } else {
+          setImgCertification(res);
+        }
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -457,7 +472,7 @@ const Document = ({ id }) => {
                     id="files"
                     name="files"
                     accept=".jpg, .jpeg, .png"
-                    multiple
+                    // multiple
                     onChange={onChangeInformation}
                   />
                   <div className="div-thumbnail-infomation">
@@ -511,7 +526,7 @@ const Document = ({ id }) => {
                     id="files"
                     name="files"
                     accept=".jpg, .jpeg, .png"
-                    multiple
+                    // multiple
                     onChange={onChangeRegistration}
                   />
                   <div className="div-thumbnail-infomation">
@@ -565,7 +580,7 @@ const Document = ({ id }) => {
                     id="files"
                     name="files"
                     accept=".jpg, .jpeg, .png"
-                    multiple
+                    // multiple
                     onChange={onChangeCertification}
                   />
                   <div className="div-thumbnail-infomation">
