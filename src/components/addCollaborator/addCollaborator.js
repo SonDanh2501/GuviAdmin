@@ -33,7 +33,6 @@ const AddCollaborator = () => {
   };
 
   const addCustomer = useCallback(() => {
-    console.log("fafsf");
     dispatch(loadingAction.loadingRequest(true));
     dispatch(
       createCollaborator.createCollaboratorRequest({
@@ -41,7 +40,7 @@ const AddCollaborator = () => {
         phone: formikRef?.current?.values?.phone,
         email: formikRef?.current?.values?.email,
         full_name: formikRef?.current?.values?.name,
-        identify: formikRef?.current?.values?.identify,
+        identity_number: formikRef?.current?.values?.identify,
         city: 79,
       })
     );

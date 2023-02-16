@@ -21,6 +21,8 @@
     "file-saver": "~2.0.5",
     "filereader": "~0.10.3",
     "formik": "~2.2.9",
+    "jszip": "^3.10.1",
+    "jszip-utils": "^0.1.0",
     "jwt-decode": "~3.1.2",
     "lodash": "~4.17.21",
     "moment": "~2.29.1",

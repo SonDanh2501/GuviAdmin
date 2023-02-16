@@ -10,6 +10,7 @@ import {
 import CustomTextInput from "../../../../../../../components/CustomTextInput/customTextInput";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
+import dayjs from "dayjs";
 import "./index.scss";
 
 const Information = ({ data, image }) => {
@@ -101,6 +102,11 @@ const Information = ({ data, image }) => {
     imgUrl,
   ]);
 
+  const onChange = (date, dateString) => {
+    console.log(date, dateString);
+    setBirthday(dateString);
+  };
+
   return (
     <>
       <Form>
@@ -136,8 +142,8 @@ const Information = ({ data, image }) => {
           <Row>
             <Col lg="6">
               <CustomTextInput
-                label={"Ngày, tháng, năm sinh"}
-                placeholder="Chọn ngày tháng sinh"
+                label={"Ngày sinh"}
+                placeholder="Chọn ngày sinh"
                 type="date"
                 value={birthday}
                 onChange={(e) => setBirthday(e.target.value)}

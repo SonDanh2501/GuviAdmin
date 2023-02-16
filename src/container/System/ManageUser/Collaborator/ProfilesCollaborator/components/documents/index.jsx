@@ -10,7 +10,11 @@ import { postFile, postMutipleFile } from "../../../../../../../api/file";
 import CustomTextInput from "../../../../../../../components/CustomTextInput/customTextInput";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
+import { saveAs } from "file-saver";
+import JSZip from "jszip";
 import "./index.scss";
+import JSZipUtils from "jszip-utils";
+import resizeFile from "../../../../../../../helper/resizer";
 
 const Document = ({ id }) => {
   const [deal, setDeal] = useState(false);
@@ -22,7 +26,7 @@ const Document = ({ id }) => {
   const [imgIdentifyFronsite, setImgIdentifyFronsite] = useState("");
   const [imgIdentifyBacksite, setImgIdentifyBacksite] = useState("");
   const [imgInformation, setImgInformation] = useState([]);
-  const [imgCertification, setImgCertification] = useState("");
+  const [imgCertification, setImgCertification] = useState([]);
   const [imgRegistration, setImgRegistration] = useState([]);
 
   const dispatch = useDispatch();
@@ -53,7 +57,7 @@ const Document = ({ id }) => {
       });
   }, [id]);
 
-  const onChangeIdentifyBefore = (e) => {
+  const onChangeIdentifyBefore = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
     if (e.target.files[0]) {
       const reader = new FileReader();
@@ -63,7 +67,9 @@ const Document = ({ id }) => {
       reader.readAsDataURL(e.target.files[0]);
     }
     const formData = new FormData();
-    formData.append("file", e.target.files[0]);
+    const image = await resizeFile(e.target.files[0]);
+
+    formData.append("file", image);
     postFile(formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -80,7 +86,7 @@ const Document = ({ id }) => {
         dispatch(loadingAction.loadingRequest(false));
       });
   };
-  const onChangeIdentifyAfter = (e) => {
+  const onChangeIdentifyAfter = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
     if (e.target.files[0]) {
       const reader = new FileReader();
@@ -90,7 +96,9 @@ const Document = ({ id }) => {
       reader.readAsDataURL(e.target.files[0]);
     }
     const formData = new FormData();
-    formData.append("file", e.target.files[0]);
+    const image = await resizeFile(e.target.files[0]);
+
+    formData.append("file", image);
     postFile(formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -108,12 +116,13 @@ const Document = ({ id }) => {
       });
   };
 
-  const onChangeInformation = (e) => {
+  const onChangeInformation = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
     const fileLength = e.target.files.length;
     const formData = new FormData();
     for (var i = 0; i < fileLength; i++) {
-      formData.append("images", e.target.files[i]);
+      const image = await resizeFile(e.target.files[i]);
+      formData.append("images", image);
     }
     postMutipleFile(formData, {
       headers: {
@@ -132,12 +141,13 @@ const Document = ({ id }) => {
       });
   };
 
-  const onChangeRegistration = (e) => {
+  const onChangeRegistration = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
     const fileLength = e.target.files.length;
     const formData = new FormData();
     for (var i = 0; i < fileLength; i++) {
-      formData.append("images", e.target.files[i]);
+      const image = await resizeFile(e.target.files[i]);
+      formData.append("images", image);
     }
     postMutipleFile(formData, {
       headers: {
@@ -156,18 +166,15 @@ const Document = ({ id }) => {
       });
   };
 
-  const onChangeCertification = (e) => {
+  const onChangeCertification = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
-    if (e.target.files[0]) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        setImgCertification(reader.result);
-      });
-      reader.readAsDataURL(e.target.files[0]);
-    }
+    const fileLength = e.target.files.length;
     const formData = new FormData();
-    formData.append("file", e.target.files[0]);
-    postFile(formData, {
+    for (var i = 0; i < fileLength; i++) {
+      const image = await resizeFile(e.target.files[i]);
+      formData.append("images", image);
+    }
+    postMutipleFile(formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -249,12 +256,94 @@ const Document = ({ id }) => {
     return setImgRegistration(newArray);
   };
 
+  const removeItemCertification = (item) => {
+    const newArray = imgCertification.filter((i) => i !== item);
+    return setImgCertification(newArray);
+  };
+
+  const downloadImageIdentify = () => {
+    saveAs(imgIdentifyFronsite, "identifyFronsite.png"); // Put your image url here.
+    saveAs(imgIdentifyBacksite, "identifyBacksite.png"); // Put your image url here.
+  };
+
+  const downloadImageInformation = () => {
+    var zip = new JSZip();
+    var count = 0;
+    var zipFilename = "Infomation.zip";
+    imgInformation.forEach(function (url, i) {
+      var filename = imgInformation[i];
+      filename = filename
+        .replace(/[\/\*\|\:\<\>\?\"\\]/gi, "")
+        .replace("infomation", "");
+      JSZipUtils.getBinaryContent(url, function (err, data) {
+        if (err) {
+          throw err;
+        }
+        zip.file(filename, data, { binary: true });
+        count++;
+        if (count == imgInformation.length) {
+          zip.generateAsync({ type: "blob" }).then(function (content) {
+            saveAs(content, zipFilename);
+          });
+        }
+      });
+    });
+  };
+
+  const downloadImageRegistration = () => {
+    var zip = new JSZip();
+    var count = 0;
+    var zipFilename = "Registration.zip";
+    imgRegistration.forEach(function (url, i) {
+      var filename = imgRegistration[i];
+      filename = filename
+        .replace(/[\/\*\|\:\<\>\?\"\\]/gi, "")
+        .replace("registration", "");
+      JSZipUtils.getBinaryContent(url, function (err, data) {
+        if (err) {
+          throw err;
+        }
+        zip.file(filename, data, { binary: true });
+        count++;
+        if (count == imgRegistration.length) {
+          zip.generateAsync({ type: "blob" }).then(function (content) {
+            saveAs(content, zipFilename);
+          });
+        }
+      });
+    });
+  };
+
+  const downloadImageCertification = () => {
+    var zip = new JSZip();
+    var count = 0;
+    var zipFilename = "Certification.zip";
+    imgCertification.forEach(function (url, i) {
+      var filename = imgCertification[i];
+      filename = filename
+        .replace(/[\/\*\|\:\<\>\?\"\\]/gi, "")
+        .replace("registration", "");
+      JSZipUtils.getBinaryContent(url, function (err, data) {
+        if (err) {
+          throw err;
+        }
+        zip.file(filename, data, { binary: true });
+        count++;
+        if (count == imgCertification.length) {
+          zip.generateAsync({ type: "blob" }).then(function (content) {
+            saveAs(content, zipFilename);
+          });
+        }
+      });
+    });
+  };
+
   return (
     <>
       <Form>
         <div className="pl-lg-5">
           <Row>
-            <Col lg="4" className="col-check">
+            <Col lg="3" className="col-check">
               <Checkbox
                 checked={deal}
                 onChange={(e) => setDeal(e.target.checked)}
@@ -263,7 +352,7 @@ const Document = ({ id }) => {
               </Checkbox>
             </Col>
 
-            <Col lg="8">
+            <Col lg="9">
               <CustomTextInput
                 label="Mã hồ sơ"
                 placeholder={"Nhập mã hồ sơ"}
@@ -274,7 +363,7 @@ const Document = ({ id }) => {
           </Row>
           <hr />
           <Row>
-            <Col lg="4" className="col-check">
+            <Col lg="3" className="col-check">
               <Checkbox
                 checked={identify}
                 onChange={(e) => setIdentify(e.target.checked)}
@@ -283,7 +372,7 @@ const Document = ({ id }) => {
               </Checkbox>
             </Col>
 
-            <Col lg="8">
+            <Col lg="7">
               <FormGroup>
                 <Label for="exampleThumbnail">CCCD/CMND mặt trước</Label>
                 <div className="col-img">
@@ -337,10 +426,20 @@ const Document = ({ id }) => {
                 </div>
               </FormGroup>
             </Col>
+            {imgIdentifyFronsite && (
+              <Col lg="2" className="div-col-download">
+                <Button
+                  className="btn-download"
+                  onClick={downloadImageIdentify}
+                >
+                  <i class="uil uil-image-download"></i>
+                </Button>
+              </Col>
+            )}
           </Row>
           <hr />
           <Row>
-            <Col lg="4" className="col-check">
+            <Col lg="3" className="col-check">
               <Checkbox
                 checked={information}
                 onChange={(e) => setInformation(e.target.checked)}
@@ -349,7 +448,7 @@ const Document = ({ id }) => {
               </Checkbox>
             </Col>
 
-            <Col lg="8">
+            <Col lg="7">
               <div className="div-infomation">
                 <Label for="exampleThumbnail">Hình ảnh</Label>
                 <div className="col-img">
@@ -381,10 +480,20 @@ const Document = ({ id }) => {
                 </div>
               </div>
             </Col>
+            {imgInformation.length > 0 && (
+              <Col lg="2" className="div-col-download">
+                <Button
+                  className="btn-download"
+                  onClick={downloadImageInformation}
+                >
+                  <i class="uil uil-image-download"></i>
+                </Button>
+              </Col>
+            )}
           </Row>
           <hr />
           <Row>
-            <Col lg="4" className="col-check">
+            <Col lg="3" className="col-check">
               <Checkbox
                 checked={registration}
                 onChange={(e) => setRegistration(e.target.checked)}
@@ -393,7 +502,7 @@ const Document = ({ id }) => {
               </Checkbox>
             </Col>
 
-            <Col lg="8">
+            <Col lg="7">
               <div className="div-infomation">
                 <Label for="exampleThumbnail">Hình ảnh</Label>
                 <div className="col-img">
@@ -425,10 +534,20 @@ const Document = ({ id }) => {
                 </div>
               </div>
             </Col>
+            {imgRegistration.length > 0 && (
+              <Col lg="2" className="div-col-download">
+                <Button
+                  className="btn-download"
+                  onClick={downloadImageRegistration}
+                >
+                  <i class="uil uil-image-download"></i>
+                </Button>
+              </Col>
+            )}
           </Row>
           <hr />
-          <Row>
-            <Col lg="4" className="col-check">
+          <Row className="mb-5">
+            <Col lg="3" className="col-check">
               <Checkbox
                 checked={certification}
                 onChange={(e) => setCertification(e.target.checked)}
@@ -437,8 +556,8 @@ const Document = ({ id }) => {
               </Checkbox>
             </Col>
 
-            <Col lg="8">
-              <FormGroup>
+            <Col lg="7">
+              <div className="div-infomation">
                 <Label for="exampleThumbnail">Hình ảnh</Label>
                 <div className="col-img">
                   <input
@@ -446,20 +565,41 @@ const Document = ({ id }) => {
                     id="files"
                     name="files"
                     accept=".jpg, .jpeg, .png"
+                    multiple
                     onChange={onChangeCertification}
                   />
-                  {imgCertification && (
-                    <div className="div-img-thumbnail">
-                      <i
-                        class="uil uil-times-circle"
-                        onClick={() => setImgCertification("")}
-                      />
-                      <Image src={imgCertification} className="img-thumbnail" />
+                  <div className="div-thumbnail-infomation">
+                    <div className="div-thumbnail-infomation">
+                      {imgCertification.length > 0 &&
+                        imgCertification.map((item) => {
+                          return (
+                            <div className="div-item-thumbnail-infomation">
+                              <i
+                                class="uil uil-times-circle"
+                                onClick={() => removeItemCertification(item)}
+                              ></i>
+                              <Image
+                                src={item}
+                                className="img-thumbnail-infomation"
+                              />
+                            </div>
+                          );
+                        })}
                     </div>
-                  )}
+                  </div>
                 </div>
-              </FormGroup>
+              </div>
             </Col>
+            {imgCertification.length > 0 && (
+              <Col lg="2" className="div-col-download">
+                <Button
+                  className="btn-download"
+                  onClick={downloadImageCertification}
+                >
+                  <i class="uil uil-image-download"></i>
+                </Button>
+              </Col>
+            )}
           </Row>
         </div>
         <Button className="btn-update" onClick={onUpdateDocument}>
