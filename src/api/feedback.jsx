@@ -11,3 +11,7 @@ export const searchFeedbackApi = (payload) => {
     `/admin/feedback_manager/get_list?search=${payload}&start=0&length=20`
   );
 };
+
+export const deleteFeedbackApi = (id) => {
+  return axiosClient.post(`/admin/feedback_manager/delete_feedback/${id}`);
+};

@@ -65,11 +65,10 @@ const ReportManager = () => {
               })
             }
           >
-            {data?.code_collaborator}{" "}
+            {data?.id_view}
           </a>
         );
       },
-      width: "10%",
     },
     {
       title: "Tên CTV",
@@ -87,13 +86,11 @@ const ReportManager = () => {
           </a>
         );
       },
-      width: "12%",
     },
     {
       title: "Số ca",
       dataIndex: "total_order",
       align: "center",
-      width: "5%",
     },
     {
       title: "Doanh số",
@@ -103,7 +100,6 @@ const ReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_gross_income)}</a>
         );
       },
-      width: "8%",
     },
     {
       title: () => {
@@ -131,7 +127,6 @@ const ReportManager = () => {
           </a>
         );
       },
-      width: "9%",
     },
     {
       title: () => {
@@ -153,7 +148,6 @@ const ReportManager = () => {
           </div>
         );
       },
-      width: "6%",
       align: "right",
       render: (data) => {
         return <a className="text-money">{formatMoney(data?.total_income)}</a>;
@@ -183,7 +177,6 @@ const ReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_discount)}</a>
         );
       },
-      width: "8%",
     },
     {
       title: () => {
@@ -212,11 +205,9 @@ const ReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_net_income)}</a>
         );
       },
-      width: "12%",
     },
     {
       title: "Phí áp dụng",
-      width: "9%",
       render: (data) => {
         return (
           <a className="text-money">{formatMoney(data?.total_serviceFee)}</a>
@@ -251,7 +242,6 @@ const ReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_order_fee)}</a>
         );
       },
-      width: "10%",
     },
     {
       title: () => {
@@ -281,7 +271,6 @@ const ReportManager = () => {
           </a>
         );
       },
-      width: "9%",
     },
     {
       title: () => {

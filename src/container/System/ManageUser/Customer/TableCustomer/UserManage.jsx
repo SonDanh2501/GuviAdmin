@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
 import {
@@ -22,6 +22,7 @@ import {
 import { loadingAction } from "../../../../../redux/actions/loading";
 import "./UserManage.scss";
 import LoadingPagination from "../../../../../components/paginationLoading";
+import { getUser } from "../../../../../redux/selectors/auth";
 
 export default function UserManage(props) {
   const { data, total, status } = props;
@@ -42,6 +43,7 @@ export default function UserManage(props) {
   const toggleBlock = () => setModalBlock(!modalBlock);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector(getUser);
 
   const onDelete = useCallback((id) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -137,7 +139,7 @@ export default function UserManage(props) {
     },
     {
       key: "2",
-      label: <a onClick={toggle}>Xoá</a>,
+      label: user?.role === "admin" && <a onClick={toggle}>Xoá</a>,
     },
   ];
 
@@ -292,13 +294,6 @@ export default function UserManage(props) {
       align: "center",
       render: (data) => (
         <Space size="middle">
-          {/* <div>
-            {data?.is_active ? (
-              <img className="img-unlock" src={unlock} onClick={toggleBlock} />
-            ) : (
-              <img className="img-unlock" src={lock} onClick={toggleBlock} />
-            )}
-          </div> */}
           <Dropdown
             menu={{
               items,

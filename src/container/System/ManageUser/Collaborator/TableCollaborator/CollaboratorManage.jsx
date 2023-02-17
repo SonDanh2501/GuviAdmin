@@ -10,7 +10,7 @@ import {
   Table,
 } from "antd";
 import React, { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   activeCollaborator,
@@ -33,10 +33,10 @@ import "./CollaboratorManage.scss";
 
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
+import { getUser } from "../../../../../redux/selectors/auth.js";
 
 export default function CollaboratorManage(props) {
   const { data, total, status } = props;
-
   const [dataFilter, setDataFilter] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalFilter, setTotalFilter] = useState("");
@@ -53,6 +53,7 @@ export default function CollaboratorManage(props) {
   const toggleBlock = () => setModalBlock(!modalBlock);
   const toggleVerify = () => setModalVerify(!modalVerify);
   const toggleLockTime = () => setModalLockTime(!modalLockTime);
+  const user = useSelector(getUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -222,7 +223,7 @@ export default function CollaboratorManage(props) {
     },
     {
       key: "3",
-      label: <a onClick={toggle}>Xoá</a>,
+      label: user?.role === "admin" && <a onClick={toggle}>Xoá</a>,
     },
   ];
 

@@ -31,6 +31,7 @@ import {
 } from "../../../../api/topup";
 import { formatMoney } from "../../../../helper/formatMoney";
 import LoadingPagination from "../../../../components/paginationLoading";
+import { getUser } from "../../../../redux/selectors/auth";
 
 export default function TopupManage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,13 +49,13 @@ export default function TopupManage() {
   const toggleConfirm = () => setModalConfirm(!modalConfirm);
   const toggleEdit = () => setModalEdit(!modalEdit);
   const toggle = () => setModal(!modal);
+  const user = useSelector(getUser);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // dispatch(loadingAction.loadingRequest(true));
     dispatch(
-      getTopupCollaborator.getTopupCollaboratorRequest({ start: 0, length: 10 })
+      getTopupCollaborator.getTopupCollaboratorRequest({ start: 0, length: 20 })
     );
   }, [dispatch]);
 
@@ -84,7 +85,7 @@ export default function TopupManage() {
     _debounce((value) => {
       setIsLoading(true);
       setValueSearch(value);
-      searchTopupCollaboratorApi(value, 0, 10)
+      searchTopupCollaboratorApi(value, 0, 20)
         .then((res) => {
           setDataFilter(res.data);
           setTotalFilter(res.totalItem);
@@ -104,7 +105,7 @@ export default function TopupManage() {
         ? page * dataFilter.length - dataFilter.length
         : page * listCollaborators.length - listCollaborators.length;
     dataFilter.length > 0
-      ? searchTopupCollaboratorApi(valueSearch, 0, 10)
+      ? searchTopupCollaboratorApi(valueSearch, 0, 20)
           .then((res) => {
             setDataFilter(res.data);
             setTotalFilter(res.totalItem);
@@ -113,7 +114,7 @@ export default function TopupManage() {
       : dispatch(
           getTopupCollaborator.getTopupCollaboratorRequest({
             start: start > 0 ? start : 0,
-            length: 10,
+            length: 20,
           })
         );
   };
@@ -165,35 +166,70 @@ export default function TopupManage() {
       render: (data) => {
         return (
           <>
-            {!data?.is_verify_money &&
-              (data?.status === "cancel" ? (
-                <a className="text-cancel">Đã huỷ</a>
-              ) : (
-                <button className="btn-confirm" onClick={toggleConfirm}>
-                  Duyệt lệnh
-                </button>
-              ))}
-            {!data?.is_verify_money &&
-              (data?.status === "cancel" ? (
-                <></>
-              ) : (
-                <button
-                  className="btn-edit"
-                  onClick={() => {
-                    toggleEdit();
-                    setItemEdit(data);
-                  }}
-                >
-                  <i className="uil uil-edit-alt"></i>
-                </button>
-              ))}
-
-            <button className="btn-delete" onClick={toggle}>
-              <i className="uil uil-trash"></i>
+            <button
+              className="btn-confirm"
+              onClick={toggleConfirm}
+              disabled={
+                (!data?.is_verify_money && data?.status === "cancel") ||
+                data?.is_verify_money
+                  ? true
+                  : false
+              }
+            >
+              Duyệt lệnh
             </button>
+
+            <button
+              className="btn-edit"
+              disabled={
+                (!data?.is_verify_money && data?.status === "cancel") ||
+                data?.is_verify_money
+                  ? true
+                  : false
+              }
+              onClick={() => {
+                toggleEdit();
+                setItemEdit(data);
+              }}
+            >
+              <i
+                className={
+                  (!data?.is_verify_money && data?.status === "cancel") ||
+                  data?.is_verify_money
+                    ? "uil uil-edit-alt icon-edit"
+                    : "uil uil-edit-alt"
+                }
+              ></i>
+            </button>
+
+            {user?.role === "admin" && (
+              <button className="btn-delete" onClick={toggle}>
+                <i className="uil uil-trash"></i>
+              </button>
+            )}
           </>
         );
       },
+    },
+    {
+      title: "Trạng thái",
+      render: (data) => {
+        return (
+          <div>
+            {data?.status === "pending" ? (
+              <a className="text-pending-topup">Đang xử lý</a>
+            ) : data?.status === "transfered" ? (
+              <a className="text-transfered">Đã chuyển tiền</a>
+            ) : data?.status === "done" ? (
+              <a className="text-done">Hoàn tất</a>
+            ) : (
+              <a className="text-cancel">Đã huỷ</a>
+            )}
+          </div>
+        );
+      },
+      width: "10%",
+      align: "center",
     },
   ];
 
@@ -220,24 +256,6 @@ export default function TopupManage() {
               </Col>
             </Row>
           </CardHeader>
-          {/* <Table className="align-items-center table-flush " responsive>
-            <thead>
-              <tr>
-                <th>Tên cộng tác viên</th>
-                <th>Số tiền</th>
-                <th>Nạp/rút</th>
-                <th>Nội dung</th>‚
-                <th>Ngày nạp</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {dataFilter.length > 0
-                ? dataFilter.map((e) => <TableManageTopup data={e} />)
-                : listCollaborators &&
-                  listCollaborators.map((e) => <TableManageTopup data={e} />)}
-            </tbody>
-          </Table> */}
           <Table
             columns={columns}
             dataSource={dataFilter.length > 0 ? dataFilter : listCollaborators}
@@ -275,6 +293,7 @@ export default function TopupManage() {
                 onChange={onChange}
                 total={dataFilter.length > 0 ? totalFilter : totalCollaborators}
                 showSizeChanger={false}
+                pageSize={20}
               />
             </div>
           </div>
@@ -294,7 +313,7 @@ export default function TopupManage() {
                     : " Bạn có muốn duyệt lệnh rút tiền cho :"}
                 </h4>
                 <div className="body-modal">
-                  <a>CTV: {itemEdit?.id_collaborator?.name}</a>
+                  <a>CTV: {itemEdit?.id_collaborator?.full_name}</a>
                   <a>SĐT: {itemEdit?.id_collaborator?.phone}</a>
                   <a>Số tiền: {formatMoney(itemEdit?.money)}</a>
                   <a>Nội dung: {itemEdit?.transfer_note}</a>
@@ -318,7 +337,7 @@ export default function TopupManage() {
               <a>
                 Bạn có chắc muốn xóa giao dịch của cộng tác viên
                 <a className="text-name-modal">
-                  {itemEdit?.id_collaborator?.name}
+                  {itemEdit?.id_collaborator?.full_name}
                 </a>
                 này không?
               </a>

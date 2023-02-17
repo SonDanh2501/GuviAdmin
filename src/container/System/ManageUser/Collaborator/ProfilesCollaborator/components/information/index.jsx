@@ -38,7 +38,7 @@ const Information = ({ data, image }) => {
       : data?.identity_date.slice(0, data?.identity_date.indexOf("T"));
     setName(data?.full_name);
     setGender(data?.gender);
-    setBirthday(birthdayD);
+    setBirthday(data?.birthday);
     setResident(data?.permanent_address);
     setStaying(data?.temporary_address);
     setEthnic(data?.folk);
@@ -46,7 +46,7 @@ const Information = ({ data, image }) => {
     setLevel(data?.edu_level);
     setNumber(data?.identity_number);
     setIssued(data?.identity_place);
-    setIssuedDay(identityD);
+    setIssuedDay(data?.identity_date);
     setImgUrl(data?.avatar);
     setPhone(data?.phone);
   }, [data]);
@@ -102,11 +102,6 @@ const Information = ({ data, image }) => {
     imgUrl,
   ]);
 
-  const onChange = (date, dateString) => {
-    console.log(date, dateString);
-    setBirthday(dateString);
-  };
-
   return (
     <>
       <Form>
@@ -145,7 +140,7 @@ const Information = ({ data, image }) => {
                 label={"Ngày sinh"}
                 placeholder="Chọn ngày sinh"
                 type="date"
-                value={birthday}
+                value={moment(birthday).format("YYYY-MM-DD")}
                 onChange={(e) => setBirthday(e.target.value)}
               />
             </Col>
@@ -253,7 +248,7 @@ const Information = ({ data, image }) => {
                 label={"Ngày cấp"}
                 placeholder="Nhập thông tin"
                 type="date"
-                value={issuedDay}
+                value={moment(issuedDay).format("YYYY-MM-DD")}
                 onChange={(e) => setIssuedDay(e.target.value)}
               />
             </Col>

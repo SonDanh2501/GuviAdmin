@@ -1,5 +1,5 @@
 import { Tabs } from "antd";
-import PromotionManage from "../ManagePromotion/Customer/promotionManage";
+import ManagePromotions from "../ManagePromotion";
 import "./index.scss";
 import BannerManage from "./ManageBanner/BannerManage";
 import NewsManage from "./ManageNews/NewsManage";
@@ -9,7 +9,7 @@ const ManageSetting = () => {
     <div className="div-container-promotion">
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="Quản lý khuyến mãi" key="1">
-          <PromotionManage />
+          <ManagePromotions />
         </Tabs.TabPane>
         <Tabs.TabPane tab="Quản lý banner" key="2">
           <BannerManage />

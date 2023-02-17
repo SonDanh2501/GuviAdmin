@@ -19,6 +19,11 @@
   }
 }
 
+.icon-edit {
+  color: rgb(126, 126, 126);
+  opacity: 0.5;
+}
+
 .btn-confirm {
   border: none;
   font-family: Arial, Helvetica, sans-serif;
@@ -61,4 +66,34 @@
 .text-withdraw {
   color: #ff0000 !important;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.text-done {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  color: #00cf3a;
+  text-decoration: none;
+}
+
+.text-pending-topup {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  color: #00cf3a !important;
+  text-decoration: none;
+}
+
+.text-transfered {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  color: #19129a !important;
+  text-decoration: none;
 }

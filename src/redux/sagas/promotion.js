@@ -23,7 +23,8 @@ function* fetchPromotionSaga(action) {
     const promotion = yield call(
       fetchPromotion,
       action.payload.start,
-      action.payload.length
+      action.payload.length,
+      action.payload.type
     );
     yield put(
       getPromotion.getPromotionSuccess({

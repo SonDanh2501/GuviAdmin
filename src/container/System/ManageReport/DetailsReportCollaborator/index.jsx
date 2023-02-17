@@ -52,7 +52,7 @@ const DetailReportManager = () => {
     {
       title: "Mã CTV",
       render: (data) => {
-        return <a>{data?.code_collaborator} </a>;
+        return <a>{data?.id_view} </a>;
       },
       width: "10%",
     },

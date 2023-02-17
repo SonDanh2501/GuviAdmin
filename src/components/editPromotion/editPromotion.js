@@ -431,7 +431,7 @@ const EditPromotion = ({ state, setState, data }) => {
                       toolbarClassName="toolbarClassName"
                       wrapperClassName="wrapperClassName wrapperStyle"
                       editorClassName="editorClassName"
-                      editorStyle={{ color: "black" }}
+                      wrapperStyle={{ color: "#000" }}
                     />
                   </div>
                   <Label>Tiếng Anh</Label>
@@ -442,7 +442,7 @@ const EditPromotion = ({ state, setState, data }) => {
                       toolbarClassName="toolbarClassName"
                       wrapperClassName="wrapperClassName wrapperStyle"
                       editorClassName="editorClassName"
-                      editorStyle={{ color: "black" }}
+                      wrapperStyle={{ color: "#000" }}
                     />
                   </div>
                 </Col>

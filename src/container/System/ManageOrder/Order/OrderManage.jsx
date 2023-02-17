@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getOrder, searchOrder } from "../../../../redux/actions/order";
 
 import { UilEllipsisV } from "@iconscout/react-unicons";
@@ -8,9 +8,13 @@ import moment from "moment";
 import vi from "moment/locale/vi";
 import { useNavigate } from "react-router-dom";
 import "./OrderManage.scss";
-import { searchOrderApi } from "../../../../api/order";
+import { deleteOrderApi, searchOrderApi } from "../../../../api/order";
 import EditOrder from "../DrawerEditOrder";
 import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { loadingAction } from "../../../../redux/actions/loading";
+import { errorNotify } from "../../../../helper/toast";
+import { getUser } from "../../../../redux/selectors/auth";
 
 export default function OrderManage(props) {
   const { data, total, status, dataSearch, value } = props;
@@ -18,8 +22,11 @@ export default function OrderManage(props) {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [item, setItem] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector(getUser);
+  const toggle = () => setModal(!modal);
 
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work)).format("HH:mm");
@@ -30,11 +37,23 @@ export default function OrderManage(props) {
     return start + " - " + timeEnd;
   };
 
+  const deleteOrder = (id) => {
+    dispatch(loadingAction.loadingRequest(true));
+    deleteOrderApi(id)
+      .then((res) => {
+        // window.location.reload();
+        console.log(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+
   const items = [
-    // {
-    //   key: "1",
-    //   label: <EditOrder id={item?._id} />,
-    // },
     {
       key: "1",
       label:
@@ -58,6 +77,16 @@ export default function OrderManage(props) {
         </a>
       ),
     },
+    // {
+    //   key: "3",
+    //   label:
+    //     user?.role === "admin" &&
+    //     (item?.status === "cancel" || item?.status === "done" ? (
+    //       <a onClick={toggle}>Xoá</a>
+    //     ) : (
+    //       ""
+    //     )),
+    // },
   ];
 
   const columns = [
@@ -280,6 +309,26 @@ export default function OrderManage(props) {
               pageSize={20}
             />
           </div>
+        </div>
+
+        <div>
+          <Modal isOpen={modal} toggle={toggle}>
+            <ModalHeader toggle={toggle}>Xóa đơn hàng</ModalHeader>
+            <ModalBody>
+              <a>
+                Bạn có chắc muốn xóa đơn hàng{" "}
+                <a className="text-name-modal">{item?.id_view}</a> này không?
+              </a>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={() => deleteOrder(item?._id)}>
+                Có
+              </Button>
+              <Button color="#ddd" onClick={toggle}>
+                Không
+              </Button>
+            </ModalFooter>
+          </Modal>
         </div>
       </div>
     </React.Fragment>

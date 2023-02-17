@@ -36,8 +36,9 @@ import "./PromotionManage.scss";
 import onToggle from "../../../../assets/images/on-button.png";
 import offToggle from "../../../../assets/images/off-button.png";
 import LoadingPagination from "../../../../components/paginationLoading/index.jsx";
+import { getUser } from "../../../../redux/selectors/auth.js";
 
-export default function PromotionManage() {
+export default function PromotionManage({ type }) {
   const promotion = useSelector(getPromotionSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -57,9 +58,17 @@ export default function PromotionManage() {
   const toggle = () => setModal(!modal);
   const toggleActive = () => setModalActive(!modalActive);
   const [api, contextHolder] = notification.useNotification();
+  const user = useSelector(getUser);
+
   useEffect(() => {
-    dispatch(getPromotion.getPromotionRequest({ start: 0, length: 10 }));
-  }, []);
+    dispatch(
+      getPromotion.getPromotionRequest({ start: 0, length: 10, type: type })
+    );
+    setDataFilter([]);
+    setDataSearch([]);
+    setValueFilter("");
+    setValueSearch("");
+  }, [type]);
 
   const onDelete = useCallback((id) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -95,13 +104,13 @@ export default function PromotionManage() {
         ? page * dataFilter.length - dataFilter.length
         : page * promotion.length - promotion.length;
     dataSearch.length > 0
-      ? searchPromotion(valueSearch, start, 10)
+      ? searchPromotion(valueSearch, start, 10, type)
           .then((res) => {
             setDataSearch(res.data);
           })
           .catch((err) => console.log(err))
       : dataFilter.length > 0
-      ? filterPromotion(valueFilter, start, 10)
+      ? filterPromotion(valueFilter, start, 10, type)
           .then((res) => {
             setDataSearch(res?.data);
             setTotalSearch(res?.totalItem);
@@ -111,6 +120,7 @@ export default function PromotionManage() {
           getPromotion.getPromotionRequest({
             start: start > 0 ? start : 0,
             length: 10,
+            type: type,
           })
         );
   };
@@ -120,7 +130,7 @@ export default function PromotionManage() {
       setValueSearch(value);
       setIsLoading(true);
       if (value !== "") {
-        searchPromotion(value, 0, 10)
+        searchPromotion(value, 0, 10, type)
           .then((res) => {
             setIsLoading(false);
 
@@ -135,13 +145,13 @@ export default function PromotionManage() {
         setDataSearch([]);
       }
     }, 1000),
-    []
+    [type]
   );
 
   const handleChange = (value) => {
     setValueFilter(value);
     setIsLoading(true);
-    filterPromotion(value, 0, 10)
+    filterPromotion(value, 0, 10, type)
       .then((res) => {
         setIsLoading(false);
         setDataFilter(res?.data);
@@ -176,7 +186,7 @@ export default function PromotionManage() {
     },
     {
       key: "2",
-      label: <a onClick={toggle}>Xoá</a>,
+      label: user.role === "admin" && <a onClick={toggle}>Xoá</a>,
     },
   ];
 
@@ -312,6 +322,7 @@ export default function PromotionManage() {
             size={"large"}
             style={{ width: 190 }}
             onChange={handleChange}
+            value={valueFilter}
             options={[
               { value: "", label: "Lọc theo trạng thái" },
               { value: "upcoming", label: "Sắp diễn ra" },

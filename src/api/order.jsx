@@ -46,3 +46,9 @@ export const changeStatusOrderApi = (id, data) => {
     data
   );
 };
+
+export const deleteOrderApi = (id) => {
+  return axiosClient.post(
+    `/admin/group-order-manager/delete_group_order/${id}?lang=vi`
+  );
+};

@@ -369,7 +369,7 @@ const AddPromotion = () => {
                       toolbarClassName="toolbarClassName"
                       wrapperClassName="wrapperClassName wrapperStyle"
                       editorClassName="editorClassName"
-                      editorStyle={{ color: "black" }}
+                      wrapperStyle={{ color: "#000" }}
                     />
                   </div>
                   <Label>Tiếng Việt</Label>
@@ -380,7 +380,7 @@ const AddPromotion = () => {
                       toolbarClassName="toolbarClassName"
                       wrapperClassName="wrapperClassName wrapperStyle"
                       editorClassName="editorClassName"
-                      editorStyle={{ color: "black" }}
+                      wrapperStyle={{ color: "#000" }}
                     />
                   </div>
                 </Col>

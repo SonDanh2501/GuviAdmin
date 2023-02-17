@@ -1,20 +1,20 @@
 import axiosClient from "../axios";
 
-export const fetchPromotion = (start, length) => {
+export const fetchPromotion = (start, length, type) => {
   return axiosClient.get(
-    `/admin/promotion_manager/get_list?start=${start}&length=${length}`
+    `/admin/promotion_manager/get_list?start=${start}&length=${length}&typeSort=${type}`
   );
 };
 
-export const searchPromotion = (search, start, length) => {
+export const searchPromotion = (search, start, length, type) => {
   return axiosClient.get(
-    `/admin/promotion_manager/get_list?search=${search}&start=${start}&length=${length}`
+    `/admin/promotion_manager/get_list?search=${search}&start=${start}&length=${length}&typeSort=${type}`
   );
 };
 
-export const filterPromotion = (status, start, length) => {
+export const filterPromotion = (status, start, length, type) => {
   return axiosClient.get(
-    `/admin/promotion_manager/get_list?status=${status}&start=${start}&length=${length}`
+    `/admin/promotion_manager/get_list?status=${status}&start=${start}&length=${length}&typeSort=${type}`
   );
 };
 
