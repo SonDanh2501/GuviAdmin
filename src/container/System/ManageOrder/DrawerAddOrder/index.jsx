@@ -18,6 +18,7 @@ import {
   checkCodePromotionOrderApi,
   checkEventCodePromotionOrderApi,
   createOrderApi,
+  getServiceFeeOrderApi,
 } from "../../../../api/order";
 import { loadingAction } from "../../../../redux/actions/loading";
 import LoadingPagination from "../../../../components/paginationLoading";
@@ -44,7 +45,9 @@ const AddOrder = () => {
   const [discount, setDiscount] = useState(0);
   const [codePromotion, setCodePromotion] = useState("");
   const [eventPromotion, setEventPromotion] = useState([]);
-  const [eventFeePromotion, setEventFeePromotion] = useState();
+  const [eventFeePromotion, setEventFeePromotion] = useState(0);
+  const [feeService, setFeeService] = useState(0);
+  const [dataFeeService, setDataFeeService] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const showDrawer = () => {
@@ -170,62 +173,106 @@ const AddOrder = () => {
   var accessToken = AES.encrypt(temp, "guvico");
 
   useEffect(() => {
-    setIsLoading(true);
-    getCalculateFeeApi({
-      token: accessToken.toString(),
-      type: "loop",
-      type_address_work: "house",
-      note_address: "",
-      note: note,
-      is_auto_order: false,
-      date_work_schedule: [timeW],
-      extend_optional: mutipleSelected.concat(time),
-    })
-      .then((res) => {
-        setPriceOrder(res?.initial_fee);
-        setIsLoading(false);
+    if (
+      lat &&
+      long &&
+      address &&
+      timeWork &&
+      dateWork &&
+      mutipleSelected &&
+      time
+    ) {
+      setIsLoading(true);
+      getCalculateFeeApi({
+        token: accessToken.toString(),
+        type: "loop",
+        type_address_work: "house",
+        note_address: "",
+        note: note,
+        is_auto_order: false,
+        date_work_schedule: [timeW],
+        extend_optional: mutipleSelected.concat(time),
       })
-      .catch((err) => {
-        setIsLoading(false);
-      });
-  }, [lat, long, address, timeWork, dateWork, mutipleSelected, time]);
+        .then((res) => {
+          setPriceOrder(res?.initial_fee);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+        });
+    }
 
-  if (
-    lat &&
-    long &&
-    address &&
-    timeWork &&
-    dateWork &&
-    mutipleSelected &&
-    time &&
-    id
-  ) {
-    checkEventCodePromotionOrderApi(id, {
-      token: accessToken.toString(),
-      type: "loop",
-      type_address_work: "house",
-      note_address: "",
-      note: note,
-      is_auto_order: false,
-      date_work_schedule: [timeW],
-      extend_optional: mutipleSelected.concat(time),
-    })
-      .then((res) => {
-        const totalEventFee =
-          res?.event_promotion.length > 0
-            ? res?.event_promotion
-                .map((el) => el.discount)
-                .reduce((a, b) => a + b)
-            : 0;
-        setEventFeePromotion(totalEventFee);
-        setEventPromotion(res?.event_promotion);
-        setIsLoading(false);
-        console.log(res);
+    if (
+      lat &&
+      long &&
+      address &&
+      timeWork &&
+      dateWork &&
+      mutipleSelected &&
+      time
+    ) {
+      setIsLoading(true);
+      getServiceFeeOrderApi({
+        token: accessToken.toString(),
+        type: "loop",
+        type_address_work: "house",
+        note_address: "",
+        note: note,
+        is_auto_order: false,
+        date_work_schedule: [timeW],
+        extend_optional: mutipleSelected.concat(time),
       })
-      .catch((err) => {
-        setIsLoading(false);
-      });
-  }
+        .then((res) => {
+          const totalEventFee =
+            res?.service_fee.length > 0
+              ? res?.service_fee.map((el) => el.fee).reduce((a, b) => a + b)
+              : 0;
+          setFeeService(totalEventFee);
+          setDataFeeService(res?.service_fee);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+        });
+    }
+
+    if (
+      lat &&
+      long &&
+      address &&
+      timeWork &&
+      dateWork &&
+      mutipleSelected &&
+      time &&
+      id
+    ) {
+      setIsLoading(true);
+      checkEventCodePromotionOrderApi(id, {
+        token: accessToken.toString(),
+        type: "loop",
+        type_address_work: "house",
+        note_address: "",
+        note: note,
+        is_auto_order: false,
+        date_work_schedule: [timeW],
+        extend_optional: mutipleSelected.concat(time),
+      })
+        .then((res) => {
+          const totalEventFee =
+            res?.event_promotion.length > 0
+              ? res?.event_promotion
+                  .map((el) => el.discount)
+                  .reduce((a, b) => a + b)
+              : 0;
+          setEventFeePromotion(totalEventFee);
+          setEventPromotion(res?.event_promotion);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+        });
+    }
+  }, [lat, long, address, timeWork, dateWork, mutipleSelected, time, id]);
 
   const checkPromotion = useCallback(
     (code) => {
@@ -541,11 +588,15 @@ const AddOrder = () => {
               </a>
             );
           })}
+          <a>Phí dịch vụ: {formatMoney(feeService)}</a>
         </div>
         {priceOrder && (
           <div className="div-footer mt-5">
             <a className="text-price">
-              Giá: {formatMoney(priceOrder - discount - eventFeePromotion)}{" "}
+              Giá:{" "}
+              {formatMoney(
+                priceOrder - discount - eventFeePromotion - feeService
+              )}{" "}
             </a>
             <Button onClick={onCreateOrder}>Đăng việc</Button>
           </div>

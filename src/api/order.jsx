@@ -59,3 +59,7 @@ export const checkEventCodePromotionOrderApi = (id, data) => {
     data
   );
 };
+
+export const getServiceFeeOrderApi = (data) => {
+  return axiosClient.post(`/admin/group-order-manager/get_service_fee`, data);
+};
