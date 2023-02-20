@@ -9,8 +9,6 @@ const regexPhone =
 const regexEmail =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const confirmPasswordMessage = "Password không trùng khớp";
-
 const validateLoginSchema = Yup.object().shape({
   email: Yup.string()
     .matches(regexEmail, validEmailMessage)

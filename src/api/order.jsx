@@ -52,3 +52,10 @@ export const deleteOrderApi = (id) => {
     `/admin/group-order-manager/delete_group_order/${id}?lang=vi`
   );
 };
+
+export const checkEventCodePromotionOrderApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/promotion_manager/check_event_promotion/${id}`,
+    data
+  );
+};

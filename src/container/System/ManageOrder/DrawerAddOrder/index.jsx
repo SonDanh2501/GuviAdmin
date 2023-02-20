@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { formatMoney } from "../../../../helper/formatMoney";
 import {
   checkCodePromotionOrderApi,
+  checkEventCodePromotionOrderApi,
   createOrderApi,
 } from "../../../../api/order";
 import { loadingAction } from "../../../../redux/actions/loading";
@@ -42,6 +43,8 @@ const AddOrder = () => {
   const [priceOrder, setPriceOrder] = useState();
   const [discount, setDiscount] = useState(0);
   const [codePromotion, setCodePromotion] = useState("");
+  const [eventPromotion, setEventPromotion] = useState();
+  const [eventFeePromotion, setEventFeePromotion] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   const showDrawer = () => {
@@ -186,6 +189,35 @@ const AddOrder = () => {
         setIsLoading(false);
       });
   }, [lat, long, address, timeWork, dateWork, mutipleSelected, time]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    checkEventCodePromotionOrderApi(id, {
+      token: accessToken.toString(),
+      type: "loop",
+      type_address_work: "house",
+      note_address: "",
+      note: note,
+      is_auto_order: false,
+      date_work_schedule: [timeW],
+      extend_optional: mutipleSelected.concat(time),
+    })
+      .then((res) => {
+        const totalEventFee =
+          res?.event_promotion.length > 0
+            ? res?.event_promotion
+                .map((el) => el.discount)
+                .reduce((a, b) => a + b)
+            : 0;
+        setEventFeePromotion(totalEventFee);
+        setEventPromotion(res?.event_promotion);
+        setIsLoading(false);
+        console.log(res);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  }, [lat, long, address, timeWork, dateWork, mutipleSelected, time, id]);
 
   const checkPromotion = useCallback(
     (code) => {
@@ -491,10 +523,21 @@ const AddOrder = () => {
             </div>
           </div>
         )}
+        <div className="div-total mt-3">
+          <a>Tạm tính: {formatMoney(priceOrder)}</a>
+          {eventPromotion.map((item, index) => {
+            return (
+              <a style={{ color: "red" }}>
+                {item?.title.vi}: {"-"}
+                {formatMoney(item?.discount)}
+              </a>
+            );
+          })}
+        </div>
         {priceOrder && (
           <div className="div-footer mt-5">
             <a className="text-price">
-              Giá: {formatMoney(priceOrder - discount)}{" "}
+              Giá: {formatMoney(priceOrder - discount - eventFeePromotion)}{" "}
             </a>
             <Button onClick={onCreateOrder}>Đăng việc</Button>
           </div>
