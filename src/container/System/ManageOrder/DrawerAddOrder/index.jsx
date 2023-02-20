@@ -43,7 +43,7 @@ const AddOrder = () => {
   const [priceOrder, setPriceOrder] = useState();
   const [discount, setDiscount] = useState(0);
   const [codePromotion, setCodePromotion] = useState("");
-  const [eventPromotion, setEventPromotion] = useState();
+  const [eventPromotion, setEventPromotion] = useState([]);
   const [eventFeePromotion, setEventFeePromotion] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -190,8 +190,16 @@ const AddOrder = () => {
       });
   }, [lat, long, address, timeWork, dateWork, mutipleSelected, time]);
 
-  useEffect(() => {
-    setIsLoading(true);
+  if (
+    lat &&
+    long &&
+    address &&
+    timeWork &&
+    dateWork &&
+    mutipleSelected &&
+    time &&
+    id
+  ) {
     checkEventCodePromotionOrderApi(id, {
       token: accessToken.toString(),
       type: "loop",
@@ -217,7 +225,7 @@ const AddOrder = () => {
       .catch((err) => {
         setIsLoading(false);
       });
-  }, [lat, long, address, timeWork, dateWork, mutipleSelected, time, id]);
+  }
 
   const checkPromotion = useCallback(
     (code) => {
