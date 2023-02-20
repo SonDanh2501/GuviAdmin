@@ -59,7 +59,7 @@ export default function OrderManage(props) {
       key: "1",
       label:
         item?.status === "pending" ? (
-          <AddCollaboratorOrder idOrder={item?._id} />
+          <AddCollaboratorOrder idOrder={item?.id_order[0]} />
         ) : (
           <></>
         ),
