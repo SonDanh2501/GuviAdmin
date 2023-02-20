@@ -19,6 +19,8 @@ import {
   searchPromotion,
 } from "../../../../api/promotion.jsx";
 import AddPromotion from "../../../../components/addPromotion/addPromotion.js";
+import AddPromotionEvent from "../../../../components/addPromotionEvent/addPromotionEvent.js";
+
 import { loadingAction } from "../../../../redux/actions/loading.js";
 import {
   deletePromotionAction,
@@ -37,6 +39,7 @@ import onToggle from "../../../../assets/images/on-button.png";
 import offToggle from "../../../../assets/images/off-button.png";
 import LoadingPagination from "../../../../components/paginationLoading/index.jsx";
 import { getUser } from "../../../../redux/selectors/auth.js";
+import EditPromotionEvent from "../../../../components/editPromotionEvent/editPromotionEvent.js";
 
 export default function PromotionManage({ type }) {
   const promotion = useSelector(getPromotionSelector);
@@ -339,7 +342,7 @@ export default function PromotionManage({ type }) {
             prefix={<SearchOutlined />}
             onChange={(e) => handleSearch(e.target.value)}
           />
-          <AddPromotion />
+          {type === "code" ? <AddPromotion /> : <AddPromotionEvent />}
         </div>
         <div className="mt-3">
           <Table
@@ -398,11 +401,19 @@ export default function PromotionManage({ type }) {
         </div>
 
         <div>
-          <EditPromotion
-            state={modalEdit}
-            setState={() => setModalEdit(!modalEdit)}
-            data={itemEdit}
-          />
+          {type === "code" ? (
+            <EditPromotion
+              state={modalEdit}
+              setState={() => setModalEdit(!modalEdit)}
+              data={itemEdit}
+            />
+          ) : (
+            <EditPromotionEvent
+              state={modalEdit}
+              setState={() => setModalEdit(!modalEdit)}
+              data={itemEdit}
+            />
+          )}
         </div>
         <div>
           <Modal isOpen={modal} toggle={toggle}>

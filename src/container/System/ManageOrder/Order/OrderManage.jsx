@@ -29,7 +29,9 @@ export default function OrderManage(props) {
   const toggle = () => setModal(!modal);
 
   const timeWork = (data) => {
-    const start = moment(new Date(data.date_work)).format("HH:mm");
+    const start = moment(new Date(data.date_work_schedule[0].date)).format(
+      "HH:mm"
+    );
 
     const timeEnd =
       Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
@@ -41,8 +43,7 @@ export default function OrderManage(props) {
     dispatch(loadingAction.loadingRequest(true));
     deleteOrderApi(id)
       .then((res) => {
-        // window.location.reload();
-        console.log(res);
+        window.location.reload();
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -163,10 +164,12 @@ export default function OrderManage(props) {
           <div className="div-worktime">
             <a className="text-worktime">
               {" "}
-              {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
+              {moment(new Date(data?.date_work_schedule[0].date)).format(
+                "DD/MM/YYYY"
+              )}
             </a>
             <a className="text-worktime">
-              {moment(new Date(data?.date_work))
+              {moment(new Date(data?.date_work_schedule[0].date))
                 .locale("vi", vi)
                 .format("dddd")}
             </a>

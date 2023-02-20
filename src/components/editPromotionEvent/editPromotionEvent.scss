@@ -1,12 +1,11 @@
-.btn-add-promotion {
-  width: 15%px;
-  height: 48px;
-  border: none;
+.btn-modal {
+  background-color: #17a2b8;
+  border: none !important;
   border-radius: 5px;
-  background-color: #48cae4;
-  color: white;
-  margin-left: 20px;
-  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  height: 35px;
+  -webkit-box-shadow: 1px 3px 1px #b6b5ab;
+  -moz-box-shadow: 1px 3px 1px #b6b5ab;
+  box-shadow: 1px 3px 1px #b6b5ab;
 }
 
 .textInput {
@@ -34,6 +33,10 @@
   height: 100px;
   border-radius: 5px;
   margin-bottom: 10px;
+}
+
+.input-promo {
+  margin-left: 20px;
 }
 
 .form-description {
@@ -65,14 +68,16 @@
   margin-bottom: 10px;
   box-shadow: 2px 3px 2px rgb(216, 216, 216);
   margin-left: 20px;
+  width: 100px;
 }
 
-.btn-form-same-promotions-default {
+.btn-form-same-promotion-default {
   margin-right: 10px;
   color: rgb(0, 0, 0);
   margin-bottom: 10px;
   box-shadow: 2px 3px 2px rgb(216, 216, 216);
   margin-left: 20px;
+  width: 100px;
 }
 
 .select-type-promo {

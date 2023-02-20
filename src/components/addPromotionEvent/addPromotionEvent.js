@@ -1,8 +1,8 @@
 import { Select } from "antd";
 import { convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import { Editor } from "react-draft-wysiwyg";
 import React, { memo, useCallback, useEffect, useState } from "react";
+import { Editor } from "react-draft-wysiwyg";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -25,9 +25,9 @@ import { createPromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
-import "./addPromotion.scss";
+import "./addPromotionEvent.scss";
 
-const AddPromotion = () => {
+const AddPromotionEvent = () => {
   const [state, setState] = useState(false);
   const [formDiscount, setFormDiscount] = React.useState("amount");
   const [discountUnit, setDiscountUnit] = React.useState("amount");
@@ -39,8 +39,6 @@ const AddPromotion = () => {
   const [customer, setCustomer] = React.useState([]);
   const [titleVN, setTitleVN] = React.useState("");
   const [titleEN, setTitleEN] = React.useState("");
-  const [shortDescriptionVN, setShortDescriptionVN] = React.useState("");
-  const [shortDescriptionEN, setShortDescriptionEN] = React.useState("");
   const [descriptionVN, setDescriptionVN] = React.useState(
     EditorState.createEmpty()
   );
@@ -60,15 +58,9 @@ const AddPromotion = () => {
   const [limitedDate, setLimitedDate] = React.useState(false);
   const [startDate, setStartDate] = React.useState("");
   const [endDate, setEndDate] = React.useState("");
-  const [isExchangePoint, setIsExchangePoint] = React.useState(false);
-  const [exchangePoint, setExchangePoint] = React.useState("");
   const [isUsePromo, setIsUsePromo] = React.useState(false);
   const [usePromo, setUsePromo] = React.useState("");
-  const [imgThumbnail, setImgThumbnail] = React.useState("");
-  const [imgBackground, setImgBackground] = React.useState("");
   const [serviceApply, setServiceApply] = useState("");
-  const [dateExchange, setDateExchange] = useState();
-  const [position, setPosition] = useState();
   const [isPaymentMethod, setIsPaymentMethod] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState([]);
   const options = [];
@@ -104,74 +96,6 @@ const AddPromotion = () => {
       value: item?._id,
     });
   });
-
-  const onChangeThumbnail = async (e) => {
-    dispatch(loadingAction.loadingRequest(true));
-    try {
-      if (e.target.files[0]) {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          setImgThumbnail(reader.result);
-        });
-        reader.readAsDataURL(e.target.files[0]);
-      }
-      const file = e.target.files[0];
-      const image = await resizeFile(file);
-      const formData = new FormData();
-      formData.append("file", image);
-      postFile(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-        .then((res) => {
-          setImgThumbnail(res);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const onChangeBackground = async (e) => {
-    dispatch(loadingAction.loadingRequest(true));
-    try {
-      if (e.target.files[0]) {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          setImgBackground(reader.result);
-        });
-        reader.readAsDataURL(e.target.files[0]);
-      }
-      const file = e.target.files[0];
-      const image = await resizeFile(file);
-      const formData = new FormData();
-      formData.append("file", image);
-      postFile(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-        .then((res) => {
-          setImgBackground(res);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const onFormDiscount = (title) => {
     setFormDiscount(title);
@@ -209,16 +133,16 @@ const AddPromotion = () => {
           en: titleEN,
         },
         short_description: {
-          vi: shortDescriptionVN,
-          en: shortDescriptionEN,
+          vi: "",
+          en: "",
         },
         description: {
           vi: draftToHtml(convertToRaw(descriptionVN.getCurrentContent())),
           en: draftToHtml(convertToRaw(descriptionEN.getCurrentContent())),
         },
-        thumbnail: imgThumbnail,
-        image_background: imgBackground,
-        code: promoCode ? promoCode : codebrand,
+        thumbnail: "",
+        image_background: "",
+        code: promoCode,
         is_limit_date: limitedDate,
         limit_start_date: limitedDate
           ? new Date(startDate).toISOString()
@@ -233,18 +157,18 @@ const AddPromotion = () => {
         service_apply: [serviceApply],
         is_limited_use: isUsePromo,
         limited_use: isUsePromo ? usePromo : 0,
-        type_discount: promoType,
-        type_promotion: "code",
+        type_discount: "order",
+        type_promotion: "event",
         price_min_order: minimumOrder,
         discount_unit: discountUnit,
         discount_max_price: maximumDiscount,
         discount_value: reducedValue,
         is_delete: false,
-        is_exchange_point: isExchangePoint,
-        exchange_point: exchangePoint,
+        is_exchange_point: false,
+        exchange_point: 0,
         brand: namebrand.toUpperCase(),
-        exp_date_exchange: dateExchange,
-        position: position,
+        exp_date_exchange: 0,
+        position: 0,
         is_payment_method: isPaymentMethod,
         payment_method: paymentMethod,
       })
@@ -252,12 +176,8 @@ const AddPromotion = () => {
   }, [
     titleVN,
     titleEN,
-    shortDescriptionVN,
-    shortDescriptionEN,
     descriptionVN,
     descriptionEN,
-    imgThumbnail,
-    imgBackground,
     codebrand,
     limitedDate,
     startDate,
@@ -270,18 +190,13 @@ const AddPromotion = () => {
     customer,
     isUsePromo,
     usePromo,
-    promoType,
     discountUnit,
-    isExchangePoint,
-    exchangePoint,
     namebrand,
     maximumDiscount,
     reducedValue,
     serviceApply,
     promoCode,
-    dateExchange,
     minimumOrder,
-    position,
     isPaymentMethod,
     paymentMethod,
   ]);
@@ -307,7 +222,7 @@ const AddPromotion = () => {
       >
         <div className="modal-header">
           <h3 className="modal-title" id="exampleModalLabel">
-            Thêm mã khuyến mãi
+            Thêm chương trình khuyến mãi
           </h3>
           <button className="btn-close" onClick={() => setState(!state)}>
             <i className="uil uil-times-square"></i>
@@ -333,22 +248,7 @@ const AddPromotion = () => {
                     value={titleEN}
                     onChange={(e) => setTitleEN(e.target.value)}
                   />
-                  <h5>2. Mô tả ngắn</h5>
-                  <CustomTextInput
-                    label={"Tiếng Việt"}
-                    placeholder="Nhập mô tả tiếng việt"
-                    value={shortDescriptionVN}
-                    type="textarea"
-                    onChange={(e) => setShortDescriptionVN(e.target.value)}
-                  />
-                  <CustomTextInput
-                    label={"Tiếng Anh"}
-                    placeholder="Nhập mô tả tiếng anh"
-                    type="textarea"
-                    value={shortDescriptionEN}
-                    onChange={(e) => setShortDescriptionEN(e.target.value)}
-                  />
-                  <h5>3. Mô tả chi tiết</h5>
+                  <h5>2. Mô tả chi tiết</h5>
                   <Label>Tiếng Việt</Label>
                   <div className="form-description">
                     <Editor
@@ -374,210 +274,101 @@ const AddPromotion = () => {
                 </Col>
                 <Col md={4}>
                   <div>
-                    <h5>4. Thumbnail/Background</h5>
+                    <h5>3. Giá đơn đặt tối thiểu</h5>
                     <CustomTextInput
-                      label={"Thumbnail 160px * 170px"}
-                      type="file"
-                      accept={".jpg,.png,.jpeg"}
-                      className="input-upload"
-                      onChange={onChangeThumbnail}
-                    />
-                    {imgThumbnail && (
-                      <img src={imgThumbnail} className="img-thumbnail" />
-                    )}
-                    <CustomTextInput
-                      label={"Background 414px * 200px"}
-                      type="file"
-                      accept={".jpg,.png,.jpeg"}
-                      className="input-upload"
-                      onChange={onChangeBackground}
-                    />
-                    {imgBackground && (
-                      <img src={imgBackground} className="img-background" />
-                    )}
-                  </div>
-                  <div>
-                    <h5>5. Mã khuyến mãi</h5>
-                    <CustomTextInput
-                      placeholder="Nhập mã khuyến mãi"
-                      type="text"
-                      value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value)}
+                      placeholder="Nhập giá"
+                      className="input-promo-code"
+                      type="number"
+                      min={0}
+                      value={minimumOrder}
+                      onChange={(e) => setMinimumOrder(e.target.value)}
                     />
                   </div>
+
                   <div>
-                    <h5>6. Loại khuyến mãi</h5>
+                    <h5>4. Hình thức giảm giá</h5>
+                    <Row>
+                      <Button
+                        className={
+                          discountUnit === "amount"
+                            ? "btn-form-same-promotion"
+                            : "btn-form-same-promotion-default"
+                        }
+                        outline
+                        onClick={() => onFormDiscount("amount")}
+                      >
+                        Giảm trực tiếp
+                      </Button>
+                      <Button
+                        className={
+                          discountUnit === "percent"
+                            ? "btn-form-same-promotion"
+                            : "btn-form-same-promotion-default"
+                        }
+                        outline
+                        onClick={() => onFormDiscount("percent")}
+                      >
+                        Giảm theo phần trăm
+                      </Button>
+                      {discountUnit === "amount" ? (
+                        <CustomTextInput
+                          label={"Giá giảm "}
+                          classNameForm="input-promo-amount"
+                          placeholder="VNĐ"
+                          type="number"
+                          min={0}
+                          value={maximumDiscount}
+                          onChange={(e) => setMaximumDiscount(e.target.value)}
+                        />
+                      ) : (
+                        <Row className="row-discount">
+                          <CustomTextInput
+                            label={"Giá trị giảm"}
+                            className="input-promo-discount"
+                            classNameForm="form-discount"
+                            placeholder="%"
+                            type="number"
+                            min={0}
+                            value={reducedValue}
+                            onChange={(e) => setReducedValue(e.target.value)}
+                          />
+                          <CustomTextInput
+                            label={"Giá giảm tối đa"}
+                            className="input-promo-discount"
+                            classNameForm="form-discount"
+                            min={0}
+                            placeholder="VNĐ"
+                            type="number"
+                            value={maximumDiscount}
+                            onChange={(e) => setMaximumDiscount(e.target.value)}
+                          />
+                        </Row>
+                      )}
+                    </Row>
+                  </div>
+                  <div>
+                    <h5>5. Dịch vụ áp dụng</h5>
+                    <Label>Các dịch vụ</Label>
+
                     <CustomTextInput
                       className="select-type-promo"
                       name="select"
                       type="select"
-                      value={promoType}
-                      onChange={(e) => setPromoType(e.target.value)}
-                      body={
-                        <>
-                          {/* <option value={"same_price"}>Đồng giá</option> */}
-                          <option value={"order"}>Giảm giá theo đơn đặt</option>
-                          <option value={"partner_promotion"}>
-                            Khuyến mãi từ đối tác
+                      value={serviceApply}
+                      onChange={(e) => {
+                        setServiceApply(e.target.value);
+                      }}
+                      body={service.map((item, index) => {
+                        return (
+                          <option key={index} value={item?._id}>
+                            {item?.title?.vi}
                           </option>
-                        </>
-                      }
+                        );
+                      })}
                     />
-                    {/* {promoType === "same_price" ? (
-                      <CustomTextInput
-                        label={"Đơn giá"}
-                        placeholder="Nhập đơn giá"
-                        className="input-promo-code"
-                        type="number"
-                        min={0}
-                        value={maximumDiscount}
-                        onChange={(e) => setMaximumDiscount(e.target.value)}
-                      />
-                    ) :  */}
-                    {promoType === "order" ? (
-                      <CustomTextInput
-                        label={"Giá đơn đặt tối thiểu"}
-                        placeholder="Nhập giá"
-                        className="input-promo-code"
-                        type="number"
-                        min={0}
-                        value={minimumOrder}
-                        onChange={(e) => setMinimumOrder(e.target.value)}
-                      />
-                    ) : (
-                      <>
-                        <CustomTextInput
-                          label={"Tên đối tác"}
-                          placeholder="Nhập tên đối tác"
-                          className="input-promo-brand"
-                          type="text"
-                          value={namebrand}
-                          onChange={(e) => setNamebrand(e.target.value)}
-                        />
-                      </>
-                    )}
                   </div>
-                  {promoType === "partner_promotion" ? null : (
-                    <div>
-                      <h5>7. Hình thức giảm giá</h5>
-                      <Row>
-                        <Button
-                          className={
-                            discountUnit === "amount"
-                              ? "btn-form-same-promotion"
-                              : "btn-form-same-promotion-default"
-                          }
-                          outline
-                          onClick={() => onFormDiscount("amount")}
-                        >
-                          Giảm trực tiếp
-                        </Button>
-                        <Button
-                          className={
-                            discountUnit === "percent"
-                              ? "btn-form-same-promotion"
-                              : "btn-form-same-promotion-default"
-                          }
-                          outline
-                          onClick={() => onFormDiscount("percent")}
-                        >
-                          Giảm theo phần trăm
-                        </Button>
-                        {/* <Button
-                          className={
-                            discountUnit === "same_price"
-                              ? "btn-form-same-promotion"
-                              : "btn-form-same-promotion-default"
-                          }
-                          outline
-                          onClick={() => onFormDiscount("same_price")}
-                        >
-                          Đồng giá
-                        </Button> */}
-                        {
-                          discountUnit === "amount" ? (
-                            <CustomTextInput
-                              label={"Giá giảm "}
-                              classNameForm="input-promo-amount"
-                              placeholder="VNĐ"
-                              type="number"
-                              min={0}
-                              value={maximumDiscount}
-                              onChange={(e) =>
-                                setMaximumDiscount(e.target.value)
-                              }
-                            />
-                          ) : (
-                            <Row className="row-discount">
-                              <CustomTextInput
-                                label={"Giá trị giảm"}
-                                className="input-promo-discount"
-                                classNameForm="form-discount"
-                                placeholder="%"
-                                type="number"
-                                min={0}
-                                value={reducedValue}
-                                onChange={(e) =>
-                                  setReducedValue(e.target.value)
-                                }
-                              />
-                              <CustomTextInput
-                                label={"Giá giảm tối đa"}
-                                className="input-promo-discount"
-                                classNameForm="form-discount"
-                                min={0}
-                                placeholder="VNĐ"
-                                type="number"
-                                value={maximumDiscount}
-                                onChange={(e) =>
-                                  setMaximumDiscount(e.target.value)
-                                }
-                              />
-                            </Row>
-                          )
-                          // ) : (
-                          //   <CustomTextInput
-                          //     label={"Đơn giá"}
-                          //     placeholder="Nhập đơn giá"
-                          //     classNameForm="input-promo-amount"
-                          //     type="number"
-                          //     min={0}
-                          //     value={maximumDiscount}
-                          //     onChange={(e) => setMaximumDiscount(e.target.value)}
-                          //   />
-                          // )
-                        }
-                      </Row>
-                    </div>
-                  )}
-                </Col>
-                <Col md={4}>
-                  {promoType !== "partner_promotion" && (
-                    <div>
-                      <h5>9. Dịch vụ áp dụng</h5>
-                      <Label>Các dịch vụ</Label>
-
-                      <CustomTextInput
-                        className="select-type-promo"
-                        name="select"
-                        type="select"
-                        value={serviceApply}
-                        onChange={(e) => {
-                          setServiceApply(e.target.value);
-                        }}
-                        body={service.map((item, index) => {
-                          return (
-                            <option key={index} value={item?._id}>
-                              {item?.title?.vi}
-                            </option>
-                          );
-                        })}
-                      />
-                    </div>
-                  )}
-
                   <div>
-                    <h5>10. Đối tượng áp dụng</h5>
+                    <h5>6. Đối tượng áp dụng</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Nhóm khách hàng
@@ -634,7 +425,8 @@ const AddPromotion = () => {
                       />
                     )}
                   </div>
-
+                </Col>
+                <Col md={4}>
                   <div>
                     <h5 className="mt-2">11. Số lượng mã khuyến mãi</h5>
                     <FormGroup check inline>
@@ -722,31 +514,6 @@ const AddPromotion = () => {
                     )}
                   </div>
                   <div>
-                    <h5 className="mt-2">14. Điểm quy đổi</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Điểm quy đổi
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isExchangePoint}
-                        onClick={() => setIsExchangePoint(!isExchangePoint)}
-                      />
-                    </FormGroup>
-                    {isExchangePoint && (
-                      <CustomTextInput
-                        label={"Điểm"}
-                        placeholder="Nhập số điểm"
-                        className="input-promo-code"
-                        type="number"
-                        min={0}
-                        value={exchangePoint}
-                        onChange={(e) => setExchangePoint(e.target.value)}
-                      />
-                    )}
-                  </div>
-                  <div>
                     <h5 className="mt-2">15. Phương thức thanh toán</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
@@ -773,30 +540,8 @@ const AddPromotion = () => {
                       />
                     )}
                   </div>
-                  <div>
-                    <h5 className="mt-2">16. Thời gian sử dụng sau khi đổi</h5>
-                    <CustomTextInput
-                      placeholder="Nhập số ngày (1,2,3...,n"
-                      className="input-promo-code"
-                      type="number"
-                      min={0}
-                      value={dateExchange}
-                      onChange={(e) => setDateExchange(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <h5 className="mt-2">17. Thứ tự hiện thị</h5>
-                    <CustomTextInput
-                      placeholder="Nhập số thứ tự (1,2,3...,n"
-                      className="input-promo-code"
-                      type="number"
-                      min={0}
-                      value={position}
-                      onChange={(e) => setPosition(e.target.value)}
-                    />
-                  </div>
                   <Button
-                    className="btn_add"
+                    className="btn_add mt-5"
                     color="warning"
                     onClick={onCreatePromotion}
                   >
@@ -812,4 +557,4 @@ const AddPromotion = () => {
   );
 };
 
-export default memo(AddPromotion);
+export default memo(AddPromotionEvent);
