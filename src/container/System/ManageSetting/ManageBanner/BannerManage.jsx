@@ -14,8 +14,8 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import EditBanner from "../../../../components/editBanner/editBanner";
 import { activeBanner, deleteBanner } from "../../../../api/banner";
 import { loadingAction } from "../../../../redux/actions/loading";
-import unlock from "../../../../assets/images/unlocked.png";
-import lock from "../../../../assets/images/lock.png";
+import onToggle from "../../../../assets/images/on-button.png";
+import offToggle from "../../../../assets/images/off-button.png";
 
 export default function BannerManage() {
   const [dataFilter, setDataFilter] = useState([]);
@@ -160,9 +160,9 @@ export default function BannerManage() {
       render: (data) => (
         <Space size="middle">
           {data?.is_active ? (
-            <img className="img-unlock" src={unlock} onClick={toggleBlock} />
+            <img className="img-unlock" src={onToggle} onClick={toggleBlock} />
           ) : (
-            <img className="img-unlock" src={lock} onClick={toggleBlock} />
+            <img className="img-unlock" src={offToggle} onClick={toggleBlock} />
           )}
 
           <Dropdown

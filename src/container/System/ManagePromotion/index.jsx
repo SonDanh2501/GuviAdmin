@@ -5,13 +5,34 @@ import PromotionManage from "./Promotion/promotionManage";
 
 const ManagePromotions = () => {
   const [selected, setSelected] = useState("code");
+  const [brand, setBrand] = useState("guvi");
   return (
     <div>
       <Button
-        className={selected === "code" ? "btn-selected" : "btn-default"}
-        onClick={() => setSelected("code")}
+        className={
+          selected === "code" && brand === "guvi"
+            ? "btn-selected"
+            : "btn-default"
+        }
+        onClick={() => {
+          setSelected("code");
+          setBrand("guvi");
+        }}
       >
-        Mã khuyến mãi
+        Khuyến mãi Guvi
+      </Button>
+      <Button
+        className={
+          selected === "code" && brand === "orther"
+            ? "btn-selected"
+            : "btn-default"
+        }
+        onClick={() => {
+          setSelected("code");
+          setBrand("orther");
+        }}
+      >
+        Khuyến mãi đối tác
       </Button>
       <Button
         className={selected === "event" ? "btn-selected" : "btn-default"}
@@ -20,10 +41,12 @@ const ManagePromotions = () => {
         Chương trình khuyến mãi
       </Button>
 
-      {selected === "code" ? (
-        <PromotionManage type={selected} />
+      {selected === "code" && brand === "guvi" ? (
+        <PromotionManage type={selected} brand={brand} />
+      ) : selected === "code" && brand === "orther" ? (
+        <PromotionManage type={selected} brand={brand} />
       ) : (
-        <PromotionManage type={selected} />
+        <PromotionManage type={selected} brand={""} />
       )}
     </div>
   );

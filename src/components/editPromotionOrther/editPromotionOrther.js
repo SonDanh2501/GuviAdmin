@@ -1,8 +1,13 @@
 import { Select } from "antd";
-import { convertToRaw, EditorState } from "draft-js";
+import {
+  ContentState,
+  convertFromHTML,
+  convertToRaw,
+  EditorState,
+} from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import { Editor } from "react-draft-wysiwyg";
 import React, { memo, useCallback, useEffect, useState } from "react";
+import { Editor } from "react-draft-wysiwyg";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -17,28 +22,31 @@ import {
 import { fetchCustomers } from "../../api/customer";
 import { DATA_PAYMENT } from "../../api/fakeData";
 import { postFile } from "../../api/file";
-import { getGroupCustomerApi } from "../../api/promotion";
+import {
+  getGroupCustomer,
+  getGroupCustomerApi,
+  getPromotionDetails,
+} from "../../api/promotion";
 import resizeFile from "../../helper/resizer";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
-import { createPromotionAction } from "../../redux/actions/promotion";
+import { updatePromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
-import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
-import "./addPromotion.scss";
+import "./editPromotionOrther.scss";
 
-const AddPromotion = () => {
-  const [state, setState] = useState(false);
+const EditPromotionOrther = ({ state, setState, data }) => {
   const [formDiscount, setFormDiscount] = React.useState("amount");
   const [discountUnit, setDiscountUnit] = React.useState("amount");
+  const [create, setCreate] = React.useState(false);
   const [dataGroupCustomer, setDataGroupCustomer] = React.useState([]);
   const [isGroupCustomer, setIsGroupCustomer] = React.useState(false);
   const [groupCustomer, setGroupCustomer] = React.useState([]);
   const [dataCustomer, setDataCustomer] = React.useState([]);
   const [isCustomer, setIsCustomer] = React.useState(false);
   const [customer, setCustomer] = React.useState([]);
-  const [titleVN, setTitleVN] = React.useState("");
-  const [titleEN, setTitleEN] = React.useState("");
+  const [titleVN, setTitleVN] = React.useState(data?.title?.vi);
+  const [titleEN, setTitleEN] = React.useState(data?.title?.en);
   const [shortDescriptionVN, setShortDescriptionVN] = React.useState("");
   const [shortDescriptionEN, setShortDescriptionEN] = React.useState("");
   const [descriptionVN, setDescriptionVN] = React.useState(
@@ -50,11 +58,12 @@ const AddPromotion = () => {
   const [promoCode, setPromoCode] = React.useState("");
   const [promoType, setPromoType] = React.useState("order");
   const [unitPrice, setUnitPrice] = React.useState("");
-  const [minimumOrder, setMinimumOrder] = React.useState();
+  const [minimumOrder, setMinimumOrder] = React.useState("");
   const [namebrand, setNamebrand] = React.useState("");
   const [codebrand, setCodebrand] = React.useState("");
-  const [reducedValue, setReducedValue] = React.useState(0);
-  const [maximumDiscount, setMaximumDiscount] = React.useState(0);
+  const [reducedValue, setReducedValue] = React.useState();
+  const [maximumDiscount, setMaximumDiscount] = React.useState();
+  const [orderFirst, setOrderFirst] = React.useState(false);
   const [limitedQuantity, setLimitedQuantity] = React.useState(false);
   const [amount, setAmount] = React.useState("");
   const [limitedDate, setLimitedDate] = React.useState(false);
@@ -73,8 +82,8 @@ const AddPromotion = () => {
   const [paymentMethod, setPaymentMethod] = useState([]);
   const options = [];
   const optionsCustomer = [];
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const service = useSelector(getService);
 
   useEffect(() => {
@@ -82,14 +91,10 @@ const AddPromotion = () => {
       .then((res) => setDataGroupCustomer(res.data))
       .catch((err) => console.log(err));
 
-    fetchCustomers(0, 1000, "")
+    fetchCustomers(0, 200, "")
       .then((res) => setDataCustomer(res?.data))
       .catch((err) => console.log(err));
   }, []);
-
-  useEffect(() => {
-    setServiceApply(service[0]?._id);
-  }, [service]);
 
   dataGroupCustomer.map((item, index) => {
     options.push({
@@ -181,7 +186,7 @@ const AddPromotion = () => {
       setDiscountUnit("percent");
     }
     // else {
-    //   setDiscountUnit("same-price");
+    //   setDiscountUnit("same_price");
     // }
   };
   const handleChange = (value) => {
@@ -195,58 +200,121 @@ const AddPromotion = () => {
   const handleChangePaymentMethod = (value) => {
     setPaymentMethod(value);
   };
-
   const onEditorVNStateChange = (editorState) => setDescriptionVN(editorState);
 
   const onEditorENStateChange = (editorState) => setDescriptionEN(editorState);
 
-  const onCreatePromotion = useCallback(() => {
+  useEffect(() => {
+    getPromotionDetails(data?._id)
+      .then((res) => {
+        setTitleVN(res?.title?.vi);
+        setTitleEN(res?.title?.en);
+        setShortDescriptionVN(res?.short_description?.vi);
+        setShortDescriptionEN(res?.short_description?.en);
+        setDescriptionVN(
+          EditorState.createWithContent(
+            ContentState.createFromBlockArray(
+              convertFromHTML(res?.description?.vi)
+            )
+          )
+        );
+        setDescriptionEN(
+          EditorState.createWithContent(
+            ContentState.createFromBlockArray(
+              convertFromHTML(res?.description?.en)
+            )
+          )
+        );
+        setImgThumbnail(res?.thumbnail);
+        setImgBackground(res?.image_background);
+        setCodebrand(res?.code);
+        setLimitedDate(res?.is_limit_date);
+        setStartDate(
+          res?.is_limit_date
+            ? res?.limit_start_date.slice(0, res?.limit_start_date.indexOf("T"))
+            : ""
+        );
+        setEndDate(
+          res?.is_limit_date
+            ? res?.limit_end_date.slice(0, res?.limit_start_date.indexOf("T"))
+            : ""
+        );
+        setLimitedQuantity(res?.is_limit_count);
+        setAmount(res?.limit_count);
+        setIsGroupCustomer(res?.is_id_group_customer);
+        setGroupCustomer(res?.id_group_customer);
+        setIsCustomer(res?.is_id_customer);
+        setCustomer(res?.id_customer);
+        setIsUsePromo(res?.is_limited_use);
+        setUsePromo(res?.limited_use);
+        setPromoType(res?.type_discount);
+        setDiscountUnit(res?.discount_unit);
+        setMaximumDiscount(res?.discount_max_price);
+        setReducedValue(res?.discount_value);
+        setIsExchangePoint(res?.is_exchange_point);
+        setExchangePoint(res?.exchange_point);
+        setNamebrand(res?.brand);
+        setPromoCode(res?.code);
+        setServiceApply(res?.service_apply[0]);
+        setMinimumOrder(res?.price_min_order);
+        setDateExchange(res?.exp_date_exchange);
+        setPosition(res?.position);
+        setIsPaymentMethod(res?.is_payment_method);
+        setPaymentMethod(res?.payment_method);
+      })
+      .catch((err) => console.log(err));
+  }, [data]);
+
+  const onEditPromotion = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
     dispatch(
-      createPromotionAction.createPromotionRequest({
-        title: {
-          vi: titleVN,
-          en: titleEN,
+      updatePromotionAction.updatePromotionRequest({
+        id: data?._id,
+        data: {
+          title: {
+            vi: titleVN,
+            en: titleEN,
+          },
+          short_description: {
+            vi: shortDescriptionVN,
+            en: shortDescriptionEN,
+          },
+          description: {
+            vi: draftToHtml(convertToRaw(descriptionVN.getCurrentContent())),
+            en: draftToHtml(convertToRaw(descriptionEN.getCurrentContent())),
+          },
+          thumbnail: imgThumbnail,
+          image_background: imgBackground,
+          code: promoCode,
+          is_limit_date: limitedDate,
+          limit_start_date: limitedDate
+            ? new Date(startDate).toISOString()
+            : null,
+          limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
+          is_limit_count: limitedQuantity,
+          limit_count: limitedQuantity ? amount : 0,
+          is_id_group_customer: isGroupCustomer,
+          id_group_customer: groupCustomer,
+          is_id_customer: isCustomer,
+          id_customer: customer,
+          service_apply: [],
+          is_limited_use: isUsePromo,
+          limited_use: isUsePromo ? usePromo : 0,
+          type_discount: "partner_promotion",
+          type_promotion: "code",
+          price_min_order: minimumOrder,
+          discount_unit: discountUnit,
+          discount_max_price: maximumDiscount,
+          discount_value: reducedValue,
+          is_delete: false,
+          is_exchange_point: isExchangePoint,
+          exchange_point: exchangePoint,
+          brand: namebrand,
+          exp_date_exchange: dateExchange,
+          position: position,
+          is_payment_method: isPaymentMethod,
+          payment_method: paymentMethod,
         },
-        short_description: {
-          vi: shortDescriptionVN,
-          en: shortDescriptionEN,
-        },
-        description: {
-          vi: draftToHtml(convertToRaw(descriptionVN.getCurrentContent())),
-          en: draftToHtml(convertToRaw(descriptionEN.getCurrentContent())),
-        },
-        thumbnail: imgThumbnail,
-        image_background: imgBackground,
-        code: promoCode ? promoCode : codebrand,
-        is_limit_date: limitedDate,
-        limit_start_date: limitedDate
-          ? new Date(startDate).toISOString()
-          : null,
-        limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
-        is_limit_count: limitedQuantity,
-        limit_count: limitedQuantity ? amount : 0,
-        is_id_group_customer: isGroupCustomer,
-        id_group_customer: groupCustomer,
-        is_id_customer: isCustomer,
-        id_customer: customer,
-        service_apply: [serviceApply],
-        is_limited_use: isUsePromo,
-        limited_use: isUsePromo ? usePromo : 0,
-        type_discount: "order",
-        type_promotion: "code",
-        price_min_order: minimumOrder,
-        discount_unit: discountUnit,
-        discount_max_price: maximumDiscount,
-        discount_value: reducedValue,
-        is_delete: false,
-        is_exchange_point: isExchangePoint,
-        exchange_point: exchangePoint,
-        brand: namebrand.toUpperCase(),
-        exp_date_exchange: dateExchange,
-        position: position,
-        is_payment_method: isPaymentMethod,
-        payment_method: paymentMethod,
       })
     );
   }, [
@@ -277,10 +345,11 @@ const AddPromotion = () => {
     namebrand,
     maximumDiscount,
     reducedValue,
-    serviceApply,
+    data,
     promoCode,
-    dateExchange,
+    serviceApply,
     minimumOrder,
+    dateExchange,
     position,
     isPaymentMethod,
     paymentMethod,
@@ -288,14 +357,6 @@ const AddPromotion = () => {
 
   return (
     <>
-      {/* Button trigger modal */}
-      <CustomButton
-        title="Thêm khuyến mãi"
-        className="btn-add-promotion"
-        type="button"
-        onClick={() => setState(!state)}
-      />
-
       {/* Modal */}
       <Modal
         fullscreen={true}
@@ -307,7 +368,7 @@ const AddPromotion = () => {
       >
         <div className="modal-header">
           <h3 className="modal-title" id="exampleModalLabel">
-            Thêm mã khuyến mãi
+            Sửa khuyến mãi từ đối tác
           </h3>
           <button className="btn-close" onClick={() => setState(!state)}>
             <i className="uil uil-times-square"></i>
@@ -406,133 +467,18 @@ const AddPromotion = () => {
                     />
                   </div>
                   <div>
-                    <h5>6. Giá đơn đặt tối thiểu</h5>
-
+                    <h5>6. Tên đối tác</h5>
                     <CustomTextInput
-                      placeholder="Nhập giá"
-                      className="input-promo-code"
-                      type="number"
-                      min={0}
-                      value={minimumOrder}
-                      onChange={(e) => setMinimumOrder(e.target.value)}
+                      label={"Tên đối tác"}
+                      placeholder="Nhập tên đối tác"
+                      className="input-promo-brand"
+                      type="text"
+                      value={namebrand}
+                      onChange={(e) => setNamebrand(e.target.value)}
                     />
                   </div>
-
                   <div>
-                    <h5>7. Hình thức giảm giá</h5>
-                    <Row>
-                      <Button
-                        className={
-                          discountUnit === "amount"
-                            ? "btn-form-same-promotion"
-                            : "btn-form-same-promotion-default"
-                        }
-                        outline
-                        onClick={() => onFormDiscount("amount")}
-                      >
-                        Giảm trực tiếp
-                      </Button>
-                      <Button
-                        className={
-                          discountUnit === "percent"
-                            ? "btn-form-same-promotion"
-                            : "btn-form-same-promotion-default"
-                        }
-                        outline
-                        onClick={() => onFormDiscount("percent")}
-                      >
-                        Giảm theo phần trăm
-                      </Button>
-                      {/* <Button
-                          className={
-                            discountUnit === "same_price"
-                              ? "btn-form-same-promotion"
-                              : "btn-form-same-promotion-default"
-                          }
-                          outline
-                          onClick={() => onFormDiscount("same_price")}
-                        >
-                          Đồng giá
-                        </Button> */}
-                      {
-                        discountUnit === "amount" ? (
-                          <CustomTextInput
-                            label={"Giá giảm "}
-                            classNameForm="input-promo-amount"
-                            placeholder="VNĐ"
-                            type="number"
-                            min={0}
-                            value={maximumDiscount}
-                            onChange={(e) => setMaximumDiscount(e.target.value)}
-                          />
-                        ) : (
-                          <Row className="row-discount">
-                            <CustomTextInput
-                              label={"Giá trị giảm"}
-                              className="input-promo-discount"
-                              classNameForm="form-discount"
-                              placeholder="%"
-                              type="number"
-                              min={0}
-                              value={reducedValue}
-                              onChange={(e) => setReducedValue(e.target.value)}
-                            />
-                            <CustomTextInput
-                              label={"Giá giảm tối đa"}
-                              className="input-promo-discount"
-                              classNameForm="form-discount"
-                              min={0}
-                              placeholder="VNĐ"
-                              type="number"
-                              value={maximumDiscount}
-                              onChange={(e) =>
-                                setMaximumDiscount(e.target.value)
-                              }
-                            />
-                          </Row>
-                        )
-                        // ) : (
-                        //   <CustomTextInput
-                        //     label={"Đơn giá"}
-                        //     placeholder="Nhập đơn giá"
-                        //     classNameForm="input-promo-amount"
-                        //     type="number"
-                        //     min={0}
-                        //     value={maximumDiscount}
-                        //     onChange={(e) => setMaximumDiscount(e.target.value)}
-                        //   />
-                        // )
-                      }
-                    </Row>
-                  </div>
-                </Col>
-                <Col md={4}>
-                  {promoType !== "partner_promotion" && (
-                    <div>
-                      <h5>9. Dịch vụ áp dụng</h5>
-                      <Label>Các dịch vụ</Label>
-
-                      <CustomTextInput
-                        className="select-type-promo"
-                        name="select"
-                        type="select"
-                        value={serviceApply}
-                        onChange={(e) => {
-                          setServiceApply(e.target.value);
-                        }}
-                        body={service.map((item, index) => {
-                          return (
-                            <option key={index} value={item?._id}>
-                              {item?.title?.vi}
-                            </option>
-                          );
-                        })}
-                      />
-                    </div>
-                  )}
-
-                  <div>
-                    <h5>10. Đối tượng áp dụng</h5>
+                    <h5>7. Đối tượng áp dụng</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Nhóm khách hàng
@@ -589,9 +535,10 @@ const AddPromotion = () => {
                       />
                     )}
                   </div>
-
+                </Col>
+                <Col md={4}>
                   <div>
-                    <h5 className="mt-2">11. Số lượng mã khuyến mãi</h5>
+                    <h5 className="mt-2">8. Số lượng mã khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Số lượng giới hạn
@@ -615,7 +562,7 @@ const AddPromotion = () => {
                     )}
                   </div>
                   <div>
-                    <h5 className="mt-2">12. Số lần sử dụng khuyến mãi</h5>
+                    <h5 className="mt-2">9. Số lần sử dụng khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Lần sử dụng khuyến mãi
@@ -639,7 +586,7 @@ const AddPromotion = () => {
                     )}
                   </div>
                   <div>
-                    <h5 className="mt-2">13. Thời gian khuyến mãi</h5>
+                    <h5 className="mt-2">10. Thời gian khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Giới hạn ngày
@@ -677,7 +624,7 @@ const AddPromotion = () => {
                     )}
                   </div>
                   <div>
-                    <h5 className="mt-2">14. Điểm quy đổi</h5>
+                    <h5 className="mt-2">11. Điểm quy đổi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Điểm quy đổi
@@ -702,7 +649,7 @@ const AddPromotion = () => {
                     )}
                   </div>
                   <div>
-                    <h5 className="mt-2">15. Phương thức thanh toán</h5>
+                    <h5 className="mt-2">12. Phương thức thanh toán</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Thanh toán
@@ -729,7 +676,7 @@ const AddPromotion = () => {
                     )}
                   </div>
                   <div>
-                    <h5 className="mt-2">16. Thời gian sử dụng sau khi đổi</h5>
+                    <h5 className="mt-2">13. Thời gian sử dụng sau khi đổi</h5>
                     <CustomTextInput
                       placeholder="Nhập số ngày (1,2,3...,n"
                       className="input-promo-code"
@@ -740,7 +687,7 @@ const AddPromotion = () => {
                     />
                   </div>
                   <div>
-                    <h5 className="mt-2">17. Thứ tự hiện thị</h5>
+                    <h5 className="mt-2">14. Thứ tự hiện thị</h5>
                     <CustomTextInput
                       placeholder="Nhập số thứ tự (1,2,3...,n"
                       className="input-promo-code"
@@ -753,9 +700,9 @@ const AddPromotion = () => {
                   <Button
                     className="btn_add"
                     color="warning"
-                    onClick={onCreatePromotion}
+                    onClick={onEditPromotion}
                   >
-                    Thêm khuyến mãi
+                    Sửa khuyến mãi
                   </Button>
                 </Col>
               </Row>
@@ -767,4 +714,4 @@ const AddPromotion = () => {
   );
 };
 
-export default memo(AddPromotion);
+export default memo(EditPromotionOrther);

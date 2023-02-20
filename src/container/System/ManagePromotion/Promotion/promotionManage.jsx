@@ -40,8 +40,10 @@ import offToggle from "../../../../assets/images/off-button.png";
 import LoadingPagination from "../../../../components/paginationLoading/index.jsx";
 import { getUser } from "../../../../redux/selectors/auth.js";
 import EditPromotionEvent from "../../../../components/editPromotionEvent/editPromotionEvent.js";
+import AddPromotionOrther from "../../../../components/addPromotionOrther/addPromotionOrther.js";
+import EditPromotionOrther from "../../../../components/editPromotionOrther/editPromotionOrther.js";
 
-export default function PromotionManage({ type }) {
+export default function PromotionManage({ type, brand }) {
   const promotion = useSelector(getPromotionSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -65,13 +67,18 @@ export default function PromotionManage({ type }) {
 
   useEffect(() => {
     dispatch(
-      getPromotion.getPromotionRequest({ start: 0, length: 10, type: type })
+      getPromotion.getPromotionRequest({
+        start: 0,
+        length: 10,
+        type: type,
+        brand: brand,
+      })
     );
     setDataFilter([]);
     setDataSearch([]);
     setValueFilter("");
     setValueSearch("");
-  }, [type]);
+  }, [type, brand]);
 
   const onDelete = useCallback((id) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -107,13 +114,13 @@ export default function PromotionManage({ type }) {
         ? page * dataFilter.length - dataFilter.length
         : page * promotion.length - promotion.length;
     dataSearch.length > 0
-      ? searchPromotion(valueSearch, start, 10, type)
+      ? searchPromotion(valueSearch, start, 10, type, brand)
           .then((res) => {
             setDataSearch(res.data);
           })
           .catch((err) => console.log(err))
       : dataFilter.length > 0
-      ? filterPromotion(valueFilter, start, 10, type)
+      ? filterPromotion(valueFilter, start, 10, type, brand)
           .then((res) => {
             setDataSearch(res?.data);
             setTotalSearch(res?.totalItem);
@@ -124,6 +131,7 @@ export default function PromotionManage({ type }) {
             start: start > 0 ? start : 0,
             length: 10,
             type: type,
+            brand: brand,
           })
         );
   };
@@ -133,7 +141,7 @@ export default function PromotionManage({ type }) {
       setValueSearch(value);
       setIsLoading(true);
       if (value !== "") {
-        searchPromotion(value, 0, 10, type)
+        searchPromotion(value, 0, 10, type, brand)
           .then((res) => {
             setIsLoading(false);
 
@@ -148,13 +156,13 @@ export default function PromotionManage({ type }) {
         setDataSearch([]);
       }
     }, 1000),
-    [type]
+    [type, brand]
   );
 
   const handleChange = (value) => {
     setValueFilter(value);
     setIsLoading(true);
-    filterPromotion(value, 0, 10, type)
+    filterPromotion(value, 0, 10, type, brand)
       .then((res) => {
         setIsLoading(false);
         setDataFilter(res?.data);
@@ -193,128 +201,299 @@ export default function PromotionManage({ type }) {
     },
   ];
 
-  const columns = [
-    {
-      title: "Tên Promotion",
-      render: (data) => {
-        return (
-          <>
-            <img className="img-customer-promotion" src={data?.thumbnail} />
-            <a>{data.title.vi}</a>
-          </>
-        );
-      },
-    },
-    {
-      title: "Position",
-      dataIndex: "position",
-    },
-    {
-      title: "Mã code",
-      dataIndex: "code",
-    },
+  const columns =
+    type === "code"
+      ? [
+          {
+            title: "Tên Promotion",
+            render: (data) => {
+              return (
+                <div className="div-img-promotion">
+                  <img
+                    className="img-customer-promotion"
+                    src={data?.thumbnail}
+                  />
+                  <a>
+                    {data.title.vi.length > 25
+                      ? data.title.vi.slice(0, 25) + "..."
+                      : data.title.vi}
+                  </a>
+                </div>
+              );
+            },
+            width: "20%",
+          },
+          {
+            title: "Sử dụng",
+            dataIndex: "total_used_promotion",
+            align: "center",
+            width: "10%",
+          },
+          {
+            title: "Position",
+            dataIndex: "position",
+            align: "center",
+            width: "5%",
+          },
+          {
+            title: "Mã code",
+            dataIndex: "code",
+            width: "10%",
+            align: "center",
+          },
 
-    {
-      title: "Hạn",
-      key: "action",
-      render: (data) => {
-        const startDate = moment(new Date(data?.limit_start_date)).format(
-          "DD/MM/YYYY"
-        );
-        const endDate = moment(new Date(data?.limit_end_date)).format(
-          "DD/MM/YYYY"
-        );
-        return (
-          <a>
-            {data?.is_limit_date ? startDate + "-" + endDate : "Không có hạn"}
-          </a>
-        );
-      },
-    },
-    {
-      title: "Bật/tắt",
-      render: (data) => {
-        var date =
-          data?.limit_end_date && moment(data?.limit_end_date.slice(0, 10));
-        var now = moment();
-        return (
-          <div>
-            {contextHolder}
-            {data?.is_active ? (
-              <img
-                src={onToggle}
-                className="img-toggle"
-                onClick={toggleActive}
-              />
-            ) : (
-              <div>
-                {data?.is_limit_date ? (
-                  date < now ? (
+          {
+            title: "Hạn",
+            align: "center",
+            width: "10%",
+            render: (data) => {
+              const startDate = moment(new Date(data?.limit_start_date)).format(
+                "DD/MM/YYYY"
+              );
+              const endDate = moment(new Date(data?.limit_end_date)).format(
+                "DD/MM/YYYY"
+              );
+              return (
+                <a>
+                  {data?.is_limit_date
+                    ? startDate + "-" + endDate
+                    : "Không có hạn"}
+                </a>
+              );
+            },
+          },
+          {
+            title: "Bật/tắt",
+            align: "center",
+            width: "10%",
+            render: (data) => {
+              var date =
+                data?.limit_end_date &&
+                moment(data?.limit_end_date.slice(0, 10));
+              var now = moment();
+              return (
+                <div>
+                  {contextHolder}
+                  {data?.is_active ? (
                     <img
-                      src={offToggle}
-                      className="img-toggle"
-                      onClick={() => openNotificationWithIcon("warning")}
-                    />
-                  ) : (
-                    <img
-                      src={offToggle}
+                      src={onToggle}
                       className="img-toggle"
                       onClick={toggleActive}
                     />
-                  )
-                ) : (
+                  ) : (
+                    <div>
+                      {data?.is_limit_date ? (
+                        date < now ? (
+                          <img
+                            src={offToggle}
+                            className="img-toggle"
+                            onClick={() => openNotificationWithIcon("warning")}
+                          />
+                        ) : (
+                          <img
+                            src={offToggle}
+                            className="img-toggle"
+                            onClick={toggleActive}
+                          />
+                        )
+                      ) : (
+                        <img
+                          src={offToggle}
+                          className="img-toggle"
+                          onClick={toggleActive}
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            },
+          },
+          {
+            title: "Trạng thái",
+            align: "center",
+            width: "10%",
+            render: (data) => {
+              return (
+                <div>
+                  {data?.status === "upcoming" ? (
+                    <a style={{ color: "green" }}>Sắp diễn ra</a>
+                  ) : data?.status === "doing" ? (
+                    <a style={{ color: "green" }}>Đang diễn ra</a>
+                  ) : data?.status === "out_of_stock" ? (
+                    <a style={{ color: "red" }}>Hết số lượng</a>
+                  ) : data?.status === "out_of_date" ? (
+                    <a style={{ color: "red" }}>Hết hạn</a>
+                  ) : (
+                    <a style={{ color: "red" }}>Kết thúc</a>
+                  )}
+                </div>
+              );
+            },
+          },
+          {
+            title: "",
+            key: "action",
+            align: "right",
+            render: (record) => (
+              <Space size="middle">
+                <Dropdown
+                  menu={{
+                    items,
+                  }}
+                  trigger={["click"]}
+                  placement="bottom"
+                >
+                  <a style={{ color: "black" }}>
+                    <UilEllipsisV />
+                  </a>
+                </Dropdown>
+              </Space>
+            ),
+          },
+        ]
+      : [
+          {
+            title: "Tên Promotion",
+            render: (data) => {
+              return (
+                <div className="div-img-promotion">
                   <img
-                    src={offToggle}
-                    className="img-toggle"
-                    onClick={toggleActive}
+                    className="img-customer-promotion"
+                    src={data?.thumbnail}
                   />
-                )}
-              </div>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      title: "Trạng thái",
-      render: (data) => {
-        return (
-          <div>
-            {data?.status === "upcoming" ? (
-              <a style={{ color: "green" }}>Sắp diễn ra</a>
-            ) : data?.status === "doing" ? (
-              <a style={{ color: "green" }}>Đang diễn ra</a>
-            ) : data?.status === "out_of_stock" ? (
-              <a style={{ color: "red" }}>Hết số lượng</a>
-            ) : data?.status === "out_of_date" ? (
-              <a style={{ color: "red" }}>Hết hạn</a>
-            ) : (
-              <a style={{ color: "red" }}>Kết thúc</a>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      title: "",
-      key: "action",
-      render: (record) => (
-        <Space size="middle">
-          <Dropdown
-            menu={{
-              items,
-            }}
-            trigger={["click"]}
-            placement="bottom"
-          >
-            <a style={{ color: "black" }}>
-              <UilEllipsisV />
-            </a>
-          </Dropdown>
-        </Space>
-      ),
-    },
-  ];
+                  <a>
+                    {data.title.vi.length > 25
+                      ? data.title.vi.slice(0, 25) + "..."
+                      : data.title.vi}
+                  </a>
+                </div>
+              );
+            },
+            width: "20%",
+          },
+          {
+            title: "Sử dụng",
+            dataIndex: "total_used_promotion",
+            align: "center",
+            width: "10%",
+          },
+          {
+            title: "Position",
+            dataIndex: "position",
+            align: "center",
+            width: "5%",
+          },
+          {
+            title: "Hạn",
+            align: "center",
+            width: "10%",
+            render: (data) => {
+              const startDate = moment(new Date(data?.limit_start_date)).format(
+                "DD/MM/YYYY"
+              );
+              const endDate = moment(new Date(data?.limit_end_date)).format(
+                "DD/MM/YYYY"
+              );
+              return (
+                <a>
+                  {data?.is_limit_date
+                    ? startDate + "-" + endDate
+                    : "Không có hạn"}
+                </a>
+              );
+            },
+          },
+          {
+            title: "Bật/tắt",
+            align: "center",
+            width: "10%",
+            render: (data) => {
+              var date =
+                data?.limit_end_date &&
+                moment(data?.limit_end_date.slice(0, 10));
+              var now = moment();
+              return (
+                <div>
+                  {contextHolder}
+                  {data?.is_active ? (
+                    <img
+                      src={onToggle}
+                      className="img-toggle"
+                      onClick={toggleActive}
+                    />
+                  ) : (
+                    <div>
+                      {data?.is_limit_date ? (
+                        date < now ? (
+                          <img
+                            src={offToggle}
+                            className="img-toggle"
+                            onClick={() => openNotificationWithIcon("warning")}
+                          />
+                        ) : (
+                          <img
+                            src={offToggle}
+                            className="img-toggle"
+                            onClick={toggleActive}
+                          />
+                        )
+                      ) : (
+                        <img
+                          src={offToggle}
+                          className="img-toggle"
+                          onClick={toggleActive}
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            },
+          },
+          {
+            title: "Trạng thái",
+            align: "center",
+            width: "10%",
+            render: (data) => {
+              return (
+                <div>
+                  {data?.status === "upcoming" ? (
+                    <a style={{ color: "green" }}>Sắp diễn ra</a>
+                  ) : data?.status === "doing" ? (
+                    <a style={{ color: "green" }}>Đang diễn ra</a>
+                  ) : data?.status === "out_of_stock" ? (
+                    <a style={{ color: "red" }}>Hết số lượng</a>
+                  ) : data?.status === "out_of_date" ? (
+                    <a style={{ color: "red" }}>Hết hạn</a>
+                  ) : (
+                    <a style={{ color: "red" }}>Kết thúc</a>
+                  )}
+                </div>
+              );
+            },
+          },
+          {
+            title: "",
+            key: "action",
+            align: "right",
+            render: (record) => (
+              <Space size="middle">
+                <Dropdown
+                  menu={{
+                    items,
+                  }}
+                  trigger={["click"]}
+                  placement="bottom"
+                >
+                  <a style={{ color: "black" }}>
+                    <UilEllipsisV />
+                  </a>
+                </Dropdown>
+              </Space>
+            ),
+          },
+        ];
 
   return (
     <React.Fragment>
@@ -342,7 +521,13 @@ export default function PromotionManage({ type }) {
             prefix={<SearchOutlined />}
             onChange={(e) => handleSearch(e.target.value)}
           />
-          {type === "code" ? <AddPromotion /> : <AddPromotionEvent />}
+          {type === "code" && brand === "guvi" ? (
+            <AddPromotion />
+          ) : type === "code" && brand === "orther" ? (
+            <AddPromotionOrther />
+          ) : (
+            <AddPromotionEvent />
+          )}
         </div>
         <div className="mt-3">
           <Table
@@ -401,8 +586,14 @@ export default function PromotionManage({ type }) {
         </div>
 
         <div>
-          {type === "code" ? (
+          {type === "code" && brand === "guvi" ? (
             <EditPromotion
+              state={modalEdit}
+              setState={() => setModalEdit(!modalEdit)}
+              data={itemEdit}
+            />
+          ) : type === "code" && brand === "orther" ? (
+            <EditPromotionOrther
               state={modalEdit}
               setState={() => setModalEdit(!modalEdit)}
               data={itemEdit}

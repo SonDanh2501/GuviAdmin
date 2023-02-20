@@ -121,8 +121,19 @@ export default function TopupManage() {
 
   const columns = [
     {
+      title: "Mã",
+      dataIndex: ["id_collaborator", "id_view"],
+    },
+    {
       title: "Tên cộng tác viên",
-      dataIndex: ["id_collaborator", "full_name"],
+      render: (data) => {
+        return (
+          <div className="div-name-topup">
+            <a>{data?.id_collaborator?.full_name}</a>
+            <a>{data?.id_collaborator?.phone}</a>
+          </div>
+        );
+      },
     },
     {
       title: "Số tiền",
@@ -158,59 +169,6 @@ export default function TopupManage() {
         <a>{moment(new Date(data?.date_created)).format("DD/MM/yyy HH:mm")}</a>
       ),
     },
-
-    {
-      title: "",
-      key: "action",
-      align: "center",
-      render: (data) => {
-        return (
-          <>
-            <button
-              className="btn-confirm"
-              onClick={toggleConfirm}
-              disabled={
-                (!data?.is_verify_money && data?.status === "cancel") ||
-                data?.is_verify_money
-                  ? true
-                  : false
-              }
-            >
-              Duyệt lệnh
-            </button>
-
-            <button
-              className="btn-edit"
-              disabled={
-                (!data?.is_verify_money && data?.status === "cancel") ||
-                data?.is_verify_money
-                  ? true
-                  : false
-              }
-              onClick={() => {
-                toggleEdit();
-                setItemEdit(data);
-              }}
-            >
-              <i
-                className={
-                  (!data?.is_verify_money && data?.status === "cancel") ||
-                  data?.is_verify_money
-                    ? "uil uil-edit-alt icon-edit"
-                    : "uil uil-edit-alt"
-                }
-              ></i>
-            </button>
-
-            {user?.role === "admin" && (
-              <button className="btn-delete" onClick={toggle}>
-                <i className="uil uil-trash"></i>
-              </button>
-            )}
-          </>
-        );
-      },
-    },
     {
       title: "Trạng thái",
       render: (data) => {
@@ -230,6 +188,60 @@ export default function TopupManage() {
       },
       width: "10%",
       align: "center",
+    },
+    {
+      title: "",
+      key: "action",
+      align: "center",
+      render: (data) => {
+        return (
+          <div>
+            <button
+              className="btn-confirm"
+              onClick={toggleConfirm}
+              disabled={
+                (!data?.is_verify_money && data?.status === "cancel") ||
+                data?.is_verify_money
+                  ? true
+                  : false
+              }
+            >
+              Duyệt lệnh
+            </button>
+
+            <div className="mt-1">
+              <button
+                className="btn-edit"
+                disabled={
+                  (!data?.is_verify_money && data?.status === "cancel") ||
+                  data?.is_verify_money
+                    ? true
+                    : false
+                }
+                onClick={() => {
+                  toggleEdit();
+                  setItemEdit(data);
+                }}
+              >
+                <i
+                  className={
+                    (!data?.is_verify_money && data?.status === "cancel") ||
+                    data?.is_verify_money
+                      ? "uil uil-edit-alt icon-edit"
+                      : "uil uil-edit-alt"
+                  }
+                ></i>
+              </button>
+
+              {user?.role === "admin" && (
+                <button className="btn-delete" onClick={toggle}>
+                  <i className="uil uil-trash"></i>
+                </button>
+              )}
+            </div>
+          </div>
+        );
+      },
     },
   ];
 

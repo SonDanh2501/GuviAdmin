@@ -1,0 +1,101 @@
+.btn-modal {
+  background-color: #17a2b8;
+  border: none !important;
+  border-radius: 5px;
+  height: 35px;
+  -webkit-box-shadow: 1px 3px 1px #b6b5ab;
+  -moz-box-shadow: 1px 3px 1px #b6b5ab;
+  box-shadow: 1px 3px 1px #b6b5ab;
+}
+
+.textInput {
+  width: 200px;
+  height: 40px;
+  border-radius: 5px;
+  margin-left: 20px;
+  border: 1px solid #dddd;
+}
+
+.btn-close {
+  color: red;
+  border: none;
+  background-color: transparent;
+  height: 50px;
+  width: 40px;
+}
+
+.input-upload {
+  border: none;
+}
+
+.img-background {
+  width: 300px;
+  height: 100px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.input-promo {
+  margin-left: 20px;
+}
+
+.form-description {
+  border: 1px solid rgb(208, 208, 208);
+  border-radius: 5px;
+}
+
+.btn-form-promotion {
+  background-color: plum;
+  border: none;
+  color: white;
+  margin-bottom: 10px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  margin-left: 20px;
+}
+
+.btn-form-promotion-default {
+  margin-right: 10px;
+  color: rgb(0, 0, 0);
+  margin-bottom: 10px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  margin-left: 20px;
+}
+
+.btn-form-same-promotion {
+  background-color: plum;
+  border: none;
+  color: white;
+  margin-bottom: 10px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  margin-left: 20px;
+  width: 100px;
+}
+
+.btn-form-same-promotion-default {
+  margin-right: 10px;
+  color: rgb(0, 0, 0);
+  margin-bottom: 10px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  margin-left: 20px;
+  width: 100px;
+}
+
+.select-type-promo {
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid rgb(206, 205, 205);
+}
+
+.input-promo-amount {
+  margin-left: 20px;
+}
+.form-discount {
+  margin-left: 30px;
+}
+.input-promo-discount {
+  width: 100px;
+}
+
+.input-promo-brand {
+  text-transform: uppercase;
+}
