@@ -1,6 +1,6 @@
 export const DATA_TIME_TOTAL = [
   { id: 1, title: "07:00", time: "00:00:00", estimate: 16 },
-  { id: 2, title: "07:00", time: "00:30:00", estimate: 15 },
+  { id: 2, title: "07:30", time: "00:30:00", estimate: 15 },
   { id: 3, title: "08:00", time: "01:00:00", estimate: 15 },
   { id: 4, title: "08:30", time: "01:30:00", estimate: 14 },
   { id: 5, title: "09:00", time: "02:00:00", estimate: 14 },
