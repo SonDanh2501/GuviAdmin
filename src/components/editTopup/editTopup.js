@@ -143,7 +143,7 @@ const EditTopup = ({ state, setState, item }) => {
             />
             <CustomButton
               title="Sửa"
-              className="float-right btn-modal"
+              className="float-right btn-modal-edit-topup"
               type="button"
               onClick={editMoney}
             />

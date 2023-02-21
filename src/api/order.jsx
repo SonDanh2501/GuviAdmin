@@ -63,3 +63,9 @@ export const checkEventCodePromotionOrderApi = (id, data) => {
 export const getServiceFeeOrderApi = (data) => {
   return axiosClient.post(`/admin/group-order-manager/get_service_fee`, data);
 };
+
+export const getOrderByGroupOrderApi = (id) => {
+  return axiosClient.get(
+    `/admin/order_manager/get_order_by_group_order/${id}?lang=vi`
+  );
+};

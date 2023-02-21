@@ -102,3 +102,16 @@
   display: flex;
   flex-direction: column;
 }
+
+.div-header-topup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .input-search-topup {
+    height: 40px;
+    margin-top: 25px;
+    width: 70%;
+    margin-left: 10%;
+  }
+}

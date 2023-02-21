@@ -92,7 +92,15 @@ export default function OrderDoingManage() {
       render: (data) => {
         return (
           <div className="div-service">
-            <a className="text-service">{data?.service?._id?.title?.vi}</a>
+            <a className="text-service">
+              {data?.type === "schedule"
+                ? "Giúp việc cố định"
+                : data?.type === "loop" && !data?.is_auto_order
+                ? "Giúp việc theo giờ"
+                : data?.type === "loop" && data?.is_auto_order
+                ? "Lặp lại hàng tuần"
+                : ""}
+            </a>
             <a className="text-service">{timeWork(data)}</a>
           </div>
         );

@@ -1,11 +1,14 @@
-import { List, Pagination } from "antd";
+import { List, Pagination, Table } from "antd";
 import moment from "moment";
 import { memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
+  getCollaboratorRemainder,
   getHistoryActivityCollaborator,
+  getListTransitionByCollaborator,
   getTopupWithdrawCollaborator,
 } from "../../../../../../../api/collaborator";
+import { formatMoney } from "../../../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import "./index.scss";
@@ -14,20 +17,29 @@ const WithdrawTopup = ({ id }) => {
   const [data, setData] = useState([]);
   const [totalData, setTotalData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [remainder, setRemainder] = useState(0);
+  const [giftRemainder, setGiftRemainder] = useState(0);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
-    getTopupWithdrawCollaborator(id, 0, 10)
+    getCollaboratorRemainder(id)
       .then((res) => {
-        setData(res.data);
-        setTotalData(res.totalItem);
+        setRemainder(res?.remainder);
+        setGiftRemainder(res?.gift_remainder);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
-        errorNotify({
-          message: err,
-        });
+        console.log(err);
+        dispatch(loadingAction.loadingRequest(false));
+      });
+    getListTransitionByCollaborator(id, 0, 10)
+      .then((res) => {
+        setData(res?.data);
+        setTotalData(res?.totalItem);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
         dispatch(loadingAction.loadingRequest(false));
       });
   }, [id]);
@@ -35,7 +47,7 @@ const WithdrawTopup = ({ id }) => {
   const onChange = (page) => {
     setCurrentPage(page);
     const start = page * data.length - data.length;
-    getHistoryActivityCollaborator(id, start, 10)
+    getListTransitionByCollaborator(id, start, 10)
       .then((res) => {
         setData(res.data);
         setTotalData(res.totalItem);
@@ -43,80 +55,87 @@ const WithdrawTopup = ({ id }) => {
       .catch((err) => console.log(err));
   };
 
-  const renderItem = (item) => {
-    const subject = item?.id_admin_action
-      ? item?.title_admin.replace(
-          item?.id_admin_action?._id,
-          item?.id_admin_action?.full_name
-        )
-      : item?.id_collaborator
-      ? item?.title_admin.replace(
-          item?.id_collaborator?._id,
-          item?.id_collaborator?.full_name
-        )
-      : item?.id_customer
-      ? item?.title_admin.replace(
-          item?.id_customer?._id,
-          item?.id_customer?.full_name
-        )
-      : "";
-
-    const predicate = item?.id_promotion
-      ? subject.replace(item?.id_promotion?._id, item?.id_promotion?.title?.vi)
-      : item?.id_collaborator
-      ? subject.replace(
-          item?.id_collaborator?._id,
-          item?.id_collaborator?.full_name
-        )
-      : item?.id_customer
-      ? subject.replace(item?.id_customer?._id, item?.id_customer?.full_name)
-      : item?.id_admin_action
-      ? subject.replace(
-          item?.id_admin_action?._id,
-          item?.id_admin_action?.full_name
-        )
-      : item?.id_transistion_collaborator
-      ? subject.replace(
-          item?.id_transistion_collaborator?._id,
-          item?.id_transistion_collaborator?.transfer_note
-        )
-      : item?.id_transistion_customer
-      ? subject.replace(
-          item?.id_transistion_customer?._id,
-          item?.id_transistion_customer?.transfer_note
-        )
-      : "";
-
-    const object = item?.id_transistion_collaborator
-      ? predicate.replace(
-          item?.id_transistion_collaborator?._id,
-          item?.id_transistion_collaborator?.transfer_note
-        )
-      : item?.id_transistion_customer
-      ? predicate.replace(
-          item?.id_transistion_customer?._id,
-          item?.id_transistion_customer?.transfer_note
-        )
-      : predicate.replace(
-          item?.id_reason_cancel?._id,
-          item?.id_reason_cancel?.title?.vi
-        );
-
-    return (
-      <div className="div-listItem">
-        <div className="div-list">
-          <a className="text-title">{object}</a>
-          <a className="text-date">
-            {moment(new Date(item?.date_create)).format("DD/MM/yyy HH:mm")}
-          </a>
+  const columns = [
+    {
+      title: "Giờ",
+      render: (data) => (
+        <div className="div-time">
+          <a>{moment(new Date(data?.date_created)).format("DD/MM/YYYY")}</a>
+          <a>{moment(new Date(data?.date_created)).format("HH:mm")}</a>
         </div>
-      </div>
-    );
-  };
+      ),
+    },
+    {
+      title: "Số tiền",
+      render: (data) => <a>{formatMoney(data?.money)}</a>,
+    },
+    {
+      title: "Nạp/rút",
+      render: (data) => {
+        return (
+          <>
+            {data?.type_transfer === "top_up" ? (
+              <div>
+                <i class="uil uil-money-insert icon-topup"></i>
+                <a className="text-topup">Nạp</a>
+              </div>
+            ) : (
+              <div>
+                <i class="uil uil-money-withdraw icon-withdraw"></i>
+                <a className="text-withdraw">Rút</a>
+              </div>
+            )}
+          </>
+        );
+      },
+    },
+    {
+      title: "Nội dung",
+      dataIndex: "transfer_note",
+    },
+    {
+      title: "Ngày nạp",
+      render: (data) => (
+        <a>{moment(new Date(data?.date_created)).format("DD/MM/yyy HH:mm")}</a>
+      ),
+    },
+    {
+      title: "Trạng thái",
+      render: (data) => {
+        return (
+          <div>
+            {data?.status === "pending" ? (
+              <a className="text-pending-topup">Đang xử lý</a>
+            ) : data?.status === "transfered" ? (
+              <a className="text-transfered">Đã chuyển tiền</a>
+            ) : data?.status === "done" ? (
+              <a className="text-done">Hoàn tất</a>
+            ) : (
+              <a className="text-cancel">Đã huỷ</a>
+            )}
+          </div>
+        );
+      },
+      width: "10%",
+      align: "center",
+    },
+  ];
 
   return (
     <>
-      <List itemLayout="horizontal" dataSource={data} renderItem={renderItem} />
+      <div className="div-monney">
+        <div>
+          <a className="text-title-monney">Ví CTV:</a>
+          <a className="text-monney"> {formatMoney(remainder)}</a>
+        </div>
+        <div>
+          <a className="text-title-monney">Ví thưởng: </a>
+          <a className="text-monney">{formatMoney(giftRemainder)}</a>
+        </div>
+      </div>
+      <div className="mt-5">
+        <Table columns={columns} dataSource={data} pagination={false} />
+      </div>
       <div className="div-pagination p-2">
         <a>Tổng: {totalData}</a>
         <div>
@@ -125,7 +144,6 @@ const WithdrawTopup = ({ id }) => {
             onChange={onChange}
             total={totalData}
             showSizeChanger={false}
-            pageSize={10}
           />
         </div>
       </div>

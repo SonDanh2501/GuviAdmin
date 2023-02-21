@@ -27,7 +27,7 @@ const CustomTextInput = ({
   return (
     <FormGroup className={classNameForm}>
       {label && (
-        <Label for="exampleAddress" style={{ fontSize: 18 }}>
+        <Label for="exampleAddress" style={{ fontSize: 20 }}>
           {label}
         </Label>
       )}

@@ -26,17 +26,22 @@ const AddOrder = () => {
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState("");
   const [long, setLong] = useState("");
+  const [errorAddress, setErrorAddress] = useState("");
   const [note, setNote] = useState("");
   const [time, setTime] = useState([]);
-  const [extraService, setExtraService] = useState("");
+  const [errorTime, setErrorTime] = useState("");
   const [dateWork, setDateWork] = useState("");
+  const [errorDateWork, setErrorDateWork] = useState("");
   const [timeWork, setTimeWork] = useState("");
+  const [errorTimeWork, setErrorTimeWork] = useState("");
   const [extendService, setExtendService] = useState([]);
+  const [errorExtendService, setErrorExtendService] = useState("");
   const [addService, setAddService] = useState([]);
   const [mutipleSelected, setMutipleSelected] = useState([]);
   const [open, setOpen] = useState(false);
   const [dataFilter, setDataFilter] = useState([]);
   const [name, setName] = useState("");
+  const [errorNameCustomer, setErrorNameCustomer] = useState("");
   const [id, setId] = useState("");
   const service = useSelector(getService);
   const [serviceApply, setServiceApply] = useState("");
@@ -48,6 +53,7 @@ const AddOrder = () => {
   const [eventFeePromotion, setEventFeePromotion] = useState(0);
   const [feeService, setFeeService] = useState(0);
   const [dataFeeService, setDataFeeService] = useState(0);
+  const [itemPromotion, setItemPromotion] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const showDrawer = () => {
@@ -83,10 +89,12 @@ const AddOrder = () => {
 
   const onChange = (date, dateString) => {
     setDateWork(dateString);
+    setErrorDateWork("");
   };
 
   const onChangeTime = (value) => {
     setTimeWork(value);
+    setErrorTimeWork("");
   };
 
   const onChangeTimeService = (value) => {
@@ -115,27 +123,26 @@ const AddOrder = () => {
   );
 
   const onChangeServiceApply = (e) => {
+    setIsLoading(true);
     getOptionalServiceByServiceApi(e.target.value)
       .then((res) => {
         getExtendOptionalByOptionalServiceApi(res.data[0]?._id)
-          .then((res) => setExtendService(res?.data))
+          .then((res) => {
+            setExtendService(res?.data);
+            setIsLoading(false);
+          })
           .catch((err) => {});
         getExtendOptionalByOptionalServiceApi(res.data[1]?._id)
-          .then((res) => setAddService(res?.data))
+          .then((res) => {
+            setAddService(res?.data);
+            setIsLoading(false);
+          })
           .catch((err) => {});
       })
       .catch((err) => console.log(err));
 
     setServiceApply(e.target.value);
     setPriceOrder();
-  };
-
-  const onChangeExtraService = (value) => {
-    if (value === extraService) {
-      setExtraService("");
-    } else {
-      setExtraService(value);
-    }
   };
 
   const timeW = dateWork + "T" + timeWork + ".000Z";
@@ -199,19 +206,11 @@ const AddOrder = () => {
         })
         .catch((err) => {
           setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
         });
-    }
 
-    if (
-      lat &&
-      long &&
-      address &&
-      timeWork &&
-      dateWork &&
-      mutipleSelected &&
-      time
-    ) {
-      setIsLoading(true);
       getServiceFeeOrderApi({
         token: accessToken.toString(),
         type: "loop",
@@ -233,6 +232,9 @@ const AddOrder = () => {
         })
         .catch((err) => {
           setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
         });
     }
 
@@ -270,12 +272,15 @@ const AddOrder = () => {
         })
         .catch((err) => {
           setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
         });
     }
   }, [lat, long, address, timeWork, dateWork, mutipleSelected, time, id]);
 
   const checkPromotion = useCallback(
-    (code) => {
+    (item) => {
       setIsLoading(true);
       checkCodePromotionOrderApi(id, {
         id_customer: id,
@@ -287,12 +292,13 @@ const AddOrder = () => {
         is_auto_order: false,
         date_work_schedule: [timeW],
         extend_optional: mutipleSelected.concat(time),
-        code_promotion: code,
+        code_promotion: item?.code,
       })
         .then((res) => {
           setIsLoading(false);
-          setCodePromotion(code);
+          setCodePromotion(item?.code);
           setDiscount(res?.discount);
+          setItemPromotion(item);
         })
         .catch((err) => {
           errorNotify({
@@ -306,27 +312,56 @@ const AddOrder = () => {
 
   const onCreateOrder = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-    createOrderApi({
-      id_customer: id,
-      token: accessToken.toString(),
-      type: "loop",
-      type_address_work: "house",
-      note_address: "",
-      note: note,
-      is_auto_order: false,
-      date_work_schedule: [timeW],
-      extend_optional: mutipleSelected.concat(time),
-      code_promotion: codePromotion,
-    })
-      .then((res) => {
-        window.location.reload();
+
+    if (
+      lat &&
+      long &&
+      address &&
+      timeWork &&
+      dateWork &&
+      mutipleSelected &&
+      time &&
+      id
+    ) {
+      createOrderApi({
+        id_customer: id,
+        token: accessToken.toString(),
+        type: "loop",
+        type_address_work: "house",
+        note_address: "",
+        note: note,
+        is_auto_order: false,
+        date_work_schedule: [timeW],
+        extend_optional: mutipleSelected.concat(time),
+        code_promotion: codePromotion,
       })
-      .catch((err) => {
-        errorNotify({
-          message: err,
+        .then((res) => {
+          window.location.reload();
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
         });
-        dispatch(loadingAction.loadingRequest(false));
-      });
+    } else if (!id) {
+      setErrorNameCustomer("Vui lòng chọn khách hàng");
+      dispatch(loadingAction.loadingRequest(false));
+    } else if (!address && !lat && !long) {
+      setErrorAddress("Vui lòng nhập đầy đủ địa chỉ");
+      dispatch(loadingAction.loadingRequest(false));
+    } else if (time.length === 0) {
+      setErrorTime("Vui lòng chọn dịch vụ");
+      dispatch(loadingAction.loadingRequest(false));
+    } else if (!dateWork) {
+      setErrorDateWork("Vui lòng chọn ngày làm");
+      dispatch(loadingAction.loadingRequest(false));
+    } else if (!timeWork) {
+      setErrorTimeWork("Vui lòng chọn giờ làm");
+      dispatch(loadingAction.loadingRequest(false));
+    } else {
+      dispatch(loadingAction.loadingRequest(false));
+    }
   }, [
     id,
     lat,
@@ -352,7 +387,7 @@ const AddOrder = () => {
         open={open}
       >
         <div>
-          <a className="label">Khách hàng</a>
+          <a className="label">Khách hàng (*)</a>
           <Input
             placeholder="Tìm kiếm theo tên hoặc số điện thoại số điện thoại"
             value={name}
@@ -360,6 +395,7 @@ const AddOrder = () => {
             onChange={(e) => handleSearch(e.target.value)}
             className="input"
           />
+          <a className="text-error">{errorNameCustomer}</a>
 
           {dataFilter.length > 0 && (
             <List type={"unstyled"} className="list-item">
@@ -372,6 +408,7 @@ const AddOrder = () => {
                       setId(e.target.value);
                       setName(item?.full_name);
                       setDataFilter([]);
+                      setErrorNameCustomer("");
                     }}
                   >
                     {item?.full_name}
@@ -382,225 +419,237 @@ const AddOrder = () => {
           )}
         </div>
 
-        {id && (
+        <div>
+          <div className="mt-3">
+            <CustomTextInput
+              className="select-type-promo"
+              name="select"
+              type="select"
+              value={serviceApply}
+              onChange={onChangeServiceApply}
+              body={service.map((item, index) => {
+                return (
+                  <option key={index} value={item?._id}>
+                    {item?.title?.vi}
+                  </option>
+                );
+              })}
+            />
+          </div>
+
           <div>
-            <div className="mt-3">
+            <CustomTextInput
+              label="Nhập địa chỉ (*)"
+              type="text"
+              placeholder="Vui lòng nhập địa chỉ"
+              onChange={(e) => setAddress(e.target.value)}
+            />
+
+            <div className="div-latLong">
               <CustomTextInput
-                className="select-type-promo"
-                name="select"
-                type="select"
-                value={serviceApply}
-                onChange={onChangeServiceApply}
-                body={service.map((item, index) => {
-                  return (
-                    <option key={index} value={item?._id}>
-                      {item?.title?.vi}
-                    </option>
-                  );
-                })}
+                label="Kinh độ (*)"
+                type="number"
+                placeholder="Vui lòng nhập kinh độ"
+                onChange={(e) => setLat(e.target.value)}
+              />
+
+              <CustomTextInput
+                label="Vĩ độ (*)"
+                type="number"
+                placeholder="Vui lòng nhập vĩ độ"
+                onChange={(e) => setLong(e.target.value)}
               />
             </div>
+            <a className="text-error">{errorAddress}</a>
 
-            <div>
-              <CustomTextInput
-                label="Nhập địa chỉ"
-                type="text"
-                placeholder="Vui lòng nhập địa chỉ"
-                onChange={(e) => setAddress(e.target.value)}
-              />
-
-              <div className="div-latLong">
-                <CustomTextInput
-                  label="Kinh độ"
-                  type="text"
-                  placeholder="Vui lòng nhập kinh độ"
-                  onChange={(e) => setLat(e.target.value)}
-                />
-
-                <CustomTextInput
-                  label="Vĩ độ"
-                  type="text"
-                  placeholder="Vui lòng nhập vĩ độ"
-                  onChange={(e) => setLong(e.target.value)}
-                />
-              </div>
-
-              <div className="div-add-service">
-                <a className="label">Thời lượng</a>
-                <div className="div-service">
-                  {extendService.slice(0, 3).map((item) => {
-                    return (
-                      <div
+            <div className="div-add-service mt-3">
+              <a className="label">Thời lượng (*)</a>
+              <div className="div-service">
+                {extendService.slice(0, 3).map((item) => {
+                  return (
+                    <div
+                      className={
+                        item?._id === time?._id
+                          ? "select-service"
+                          : "select-service-default"
+                      }
+                      onClick={() => onChangeTimeService(item)}
+                    >
+                      <a
                         className={
                           item?._id === time?._id
-                            ? "select-service"
-                            : "select-service-default"
+                            ? "text-service"
+                            : "text-service-default"
                         }
-                        onClick={() => onChangeTimeService(item)}
                       >
-                        <a
-                          className={
-                            item?._id === time?._id
-                              ? "text-service"
-                              : "text-service-default"
-                          }
-                        >
-                          {item?.title?.vi}
-                        </a>
-                        <a
-                          className={
-                            item?._id === time?._id
-                              ? "text-service"
-                              : "text-service-default"
-                          }
-                        >
-                          {item?.description?.vi.slice(
-                            0,
-                            item?.description?.vi.indexOf("2")
-                          )}
-                        </a>
-                        <a
-                          className={
-                            item?._id === time?._id
-                              ? "text-service"
-                              : "text-service-default"
-                          }
-                        >
-                          {item?.description?.vi.slice(
-                            item?.description?.vi.indexOf(" ")
-                          )}
-                        </a>
-                      </div>
-                    );
-                  })}
-                </div>
+                        {item?.title?.vi}
+                      </a>
+                      <a
+                        className={
+                          item?._id === time?._id
+                            ? "text-service"
+                            : "text-service-default"
+                        }
+                      >
+                        {item?.description?.vi.slice(
+                          0,
+                          item?.description?.vi.indexOf("2")
+                        )}
+                      </a>
+                      <a
+                        className={
+                          item?._id === time?._id
+                            ? "text-service"
+                            : "text-service-default"
+                        }
+                      >
+                        {item?.description?.vi.slice(
+                          item?.description?.vi.indexOf(" ")
+                        )}
+                      </a>
+                    </div>
+                  );
+                })}
               </div>
+              <a className="text-error">{errorTime}</a>
+            </div>
 
-              <div className="div-add-service">
-                <a className="label">Dịch vụ thêm</a>
-                <div className="div-service">
-                  {addService.slice(0, 3).map((item) => {
-                    return (
-                      <div
+            <div className="div-add-service mt-3">
+              <a className="label">Dịch vụ thêm</a>
+              <div className="div-service">
+                {addService.slice(0, 3).map((item) => {
+                  return (
+                    <div
+                      className={
+                        mutipleSelected.some((items) => items._id === item?._id)
+                          ? "select-service"
+                          : "select-service-default"
+                      }
+                      onClick={() => onChooseMultiple(item?._id)}
+                    >
+                      <a
                         className={
                           mutipleSelected.some(
                             (items) => items._id === item?._id
                           )
-                            ? "select-service"
-                            : "select-service-default"
+                            ? "text-service"
+                            : "text-service-default"
                         }
-                        onClick={() => onChooseMultiple(item?._id)}
                       >
-                        <a
-                          className={
-                            mutipleSelected.some(
-                              (items) => items._id === item?._id
-                            )
-                              ? "text-service"
-                              : "text-service-default"
-                          }
-                        >
-                          {item?.title?.vi}
-                        </a>
-                        <a
-                          className={
-                            mutipleSelected.some(
-                              (items) => items._id === item?._id
-                            )
-                              ? "text-service"
-                              : "text-service-default"
-                          }
-                        >
-                          {item?.description?.vi}
-                        </a>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="form-picker">
-                <a className="label">Ngày làm</a>
-                <DatePicker format={dateFormat} onChange={onChange} />
-              </div>
-              <div className="form-picker-hours">
-                <a className="label-hours">Giờ làm</a>
-                {/* <DatePicker format={dateFormat} onChange={onChange} /> */}
-                <div className="div-hours">
-                  {DATA_TIME_TOTAL.map((item) => {
-                    const timeChosse = item?.title?.slice(0, 2);
-                    return (
-                      <Button
+                        {item?.title?.vi}
+                      </a>
+                      <a
                         className={
-                          timeWork === item.time
-                            ? "select-time"
-                            : "select-time-default"
-                        }
-                        onClick={() => onChangeTime(item.time)}
-                        disabled={
-                          dateWork === dayNow
-                            ? timeNow >= timeChosse
-                              ? true
-                              : false
-                            : false
+                          mutipleSelected.some(
+                            (items) => items._id === item?._id
+                          )
+                            ? "text-service"
+                            : "text-service-default"
                         }
                       >
-                        {item.title}
-                      </Button>
-                    );
-                  })}
-                </div>
-              </div>
-              <CustomTextInput
-                label="Ghi chú"
-                type="textarea"
-                placeholder="Vui lòng nhập ghi chú"
-                onChange={(e) => setNote(e.target.value)}
-              />
-
-              <div className="div-promotion">
-                {promotionCustomer.map((item, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className={
-                        codePromotion === item.code
-                          ? "div-item-promotion-selected"
-                          : "div-item-promotion"
-                      }
-                      onClick={() => checkPromotion(item?.code)}
-                    >
-                      <a className="text-code">{item?.code}</a>
-                      <a className="text-title-promotion">{item?.title?.vi}</a>
+                        {item?.description?.vi}
+                      </a>
                     </div>
                   );
                 })}
               </div>
             </div>
+            <div className="form-picker">
+              <a className="label">Ngày làm (*)</a>
+              <DatePicker format={dateFormat} onChange={onChange} />
+              <a className="text-error">{errorDateWork}</a>
+            </div>
+            <div className="form-picker-hours">
+              <a className="label-hours">Giờ làm (*)</a>
+              {/* <DatePicker format={dateFormat} onChange={onChange} /> */}
+              <div className="div-hours">
+                {DATA_TIME_TOTAL.map((item) => {
+                  const timeChosse = item?.title?.slice(0, 2);
+                  return (
+                    <Button
+                      className={
+                        timeWork === item.time
+                          ? "select-time"
+                          : "select-time-default"
+                      }
+                      onClick={() => onChangeTime(item.time)}
+                      disabled={
+                        dateWork === dayNow
+                          ? timeNow >= timeChosse
+                            ? true
+                            : false
+                          : false
+                      }
+                    >
+                      {item.title}
+                    </Button>
+                  );
+                })}
+              </div>
+              <a className="text-error">{errorTimeWork}</a>
+            </div>
+            <CustomTextInput
+              label="Ghi chú"
+              type="textarea"
+              placeholder="Vui lòng nhập ghi chú"
+              onChange={(e) => setNote(e.target.value)}
+            />
+
+            <div className="div-promotion">
+              {promotionCustomer.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={
+                      codePromotion === item.code
+                        ? "div-item-promotion-selected"
+                        : "div-item-promotion"
+                    }
+                    onClick={() => {
+                      checkPromotion(item);
+                    }}
+                  >
+                    <a className="text-code">{item?.code}</a>
+                    <a className="text-title-promotion">{item?.title?.vi}</a>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        )}
-        <div className="div-total mt-3">
-          <a>Tạm tính: {formatMoney(priceOrder)}</a>
-          {eventPromotion.map((item, index) => {
-            return (
-              <a style={{ color: "red" }}>
-                {item?.title.vi}: {"-"}
-                {formatMoney(item?.discount)}
-              </a>
-            );
-          })}
-          <a>Phí dịch vụ: {formatMoney(feeService)}</a>
         </div>
+
         {priceOrder && (
-          <div className="div-footer mt-5">
-            <a className="text-price">
-              Giá:
-              {formatMoney(
-                priceOrder + feeService - discount - eventFeePromotion
-              )}
-            </a>
-            <Button onClick={onCreateOrder}>Đăng việc</Button>
+          <div className="div-total mt-3">
+            <a>Tạm tính: {formatMoney(priceOrder)}</a>
+            <a>Phí dịch vụ: {formatMoney(feeService)}</a>
+            {eventPromotion.map((item, index) => {
+              return (
+                <a style={{ color: "red" }}>
+                  {item?.title.vi}: {"-"}
+                  {formatMoney(item?.discount)}
+                </a>
+              );
+            })}
+            {discount > 0 && (
+              <div>
+                <a style={{ color: "red" }}>{itemPromotion?.title?.vi}: </a>
+                <a style={{ color: "red" }}> {formatMoney(-discount)}</a>
+              </div>
+            )}
           </div>
         )}
+
+        <div className="div-footer mt-5">
+          <a className="text-price">
+            Giá:{" "}
+            {priceOrder > 0
+              ? formatMoney(
+                  priceOrder + feeService - discount - eventFeePromotion
+                )
+              : formatMoney(0)}
+          </a>
+          <Button onClick={onCreateOrder}>Đăng việc</Button>
+        </div>
 
         {isLoading && <LoadingPagination />}
       </Drawer>

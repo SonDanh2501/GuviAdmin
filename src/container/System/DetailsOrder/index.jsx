@@ -1,12 +1,14 @@
-import { Button, Col, FloatButton, Image, Popconfirm, Row } from "antd";
+import { Button, Col, FloatButton, Image, Popconfirm, Row, Table } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
-import { Modal, ModalFooter, ModalHeader } from "reactstrap";
-import { getCollaboratorsById } from "../../../api/collaborator";
-import { fetchCustomerById } from "../../../api/customer";
-import { changeStatusOrderApi, getOrderDetailApi } from "../../../api/order";
+import { useLocation, useNavigate } from "react-router-dom";
+import vi from "moment/locale/vi";
+import {
+  changeStatusOrderApi,
+  getOrderByGroupOrderApi,
+  getOrderDetailApi,
+} from "../../../api/order";
 import user from "../../../assets/images/user.png";
 import { formatMoney } from "../../../helper/formatMoney";
 import { errorNotify } from "../../../helper/toast";
@@ -16,20 +18,24 @@ import "./index.scss";
 const DetailsOrder = () => {
   const { state } = useLocation();
   const { id } = state || {};
-  const [data, setData] = useState([]);
+  const [dataGroup, setDataGroup] = useState({
+    date_work_schedule: [{ data: "2023-02-21T00:30:00.000Z" }],
+  });
+  const [dataList, setDataList] = useState([]);
   const [modal, setModal] = useState(false);
   const [open, setOpen] = useState(false);
   const [openStatus, setOpenStatus] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const toggle = () => setModal(!modal);
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
-    getOrderDetailApi(id)
+    getOrderByGroupOrderApi(id)
       .then((res) => {
-        setData(res);
+        setDataGroup(res?.data?.groupOrder);
+        setDataList(res?.data?.listOrder);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -41,7 +47,18 @@ const DetailsOrder = () => {
   }, [id]);
 
   const timeWork = (data) => {
-    const start = moment(new Date(data.date_work)).format("HH:mm");
+    const start = moment(new Date(data?.date_work_schedule[0]?.date)).format(
+      "HH:mm"
+    );
+
+    const timeEnd =
+      Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
+
+    return start + " - " + timeEnd;
+  };
+
+  const timeWorkList = (data) => {
+    const start = moment(new Date(data?.date_work)).format("HH:mm");
 
     const timeEnd =
       Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
@@ -90,6 +107,121 @@ const DetailsOrder = () => {
     setOpen(false);
   };
 
+  const columns = [
+    {
+      title: "Mã",
+      render: (data) => {
+        return <a className="text-id">{data?.id_view}</a>;
+      },
+    },
+    {
+      title: "Ngày tạo",
+      render: (data) => {
+        return (
+          <div className="div-create">
+            <a className="text-create">
+              {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
+            </a>
+            <a className="text-create">
+              {moment(new Date(data?.date_create)).format("HH:mm")}
+            </a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Dịch vụ",
+      render: (data) => {
+        return (
+          <div className="div-service">
+            <a className="text-service">
+              {dataGroup?.type === "schedule"
+                ? "Giúp việc cố định"
+                : dataGroup?.type === "loop" && !dataGroup?.is_auto_order
+                ? "Giúp việc theo giờ"
+                : dataGroup?.type === "loop" && dataGroup?.is_auto_order
+                ? "Lặp lại hàng tuần"
+                : ""}
+            </a>
+            <a className="text-service">{timeWorkList(data)}</a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Thời gian",
+      render: (data) => {
+        return (
+          <div className="div-worktime">
+            <a className="text-worktime">
+              {" "}
+              {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
+            </a>
+            <a className="text-worktime">
+              {moment(new Date(data?.date_work))
+                .locale("vi", vi)
+                .format("dddd")}
+            </a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Địa điểm",
+      render: (data) => <p className="text-address">{data?.address}</p>,
+    },
+    {
+      title: "Cộng tác viên",
+      render: (data) => (
+        <>
+          {!data?.id_collaborator ? (
+            <a>Đang tìm kiếm</a>
+          ) : (
+            <a
+              onClick={() =>
+                navigate("/group-order/manage-order/details-collaborator", {
+                  state: { id: data?.id_collaborator },
+                })
+              }
+              className="text-collaborator"
+            >
+              {data?.name_collaborator}
+            </a>
+          )}
+        </>
+      ),
+    },
+
+    {
+      title: "Trạng thái",
+      render: (data) => (
+        <a
+          className={
+            data?.status === "pending"
+              ? "text-pending-order"
+              : data?.status === "confirm"
+              ? "text-confirm"
+              : data?.status === "doing"
+              ? "text-doing"
+              : data?.status === "done"
+              ? "text-done"
+              : "text-cancel"
+          }
+        >
+          {data?.status === "pending"
+            ? "Đang chờ làm"
+            : data?.status === "confirm"
+            ? "Đã nhận"
+            : data?.status === "doing"
+            ? "Đang làm"
+            : data?.status === "done"
+            ? "Hoàn thành"
+            : "Đã huỷ"}
+        </a>
+      ),
+    },
+  ];
+
   return (
     <div className="div-container">
       <a className="label">Chi tiết công việc</a>
@@ -98,17 +230,23 @@ const DetailsOrder = () => {
           <a className="label-customer">Khách hàng</a>
           <div className="div-body">
             <Image
-              src={data?.id_customer?.avatar ? data?.id_customer?.avatar : user}
+              src={
+                dataGroup?.id_customer?.avatar
+                  ? dataGroup?.id_customer?.avatar
+                  : user
+              }
               className="img-customer"
             />
 
             <div className="div-info">
-              <a className="label-name">Tên: {data?.id_customer?.full_name}</a>
-              <a className="label-name">SĐT: {data?.id_customer?.phone}</a>
+              <a className="label-name">
+                Tên: {dataGroup?.id_customer?.full_name}
+              </a>
+              <a className="label-name">SĐT: {dataGroup?.id_customer?.phone}</a>
               <a className="label-name">
                 Tuổi:{" "}
-                {data?.id_customer?.birthday
-                  ? moment().diff(data?.id_customer?.birthday, "years")
+                {dataGroup?.id_customer?.birthday
+                  ? moment().diff(dataGroup?.id_customer?.birthday, "years")
                   : "Chưa cập nhật"}
               </a>
             </div>
@@ -119,7 +257,7 @@ const DetailsOrder = () => {
             <a className="title">
               Dịch vụ:{" "}
               <a className="text-service">
-                {data?.service?._id?.kind === "giup_viec_theo_gio"
+                {dataGroup?.service?._id?.kind === "giup_viec_theo_gio"
                   ? "Giúp việc theo giờ"
                   : "Giúp việc cố định"}
               </a>
@@ -129,23 +267,25 @@ const DetailsOrder = () => {
               <div className="div-times">
                 <a>
                   -Ngày làm:{" "}
-                  {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
+                  {moment(
+                    new Date(dataGroup?.date_work_schedule[0]?.date)
+                  ).format("DD/MM/YYYY")}
                 </a>
-                <a>-Giờ làm: {timeWork(data)}</a>
+                <a>-Giờ làm: {timeWork(dataGroup)}</a>
               </div>
             </div>
             <a className="title">
-              Địa điểm: <a className="text-service">{data?.address}</a>
+              Địa điểm: <a className="text-service">{dataGroup?.address}</a>
             </a>
-            {data?.note && (
+            {dataGroup?.note && (
               <a className="title">
-                Ghi chú: <a className="text-service">{data?.note}</a>
+                Ghi chú: <a className="text-service">{dataGroup?.note}</a>
               </a>
             )}
 
             <a className="title">
               Dịch vụ thêm:{" "}
-              {data?.service?.optional_service.map((item) => {
+              {dataGroup?.service?.optional_service.map((item) => {
                 return (
                   <a>
                     {item?._id?.type === "multi_select_horizontal_thumbnail"
@@ -162,22 +302,24 @@ const DetailsOrder = () => {
             <a className="title">
               Thanh toán:{" "}
               <a className="text-service">
-                {data?.payment_method === "cash" ? "Tiền mặt" : "G-point"}
+                {dataGroup?.payment_method === "cash" ? "Tiền mặt" : "G-point"}
               </a>
             </a>
             <a className="title">
               Tổng tiền:{" "}
-              <a className="text-service">{formatMoney(data?.final_fee)}</a>
+              <a className="text-service">
+                {formatMoney(dataGroup?.final_fee)}
+              </a>
             </a>
             <a className="title">
               Trạng thái:{" "}
-              {data?.status === "pending" ? (
+              {dataGroup?.status === "pending" ? (
                 <a className="text-pending ">Đang chờ làm</a>
-              ) : data?.status === "confirm" ? (
+              ) : dataGroup?.status === "confirm" ? (
                 <a className="text-confirm">Đã nhận</a>
-              ) : data?.status === "doing" ? (
+              ) : dataGroup?.status === "doing" ? (
                 <a className="text-doing">Đang làm</a>
-              ) : data?.status === "done" ? (
+              ) : dataGroup?.status === "done" ? (
                 <a className="text-done">Đã xong</a>
               ) : (
                 <a className="text-cancel">Đã huỷ</a>
@@ -185,9 +327,9 @@ const DetailsOrder = () => {
             </a>
           </div>
         </Col>
-        {data?.id_collaborator && (
+        {dataGroup?.id_collaborator && (
           <Col span={8} className="col-right">
-            <a className="label-ctv">Cộng tác viên</a>
+            <a className="label-ctv">Cộng tác viên hiện tại</a>
             <div className="div-body">
               <Image
                 style={{
@@ -195,21 +337,31 @@ const DetailsOrder = () => {
                   height: 100,
                   backgroundColor: "transparent",
                 }}
-                src={data?.id_collaborator?.avatar}
+                src={dataGroup?.id_collaborator?.avatar}
                 className="img-collaborator"
               />
 
               <div className="div-info">
-                <a className="label-name">
-                  Tên: {data?.id_collaborator?.full_name}
+                <a
+                  className="label-name"
+                  onClick={() =>
+                    navigate("/group-order/manage-order/details-collaborator", {
+                      state: { id: dataGroup?.id_collaborator?._id },
+                    })
+                  }
+                >
+                  Tên: {dataGroup?.id_collaborator?.full_name}
                 </a>
                 <a className="label-name">
-                  SĐT: {data?.id_collaborator?.phone}
+                  SĐT: {dataGroup?.id_collaborator?.phone}
                 </a>
                 <a className="label-name">
                   Tuổi:{" "}
-                  {data?.id_collaborator?.birthday
-                    ? moment().diff(data?.id_collaborator?.birthday, "years")
+                  {dataGroup?.id_collaborator?.birthday
+                    ? moment().diff(
+                        dataGroup?.id_collaborator?.birthday,
+                        "years"
+                      )
                     : "Chưa cập nhật"}
                 </a>
               </div>
@@ -217,12 +369,7 @@ const DetailsOrder = () => {
           </Col>
         )}
       </Row>
-      {/* 
-      <Button className="btn-cancel" onClick={toggle}>
-        Huỷ việc
-      </Button> */}
-
-      {data?.status === "pending" || data?.status === "confirm" ? (
+      {dataGroup?.status === "pending" || dataGroup?.status === "confirm" ? (
         <Popconfirm
           title="Bạn có muốn huỷ việc"
           // description="Open Popconfirm with async logic"
@@ -239,7 +386,7 @@ const DetailsOrder = () => {
         </Popconfirm>
       ) : null}
 
-      {data?.status === "doing" || data?.status === "confirm" ? (
+      {dataGroup?.status === "doing" || dataGroup?.status === "confirm" ? (
         <Popconfirm
           title="Bạn có chuyển trạng thái công việc"
           // description="Open Popconfirm with async logic"
@@ -251,14 +398,18 @@ const DetailsOrder = () => {
           onCancel={handleCancel}
         >
           <Button className="btn-cancel" onClick={showPopStatusconfirm}>
-            {data?.status === "confirm"
+            {dataGroup?.status === "confirm"
               ? "Bắt đầu ca làm"
-              : data?.status === "doing"
+              : dataGroup?.status === "doing"
               ? "Hoàn thành ca làm"
               : ""}
           </Button>
         </Popconfirm>
       ) : null}
+
+      <div className="mt-5">
+        <Table columns={columns} dataSource={dataList} pagination={false} />
+      </div>
 
       <FloatButton.BackTop />
     </div>

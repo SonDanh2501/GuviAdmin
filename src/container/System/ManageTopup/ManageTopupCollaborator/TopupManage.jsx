@@ -1,4 +1,4 @@
-import { Empty, Pagination, Skeleton, Table } from "antd";
+import { Empty, Input, Pagination, Skeleton, Table } from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,6 +32,7 @@ import {
 import { formatMoney } from "../../../../helper/formatMoney";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { getUser } from "../../../../redux/selectors/auth";
+import { SearchOutlined } from "@ant-design/icons";
 
 export default function TopupManage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -247,128 +248,120 @@ export default function TopupManage() {
 
   return (
     <React.Fragment>
-      <div className="mt-2 p-3">
-        <Card className="shadow">
-          <CardHeader className="border-0 card-header">
-            <Row className="align-items-center">
-              <Col className="text-left add">
-                <div>
-                  <AddTopup />
-                </div>
-                <div className="withdraw">
-                  <Withdraw />
-                </div>
-              </Col>
-              <Col>
-                <CustomTextInput
-                  placeholder="Tìm kiếm"
-                  type="text"
-                  onChange={(e) => handleSearch(e.target.value)}
-                />
-              </Col>
-            </Row>
-          </CardHeader>
-          <Table
-            columns={columns}
-            dataSource={dataFilter.length > 0 ? dataFilter : listCollaborators}
-            pagination={false}
-            rowKey={(record) => record._id}
-            rowSelection={{
-              selectedRowKeys,
-              onChange: (selectedRowKeys, selectedRows) => {
-                setSelectedRowKeys(selectedRowKeys);
-              },
-            }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  setItemEdit(record);
-                },
-              };
-            }}
-            // locale={{
-            //   emptyText:
-            //     listCollaborators.length > 0 ? (
-            //       <Empty />
-            //     ) : (
-            //       <Skeleton active={true} />
-            //     ),
-            // }}
-          />
-          <div className="div-pagination p-2">
-            <a>
-              Tổng: {dataFilter.length > 0 ? totalFilter : totalCollaborators}
-            </a>
-            <div>
-              <Pagination
-                current={currentPage}
-                onChange={onChange}
-                total={dataFilter.length > 0 ? totalFilter : totalCollaborators}
-                showSizeChanger={false}
-                pageSize={20}
-              />
-            </div>
-          </div>
-        </Card>
-        <div>
-          <Modal isOpen={modalConfirm} toggle={toggleConfirm}>
-            <ModalHeader toggle={toggleConfirm}>
-              {itemEdit?.type_transfer === "top_up"
-                ? "Duyệt lệnh nạp tiền"
-                : " Duyệt lệnh rút tiền"}
-            </ModalHeader>
-            <ModalBody>
-              <>
-                <h4>
-                  {itemEdit?.type_transfer === "top_up"
-                    ? "Bạn có muốn duyệt lệnh nạp tiền cho :"
-                    : " Bạn có muốn duyệt lệnh rút tiền cho :"}
-                </h4>
-                <div className="body-modal">
-                  <a>CTV: {itemEdit?.id_collaborator?.full_name}</a>
-                  <a>SĐT: {itemEdit?.id_collaborator?.phone}</a>
-                  <a>Số tiền: {formatMoney(itemEdit?.money)}</a>
-                  <a>Nội dung: {itemEdit?.transfer_note}</a>
-                </div>
-              </>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={() => onConfirm(itemEdit?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggleConfirm}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
-        </div>
-        <div>
-          <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Xóa giao dịch</ModalHeader>
-            <ModalBody>
-              <a>
-                Bạn có chắc muốn xóa giao dịch của cộng tác viên
-                <a className="text-name-modal">
-                  {itemEdit?.id_collaborator?.full_name}
-                </a>
-                này không?
-              </a>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggle}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
-        </div>
-        <div>
-          <EditPopup item={itemEdit} state={modalEdit} setState={toggleEdit} />
-        </div>
-        {isLoading && <LoadingPagination />}
+      <div className="div-header-topup">
+        <AddTopup />
+        <Withdraw />
+        <Input
+          placeholder="Tìm kiếm"
+          type="text"
+          className="input-search-topup"
+          prefix={<SearchOutlined />}
+          onChange={(e) => {
+            handleSearch(e.target.value);
+          }}
+        />
       </div>
+
+      <div className="mt-3">
+        <Table
+          columns={columns}
+          dataSource={dataFilter.length > 0 ? dataFilter : listCollaborators}
+          pagination={false}
+          rowKey={(record) => record._id}
+          rowSelection={{
+            selectedRowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
+              setSelectedRowKeys(selectedRowKeys);
+            },
+          }}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setItemEdit(record);
+              },
+            };
+          }}
+          // locale={{
+          //   emptyText:
+          //     listCollaborators.length > 0 ? (
+          //       <Empty />
+          //     ) : (
+          //       <Skeleton active={true} />
+          //     ),
+          // }}
+        />
+      </div>
+      <div className="div-pagination p-2">
+        <a>Tổng: {dataFilter.length > 0 ? totalFilter : totalCollaborators}</a>
+        <div>
+          <Pagination
+            current={currentPage}
+            onChange={onChange}
+            total={dataFilter.length > 0 ? totalFilter : totalCollaborators}
+            showSizeChanger={false}
+            pageSize={20}
+          />
+        </div>
+      </div>
+
+      <div>
+        <Modal isOpen={modalConfirm} toggle={toggleConfirm}>
+          <ModalHeader toggle={toggleConfirm}>
+            {itemEdit?.type_transfer === "top_up"
+              ? "Duyệt lệnh nạp tiền"
+              : " Duyệt lệnh rút tiền"}
+          </ModalHeader>
+          <ModalBody>
+            <>
+              <h4>
+                {itemEdit?.type_transfer === "top_up"
+                  ? "Bạn có muốn duyệt lệnh nạp tiền cho :"
+                  : " Bạn có muốn duyệt lệnh rút tiền cho :"}
+              </h4>
+              <div className="body-modal">
+                <a>CTV: {itemEdit?.id_collaborator?.full_name}</a>
+                <a>SĐT: {itemEdit?.id_collaborator?.phone}</a>
+                <a>Số tiền: {formatMoney(itemEdit?.money)}</a>
+                <a>Nội dung: {itemEdit?.transfer_note}</a>
+              </div>
+            </>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={() => onConfirm(itemEdit?._id)}>
+              Có
+            </Button>
+            <Button color="#ddd" onClick={toggleConfirm}>
+              Không
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+      <div>
+        <Modal isOpen={modal} toggle={toggle}>
+          <ModalHeader toggle={toggle}>Xóa giao dịch</ModalHeader>
+          <ModalBody>
+            <a>
+              Bạn có chắc muốn xóa giao dịch của cộng tác viên
+              <a className="text-name-modal">
+                {itemEdit?.id_collaborator?.full_name}
+              </a>
+              này không?
+            </a>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
+              Có
+            </Button>
+            <Button color="#ddd" onClick={toggle}>
+              Không
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+      <div>
+        <EditPopup item={itemEdit} state={modalEdit} setState={toggleEdit} />
+      </div>
+      {isLoading && <LoadingPagination />}
     </React.Fragment>
   );
 }

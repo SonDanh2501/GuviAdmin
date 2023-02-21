@@ -35,3 +35,28 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.div-monney {
+  display: flex;
+  flex-direction: column;
+
+  .text-title-monney {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000 !important;
+  }
+  .text-monney {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    color: #000000 !important;
+  }
+}
+
+.div-time {
+  display: flex;
+  flex-direction: column;
+}

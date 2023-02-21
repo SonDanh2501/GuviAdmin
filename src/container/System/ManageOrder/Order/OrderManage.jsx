@@ -146,11 +146,13 @@ export default function OrderManage(props) {
         return (
           <div className="div-service">
             <a className="text-service">
-              {data?.service?._id?.kind === "giup_viec_co_dinh"
+              {data?.type === "schedule"
                 ? "Giúp việc cố định"
-                : data?.service?._id?.kind === "giup_viec_theo_gio"
+                : data?.type === "loop" && !data?.is_auto_order
                 ? "Giúp việc theo giờ"
-                : "Tổng vệ sinh"}{" "}
+                : data?.type === "loop" && data?.is_auto_order
+                ? "Lặp lại hàng tuần"
+                : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>
           </div>

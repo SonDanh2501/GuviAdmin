@@ -89,3 +89,13 @@ export const editAccountBankCollaborator = (id, data) => {
     data
   );
 };
+
+export const getCollaboratorRemainder = (id) => {
+  return axiosClient.get(`/admin/collaborator_manager/get_remainder/${id}`);
+};
+
+export const getListTransitionByCollaborator = (id, start, length) => {
+  return axiosClient.get(
+    `/admin/collaborator_manager/get_transition/${id}?start=${start}&length=${length}`
+  );
+};
