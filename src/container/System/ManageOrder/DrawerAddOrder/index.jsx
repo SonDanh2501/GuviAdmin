@@ -593,10 +593,10 @@ const AddOrder = () => {
         {priceOrder && (
           <div className="div-footer mt-5">
             <a className="text-price">
-              Giá:{" "}
+              Giá:
               {formatMoney(
-                priceOrder - discount - eventFeePromotion - feeService
-              )}{" "}
+                priceOrder + feeService - discount - eventFeePromotion
+              )}
             </a>
             <Button onClick={onCreateOrder}>Đăng việc</Button>
           </div>
