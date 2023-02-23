@@ -27,6 +27,7 @@ import {
   getPlaceDetailApi,
   googlePlaceAutocomplete,
 } from "../../../../api/location";
+import useDebounce from "../../../../helper/debounce";
 const AddOrder = () => {
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState("");
@@ -61,6 +62,7 @@ const AddOrder = () => {
   const [itemPromotion, setItemPromotion] = useState(0);
   const [places, setPlaces] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const debouncedValue = useDebounce(address, 300);
 
   const showDrawer = () => {
     setOpen(true);
@@ -382,20 +384,22 @@ const AddOrder = () => {
 
   const handleSearchLocation = useCallback((value) => {
     setAddress(value);
-    setIsLoading(true);
-    googlePlaceAutocomplete(value)
-      .then((res) => {
-        if (res.predictions) {
-          setPlaces(res.predictions);
-        } else {
+    setTimeout(() => {
+      setIsLoading(true);
+      googlePlaceAutocomplete(value)
+        .then((res) => {
+          if (res.predictions) {
+            setPlaces(res.predictions);
+          } else {
+            setPlaces([]);
+          }
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
           setPlaces([]);
-        }
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        setPlaces([]);
-      });
+        });
+    }, 1000);
   }, []);
 
   const findPlace = useCallback((id) => {
