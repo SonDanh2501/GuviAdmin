@@ -259,7 +259,7 @@ export default function Home() {
               className="btn-details"
               onClick={() =>
                 navigate("/details-order", {
-                  state: { id: data?.id_group_order },
+                  state: { id: data?._id },
                 })
               }
             >
