@@ -34,7 +34,9 @@ export default function OrderCustomer() {
   }, [id]);
 
   const timeWork = (data) => {
-    const start = moment(new Date(data.date_work)).format("HH:mm");
+    const start = moment(new Date(data.date_work_schedule[0].date)).format(
+      "HH:mm"
+    );
 
     const timeEnd =
       Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
@@ -107,11 +109,13 @@ export default function OrderCustomer() {
         return (
           <div className="div-service">
             <a className="text-service">
-              {data?.service?._id?.kind === "giup_viec_co_dinh"
+              {data?.type === "schedule"
                 ? "Giúp việc cố định"
-                : data?.service?._id?.kind === "giup_viec_theo_gio"
+                : data?.type === "loop" && !data?.is_auto_order
                 ? "Giúp việc theo giờ"
-                : "Tổng vệ sinh"}{" "}
+                : data?.type === "loop" && data?.is_auto_order
+                ? "Lặp lại hàng tuần"
+                : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>
           </div>
@@ -125,10 +129,12 @@ export default function OrderCustomer() {
           <div className="div-worktime">
             <a className="text-worktime">
               {" "}
-              {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
+              {moment(new Date(data?.date_work_schedule[0].date)).format(
+                "DD/MM/YYYY"
+              )}
             </a>
             <a className="text-worktime">
-              {moment(new Date(data?.date_work))
+              {moment(new Date(data?.date_work_schedule[0].date))
                 .locale("vi", vi)
                 .format("dddd")}
             </a>

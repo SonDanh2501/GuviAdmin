@@ -69,3 +69,9 @@ export const getOrderByGroupOrderApi = (id) => {
     `/admin/order_manager/get_order_by_group_order/${id}?lang=vi`
   );
 };
+
+export const changeOrderCancelToDoneApi = (id) => {
+  return axiosClient.post(
+    `/admin/group-order-manager/change_cancel_to_done/${id}?lang=vi`
+  );
+};

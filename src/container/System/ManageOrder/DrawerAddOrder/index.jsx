@@ -20,8 +20,13 @@ import {
   createOrderApi,
   getServiceFeeOrderApi,
 } from "../../../../api/order";
+import _debounce from "lodash/debounce";
 import { loadingAction } from "../../../../redux/actions/loading";
 import LoadingPagination from "../../../../components/paginationLoading";
+import {
+  getPlaceDetailApi,
+  googlePlaceAutocomplete,
+} from "../../../../api/location";
 const AddOrder = () => {
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState("");
@@ -54,6 +59,7 @@ const AddOrder = () => {
   const [feeService, setFeeService] = useState(0);
   const [dataFeeService, setDataFeeService] = useState(0);
   const [itemPromotion, setItemPromotion] = useState(0);
+  const [places, setPlaces] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const showDrawer = () => {
@@ -147,7 +153,7 @@ const AddOrder = () => {
 
   const timeW = dateWork + "T" + timeWork + ".000Z";
 
-  const timeNow = Number(new Date().toTimeString().slice(0, 2)) + 3;
+  const timeNow = Number(new Date().toTimeString().slice(0, 2));
 
   const dayNow = new Date().toISOString().slice(0, 10);
 
@@ -374,6 +380,38 @@ const AddOrder = () => {
     codePromotion,
   ]);
 
+  const handleSearchLocation = useCallback((value) => {
+    setAddress(value);
+    setIsLoading(true);
+    googlePlaceAutocomplete(value)
+      .then((res) => {
+        if (res.predictions) {
+          setPlaces(res.predictions);
+        } else {
+          setPlaces([]);
+        }
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setPlaces([]);
+      });
+  }, []);
+
+  const findPlace = useCallback((id) => {
+    setIsLoading(true);
+    setPlaces([]);
+    getPlaceDetailApi(id)
+      .then((res) => {
+        setIsLoading(false);
+        setLat(res?.result?.geometry?.location?.lat);
+        setLong(res?.result?.geometry?.location?.lng);
+      })
+      .catch((e) => {
+        setIsLoading(false);
+      });
+  }, []);
+
   return (
     <>
       <Button className="btn-add-order" onClick={showDrawer}>
@@ -387,7 +425,9 @@ const AddOrder = () => {
         open={open}
       >
         <div>
-          <a className="label">Khách hàng (*)</a>
+          <a className="label">
+            Khách hàng <a style={{ color: "red" }}>(*)</a>
+          </a>
           <Input
             placeholder="Tìm kiếm theo tên hoặc số điện thoại số điện thoại"
             value={name}
@@ -438,32 +478,38 @@ const AddOrder = () => {
           </div>
 
           <div>
-            <CustomTextInput
-              label="Nhập địa chỉ (*)"
+            <a className="label">
+              Địa điểm <a style={{ color: "red" }}>(*)</a>
+            </a>
+            <Input
+              placeholder="Vui lòng chọn địa chỉ"
+              value={address}
               type="text"
-              placeholder="Vui lòng nhập địa chỉ"
-              onChange={(e) => setAddress(e.target.value)}
+              onChange={(e) => handleSearchLocation(e.target.value)}
+              className="input"
             />
-
-            <div className="div-latLong">
-              <CustomTextInput
-                label="Kinh độ (*)"
-                type="number"
-                placeholder="Vui lòng nhập kinh độ"
-                onChange={(e) => setLat(e.target.value)}
-              />
-
-              <CustomTextInput
-                label="Vĩ độ (*)"
-                type="number"
-                placeholder="Vui lòng nhập vĩ độ"
-                onChange={(e) => setLong(e.target.value)}
-              />
-            </div>
+            {places.length > 0 && (
+              <List type={"unstyled"} className="list-item-place">
+                {places?.map((item, index) => {
+                  return (
+                    <option
+                      key={index}
+                      onClick={(e) => {
+                        setAddress(item?.description);
+                        findPlace(item?.place_id);
+                      }}
+                    >
+                      {item?.description}
+                    </option>
+                  );
+                })}
+              </List>
+            )}
             <a className="text-error">{errorAddress}</a>
-
             <div className="div-add-service mt-3">
-              <a className="label">Thời lượng (*)</a>
+              <a className="label">
+                Thời lượng <a style={{ color: "red" }}>(*)</a>
+              </a>
               <div className="div-service">
                 {extendService.slice(0, 3).map((item) => {
                   return (
@@ -555,13 +601,14 @@ const AddOrder = () => {
               </div>
             </div>
             <div className="form-picker">
-              <a className="label">Ngày làm (*)</a>
+              <a className="label">
+                Ngày làm <a style={{ color: "red" }}>(*)</a>
+              </a>
               <DatePicker format={dateFormat} onChange={onChange} />
               <a className="text-error">{errorDateWork}</a>
             </div>
             <div className="form-picker-hours">
               <a className="label-hours">Giờ làm (*)</a>
-              {/* <DatePicker format={dateFormat} onChange={onChange} /> */}
               <div className="div-hours">
                 {DATA_TIME_TOTAL.map((item) => {
                   const timeChosse = item?.title?.slice(0, 2);
@@ -594,7 +641,6 @@ const AddOrder = () => {
               placeholder="Vui lòng nhập ghi chú"
               onChange={(e) => setNote(e.target.value)}
             />
-
             <div className="div-promotion">
               {promotionCustomer.map((item, index) => {
                 return (
@@ -617,7 +663,6 @@ const AddOrder = () => {
             </div>
           </div>
         </div>
-
         {priceOrder && (
           <div className="div-total mt-3">
             <a>Tạm tính: {formatMoney(priceOrder)}</a>
