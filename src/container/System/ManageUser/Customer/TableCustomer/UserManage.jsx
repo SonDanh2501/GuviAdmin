@@ -260,16 +260,16 @@ export default function UserManage(props) {
       render: (data) => {
         return (
           <>
-            {data?.id_order ? (
+            {data?.id_group_order ? (
               <a
                 className="text-id-order"
                 onClick={() =>
                   navigate("/details-order", {
-                    state: { id: data?.id_order },
+                    state: { id: data?.id_group_order },
                   })
                 }
               >
-                {data?.id_order}
+                {data?.id_group_order}
               </a>
             ) : (
               <a className="text-address">Không có</a>

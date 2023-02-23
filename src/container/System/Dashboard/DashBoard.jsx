@@ -125,7 +125,9 @@ export default function Home() {
   }, []);
 
   const timeWork = (data) => {
-    const start = moment(new Date(data.date_work)).format("HH:mm");
+    const start = moment(new Date(data.date_work_schedule[0].date)).format(
+      "HH:mm"
+    );
 
     const timeEnd =
       Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
@@ -172,10 +174,14 @@ export default function Home() {
         return (
           <div className="div-column-service">
             <a className="text-service">
-              {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
+              {moment(new Date(data.date_work_schedule[0].date)).format(
+                "DD/MM/YYYY"
+              )}
             </a>
             <a className="text-service">
-              {moment(new Date(data?.date_work)).lang("VI").format("dddd")}
+              {moment(new Date(data.date_work_schedule[0].date))
+                .lang("VI")
+                .format("dddd")}
             </a>
           </div>
         );
@@ -248,7 +254,7 @@ export default function Home() {
       render: (data) => {
         return (
           <div className="div-action">
-            <button className="btn-click">Thao tác</button>
+            {/* <button className="btn-click">Thao tác</button> */}
             <button
               className="btn-details"
               onClick={() =>

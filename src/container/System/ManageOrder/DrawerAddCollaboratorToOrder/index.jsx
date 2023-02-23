@@ -97,8 +97,11 @@ const AddCollaboratorOrder = ({ idOrder }) => {
           </div>
 
           {id && (
-            <Button className="btn-add" onClick={addCollaboratorToOrder}>
-              Chỉnh sửa
+            <Button
+              className="btn-add-collaborator"
+              onClick={addCollaboratorToOrder}
+            >
+              Thêm cộng tác viên
             </Button>
           )}
         </div>
