@@ -343,9 +343,13 @@ const DetailsOrder = () => {
                 <a className="title">
                   Dịch vụ:{" "}
                   <a className="text-service">
-                    {dataGroup?.service?._id?.kind === "giup_viec_theo_gio"
+                    {dataGroup?.type === "schedule"
+                      ? "Giúp việc cố định"
+                      : dataGroup?.type === "loop" && !dataGroup?.is_auto_order
                       ? "Giúp việc theo giờ"
-                      : "Giúp việc cố định"}
+                      : dataGroup?.type === "loop" && dataGroup?.is_auto_order
+                      ? "Lặp lại hàng tuần"
+                      : ""}
                   </a>
                 </a>
                 <div className="div-datework">

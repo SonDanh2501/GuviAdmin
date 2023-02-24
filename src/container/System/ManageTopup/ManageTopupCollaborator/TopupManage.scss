@@ -103,15 +103,66 @@
   flex-direction: column;
 }
 
+.div-total {
+  display: flex;
+  flex-direction: column;
+
+  .total-revenue {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    color: #03a80c;
+    text-decoration: none;
+
+    .text-money-revenue {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      color: #000000;
+      text-decoration: none;
+      margin-left: 10px;
+    }
+  }
+  .total-expenditure {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    color: #ec3d3d;
+    text-decoration: none;
+
+    .text-money-expenditure {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      color: #000000;
+      text-decoration: none;
+      margin-left: 10px;
+    }
+  }
+}
+
 .div-header-topup {
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-top: 20px;
 
   .input-search-topup {
     height: 40px;
-    margin-top: 25px;
     width: 70%;
     margin-left: 10%;
+  }
+}
+
+.div-date {
+  display: flex;
+  flex-direction: row;
+
+  .picker {
+    width: 300px;
   }
 }

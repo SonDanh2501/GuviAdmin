@@ -1,38 +1,27 @@
-import { Empty, Input, Pagination, Skeleton, Table } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { DatePicker, Input, Pagination, Select, Table } from "antd";
 import _debounce from "lodash/debounce";
+import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Button,
-  Card,
-  CardHeader,
-  Col,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Row,
-} from "reactstrap";
-import AddTopup from "../../../../components/addTopup/addTopup";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
-import Withdraw from "../../../../components/withdraw/withdraw";
-import { loadingAction } from "../../../../redux/actions/loading";
-import { getTopupCollaborator } from "../../../../redux/actions/topup";
-import { getTopupCTV, totalTopupCTV } from "../../../../redux/selectors/topup";
-import "./TopupManage.scss";
-
-import EditPopup from "../../../../components/editTopup/editTopup";
-
-import moment from "moment";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   deleteMoneyCollaboratorApi,
   searchTopupCollaboratorApi,
   verifyMoneyCollaboratorApi,
 } from "../../../../api/topup";
-import { formatMoney } from "../../../../helper/formatMoney";
+import AddTopup from "../../../../components/addTopup/addTopup";
+import EditPopup from "../../../../components/editTopup/editTopup";
 import LoadingPagination from "../../../../components/paginationLoading";
+import Withdraw from "../../../../components/withdraw/withdraw";
+import { formatMoney } from "../../../../helper/formatMoney";
+import { loadingAction } from "../../../../redux/actions/loading";
+import { getTopupCollaborator } from "../../../../redux/actions/topup";
 import { getUser } from "../../../../redux/selectors/auth";
-import { SearchOutlined } from "@ant-design/icons";
+import { getTopupCTV, totalTopupCTV } from "../../../../redux/selectors/topup";
+import "./TopupManage.scss";
+const { RangePicker } = DatePicker;
+const { Option } = Select;
 
 export default function TopupManage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,6 +36,7 @@ export default function TopupManage() {
   const [modal, setModal] = React.useState(false);
   const [modalConfirm, setModalConfirm] = React.useState(false);
   const [modalEdit, setModalEdit] = React.useState(false);
+  const [typeDate, setTypeDate] = useState("week");
   const toggleConfirm = () => setModalConfirm(!modalConfirm);
   const toggleEdit = () => setModalEdit(!modalEdit);
   const toggle = () => setModal(!modal);
@@ -246,8 +236,39 @@ export default function TopupManage() {
     },
   ];
 
+  const onChangeDate = useCallback((start, end) => {
+    const dayStart = moment(start).toISOString();
+    const dayEnd = moment(end).toISOString();
+  }, []);
+
   return (
     <React.Fragment>
+      {/* <div className="div-total">
+        <div className="div-date">
+          <Input.Group compact>
+            <Select defaultValue={typeDate} onChange={(e) => setTypeDate(e)}>
+              <Option value="week">Tuần </Option>
+              <Option value="month">Tháng</Option>
+              <Option value="quarter">Quý</Option>
+            </Select>
+          </Input.Group>
+          <div>
+            <RangePicker
+              picker={typeDate}
+              className="picker"
+              onChange={(e) => onChangeDate(e[0]?.$d, e[1]?.$d)}
+            />
+          </div>
+        </div>
+        <a className="total-revenue">
+          Tổng thu:
+          <a className="text-money-revenue">{formatMoney(2000000000)}</a>
+        </a>
+        <a className="total-expenditure">
+          Tổng chi:
+          <a className="text-money-expenditure">{formatMoney(2000000000)}</a>
+        </a>
+      </div> */}
       <div className="div-header-topup">
         <AddTopup />
         <Withdraw />

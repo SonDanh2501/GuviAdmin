@@ -38,14 +38,6 @@ const MoreTopCollaborator = () => {
   const onChangeDate = useCallback((start, end) => {
     const dayStart = moment(start).toISOString();
     const dayEnd = moment(end).toISOString();
-    // dispatch(
-    //   getTopCollaborator.getTopCollaboratorRequest({
-    //     startDate: dayStart,
-    //     endDate: dayEnd,
-    //     start: 0,
-    //     length: 10,
-    //   })
-    // );
     getTopCollaboratorApi(dayStart, dayEnd, 0, 10)
       .then((res) => setData(res.data))
       .catch((err) => console.log(err));
