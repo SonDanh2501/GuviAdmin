@@ -18,6 +18,16 @@
   height: 40px;
 }
 
+.label-customer {
+  font-size: 18px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  color: black;
+  margin-bottom: 10px;
+}
+
 .form-picker {
   display: flex;
   flex-direction: column;
@@ -256,4 +266,11 @@
   width: 90%;
   border: 1px solid rgb(175, 175, 175);
   border-radius: 5px;
+}
+
+.div-auto-order {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }

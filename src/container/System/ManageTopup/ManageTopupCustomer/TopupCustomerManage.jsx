@@ -184,80 +184,55 @@ export default function TopupCustomerManage() {
   return (
     <React.Fragment>
       <div className="mt-2 p-3">
-        <Card className="shadow">
-          <CardHeader className="border-0 card-header">
-            <Row className="align-items-center">
-              <Col className="text-left add">
-                <div>
-                  <AddTopupCustomer />
-                </div>
-              </Col>
-              <Col>
-                <CustomTextInput
-                  placeholder="Tìm kiếm"
-                  type="text"
-                  onChange={(e) => handleSearch(e.target.value)}
-                />
-              </Col>
-            </Row>
-          </CardHeader>
-          {/* <Table className="align-items-center table-flush " responsive>
-            <thead>
-              <tr>
-                <th>Tên khách hàng</th>
-                <th>Số tiền</th>
-                <th>Nạp/rút</th>
-                <th>Nội dung</th>
-                <th>Ngày nạp</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {dataFilter.length > 0
-                ? dataFilter.map((e) => <TableManageTopup data={e} />)
-                : listCustomer &&
-                  listCustomer.map((e) => <TableManageTopup data={e} />)}
-            </tbody>
-          </Table> */}
-          <Table
-            columns={columns}
-            dataSource={dataFilter.length > 0 ? dataFilter : listCustomer}
-            pagination={false}
-            rowKey={(record) => record._id}
-            rowSelection={{
-              selectedRowKeys,
-              onChange: (selectedRowKeys, selectedRows) => {
-                setSelectedRowKeys(selectedRowKeys);
-              },
-            }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  setItemEdit(record);
-                },
-              };
-            }}
-            // locale={{
-            //   emptyText:
-            //     listCustomer.length > 0 ? (
-            //       <Empty />
-            //     ) : (
-            //       <Skeleton active={true} />
-            //     ),
-            // }}
+        <div className="div-header-customer-topup">
+          <AddTopupCustomer />
+          <CustomTextInput
+            placeholder="Tìm kiếm"
+            type="text"
+            onChange={(e) => handleSearch(e.target.value)}
+            className="input-search-topup"
           />
-          <div className="div-pagination p-2">
-            <a>Tổng: {dataFilter.length > 0 ? totalFilter : totalCustomer}</a>
-            <div>
-              <Pagination
-                current={currentPage}
-                onChange={onChange}
-                total={dataFilter.length > 0 ? totalFilter : totalCustomer}
-                showSizeChanger={false}
-              />
-            </div>
+        </div>
+
+        <Table
+          columns={columns}
+          dataSource={dataFilter.length > 0 ? dataFilter : listCustomer}
+          pagination={false}
+          rowKey={(record) => record._id}
+          rowSelection={{
+            selectedRowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
+              setSelectedRowKeys(selectedRowKeys);
+            },
+          }}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setItemEdit(record);
+              },
+            };
+          }}
+          // locale={{
+          //   emptyText:
+          //     listCustomer.length > 0 ? (
+          //       <Empty />
+          //     ) : (
+          //       <Skeleton active={true} />
+          //     ),
+          // }}
+        />
+        <div className="div-pagination p-2">
+          <a>Tổng: {dataFilter.length > 0 ? totalFilter : totalCustomer}</a>
+          <div>
+            <Pagination
+              current={currentPage}
+              onChange={onChange}
+              total={dataFilter.length > 0 ? totalFilter : totalCustomer}
+              showSizeChanger={false}
+            />
           </div>
-        </Card>
+        </div>
+
         <div>
           <Modal isOpen={modalConfirm} toggle={toggleConfirm}>
             <ModalHeader toggle={toggleConfirm}>

@@ -18,3 +18,16 @@
     margin-left: 20px;
   }
 }
+
+.div-header-customer-topup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .input-search-topup {
+    height: 40px;
+    margin-top: 25px;
+    width: 500px;
+    margin-left: 10%;
+  }
+}

@@ -160,7 +160,7 @@ const AddTopupCustomer = () => {
             />
             <CustomButton
               title="Nạp "
-              className="float-left btn-add"
+              className="float-left btn-add-topup-customer"
               type="button"
               onClick={addMoney}
             />

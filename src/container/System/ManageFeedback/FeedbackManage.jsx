@@ -1,4 +1,5 @@
-import { Pagination, Table } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { Input, Pagination, Table } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { useCallback, useState } from "react";
@@ -116,12 +117,13 @@ export default function FeedbackManage() {
     {
       title: "Ngày phản hồi",
       render: (data) => (
-        <a>{moment(new Date(data?.date_create)).format("DD/MM/yyy HH:mm")}</a>
+        <a>{moment(new Date(data?.date_create)).format("DD/MM/yyy - HH:mm")}</a>
       ),
     },
     {
       title: "",
       key: "action",
+      align: "center",
       render: (data) =>
         user?.role === "admin" && (
           <button className="btn-delete" onClick={toggle}>
@@ -133,20 +135,17 @@ export default function FeedbackManage() {
 
   return (
     <React.Fragment>
-      <div className="mt-2 p-3">
-        <Card className="shadow">
-          <CardHeader className="border-0 card-header">
-            <Row className="align-items-center">
-              <Col className="text-left"></Col>
-              <Col>
-                <CustomTextInput
-                  placeholder="Tìm kiếm theo tên hoặc số điện thoại"
-                  type="text"
-                  onChange={(e) => handleSearch(e.target.value)}
-                />
-              </Col>
-            </Row>
-          </CardHeader>
+      <div>
+        <h5>Phản hồi</h5>
+        <Input
+          placeholder="Tìm kiếm theo tên hoặc số điện thoại"
+          type="text"
+          className="input-search"
+          prefix={<SearchOutlined />}
+          onChange={(e) => handleSearch(e.target.value)}
+        />
+
+        <div className="mt-3">
           <Table
             columns={columns}
             dataSource={dataFilter.length > 0 ? dataFilter : listFeedback}
@@ -166,19 +165,19 @@ export default function FeedbackManage() {
               };
             }}
           />
-          <div className="div-pagination p-2">
-            <a>Tổng: {dataFilter.length > 0 ? totalFilter : feedbackTotal}</a>
-            <div>
-              <Pagination
-                current={currentPage}
-                onChange={onChange}
-                total={dataFilter.length > 0 ? totalFilter : feedbackTotal}
-                showSizeChanger={false}
-                pageSize={20}
-              />
-            </div>
+        </div>
+        <div className="div-pagination p-2">
+          <a>Tổng: {dataFilter.length > 0 ? totalFilter : feedbackTotal}</a>
+          <div>
+            <Pagination
+              current={currentPage}
+              onChange={onChange}
+              total={dataFilter.length > 0 ? totalFilter : feedbackTotal}
+              showSizeChanger={false}
+              pageSize={20}
+            />
           </div>
-        </Card>
+        </div>
 
         <div>
           <Modal isOpen={modal} toggle={toggle}>

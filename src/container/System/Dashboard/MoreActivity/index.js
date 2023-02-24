@@ -46,7 +46,7 @@ const MoreActivity = () => {
           lineHeight: "32px",
         }}
       >
-        <Button onClick={onLoadMore}>loading more</Button>
+        <Button onClick={onLoadMore}>Xem thêm</Button>
       </div>
     ) : null;
 

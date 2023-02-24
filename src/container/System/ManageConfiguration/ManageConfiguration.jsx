@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { Alert, Button, Row, Toast, ToastBody, ToastHeader } from "reactstrap";
+import { Button } from "reactstrap";
+
 import "./ManageConfiguration.scss";
 
 const ManageConfiguration = () => {
@@ -41,6 +42,16 @@ const ManageConfiguration = () => {
           }}
         >
           Cấu hình app CTV
+        </Button>
+      </div>
+      <div className="mt-5">
+        <Button
+          className="btn"
+          onClick={() => {
+            navigate("/adminManage/manage-configuration/setting-qrcode");
+          }}
+        >
+          Cấu hình QrCode
         </Button>
       </div>
     </div>
