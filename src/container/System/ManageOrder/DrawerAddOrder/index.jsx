@@ -1,5 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Col, DatePicker, Drawer, Input, List, Row } from "antd";
+import {
+  Button,
+  Col,
+  DatePicker,
+  Drawer,
+  Input,
+  List,
+  Row,
+  Switch,
+} from "antd";
 import "./index.scss";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import { DATA_TIME_TOTAL } from "../../../../api/fakeData";
@@ -60,6 +69,7 @@ const AddOrder = () => {
   const [feeService, setFeeService] = useState(0);
   const [dataFeeService, setDataFeeService] = useState(0);
   const [itemPromotion, setItemPromotion] = useState(0);
+  const [isAutoOrder, setIsAutoOrder] = useState(false);
   const [places, setPlaces] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const debouncedValue = useDebounce(address, 300);
@@ -318,6 +328,40 @@ const AddOrder = () => {
     [id, lat, long, address, timeWork, dateWork, mutipleSelected, time]
   );
 
+  const handleSearchLocation = useCallback((value) => {
+    setAddress(value);
+    setTimeout(() => {
+      setIsLoading(true);
+      googlePlaceAutocomplete(value)
+        .then((res) => {
+          if (res.predictions) {
+            setPlaces(res.predictions);
+          } else {
+            setPlaces([]);
+          }
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          setPlaces([]);
+        });
+    }, 1000);
+  }, []);
+
+  const findPlace = useCallback((id) => {
+    setIsLoading(true);
+    setPlaces([]);
+    getPlaceDetailApi(id)
+      .then((res) => {
+        setIsLoading(false);
+        setLat(res?.result?.geometry?.location?.lat);
+        setLong(res?.result?.geometry?.location?.lng);
+      })
+      .catch((e) => {
+        setIsLoading(false);
+      });
+  }, []);
+
   const onCreateOrder = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
 
@@ -338,7 +382,7 @@ const AddOrder = () => {
         type_address_work: "house",
         note_address: "",
         note: note,
-        is_auto_order: false,
+        is_auto_order: isAutoOrder,
         date_work_schedule: [timeW],
         extend_optional: mutipleSelected.concat(time),
         code_promotion: codePromotion,
@@ -380,41 +424,8 @@ const AddOrder = () => {
     mutipleSelected,
     time,
     codePromotion,
+    isAutoOrder,
   ]);
-
-  const handleSearchLocation = useCallback((value) => {
-    setAddress(value);
-    setTimeout(() => {
-      setIsLoading(true);
-      googlePlaceAutocomplete(value)
-        .then((res) => {
-          if (res.predictions) {
-            setPlaces(res.predictions);
-          } else {
-            setPlaces([]);
-          }
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          setPlaces([]);
-        });
-    }, 1000);
-  }, []);
-
-  const findPlace = useCallback((id) => {
-    setIsLoading(true);
-    setPlaces([]);
-    getPlaceDetailApi(id)
-      .then((res) => {
-        setIsLoading(false);
-        setLat(res?.result?.geometry?.location?.lat);
-        setLong(res?.result?.geometry?.location?.lng);
-      })
-      .catch((e) => {
-        setIsLoading(false);
-      });
-  }, []);
 
   return (
     <>
@@ -429,7 +440,7 @@ const AddOrder = () => {
         open={open}
       >
         <div>
-          <a className="label">
+          <a className="label-customer">
             Khách hàng <a style={{ color: "red" }}>(*)</a>
           </a>
           <Input
@@ -482,7 +493,7 @@ const AddOrder = () => {
           </div>
 
           <div>
-            <a className="label">
+            <a className="label-customer">
               Địa điểm <a style={{ color: "red" }}>(*)</a>
             </a>
             <Input
@@ -638,6 +649,14 @@ const AddOrder = () => {
                 })}
               </div>
               <a className="text-error">{errorTimeWork}</a>
+              <div className="div-auto-order">
+                <a className="label-hours">Lặp lại hàng tuần</a>
+                <Switch
+                  defaultChecked={isAutoOrder}
+                  style={{ width: 50, marginRight: 20 }}
+                  onChange={() => setIsAutoOrder(!isAutoOrder)}
+                />
+              </div>
             </div>
             <CustomTextInput
               label="Ghi chú"

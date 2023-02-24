@@ -10,6 +10,7 @@ import ManageConfiguration from "../container/System/ManageConfiguration/ManageC
 import AppCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/AppCollaborator";
 import AppCustomer from "../container/System/ManageConfiguration/ScreenConfiguration/AppCustomer";
 import GroupCustomerManage from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer";
+import SettingQrCode from "../container/System/ManageConfiguration/ScreenConfiguration/SettingQrcode";
 import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
 import ManageOrder from "../container/System/ManageOrder";
 import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDoingManage";
@@ -36,106 +37,6 @@ const Dashboard = () => {
     setColor(e);
   };
   return (
-    // <div className="container-dashboard lg:bg-red">
-    //   <Header />
-
-    //   <div className="row">
-    //     {hideSidebar && (
-    //       <div className="sidebar" style={{ backgroundColor: color }}>
-    //         <Sidebar color={color} onChangeColor={(e) => onColor(e)} />
-    //       </div>
-    //     )}
-    //     {/* <main className={hideSidebar ? "main p-0" : "main-full p-0"}> */}
-    //     <main className="main">
-    //       <Routes>
-    //         <Route path="/" element={<Home />} />
-    //         <Route path="/details-order" element={<DetailsOrder />} />
-
-    //         <Route
-    //           path="/details-collaborator"
-    //           element={<ProfileCollaborator />}
-    //         />
-    //         <Route path="/details-customer" element={<Profiles />} />
-    //         <Route path="/system/user-manage" element={<ManageCustomer />} />
-    //         <Route
-    //           path="/system/user-manage/details-customer"
-    //           element={<Profiles />}
-    //         />
-    //         <Route
-    //           path="/system/collaborator-manage"
-    //           element={<ManageCollaborator />}
-    //         />
-    //         <Route
-    //           path="/system/collaborator-manage/details-collaborator"
-    //           element={<ProfileCollaborator />}
-    //         />
-    //         <Route
-    //           path="/promotion/manage-setting"
-    //           element={<ManageSetting />}
-    //         />
-
-    //         <Route
-    //           path="/services/manage-group-service"
-    //           element={<GroupServiceManage />}
-    //         />
-    //         <Route
-    //           path="/services/manage-group-service/manage-service"
-    //           element={<ServiceManage />}
-    //         />
-    //         <Route
-    //           path="/feedback/manage-feedback"
-    //           element={<FeedbackManage />}
-    //         />
-    //         <Route path="/group-order/manage-order" element={<ManageOrder />} />
-    //         <Route
-    //           path="/group-order/manage-order/details-collaborator"
-    //           element={<ProfileCollaborator />}
-    //         />
-    //         <Route
-    //           path="/group-order/manage-order/details-customer"
-    //           element={<Profiles />}
-    //         />
-    //         <Route
-    //           path="/group-order/manage-order/all"
-    //           element={<ManageOrder />}
-    //         />
-    //         <Route
-    //           path="/group-order/manage-order/doing"
-    //           element={<OrderDoingManage />}
-    //         />
-
-    //         <Route path="/topup/manage-topup" element={<ManageTopup />} />
-
-    //         <Route
-    //           path="/adminManage/manage-configuration/manage-group-customer"
-    //           element={<GroupCustomerManage />}
-    //         />
-    //         <Route path="/report/manage-report" element={<ManageReport />} />
-    //         <Route
-    //           path="/report/manage-report/all"
-    //           element={<ManageReport />}
-    //         />
-
-    //         <Route
-    //           path="/adminManage/manage-configuration"
-    //           element={<ManageConfiguration />}
-    //         />
-    //         <Route
-    //           path="/adminManage/manage-configuration/manage-reason"
-    //           element={<ReasonManage />}
-    //         />
-    //         <Route
-    //           path="/adminManage/manage-configuration/manage-app-customer"
-    //           element={<AppCustomer />}
-    //         />
-    //         <Route
-    //           path="/adminManage/manage-configuration/manage-app-collaborator"
-    //           element={<AppCollaborator />}
-    //         />
-    //       </Routes>
-    //     </main>
-    //   </div>
-    // </div>
     <Layout>
       <Header
         style={{
@@ -258,6 +159,10 @@ const Dashboard = () => {
               <Route
                 path="/adminManage/manage-configuration/manage-app-collaborator"
                 element={<AppCollaborator />}
+              />
+              <Route
+                path="/adminManage/manage-configuration/setting-qrcode"
+                element={<SettingQrCode />}
               />
             </Routes>
           </Content>

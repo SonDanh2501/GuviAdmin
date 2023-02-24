@@ -38,6 +38,7 @@ const DetailsOrder = () => {
     dispatch(loadingAction.loadingRequest(true));
     getOrderByGroupOrderApi(id)
       .then((res) => {
+        console.log(res);
         setHideShow(true);
         setDataGroup(res?.data?.groupOrder);
         setDataList(res?.data?.listOrder);
