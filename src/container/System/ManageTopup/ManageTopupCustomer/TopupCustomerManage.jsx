@@ -1,4 +1,5 @@
-import { Empty, Pagination, Skeleton, Table } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { Empty, Input, Pagination, Skeleton, Table } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
@@ -183,17 +184,21 @@ export default function TopupCustomerManage() {
 
   return (
     <React.Fragment>
-      <div className="mt-2 p-3">
-        <div className="div-header-customer-topup">
-          <AddTopupCustomer />
-          <CustomTextInput
-            placeholder="Tìm kiếm"
-            type="text"
-            onChange={(e) => handleSearch(e.target.value)}
-            className="input-search-topup"
-          />
-        </div>
+      <div className="div-header-customer-topup mt-2">
+        <AddTopupCustomer />
 
+        <Input
+          placeholder="Tìm kiếm"
+          type="text"
+          className="input-search-topup"
+          prefix={<SearchOutlined />}
+          onChange={(e) => {
+            handleSearch(e.target.value);
+          }}
+        />
+      </div>
+
+      <div className="mt-3">
         <Table
           columns={columns}
           dataSource={dataFilter.length > 0 ? dataFilter : listCustomer}
@@ -221,67 +226,65 @@ export default function TopupCustomerManage() {
           //     ),
           // }}
         />
-        <div className="div-pagination p-2">
-          <a>Tổng: {dataFilter.length > 0 ? totalFilter : totalCustomer}</a>
-          <div>
-            <Pagination
-              current={currentPage}
-              onChange={onChange}
-              total={dataFilter.length > 0 ? totalFilter : totalCustomer}
-              showSizeChanger={false}
-            />
-          </div>
+      </div>
+      <div className="div-pagination p-2">
+        <a>Tổng: {dataFilter.length > 0 ? totalFilter : totalCustomer}</a>
+        <div>
+          <Pagination
+            current={currentPage}
+            onChange={onChange}
+            total={dataFilter.length > 0 ? totalFilter : totalCustomer}
+            showSizeChanger={false}
+          />
         </div>
+      </div>
 
-        <div>
-          <Modal isOpen={modalConfirm} toggle={toggleConfirm}>
-            <ModalHeader toggle={toggleConfirm}>
-              Duyệt lệnh nạp tiền
-            </ModalHeader>
-            <ModalBody>
-              <>
-                <h4>Bạn có muốn duyệt lệnh nạp tiền cho :</h4>
-                <div className="body-modal">
-                  <a>Khách hàng: {itemEdit?.id_customer?.name}</a>
-                  <a>SĐT: {itemEdit?.id_customer?.phone}</a>
-                  <a>Số tiền: {formatMoney(itemEdit?.money)}</a>
-                  <a>Nội dung: {itemEdit?.transfer_note}</a>
-                </div>
-              </>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={() => onConfirm(itemEdit?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggleConfirm}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
-        </div>
-        <div>
-          <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Xóa giao dịch</ModalHeader>
-            <ModalBody>
-              <a>
-                Bạn có chắc muốn xóa giao dịch của khách hàng
-                <a className="text-name-modal">{itemEdit?.id_customer?.name}</a>
-                này không?
-              </a>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggle}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
-        </div>
-        <div>
-          <EditPopup item={itemEdit} state={modalEdit} setState={toggleEdit} />
-        </div>
+      <div>
+        <Modal isOpen={modalConfirm} toggle={toggleConfirm}>
+          <ModalHeader toggle={toggleConfirm}>Duyệt lệnh nạp tiền</ModalHeader>
+          <ModalBody>
+            <>
+              <h4>Bạn có muốn duyệt lệnh nạp tiền cho :</h4>
+              <div className="body-modal">
+                <a>Khách hàng: {itemEdit?.id_customer?.name}</a>
+                <a>SĐT: {itemEdit?.id_customer?.phone}</a>
+                <a>Số tiền: {formatMoney(itemEdit?.money)}</a>
+                <a>Nội dung: {itemEdit?.transfer_note}</a>
+              </div>
+            </>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={() => onConfirm(itemEdit?._id)}>
+              Có
+            </Button>
+            <Button color="#ddd" onClick={toggleConfirm}>
+              Không
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+      <div>
+        <Modal isOpen={modal} toggle={toggle}>
+          <ModalHeader toggle={toggle}>Xóa giao dịch</ModalHeader>
+          <ModalBody>
+            <a>
+              Bạn có chắc muốn xóa giao dịch của khách hàng
+              <a className="text-name-modal">{itemEdit?.id_customer?.name}</a>
+              này không?
+            </a>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
+              Có
+            </Button>
+            <Button color="#ddd" onClick={toggle}>
+              Không
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+      <div>
+        <EditPopup item={itemEdit} state={modalEdit} setState={toggleEdit} />
       </div>
     </React.Fragment>
   );

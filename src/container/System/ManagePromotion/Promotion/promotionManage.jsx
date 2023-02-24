@@ -358,10 +358,10 @@ export default function PromotionManage({ type, brand }) {
             render: (data) => {
               return (
                 <div className="div-img-promotion">
-                  <img
+                  {/* <img
                     className="img-customer-promotion"
                     src={data?.thumbnail}
-                  />
+                  /> */}
                   <a>
                     {data.title.vi.length > 25
                       ? data.title.vi.slice(0, 25) + "..."

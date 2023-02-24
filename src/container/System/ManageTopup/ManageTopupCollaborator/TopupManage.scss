@@ -112,7 +112,7 @@
     font-style: normal;
     font-weight: 700;
     font-size: 18px;
-    color: #03a80c;
+    color: #000000;
     text-decoration: none;
 
     .text-money-revenue {
@@ -124,13 +124,17 @@
       text-decoration: none;
       margin-left: 10px;
     }
+
+    .icon-up {
+      color: #00cf3a;
+    }
   }
   .total-expenditure {
     font-family: "Roboto";
     font-style: normal;
     font-weight: 700;
     font-size: 18px;
-    color: #ec3d3d;
+    color: #000000;
     text-decoration: none;
 
     .text-money-expenditure {
@@ -141,6 +145,9 @@
       color: #000000;
       text-decoration: none;
       margin-left: 10px;
+    }
+    .icon-down {
+      color: #ff0000;
     }
   }
 }

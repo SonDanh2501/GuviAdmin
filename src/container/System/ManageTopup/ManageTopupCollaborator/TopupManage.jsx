@@ -262,11 +262,17 @@ export default function TopupManage() {
         </div>
         <a className="total-revenue">
           Tổng thu:
-          <a className="text-money-revenue">{formatMoney(2000000000)}</a>
+          <a className="text-money-revenue">
+            <i class="uil uil-arrow-up icon-up"></i>
+            {formatMoney(0)}
+          </a>
         </a>
         <a className="total-expenditure">
           Tổng chi:
-          <a className="text-money-expenditure">{formatMoney(2000000000)}</a>
+          <a className="text-money-expenditure">
+            <i class="uil uil-arrow-down icon-down"></i>
+            {formatMoney(0)}
+          </a>
         </a>
       </div> */}
       <div className="div-header-topup">

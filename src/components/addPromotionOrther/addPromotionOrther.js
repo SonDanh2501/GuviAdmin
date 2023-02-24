@@ -68,7 +68,7 @@ const AddPromotionOther = () => {
   const [imgBackground, setImgBackground] = React.useState("");
   const [serviceApply, setServiceApply] = useState("");
   const [dateExchange, setDateExchange] = useState();
-  const [position, setPosition] = useState();
+  const [position, setPosition] = useState(0);
   const [isPaymentMethod, setIsPaymentMethod] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState([]);
   const options = [];

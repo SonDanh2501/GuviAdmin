@@ -63,6 +63,7 @@ const AddPromotionEvent = () => {
   const [serviceApply, setServiceApply] = useState("");
   const [isPaymentMethod, setIsPaymentMethod] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState([]);
+  const [position, setPosition] = useState(0);
   const options = [];
   const optionsCustomer = [];
   const dispatch = useDispatch();
@@ -168,7 +169,7 @@ const AddPromotionEvent = () => {
         exchange_point: 0,
         brand: namebrand.toUpperCase(),
         exp_date_exchange: 0,
-        position: 0,
+        position: position,
         is_payment_method: isPaymentMethod,
         payment_method: paymentMethod,
       })
@@ -199,6 +200,7 @@ const AddPromotionEvent = () => {
     minimumOrder,
     isPaymentMethod,
     paymentMethod,
+    position,
   ]);
 
   return (
@@ -539,6 +541,18 @@ const AddPromotionEvent = () => {
                         options={DATA_PAYMENT}
                       />
                     )}
+                  </div>
+
+                  <div>
+                    <h5 className="mt-2">16. Thứ tự hiện thị</h5>
+                    <CustomTextInput
+                      placeholder="Nhập số thứ tự (1,2,3...,n"
+                      className="input-promo-code"
+                      type="number"
+                      min={0}
+                      value={position}
+                      onChange={(e) => setPosition(e.target.value)}
+                    />
                   </div>
                   <Button
                     className="btn_add mt-5"

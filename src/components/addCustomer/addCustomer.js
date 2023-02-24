@@ -35,7 +35,7 @@ const AddCustomer = () => {
     dispatch(loadingAction.loadingRequest(true));
     dispatch(
       createCustomer.createCustomerRequest({
-        code_phone_area: formikRef?.current?.values?.code_phone_area,
+        code_phone_area: "+84",
         phone: formikRef?.current?.values?.phone,
         email: formikRef?.current?.values?.email,
         full_name: formikRef?.current?.values?.name,
@@ -83,7 +83,7 @@ const AddCustomer = () => {
                   onChange={(text) => setFieldValue("name", text.target.value)}
                   errors={errors?.name}
                 />
-                <CustomTextInput
+                {/* <CustomTextInput
                   label="Mã vùng"
                   type="select"
                   id="codeArea"
@@ -98,7 +98,7 @@ const AddCustomer = () => {
                     </>
                   }
                   errors={errors?.code_phone_area}
-                />
+                /> */}
                 <CustomTextInput
                   label="Số điện thoại"
                   type="text"

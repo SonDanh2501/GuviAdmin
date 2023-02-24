@@ -454,6 +454,7 @@ const EditPromotionEvent = ({ state, setState, data }) => {
                         placeholder="Please select"
                         onChange={handleChange}
                         options={options}
+                        value={groupCustomer}
                       />
                     )}
                     <FormGroup check inline>
@@ -600,6 +601,7 @@ const EditPromotionEvent = ({ state, setState, data }) => {
                         placeholder="Please select"
                         onChange={handleChangePaymentMethod}
                         options={DATA_PAYMENT}
+                        value={paymentMethod}
                       />
                     )}
                   </div>

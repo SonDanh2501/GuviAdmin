@@ -2,6 +2,8 @@ import { Button } from "antd";
 import { useState } from "react";
 import "./index.scss";
 import PromotionManage from "./Promotion/promotionManage";
+import ManagePromotionGuvi from "./PromotionGuvi";
+import ManagePromotionOrther from "./PromotionOrther";
 
 const ManagePromotions = () => {
   const [selected, setSelected] = useState("code");
@@ -42,11 +44,14 @@ const ManagePromotions = () => {
       </Button>
 
       {selected === "code" && brand === "guvi" ? (
+        // <ManagePromotionGuvi type={selected} brand={brand} />
         <PromotionManage type={selected} brand={brand} />
       ) : selected === "code" && brand === "orther" ? (
+        // <ManagePromotionOrther type={selected} brand={brand} />
         <PromotionManage type={selected} brand={brand} />
       ) : (
         <PromotionManage type={selected} brand={""} />
+        // <ManagePromotionOrther type={selected} brand={""} />
       )}
     </div>
   );

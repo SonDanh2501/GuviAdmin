@@ -1,6 +1,8 @@
 .div-header-promotion {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 
   .input-search {
     width: 75%;

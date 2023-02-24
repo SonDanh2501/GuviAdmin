@@ -36,7 +36,7 @@ const AddCollaborator = () => {
     dispatch(loadingAction.loadingRequest(true));
     dispatch(
       createCollaborator.createCollaboratorRequest({
-        code_phone_area: formikRef?.current?.values?.code_phone_area,
+        code_phone_area: "+84",
         phone: formikRef?.current?.values?.phone,
         email: formikRef?.current?.values?.email,
         full_name: formikRef?.current?.values?.name,
@@ -85,7 +85,7 @@ const AddCollaborator = () => {
                   onChange={(text) => setFieldValue("name", text.target.value)}
                   errors={errors?.name}
                 />
-                <CustomTextInput
+                {/* <CustomTextInput
                   label="Mã vùng"
                   type="select"
                   id="codeArea"
@@ -100,7 +100,7 @@ const AddCollaborator = () => {
                     </>
                   }
                   errors={errors?.code_phone_area}
-                />
+                /> */}
                 <CustomTextInput
                   label="Số điện thoại"
                   type="text"

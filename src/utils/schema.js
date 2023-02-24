@@ -20,7 +20,7 @@ const validateLoginSchema = Yup.object().shape({
 });
 
 const validateAddCustomerSchema = Yup.object().shape({
-  code_phone_area: Yup.string().required(requiredErrorMessage),
+  // code_phone_area: Yup.string().required(requiredErrorMessage),
   phone: Yup.string()
     .matches(regexPhone, validPhoneMessage)
     .required(requiredErrorMessage),
@@ -32,7 +32,7 @@ const validateAddCustomerSchema = Yup.object().shape({
 });
 
 const validateAddCollaboratorSchema = Yup.object().shape({
-  code_phone_area: Yup.string().required(requiredErrorMessage),
+  // code_phone_area: Yup.string().required(requiredErrorMessage),
   phone: Yup.string()
     .matches(regexPhone, validPhoneMessage)
     .required(requiredErrorMessage),
