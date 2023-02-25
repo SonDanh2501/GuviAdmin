@@ -72,7 +72,6 @@ const AddOrder = () => {
   const [isAutoOrder, setIsAutoOrder] = useState(false);
   const [places, setPlaces] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const debouncedValue = useDebounce(address, 300);
 
   const showDrawer = () => {
     setOpen(true);
@@ -328,9 +327,13 @@ const AddOrder = () => {
     [id, lat, long, address, timeWork, dateWork, mutipleSelected, time]
   );
 
-  const handleSearchLocation = useCallback((value) => {
+  const valueAddress = (value) => {
     setAddress(value);
-    setTimeout(() => {
+  };
+
+  const handleSearchLocation = useCallback(
+    _debounce((value) => {
+      setAddress(value);
       setIsLoading(true);
       googlePlaceAutocomplete(value)
         .then((res) => {
@@ -345,8 +348,9 @@ const AddOrder = () => {
           setIsLoading(false);
           setPlaces([]);
         });
-    }, 1000);
-  }, []);
+    }, 3000),
+    []
+  );
 
   const findPlace = useCallback((id) => {
     setIsLoading(true);
@@ -500,7 +504,10 @@ const AddOrder = () => {
               placeholder="Vui lòng chọn địa chỉ"
               value={address}
               type="text"
-              onChange={(e) => handleSearchLocation(e.target.value)}
+              onChange={(e) => {
+                valueAddress(e.target.value);
+                handleSearchLocation(e.target.value);
+              }}
               className="input"
             />
             {places.length > 0 && (

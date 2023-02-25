@@ -60,22 +60,60 @@
         }
       }
     }
+  }
 
-    .label-details {
+  .label-details {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+    color: #19202c;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .div-details-service {
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+    .title {
       font-family: "Roboto";
       font-style: normal;
       font-weight: 600;
-      font-size: 20px;
+      font-size: 16px;
       line-height: 30px;
       color: #19202c;
       align-items: center;
-      margin-bottom: 10px;
+
+      .text-service {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 30px;
+        color: #19202c;
+        align-items: center;
+      }
+
+      .text-add-service {
+        display: flex;
+        flex-wrap: wrap;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 30px;
+        color: #19202c;
+        align-items: center;
+        margin-left: 10%;
+        margin-top: -10px;
+      }
     }
 
-    .div-details-service {
-      margin-left: 15px;
+    .div-datework {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       .title {
         font-family: "Roboto";
         font-style: normal;
@@ -84,96 +122,58 @@
         line-height: 30px;
         color: #19202c;
         align-items: center;
-
-        .text-service {
-          font-family: "Roboto";
-          font-style: normal;
-          font-weight: 300;
-          font-size: 16px;
-          line-height: 30px;
-          color: #19202c;
-          align-items: center;
-        }
-
-        .text-add-service {
-          display: flex;
-          flex-wrap: wrap;
-          font-family: "Roboto";
-          font-style: normal;
-          font-weight: 300;
-          font-size: 16px;
-          line-height: 30px;
-          color: #19202c;
-          align-items: center;
-          margin-left: 10%;
-          margin-top: -10px;
-        }
       }
 
-      .div-datework {
+      .div-times {
         display: flex;
-        flex-direction: row;
-        .title {
-          font-family: "Roboto";
-          font-style: normal;
-          font-weight: 600;
-          font-size: 16px;
-          line-height: 30px;
-          color: #19202c;
-          align-items: center;
-        }
-
-        .div-times {
-          display: flex;
-          flex-direction: column;
-          margin-top: 5px;
-        }
+        flex-direction: column;
+        margin-top: 5px;
       }
+    }
 
-      .text-pending {
-        font-family: "Roboto";
-        font-style: normal;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 16px;
-        color: #ece200 !important;
-      }
+    .text-pending {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 16px;
+      color: #ece200 !important;
+    }
 
-      .text-confirm {
-        font-family: "Roboto";
-        font-style: normal;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 16px;
-        color: #023e8a;
-      }
+    .text-confirm {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 16px;
+      color: #023e8a;
+    }
 
-      .text-doing {
-        font-family: "Roboto";
-        font-style: normal;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 16px;
-        color: #023e8a;
-      }
+    .text-doing {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 16px;
+      color: #023e8a;
+    }
 
-      .text-done {
-        font-family: "Roboto";
-        font-style: normal;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 16px;
-        color: #00cf3a;
-      }
+    .text-done {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 16px;
+      color: #00cf3a;
+    }
 
-      .text-cancel {
-        font-family: "Roboto";
-        font-style: normal;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 16px;
-        color: #ff0000;
-      }
+    .text-cancel {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 16px;
+      color: #ff0000;
     }
   }
 

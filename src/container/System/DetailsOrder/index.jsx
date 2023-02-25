@@ -60,7 +60,7 @@ const DetailsOrder = () => {
     const timeEnd =
       Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
 
-    return start + " - " + timeEnd;
+    return start + " - " + timeEnd + "   (" + data?.total_estimate + " giờ )";
   };
 
   const timeWorkList = (data) => {
@@ -337,87 +337,6 @@ const DetailsOrder = () => {
                   </a>
                 </div>
               </div>
-
-              <a className="label-details">Chi tiết</a>
-              <div className="div-details-service">
-                <a className="title">
-                  Dịch vụ:{" "}
-                  <a className="text-service">
-                    {dataGroup?.type === "schedule"
-                      ? "Giúp việc cố định"
-                      : dataGroup?.type === "loop" && !dataGroup?.is_auto_order
-                      ? "Giúp việc theo giờ"
-                      : dataGroup?.type === "loop" && dataGroup?.is_auto_order
-                      ? "Lặp lại hàng tuần"
-                      : ""}
-                  </a>
-                </a>
-                <div className="div-datework">
-                  <a className="title">Thời gian: </a>
-                  <div className="div-times">
-                    <a>
-                      -Ngày làm:{" "}
-                      {moment(
-                        new Date(dataGroup?.date_work_schedule[0]?.date)
-                      ).format("DD/MM/YYYY")}
-                    </a>
-                    <a>-Giờ làm: {timeWork(dataGroup)}</a>
-                  </div>
-                </div>
-                <a className="title">
-                  Địa điểm: <a className="text-service">{dataGroup?.address}</a>
-                </a>
-                {dataGroup?.note && (
-                  <a className="title">
-                    Ghi chú: <a className="text-service">{dataGroup?.note}</a>
-                  </a>
-                )}
-
-                <a className="title">
-                  Dịch vụ thêm:{" "}
-                  {dataGroup?.service?.optional_service.map((item) => {
-                    return (
-                      <a>
-                        {item?._id?.type === "multi_select_horizontal_thumbnail"
-                          ? item?.extend_optional?.map((item) => (
-                              <a className="text-add-service">
-                                - {item?.title?.vi}
-                              </a>
-                            ))
-                          : null}
-                      </a>
-                    );
-                  })}
-                </a>
-                <a className="title">
-                  Thanh toán:{" "}
-                  <a className="text-service">
-                    {dataGroup?.payment_method === "cash"
-                      ? "Tiền mặt"
-                      : "G-point"}
-                  </a>
-                </a>
-                <a className="title">
-                  Tổng tiền:{" "}
-                  <a className="text-service">
-                    {formatMoney(dataGroup?.final_fee)}
-                  </a>
-                </a>
-                <a className="title">
-                  Trạng thái:{" "}
-                  {dataGroup?.status === "pending" ? (
-                    <a className="text-pending ">Đang chờ làm</a>
-                  ) : dataGroup?.status === "confirm" ? (
-                    <a className="text-confirm">Đã nhận</a>
-                  ) : dataGroup?.status === "doing" ? (
-                    <a className="text-doing">Đang làm</a>
-                  ) : dataGroup?.status === "done" ? (
-                    <a className="text-done">Đã xong</a>
-                  ) : (
-                    <a className="text-cancel">Đã huỷ</a>
-                  )}
-                </a>
-              </div>
             </Col>
             {dataGroup?.id_collaborator && (
               <Col span={8} className="col-right">
@@ -463,6 +382,88 @@ const DetailsOrder = () => {
                 </div>
               </Col>
             )}
+          </Row>
+          <Row>
+            <div className="div-details-service">
+              <a className="label-details">Chi tiết</a>
+              <a className="title">
+                Dịch vụ:{" "}
+                <a className="text-service">
+                  {dataGroup?.type === "schedule"
+                    ? "Giúp việc cố định"
+                    : dataGroup?.type === "loop" && !dataGroup?.is_auto_order
+                    ? "Giúp việc theo giờ"
+                    : dataGroup?.type === "loop" && dataGroup?.is_auto_order
+                    ? "Lặp lại hàng tuần"
+                    : ""}
+                </a>
+              </a>
+              <div className="div-datework">
+                <a className="title">Thời gian: </a>
+                <div className="div-times">
+                  <a>
+                    -Ngày làm:{" "}
+                    {moment(
+                      new Date(dataGroup?.date_work_schedule[0]?.date)
+                    ).format("DD/MM/YYYY")}
+                  </a>
+                  <a>-Giờ làm: {timeWork(dataGroup)}</a>
+                </div>
+              </div>
+              <a className="title">
+                Địa điểm: <a className="text-service">{dataGroup?.address}</a>
+              </a>
+              {dataGroup?.note && (
+                <a className="title">
+                  Ghi chú: <a className="text-service">{dataGroup?.note}</a>
+                </a>
+              )}
+
+              <a className="title">
+                Dịch vụ thêm:{" "}
+                {dataGroup?.service?.optional_service.map((item) => {
+                  return (
+                    <a>
+                      {item?._id?.type === "multi_select_horizontal_thumbnail"
+                        ? item?.extend_optional?.map((item) => (
+                            <a className="text-add-service">
+                              - {item?.title?.vi}
+                            </a>
+                          ))
+                        : null}
+                    </a>
+                  );
+                })}
+              </a>
+              <a className="title">
+                Thanh toán:{" "}
+                <a className="text-service">
+                  {dataGroup?.payment_method === "cash"
+                    ? "Tiền mặt"
+                    : "G-point"}
+                </a>
+              </a>
+              <a className="title">
+                Tổng tiền:{" "}
+                <a className="text-service">
+                  {formatMoney(dataGroup?.final_fee)}
+                </a>
+              </a>
+              <a className="title">
+                Trạng thái:{" "}
+                {dataGroup?.status === "pending" ? (
+                  <a className="text-pending ">Đang chờ làm</a>
+                ) : dataGroup?.status === "confirm" ? (
+                  <a className="text-confirm">Đã nhận</a>
+                ) : dataGroup?.status === "doing" ? (
+                  <a className="text-doing">Đang làm</a>
+                ) : dataGroup?.status === "done" ? (
+                  <a className="text-done">Đã xong</a>
+                ) : (
+                  <a className="text-cancel">Đã huỷ</a>
+                )}
+              </a>
+            </div>
           </Row>
           {/* {dataGroup?.status === "pending" ||
           dataGroup?.status === "confirm" ? (
