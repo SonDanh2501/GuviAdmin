@@ -42,7 +42,10 @@ export const verifyCollaborator = (id) => {
 };
 
 export const lockTimeCollaborator = (id, data) => {
-  return axiosClient.post(`/admin/collaborator_manager/lock_item/${id}`, data);
+  return axiosClient.post(
+    `/admin/collaborator_manager/lock_collaborator/${id}?lang=vi`,
+    data
+  );
 };
 
 export const updateInformationCollaboratorApi = (id, data) => {

@@ -93,7 +93,7 @@ const AddPopup = () => {
     <>
       <CustomButton
         title="Nạp tiền"
-        className="btn-add"
+        className="btn-add-topup"
         type="button"
         // onClick={() => setState(!state)}
         onClick={showDrawer}
@@ -161,7 +161,7 @@ const AddPopup = () => {
             />
             <CustomButton
               title="Nạp tiền"
-              className="float-left btn-add"
+              className="float-left btn-add-t"
               type="button"
               onClick={addMoney}
             />

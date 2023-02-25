@@ -129,7 +129,7 @@ const AddCustomer = () => {
                 />
                 <CustomButton
                   title="Thêm"
-                  className="float-right btn-add"
+                  className="float-right btn-add-cus"
                   type="button"
                   onClick={handleSubmit}
                 />

@@ -77,6 +77,38 @@
     margin-left: 15px;
     display: flex;
     flex-direction: column;
+
+    .div-price {
+      display: flex;
+      flex-direction: row;
+
+      .detail-price {
+        display: flex;
+        flex-direction: column;
+        margin-left: 10px;
+
+        .div-total {
+          flex-direction: row;
+          justify-content: space-between;
+        }
+
+        .div-event-promo {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+
+          .div-price-event {
+            display: flex;
+            flex-direction: column;
+            .text-event-discount {
+              color: #ff0000;
+              margin-left: 10px;
+            }
+          }
+        }
+      }
+    }
+
     .title {
       font-family: "Roboto";
       font-style: normal;

@@ -128,7 +128,7 @@ const AddCollaborator = () => {
                 />
                 <CustomButton
                   title="Thêm"
-                  className="float-right btn-add"
+                  className="float-right btn-add-ctv"
                   type="button"
                   onClick={handleSubmit}
                 />

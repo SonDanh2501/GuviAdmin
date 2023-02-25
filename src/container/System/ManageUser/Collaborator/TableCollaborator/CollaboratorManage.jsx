@@ -141,11 +141,11 @@ export default function CollaboratorManage(props) {
     (id, is_lock_time) => {
       dispatch(loadingAction.loadingRequest(true));
       if (is_lock_time === true) {
-        lockTimeCollaborator(id, { is_lock_time: false })
+        lockTimeCollaborator(id, { is_locked: false })
           .then((res) => {
             setModalLockTime(!modalLockTime);
             dispatch(loadingAction.loadingRequest(false));
-            window.location.reload();
+            // window.location.reload();
           })
           .catch((err) => {
             dispatch(loadingAction.loadingRequest(false));
@@ -155,13 +155,13 @@ export default function CollaboratorManage(props) {
           });
       } else {
         lockTimeCollaborator(id, {
-          is_lock_time: true,
-          lock_time: moment(new Date(timeValue)).toISOString(),
+          is_locked: true,
+          date_lock: moment(new Date(timeValue)).toISOString(),
         })
           .then((res) => {
             setModalLockTime(!modalLockTime);
             dispatch(loadingAction.loadingRequest(false));
-            window.location.reload();
+            // window.location.reload();
           })
           .catch((err) => {
             dispatch(loadingAction.loadingRequest(false));
@@ -289,22 +289,24 @@ export default function CollaboratorManage(props) {
       title: "Trạng thái",
       align: "center",
       render: (data) => {
+        const now = moment(new Date()).format("DD/MM/YYYY hh:mm:ss");
+        const then = moment(new Date(data?.date_lock)).format(
+          "DD/MM/YYYY hh:mm:ss"
+        );
         return (
           <div>
             {!data?.is_verify ? (
               <div>
                 <img src={pending} />
-                <a className="text-pending">Pending</a>
+                <a className="text-pending-cola">Pending</a>
               </div>
-            ) : data?.is_lock_time ? (
+            ) : data?.is_locked ? (
               <div>
                 <div>
                   <img src={pending} />
                   <a className="text-lock-time">Block</a>
                 </div>
-                {/* <a className="text-lock-time">
-                  Còn lại {moment().from(moment(data?.lock_time), "days")}
-                </a> */}
+                <a className="text-lock-time">{then}</a>
               </div>
             ) : data?.is_active ? (
               <div>

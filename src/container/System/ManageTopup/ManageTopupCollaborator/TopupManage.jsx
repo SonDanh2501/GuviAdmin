@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   deleteMoneyCollaboratorApi,
+  getRevenueCollaboratorApi,
   searchTopupCollaboratorApi,
   verifyMoneyCollaboratorApi,
 } from "../../../../api/topup";
@@ -28,6 +29,8 @@ export default function TopupManage() {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState();
   const [valueSearch, setValueSearch] = useState();
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  const [totalExpenditure, setTotalExpenditure] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const listCollaborators = useSelector(getTopupCTV);
   const totalCollaborators = useSelector(totalTopupCTV);
@@ -48,6 +51,17 @@ export default function TopupManage() {
     dispatch(
       getTopupCollaborator.getTopupCollaboratorRequest({ start: 0, length: 20 })
     );
+    getRevenueCollaboratorApi(
+      moment().startOf("month").toISOString(),
+      moment(new Date()).toISOString()
+    )
+      .then((res) => {
+        setTotalRevenue(res?.totalTopUp);
+        setTotalExpenditure(res?.totaWithdraw);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [dispatch]);
 
   const onDelete = useCallback((id) => {
@@ -239,11 +253,20 @@ export default function TopupManage() {
   const onChangeDate = useCallback((start, end) => {
     const dayStart = moment(start).toISOString();
     const dayEnd = moment(end).toISOString();
+
+    getRevenueCollaboratorApi(dayStart, dayEnd)
+      .then((res) => {
+        setTotalRevenue(res?.totalTopUp);
+        setTotalExpenditure(res?.totaWithdraw);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (
     <React.Fragment>
-      {/* <div className="div-total">
+      <div className="div-total">
         <div className="div-date">
           <Input.Group compact>
             <Select defaultValue={typeDate} onChange={(e) => setTypeDate(e)}>
@@ -264,17 +287,17 @@ export default function TopupManage() {
           Tổng thu:
           <a className="text-money-revenue">
             <i class="uil uil-arrow-up icon-up"></i>
-            {formatMoney(0)}
+            {formatMoney(totalRevenue)}
           </a>
         </a>
         <a className="total-expenditure">
           Tổng chi:
           <a className="text-money-expenditure">
             <i class="uil uil-arrow-down icon-down"></i>
-            {formatMoney(0)}
+            {formatMoney(totalExpenditure)}
           </a>
         </a>
-      </div> */}
+      </div>
       <div className="div-header-topup">
         <AddTopup />
         <Withdraw />

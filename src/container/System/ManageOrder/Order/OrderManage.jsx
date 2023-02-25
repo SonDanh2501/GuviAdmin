@@ -78,16 +78,16 @@ export default function OrderManage(props) {
         </a>
       ),
     },
-    // {
-    //   key: "3",
-    //   label:
-    //     user?.role === "admin" &&
-    //     (item?.status === "cancel" || item?.status === "done" ? (
-    //       <a onClick={toggle}>Xoá</a>
-    //     ) : (
-    //       ""
-    //     )),
-    // },
+    {
+      key: "3",
+      label:
+        user?.role === "admin" &&
+        (item?.status === "cancel" || item?.status === "done" ? (
+          <a onClick={toggle}>Xoá</a>
+        ) : (
+          ""
+        )),
+    },
   ];
 
   const columns = [

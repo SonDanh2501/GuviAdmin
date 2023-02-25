@@ -29,6 +29,7 @@ const DetailsOrder = () => {
   const [openStatus, setOpenStatus] = useState(false);
   const [openPopup, setOpenPopup] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [serviceFee, setServiceFee] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toggle = () => setModal(!modal);
@@ -38,7 +39,6 @@ const DetailsOrder = () => {
     dispatch(loadingAction.loadingRequest(true));
     getOrderByGroupOrderApi(id)
       .then((res) => {
-        console.log(res);
         setHideShow(true);
         setDataGroup(res?.data?.groupOrder);
         setDataList(res?.data?.listOrder);
@@ -443,12 +443,44 @@ const DetailsOrder = () => {
                     : "G-point"}
                 </a>
               </a>
-              <a className="title">
-                Tổng tiền:{" "}
-                <a className="text-service">
-                  {formatMoney(dataGroup?.final_fee)}
-                </a>
-              </a>
+              <div className="div-price">
+                <a className="title">Tạm tính:</a>
+                <div className="detail-price">
+                  <div className="div-total">
+                    <a>- Tổng tiền:</a>
+                    <a>{formatMoney(dataGroup?.initial_fee + 2000)}</a>
+                  </div>
+                  {dataGroup?.code_promotion && (
+                    <div className="div-total">
+                      <a>- Khuyến mãi:</a>
+                      <a>
+                        <a style={{ color: "red", marginLeft: 5 }}>
+                          {formatMoney(-dataGroup?.code_promotion?.discount)}
+                        </a>
+                      </a>
+                    </div>
+                  )}
+                  {dataGroup?.event_promotion && (
+                    <div className="div-event-promo">
+                      <a>- Chương trình:</a>
+                      <div className="div-price-event">
+                        {dataGroup?.event_promotion.map((item, key) => {
+                          return (
+                            <a className="text-event-discount">
+                              {formatMoney(-item?.discount)}
+                            </a>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  <div className="div-total">
+                    <a className="title">- Giá: </a>
+                    <a className="title">{formatMoney(dataGroup?.final_fee)}</a>
+                  </div>
+                </div>
+              </div>
+
               <a className="title">
                 Trạng thái:{" "}
                 {dataGroup?.status === "pending" ? (

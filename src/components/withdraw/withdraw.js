@@ -84,7 +84,7 @@ const Withdraw = () => {
       {/* Button trigger modal */}
       <CustomButton
         title="Rút tiền"
-        className="btn-add"
+        className="btn-add-withdraw "
         type="button"
         // onClick={() => setState(!state)}
         onClick={showDrawer}
@@ -152,7 +152,7 @@ const Withdraw = () => {
             />
             <CustomButton
               title="Rút tiền"
-              className="float-left btn-add"
+              className="float-left btn-add-w"
               type="button"
               onClick={onWithdraw}
             />

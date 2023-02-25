@@ -46,8 +46,6 @@ const AddPromotionEvent = () => {
     EditorState.createEmpty()
   );
   const [promoCode, setPromoCode] = React.useState("");
-  const [promoType, setPromoType] = React.useState("order");
-  const [unitPrice, setUnitPrice] = React.useState("");
   const [minimumOrder, setMinimumOrder] = React.useState();
   const [namebrand, setNamebrand] = React.useState("");
   const [codebrand, setCodebrand] = React.useState("");
@@ -64,6 +62,11 @@ const AddPromotionEvent = () => {
   const [isPaymentMethod, setIsPaymentMethod] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState([]);
   const [position, setPosition] = useState(0);
+  const [isSendNotification, setIsSendNotification] = useState(false);
+  const [titleNoti, setTitleNoti] = useState("");
+  const [descriptionNoti, setDescriptionNoti] = useState("");
+  const [imgNoti, setImgNoti] = useState("");
+
   const options = [];
   const optionsCustomer = [];
   const dispatch = useDispatch();
@@ -124,6 +127,40 @@ const AddPromotionEvent = () => {
   const onEditorVNStateChange = (editorState) => setDescriptionVN(editorState);
 
   const onEditorENStateChange = (editorState) => setDescriptionEN(editorState);
+
+  const onChangeImageNoti = async (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+    try {
+      if (e.target.files[0]) {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          setImgNoti(reader.result);
+        });
+        reader.readAsDataURL(e.target.files[0]);
+      }
+      const file = e.target.files[0];
+      const image = await resizeFile(file);
+      const formData = new FormData();
+      formData.append("file", image);
+      postFile(formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((res) => {
+          setImgNoti(res);
+          dispatch(loadingAction.loadingRequest(false));
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
+        });
+    } catch (err) {
+      dispatch(loadingAction.loadingRequest(false));
+    }
+  };
 
   const onCreatePromotion = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -427,10 +464,8 @@ const AddPromotionEvent = () => {
                       />
                     )}
                   </div>
-                </Col>
-                <Col md={4}>
                   <div>
-                    <h5 className="mt-2">11. Số lượng mã khuyến mãi</h5>
+                    <h5 className="mt-2">7. Số lượng mã khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Số lượng giới hạn
@@ -453,8 +488,10 @@ const AddPromotionEvent = () => {
                       />
                     )}
                   </div>
+                </Col>
+                <Col md={4}>
                   <div>
-                    <h5 className="mt-2">12. Số lần sử dụng khuyến mãi</h5>
+                    <h5 className="mt-2">8. Số lần sử dụng khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Lần sử dụng khuyến mãi
@@ -478,7 +515,7 @@ const AddPromotionEvent = () => {
                     )}
                   </div>
                   <div>
-                    <h5 className="mt-2">13. Thời gian khuyến mãi</h5>
+                    <h5 className="mt-2">9. Thời gian khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Giới hạn ngày
@@ -516,7 +553,7 @@ const AddPromotionEvent = () => {
                     )}
                   </div>
                   <div>
-                    <h5 className="mt-2">15. Phương thức thanh toán</h5>
+                    <h5 className="mt-2">10. Phương thức thanh toán</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Thanh toán
@@ -544,7 +581,7 @@ const AddPromotionEvent = () => {
                   </div>
 
                   <div>
-                    <h5 className="mt-2">16. Thứ tự hiện thị</h5>
+                    <h5 className="mt-2">11. Thứ tự hiện thị</h5>
                     <CustomTextInput
                       placeholder="Nhập số thứ tự (1,2,3...,n"
                       className="input-promo-code"
@@ -554,6 +591,49 @@ const AddPromotionEvent = () => {
                       onChange={(e) => setPosition(e.target.value)}
                     />
                   </div>
+                  {/* <div> 
+                    <FormGroup check inline>
+                      <Label check className="text-first">
+                        12. Gửi thông báo
+                      </Label>
+                      <Input
+                        type="checkbox"
+                        className="ml-2"
+                        defaultChecked={isSendNotification}
+                        onClick={() =>
+                          setIsSendNotification(!isSendNotification)
+                        }
+                      />
+                    </FormGroup>
+
+                    {isSendNotification && (
+                      <div>
+                        <CustomTextInput
+                          placeholder="Nhập tiêu đề thông báo"
+                          className="input-promo-code mt-2"
+                          type="text"
+                          value={titleNoti}
+                          onChange={(e) => setTitleNoti(e.target.value)}
+                        />
+                        <CustomTextInput
+                          placeholder="Nhập nội dung thông báo"
+                          className="input-promo-code"
+                          type="text"
+                          value={descriptionNoti}
+                          onChange={(e) => setDescriptionNoti(e.target.value)}
+                        />
+                        <CustomTextInput
+                          type="file"
+                          accept={".jpg,.png,.jpeg"}
+                          className="input-upload"
+                          onChange={onChangeImageNoti}
+                        />
+                        {imgNoti && (
+                          <img src={imgNoti} className="img-background" />
+                        )}
+                      </div>
+                    )}
+                  </div> */}
                   <Button
                     className="btn_add mt-5"
                     color="warning"
