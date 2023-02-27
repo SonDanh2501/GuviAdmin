@@ -43,7 +43,7 @@ import EditPromotionEvent from "../../../../components/editPromotionEvent/editPr
 import AddPromotionOrther from "../../../../components/addPromotionOrther/addPromotionOrther.js";
 import EditPromotionOrther from "../../../../components/editPromotionOrther/editPromotionOrther.js";
 
-export default function PromotionManage({ type, brand }) {
+export default function PromotionManage({ type, brand, idService }) {
   const promotion = useSelector(getPromotionSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -72,13 +72,14 @@ export default function PromotionManage({ type, brand }) {
         length: 10,
         type: type,
         brand: brand,
+        id_service: idService,
       })
     );
     setDataFilter([]);
     setDataSearch([]);
     setValueFilter("");
     setValueSearch("");
-  }, [type, brand]);
+  }, [type, brand, idService]);
 
   const onDelete = useCallback((id) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -114,13 +115,13 @@ export default function PromotionManage({ type, brand }) {
         ? page * dataFilter.length - dataFilter.length
         : page * promotion.length - promotion.length;
     dataSearch.length > 0
-      ? searchPromotion(valueSearch, start, 10, type, brand)
+      ? searchPromotion(valueSearch, start, 10, type, brand, idService)
           .then((res) => {
             setDataSearch(res.data);
           })
           .catch((err) => console.log(err))
       : dataFilter.length > 0
-      ? filterPromotion(valueFilter, start, 10, type, brand)
+      ? filterPromotion(valueFilter, start, 10, type, brand, idService)
           .then((res) => {
             setDataSearch(res?.data);
             setTotalSearch(res?.totalItem);
@@ -132,6 +133,7 @@ export default function PromotionManage({ type, brand }) {
             length: 10,
             type: type,
             brand: brand,
+            id_service: idService,
           })
         );
   };
@@ -141,7 +143,7 @@ export default function PromotionManage({ type, brand }) {
       setValueSearch(value);
       setIsLoading(true);
       if (value !== "") {
-        searchPromotion(value, 0, 10, type, brand)
+        searchPromotion(value, 0, 10, type, brand, idService)
           .then((res) => {
             setIsLoading(false);
 
@@ -156,13 +158,13 @@ export default function PromotionManage({ type, brand }) {
         setDataSearch([]);
       }
     }, 1000),
-    [type, brand]
+    [type, brand, idService]
   );
 
   const handleChange = (value) => {
     setValueFilter(value);
     setIsLoading(true);
-    filterPromotion(value, 0, 10, type, brand)
+    filterPromotion(value, 0, 10, type, brand, idService)
       .then((res) => {
         setIsLoading(false);
         setDataFilter(res?.data);
@@ -522,11 +524,11 @@ export default function PromotionManage({ type, brand }) {
             onChange={(e) => handleSearch(e.target.value)}
           />
           {type === "code" && brand === "guvi" ? (
-            <AddPromotion />
+            <AddPromotion idService={idService} />
           ) : type === "code" && brand === "orther" ? (
             <AddPromotionOrther />
           ) : (
-            <AddPromotionEvent />
+            <AddPromotionEvent idService={idService} />
           )}
         </div>
         <div className="mt-3">

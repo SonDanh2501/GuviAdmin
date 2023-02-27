@@ -8,6 +8,7 @@ import { TopupMoneyCollaboratorApi } from "../../api/topup";
 import { loadingAction } from "../../redux/actions/loading";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
+import _debounce from "lodash/debounce";
 import "./addTopup.scss";
 
 const AddPopup = () => {
@@ -29,25 +30,32 @@ const AddPopup = () => {
     setOpen(false);
   };
 
-  const searchCollaborator = useCallback((value) => {
+  const valueSearch = (value) => {
     setName(value);
-    if (value) {
-      searchCollaborators(0, 100, "", value)
-        .then((res) => {
-          if (value === "") {
-            setData([]);
-          } else {
-            setData(res.data);
-          }
-        })
-        .catch((err) => console.log(err));
-    } else if (id) {
-      setData([]);
-    } else {
-      setData([]);
-    }
-    setId("");
-  }, []);
+  };
+
+  const searchCollaborator = useCallback(
+    _debounce((value) => {
+      setName(value);
+      if (value) {
+        searchCollaborators(0, 100, "", value)
+          .then((res) => {
+            if (value === "") {
+              setData([]);
+            } else {
+              setData(res.data);
+            }
+          })
+          .catch((err) => console.log(err));
+      } else if (id) {
+        setData([]);
+      } else {
+        setData([]);
+      }
+      setId("");
+    }, 500),
+    []
+  );
 
   const addMoney = useCallback(() => {
     if (name === "" || money === "") {
@@ -114,7 +122,10 @@ const AddPopup = () => {
               <Input
                 placeholder="Tìm kiếm theo số điện thoại"
                 value={name}
-                onChange={(e) => searchCollaborator(e.target.value)}
+                onChange={(e) => {
+                  searchCollaborator(e.target.value);
+                  valueSearch(e.target.value);
+                }}
               />
               {errorName && <a className="error">{errorName}</a>}
               {data.length > 0 && (

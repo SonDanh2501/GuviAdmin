@@ -23,6 +23,7 @@ const ManageOrder = () => {
   const [dataSearch, setDataSearch] = useState([]);
   const [totalSearch, setTotalSearch] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
+  const [tab, setTab] = useState("theo_gio");
 
   const dispatch = useDispatch();
   const listOrder = useSelector(getOrderSelector);
@@ -31,7 +32,14 @@ const ManageOrder = () => {
   const totalOrderSearch = useSelector(searchOrderTotal);
 
   useEffect(() => {
-    dispatch(getOrder.getOrderRequest({ start: 0, length: 20, status: "all" }));
+    dispatch(
+      getOrder.getOrderRequest({
+        start: 0,
+        length: 20,
+        status: "all",
+        kind: "",
+      })
+    );
   }, [dispatch]);
 
   const handleSearch = useCallback(
@@ -63,6 +71,7 @@ const ManageOrder = () => {
   const onChangeTab = (active) => {
     if (active === "2") {
       setStatus("pending");
+      setTab("theo_gio");
       dispatch(
         searchOrder.searchOrderRequest({
           start: 0,
@@ -72,7 +81,12 @@ const ManageOrder = () => {
         })
       );
       dispatch(
-        getOrder.getOrderRequest({ start: 0, length: 20, status: "pending" })
+        getOrder.getOrderRequest({
+          start: 0,
+          length: 20,
+          status: "pending",
+          kind: "",
+        })
       );
     } else if (active === "3") {
       setStatus("doing");
@@ -85,7 +99,12 @@ const ManageOrder = () => {
         })
       );
       dispatch(
-        getOrder.getOrderRequest({ start: 0, length: 20, status: "doing" })
+        getOrder.getOrderRequest({
+          start: 0,
+          length: 20,
+          status: "doing",
+          kind: "",
+        })
       );
     } else if (active === "5") {
       setStatus("cancel");
@@ -98,7 +117,12 @@ const ManageOrder = () => {
         })
       );
       dispatch(
-        getOrder.getOrderRequest({ start: 0, length: 20, status: "cancel" })
+        getOrder.getOrderRequest({
+          start: 0,
+          length: 20,
+          status: "cancel",
+          kind: "",
+        })
       );
     } else if (active === "6") {
       setStatus("done");
@@ -111,10 +135,16 @@ const ManageOrder = () => {
         })
       );
       dispatch(
-        getOrder.getOrderRequest({ start: 0, length: 20, status: "done" })
+        getOrder.getOrderRequest({
+          start: 0,
+          length: 20,
+          status: "done",
+          kind: "",
+        })
       );
     } else if (active === "1") {
       setStatus("all");
+      setTab("theo_gio");
       dispatch(
         searchOrder.searchOrderRequest({
           start: 0,
@@ -124,7 +154,12 @@ const ManageOrder = () => {
         })
       );
       dispatch(
-        getOrder.getOrderRequest({ start: 0, length: 20, status: "all" })
+        getOrder.getOrderRequest({
+          start: 0,
+          length: 20,
+          status: "all",
+          kind: "",
+        })
       );
     }
   };
@@ -132,15 +167,6 @@ const ManageOrder = () => {
     <>
       <div className="div-header">
         <a className="title-cv">Danh sách công việc</a>
-        {/* <CustomTextInput
-          placeholder="Tìm kiếm"
-          type="text"
-          className="field-search"
-          onChange={(e) => {
-            handleSearch(e.target.value);
-            setValueSearch(e.target.value);
-          }}
-        /> */}
         <Input
           placeholder="Tìm kiếm"
           type="text"
@@ -172,6 +198,40 @@ const ManageOrder = () => {
       <div className="div-container">
         <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
           <Tabs.TabPane tab="TẤT CẢ" key="1">
+            {/* <div className="div-tab">
+              {DATA.map((item, index) => {
+                return (
+                  <div
+                    className="div-tab-item"
+                    key={index}
+                    onClick={() => {
+                      setTab(item?.value);
+                      dispatch(
+                        getOrder.getOrderRequest({
+                          start: 0,
+                          length: 20,
+                          status: "all",
+                          kind: item?.value,
+                        })
+                      );
+                    }}
+                  >
+                    <a
+                      className={
+                        tab === item?.value
+                          ? "text-title-tab"
+                          : "text-title-tab-default"
+                      }
+                    >
+                      {item?.title}
+                    </a>
+                    <div
+                      className={tab === item?.value ? "tab-line" : ""}
+                    ></div>
+                  </div>
+                );
+              })}
+            </div> */}
             <OrderManage
               data={listOrderSearch.length > 0 ? listOrderSearch : listOrder}
               total={totalOrderSearch > 0 ? totalOrderSearch : orderTotal}
@@ -181,6 +241,40 @@ const ManageOrder = () => {
             />
           </Tabs.TabPane>
           <Tabs.TabPane tab="ĐANG CHỜ" key="2">
+            {/* <div className="div-tab">
+              {DATA.map((item, index) => {
+                return (
+                  <div
+                    className="div-tab-item"
+                    key={index}
+                    onClick={() => {
+                      setTab(item?.value);
+                      dispatch(
+                        getOrder.getOrderRequest({
+                          start: 0,
+                          length: 20,
+                          status: "pending",
+                          kind: item?.value,
+                        })
+                      );
+                    }}
+                  >
+                    <a
+                      className={
+                        tab === item?.value
+                          ? "text-title-tab"
+                          : "text-title-tab-default"
+                      }
+                    >
+                      {item?.title}
+                    </a>
+                    <div
+                      className={tab === item?.value ? "tab-line" : ""}
+                    ></div>
+                  </div>
+                );
+              })}
+            </div> */}
             <OrderManage
               data={listOrderSearch.length > 0 ? listOrderSearch : listOrder}
               total={totalOrderSearch > 0 ? totalOrderSearch : orderTotal}
@@ -225,3 +319,21 @@ const ManageOrder = () => {
 };
 
 export default ManageOrder;
+
+const DATA = [
+  {
+    id: 1,
+    title: "Giúp việc theo giờ",
+    value: "theo_gio",
+  },
+  {
+    id: 1,
+    title: "Giúp việc cố định",
+    value: "co_dinh",
+  },
+  {
+    id: 1,
+    title: "Lặp lại hằng tuần",
+    value: "lap_lai",
+  },
+];

@@ -17,7 +17,10 @@ export const createCustomer = (payload) => {
   return axiosClient.post("/admin/customer_manager/create_item", payload);
 };
 export const updateCustomer = (id, payload) => {
-  return axiosClient.post(`/admin/customer_manager/edit_item/${id}`, payload);
+  return axiosClient.post(
+    `/admin/customer_manager/edit_item/${id}?lang=vi`,
+    payload
+  );
 };
 export const activeCustomer = (id, payload) => {
   return axiosClient.post(`/admin/customer_manager/acti_item/${id}`, payload);

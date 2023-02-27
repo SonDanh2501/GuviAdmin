@@ -7,6 +7,7 @@ import {
   getHistoryActivityCollaborator,
   getListTransitionByCollaborator,
   getTopupWithdrawCollaborator,
+  getTransitionDetailsCollaborator,
 } from "../../../../../../../api/collaborator";
 import { formatMoney } from "../../../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../../../helper/toast";
@@ -19,6 +20,8 @@ const WithdrawTopup = ({ id }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [remainder, setRemainder] = useState(0);
   const [giftRemainder, setGiftRemainder] = useState(0);
+  const [topup, setTopup] = useState(0);
+  const [withdraw, setWithdraw] = useState(0);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -37,6 +40,16 @@ const WithdrawTopup = ({ id }) => {
       .then((res) => {
         setData(res?.data);
         setTotalData(res?.totalItem);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        dispatch(loadingAction.loadingRequest(false));
+      });
+
+    getTransitionDetailsCollaborator(id)
+      .then((res) => {
+        setTopup(res?.totalTopUp);
+        setWithdraw(res?.totalWithdraw);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -123,14 +136,32 @@ const WithdrawTopup = ({ id }) => {
 
   return (
     <>
-      <div className="div-monney">
-        <div>
-          <a className="text-title-monney">Ví CTV:</a>
-          <a className="text-monney"> {formatMoney(remainder)}</a>
+      <div className="div-head">
+        <div className="div-monney">
+          <div>
+            <a className="text-title-monney">Ví CTV:</a>
+            <a className="text-monney"> {formatMoney(remainder)}</a>
+          </div>
+          <div>
+            <a className="text-title-monney">Ví thưởng: </a>
+            <a className="text-monney">{formatMoney(giftRemainder)}</a>
+          </div>
         </div>
-        <div>
-          <a className="text-title-monney">Ví thưởng: </a>
-          <a className="text-monney">{formatMoney(giftRemainder)}</a>
+        <div className="div-monney">
+          <a className="total-revenue">
+            Tổng nạp:
+            <a className="text-money-revenue">
+              <i class="uil uil-arrow-up icon-up"></i>
+              {formatMoney(topup)}
+            </a>
+          </a>
+          <a className="total-expenditure">
+            Tổng rút:
+            <a className="text-money-expenditure">
+              <i class="uil uil-arrow-down icon-down"></i>
+              {formatMoney(withdraw)}
+            </a>
+          </a>
         </div>
       </div>
       <div className="mt-5">

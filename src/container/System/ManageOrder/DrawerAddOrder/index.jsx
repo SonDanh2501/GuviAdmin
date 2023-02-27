@@ -168,25 +168,32 @@ const AddOrder = () => {
 
   const dayNow = new Date().toISOString().slice(0, 10);
 
-  const handleSearch = useCallback((value) => {
+  const valueSearch = (value) => {
     setName(value);
-    if (value) {
-      searchCustomers(0, 10, "", value)
-        .then((res) => {
-          setDataFilter(res.data);
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
+  };
+
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      setName(value);
+      if (value) {
+        searchCustomers(0, 10, "", value)
+          .then((res) => {
+            setDataFilter(res.data);
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
           });
-        });
-    } else if (id) {
-      setDataFilter([]);
-    } else {
-      setDataFilter([]);
-    }
-    setId("");
-  }, []);
+      } else if (id) {
+        setDataFilter([]);
+      } else {
+        setDataFilter([]);
+      }
+      setId("");
+    }, 500),
+    []
+  );
 
   var AES = require("crypto-js/aes");
   const temp = JSON.stringify({
@@ -451,7 +458,10 @@ const AddOrder = () => {
             placeholder="Tìm kiếm theo tên hoặc số điện thoại số điện thoại"
             value={name}
             type="text"
-            onChange={(e) => handleSearch(e.target.value)}
+            onChange={(e) => {
+              valueSearch(e.target.value);
+              handleSearch(e.target.value);
+            }}
             className="input"
           />
           <a className="text-error">{errorNameCustomer}</a>
@@ -460,7 +470,7 @@ const AddOrder = () => {
             <List type={"unstyled"} className="list-item">
               {dataFilter?.map((item, index) => {
                 return (
-                  <option
+                  <div
                     key={index}
                     value={item?._id}
                     onClick={(e) => {
@@ -470,8 +480,10 @@ const AddOrder = () => {
                       setErrorNameCustomer("");
                     }}
                   >
-                    {item?.full_name}
-                  </option>
+                    <a>
+                      {item?.full_name} - {item?.phone} - {item?.id_view}
+                    </a>
+                  </div>
                 );
               })}
             </List>

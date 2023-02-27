@@ -11,7 +11,8 @@ function* fetchOrderSaga(action) {
       getOrderApi,
       action.payload.start,
       action.payload.length,
-      action.payload.status
+      action.payload.status,
+      action.payload.kind
     );
     yield put(
       getOrder.getOrderSuccess({

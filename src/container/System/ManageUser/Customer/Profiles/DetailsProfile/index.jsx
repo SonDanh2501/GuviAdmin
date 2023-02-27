@@ -19,6 +19,7 @@ import user from "../../../../../../assets/images/user.png";
 import "./index.scss";
 import {
   fetchCustomerById,
+  updateCustomer,
   updatePointCustomer,
 } from "../../../../../../api/customer";
 import { FloatButton, Image } from "antd";
@@ -28,6 +29,10 @@ import { errorNotify } from "../../../../../../helper/toast";
 const DetailsProfile = () => {
   const { state } = useLocation();
   const { id } = state || {};
+  const [name, setName] = useState("");
+  const [mail, setMail] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [gender, setGender] = useState("other");
   const [rank, setRank] = useState("");
   const [data, setData] = useState([]);
   const [point, setPoint] = useState();
@@ -35,7 +40,13 @@ const DetailsProfile = () => {
 
   useEffect(() => {
     fetchCustomerById(id)
-      .then((res) => setData(res))
+      .then((res) => {
+        setData(res);
+        setName(res?.full_name);
+        setMail(res?.email);
+        setBirthday(res?.birthday ? res?.birthday?.slice(0, 10) : "");
+        setGender(res?.gender);
+      })
       .catch((err) => console.log(err));
   }, [id]);
 
@@ -53,6 +64,19 @@ const DetailsProfile = () => {
     setRankPoint(data?.rank_point);
   }, [data]);
 
+  const updateUser = () => {
+    const birth = new Date(birthday).toISOString();
+    updateCustomer(data?._id, {
+      phone: data?.phone,
+      email: mail,
+      full_name: name,
+      gender: gender,
+      birthday: birth,
+    })
+      .then((res) => {})
+      .catch((err) => {});
+  };
+
   const updateRankPoint = () => {
     updatePointCustomer(data?._id, {
       point: point,
@@ -66,6 +90,8 @@ const DetailsProfile = () => {
           message: err,
         });
       });
+
+    updateUser();
   };
 
   const age = moment().diff(data?.birthday, "years");
@@ -107,77 +133,100 @@ const DetailsProfile = () => {
           </Col>
           <Col className="order-xl-1" xl="8">
             <div className="pl-lg-4">
+              <h3 className="">Thông tin</h3>
               <Col lg="6">
-                <h3 className="">Thông tin</h3>
-                <FormGroup>
-                  <label className="form-control-label" htmlFor="input-email">
-                    Email
-                  </label>
-                  <Input
-                    className="form-control-alternative"
-                    id="input-email"
-                    type="email"
-                    value={data?.email ? data?.email : "Chưa có"}
-                    disabled={true}
-                  />
-                </FormGroup>
+                <Row>
+                  <Col lg="6">
+                    <FormGroup>
+                      <label
+                        className="form-control-label"
+                        htmlFor="input-email"
+                      >
+                        Họ tên
+                      </label>
+                      <Input
+                        className="form-control-alternative"
+                        id="input-email"
+                        type="email"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                    </FormGroup>
 
-                <FormGroup>
-                  <label className="form-control-label" htmlFor="input-email">
-                    Ngày sinh
-                  </label>
-                  <Input
-                    className="form-control-alternative"
-                    id="input-email"
-                    type="email"
-                    value={
-                      data?.birthday
-                        ? moment(new Date(data?.birthday)).format("DD/MM/YYYY")
-                        : "Chưa có"
-                    }
-                    disabled={true}
-                  />
-                </FormGroup>
+                    <FormGroup className="div-select">
+                      <label
+                        className="form-control-label"
+                        htmlFor="input-last-name"
+                      >
+                        Giới tính
+                      </label>
+                      <Input
+                        className="input-select"
+                        id="input-last-name"
+                        type="select"
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
+                      >
+                        <>
+                          <option value={"other"}>Khác</option>
+                          <option value={"male"}>Nam</option>
+                          <option value={"female"}>Nữ</option>
+                        </>
+                      </Input>
+                    </FormGroup>
 
-                <FormGroup>
-                  <label
-                    className="form-control-label"
-                    htmlFor="input-last-name"
-                  >
-                    Giới tính
-                  </label>
-                  <Input
-                    className="form-control-alternative"
-                    id="input-last-name"
-                    type="text"
-                    value={
-                      data?.gender === "male"
-                        ? "Nam"
-                        : data?.gender === "female"
-                        ? "Nữ"
-                        : data?.gender === "other"
-                        ? "Khác"
-                        : "Chưa có"
-                    }
-                    disabled={true}
-                  />
-                </FormGroup>
-
-                <FormGroup>
-                  <label
-                    className="form-control-label"
-                    htmlFor="input-last-name"
-                  >
-                    Số điện thoại
-                  </label>
-                  <Input
-                    className="form-control-alternative"
-                    id="input-last-name"
-                    type="text"
-                    value={data?.phone}
-                    disabled={true}
-                  />
-                </FormGroup>
+                    <FormGroup>
+                      <label
+                        className="form-control-label"
+                        htmlFor="input-last-name"
+                      >
+                        Số điện thoại
+                      </label>
+                      <Input
+                        className="form-control-alternative"
+                        id="input-last-name"
+                        type="text"
+                        value={data?.phone}
+                        disabled={true}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg="6">
+                    <FormGroup>
+                      <label
+                        className="form-control-label"
+                        htmlFor="input-email"
+                      >
+                        Ngày sinh
+                      </label>
+                      <Input
+                        className="form-control-alternative"
+                        id="input-email"
+                        type="date"
+                        value={birthday}
+                        onChange={(e) => {
+                          setBirthday(e.target.value);
+                        }}
+                      />
+                      <FormGroup className="mt-3">
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-email"
+                        >
+                          Email
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-email"
+                          placeholder="Nhập email"
+                          type="email"
+                          value={mail}
+                          onChange={(e) => setMail(e.target.value)}
+                        />
+                      </FormGroup>
+                    </FormGroup>
+                  </Col>
+                </Row>
               </Col>
               <Col lg="6">
                 <h3 className="">Điểm thưởng</h3>

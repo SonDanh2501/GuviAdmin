@@ -35,28 +35,106 @@
   justify-content: space-between;
   align-items: center;
 }
-
-.div-monney {
+.div-head {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
 
-  .text-title-monney {
-    font-family: "Roboto";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    color: #000000 !important;
-  }
-  .text-monney {
-    font-family: "Roboto";
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    color: #000000 !important;
+  .div-monney {
+    display: flex;
+    flex-direction: column;
+
+    .text-title-monney {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      color: #000000 !important;
+    }
+    .text-monney {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      color: #000000 !important;
+    }
+
+    .total-revenue {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 18px;
+      color: #000000;
+      text-decoration: none;
+
+      .text-money-revenue {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        color: #000000;
+        text-decoration: none;
+        margin-left: 10px;
+      }
+
+      .icon-up {
+        color: #00cf3a;
+      }
+    }
+    .total-expenditure {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 18px;
+      color: #000000;
+      text-decoration: none;
+
+      .text-money-expenditure {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        color: #000000;
+        text-decoration: none;
+        margin-left: 10px;
+      }
+      .icon-down {
+        color: #ff0000;
+      }
+    }
   }
 }
 
 .div-time {
   display: flex;
   flex-direction: column;
+}
+
+.text-pending-topup {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  color: #ecd503 !important;
+  text-decoration: none;
+}
+
+.text-transfered {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  color: #19129a !important;
+  text-decoration: none;
+}
+.text-done {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  color: #00cf3a;
+  text-decoration: none;
 }

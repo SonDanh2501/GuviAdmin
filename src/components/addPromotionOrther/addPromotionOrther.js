@@ -1,4 +1,4 @@
-import { Select } from "antd";
+import { List, Select } from "antd";
 import { convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { Editor } from "react-draft-wysiwyg";
@@ -14,7 +14,7 @@ import {
   Modal,
   Row,
 } from "reactstrap";
-import { fetchCustomers } from "../../api/customer";
+import { fetchCustomers, searchCustomers } from "../../api/customer";
 import { DATA_PAYMENT } from "../../api/fakeData";
 import { postFile } from "../../api/file";
 import { getGroupCustomerApi } from "../../api/promotion";
@@ -25,6 +25,7 @@ import { createPromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
+import _debounce from "lodash/debounce";
 import "./addPromotionOrther.scss";
 
 const AddPromotionOther = () => {
@@ -71,6 +72,9 @@ const AddPromotionOther = () => {
   const [position, setPosition] = useState(0);
   const [isPaymentMethod, setIsPaymentMethod] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState([]);
+  const [data, setData] = useState([]);
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
   const options = [];
   const optionsCustomer = [];
   const dispatch = useDispatch();
@@ -200,6 +204,31 @@ const AddPromotionOther = () => {
 
   const onEditorENStateChange = (editorState) => setDescriptionEN(editorState);
 
+  const changeValue = (value) => {
+    setName(value);
+  };
+
+  const searchCustomer = useCallback(
+    _debounce((value) => {
+      setName(value);
+      if (value) {
+        searchCustomers(0, 20, "", value)
+          .then((res) => {
+            if (value === "") {
+              setData([]);
+            } else {
+              setData(res.data);
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        setData([]);
+      }
+      setId("");
+    }, 500),
+    []
+  );
+
   const onCreatePromotion = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
     dispatch(
@@ -229,7 +258,7 @@ const AddPromotionOther = () => {
         is_id_group_customer: isGroupCustomer,
         id_group_customer: groupCustomer,
         is_id_customer: isCustomer,
-        id_customer: customer,
+        id_customer: id,
         service_apply: [],
         is_limited_use: isUsePromo,
         limited_use: isUsePromo ? usePromo : 0,
@@ -284,6 +313,7 @@ const AddPromotionOther = () => {
     position,
     isPaymentMethod,
     paymentMethod,
+    id,
   ]);
 
   return (
@@ -454,24 +484,35 @@ const AddPromotionOther = () => {
                       />
                     </FormGroup>
                     {isCustomer && (
-                      <Select
-                        style={{
-                          width: "100%",
-                        }}
-                        placeholder="Chọn khách hàng"
-                        onChange={handleChangeCustomer}
-                        options={optionsCustomer}
-                        filterOption={(input, option) =>
-                          (option?.label ?? "").includes(input)
-                        }
-                        filterSort={(optionA, optionB) =>
-                          (optionA?.label ?? "")
-                            .toLowerCase()
-                            .localeCompare((optionB?.label ?? "").toLowerCase())
-                        }
-                        optionFilterProp="children"
-                        showSearch
-                      />
+                      <div>
+                        <Input
+                          placeholder="Tìm kiếm theo tên và số điện thoại"
+                          value={name}
+                          onChange={(e) => {
+                            changeValue(e.target.value);
+                            searchCustomer(e.target.value);
+                          }}
+                        />
+                        {data.length > 0 && (
+                          <List type={"unstyled"} className="list-item-kh">
+                            {data?.map((item, index) => {
+                              return (
+                                <option
+                                  key={index}
+                                  value={item?._id}
+                                  onClick={(e) => {
+                                    setId(e.target.value);
+                                    setName(item?.name);
+                                    setData([]);
+                                  }}
+                                >
+                                  {item?.name}
+                                </option>
+                              );
+                            })}
+                          </List>
+                        )}
+                      </div>
                     )}
                   </div>
                 </Col>

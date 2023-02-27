@@ -145,7 +145,7 @@ export default function CollaboratorManage(props) {
           .then((res) => {
             setModalLockTime(!modalLockTime);
             dispatch(loadingAction.loadingRequest(false));
-            // window.location.reload();
+            window.location.reload();
           })
           .catch((err) => {
             dispatch(loadingAction.loadingRequest(false));
@@ -161,7 +161,7 @@ export default function CollaboratorManage(props) {
           .then((res) => {
             setModalLockTime(!modalLockTime);
             dispatch(loadingAction.loadingRequest(false));
-            // window.location.reload();
+            window.location.reload();
           })
           .catch((err) => {
             dispatch(loadingAction.loadingRequest(false));
@@ -215,7 +215,7 @@ export default function CollaboratorManage(props) {
     },
     {
       key: "2",
-      label: !itemEdit?.is_lock_time ? (
+      label: !itemEdit?.is_locked ? (
         <a onClick={toggleLockTime}>Khoá</a>
       ) : (
         <a onClick={toggleLockTime}>Mở khoá</a>
@@ -443,16 +443,16 @@ export default function CollaboratorManage(props) {
           <Modal isOpen={modalLockTime} toggle={toggleLockTime}>
             <ModalHeader toggle={toggleLockTime}>
               {" "}
-              {itemEdit?.is_lock_time === false
+              {itemEdit?.is_locked === false
                 ? "Khóa tài khoản cộng tác viên"
                 : "Mở tài khoản cộng tác viên"}
             </ModalHeader>
             <ModalBody>
-              {itemEdit?.is_lock_time === false
+              {itemEdit?.is_locked === false
                 ? "Bạn có muốn khóa tài khoản cộng tác viên"
                 : "Bạn có muốn kích hoạt tài khoản cộng tác viên"}
               <h3>{itemEdit?.full_name}</h3>
-              {itemEdit?.is_lock_time === false && (
+              {itemEdit?.is_locked === false && (
                 <CustomTextInput
                   label={"*Thời gian khoá (hh:mm)"}
                   type="datetime-local"
@@ -466,7 +466,7 @@ export default function CollaboratorManage(props) {
               <Button
                 color="primary"
                 onClick={() =>
-                  onLockTimeCollaborator(itemEdit?._id, itemEdit?.is_lock_time)
+                  onLockTimeCollaborator(itemEdit?._id, itemEdit?.is_locked)
                 }
               >
                 Có

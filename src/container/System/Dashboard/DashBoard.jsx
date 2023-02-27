@@ -580,7 +580,7 @@ export default function Home() {
         <div>
           <Row>
             <Col lg="9">
-              <div className="div-chart-pie">
+              {/* <div className="div-chart-pie">
                 <div>
                   <a>TOP DỊCH VỤ</a>
                 </div>
@@ -637,25 +637,9 @@ export default function Home() {
                       />
                       <a>Hồ Chí Minh</a>
                     </div>
-                    {/* <div>
-                      <Progress
-                        percent={66}
-                        strokeWidth={10}
-                        strokeColor={"#48CAE4"}
-                      />
-                      <a>Hồ Chí Minh</a>
-                    </div>
-                    <div>
-                      <Progress
-                        percent={66}
-                        strokeWidth={10}
-                        strokeColor={"#48CAE4"}
-                      />
-                      <a>Hồ Chí Minh</a>
-                    </div> */}
                   </Col>
                 </Row>
-              </div>
+              </div> */}
             </Col>
             <Col lg="3">
               <div className="col-activity">

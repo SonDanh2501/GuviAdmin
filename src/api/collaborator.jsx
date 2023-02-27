@@ -102,3 +102,9 @@ export const getListTransitionByCollaborator = (id, start, length) => {
     `/admin/collaborator_manager/get_transition/${id}?start=${start}&length=${length}`
   );
 };
+
+export const getTransitionDetailsCollaborator = (id) => {
+  return axiosClient.get(
+    `/admin/collaborator_manager/total_top_up_withdraw/${id}?lang=vi`
+  );
+};

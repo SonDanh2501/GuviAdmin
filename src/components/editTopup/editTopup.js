@@ -13,6 +13,7 @@ import { loadingAction } from "../../redux/actions/loading";
 import { createNew } from "../../redux/actions/news";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
+import _debounce from "lodash/debounce";
 import "./editTopup.scss";
 
 const EditTopup = ({ state, setState, item }) => {
@@ -30,19 +31,26 @@ const EditTopup = ({ state, setState, item }) => {
     setNote(item?.transfer_note);
   }, [item]);
 
-  const searchCollaborator = useCallback((value) => {
+  const valueSearch = (value) => {
     setName(value);
-    if (value) {
-      searchCollaborators(value)
-        .then((res) => setData(res.data))
-        .catch((err) => console.log(err));
-    } else if (id) {
-      setData([]);
-    } else {
-      setData([]);
-    }
-    setId("");
-  }, []);
+  };
+
+  const searchCollaborator = useCallback(
+    _debounce((value) => {
+      setName(value);
+      if (value) {
+        searchCollaborators(value)
+          .then((res) => setData(res.data))
+          .catch((err) => console.log(err));
+      } else if (id) {
+        setData([]);
+      } else {
+        setData([]);
+      }
+      setId("");
+    }, 500),
+    []
+  );
 
   const editMoney = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -97,7 +105,10 @@ const EditTopup = ({ state, setState, item }) => {
               <Input
                 placeholder="Tìm kiếm theo số điện thoại"
                 value={name}
-                onChange={(e) => searchCollaborator(e.target.value)}
+                onChange={(e) => {
+                  searchCollaborator(e.target.value);
+                  valueSearch(e.target.value);
+                }}
               />
               {data.length > 0 && (
                 <List type={"unstyled"} className="list-item">

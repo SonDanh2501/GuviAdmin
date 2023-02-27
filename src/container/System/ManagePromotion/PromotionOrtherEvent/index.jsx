@@ -1,36 +1,51 @@
 import { Tabs } from "antd";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { getService } from "../../../../redux/selectors/service";
 import PromotionManage from "../Promotion/promotionManage";
 import "./index.scss";
 
 const ManagePromotionEvent = ({ type, brand }) => {
+  const service = useSelector(getService);
+  const [tab, setTab] = useState("");
+  const [id, setId] = useState("");
+
+  useEffect(() => {
+    setTab(service[0]?.kind);
+    setId(service[0]?._id);
+  }, [service]);
   return (
-    <div className="ml-2">
-      <Tabs defaultActiveKey="1">
-        {DATA.map((item, index) => {
+    <div className=" ml-2 mt-3">
+      <div className="div-tab">
+        {service?.map((item, index) => {
           return (
-            <Tabs.TabPane tab={item?.title} key={item?.id}>
-              <PromotionManage type={type} brand={brand} />
-            </Tabs.TabPane>
+            <div
+              key={index}
+              className="tab"
+              onClick={() => {
+                setTab(item?.kind);
+                setId(item?._id);
+              }}
+            >
+              <a
+                className={
+                  tab === item?.kind
+                    ? "text-title-tab"
+                    : "text-title-tab-default"
+                }
+              >
+                {item?.title?.vi}
+              </a>
+              <div className={tab === item?.kind ? "tab-line" : ""}></div>
+            </div>
           );
         })}
-      </Tabs>
+      </div>
+      <div>
+        <PromotionManage type={type} brand={brand} idService={id} />
+      </div>
     </div>
   );
 };
 
 export default ManagePromotionEvent;
-
-const DATA = [
-  {
-    id: 1,
-    title: "Giúp việc theo giờ",
-  },
-  {
-    id: 2,
-    title: "Giúp việc cố định",
-  },
-  {
-    id: 3,
-    title: "Tổng vệ sinh",
-  },
-];

@@ -25,7 +25,8 @@ function* fetchPromotionSaga(action) {
       action.payload.start,
       action.payload.length,
       action.payload.type,
-      action.payload.brand
+      action.payload.brand,
+      action.payload.id_service
     );
     yield put(
       getPromotion.getPromotionSuccess({

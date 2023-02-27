@@ -1,0 +1,32 @@
+.div-tab {
+  display: flex;
+  flex-direction: row;
+
+  .tab {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+
+    .text-title-tab {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      color: #41a2f3;
+      text-decoration: none;
+    }
+
+    .text-title-tab-default {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      color: #000000;
+      text-decoration: none;
+    }
+
+    .tab-line {
+      border: 1px solid #41a2f3;
+    }
+  }
+}

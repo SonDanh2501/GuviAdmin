@@ -1,8 +1,8 @@
 import axiosClient from "../axios";
 
-export const getOrderApi = (start, length, status) => {
+export const getOrderApi = (start, length, status, kind) => {
   return axiosClient.get(
-    `/admin/statistic/job_lists?start=${start}&length=${length}&status=${status}`
+    `/admin/statistic/job_lists?start=${start}&length=${length}&status=${status}&kind=${kind}`
   );
 };
 

@@ -293,7 +293,9 @@ const ReportManager = () => {
         );
       },
       align: "center",
-      dataIndex: "percent_income",
+      render: (data) => {
+        return <a>{data?.percent_income ? data?.percent_income + "%" : ""}</a>;
+      },
     },
   ];
 

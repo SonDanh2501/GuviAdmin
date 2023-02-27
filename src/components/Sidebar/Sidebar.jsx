@@ -373,6 +373,18 @@ const Sidebar = ({ onChangeColor }) => {
       ) : user?.role === "support_customer" ? (
         <ul className="nav nav-pills flex-column ">
           <li>
+            <NavLink to="/">
+              {({ isActive }) => (
+                <div className={isActive ? "active-link" : "unactive-link"}>
+                  <i className="uil uil-estate icon"></i>
+                  <a className={isActive ? "active-text" : "unactive-text"}>
+                    Tổng quan
+                  </a>
+                </div>
+              )}
+            </NavLink>
+          </li>
+          <li>
             <NavLink to="/group-order/manage-order" onClick={toggleNavbar}>
               {({ isActive }) => (
                 <div className={isActive ? "active-link" : "unactive-link"}>

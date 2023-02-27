@@ -128,15 +128,17 @@ export default function OrderManage(props) {
       // dataIndex: ["id_customer", "full_name"],
       render: (data) => {
         return (
-          <a
+          <div
             onClick={() =>
               navigate("/group-order/manage-order/details-customer", {
                 state: { id: data?.id_customer?._id },
               })
             }
+            className="div-name"
           >
-            {data?.id_customer?.full_name}
-          </a>
+            <a>{data?.id_customer?.full_name}</a>
+            <a>{data?.id_customer?.phone}</a>
+          </div>
         );
       },
     },
@@ -190,16 +192,19 @@ export default function OrderManage(props) {
           {!data?.id_collaborator ? (
             <a>Đang tìm kiếm</a>
           ) : (
-            <a
+            <div
               onClick={() =>
                 navigate("/group-order/manage-order/details-collaborator", {
                   state: { id: data?.id_collaborator?._id },
                 })
               }
-              className="text-collaborator"
+              className="div-name"
             >
-              {data?.id_collaborator?.full_name}
-            </a>
+              <a className="text-collaborator">
+                {data?.id_collaborator?.full_name}
+              </a>
+              <a>{data?.id_collaborator?.phone}</a>
+            </div>
           )}
         </>
       ),

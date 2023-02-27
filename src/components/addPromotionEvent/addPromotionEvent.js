@@ -1,4 +1,4 @@
-import { Select } from "antd";
+import { List, Select } from "antd";
 import { convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import React, { memo, useCallback, useEffect, useState } from "react";
@@ -14,7 +14,7 @@ import {
   Modal,
   Row,
 } from "reactstrap";
-import { fetchCustomers } from "../../api/customer";
+import { fetchCustomers, searchCustomers } from "../../api/customer";
 import { DATA_PAYMENT } from "../../api/fakeData";
 import { postFile } from "../../api/file";
 import { getGroupCustomerApi } from "../../api/promotion";
@@ -25,9 +25,11 @@ import { createPromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
+import _debounce from "lodash/debounce";
+
 import "./addPromotionEvent.scss";
 
-const AddPromotionEvent = () => {
+const AddPromotionEvent = ({ idService }) => {
   const [state, setState] = useState(false);
   const [formDiscount, setFormDiscount] = React.useState("amount");
   const [discountUnit, setDiscountUnit] = React.useState("amount");
@@ -66,6 +68,9 @@ const AddPromotionEvent = () => {
   const [titleNoti, setTitleNoti] = useState("");
   const [descriptionNoti, setDescriptionNoti] = useState("");
   const [imgNoti, setImgNoti] = useState("");
+  const [data, setData] = useState([]);
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
 
   const options = [];
   const optionsCustomer = [];
@@ -161,6 +166,30 @@ const AddPromotionEvent = () => {
       dispatch(loadingAction.loadingRequest(false));
     }
   };
+  const changeValue = (value) => {
+    setName(value);
+  };
+
+  const searchCustomer = useCallback(
+    _debounce((value) => {
+      setName(value);
+      if (value) {
+        searchCustomers(0, 20, "", value)
+          .then((res) => {
+            if (value === "") {
+              setData([]);
+            } else {
+              setData(res.data);
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        setData([]);
+      }
+      setId("");
+    }, 500),
+    []
+  );
 
   const onCreatePromotion = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -191,8 +220,8 @@ const AddPromotionEvent = () => {
         is_id_group_customer: isGroupCustomer,
         id_group_customer: groupCustomer,
         is_id_customer: isCustomer,
-        id_customer: customer,
-        service_apply: [serviceApply],
+        id_customer: id,
+        service_apply: [idService],
         is_limited_use: isUsePromo,
         limited_use: isUsePromo ? usePromo : 0,
         type_discount: "order",
@@ -232,12 +261,14 @@ const AddPromotionEvent = () => {
     namebrand,
     maximumDiscount,
     reducedValue,
-    serviceApply,
+    // serviceApply,
     promoCode,
     minimumOrder,
     isPaymentMethod,
     paymentMethod,
     position,
+    idService,
+    id,
   ]);
 
   return (
@@ -385,7 +416,7 @@ const AddPromotionEvent = () => {
                       )}
                     </Row>
                   </div>
-                  <div>
+                  {/* <div>
                     <h5>5. Dịch vụ áp dụng</h5>
                     <Label>Các dịch vụ</Label>
 
@@ -405,7 +436,7 @@ const AddPromotionEvent = () => {
                         );
                       })}
                     />
-                  </div>
+                  </div> */}
                   <div>
                     <h5>6. Đối tượng áp dụng</h5>
                     <FormGroup check inline>
@@ -444,24 +475,35 @@ const AddPromotionEvent = () => {
                       />
                     </FormGroup>
                     {isCustomer && (
-                      <Select
-                        style={{
-                          width: "100%",
-                        }}
-                        placeholder="Chọn khách hàng"
-                        onChange={handleChangeCustomer}
-                        options={optionsCustomer}
-                        filterOption={(input, option) =>
-                          (option?.label ?? "").includes(input)
-                        }
-                        filterSort={(optionA, optionB) =>
-                          (optionA?.label ?? "")
-                            .toLowerCase()
-                            .localeCompare((optionB?.label ?? "").toLowerCase())
-                        }
-                        optionFilterProp="children"
-                        showSearch
-                      />
+                      <div>
+                        <Input
+                          placeholder="Tìm kiếm theo tên và số điện thoại"
+                          value={name}
+                          onChange={(e) => {
+                            changeValue(e.target.value);
+                            searchCustomer(e.target.value);
+                          }}
+                        />
+                        {data.length > 0 && (
+                          <List type={"unstyled"} className="list-item-kh">
+                            {data?.map((item, index) => {
+                              return (
+                                <option
+                                  key={index}
+                                  value={item?._id}
+                                  onClick={(e) => {
+                                    setId(e.target.value);
+                                    setName(item?.name);
+                                    setData([]);
+                                  }}
+                                >
+                                  {item?.name}
+                                </option>
+                              );
+                            })}
+                          </List>
+                        )}
+                      </div>
                     )}
                   </div>
                   <div>

@@ -24,3 +24,12 @@
   background-color: #48cae4;
   color: white;
 }
+
+.div-select {
+  display: flex;
+  flex-direction: column;
+
+  .input-select {
+    width: 50%;
+  }
+}
