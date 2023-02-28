@@ -8,6 +8,7 @@ import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { activeNew, deleteNew, searchNew } from "../../../../api/news";
 import AddNews from "../../../../components/addNews/addNews";
 import EditNews from "../../../../components/editNews/editNews";
+import { errorNotify } from "../../../../helper/toast";
 import { loadingAction } from "../../../../redux/actions/loading";
 import { getNews } from "../../../../redux/actions/news";
 import { getNewSelector, getNewTotal } from "../../../../redux/selectors/news";
@@ -72,9 +73,14 @@ export default function NewsManage() {
     dispatch(loadingAction.loadingRequest(true));
     deleteNew(id)
       .then((res) => {
-        window.location.reload();
+        dispatch(getNews.getNewsRequest({ start: 0, length: 10 }));
+        dispatch(loadingAction.loadingRequest(false));
+        setModal(false);
       })
       .catch((err) => {
+        errorNotify({
+          message: err,
+        });
         dispatch(loadingAction.loadingRequest(false));
       });
   }, []);
@@ -84,19 +90,27 @@ export default function NewsManage() {
     if (is_active === true) {
       activeNew(id, { is_active: false })
         .then((res) => {
-          setModalBlock(!modalBlock);
-          window.location.reload();
+          dispatch(getNews.getNewsRequest({ start: 0, length: 10 }));
+          setModalBlock(false);
+          dispatch(loadingAction.loadingRequest(false));
         })
         .catch((err) => {
+          errorNotify({
+            message: err,
+          });
           dispatch(loadingAction.loadingRequest(false));
         });
     } else {
       activeNew(id, { is_active: true })
         .then((res) => {
-          setModalBlock(!modalBlock);
-          window.location.reload();
+          dispatch(getNews.getNewsRequest({ start: 0, length: 10 }));
+          setModalBlock(false);
+          dispatch(loadingAction.loadingRequest(false));
         })
         .catch((err) => {
+          errorNotify({
+            message: err,
+          });
           dispatch(loadingAction.loadingRequest(false));
         });
     }

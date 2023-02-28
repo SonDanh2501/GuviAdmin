@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   activePromotion,
+  deletePromotion,
   filterPromotion,
   searchPromotion,
 } from "../../../../api/promotion.jsx";
@@ -42,6 +43,7 @@ import { getUser } from "../../../../redux/selectors/auth.js";
 import EditPromotionEvent from "../../../../components/editPromotionEvent/editPromotionEvent.js";
 import AddPromotionOrther from "../../../../components/addPromotionOrther/addPromotionOrther.js";
 import EditPromotionOrther from "../../../../components/editPromotionOrther/editPromotionOrther.js";
+import { errorNotify } from "../../../../helper/toast.js";
 
 export default function PromotionManage({ type, brand, idService }) {
   const promotion = useSelector(getPromotionSelector);
@@ -81,30 +83,83 @@ export default function PromotionManage({ type, brand, idService }) {
     setValueSearch("");
   }, [type, brand, idService]);
 
-  const onDelete = useCallback((id) => {
-    dispatch(loadingAction.loadingRequest(true));
-    dispatch(deletePromotionAction.deletePromotionRequest(id));
-  }, []);
+  const onDelete = useCallback(
+    (id) => {
+      dispatch(loadingAction.loadingRequest(true));
+      deletePromotion(id)
+        .then((res) => {
+          dispatch(
+            getPromotion.getPromotionRequest({
+              start: 0,
+              length: 10,
+              type: type,
+              brand: brand,
+              id_service: idService,
+            })
+          );
+          setModal(false);
+          dispatch(loadingAction.loadingRequest(false));
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
+        });
+    },
+    [type, brand, idService]
+  );
 
-  const onActive = useCallback((id, is_active) => {
-    if (is_active) {
-      activePromotion(id, { is_active: false })
-        .then((res) => {
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      activePromotion(id, { is_active: true })
-        .then((res) => {
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, []);
+  const onActive = useCallback(
+    (id, is_active) => {
+      dispatch(loadingAction.loadingRequest(true));
+
+      if (is_active) {
+        activePromotion(id, { is_active: false })
+          .then((res) => {
+            dispatch(
+              getPromotion.getPromotionRequest({
+                start: 0,
+                length: 10,
+                type: type,
+                brand: brand,
+                id_service: idService,
+              })
+            );
+            setModalActive(false);
+            dispatch(loadingAction.loadingRequest(false));
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            dispatch(loadingAction.loadingRequest(false));
+          });
+      } else {
+        activePromotion(id, { is_active: true })
+          .then((res) => {
+            dispatch(
+              getPromotion.getPromotionRequest({
+                start: 0,
+                length: 10,
+                type: type,
+                brand: brand,
+                id_service: idService,
+              })
+            );
+            setModalActive(false);
+            dispatch(loadingAction.loadingRequest(false));
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            dispatch(loadingAction.loadingRequest(false));
+          });
+      }
+    },
+    [type, brand, idService]
+  );
 
   const onChange = (page) => {
     setCurrentPage(page);

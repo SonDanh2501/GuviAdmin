@@ -216,7 +216,7 @@ const AddBanner = () => {
 
             <CustomButton
               title="Thêm"
-              className="float-left btn-add"
+              className="float-left btn-add-banner"
               type="button"
               onClick={addBanner}
             />

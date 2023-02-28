@@ -24,10 +24,10 @@ const validateAddCustomerSchema = Yup.object().shape({
   phone: Yup.string()
     .matches(regexPhone, validPhoneMessage)
     .required(requiredErrorMessage),
-  password: Yup.string()
-    .min(8, validPasswordMessage)
-    .required(requiredErrorMessage)
-    .matches(regexPassword, validPasswordMessage),
+  password:
+    Yup.string()
+    .required(requiredErrorMessage),
+
   name: Yup.string().required(requiredErrorMessage),
 });
 

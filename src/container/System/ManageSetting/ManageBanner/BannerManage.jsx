@@ -16,6 +16,7 @@ import { activeBanner, deleteBanner } from "../../../../api/banner";
 import { loadingAction } from "../../../../redux/actions/loading";
 import onToggle from "../../../../assets/images/on-button.png";
 import offToggle from "../../../../assets/images/off-button.png";
+import { errorNotify } from "../../../../helper/toast";
 
 export default function BannerManage() {
   const [dataFilter, setDataFilter] = useState([]);
@@ -33,7 +34,6 @@ export default function BannerManage() {
   const totalBanner = useSelector(getBannerTotal);
   const dispatch = useDispatch();
   React.useEffect(() => {
-    // dispatch(loadingAction.loadingRequest(true));
     dispatch(getBanners.getBannersRequest(0, 10));
   }, [dispatch]);
 
@@ -41,9 +41,14 @@ export default function BannerManage() {
     dispatch(loadingAction.loadingRequest(true));
     deleteBanner(id, { is_delete: true })
       .then((res) => {
-        window.location.reload();
+        dispatch(getBanners.getBannersRequest(0, 10));
+        setModal(false);
+        dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
+        errorNotify({
+          message: err,
+        });
         dispatch(loadingAction.loadingRequest(false));
       });
   }, []);
@@ -53,20 +58,27 @@ export default function BannerManage() {
     if (is_active === true) {
       activeBanner(id, { is_active: false })
         .then((res) => {
-          setModalBlock(!modalBlock);
-          window.location.reload();
+          dispatch(getBanners.getBannersRequest(0, 10));
+          setModalBlock(false);
+          dispatch(loadingAction.loadingRequest(false));
         })
         .catch((err) => {
+          errorNotify({
+            message: err,
+          });
           dispatch(loadingAction.loadingRequest(false));
         });
     } else {
       activeBanner(id, { is_active: true })
         .then((res) => {
-          setModalBlock(!modalBlock);
-
-          window.location.reload();
+          dispatch(getBanners.getBannersRequest(0, 10));
+          setModalBlock(false);
+          dispatch(loadingAction.loadingRequest(false));
         })
         .catch((err) => {
+          errorNotify({
+            message: err,
+          });
           dispatch(loadingAction.loadingRequest(false));
         });
     }
@@ -160,9 +172,17 @@ export default function BannerManage() {
       render: (data) => (
         <Space size="middle">
           {data?.is_active ? (
-            <img className="img-unlock" src={onToggle} onClick={toggleBlock} />
+            <img
+              className="img-unlock-banner"
+              src={onToggle}
+              onClick={toggleBlock}
+            />
           ) : (
-            <img className="img-unlock" src={offToggle} onClick={toggleBlock} />
+            <img
+              className="img-unlock-banner"
+              src={offToggle}
+              onClick={toggleBlock}
+            />
           )}
 
           <Dropdown

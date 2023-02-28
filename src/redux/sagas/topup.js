@@ -3,8 +3,16 @@ import * as actions from "../actions/banner";
 import * as api from "../../api/banner";
 import { getType } from "../actions/banner";
 import { loadingAction } from "../actions/loading";
-import { getTopupCollaboratorApi, getTopupCustomerApi } from "../../api/topup";
-import { getTopupCollaborator, getTopupCustomer } from "../actions/topup";
+import {
+  getRevenueCollaboratorApi,
+  getTopupCollaboratorApi,
+  getTopupCustomerApi,
+} from "../../api/topup";
+import {
+  getRevenueCollaborator,
+  getTopupCollaborator,
+  getTopupCustomer,
+} from "../actions/topup";
 
 function* fetchTopupCollaboratorSaga(action) {
   try {
@@ -48,6 +56,27 @@ function* fetchTopupCustomerSaga(action) {
   }
 }
 
+function* handleRevenueCollaboratorSaga(action) {
+  try {
+    const response = yield call(
+      getRevenueCollaboratorApi,
+      action.payload.startDate,
+      action.payload.endState
+    );
+
+    yield put(
+      getRevenueCollaborator.getRevenueCollaboratorSuccess({
+        revenue: response.totalTopUp,
+        expenditure: response.totaWithdraw,
+      })
+    );
+    yield put(loadingAction.loadingRequest(false));
+  } catch (err) {
+    yield put(loadingAction.loadingRequest(false));
+    yield put(getRevenueCollaborator.getRevenueCollaboratorFailure(err));
+  }
+}
+
 function* TopupSaga() {
   yield takeLatest(
     getType(getTopupCollaborator.getTopupCollaboratorRequest),
@@ -56,6 +85,10 @@ function* TopupSaga() {
   yield takeLatest(
     getType(getTopupCustomer.getTopupCustomerRequest),
     fetchTopupCustomerSaga
+  );
+  yield takeLatest(
+    getType(getRevenueCollaborator.getRevenueCollaboratorRequest),
+    handleRevenueCollaboratorSaga
   );
 }
 

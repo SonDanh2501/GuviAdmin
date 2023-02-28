@@ -266,15 +266,15 @@ const Sidebar = ({ onChangeColor }) => {
                   <a className={isActive ? "active-text" : "unactive-text"}>
                     Báo cáo
                   </a>
-                  {collapsedReport ? (
+                  {/* {collapsedReport ? (
                     <i class="uil uil-angle-right icon-right"></i>
                   ) : (
                     <i class="uil uil-angle-down icon-right"></i>
-                  )}
+                  )} */}
                 </div>
               )}
             </NavLink>
-            <Collapse isOpen={!collapsedReport}>
+            {/* <Collapse isOpen={!collapsedReport}>
               <Nav className="nav" navbar>
                 <NavItem>
                   <NavLink to="/report/manage-report/all">
@@ -337,7 +337,7 @@ const Sidebar = ({ onChangeColor }) => {
                   </NavLink>
                 </NavItem>
               </Nav>
-            </Collapse>
+            </Collapse> */}
           </li>
         </ul>
       ) : user?.role === "marketing" || user?.role === "marketing_manager" ? (
@@ -528,15 +528,15 @@ const Sidebar = ({ onChangeColor }) => {
                   <a className={isActive ? "active-text" : "unactive-text"}>
                     Báo cáo
                   </a>
-                  {collapsedReport ? (
+                  {/* {collapsedReport ? (
                     <i class="uil uil-angle-right icon-right"></i>
                   ) : (
                     <i class="uil uil-angle-down icon-right"></i>
-                  )}
+                  )} */}
                 </div>
               )}
             </NavLink>
-            <Collapse isOpen={!collapsedReport}>
+            {/* <Collapse isOpen={!collapsedReport}>
               <Nav className="nav" navbar>
                 <NavItem>
                   <NavLink to="/report/manage-report/all">
@@ -599,7 +599,7 @@ const Sidebar = ({ onChangeColor }) => {
                   </NavLink>
                 </NavItem>
               </Nav>
-            </Collapse>
+            </Collapse> */}
           </li>
         </ul>
       ) : user?.role === "support" ? (

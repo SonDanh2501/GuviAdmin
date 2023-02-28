@@ -49,7 +49,7 @@ const Header = () => {
             class="uil uil-align-justify"
           ></i>
         </button> */}
-        <img src={Logo} className="img-logo" onClick={() => navigate("/")} />
+        <img src={Logo} className="img-logo" />
       </div>
 
       <div className="nav">

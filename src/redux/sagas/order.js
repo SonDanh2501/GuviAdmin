@@ -34,7 +34,8 @@ function* searchOrderSaga(action) {
       action.payload.start,
       action.payload.length,
       action.payload.status,
-      action.payload.value
+      action.payload.value,
+      action.payload.kind
     );
     yield put(
       searchOrder.searchOrderSuccess({

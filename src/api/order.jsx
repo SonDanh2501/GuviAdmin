@@ -12,9 +12,9 @@ export const filterOrderApi = (start, length, payload) => {
   );
 };
 
-export const searchOrderApi = (start, length, status, value) => {
+export const searchOrderApi = (start, length, status, value, kind) => {
   return axiosClient.get(
-    `/admin/statistic/job_lists?start=${start}&length=${length}&status=${status}&search=${value}`
+    `/admin/statistic/job_lists?start=${start}&length=${length}&status=${status}&search=${value}&kind=${kind}`
   );
 };
 
@@ -44,6 +44,12 @@ export const changeStatusOrderApi = (id, data) => {
   return axiosClient.post(
     `/admin/order_manager/change_status_order/${id}?lang=vi`,
     data
+  );
+};
+
+export const cancelGroupOrderApi = (id) => {
+  return axiosClient.post(
+    `/admin/group-order-manager/cancel_group_order_v2/${id}?lang=vi`
   );
 };
 

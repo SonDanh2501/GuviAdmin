@@ -11,7 +11,11 @@ import { Dropdown, FloatButton, Input, Pagination, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { activeCustomer, searchCustomers } from "../../../../../api/customer";
+import {
+  activeCustomer,
+  deleteCustomer,
+  searchCustomers,
+} from "../../../../../api/customer";
 import EditCustomer from "../../../../../components/editCustomer/editCustomer";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
@@ -45,15 +49,30 @@ export default function UserManage(props) {
   const dispatch = useDispatch();
   const user = useSelector(getUser);
 
-  const onDelete = useCallback((id) => {
-    dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      deleteCustomerAction.deleteCustomerRequest({
-        id: id,
-        data: { is_delete: true },
-      })
-    );
-  }, []);
+  const onDelete = useCallback(
+    (id) => {
+      dispatch(loadingAction.loadingRequest(true));
+      deleteCustomer(id, { is_delete: true })
+        .then((res) => {
+          dispatch(
+            getCustomers.getCustomersRequest({
+              start: 0,
+              length: 20,
+              type: status,
+            })
+          );
+          setModal(false);
+          dispatch(loadingAction.loadingRequest(false));
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
+        });
+    },
+    [status]
+  );
 
   const blockCustomer = useCallback((id, is_active) => {
     dispatch(loadingAction.loadingRequest(true));

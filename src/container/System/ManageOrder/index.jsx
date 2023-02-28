@@ -14,16 +14,17 @@ import {
 import { getOrder, searchOrder } from "../../../redux/actions/order";
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useEffect, useState } from "react";
-import { searchOrderApi } from "../../../api/order";
+import { searchOrderApi, getOrderApi } from "../../../api/order";
 import AddOrder from "./DrawerAddOrder";
 import { SearchOutlined } from "@ant-design/icons";
+import { DATA, DATA_STATUS } from "../../../api/fakeData";
 
 const ManageOrder = () => {
-  const [status, setStatus] = useState("all");
   const [dataSearch, setDataSearch] = useState([]);
   const [totalSearch, setTotalSearch] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
-  const [tab, setTab] = useState("theo_gio");
+  const [tab, setTab] = useState("all");
+  const [kind, setKind] = useState("theo_gio");
 
   const dispatch = useDispatch();
   const listOrder = useSelector(getOrderSelector);
@@ -36,24 +37,20 @@ const ManageOrder = () => {
       getOrder.getOrderRequest({
         start: 0,
         length: 20,
-        status: "all",
-        kind: "",
+        status: tab,
+        kind: kind,
       })
     );
-  }, [dispatch]);
+  }, [dispatch, tab, kind]);
 
   const handleSearch = useCallback(
     _debounce((value) => {
-      dispatch(
-        searchOrder.searchOrderRequest({
-          start: 0,
-          length: 20,
-          status: status,
-          value: value,
-        })
-      );
+      searchOrderApi(0, 20, tab, value, kind).then((res) => {
+        setDataSearch(res?.data);
+        setTotalSearch(res?.totalItem);
+      });
     }, 1000),
-    [status]
+    [tab, kind]
   );
 
   const items = [
@@ -68,101 +65,6 @@ const ManageOrder = () => {
     },
   ];
 
-  const onChangeTab = (active) => {
-    if (active === "2") {
-      setStatus("pending");
-      setTab("theo_gio");
-      dispatch(
-        searchOrder.searchOrderRequest({
-          start: 0,
-          length: 20,
-          status: "pending",
-          value: "",
-        })
-      );
-      dispatch(
-        getOrder.getOrderRequest({
-          start: 0,
-          length: 20,
-          status: "pending",
-          kind: "",
-        })
-      );
-    } else if (active === "3") {
-      setStatus("doing");
-      dispatch(
-        searchOrder.searchOrderRequest({
-          start: 0,
-          length: 20,
-          status: "doing",
-          value: "",
-        })
-      );
-      dispatch(
-        getOrder.getOrderRequest({
-          start: 0,
-          length: 20,
-          status: "doing",
-          kind: "",
-        })
-      );
-    } else if (active === "5") {
-      setStatus("cancel");
-      dispatch(
-        searchOrder.searchOrderRequest({
-          start: 0,
-          length: 20,
-          status: "cancel",
-          value: "",
-        })
-      );
-      dispatch(
-        getOrder.getOrderRequest({
-          start: 0,
-          length: 20,
-          status: "cancel",
-          kind: "",
-        })
-      );
-    } else if (active === "6") {
-      setStatus("done");
-      dispatch(
-        searchOrder.searchOrderRequest({
-          start: 0,
-          length: 20,
-          status: "done",
-          value: "",
-        })
-      );
-      dispatch(
-        getOrder.getOrderRequest({
-          start: 0,
-          length: 20,
-          status: "done",
-          kind: "",
-        })
-      );
-    } else if (active === "1") {
-      setStatus("all");
-      setTab("theo_gio");
-      dispatch(
-        searchOrder.searchOrderRequest({
-          start: 0,
-          length: 20,
-          status: "all",
-          value: "",
-        })
-      );
-      dispatch(
-        getOrder.getOrderRequest({
-          start: 0,
-          length: 20,
-          status: "all",
-          kind: "",
-        })
-      );
-    }
-  };
   return (
     <>
       <div className="div-header">
@@ -171,6 +73,7 @@ const ManageOrder = () => {
           placeholder="Tìm kiếm"
           type="text"
           className="field-search"
+          value={valueSearch}
           prefix={<SearchOutlined />}
           onChange={(e) => {
             handleSearch(e.target.value);
@@ -196,122 +99,71 @@ const ManageOrder = () => {
       </div>
 
       <div className="div-container">
-        <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
-          <Tabs.TabPane tab="TẤT CẢ" key="1">
-            {/* <div className="div-tab">
-              {DATA.map((item, index) => {
-                return (
-                  <div
-                    className="div-tab-item"
-                    key={index}
-                    onClick={() => {
-                      setTab(item?.value);
-                      dispatch(
-                        getOrder.getOrderRequest({
-                          start: 0,
-                          length: 20,
-                          status: "all",
-                          kind: item?.value,
-                        })
-                      );
-                    }}
+        <div className="div-tab">
+          {DATA_STATUS.map((item, index) => {
+            return (
+              <div
+                className="div-tab-item"
+                key={index}
+                onClick={() => {
+                  setTab(item?.value);
+                  setKind("theo_gio");
+                }}
+              >
+                <a
+                  className={
+                    tab === item?.value
+                      ? "text-title-tab"
+                      : "text-title-tab-default"
+                  }
+                >
+                  {item?.title}
+                </a>
+                <div className={tab === item?.value ? "tab-line" : ""}></div>
+              </div>
+            );
+          })}
+        </div>
+        <div>
+          <div className="div-tab">
+            {DATA.map((item, index) => {
+              return (
+                <div
+                  className="div-tab-item"
+                  key={index}
+                  onClick={() => {
+                    setKind(item?.value);
+                    setDataSearch([]);
+                    setValueSearch("");
+                  }}
+                >
+                  <a
+                    className={
+                      kind === item?.value
+                        ? "text-title-tab"
+                        : "text-title-tab-default"
+                    }
                   >
-                    <a
-                      className={
-                        tab === item?.value
-                          ? "text-title-tab"
-                          : "text-title-tab-default"
-                      }
-                    >
-                      {item?.title}
-                    </a>
-                    <div
-                      className={tab === item?.value ? "tab-line" : ""}
-                    ></div>
-                  </div>
-                );
-              })}
-            </div> */}
-            <OrderManage
-              data={listOrderSearch.length > 0 ? listOrderSearch : listOrder}
-              total={totalOrderSearch > 0 ? totalOrderSearch : orderTotal}
-              dataSearch={listOrderSearch}
-              value={valueSearch}
-              status={status}
-            />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="ĐANG CHỜ" key="2">
-            {/* <div className="div-tab">
-              {DATA.map((item, index) => {
-                return (
-                  <div
-                    className="div-tab-item"
-                    key={index}
-                    onClick={() => {
-                      setTab(item?.value);
-                      dispatch(
-                        getOrder.getOrderRequest({
-                          start: 0,
-                          length: 20,
-                          status: "pending",
-                          kind: item?.value,
-                        })
-                      );
-                    }}
-                  >
-                    <a
-                      className={
-                        tab === item?.value
-                          ? "text-title-tab"
-                          : "text-title-tab-default"
-                      }
-                    >
-                      {item?.title}
-                    </a>
-                    <div
-                      className={tab === item?.value ? "tab-line" : ""}
-                    ></div>
-                  </div>
-                );
-              })}
-            </div> */}
-            <OrderManage
-              data={listOrderSearch.length > 0 ? listOrderSearch : listOrder}
-              total={totalOrderSearch > 0 ? totalOrderSearch : orderTotal}
-              value={valueSearch}
-              dataSearch={listOrderSearch}
-              status={status}
-            />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="CHƯA HOÀN TẤT" key="3">
-            <OrderManage
-              data={listOrderSearch.length > 0 ? listOrderSearch : listOrder}
-              total={totalOrderSearch > 0 ? totalOrderSearch : orderTotal}
-              dataSearch={listOrderSearch}
-              value={valueSearch}
-              status={status}
-            />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="ĐÃ HẾT HẠN" key="4"></Tabs.TabPane>
-          <Tabs.TabPane tab="VIỆC ĐÃ HUỶ" key="5">
-            <OrderManage
-              data={listOrderSearch.length > 0 ? listOrderSearch : listOrder}
-              total={totalOrderSearch > 0 ? totalOrderSearch : orderTotal}
-              dataSearch={listOrderSearch}
-              value={valueSearch}
-              status={status}
-            />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="HOÀN TẤT" key="6">
-            <OrderManage
-              data={listOrderSearch.length > 0 ? listOrderSearch : listOrder}
-              total={totalOrderSearch > 0 ? totalOrderSearch : orderTotal}
-              dataSearch={listOrderSearch}
-              value={valueSearch}
-              status={status}
-            />
-          </Tabs.TabPane>
-        </Tabs>
+                    {item?.title}
+                  </a>
+                  <div className={kind === item?.value ? "tab-line" : ""}></div>
+                </div>
+              );
+            })}
+          </div>
+
+          <OrderManage
+            data={dataSearch.length > 0 ? dataSearch : listOrder}
+            total={totalSearch > 0 ? totalSearch : orderTotal}
+            dataSearch={dataSearch}
+            value={valueSearch}
+            status={tab}
+            kind={kind}
+            setDataSearch={setDataSearch}
+            setTotalSearch={setTotalSearch}
+          />
+        </div>
+
         <FloatButton.BackTop />
       </div>
     </>
@@ -319,21 +171,3 @@ const ManageOrder = () => {
 };
 
 export default ManageOrder;
-
-const DATA = [
-  {
-    id: 1,
-    title: "Giúp việc theo giờ",
-    value: "theo_gio",
-  },
-  {
-    id: 1,
-    title: "Giúp việc cố định",
-    value: "co_dinh",
-  },
-  {
-    id: 1,
-    title: "Lặp lại hằng tuần",
-    value: "lap_lai",
-  },
-];

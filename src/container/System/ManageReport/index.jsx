@@ -11,9 +11,11 @@ const ManageReport = () => {
       </div>
       <div className="div-container-report">
         <Tabs defaultActiveKey="1">
-          <Tabs.TabPane tab="Cộng tác viên" key="1">
+          <Tabs.TabPane tab="Tổng quan" key="1">
             <ReportManager />
           </Tabs.TabPane>
+          <Tabs.TabPane tab="Báo cáo tài chính" key="2"></Tabs.TabPane>
+          <Tabs.TabPane tab="Báo cáo dịch vụ" key="2"></Tabs.TabPane>
         </Tabs>
       </div>
     </>

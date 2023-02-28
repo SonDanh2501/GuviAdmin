@@ -99,7 +99,17 @@ export default function CollaboratorManage(props) {
   const onDelete = useCallback((id) => {
     dispatch(loadingAction.loadingRequest(true));
     deleteCollaborator(id, { is_delete: true })
-      .then((res) => window.location.reload())
+      .then((res) => {
+        dispatch(
+          getCollaborators.getCollaboratorsRequest({
+            start: 0,
+            length: 20,
+            type: status,
+          })
+        );
+        dispatch(loadingAction.loadingRequest(false));
+        setModal(false);
+      })
       .catch((err) => {
         dispatch(loadingAction.loadingRequest(false));
         errorNotify({
@@ -113,8 +123,14 @@ export default function CollaboratorManage(props) {
     if (is_active === true) {
       activeCollaborator(id, { is_active: false })
         .then((res) => {
-          setModalBlock(!modalBlock);
-          window.location.reload();
+          dispatch(
+            getCollaborators.getCollaboratorsRequest({
+              start: 0,
+              length: 20,
+              type: status,
+            })
+          );
+          setModalBlock(false);
         })
         .catch((err) => {
           dispatch(loadingAction.loadingRequest(false));
@@ -125,8 +141,15 @@ export default function CollaboratorManage(props) {
     } else {
       activeCollaborator(id, { is_active: true })
         .then((res) => {
-          setModalBlock(!modalBlock);
-          window.location.reload();
+          dispatch(
+            getCollaborators.getCollaboratorsRequest({
+              start: 0,
+              length: 20,
+              type: status,
+            })
+          );
+          setModalBlock(false);
+          dispatch(loadingAction.loadingRequest(false));
         })
         .catch((err) => {
           dispatch(loadingAction.loadingRequest(false));
@@ -143,9 +166,15 @@ export default function CollaboratorManage(props) {
       if (is_lock_time === true) {
         lockTimeCollaborator(id, { is_locked: false })
           .then((res) => {
-            setModalLockTime(!modalLockTime);
+            dispatch(
+              getCollaborators.getCollaboratorsRequest({
+                start: 0,
+                length: 20,
+                type: status,
+              })
+            );
+            setModalLockTime(false);
             dispatch(loadingAction.loadingRequest(false));
-            window.location.reload();
           })
           .catch((err) => {
             dispatch(loadingAction.loadingRequest(false));
@@ -159,9 +188,15 @@ export default function CollaboratorManage(props) {
           date_lock: moment(new Date(timeValue)).toISOString(),
         })
           .then((res) => {
-            setModalLockTime(!modalLockTime);
+            dispatch(
+              getCollaborators.getCollaboratorsRequest({
+                start: 0,
+                length: 20,
+                type: status,
+              })
+            );
+            setModalLockTime(false);
             dispatch(loadingAction.loadingRequest(false));
-            window.location.reload();
           })
           .catch((err) => {
             dispatch(loadingAction.loadingRequest(false));
@@ -178,9 +213,15 @@ export default function CollaboratorManage(props) {
     if (is_verify === true) {
       verifyCollaborator(id)
         .then((res) => {
-          setModalVerify(!modalVerify);
+          dispatch(
+            getCollaborators.getCollaboratorsRequest({
+              start: 0,
+              length: 20,
+              type: status,
+            })
+          );
+          setModalVerify(false);
           dispatch(loadingAction.loadingRequest(false));
-          window.location.reload();
         })
         .catch((err) => {
           dispatch(loadingAction.loadingRequest(false));
@@ -191,9 +232,15 @@ export default function CollaboratorManage(props) {
     } else {
       verifyCollaborator(id)
         .then((res) => {
-          setModalVerify(!modalVerify);
+          dispatch(
+            getCollaborators.getCollaboratorsRequest({
+              start: 0,
+              length: 20,
+              type: status,
+            })
+          );
+          setModalVerify(false);
           dispatch(loadingAction.loadingRequest(false));
-          window.location.reload();
         })
         .catch((err) => {
           dispatch(loadingAction.loadingRequest(false));

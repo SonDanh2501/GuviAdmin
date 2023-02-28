@@ -24,7 +24,7 @@ export default function OrderDoingManage() {
   const [valueSearch, setValueSearch] = useState("");
 
   useEffect(() => {
-    getOrderApi(0, 10, "doing").then((res) => {
+    getOrderApi(0, 10, "doing", "").then((res) => {
       setData(res.data);
       setTotal(res.totalItem);
     });

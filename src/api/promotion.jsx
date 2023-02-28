@@ -42,10 +42,8 @@ export const getGroupCustomerApi = (start, length) => {
   );
 };
 
-export const deletePromotion = (params) => {
-  return axiosClient.get(
-    `/admin/promotion_manager/delete_soft/${params}?lang=vi`
-  );
+export const deletePromotion = (id) => {
+  return axiosClient.get(`/admin/promotion_manager/delete_soft/${id}?lang=vi`);
 };
 
 export const getPromotionDetails = (id) => {

@@ -16,10 +16,19 @@ import EditPopup from "../../../../components/editTopup/editTopup";
 import LoadingPagination from "../../../../components/paginationLoading";
 import Withdraw from "../../../../components/withdraw/withdraw";
 import { formatMoney } from "../../../../helper/formatMoney";
+import { errorNotify } from "../../../../helper/toast";
 import { loadingAction } from "../../../../redux/actions/loading";
-import { getTopupCollaborator } from "../../../../redux/actions/topup";
+import {
+  getRevenueCollaborator,
+  getTopupCollaborator,
+} from "../../../../redux/actions/topup";
 import { getUser } from "../../../../redux/selectors/auth";
-import { getTopupCTV, totalTopupCTV } from "../../../../redux/selectors/topup";
+import {
+  getRevenueCTV,
+  getTopupCTV,
+  totalExpenditureCTV,
+  totalTopupCTV,
+} from "../../../../redux/selectors/topup";
 import "./TopupManage.scss";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -44,6 +53,8 @@ export default function TopupManage() {
   const toggleEdit = () => setModalEdit(!modalEdit);
   const toggle = () => setModal(!modal);
   const user = useSelector(getUser);
+  const revenue = useSelector(getRevenueCTV);
+  const expenditure = useSelector(totalExpenditureCTV);
 
   const dispatch = useDispatch();
 
@@ -51,25 +62,36 @@ export default function TopupManage() {
     dispatch(
       getTopupCollaborator.getTopupCollaboratorRequest({ start: 0, length: 20 })
     );
-    getRevenueCollaboratorApi(
-      moment().startOf("month").toISOString(),
-      moment(new Date()).toISOString()
-    )
-      .then((res) => {
-        setTotalRevenue(res?.totalTopUp);
-        setTotalExpenditure(res?.totaWithdraw);
+    dispatch(
+      getRevenueCollaborator.getRevenueCollaboratorRequest({
+        startDate: moment().startOf("month").toISOString(),
+        endDate: moment(new Date()).toISOString(),
       })
-      .catch((err) => {
-        console.log(err);
-      });
+    );
   }, [dispatch]);
 
   const onDelete = useCallback((id) => {
     dispatch(loadingAction.loadingRequest(true));
     deleteMoneyCollaboratorApi(id, { is_delete: true })
-      .then((res) => window.location.reload())
+      .then((res) => {
+        dispatch(
+          getTopupCollaborator.getTopupCollaboratorRequest({
+            start: 0,
+            length: 20,
+          })
+        );
+        dispatch(
+          getRevenueCollaborator.getRevenueCollaboratorRequest({
+            startDate: moment().startOf("month").toISOString(),
+            endDate: moment(new Date()).toISOString(),
+          })
+        );
+        setModal(false);
+        dispatch(loadingAction.loadingRequest(false));
+      })
       .catch((err) => {
         console.log(err);
+        setModalConfirm(false);
         dispatch(loadingAction.loadingRequest(false));
       });
   }, []);
@@ -78,11 +100,27 @@ export default function TopupManage() {
     dispatch(loadingAction.loadingRequest(true));
     verifyMoneyCollaboratorApi(id, { is_verify_money: true })
       .then((res) => {
-        window.location.reload();
+        dispatch(
+          getTopupCollaborator.getTopupCollaboratorRequest({
+            start: 0,
+            length: 20,
+          })
+        );
+        dispatch(
+          getRevenueCollaborator.getRevenueCollaboratorRequest({
+            startDate: moment().startOf("month").toISOString(),
+            endDate: moment(new Date()).toISOString(),
+          })
+        );
+        setModalConfirm(false);
+        dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        setModalConfirm(false);
         dispatch(loadingAction.loadingRequest(false));
-        console.log(err);
       });
   }, []);
 
@@ -254,14 +292,12 @@ export default function TopupManage() {
     const dayStart = moment(start).toISOString();
     const dayEnd = moment(end).toISOString();
 
-    getRevenueCollaboratorApi(dayStart, dayEnd)
-      .then((res) => {
-        setTotalRevenue(res?.totalTopUp);
-        setTotalExpenditure(res?.totaWithdraw);
+    dispatch(
+      getRevenueCollaborator.getRevenueCollaboratorRequest({
+        startDate: dayStart,
+        endDate: dayEnd,
       })
-      .catch((err) => {
-        console.log(err);
-      });
+    );
   }, []);
 
   return (
@@ -287,14 +323,14 @@ export default function TopupManage() {
           Tổng thu:
           <a className="text-money-revenue">
             <i class="uil uil-arrow-up icon-up"></i>
-            {formatMoney(totalRevenue)}
+            {formatMoney(revenue)}
           </a>
         </a>
         <a className="total-expenditure">
           Tổng chi:
           <a className="text-money-expenditure">
             <i class="uil uil-arrow-down icon-down"></i>
-            {formatMoney(totalExpenditure)}
+            {formatMoney(expenditure)}
           </a>
         </a>
       </div>

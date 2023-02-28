@@ -1,19 +1,13 @@
-import { Select } from "antd";
-import { validateYupSchema } from "formik";
+import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Form, FormGroup, Input, Label, List, Modal } from "reactstrap";
-import { searchCollaborators } from "../../api/collaborator";
 import IntlCurrencyInput from "react-intl-currency-input";
-import {
-  TopupMoneyCollaboratorApi,
-  updateMoneyCollaboratorApi,
-} from "../../api/topup";
+import { useDispatch } from "react-redux";
+import { Form, Input, Label, List, Modal } from "reactstrap";
+import { searchCollaborators } from "../../api/collaborator";
+import { updateMoneyCollaboratorApi } from "../../api/topup";
 import { loadingAction } from "../../redux/actions/loading";
-import { createNew } from "../../redux/actions/news";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
-import _debounce from "lodash/debounce";
 import "./editTopup.scss";
 
 const EditTopup = ({ state, setState, item }) => {
@@ -25,7 +19,7 @@ const EditTopup = ({ state, setState, item }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setName(item?.id_collaborator?.name);
+    setName(item?.id_collaborator?.full_name);
     setId(item?._id);
     setMoney(item?.money);
     setNote(item?.transfer_note);

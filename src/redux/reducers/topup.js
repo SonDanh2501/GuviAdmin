@@ -1,5 +1,6 @@
 import { INIT_STATE } from "../../utils/contant";
 import {
+  getRevenueCollaborator,
   getTopupCollaborator,
   getTopupCustomer,
   getType,
@@ -32,6 +33,20 @@ export default function TopupReducers(state = INIT_STATE.topup, action) {
         totalItemCustomer: action.payload.total,
       };
     case getType(getTopupCustomer.getTopupCustomerFailure):
+      return {
+        ...state,
+      };
+    case getType(getRevenueCollaborator.getRevenueCollaboratorRequest):
+      return {
+        ...state,
+      };
+    case getType(getRevenueCollaborator.getRevenueCollaboratorSuccess):
+      return {
+        ...state,
+        revenue: action.payload.revenue,
+        expenditure: action.payload.expenditure,
+      };
+    case getType(getRevenueCollaborator.getRevenueCollaboratorFailure):
       return {
         ...state,
       };

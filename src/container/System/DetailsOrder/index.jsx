@@ -8,6 +8,7 @@ import {
   changeStatusOrderApi,
   getOrderByGroupOrderApi,
   changeOrderCancelToDoneApi,
+  cancelGroupOrderApi,
 } from "../../../api/order";
 import user from "../../../assets/images/user.png";
 import { formatMoney } from "../../../helper/formatMoney";
@@ -84,11 +85,23 @@ const DetailsOrder = () => {
     setOpenPopup(true);
   };
 
-  const handleOk = (id) => {
+  const handleOk = (_id) => {
     dispatch(loadingAction.loadingRequest(true));
-    changeStatusOrderApi(id, { status: "cancel" })
+    cancelGroupOrderApi(_id)
       .then((res) => {
-        window.location.reload();
+        getOrderByGroupOrderApi(id)
+          .then((res) => {
+            setHideShow(true);
+            setDataGroup(res?.data?.groupOrder);
+            setDataList(res?.data?.listOrder);
+            dispatch(loadingAction.loadingRequest(false));
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            dispatch(loadingAction.loadingRequest(false));
+          });
       })
       .catch((err) => {
         setModal(!modal);
@@ -277,7 +290,7 @@ const DetailsOrder = () => {
               ) : null}
             </div>
 
-            <div>
+            {/* <div>
               {data?.status === "pending" || data?.status === "confirm" ? (
                 <Popconfirm
                   title="Bạn có muốn huỷ việc"
@@ -297,7 +310,7 @@ const DetailsOrder = () => {
                   </Button>
                 </Popconfirm>
               ) : null}
-            </div>
+            </div> */}
           </>
         );
       },
@@ -419,12 +432,12 @@ const DetailsOrder = () => {
                 </a>
               )}
 
-              <a className="title">
+              {/* <a className="title">
                 Dịch vụ thêm:{" "}
                 {dataGroup?.service?.optional_service.map((item) => {
                   return (
                     <a>
-                      {item?._id?.type === "multi_select_horizontal_thumbnail"
+                      {item?._id === "632148d02bacd0aa8648657c"
                         ? item?.extend_optional?.map((item) => (
                             <a className="text-add-service">
                               - {item?.title?.vi}
@@ -434,7 +447,8 @@ const DetailsOrder = () => {
                     </a>
                   );
                 })}
-              </a>
+              </a> */}
+
               <a className="title">
                 Thanh toán:{" "}
                 <a className="text-service">
@@ -453,6 +467,7 @@ const DetailsOrder = () => {
                   {dataGroup?.code_promotion && (
                     <div className="div-total">
                       <a>- Khuyến mãi:</a>
+                      <a>-Mã code: {dataGroup?.code_promotion?.code}</a>
                       <a>
                         <a style={{ color: "red", marginLeft: 5 }}>
                           {formatMoney(-dataGroup?.code_promotion?.discount)}
@@ -474,6 +489,22 @@ const DetailsOrder = () => {
                       </div>
                     </div>
                   )}
+                  {dataGroup?.service?.optional_service.map((item) => {
+                    return (
+                      <div>
+                        {item?._id === "632148d02bacd0aa8648657c"
+                          ? item?.extend_optional?.map((item) => {
+                              return (
+                                <div className="div-event-promo">
+                                  <a>- {item?.title?.vi}</a>
+                                  <a> +{formatMoney(item?.price)}</a>
+                                </div>
+                              );
+                            })
+                          : null}
+                      </div>
+                    );
+                  })}
                   <div className="div-total">
                     <a className="title">- Giá: </a>
                     <a className="title">{formatMoney(dataGroup?.final_fee)}</a>
@@ -497,13 +528,13 @@ const DetailsOrder = () => {
               </a>
             </div>
           </Row>
-          {/* {dataGroup?.status === "pending" ||
+          {dataGroup?.status === "pending" ||
           dataGroup?.status === "confirm" ? (
             <Popconfirm
               title="Bạn có muốn huỷ việc"
               // description="Open Popconfirm with async logic"
               open={open}
-              onConfirm={handleOk}
+              onConfirm={() => handleOk(dataGroup?._id)}
               okButtonProps={{
                 loading: confirmLoading,
               }}
@@ -513,7 +544,7 @@ const DetailsOrder = () => {
                 Huỷ việc
               </Button>
             </Popconfirm>
-          ) : null} */}
+          ) : null}
 
           {user === "admin" && dataGroup?.status === "cancel" ? (
             <Popconfirm

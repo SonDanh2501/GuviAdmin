@@ -17,7 +17,17 @@ import { errorNotify } from "../../../../helper/toast";
 import { getUser } from "../../../../redux/selectors/auth";
 
 export default function OrderManage(props) {
-  const { data, total, status, dataSearch, value } = props;
+  const {
+    data,
+    total,
+    status,
+    dataSearch,
+    value,
+    kind,
+    setDataSearch,
+    setTotalSearch,
+    tab,
+  } = props;
   const [dataFilter, setDataFilter] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [item, setItem] = useState([]);
@@ -43,13 +53,22 @@ export default function OrderManage(props) {
     dispatch(loadingAction.loadingRequest(true));
     deleteOrderApi(id)
       .then((res) => {
-        window.location.reload();
+        dispatch(
+          getOrder.getOrderRequest({
+            start: 0,
+            length: 20,
+            status: status,
+            kind: kind,
+          })
+        );
+        setModal(false);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
         errorNotify({
           message: err,
         });
+        setModal(false);
         dispatch(loadingAction.loadingRequest(false));
       });
   };
@@ -265,19 +284,16 @@ export default function OrderManage(props) {
         ? page * dataSearch.length - dataSearch.length
         : page * data.length - data.length;
     dataSearch.length > 0
-      ? dispatch(
-          searchOrder.searchOrderRequest({
-            start: start,
-            length: 20,
-            status: status,
-            value: value,
-          })
-        )
+      ? searchOrderApi(0, 20, tab, value, kind).then((res) => {
+          setDataSearch(res?.data);
+          setTotalSearch(res?.totalItem);
+        })
       : dispatch(
           getOrder.getOrderRequest({
             start: start > 0 ? start : 0,
             length: 20,
             status: status,
+            kind: kind,
           })
         );
   };
@@ -287,11 +303,8 @@ export default function OrderManage(props) {
       <div>
         <Table
           columns={columns}
-          dataSource={dataFilter.length > 0 ? dataFilter : data}
+          dataSource={data}
           pagination={false}
-          // locale={{
-          //   emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
-          // }}
           rowKey={(record) => record._id}
           rowSelection={{
             selectedRowKeys,

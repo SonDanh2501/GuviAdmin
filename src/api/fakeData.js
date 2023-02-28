@@ -36,3 +36,49 @@ export const DATA_PAYMENT = [
   { label: "Ví momo", value: "momo" },
   { label: "G-pay", value: "point" },
 ];
+
+export const DATA = [
+  {
+    id: 1,
+    title: "Giúp việc theo giờ",
+    value: "theo_gio",
+  },
+  {
+    id: 2,
+    title: "Giúp việc cố định",
+    value: "co_dinh",
+  },
+  {
+    id: 3,
+    title: "Lặp lại hằng tuần",
+    value: "lap_lai",
+  },
+];
+
+export const DATA_STATUS = [
+  {
+    id: 1,
+    title: "Tất cả",
+    value: "all",
+  },
+  {
+    id: 2,
+    title: "Đang chờ",
+    value: "pending",
+  },
+  {
+    id: 3,
+    title: "Chưa hoàn tất",
+    value: "doing",
+  },
+  {
+    id: 4,
+    title: "Việc đã huỷ",
+    value: "cancel",
+  },
+  {
+    id: 5,
+    title: "Hoàn tất",
+    value: "done",
+  },
+];

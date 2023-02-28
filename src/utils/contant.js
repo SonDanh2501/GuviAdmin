@@ -55,6 +55,8 @@ export const INIT_STATE = {
     totalItem: 0,
     dataCustomer: [],
     totalItemCustomer: 0,
+    revenue: 0,
+    expenditure: 0,
   },
   statistic: {
     historyActivity: [],
