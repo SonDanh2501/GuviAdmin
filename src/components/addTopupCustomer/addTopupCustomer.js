@@ -6,10 +6,12 @@ import { TopupMoneyCustomerApi } from "../../api/topup";
 import { loadingAction } from "../../redux/actions/loading";
 import CustomButton from "../customButton/customButton";
 import IntlCurrencyInput from "react-intl-currency-input";
-
+import _debounce from "lodash/debounce";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./addTopupCustomer.scss";
 import { Drawer } from "antd";
+import { errorNotify } from "../../helper/toast";
+import { getTopupCustomer } from "../../redux/actions/topup";
 
 const AddTopupCustomer = () => {
   const [state, setState] = useState(false);
@@ -30,23 +32,30 @@ const AddTopupCustomer = () => {
     setOpen(false);
   };
 
-  const searchCollaborator = useCallback((value) => {
+  const valueSearch = (value) => {
     setName(value);
-    if (value) {
-      searchCustomers(0, 100, "", value)
-        .then((res) => {
-          if (value === "") {
-            setData([]);
-          } else {
-            setData(res.data);
-          }
-        })
-        .catch((err) => console.log(err));
-    } else {
-      setData([]);
-    }
-    setId("");
-  }, []);
+  };
+
+  const searchCollaborator = useCallback(
+    _debounce((value) => {
+      setName(value);
+      if (value) {
+        searchCustomers(0, 100, "", value)
+          .then((res) => {
+            if (value === "") {
+              setData([]);
+            } else {
+              setData(res.data);
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        setData([]);
+      }
+      setId("");
+    }, 500),
+    []
+  );
 
   const addMoney = useCallback(() => {
     if (name === "" || money === "") {
@@ -60,11 +69,18 @@ const AddTopupCustomer = () => {
         transfer_note: note,
       })
         .then((res) => {
-          window.location.reload();
+          setOpen(false);
+          dispatch(
+            getTopupCustomer.getTopupCustomerRequest({ start: 0, length: 10 })
+          );
+          dispatch(loadingAction.loadingRequest(false));
         })
         .catch((err) => {
           dispatch(loadingAction.loadingRequest(false));
-          console.log(err);
+          errorNotify({
+            message: err,
+          });
+          setOpen(false);
         });
     }
   }, [id, money, note, name]);
@@ -93,7 +109,7 @@ const AddTopupCustomer = () => {
       {/* Button trigger modal */}
       <CustomButton
         title="Nạp tiền"
-        className="btn-add"
+        className="btn-add-topup-customer"
         type="button"
         onClick={showDrawer}
       />
@@ -114,24 +130,29 @@ const AddTopupCustomer = () => {
               <Input
                 placeholder="Tìm kiếm theo số điện thoại"
                 value={name}
-                onChange={(e) => searchCollaborator(e.target.value)}
+                onChange={(e) => {
+                  searchCollaborator(e.target.value);
+                  valueSearch(e.target.value);
+                }}
               />
               {errorName && <a className="error">{errorName}</a>}
               {data.length > 0 && (
                 <List type={"unstyled"} className="list-item">
                   {data?.map((item, index) => {
                     return (
-                      <option
+                      <div
                         key={index}
-                        value={item?._id}
                         onClick={(e) => {
-                          setId(e.target.value);
+                          setId(item?._id);
                           setName(item?.name);
                           setData([]);
                         }}
                       >
-                        {item?.name}
-                      </option>
+                        <a>
+                          {" "}
+                          {item?.name} - {item?.phone} - {item?.id_view}
+                        </a>
+                      </div>
                     );
                   })}
                 </List>

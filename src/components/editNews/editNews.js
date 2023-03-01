@@ -2,10 +2,11 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, FormGroup, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
+import { updateNew } from "../../api/news";
 import resizeFile from "../../helper/resizer";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
-import { updateNew } from "../../redux/actions/news";
+import { getNews } from "../../redux/actions/news";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./editNews.scss";
@@ -64,19 +65,26 @@ const EditNews = ({ state, setState, data }) => {
   };
   const onEditNews = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      updateNew.updateNewRequest({
-        id: data?._id,
-        data: {
-          title: title,
-          short_description: shortDescription,
-          thumbnail: imgThumbnail,
-          url: url,
-          type: type,
-          position: position,
-        },
+    updateNew(data?._id, {
+      title: title,
+      short_description: shortDescription,
+      thumbnail: imgThumbnail,
+      url: url,
+      type: type,
+      position: position,
+    })
+      .then((res) => {
+        dispatch(getNews.getNewsRequest({ start: 0, length: 10 }));
+        setState(false);
+        dispatch(loadingAction.loadingRequest(false));
       })
-    );
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        setState(false);
+        dispatch(loadingAction.loadingRequest(false));
+      });
   }, [data, title, shortDescription, imgThumbnail, url, type, position]);
 
   return (

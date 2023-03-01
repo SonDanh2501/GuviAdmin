@@ -36,7 +36,7 @@ import {
   getPlaceDetailApi,
   googlePlaceAutocomplete,
 } from "../../../../api/location";
-import useDebounce from "../../../../helper/debounce";
+
 const AddOrder = () => {
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState("");
@@ -474,7 +474,7 @@ const AddOrder = () => {
                     key={index}
                     value={item?._id}
                     onClick={(e) => {
-                      setId(e.target.value);
+                      setId(item?._id);
                       setName(item?.full_name);
                       setDataFilter([]);
                       setErrorNameCustomer("");

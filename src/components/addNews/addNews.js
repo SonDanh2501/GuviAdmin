@@ -3,12 +3,13 @@ import { useDispatch } from "react-redux";
 import { Form, FormGroup, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
 import { loadingAction } from "../../redux/actions/loading";
-import { createNew } from "../../redux/actions/news";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import { errorNotify } from "../../helper/toast";
 import "./addNews.scss";
 import resizeFile from "../../helper/resizer";
+import { createNew } from "../../api/news";
+import { getNews } from "../../redux/actions/news";
 
 const AddNews = () => {
   const [state, setState] = useState(false);
@@ -57,16 +58,26 @@ const AddNews = () => {
 
   const addNews = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      createNew.createNewRequest({
-        title: title,
-        short_description: shortDescription,
-        thumbnail: imgThumbnail,
-        url: url,
-        type: type,
-        position: position,
+    createNew({
+      title: title,
+      short_description: shortDescription,
+      thumbnail: imgThumbnail,
+      url: url,
+      type: type,
+      position: position,
+    })
+      .then((res) => {
+        dispatch(getNews.getNewsRequest({ start: 0, length: 10 }));
+        setState(false);
+        dispatch(loadingAction.loadingRequest(false));
       })
-    );
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        setState(false);
+        dispatch(loadingAction.loadingRequest(false));
+      });
   }, [dispatch, title, shortDescription, imgThumbnail, url, type, position]);
 
   return (

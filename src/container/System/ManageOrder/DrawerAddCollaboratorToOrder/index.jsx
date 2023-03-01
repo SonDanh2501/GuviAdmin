@@ -6,6 +6,7 @@ import { errorNotify } from "../../../../helper/toast";
 import { addCollaboratorToOrderApi } from "../../../../api/order";
 import { useDispatch } from "react-redux";
 import { loadingAction } from "../../../../redux/actions/loading";
+import _debounce from "lodash/debounce";
 const AddCollaboratorOrder = ({ idOrder }) => {
   const [open, setOpen] = useState(false);
   const [dataFilter, setDataFilter] = useState([]);
@@ -19,24 +20,31 @@ const AddCollaboratorOrder = ({ idOrder }) => {
     setOpen(false);
   };
 
-  const handleSearch = useCallback((value) => {
+  const valueSearch = (value) => {
     setName(value);
-    if (value) {
-      searchCollaborators(0, 10, "all", value)
-        .then((res) => {
-          setDataFilter(res.data);
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-        });
-    } else {
-      setDataFilter([]);
-    }
+  };
 
-    setId("");
-  }, []);
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      setName(value);
+      if (value) {
+        searchCollaborators(0, 10, "all", value)
+          .then((res) => {
+            setDataFilter(res.data);
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+          });
+      } else {
+        setDataFilter([]);
+      }
+
+      setId("");
+    }, 500),
+    []
+  );
 
   const addCollaboratorToOrder = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -71,7 +79,10 @@ const AddCollaboratorOrder = ({ idOrder }) => {
               placeholder="Tìm kiếm theo tên hoặc số điện thoại số điện thoại"
               value={name}
               type="text"
-              onChange={(e) => handleSearch(e.target.value)}
+              onChange={(e) => {
+                handleSearch(e.target.value);
+                valueSearch(e.target.value);
+              }}
               className="input"
             />
             {/* {errorName && <a className="error">{errorName}</a>} */}
@@ -79,17 +90,19 @@ const AddCollaboratorOrder = ({ idOrder }) => {
               <List type={"unstyled"} className="list-item">
                 {dataFilter?.map((item, index) => {
                   return (
-                    <option
+                    <div
                       key={index}
-                      value={item?._id}
                       onClick={(e) => {
-                        setId(e.target.value);
+                        setId(item?._id);
                         setName(item?.full_name);
                         setDataFilter([]);
                       }}
                     >
-                      {item?.full_name}
-                    </option>
+                      <a>
+                        {" "}
+                        {item?.full_name} - {item?.phone} - {item?.id_view}
+                      </a>
+                    </div>
                   );
                 })}
               </List>
@@ -98,7 +111,7 @@ const AddCollaboratorOrder = ({ idOrder }) => {
 
           {id && (
             <Button
-              className="btn-add-collaborator"
+              className="btn-add-collaborator-order"
               onClick={addCollaboratorToOrder}
             >
               Thêm cộng tác viên

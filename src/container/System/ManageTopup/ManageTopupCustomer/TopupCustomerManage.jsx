@@ -24,6 +24,7 @@ import AddTopupCustomer from "../../../../components/addTopupCustomer/addTopupCu
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import EditPopup from "../../../../components/editTopup/editTopup";
 import { formatMoney } from "../../../../helper/formatMoney";
+import { errorNotify } from "../../../../helper/toast";
 import { loadingAction } from "../../../../redux/actions/loading";
 import { getTopupCustomer } from "../../../../redux/actions/topup";
 import { getTopupKH, totalTopupKH } from "../../../../redux/selectors/topup";
@@ -56,9 +57,18 @@ export default function TopupCustomerManage() {
   const onDelete = useCallback((id) => {
     dispatch(loadingAction.loadingRequest(true));
     deleteMoneyCustomerApi(id, { is_delete: true })
-      .then((res) => window.location.reload())
+      .then((res) => {
+        dispatch(
+          getTopupCustomer.getTopupCustomerRequest({ start: 0, length: 10 })
+        );
+        setModal(false);
+        dispatch(loadingAction.loadingRequest(false));
+      })
       .catch((err) => {
-        console.log(err);
+        errorNotify({
+          message: err,
+        });
+        setModal(false);
         dispatch(loadingAction.loadingRequest(false));
       });
   }, []);

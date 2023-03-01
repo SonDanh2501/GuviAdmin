@@ -10,6 +10,12 @@ import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import _debounce from "lodash/debounce";
 import "./withdraw.scss";
+import {
+  getRevenueCollaborator,
+  getTopupCollaborator,
+} from "../../redux/actions/topup";
+import { errorNotify } from "../../helper/toast";
+import moment from "moment";
 
 const Withdraw = () => {
   const [state, setState] = useState(false);
@@ -62,9 +68,27 @@ const Withdraw = () => {
         transfer_note: note,
       })
         .then((res) => {
-          window.location.reload();
+          dispatch(
+            getTopupCollaborator.getTopupCollaboratorRequest({
+              start: 0,
+              length: 20,
+            })
+          );
+          dispatch(
+            getRevenueCollaborator.getRevenueCollaboratorRequest({
+              startDate: moment().startOf("year").toISOString(),
+              endDate: moment(new Date()).toISOString(),
+            })
+          );
+          setOpen(false);
+          dispatch(loadingAction.loadingRequest(false));
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
+        });
     }
   }, [id, money, note, name]);
 
@@ -124,17 +148,18 @@ const Withdraw = () => {
                 <List type={"unstyled"} className="list-item">
                   {data?.map((item, index) => {
                     return (
-                      <option
+                      <div
                         key={index}
-                        value={item?._id}
                         onClick={(e) => {
-                          setId(e.target.value);
+                          setId(item?._id);
                           setName(item?.full_name);
                           setData([]);
                         }}
                       >
-                        {item?.full_name}
-                      </option>
+                        <a>
+                          {item?.full_name} - {item?.phone} - {item?.id_view}
+                        </a>
+                      </div>
                     );
                   })}
                 </List>

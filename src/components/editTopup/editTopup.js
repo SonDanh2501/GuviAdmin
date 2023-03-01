@@ -1,11 +1,17 @@
 import _debounce from "lodash/debounce";
+import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import IntlCurrencyInput from "react-intl-currency-input";
 import { useDispatch } from "react-redux";
 import { Form, Input, Label, List, Modal } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
 import { updateMoneyCollaboratorApi } from "../../api/topup";
+import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
+import {
+  getRevenueCollaborator,
+  getTopupCollaborator,
+} from "../../redux/actions/topup";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./editTopup.scss";
@@ -53,9 +59,27 @@ const EditTopup = ({ state, setState, item }) => {
       transfer_note: note,
     })
       .then((res) => {
-        window.location.reload();
+        dispatch(
+          getTopupCollaborator.getTopupCollaboratorRequest({
+            start: 0,
+            length: 20,
+          })
+        );
+        dispatch(
+          getRevenueCollaborator.getRevenueCollaboratorRequest({
+            startDate: moment().startOf("year").toISOString(),
+            endDate: moment(new Date()).toISOString(),
+          })
+        );
+        setState(false);
+        dispatch(loadingAction.loadingRequest(false));
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
   }, [id, money, note]);
 
   const currencyConfig = {
@@ -108,17 +132,18 @@ const EditTopup = ({ state, setState, item }) => {
                 <List type={"unstyled"} className="list-item">
                   {data?.map((item, index) => {
                     return (
-                      <option
+                      <div
                         key={index}
-                        value={item?._id}
                         onClick={(e) => {
-                          setId(e.target.value);
-                          setName(item?.name);
+                          setId(item?._id);
+                          setName(item?.full_name);
                           setData([]);
                         }}
                       >
-                        {item?.name}
-                      </option>
+                        <a>
+                          {item?.full_name} - {item?.phone} - {item?.id_view}
+                        </a>
+                      </div>
                     );
                   })}
                 </List>

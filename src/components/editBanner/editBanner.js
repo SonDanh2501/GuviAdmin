@@ -2,10 +2,11 @@ import { Image } from "antd";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Input, Label, Modal } from "reactstrap";
+import { updateBanner } from "../../api/banner";
 import { postFile } from "../../api/file";
 import resizeFile from "../../helper/resizer";
 import { errorNotify } from "../../helper/toast";
-import { updateBanner } from "../../redux/actions/banner";
+import { getBanners } from "../../redux/actions/banner";
 import { loadingAction } from "../../redux/actions/loading";
 import { getPromotion } from "../../redux/actions/promotion";
 import { getPromotionSelector } from "../../redux/selectors/promotion";
@@ -79,19 +80,26 @@ const EditBanner = ({ state, setState, data }) => {
 
   const onEditBanner = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      updateBanner.updateBannerRequest({
-        id: data?._id,
-        data: {
-          title: title,
-          image: imgThumbnail,
-          type_link: typeLink,
-          link_id: linkID,
-          position: position,
-          kind: kindService,
-        },
+    updateBanner(data?._id, {
+      title: title,
+      image: imgThumbnail,
+      type_link: typeLink,
+      link_id: linkID,
+      position: position,
+      kind: kindService,
+    })
+      .then((res) => {
+        dispatch(getBanners.getBannersRequest(0, 10));
+        setState(!state);
+        dispatch(loadingAction.loadingRequest(false));
       })
-    );
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+        setState(!state);
+      });
   }, [data, title, imgThumbnail, typeLink, linkID, position, kindService]);
 
   return (

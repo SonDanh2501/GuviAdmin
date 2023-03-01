@@ -26,7 +26,7 @@ const EditCustomer = ({ state, setState, data }) => {
       updateCustomer.updateCustomerRequest({
         id: data?._id,
         data: {
-          code_phone_area: formikRef?.current?.values?.code_phone_area,
+          code_phone_area: "+84",
           phone: formikRef?.current?.values?.phone,
           email: formikRef?.current?.values?.email,
           full_name: formikRef?.current?.values?.name,
@@ -79,7 +79,7 @@ const EditCustomer = ({ state, setState, data }) => {
                     }
                     errors={errors?.name}
                   />
-                  <CustomTextInput
+                  {/* <CustomTextInput
                     label="Mã vùng"
                     type="select"
                     id="codeArea"
@@ -96,7 +96,7 @@ const EditCustomer = ({ state, setState, data }) => {
                       </>
                     }
                     errors={errors?.code_phone_area}
-                  />
+                  /> */}
                   <CustomTextInput
                     label="Số điện thoại"
                     type="text"

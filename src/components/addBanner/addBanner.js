@@ -2,7 +2,7 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
-import { createBanner } from "../../redux/actions/banner";
+import { getBanners } from "../../redux/actions/banner";
 import { loadingAction } from "../../redux/actions/loading";
 import { getPromotion } from "../../redux/actions/promotion";
 import { getPromotionSelector } from "../../redux/selectors/promotion";
@@ -14,6 +14,7 @@ import "./addBanner.scss";
 import { Drawer, Image } from "antd";
 import resizeFile from "../../helper/resizer";
 import { getService } from "../../redux/selectors/service";
+import { createBanner } from "../../api/banner";
 
 const AddBanner = () => {
   const [state, setState] = useState(false);
@@ -75,16 +76,26 @@ const AddBanner = () => {
 
   const addBanner = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      createBanner.createBannerRequest({
-        title: title,
-        image: imgThumbnail,
-        type_link: typeLink,
-        link_id: linkID,
-        position: position,
-        kind: kindService,
+    createBanner({
+      title: title,
+      image: imgThumbnail,
+      type_link: typeLink,
+      link_id: linkID,
+      position: position,
+      kind: kindService,
+    })
+      .then((res) => {
+        dispatch(getBanners.getBannersRequest(0, 10));
+        setOpen(false);
+        dispatch(loadingAction.loadingRequest(false));
       })
-    );
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+        setOpen(false);
+      });
   }, [dispatch, title, imgThumbnail, typeLink, linkID, position, kindService]);
 
   return (

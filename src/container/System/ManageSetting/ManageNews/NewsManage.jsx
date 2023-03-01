@@ -82,6 +82,7 @@ export default function NewsManage() {
           message: err,
         });
         dispatch(loadingAction.loadingRequest(false));
+        setModal(false);
       });
   }, []);
 
@@ -112,6 +113,7 @@ export default function NewsManage() {
             message: err,
           });
           dispatch(loadingAction.loadingRequest(false));
+          setModalBlock(false);
         });
     }
   }, []);

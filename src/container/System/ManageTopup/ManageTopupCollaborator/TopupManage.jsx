@@ -64,7 +64,7 @@ export default function TopupManage() {
     );
     dispatch(
       getRevenueCollaborator.getRevenueCollaboratorRequest({
-        startDate: moment().startOf("month").toISOString(),
+        startDate: moment().startOf("year").toISOString(),
         endDate: moment(new Date()).toISOString(),
       })
     );
@@ -82,7 +82,7 @@ export default function TopupManage() {
         );
         dispatch(
           getRevenueCollaborator.getRevenueCollaboratorRequest({
-            startDate: moment().startOf("month").toISOString(),
+            startDate: moment().startOf("year").toISOString(),
             endDate: moment(new Date()).toISOString(),
           })
         );
@@ -90,7 +90,9 @@ export default function TopupManage() {
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
-        console.log(err);
+        errorNotify({
+          message: err,
+        });
         setModalConfirm(false);
         dispatch(loadingAction.loadingRequest(false));
       });
@@ -108,7 +110,7 @@ export default function TopupManage() {
         );
         dispatch(
           getRevenueCollaborator.getRevenueCollaboratorRequest({
-            startDate: moment().startOf("month").toISOString(),
+            startDate: moment().startOf("year").toISOString(),
             endDate: moment(new Date()).toISOString(),
           })
         );

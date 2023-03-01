@@ -257,7 +257,7 @@ export default function CollaboratorManage(props) {
       label: itemEdit?.is_active ? (
         <a onClick={toggleBlock}>Chặn</a>
       ) : (
-        <a onClick={toggleBlock}>Kích hoạt</a>
+        <a onClick={toggleBlock}>Bỏ chặn</a>
       ),
     },
     {

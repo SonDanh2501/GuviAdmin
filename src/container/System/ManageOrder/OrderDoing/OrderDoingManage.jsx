@@ -22,6 +22,7 @@ export default function OrderDoingManage() {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
   const [valueSearch, setValueSearch] = useState("");
+  const [item, setItem] = useState([]);
 
   useEffect(() => {
     getOrderApi(0, 10, "doing", "").then((res) => {
@@ -31,7 +32,9 @@ export default function OrderDoingManage() {
   }, []);
 
   const timeWork = (data) => {
-    const start = moment(new Date(data.date_work)).format("HH:mm");
+    const start = moment(new Date(data.date_work_schedule[0].date)).format(
+      "HH:mm"
+    );
 
     const timeEnd =
       Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
@@ -42,11 +45,17 @@ export default function OrderDoingManage() {
   const items = [
     {
       key: "1",
-      label: <a>Chỉnh sửa</a>,
-    },
-    {
-      key: "2",
-      label: <a>Xem chi tiết</a>,
+      label: (
+        <a
+          onClick={() =>
+            navigate("/details-order", {
+              state: { id: item?._id },
+            })
+          }
+        >
+          Xem chi tiết
+        </a>
+      ),
     },
   ];
 
@@ -113,11 +122,15 @@ export default function OrderDoingManage() {
           <div className="div-worktime">
             <a className="text-worktime">
               {" "}
-              {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
+              {moment(new Date(data.date_work_schedule[0].date)).format(
+                "DD/MM/YYYY"
+              )}
             </a>
             <a className="text-worktime">
               {formatDayVN(
-                moment(new Date(data?.date_work)).format("DD/MM/YYYY")
+                moment(new Date(data.date_work_schedule[0].date)).format(
+                  "DD/MM/YYYY"
+                )
               )}
             </a>
           </div>
@@ -259,6 +272,13 @@ export default function OrderDoingManage() {
               onChange: (selectedRowKeys, selectedRows) => {
                 setSelectedRowKeys(selectedRowKeys);
               },
+            }}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  setItem(record);
+                },
+              };
             }}
           />
 

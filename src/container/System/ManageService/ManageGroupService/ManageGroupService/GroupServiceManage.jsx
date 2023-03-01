@@ -31,7 +31,6 @@ export default function GroupServiceManage() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    // dispatch(loadingAction.loadingRequest(true));
     dispatch(getGroupServiceAction.getGroupServiceRequest(0, 10));
   }, [dispatch]);
 

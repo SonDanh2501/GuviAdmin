@@ -93,8 +93,8 @@ export default function Home() {
     );
     dispatch(
       getTopCollaborator.getTopCollaboratorRequest({
-        startDate: moment().startOf("month").toISOString(),
-        endDate: moment().endOf("month").toISOString(),
+        startDate: moment().startOf("year").toISOString(),
+        endDate: moment(new Date()).toISOString(),
         start: 0,
         length: 10,
       })

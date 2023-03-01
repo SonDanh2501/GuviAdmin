@@ -431,23 +431,20 @@ const DetailsOrder = () => {
                   Ghi chú: <a className="text-service">{dataGroup?.note}</a>
                 </a>
               )}
-
-              {/* <a className="title">
-                Dịch vụ thêm:{" "}
+              <div style={{ flexDirection: "row" }}>
+                <a className="title">Dịch vụ thêm: </a>
                 {dataGroup?.service?.optional_service.map((item) => {
                   return (
                     <a>
                       {item?._id === "632148d02bacd0aa8648657c"
                         ? item?.extend_optional?.map((item) => (
-                            <a className="text-add-service">
-                              - {item?.title?.vi}
-                            </a>
+                            <a>- {item?.title?.vi}</a>
                           ))
                         : null}
                     </a>
                   );
                 })}
-              </a> */}
+              </div>
 
               <a className="title">
                 Thanh toán:{" "}
