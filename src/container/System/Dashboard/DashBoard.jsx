@@ -80,7 +80,7 @@ export default function Home() {
     )
       .then((res) => {
         setArrResult(res.arrResult);
-        getDates(res?.arrResult?.date_start, res?.arrResult?.date_end);
+        getDates(res?.arrResult[0]?.date_start, res?.arrResult?.date_end);
       })
       .catch((err) => console.log(err));
     dispatch(getServiceConnect.getServiceConnectRequest());
@@ -324,7 +324,12 @@ export default function Home() {
                       }}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis />
+                      <XAxis
+                        dataKey="date_end"
+                        tickFormatter={(tickItem) =>
+                          moment(tickItem).format("DD/MM/YYYY")
+                        }
+                      />
                       <YAxis dataKey="total_income" fontSize={12} />
                       <Tooltip />
                       <Area

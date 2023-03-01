@@ -7,7 +7,7 @@ let token;
 getToken().then((res) => (token = res));
 
 // baseURL: 'https://guvico-be-production.up.railway.app'
-// https://server.guvico.com/
+// https://server.guvico.com
 // https://guvico-be-develop.up.railway.app
 
 const axiosClient = axios.create({
