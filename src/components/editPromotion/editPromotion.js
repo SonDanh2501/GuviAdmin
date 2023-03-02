@@ -80,6 +80,9 @@ const EditPromotion = ({ state, setState, data }) => {
   const [position, setPosition] = useState();
   const [isPaymentMethod, setIsPaymentMethod] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState([]);
+  const [dataL, setDataL] = useState([]);
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
   const options = [];
   const optionsCustomer = [];
 

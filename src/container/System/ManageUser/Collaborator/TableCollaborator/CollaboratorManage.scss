@@ -91,16 +91,6 @@
   text-decoration: none !important;
 }
 
-.text-verify {
-  color: #00cf3a !important;
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 16px;
-  text-decoration: none !important;
-}
-
 .text-online {
   color: #00cf3a !important;
   font-family: "Roboto";
@@ -150,14 +140,6 @@
   text-decoration: none !important;
 }
 
-.text-nonverify {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 16px;
-  color: #ff0000;
-}
 .icon-nonverify {
   color: #ff0000 !important;
   margin-right: 5px;
@@ -244,5 +226,69 @@
   }
   .input {
     border: none;
+  }
+}
+
+.text-verify {
+  color: #00cf3a !important;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  text-decoration: none !important;
+}
+
+.text-nonverify {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  color: #ff0000;
+}
+
+.div-verify {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .text-verify {
+    color: #00cf3a !important;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    text-decoration: none !important;
+  }
+
+  .text-nonverify {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    color: #ff0000;
+  }
+
+  .btn-contacted {
+    height: 30px;
+    background-color: #00cf3a;
+    width: 70px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin-top: 5px;
+    border-radius: 4px;
+
+    .text-contacted {
+      font-family: "Roboto";
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 16px;
+      color: #000000;
+      text-decoration: none;
+    }
   }
 }

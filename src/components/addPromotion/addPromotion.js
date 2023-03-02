@@ -613,17 +613,19 @@ const AddPromotion = ({ idService }) => {
                           <List type={"unstyled"} className="list-item-kh">
                             {data?.map((item, index) => {
                               return (
-                                <option
+                                <div
                                   key={index}
-                                  value={item?._id}
                                   onClick={(e) => {
-                                    setId(e.target.value);
+                                    setId(item?._id);
                                     setName(item?.name);
                                     setData([]);
                                   }}
                                 >
-                                  {item?.name}
-                                </option>
+                                  <a>
+                                    {item?.name} - {item?.phone} -{" "}
+                                    {item?.id_view}
+                                  </a>
+                                </div>
                               );
                             })}
                           </List>

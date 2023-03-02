@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   activeCollaborator,
+  changeContactedCollaborator,
   deleteCollaborator,
   lockTimeCollaborator,
   searchCollaborators,
@@ -251,6 +252,29 @@ export default function CollaboratorManage(props) {
     }
   }, []);
 
+  const onContected = useCallback((id) => {
+    dispatch(loadingAction.loadingRequest(true));
+
+    changeContactedCollaborator(id)
+      .then((res) => {
+        dispatch(
+          getCollaborators.getCollaboratorsRequest({
+            start: 0,
+            length: 20,
+            type: status,
+          })
+        );
+
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        dispatch(loadingAction.loadingRequest(false));
+        errorNotify({
+          message: err,
+        });
+      });
+  }, []);
+
   const items = [
     {
       key: "1",
@@ -375,13 +399,21 @@ export default function CollaboratorManage(props) {
       align: "center",
       render: (data) => {
         return (
-          <>
+          <div className="div-verify">
             {data?.is_verify ? (
               <a className="text-verify">Đã xác thực</a>
             ) : (
               <a className="text-nonverify">Chưa xác thực</a>
             )}
-          </>
+            {!data?.is_contacted && (
+              <div
+                className="btn-contacted"
+                onClick={() => onContected(data?._id)}
+              >
+                <a className="text-contacted">Liên hệ</a>
+              </div>
+            )}
+          </div>
         );
       },
     },

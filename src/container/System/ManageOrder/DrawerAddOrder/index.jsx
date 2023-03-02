@@ -36,6 +36,7 @@ import {
   getPlaceDetailApi,
   googlePlaceAutocomplete,
 } from "../../../../api/location";
+import axios from "axios";
 
 const AddOrder = () => {
   const [address, setAddress] = useState("");
@@ -342,19 +343,41 @@ const AddOrder = () => {
     _debounce((value) => {
       setAddress(value);
       setIsLoading(true);
-      googlePlaceAutocomplete(value)
+      axios
+        .get(
+          "https://rsapi.goong.io/Place/AutoComplete?api_key=K6YbCtlzCGyTBd08hwWlzLCuuyTinXVRdMYDb8qJ",
+          {
+            params: {
+              input: value,
+            },
+          }
+        )
         .then((res) => {
-          if (res.predictions) {
-            setPlaces(res.predictions);
+          if (res.data.predictions) {
+            setPlaces(res.data.predictions);
           } else {
             setPlaces([]);
           }
+
           setIsLoading(false);
         })
         .catch((err) => {
           setIsLoading(false);
           setPlaces([]);
         });
+      // googlePlaceAutocomplete(value)
+      //   .then((res) => {
+      //     if (res.predictions) {
+      //       setPlaces(res.predictions);
+      //     } else {
+      //       setPlaces([]);
+      //     }
+      //     setIsLoading(false);
+      //   })
+      //   .catch((err) => {
+      //     setIsLoading(false);
+      //     setPlaces([]);
+      //   });
     }, 3000),
     []
   );
@@ -362,15 +385,32 @@ const AddOrder = () => {
   const findPlace = useCallback((id) => {
     setIsLoading(true);
     setPlaces([]);
-    getPlaceDetailApi(id)
+    axios
+      .get(
+        "https://rsapi.goong.io/Place/Detail?api_key=K6YbCtlzCGyTBd08hwWlzLCuuyTinXVRdMYDb8qJ",
+        {
+          params: {
+            place_id: id,
+          },
+        }
+      )
       .then((res) => {
         setIsLoading(false);
-        setLat(res?.result?.geometry?.location?.lat);
-        setLong(res?.result?.geometry?.location?.lng);
+        setLat(res?.data?.result?.geometry?.location?.lat);
+        setLong(res?.data?.result?.geometry?.location?.lng);
       })
       .catch((e) => {
         setIsLoading(false);
       });
+    // getPlaceDetailApi(id)
+    //   .then((res) => {
+    //     setIsLoading(false);
+    //     setLat(res?.result?.geometry?.location?.lat);
+    //     setLong(res?.result?.geometry?.location?.lng);
+    //   })
+    //   .catch((e) => {
+    //     setIsLoading(false);
+    //   });
   }, []);
 
   const onCreateOrder = useCallback(() => {

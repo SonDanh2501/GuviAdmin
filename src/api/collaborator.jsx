@@ -108,3 +108,9 @@ export const getTransitionDetailsCollaborator = (id) => {
     `/admin/collaborator_manager/total_top_up_withdraw/${id}?lang=vi`
   );
 };
+
+export const changeContactedCollaborator = (id) => {
+  return axiosClient.post(
+    `/admin/collaborator_manager/contacted_collaborator/${id}?lang=vi`
+  );
+};
