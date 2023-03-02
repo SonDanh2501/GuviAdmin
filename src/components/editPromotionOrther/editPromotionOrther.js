@@ -1,4 +1,4 @@
-import { Select } from "antd";
+import { List, Select } from "antd";
 import {
   ContentState,
   convertFromHTML,
@@ -19,7 +19,7 @@ import {
   Modal,
   Row,
 } from "reactstrap";
-import { fetchCustomers } from "../../api/customer";
+import { fetchCustomers, searchCustomers } from "../../api/customer";
 import { DATA_PAYMENT } from "../../api/fakeData";
 import { postFile } from "../../api/file";
 import {
@@ -33,6 +33,7 @@ import { loadingAction } from "../../redux/actions/loading";
 import { updatePromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
 import CustomTextInput from "../CustomTextInput/customTextInput";
+import _debounce from "lodash/debounce";
 import "./editPromotionOrther.scss";
 
 const EditPromotionOrther = ({ state, setState, data }) => {
@@ -80,6 +81,9 @@ const EditPromotionOrther = ({ state, setState, data }) => {
   const [position, setPosition] = useState();
   const [isPaymentMethod, setIsPaymentMethod] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState([]);
+  const [dataL, setDataL] = useState([]);
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
   const options = [];
   const optionsCustomer = [];
 
@@ -204,6 +208,31 @@ const EditPromotionOrther = ({ state, setState, data }) => {
 
   const onEditorENStateChange = (editorState) => setDescriptionEN(editorState);
 
+  const changeValue = (value) => {
+    setName(value);
+  };
+
+  const searchCustomer = useCallback(
+    _debounce((value) => {
+      setName(value);
+      if (value) {
+        searchCustomers(0, 20, "", value)
+          .then((res) => {
+            if (value === "") {
+              setDataL([]);
+            } else {
+              setDataL(res.data);
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        setDataL([]);
+      }
+      setId("");
+    }, 500),
+    []
+  );
+
   useEffect(() => {
     getPromotionDetails(data?._id)
       .then((res) => {
@@ -245,6 +274,7 @@ const EditPromotionOrther = ({ state, setState, data }) => {
         setGroupCustomer(res?.id_group_customer);
         setIsCustomer(res?.is_id_customer);
         setCustomer(res?.id_customer);
+        setId(res?.id_customer);
         setIsUsePromo(res?.is_limited_use);
         setUsePromo(res?.limited_use);
         setPromoType(res?.type_discount);
@@ -296,7 +326,7 @@ const EditPromotionOrther = ({ state, setState, data }) => {
           is_id_group_customer: isGroupCustomer,
           id_group_customer: groupCustomer,
           is_id_customer: isCustomer,
-          id_customer: customer,
+          id_customer: id,
           service_apply: [],
           is_limited_use: isUsePromo,
           limited_use: isUsePromo ? usePromo : 0,
@@ -353,6 +383,7 @@ const EditPromotionOrther = ({ state, setState, data }) => {
     position,
     isPaymentMethod,
     paymentMethod,
+    id,
   ]);
 
   return (
@@ -516,24 +547,37 @@ const EditPromotionOrther = ({ state, setState, data }) => {
                       />
                     </FormGroup>
                     {isCustomer && (
-                      <Select
-                        style={{
-                          width: "100%",
-                        }}
-                        placeholder="Chọn khách hàng"
-                        onChange={handleChangeCustomer}
-                        options={optionsCustomer}
-                        filterOption={(input, option) =>
-                          (option?.label ?? "").includes(input)
-                        }
-                        filterSort={(optionA, optionB) =>
-                          (optionA?.label ?? "")
-                            .toLowerCase()
-                            .localeCompare((optionB?.label ?? "").toLowerCase())
-                        }
-                        optionFilterProp="children"
-                        showSearch
-                      />
+                      <div>
+                        <Input
+                          placeholder="Tìm kiếm theo tên và số điện thoại"
+                          value={name}
+                          onChange={(e) => {
+                            changeValue(e.target.value);
+                            searchCustomer(e.target.value);
+                          }}
+                        />
+                        {dataL.length > 0 && (
+                          <List type={"unstyled"} className="list-item-kh">
+                            {dataL?.map((item, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  onClick={(e) => {
+                                    setId(item?._id);
+                                    setName(item?.name);
+                                    setDataL([]);
+                                  }}
+                                >
+                                  <a>
+                                    {item?.name} - {item?.phone} -{" "}
+                                    {item?.id_view}
+                                  </a>
+                                </div>
+                              );
+                            })}
+                          </List>
+                        )}
+                      </div>
                     )}
                   </div>
                 </Col>

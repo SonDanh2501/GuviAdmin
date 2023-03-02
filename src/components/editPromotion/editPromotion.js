@@ -1,4 +1,4 @@
-import { Select } from "antd";
+import { List, Select } from "antd";
 import {
   ContentState,
   convertFromHTML,
@@ -6,6 +6,7 @@ import {
   EditorState,
 } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,14 +20,10 @@ import {
   Modal,
   Row,
 } from "reactstrap";
-import { fetchCustomers } from "../../api/customer";
+import { fetchCustomers, searchCustomers } from "../../api/customer";
 import { DATA_PAYMENT } from "../../api/fakeData";
 import { postFile } from "../../api/file";
-import {
-  getGroupCustomer,
-  getGroupCustomerApi,
-  getPromotionDetails,
-} from "../../api/promotion";
+import { getGroupCustomerApi, getPromotionDetails } from "../../api/promotion";
 import resizeFile from "../../helper/resizer";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
@@ -207,6 +204,31 @@ const EditPromotion = ({ state, setState, data }) => {
 
   const onEditorENStateChange = (editorState) => setDescriptionEN(editorState);
 
+  const changeValue = (value) => {
+    setName(value);
+  };
+
+  const searchCustomer = useCallback(
+    _debounce((value) => {
+      setName(value);
+      if (value) {
+        searchCustomers(0, 20, "", value)
+          .then((res) => {
+            if (value === "") {
+              setDataL([]);
+            } else {
+              setDataL(res.data);
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        setDataL([]);
+      }
+      setId("");
+    }, 500),
+    []
+  );
+
   useEffect(() => {
     getPromotionDetails(data?._id)
       .then((res) => {
@@ -248,6 +270,7 @@ const EditPromotion = ({ state, setState, data }) => {
         setGroupCustomer(res?.id_group_customer);
         setIsCustomer(res?.is_id_customer);
         setCustomer(res?.id_customer);
+        setId(res?.id_customer);
         setIsUsePromo(res?.is_limited_use);
         setUsePromo(res?.limited_use);
         setPromoType(res?.type_discount);
@@ -299,7 +322,7 @@ const EditPromotion = ({ state, setState, data }) => {
           is_id_group_customer: isGroupCustomer,
           id_group_customer: groupCustomer,
           is_id_customer: isCustomer,
-          id_customer: customer,
+          id_customer: id,
           service_apply: [serviceApply],
           is_limited_use: isUsePromo,
           limited_use: isUsePromo ? usePromo : 0,
@@ -356,6 +379,7 @@ const EditPromotion = ({ state, setState, data }) => {
     position,
     isPaymentMethod,
     paymentMethod,
+    id,
   ]);
 
   return (
@@ -634,24 +658,37 @@ const EditPromotion = ({ state, setState, data }) => {
                       />
                     </FormGroup>
                     {isCustomer && (
-                      <Select
-                        style={{
-                          width: "100%",
-                        }}
-                        placeholder="Chọn khách hàng"
-                        onChange={handleChangeCustomer}
-                        options={optionsCustomer}
-                        filterOption={(input, option) =>
-                          (option?.label ?? "").includes(input)
-                        }
-                        filterSort={(optionA, optionB) =>
-                          (optionA?.label ?? "")
-                            .toLowerCase()
-                            .localeCompare((optionB?.label ?? "").toLowerCase())
-                        }
-                        optionFilterProp="children"
-                        showSearch
-                      />
+                      <div>
+                        <Input
+                          placeholder="Tìm kiếm theo tên và số điện thoại"
+                          value={name}
+                          onChange={(e) => {
+                            changeValue(e.target.value);
+                            searchCustomer(e.target.value);
+                          }}
+                        />
+                        {dataL.length > 0 && (
+                          <List type={"unstyled"} className="list-item-kh">
+                            {dataL?.map((item, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  onClick={(e) => {
+                                    setId(item?._id);
+                                    setName(item?.name);
+                                    setDataL([]);
+                                  }}
+                                >
+                                  <a>
+                                    {item?.name} - {item?.phone} -{" "}
+                                    {item?.id_view}
+                                  </a>
+                                </div>
+                              );
+                            })}
+                          </List>
+                        )}
+                      </div>
                     )}
                   </div>
 

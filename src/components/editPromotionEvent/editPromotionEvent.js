@@ -1,4 +1,4 @@
-import { Select } from "antd";
+import { List, Select } from "antd";
 import {
   ContentState,
   convertFromHTML,
@@ -6,6 +6,7 @@ import {
   EditorState,
 } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,16 +20,9 @@ import {
   Modal,
   Row,
 } from "reactstrap";
-import { fetchCustomers } from "../../api/customer";
+import { fetchCustomers, searchCustomers } from "../../api/customer";
 import { DATA_PAYMENT } from "../../api/fakeData";
-import { postFile } from "../../api/file";
-import {
-  getGroupCustomer,
-  getGroupCustomerApi,
-  getPromotionDetails,
-} from "../../api/promotion";
-import resizeFile from "../../helper/resizer";
-import { errorNotify } from "../../helper/toast";
+import { getGroupCustomerApi, getPromotionDetails } from "../../api/promotion";
 import { loadingAction } from "../../redux/actions/loading";
 import { updatePromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
@@ -78,6 +72,10 @@ const EditPromotionEvent = ({ state, setState, data }) => {
   const [serviceApply, setServiceApply] = useState("");
   const [isPaymentMethod, setIsPaymentMethod] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState([]);
+  const [position, setPosition] = useState(0);
+  const [dataL, setDataL] = useState([]);
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
   const options = [];
   const optionsCustomer = [];
 
@@ -134,6 +132,31 @@ const EditPromotionEvent = ({ state, setState, data }) => {
 
   const onEditorENStateChange = (editorState) => setDescriptionEN(editorState);
 
+  const changeValue = (value) => {
+    setName(value);
+  };
+
+  const searchCustomer = useCallback(
+    _debounce((value) => {
+      setName(value);
+      if (value) {
+        searchCustomers(0, 20, "", value)
+          .then((res) => {
+            if (value === "") {
+              setDataL([]);
+            } else {
+              setDataL(res.data);
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        setDataL([]);
+      }
+      setId("");
+    }, 500),
+    []
+  );
+
   useEffect(() => {
     getPromotionDetails(data?._id)
       .then((res) => {
@@ -173,6 +196,7 @@ const EditPromotionEvent = ({ state, setState, data }) => {
         setGroupCustomer(res?.id_group_customer);
         setIsCustomer(res?.is_id_customer);
         setCustomer(res?.id_customer);
+        setId(res?.id_customer);
         setIsUsePromo(res?.is_limited_use);
         setUsePromo(res?.limited_use);
         setPromoType(res?.type_discount);
@@ -188,6 +212,7 @@ const EditPromotionEvent = ({ state, setState, data }) => {
         setMinimumOrder(res?.price_min_order);
         setIsPaymentMethod(res?.is_payment_method);
         setPaymentMethod(res?.payment_method);
+        setPosition(res?.position);
       })
       .catch((err) => console.log(err));
   }, [data]);
@@ -223,7 +248,7 @@ const EditPromotionEvent = ({ state, setState, data }) => {
           is_id_group_customer: isGroupCustomer,
           id_group_customer: groupCustomer,
           is_id_customer: isCustomer,
-          id_customer: customer,
+          id_customer: id,
           service_apply: [serviceApply],
           is_limited_use: isUsePromo,
           limited_use: isUsePromo ? usePromo : 0,
@@ -238,7 +263,7 @@ const EditPromotionEvent = ({ state, setState, data }) => {
           exchange_point: 0,
           brand: namebrand.toUpperCase(),
           exp_date_exchange: 0,
-          position: 0,
+          position: position,
           is_payment_method: isPaymentMethod,
           payment_method: paymentMethod,
         },
@@ -270,6 +295,8 @@ const EditPromotionEvent = ({ state, setState, data }) => {
     minimumOrder,
     isPaymentMethod,
     paymentMethod,
+    id,
+    position,
   ]);
 
   return (
@@ -469,30 +496,43 @@ const EditPromotionEvent = ({ state, setState, data }) => {
                       />
                     </FormGroup>
                     {isCustomer && (
-                      <Select
-                        style={{
-                          width: "100%",
-                        }}
-                        placeholder="Chọn khách hàng"
-                        onChange={handleChangeCustomer}
-                        options={optionsCustomer}
-                        filterOption={(input, option) =>
-                          (option?.label ?? "").includes(input)
-                        }
-                        filterSort={(optionA, optionB) =>
-                          (optionA?.label ?? "")
-                            .toLowerCase()
-                            .localeCompare((optionB?.label ?? "").toLowerCase())
-                        }
-                        optionFilterProp="children"
-                        showSearch
-                      />
+                      <div>
+                        <Input
+                          placeholder="Tìm kiếm theo tên và số điện thoại"
+                          value={name}
+                          onChange={(e) => {
+                            changeValue(e.target.value);
+                            searchCustomer(e.target.value);
+                          }}
+                        />
+                        {dataL.length > 0 && (
+                          <List type={"unstyled"} className="list-item-kh">
+                            {dataL?.map((item, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  onClick={(e) => {
+                                    setId(item?._id);
+                                    setName(item?.name);
+                                    setDataL([]);
+                                  }}
+                                >
+                                  <a>
+                                    {item?.name} - {item?.phone} -{" "}
+                                    {item?.id_view}
+                                  </a>
+                                </div>
+                              );
+                            })}
+                          </List>
+                        )}
+                      </div>
                     )}
                   </div>
                 </Col>
                 <Col md={4}>
                   <div>
-                    <h5 className="mt-2">11. Số lượng mã khuyến mãi</h5>
+                    <h5 className="mt-2">7. Số lượng mã khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Số lượng giới hạn
@@ -516,7 +556,7 @@ const EditPromotionEvent = ({ state, setState, data }) => {
                     )}
                   </div>
                   <div>
-                    <h5 className="mt-2">12. Số lần sử dụng khuyến mãi</h5>
+                    <h5 className="mt-2">8. Số lần sử dụng khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Lần sử dụng khuyến mãi
@@ -540,7 +580,7 @@ const EditPromotionEvent = ({ state, setState, data }) => {
                     )}
                   </div>
                   <div>
-                    <h5 className="mt-2">13. Thời gian khuyến mãi</h5>
+                    <h5 className="mt-2">10. Thời gian khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Giới hạn ngày
@@ -578,7 +618,7 @@ const EditPromotionEvent = ({ state, setState, data }) => {
                     )}
                   </div>
                   <div>
-                    <h5 className="mt-2">15. Phương thức thanh toán</h5>
+                    <h5 className="mt-2">11. Phương thức thanh toán</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Thanh toán
@@ -604,6 +644,18 @@ const EditPromotionEvent = ({ state, setState, data }) => {
                         value={paymentMethod}
                       />
                     )}
+                  </div>
+
+                  <div>
+                    <h5 className="mt-2">11. Thứ tự hiện thị</h5>
+                    <CustomTextInput
+                      placeholder="Nhập số thứ tự (1,2,3...,n"
+                      className="input-promo-code"
+                      type="number"
+                      min={0}
+                      value={position}
+                      onChange={(e) => setPosition(e.target.value)}
+                    />
                   </div>
                   <Button
                     className="btn_add mt-5"

@@ -405,14 +405,14 @@ export default function CollaboratorManage(props) {
             ) : (
               <a className="text-nonverify">Chưa xác thực</a>
             )}
-            {!data?.is_contacted && (
+            {/* {!data?.is_contacted && (
               <div
                 className="btn-contacted"
                 onClick={() => onContected(data?._id)}
               >
                 <a className="text-contacted">Liên hệ</a>
               </div>
-            )}
+            )} */}
           </div>
         );
       },
