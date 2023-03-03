@@ -1,5 +1,6 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { DatePicker, Input, Pagination, Select, Table } from "antd";
+import { data } from "autoprefixer";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
@@ -232,6 +233,15 @@ export default function TopupManage() {
         );
       },
       width: "10%",
+      align: "center",
+    },
+    {
+      title: "Người duyệt",
+      render: (data) => {
+        return (
+          <a className="text-name-verify">{data?.id_admin_verify?.full_name}</a>
+        );
+      },
       align: "center",
     },
     {

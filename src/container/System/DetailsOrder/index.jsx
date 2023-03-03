@@ -462,14 +462,15 @@ const DetailsOrder = () => {
                     <a>{formatMoney(dataGroup?.initial_fee + 2000)}</a>
                   </div>
                   {dataGroup?.code_promotion && (
-                    <div className="div-total">
+                    <div className="div-total-promo">
                       <a>- Khuyến mãi:</a>
-                      <a>-Mã code: {dataGroup?.code_promotion?.code}</a>
-                      <a>
+                      <div className="div-promo">
+                        <a>+ Mã code: {dataGroup?.code_promotion?.code}</a>
+
                         <a style={{ color: "red", marginLeft: 5 }}>
                           {formatMoney(-dataGroup?.code_promotion?.discount)}
                         </a>
-                      </a>
+                      </div>
                     </div>
                   )}
                   {dataGroup?.event_promotion && (

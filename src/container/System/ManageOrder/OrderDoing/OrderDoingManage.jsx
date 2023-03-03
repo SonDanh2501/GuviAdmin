@@ -116,7 +116,7 @@ export default function OrderDoingManage() {
       },
     },
     {
-      title: "Thời gian",
+      title: "Ngày làm",
       render: (data) => {
         return (
           <div className="div-worktime">

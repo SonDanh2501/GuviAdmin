@@ -181,7 +181,7 @@ export default function OrderManage(props) {
       },
     },
     {
-      title: "Thời gian",
+      title: "Ngày làm",
       render: (data) => {
         return (
           <div className="div-worktime">

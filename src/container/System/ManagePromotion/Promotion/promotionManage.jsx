@@ -45,7 +45,7 @@ import AddPromotionOrther from "../../../../components/addPromotionOrther/addPro
 import EditPromotionOrther from "../../../../components/editPromotionOrther/editPromotionOrther.js";
 import { errorNotify } from "../../../../helper/toast.js";
 
-export default function PromotionManage({ type, brand, idService }) {
+export default function PromotionManage({ type, brand, idService, exchange }) {
   const promotion = useSelector(getPromotionSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -75,13 +75,14 @@ export default function PromotionManage({ type, brand, idService }) {
         type: type,
         brand: brand,
         id_service: idService,
+        exchange: exchange,
       })
     );
     setDataFilter([]);
     setDataSearch([]);
     setValueFilter("");
     setValueSearch("");
-  }, [type, brand, idService]);
+  }, [type, brand, idService, exchange]);
 
   const onDelete = useCallback(
     (id) => {
@@ -95,6 +96,7 @@ export default function PromotionManage({ type, brand, idService }) {
               type: type,
               brand: brand,
               id_service: idService,
+              exchange: exchange,
             })
           );
           setModal(false);
@@ -124,6 +126,7 @@ export default function PromotionManage({ type, brand, idService }) {
                 type: type,
                 brand: brand,
                 id_service: idService,
+                exchange: exchange,
               })
             );
             setModalActive(false);
@@ -145,6 +148,7 @@ export default function PromotionManage({ type, brand, idService }) {
                 type: type,
                 brand: brand,
                 id_service: idService,
+                exchange: exchange,
               })
             );
             setModalActive(false);
@@ -170,13 +174,29 @@ export default function PromotionManage({ type, brand, idService }) {
         ? page * dataFilter.length - dataFilter.length
         : page * promotion.length - promotion.length;
     dataSearch.length > 0
-      ? searchPromotion(valueSearch, start, 10, type, brand, idService)
+      ? searchPromotion(
+          valueSearch,
+          start,
+          10,
+          type,
+          brand,
+          idService,
+          exchange
+        )
           .then((res) => {
             setDataSearch(res.data);
           })
           .catch((err) => console.log(err))
       : dataFilter.length > 0
-      ? filterPromotion(valueFilter, start, 10, type, brand, idService)
+      ? filterPromotion(
+          valueFilter,
+          start,
+          10,
+          type,
+          brand,
+          idService,
+          exchange
+        )
           .then((res) => {
             setDataSearch(res?.data);
             setTotalSearch(res?.totalItem);
@@ -189,6 +209,7 @@ export default function PromotionManage({ type, brand, idService }) {
             type: type,
             brand: brand,
             id_service: idService,
+            exchange: exchange,
           })
         );
   };
@@ -198,7 +219,7 @@ export default function PromotionManage({ type, brand, idService }) {
       setValueSearch(value);
       setIsLoading(true);
       if (value !== "") {
-        searchPromotion(value, 0, 10, type, brand, idService)
+        searchPromotion(value, 0, 10, type, brand, idService, exchange)
           .then((res) => {
             setIsLoading(false);
 
@@ -219,7 +240,7 @@ export default function PromotionManage({ type, brand, idService }) {
   const handleChange = (value) => {
     setValueFilter(value);
     setIsLoading(true);
-    filterPromotion(value, 0, 10, type, brand, idService)
+    filterPromotion(value, 0, 10, type, brand, idService, exchange)
       .then((res) => {
         setIsLoading(false);
         setDataFilter(res?.data);
@@ -287,7 +308,7 @@ export default function PromotionManage({ type, brand, idService }) {
             width: "10%",
           },
           {
-            title: "Position",
+            title: "Vị trí",
             dataIndex: "position",
             align: "center",
             width: "5%",

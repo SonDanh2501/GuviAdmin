@@ -1,23 +1,25 @@
-import collaborator from "../../../../assets/images/collaborator.png";
-import caculator from "../../../../assets/images/caculator.png";
-import "./index.scss";
-import moment from "moment";
-import dayjs from "dayjs";
 import { DatePicker, Select, Table, Tooltip } from "antd";
+import moment from "moment";
+import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
   CartesianGrid,
+  LabelList,
   Legend,
   ResponsiveContainer,
   XAxis,
   YAxis,
 } from "recharts";
-import { useEffect, useState } from "react";
 import {
+  getTotalCustomerDay,
   getTotalCustomerYear,
   getTotalReportCustomer,
 } from "../../../../api/report";
+import caculator from "../../../../assets/images/caculator.png";
+import collaborator from "../../../../assets/images/collaborator.png";
+import LoadingPagination from "../../../../components/paginationLoading";
+import "./index.scss";
 
 const { RangePicker } = DatePicker;
 
@@ -27,7 +29,10 @@ const ReportCustomer = () => {
   const [totalMonth, setTotalMonth] = useState(0);
   const [totalDay, setTotalDay] = useState(0);
   const [total, setTotal] = useState(0);
+  const [totalYear, setTotalYear] = useState(0);
   const [data, setData] = useState([]);
+  const [dataTable, setDataTable] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dataChart = [];
 
@@ -62,14 +67,46 @@ const ReportCustomer = () => {
         setData(res);
       })
       .catch((err) => {});
+
+    getTotalCustomerDay(
+      moment().startOf("month").toISOString(),
+      moment().endOf("month").toISOString()
+    )
+      .then((res) => {
+        setDataTable(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
+
+  useEffect(() => {
+    let sum = 0;
+    for (let i = 0; i < data.length; i++) {
+      setTotalYear((sum += data[i].total));
+    }
+  }, [data]);
 
   const columns = [
     {
       title: "THỜI GIAN",
+      render: (data) => {
+        return (
+          <div className="div-create">
+            <a className="text-create">
+              {moment(new Date(data?.day)).format("DD/MM/YYYY")}
+            </a>
+            <a className="text-create">
+              {moment(new Date(data?.day)).format("HH:mm")}
+            </a>
+          </div>
+        );
+      },
     },
     {
       title: "SỐ LƯỢT ĐĂNG KÝ",
+      dataIndex: ["total"],
+      align: "center",
     },
     {
       title: "SỐ LƯỢT TẢI APPSTORE",
@@ -88,6 +125,35 @@ const ReportCustomer = () => {
       month: index + 1,
     });
   });
+
+  const onChange = (date, dateString) => {
+    setIsLoading(true);
+    getTotalCustomerYear(dateString)
+      .then((res) => {
+        setData(res);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  };
+
+  const onChangeMonth = (date, dateString) => {
+    setIsLoading(true);
+
+    getTotalCustomerDay(
+      moment(dateString).startOf("month").toISOString(),
+      moment(dateString).endOf("month").toISOString()
+    )
+      .then((res) => {
+        setDataTable(res);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  };
 
   return (
     <div className="div-container-report-customer">
@@ -120,7 +186,7 @@ const ReportCustomer = () => {
         <div className="div-tab-header">
           <div className="div-img">
             <img src={caculator} className="img" />
-            <a className="text-day">{moment().month()}</a>
+            <a className="text-day">{moment().date()}</a>
           </div>
           <div className="div-text-tab">
             <a className="text-tab-header">Ngày</a>
@@ -132,7 +198,11 @@ const ReportCustomer = () => {
         <div className="div-time-area">
           <div>
             <a className="text-time">Thời gian</a>
-            <DatePicker picker="year" defaultValue={moment()} />
+            <DatePicker
+              picker="year"
+              defaultValue={moment()}
+              onChange={onChange}
+            />
           </div>
           <div>
             <a className="text-area">Khu vực</a>
@@ -147,7 +217,7 @@ const ReportCustomer = () => {
         <div className="mt-3 divl-total">
           <a className="text-total-user">Tổng user</a>
           <div className="div-total">
-            <a className="text-number-total">700</a>
+            <a className="text-number-total">{totalYear}</a>
           </div>
         </div>
         <div className="mt-5">
@@ -162,12 +232,23 @@ const ReportCustomer = () => {
                 left: 20,
                 bottom: 5,
               }}
+              barSize={50}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
+              <XAxis
+                dataKey="month"
+                tickFormatter={(tickItem) => "Tháng " + tickItem}
+              />
+              <YAxis dataKey="total" fontSize={12} />
               <Tooltip />
-              <Bar dataKey="total" fill="#4376CC" minPointSize={10} />
+              <Legend />
+              <Bar
+                dataKey="total"
+                fill="#4376CC"
+                minPointSize={10}
+                label={{ position: "centerTop", fill: "white" }}
+                name="total"
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -176,11 +257,12 @@ const ReportCustomer = () => {
       <div className="mt-3 div-table">
         <div>
           <a className="text-time">Thời gian</a>
-          <RangePicker format={"DD/MM/YYYY"} />
+          <DatePicker picker="month" onChange={onChangeMonth} />
         </div>
 
         <div className="mt-4">
           <Table
+            dataSource={dataTable.reverse()}
             columns={columns}
             pagination={false}
             rowKey={(record) => record._id}
@@ -201,6 +283,8 @@ const ReportCustomer = () => {
           />
         </div>
       </div>
+
+      {isLoading && <LoadingPagination />}
     </div>
   );
 };

@@ -92,6 +92,16 @@
           flex-direction: row;
           justify-content: space-between;
         }
+        .div-total-promo {
+          flex-direction: row;
+          justify-content: space-between;
+          .div-promo {
+            display: flex;
+            margin-left: 30px;
+            flex-direction: row;
+            justify-content: space-between;
+          }
+        }
 
         .div-event-promo {
           display: flex;

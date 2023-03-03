@@ -6,45 +6,49 @@ import PromotionManage from "../Promotion/promotionManage";
 import "./index.scss";
 
 const ManagePromotionOrther = ({ type, brand }) => {
-  // const service = useSelector(getService);
-  // const [tab, setTab] = useState("");
-  // const [id, setId] = useState("");
+  const [tab, setTab] = useState("no_exchange");
+  const [id, setId] = useState("");
 
-  // useEffect(() => {
-  //   setTab(service[0]?.kind);
-  //   setId(service[0]?._id);
-  // }, [service]);
   return (
     <div className=" ml-2 mt-3">
-      {/* <div className="div-tab">
-        {service?.map((item, index) => {
+      <div className="div-tab">
+        {DATA_TAB?.map((item, index) => {
           return (
             <div
               className="tab"
               onClick={() => {
-                setTab(item?.kind);
-                setId(item?._id);
+                setTab(item?.tab);
               }}
             >
               <a
                 className={
-                  tab === item?.kind
+                  tab === item?.tab
                     ? "text-title-tab"
                     : "text-title-tab-default"
                 }
               >
-                {item?.title?.vi}
+                {item?.title}
               </a>
-              <div className={tab === item?.kind ? "tab-line" : ""}></div>
+              <div className={tab === item?.tab ? "tab-line" : ""}></div>
             </div>
           );
         })}
-      </div> */}
+      </div>
       <div>
-        <PromotionManage type={type} brand={brand} idService={""} />
+        <PromotionManage
+          type={type}
+          brand={brand}
+          idService={""}
+          exchange={tab}
+        />
       </div>
     </div>
   );
 };
 
 export default ManagePromotionOrther;
+
+const DATA_TAB = [
+  { id: 1, title: "Tặng", tab: "no_exchange" },
+  { id: 2, title: "Điểm quy đổi", tab: "exchange" },
+];

@@ -1,8 +1,15 @@
 import axiosClient from "../axios";
 
-export const fetchPromotion = (start, length, type, brand, id_service) => {
+export const fetchPromotion = (
+  start,
+  length,
+  type,
+  brand,
+  id_service,
+  exchange
+) => {
   return axiosClient.get(
-    `/admin/promotion_manager/get_list?start=${start}&length=${length}&typeSort=${type}&brand=${brand}&id_service=${id_service}`
+    `/admin/promotion_manager/get_list?start=${start}&length=${length}&typeSort=${type}&brand=${brand}&id_service=${id_service}&exchange=${exchange}`
   );
 };
 
@@ -12,10 +19,11 @@ export const searchPromotion = (
   length,
   type,
   brand,
-  id_service
+  id_service,
+  exchange
 ) => {
   return axiosClient.get(
-    `/admin/promotion_manager/get_list?search=${search}&start=${start}&length=${length}&typeSort=${type}&brand=${brand}&id_service=${id_service}`
+    `/admin/promotion_manager/get_list?search=${search}&start=${start}&length=${length}&typeSort=${type}&brand=${brand}&id_service=${id_service}&exchange=${exchange}`
   );
 };
 
@@ -25,10 +33,11 @@ export const filterPromotion = (
   length,
   type,
   brand,
-  id_service
+  id_service,
+  exchange
 ) => {
   return axiosClient.get(
-    `/admin/promotion_manager/get_list?status=${status}&start=${start}&length=${length}&typeSort=${type}&brand=${brand}&id_service=${id_service}`
+    `/admin/promotion_manager/get_list?status=${status}&start=${start}&length=${length}&typeSort=${type}&brand=${brand}&id_service=${id_service}&exchange=${exchange}`
   );
 };
 

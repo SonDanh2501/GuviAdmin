@@ -181,7 +181,7 @@ export default function FeedbackManage() {
 
         <div>
           <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Xóa giao dịch</ModalHeader>
+            <ModalHeader toggle={toggle}>Xóa phản hồi</ModalHeader>
             <ModalBody>
               <a>
                 Bạn có chắc muốn xóa phản hồi của khách hàng
