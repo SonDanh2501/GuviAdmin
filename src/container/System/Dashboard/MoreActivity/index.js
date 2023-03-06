@@ -52,7 +52,7 @@ const MoreActivity = () => {
 
   return (
     <>
-      <button onClick={showDrawer} className="btn-see-more float-right">
+      <button onClick={showDrawer} className="btn-see-more ">
         Xem chi tiết <i class="uil uil-angle-right"></i>
       </button>
 

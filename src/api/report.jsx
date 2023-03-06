@@ -58,3 +58,9 @@ export const getTotalCustomerDay = (start_date, end_date) => {
     `/admin/customer_manager/total_customer_dayly?lang=vi&&start_date=${start_date}&end_date=${end_date}`
   );
 };
+
+export const getTotalDetailCustomerDay = (start_date, end_date) => {
+  return axiosClient.get(
+    `/admin/customer_manager/detail_total_customer_daily?lang=vi&start_date=${start_date}&end_date=${end_date}`
+  );
+};

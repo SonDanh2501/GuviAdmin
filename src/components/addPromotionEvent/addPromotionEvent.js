@@ -29,7 +29,7 @@ import _debounce from "lodash/debounce";
 
 import "./addPromotionEvent.scss";
 
-const AddPromotionEvent = ({ idService }) => {
+const AddPromotionEvent = ({ idService, tab }) => {
   const [state, setState] = useState(false);
   const [formDiscount, setFormDiscount] = React.useState("amount");
   const [discountUnit, setDiscountUnit] = React.useState("amount");
@@ -221,7 +221,7 @@ const AddPromotionEvent = ({ idService }) => {
         id_group_customer: groupCustomer,
         is_id_customer: isCustomer,
         id_customer: id,
-        service_apply: [idService],
+        service_apply: tab === "tat_ca" ? [serviceApply] : [idService],
         is_limited_use: isUsePromo,
         limited_use: isUsePromo ? usePromo : 0,
         type_discount: "order",
@@ -261,7 +261,7 @@ const AddPromotionEvent = ({ idService }) => {
     namebrand,
     maximumDiscount,
     reducedValue,
-    // serviceApply,
+    serviceApply,
     promoCode,
     minimumOrder,
     isPaymentMethod,
@@ -416,27 +416,29 @@ const AddPromotionEvent = ({ idService }) => {
                       )}
                     </Row>
                   </div>
-                  {/* <div>
-                    <h5>5. Dịch vụ áp dụng</h5>
-                    <Label>Các dịch vụ</Label>
+                  {tab === "tat_ca" && (
+                    <div>
+                      <h5>5. Dịch vụ áp dụng</h5>
+                      <Label>Các dịch vụ</Label>
 
-                    <CustomTextInput
-                      className="select-type-promo"
-                      name="select"
-                      type="select"
-                      value={serviceApply}
-                      onChange={(e) => {
-                        setServiceApply(e.target.value);
-                      }}
-                      body={service.map((item, index) => {
-                        return (
-                          <option key={index} value={item?._id}>
-                            {item?.title?.vi}
-                          </option>
-                        );
-                      })}
-                    />
-                  </div> */}
+                      <CustomTextInput
+                        className="select-type-promo"
+                        name="select"
+                        type="select"
+                        value={serviceApply}
+                        onChange={(e) => {
+                          setServiceApply(e.target.value);
+                        }}
+                        body={service.map((item, index) => {
+                          return (
+                            <option key={index} value={item?._id}>
+                              {item?.title?.vi}
+                            </option>
+                          );
+                        })}
+                      />
+                    </div>
+                  )}
                   <div>
                     <h5>6. Đối tượng áp dụng</h5>
                     <FormGroup check inline>

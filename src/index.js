@@ -33,7 +33,7 @@ ReactDOM.render(
     <PersistGate persistor={persistor}>
       <BrowserRouter>
         <App />
-        <ToastContainer />
+        <ToastContainer autoClose={3000} />
         <AppLoading />
       </BrowserRouter>
     </PersistGate>

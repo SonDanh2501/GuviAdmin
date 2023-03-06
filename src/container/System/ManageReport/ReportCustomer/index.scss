@@ -164,3 +164,21 @@
     }
   }
 }
+
+.btn-details {
+  width: 75px;
+  height: 21px;
+  background-color: #0075ff;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .text-details {
+    color: #fff;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+  }
+}

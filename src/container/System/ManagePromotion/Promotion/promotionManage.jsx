@@ -45,7 +45,13 @@ import AddPromotionOrther from "../../../../components/addPromotionOrther/addPro
 import EditPromotionOrther from "../../../../components/editPromotionOrther/editPromotionOrther.js";
 import { errorNotify } from "../../../../helper/toast.js";
 
-export default function PromotionManage({ type, brand, idService, exchange }) {
+export default function PromotionManage({
+  type,
+  brand,
+  idService,
+  exchange,
+  tab,
+}) {
   const promotion = useSelector(getPromotionSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -600,11 +606,11 @@ export default function PromotionManage({ type, brand, idService, exchange }) {
             onChange={(e) => handleSearch(e.target.value)}
           />
           {type === "code" && brand === "guvi" ? (
-            <AddPromotion idService={idService} />
+            <AddPromotion idService={idService} tab={tab} />
           ) : type === "code" && brand === "orther" ? (
             <AddPromotionOrther />
           ) : (
-            <AddPromotionEvent idService={idService} />
+            <AddPromotionEvent idService={idService} tab={tab} />
           )}
         </div>
         <div className="mt-3">

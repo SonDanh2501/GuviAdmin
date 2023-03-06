@@ -1,6 +1,7 @@
 import { DatePicker, Select, Table, Tooltip } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
+import { useNavigate, useNavigation } from "react-router-dom";
 import {
   Bar,
   BarChart,
@@ -35,6 +36,8 @@ const ReportCustomer = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const dataChart = [];
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getTotalReportCustomer(
@@ -87,38 +90,6 @@ const ReportCustomer = () => {
     }
   }, [data]);
 
-  const columns = [
-    {
-      title: "THỜI GIAN",
-      render: (data) => {
-        return (
-          <div className="div-create">
-            <a className="text-create">
-              {moment(new Date(data?.day)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-create">
-              {moment(new Date(data?.day)).format("HH:mm")}
-            </a>
-          </div>
-        );
-      },
-    },
-    {
-      title: "SỐ LƯỢT ĐĂNG KÝ",
-      dataIndex: ["total"],
-      align: "center",
-    },
-    {
-      title: "SỐ LƯỢT TẢI APPSTORE",
-    },
-    {
-      title: "SỐ LƯỢT TẢI GOOGLE PLAY",
-    },
-    {
-      key: "action",
-    },
-  ];
-
   data.map((item, index) => {
     dataChart.push({
       total: item?.total,
@@ -154,6 +125,55 @@ const ReportCustomer = () => {
         setIsLoading(false);
       });
   };
+
+  const columns = [
+    {
+      title: "THỜI GIAN",
+      render: (data) => {
+        return (
+          <div className="div-create">
+            <a className="text-create">
+              {moment(new Date(data?.day)).format("DD/MM/YYYY")}
+            </a>
+            <a className="text-create">
+              {moment(new Date(data?.day)).format("HH:mm")}
+            </a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "SỐ LƯỢT ĐĂNG KÝ",
+      dataIndex: ["total"],
+      align: "center",
+    },
+    {
+      title: "SỐ LƯỢT CLICK TRANG",
+    },
+    {
+      title: "SỐ LƯỢT TẢI APPSTORE",
+    },
+    {
+      title: "SỐ LƯỢT TẢI GOOGLE PLAY",
+    },
+    {
+      key: "action",
+      render: (data) => {
+        return (
+          <div
+            className="btn-details"
+            onClick={() =>
+              navigate("/report/manage-report/details-register-customer", {
+                state: { date: data?.day },
+              })
+            }
+          >
+            <a className="text-details">Chi tiết</a>
+          </div>
+        );
+      },
+    },
+  ];
 
   return (
     <div className="div-container-report-customer">
@@ -245,7 +265,7 @@ const ReportCustomer = () => {
               <Bar
                 dataKey="total"
                 fill="#4376CC"
-                minPointSize={10}
+                minPointSize={5}
                 label={{ position: "centerTop", fill: "white" }}
                 name="total"
               />

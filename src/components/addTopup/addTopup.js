@@ -15,7 +15,7 @@ import {
   getTopupCollaborator,
 } from "../../redux/actions/topup";
 import moment from "moment";
-import { errorNotify } from "../../helper/toast";
+import { errorNotify, successNotify } from "../../helper/toast";
 
 const AddPopup = () => {
   const [state, setState] = useState(false);
@@ -88,6 +88,9 @@ const AddPopup = () => {
             })
           );
           setOpen(false);
+          successNotify({
+            message: "Nạp tiền cho cộng tác viên thành công",
+          });
           dispatch(loadingAction.loadingRequest(false));
         })
         .catch((err) => {

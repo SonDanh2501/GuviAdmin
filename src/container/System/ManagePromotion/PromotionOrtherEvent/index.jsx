@@ -57,6 +57,7 @@ const ManagePromotionEvent = ({ type, brand }) => {
           brand={brand}
           idService={id}
           exchange={""}
+          tab={tab}
         />
       </div>
     </div>

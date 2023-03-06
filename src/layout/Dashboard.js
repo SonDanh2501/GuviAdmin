@@ -16,6 +16,7 @@ import ManageOrder from "../container/System/ManageOrder";
 import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDoingManage";
 import ManageReport from "../container/System/ManageReport";
 import DetailReportManager from "../container/System/ManageReport/DetailsReportCollaborator";
+import DetailRegisterCustomer from "../container/System/ManageReport/ReportCustomer/DetailRegisterCustomer";
 import GroupServiceManage from "../container/System/ManageService/ManageGroupService/ManageGroupService/GroupServiceManage";
 import ServiceManage from "../container/System/ManageService/ManageService/ServiceManage";
 import ManageSetting from "../container/System/ManageSetting";
@@ -142,6 +143,10 @@ const Dashboard = () => {
               <Route
                 path="/report/manage-report/report-details"
                 element={<DetailReportManager />}
+              />
+              <Route
+                path="/report/manage-report/details-register-customer"
+                element={<DetailRegisterCustomer />}
               />
 
               <Route

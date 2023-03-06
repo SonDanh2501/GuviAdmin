@@ -288,7 +288,7 @@ export default function UserManage(props) {
                   })
                 }
               >
-                {data?.id_group_order}
+                {data?.id_view_group_order}
               </a>
             ) : (
               <a className="text-address">Không có</a>

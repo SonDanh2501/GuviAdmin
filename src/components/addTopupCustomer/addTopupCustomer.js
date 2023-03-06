@@ -10,7 +10,7 @@ import _debounce from "lodash/debounce";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./addTopupCustomer.scss";
 import { Drawer } from "antd";
-import { errorNotify } from "../../helper/toast";
+import { errorNotify, successNotify } from "../../helper/toast";
 import { getTopupCustomer } from "../../redux/actions/topup";
 
 const AddTopupCustomer = () => {
@@ -73,6 +73,9 @@ const AddTopupCustomer = () => {
           dispatch(
             getTopupCustomer.getTopupCustomerRequest({ start: 0, length: 10 })
           );
+          successNotify({
+            message: "Nạp tiền cho khách hàng thành công",
+          });
           dispatch(loadingAction.loadingRequest(false));
         })
         .catch((err) => {

@@ -104,12 +104,11 @@ const History = ({ id }) => {
         );
     return (
       <div className="div-listItem">
-        <div className="div-list">
-          <a className="text-title">{object}</a>
-          <a className="text-date">
-            {moment(new Date(item?.date_create)).format("DD/MM/yyy HH:mm")}
-          </a>
-        </div>
+        <a className="text-title">{object}</a>
+
+        <a className="text-date">
+          {moment(new Date(item?.date_create)).format("DD/MM/yyy HH:mm")}
+        </a>
       </div>
     );
   };

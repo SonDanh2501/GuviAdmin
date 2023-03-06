@@ -14,7 +14,7 @@ import {
   getRevenueCollaborator,
   getTopupCollaborator,
 } from "../../redux/actions/topup";
-import { errorNotify } from "../../helper/toast";
+import { errorNotify, successNotify } from "../../helper/toast";
 import moment from "moment";
 
 const Withdraw = () => {
@@ -81,6 +81,9 @@ const Withdraw = () => {
             })
           );
           setOpen(false);
+          successNotify({
+            message: "Rút tiền cho cộng tác viên thành công",
+          });
           dispatch(loadingAction.loadingRequest(false));
         })
         .catch((err) => {

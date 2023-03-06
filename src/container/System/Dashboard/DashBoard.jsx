@@ -327,7 +327,7 @@ export default function Home() {
                       <XAxis
                         dataKey="date_end"
                         tickFormatter={(tickItem) =>
-                          moment(tickItem).format("DD/MM/YYYY")
+                          moment(tickItem).format("DD/MM")
                         }
                       />
                       <YAxis dataKey="total_income" fontSize={12} />

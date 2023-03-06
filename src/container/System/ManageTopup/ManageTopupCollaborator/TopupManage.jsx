@@ -17,7 +17,7 @@ import EditPopup from "../../../../components/editTopup/editTopup";
 import LoadingPagination from "../../../../components/paginationLoading";
 import Withdraw from "../../../../components/withdraw/withdraw";
 import { formatMoney } from "../../../../helper/formatMoney";
-import { errorNotify } from "../../../../helper/toast";
+import { errorNotify, successNotify } from "../../../../helper/toast";
 import { loadingAction } from "../../../../redux/actions/loading";
 import {
   getRevenueCollaborator,
@@ -116,6 +116,9 @@ export default function TopupManage() {
           })
         );
         setModalConfirm(false);
+        successNotify({
+          message: "Duyệt lệnh cho cộng tác viên thành công",
+        });
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {

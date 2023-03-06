@@ -60,6 +60,7 @@ const ManagePromotionGuvi = ({ type, brand }) => {
           brand={brand}
           idService={id}
           exchange={""}
+          tab={tab}
         />
       </div>
     </div>

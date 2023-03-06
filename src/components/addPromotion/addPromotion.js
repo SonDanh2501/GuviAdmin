@@ -28,7 +28,7 @@ import CustomTextInput from "../CustomTextInput/customTextInput";
 import _debounce from "lodash/debounce";
 import "./addPromotion.scss";
 
-const AddPromotion = ({ idService }) => {
+const AddPromotion = ({ idService, tab }) => {
   const [state, setState] = useState(false);
   const [formDiscount, setFormDiscount] = React.useState("amount");
   const [discountUnit, setDiscountUnit] = React.useState("amount");
@@ -259,7 +259,7 @@ const AddPromotion = ({ idService }) => {
         id_group_customer: groupCustomer,
         is_id_customer: isCustomer,
         id_customer: id,
-        service_apply: [idService],
+        service_apply: tab === "tat_ca" ? [serviceApply] : [idService],
         is_limited_use: isUsePromo,
         limited_use: isUsePromo ? usePromo : 0,
         type_discount: "order",
@@ -306,7 +306,7 @@ const AddPromotion = ({ idService }) => {
     namebrand,
     maximumDiscount,
     reducedValue,
-    // serviceApply,
+    serviceApply,
     promoCode,
     dateExchange,
     minimumOrder,
@@ -538,7 +538,7 @@ const AddPromotion = ({ idService }) => {
                   </div>
                 </Col>
                 <Col md={4}>
-                  {/* {promoType !== "partner_promotion" && (
+                  {tab === "tat_ca" && (
                     <div>
                       <h5>9. Dịch vụ áp dụng</h5>
                       <Label>Các dịch vụ</Label>
@@ -560,7 +560,7 @@ const AddPromotion = ({ idService }) => {
                         })}
                       />
                     </div>
-                  )} */}
+                  )}
 
                   <div>
                     <h5>10. Đối tượng áp dụng</h5>
