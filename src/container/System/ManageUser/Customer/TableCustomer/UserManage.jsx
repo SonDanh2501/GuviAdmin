@@ -360,7 +360,7 @@ export default function UserManage(props) {
     <React.Fragment>
       <div>
         <div className="div-header">
-          <Dropdown
+          {/* <Dropdown
             menu={{ items: itemFilter }}
             trigger={["click"]}
             className="dropdown"
@@ -373,7 +373,7 @@ export default function UserManage(props) {
                 </a>
               </Space>
             </a>
-          </Dropdown>
+          </Dropdown> */}
           <Input
             placeholder="Tìm kiếm"
             type="text"

@@ -114,3 +114,9 @@ export const changeContactedCollaborator = (id) => {
     `/admin/collaborator_manager/contacted_collaborator/${id}?lang=vi`
   );
 };
+
+export const getReviewCollaborator = (id) => {
+  return axiosClient.get(
+    `/admin/collaborator_manager/get_review/${id}?lang=vi`
+  );
+};

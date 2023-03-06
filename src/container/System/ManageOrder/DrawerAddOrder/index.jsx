@@ -476,6 +476,7 @@ const AddOrder = () => {
     time,
     codePromotion,
     isAutoOrder,
+    note,
   ]);
 
   return (
