@@ -66,3 +66,9 @@ export const updatePromotion = (id, data) => {
 export const activePromotion = (id, data) => {
   return axiosClient.post(`/admin/promotion_manager/active/${id}`, data);
 };
+
+export const getOrderUsePromotion = (id, status) => {
+  return axiosClient.get(
+    `/admin/promotion_manager/detail_used_promotion/${id}?lang=vi&status=${status}`
+  );
+};

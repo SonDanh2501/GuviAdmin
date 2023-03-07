@@ -1,37 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { getOrder, searchOrder } from "../../../../../../redux/actions/order";
-
-import { UilEllipsisV } from "@iconscout/react-unicons";
-import { Dropdown, Empty, Pagination, Skeleton, Space, Table } from "antd";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Pagination, Table } from "antd";
 import moment from "moment";
 import vi from "moment/locale/vi";
-import { useLocation, useNavigate } from "react-router-dom";
-import "./index.scss";
-import { getOrderByCustomers } from "../../../../../../api/customer";
+import { useNavigate } from "react-router-dom";
 
-export default function OrderCustomer() {
-  const { state } = useLocation();
-  const { id } = state || {};
-  const [dataFilter, setDataFilter] = useState([]);
+import "./index.scss";
+
+export default function OrderPromotion(props) {
+  const { data, total } = props;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [item, setItem] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState([]);
-  const [total, setTotal] = useState();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    getOrderByCustomers(id, 0, 20)
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [id]);
 
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work_schedule[0].date)).format(
@@ -43,28 +24,6 @@ export default function OrderCustomer() {
 
     return start + " - " + timeEnd;
   };
-
-  //   const items = [
-  //     {
-  //       key: "1",
-  //       label:
-  //         item?.status === "cancel" ? <></> : <EditOrder idOrder={item?._id} />,
-  //     },
-  //     {
-  //       key: "2",
-  //       label: (
-  //         <a
-  //           onClick={() =>
-  //             navigate("/details-order", {
-  //               state: { id: item?._id },
-  //             })
-  //           }
-  //         >
-  //           Xem chi tiết
-  //         </a>
-  //       ),
-  //     },
-  //   ];
 
   const columns = [
     {
@@ -100,6 +59,25 @@ export default function OrderCustomer() {
       },
     },
     {
+      title: "Tên khách hàng",
+      // dataIndex: ["id_customer", "full_name"],
+      render: (data) => {
+        return (
+          <div
+            onClick={() =>
+              navigate("/group-order/manage-order/details-customer", {
+                state: { id: data?.id_customer?._id },
+              })
+            }
+            className="div-name"
+          >
+            <a>{data?.id_customer?.full_name}</a>
+            <a>{data?.id_customer?.phone}</a>
+          </div>
+        );
+      },
+    },
+    {
       title: "Dịch vụ",
       render: (data) => {
         return (
@@ -119,7 +97,7 @@ export default function OrderCustomer() {
       },
     },
     {
-      title: "Thời gian",
+      title: "Ngày làm",
       render: (data) => {
         return (
           <div className="div-worktime">
@@ -149,16 +127,19 @@ export default function OrderCustomer() {
           {!data?.id_collaborator ? (
             <a>Đang tìm kiếm</a>
           ) : (
-            <a
+            <div
               onClick={() =>
                 navigate("/group-order/manage-order/details-collaborator", {
-                  state: { id: data?.id_collaborator },
+                  state: { id: data?.id_collaborator?._id },
                 })
               }
-              className="text-collaborator"
+              className="div-name"
             >
-              {data?.name_collaborator}
-            </a>
+              <a className="text-collaborator">
+                {data?.id_collaborator?.full_name}
+              </a>
+              <a>{data?.id_collaborator?.phone}</a>
+            </div>
           )}
         </>
       ),
@@ -170,7 +151,7 @@ export default function OrderCustomer() {
         <a
           className={
             data?.status === "pending"
-              ? "text-pending"
+              ? "text-pending-order"
               : data?.status === "confirm"
               ? "text-confirm"
               : data?.status === "doing"
@@ -192,49 +173,17 @@ export default function OrderCustomer() {
         </a>
       ),
     },
-    // {
-    //   key: "action",
-    //   render: (data) => (
-    //     <Space size="middle">
-    //       <Dropdown
-    //         menu={{
-    //           items,
-    //         }}
-    //         placement="bottom"
-    //         trigger={["click"]}
-    //       >
-    //         <div>
-    //           <UilEllipsisV />
-    //         </div>
-    //       </Dropdown>
-    //     </Space>
-    //   ),
-    // },
   ];
 
-  const onChange = (page) => {
-    setCurrentPage(page);
-    const start = page * data.length - data.length;
-    getOrderByCustomers(id, start, 20)
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.total);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  const onChange = (page) => {};
 
   return (
     <React.Fragment>
       <div>
         <Table
           columns={columns}
-          dataSource={dataFilter.length > 0 ? dataFilter : data}
+          dataSource={data}
           pagination={false}
-          // locale={{
-          //   emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
-          // }}
           rowKey={(record) => record._id}
           rowSelection={{
             selectedRowKeys,

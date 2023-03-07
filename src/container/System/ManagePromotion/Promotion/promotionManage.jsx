@@ -44,6 +44,7 @@ import EditPromotionEvent from "../../../../components/editPromotionEvent/editPr
 import AddPromotionOrther from "../../../../components/addPromotionOrther/addPromotionOrther.js";
 import EditPromotionOrther from "../../../../components/editPromotionOrther/editPromotionOrther.js";
 import { errorNotify } from "../../../../helper/toast.js";
+import { useNavigate } from "react-router-dom";
 
 export default function PromotionManage({
   type,
@@ -72,6 +73,7 @@ export default function PromotionManage({
   const toggleActive = () => setModalActive(!modalActive);
   const [api, contextHolder] = notification.useNotification();
   const user = useSelector(getUser);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(
@@ -309,9 +311,22 @@ export default function PromotionManage({
           },
           {
             title: "Sử dụng",
-            dataIndex: "total_used_promotion",
+
             align: "center",
             width: "10%",
+            render: (data) => {
+              return (
+                <a
+                  onClick={() =>
+                    navigate("/promotion/manage-setting/order-promotion", {
+                      state: { id: data?._id },
+                    })
+                  }
+                >
+                  {data?.total_used_promotion}
+                </a>
+              );
+            },
           },
           {
             title: "Vị trí",
@@ -458,9 +473,21 @@ export default function PromotionManage({
           },
           {
             title: "Sử dụng",
-            dataIndex: "total_used_promotion",
             align: "center",
             width: "10%",
+            render: (data) => {
+              return (
+                <a
+                  onClick={() =>
+                    navigate("/promotion/manage-setting/order-promotion", {
+                      state: { id: data?._id },
+                    })
+                  }
+                >
+                  {data?.total_used_promotion}
+                </a>
+              );
+            },
           },
           {
             title: "Position",

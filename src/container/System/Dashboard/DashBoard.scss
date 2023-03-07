@@ -213,6 +213,20 @@
           font-weight: normal;
           font-size: 11px;
           font-family: "Roboto", sans-serif;
+          width: 150;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        .text-level-number {
+          color: white;
+          font-weight: normal;
+          font-size: 11px;
+          font-family: "Roboto", sans-serif;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
       }
 
@@ -231,6 +245,19 @@
           font-weight: normal;
           font-size: 11px;
           font-family: "Roboto", sans-serif;
+          width: 100px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .text-level-number {
+          color: white;
+          font-weight: normal;
+          font-size: 11px;
+          font-family: "Roboto", sans-serif;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
       }
 
@@ -249,6 +276,19 @@
           font-weight: normal;
           font-size: 11px;
           font-family: "Roboto", sans-serif;
+          width: 88px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .text-level-number {
+          color: white;
+          font-weight: normal;
+          font-size: 11px;
+          font-family: "Roboto", sans-serif;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
       }
       .level-ctv4 {
@@ -271,6 +311,15 @@
           white-space: nowrap;
           text-overflow: ellipsis;
         }
+        .text-level-number {
+          color: white;
+          font-weight: normal;
+          font-size: 11px;
+          font-family: "Roboto", sans-serif;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
       }
       .level-ctv5 {
         display: flex;
@@ -288,6 +337,15 @@
           font-size: 11px;
           font-family: "Roboto", sans-serif;
           width: 66px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .text-level-number {
+          color: white;
+          font-weight: normal;
+          font-size: 11px;
+          font-family: "Roboto", sans-serif;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;

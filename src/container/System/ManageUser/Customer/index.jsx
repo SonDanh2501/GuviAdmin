@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 
 const ManageCustomer = () => {
   const [status, setStatus] = useState("");
+
   const customers = useSelector(getCustomer);
   const customerTotal = useSelector(getCustomerTotalItem);
   const dispatch = useDispatch();

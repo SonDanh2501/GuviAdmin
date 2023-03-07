@@ -1,124 +1,145 @@
 $font-01: "Roboto", sans-serif;
 
-.container-sidebar {
-  padding-top: 20px;
+.div-sidebar {
+  display: flex;
+  flex-direction: column;
 
-  .div-header {
-    padding: 10px;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
+  .div-menu {
     display: flex;
+    justify-content: flex-end;
+    padding-top: 10px;
+    padding-right: 10px;
 
-    .logo {
-      width: 100px;
-      height: 38pxpx;
-    }
-
-    .name-guvi {
-      color: rgb(0, 0, 0);
-      margin-left: 20px;
-    }
-  }
-
-  .icon {
-    margin-right: 20px;
-    color: black;
-  }
-
-  .icon-right {
-    color: black;
-    display: flex;
-    margin-left: 25%;
-    margin-top: 2px;
-  }
-
-  .active-link {
-    width: "10%";
-    height: 60px;
-    background-color: #e6e8f4;
-    padding: 20px 30px;
-    display: flex;
-    text-decoration: none;
-
-    .active-text {
-      text-decoration: none !important;
-      color: rgb(0, 0, 0);
-      font-family: $font-01;
-    }
-  }
-  .unactive-link {
-    width: "10%";
-    height: 60px;
-    background-color: "transparent" !important;
-    padding: 20px 30px;
-    display: flex;
-    border-bottom: 1px solid #e6e8f4;
-
-    .unactive-text {
-      text-decoration: none !important;
-      color: rgb(0, 0, 0);
-      font-family: $font-01;
-    }
-  }
-
-  .nav {
-    .active-link-nav {
-      width: "10%";
-      height: 60px;
-      padding: 20px 60px 20px 40px;
+    .menu {
       display: flex;
-      text-decoration: none;
-
-      .active-text-nav {
-        text-decoration: none !important;
-        color: rgb(0, 0, 0);
-        font-weight: 600;
-        font-family: $font-01;
-      }
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      width: 30px;
+      height: 30px;
+      border: 1px solid #d6d6d6;
     }
-    .unactive-link-nav {
-      width: "10%";
-      height: 60px;
-      background-color: "transparent" !important;
-      padding: 20px 60px 20px 40px;
+  }
+  .container-sidebar {
+    padding-top: 10px;
+
+    .div-header {
+      padding: 10px;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
       display: flex;
 
-      .unactive-text-nav {
-        text-decoration: none !important;
+      .logo {
+        width: 100px;
+        height: 38pxpx;
+      }
+
+      .name-guvi {
         color: rgb(0, 0, 0);
-        font-family: $font-01;
+        margin-left: 20px;
       }
     }
-  }
 
-  .configuration {
-    position: absolute;
-    width: 100%;
+    .icon {
+      margin-right: 20px;
+      color: black;
+    }
 
-    .active-link-configuration {
+    .icon-right {
+      color: black;
+      display: flex;
+      margin-left: 25%;
+      margin-top: 2px;
+    }
+
+    .active-link {
+      width: "10%";
       height: 60px;
       background-color: #e6e8f4;
       padding: 20px 30px;
       display: flex;
       text-decoration: none;
 
-      .active-text-configuration {
+      .active-text {
         text-decoration: none !important;
         color: rgb(0, 0, 0);
         font-family: $font-01;
       }
     }
-    .unactive-link-configuration {
+    .unactive-link {
+      width: "10%";
       height: 60px;
       background-color: "transparent" !important;
       padding: 20px 30px;
       display: flex;
+      border-bottom: 1px solid #e6e8f4;
 
-      .unactive-text-configuration {
+      .unactive-text {
         text-decoration: none !important;
         color: rgb(0, 0, 0);
         font-family: $font-01;
+      }
+    }
+
+    .nav {
+      .active-link-nav {
+        width: "10%";
+        height: 60px;
+        padding: 20px 60px 20px 40px;
+        display: flex;
+        text-decoration: none;
+
+        .active-text-nav {
+          text-decoration: none !important;
+          color: rgb(0, 0, 0);
+          font-weight: 600;
+          font-family: $font-01;
+        }
+      }
+      .unactive-link-nav {
+        width: "10%";
+        height: 60px;
+        background-color: "transparent" !important;
+        padding: 20px 60px 20px 40px;
+        display: flex;
+
+        .unactive-text-nav {
+          text-decoration: none !important;
+          color: rgb(0, 0, 0);
+          font-family: $font-01;
+        }
+      }
+    }
+
+    .configuration {
+      position: absolute;
+      width: 100%;
+
+      .active-link-configuration {
+        height: 60px;
+        background-color: #e6e8f4;
+        padding: 20px 30px;
+        display: flex;
+        text-decoration: none;
+
+        .active-text-configuration {
+          text-decoration: none !important;
+          color: rgb(0, 0, 0);
+          font-family: $font-01;
+        }
+      }
+      .unactive-link-configuration {
+        height: 60px;
+        background-color: "transparent" !important;
+        padding: 20px 30px;
+        display: flex;
+
+        .unactive-text-configuration {
+          text-decoration: none !important;
+          color: rgb(0, 0, 0);
+          font-family: $font-01;
+        }
       }
     }
   }

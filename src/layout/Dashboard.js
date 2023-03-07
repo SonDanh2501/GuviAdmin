@@ -1,5 +1,6 @@
 import { Layout } from "antd";
 import { Footer } from "antd/es/layout/layout";
+import moment from "moment";
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Sidebar from "../components/Sidebar/Sidebar";
@@ -14,6 +15,7 @@ import SettingQrCode from "../container/System/ManageConfiguration/ScreenConfigu
 import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
 import ManageOrder from "../container/System/ManageOrder";
 import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDoingManage";
+import OrderUsePromotion from "../container/System/ManagePromotion/OrderUsePromotion";
 import ManageReport from "../container/System/ManageReport";
 import DetailReportManager from "../container/System/ManageReport/DetailsReportCollaborator";
 import DetailRegisterCustomer from "../container/System/ManageReport/ReportCustomer/DetailRegisterCustomer";
@@ -32,11 +34,7 @@ const { Header, Content, Sider } = Layout;
 
 const Dashboard = () => {
   const [hideSidebar, setHideSidebar] = useState(true);
-  const [color, setColor] = useState("");
 
-  const onColor = (e) => {
-    setColor(e);
-  };
   return (
     <Layout>
       <Header
@@ -47,17 +45,36 @@ const Dashboard = () => {
         <HeaderBar />
       </Header>
       <Layout>
-        <Sider
-          width={230}
-          style={{
-            background: "white",
-          }}
-        >
-          <Sidebar />
-        </Sider>
+        {!hideSidebar && (
+          <Sider
+            width={1}
+            style={{
+              background: "transparent",
+            }}
+          >
+            <div
+              className="div-menu-das"
+              onClick={() => setHideSidebar(!hideSidebar)}
+            >
+              <i class="uil uil-bars"></i>
+            </div>
+          </Sider>
+        )}
+
+        {hideSidebar && (
+          <Sider
+            width={230}
+            style={{
+              background: "white",
+            }}
+          >
+            <Sidebar onClick={() => setHideSidebar(!hideSidebar)} />
+          </Sider>
+        )}
         <Layout
           style={{
             padding: "24px 24px",
+            minHeight: "80%",
           }}
         >
           <Content
@@ -94,6 +111,11 @@ const Dashboard = () => {
               <Route
                 path="/promotion/manage-setting"
                 element={<ManageSetting />}
+              />
+
+              <Route
+                path="/promotion/manage-setting/order-promotion"
+                element={<OrderUsePromotion />}
               />
 
               <Route
@@ -171,6 +193,7 @@ const Dashboard = () => {
               />
             </Routes>
           </Content>
+          {/* <Footer>Guvi Admin ©{moment().year()} Created by Le Minh Dang</Footer> */}
         </Layout>
       </Layout>
     </Layout>

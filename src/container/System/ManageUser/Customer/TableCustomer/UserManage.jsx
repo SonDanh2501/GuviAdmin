@@ -2,11 +2,7 @@ import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
-import {
-  FilterOutlined,
-  MoreOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
+import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
 import { Dropdown, FloatButton, Input, Pagination, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
@@ -17,16 +13,13 @@ import {
   searchCustomers,
 } from "../../../../../api/customer";
 import EditCustomer from "../../../../../components/editCustomer/editCustomer";
+import LoadingPagination from "../../../../../components/paginationLoading";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
-import {
-  deleteCustomerAction,
-  getCustomers,
-} from "../../../../../redux/actions/customerAction";
+import { getCustomers } from "../../../../../redux/actions/customerAction";
 import { loadingAction } from "../../../../../redux/actions/loading";
-import "./UserManage.scss";
-import LoadingPagination from "../../../../../components/paginationLoading";
 import { getUser } from "../../../../../redux/selectors/auth";
+import "./UserManage.scss";
 
 export default function UserManage(props) {
   const { data, total, status } = props;
@@ -43,6 +36,7 @@ export default function UserManage(props) {
   const [modalEdit, setModalEdit] = useState(false);
   const [conditionFilter, setConditionFilter] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [rank, setRank] = useState("");
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
   const navigate = useNavigate();
@@ -162,172 +156,334 @@ export default function UserManage(props) {
     },
   ];
 
-  const columns = [
-    {
-      title: "Mã",
-      width: "10%",
-      render: (data) => {
-        return (
-          <div
-            onClick={() =>
-              navigate("/system/user-manage/details-customer", {
-                state: { id: data?._id },
-              })
-            }
-          >
-            {/* <img
+  const columns =
+    status === "birthday"
+      ? [
+          {
+            title: "Mã",
+
+            render: (data) => {
+              return (
+                <div
+                  onClick={() =>
+                    navigate("/system/user-manage/details-customer", {
+                      state: { id: data?._id },
+                    })
+                  }
+                >
+                  <a className="text-id"> {data?.id_view}</a>
+                </div>
+              );
+            },
+          },
+          {
+            title: "Khách hàng",
+
+            render: (data) => {
+              return (
+                <div
+                  onClick={() =>
+                    navigate("/system/user-manage/details-customer", {
+                      state: { id: data?._id },
+                    })
+                  }
+                >
+                  {/* <img
               className="img_customer"
               src={data?.avatar ? data?.avatar : user}
             /> */}
-            <a className="text-id"> {data?.id_view}</a>
-          </div>
-        );
-      },
-    },
-    {
-      title: "Khách hàng",
-      width: "20%",
-      render: (data) => {
-        return (
-          <div
-            onClick={() =>
-              navigate("/system/user-manage/details-customer", {
-                state: { id: data?._id },
-              })
-            }
-          >
-            {/* <img
-              className="img_customer"
-              src={data?.avatar ? data?.avatar : user}
-            /> */}
-            <a className="text-name"> {data?.full_name}</a>
-          </div>
-        );
-      },
-    },
-    {
-      title: "Số điện thoại",
-      render: (data, record, index) => {
-        const phone = data?.phone.slice(0, 7);
-        return (
-          <div className="hide-phone">
-            <a className="text-phone">
-              {rowIndex === index
-                ? hidePhone
-                  ? data?.phone
-                  : phone + "***"
-                : phone + "***"}
-            </a>
-            <a
-              className="btn-eyes"
-              onClick={() =>
-                rowIndex === index
-                  ? setHidePhone(!hidePhone)
-                  : setHidePhone(!hidePhone)
+                  <a className="text-name"> {data?.full_name}</a>
+                </div>
+              );
+            },
+          },
+          {
+            title: "Số điện thoại",
+            render: (data, record, index) => {
+              const phone = data?.phone.slice(0, 7);
+              return (
+                <div className="hide-phone">
+                  <a className="text-phone">
+                    {rowIndex === index
+                      ? hidePhone
+                        ? data?.phone
+                        : phone + "***"
+                      : phone + "***"}
+                  </a>
+                  <a
+                    className="btn-eyes"
+                    onClick={() =>
+                      rowIndex === index
+                        ? setHidePhone(!hidePhone)
+                        : setHidePhone(!hidePhone)
+                    }
+                  >
+                    {rowIndex === index ? (
+                      hidePhone ? (
+                        <i class="uil uil-eye"></i>
+                      ) : (
+                        <i class="uil uil-eye-slash"></i>
+                      )
+                    ) : (
+                      <i class="uil uil-eye-slash"></i>
+                    )}
+                  </a>
+                </div>
+              );
+            },
+          },
+
+          {
+            title: "Ngày sinh",
+            render: (data) => {
+              return (
+                <a>{moment(new Date(data?.birthday)).format("DD/MM/YYYY")}</a>
+              );
+            },
+          },
+          {
+            title: "Hạng thành viên",
+            render: (data) => {
+              if (data?.rank_point >= 0 && data?.rank_point < 100) {
+                setRank("Hạng thành viên");
+              } else if (data?.rank_point >= 100 && data?.rank_point < 300) {
+                setRank("Bạc");
+              } else if (data?.rank_point >= 300 && data?.rank_point < 1500) {
+                setRank("Vàng");
+              } else {
+                setRank("Bạch kim");
               }
-            >
-              {rowIndex === index ? (
-                hidePhone ? (
-                  <i class="uil uil-eye"></i>
-                ) : (
-                  <i class="uil uil-eye-slash"></i>
-                )
-              ) : (
-                <i class="uil uil-eye-slash"></i>
-              )}
-            </a>
-          </div>
-        );
-      },
-      width: "15%",
-    },
-    {
-      title: "Địa Chỉ",
-      render: (data) => (
-        <a className="text-address">
-          {!data?.default_address
-            ? "Chưa có"
-            : data?.default_address.slice(0, 60) + "..."}
-        </a>
-      ),
-      width: "25%",
-    },
-    {
-      title: "Ngày tạo",
-      render: (data) => {
-        return (
-          <div className="div-create">
-            <a className="text-create">
-              {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-create">
-              {moment(new Date(data?.date_create)).format("HH:mm")}
-            </a>
-          </div>
-        );
-      },
-      width: "10%",
-    },
-    {
-      title: "Tổng Đơn",
-      render: (data) => <a className="text-address">{data?.total_order}</a>,
-      width: "15%",
-      align: "center",
-    },
-    {
-      title: "Đơn gần nhất",
-      render: (data) => {
-        return (
-          <>
-            {data?.id_group_order ? (
-              <a
-                className="text-id-order"
-                onClick={() =>
-                  navigate("/details-order", {
-                    state: { id: data?.id_group_order },
-                  })
-                }
-              >
-                {data?.id_view_group_order}
+              return <a className="text-address">{rank}</a>;
+            },
+          },
+          {
+            title: "Tổng Đơn",
+            render: (data) => (
+              <a className="text-address">{data?.total_order}</a>
+            ),
+
+            align: "center",
+            responsive: ["xl"],
+          },
+          {
+            title: "Đơn gần nhất",
+            render: (data) => {
+              return (
+                <>
+                  {data?.id_group_order ? (
+                    <a
+                      className="text-id-order"
+                      onClick={() =>
+                        navigate("/details-order", {
+                          state: { id: data?.id_group_order },
+                        })
+                      }
+                    >
+                      {data?.id_view_group_order}
+                    </a>
+                  ) : (
+                    <a className="text-address">Không có</a>
+                  )}
+                </>
+              );
+            },
+
+            align: "center",
+          },
+          {
+            title: " Tổng",
+            render: (data) => (
+              <a className="text-address">{formatMoney(data?.total_price)}</a>
+            ),
+            align: "right",
+            responsive: ["xl"],
+          },
+          {
+            key: "action",
+
+            align: "center",
+            render: (data) => (
+              <Space size="middle">
+                <Dropdown
+                  menu={{
+                    items,
+                  }}
+                  placement="bottom"
+                  trigger={["click"]}
+                >
+                  <a>
+                    <MoreOutlined className="icon-more" />
+                  </a>
+                </Dropdown>
+              </Space>
+            ),
+          },
+        ]
+      : [
+          {
+            title: "Mã",
+
+            render: (data) => {
+              return (
+                <div
+                  onClick={() =>
+                    navigate("/system/user-manage/details-customer", {
+                      state: { id: data?._id },
+                    })
+                  }
+                >
+                  <a className="text-id"> {data?.id_view}</a>
+                </div>
+              );
+            },
+          },
+          {
+            title: "Khách hàng",
+
+            render: (data) => {
+              return (
+                <div
+                  onClick={() =>
+                    navigate("/system/user-manage/details-customer", {
+                      state: { id: data?._id },
+                    })
+                  }
+                >
+                  {/* <img
+              className="img_customer"
+              src={data?.avatar ? data?.avatar : user}
+            /> */}
+                  <a className="text-name"> {data?.full_name}</a>
+                </div>
+              );
+            },
+          },
+          {
+            title: "Số điện thoại",
+            render: (data, record, index) => {
+              const phone = data?.phone.slice(0, 7);
+              return (
+                <div className="hide-phone">
+                  <a className="text-phone">
+                    {rowIndex === index
+                      ? hidePhone
+                        ? data?.phone
+                        : phone + "***"
+                      : phone + "***"}
+                  </a>
+                  <a
+                    className="btn-eyes"
+                    onClick={() =>
+                      rowIndex === index
+                        ? setHidePhone(!hidePhone)
+                        : setHidePhone(!hidePhone)
+                    }
+                  >
+                    {rowIndex === index ? (
+                      hidePhone ? (
+                        <i class="uil uil-eye"></i>
+                      ) : (
+                        <i class="uil uil-eye-slash"></i>
+                      )
+                    ) : (
+                      <i class="uil uil-eye-slash"></i>
+                    )}
+                  </a>
+                </div>
+              );
+            },
+          },
+          {
+            title: "Địa Chỉ",
+            render: (data) => (
+              <a className="text-address">
+                {!data?.default_address
+                  ? "Chưa có"
+                  : data?.default_address.slice(0, 60) + "..."}
               </a>
-            ) : (
-              <a className="text-address">Không có</a>
-            )}
-          </>
-        );
-      },
-      width: "20%",
-      align: "center",
-    },
-    {
-      title: " Tổng",
-      render: (data) => (
-        <a className="text-address">{formatMoney(data?.total_price)}</a>
-      ),
-      align: "right",
-      width: "10%",
-    },
-    {
-      key: "action",
-      width: "10%",
-      align: "center",
-      render: (data) => (
-        <Space size="middle">
-          <Dropdown
-            menu={{
-              items,
-            }}
-            placement="bottom"
-            trigger={["click"]}
-          >
-            <a>
-              <MoreOutlined className="icon-more" />
-            </a>
-          </Dropdown>
-        </Space>
-      ),
-    },
-  ];
+            ),
+
+            responsive: ["xl"],
+          },
+          {
+            title: "Ngày tạo",
+            render: (data) => {
+              return (
+                <div className="div-create">
+                  <a className="text-create">
+                    {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
+                  </a>
+                  <a className="text-create">
+                    {moment(new Date(data?.date_create)).format("HH:mm")}
+                  </a>
+                </div>
+              );
+            },
+            responsive: ["xl"],
+          },
+          {
+            title: "Tổng Đơn",
+            render: (data) => (
+              <a className="text-address">{data?.total_order}</a>
+            ),
+
+            align: "center",
+            responsive: ["xl"],
+          },
+          {
+            title: "Đơn gần nhất",
+            render: (data) => {
+              return (
+                <>
+                  {data?.id_group_order ? (
+                    <a
+                      className="text-id-order"
+                      onClick={() =>
+                        navigate("/details-order", {
+                          state: { id: data?.id_group_order },
+                        })
+                      }
+                    >
+                      {data?.id_view_group_order}
+                    </a>
+                  ) : (
+                    <a className="text-address">Không có</a>
+                  )}
+                </>
+              );
+            },
+
+            align: "center",
+          },
+          {
+            title: " Tổng",
+            render: (data) => (
+              <a className="text-address">{formatMoney(data?.total_price)}</a>
+            ),
+            align: "right",
+            responsive: ["xl"],
+          },
+          {
+            key: "action",
+
+            align: "center",
+            render: (data) => (
+              <Space size="middle">
+                <Dropdown
+                  menu={{
+                    items,
+                  }}
+                  placement="bottom"
+                  trigger={["click"]}
+                >
+                  <a>
+                    <MoreOutlined className="icon-more" />
+                  </a>
+                </Dropdown>
+              </Space>
+            ),
+          },
+        ];
 
   const itemFilter = [
     {
@@ -403,10 +559,6 @@ export default function UserManage(props) {
                 },
               };
             }}
-            // locale={{
-            //   emptyText:
-            //     customers.length > 0 ? <Empty /> : <Skeleton active={true} />,
-            // }}
           />
         </div>
 
