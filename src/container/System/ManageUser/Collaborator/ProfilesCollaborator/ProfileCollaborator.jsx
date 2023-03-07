@@ -154,7 +154,7 @@ const ProfileCollaborator = () => {
                     <WithdrawTopup id={id} />
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Đánh giá" key="6">
-                    <Review />
+                    <Review id={id} totalReview={data?.total_star} />
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Tài khoản ngân hàng" key="7">
                     <BankAccount id={data?._id} />

@@ -460,7 +460,7 @@ export default function CollaboratorManage(props) {
     <React.Fragment>
       <div className="mt-2 p-3">
         <div className="div-header-colla">
-          <Dropdown
+          {/* <Dropdown
             menu={{ items: itemFilter }}
             trigger={["click"]}
             className="dropdown"
@@ -471,7 +471,7 @@ export default function CollaboratorManage(props) {
                 <a className="text-filter">Thêm điều kiện lọc</a>
               </Space>
             </a>
-          </Dropdown>
+          </Dropdown> */}
           <Input
             placeholder="Tìm kiếm"
             type="text"

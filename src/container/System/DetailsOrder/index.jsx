@@ -10,7 +10,7 @@ import {
   changeOrderCancelToDoneApi,
   cancelGroupOrderApi,
 } from "../../../api/order";
-import user from "../../../assets/images/user.png";
+import userIma from "../../../assets/images/user.png";
 import { formatMoney } from "../../../helper/formatMoney";
 import { errorNotify } from "../../../helper/toast";
 import { loadingAction } from "../../../redux/actions/loading";
@@ -330,7 +330,7 @@ const DetailsOrder = () => {
                   src={
                     dataGroup?.id_customer?.avatar
                       ? dataGroup?.id_customer?.avatar
-                      : user
+                      : userIma
                   }
                   className="img-customer"
                 />
