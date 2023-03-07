@@ -456,7 +456,7 @@ export default function Home() {
                       <p className="text-level">
                         {topCollaborator[0]?._id?.full_name}
                       </p>
-                      <p className="text-level">
+                      <p className="text-level-number">
                         {formatMoney(topCollaborator[0]?.sumIncome)}
                       </p>
                     </div>
@@ -474,7 +474,7 @@ export default function Home() {
                         <p className="text-level">
                           {topCollaborator[1]?._id?.name}
                         </p>
-                        <p className="text-level">
+                        <p className="text-level-number">
                           {formatMoney(topCollaborator[1]?.sumIncome)}
                         </p>
                       </div>
@@ -493,7 +493,7 @@ export default function Home() {
                         <p className="text-level">
                           {topCollaborator[2]?._id?.name}
                         </p>
-                        <p className="text-level">
+                        <p className="text-level-number">
                           {formatMoney(topCollaborator[2]?.sumIncome)}
                         </p>
                       </div>
@@ -512,7 +512,7 @@ export default function Home() {
                         <p className="text-level">
                           {topCollaborator[3]?._id?.name}
                         </p>
-                        <p className="text-level">
+                        <p className="text-level-number">
                           {formatMoney(topCollaborator[3]?.sumIncome)}
                         </p>
                       </div>
@@ -531,7 +531,7 @@ export default function Home() {
                         <p className="text-level">
                           {topCollaborator[4]?._id?.name}
                         </p>
-                        <p className="text-level">
+                        <p className="text-level-number">
                           {formatMoney(topCollaborator[4]?.sumIncome)}
                         </p>
                       </div>

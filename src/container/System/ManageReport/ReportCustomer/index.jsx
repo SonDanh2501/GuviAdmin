@@ -73,7 +73,7 @@ const ReportCustomer = () => {
 
     getTotalCustomerDay(
       moment().startOf("month").toISOString(),
-      moment().endOf("month").toISOString()
+      moment(new Date()).toISOString()
     )
       .then((res) => {
         setDataTable(res);
@@ -109,9 +109,23 @@ const ReportCustomer = () => {
       });
   };
 
+  const onChangeDay = (start, end) => {
+    setIsLoading(true);
+    const dayStart = moment(start).toISOString();
+    const dayEnd = moment(end).toISOString();
+    getTotalCustomerDay(dayStart, dayEnd)
+      .then((res) => {
+        setDataTable(res);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  };
+
   const onChangeMonth = (date, dateString) => {
     setIsLoading(true);
-
     getTotalCustomerDay(
       moment(dateString).startOf("month").toISOString(),
       moment(dateString).endOf("month").toISOString()
@@ -121,7 +135,21 @@ const ReportCustomer = () => {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        setIsLoading(false);
+      });
+  };
+
+  const onChangeWeek = (date, dateString) => {
+    setIsLoading(true);
+    getTotalCustomerDay(
+      moment(date?.$d).startOf("week").toISOString(),
+      moment(date?.$d).endOf("week").toISOString()
+    )
+      .then((res) => {
+        setDataTable(res);
+        setIsLoading(false);
+      })
+      .catch((err) => {
         setIsLoading(false);
       });
   };
@@ -275,9 +303,24 @@ const ReportCustomer = () => {
       </div>
       <a className="text-title">SỐ LƯỢT ĐĂNG KÝ USER THEO THỜI GIAN</a>
       <div className="mt-3 div-table">
-        <div>
-          <a className="text-time">Thời gian</a>
-          <DatePicker picker="month" onChange={onChangeMonth} />
+        <div className="div-header-table">
+          <div>
+            <a className="text-time">Thời gian</a>
+            <RangePicker
+              picker="day"
+              onChange={(e) => onChangeDay(e[0]?.$d, e[1]?.$d)}
+            />
+          </div>
+
+          <div className="ml-5">
+            <a className="text-time">Tuần</a>
+            <DatePicker picker="week" onChange={onChangeWeek} />
+          </div>
+
+          <div className="ml-5">
+            <a className="text-time">Tháng</a>
+            <DatePicker picker="month" onChange={onChangeMonth} />
+          </div>
         </div>
 
         <div className="mt-4">
