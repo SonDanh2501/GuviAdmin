@@ -81,6 +81,8 @@ const EditPromotionOrther = ({ state, setState, data }) => {
   const [position, setPosition] = useState();
   const [isPaymentMethod, setIsPaymentMethod] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState([]);
+  const [listCustomers, setListCustomers] = useState([]);
+  const [listNameCustomers, setListNameCustomers] = useState([]);
   const [dataL, setDataL] = useState([]);
   const [id, setId] = useState("");
   const [name, setName] = useState("");
@@ -274,7 +276,7 @@ const EditPromotionOrther = ({ state, setState, data }) => {
         setGroupCustomer(res?.id_group_customer);
         setIsCustomer(res?.is_id_customer);
         setCustomer(res?.id_customer);
-        setId(res?.id_customer);
+        setListCustomers(res?.id_customer);
         setIsUsePromo(res?.is_limited_use);
         setUsePromo(res?.limited_use);
         setPromoType(res?.type_discount);
@@ -294,6 +296,28 @@ const EditPromotionOrther = ({ state, setState, data }) => {
       })
       .catch((err) => console.log(err));
   }, [data]);
+
+  const onChooseCustomer = (item) => {
+    setId(item?._id);
+    setName("");
+    setDataL([]);
+    const newData = listCustomers.concat(item?._id);
+    const newNameData = listNameCustomers.concat({
+      name: item?.full_name,
+      phone: item?.phone,
+      id: item?._id,
+      idView: item?.id_view,
+    });
+    setListCustomers(newData);
+    setListNameCustomers(newNameData);
+  };
+
+  const removeItemCustomer = (item) => {
+    const newNameArray = listNameCustomers.filter((i) => i?.id !== item?.id);
+    const newArray = listCustomers.filter((i) => i !== item?.id);
+    setListNameCustomers(newNameArray);
+    setListCustomers(newArray);
+  };
 
   const onEditPromotion = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -326,7 +350,7 @@ const EditPromotionOrther = ({ state, setState, data }) => {
           is_id_group_customer: isGroupCustomer,
           id_group_customer: groupCustomer,
           is_id_customer: isCustomer,
-          id_customer: id,
+          id_customer: listCustomers,
           service_apply: [],
           is_limited_use: isUsePromo,
           limited_use: isUsePromo ? usePromo : 0,
@@ -383,7 +407,7 @@ const EditPromotionOrther = ({ state, setState, data }) => {
     position,
     isPaymentMethod,
     paymentMethod,
-    id,
+    listCustomers,
   ]);
 
   return (
@@ -562,11 +586,7 @@ const EditPromotionOrther = ({ state, setState, data }) => {
                               return (
                                 <div
                                   key={index}
-                                  onClick={(e) => {
-                                    setId(item?._id);
-                                    setName(item?.name);
-                                    setDataL([]);
-                                  }}
+                                  onClick={() => onChooseCustomer(item)}
                                 >
                                   <a>
                                     {item?.name} - {item?.phone} -{" "}
@@ -576,6 +596,26 @@ const EditPromotionOrther = ({ state, setState, data }) => {
                               );
                             })}
                           </List>
+                        )}
+                        {listNameCustomers.length > 0 && (
+                          <div className="div-list-customer">
+                            <List type={"unstyled"}>
+                              {listNameCustomers.map((item) => {
+                                return (
+                                  <div className="div-item-customer">
+                                    <a className="text-name-list">
+                                      - {item?.name} . {item?.phone} .{" "}
+                                      {item?.idView}
+                                    </a>
+                                    <i
+                                      class="uil uil-times-circle"
+                                      onClick={() => removeItemCustomer(item)}
+                                    ></i>
+                                  </div>
+                                );
+                              })}
+                            </List>
+                          </div>
                         )}
                       </div>
                     )}

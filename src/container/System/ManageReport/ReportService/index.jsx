@@ -17,9 +17,10 @@ import {
   getTotalCustomerYear,
   getTotalReportCustomer,
 } from "../../../../api/report";
-import caculator from "../../../../assets/images/caculator.png";
+import add from "../../../../assets/images/add.png";
 import collaborator from "../../../../assets/images/collaborator.png";
 import LoadingPagination from "../../../../components/paginationLoading";
+import vi from "moment/locale/vi";
 import "./index.scss";
 
 const { RangePicker } = DatePicker;
@@ -38,53 +39,164 @@ const ReportService = () => {
   const dataChart = [];
 
   const navigate = useNavigate();
+  const timeWork = (data) => {
+    const start = moment(new Date(data.date_work_schedule[0].date)).format(
+      "HH:mm"
+    );
+
+    const timeEnd =
+      Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
+
+    return start + " - " + timeEnd;
+  };
 
   const columns = [
     {
-      title: "THỜI GIAN",
+      title: "Mã",
+      render: (data) => {
+        return (
+          <a
+            className="text-id"
+            onClick={() =>
+              navigate("/details-order", {
+                state: { id: data?._id },
+              })
+            }
+          >
+            {data?.id_view}
+          </a>
+        );
+      },
+    },
+    {
+      title: "Ngày tạo",
       render: (data) => {
         return (
           <div className="div-create">
             <a className="text-create">
-              {moment(new Date(data?.day)).format("DD/MM/YYYY")}
+              {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
             </a>
             <a className="text-create">
-              {moment(new Date(data?.day)).format("HH:mm")}
+              {moment(new Date(data?.date_create)).format("HH:mm")}
             </a>
           </div>
         );
       },
     },
     {
-      title: "SỐ LƯỢT ĐĂNG KÝ",
-      dataIndex: ["total"],
-      align: "center",
-    },
-    {
-      title: "SỐ LƯỢT CLICK TRANG",
-    },
-    {
-      title: "SỐ LƯỢT TẢI APPSTORE",
-    },
-    {
-      title: "SỐ LƯỢT TẢI GOOGLE PLAY",
-    },
-    {
-      key: "action",
+      title: "Tên khách hàng",
+      // dataIndex: ["id_customer", "full_name"],
       render: (data) => {
         return (
           <div
-            className="btn-details"
             onClick={() =>
-              navigate("/report/manage-report/details-register-customer", {
-                state: { date: data?.day },
+              navigate("/group-order/manage-order/details-customer", {
+                state: { id: data?.id_customer?._id },
               })
             }
+            className="div-name"
           >
-            <a className="text-details">Chi tiết</a>
+            <a>{data?.id_customer?.full_name}</a>
+            <a>{data?.id_customer?.phone}</a>
           </div>
         );
       },
+    },
+    {
+      title: "Dịch vụ",
+      render: (data) => {
+        return (
+          <div className="div-service">
+            <a className="text-service">
+              {data?.type === "schedule"
+                ? "Giúp việc cố định"
+                : data?.type === "loop" && !data?.is_auto_order
+                ? "Giúp việc theo giờ"
+                : data?.type === "loop" && data?.is_auto_order
+                ? "Lặp lại hàng tuần"
+                : ""}
+            </a>
+            <a className="text-service">{timeWork(data)}</a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Ngày làm",
+      render: (data) => {
+        return (
+          <div className="div-worktime">
+            <a className="text-worktime">
+              {" "}
+              {moment(new Date(data?.date_work_schedule[0].date)).format(
+                "DD/MM/YYYY"
+              )}
+            </a>
+            <a className="text-worktime">
+              {moment(new Date(data?.date_work_schedule[0].date))
+                .locale("vi", vi)
+                .format("dddd")}
+            </a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Địa điểm",
+      render: (data) => <p className="text-address">{data?.address}</p>,
+    },
+    {
+      title: "Cộng tác viên",
+      render: (data) => (
+        <>
+          {!data?.id_collaborator ? (
+            <a>Đang tìm kiếm</a>
+          ) : (
+            <div
+              onClick={() =>
+                navigate("/group-order/manage-order/details-collaborator", {
+                  state: { id: data?.id_collaborator?._id },
+                })
+              }
+              className="div-name"
+            >
+              <a className="text-collaborator">
+                {data?.id_collaborator?.full_name}
+              </a>
+              <a>{data?.id_collaborator?.phone}</a>
+            </div>
+          )}
+        </>
+      ),
+    },
+
+    {
+      title: "Trạng thái",
+      render: (data) => (
+        <a
+          className={
+            data?.status === "pending"
+              ? "text-pending-order"
+              : data?.status === "confirm"
+              ? "text-confirm"
+              : data?.status === "doing"
+              ? "text-doing"
+              : data?.status === "done"
+              ? "text-done"
+              : "text-cancel"
+          }
+        >
+          {data?.status === "pending"
+            ? "Đang chờ làm"
+            : data?.status === "confirm"
+            ? "Đã nhận"
+            : data?.status === "doing"
+            ? "Đang làm"
+            : data?.status === "done"
+            ? "Hoàn thành"
+            : "Đã huỷ"}
+        </a>
+      ),
     },
   ];
 
@@ -96,26 +208,54 @@ const ReportService = () => {
             <img src={collaborator} className="img" />
           </div>
           <div className="div-text-tab">
-            <a className="text-tab-header">Tổng user cũ</a>
-            <a className="text-tab-header">{total}</a>
+            <div className="div-t">
+              <a className="text-tab-header">Khách hàng mới</a>
+              <a className="text-tab-header"></a>
+            </div>
           </div>
         </div>
+
+        <div className="div-tab-header">
+          <div className="div-img">
+            <img src={add} className="img" />
+          </div>
+          <div className="div-text-tab">
+            <div className="div-t">
+              <a className="text-tab-header">Tổng đơn KH cũ</a>
+              <a className="text-tab-header"></a>
+            </div>
+          </div>
+        </div>
+
         <div className="div-tab-header">
           <div className="div-img">
             <img src={collaborator} className="img" />
           </div>
           <div className="div-text-tab">
-            <a className="text-tab-header">Tổng user mới</a>
-            <a className="text-tab-header">{totalMonth}</a>
+            <div className="div-t">
+              <a className="text-tab-header">Khách hàng cũ</a>
+              <a className="text-tab-header"></a>
+            </div>
+          </div>
+        </div>
+
+        <div className="div-tab-header">
+          <div className="div-img">
+            <img src={add} className="img" />
+          </div>
+          <div className="div-text-tab">
+            <div className="div-t">
+              <a className="text-tab-header">Tổng đơn KH mới</a>
+              <a className="text-tab-header"></a>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="mt-5 div-table">
-        <a className="text-title">Dịch vụ đã hoàn thành</a>
+        <a className="text-title">Dịch vụ theo khu vực</a>
         <div className="mt-4">
           <Table
-            dataSource={dataTable.reverse()}
             columns={columns}
             pagination={false}
             rowKey={(record) => record._id}

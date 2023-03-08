@@ -3,6 +3,7 @@ import { Tabs } from "antd";
 import "./index.scss";
 import ReportManager from "./ReportCollaborator";
 import ReportCustomer from "./ReportCustomer";
+import ReportInvite from "./ReportInvite";
 import ReportService from "./ReportService";
 
 const ManageReport = () => {
@@ -19,7 +20,10 @@ const ManageReport = () => {
           <Tabs.TabPane tab="Báo cáo số lượng user" key="2">
             <ReportCustomer />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo dịch vụ" key="3">
+          <Tabs.TabPane tab="Báo cáo lượt giới thiệu" key="3">
+            <ReportInvite />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Báo cáo dịch vụ" key="4">
             <ReportService />
           </Tabs.TabPane>
         </Tabs>

@@ -19,6 +19,7 @@ import OrderUsePromotion from "../container/System/ManagePromotion/OrderUsePromo
 import ManageReport from "../container/System/ManageReport";
 import DetailReportManager from "../container/System/ManageReport/DetailsReportCollaborator";
 import DetailRegisterCustomer from "../container/System/ManageReport/ReportCustomer/DetailRegisterCustomer";
+import ReportInviteDetails from "../container/System/ManageReport/ReportInvite/ReportInviteDetails";
 import GroupServiceManage from "../container/System/ManageService/ManageGroupService/ManageGroupService/GroupServiceManage";
 import ServiceManage from "../container/System/ManageService/ManageService/ServiceManage";
 import ManageSetting from "../container/System/ManageSetting";
@@ -169,6 +170,11 @@ const Dashboard = () => {
               <Route
                 path="/report/manage-report/details-register-customer"
                 element={<DetailRegisterCustomer />}
+              />
+
+              <Route
+                path="/report/manage-report/details-customer-invite"
+                element={<ReportInviteDetails />}
               />
 
               <Route

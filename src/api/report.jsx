@@ -64,3 +64,21 @@ export const getTotalDetailCustomerDay = (start_date, end_date) => {
     `/admin/customer_manager/detail_total_customer_daily?lang=vi&start_date=${start_date}&end_date=${end_date}`
   );
 };
+
+export const getReportCustomerInviteDay = (start, length) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_customer_inviter?lang=vi&start=${start}&length=${length}`
+  );
+};
+
+export const getReportDetailsCustomerInvite = (id, start, length) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_detail_customer_inviter/${id}?lang=vi&start=${start}&length=${length}`
+  );
+};
+
+export const getTopCustomerInvite = (start_date, end_date) => {
+  return axiosClient.get(
+    `/admin/report_mananger/top_customer_inviter?lang=vi&start_date=${start_date}&end_date=${end_date}`
+  );
+};
