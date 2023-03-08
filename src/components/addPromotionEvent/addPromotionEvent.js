@@ -68,6 +68,8 @@ const AddPromotionEvent = ({ idService, tab }) => {
   const [titleNoti, setTitleNoti] = useState("");
   const [descriptionNoti, setDescriptionNoti] = useState("");
   const [imgNoti, setImgNoti] = useState("");
+  const [listCustomers, setListCustomers] = useState([]);
+  const [listNameCustomers, setListNameCustomers] = useState([]);
   const [data, setData] = useState([]);
   const [id, setId] = useState("");
   const [name, setName] = useState("");
@@ -191,6 +193,28 @@ const AddPromotionEvent = ({ idService, tab }) => {
     []
   );
 
+  const onChooseCustomer = (item) => {
+    setId(item?._id);
+    setName("");
+    setData([]);
+    const newData = listCustomers.concat(item?._id);
+    const newNameData = listNameCustomers.concat({
+      name: item?.full_name,
+      phone: item?.phone,
+      id: item?._id,
+      idView: item?.id_view,
+    });
+    setListCustomers(newData);
+    setListNameCustomers(newNameData);
+  };
+
+  const removeItemCustomer = (item) => {
+    const newNameArray = listNameCustomers.filter((i) => i?.id !== item?.id);
+    const newArray = listCustomers.filter((i) => i !== item?.id);
+    setListNameCustomers(newNameArray);
+    setListCustomers(newArray);
+  };
+
   const onCreatePromotion = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
     dispatch(
@@ -220,7 +244,7 @@ const AddPromotionEvent = ({ idService, tab }) => {
         is_id_group_customer: isGroupCustomer,
         id_group_customer: groupCustomer,
         is_id_customer: isCustomer,
-        id_customer: id,
+        id_customer: listCustomers,
         service_apply: tab === "tat_ca" ? [serviceApply] : [idService],
         is_limited_use: isUsePromo,
         limited_use: isUsePromo ? usePromo : 0,
@@ -268,7 +292,7 @@ const AddPromotionEvent = ({ idService, tab }) => {
     paymentMethod,
     position,
     idService,
-    id,
+    listCustomers,
   ]);
 
   return (
@@ -493,11 +517,7 @@ const AddPromotionEvent = ({ idService, tab }) => {
                                 <option
                                   key={index}
                                   value={item?._id}
-                                  onClick={(e) => {
-                                    setId(e.target.value);
-                                    setName(item?.name);
-                                    setData([]);
-                                  }}
+                                  onClick={() => onChooseCustomer(item)}
                                 >
                                   {item?.name}
                                 </option>
@@ -505,9 +525,31 @@ const AddPromotionEvent = ({ idService, tab }) => {
                             })}
                           </List>
                         )}
+                        {listNameCustomers.length > 0 && (
+                          <div className="div-list-customer">
+                            <List type={"unstyled"}>
+                              {listNameCustomers.map((item) => {
+                                return (
+                                  <div className="div-item-customer">
+                                    <a className="text-name-list">
+                                      - {item?.name} . {item?.phone} .{" "}
+                                      {item?.idView}
+                                    </a>
+                                    <i
+                                      class="uil uil-times-circle"
+                                      onClick={() => removeItemCustomer(item)}
+                                    ></i>
+                                  </div>
+                                );
+                              })}
+                            </List>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
+                </Col>
+                <Col md={4}>
                   <div>
                     <h5 className="mt-2">7. Số lượng mã khuyến mãi</h5>
                     <FormGroup check inline>
@@ -532,8 +574,6 @@ const AddPromotionEvent = ({ idService, tab }) => {
                       />
                     )}
                   </div>
-                </Col>
-                <Col md={4}>
                   <div>
                     <h5 className="mt-2">8. Số lần sử dụng khuyến mãi</h5>
                     <FormGroup check inline>
