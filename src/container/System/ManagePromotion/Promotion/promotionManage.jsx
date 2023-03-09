@@ -299,24 +299,24 @@ export default function PromotionManage({
                     className="img-customer-promotion"
                     src={data?.thumbnail}
                   />
-                  <a>
-                    {data.title.vi.length > 25
+                  <a className="text-title-promotion">
+                    {/* {data.title.vi.length > 25
                       ? data.title.vi.slice(0, 25) + "..."
-                      : data.title.vi}
+                      : data.title.vi} */}
+                    {data.title.vi}
                   </a>
                 </div>
               );
             },
-            width: "20%",
           },
           {
             title: "Sử dụng",
-
             align: "center",
-            width: "10%",
+
             render: (data) => {
               return (
                 <a
+                  className="text-title-promotion"
                   onClick={() =>
                     navigate("/promotion/manage-setting/order-promotion", {
                       state: { id: data?._id },
@@ -330,21 +330,24 @@ export default function PromotionManage({
           },
           {
             title: "Vị trí",
-            dataIndex: "position",
             align: "center",
-            width: "5%",
+            render: (data) => (
+              <a className="text-title-promotion">{data?.position}</a>
+            ),
           },
           {
             title: "Mã code",
-            dataIndex: "code",
-            width: "10%",
+
             align: "center",
+            render: (data) => (
+              <a className="text-title-promotion">{data?.code}</a>
+            ),
           },
 
           {
             title: "Hạn",
             align: "center",
-            width: "10%",
+
             render: (data) => {
               const startDate = moment(new Date(data?.limit_start_date)).format(
                 "DD/MM/YYYY"
@@ -353,7 +356,7 @@ export default function PromotionManage({
                 "DD/MM/YYYY"
               );
               return (
-                <a>
+                <a className="text-title-promotion">
                   {data?.is_limit_date
                     ? startDate + "-" + endDate
                     : "Không có hạn"}
@@ -364,7 +367,7 @@ export default function PromotionManage({
           {
             title: "Bật/tắt",
             align: "center",
-            width: "10%",
+
             render: (data) => {
               var date =
                 data?.limit_end_date &&
@@ -411,20 +414,19 @@ export default function PromotionManage({
           {
             title: "Trạng thái",
             align: "center",
-            width: "10%",
             render: (data) => {
               return (
                 <div>
                   {data?.status === "upcoming" ? (
-                    <a style={{ color: "green" }}>Sắp diễn ra</a>
+                    <a className="text-upcoming">Sắp diễn ra</a>
                   ) : data?.status === "doing" ? (
-                    <a style={{ color: "green" }}>Đang diễn ra</a>
+                    <a className="text-upcoming">Đang diễn ra</a>
                   ) : data?.status === "out_of_stock" ? (
-                    <a style={{ color: "red" }}>Hết số lượng</a>
+                    <a className="text-cancel">Hết số lượng</a>
                   ) : data?.status === "out_of_date" ? (
-                    <a style={{ color: "red" }}>Hết hạn</a>
+                    <a className="text-cancel">Hết hạn</a>
                   ) : (
-                    <a style={{ color: "red" }}>Kết thúc</a>
+                    <a className="text-cancel">Kết thúc</a>
                   )}
                 </div>
               );
@@ -469,12 +471,11 @@ export default function PromotionManage({
                 </div>
               );
             },
-            width: "20%",
           },
           {
             title: "Sử dụng",
             align: "center",
-            width: "10%",
+
             render: (data) => {
               return (
                 <a
@@ -490,15 +491,15 @@ export default function PromotionManage({
             },
           },
           {
-            title: "Position",
-            dataIndex: "position",
+            title: "Vị trí",
             align: "center",
-            width: "5%",
+            render: (data) => (
+              <a className="text-title-promotion">{data?.position}</a>
+            ),
           },
           {
             title: "Hạn",
             align: "center",
-            width: "10%",
             render: (data) => {
               const startDate = moment(new Date(data?.limit_start_date)).format(
                 "DD/MM/YYYY"
@@ -518,7 +519,6 @@ export default function PromotionManage({
           {
             title: "Bật/tắt",
             align: "center",
-            width: "10%",
             render: (data) => {
               var date =
                 data?.limit_end_date &&
@@ -565,20 +565,19 @@ export default function PromotionManage({
           {
             title: "Trạng thái",
             align: "center",
-            width: "10%",
             render: (data) => {
               return (
                 <div>
                   {data?.status === "upcoming" ? (
-                    <a style={{ color: "green" }}>Sắp diễn ra</a>
+                    <a className="text-upcoming">Sắp diễn ra</a>
                   ) : data?.status === "doing" ? (
-                    <a style={{ color: "green" }}>Đang diễn ra</a>
+                    <a className="text-upcoming">Đang diễn ra</a>
                   ) : data?.status === "out_of_stock" ? (
-                    <a style={{ color: "red" }}>Hết số lượng</a>
+                    <a className="text-cancel">Hết số lượng</a>
                   ) : data?.status === "out_of_date" ? (
-                    <a style={{ color: "red" }}>Hết hạn</a>
+                    <a className="text-cancel">Hết hạn</a>
                   ) : (
-                    <a style={{ color: "red" }}>Kết thúc</a>
+                    <a className="text-cancel">Kết thúc</a>
                   )}
                 </div>
               );

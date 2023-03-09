@@ -171,22 +171,26 @@ export default function TopupManage() {
   const columns = [
     {
       title: "Mã",
-      dataIndex: ["id_collaborator", "id_view"],
+      render: (data) => (
+        <a className="text-id">{data?.id_collaborator?.id_view}</a>
+      ),
     },
     {
       title: "Tên cộng tác viên",
       render: (data) => {
         return (
           <div className="div-name-topup">
-            <a>{data?.id_collaborator?.full_name}</a>
-            <a>{data?.id_collaborator?.phone}</a>
+            <a className="text-name">{data?.id_collaborator?.full_name}</a>
+            <a className="text-phone">{data?.id_collaborator?.phone}</a>
           </div>
         );
       },
     },
     {
       title: "Số tiền",
-      render: (data) => <a>{formatMoney(data?.money)}</a>,
+      render: (data) => (
+        <a className="text-money-topup">{formatMoney(data?.money)}</a>
+      ),
     },
     {
       title: "Nạp/rút",
@@ -210,13 +214,22 @@ export default function TopupManage() {
     },
     {
       title: "Nội dung",
-      dataIndex: "transfer_note",
+      render: (data) => <a className="text-id">{data?.transfer_note}</a>,
     },
     {
       title: "Ngày nạp",
-      render: (data) => (
-        <a>{moment(new Date(data?.date_created)).format("DD/MM/yyy HH:mm")}</a>
-      ),
+      render: (data) => {
+        return (
+          <div className="div-time">
+            <a className="text-time">
+              {moment(new Date(data?.date_created)).format("DD/MM/yyy")}
+            </a>
+            <a className="text-time">
+              {moment(new Date(data?.date_created)).format("HH:mm")}
+            </a>
+          </div>
+        );
+      },
     },
     {
       title: "Trạng thái",
@@ -235,7 +248,6 @@ export default function TopupManage() {
           </div>
         );
       },
-      width: "10%",
       align: "center",
     },
     {

@@ -88,17 +88,18 @@ export default function FeedbackManage() {
   const columns = [
     {
       title: "Loại phản hồi",
-      dataIndex: ["type", "name", "vi"],
+      render: (data) => <a className="text-type">{data?.type?.name?.vi}</a>,
     },
     {
       title: "Nội dung",
-      dataIndex: "body",
+      render: (data) => <a className="text-content">{data?.body}</a>,
     },
     {
       title: "Người phản hồi",
       render: (data) => {
         return (
           <a
+            className="text-type"
             onClick={() =>
               navigate("/details-customer", {
                 state: { id: data?._id },
@@ -112,12 +113,14 @@ export default function FeedbackManage() {
     },
     {
       title: "SĐT người phản hồi",
-      dataIndex: "phone",
+      render: (data) => <a className="text-content">{data?.phone}</a>,
     },
     {
       title: "Ngày phản hồi",
       render: (data) => (
-        <a>{moment(new Date(data?.date_create)).format("DD/MM/yyy - HH:mm")}</a>
+        <a className="text-content">
+          {moment(new Date(data?.date_create)).format("DD/MM/yyy - HH:mm")}
+        </a>
       ),
     },
     {

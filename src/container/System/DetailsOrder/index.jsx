@@ -31,6 +31,7 @@ const DetailsOrder = () => {
   const [openPopup, setOpenPopup] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [serviceFee, setServiceFee] = useState(0);
+  const [rowIndex, setRowIndex] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toggle = () => setModal(!modal);
@@ -261,24 +262,30 @@ const DetailsOrder = () => {
     },
     {
       key: "actions",
-      render: (data) => {
+      render: (data, record, index) => {
         return (
           <>
             <div>
               {data?.status === "doing" || data?.status === "confirm" ? (
-                <Popconfirm
-                  title="Bạn có chuyển trạng thái công việc"
-                  // description="Open Popconfirm with async logic"
-                  open={openStatus}
-                  onConfirm={() => handleChangeStatus(data?._id)}
-                  okButtonProps={{
-                    loading: confirmLoading,
-                  }}
-                  onCancel={() => setOpenStatus(false)}
-                >
+                <div>
+                  {rowIndex === index && (
+                    <Popconfirm
+                      title="Bạn có chuyển trạng thái công việc"
+                      // description="Open Popconfirm with async logic"
+                      open={openStatus}
+                      onConfirm={() => handleChangeStatus(data?._id)}
+                      okButtonProps={{
+                        loading: confirmLoading,
+                      }}
+                      onCancel={() => setOpenStatus(false)}
+                    />
+                  )}
+
                   <Button
                     className="btn-confirm-order"
-                    onClick={showPopStatusconfirm}
+                    onClick={() =>
+                      rowIndex === index ? showPopStatusconfirm() : ""
+                    }
                   >
                     {data?.status === "confirm"
                       ? "Bắt đầu"
@@ -286,8 +293,10 @@ const DetailsOrder = () => {
                       ? "Hoàn thành"
                       : ""}
                   </Button>
-                </Popconfirm>
-              ) : null}
+                </div>
+              ) : (
+                " "
+              )}
             </div>
 
             {/* <div>
@@ -562,7 +571,18 @@ const DetailsOrder = () => {
           ) : null}
 
           <div className="mt-5">
-            <Table columns={columns} dataSource={dataList} pagination={false} />
+            <Table
+              columns={columns}
+              dataSource={dataList}
+              pagination={false}
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    setRowIndex(rowIndex);
+                  },
+                };
+              }}
+            />
           </div>
 
           <FloatButton.BackTop />

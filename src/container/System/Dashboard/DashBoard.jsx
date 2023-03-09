@@ -203,7 +203,7 @@ export default function Home() {
         return (
           <div>
             {!data?.id_collaborator ? (
-              <a>Đang tìm kiếm</a>
+              <a className="text-find-collaborator">Đang tìm kiếm</a>
             ) : (
               <a
                 onClick={() =>

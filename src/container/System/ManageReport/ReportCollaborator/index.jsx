@@ -59,6 +59,7 @@ const ReportManager = () => {
       render: (data) => {
         return (
           <a
+            className="text-id"
             onClick={() =>
               navigate("/report/manage-report/report-details", {
                 state: { id: data?.code_collaborator },

@@ -199,18 +199,18 @@ const AddPromotionEvent = ({ idService, tab }) => {
     setData([]);
     const newData = listCustomers.concat(item?._id);
     const newNameData = listNameCustomers.concat({
-      name: item?.full_name,
+      _id: item?._id,
+      full_name: item?.full_name,
       phone: item?.phone,
-      id: item?._id,
-      idView: item?.id_view,
+      id_view: item?.id_view,
     });
     setListCustomers(newData);
     setListNameCustomers(newNameData);
   };
 
   const removeItemCustomer = (item) => {
-    const newNameArray = listNameCustomers.filter((i) => i?.id !== item?.id);
-    const newArray = listCustomers.filter((i) => i !== item?.id);
+    const newNameArray = listNameCustomers.filter((i) => i?._id !== item?._id);
+    const newArray = listCustomers.filter((i) => i !== item?._id);
     setListNameCustomers(newNameArray);
     setListCustomers(newArray);
   };
@@ -514,13 +514,16 @@ const AddPromotionEvent = ({ idService, tab }) => {
                           <List type={"unstyled"} className="list-item-kh">
                             {data?.map((item, index) => {
                               return (
-                                <option
+                                <div
+                                  className="div-item"
                                   key={index}
-                                  value={item?._id}
                                   onClick={() => onChooseCustomer(item)}
                                 >
-                                  {item?.name}
-                                </option>
+                                  <a className="text-name">
+                                    {item?.full_name} - {item?.phone} -{" "}
+                                    {item?.id_view}
+                                  </a>
+                                </div>
                               );
                             })}
                           </List>
@@ -532,8 +535,8 @@ const AddPromotionEvent = ({ idService, tab }) => {
                                 return (
                                   <div className="div-item-customer">
                                     <a className="text-name-list">
-                                      - {item?.name} . {item?.phone} .{" "}
-                                      {item?.idView}
+                                      - {item?.full_name} . {item?.phone} .{" "}
+                                      {item?.id_view}
                                     </a>
                                     <i
                                       class="uil uil-times-circle"

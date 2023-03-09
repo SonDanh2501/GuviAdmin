@@ -18,6 +18,7 @@
     font-size: 14px;
     line-height: 16px;
     color: black;
+    text-decoration: none;
   }
 }
 
@@ -45,7 +46,7 @@
     font-weight: 400;
     font-size: 14px;
     line-height: 16px;
-    text-transform: capitalize;
+    text-decoration: none;
     color: black;
   }
 }
@@ -72,6 +73,24 @@
   color: #023e8a;
 }
 
+.text-name-customer {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  color: #000000;
+}
+
+.text-phone-customer {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  color: #000000;
+}
+
 .text-pending-order {
   font-family: "Roboto";
   font-style: normal;
@@ -79,6 +98,7 @@
   font-size: 14px;
   line-height: 16px;
   color: #ece200 !important;
+  text-decoration: none;
 }
 
 .text-confirm {
@@ -88,6 +108,7 @@
   font-size: 14px;
   line-height: 16px;
   color: #023e8a;
+  text-decoration: none;
 }
 
 .text-doing {
@@ -97,6 +118,7 @@
   font-size: 14px;
   line-height: 16px;
   color: #023e8a;
+  text-decoration: none;
 }
 
 .text-cancel {
@@ -106,6 +128,7 @@
   font-size: 14px;
   line-height: 16px;
   color: #ff0000;
+  text-decoration: none;
 }
 .text-done {
   font-family: "Roboto";
