@@ -176,7 +176,7 @@ const EditGroupService = ({ state, setState, data }) => {
             </div>
 
             <CustomButton
-              title="Thêm"
+              title="Sửa"
               className="float-right btn-edit-service"
               type="button"
               onClick={editGroupSerive}

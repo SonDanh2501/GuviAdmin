@@ -62,9 +62,12 @@ $font-01: "Roboto", sans-serif;
       text-decoration: none;
 
       .active-text {
-        text-decoration: none !important;
-        color: rgb(0, 0, 0);
-        font-family: $font-01;
+        font-family: "Roboto";
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 16px;
+        color: #000000;
+        text-decoration: none;
       }
     }
     .unactive-link {
@@ -76,9 +79,12 @@ $font-01: "Roboto", sans-serif;
       border-bottom: 1px solid #e6e8f4;
 
       .unactive-text {
-        text-decoration: none !important;
-        color: rgb(0, 0, 0);
-        font-family: $font-01;
+        font-family: "Roboto";
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 16px;
+        color: #000000;
+        text-decoration: none;
       }
     }
 
@@ -91,10 +97,12 @@ $font-01: "Roboto", sans-serif;
         text-decoration: none;
 
         .active-text-nav {
-          text-decoration: none !important;
-          color: rgb(0, 0, 0);
-          font-weight: 600;
-          font-family: $font-01;
+          font-family: "Roboto";
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 16px;
+          color: #000000;
+          text-decoration: none;
         }
       }
       .unactive-link-nav {
@@ -105,9 +113,12 @@ $font-01: "Roboto", sans-serif;
         display: flex;
 
         .unactive-text-nav {
-          text-decoration: none !important;
-          color: rgb(0, 0, 0);
-          font-family: $font-01;
+          font-family: "Roboto";
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 16px;
+          color: #000000;
+          text-decoration: none;
         }
       }
     }
@@ -124,9 +135,12 @@ $font-01: "Roboto", sans-serif;
         text-decoration: none;
 
         .active-text-configuration {
-          text-decoration: none !important;
-          color: rgb(0, 0, 0);
-          font-family: $font-01;
+          font-family: "Roboto";
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 16px;
+          color: #000000;
+          text-decoration: none;
         }
       }
       .unactive-link-configuration {
@@ -136,9 +150,12 @@ $font-01: "Roboto", sans-serif;
         display: flex;
 
         .unactive-text-configuration {
-          text-decoration: none !important;
-          color: rgb(0, 0, 0);
-          font-family: $font-01;
+          font-family: "Roboto";
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 16px;
+          color: #000000;
+          text-decoration: none;
         }
       }
     }

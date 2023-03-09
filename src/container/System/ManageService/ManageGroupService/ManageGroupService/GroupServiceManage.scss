@@ -19,3 +19,25 @@
   font-size: 24px;
   color: #25213b;
 }
+
+.div-head-service {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.text-service {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  color: #000000;
+}
+
+.text-title {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  color: #000000;
+}

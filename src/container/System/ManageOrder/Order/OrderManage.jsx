@@ -155,8 +155,8 @@ export default function OrderManage(props) {
             }
             className="div-name"
           >
-            <a>{data?.id_customer?.full_name}</a>
-            <a>{data?.id_customer?.phone}</a>
+            <a className="text-name-customer">{data?.id_customer?.full_name}</a>
+            <a className="text-phone-customer">{data?.id_customer?.phone}</a>
           </div>
         );
       },

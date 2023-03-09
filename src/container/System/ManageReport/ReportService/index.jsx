@@ -203,50 +203,50 @@ const ReportService = () => {
   return (
     <div className="div-container-report-customer">
       <div className="header-report-customer">
-        <div className="div-tab-header">
+        <div className="div-tab-header-service">
           <div className="div-img">
             <img src={collaborator} className="img" />
           </div>
           <div className="div-text-tab">
             <div className="div-t">
               <a className="text-tab-header">Khách hàng mới</a>
-              <a className="text-tab-header"></a>
+              <a className="text-tab-header">3</a>
             </div>
           </div>
         </div>
 
-        <div className="div-tab-header">
-          <div className="div-img">
-            <img src={add} className="img" />
-          </div>
-          <div className="div-text-tab">
-            <div className="div-t">
-              <a className="text-tab-header">Tổng đơn KH cũ</a>
-              <a className="text-tab-header"></a>
-            </div>
-          </div>
-        </div>
-
-        <div className="div-tab-header">
-          <div className="div-img">
-            <img src={collaborator} className="img" />
-          </div>
-          <div className="div-text-tab">
-            <div className="div-t">
-              <a className="text-tab-header">Khách hàng cũ</a>
-              <a className="text-tab-header"></a>
-            </div>
-          </div>
-        </div>
-
-        <div className="div-tab-header">
+        <div className="div-tab-header-service">
           <div className="div-img">
             <img src={add} className="img" />
           </div>
           <div className="div-text-tab">
             <div className="div-t">
               <a className="text-tab-header">Tổng đơn KH mới</a>
-              <a className="text-tab-header"></a>
+              <a className="text-tab-header">3</a>
+            </div>
+          </div>
+        </div>
+
+        <div className="div-tab-header-service">
+          <div className="div-img">
+            <img src={collaborator} className="img" />
+          </div>
+          <div className="div-text-tab">
+            <div className="div-t">
+              <a className="text-tab-header">Khách hàng cũ</a>
+              <a className="text-tab-header">3</a>
+            </div>
+          </div>
+        </div>
+
+        <div className="div-tab-header-service">
+          <div className="div-img">
+            <img src={add} className="img" />
+          </div>
+          <div className="div-text-tab">
+            <div className="div-t">
+              <a className="text-tab-header">Tổng đơn KH cũ</a>
+              <a className="text-tab-header">3</a>
             </div>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { FilterOutlined, SearchOutlined } from "@ant-design/icons";
 import {
+  Checkbox,
   Dropdown,
   Empty,
   FloatButton,
@@ -49,6 +50,7 @@ export default function CollaboratorManage(props) {
   const [modalVerify, setModalVerify] = React.useState(false);
   const [modalLockTime, setModalLockTime] = React.useState(false);
   const [modalEdit, setModalEdit] = React.useState(false);
+  const [checkLock, setCheckLock] = React.useState(false);
   const [timeValue, setTimeValue] = React.useState("");
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
@@ -532,13 +534,23 @@ export default function CollaboratorManage(props) {
                 : "Bạn có muốn kích hoạt tài khoản cộng tác viên"}
               <h3>{itemEdit?.full_name}</h3>
               {itemEdit?.is_locked === false && (
-                <CustomTextInput
-                  label={"*Thời gian khoá (hh:mm)"}
-                  type="datetime-local"
-                  name="time"
-                  className="text-input"
-                  onChange={(e) => setTimeValue(e.target.value)}
-                />
+                <>
+                  <Checkbox
+                    checked={checkLock}
+                    onChange={(e) => setCheckLock(e.target.checked)}
+                  >
+                    Khoá theo thời gian (nếu không chọn sẽ khoá vĩnh viễn)
+                  </Checkbox>
+                  {checkLock && (
+                    <CustomTextInput
+                      label={"*Thời gian khoá (hh:mm)"}
+                      type="datetime-local"
+                      name="time"
+                      className="text-input"
+                      onChange={(e) => setTimeValue(e.target.value)}
+                    />
+                  )}
+                </>
               )}
             </ModalBody>
             <ModalFooter>

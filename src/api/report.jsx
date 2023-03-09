@@ -65,9 +65,14 @@ export const getTotalDetailCustomerDay = (start_date, end_date) => {
   );
 };
 
-export const getReportCustomerInviteDay = (start, length) => {
+export const getReportCustomerInviteDay = (
+  start,
+  length,
+  start_date,
+  end_date
+) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_customer_inviter?lang=vi&start=${start}&length=${length}`
+    `/admin/report_mananger/report_customer_inviter?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
   );
 };
 

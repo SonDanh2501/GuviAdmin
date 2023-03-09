@@ -271,8 +271,7 @@ const EditPromotion = ({ state, setState, data }) => {
         setIsGroupCustomer(res?.is_id_group_customer);
         setGroupCustomer(res?.id_group_customer);
         setIsCustomer(res?.is_id_customer);
-        setCustomer(res?.id_customer);
-        setListCustomers(res?.id_customer);
+        setListNameCustomers(res?.id_customer);
         setIsUsePromo(res?.is_limited_use);
         setUsePromo(res?.limited_use);
         setPromoType(res?.type_discount);
@@ -289,6 +288,10 @@ const EditPromotion = ({ state, setState, data }) => {
         setPosition(res?.position);
         setIsPaymentMethod(res?.is_payment_method);
         setPaymentMethod(res?.payment_method);
+        // setListCustomers(res?.id_customer);
+        res?.id_customer?.map((item) => {
+          listCustomers.push(item?._id);
+        });
       })
       .catch((err) => console.log(err));
   }, [data]);
@@ -299,18 +302,18 @@ const EditPromotion = ({ state, setState, data }) => {
     setDataL([]);
     const newData = listCustomers.concat(item?._id);
     const newNameData = listNameCustomers.concat({
-      name: item?.full_name,
+      _id: item?._id,
+      full_name: item?.full_name,
       phone: item?.phone,
-      id: item?._id,
-      idView: item?.id_view,
+      id_view: item?.id_view,
     });
     setListCustomers(newData);
     setListNameCustomers(newNameData);
   };
 
   const removeItemCustomer = (item) => {
-    const newNameArray = listNameCustomers.filter((i) => i?.id !== item?.id);
-    const newArray = listCustomers.filter((i) => i !== item?.id);
+    const newNameArray = listNameCustomers.filter((i) => i?._id !== item?._id);
+    const newArray = listCustomers.filter((i) => i !== item?._id);
     setListNameCustomers(newNameArray);
     setListCustomers(newArray);
   };
@@ -696,11 +699,12 @@ const EditPromotion = ({ state, setState, data }) => {
                             {dataL?.map((item, index) => {
                               return (
                                 <div
+                                  className="div-item"
                                   key={index}
                                   onClick={() => onChooseCustomer(item)}
                                 >
-                                  <a>
-                                    {item?.name} - {item?.phone} -{" "}
+                                  <a className="text-name">
+                                    {item?.full_name} - {item?.phone} -{" "}
                                     {item?.id_view}
                                   </a>
                                 </div>
@@ -715,8 +719,8 @@ const EditPromotion = ({ state, setState, data }) => {
                                 return (
                                   <div className="div-item-customer">
                                     <a className="text-name-list">
-                                      - {item?.name} . {item?.phone} .{" "}
-                                      {item?.idView}
+                                      - {item?.full_name} . {item?.phone} .{" "}
+                                      {item?.id_view}
                                     </a>
                                     <i
                                       class="uil uil-times-circle"
@@ -898,7 +902,7 @@ const EditPromotion = ({ state, setState, data }) => {
                     color="warning"
                     onClick={onEditPromotion}
                   >
-                    Thêm khuyến mãi
+                    Sửa khuyến mãi
                   </Button>
                 </Col>
               </Row>

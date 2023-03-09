@@ -27,7 +27,12 @@ const ReportInvite = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getReportCustomerInviteDay(0, 20)
+    getReportCustomerInviteDay(
+      0,
+      20,
+      moment("2022-08-30").startOf("year").toISOString(),
+      moment(new Date()).toISOString()
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -35,7 +40,7 @@ const ReportInvite = () => {
       .catch((err) => console.log(err));
 
     getTopCustomerInvite(
-      moment().startOf("year").toISOString(),
+      moment("2022-08-30").startOf("year").toISOString(),
       moment(new Date()).toISOString()
     )
       .then((res) => {
@@ -127,7 +132,7 @@ const ReportInvite = () => {
             }}
           >
             <CartesianGrid stroke="#f5f5f5" />
-            <XAxis type="number" domain={[0, 5]} />
+            <XAxis type="number" />
             <YAxis dataKey="customer" type="category" scale="band" />
             <Tooltip />
             <Legend />

@@ -8,9 +8,11 @@ import {
   activeGroupServiceApi,
   deleteGroupServiceApi,
 } from "../../../../../api/service";
+import AddGroupService from "../../../../../components/addGroupService/addGroupService";
 import EditGroupService from "../../../../../components/editGroupService/editGroupService";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import { getGroupServiceAction } from "../../../../../redux/actions/service";
+import { getUser } from "../../../../../redux/selectors/auth";
 import {
   getGroupService,
   getGroupServiceTotal,
@@ -95,7 +97,7 @@ export default function GroupServiceManage() {
 
   const columns = [
     {
-      title: "Image",
+      title: "Hình ảnh",
       width: "30%",
       render: (data) => {
         return (
@@ -106,15 +108,15 @@ export default function GroupServiceManage() {
       },
     },
     {
-      title: "Title",
+      title: "Tiêu đề",
       render: (data) => {
-        return <a className="text-phone">{data?.title.vi}</a>;
+        return <a className="text-title">{data?.title.vi}</a>;
       },
       width: "35%",
     },
     {
-      title: "Type",
-      render: (data) => <a className="text-address">{data?.type}</a>,
+      title: "Loại dịch vụ",
+      render: (data) => <a className="text-service">{data?.type}</a>,
       width: "30%",
     },
     {
@@ -141,41 +143,43 @@ export default function GroupServiceManage() {
 
   return (
     <React.Fragment>
-      <div className="mt-2 p-3">
+      <div className="div-head-service">
         <a className="label-service"> Tất cả dịch vụ</a>
-        <div className="mt-3">
-          <Table
-            columns={columns}
-            dataSource={listGroupService}
-            pagination={false}
-            rowKey={(record) => record._id}
-            rowSelection={{
-              selectedRowKeys,
-              onChange: (selectedRowKeys, selectedRows) => {
-                setSelectedRowKeys(selectedRowKeys);
-              },
-            }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  setItemEdit(record);
-                  // navigate("/services/manage-group-service/manage-service", {
-                  //   state: { id: record?._id },
-                  // });
-                },
-              };
-            }}
-            locale={{
-              emptyText:
-                listGroupService.length > 0 ? (
-                  <Empty />
-                ) : (
-                  <Skeleton active={true} />
-                ),
-            }}
-          />
-        </div>
+        <AddGroupService />
       </div>
+      <div className="mt-3">
+        <Table
+          columns={columns}
+          dataSource={listGroupService}
+          pagination={false}
+          rowKey={(record) => record._id}
+          rowSelection={{
+            selectedRowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
+              setSelectedRowKeys(selectedRowKeys);
+            },
+          }}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setItemEdit(record);
+                // navigate("/services/manage-group-service/manage-service", {
+                //   state: { id: record?._id },
+                // });
+              },
+            };
+          }}
+          locale={{
+            emptyText:
+              listGroupService.length > 0 ? (
+                <Empty />
+              ) : (
+                <Skeleton active={true} />
+              ),
+          }}
+        />
+      </div>
+
       <div>
         <Modal isOpen={modal} toggle={toggle}>
           <ModalHeader toggle={toggle}>Xóa GroupService</ModalHeader>
