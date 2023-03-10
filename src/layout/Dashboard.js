@@ -14,6 +14,7 @@ import GroupCustomerManage from "../container/System/ManageConfiguration/ScreenC
 import SettingQrCode from "../container/System/ManageConfiguration/ScreenConfiguration/SettingQrcode";
 import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
 import ManageOrder from "../container/System/ManageOrder";
+import AddOrder from "../container/System/ManageOrder/DrawerAddOrder";
 import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDoingManage";
 import OrderUsePromotion from "../container/System/ManagePromotion/OrderUsePromotion";
 import ManageReport from "../container/System/ManageReport";
@@ -134,6 +135,11 @@ const Dashboard = () => {
               <Route
                 path="/group-order/manage-order"
                 element={<ManageOrder />}
+              />
+
+              <Route
+                path="/group-order/manage-order/create-order"
+                element={<AddOrder />}
               />
               <Route
                 path="/group-order/manage-order/details-collaborator"

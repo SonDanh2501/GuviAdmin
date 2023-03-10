@@ -82,3 +82,45 @@ export const DATA_STATUS = [
     value: "done",
   },
 ];
+
+export const DATA_DATE = [
+  { id: 1, date: "T2", number: "2", value: "Mon", estimate: 1 },
+  { id: 2, date: "T3", number: "3", value: "Tue", estimate: 1 },
+  { id: 3, date: "T4", number: "4", value: "Wed", estimate: 1 },
+  { id: 4, date: "T5", number: "5", value: "Thu", estimate: 1 },
+  { id: 5, date: "T6", number: "6", value: "Fri", estimate: 1 },
+  { id: 6, date: "T7", number: "7", value: "Sat", estimate: 1 },
+  {
+    id: 7,
+    date: "CN",
+    number: "CN",
+    value: "Sun",
+    estimate: 1,
+  },
+];
+
+export const DATA_MONTH = [
+  {
+    id: 1,
+    title: "1 tháng",
+    estimate: 1,
+  },
+  {
+    id: 2,
+    title: "2 tháng",
+
+    estimate: 2,
+  },
+  {
+    id: 3,
+    title: "3 tháng",
+
+    estimate: 3,
+  },
+  {
+    id: 4,
+    title: "6 tháng",
+
+    estimate: 6,
+  },
+];
