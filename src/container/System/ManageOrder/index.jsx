@@ -1,4 +1,4 @@
-import { Space, Tabs, Dropdown, Input, FloatButton } from "antd";
+import { Space, Tabs, Dropdown, Input, FloatButton, Button } from "antd";
 import { ExportCSV } from "../../../helper/export";
 import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
 import _debounce from "lodash/debounce";
@@ -18,6 +18,7 @@ import { searchOrderApi, getOrderApi } from "../../../api/order";
 import AddOrder from "./DrawerAddOrder";
 import { SearchOutlined } from "@ant-design/icons";
 import { DATA, DATA_STATUS } from "../../../api/fakeData";
+import { useNavigate } from "react-router-dom";
 
 const ManageOrder = () => {
   const [dataSearch, setDataSearch] = useState([]);
@@ -31,6 +32,7 @@ const ManageOrder = () => {
   const orderTotal = useSelector(getOrderTotal);
   const listOrderSearch = useSelector(searchOrderSelector);
   const totalOrderSearch = useSelector(searchOrderTotal);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(
@@ -94,8 +96,13 @@ const ManageOrder = () => {
               </Space>
             </a>
           </Dropdown>
-          <AddOrder />
         </div>
+        <Button
+          className="btn-create-order"
+          onClick={() => navigate("/group-order/manage-order/create-order")}
+        >
+          Tạo dịch vụ
+        </Button>
       </div>
 
       <div className="div-container">

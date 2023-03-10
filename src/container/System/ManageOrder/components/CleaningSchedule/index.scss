@@ -18,6 +18,16 @@
   height: 40px;
 }
 
+.label-customer {
+  font-size: 18px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  color: black;
+  margin-bottom: 10px;
+}
+
 .form-picker {
   display: flex;
   flex-direction: column;
@@ -30,6 +40,9 @@
     line-height: 16px;
     color: black;
     margin-bottom: 10px;
+  }
+  .select-time {
+    width: 50%;
   }
 }
 
@@ -103,6 +116,7 @@
 .form-picker-hours {
   display: flex;
   flex-direction: column;
+  width: 50%;
 
   .label-hours {
     font-size: 18px;
@@ -142,6 +156,11 @@
       padding: 5px;
     }
   }
+}
+
+.input-note {
+  width: 50%;
+  margin-top: 10px;
 }
 
 .div-latLong {
@@ -220,7 +239,37 @@
   }
 }
 
-.div-search-customer {
+.div-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 50%;
+
+  .text-price {
+    font-size: 18px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+    color: black;
+    text-align: center;
+  }
+}
+
+.div-total {
+  display: flex;
+  flex-direction: column;
+}
+
+.text-error {
+  font-size: 14px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 300;
+  color: rgb(216, 26, 26);
+}
+
+.div-search-address {
   display: flex;
   flex-direction: column;
   .input-search {
@@ -235,5 +284,112 @@
     line-height: 16px;
     color: black;
     margin-bottom: 10px;
+  }
+}
+
+.list-item-place {
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  position: absolute;
+  width: 40%;
+  border: 1px solid rgb(175, 175, 175);
+  border-radius: 5px;
+}
+
+.div-auto-order {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 50%;
+
+  .label-hours {
+    font-size: 18px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    color: black;
+    margin-bottom: 10px;
+    margin-top: 15px;
+  }
+}
+
+.div-select-date {
+  width: 100%;
+  .label-date {
+    font-size: 18px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    color: black;
+  }
+
+  .div-date {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+
+    .div-item-date {
+      display: flex;
+      width: 50px;
+      height: 45px;
+      border-radius: 4px;
+      background-color: aqua;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+    }
+
+    .div-item-date-default {
+      display: flex;
+      width: 50px;
+      height: 45px;
+      border-radius: 4px;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      border: 1px solid #d6d6d6;
+    }
+  }
+}
+
+.div-select-month {
+  .label-month {
+    font-size: 18px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    color: black;
+  }
+
+  .div-month {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+
+    .div-item-month {
+      display: flex;
+      width: 100px;
+      height: 45px;
+      border-radius: 8px;
+      background-color: aqua;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+    }
+
+    .div-item-month-default {
+      display: flex;
+      width: 100px;
+      height: 45px;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      border: 1px solid #d6d6d6;
+      border-radius: 8px;
+    }
   }
 }
