@@ -10,6 +10,7 @@ import _debounce from "lodash/debounce";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { searchCollaborators } from "../../../../../api/collaborator";
 import {
   DATA_DATE,
   DATA_MONTH,
@@ -21,6 +22,7 @@ import {
   googlePlaceAutocomplete,
 } from "../../../../../api/location";
 import {
+  addCollaboratorToOrderApi,
   checkCodePromotionOrderApi,
   checkEventCodePromotionOrderApi,
   createOrderApi,
@@ -46,8 +48,6 @@ const CleaningSchedule = (props) => {
   const [note, setNote] = useState("");
   const [time, setTime] = useState([]);
   const [errorTime, setErrorTime] = useState("");
-  const [dateWork, setDateWork] = useState("");
-  const [errorDateWork, setErrorDateWork] = useState("");
   const [timeWork, setTimeWork] = useState("");
   const [errorTimeWork, setErrorTimeWork] = useState("");
   const [errorExtendService, setErrorExtendService] = useState("");
@@ -68,6 +68,10 @@ const CleaningSchedule = (props) => {
   const [estimateMonth, setEstimateMonth] = useState(1);
   const [estimateDateWork, setEstimateDateWork] = useState(0);
   const [selectDay, setSelectDay] = useState([]);
+  const [dataCollaborator, setDataCollaborator] = useState([]);
+  const [nameCollaborator, setNameCollaborator] = useState("");
+  const [errorCollaborator, setErrorCollaborator] = useState("");
+  const [idCollaborator, setIdCollaborator] = useState("");
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -106,7 +110,7 @@ const CleaningSchedule = (props) => {
           selectDay.push(day.toString());
       });
     });
-  }, [estimateMonth, selectedDate, selectDay]);
+  }, [estimateMonth, selectedDate]);
 
   const onChangeTime = (value) => {
     setTimeWork(value);
@@ -129,14 +133,13 @@ const CleaningSchedule = (props) => {
       });
       if (selectedDate.includes(date?.value)) {
         setSelectedDate((prev) => prev.filter((p) => p !== date?.value));
-
         setEstimateDateWork(estimateDateWork - date?.estimate);
       } else {
         setSelectedDate((prev) => [...prev, date?.value]);
         setEstimateDateWork(estimateDateWork + date?.estimate);
       }
     },
-    [estimateDateWork, months, selectedDate]
+    [estimateDateWork, months, selectedDate, chooseMonth, timeWork]
   );
 
   const onChooseMonth = (value) => {
@@ -146,12 +149,6 @@ const CleaningSchedule = (props) => {
     setChooseMonth(value);
     setEstimateMonth(value);
   };
-
-  var uploadDateFilter = selectDay.map(
-    (item) => new Date(item.replace("00:00:00", timeWork))
-  );
-
-  let date_work_schedule = uploadDateFilter.map((item) => item.toISOString());
 
   var AES = require("crypto-js/aes");
   const temp = JSON.stringify({
@@ -204,7 +201,7 @@ const CleaningSchedule = (props) => {
           setIsLoading(false);
           setPlaces([]);
         });
-    }, 3000),
+    }, 2000),
     []
   );
 
@@ -239,8 +236,34 @@ const CleaningSchedule = (props) => {
       });
   }, []);
 
+  const onSelectDay = useCallback(
+    (title) => {
+      if (selectDay.includes(title)) {
+        if (selectDay.length > 4) {
+          setSelectDay((prev) => prev.filter((p) => p !== title));
+        }
+      } else {
+        setSelectDay((prev) => [...prev, title]);
+      }
+    },
+    [selectDay]
+  );
+
+  var uploadDateFilter = selectDay.map(
+    (item) => new Date(item.replace("00:00:00", timeWork))
+  );
+
+  let date_work_schedule = uploadDateFilter.map((item) => item.toISOString());
+
   useEffect(() => {
-    if (lat && long && address && timeWork && time) {
+    if (
+      lat &&
+      long &&
+      address &&
+      timeWork &&
+      time &&
+      date_work_schedule.length > 0
+    ) {
       getCalculateFeeApi({
         token: accessToken.toString(),
         type: "schedule",
@@ -263,10 +286,28 @@ const CleaningSchedule = (props) => {
           });
         });
     }
-  }, [lat, long, address, timeWork, time, note, selectDay]);
+  }, [
+    lat,
+    long,
+    address,
+    timeWork,
+    time,
+    note,
+    selectDay,
+    chooseMonth,
+    estimateMonth,
+    date_work_schedule,
+  ]);
 
   useEffect(() => {
-    if (lat && long && address && timeWork && time) {
+    if (
+      lat &&
+      long &&
+      address &&
+      timeWork &&
+      time &&
+      date_work_schedule.length > 0
+    ) {
       getServiceFeeOrderApi({
         token: accessToken.toString(),
         type: "schedule",
@@ -294,10 +335,28 @@ const CleaningSchedule = (props) => {
           });
         });
     }
-  }, [lat, long, address, timeWork, time, note, selectDay]);
+  }, [
+    lat,
+    long,
+    address,
+    timeWork,
+    time,
+    note,
+    selectDay,
+    chooseMonth,
+    estimateMonth,
+  ]);
 
   useEffect(() => {
-    if (lat && long && address && timeWork && time && id) {
+    if (
+      lat &&
+      long &&
+      address &&
+      timeWork &&
+      time &&
+      id &&
+      date_work_schedule.length > 0
+    ) {
       setIsLoading(true);
       checkEventCodePromotionOrderApi(id, {
         token: accessToken.toString(),
@@ -328,7 +387,17 @@ const CleaningSchedule = (props) => {
           });
         });
     }
-  }, [lat, long, address, timeWork, time, id, selectDay]);
+  }, [
+    lat,
+    long,
+    address,
+    timeWork,
+    time,
+    id,
+    selectDay,
+    chooseMonth,
+    estimateMonth,
+  ]);
 
   const checkPromotion = useCallback(
     (item) => {
@@ -359,13 +428,23 @@ const CleaningSchedule = (props) => {
           setIsLoading(false);
         });
     },
-    [id, lat, long, address, timeWork, date_work_schedule, time]
+    [
+      id,
+      lat,
+      long,
+      address,
+      timeWork,
+      date_work_schedule,
+      time,
+      chooseMonth,
+      estimateMonth,
+    ]
   );
 
   const onCreateOrder = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
 
-    if (lat && long && address && timeWork && time && id) {
+    if (lat && long && address && timeWork && time && id && idCollaborator) {
       createOrderApi({
         id_customer: id,
         token: accessToken.toString(),
@@ -380,8 +459,19 @@ const CleaningSchedule = (props) => {
         payment_method: "point",
       })
         .then((res) => {
-          navigate("/group-order/manage-order");
-          window.location.reload();
+          addCollaboratorToOrderApi(res?._id, {
+            id_collaborator: idCollaborator,
+          })
+            .then((res) => {
+              navigate("/group-order/manage-order");
+              window.location.reload();
+            })
+            .catch((err) => {
+              errorNotify({
+                message: err,
+              });
+              dispatch(loadingAction.loadingRequest(false));
+            });
         })
         .catch((err) => {
           errorNotify({
@@ -401,6 +491,9 @@ const CleaningSchedule = (props) => {
     } else if (!timeWork) {
       setErrorTimeWork("Vui lòng chọn giờ làm");
       dispatch(loadingAction.loadingRequest(false));
+    } else if (!idCollaborator) {
+      setErrorCollaborator("Vui lòng chọn CTV");
+      dispatch(loadingAction.loadingRequest(false));
     } else {
       dispatch(loadingAction.loadingRequest(false));
     }
@@ -414,19 +507,36 @@ const CleaningSchedule = (props) => {
     time,
     codePromotion,
     note,
+    chooseMonth,
+    estimateMonth,
+    idCollaborator,
   ]);
 
-  const onSelectDay = useCallback(
-    (title) => {
-      if (selectDay.includes(title)) {
-        if (selectDay.length > 4) {
-          setSelectDay((prev) => prev.filter((p) => p !== title));
-        }
+  const searchValue = (value) => {
+    setNameCollaborator(value);
+  };
+
+  const searchCollaborator = useCallback(
+    _debounce((value) => {
+      setNameCollaborator(value);
+      if (value) {
+        searchCollaborators(0, 100, "", value)
+          .then((res) => {
+            if (value === "") {
+              setDataCollaborator([]);
+            } else {
+              setDataCollaborator(res.data);
+            }
+          })
+          .catch((err) => console.log(err));
+      } else if (idCollaborator) {
+        setDataCollaborator([]);
       } else {
-        setSelectDay((prev) => [...prev, title]);
+        setDataCollaborator([]);
       }
-    },
-    [selectDay]
+      setIdCollaborator("");
+    }, 500),
+    []
   );
 
   return (
@@ -598,7 +708,44 @@ const CleaningSchedule = (props) => {
           placeholder="Vui lòng nhập ghi chú"
           onChange={(e) => setNote(e.target.value)}
         />
-        <div className="div-promotion">
+
+        <div>
+          <h5>(*)Cộng tác viên</h5>
+          <Input
+            placeholder="Tìm kiếm theo số điện thoại"
+            value={nameCollaborator}
+            className="input-seach-collaborator"
+            onChange={(e) => {
+              searchCollaborator(e.target.value);
+              searchValue(e.target.value);
+            }}
+          />
+          {<a className="text-error">{errorCollaborator}</a>}
+
+          {dataCollaborator.length > 0 && (
+            <List type={"unstyled"} className="list-item">
+              {dataCollaborator?.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    onClick={(e) => {
+                      setIdCollaborator(item?._id);
+                      setNameCollaborator(item?.full_name);
+                      setDataCollaborator([]);
+                      setErrorCollaborator("");
+                    }}
+                  >
+                    <a>
+                      {item?.full_name} - {item?.phone} - {item?.id_view}
+                    </a>
+                  </div>
+                );
+              })}
+            </List>
+          )}
+        </div>
+
+        <div className="div-promotion mt-3">
           {promotionCustomer.map((item, index) => {
             return (
               <div
@@ -728,9 +875,11 @@ const CleaningSchedule = (props) => {
                         const words = day.toString().split(" ");
 
                         return (
-                          <div
+                          <button
                             key={index}
-                            disabled={day < addDays(new Date(), 7)}
+                            disabled={
+                              day < addDays(new Date(), 7) ? true : false
+                            }
                             className={
                               day < addDays(new Date(), 7)
                                 ? "div-date"
@@ -751,7 +900,7 @@ const CleaningSchedule = (props) => {
                             >
                               {words[2]}
                             </a>
-                          </div>
+                          </button>
                         );
                       })}
                     </div>
