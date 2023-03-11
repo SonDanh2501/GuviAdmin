@@ -14,6 +14,7 @@ import { errorNotify } from "../../../../../helper/toast";
 import _debounce from "lodash/debounce";
 import { DATA_TIME_TOTAL } from "../../../../../api/fakeData";
 import {
+  addCollaboratorToOrderApi,
   checkCodePromotionOrderApi,
   checkEventCodePromotionOrderApi,
   createOrderApi,
@@ -25,6 +26,7 @@ import { loadingAction } from "../../../../../redux/actions/loading";
 import "./index.scss";
 import { useNavigate } from "react-router-dom";
 import LoadingPagination from "../../../../../components/paginationLoading";
+import { searchCollaborators } from "../../../../../api/collaborator";
 
 const CleaningHourly = (props) => {
   const { extendService, addService, id, name, setErrorNameCustomer } = props;
@@ -41,9 +43,6 @@ const CleaningHourly = (props) => {
   const [errorTimeWork, setErrorTimeWork] = useState("");
   const [errorExtendService, setErrorExtendService] = useState("");
   const [mutipleSelected, setMutipleSelected] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [dataFilter, setDataFilter] = useState([]);
-  const [serviceApply, setServiceApply] = useState("");
   const [promotionCustomer, setPromotionCustomer] = useState([]);
   const [priceOrder, setPriceOrder] = useState();
   const [discount, setDiscount] = useState(0);
@@ -56,6 +55,11 @@ const CleaningHourly = (props) => {
   const [isAutoOrder, setIsAutoOrder] = useState(false);
   const [places, setPlaces] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [dataCollaborator, setDataCollaborator] = useState([]);
+  const [nameCollaborator, setNameCollaborator] = useState("");
+  const [idCollaborator, setIdCollaborator] = useState("");
+  const [errorCollaborator, setErrorCollaborator] = useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -340,7 +344,8 @@ const CleaningHourly = (props) => {
       dateWork &&
       mutipleSelected &&
       time &&
-      id
+      id &&
+      idCollaborator
     ) {
       createOrderApi({
         id_customer: id,
@@ -356,8 +361,19 @@ const CleaningHourly = (props) => {
         payment_method: "cash",
       })
         .then((res) => {
-          navigate("/group-order/manage-order");
-          window.location.reload();
+          addCollaboratorToOrderApi(res?._id, {
+            id_collaborator: idCollaborator,
+          })
+            .then((res) => {
+              navigate("/group-order/manage-order");
+              window.location.reload();
+            })
+            .catch((err) => {
+              errorNotify({
+                message: err,
+              });
+              dispatch(loadingAction.loadingRequest(false));
+            });
         })
         .catch((err) => {
           errorNotify({
@@ -380,6 +396,9 @@ const CleaningHourly = (props) => {
     } else if (!timeWork) {
       setErrorTimeWork("Vui lòng chọn giờ làm");
       dispatch(loadingAction.loadingRequest(false));
+    } else if (!idCollaborator) {
+      setErrorCollaborator("Vui lòng chọn CTV");
+      dispatch(loadingAction.loadingRequest(false));
     } else {
       dispatch(loadingAction.loadingRequest(false));
     }
@@ -395,7 +414,35 @@ const CleaningHourly = (props) => {
     codePromotion,
     isAutoOrder,
     note,
+    idCollaborator,
   ]);
+
+  const searchValue = (value) => {
+    setNameCollaborator(value);
+  };
+
+  const searchCollaborator = useCallback(
+    _debounce((value) => {
+      setNameCollaborator(value);
+      if (value) {
+        searchCollaborators(0, 100, "", value)
+          .then((res) => {
+            if (value === "") {
+              setDataCollaborator([]);
+            } else {
+              setDataCollaborator(res.data);
+            }
+          })
+          .catch((err) => console.log(err));
+      } else if (idCollaborator) {
+        setDataCollaborator([]);
+      } else {
+        setDataCollaborator([]);
+      }
+      setIdCollaborator("");
+    }, 500),
+    []
+  );
 
   return (
     <>
@@ -582,7 +629,45 @@ const CleaningHourly = (props) => {
           placeholder="Vui lòng nhập ghi chú"
           onChange={(e) => setNote(e.target.value)}
         />
-        <div className="div-promotion">
+
+        <div>
+          <h5>(*)Cộng tác viên</h5>
+          <div>
+            <Input
+              placeholder="Tìm kiếm theo số điện thoại"
+              value={nameCollaborator}
+              className="input-seach-collaborator"
+              onChange={(e) => {
+                searchCollaborator(e.target.value);
+                searchValue(e.target.value);
+              }}
+            />
+            {<a className="text-error">{errorCollaborator}</a>}
+          </div>
+
+          {dataCollaborator.length > 0 && (
+            <List type={"unstyled"} className="list-item">
+              {dataCollaborator?.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    onClick={(e) => {
+                      setIdCollaborator(item?._id);
+                      setNameCollaborator(item?.full_name);
+                      setDataCollaborator([]);
+                    }}
+                  >
+                    <a>
+                      {item?.full_name} - {item?.phone} - {item?.id_view}
+                    </a>
+                  </div>
+                );
+              })}
+            </List>
+          )}
+        </div>
+
+        <div className="div-promotion mt-3">
           {promotionCustomer.map((item, index) => {
             return (
               <div

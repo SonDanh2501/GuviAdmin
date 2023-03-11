@@ -69,6 +69,7 @@ const AddOrder = () => {
 
   const onChangeServiceApply = (e) => {
     setIsLoading(true);
+    setAddService([]);
     getOptionalServiceByServiceApi(e.target.value)
       .then((res) => {
         setOptionalService(res?.data);
