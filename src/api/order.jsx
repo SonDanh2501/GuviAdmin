@@ -24,7 +24,7 @@ export const getOrderDetailApi = (id) => {
 
 export const addCollaboratorToOrderApi = (id, data) => {
   return axiosClient.post(
-    `/admin/order_manager/add_collaborator_to_order/${id}?lang=vi`,
+    `/admin/group-order-manager/add_collaborator_to_order/${id}?lang=vi`,
     data
   );
 };

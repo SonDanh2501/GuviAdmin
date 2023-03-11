@@ -45,7 +45,12 @@ const ReportManager = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getReportCollaborator(0, 20)
+    getReportCollaborator(
+      0,
+      20,
+      moment().startOf("year").toISOString(),
+      moment(new Date()).toISOString()
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);

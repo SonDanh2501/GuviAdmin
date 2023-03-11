@@ -1,8 +1,8 @@
 import axiosClient from "../axios";
 
-export const getReportCollaborator = (start, length) => {
+export const getReportCollaborator = (start, length, start_date, end_date) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_collaborator?lang=vi&start=${start}&length=${length}`
+    `/admin/report_mananger/report_collaborator?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
   );
 };
 
