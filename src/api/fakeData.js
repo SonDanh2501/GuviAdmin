@@ -124,3 +124,66 @@ export const DATA_MONTH = [
     estimate: 6,
   },
 ];
+
+export const DATA_TIME = [
+  { id: 1, title: "07:00", time: "07:00:00", estimate: 16 },
+  { id: 2, title: "07:30", time: "07:30:00", estimate: 15 },
+  { id: 3, title: "08:00", time: "08:00:00", estimate: 15 },
+  { id: 4, title: "08:30", time: "08:30:00", estimate: 14 },
+  { id: 5, title: "09:00", time: "09:00:00", estimate: 14 },
+  { id: 6, title: "09:30", time: "09:30:00", estimate: 13 },
+  { id: 7, title: "10:00", time: "10:00:00", estimate: 13 },
+  { id: 8, title: "10:30", time: "10:30:00", estimate: 12 },
+  { id: 9, title: "11:00", time: "11:00:00", estimate: 12 },
+  { id: 11, title: "11:30", time: "11:30:00", estimate: 11 },
+  { id: 12, title: "12:00", time: "12:00:00", estimate: 11 },
+  { id: 13, title: "12:30", time: "12:30:00", estimate: 10 },
+
+  { id: 14, title: "13:00", time: "13:00:00", estimate: 10 },
+  { id: 15, title: "13:30", time: "13:30:00", estimate: 9 },
+  { id: 16, title: "14:00", time: "14:00:00", estimate: 9 },
+  { id: 17, title: "14:30", time: "14:30:00", estimate: 8 },
+  { id: 18, title: "15:00", time: "15:00:00", estimate: 8 },
+  { id: 19, title: "15:30", time: "15:30:00", estimate: 7 },
+  { id: 20, title: "16:00", time: "16:00:00", estimate: 7 },
+  { id: 21, title: "16:30", time: "16:30:00", estimate: 6 },
+
+  { id: 22, title: "17:00", time: "17:00:00", estimate: 6 },
+  { id: 23, title: "17:30", time: "17:30:00", estimate: 5 },
+  { id: 24, title: "18:00", time: "18:00:00", estimate: 5 },
+  { id: 25, title: "18:30", time: "18:30:00", estimate: 4 },
+  { id: 26, title: "19:00", time: "19:00:00", estimate: 4 },
+  { id: 27, title: "19:30", time: "19:30:00", estimate: 3 },
+  { id: 28, title: "20:00", time: "20:00:00", estimate: 3 },
+];
+
+export const date = [
+  {
+    id: 1,
+    title: "T2",
+  },
+  {
+    id: 2,
+    title: "T3",
+  },
+  {
+    id: 3,
+    title: "T4",
+  },
+  {
+    id: 4,
+    title: "T5",
+  },
+  {
+    id: 5,
+    title: "T6",
+  },
+  {
+    id: 6,
+    title: "T7",
+  },
+  {
+    id: 7,
+    title: "CN",
+  },
+];

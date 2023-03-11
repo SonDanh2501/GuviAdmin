@@ -1,28 +1,4 @@
-import { Button, DatePicker, Input, List, Switch } from "antd";
-import { useCallback, useEffect, useState } from "react";
-import { searchCustomers } from "../../../../../api/customer";
-import {
-  getPlaceDetailApi,
-  googlePlaceAutocomplete,
-} from "../../../../../api/location";
-import {
-  getCalculateFeeApi,
-  getPromotionByCustomerApi,
-} from "../../../../../api/service";
-import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
-import { errorNotify } from "../../../../../helper/toast";
-import _debounce from "lodash/debounce";
-import {
-  DATA_DATE,
-  DATA_MONTH,
-  DATA_TIME_TOTAL,
-} from "../../../../../api/fakeData";
-import {
-  checkCodePromotionOrderApi,
-  checkEventCodePromotionOrderApi,
-  createOrderApi,
-  getServiceFeeOrderApi,
-} from "../../../../../api/order";
+import { Button, Drawer, Input, List } from "antd";
 import {
   addDays,
   addMonths,
@@ -30,12 +6,36 @@ import {
   eachMonthOfInterval,
   endOfMonth,
 } from "date-fns";
-import { formatMoney } from "../../../../../helper/formatMoney";
+import _debounce from "lodash/debounce";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {
+  DATA_DATE,
+  DATA_MONTH,
+  DATA_TIME,
+  date,
+} from "../../../../../api/fakeData";
+import {
+  getPlaceDetailApi,
+  googlePlaceAutocomplete,
+} from "../../../../../api/location";
+import {
+  checkCodePromotionOrderApi,
+  checkEventCodePromotionOrderApi,
+  createOrderApi,
+  getServiceFeeOrderApi,
+} from "../../../../../api/order";
+import {
+  getCalculateFeeApi,
+  getPromotionByCustomerApi,
+} from "../../../../../api/service";
+import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
+import LoadingPagination from "../../../../../components/paginationLoading";
+import { formatMoney } from "../../../../../helper/formatMoney";
+import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import "./index.scss";
-import { useNavigate } from "react-router-dom";
-import LoadingPagination from "../../../../../components/paginationLoading";
 
 const CleaningSchedule = (props) => {
   const { extendService, id, name, setErrorNameCustomer } = props;
@@ -68,8 +68,16 @@ const CleaningSchedule = (props) => {
   const [estimateMonth, setEstimateMonth] = useState(1);
   const [estimateDateWork, setEstimateDateWork] = useState(0);
   const [selectDay, setSelectDay] = useState([]);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     getPromotionByCustomerApi(id)
@@ -112,17 +120,6 @@ const CleaningSchedule = (props) => {
     });
   };
 
-  //   const onChooseMultiple = useCallback(
-  //     (title) => {
-  //       if (selectedDate.includes(title)) {
-  //         setSelectedDate((prev) => prev.filter((p) => p !== title));
-  //       } else {
-  //         setSelectedDate((prev) => [...prev, title]);
-  //       }
-  //     },
-  //     [selectedDate]
-  //   );
-
   const optionSelectedDate = useCallback(
     (date) => {
       months.map((month) => {
@@ -153,8 +150,6 @@ const CleaningSchedule = (props) => {
   var uploadDateFilter = selectDay.map(
     (item) => new Date(item.replace("00:00:00", timeWork))
   );
-
-  console.log(timeWork);
 
   let date_work_schedule = uploadDateFilter.map((item) => item.toISOString());
 
@@ -268,7 +263,7 @@ const CleaningSchedule = (props) => {
           });
         });
     }
-  }, [lat, long, address, timeWork, time, note]);
+  }, [lat, long, address, timeWork, time, note, selectDay]);
 
   useEffect(() => {
     if (lat && long && address && timeWork && time) {
@@ -299,7 +294,7 @@ const CleaningSchedule = (props) => {
           });
         });
     }
-  }, [lat, long, address, timeWork, time, note]);
+  }, [lat, long, address, timeWork, time, note, selectDay]);
 
   useEffect(() => {
     if (lat && long && address && timeWork && time && id) {
@@ -333,7 +328,7 @@ const CleaningSchedule = (props) => {
           });
         });
     }
-  }, [lat, long, address, timeWork, time, id]);
+  }, [lat, long, address, timeWork, time, id, selectDay]);
 
   const checkPromotion = useCallback(
     (item) => {
@@ -346,7 +341,7 @@ const CleaningSchedule = (props) => {
         note_address: "",
         note: note,
         is_auto_order: false,
-        date_work_schedule: [date_work_schedule],
+        date_work_schedule: date_work_schedule,
         extend_optional: [time],
         code_promotion: item?.code,
         payment_method: "point",
@@ -420,6 +415,19 @@ const CleaningSchedule = (props) => {
     codePromotion,
     note,
   ]);
+
+  const onSelectDay = useCallback(
+    (title) => {
+      if (selectDay.includes(title)) {
+        if (selectDay.length > 4) {
+          setSelectDay((prev) => prev.filter((p) => p !== title));
+        }
+      } else {
+        setSelectDay((prev) => [...prev, title]);
+      }
+    },
+    [selectDay]
+  );
 
   return (
     <>
@@ -536,7 +544,7 @@ const CleaningSchedule = (props) => {
         <div className="form-picker-hours">
           <a className="label-hours">Giờ làm (*)</a>
           <div className="div-hours">
-            {DATA_TIME_TOTAL.map((item) => {
+            {DATA_TIME.map((item) => {
               return (
                 <Button
                   className={
@@ -574,6 +582,14 @@ const CleaningSchedule = (props) => {
             })}
           </div>
         </div>
+
+        <Button
+          className="btn-see-time-work"
+          onClick={showDrawer}
+          disabled={lat && long && address && timeWork && time ? false : true}
+        >
+          Xem lịch trình làm việc
+        </Button>
 
         <CustomTextInput
           label="Ghi chú"
@@ -635,9 +651,197 @@ const CleaningSchedule = (props) => {
           <Button onClick={onCreateOrder}>Đăng việc</Button>
         </div>
         {isLoading && <LoadingPagination />}
+
+        <div>
+          <Drawer
+            title="Xem lịch làm việc"
+            placement="right"
+            onClose={onClose}
+            width={400}
+            open={open}
+          >
+            <div>
+              {months?.map((month, i) => {
+                const theFirstDayInMonth = month[0].toString().split(" ")[0];
+                const year = month[0].toString().split(/\s/);
+
+                const formatMonthVN = (function (timess) {
+                  var a = new Date(timess).toString().split(/\s/);
+
+                  return {
+                    Jan: "Tháng 1",
+                    Feb: "Tháng 2",
+                    Mar: "Tháng 3",
+                    Apr: "Tháng 4",
+                    May: "Tháng 5",
+                    Jun: "Tháng 6",
+                    Jul: "Tháng 7",
+                    Aug: "Tháng 8",
+                    Sep: "Tháng 9",
+                    Oct: "Tháng 10",
+                    Nov: "Tháng 11",
+                    Dec: "Tháng 12",
+                  }[a[1]];
+                })(month[0]);
+
+                return (
+                  <div key={i}>
+                    <a className="title-month">
+                      {formatMonthVN} , {year[3]}
+                    </a>
+                    <div className="div-flex-date">
+                      {date.map((item) => (
+                        <div key={item.id} className="div-date">
+                          <a className="text-date">{item.title}</a>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="div-descrip-time">
+                      {theFirstDayInMonth === "Tue"
+                        ? Tue.map((item) => (
+                            <a key={item.id} className="div-date" />
+                          ))
+                        : theFirstDayInMonth === "Wed"
+                        ? Wed.map((item) => (
+                            <a key={item.id} className="div-date" />
+                          ))
+                        : theFirstDayInMonth === "Thu"
+                        ? Thu.map((item) => (
+                            <a key={item.id} className="div-date" />
+                          ))
+                        : theFirstDayInMonth === "Fri"
+                        ? Fri.map((item) => (
+                            <a key={item.id} className="div-date" />
+                          ))
+                        : theFirstDayInMonth === "Sat"
+                        ? Sat.map((item) => (
+                            <a key={item.id} className="div-date" />
+                          ))
+                        : theFirstDayInMonth === "Sun"
+                        ? Sun.map((item) => (
+                            <a key={item.id} className="div-date" />
+                          ))
+                        : null}
+
+                      {month.map((day, index) => {
+                        const words = day.toString().split(" ");
+
+                        return (
+                          <div
+                            key={index}
+                            disabled={day < addDays(new Date(), 7)}
+                            className={
+                              day < addDays(new Date(), 7)
+                                ? "div-date"
+                                : selectDay.includes(day.toString())
+                                ? "div-date-selected"
+                                : "div-date"
+                            }
+                            onClick={() => onSelectDay(day.toString())}
+                          >
+                            <a
+                              className={
+                                day < addDays(new Date(), 7)
+                                  ? "date-not-use"
+                                  : selectDay.includes(day.toString())
+                                  ? "text-date-selected"
+                                  : "date-use"
+                              }
+                            >
+                              {words[2]}
+                            </a>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </Drawer>
+        </div>
       </div>
     </>
   );
 };
 
 export default CleaningSchedule;
+
+const Tue = [
+  {
+    id: 1,
+  },
+];
+
+const Wed = [
+  {
+    id: 1,
+  },
+  {
+    id: 2,
+  },
+];
+const Thu = [
+  {
+    id: 1,
+  },
+  {
+    id: 2,
+  },
+  {
+    id: 3,
+  },
+];
+const Fri = [
+  {
+    id: 1,
+  },
+  {
+    id: 2,
+  },
+  {
+    id: 3,
+  },
+  {
+    id: 4,
+  },
+];
+const Sat = [
+  {
+    id: 1,
+  },
+  {
+    id: 2,
+  },
+  {
+    id: 3,
+  },
+  {
+    id: 4,
+  },
+  {
+    id: 5,
+  },
+];
+
+const Sun = [
+  {
+    id: 1,
+  },
+  {
+    id: 2,
+  },
+  {
+    id: 3,
+  },
+  {
+    id: 4,
+  },
+  {
+    id: 5,
+  },
+  {
+    id: 6,
+  },
+];
