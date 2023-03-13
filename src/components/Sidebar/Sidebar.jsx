@@ -345,6 +345,18 @@ const Sidebar = ({ onClick }) => {
               </Nav>
             </Collapse> */}
             </li>
+            <li>
+              <NavLink to="/notification/manage-push-notification">
+                {({ isActive }) => (
+                  <div className={isActive ? "active-link" : "unactive-link"}>
+                    <i class="uil uil-bell icon"></i>
+                    <a className={isActive ? "active-text" : "unactive-text"}>
+                      Thông báo
+                    </a>
+                  </div>
+                )}
+              </NavLink>
+            </li>
           </ul>
         ) : user?.role === "marketing" || user?.role === "marketing_manager" ? (
           <ul className="nav nav-pills flex-column ">

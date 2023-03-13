@@ -25,7 +25,8 @@ const ManageOrder = () => {
   const [totalSearch, setTotalSearch] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
   const [tab, setTab] = useState("all");
-  const [kind, setKind] = useState("theo_gio");
+  const [kind, setKind] = useState("");
+  const [valueTab, setValueTab] = useState("tat_ca");
 
   const dispatch = useDispatch();
   const listOrder = useSelector(getOrderSelector);
@@ -114,7 +115,8 @@ const ManageOrder = () => {
                 key={index}
                 onClick={() => {
                   setTab(item?.value);
-                  setKind("theo_gio");
+                  setKind("");
+                  setValueTab("tat_ca");
                 }}
               >
                 <a
@@ -139,21 +141,24 @@ const ManageOrder = () => {
                   className="div-tab-item"
                   key={index}
                   onClick={() => {
-                    setKind(item?.value);
+                    setKind(item?.kind);
+                    setValueTab(item?.value);
                     setDataSearch([]);
                     setValueSearch("");
                   }}
                 >
                   <a
                     className={
-                      kind === item?.value
+                      valueTab === item?.value
                         ? "text-title-tab"
                         : "text-title-tab-default"
                     }
                   >
                     {item?.title}
                   </a>
-                  <div className={kind === item?.value ? "tab-line" : ""}></div>
+                  <div
+                    className={valueTab === item?.value ? "tab-line" : ""}
+                  ></div>
                 </div>
               );
             })}

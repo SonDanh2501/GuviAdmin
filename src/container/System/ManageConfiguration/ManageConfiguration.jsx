@@ -1,3 +1,4 @@
+import { Row } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Button } from "reactstrap";
 
@@ -7,7 +8,7 @@ const ManageConfiguration = () => {
   const navigate = useNavigate();
   return (
     <div className="container-configuration">
-      <div>
+      <Row>
         <Button
           className="btn"
           onClick={() => {
@@ -43,8 +44,8 @@ const ManageConfiguration = () => {
         >
           Cấu hình app CTV
         </Button>
-      </div>
-      <div className="mt-5">
+      </Row>
+      <Row className="mt-5">
         <Button
           className="btn"
           onClick={() => {
@@ -53,7 +54,7 @@ const ManageConfiguration = () => {
         >
           Cấu hình QrCode
         </Button>
-      </div>
+      </Row>
     </div>
   );
 };

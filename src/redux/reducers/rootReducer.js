@@ -13,6 +13,7 @@ import feedback from "./feedback";
 import loading from "./loading";
 import order from "./order";
 import topup from "./topup";
+import notification from "./notification";
 import statistic from "./statistic";
 import Auth from "./auth";
 
@@ -36,5 +37,6 @@ const rootReducer = combineReducers({
   order,
   topup,
   statistic,
+  notification,
 });
 export default rootReducer;

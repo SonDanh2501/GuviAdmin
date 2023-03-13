@@ -17,6 +17,7 @@ import ManageOrder from "../container/System/ManageOrder";
 import AddOrder from "../container/System/ManageOrder/DrawerAddOrder";
 import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDoingManage";
 import OrderUsePromotion from "../container/System/ManagePromotion/OrderUsePromotion";
+import ManagePushNotification from "../container/System/ManagePushNotification";
 import ManageReport from "../container/System/ManageReport";
 import DetailReportManager from "../container/System/ManageReport/DetailsReportCollaborator";
 import DetailRegisterCustomer from "../container/System/ManageReport/ReportCustomer/DetailRegisterCustomer";
@@ -181,6 +182,11 @@ const Dashboard = () => {
               <Route
                 path="/report/manage-report/details-customer-invite"
                 element={<ReportInviteDetails />}
+              />
+
+              <Route
+                path="/notification/manage-push-notification"
+                element={<ManagePushNotification />}
               />
 
               <Route

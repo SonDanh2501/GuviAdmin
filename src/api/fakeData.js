@@ -40,18 +40,27 @@ export const DATA_PAYMENT = [
 export const DATA = [
   {
     id: 1,
-    title: "Giúp việc theo giờ",
-    value: "theo_gio",
+    title: "Tất cả",
+    value: "tat_ca",
+    kind: "",
   },
   {
     id: 2,
-    title: "Giúp việc cố định",
-    value: "co_dinh",
+    title: "Giúp việc theo giờ",
+    value: "theo_gio",
+    kind: "theo_gio",
   },
   {
     id: 3,
+    title: "Giúp việc cố định",
+    value: "co_dinh",
+    kind: "co_dinh",
+  },
+  {
+    id: 4,
     title: "Lặp lại hằng tuần",
     value: "lap_lai",
+    kind: "lap_lai",
   },
 ];
 
