@@ -7,7 +7,7 @@ import {
   endOfMonth,
 } from "date-fns";
 import _debounce from "lodash/debounce";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { searchCollaborators } from "../../../../../api/collaborator";
@@ -73,6 +73,7 @@ const CleaningSchedule = (props) => {
   const [errorCollaborator, setErrorCollaborator] = useState("");
   const [idCollaborator, setIdCollaborator] = useState("");
   const [open, setOpen] = useState(false);
+  const inputRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -110,6 +111,11 @@ const CleaningSchedule = (props) => {
           selectDay.push(day.toString());
       });
     });
+    const timeout = setTimeout(() => {
+      inputRef.current?.blur();
+      inputRef.current?.focus();
+    }, 100);
+    return () => clearTimeout(timeout);
   }, [estimateMonth, selectedDate]);
 
   const onChangeTime = (value) => {
@@ -293,7 +299,7 @@ const CleaningSchedule = (props) => {
     timeWork,
     time,
     note,
-    selectDay,
+    selectDay.toString(),
     chooseMonth,
     estimateMonth,
     date_work_schedule,
@@ -335,19 +341,6 @@ const CleaningSchedule = (props) => {
           });
         });
     }
-  }, [
-    lat,
-    long,
-    address,
-    timeWork,
-    time,
-    note,
-    selectDay,
-    chooseMonth,
-    estimateMonth,
-  ]);
-
-  useEffect(() => {
     if (
       lat &&
       long &&
@@ -394,9 +387,10 @@ const CleaningSchedule = (props) => {
     timeWork,
     time,
     id,
-    selectDay,
+    selectDay.toString(),
     chooseMonth,
     estimateMonth,
+    note,
   ]);
 
   const checkPromotion = useCallback(
@@ -443,42 +437,57 @@ const CleaningSchedule = (props) => {
 
   const onCreateOrder = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-
-    if (lat && long && address && timeWork && time && id && idCollaborator) {
-      createOrderApi({
-        id_customer: id,
-        token: accessToken.toString(),
-        type: "loop",
-        type_address_work: "house",
-        note_address: "",
-        note: note,
-        is_auto_order: false,
-        date_work_schedule: date_work_schedule,
-        extend_optional: [time],
-        code_promotion: codePromotion,
-        payment_method: "point",
-      })
-        .then((res) => {
-          addCollaboratorToOrderApi(res?._id, {
-            id_collaborator: idCollaborator,
-          })
-            .then((res) => {
-              navigate("/group-order/manage-order");
-              window.location.reload();
-            })
-            .catch((err) => {
-              errorNotify({
-                message: err,
-              });
-              dispatch(loadingAction.loadingRequest(false));
-            });
+    if ((lat && long && address && timeWork && time && id) || idCollaborator) {
+      if (idCollaborator) {
+        createOrderApi({
+          id_customer: id,
+          token: accessToken.toString(),
+          type: "loop",
+          type_address_work: "house",
+          note_address: "",
+          note: note,
+          is_auto_order: false,
+          date_work_schedule: date_work_schedule,
+          extend_optional: [time],
+          code_promotion: codePromotion,
+          payment_method: "point",
+          id_collaborator: idCollaborator,
         })
-        .catch((err) => {
-          errorNotify({
-            message: err,
+          .then((res) => {
+            navigate("/group-order/manage-order");
+            window.location.reload();
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            dispatch(loadingAction.loadingRequest(false));
           });
-          dispatch(loadingAction.loadingRequest(false));
-        });
+      } else {
+        createOrderApi({
+          id_customer: id,
+          token: accessToken.toString(),
+          type: "loop",
+          type_address_work: "house",
+          note_address: "",
+          note: note,
+          is_auto_order: false,
+          date_work_schedule: date_work_schedule,
+          extend_optional: [time],
+          code_promotion: codePromotion,
+          payment_method: "point",
+        })
+          .then((res) => {
+            navigate("/group-order/manage-order");
+            window.location.reload();
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            dispatch(loadingAction.loadingRequest(false));
+          });
+      }
     } else if (!id) {
       setErrorNameCustomer("Vui lòng chọn khách hàng");
       dispatch(loadingAction.loadingRequest(false));
@@ -490,9 +499,6 @@ const CleaningSchedule = (props) => {
       dispatch(loadingAction.loadingRequest(false));
     } else if (!timeWork) {
       setErrorTimeWork("Vui lòng chọn giờ làm");
-      dispatch(loadingAction.loadingRequest(false));
-    } else if (!idCollaborator) {
-      setErrorCollaborator("Vui lòng chọn CTV");
       dispatch(loadingAction.loadingRequest(false));
     } else {
       dispatch(loadingAction.loadingRequest(false));
@@ -720,7 +726,6 @@ const CleaningSchedule = (props) => {
               searchValue(e.target.value);
             }}
           />
-          {<a className="text-error">{errorCollaborator}</a>}
 
           {dataCollaborator.length > 0 && (
             <List type={"unstyled"} className="list-item">

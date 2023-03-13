@@ -337,50 +337,66 @@ const CleaningHourly = (props) => {
     dispatch(loadingAction.loadingRequest(true));
 
     if (
-      lat &&
-      long &&
-      address &&
-      timeWork &&
-      dateWork &&
-      mutipleSelected &&
-      time &&
-      id &&
+      (lat &&
+        long &&
+        address &&
+        timeWork &&
+        dateWork &&
+        mutipleSelected &&
+        time &&
+        id) ||
       idCollaborator
     ) {
-      createOrderApi({
-        id_customer: id,
-        token: accessToken.toString(),
-        type: "loop",
-        type_address_work: "house",
-        note_address: "",
-        note: note,
-        is_auto_order: isAutoOrder,
-        date_work_schedule: [timeW],
-        extend_optional: mutipleSelected.concat(time),
-        code_promotion: codePromotion,
-        payment_method: "cash",
-      })
-        .then((res) => {
-          addCollaboratorToOrderApi(res?._id, {
-            id_collaborator: idCollaborator,
-          })
-            .then((res) => {
-              navigate("/group-order/manage-order");
-              window.location.reload();
-            })
-            .catch((err) => {
-              errorNotify({
-                message: err,
-              });
-              dispatch(loadingAction.loadingRequest(false));
-            });
+      if (idCollaborator) {
+        createOrderApi({
+          id_customer: id,
+          token: accessToken.toString(),
+          type: "loop",
+          type_address_work: "house",
+          note_address: "",
+          note: note,
+          is_auto_order: isAutoOrder,
+          date_work_schedule: [timeW],
+          extend_optional: mutipleSelected.concat(time),
+          code_promotion: codePromotion,
+          payment_method: "cash",
+          id_collaborator: idCollaborator,
         })
-        .catch((err) => {
-          errorNotify({
-            message: err,
+          .then((res) => {
+            navigate("/group-order/manage-order");
+            window.location.reload();
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            dispatch(loadingAction.loadingRequest(false));
           });
-          dispatch(loadingAction.loadingRequest(false));
-        });
+      } else {
+        createOrderApi({
+          id_customer: id,
+          token: accessToken.toString(),
+          type: "loop",
+          type_address_work: "house",
+          note_address: "",
+          note: note,
+          is_auto_order: isAutoOrder,
+          date_work_schedule: [timeW],
+          extend_optional: mutipleSelected.concat(time),
+          code_promotion: codePromotion,
+          payment_method: "cash",
+        })
+          .then((res) => {
+            navigate("/group-order/manage-order");
+            window.location.reload();
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            dispatch(loadingAction.loadingRequest(false));
+          });
+      }
     } else if (!id) {
       setErrorNameCustomer("Vui lòng chọn khách hàng");
       dispatch(loadingAction.loadingRequest(false));

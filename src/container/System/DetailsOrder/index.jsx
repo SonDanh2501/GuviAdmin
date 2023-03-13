@@ -28,7 +28,7 @@ const DetailsOrder = () => {
   const [modal, setModal] = useState(false);
   const [open, setOpen] = useState(false);
   const [openStatus, setOpenStatus] = useState(false);
-  const [openPopup, setOpenPopup] = useState(false);
+  const [openCancelOrder, setOpenCancelOrder] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [serviceFee, setServiceFee] = useState(0);
   const [rowIndex, setRowIndex] = useState();
@@ -82,8 +82,8 @@ const DetailsOrder = () => {
     setOpenStatus(true);
   };
 
-  const showPopupconfirm = () => {
-    setOpenPopup(true);
+  const showPopCancelOrder = () => {
+    setOpenCancelOrder(true);
   };
 
   const handleOk = (_id) => {
@@ -113,11 +113,23 @@ const DetailsOrder = () => {
       });
   };
 
-  const handleChangeStatus = (id) => {
+  const handleChangeStatus = (_id) => {
     dispatch(loadingAction.loadingRequest(true));
-    changeStatusOrderApi(id, { status: "next" })
+    changeStatusOrderApi(_id, { status: "next" })
       .then((res) => {
-        window.location.reload();
+        getOrderByGroupOrderApi(id)
+          .then((res) => {
+            setOpenStatus(false);
+            setDataGroup(res?.data?.groupOrder);
+            setDataList(res?.data?.listOrder);
+            dispatch(loadingAction.loadingRequest(false));
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            dispatch(loadingAction.loadingRequest(false));
+          });
       })
       .catch((err) => {
         setModal(!modal);
@@ -128,11 +140,23 @@ const DetailsOrder = () => {
       });
   };
 
-  const handleChangeCancelToOrder = () => {
+  const handleCancelOrder = (_id) => {
     dispatch(loadingAction.loadingRequest(true));
-    changeOrderCancelToDoneApi(dataGroup?._id)
+    changeStatusOrderApi(_id, { status: "cancel" })
       .then((res) => {
-        window.location.reload();
+        getOrderByGroupOrderApi(id)
+          .then((res) => {
+            setOpenCancelOrder(false);
+            setDataGroup(res?.data?.groupOrder);
+            setDataList(res?.data?.listOrder);
+            dispatch(loadingAction.loadingRequest(false));
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            dispatch(loadingAction.loadingRequest(false));
+          });
       })
       .catch((err) => {
         setModal(!modal);
@@ -299,27 +323,31 @@ const DetailsOrder = () => {
               )}
             </div>
 
-            {/* <div>
+            <div>
               {data?.status === "pending" || data?.status === "confirm" ? (
-                <Popconfirm
-                  title="Bạn có muốn huỷ việc"
-                  // description="Open Popconfirm with async logic"
-                  open={open}
-                  onConfirm={() => handleOk(data?._id)}
-                  okButtonProps={{
-                    loading: confirmLoading,
-                  }}
-                  onCancel={handleCancel}
-                >
+                <div>
+                  {rowIndex === index && (
+                    <Popconfirm
+                      title="Bạn có muốn huỷ việc"
+                      open={openCancelOrder}
+                      onConfirm={() => handleCancelOrder(data?._id)}
+                      okButtonProps={{
+                        loading: confirmLoading,
+                      }}
+                      onCancel={() => setOpenCancelOrder(false)}
+                    />
+                  )}
                   <Button
                     className="btn-confirm-order mt-1"
-                    onClick={showPopconfirm}
+                    onClick={() =>
+                      rowIndex === index ? showPopCancelOrder() : ""
+                    }
                   >
                     Huỷ việc
                   </Button>
-                </Popconfirm>
+                </div>
               ) : null}
-            </div> */}
+            </div>
           </>
         );
       },
@@ -553,7 +581,7 @@ const DetailsOrder = () => {
             </Popconfirm>
           ) : null}
 
-          {user === "admin" && dataGroup?.status === "cancel" ? (
+          {/* {user === "admin" && dataGroup?.status === "cancel" ? (
             <Popconfirm
               title="Bạn có chuyển trạng thái sang hoàn tất"
               // description="Open Popconfirm with async logic"
@@ -568,7 +596,7 @@ const DetailsOrder = () => {
                 Hoàn tất
               </Button>
             </Popconfirm>
-          ) : null}
+          ) : null} */}
 
           <div className="mt-5">
             <Table

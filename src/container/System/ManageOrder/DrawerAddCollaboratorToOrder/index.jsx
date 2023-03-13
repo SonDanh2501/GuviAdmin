@@ -23,6 +23,7 @@ const AddCollaboratorOrder = ({ idOrder }) => {
   const valueSearch = (value) => {
     setName(value);
   };
+  console.log(idOrder);
 
   const handleSearch = useCallback(
     _debounce((value) => {
