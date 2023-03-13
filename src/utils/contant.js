@@ -66,6 +66,10 @@ export const INIT_STATE = {
     topCollaborator: [],
     totalTopCollaborator: 0,
   },
+  notification: {
+    data: [],
+    totalItem: 0,
+  },
 };
 
 export const path = {

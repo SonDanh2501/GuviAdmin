@@ -13,6 +13,7 @@ import loadingSaga from "./loading";
 import orderSaga from "./order";
 import topupSaga from "./topup";
 import statisticSaga from "./statistic";
+import notificationSaga from "./notification";
 
 export default function* rootSaga() {
   yield all([
@@ -30,5 +31,6 @@ export default function* rootSaga() {
     fork(orderSaga),
     fork(topupSaga),
     fork(statisticSaga),
+    fork(notificationSaga),
   ]);
 }

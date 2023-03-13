@@ -1,0 +1,48 @@
+.div-date-create {
+  display: flex;
+  flex-direction: column;
+
+  .text-create {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #6e6893;
+    text-decoration: none;
+  }
+}
+
+.div-tab {
+  display: flex;
+  flex-direction: row;
+
+  .div-item-tab {
+    margin-left: 20px;
+
+    .text-tab {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 16px;
+      color: #979797;
+      text-decoration: none;
+    }
+  }
+
+  .div-item-tab-selected {
+    margin-left: 20px;
+    border-bottom: 2px solid #41a2f3;
+
+    .text-tab {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 16px;
+      color: #000000;
+      text-decoration: none;
+    }
+  }
+}
