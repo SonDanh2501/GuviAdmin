@@ -166,7 +166,7 @@ export default function UserManage(props) {
               return (
                 <div
                   onClick={() =>
-                    navigate("/system/user-manage/details-customer", {
+                    navigate("/profile-customer", {
                       state: { id: data?._id },
                     })
                   }
@@ -183,7 +183,7 @@ export default function UserManage(props) {
               return (
                 <div
                   onClick={() =>
-                    navigate("/system/user-manage/details-customer", {
+                    navigate("/profile-customer", {
                       state: { id: data?._id },
                     })
                   }
@@ -327,7 +327,7 @@ export default function UserManage(props) {
               return (
                 <div
                   onClick={() =>
-                    navigate("/system/user-manage/details-customer", {
+                    navigate("/profile-customer", {
                       state: { id: data?._id },
                     })
                   }
@@ -344,7 +344,7 @@ export default function UserManage(props) {
               return (
                 <div
                   onClick={() =>
-                    navigate("/system/user-manage/details-customer", {
+                    navigate("/profile-customer", {
                       state: { id: data?._id },
                     })
                   }

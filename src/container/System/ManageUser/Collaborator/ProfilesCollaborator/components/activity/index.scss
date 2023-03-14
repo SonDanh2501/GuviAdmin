@@ -1,5 +1,6 @@
-.div-listItem {
+.div-list-item {
   display: flex;
+  flex-direction: column;
   padding: 10px;
   margin-top: 10px;
   border-bottom: 1px solid rgb(208, 208, 208);

@@ -150,6 +150,7 @@ const Dashboard = () => {
                 path="/group-order/manage-order/details-customer"
                 element={<Profiles />}
               />
+              <Route path="/profile-customer" element={<Profiles />} />
               <Route
                 path="/group-order/manage-order/all"
                 element={<ManageOrder />}

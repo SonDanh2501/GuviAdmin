@@ -149,7 +149,7 @@ export default function OrderManage(props) {
         return (
           <div
             onClick={() =>
-              navigate("/group-order/manage-order/details-customer", {
+              navigate("/profile-customer", {
                 state: { id: data?.id_customer?._id },
               })
             }

@@ -295,7 +295,6 @@ const CleaningSchedule = (props) => {
   }, [
     lat,
     long,
-    address,
     timeWork,
     time,
     note,
@@ -383,7 +382,6 @@ const CleaningSchedule = (props) => {
   }, [
     lat,
     long,
-    address,
     timeWork,
     time,
     id,

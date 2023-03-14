@@ -496,14 +496,19 @@ const DetailsOrder = () => {
                 <div className="detail-price">
                   <div className="div-total">
                     <a>- Tổng tiền:</a>
-                    <a>{formatMoney(dataGroup?.initial_fee + 2000)}</a>
+                    <a>{formatMoney(dataGroup?.initial_fee)}</a>
+                  </div>
+                  <div className="div-total">
+                    <a>- Phí dịch vụ:</a>
+                    {dataGroup?.service_fee?.map((item) => (
+                      <a>+{formatMoney(item?.fee)}</a>
+                    ))}
                   </div>
                   {dataGroup?.code_promotion && (
                     <div className="div-total-promo">
                       <a>- Khuyến mãi:</a>
                       <div className="div-promo">
                         <a>+ Mã code: {dataGroup?.code_promotion?.code}</a>
-
                         <a style={{ color: "red", marginLeft: 5 }}>
                           {formatMoney(-dataGroup?.code_promotion?.discount)}
                         </a>

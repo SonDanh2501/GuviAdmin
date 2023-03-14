@@ -7,7 +7,7 @@ export const getListNotification = (status, start, length) => {
 };
 
 export const getDetailNotification = (id) => {
-  return axiosClient.post(`/admin/push_notification_manager/detail_item/${id}`);
+  return axiosClient.get(`/admin/push_notification_manager/detail_item/${id}`);
 };
 
 export const createPushNotification = (data) => {
