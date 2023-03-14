@@ -299,7 +299,7 @@ const CleaningHourly = (props) => {
           });
         });
     }
-  }, [lat, long, address, timeWork, dateWork, mutipleSelected, time, id]);
+  }, [lat, long, timeWork, dateWork, mutipleSelected, time, id]);
 
   const checkPromotion = useCallback(
     (item) => {
@@ -330,7 +330,7 @@ const CleaningHourly = (props) => {
           setIsLoading(false);
         });
     },
-    [id, lat, long, address, timeWork, dateWork, mutipleSelected, time]
+    [id, lat, long, timeWork, dateWork, mutipleSelected, time]
   );
 
   const onCreateOrder = useCallback(() => {

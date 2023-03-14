@@ -21,6 +21,7 @@ import {
   searchCollaborators,
   verifyCollaborator,
 } from "../../../../../api/collaborator.jsx";
+import _debounce from "lodash/debounce";
 import offToggle from "../../../../../assets/images/off-button.png";
 import offline from "../../../../../assets/images/offline.svg";
 import onToggle from "../../../../../assets/images/on-button.png";
@@ -82,9 +83,12 @@ export default function CollaboratorManage(props) {
         );
   };
 
+  const changeValueSearch = (value) => {
+    setValueFilter(value);
+  };
+
   const handleSearch = useCallback(
-    (value) => {
-      setValueFilter(value);
+    _debounce((value) => {
       searchCollaborators(0, 20, status, value)
         .then((res) => {
           setDataFilter(res.data);
@@ -95,7 +99,7 @@ export default function CollaboratorManage(props) {
             message: err,
           });
         });
-    },
+    }, 1000),
     [status]
   );
 
@@ -479,7 +483,10 @@ export default function CollaboratorManage(props) {
             type="text"
             className="input-search"
             prefix={<SearchOutlined />}
-            onChange={(e) => handleSearch(e.target.value)}
+            onChange={(e) => {
+              changeValueSearch(e.target.value);
+              handleSearch(e.target.value);
+            }}
           />
         </div>
         <div className="div-table mt-3">

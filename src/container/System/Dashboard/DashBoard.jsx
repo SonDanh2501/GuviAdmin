@@ -143,7 +143,7 @@ export default function Home() {
           <a
             className="text-collaborator"
             onClick={() =>
-              navigate("/details-customer", {
+              navigate("/profile-customer", {
                 state: { id: data?.id_customer?._id },
               })
             }

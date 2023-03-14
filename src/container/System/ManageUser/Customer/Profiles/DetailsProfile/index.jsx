@@ -26,9 +26,9 @@ import { FloatButton, Image } from "antd";
 import { errorNotify } from "../../../../../../helper/toast";
 // core components
 
-const DetailsProfile = () => {
-  const { state } = useLocation();
-  const { id } = state || {};
+const DetailsProfile = ({ id }) => {
+  // const { state } = useLocation();
+  // const { id } = state || {};
   const [name, setName] = useState("");
   const [mail, setMail] = useState("");
   const [birthday, setBirthday] = useState("");
@@ -116,7 +116,7 @@ const DetailsProfile = () => {
             </div>
             <div className="row-heading">
               <div className="col-heading">
-                <span className="heading">{formatMoney(data?.cash)}</span>
+                <span className="heading">{formatMoney(data?.pay_point)}</span>
                 <span className="description">G-pay</span>
               </div>
               <div className="col-heading">

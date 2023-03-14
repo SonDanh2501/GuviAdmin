@@ -31,7 +31,7 @@ export const deleteCustomer = (id, payload) => {
 
 export const getOrderByCustomers = (id, start, length) => {
   return axiosClient.get(
-    `/admin/order_manager/get_order_by_customer/${id}?&start=${start}&length=${length}`
+    `/admin/order_manager/get_order_by_customer/${id}?start=${start}&length=${length}`
   );
 };
 
@@ -39,5 +39,11 @@ export const updatePointCustomer = (id, payload) => {
   return axiosClient.post(
     `/admin/customer_manager/edit_point_and_rank_point/${id}?lang=vi`,
     payload
+  );
+};
+
+export const getHistoryTransitionByCustomers = (id, start, length) => {
+  return axiosClient.get(
+    `/admin/customer_manager/get_history_point/${id}?start=${start}&length=${length}`
   );
 };

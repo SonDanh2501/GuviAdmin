@@ -20,12 +20,16 @@ import _debounce from "lodash/debounce";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import { searchCustomers } from "../../../../api/customer";
 import { getGroupCustomerApi } from "../../../../api/promotion";
-import { createPushNotification } from "../../../../api/notification";
+import {
+  createPushNotification,
+  editPushNotification,
+  getDetailNotification,
+} from "../../../../api/notification";
 import { getNotification } from "../../../../redux/actions/notification";
 import moment from "moment";
 import { postFile } from "../../../../api/file";
 import resizeFile from "../../../../helper/resizer";
-const EditPushNotification = ({ idOrder }) => {
+const EditPushNotification = ({ id }) => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -48,6 +52,33 @@ const EditPushNotification = ({ idOrder }) => {
   const onClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    getDetailNotification(id)
+      .then((res) => {
+        const date = moment(new Date(res?.date_schedule)).format(
+          "YYYY-MM-DDTHH:mm"
+        );
+        setTitle(res?.title);
+        setDescription(res?.body);
+        setImgThumbnail(res?.image_url);
+        setIsCustomer(res?.is_id_customer);
+        setIsGroupCustomer(res?.is_id_group_customer);
+        // setGroupCustomer(res?.id_group_customer);
+        setIsDateSchedule(res?.is_date_schedule);
+        setDateSchedule(date);
+        setListNameCustomers(res?.id_customer);
+        res?.id_customer?.map((item) => {
+          listCustomers.push(item?._id);
+        });
+        res?.id_group_customer?.map((item) => {
+          groupCustomer.push(item?._id);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
 
   useEffect(() => {
     getGroupCustomerApi(0, 10)
@@ -147,7 +178,7 @@ const EditPushNotification = ({ idOrder }) => {
 
   const onCreateNotification = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-    createPushNotification({
+    editPushNotification(id, {
       title: title,
       body: description,
       is_date_schedule: isDateSchedule,
@@ -184,13 +215,14 @@ const EditPushNotification = ({ idOrder }) => {
     listCustomers,
     groupCustomer,
     imgThumbnail,
+    id,
   ]);
 
   return (
     <>
-      <div className="btn-push-noti" onClick={showDrawer}>
-        <a>Tạo thông báo</a>
-      </div>
+      <a onClick={showDrawer}>
+        <a>Chỉnh sửa </a>
+      </a>
       <Drawer
         title="Tạo thông báo"
         placement="right"
@@ -309,6 +341,7 @@ const EditPushNotification = ({ idOrder }) => {
               }}
               placeholder="Please select"
               onChange={handleChange}
+              value={groupCustomer}
               options={options}
             />
           )}
@@ -333,7 +366,7 @@ const EditPushNotification = ({ idOrder }) => {
           className="btn-create-notification"
           onClick={onCreateNotification}
         >
-          Tạo
+          Sửa
         </Button>
       </Drawer>
     </>

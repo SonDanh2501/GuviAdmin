@@ -9,13 +9,27 @@ import {
   getNotificationTotal,
 } from "../../../redux/selectors/notification";
 import AddPushNotification from "./AddPushNotification";
+import EditPushNotification from "./EditPushNotification";
+import offToggle from "../../../assets/images/off-button.png";
+import onToggle from "../../../assets/images/on-button.png";
 import "./index.scss";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import {
+  activePushNotification,
+  deletePushNotification,
+} from "../../../api/notification";
+import { loadingAction } from "../../../redux/actions/loading";
+import { errorNotify } from "../../../helper/toast";
 
 const ManagePushNotification = () => {
   const listNotification = useSelector(getListNotifications);
   const totalNotification = useSelector(getNotificationTotal);
+  const [itemEdit, setItemEdit] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [status, setStatus] = useState("todo");
+  const [modalVerify, setModalVerify] = useState(false);
+  const [modal, setModal] = useState(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,6 +41,8 @@ const ManagePushNotification = () => {
       })
     );
   }, [status]);
+  const toggle = () => setModal(!modal);
+  const toggleVerify = () => setModalVerify(!modalVerify);
 
   const onChange = (page) => {
     setCurrentPage(page);
@@ -41,10 +57,63 @@ const ManagePushNotification = () => {
     );
   };
 
+  const onActive = (id, active) => {
+    dispatch(loadingAction.loadingRequest(true));
+    activePushNotification(id, {
+      is_active: active ? false : true,
+    })
+      .then((res) => {
+        dispatch(
+          getNotification.getNotificationRequest({
+            status: status,
+            start: 0,
+            length: 20,
+          })
+        );
+        setModalVerify(false);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+        setModalVerify(false);
+      });
+  };
+
+  const onDelete = (id) => {
+    dispatch(loadingAction.loadingRequest(true));
+
+    deletePushNotification(id)
+      .then((res) => {
+        dispatch(
+          getNotification.getNotificationRequest({
+            status: status,
+            start: 0,
+            length: 20,
+          })
+        );
+        setModal(false);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+        setModal(false);
+      });
+  };
+
   const items = [
     {
       key: "1",
-      label: <a>Chỉnh sửa</a>,
+      label: status === "todo" && <EditPushNotification id={itemEdit?._id} />,
+    },
+    {
+      key: "2",
+      label: <a onClick={toggle}>Xoá</a>,
     },
   ];
 
@@ -75,32 +144,40 @@ const ManagePushNotification = () => {
     {
       key: "action",
       align: "center",
-      render: (data) => (
-        <Space size="middle">
-          {/* <div>
-            {data?.is_verify ? (
-              <img src={onToggle} className="img-toggle" />
-            ) : (
-              <img
-                src={offToggle}
-                className="img-toggle"
-                onClick={toggleVerify}
-              />
-            )}
-          </div> */}
-          <Dropdown
-            menu={{
-              items,
-            }}
-            placement="bottom"
-            trigger={["click"]}
-          >
-            <a>
-              <i class="uil uil-ellipsis-v"></i>
-            </a>
-          </Dropdown>
-        </Space>
-      ),
+      render: (data) => {
+        return (
+          <div>
+            <Space size="middle">
+              <div>
+                {data?.is_active ? (
+                  <img
+                    src={onToggle}
+                    className="img-toggle"
+                    onClick={toggleVerify}
+                  />
+                ) : (
+                  <img
+                    src={offToggle}
+                    className="img-toggle"
+                    onClick={toggleVerify}
+                  />
+                )}
+              </div>
+              <Dropdown
+                menu={{
+                  items,
+                }}
+                placement="bottom"
+                trigger={["click"]}
+              >
+                <a>
+                  <i class="uil uil-ellipsis-v"></i>
+                </a>
+              </Dropdown>
+            </Space>
+          </div>
+        );
+      },
     },
   ];
 
@@ -131,6 +208,13 @@ const ManagePushNotification = () => {
         <Table
           columns={columns}
           dataSource={listNotification}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setItemEdit(record);
+              },
+            };
+          }}
           pagination={false}
         />
       </div>
@@ -145,6 +229,52 @@ const ManagePushNotification = () => {
             pageSize={20}
           />
         </div>
+      </div>
+
+      <div>
+        <Modal isOpen={modalVerify} toggle={toggleVerify}>
+          <ModalHeader toggle={toggleVerify}>
+            {!itemEdit?.is_active === true
+              ? "Bật hoạt động cho thông báo"
+              : "Ẩn hoạt động cho thông báo"}
+          </ModalHeader>
+          <ModalBody>
+            {!itemEdit?.is_active === true
+              ? "Bạn có muốn Bật hoạt động cho thông báo"
+              : "Bạn có muốn Ẩn hoạt động cho thông báo"}
+            <h3>{itemEdit?.title}</h3>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="primary"
+              onClick={() => onActive(itemEdit?._id, itemEdit?.is_active)}
+            >
+              Có
+            </Button>
+            <Button color="#ddd" onClick={toggleVerify}>
+              Không
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+      <div>
+        <Modal isOpen={modal} toggle={toggle}>
+          <ModalHeader toggle={toggle}>Xóa thông báo</ModalHeader>
+          <ModalBody>
+            <a>
+              Bạn có chắc muốn xóa thông báo
+              <a className="text-name-modal">{itemEdit?.title}</a> này không?
+            </a>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
+              Có
+            </Button>
+            <Button color="#ddd" onClick={toggle}>
+              Không
+            </Button>
+          </ModalFooter>
+        </Modal>
       </div>
     </div>
   );

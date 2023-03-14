@@ -17,7 +17,7 @@ import {
 import { fetchCustomers, searchCustomers } from "../../api/customer";
 import { DATA_PAYMENT } from "../../api/fakeData";
 import { postFile } from "../../api/file";
-import { getGroupCustomerApi } from "../../api/promotion";
+import { createPromotion, getGroupCustomerApi } from "../../api/promotion";
 import resizeFile from "../../helper/resizer";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
@@ -27,6 +27,7 @@ import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import _debounce from "lodash/debounce";
 import "./addPromotion.scss";
+import { createPushNotification } from "../../api/notification";
 
 const AddPromotion = ({ idService, tab }) => {
   const [state, setState] = useState(false);
@@ -77,6 +78,10 @@ const AddPromotion = ({ idService, tab }) => {
   const [name, setName] = useState("");
   const [listCustomers, setListCustomers] = useState([]);
   const [listNameCustomers, setListNameCustomers] = useState([]);
+  const [isSendNotification, setIsSendNotification] = useState(false);
+  const [titleNoti, setTitleNoti] = useState("");
+  const [descriptionNoti, setDescriptionNoti] = useState("");
+  const [imgNoti, setImgNoti] = useState("");
   const options = [];
   const optionsCustomer = [];
   const dispatch = useDispatch();
@@ -255,53 +260,84 @@ const AddPromotion = ({ idService, tab }) => {
 
   const onCreatePromotion = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      createPromotionAction.createPromotionRequest({
-        title: {
-          vi: titleVN,
-          en: titleEN,
-        },
-        short_description: {
-          vi: shortDescriptionVN,
-          en: shortDescriptionEN,
-        },
-        description: {
-          vi: draftToHtml(convertToRaw(descriptionVN.getCurrentContent())),
-          en: draftToHtml(convertToRaw(descriptionEN.getCurrentContent())),
-        },
-        thumbnail: imgThumbnail,
-        image_background: imgBackground,
-        code: promoCode ? promoCode : codebrand,
-        is_limit_date: limitedDate,
-        limit_start_date: limitedDate
-          ? new Date(startDate).toISOString()
-          : null,
-        limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
-        is_limit_count: limitedQuantity,
-        limit_count: limitedQuantity ? amount : 0,
-        is_id_group_customer: isGroupCustomer,
-        id_group_customer: groupCustomer,
-        is_id_customer: isCustomer,
-        id_customer: listCustomers,
-        service_apply: tab === "tat_ca" ? [serviceApply] : [idService],
-        is_limited_use: isUsePromo,
-        limited_use: isUsePromo ? usePromo : 0,
-        type_discount: "order",
-        type_promotion: "code",
-        price_min_order: minimumOrder,
-        discount_unit: discountUnit,
-        discount_max_price: maximumDiscount,
-        discount_value: reducedValue,
-        is_delete: false,
-        is_exchange_point: isExchangePoint,
-        exchange_point: exchangePoint,
-        brand: namebrand.toUpperCase(),
-        exp_date_exchange: dateExchange,
-        position: position,
-        is_payment_method: isPaymentMethod,
-        payment_method: paymentMethod,
+
+    createPromotion({
+      title: {
+        vi: titleVN,
+        en: titleEN,
+      },
+      short_description: {
+        vi: shortDescriptionVN,
+        en: shortDescriptionEN,
+      },
+      description: {
+        vi: draftToHtml(convertToRaw(descriptionVN.getCurrentContent())),
+        en: draftToHtml(convertToRaw(descriptionEN.getCurrentContent())),
+      },
+      thumbnail: imgThumbnail,
+      image_background: imgBackground,
+      code: promoCode ? promoCode : codebrand,
+      is_limit_date: limitedDate,
+      limit_start_date: limitedDate ? new Date(startDate).toISOString() : null,
+      limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
+      is_limit_count: limitedQuantity,
+      limit_count: limitedQuantity ? amount : 0,
+      is_id_group_customer: isGroupCustomer,
+      id_group_customer: groupCustomer,
+      is_id_customer: isCustomer,
+      id_customer: listCustomers,
+      service_apply: tab === "tat_ca" ? [serviceApply] : [idService],
+      is_limited_use: isUsePromo,
+      limited_use: isUsePromo ? usePromo : 0,
+      type_discount: "order",
+      type_promotion: "code",
+      price_min_order: minimumOrder,
+      discount_unit: discountUnit,
+      discount_max_price: maximumDiscount,
+      discount_value: reducedValue,
+      is_delete: false,
+      is_exchange_point: isExchangePoint,
+      exchange_point: exchangePoint,
+      brand: namebrand.toUpperCase(),
+      exp_date_exchange: dateExchange,
+      position: position,
+      is_payment_method: isPaymentMethod,
+      payment_method: paymentMethod,
+    })
+      .then((res) => {
+        if (isSendNotification) {
+          createPushNotification({
+            title: titleNoti,
+            body: descriptionNoti,
+            is_date_schedule: false,
+            date_schedule: "",
+            is_id_customer: isCustomer,
+            id_customer: listCustomers,
+            is_id_group_customer: isGroupCustomer,
+            id_group_customer: groupCustomer,
+            image_url: imgBackground,
+          })
+            .then(() => {
+              dispatch(loadingAction.loadingRequest(false));
+              window.location.reload();
+            })
+            .catch((err) => {
+              errorNotify({
+                message: err,
+              });
+              dispatch(loadingAction.loadingRequest(false));
+            });
+        } else {
+          dispatch(loadingAction.loadingRequest(false));
+          window.location.reload();
+        }
       })
-    );
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
   }, [
     titleVN,
     titleEN,
@@ -339,6 +375,9 @@ const AddPromotion = ({ idService, tab }) => {
     paymentMethod,
     idService,
     listCustomers,
+    isSendNotification,
+    titleNoti,
+    descriptionNoti,
   ]);
 
   return (
@@ -560,8 +599,6 @@ const AddPromotion = ({ idService, tab }) => {
                       }
                     </Row>
                   </div>
-                </Col>
-                <Col md={4}>
                   {tab === "tat_ca" && (
                     <div>
                       <h5>9. Dịch vụ áp dụng</h5>
@@ -675,7 +712,8 @@ const AddPromotion = ({ idService, tab }) => {
                       </div>
                     )}
                   </div>
-
+                </Col>
+                <Col md={4}>
                   <div>
                     <h5 className="mt-2">11. Số lượng mã khuyến mãi</h5>
                     <FormGroup check inline>
@@ -836,8 +874,51 @@ const AddPromotion = ({ idService, tab }) => {
                       onChange={(e) => setPosition(e.target.value)}
                     />
                   </div>
+                  <div>
+                    <FormGroup check inline>
+                      <Label check className="text-first">
+                        12. Gửi thông báo
+                      </Label>
+                      <Input
+                        type="checkbox"
+                        className="ml-2"
+                        defaultChecked={isSendNotification}
+                        onClick={() =>
+                          setIsSendNotification(!isSendNotification)
+                        }
+                      />
+                    </FormGroup>
+
+                    {isSendNotification && (
+                      <div>
+                        <CustomTextInput
+                          placeholder="Nhập tiêu đề thông báo"
+                          className="input-promo-code mt-2"
+                          type="text"
+                          value={titleNoti}
+                          onChange={(e) => setTitleNoti(e.target.value)}
+                        />
+                        <CustomTextInput
+                          placeholder="Nhập nội dung thông báo"
+                          className="input-promo-code"
+                          type="textarea"
+                          value={descriptionNoti}
+                          onChange={(e) => setDescriptionNoti(e.target.value)}
+                        />
+                        {/* <CustomTextInput
+                          type="file"
+                          accept={".jpg,.png,.jpeg"}
+                          className="input-upload"
+                          onChange={onChangeImageNoti}
+                        />
+                        {imgNoti && (
+                          <img src={imgNoti} className="img-background" />
+                        )} */}
+                      </div>
+                    )}
+                  </div>
                   <Button
-                    className="btn_add"
+                    className="btn_add mt-3"
                     color="warning"
                     onClick={onCreatePromotion}
                   >
