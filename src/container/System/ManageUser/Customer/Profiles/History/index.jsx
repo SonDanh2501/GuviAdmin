@@ -59,7 +59,9 @@ const HistoryTransition = ({ id }) => {
                       : "text-money-plus"
                   }
                 >
-                  {formatMoney(item?.value)}
+                  {money.slice(0, 1) === "-"
+                    ? formatMoney(item?.value)
+                    : "+" + formatMoney(item?.value)}
                 </a>
               </div>
               <a className="text-date">

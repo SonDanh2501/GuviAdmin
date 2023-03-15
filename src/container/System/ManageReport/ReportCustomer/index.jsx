@@ -111,8 +111,8 @@ const ReportCustomer = () => {
 
   const onChangeDay = (start, end) => {
     setIsLoading(true);
-    const dayStart = moment(start).toISOString();
-    const dayEnd = moment(end).toISOString();
+    const dayStart = moment(start).startOf("date").toISOString();
+    const dayEnd = moment(end).endOf("date").toISOString();
     getTotalCustomerDay(dayStart, dayEnd)
       .then((res) => {
         setDataTable(res);

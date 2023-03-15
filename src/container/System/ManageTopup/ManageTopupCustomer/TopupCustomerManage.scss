@@ -31,3 +31,44 @@
     width: 100vh;
   }
 }
+
+.text-id {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  color: #000000;
+  text-decoration: none;
+}
+
+.div-name-topup {
+  display: flex;
+  flex-direction: column;
+
+  .text-name {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+  }
+
+  .text-phone {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000 !important;
+    text-decoration: none;
+  }
+}
+
+.text-cancel-topup {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000000 !important;
+  text-decoration: none;
+}

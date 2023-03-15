@@ -85,3 +85,9 @@ export const deleteMoneyCustomerApi = (id, data) => {
     data
   );
 };
+
+export const cancelMoneyCustomerApi = (id) => {
+  return axiosClient.post(
+    `/admin/customer_manager/cancel_transition/${id}?lang=vi`
+  );
+};

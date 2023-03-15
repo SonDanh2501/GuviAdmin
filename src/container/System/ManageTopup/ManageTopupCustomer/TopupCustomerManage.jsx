@@ -16,6 +16,7 @@ import {
   Row,
 } from "reactstrap";
 import {
+  cancelMoneyCustomerApi,
   deleteMoneyCustomerApi,
   searchTopupCustomerApi,
   verifyMoneyCustomerApi,
@@ -27,6 +28,7 @@ import { formatMoney } from "../../../../helper/formatMoney";
 import { errorNotify } from "../../../../helper/toast";
 import { loadingAction } from "../../../../redux/actions/loading";
 import { getTopupCustomer } from "../../../../redux/actions/topup";
+import { getUser } from "../../../../redux/selectors/auth";
 import { getTopupKH, totalTopupKH } from "../../../../redux/selectors/topup";
 import "./TopupCustomerManage.scss";
 
@@ -38,19 +40,22 @@ export default function TopupCustomerManage() {
   const listCustomer = useSelector(getTopupKH);
   const totalCustomer = useSelector(totalTopupKH);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [itemEdit, setItemEdit] = React.useState([]);
-  const [modal, setModal] = React.useState(false);
-  const [modalConfirm, setModalConfirm] = React.useState(false);
-  const [modalEdit, setModalEdit] = React.useState(false);
+  const [itemEdit, setItemEdit] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [modalCancel, setModalCancel] = useState(false);
+  const [modalConfirm, setModalConfirm] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
   const toggleConfirm = () => setModalConfirm(!modalConfirm);
   const toggleEdit = () => setModalEdit(!modalEdit);
   const toggle = () => setModal(!modal);
+  const toggleCancel = () => setModalCancel(!modalCancel);
+  const user = useSelector(getUser);
   const dispatch = useDispatch();
 
   useEffect(() => {
     // dispatch(loadingAction.loadingRequest(true));
     dispatch(
-      getTopupCustomer.getTopupCustomerRequest({ start: 0, length: 10 })
+      getTopupCustomer.getTopupCustomerRequest({ start: 0, length: 20 })
     );
   }, [dispatch]);
 
@@ -77,11 +82,33 @@ export default function TopupCustomerManage() {
     dispatch(loadingAction.loadingRequest(true));
     verifyMoneyCustomerApi(id, { is_verify_money: true })
       .then((res) => {
-        window.location.reload();
+        dispatch(
+          getTopupCustomer.getTopupCustomerRequest({ start: 0, length: 10 })
+        );
+        setModalConfirm(false);
       })
       .catch((err) => {
+        errorNotify({
+          message: err,
+        });
         dispatch(loadingAction.loadingRequest(false));
-        console.log(err);
+      });
+  }, []);
+
+  const onCancel = useCallback((id) => {
+    dispatch(loadingAction.loadingRequest(true));
+    cancelMoneyCustomerApi(id)
+      .then((res) => {
+        dispatch(
+          getTopupCustomer.getTopupCustomerRequest({ start: 0, length: 10 })
+        );
+        setModalCancel(false);
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
       });
   }, []);
 
@@ -122,8 +149,19 @@ export default function TopupCustomerManage() {
 
   const columns = [
     {
+      title: "Mã",
+      render: (data) => <a className="text-id">{data?.id_customer?.id_view}</a>,
+    },
+    {
       title: "Tên khách hàng",
-      dataIndex: ["id_customer", "full_name"],
+      render: (data) => {
+        return (
+          <div className="div-name-topup">
+            <a className="text-name">{data?.id_customer?.full_name}</a>
+            <a className="text-phone">{data?.id_customer?.phone}</a>
+          </div>
+        );
+      },
     },
     {
       title: "Số tiền",
@@ -159,34 +197,54 @@ export default function TopupCustomerManage() {
         <a>{moment(new Date(data?.date_created)).format("DD/MM/yyy HH:mm")}</a>
       ),
     },
-
+    {
+      title: "Trạng thái",
+      render: (data) => {
+        return (
+          <div>
+            {data?.status === "pending" ? (
+              <a className="text-pending-topup">Đang xử lý</a>
+            ) : data?.status === "transfered" ? (
+              <a className="text-transfered">Đã chuyển tiền</a>
+            ) : data?.status === "done" ? (
+              <a className="text-done">Hoàn tất</a>
+            ) : (
+              <a className="text-cancel">Đã huỷ</a>
+            )}
+          </div>
+        );
+      },
+      align: "center",
+    },
     {
       title: "",
       key: "action",
+      align: "center",
       render: (data) => {
         return (
-          <>
-            {!data?.is_verify_money && (
-              <button className="btn-confirm" onClick={toggleConfirm}>
-                Duyệt lệnh
-              </button>
-            )}
-            {!data?.is_verify_money && (
-              <button
-                className="btn-edit"
-                onClick={() => {
-                  toggleEdit();
-                  setItemEdit(data);
-                }}
-              >
-                <i className="uil uil-edit-alt"></i>
-              </button>
-            )}
-
-            <button className="btn-delete" onClick={toggle}>
-              <i className="uil uil-trash"></i>
+          <div>
+            <button
+              className="btn-confirm"
+              onClick={toggleConfirm}
+              disabled={data?.status === "pending" ? false : true}
+            >
+              Duyệt lệnh
             </button>
-          </>
+
+            <div className="mt-1 ml-3">
+              {data?.status === "pending" && (
+                <a className="text-cancel-topup" onClick={toggleCancel}>
+                  Huỷ
+                </a>
+              )}
+
+              {user?.role === "admin" && (
+                <button className="btn-delete" onClick={toggle}>
+                  <i className="uil uil-trash"></i>
+                </button>
+              )}
+            </div>
+          </div>
         );
       },
     },
@@ -245,6 +303,7 @@ export default function TopupCustomerManage() {
             onChange={onChange}
             total={dataFilter.length > 0 ? totalFilter : totalCustomer}
             showSizeChanger={false}
+            pageSize={20}
           />
         </div>
       </div>
@@ -274,12 +333,36 @@ export default function TopupCustomerManage() {
         </Modal>
       </div>
       <div>
+        <Modal isOpen={modalCancel} toggle={toggleCancel}>
+          <ModalHeader toggle={toggleCancel}>Huỷ giao dịch</ModalHeader>
+          <ModalBody>
+            <a>
+              Bạn có chắc muốn huỷ giao dịch của khách hàng
+              <a className="text-name-modal">
+                {itemEdit?.id_customer?.full_name}
+              </a>
+              này không?
+            </a>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={() => onCancel(itemEdit?._id)}>
+              Có
+            </Button>
+            <Button color="#ddd" onClick={toggleCancel}>
+              Không
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+      <div>
         <Modal isOpen={modal} toggle={toggle}>
           <ModalHeader toggle={toggle}>Xóa giao dịch</ModalHeader>
           <ModalBody>
             <a>
               Bạn có chắc muốn xóa giao dịch của khách hàng
-              <a className="text-name-modal">{itemEdit?.id_customer?.name}</a>
+              <a className="text-name-modal">
+                {itemEdit?.id_customer?.full_name}
+              </a>
               này không?
             </a>
           </ModalBody>

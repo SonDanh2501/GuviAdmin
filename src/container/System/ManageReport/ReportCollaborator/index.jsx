@@ -60,36 +60,20 @@ const ReportManager = () => {
 
   const columns = [
     {
-      title: "Mã CTV",
+      title: "CTV",
       render: (data) => {
         return (
-          <a
-            className="text-id"
+          <div
+            className="div-name-ctv"
             onClick={() =>
               navigate("/report/manage-report/report-details", {
                 state: { id: data?.code_collaborator },
               })
             }
           >
-            {data?.id_view}
-          </a>
-        );
-      },
-    },
-    {
-      title: "Tên CTV",
-      // dataIndex: "full_name",
-      render: (data) => {
-        return (
-          <a
-            onClick={() =>
-              navigate("/report/manage-report/report-details", {
-                state: { id: data?.code_collaborator },
-              })
-            }
-          >
-            {data?.full_name}
-          </a>
+            <a className="text-name-report"> {data?.full_name}</a>
+            <a className="text-id">{data?.id_view}</a>
+          </div>
         );
       },
     },
@@ -348,8 +332,8 @@ const ReportManager = () => {
 
   const onChangeFilter = useCallback((start, end) => {
     setIsLoading(true);
-    const dayStart = moment(start).toISOString();
-    const dayEnd = moment(end).toISOString();
+    const dayStart = moment(start).startOf("date").toISOString();
+    const dayEnd = moment(end).endOf("date").toISOString();
     filterReportCollaborator(0, 20, dayStart, dayEnd)
       .then((res) => {
         setIsLoading(false);
