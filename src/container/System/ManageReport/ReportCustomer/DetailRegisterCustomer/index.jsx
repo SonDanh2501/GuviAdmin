@@ -11,6 +11,7 @@ const DetailRegisterCustomer = () => {
   const [rowIndex, setRowIndex] = useState();
   const [hidePhone, setHidePhone] = useState(false);
   const [data, setData] = useState([]);
+
   useEffect(() => {
     getTotalDetailCustomerDay(
       moment(date).startOf("date").toISOString(),
@@ -120,7 +121,12 @@ const DetailRegisterCustomer = () => {
   ];
   return (
     <>
-      <h4>
+      <i
+        class="uil uil-arrow-left"
+        style={{ width: 50, height: 50 }}
+        onClick={() => navigate(-1)}
+      ></i>
+      <h4 className="mt-2">
         Số lượng khách hàng đăng kí ngày{" "}
         {moment(new Date(date)).format("DD/MM/YYYY")}
       </h4>

@@ -87,3 +87,9 @@ export const getTopCustomerInvite = (start_date, end_date) => {
     `/admin/report_mananger/top_customer_inviter?lang=vi&start_date=${start_date}&end_date=${end_date}`
   );
 };
+
+export const getReportOrder = (start, length, start_date, end_date) => {
+  return axiosClient.get(
+    `/admin/group-order-manager/report_group_order?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
+  );
+};

@@ -668,14 +668,16 @@ export default function Home() {
                           item?.id_customer?._id,
                           item?.id_customer?.full_name
                         )
-                      : item?.id_order
-                      ? item?.title_admin.replace(
-                          item?.id_order?._id,
-                          item?.id_order?._id
-                        )
                       : "";
 
-                    const predicate = item?.id_promotion
+                    const predicate = item?.id_address
+                      ? subject.replace(item?.id_address, item?.value_string)
+                      : item?.id_order
+                      ? subject.replace(
+                          item?.id_order?._id,
+                          item?.id_order?.id_view
+                        )
+                      : item?.id_promotion
                       ? subject.replace(
                           item?.id_promotion?._id,
                           item?.id_promotion?.title?.vi
@@ -705,14 +707,14 @@ export default function Home() {
                           item?.id_transistion_customer?._id,
                           item?.id_transistion_customer?.transfer_note
                         )
-                      : item?.id_order
-                      ? item?.title_admin.replace(
-                          item?.id_order?._id,
-                          item?.id_order?._id
-                        )
                       : "";
 
-                    const object = item?.id_transistion_collaborator
+                    const object = item?.id_order
+                      ? predicate.replace(
+                          item?.id_order?._id,
+                          item?.id_order?.id_view
+                        )
+                      : item?.id_transistion_collaborator
                       ? predicate.replace(
                           item?.id_transistion_collaborator?._id,
                           item?.id_transistion_collaborator?.transfer_note

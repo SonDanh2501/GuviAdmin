@@ -110,9 +110,10 @@ const DetailsProfile = ({ id }) => {
               <h3 className="mt-5">
                 {data?.full_name}{" "}
                 <span className="font-weight-light">
-                  {!data.birthday ? "" : age + "tuổi"}
+                  {!data.birthday ? "" : "-" + age + "tuổi"}
                 </span>
               </h3>
+              <a className="text-invite">Mã giới thiệu: {data?.invite_code}</a>
             </div>
             <div className="row-heading">
               <div className="col-heading">

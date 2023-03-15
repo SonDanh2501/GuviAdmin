@@ -1,64 +1,112 @@
-import { Button, DatePicker, Image, Pagination, Popover, Table } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import {
+  Button,
+  DatePicker,
+  Dropdown,
+  Empty,
+  Input,
+  Pagination,
+  Popover,
+  Select,
+  Skeleton,
+  Space,
+  Spin,
+  Table,
+} from "antd";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import { getCollaboratorsById } from "../../../../api/collaborator";
+import { useNavigate } from "react-router-dom";
 import {
-  filterReportCollaboratorDetails,
+  filterReportCollaborator,
   getReportCollaborator,
-  getReportCollaboratorDetails,
+  getReportOrder,
+  searchReportCollaborator,
 } from "../../../../api/report";
 import { formatMoney } from "../../../../helper/formatMoney";
-import { loadingAction } from "../../../../redux/actions/loading";
-import "./index.scss";
-const { RangePicker } = DatePicker;
+import _debounce from "lodash/debounce";
 
-const DetailReportManager = () => {
-  const { state } = useLocation();
-  const { id } = state || {};
+import "./index.scss";
+import LoadingPagination from "../../../../components/paginationLoading";
+const { RangePicker } = DatePicker;
+const { Option } = Select;
+
+const ReportOrder = () => {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState("");
+  const [dataSearch, setDataSearch] = useState([]);
+  const [totalSearch, setTotalSearch] = useState("");
+  const [valueSearch, setValueSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
-  const [dataCollaborator, setDataCollaborator] = useState();
   const [total, setTotal] = useState([]);
   const [type, setType] = useState("day");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(loadingAction.loadingRequest(true));
-    getReportCollaboratorDetails(id, 0, 20)
+    getReportOrder(
+      0,
+      20,
+      moment().startOf("year").toISOString(),
+      moment(new Date()).toISOString()
+    )
       .then((res) => {
-        dispatch(loadingAction.loadingRequest(false));
         setData(res?.data);
         setTotal(res?.totalItem);
       })
-      .then((err) => {
-        dispatch(loadingAction.loadingRequest(false));
-      });
-
-    getCollaboratorsById(id)
-      .then((res) => {
-        setDataCollaborator(res);
-        dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => {
-        dispatch(loadingAction.loadingRequest(false));
-      });
-  }, [id]);
+      .catch((err) => console.log(err));
+  }, []);
 
   const columns = [
     {
-      title: "Giờ",
+      title: "Mã đơn",
+      render: (data) => (
+        <a
+          onClick={() =>
+            navigate("/details-order", {
+              state: { id: data?._id },
+            })
+          }
+        >
+          {data?.id_view}
+        </a>
+      ),
+    },
+    {
+      title: "Khách hàng",
       render: (data) => {
         return (
-          <div className="div-time-report">
-            <a>{moment(new Date(data?.date_work)).format("DD/MM/YYYY")} </a>
-            <a>{moment(new Date(data?.date_work)).format("HH:mm")} </a>
+          <div
+            className="div-name-ctv"
+            onClick={() =>
+              navigate("/profile-customer", {
+                state: { id: data?.id_customer?._id },
+              })
+            }
+          >
+            <a className="text-name-report"> {data?.id_customer?.full_name}</a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "CTV",
+      render: (data) => {
+        return (
+          <div
+            className="div-name-ctv"
+            onClick={() =>
+              navigate("/details-collaborator", {
+                state: { id: data?.id_collaborator?._id },
+              })
+            }
+          >
+            <a className="text-name-report">
+              {" "}
+              {data?.id_collaborator?.full_name}
+            </a>
           </div>
         );
       },
@@ -119,7 +167,6 @@ const DetailReportManager = () => {
           </div>
         );
       },
-
       align: "right",
       render: (data) => {
         return <a className="text-money">{formatMoney(data?.total_income)}</a>;
@@ -180,7 +227,6 @@ const DetailReportManager = () => {
     },
     {
       title: "Phí áp dụng",
-
       render: (data) => {
         return (
           <a className="text-money">{formatMoney(data?.total_serviceFee)}</a>
@@ -266,11 +312,14 @@ const DetailReportManager = () => {
         );
       },
       align: "center",
-      render: (data) => <a className="text-money">{data?.percent_income}%</a>,
+      render: (data) => {
+        return <a>{data?.percent_income ? data?.percent_income + "%" : ""}</a>;
+      },
     },
   ];
 
   const onChange = (page) => {
+    setIsLoading(true);
     setCurrentPage(page);
     const start =
       dataFilter.length > 0
@@ -278,89 +327,115 @@ const DetailReportManager = () => {
         : page * data.length - data.length;
 
     dataFilter.length > 0
-      ? filterReportCollaboratorDetails(id, start, 20, startDate, endDate)
+      ? getReportOrder(start, 20, startDate, endDate)
           .then((res) => {
-            setDataFilter(res?.data);
-            setTotalFilter(res?.totalItem);
-          })
-          .catch((err) => console.log(err))
-      : getReportCollaborator(start > 0 ? start : 0, 20)
-          .then((res) => {
+            setIsLoading(false);
             setData(res?.data);
             setTotal(res?.totalItem);
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            setIsLoading(false);
+          })
+      : getReportOrder(start > 0 ? start : 0, 20, startDate, endDate)
+          .then((res) => {
+            setIsLoading(false);
+            setData(res?.data);
+            setTotal(res?.totalItem);
+          })
+          .catch((err) => {
+            setIsLoading(false);
+          });
   };
 
-  const onChangeFilter = useCallback(
-    (start, end) => {
-      const dayStart = moment(start).startOf("date").toISOString();
-      const dayEnd = moment(end).endOf("date").toISOString();
-      filterReportCollaboratorDetails(id, 0, 20, dayStart, dayEnd)
+  const onChangeFilter = useCallback((start, end) => {
+    setIsLoading(true);
+    const dayStart = moment(start).startOf("date").toISOString();
+    const dayEnd = moment(end).endOf("date").toISOString();
+    getReportOrder(0, 20, dayStart, dayEnd)
+      .then((res) => {
+        setIsLoading(false);
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => console.log(err));
+    setStartDate(dayStart);
+    setEndDate(dayEnd);
+  }, []);
+
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      setIsLoading(true);
+      setValueSearch(value);
+      searchReportCollaborator(0, 20, value)
         .then((res) => {
-          setDataFilter(res?.data);
-          setTotalFilter(res?.totalItem);
+          setDataSearch(res.data);
+          setTotalSearch(res.totalItem);
+          setIsLoading(false);
         })
-        .catch((err) => console.log(err));
-      setStartDate(dayStart);
-      setEndDate(dayEnd);
-    },
-    [id]
+        .catch((err) => {
+          setIsLoading(false);
+        });
+    }, 1000),
+    []
   );
 
   return (
     <div>
-      <i
-        class="uil uil-arrow-left"
-        style={{ width: 50, height: 50 }}
-        onClick={() => navigate(-1)}
-      ></i>
-      <div className="div-info-collaborator mt-2">
-        <Image
-          src={dataCollaborator?.avatar}
-          style={{ width: 100, height: 100, borderRadius: 4 }}
-        />
-        <div className="div-info-name">
+      <div className="div-header-report">
+        <div className="div-date">
+          <Input.Group compact>
+            <Select
+              defaultValue={type}
+              onChange={(e) => setType(e)}
+              className="input-picker"
+            >
+              <Option value="day">Ngày</Option>
+              <Option value="week">Tuần </Option>
+              <Option value="month">Tháng</Option>
+              <Option value="quarter">Quý</Option>
+            </Select>
+          </Input.Group>
           <div>
-            <a className="text-title-ctv">Tên:</a>{" "}
-            <a className="text-name-ctv">{dataCollaborator?.full_name}</a>
-          </div>
-          <div>
-            <a className="text-title-ctv">Mã:</a>{" "}
-            <a className="text-name-ctv">{dataCollaborator?.id_view}</a>
-          </div>
-          <div>
-            <a className="text-title-ctv">Sđt:</a>{" "}
-            <a className="text-name-ctv">{dataCollaborator?.phone}</a>
+            <RangePicker
+              picker={type}
+              className="picker"
+              onChange={(e) => onChangeFilter(e[0]?.$d, e[1]?.$d)}
+            />
           </div>
         </div>
-      </div>
-      <div className="mt-3">
-        <RangePicker
-          picker={"day"}
-          className="picker"
-          onChange={(e) => onChangeFilter(e[0]?.$d, e[1]?.$d)}
-        />
+        {/* <Input
+          placeholder="Tìm kiếm"
+          type="text"
+          className="input-search-report"
+          prefix={<SearchOutlined />}
+          onChange={(e) => handleSearch(e.target.value)}
+        /> */}
       </div>
       <div className="mt-3">
         <Table
           columns={columns}
           pagination={false}
-          dataSource={dataFilter.length > 0 ? dataFilter : data}
+          dataSource={data}
+          locale={{
+            emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
+          }}
         />
       </div>
       <div className="mt-2 div-pagination p-2">
-        <a>Tổng: {totalFilter > 0 ? totalFilter : total}</a>
-        <Pagination
-          current={currentPage}
-          onChange={onChange}
-          total={totalFilter > 0 ? totalFilter : total}
-          showSizeChanger={false}
-          pageSize={20}
-        />
+        <a>Tổng: {total}</a>
+        <div>
+          <Pagination
+            current={currentPage}
+            onChange={onChange}
+            total={total}
+            showSizeChanger={false}
+            pageSize={20}
+          />
+        </div>
       </div>
+      {isLoading && <LoadingPagination />}
     </div>
   );
 };
 
-export default DetailReportManager;
+export default ReportOrder;

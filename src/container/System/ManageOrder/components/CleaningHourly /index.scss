@@ -171,6 +171,8 @@
 .div-promotion {
   display: flex;
   flex-direction: row;
+  width: 60%;
+  flex-wrap: wrap;
   .div-item-promotion {
     margin-right: 20px;
     border: 1px solid rgb(182, 182, 182);
@@ -181,6 +183,7 @@
     border-radius: 8px;
     justify-content: center;
     padding-left: 8px;
+    margin-top: 10px;
 
     .text-code {
       font-size: 18px;

@@ -28,6 +28,7 @@ import ManageSetting from "../container/System/ManageSetting";
 import ReasonManage from "../container/System/ManageSetting/ManageReason/ReasonManage";
 import ManageTopup from "../container/System/ManageTopup";
 import ManageCollaborator from "../container/System/ManageUser/Collaborator";
+import DetailActivityCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/components/DetailActivity";
 import ProfileCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/ProfileCollaborator";
 import ManageCustomer from "../container/System/ManageUser/Customer";
 import Profiles from "../container/System/ManageUser/Customer/Profiles";
@@ -110,6 +111,10 @@ const Dashboard = () => {
               <Route
                 path="/system/collaborator-manage/details-collaborator"
                 element={<ProfileCollaborator />}
+              />
+              <Route
+                path="/system/collaborator-manage/details-collaborator/details-activity"
+                element={<DetailActivityCollaborator />}
               />
               <Route
                 path="/promotion/manage-setting"

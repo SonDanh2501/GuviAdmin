@@ -44,6 +44,6 @@ export const updatePointCustomer = (id, payload) => {
 
 export const getHistoryTransitionByCustomers = (id, start, length) => {
   return axiosClient.get(
-    `/admin/customer_manager/get_history_point/${id}?start=${start}&length=${length}`
+    `/admin/customer_manager/get_history_activity_customer/${id}?start=${start}&length=${length}`
   );
 };

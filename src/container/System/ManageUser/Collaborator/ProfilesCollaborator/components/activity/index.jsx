@@ -1,10 +1,12 @@
-import { List, Pagination } from "antd";
+import { List, Pagination, Table } from "antd";
 import moment from "moment";
 import { memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { getHistoryActivityCollaborator } from "../../../../../../../api/collaborator";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
+import vi from "moment/locale/vi";
 import "./index.scss";
 
 const Activity = ({ id }) => {
@@ -12,6 +14,7 @@ const Activity = ({ id }) => {
   const [totalData, setTotalData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -112,11 +115,149 @@ const Activity = ({ id }) => {
       </div>
     );
   };
+  const timeWork = (data) => {
+    const start = moment(new Date(data.date_work_schedule[0].date)).format(
+      "HH:mm"
+    );
+
+    const timeEnd =
+      Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
+
+    return start + " - " + timeEnd;
+  };
+
+  const columns = [
+    {
+      title: "Mã",
+      render: (data) => {
+        return (
+          <a
+            className="text-id"
+            onClick={() =>
+              navigate("/details-order", {
+                state: { id: data?._id },
+              })
+            }
+          >
+            {data?.id_view}
+          </a>
+        );
+      },
+    },
+    {
+      title: "Ngày tạo",
+      render: (data) => {
+        return (
+          <div className="div-create">
+            <a className="text-create">
+              {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
+            </a>
+            <a className="text-create">
+              {moment(new Date(data?.date_create)).format("HH:mm")}
+            </a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Khách hàng",
+      // dataIndex: ["id_customer", "full_name"],
+      render: (data) => {
+        return (
+          <div
+            onClick={() =>
+              navigate("/profile-customer", {
+                state: { id: data?.id_customer?._id },
+              })
+            }
+            className="div-name"
+          >
+            <a className="text-name-customer">{data?.id_customer?.full_name}</a>
+            <a className="text-phone-customer">{data?.id_customer?.phone}</a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Dịch vụ",
+      render: (data) => {
+        return (
+          <div className="div-service">
+            <a className="text-service">
+              {data?.type === "schedule"
+                ? "Giúp việc cố định"
+                : data?.type === "loop" && !data?.is_auto_order
+                ? "Giúp việc theo giờ"
+                : data?.type === "loop" && data?.is_auto_order
+                ? "Lặp lại hàng tuần"
+                : ""}
+            </a>
+            <a className="text-service">{timeWork(data)}</a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Ngày làm",
+      render: (data) => {
+        return (
+          <div className="div-worktime">
+            <a className="text-worktime">
+              {" "}
+              {moment(new Date(data?.date_work_schedule[0].date)).format(
+                "DD/MM/YYYY"
+              )}
+            </a>
+            <a className="text-worktime">
+              {moment(new Date(data?.date_work_schedule[0].date))
+                .locale("vi", vi)
+                .format("dddd")}
+            </a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Địa điểm",
+      render: (data) => <p className="text-address">{data?.address}</p>,
+    },
+    {
+      title: "Trạng thái",
+      render: (data) => (
+        <a
+          className={
+            data?.status === "pending"
+              ? "text-pending-order"
+              : data?.status === "confirm"
+              ? "text-confirm"
+              : data?.status === "doing"
+              ? "text-doing"
+              : data?.status === "done"
+              ? "text-done"
+              : "text-cancel"
+          }
+        >
+          {data?.status === "pending"
+            ? "Đang chờ làm"
+            : data?.status === "confirm"
+            ? "Đã nhận"
+            : data?.status === "doing"
+            ? "Đang làm"
+            : data?.status === "done"
+            ? "Hoàn thành"
+            : "Đã huỷ"}
+        </a>
+      ),
+    },
+  ];
 
   return (
     <>
-      <List itemLayout="horizontal" dataSource={data} renderItem={renderItem} />
-      <div className="div-pagination p-2">
+      {/* <List itemLayout="horizontal" dataSource={data} renderItem={renderItem} /> */}
+
+      <Table columns={columns} />
+
+      {/* <div className="div-pagination p-2">
         <a>Tổng: {totalData}</a>
         <div>
           <Pagination
@@ -127,7 +268,7 @@ const Activity = ({ id }) => {
             pageSize={10}
           />
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

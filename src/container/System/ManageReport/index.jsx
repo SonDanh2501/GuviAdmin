@@ -4,6 +4,7 @@ import "./index.scss";
 import ReportManager from "./ReportCollaborator";
 import ReportCustomer from "./ReportCustomer";
 import ReportInvite from "./ReportInvite";
+import ReportOrder from "./ReportOrder";
 import ReportService from "./ReportService";
 
 const ManageReport = () => {
@@ -15,15 +16,18 @@ const ManageReport = () => {
       <div className="div-container-report">
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane tab="Tổng quan" key="1">
+            <ReportOrder />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Báo cáo CTV" key="2">
             <ReportManager />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo số lượng user" key="2">
+          <Tabs.TabPane tab="Báo cáo số lượng user" key="3">
             <ReportCustomer />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo lượt giới thiệu" key="3">
+          <Tabs.TabPane tab="Báo cáo lượt giới thiệu" key="4">
             <ReportInvite />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo dịch vụ" key="4">
+          <Tabs.TabPane tab="Báo cáo dịch vụ" key="5">
             <ReportService />
           </Tabs.TabPane>
         </Tabs>

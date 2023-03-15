@@ -1,4 +1,4 @@
-import { List, Select } from "antd";
+import { Checkbox, List, Select } from "antd";
 import { convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { Editor } from "react-draft-wysiwyg";
@@ -28,6 +28,7 @@ import CustomTextInput from "../CustomTextInput/customTextInput";
 import _debounce from "lodash/debounce";
 import "./addPromotion.scss";
 import { createPushNotification } from "../../api/notification";
+import moment from "moment";
 
 const AddPromotion = ({ idService, tab }) => {
   const [state, setState] = useState(false);
@@ -82,6 +83,8 @@ const AddPromotion = ({ idService, tab }) => {
   const [titleNoti, setTitleNoti] = useState("");
   const [descriptionNoti, setDescriptionNoti] = useState("");
   const [imgNoti, setImgNoti] = useState("");
+  const [isDateSchedule, setIsDateSchedule] = useState(true);
+  const [dateSchedule, setDateSchedule] = useState("");
   const options = [];
   const optionsCustomer = [];
   const dispatch = useDispatch();
@@ -309,8 +312,8 @@ const AddPromotion = ({ idService, tab }) => {
           createPushNotification({
             title: titleNoti,
             body: descriptionNoti,
-            is_date_schedule: false,
-            date_schedule: "",
+            is_date_schedule: isDateSchedule,
+            date_schedule: moment(new Date(dateSchedule)).toISOString(),
             is_id_customer: isCustomer,
             id_customer: listCustomers,
             is_id_group_customer: isGroupCustomer,
@@ -378,6 +381,8 @@ const AddPromotion = ({ idService, tab }) => {
     isSendNotification,
     titleNoti,
     descriptionNoti,
+    isDateSchedule,
+    dateSchedule,
   ]);
 
   return (
@@ -905,15 +910,25 @@ const AddPromotion = ({ idService, tab }) => {
                           value={descriptionNoti}
                           onChange={(e) => setDescriptionNoti(e.target.value)}
                         />
-                        {/* <CustomTextInput
-                          type="file"
-                          accept={".jpg,.png,.jpeg"}
-                          className="input-upload"
-                          onChange={onChangeImageNoti}
-                        />
-                        {imgNoti && (
-                          <img src={imgNoti} className="img-background" />
-                        )} */}
+                        <div>
+                          <Checkbox
+                            checked={isDateSchedule}
+                            onChange={(e) =>
+                              setIsDateSchedule(e.target.checked)
+                            }
+                          >
+                            Thời gian thông báo
+                          </Checkbox>
+                          {isDateSchedule && (
+                            <CustomTextInput
+                              type="datetime-local"
+                              name="time"
+                              className="text-input mt-2"
+                              value={dateSchedule}
+                              onChange={(e) => setDateSchedule(e.target.value)}
+                            />
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
