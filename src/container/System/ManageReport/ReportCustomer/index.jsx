@@ -31,6 +31,7 @@ const ReportCustomer = () => {
   const [totalDay, setTotalDay] = useState(0);
   const [total, setTotal] = useState(0);
   const [totalYear, setTotalYear] = useState(0);
+  const [year, setYear] = useState(0);
   const [data, setData] = useState([]);
   const [dataTable, setDataTable] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -99,6 +100,7 @@ const ReportCustomer = () => {
 
   const onChange = (date, dateString) => {
     setIsLoading(true);
+    setYear(dateString);
     getTotalCustomerYear(dateString)
       .then((res) => {
         setData(res);
@@ -111,6 +113,7 @@ const ReportCustomer = () => {
 
   const onChangeDay = (start, end) => {
     setIsLoading(true);
+
     const dayStart = moment(start).startOf("date").toISOString();
     const dayEnd = moment(end).endOf("date").toISOString();
     getTotalCustomerDay(dayStart, dayEnd)
@@ -246,11 +249,7 @@ const ReportCustomer = () => {
         <div className="div-time-area">
           <div>
             <a className="text-time">Thời gian</a>
-            <DatePicker
-              picker="year"
-              defaultValue={moment()}
-              onChange={onChange}
-            />
+            <DatePicker picker="year" onChange={onChange} />
           </div>
           <div>
             <a className="text-area">Khu vực</a>

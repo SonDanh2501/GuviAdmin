@@ -30,6 +30,7 @@ const AddCollaborator = () => {
     email: "",
     name: "",
     identify: "",
+    code: "",
   };
 
   const addCustomer = useCallback(() => {
@@ -42,6 +43,7 @@ const AddCollaborator = () => {
         full_name: formikRef?.current?.values?.name,
         identity_number: formikRef?.current?.values?.identify,
         city: 79,
+        id_inviter: formikRef?.current?.values?.code,
       })
     );
   }, [formikRef]);
@@ -125,6 +127,13 @@ const AddCollaborator = () => {
                     setFieldValue("identify", text.target.value)
                   }
                   errors={errors?.identify}
+                />
+                <CustomTextInput
+                  label="Mã giới thiệu"
+                  type="text"
+                  id="className"
+                  placeholder="Nhập mã giới thiệu"
+                  onChange={(text) => setFieldValue("code", text.target.value)}
                 />
                 <CustomButton
                   title="Thêm"

@@ -73,7 +73,7 @@ const Review = ({ id, totalReview }) => {
     <div>
       <div>
         <a className="text-total-star">
-          Tổng lượt đánh giá: {totalReview / data.length}{" "}
+          Tổng lượt đánh giá: {totalReview}
           <i class="uil uil-star icon-star"></i>
         </a>
       </div>

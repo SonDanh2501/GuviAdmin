@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrder, searchOrder } from "../../../../redux/actions/order";
 
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import { Dropdown, Empty, Pagination, Skeleton, Space, Table } from "antd";
+import {
+  Dropdown,
+  Empty,
+  Input,
+  Pagination,
+  Skeleton,
+  Space,
+  Table,
+} from "antd";
 import moment from "moment";
 import vi from "moment/locale/vi";
 import { useNavigate } from "react-router-dom";
@@ -15,20 +23,20 @@ import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { loadingAction } from "../../../../redux/actions/loading";
 import { errorNotify } from "../../../../helper/toast";
 import { getUser } from "../../../../redux/selectors/auth";
+import { SearchOutlined } from "@ant-design/icons";
+import _debounce from "lodash/debounce";
 
 export default function OrderManage(props) {
   const {
     data,
     total,
     status,
-    dataSearch,
-    value,
+    // dataSearch,
+    // value,
     kind,
-    setDataSearch,
-    setTotalSearch,
-    tab,
+    // setDataSearch,
+    // setTotalSearch,
   } = props;
-  const [dataFilter, setDataFilter] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [item, setItem] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -36,6 +44,9 @@ export default function OrderManage(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(getUser);
+  const [dataSearch, setDataSearch] = useState([]);
+  const [totalSearch, setTotalSearch] = useState(0);
+  const [valueSearch, setValueSearch] = useState("");
   const toggle = () => setModal(!modal);
 
   const timeWork = (data) => {
@@ -284,7 +295,7 @@ export default function OrderManage(props) {
         ? page * dataSearch.length - dataSearch.length
         : page * data.length - data.length;
     dataSearch.length > 0
-      ? searchOrderApi(0, 20, tab, value, kind).then((res) => {
+      ? searchOrderApi(0, 20, status, valueSearch, kind).then((res) => {
           setDataSearch(res?.data);
           setTotalSearch(res?.totalItem);
         })
@@ -298,12 +309,34 @@ export default function OrderManage(props) {
         );
   };
 
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      searchOrderApi(0, 20, status, value, kind).then((res) => {
+        setDataSearch(res?.data);
+        setTotalSearch(res?.totalItem);
+      });
+    }, 1000),
+    [status, kind]
+  );
   return (
     <React.Fragment>
       <div>
+        <Input
+          placeholder="Tìm kiếm"
+          type="text"
+          className="field-search"
+          value={valueSearch}
+          prefix={<SearchOutlined />}
+          onChange={(e) => {
+            handleSearch(e.target.value);
+            setValueSearch(e.target.value);
+          }}
+        />
+      </div>
+      <div className="mt-3">
         <Table
           columns={columns}
-          dataSource={data}
+          dataSource={dataSearch?.length > 0 ? dataSearch : data}
           pagination={false}
           rowKey={(record) => record._id}
           rowSelection={{
@@ -322,12 +355,12 @@ export default function OrderManage(props) {
         />
 
         <div className="mt-2 div-pagination p-2">
-          <a>Tổng: {total}</a>
+          <a>Tổng: {totalSearch > 0 ? totalSearch : total}</a>
           <div>
             <Pagination
               current={currentPage}
               onChange={onChange}
-              total={total}
+              total={totalSearch > 0 ? totalSearch : total}
               showSizeChanger={false}
               pageSize={20}
             />

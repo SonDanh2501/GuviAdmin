@@ -38,6 +38,7 @@ const ReportManager = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
+  const [totalColumn, setTotalColumn] = useState([]);
   const [type, setType] = useState("day");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -54,240 +55,10 @@ const ReportManager = () => {
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
+        setTotalColumn(res?.total);
       })
       .catch((err) => console.log(err));
   }, []);
-
-  const columns = [
-    {
-      title: "CTV",
-      render: (data) => {
-        return (
-          <div
-            className="div-name-ctv"
-            onClick={() =>
-              navigate("/report/manage-report/report-details", {
-                state: { id: data?.code_collaborator },
-              })
-            }
-          >
-            <a className="text-name-report"> {data?.full_name}</a>
-            <a className="text-id">{data?.id_view}</a>
-          </div>
-        );
-      },
-    },
-    {
-      title: "Số ca",
-      dataIndex: "total_order",
-      align: "center",
-    },
-    {
-      title: "Doanh số",
-      align: "right",
-      render: (data) => {
-        return (
-          <a className="text-money">{formatMoney(data?.total_gross_income)}</a>
-        );
-      },
-    },
-    {
-      title: () => {
-        const content = (
-          <div className="div-content">
-            <p className="text-content">Phí dịch vụ trả Cộng tác viên.</p>
-          </div>
-        );
-        return (
-          <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Phí dịch vụ</a>
-            <Popover content={content} placement="bottom">
-              <Button className="btn-question">
-                <i class="uil uil-question-circle icon-question"></i>
-              </Button>
-            </Popover>
-          </div>
-        );
-      },
-      align: "right",
-      render: (data) => {
-        return (
-          <a className="text-money">
-            {formatMoney(data?.total_collabotator_fee)}
-          </a>
-        );
-      },
-    },
-    {
-      title: () => {
-        const content = (
-          <div className="div-content">
-            <p className="text-content">
-              Doanh thu = Doanh số (-) Phí dịch vụ trả CTV
-            </p>
-          </div>
-        );
-        return (
-          <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Doanh thu</a>
-            <Popover content={content} placement="bottom">
-              <Button className="btn-question">
-                <i class="uil uil-question-circle icon-question"></i>
-              </Button>
-            </Popover>
-          </div>
-        );
-      },
-      align: "right",
-      render: (data) => {
-        return <a className="text-money">{formatMoney(data?.total_income)}</a>;
-      },
-    },
-    {
-      title: () => {
-        const content = (
-          <div className="div-content">
-            <p className="text-content">Tổng số tiền giảm giá</p>
-          </div>
-        );
-        return (
-          <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Giảm giá</a>
-            <Popover content={content} placement="bottom">
-              <Button className="btn-question">
-                <i class="uil uil-question-circle icon-question"></i>
-              </Button>
-            </Popover>
-          </div>
-        );
-      },
-      align: "right",
-      render: (data) => {
-        return (
-          <a className="text-money">{formatMoney(data?.total_discount)}</a>
-        );
-      },
-    },
-    {
-      title: () => {
-        const content = (
-          <div className="div-content">
-            <p className="text-content">
-              Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần
-              = Doanh thu (-) Giảm giá.
-            </p>
-          </div>
-        );
-        return (
-          <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Doanh thu thuần</a>
-            <Popover content={content} placement="bottom">
-              <Button className="btn-question">
-                <i class="uil uil-question-circle icon-question"></i>
-              </Button>
-            </Popover>
-          </div>
-        );
-      },
-      align: "right",
-      render: (data) => {
-        return (
-          <a className="text-money">{formatMoney(data?.total_net_income)}</a>
-        );
-      },
-    },
-    {
-      title: "Phí áp dụng",
-      render: (data) => {
-        return (
-          <a className="text-money">{formatMoney(data?.total_serviceFee)}</a>
-        );
-      },
-      align: "right",
-    },
-    {
-      title: () => {
-        const content = (
-          <div className="div-content">
-            <p className="text-content">
-              Tổng tiền trên dịch vụ. Tổng hoá đơn = Doanh thu thuần (+) Phí áp
-              dụng.
-            </p>
-          </div>
-        );
-        return (
-          <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Tổng hoá đơn</a>
-            <Popover content={content} placement="bottom">
-              <Button className="btn-question">
-                <i class="uil uil-question-circle icon-question"></i>
-              </Button>
-            </Popover>
-          </div>
-        );
-      },
-      align: "right",
-      render: (data) => {
-        return (
-          <a className="text-money">{formatMoney(data?.total_order_fee)}</a>
-        );
-      },
-    },
-    {
-      title: () => {
-        const content = (
-          <div className="div-content">
-            <p className="text-content">
-              Lợi nhuận = Doanh thu (+) Phí áp dụng (-) Giảm giá.
-            </p>
-          </div>
-        );
-        return (
-          <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Lợi nhuận</a>
-            <Popover content={content} placement="bottom">
-              <Button className="btn-question">
-                <i class="uil uil-question-circle icon-question"></i>
-              </Button>
-            </Popover>
-          </div>
-        );
-      },
-      align: "right",
-      render: (data) => {
-        return (
-          <a className="text-money">
-            {formatMoney(data?.total_net_income_business)}
-          </a>
-        );
-      },
-    },
-    {
-      title: () => {
-        const content = (
-          <div className="div-content">
-            <p className="text-content">
-              % lợi nhuận = Tổng lợi nhuận (/) Doanh thu thuần.
-            </p>
-          </div>
-        );
-        return (
-          <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>% lợi nhuận</a>
-            <Popover content={content} placement="bottom">
-              <Button className="btn-question">
-                <i class="uil uil-question-circle icon-question"></i>
-              </Button>
-            </Popover>
-          </div>
-        );
-      },
-      align: "center",
-      render: (data) => {
-        return <a>{data?.percent_income ? data?.percent_income + "%" : ""}</a>;
-      },
-    },
-  ];
 
   const onChange = (page) => {
     setIsLoading(true);
@@ -361,6 +132,293 @@ const ReportManager = () => {
     }, 1000),
     []
   );
+
+  const columns = [
+    {
+      title: "CTV",
+      render: (data) => {
+        return (
+          <div
+            className="div-name-ctv"
+            onClick={() =>
+              navigate("/report/manage-report/report-details", {
+                state: { id: data?.code_collaborator },
+              })
+            }
+          >
+            <a className="text-name-report"> {data?.full_name}</a>
+            <a className="text-id">{data?.id_view}</a>
+          </div>
+        );
+      },
+      witdh: "10%",
+    },
+    {
+      title: "Số ca",
+      dataIndex: "total_order",
+      align: "center",
+    },
+    {
+      title: "Doanh số",
+      align: "right",
+      render: (data) => {
+        return (
+          <a className="text-money">{formatMoney(data?.total_gross_income)}</a>
+        );
+      },
+    },
+    {
+      title: () => {
+        const content = (
+          <div className="div-content">
+            <p className="text-content">Phí dịch vụ trả Cộng tác viên.</p>
+          </div>
+        );
+        return (
+          <div className="div-title-collaborator">
+            <div className="div-title">
+              <a style={{ textAlign: "center" }}>Phí dịch vụ</a>
+              <Popover content={content} placement="bottom">
+                <Button className="btn-question">
+                  <i class="uil uil-question-circle icon-question"></i>
+                </Button>
+              </Popover>
+            </div>
+            <a className="text-money-title">
+              {totalColumn?.collabotator_fee > 0
+                ? formatMoney(totalColumn?.collabotator_fee)
+                : formatMoney(0)}
+            </a>
+          </div>
+        );
+      },
+      align: "right",
+      render: (data) => {
+        return (
+          <a className="text-money">
+            {formatMoney(data?.total_collabotator_fee)}
+          </a>
+        );
+      },
+    },
+    {
+      title: () => {
+        const content = (
+          <div className="div-content">
+            <p className="text-content">
+              Doanh thu = Doanh số (-) Phí dịch vụ trả CTV
+            </p>
+          </div>
+        );
+        return (
+          <div className="div-title-collaborator">
+            <div className="div-title">
+              <a style={{ textAlign: "center" }}>Doanh thu</a>
+              <Popover content={content} placement="bottom">
+                <Button className="btn-question">
+                  <i class="uil uil-question-circle icon-question"></i>
+                </Button>
+              </Popover>
+            </div>
+            <a className="text-money-title">
+              {totalColumn?.income > 0
+                ? formatMoney(totalColumn?.income)
+                : formatMoney(0)}
+            </a>
+          </div>
+        );
+      },
+      align: "right",
+      render: (data) => {
+        return <a className="text-money">{formatMoney(data?.total_income)}</a>;
+      },
+    },
+    {
+      title: () => {
+        const content = (
+          <div className="div-content">
+            <p className="text-content">Tổng số tiền giảm giá</p>
+          </div>
+        );
+        return (
+          <div className="div-title-collaborator">
+            <div className="div-title">
+              <a style={{ textAlign: "center" }}>Giảm giá</a>
+              <Popover content={content} placement="bottom">
+                <Button className="btn-question">
+                  <i class="uil uil-question-circle icon-question"></i>
+                </Button>
+              </Popover>
+            </div>
+            <a className="text-money-title">
+              {totalColumn?.discount > 0
+                ? formatMoney(totalColumn?.discount)
+                : formatMoney(0)}
+            </a>
+          </div>
+        );
+      },
+      align: "right",
+      render: (data) => {
+        return (
+          <a className="text-money">{formatMoney(data?.total_discount)}</a>
+        );
+      },
+    },
+    {
+      title: () => {
+        const content = (
+          <div className="div-content">
+            <p className="text-content">
+              Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần
+              = Doanh thu (-) Giảm giá.
+            </p>
+          </div>
+        );
+        return (
+          <div className="div-title-collaborator">
+            <div className="div-title">
+              <a style={{ textAlign: "center" }}>Doanh thu thuần</a>
+              <Popover content={content} placement="bottom">
+                <Button className="btn-question">
+                  <i class="uil uil-question-circle icon-question"></i>
+                </Button>
+              </Popover>
+            </div>
+            <a className="text-money-title">
+              {totalColumn?.net_income > 0
+                ? formatMoney(totalColumn?.net_income)
+                : formatMoney(0)}
+            </a>
+          </div>
+        );
+      },
+      align: "right",
+      render: (data) => {
+        return (
+          <a className="text-money">{formatMoney(data?.total_net_income)}</a>
+        );
+      },
+    },
+    {
+      title: () => {
+        return (
+          <div className="div-title-collaborator">
+            <a>Phí áp dụng</a>
+            <a className="text-money-title">
+              {totalColumn?.serviceFee > 0
+                ? formatMoney(totalColumn?.serviceFee)
+                : formatMoney(0)}
+            </a>
+          </div>
+        );
+      },
+      render: (data) => {
+        return (
+          <a className="text-money">{formatMoney(data?.total_serviceFee)}</a>
+        );
+      },
+      align: "right",
+    },
+    {
+      title: () => {
+        const content = (
+          <div className="div-content">
+            <p className="text-content">
+              Tổng tiền trên dịch vụ. Tổng hoá đơn = Doanh thu thuần (+) Phí áp
+              dụng.
+            </p>
+          </div>
+        );
+        return (
+          <div className="div-title-collaborator">
+            <div className="div-title">
+              <a style={{ textAlign: "center" }}>Tổng hoá đơn</a>
+              <Popover content={content} placement="bottom">
+                <Button className="btn-question">
+                  <i class="uil uil-question-circle icon-question"></i>
+                </Button>
+              </Popover>
+            </div>
+            <a className="text-money-title">
+              {totalColumn?.order_fee > 0
+                ? formatMoney(totalColumn?.order_fee)
+                : formatMoney(0)}
+            </a>
+          </div>
+        );
+      },
+      align: "right",
+      render: (data) => {
+        return (
+          <a className="text-money">{formatMoney(data?.total_order_fee)}</a>
+        );
+      },
+    },
+    {
+      title: () => {
+        const content = (
+          <div className="div-content">
+            <p className="text-content">
+              Lợi nhuận = Doanh thu (+) Phí áp dụng (-) Giảm giá.
+            </p>
+          </div>
+        );
+        return (
+          <div className="div-title-collaborator">
+            <div className="div-title">
+              <a style={{ textAlign: "center" }}>Lợi nhuận</a>
+              <Popover content={content} placement="bottom">
+                <Button className="btn-question">
+                  <i class="uil uil-question-circle icon-question"></i>
+                </Button>
+              </Popover>
+            </div>
+            <a className="text-money-title">
+              {totalColumn?.net_income_business > 0
+                ? formatMoney(totalColumn?.net_income_business)
+                : formatMoney(0)}
+            </a>
+          </div>
+        );
+      },
+      align: "right",
+      render: (data) => {
+        return (
+          <a className="text-money">
+            {formatMoney(data?.total_net_income_business)}
+          </a>
+        );
+      },
+    },
+    {
+      title: () => {
+        const content = (
+          <div className="div-content">
+            <p className="text-content">
+              % lợi nhuận = Tổng lợi nhuận (/) Doanh thu thuần.
+            </p>
+          </div>
+        );
+        return (
+          <div className="div-title-collaborator">
+            <div className="div-title">
+              <a style={{ textAlign: "center" }}>% lợi nhuận</a>
+              <Popover content={content} placement="bottom">
+                <Button className="btn-question">
+                  <i class="uil uil-question-circle icon-question"></i>
+                </Button>
+              </Popover>
+            </div>
+          </div>
+        );
+      },
+      align: "center",
+      render: (data) => {
+        return <a>{data?.percent_income ? data?.percent_income + "%" : ""}</a>;
+      },
+    },
+  ];
 
   return (
     <div>
