@@ -1,2 +1,107 @@
+.text-id {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #000000;
+  text-decoration: none;
+}
+.div-title-column {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
+  .btn-question {
+    border: none;
+    background-color: transparent;
+    width: 10px;
+    height: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
+  .icon-question {
+    color: aqua;
+    margin-left: 10px;
+  }
+}
+
+.text-money {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px !important;
+  line-height: 17px;
+  color: #000;
+  text-decoration: none !important;
+}
+
+.div-content {
+  width: 160px;
+
+  .text-content {
+    color: #000000;
+    font-family: "Roboto";
+    font-style: normal;
+    font-size: 14px;
+  }
+}
+
+.div-header-report {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .div-date {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .input-search-report {
+    height: 40px;
+    width: 60%;
+  }
+}
+
+.loading {
+  position: fixed;
+  z-index: 1051;
+  height: auto;
+  width: auto;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.div-name-ctv {
+  display: flex;
+  flex-direction: column;
+
+  .text-name-report {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    color: #000000;
+  }
+
+  .text-id {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+  }
+
+  .text-id-report {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000;
+  }
+}

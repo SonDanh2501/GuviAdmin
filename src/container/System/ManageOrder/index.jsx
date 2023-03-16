@@ -72,7 +72,7 @@ const ManageOrder = () => {
     <>
       <div className="div-header">
         <a className="title-cv">Danh sách công việc</a>
-        <Input
+        {/* <Input
           placeholder="Tìm kiếm"
           type="text"
           className="field-search"
@@ -82,7 +82,7 @@ const ManageOrder = () => {
             handleSearch(e.target.value);
             setValueSearch(e.target.value);
           }}
-        />
+        /> */}
         <div className="div-add-export">
           <Dropdown
             menu={{
@@ -144,7 +144,6 @@ const ManageOrder = () => {
                     setKind(item?.kind);
                     setValueTab(item?.value);
                     setDataSearch([]);
-                    setValueSearch("");
                   }}
                 >
                   <a
@@ -165,14 +164,14 @@ const ManageOrder = () => {
           </div>
 
           <OrderManage
-            data={dataSearch.length > 0 ? dataSearch : listOrder}
-            total={totalSearch > 0 ? totalSearch : orderTotal}
-            dataSearch={dataSearch}
-            value={valueSearch}
+            data={listOrder}
+            total={orderTotal}
+            // dataSearch={dataSearch}
+            // value={valueSearch}
             status={tab}
             kind={kind}
-            setDataSearch={setDataSearch}
-            setTotalSearch={setTotalSearch}
+            // setDataSearch={setDataSearch}
+            // setTotalSearch={setTotalSearch}
           />
         </div>
 

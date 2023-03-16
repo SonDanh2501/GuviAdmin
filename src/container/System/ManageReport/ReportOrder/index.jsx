@@ -64,6 +64,7 @@ const ReportOrder = () => {
       title: "Mã đơn",
       render: (data) => (
         <a
+          className="text-id "
           onClick={() =>
             navigate("/details-order", {
               state: { id: data?._id },
@@ -87,6 +88,7 @@ const ReportOrder = () => {
             }
           >
             <a className="text-name-report"> {data?.id_customer?.full_name}</a>
+            <a className="text-id-report"> {data?.id_customer?.id_view}</a>
           </div>
         );
       },
@@ -104,9 +106,9 @@ const ReportOrder = () => {
             }
           >
             <a className="text-name-report">
-              {" "}
               {data?.id_collaborator?.full_name}
             </a>
+            <a className="text-id-report"> {data?.id_collaborator?.id_view}</a>
           </div>
         );
       },

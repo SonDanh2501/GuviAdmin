@@ -1,16 +1,18 @@
-import { DatePicker } from "antd";
+import { DatePicker, List } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Col, Form, Input, Label, Row } from "reactstrap";
 import {
   getCollaboratorsById,
+  searchCollaborators,
   updateInformationCollaboratorApi,
 } from "../../../../../../../api/collaborator";
 import CustomTextInput from "../../../../../../../components/CustomTextInput/customTextInput";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import dayjs from "dayjs";
+import _debounce from "lodash/debounce";
 import "./index.scss";
 
 const Information = ({ data, image }) => {
@@ -27,6 +29,10 @@ const Information = ({ data, image }) => {
   const [issuedDay, setIssuedDay] = useState("");
   const [imgUrl, setImgUrl] = useState("");
   const [phone, setPhone] = useState("");
+  const [codeInvite, setCodeInvite] = useState("");
+  const [dataCollaborator, setDataCollaborator] = useState([]);
+  const [nameCollaborator, setNameCollaborator] = useState("");
+  const [idCollaborator, setIdCollaborator] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -49,6 +55,7 @@ const Information = ({ data, image }) => {
     setIssuedDay(data?.identity_date);
     setImgUrl(data?.avatar);
     setPhone(data?.phone);
+    setCodeInvite(data?.id_inviter);
   }, [data]);
 
   const onChangeNumberIndentity = (value) => {
@@ -56,6 +63,33 @@ const Information = ({ data, image }) => {
       setNumber(value.target.value);
     }
   };
+
+  const searchValue = (value) => {
+    setNameCollaborator(value);
+  };
+
+  const searchCollaborator = useCallback(
+    _debounce((value) => {
+      setNameCollaborator(value);
+      if (value) {
+        searchCollaborators(0, 100, "", value)
+          .then((res) => {
+            if (value === "") {
+              setDataCollaborator([]);
+            } else {
+              setDataCollaborator(res.data);
+            }
+          })
+          .catch((err) => console.log(err));
+      } else if (idCollaborator) {
+        setDataCollaborator([]);
+      } else {
+        setDataCollaborator([]);
+      }
+      setIdCollaborator("");
+    }, 500),
+    []
+  );
 
   const updateInformation = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -75,9 +109,11 @@ const Information = ({ data, image }) => {
       identity_place: issued,
       identity_date: indentityDay,
       avatar: image ? image : imgUrl,
+      id_inviter: idCollaborator,
     })
       .then((res) => {
         window.location.reload();
+        dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
         errorNotify({
@@ -100,6 +136,7 @@ const Information = ({ data, image }) => {
     birthday,
     image,
     imgUrl,
+    idCollaborator,
   ]);
 
   return (
@@ -253,8 +290,52 @@ const Information = ({ data, image }) => {
               />
             </Col>
           </Row>
+          <hr />
+          <h5>Giới thiệu</h5>
+          <Row>
+            <Col lg="12">
+              <div>
+                <h6>Mã giới thiệu</h6>
+                <div>
+                  <Input
+                    placeholder="Tìm kiếm theo số điện thoại"
+                    value={nameCollaborator}
+                    disabled={data?.is_verify ? true : false}
+                    className="input-seach-collaborator"
+                    onChange={(e) => {
+                      searchCollaborator(e.target.value);
+                      searchValue(e.target.value);
+                    }}
+                  />
+                </div>
+
+                {dataCollaborator.length > 0 && (
+                  <List type={"unstyled"} className="list-item">
+                    {dataCollaborator?.map((item, index) => {
+                      return (
+                        <div
+                          key={index}
+                          onClick={(e) => {
+                            setIdCollaborator(item?._id);
+                            setCodeInvite(item?.invite_code);
+                            setNameCollaborator(item?.full_name);
+                            setDataCollaborator([]);
+                          }}
+                        >
+                          <a>
+                            {item?.full_name} - {item?.phone} - {item?.id_view}{" "}
+                            - {item?.invite_code}
+                          </a>
+                        </div>
+                      );
+                    })}
+                  </List>
+                )}
+              </div>
+            </Col>
+          </Row>
         </div>
-        <Button className="btn-update" onClick={updateInformation}>
+        <Button className="btn-update mt-3" onClick={updateInformation}>
           Cập nhật
         </Button>
       </Form>

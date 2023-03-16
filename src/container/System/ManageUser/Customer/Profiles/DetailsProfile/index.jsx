@@ -122,7 +122,7 @@ const DetailsProfile = ({ id }) => {
               </div>
               <div className="col-heading">
                 <span className="heading">{rank}</span>
-                <span className="description">Member point</span>
+                <span className="description">Hạng thành viên</span>
               </div>
               <div className="col-heading">
                 <span className="heading">
