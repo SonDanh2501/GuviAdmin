@@ -64,19 +64,26 @@ export const updateDocumentCollaboratorApi = (id, data) => {
 
 export const getHistoryActivityCollaborator = (id, start, length) => {
   return axiosClient.get(
-    `admin/collaborator_manager/get_history_activity/${id}?start=${start}&length=${length}`
+    `/admin/collaborator_manager/get_history_activity_v2/${id}?start=${start}&length=${length}`
+  );
+};
+
+export const getDetailsHistoryActivityCollaborator = (id, data) => {
+  return axiosClient.post(
+    `/admin/collaborator_manager/detail_history_activity/${id}`,
+    data
   );
 };
 
 export const getHistoryCollaborator = (id, start, length) => {
   return axiosClient.get(
-    `admin/collaborator_manager/get_history_collaborator/${id}?start=${start}&length=${length}`
+    `/admin/collaborator_manager/get_history_collaborator/${id}?start=${start}&length=${length}`
   );
 };
 
 export const getTopupWithdrawCollaborator = (id, start, length) => {
   return axiosClient.get(
-    `admin/collaborator_manager/get_request_topup_withdraw/${id}?start=${start}&length=${length}`
+    `/admin/collaborator_manager/get_request_topup_withdraw/${id}?start=${start}&length=${length}`
   );
 };
 

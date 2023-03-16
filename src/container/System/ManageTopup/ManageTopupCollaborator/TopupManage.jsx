@@ -5,6 +5,7 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   deleteMoneyCollaboratorApi,
@@ -56,7 +57,7 @@ export default function TopupManage() {
   const user = useSelector(getUser);
   const revenue = useSelector(getRevenueCTV);
   const expenditure = useSelector(totalExpenditureCTV);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -172,14 +173,30 @@ export default function TopupManage() {
     {
       title: "Mã",
       render: (data) => (
-        <a className="text-id">{data?.id_collaborator?.id_view}</a>
+        <a
+          className="text-id"
+          onClick={() =>
+            navigate("/details-collaborator", {
+              state: { id: data?.id_collaborator?._id },
+            })
+          }
+        >
+          {data?.id_collaborator?.id_view}
+        </a>
       ),
     },
     {
       title: "Tên cộng tác viên",
       render: (data) => {
         return (
-          <div className="div-name-topup">
+          <div
+            className="div-name-topup"
+            onClick={() =>
+              navigate("/details-collaborator", {
+                state: { id: data?.id_collaborator?._id },
+              })
+            }
+          >
             <a className="text-name">{data?.id_collaborator?.full_name}</a>
             <a className="text-phone">{data?.id_collaborator?.phone}</a>
           </div>

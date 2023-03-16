@@ -1,7 +1,7 @@
 .div-title-collaborator {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
 
   .text-money-title {
     font-family: "Roboto";
@@ -11,6 +11,53 @@
     line-height: 17px;
     color: #000;
     text-decoration: none !important;
+    margin-top: 20px;
+  }
+
+  .div-top {
+    margin-top: 35px;
+  }
+
+  .div-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .btn-question {
+      border: none;
+      background-color: transparent;
+      width: 10px;
+      height: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-question {
+      color: aqua;
+      margin-left: 10px;
+    }
+  }
+}
+
+.div-title-collaborator-id {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  .text-money-title {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px !important;
+    line-height: 17px;
+    color: #000;
+    text-decoration: none !important;
+    margin-top: 20px;
+  }
+
+  .div-top {
+    margin-top: 35px;
   }
 
   .div-title {

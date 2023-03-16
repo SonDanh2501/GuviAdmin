@@ -4,6 +4,7 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Card,
@@ -51,6 +52,7 @@ export default function TopupCustomerManage() {
   const toggleCancel = () => setModalCancel(!modalCancel);
   const user = useSelector(getUser);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // dispatch(loadingAction.loadingRequest(true));
@@ -150,13 +152,31 @@ export default function TopupCustomerManage() {
   const columns = [
     {
       title: "Mã",
-      render: (data) => <a className="text-id">{data?.id_customer?.id_view}</a>,
+      render: (data) => (
+        <a
+          className="text-id"
+          onClick={() =>
+            navigate("/profile-customer", {
+              state: { id: data?.id_customer?._id },
+            })
+          }
+        >
+          {data?.id_customer?.id_view}
+        </a>
+      ),
     },
     {
       title: "Tên khách hàng",
       render: (data) => {
         return (
-          <div className="div-name-topup">
+          <div
+            className="div-name-topup"
+            onClick={() =>
+              navigate("/profile-customer", {
+                state: { id: data?.id_customer?._id },
+              })
+            }
+          >
             <a className="text-name">{data?.id_customer?.full_name}</a>
             <a className="text-phone">{data?.id_customer?.phone}</a>
           </div>

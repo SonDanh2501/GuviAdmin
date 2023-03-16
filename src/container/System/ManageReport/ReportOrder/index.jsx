@@ -115,7 +115,7 @@ const ReportOrder = () => {
     },
     {
       title: "Doanh số",
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">{formatMoney(data?.total_gross_income)}</a>
@@ -140,7 +140,7 @@ const ReportOrder = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">
@@ -169,7 +169,7 @@ const ReportOrder = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return <a className="text-money">{formatMoney(data?.total_income)}</a>;
       },
@@ -192,7 +192,7 @@ const ReportOrder = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">{formatMoney(data?.total_discount)}</a>
@@ -220,7 +220,7 @@ const ReportOrder = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">{formatMoney(data?.total_net_income)}</a>
@@ -234,7 +234,7 @@ const ReportOrder = () => {
           <a className="text-money">{formatMoney(data?.total_serviceFee)}</a>
         );
       },
-      align: "right",
+      align: "center",
     },
     {
       title: () => {
@@ -257,7 +257,7 @@ const ReportOrder = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">{formatMoney(data?.total_order_fee)}</a>
@@ -284,7 +284,7 @@ const ReportOrder = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">
