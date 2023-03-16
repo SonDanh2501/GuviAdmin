@@ -78,7 +78,7 @@ const History = ({ id }) => {
               <div className="div-column-1">
                 <a className="text-title">
                   {item?.title?.vi}{" "}
-                  <a>{item?.id_order && item?.id_order?.id_view}</a>{" "}
+                  <a>{item?.id_order && item?.id_order?.id_view}</a>
                 </a>
                 <a
                   className={

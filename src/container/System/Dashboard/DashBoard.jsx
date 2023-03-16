@@ -113,8 +113,8 @@ export default function Home() {
   }
 
   const onChange = useCallback((start, end) => {
-    const dayStart = moment(start).toISOString();
-    const dayEnd = moment(end).toISOString();
+    const dayStart = moment(start).startOf("date").toISOString();
+    const dayEnd = moment(end).endOf("date").toISOString();
     getDayReportApi(dayStart, dayEnd)
       .then((res) => {
         setArrResult(res.arrResult);

@@ -135,7 +135,17 @@ const ReportManager = () => {
 
   const columns = [
     {
-      title: "CTV",
+      title: () => {
+        return (
+          <div className="div-title-collaborator-id">
+            <div className="div-title">
+              <a>Cộng tác viên</a>
+            </div>
+            <div className="div-top"></div>
+          </div>
+        );
+      },
+      align: "left",
       render: (data) => {
         return (
           <div
@@ -151,16 +161,33 @@ const ReportManager = () => {
           </div>
         );
       },
-      witdh: "10%",
     },
     {
-      title: "Số ca",
+      title: () => {
+        return (
+          <div className="div-title-collaborator">
+            <div className="div-title">
+              <a style={{ textAlign: "center" }}>Số ca</a>
+            </div>
+            <div className="div-top"></div>
+          </div>
+        );
+      },
       dataIndex: "total_order",
       align: "center",
     },
     {
-      title: "Doanh số",
-      align: "right",
+      title: () => {
+        return (
+          <div className="div-title-collaborator">
+            <div className="div-title">
+              <a style={{ textAlign: "center" }}>Doanh số</a>
+            </div>
+            <div className="div-top"></div>
+          </div>
+        );
+      },
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">{formatMoney(data?.total_gross_income)}</a>
@@ -192,7 +219,7 @@ const ReportManager = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">
@@ -228,7 +255,7 @@ const ReportManager = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return <a className="text-money">{formatMoney(data?.total_income)}</a>;
       },
@@ -258,7 +285,7 @@ const ReportManager = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">{formatMoney(data?.total_discount)}</a>
@@ -293,7 +320,7 @@ const ReportManager = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">{formatMoney(data?.total_net_income)}</a>
@@ -318,7 +345,7 @@ const ReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_serviceFee)}</a>
         );
       },
-      align: "right",
+      align: "center",
     },
     {
       title: () => {
@@ -348,7 +375,7 @@ const ReportManager = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">{formatMoney(data?.total_order_fee)}</a>
@@ -382,7 +409,7 @@ const ReportManager = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">
@@ -410,6 +437,7 @@ const ReportManager = () => {
                 </Button>
               </Popover>
             </div>
+            <div className="div-top"></div>
           </div>
         );
       },

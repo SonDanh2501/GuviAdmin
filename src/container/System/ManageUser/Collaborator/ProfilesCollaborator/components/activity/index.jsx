@@ -43,82 +43,8 @@ const Activity = ({ id }) => {
       .catch((err) => console.log(err));
   };
 
-  const renderItem = (item) => {
-    const subject = item?.id_admin_action
-      ? item?.title_admin.replace(
-          item?.id_admin_action?._id,
-          item?.id_admin_action?.full_name
-        )
-      : item?.id_collaborator
-      ? item?.title_admin.replace(
-          item?.id_collaborator?._id,
-          item?.id_collaborator?.full_name
-        )
-      : item?.id_customer
-      ? item?.title_admin.replace(
-          item?.id_customer?._id,
-          item?.id_customer?.full_name
-        )
-      : "";
-
-    const predicate = item?.id_order
-      ? subject.replace(item?.id_order?._id, item?.id_order?.id_view)
-      : item?.id_promotion
-      ? subject.replace(item?.id_promotion?._id, item?.id_promotion?.title?.vi)
-      : item?.id_collaborator
-      ? subject.replace(
-          item?.id_collaborator?._id,
-          item?.id_collaborator?.full_name
-        )
-      : item?.id_customer
-      ? subject.replace(item?.id_customer?._id, item?.id_customer?.full_name)
-      : item?.id_admin_action
-      ? subject.replace(
-          item?.id_admin_action?._id,
-          item?.id_admin_action?.full_name
-        )
-      : item?.id_transistion_collaborator
-      ? subject.replace(
-          item?.id_transistion_collaborator?._id,
-          item?.id_transistion_collaborator?.transfer_note
-        )
-      : item?.id_transistion_customer
-      ? subject.replace(
-          item?.id_transistion_customer?._id,
-          item?.id_transistion_customer?.transfer_note
-        )
-      : "";
-
-    const object = item?.id_order
-      ? predicate.replace(item?.id_order?._id, item?.id_order?.id_view)
-      : item?.id_transistion_collaborator
-      ? predicate.replace(
-          item?.id_transistion_collaborator?._id,
-          item?.id_transistion_collaborator?.transfer_note
-        )
-      : item?.id_transistion_customer
-      ? predicate.replace(
-          item?.id_transistion_customer?._id,
-          item?.id_transistion_customer?.transfer_note
-        )
-      : predicate.replace(
-          item?.id_reason_cancel?._id,
-          item?.id_reason_cancel?.title?.vi
-        );
-
-    return (
-      <div className="div-list-item">
-        <a className="text-title">{object}</a>
-        <a className="text-date">
-          {moment(new Date(item?.date_create)).format("DD/MM/yyy HH:mm")}
-        </a>
-      </div>
-    );
-  };
   const timeWork = (data) => {
-    const start = moment(new Date(data.date_work_schedule[0].date)).format(
-      "HH:mm"
-    );
+    const start = moment(new Date(data.date_work)).format("HH:mm");
 
     const timeEnd =
       Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
@@ -134,9 +60,12 @@ const Activity = ({ id }) => {
           <a
             className="text-id"
             onClick={() =>
-              navigate("/details-order", {
-                state: { id: data?._id },
-              })
+              navigate(
+                "/system/collaborator-manage/details-collaborator/details-activity",
+                {
+                  state: { idOrder: data?._id, idCollaborator: id },
+                }
+              )
             }
           >
             {data?.id_view}
@@ -204,12 +133,10 @@ const Activity = ({ id }) => {
           <div className="div-worktime">
             <a className="text-worktime">
               {" "}
-              {moment(new Date(data?.date_work_schedule[0].date)).format(
-                "DD/MM/YYYY"
-              )}
+              {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
             </a>
             <a className="text-worktime">
-              {moment(new Date(data?.date_work_schedule[0].date))
+              {moment(new Date(data?.date_work))
                 .locale("vi", vi)
                 .format("dddd")}
             </a>
@@ -253,11 +180,9 @@ const Activity = ({ id }) => {
 
   return (
     <>
-      {/* <List itemLayout="horizontal" dataSource={data} renderItem={renderItem} /> */}
+      <Table columns={columns} dataSource={data} pagination={false} />
 
-      <Table columns={columns} />
-
-      {/* <div className="div-pagination p-2">
+      <div className="div-pagination p-2">
         <a>Tổng: {totalData}</a>
         <div>
           <Pagination
@@ -268,7 +193,7 @@ const Activity = ({ id }) => {
             pageSize={10}
           />
         </div>
-      </div> */}
+      </div>
     </>
   );
 };
