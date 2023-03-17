@@ -315,7 +315,7 @@ const AddPushNotification = ({ idOrder }) => {
         </div>
 
         <div className="mt-3">
-          <a className="label ">Hình ảnh 360px * 137px, tỉ lệ 2,62</a>
+          <a className="label-noti">Hình ảnh 360px * 137px, tỉ lệ 2,62</a>
           <Input
             id="exampleImage"
             name="image"

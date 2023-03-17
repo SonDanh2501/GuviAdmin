@@ -76,42 +76,7 @@ const ReportOrder = () => {
       ),
     },
     {
-      title: "Khách hàng",
-      render: (data) => {
-        return (
-          <div
-            className="div-name-ctv"
-            onClick={() =>
-              navigate("/profile-customer", {
-                state: { id: data?.id_customer?._id },
-              })
-            }
-          >
-            <a className="text-name-report"> {data?.id_customer?.full_name}</a>
-            <a className="text-id-report"> {data?.id_customer?.id_view}</a>
-          </div>
-        );
-      },
-    },
-    {
-      title: "CTV",
-      render: (data) => {
-        return (
-          <div
-            className="div-name-ctv"
-            onClick={() =>
-              navigate("/details-collaborator", {
-                state: { id: data?.id_collaborator?._id },
-              })
-            }
-          >
-            <a className="text-name-report">
-              {data?.id_collaborator?.full_name}
-            </a>
-            <a className="text-id-report"> {data?.id_collaborator?.id_view}</a>
-          </div>
-        );
-      },
+      title: "Số ca",
     },
     {
       title: "Doanh số",

@@ -44,6 +44,13 @@ export const deleteMoneyCollaboratorApi = (id, data) => {
   );
 };
 
+export const cancelMoneyCollaboratorApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/collaborator_manager/cancel_trans/${id}?lang=vi`,
+    data
+  );
+};
+
 export const getRevenueCollaboratorApi = (startDate, endDate) => {
   return axiosClient.get(
     `/admin/collaborator_manager/get_revenue_and_expenditure?lang=vi&start_date=${startDate}&end_date=${endDate}`

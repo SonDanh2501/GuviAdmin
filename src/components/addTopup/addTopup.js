@@ -25,6 +25,7 @@ const AddPopup = () => {
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [errorMoney, setErrorMoney] = useState("");
+  const [wallet, setWallet] = useState("");
   const [id, setId] = useState("");
   const dispatch = useDispatch();
 
@@ -73,6 +74,7 @@ const AddPopup = () => {
       TopupMoneyCollaboratorApi(id, {
         money: money,
         transfer_note: note,
+        type_wallet: wallet,
       })
         .then((res) => {
           dispatch(
@@ -100,7 +102,7 @@ const AddPopup = () => {
           dispatch(loadingAction.loadingRequest(false));
         });
     }
-  }, [id, money, note, name]);
+  }, [id, money, note, name, wallet]);
 
   const currencyConfig = {
     locale: "vi",
@@ -196,6 +198,24 @@ const AddPopup = () => {
               value={note}
               onChange={(e) => setNote(e.target.value)}
             />
+
+            <CustomTextInput
+              label={"Chọn ví nạp"}
+              id="exampleNote"
+              name="note"
+              type="select"
+              className="select-input-wallet"
+              body={
+                <>
+                  <option value={""}>Vui lòng chọn ví</option>
+                  <option value={"wallet"}>Ví chính</option>
+                  <option value={"gift_wallet"}>Ví thưởng</option>
+                </>
+              }
+              value={wallet}
+              onChange={(e) => setWallet(e.target.value)}
+            />
+
             <CustomButton
               title="Nạp tiền"
               className="float-left btn-add-t"
