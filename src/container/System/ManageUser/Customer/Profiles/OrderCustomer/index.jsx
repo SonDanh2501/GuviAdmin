@@ -9,6 +9,7 @@ import vi from "moment/locale/vi";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./index.scss";
 import { getOrderByCustomers } from "../../../../../../api/customer";
+import { formatMoney } from "../../../../../../helper/formatMoney";
 
 export default function OrderCustomer() {
   const { state } = useLocation();
@@ -192,24 +193,14 @@ export default function OrderCustomer() {
         </a>
       ),
     },
-    // {
-    //   key: "action",
-    //   render: (data) => (
-    //     <Space size="middle">
-    //       <Dropdown
-    //         menu={{
-    //           items,
-    //         }}
-    //         placement="bottom"
-    //         trigger={["click"]}
-    //       >
-    //         <div>
-    //           <UilEllipsisV />
-    //         </div>
-    //       </Dropdown>
-    //     </Space>
-    //   ),
-    // },
+    {
+      title: "Tổng tiền",
+      render: (data) => (
+        <a className="text-money-order-customer">
+          {formatMoney(data?.final_fee)}
+        </a>
+      ),
+    },
   ];
 
   const onChange = (page) => {

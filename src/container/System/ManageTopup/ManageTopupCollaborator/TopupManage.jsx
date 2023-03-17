@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
+  cancelMoneyCollaboratorApi,
   deleteMoneyCollaboratorApi,
   getRevenueCollaboratorApi,
   searchTopupCollaboratorApi,
@@ -52,8 +53,10 @@ export default function TopupManage() {
   const [modalEdit, setModalEdit] = React.useState(false);
   const [typeDate, setTypeDate] = useState("week");
   const toggleConfirm = () => setModalConfirm(!modalConfirm);
+  const [modalCancel, setModalCancel] = useState(false);
   const toggleEdit = () => setModalEdit(!modalEdit);
   const toggle = () => setModal(!modal);
+  const toggleCancel = () => setModalCancel(!modalCancel);
   const user = useSelector(getUser);
   const revenue = useSelector(getRevenueCTV);
   const expenditure = useSelector(totalExpenditureCTV);
@@ -127,6 +130,26 @@ export default function TopupManage() {
           message: err,
         });
         setModalConfirm(false);
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  }, []);
+
+  const onCancel = useCallback((id) => {
+    dispatch(loadingAction.loadingRequest(true));
+    cancelMoneyCollaboratorApi(id)
+      .then((res) => {
+        dispatch(
+          getTopupCollaborator.getTopupCollaboratorRequest({
+            start: 0,
+            length: 20,
+          })
+        );
+        setModalCancel(false);
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
         dispatch(loadingAction.loadingRequest(false));
       });
   }, []);
@@ -295,7 +318,13 @@ export default function TopupManage() {
             >
               Duyệt lệnh
             </button>
-
+            <div className="mt-1 ml-3">
+              {data?.status === "pending" && (
+                <a className="text-cancel-topup" onClick={toggleCancel}>
+                  Huỷ
+                </a>
+              )}
+            </div>
             <div className="mt-1">
               <button
                 className="btn-edit"
@@ -453,6 +482,12 @@ export default function TopupManage() {
                 <a>SĐT: {itemEdit?.id_collaborator?.phone}</a>
                 <a>Số tiền: {formatMoney(itemEdit?.money)}</a>
                 <a>Nội dung: {itemEdit?.transfer_note}</a>
+                <a>
+                  Loại ví:{" "}
+                  {itemEdit?.type_wallet === "wallet"
+                    ? "Ví chính"
+                    : "Ví thưởng"}
+                </a>
               </div>
             </>
           </ModalBody>
@@ -483,6 +518,28 @@ export default function TopupManage() {
               Có
             </Button>
             <Button color="#ddd" onClick={toggle}>
+              Không
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+      <div>
+        <Modal isOpen={modalCancel} toggle={toggleCancel}>
+          <ModalHeader toggle={toggleCancel}>Huỷ giao dịch</ModalHeader>
+          <ModalBody>
+            <a>
+              Bạn có chắc muốn huỷ giao dịch của cộng tác viên
+              <a className="text-name-modal">
+                {itemEdit?.id_collaborator?.full_name}
+              </a>
+              này không?
+            </a>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={() => onCancel(itemEdit?._id)}>
+              Có
+            </Button>
+            <Button color="#ddd" onClick={toggleCancel}>
               Không
             </Button>
           </ModalFooter>

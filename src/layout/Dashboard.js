@@ -41,40 +41,28 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <Header
-        style={{
-          background: "#0f157f",
-        }}
-      >
-        <HeaderBar />
-      </Header>
-      <Layout>
-        {!hideSidebar && (
-          <Sider
-            width={1}
-            style={{
-              background: "transparent",
-            }}
-          >
-            <div
-              className="div-menu-das"
-              onClick={() => setHideSidebar(!hideSidebar)}
-            >
-              <i class="uil uil-bars"></i>
-            </div>
-          </Sider>
-        )}
+      {hideSidebar && (
+        <Sider
+          width={230}
+          style={{
+            background: "white",
+          }}
+        >
+          <Sidebar />
+        </Sider>
+      )}
 
-        {hideSidebar && (
-          <Sider
-            width={230}
-            style={{
-              background: "white",
-            }}
-          >
-            <Sidebar onClick={() => setHideSidebar(!hideSidebar)} />
-          </Sider>
-        )}
+      <Layout>
+        <Header
+          style={{
+            marginLeft: 20,
+            marginRight: 20,
+            borderRadius: 4,
+            backgroundColor: "#7dbcea",
+          }}
+        >
+          <HeaderBar onClick={() => setHideSidebar(!hideSidebar)} />
+        </Header>
         <Layout
           style={{
             padding: "24px 24px",

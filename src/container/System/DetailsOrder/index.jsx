@@ -504,6 +504,22 @@ const DetailsOrder = () => {
                       <a>+{formatMoney(item?.fee)}</a>
                     ))}
                   </div>
+                  {dataGroup?.service?.optional_service.map((item) => {
+                    return (
+                      <div>
+                        {item?._id === "632148d02bacd0aa8648657c"
+                          ? item?.extend_optional?.map((item) => {
+                              return (
+                                <div className="div-event-promo">
+                                  <a>- {item?.title?.vi}</a>
+                                  <a> +{formatMoney(item?.price)}</a>
+                                </div>
+                              );
+                            })
+                          : null}
+                      </div>
+                    );
+                  })}
 
                   <div className="div-total-promo">
                     <a>- Khuyến mãi:</a>
@@ -531,22 +547,7 @@ const DetailsOrder = () => {
                       </div>
                     </div>
                   )}
-                  {dataGroup?.service?.optional_service.map((item) => {
-                    return (
-                      <div>
-                        {item?._id === "632148d02bacd0aa8648657c"
-                          ? item?.extend_optional?.map((item) => {
-                              return (
-                                <div className="div-event-promo">
-                                  <a>- {item?.title?.vi}</a>
-                                  <a> +{formatMoney(item?.price)}</a>
-                                </div>
-                              );
-                            })
-                          : null}
-                      </div>
-                    );
-                  })}
+
                   <div className="div-total">
                     <a className="title">- Giá: </a>
                     <a className="title">{formatMoney(dataGroup?.final_fee)}</a>

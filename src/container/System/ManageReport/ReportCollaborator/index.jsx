@@ -149,7 +149,7 @@ const ReportManager = () => {
       render: (data) => {
         return (
           <div
-            className="div-name-ctv"
+            className="div-name-ctv-report"
             onClick={() =>
               navigate("/report/manage-report/report-details", {
                 state: { id: data?.code_collaborator },
@@ -157,7 +157,7 @@ const ReportManager = () => {
             }
           >
             <a className="text-name-report"> {data?.full_name}</a>
-            <a className="text-id">{data?.id_view}</a>
+            {/* <a className="text-id">{data?.id_view}</a> */}
           </div>
         );
       },
@@ -183,7 +183,11 @@ const ReportManager = () => {
             <div className="div-title-report">
               <a style={{ textAlign: "center" }}>Doanh số</a>
             </div>
-            <div className="div-top"></div>
+            <a className="text-money-title">
+              {totalColumn?.gross_income > 0
+                ? formatMoney(totalColumn?.gross_income)
+                : formatMoney(0)}
+            </a>
           </div>
         );
       },

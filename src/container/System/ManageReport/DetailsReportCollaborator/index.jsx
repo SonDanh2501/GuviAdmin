@@ -53,12 +53,22 @@ const DetailReportManager = () => {
 
   const columns = [
     {
-      title: "Giờ",
+      title: "Ngày",
       render: (data) => {
         return (
           <div className="div-time-report">
             <a>{moment(new Date(data?.date_work)).format("DD/MM/YYYY")} </a>
             <a>{moment(new Date(data?.date_work)).format("HH:mm")} </a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Mã đơn",
+      render: (data) => {
+        return (
+          <div className="div-time-report">
+            <a>{data?.id_view_order} </a>
           </div>
         );
       },

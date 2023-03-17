@@ -1,26 +1,15 @@
-import { useDispatch, useSelector } from "react-redux";
-import {
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Media,
-  Nav,
-  UncontrolledDropdown,
-} from "reactstrap";
-import { getUser } from "../../redux/selectors/auth";
-import { getBrand } from "../../redux/selectors/brand";
-import imageUser from "../../assets/images/user.png";
-import "./Header.scss";
-import { logoutAction } from "../../redux/actions/auth";
-import { useNavigate } from "react-router-dom";
-import { loadingAction } from "../../redux/actions/loading";
-import Logo from "../../assets/images/LogoS.png";
 import { BellOutlined, CaretDownOutlined } from "@ant-design/icons";
-import { Space, Dropdown, List } from "antd";
+import { Dropdown, List, Space } from "antd";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { removeToken } from "../../helper/tokenHelper";
+import { logoutAction } from "../../redux/actions/auth";
+import { loadingAction } from "../../redux/actions/loading";
+import { getUser } from "../../redux/selectors/auth";
+import "./Header.scss";
 
-const Header = () => {
+const Header = ({ onClick }) => {
   const dispatch = useDispatch();
   const [data, setDate] = useState([]);
   const [status, setStatus] = useState(false);
@@ -41,15 +30,9 @@ const Header = () => {
   ];
 
   return (
-    <div className="container-header">
-      <div className="menu">
-        {/* <button onClick={onClick} className="btn-menu">
-          <i
-            style={{ width: 40, height: 40 }}
-            class="uil uil-align-justify"
-          ></i>
-        </button> */}
-        <img src={Logo} className="img-logo" />
+    <div className="div-container-header">
+      <div className="menu-icon" onClick={onClick}>
+        <i class="uil uil-bars icon-menu"></i>
       </div>
 
       <div className="nav">
