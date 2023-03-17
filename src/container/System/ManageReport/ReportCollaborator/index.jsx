@@ -138,7 +138,7 @@ const ReportManager = () => {
       title: () => {
         return (
           <div className="div-title-collaborator-id">
-            <div className="div-title">
+            <div className="div-title-report">
               <a>Cộng tác viên</a>
             </div>
             <div className="div-top"></div>
@@ -166,7 +166,7 @@ const ReportManager = () => {
       title: () => {
         return (
           <div className="div-title-collaborator">
-            <div className="div-title">
+            <div className="div-title-report">
               <a style={{ textAlign: "center" }}>Số ca</a>
             </div>
             <div className="div-top"></div>
@@ -180,7 +180,7 @@ const ReportManager = () => {
       title: () => {
         return (
           <div className="div-title-collaborator">
-            <div className="div-title">
+            <div className="div-title-report">
               <a style={{ textAlign: "center" }}>Doanh số</a>
             </div>
             <div className="div-top"></div>
@@ -203,7 +203,7 @@ const ReportManager = () => {
         );
         return (
           <div className="div-title-collaborator">
-            <div className="div-title">
+            <div className="div-title-report">
               <a style={{ textAlign: "center" }}>Phí dịch vụ</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
@@ -239,7 +239,7 @@ const ReportManager = () => {
         );
         return (
           <div className="div-title-collaborator">
-            <div className="div-title">
+            <div className="div-title-report">
               <a style={{ textAlign: "center" }}>Doanh thu</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
@@ -269,7 +269,7 @@ const ReportManager = () => {
         );
         return (
           <div className="div-title-collaborator">
-            <div className="div-title">
+            <div className="div-title-report">
               <a style={{ textAlign: "center" }}>Giảm giá</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
@@ -304,7 +304,7 @@ const ReportManager = () => {
         );
         return (
           <div className="div-title-collaborator">
-            <div className="div-title">
+            <div className="div-title-report">
               <a style={{ textAlign: "center" }}>Doanh thu thuần</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
@@ -359,7 +359,7 @@ const ReportManager = () => {
         );
         return (
           <div className="div-title-collaborator">
-            <div className="div-title">
+            <div className="div-title-report">
               <a style={{ textAlign: "center" }}>Tổng hoá đơn</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
@@ -393,7 +393,7 @@ const ReportManager = () => {
         );
         return (
           <div className="div-title-collaborator">
-            <div className="div-title">
+            <div className="div-title-report">
               <a style={{ textAlign: "center" }}>Lợi nhuận</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
@@ -429,7 +429,7 @@ const ReportManager = () => {
         );
         return (
           <div className="div-title-collaborator">
-            <div className="div-title">
+            <div className="div-title-report">
               <a style={{ textAlign: "center" }}>% lợi nhuận</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
