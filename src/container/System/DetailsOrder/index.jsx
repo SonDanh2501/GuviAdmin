@@ -491,7 +491,7 @@ const DetailsOrder = () => {
                     : "G-point"}
                 </a>
               </a>
-              <div className="div-price">
+              <div className="div-price-order">
                 <a className="title">Tạm tính:</a>
                 <div className="detail-price">
                   <div className="div-total">
@@ -499,22 +499,24 @@ const DetailsOrder = () => {
                     <a>{formatMoney(dataGroup?.initial_fee)}</a>
                   </div>
                   <div className="div-total">
-                    <a>- Phí dịch vụ:</a>
+                    <a>- Phí nền tảng:</a>
                     {dataGroup?.service_fee?.map((item) => (
                       <a>+{formatMoney(item?.fee)}</a>
                     ))}
                   </div>
-                  {dataGroup?.code_promotion && (
-                    <div className="div-total-promo">
-                      <a>- Khuyến mãi:</a>
+
+                  <div className="div-total-promo">
+                    <a>- Khuyến mãi:</a>
+                    {dataGroup?.code_promotion && (
                       <div className="div-promo">
                         <a>+ Mã code: {dataGroup?.code_promotion?.code}</a>
                         <a style={{ color: "red", marginLeft: 5 }}>
                           {formatMoney(-dataGroup?.code_promotion?.discount)}
                         </a>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
+
                   {dataGroup?.event_promotion && (
                     <div className="div-event-promo">
                       <a>- Chương trình:</a>

@@ -24,6 +24,7 @@ import {
 } from "../../../../../../api/customer";
 import { FloatButton, Image } from "antd";
 import { errorNotify } from "../../../../../../helper/toast";
+import { loadingAction } from "../../../../../../redux/actions/loading";
 // core components
 
 const DetailsProfile = ({ id }) => {
@@ -37,6 +38,7 @@ const DetailsProfile = ({ id }) => {
   const [data, setData] = useState([]);
   const [point, setPoint] = useState();
   const [rankPoint, setRankPoint] = useState();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchCustomerById(id)
@@ -65,33 +67,46 @@ const DetailsProfile = ({ id }) => {
   }, [data]);
 
   const updateUser = () => {
-    const birth = new Date(birthday).toISOString();
+    dispatch(loadingAction.loadingRequest(true));
+    const birth = moment(new Date(birthday)).toISOString();
     updateCustomer(data?._id, {
       phone: data?.phone,
       email: mail,
       full_name: name,
       gender: gender,
-      birthday: birth,
-    })
-      .then((res) => {})
-      .catch((err) => {});
-  };
-
-  const updateRankPoint = () => {
-    updatePointCustomer(data?._id, {
-      point: point,
-      rank_point: rankPoint,
+      birthday: birthday !== "" ? birth : "",
     })
       .then((res) => {
-        window.location.reload();
+        fetchCustomerById(id)
+          .then((res) => {
+            setData(res);
+            setName(res?.full_name);
+            setMail(res?.email);
+            setBirthday(res?.birthday ? res?.birthday?.slice(0, 10) : "");
+            setGender(res?.gender);
+            dispatch(loadingAction.loadingRequest(false));
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            dispatch(loadingAction.loadingRequest(false));
+          });
       })
-      .catch((err) => {
-        errorNotify({
-          message: err,
-        });
-      });
+      .catch((err) => {});
 
-    updateUser();
+    // updatePointCustomer(data?._id, {
+    //   point: point,
+    //   rank_point: rankPoint,
+    // })
+    //   .then((res) => {
+
+    //   })
+    //   .catch((err) => {
+    //     errorNotify({
+    //       message: err,
+    //     });
+    //   });
   };
 
   const age = moment().diff(data?.birthday, "years");
@@ -230,7 +245,7 @@ const DetailsProfile = ({ id }) => {
                 </Row>
               </Col>
               <Col lg="6">
-                <h3 className="">Điểm thưởng</h3>
+                {/* <h3 className="">Điểm thưởng</h3>
                 <FormGroup>
                   <label className="form-control-label">Point</label>
                   <Input
@@ -252,9 +267,9 @@ const DetailsProfile = ({ id }) => {
                     value={rankPoint}
                     onChange={(e) => setRankPoint(e.target.value)}
                   />
-                </FormGroup>
+                </FormGroup> */}
 
-                <Button className="btn-update-point" onClick={updateRankPoint}>
+                <Button className="btn-update-point" onClick={updateUser}>
                   Cập nhật
                 </Button>
               </Col>
