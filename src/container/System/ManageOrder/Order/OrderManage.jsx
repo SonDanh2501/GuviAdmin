@@ -223,17 +223,21 @@ export default function OrderManage(props) {
             <a>Đang tìm kiếm</a>
           ) : (
             <div
-              onClick={() =>
-                navigate("/group-order/manage-order/details-collaborator", {
-                  state: { id: data?.id_collaborator?._id },
-                })
-              }
+              onClick={() => {
+                if (user?.role !== "support_customer") {
+                  navigate("/group-order/manage-order/details-collaborator", {
+                    state: { id: data?.id_collaborator?._id },
+                  });
+                }
+              }}
               className="div-name"
             >
               <a className="text-collaborator">
                 {data?.id_collaborator?.full_name}
               </a>
-              <a>{data?.id_collaborator?.phone}</a>
+              {user?.role !== "support_customer" && (
+                <a>{data?.id_collaborator?.phone}</a>
+              )}
             </div>
           )}
         </>

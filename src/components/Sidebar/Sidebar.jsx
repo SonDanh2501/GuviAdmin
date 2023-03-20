@@ -390,18 +390,6 @@ const Sidebar = ({ onClick }) => {
         ) : user?.role === "support_customer" ? (
           <ul className="nav nav-pills flex-column ">
             <li>
-              <NavLink to="/">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <i className="uil uil-estate icon"></i>
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Tổng quan
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
               <NavLink to="/group-order/manage-order" onClick={toggleNavbar}>
                 {({ isActive }) => (
                   <div className={isActive ? "active-link" : "unactive-link"}>
@@ -495,113 +483,21 @@ const Sidebar = ({ onClick }) => {
                 )}
               </NavLink>
             </li>
+
             <li>
               <NavLink
-                to="/system/collaborator-manage"
-                onClick={() => changeBrand("Quản lý CTV")}
+                to="/feedback/manage-feedback"
+                onClick={() => changeBrand("Quản lý phản hồi")}
               >
                 {({ isActive }) => (
                   <div className={isActive ? "active-link" : "unactive-link"}>
-                    <i className="uil uil-user-square icon"></i>
+                    <i className="uil uil-feedback icon"></i>
                     <a className={isActive ? "active-text" : "unactive-text"}>
-                      Cộng tác viên
+                      Hỗ trợ
                     </a>
                   </div>
                 )}
               </NavLink>
-            </li>
-            <li>
-              <NavLink to="/topup/manage-topup">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <i class="uil uil-money-withdrawal icon"></i>
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Sổ Quỹ
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/report/manage-report" onClick={toggleReportNavbar}>
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <i class="uil uil-cancel icon"></i>
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Báo cáo
-                    </a>
-                    {/* {collapsedReport ? (
-                    <i class="uil uil-angle-right icon-right"></i>
-                  ) : (
-                    <i class="uil uil-angle-down icon-right"></i>
-                  )} */}
-                  </div>
-                )}
-              </NavLink>
-              {/* <Collapse isOpen={!collapsedReport}>
-              <Nav className="nav" navbar>
-                <NavItem>
-                  <NavLink to="/report/manage-report/all">
-                    {({ isActive }) => (
-                      <div
-                        className={
-                          isActive ? "active-link-nav" : "unactive-link-nav"
-                        }
-                      >
-                        <i class="uil uil-shopping-bag icon"></i>
-                        <a
-                          className={
-                            isActive ? "active-text-nav" : "unactive-text-nav"
-                          }
-                        >
-                          Tổng quan
-                        </a>
-                      </div>
-                    )}
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to="/report/manage-report/finance">
-                    {({ isActive }) => (
-                      <div
-                        className={
-                          isActive ? "active-link-nav" : "unactive-link-nav"
-                        }
-                      >
-                        <i class="uil uil-shopping-bag icon"></i>
-                        <a
-                          className={
-                            isActive ? "active-text-nav" : "unactive-text-nav"
-                          }
-                        >
-                          Báo cáo tài chính
-                        </a>
-                      </div>
-                    )}
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to="/report/manage-report/service">
-                    {({ isActive }) => (
-                      <div
-                        className={
-                          isActive ? "active-link-nav" : "unactive-link-nav"
-                        }
-                      >
-                        <i class="uil uil-shopping-bag icon"></i>
-                        <a
-                          className={
-                            isActive ? "active-text-nav" : "unactive-text-nav"
-                          }
-                        >
-                          Báo cáo dịch vụ
-                        </a>
-                      </div>
-                    )}
-                  </NavLink>
-                </NavItem>
-              </Nav>
-            </Collapse> */}
             </li>
           </ul>
         ) : user?.role === "accountant" ? (
