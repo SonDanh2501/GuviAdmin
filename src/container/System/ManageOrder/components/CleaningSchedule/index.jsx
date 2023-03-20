@@ -105,7 +105,7 @@ const CleaningSchedule = (props) => {
     months.map((month) => {
       month.map((day) => {
         selectedDate.includes(day.toString().slice(0, 3)) &&
-          day > new Date() &&
+          day > addDays(new Date(), -1) &&
           day < addDays(addDays(new Date(), 7), 30 * estimateMonth) &&
           !selectDay.includes(day.toString()) &&
           selectDay.push(day.toString());
