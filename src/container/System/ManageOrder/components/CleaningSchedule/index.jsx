@@ -105,6 +105,7 @@ const CleaningSchedule = (props) => {
     months.map((month) => {
       month.map((day) => {
         selectedDate.includes(day.toString().slice(0, 3)) &&
+          day > new Date() &&
           day < addDays(addDays(new Date(), 7), 30 * estimateMonth) &&
           !selectDay.includes(day.toString()) &&
           selectDay.push(day.toString());
@@ -834,7 +835,7 @@ const CleaningSchedule = (props) => {
                 })(month[0]);
 
                 return (
-                  <div key={i}>
+                  <div key={i} className="mt-2">
                     <a className="title-month">
                       {formatMonthVN} , {year[3]}
                     </a>
@@ -879,11 +880,13 @@ const CleaningSchedule = (props) => {
                         return (
                           <button
                             key={index}
-                            // disabled={
-                            //   day < addDays(new Date(), 7) ? true : false
-                            // }
+                            disabled={
+                              day < addDays(new Date(), -1) ? true : false
+                            }
                             className={
-                              selectDay.includes(day.toString())
+                              day < addDays(new Date(), -1)
+                                ? "div-date"
+                                : selectDay.includes(day.toString())
                                 ? "div-date-selected"
                                 : "div-date"
                             }
@@ -891,7 +894,9 @@ const CleaningSchedule = (props) => {
                           >
                             <a
                               className={
-                                selectDay.includes(day.toString())
+                                day < addDays(new Date(), -1)
+                                  ? "date-not-use"
+                                  : selectDay.includes(day.toString())
                                   ? "text-date-selected"
                                   : "date-use"
                               }
