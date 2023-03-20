@@ -280,7 +280,11 @@ const ReportOrder = () => {
       },
       align: "center",
       render: (data) => {
-        return <a>{data?.percent_income ? data?.percent_income + "%" : ""}</a>;
+        return (
+          <a className="text-money">
+            {data?.percent_income ? data?.percent_income + "%" : ""}
+          </a>
+        );
       },
     },
   ];

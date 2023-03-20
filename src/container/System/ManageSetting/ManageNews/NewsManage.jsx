@@ -148,19 +148,19 @@ export default function NewsManage() {
   const columns = [
     {
       title: "Tiêu đề",
-      dataIndex: ["title"],
-      width: "20%",
+      render: (data) => <a className="text-title-new">{data?.title}</a>,
     },
     {
       title: "Mô tả ngắn",
-      dataIndex: ["short_description"],
-      width: "30%",
+      render: (data) => (
+        <a className="text-title-new">{data?.short_description}</a>
+      ),
     },
     {
       title: "Link bài viết",
       render: (data) => {
         return (
-          <a>
+          <a className="text-title-new">
             {" "}
             {data?.url.length > 60 ? data?.url.slice(0, 60) + "..." : data?.url}
           </a>
@@ -169,11 +169,11 @@ export default function NewsManage() {
     },
     {
       title: "Loại tin",
-      dataIndex: "type",
+      render: (data) => <a className="text-title-new">{data?.type}</a>,
     },
     {
       title: "Position",
-      dataIndex: "position",
+      render: (data) => <a className="text-title-new">{data?.position}</a>,
       align: "center",
     },
     {

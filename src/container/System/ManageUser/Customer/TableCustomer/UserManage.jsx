@@ -161,7 +161,6 @@ export default function UserManage(props) {
       ? [
           {
             title: "Mã",
-
             render: (data) => {
               return (
                 <div
@@ -171,7 +170,7 @@ export default function UserManage(props) {
                     })
                   }
                 >
-                  <a className="text-id"> {data?.id_view}</a>
+                  <a className="text-id-customer"> {data?.id_view}</a>
                 </div>
               );
             },
@@ -192,7 +191,7 @@ export default function UserManage(props) {
               className="img_customer"
               src={data?.avatar ? data?.avatar : user}
             /> */}
-                  <a className="text-name"> {data?.full_name}</a>
+                  <a className="text-name-customer"> {data?.full_name}</a>
                 </div>
               );
             },
@@ -203,7 +202,7 @@ export default function UserManage(props) {
               const phone = data?.phone.slice(0, 7);
               return (
                 <div className="hide-phone">
-                  <a className="text-phone">
+                  <a className="text-phone-customer">
                     {rowIndex === index
                       ? hidePhone
                         ? data?.phone
@@ -237,7 +236,9 @@ export default function UserManage(props) {
             title: "Ngày sinh",
             render: (data) => {
               return (
-                <a>{moment(new Date(data?.birthday)).format("DD/MM/YYYY")}</a>
+                <a className="text-birtday-customer">
+                  {moment(new Date(data?.birthday)).format("DD/MM/YYYY")}
+                </a>
               );
             },
           },
@@ -253,13 +254,13 @@ export default function UserManage(props) {
               } else {
                 setRank("Bạch kim");
               }
-              return <a className="text-address">{rank}</a>;
+              return <a className="text-address-customer">{rank}</a>;
             },
           },
           {
             title: "Tổng Đơn",
             render: (data) => (
-              <a className="text-address">{data?.total_order}</a>
+              <a className="text-address-customer">{data?.total_order}</a>
             ),
 
             align: "center",
@@ -282,7 +283,7 @@ export default function UserManage(props) {
                       {data?.id_view_group_order}
                     </a>
                   ) : (
-                    <a className="text-address">Không có</a>
+                    <a className="text-address-customer">Không có</a>
                   )}
                 </>
               );
@@ -293,7 +294,9 @@ export default function UserManage(props) {
           {
             title: " Tổng",
             render: (data) => (
-              <a className="text-address">{formatMoney(data?.total_price)}</a>
+              <a className="text-address-customer">
+                {formatMoney(data?.total_price)}
+              </a>
             ),
             align: "right",
             responsive: ["xl"],
@@ -332,7 +335,7 @@ export default function UserManage(props) {
                     })
                   }
                 >
-                  <a className="text-id"> {data?.id_view}</a>
+                  <a className="text-id-customer"> {data?.id_view}</a>
                 </div>
               );
             },
@@ -353,7 +356,7 @@ export default function UserManage(props) {
               className="img_customer"
               src={data?.avatar ? data?.avatar : user}
             /> */}
-                  <a className="text-name"> {data?.full_name}</a>
+                  <a className="text-name-customer"> {data?.full_name}</a>
                 </div>
               );
             },
@@ -364,7 +367,7 @@ export default function UserManage(props) {
               const phone = data?.phone.slice(0, 7);
               return (
                 <div className="hide-phone">
-                  <a className="text-phone">
+                  <a className="text-phone-customer">
                     {rowIndex === index
                       ? hidePhone
                         ? data?.phone
@@ -396,7 +399,7 @@ export default function UserManage(props) {
           {
             title: "Địa Chỉ",
             render: (data) => (
-              <a className="text-address">
+              <a className="text-address-customer">
                 {!data?.default_address
                   ? "Chưa có"
                   : data?.default_address.slice(0, 60) + "..."}
@@ -410,10 +413,10 @@ export default function UserManage(props) {
             render: (data) => {
               return (
                 <div className="div-create">
-                  <a className="text-create">
+                  <a className="text-create-customer">
                     {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
                   </a>
-                  <a className="text-create">
+                  <a className="text-create-customer">
                     {moment(new Date(data?.date_create)).format("HH:mm")}
                   </a>
                 </div>
@@ -424,7 +427,7 @@ export default function UserManage(props) {
           {
             title: "Tổng Đơn",
             render: (data) => (
-              <a className="text-address">{data?.total_order}</a>
+              <a className="text-address-customer">{data?.total_order}</a>
             ),
 
             align: "center",
@@ -447,7 +450,7 @@ export default function UserManage(props) {
                       {data?.id_view_group_order}
                     </a>
                   ) : (
-                    <a className="text-address">Không có</a>
+                    <a className="text-address-customer">Không có</a>
                   )}
                 </>
               );
@@ -458,7 +461,9 @@ export default function UserManage(props) {
           {
             title: " Tổng",
             render: (data) => (
-              <a className="text-address">{formatMoney(data?.total_price)}</a>
+              <a className="text-address-customer">
+                {formatMoney(data?.total_price)}
+              </a>
             ),
             align: "right",
             responsive: ["xl"],

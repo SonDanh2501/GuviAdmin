@@ -2,12 +2,12 @@
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 16px;
   color: black;
 }
 
-.div-service {
+.div-service-order {
   display: flex;
   flex-direction: column;
 
@@ -15,14 +15,13 @@
     font-family: "Roboto";
     font-style: normal;
     font-weight: 500;
-    font-size: 14px;
-    line-height: 16px;
+    font-size: 12px;
     color: black;
     text-decoration: none;
   }
 }
 
-.div-create {
+.div-create-order {
   display: flex;
   flex-direction: column;
 
@@ -30,13 +29,12 @@
     font-family: "Roboto";
     font-style: normal;
     font-weight: 500;
-    font-size: 14px;
-    line-height: 16px;
-    color: #6e6893;
+    font-size: 12px;
+    color: #000000;
   }
 }
 
-.div-worktime {
+.div-worktime-order {
   display: flex;
   flex-direction: column;
 
@@ -44,21 +42,19 @@
     font-family: "Roboto";
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;
+    font-size: 12px;
     text-decoration: none;
     color: black;
   }
 }
 
-.text-address {
+.text-address-order {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 16px;
+  font-size: 12px;
   color: black;
-  width: 200px;
+  width: 150px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -91,50 +87,50 @@
   color: #000000;
 }
 
-.text-pending-order {
+.text-pen-order {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 16px;
   color: #ece200 !important;
   text-decoration: none;
 }
 
-.text-confirm {
+.text-confirm-order {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 16px;
   color: #023e8a;
   text-decoration: none;
 }
 
-.text-doing {
+.text-doing-order {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 16px;
   color: #023e8a;
   text-decoration: none;
 }
 
-.text-cancel {
+.text-cancel-order {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 16px;
   color: #ff0000;
   text-decoration: none;
 }
-.text-done {
+.text-done-order {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 16px;
   color: #00cf3a;
   text-decoration: none;
@@ -146,7 +142,25 @@
   border-radius: 5px;
 }
 
-.div-name {
+.div-name-order {
   display: flex;
   flex-direction: column;
+
+  .text-collaborator {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    text-decoration-line: underline;
+    color: #023e8a;
+  }
+
+  .text-phone {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000 !important;
+  }
 }

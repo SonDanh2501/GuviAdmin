@@ -411,14 +411,16 @@ const DetailsOrder = () => {
                   <div className="div-info">
                     <a
                       className="label-name"
-                      onClick={() =>
-                        navigate(
-                          "/group-order/manage-order/details-collaborator",
-                          {
-                            state: { id: dataGroup?.id_collaborator?._id },
-                          }
-                        )
-                      }
+                      onClick={() => {
+                        if (user?.role !== "support_customer") {
+                          navigate(
+                            "/group-order/manage-order/details-collaborator",
+                            {
+                              state: { id: dataGroup?.id_collaborator?._id },
+                            }
+                          );
+                        }
+                      }}
                     >
                       Tên: {dataGroup?.id_collaborator?.full_name}
                     </a>
@@ -561,7 +563,7 @@ const DetailsOrder = () => {
                 </div>
               </div>
 
-              <a className="title">
+              {/* <a className="title">
                 Trạng thái:{" "}
                 {dataGroup?.status === "pending" ? (
                   <a className="text-pending ">Đang chờ làm</a>
@@ -574,49 +576,33 @@ const DetailsOrder = () => {
                 ) : (
                   <a className="text-cancel">Đã huỷ</a>
                 )}
-              </a>
+              </a> */}
             </div>
           </Row>
-          {user?.role !== "support_customer" && (
-            <div>
-              {dataGroup?.status === "pending" ||
-              dataGroup?.status === "confirm" ? (
-                <Popconfirm
-                  title="Bạn có muốn huỷ việc"
-                  // description="Open Popconfirm with async logic"
-                  open={open}
-                  onConfirm={() => handleOk(dataGroup?._id)}
-                  okButtonProps={{
-                    loading: confirmLoading,
-                  }}
-                  onCancel={handleCancel}
-                >
-                  <Button className="btn-cancel" onClick={showPopconfirm}>
-                    Huỷ việc
-                  </Button>
-                </Popconfirm>
-              ) : null}
-            </div>
-          )}
+          {user?.role !== "support_customer" &&
+            dataGroup?.type === "schedule" && (
+              <div>
+                {dataGroup?.status === "pending" ||
+                dataGroup?.status === "confirm" ? (
+                  <Popconfirm
+                    title="Bạn có muốn huỷ việc"
+                    // description="Open Popconfirm with async logic"
+                    open={open}
+                    onConfirm={() => handleOk(dataGroup?._id)}
+                    okButtonProps={{
+                      loading: confirmLoading,
+                    }}
+                    onCancel={handleCancel}
+                  >
+                    <Button className="btn-cancel" onClick={showPopconfirm}>
+                      Huỷ việc
+                    </Button>
+                  </Popconfirm>
+                ) : null}
+              </div>
+            )}
 
-          {/* {user === "admin" && dataGroup?.status === "cancel" ? (
-            <Popconfirm
-              title="Bạn có chuyển trạng thái sang hoàn tất"
-              // description="Open Popconfirm with async logic"
-              open={openPopup}
-              onConfirm={handleChangeCancelToOrder}
-              okButtonProps={{
-                loading: confirmLoading,
-              }}
-              onCancel={() => setOpenPopup(false)}
-            >
-              <Button className="btn-cancel" onClick={showPopupconfirm}>
-                Hoàn tất
-              </Button>
-            </Popconfirm>
-          ) : null} */}
-
-          <div className="mt-5">
+          <div className="mt-3">
             <Table
               columns={columns}
               dataSource={dataList}
@@ -629,6 +615,10 @@ const DetailsOrder = () => {
                 };
               }}
             />
+          </div>
+
+          <div className="mt-3">
+            <a className="label-activity-detail-order">Hoạt động đơn hàng</a>
           </div>
 
           <FloatButton.BackTop />

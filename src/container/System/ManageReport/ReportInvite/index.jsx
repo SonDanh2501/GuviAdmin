@@ -99,7 +99,7 @@ const ReportInvite = () => {
     },
   ];
 
-  const onChangeDay = (start, end) => {
+  const onChangeDayTop = (start, end) => {
     const dayStart = moment(start).toISOString();
     const dayEnd = moment(end).toISOString();
     getTopCustomerInvite(dayStart, dayEnd)
@@ -107,6 +107,17 @@ const ReportInvite = () => {
         setDataTop(res);
       })
       .catch((err) => {});
+  };
+
+  const onChangeDay = (start, end) => {
+    const dayStart = moment(start).toISOString();
+    const dayEnd = moment(end).toISOString();
+    getReportCustomerInviteDay(0, 20, dayStart, dayEnd)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -117,7 +128,7 @@ const ReportInvite = () => {
         <div>
           <RangePicker
             picker="day"
-            onChange={(e) => onChangeDay(e[0]?.$d, e[1]?.$d)}
+            onChange={(e) => onChangeDayTop(e[0]?.$d, e[1]?.$d)}
           />
         </div>
         <ResponsiveContainer width={"100%"} height={350} min-width={350}>
@@ -148,6 +159,12 @@ const ReportInvite = () => {
         </ResponsiveContainer>
       </div>
       <a className="title">Bảng thống kê</a>
+      <div className="mt-3">
+        <RangePicker
+          picker="day"
+          onChange={(e) => onChangeDay(e[0]?.$d, e[1]?.$d)}
+        />
+      </div>
       <div className="mt-2">
         <Table columns={columns} dataSource={data} pagination={false} />
       </div>

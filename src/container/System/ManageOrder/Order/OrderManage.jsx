@@ -142,7 +142,7 @@ export default function OrderManage(props) {
       title: "Ngày tạo",
       render: (data) => {
         return (
-          <div className="div-create">
+          <div className="div-create-order">
             <a className="text-create">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
             </a>
@@ -176,7 +176,7 @@ export default function OrderManage(props) {
       title: "Dịch vụ",
       render: (data) => {
         return (
-          <div className="div-service">
+          <div className="div-service-order">
             <a className="text-service">
               {data?.type === "schedule"
                 ? "Giúp việc cố định"
@@ -195,7 +195,7 @@ export default function OrderManage(props) {
       title: "Ngày làm",
       render: (data) => {
         return (
-          <div className="div-worktime">
+          <div className="div-worktime-order">
             <a className="text-worktime">
               {" "}
               {moment(new Date(data?.date_work_schedule[0].date)).format(
@@ -213,14 +213,14 @@ export default function OrderManage(props) {
     },
     {
       title: "Địa điểm",
-      render: (data) => <p className="text-address">{data?.address}</p>,
+      render: (data) => <a className="text-address-order">{data?.address}</a>,
     },
     {
       title: "Cộng tác viên",
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
-            <a>Đang tìm kiếm</a>
+            <a className="text-address-order">Đang tìm kiếm</a>
           ) : (
             <div
               onClick={() => {
@@ -230,13 +230,13 @@ export default function OrderManage(props) {
                   });
                 }
               }}
-              className="div-name"
+              className="div-name-order"
             >
               <a className="text-collaborator">
                 {data?.id_collaborator?.full_name}
               </a>
               {user?.role !== "support_customer" && (
-                <a>{data?.id_collaborator?.phone}</a>
+                <a className="text-phone">{data?.id_collaborator?.phone}</a>
               )}
             </div>
           )}
@@ -250,14 +250,14 @@ export default function OrderManage(props) {
         <a
           className={
             data?.status === "pending"
-              ? "text-pending-order"
+              ? "text-pen-order"
               : data?.status === "confirm"
-              ? "text-confirm"
+              ? "text-confirm-order"
               : data?.status === "doing"
-              ? "text-doing"
+              ? "text-doing-order"
               : data?.status === "done"
-              ? "text-done"
-              : "text-cancel"
+              ? "text-done-order"
+              : "text-cancel-order"
           }
         >
           {data?.status === "pending"
