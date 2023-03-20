@@ -142,7 +142,7 @@ const AddOrder = () => {
         <a className="text-error">{errorNameCustomer}</a>
       </div>
       {dataFilter.length > 0 && (
-        <List type={"unstyled"} className="list-item">
+        <List type={"unstyled"} className="list-item-customer-add-order">
           {dataFilter?.map((item, index) => {
             return (
               <div

@@ -105,7 +105,6 @@ const CleaningSchedule = (props) => {
     months.map((month) => {
       month.map((day) => {
         selectedDate.includes(day.toString().slice(0, 3)) &&
-          day > addDays(new Date(), 7) &&
           day < addDays(addDays(new Date(), 7), 30 * estimateMonth) &&
           !selectDay.includes(day.toString()) &&
           selectDay.push(day.toString());
@@ -718,7 +717,7 @@ const CleaningSchedule = (props) => {
           <Input
             placeholder="Tìm kiếm theo số điện thoại"
             value={nameCollaborator}
-            className="input-seach-collaborator"
+            className="input-seach-collaborator-order"
             onChange={(e) => {
               searchCollaborator(e.target.value);
               searchValue(e.target.value);
@@ -807,7 +806,7 @@ const CleaningSchedule = (props) => {
             title="Xem lịch làm việc"
             placement="right"
             onClose={onClose}
-            width={400}
+            width={420}
             open={open}
           >
             <div>
@@ -880,13 +879,11 @@ const CleaningSchedule = (props) => {
                         return (
                           <button
                             key={index}
-                            disabled={
-                              day < addDays(new Date(), 7) ? true : false
-                            }
+                            // disabled={
+                            //   day < addDays(new Date(), 7) ? true : false
+                            // }
                             className={
-                              day < addDays(new Date(), 7)
-                                ? "div-date"
-                                : selectDay.includes(day.toString())
+                              selectDay.includes(day.toString())
                                 ? "div-date-selected"
                                 : "div-date"
                             }
@@ -894,9 +891,7 @@ const CleaningSchedule = (props) => {
                           >
                             <a
                               className={
-                                day < addDays(new Date(), 7)
-                                  ? "date-not-use"
-                                  : selectDay.includes(day.toString())
+                                selectDay.includes(day.toString())
                                   ? "text-date-selected"
                                   : "date-use"
                               }
