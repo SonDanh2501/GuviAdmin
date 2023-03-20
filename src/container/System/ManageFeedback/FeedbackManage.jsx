@@ -102,7 +102,7 @@ export default function FeedbackManage() {
             className="text-type"
             onClick={() =>
               navigate("/details-customer", {
-                state: { id: data?._id },
+                state: { id: data?.id_customer },
               })
             }
           >
