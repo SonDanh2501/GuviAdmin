@@ -138,15 +138,15 @@ export default function BannerManage() {
   const columns = [
     {
       title: "Tên banner",
-      dataIndex: ["title"],
+      render: (data) => <a className="text-title-banner">{data?.title}</a>,
     },
     {
       title: "Type link",
-      dataIndex: ["type_link"],
+      render: (data) => <a className="text-title-banner">{data?.type_link}</a>,
     },
     {
       title: "Position",
-      dataIndex: "position",
+      render: (data) => <a className="text-title-banner">{data?.position}</a>,
     },
     {
       title: "Link ID",
@@ -163,7 +163,12 @@ export default function BannerManage() {
     {
       title: "Hình",
       render: (data) => {
-        return <Image src={data?.image} style={{ width: 300, height: 100 }} />;
+        return (
+          <Image
+            src={data?.image}
+            style={{ width: 200, height: 80, borderRadius: 8 }}
+          />
+        );
       },
     },
     {

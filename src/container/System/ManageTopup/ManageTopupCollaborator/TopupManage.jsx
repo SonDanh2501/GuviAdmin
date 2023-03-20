@@ -220,8 +220,10 @@ export default function TopupManage() {
               })
             }
           >
-            <a className="text-name">{data?.id_collaborator?.full_name}</a>
-            <a className="text-phone">{data?.id_collaborator?.phone}</a>
+            <a className="text-name-topup">
+              {data?.id_collaborator?.full_name}
+            </a>
+            <a className="text-phone-topup">{data?.id_collaborator?.phone}</a>
           </div>
         );
       },
@@ -254,13 +256,15 @@ export default function TopupManage() {
     },
     {
       title: "Nội dung",
-      render: (data) => <a className="text-id">{data?.transfer_note}</a>,
+      render: (data) => (
+        <a className="text-description-topup">{data?.transfer_note}</a>
+      ),
     },
     {
       title: "Ngày nạp",
       render: (data) => {
         return (
-          <div className="div-time">
+          <div className="div-time-topup">
             <a className="text-time">
               {moment(new Date(data?.date_created)).format("DD/MM/yyy")}
             </a>
@@ -281,9 +285,9 @@ export default function TopupManage() {
             ) : data?.status === "transfered" ? (
               <a className="text-transfered">Đã chuyển tiền</a>
             ) : data?.status === "done" ? (
-              <a className="text-done">Hoàn tất</a>
+              <a className="text-done-topup">Hoàn tất</a>
             ) : (
-              <a className="text-cancel">Đã huỷ</a>
+              <a className="text-cancel-topup-ctv">Đã huỷ</a>
             )}
           </div>
         );
@@ -319,11 +323,12 @@ export default function TopupManage() {
               Duyệt lệnh
             </button>
             <div className="mt-1 ml-3">
-              {data?.status === "pending" && (
-                <a className="text-cancel-topup" onClick={toggleCancel}>
-                  Huỷ
-                </a>
-              )}
+              {data?.status === "pending" ||
+                (data?.status === "transfered" && (
+                  <a className="text-cancel-topup" onClick={toggleCancel}>
+                    Huỷ
+                  </a>
+                ))}
             </div>
             <div className="mt-1">
               <button

@@ -45,15 +45,17 @@ export default function CollaboratorManage(props) {
   const [totalFilter, setTotalFilter] = useState("");
   const [valueFilter, setValueFilter] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [itemEdit, setItemEdit] = React.useState([]);
-  const [modal, setModal] = React.useState(false);
-  const [modalBlock, setModalBlock] = React.useState(false);
-  const [modalVerify, setModalVerify] = React.useState(false);
-  const [modalLockTime, setModalLockTime] = React.useState(false);
-  const [modalEdit, setModalEdit] = React.useState(false);
-  const [checkLock, setCheckLock] = React.useState(false);
-  const [timeValue, setTimeValue] = React.useState("");
+  const [itemEdit, setItemEdit] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [modalBlock, setModalBlock] = useState(false);
+  const [modalVerify, setModalVerify] = useState(false);
+  const [modalLockTime, setModalLockTime] = useState(false);
+  const [modalContected, setModalContected] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
+  const [checkLock, setCheckLock] = useState(false);
+  const [timeValue, setTimeValue] = useState("");
   const toggle = () => setModal(!modal);
+  const toggleContected = () => setModalContected(!modalContected);
   const toggleBlock = () => setModalBlock(!modalBlock);
   const toggleVerify = () => setModalVerify(!modalVerify);
   const toggleLockTime = () => setModalLockTime(!modalLockTime);
@@ -270,7 +272,7 @@ export default function CollaboratorManage(props) {
             type: status,
           })
         );
-
+        setModalContected(false);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -309,7 +311,7 @@ export default function CollaboratorManage(props) {
       title: "Mã CTV",
       render: (data) => (
         <a
-          className="text-id"
+          className="text-id-collaborator"
           onClick={() =>
             navigate("/system/collaborator-manage/details-collaborator", {
               state: { id: data?._id },
@@ -358,7 +360,7 @@ export default function CollaboratorManage(props) {
     },
     {
       title: "SĐT",
-      render: (data) => <a className="text-phone">{data?.phone}</a>,
+      render: (data) => <a className="text-phone-ctv">{data?.phone}</a>,
       align: "center",
       width: "10%",
     },
@@ -406,19 +408,18 @@ export default function CollaboratorManage(props) {
       render: (data) => {
         return (
           <div className="div-verify">
-            {data?.is_verify ? (
+            {!data?.is_verify && data?.is_contacted ? (
+              <a className="text-nonverify">Đã liên hệ</a>
+            ) : data?.is_verify ? (
               <a className="text-verify">Đã xác thực</a>
             ) : (
               <a className="text-nonverify">Chưa xác thực</a>
             )}
-            {/* {!data?.is_contacted && (
-              <div
-                className="btn-contacted"
-                onClick={() => onContected(data?._id)}
-              >
+            {!data?.is_contacted && !data?.is_verify && (
+              <div className="btn-contacted" onClick={toggleContected}>
                 <a className="text-contacted">Liên hệ</a>
               </div>
-            )} */}
+            )}
           </div>
         );
       },
@@ -655,6 +656,33 @@ export default function CollaboratorManage(props) {
             </ModalFooter>
           </Modal>
         </div>
+
+        <div>
+          <Modal isOpen={modalContected} toggle={toggleContected}>
+            <ModalHeader toggle={toggleContected}>
+              Liên hệ công tác viên
+            </ModalHeader>
+            <ModalBody>
+              <a>
+                Bạn có chắc đã liên hệ cộng tác viên
+                <a className="text-name-modal">{itemEdit?.full_name}</a> này
+                không?
+              </a>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color="primary"
+                onClick={() => onContected(itemEdit?._id)}
+              >
+                Có
+              </Button>
+              <Button color="#ddd" onClick={toggleContected}>
+                Không
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+
         <div>
           <EditCollaborator
             state={modalEdit}

@@ -280,3 +280,63 @@
   height: 38px;
   border-radius: 5px;
 }
+
+.label-activity-detail-order {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 30px;
+  color: #19202c;
+  align-items: center;
+  margin-top: 20px;
+  background-color: #dadada;
+  padding: 5px 10px 5px 5px;
+  border-radius: 0px 12px 12px 0px;
+}
+
+.div-item-list {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin-top: 10px;
+  border-bottom: 1px solid #d6d6d6;
+
+  .div-name {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .text-title {
+      font-family: "Roboto";
+      font-weight: 500;
+      font-size: 18px;
+      color: black;
+      text-decoration: none;
+    }
+
+    .text-money-plus {
+      font-family: "Roboto";
+      font-weight: 500;
+      font-size: 16px;
+      color: #00cf3a;
+      text-decoration: none;
+    }
+
+    .text-money-deduction {
+      font-family: "Roboto";
+      font-weight: 500;
+      font-size: 16px;
+      color: #ff0000;
+      text-decoration: none;
+    }
+  }
+
+  .text-date {
+    font-family: "Roboto";
+    font-weight: 400;
+    font-size: 14px;
+    color: black;
+    text-decoration: none;
+  }
+}

@@ -652,7 +652,7 @@ const CleaningHourly = (props) => {
             <Input
               placeholder="Tìm kiếm theo số điện thoại"
               value={nameCollaborator}
-              className="input-seach-collaborator"
+              className="input-search-collaborator-order"
               onChange={(e) => {
                 searchCollaborator(e.target.value);
                 searchValue(e.target.value);
@@ -662,7 +662,7 @@ const CleaningHourly = (props) => {
           </div>
 
           {dataCollaborator.length > 0 && (
-            <List type={"unstyled"} className="list-item">
+            <List type={"unstyled"} className="list-item-add-ctv-order">
               {dataCollaborator?.map((item, index) => {
                 return (
                   <div
@@ -706,7 +706,7 @@ const CleaningHourly = (props) => {
         {priceOrder && (
           <div className="div-total mt-3">
             <a>Tạm tính: {formatMoney(priceOrder)}</a>
-            <a>Phí dịch vụ: {formatMoney(feeService)}</a>
+            <a>Phí nền tảng: {formatMoney(feeService)}</a>
             {eventPromotion.map((item, index) => {
               return (
                 <a style={{ color: "red" }}>

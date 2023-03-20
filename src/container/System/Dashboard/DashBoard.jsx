@@ -135,6 +135,12 @@ export default function Home() {
     return start + " - " + timeEnd;
   };
 
+  const onChangeNumberData = useCallback((number) => {
+    dispatch(
+      getLastestService.getLastestServiceRequest({ start: 0, length: number })
+    );
+  }, []);
+
   const columns = [
     {
       title: "Khách hàng",
@@ -270,12 +276,6 @@ export default function Home() {
       },
     },
   ];
-
-  const onChangeNumberData = useCallback((number) => {
-    dispatch(
-      getLastestService.getLastestServiceRequest({ start: 0, length: number })
-    );
-  }, []);
 
   return (
     <div className="container-dash">

@@ -37,11 +37,11 @@
   height: 25px;
 }
 
-.text-id {
+.text-id-collaborator {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
   color: #19202c;
 }
 
@@ -61,7 +61,7 @@
     font-family: "Roboto";
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 12px;
     text-decoration-line: underline;
     color: #023e8a !important;
   }
@@ -75,19 +75,18 @@
     font-family: "Roboto";
     font-style: normal;
     font-weight: 500;
-    font-size: 14px;
-    line-height: 16px;
+    font-size: 12px;
     color: #000000;
     text-decoration: none;
   }
 }
 
-.text-phone {
+.text-phone-ctv {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
-  color: #023e8a !important;
+  font-size: 12px;
+  color: #000000 !important;
   text-decoration: none !important;
 }
 
@@ -96,7 +95,7 @@
   font-family: "Roboto";
   font-style: normal;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   margin-left: 5px;
   text-decoration: none !important;
 }
@@ -105,7 +104,7 @@
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 12px;
   color: #979797;
   margin-left: 5px;
 }
@@ -114,7 +113,7 @@
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 12px;
   color: #f7941d !important;
   margin-left: 5px;
   text-decoration: none !important;
@@ -125,7 +124,7 @@
   font-family: "Roboto";
   font-style: normal;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 16px;
   text-decoration: none !important;
 }
@@ -134,7 +133,7 @@
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 12px;
   color: #f7941d;
   margin-left: 5px;
   text-decoration: none !important;
@@ -234,7 +233,7 @@
   font-family: "Roboto";
   font-style: normal;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 16px;
   text-decoration: none !important;
 }
@@ -243,7 +242,7 @@
   font-family: "Roboto";
   font-style: normal;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 16px;
   color: #ff0000;
   text-decoration: none !important;
@@ -259,7 +258,7 @@
     font-family: "Roboto";
     font-style: normal;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 16px;
     text-decoration: none !important;
   }
@@ -268,15 +267,15 @@
     font-family: "Roboto";
     font-style: normal;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 16px;
     color: #ff0000;
   }
 
   .btn-contacted {
-    height: 30px;
+    width: 50px;
+    height: 20px;
     background-color: #00cf3a;
-    width: 70px;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -286,7 +285,7 @@
     .text-contacted {
       font-family: "Roboto";
       font-weight: 500;
-      font-size: 14px;
+      font-size: 12px;
       line-height: 16px;
       color: #000000;
       text-decoration: none;
