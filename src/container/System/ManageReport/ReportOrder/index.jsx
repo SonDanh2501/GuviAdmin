@@ -32,13 +32,10 @@ const { Option } = Select;
 
 const ReportOrder = () => {
   const [dataFilter, setDataFilter] = useState([]);
-  const [totalFilter, setTotalFilter] = useState("");
-  const [dataSearch, setDataSearch] = useState([]);
-  const [totalSearch, setTotalSearch] = useState("");
-  const [valueSearch, setValueSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
+  const [dataTotal, setDataTotal] = useState([]);
   const [type, setType] = useState("day");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -55,13 +52,23 @@ const ReportOrder = () => {
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
+        setDataTotal(res?.total[0]);
       })
       .catch((err) => console.log(err));
   }, []);
 
   const columns = [
     {
-      title: "Mã đơn",
+      title: () => {
+        return (
+          <div className="div-title-collaborator-id">
+            <div className="div-title-report">
+              <a>Mã đơn</a>
+            </div>
+            <div className="div-top"></div>
+          </div>
+        );
+      },
       render: (data) => (
         <a
           className="text-id "
@@ -76,10 +83,38 @@ const ReportOrder = () => {
       ),
     },
     {
-      title: "Số ca",
+      title: () => {
+        return (
+          <div className="div-title-order-report">
+            <div className="div-title-report">
+              <a style={{ textAlign: "center" }}>Số ca</a>
+            </div>
+            <a className="text-money-title">
+              {dataTotal?.total_item > 0 ? dataTotal?.total_item : 0}
+            </a>
+          </div>
+        );
+      },
+      render: (data) => {
+        return <a className="text-money">1</a>;
+      },
+      align: "center",
     },
     {
-      title: "Doanh số",
+      title: () => {
+        return (
+          <div className="div-title-order-report">
+            <div className="div-title-report">
+              <a style={{ textAlign: "center" }}>Doanh số</a>
+            </div>
+            <a className="text-money-title">
+              {dataTotal?.total_gross_income > 0
+                ? formatMoney(dataTotal?.total_gross_income)
+                : formatMoney(0)}
+            </a>
+          </div>
+        );
+      },
       align: "center",
       render: (data) => {
         return (
@@ -95,13 +130,20 @@ const ReportOrder = () => {
           </div>
         );
         return (
-          <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Phí dịch vụ</a>
-            <Popover content={content} placement="bottom">
-              <Button className="btn-question">
-                <i class="uil uil-question-circle icon-question"></i>
-              </Button>
-            </Popover>
+          <div className="div-title-order-report">
+            <div className="div-title-report">
+              <a style={{ textAlign: "center" }}>Phí dịch vụ</a>
+              <Popover content={content} placement="bottom">
+                <Button className="btn-question">
+                  <i class="uil uil-question-circle icon-question"></i>
+                </Button>
+              </Popover>
+            </div>
+            <a className="text-money-title">
+              {dataTotal?.total_collabotator_fee > 0
+                ? formatMoney(dataTotal?.total_collabotator_fee)
+                : formatMoney(0)}
+            </a>
           </div>
         );
       },
@@ -124,13 +166,20 @@ const ReportOrder = () => {
           </div>
         );
         return (
-          <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Doanh thu</a>
-            <Popover content={content} placement="bottom">
-              <Button className="btn-question">
-                <i class="uil uil-question-circle icon-question"></i>
-              </Button>
-            </Popover>
+          <div className="div-title-order-report">
+            <div className="div-title-report">
+              <a style={{ textAlign: "center" }}>Doanh thu</a>
+              <Popover content={content} placement="bottom">
+                <Button className="btn-question">
+                  <i class="uil uil-question-circle icon-question"></i>
+                </Button>
+              </Popover>
+            </div>
+            <a className="text-money-title">
+              {dataTotal?.total_income > 0
+                ? formatMoney(dataTotal?.total_income)
+                : formatMoney(0)}
+            </a>
           </div>
         );
       },
@@ -147,13 +196,20 @@ const ReportOrder = () => {
           </div>
         );
         return (
-          <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Giảm giá</a>
-            <Popover content={content} placement="bottom">
-              <Button className="btn-question">
-                <i class="uil uil-question-circle icon-question"></i>
-              </Button>
-            </Popover>
+          <div className="div-title-order-report">
+            <div className="div-title-report">
+              <a style={{ textAlign: "center" }}>Giảm giá</a>
+              <Popover content={content} placement="bottom">
+                <Button className="btn-question">
+                  <i class="uil uil-question-circle icon-question"></i>
+                </Button>
+              </Popover>
+            </div>
+            <a className="text-money-title">
+              {dataTotal?.total_discount > 0
+                ? formatMoney(dataTotal?.total_discount)
+                : formatMoney(0)}
+            </a>
           </div>
         );
       },
@@ -175,13 +231,20 @@ const ReportOrder = () => {
           </div>
         );
         return (
-          <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Doanh thu thuần</a>
-            <Popover content={content} placement="bottom">
-              <Button className="btn-question">
-                <i class="uil uil-question-circle icon-question"></i>
-              </Button>
-            </Popover>
+          <div className="div-title-order-report">
+            <div className="div-title-report">
+              <a style={{ textAlign: "center" }}>Doanh thu thuần</a>
+              <Popover content={content} placement="bottom">
+                <Button className="btn-question">
+                  <i class="uil uil-question-circle icon-question"></i>
+                </Button>
+              </Popover>
+            </div>
+            <a className="text-money-title">
+              {dataTotal?.total_net_income > 0
+                ? formatMoney(dataTotal?.total_net_income)
+                : formatMoney(0)}
+            </a>
           </div>
         );
       },
@@ -193,7 +256,20 @@ const ReportOrder = () => {
       },
     },
     {
-      title: "Phí áp dụng",
+      title: () => {
+        return (
+          <div className="div-title-order-report">
+            <div className="div-title-report">
+              <a style={{ textAlign: "center" }}>Phí áp dụng</a>
+            </div>
+            <a className="text-money-title">
+              {dataTotal?.total_service_fee > 0
+                ? formatMoney(dataTotal?.total_service_fee)
+                : formatMoney(0)}
+            </a>
+          </div>
+        );
+      },
       render: (data) => {
         return (
           <a className="text-money">{formatMoney(data?.total_serviceFee)}</a>
@@ -212,13 +288,20 @@ const ReportOrder = () => {
           </div>
         );
         return (
-          <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Tổng hoá đơn</a>
-            <Popover content={content} placement="bottom">
-              <Button className="btn-question">
-                <i class="uil uil-question-circle icon-question"></i>
-              </Button>
-            </Popover>
+          <div className="div-title-order-report">
+            <div className="div-title-report">
+              <a style={{ textAlign: "center" }}>Tổng hoá đơn</a>
+              <Popover content={content} placement="bottom">
+                <Button className="btn-question">
+                  <i class="uil uil-question-circle icon-question"></i>
+                </Button>
+              </Popover>
+            </div>
+            <a className="text-money-title">
+              {dataTotal?.total_order_fee > 0
+                ? formatMoney(dataTotal?.total_order_fee)
+                : formatMoney(0)}
+            </a>
           </div>
         );
       },
@@ -239,13 +322,20 @@ const ReportOrder = () => {
           </div>
         );
         return (
-          <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Lợi nhuận</a>
-            <Popover content={content} placement="bottom">
-              <Button className="btn-question">
-                <i class="uil uil-question-circle icon-question"></i>
-              </Button>
-            </Popover>
+          <div className="div-title-order-report">
+            <div className="div-title-report">
+              <a style={{ textAlign: "center" }}>Lợi nhuận</a>
+              <Popover content={content} placement="bottom">
+                <Button className="btn-question">
+                  <i class="uil uil-question-circle icon-question"></i>
+                </Button>
+              </Popover>
+            </div>
+            <a className="text-money-title">
+              {dataTotal?.total_net_income_business > 0
+                ? formatMoney(dataTotal?.total_net_income_business)
+                : formatMoney(0)}
+            </a>
           </div>
         );
       },
@@ -268,13 +358,16 @@ const ReportOrder = () => {
           </div>
         );
         return (
-          <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>% lợi nhuận</a>
-            <Popover content={content} placement="bottom">
-              <Button className="btn-question">
-                <i class="uil uil-question-circle icon-question"></i>
-              </Button>
-            </Popover>
+          <div className="div-title-collaborator">
+            <div className="div-title-report">
+              <a style={{ textAlign: "center" }}>% lợi nhuận</a>
+              <Popover content={content} placement="bottom">
+                <Button className="btn-question">
+                  <i class="uil uil-question-circle icon-question"></i>
+                </Button>
+              </Popover>
+            </div>
+            <div className="div-top"></div>
           </div>
         );
       },
@@ -333,22 +426,22 @@ const ReportOrder = () => {
     setEndDate(dayEnd);
   }, []);
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      setIsLoading(true);
-      setValueSearch(value);
-      searchReportCollaborator(0, 20, value)
-        .then((res) => {
-          setDataSearch(res.data);
-          setTotalSearch(res.totalItem);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          setIsLoading(false);
-        });
-    }, 1000),
-    []
-  );
+  // const handleSearch = useCallback(
+  //   _debounce((value) => {
+  //     setIsLoading(true);
+  //     setValueSearch(value);
+  //     searchReportCollaborator(0, 20, value)
+  //       .then((res) => {
+  //         setDataSearch(res.data);
+  //         setTotalSearch(res.totalItem);
+  //         setIsLoading(false);
+  //       })
+  //       .catch((err) => {
+  //         setIsLoading(false);
+  //       });
+  //   }, 1000),
+  //   []
+  // );
 
   return (
     <div>

@@ -154,7 +154,7 @@ export default function TopupCustomerManage() {
       title: "Mã",
       render: (data) => (
         <a
-          className="text-id"
+          className="text-id-topup-customer"
           onClick={() =>
             navigate("/profile-customer", {
               state: { id: data?.id_customer?._id },
@@ -185,7 +185,9 @@ export default function TopupCustomerManage() {
     },
     {
       title: "Số tiền",
-      render: (data) => <a>{formatMoney(data?.money)}</a>,
+      render: (data) => (
+        <a className="text-money-customer-topup">{formatMoney(data?.money)}</a>
+      ),
     },
     {
       title: "Nạp/rút",
@@ -209,12 +211,16 @@ export default function TopupCustomerManage() {
     },
     {
       title: "Nội dung",
-      dataIndex: "transfer_note",
+      render: (data) => (
+        <a className="text-description-topup">{data?.transfer_note}</a>
+      ),
     },
     {
       title: "Ngày nạp",
       render: (data) => (
-        <a>{moment(new Date(data?.date_created)).format("DD/MM/yyy HH:mm")}</a>
+        <a className="text-money-customer-topup">
+          {moment(new Date(data?.date_created)).format("DD/MM/yyy - HH:mm")}
+        </a>
       ),
     },
     {
@@ -223,13 +229,13 @@ export default function TopupCustomerManage() {
         return (
           <div>
             {data?.status === "pending" ? (
-              <a className="text-pending-topup">Đang xử lý</a>
+              <a className="text-pending-topup-customer">Đang xử lý</a>
             ) : data?.status === "transfered" ? (
-              <a className="text-transfered">Đã chuyển tiền</a>
+              <a className="text-transfered-topup-customer">Đã chuyển tiền</a>
             ) : data?.status === "done" ? (
-              <a className="text-done">Hoàn tất</a>
+              <a className="text-done-topup-customer">Hoàn tất</a>
             ) : (
-              <a className="text-cancel">Đã huỷ</a>
+              <a className="text-cancel-topup-customer">Đã huỷ</a>
             )}
           </div>
         );

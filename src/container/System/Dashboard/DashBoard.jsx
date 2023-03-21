@@ -196,11 +196,7 @@ export default function Home() {
     {
       title: "Địa điểm",
       render: (data) => {
-        return (
-          <div className="div-column-service">
-            <a className="text-address">{data?.address}</a>
-          </div>
-        );
+        return <a className="text-address-dashboard">{data?.address}</a>;
       },
     },
     {

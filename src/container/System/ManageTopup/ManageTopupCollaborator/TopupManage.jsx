@@ -323,12 +323,12 @@ export default function TopupManage() {
               Duyệt lệnh
             </button>
             <div className="mt-1 ml-3">
-              {data?.status === "pending" ||
-                (data?.status === "transfered" && (
-                  <a className="text-cancel-topup" onClick={toggleCancel}>
-                    Huỷ
-                  </a>
-                ))}
+              {(data?.status === "pending" ||
+                data?.status === "transfered") && (
+                <a className="text-cancel-topup" onClick={toggleCancel}>
+                  Huỷ
+                </a>
+              )}
             </div>
             <div className="mt-1">
               <button
