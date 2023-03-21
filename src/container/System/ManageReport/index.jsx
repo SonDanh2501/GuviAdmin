@@ -28,7 +28,7 @@ const ManageReport = () => {
             <ReportInvite />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Báo cáo dịch vụ" key="5">
-            <ReportService />
+            {/* <ReportService /> */}
           </Tabs.TabPane>
         </Tabs>
       </div>

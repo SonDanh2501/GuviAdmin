@@ -22,6 +22,12 @@ export const getOrderDetailApi = (id) => {
   return axiosClient.get(`/admin/order_manager/get_detail/${id}`);
 };
 
+export const getHistoryOrderApi = (id) => {
+  return axiosClient.get(
+    `/admin/group-order-manager/get_history_order_by_group_order/${id}`
+  );
+};
+
 export const addCollaboratorToOrderApi = (id, data) => {
   return axiosClient.post(
     `/admin/group-order-manager/add_collaborator_to_order/${id}?lang=vi`,

@@ -1,4 +1,13 @@
-import { Button, Col, FloatButton, Image, Popconfirm, Row, Table } from "antd";
+import {
+  Button,
+  Col,
+  FloatButton,
+  Image,
+  Popconfirm,
+  Row,
+  Table,
+  Tabs,
+} from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +18,7 @@ import {
   getOrderByGroupOrderApi,
   changeOrderCancelToDoneApi,
   cancelGroupOrderApi,
+  getHistoryOrderApi,
 } from "../../../api/order";
 import userIma from "../../../assets/images/user.png";
 import { formatMoney } from "../../../helper/formatMoney";
@@ -24,6 +34,7 @@ const DetailsOrder = () => {
     date_work_schedule: [{ data: "2023-02-21T00:30:00.000Z" }],
   });
   const [dataList, setDataList] = useState([]);
+  const [dataHistory, setDataHistory] = useState([]);
   const [hideShow, setHideShow] = useState(false);
   const [modal, setModal] = useState(false);
   const [open, setOpen] = useState(false);
@@ -50,6 +61,14 @@ const DetailsOrder = () => {
         errorNotify({
           message: err,
         });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+
+    getHistoryOrderApi(id)
+      .then((res) => {
+        setDataHistory(res?.data);
+      })
+      .catch((err) => {
         dispatch(loadingAction.loadingRequest(false));
       });
   }, [id]);
@@ -361,209 +380,228 @@ const DetailsOrder = () => {
   ];
 
   return (
-    <>
-      {hideShow && (
-        <div className="div-container">
-          <a className="label">Chi tiết công việc</a>
-          <Row>
-            <Col span={16} className="col-left">
-              <a className="label-customer">Khách hàng</a>
-              <div className="div-body">
-                <Image
-                  src={
-                    dataGroup?.id_customer?.avatar
-                      ? dataGroup?.id_customer?.avatar
-                      : userIma
-                  }
-                  className="img-customer"
-                />
+    <div>
+      <>
+        <Tabs defaultActiveKey="1" size="large">
+          <Tabs.TabPane tab="Chi tiết đơn hàng" key="1">
+            <>
+              {hideShow && (
+                <div className="div-container">
+                  <a className="label">Chi tiết công việc</a>
+                  <Row>
+                    <Col span={16} className="col-left">
+                      <a className="label-customer">Khách hàng</a>
+                      <div className="div-body">
+                        <Image
+                          src={
+                            dataGroup?.id_customer?.avatar
+                              ? dataGroup?.id_customer?.avatar
+                              : userIma
+                          }
+                          className="img-customer"
+                        />
 
-                <div className="div-info">
-                  <a className="label-name">
-                    Tên: {dataGroup?.id_customer?.full_name}
-                  </a>
-                  <a className="label-name">
-                    SĐT: {dataGroup?.id_customer?.phone}
-                  </a>
-                  <a className="label-name">
-                    Tuổi:{" "}
-                    {dataGroup?.id_customer?.birthday
-                      ? moment().diff(dataGroup?.id_customer?.birthday, "years")
-                      : "Chưa cập nhật"}
-                  </a>
-                </div>
-              </div>
-            </Col>
-            {dataGroup?.id_collaborator && (
-              <Col span={8} className="col-right">
-                <a className="label-ctv">Cộng tác viên hiện tại</a>
-                <div className="div-body">
-                  <Image
-                    style={{
-                      with: 100,
-                      height: 100,
-                      backgroundColor: "transparent",
-                    }}
-                    src={dataGroup?.id_collaborator?.avatar}
-                    className="img-collaborator"
-                  />
-
-                  <div className="div-info">
-                    <a
-                      className="label-name"
-                      onClick={() => {
-                        if (user?.role !== "support_customer") {
-                          navigate(
-                            "/group-order/manage-order/details-collaborator",
-                            {
-                              state: { id: dataGroup?.id_collaborator?._id },
-                            }
-                          );
-                        }
-                      }}
-                    >
-                      Tên: {dataGroup?.id_collaborator?.full_name}
-                    </a>
-                    <a className="label-name">
-                      SĐT: {dataGroup?.id_collaborator?.phone}
-                    </a>
-                    <a className="label-name">
-                      Tuổi:{" "}
-                      {dataGroup?.id_collaborator?.birthday
-                        ? moment().diff(
-                            dataGroup?.id_collaborator?.birthday,
-                            "years"
-                          )
-                        : "Chưa cập nhật"}
-                    </a>
-                  </div>
-                </div>
-              </Col>
-            )}
-          </Row>
-          <Row>
-            <div className="div-details-service">
-              <a className="label-details">Chi tiết</a>
-              <a className="title">
-                Dịch vụ:{" "}
-                <a className="text-service">
-                  {dataGroup?.type === "schedule"
-                    ? "Giúp việc cố định"
-                    : dataGroup?.type === "loop" && !dataGroup?.is_auto_order
-                    ? "Giúp việc theo giờ"
-                    : dataGroup?.type === "loop" && dataGroup?.is_auto_order
-                    ? "Lặp lại hàng tuần"
-                    : ""}
-                </a>
-              </a>
-              <div className="div-datework">
-                <a className="title">Thời gian: </a>
-                <div className="div-times">
-                  <a>
-                    -Ngày làm:{" "}
-                    {moment(
-                      new Date(dataGroup?.date_work_schedule[0]?.date)
-                    ).format("DD/MM/YYYY")}
-                  </a>
-                  <a>-Giờ làm: {timeWork(dataGroup)}</a>
-                </div>
-              </div>
-              <a className="title">
-                Địa điểm: <a className="text-service">{dataGroup?.address}</a>
-              </a>
-              {dataGroup?.note && (
-                <a className="title">
-                  Ghi chú: <a className="text-service">{dataGroup?.note}</a>
-                </a>
-              )}
-              <div style={{ flexDirection: "row" }}>
-                <a className="title">Dịch vụ thêm: </a>
-                {dataGroup?.service?.optional_service.map((item) => {
-                  return (
-                    <a>
-                      {item?._id === "632148d02bacd0aa8648657c"
-                        ? item?.extend_optional?.map((item) => (
-                            <a>- {item?.title?.vi}</a>
-                          ))
-                        : null}
-                    </a>
-                  );
-                })}
-              </div>
-
-              <a className="title">
-                Thanh toán:{" "}
-                <a className="text-service">
-                  {dataGroup?.payment_method === "cash"
-                    ? "Tiền mặt"
-                    : "G-point"}
-                </a>
-              </a>
-              <div className="div-price-order">
-                <a className="title">Tạm tính:</a>
-                <div className="detail-price">
-                  <div className="div-total">
-                    <a>- Tổng tiền:</a>
-                    <a>{formatMoney(dataGroup?.initial_fee)}</a>
-                  </div>
-                  <div className="div-total">
-                    <a>- Phí nền tảng:</a>
-                    {dataGroup?.service_fee?.map((item) => (
-                      <a>+{formatMoney(item?.fee)}</a>
-                    ))}
-                  </div>
-                  {dataGroup?.service?.optional_service.map((item) => {
-                    return (
-                      <div>
-                        {item?._id === "632148d02bacd0aa8648657c"
-                          ? item?.extend_optional?.map((item) => {
-                              return (
-                                <div className="div-event-promo">
-                                  <a>- {item?.title?.vi}</a>
-                                  <a> +{formatMoney(item?.price)}</a>
-                                </div>
-                              );
-                            })
-                          : null}
+                        <div className="div-info">
+                          <a className="label-name">
+                            Tên: {dataGroup?.id_customer?.full_name}
+                          </a>
+                          <a className="label-name">
+                            SĐT: {dataGroup?.id_customer?.phone}
+                          </a>
+                          <a className="label-name">
+                            Tuổi:{" "}
+                            {dataGroup?.id_customer?.birthday
+                              ? moment().diff(
+                                  dataGroup?.id_customer?.birthday,
+                                  "years"
+                                )
+                              : "Chưa cập nhật"}
+                          </a>
+                        </div>
                       </div>
-                    );
-                  })}
+                    </Col>
+                    {dataGroup?.id_collaborator && (
+                      <Col span={8} className="col-right">
+                        <a className="label-ctv">Cộng tác viên hiện tại</a>
+                        <div className="div-body">
+                          <Image
+                            style={{
+                              with: 100,
+                              height: 100,
+                              backgroundColor: "transparent",
+                            }}
+                            src={dataGroup?.id_collaborator?.avatar}
+                            className="img-collaborator"
+                          />
 
-                  <div className="div-total-promo">
-                    <a>- Khuyến mãi:</a>
-                    {dataGroup?.code_promotion && (
-                      <div className="div-promo">
-                        <a>+ Mã code: {dataGroup?.code_promotion?.code}</a>
-                        <a style={{ color: "red", marginLeft: 5 }}>
-                          {formatMoney(-dataGroup?.code_promotion?.discount)}
-                        </a>
-                      </div>
+                          <div className="div-info">
+                            <a
+                              className="label-name"
+                              onClick={() => {
+                                if (user?.role !== "support_customer") {
+                                  navigate(
+                                    "/group-order/manage-order/details-collaborator",
+                                    {
+                                      state: {
+                                        id: dataGroup?.id_collaborator?._id,
+                                      },
+                                    }
+                                  );
+                                }
+                              }}
+                            >
+                              Tên: {dataGroup?.id_collaborator?.full_name}
+                            </a>
+                            <a className="label-name">
+                              SĐT: {dataGroup?.id_collaborator?.phone}
+                            </a>
+                            <a className="label-name">
+                              Tuổi:{" "}
+                              {dataGroup?.id_collaborator?.birthday
+                                ? moment().diff(
+                                    dataGroup?.id_collaborator?.birthday,
+                                    "years"
+                                  )
+                                : "Chưa cập nhật"}
+                            </a>
+                          </div>
+                        </div>
+                      </Col>
                     )}
-                  </div>
-
-                  {dataGroup?.event_promotion && (
-                    <div className="div-event-promo">
-                      <a>- Chương trình:</a>
-                      <div className="div-price-event">
-                        {dataGroup?.event_promotion.map((item, key) => {
+                  </Row>
+                  <Row>
+                    <div className="div-details-service">
+                      <a className="label-details">Chi tiết</a>
+                      <a className="title">
+                        Dịch vụ:{" "}
+                        <a className="text-service">
+                          {dataGroup?.type === "schedule"
+                            ? "Giúp việc cố định"
+                            : dataGroup?.type === "loop" &&
+                              !dataGroup?.is_auto_order
+                            ? "Giúp việc theo giờ"
+                            : dataGroup?.type === "loop" &&
+                              dataGroup?.is_auto_order
+                            ? "Lặp lại hàng tuần"
+                            : ""}
+                        </a>
+                      </a>
+                      <div className="div-datework">
+                        <a className="title">Thời gian: </a>
+                        <div className="div-times">
+                          <a>
+                            -Ngày làm:{" "}
+                            {moment(
+                              new Date(dataGroup?.date_work_schedule[0]?.date)
+                            ).format("DD/MM/YYYY")}
+                          </a>
+                          <a>-Giờ làm: {timeWork(dataGroup)}</a>
+                        </div>
+                      </div>
+                      <a className="title">
+                        Địa điểm:{" "}
+                        <a className="text-service">{dataGroup?.address}</a>
+                      </a>
+                      {dataGroup?.note && (
+                        <a className="title">
+                          Ghi chú:{" "}
+                          <a className="text-service">{dataGroup?.note}</a>
+                        </a>
+                      )}
+                      <div style={{ flexDirection: "row" }}>
+                        <a className="title">Dịch vụ thêm: </a>
+                        {dataGroup?.service?.optional_service.map((item) => {
                           return (
-                            <a className="text-event-discount">
-                              {formatMoney(-item?.discount)}
+                            <a>
+                              {item?._id === "632148d02bacd0aa8648657c"
+                                ? item?.extend_optional?.map((item) => (
+                                    <a>- {item?.title?.vi}</a>
+                                  ))
+                                : null}
                             </a>
                           );
                         })}
                       </div>
-                    </div>
-                  )}
 
-                  <div className="div-total">
-                    <a className="title">- Giá: </a>
-                    <a className="title">{formatMoney(dataGroup?.final_fee)}</a>
-                  </div>
-                </div>
-              </div>
+                      <a className="title">
+                        Thanh toán:{" "}
+                        <a className="text-service">
+                          {dataGroup?.payment_method === "cash"
+                            ? "Tiền mặt"
+                            : "G-point"}
+                        </a>
+                      </a>
+                      <div className="div-price-order">
+                        <a className="title">Tạm tính:</a>
+                        <div className="detail-price">
+                          <div className="div-total">
+                            <a>- Tổng tiền:</a>
+                            <a>{formatMoney(dataGroup?.initial_fee)}</a>
+                          </div>
+                          <div className="div-total">
+                            <a>- Phí nền tảng:</a>
+                            {dataGroup?.service_fee?.map((item) => (
+                              <a>+{formatMoney(item?.fee)}</a>
+                            ))}
+                          </div>
+                          {dataGroup?.service?.optional_service.map((item) => {
+                            return (
+                              <div>
+                                {item?._id === "632148d02bacd0aa8648657c"
+                                  ? item?.extend_optional?.map((item) => {
+                                      return (
+                                        <div className="div-event-promo">
+                                          <a>- {item?.title?.vi}</a>
+                                          <a> +{formatMoney(item?.price)}</a>
+                                        </div>
+                                      );
+                                    })
+                                  : null}
+                              </div>
+                            );
+                          })}
 
-              {/* <a className="title">
+                          <div className="div-total-promo">
+                            <a>- Khuyến mãi:</a>
+                            {dataGroup?.code_promotion && (
+                              <div className="div-promo">
+                                <a>
+                                  + Mã code: {dataGroup?.code_promotion?.code}
+                                </a>
+                                <a style={{ color: "red", marginLeft: 5 }}>
+                                  {formatMoney(
+                                    -dataGroup?.code_promotion?.discount
+                                  )}
+                                </a>
+                              </div>
+                            )}
+                          </div>
+
+                          {dataGroup?.event_promotion && (
+                            <div className="div-event-promo">
+                              <a>- Chương trình:</a>
+                              <div className="div-price-event">
+                                {dataGroup?.event_promotion.map((item, key) => {
+                                  return (
+                                    <a className="text-event-discount">
+                                      {formatMoney(-item?.discount)}
+                                    </a>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+
+                          <div className="div-total">
+                            <a className="title">- Giá: </a>
+                            <a className="title">
+                              {formatMoney(dataGroup?.final_fee)}
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* <a className="title">
                 Trạng thái:{" "}
                 {dataGroup?.status === "pending" ? (
                   <a className="text-pending ">Đang chờ làm</a>
@@ -577,54 +615,171 @@ const DetailsOrder = () => {
                   <a className="text-cancel">Đã huỷ</a>
                 )}
               </a> */}
-            </div>
-          </Row>
-          {user?.role !== "support_customer" &&
-            dataGroup?.type === "schedule" && (
-              <div>
-                {dataGroup?.status === "pending" ||
-                dataGroup?.status === "confirm" ? (
-                  <Popconfirm
-                    title="Bạn có muốn huỷ việc"
-                    // description="Open Popconfirm with async logic"
-                    open={open}
-                    onConfirm={() => handleOk(dataGroup?._id)}
-                    okButtonProps={{
-                      loading: confirmLoading,
-                    }}
-                    onCancel={handleCancel}
-                  >
-                    <Button className="btn-cancel" onClick={showPopconfirm}>
-                      Huỷ việc
-                    </Button>
-                  </Popconfirm>
-                ) : null}
+                    </div>
+                  </Row>
+                  {user?.role !== "support_customer" &&
+                    dataGroup?.type === "schedule" && (
+                      <div>
+                        {dataGroup?.status === "pending" ||
+                        dataGroup?.status === "confirm" ? (
+                          <Popconfirm
+                            title="Bạn có muốn huỷ việc"
+                            // description="Open Popconfirm with async logic"
+                            open={open}
+                            onConfirm={() => handleOk(dataGroup?._id)}
+                            okButtonProps={{
+                              loading: confirmLoading,
+                            }}
+                            onCancel={handleCancel}
+                          >
+                            <Button
+                              className="btn-cancel"
+                              onClick={showPopconfirm}
+                            >
+                              Huỷ việc
+                            </Button>
+                          </Popconfirm>
+                        ) : null}
+                      </div>
+                    )}
+
+                  <div className="mt-3">
+                    <Table
+                      columns={columns}
+                      dataSource={dataList}
+                      pagination={false}
+                      onRow={(record, rowIndex) => {
+                        return {
+                          onClick: (event) => {
+                            setRowIndex(rowIndex);
+                          },
+                        };
+                      }}
+                    />
+                  </div>
+
+                  <FloatButton.BackTop />
+                </div>
+              )}
+            </>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Hoạt động đơn hàng" key="2">
+            <div>
+              <div className="mt-3">
+                {dataHistory?.map((item, index) => {
+                  const money = item?.value?.toString();
+                  const subject = item?.id_admin_action
+                    ? item?.title_admin.replace(
+                        item?.id_admin_action?._id,
+                        item?.id_admin_action?.full_name
+                      )
+                    : item?.id_collaborator
+                    ? item?.title_admin.replace(
+                        item?.id_collaborator?._id,
+                        item?.id_collaborator?.full_name
+                      )
+                    : item?.id_customer
+                    ? item?.title_admin.replace(
+                        item?.id_customer?._id,
+                        item?.id_customer?.full_name
+                      )
+                    : "";
+
+                  const predicate = item?.id_address
+                    ? subject.replace(item?.id_address, item?.value_string)
+                    : item?.id_order
+                    ? subject.replace(
+                        item?.id_order?._id,
+                        item?.id_order?.id_view
+                      )
+                    : item?.id_promotion
+                    ? subject.replace(
+                        item?.id_promotion?._id,
+                        item?.id_promotion?.title?.vi
+                      )
+                    : item?.id_collaborator
+                    ? subject.replace(
+                        item?.id_collaborator?._id,
+                        item?.id_collaborator?.full_name
+                      )
+                    : item?.id_customer
+                    ? subject.replace(
+                        item?.id_customer?._id,
+                        item?.id_customer?.full_name
+                      )
+                    : item?.id_admin_action
+                    ? subject.replace(
+                        item?.id_admin_action?._id,
+                        item?.id_admin_action?.full_name
+                      )
+                    : item?.id_transistion_collaborator
+                    ? subject.replace(
+                        item?.id_transistion_collaborator?._id,
+                        item?.id_transistion_collaborator?.transfer_note
+                      )
+                    : item?.id_transistion_customer
+                    ? subject.replace(
+                        item?.id_transistion_customer?._id,
+                        item?.id_transistion_customer?.transfer_note
+                      )
+                    : "";
+
+                  const object = item?.id_order
+                    ? predicate.replace(
+                        item?.id_order?._id,
+                        item?.id_order?.id_view
+                      )
+                    : item?.id_transistion_collaborator
+                    ? predicate.replace(
+                        item?.id_transistion_collaborator?._id,
+                        item?.id_transistion_collaborator?.transfer_note
+                      )
+                    : item?.id_transistion_customer
+                    ? predicate.replace(
+                        item?.id_transistion_customer?._id,
+                        item?.id_transistion_customer?.transfer_note
+                      )
+                    : predicate.replace(
+                        item?.id_reason_cancel?._id,
+                        item?.id_reason_cancel?.title?.vi
+                      );
+                  return (
+                    <div
+                      key={index}
+                      className="div-item-list-activity-detail-order"
+                    >
+                      <div className="div-name">
+                        <a className="text-title">{object}</a>
+                        {item?.type !== "customer_collect_points_order" && (
+                          <a
+                            className={
+                              money.slice(0, 1) === "-"
+                                ? "text-money-deduction"
+                                : "text-money-plus"
+                            }
+                          >
+                            {item?.value === 0
+                              ? ""
+                              : money.slice(0, 1) === "-"
+                              ? formatMoney(item?.value)
+                              : "+" + formatMoney(item?.value)}
+                          </a>
+                        )}
+                      </div>
+                      <a className="text-date">
+                        {moment(new Date(item?.date_create)).format(
+                          "DD/MM/yyy - HH:mm"
+                        )}
+                      </a>
+                    </div>
+                  );
+                })}
               </div>
-            )}
-
-          <div className="mt-3">
-            <Table
-              columns={columns}
-              dataSource={dataList}
-              pagination={false}
-              onRow={(record, rowIndex) => {
-                return {
-                  onClick: (event) => {
-                    setRowIndex(rowIndex);
-                  },
-                };
-              }}
-            />
-          </div>
-
-          <div className="mt-3">
-            <a className="label-activity-detail-order">Hoạt động đơn hàng</a>
-          </div>
-
-          <FloatButton.BackTop />
-        </div>
-      )}
-    </>
+            </div>
+          </Tabs.TabPane>
+        </Tabs>
+      </>
+    </div>
   );
 };
 
