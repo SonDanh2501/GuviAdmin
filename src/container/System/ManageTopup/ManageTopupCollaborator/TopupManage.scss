@@ -255,3 +255,16 @@
     text-decoration: none;
   }
 }
+
+@media screen and (max-width: 1440px) {
+  .text-description-topup {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+    display: block;
+    width: 150px !important;
+  }
+}

@@ -169,11 +169,15 @@ const ReportManager = () => {
             <div className="div-title-report">
               <a style={{ textAlign: "center" }}>Số ca</a>
             </div>
-            <div className="div-top"></div>
+            <a className="text-money-title">
+              {totalColumn?.total_order > 0 ? totalColumn?.total_order : 0}
+            </a>
           </div>
         );
       },
-      dataIndex: "total_order",
+      render: (data) => {
+        return <a className="text-money">{data?.total_order}</a>;
+      },
       align: "center",
     },
     {

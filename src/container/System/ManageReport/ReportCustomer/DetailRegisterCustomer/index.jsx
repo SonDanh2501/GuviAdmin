@@ -3,6 +3,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getTotalDetailCustomerDay } from "../../../../../api/report";
+import "./index.scss";
 
 const DetailRegisterCustomer = () => {
   const { state } = useLocation();
@@ -77,7 +78,7 @@ const DetailRegisterCustomer = () => {
                 className="img_customer"
                 src={data?.avatar ? data?.avatar : user}
               /> */}
-            <a className="text-name"> {data?.full_name}</a>
+            <a className="text-name-report-customer"> {data?.full_name}</a>
           </div>
         );
       },

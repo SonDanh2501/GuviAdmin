@@ -220,7 +220,7 @@ export default function OrderManage(props) {
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
-            <a className="text-address-order">Đang tìm kiếm</a>
+            <a className="text-name-customer ">Đang tìm kiếm</a>
           ) : (
             <div
               onClick={() => {

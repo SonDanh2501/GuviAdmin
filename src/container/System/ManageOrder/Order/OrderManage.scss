@@ -71,7 +71,7 @@
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 16px;
   color: #000000;
 }
@@ -80,7 +80,7 @@
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 16px;
   color: #000000;
 }
@@ -160,5 +160,17 @@
     font-weight: 400;
     font-size: 12px;
     color: #000000 !important;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .text-address-order {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: black;
+    display: block;
+    width: 150px;
   }
 }
