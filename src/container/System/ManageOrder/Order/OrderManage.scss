@@ -54,10 +54,8 @@
   font-weight: 400;
   font-size: 12px;
   color: black;
-  width: 150px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  display: block;
+  width: 250px;
 }
 .text-collaborator {
   font-family: "Roboto";

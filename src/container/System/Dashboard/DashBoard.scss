@@ -603,16 +603,14 @@
     line-height: 16px;
     color: #00cf3a;
   }
-  .text-address {
+  .text-address-dashboard {
     font-family: "Roboto";
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
     color: black;
-    width: 200px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    display: block;
+    width: 270px;
   }
 
   .text-service {
