@@ -44,6 +44,7 @@ export default function TopupManage() {
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [totalExpenditure, setTotalExpenditure] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(0);
   const listCollaborators = useSelector(getTopupCTV);
   const totalCollaborators = useSelector(totalTopupCTV);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -75,90 +76,99 @@ export default function TopupManage() {
     );
   }, [dispatch]);
 
-  const onDelete = useCallback((id) => {
-    dispatch(loadingAction.loadingRequest(true));
-    deleteMoneyCollaboratorApi(id, { is_delete: true })
-      .then((res) => {
-        dispatch(
-          getTopupCollaborator.getTopupCollaboratorRequest({
-            start: 0,
-            length: 20,
-          })
-        );
-        dispatch(
-          getRevenueCollaborator.getRevenueCollaboratorRequest({
-            startDate: moment().startOf("year").toISOString(),
-            endDate: moment(new Date()).toISOString(),
-          })
-        );
-        setModal(false);
-        dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
+  const onDelete = useCallback(
+    (id) => {
+      dispatch(loadingAction.loadingRequest(true));
+      deleteMoneyCollaboratorApi(id, { is_delete: true })
+        .then((res) => {
+          dispatch(
+            getTopupCollaborator.getTopupCollaboratorRequest({
+              start: startPage,
+              length: 20,
+            })
+          );
+          dispatch(
+            getRevenueCollaborator.getRevenueCollaboratorRequest({
+              startDate: moment().startOf("year").toISOString(),
+              endDate: moment(new Date()).toISOString(),
+            })
+          );
+          setModal(false);
+          dispatch(loadingAction.loadingRequest(false));
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          setModalConfirm(false);
+          dispatch(loadingAction.loadingRequest(false));
         });
-        setModalConfirm(false);
-        dispatch(loadingAction.loadingRequest(false));
-      });
-  }, []);
+    },
+    [startPage]
+  );
 
-  const onConfirm = useCallback((id) => {
-    dispatch(loadingAction.loadingRequest(true));
-    verifyMoneyCollaboratorApi(id, { is_verify_money: true })
-      .then((res) => {
-        dispatch(
-          getTopupCollaborator.getTopupCollaboratorRequest({
-            start: 0,
-            length: 20,
-          })
-        );
-        dispatch(
-          getRevenueCollaborator.getRevenueCollaboratorRequest({
-            startDate: moment().startOf("year").toISOString(),
-            endDate: moment(new Date()).toISOString(),
-          })
-        );
-        setModalConfirm(false);
-        successNotify({
-          message: "Duyệt lệnh cho cộng tác viên thành công",
+  const onConfirm = useCallback(
+    (id) => {
+      dispatch(loadingAction.loadingRequest(true));
+      verifyMoneyCollaboratorApi(id, { is_verify_money: true })
+        .then((res) => {
+          dispatch(
+            getTopupCollaborator.getTopupCollaboratorRequest({
+              start: startPage,
+              length: 20,
+            })
+          );
+          dispatch(
+            getRevenueCollaborator.getRevenueCollaboratorRequest({
+              startDate: moment().startOf("year").toISOString(),
+              endDate: moment(new Date()).toISOString(),
+            })
+          );
+          setModalConfirm(false);
+          successNotify({
+            message: "Duyệt lệnh cho cộng tác viên thành công",
+          });
+          dispatch(loadingAction.loadingRequest(false));
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          setModalConfirm(false);
+          dispatch(loadingAction.loadingRequest(false));
         });
-        dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
-        });
-        setModalConfirm(false);
-        dispatch(loadingAction.loadingRequest(false));
-      });
-  }, []);
+    },
+    [startPage]
+  );
 
-  const onCancel = useCallback((id) => {
-    dispatch(loadingAction.loadingRequest(true));
-    cancelMoneyCollaboratorApi(id)
-      .then((res) => {
-        dispatch(
-          getTopupCollaborator.getTopupCollaboratorRequest({
-            start: 0,
-            length: 20,
-          })
-        );
-        setModalCancel(false);
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
+  const onCancel = useCallback(
+    (id) => {
+      dispatch(loadingAction.loadingRequest(true));
+      cancelMoneyCollaboratorApi(id)
+        .then((res) => {
+          dispatch(
+            getTopupCollaborator.getTopupCollaboratorRequest({
+              start: startPage,
+              length: 20,
+            })
+          );
+          setModalCancel(false);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
         });
-        dispatch(loadingAction.loadingRequest(false));
-      });
-  }, []);
+    },
+    [startPage]
+  );
 
   const handleSearch = useCallback(
     _debounce((value) => {
       setIsLoading(true);
       setValueSearch(value);
-      searchTopupCollaboratorApi(value, 0, 20)
+      searchTopupCollaboratorApi(value, startPage, 20)
         .then((res) => {
           setDataFilter(res.data);
           setTotalFilter(res.totalItem);
@@ -168,7 +178,7 @@ export default function TopupManage() {
           setIsLoading(false);
         });
     }, 1000),
-    []
+    [startPage]
   );
 
   const onChange = (page) => {
@@ -177,6 +187,9 @@ export default function TopupManage() {
       dataFilter.length > 0
         ? page * dataFilter.length - dataFilter.length
         : page * listCollaborators.length - listCollaborators.length;
+
+    setStartPage(start);
+
     dataFilter.length > 0
       ? searchTopupCollaboratorApi(valueSearch, 0, 20)
           .then((res) => {

@@ -28,6 +28,7 @@ export default function UserManage(props) {
   const [valueFilter, setValueFilter] = useState("");
   const [hidePhone, setHidePhone] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(0);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [rowIndex, setRowIndex] = useState();
   const [itemEdit, setItemEdit] = useState([]);
@@ -50,7 +51,7 @@ export default function UserManage(props) {
         .then((res) => {
           dispatch(
             getCustomers.getCustomersRequest({
-              start: 0,
+              start: startPage,
               length: 20,
               type: status,
             })
@@ -65,38 +66,54 @@ export default function UserManage(props) {
           dispatch(loadingAction.loadingRequest(false));
         });
     },
-    [status]
+    [status, startPage]
   );
 
-  const blockCustomer = useCallback((id, is_active) => {
-    dispatch(loadingAction.loadingRequest(true));
-    if (is_active === true) {
-      activeCustomer(id, { is_active: false })
-        .then((res) => {
-          setModalBlock(!modalBlock);
-          window.location.reload();
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
+  const blockCustomer = useCallback(
+    (id, is_active) => {
+      dispatch(loadingAction.loadingRequest(true));
+      if (is_active === true) {
+        activeCustomer(id, { is_active: false })
+          .then((res) => {
+            setModalBlock(!modalBlock);
+            dispatch(
+              getCustomers.getCustomersRequest({
+                start: startPage,
+                length: 20,
+                type: status,
+              })
+            );
+            dispatch(loadingAction.loadingRequest(false));
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            dispatch(loadingAction.loadingRequest(false));
           });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    } else {
-      activeCustomer(id, { is_active: true })
-        .then((res) => {
-          setModalBlock(!modalBlock);
-
-          window.location.reload();
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
+      } else {
+        activeCustomer(id, { is_active: true })
+          .then((res) => {
+            setModalBlock(!modalBlock);
+            dispatch(loadingAction.loadingRequest(false));
+            dispatch(
+              getCustomers.getCustomersRequest({
+                start: startPage,
+                length: 20,
+                type: status,
+              })
+            );
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            dispatch(loadingAction.loadingRequest(false));
           });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    }
-  }, []);
+      }
+    },
+    [startPage, status]
+  );
 
   const onChange = (page) => {
     setCurrentPage(page);
@@ -105,6 +122,9 @@ export default function UserManage(props) {
       dataFilter.length > 0
         ? page * dataFilter.length - dataFilter.length
         : page * data.length - data.length;
+
+    setStartPage(start);
+
     dataFilter.length > 0
       ? searchCustomers(start, 20, status, valueFilter)
           .then((res) => {

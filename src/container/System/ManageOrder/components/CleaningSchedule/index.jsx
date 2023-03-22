@@ -770,6 +770,7 @@ const CleaningSchedule = (props) => {
         </div>
         {priceOrder && (
           <div className="div-total mt-3">
+            <a>Số buổi: {selectDay.length}</a>
             <a>Tạm tính: {formatMoney(priceOrder)}</a>
             <a>Phí nền tảng: {formatMoney(feeService)}</a>
             {eventPromotion.map((item, index) => {

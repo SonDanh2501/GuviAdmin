@@ -82,4 +82,12 @@
 .div-time-report {
   display: flex;
   flex-direction: column;
+
+  .text-view-order {
+    color: #000000;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+  }
 }

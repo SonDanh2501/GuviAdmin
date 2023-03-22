@@ -192,15 +192,12 @@
       text-transform: uppercase;
     }
     .text-title-promotion {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-      font-size: 16px;
+      font-size: 12px !important;
       font-family: "Roboto";
-      font-weight: 200;
-      line-height: 16px;
       color: black;
       margin-top: 5px;
+      display: block;
+      width: 190px;
     }
   }
 
@@ -215,6 +212,7 @@
     justify-content: center;
     padding-left: 8px;
     background-color: plum;
+    margin-top: 10px;
 
     .text-code {
       font-size: 18px;
@@ -226,15 +224,12 @@
     }
 
     .text-title-promotion {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-      font-size: 16px;
+      font-size: 12px !important;
       font-family: "Roboto";
-      font-weight: 200;
-      line-height: 16px;
       color: black;
       margin-top: 5px;
+      display: block;
+      width: 190px;
     }
   }
 }
