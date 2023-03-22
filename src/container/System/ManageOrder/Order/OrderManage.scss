@@ -2,8 +2,7 @@
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 13px !important;
   color: black;
 }
 
@@ -45,6 +44,7 @@
     font-size: 12px;
     text-decoration: none;
     color: black;
+    text-transform: capitalize;
   }
 }
 
@@ -67,22 +67,23 @@
   color: #023e8a;
 }
 
-.text-name-customer {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 16px;
-  color: #000000;
-}
-
-.text-phone-customer {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 16px;
-  color: #000000;
+.div-name-order-cutomer {
+  display: flex;
+  flex-direction: column;
+  .text-name-customer {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: #000000;
+  }
+  .text-phone-order-customer {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000;
+  }
 }
 
 .text-pen-order {

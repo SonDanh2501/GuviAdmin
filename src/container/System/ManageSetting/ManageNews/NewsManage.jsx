@@ -155,16 +155,12 @@ export default function NewsManage() {
       render: (data) => (
         <a className="text-title-new">{data?.short_description}</a>
       ),
+      width: "30%",
     },
     {
       title: "Link bài viết",
       render: (data) => {
-        return (
-          <a className="text-title-new">
-            {" "}
-            {data?.url.length > 60 ? data?.url.slice(0, 60) + "..." : data?.url}
-          </a>
-        );
+        return <a className="text-title-new">{data?.url}</a>;
       },
     },
     {

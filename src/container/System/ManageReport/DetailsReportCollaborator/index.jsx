@@ -68,14 +68,14 @@ const DetailReportManager = () => {
       render: (data) => {
         return (
           <div className="div-time-report">
-            <a>{data?.id_view_order} </a>
+            <a className="text-view-order">{data?.id_view_order} </a>
           </div>
         );
       },
     },
     {
       title: "Doanh số",
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">{formatMoney(data?.total_gross_income)}</a>
@@ -100,7 +100,7 @@ const DetailReportManager = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">
@@ -130,7 +130,7 @@ const DetailReportManager = () => {
         );
       },
 
-      align: "right",
+      align: "center",
       render: (data) => {
         return <a className="text-money">{formatMoney(data?.total_income)}</a>;
       },
@@ -153,7 +153,7 @@ const DetailReportManager = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">{formatMoney(data?.total_discount)}</a>
@@ -181,7 +181,7 @@ const DetailReportManager = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">{formatMoney(data?.total_net_income)}</a>
@@ -196,7 +196,7 @@ const DetailReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_serviceFee)}</a>
         );
       },
-      align: "right",
+      align: "center",
     },
     {
       title: () => {
@@ -219,7 +219,7 @@ const DetailReportManager = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">{formatMoney(data?.total_order_fee)}</a>
@@ -246,7 +246,7 @@ const DetailReportManager = () => {
           </div>
         );
       },
-      align: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-money">

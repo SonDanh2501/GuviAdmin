@@ -38,6 +38,7 @@ export default function TopupCustomerManage() {
   const [totalFilter, setTotalFilter] = useState();
   const [valueSearch, setValueSearch] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(0);
   const listCustomer = useSelector(getTopupKH);
   const totalCustomer = useSelector(totalTopupKH);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -61,70 +62,88 @@ export default function TopupCustomerManage() {
     );
   }, [dispatch]);
 
-  const onDelete = useCallback((id) => {
-    dispatch(loadingAction.loadingRequest(true));
-    deleteMoneyCustomerApi(id, { is_delete: true })
-      .then((res) => {
-        dispatch(
-          getTopupCustomer.getTopupCustomerRequest({ start: 0, length: 10 })
-        );
-        setModal(false);
-        dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
+  const onDelete = useCallback(
+    (id) => {
+      dispatch(loadingAction.loadingRequest(true));
+      deleteMoneyCustomerApi(id, { is_delete: true })
+        .then((res) => {
+          dispatch(
+            getTopupCustomer.getTopupCustomerRequest({
+              start: startPage,
+              length: 10,
+            })
+          );
+          setModal(false);
+          dispatch(loadingAction.loadingRequest(false));
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          setModal(false);
+          dispatch(loadingAction.loadingRequest(false));
         });
-        setModal(false);
-        dispatch(loadingAction.loadingRequest(false));
-      });
-  }, []);
+    },
+    [startPage]
+  );
 
-  const onConfirm = useCallback((id) => {
-    dispatch(loadingAction.loadingRequest(true));
-    verifyMoneyCustomerApi(id, { is_verify_money: true })
-      .then((res) => {
-        dispatch(
-          getTopupCustomer.getTopupCustomerRequest({ start: 0, length: 10 })
-        );
-        setModalConfirm(false);
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
+  const onConfirm = useCallback(
+    (id) => {
+      dispatch(loadingAction.loadingRequest(true));
+      verifyMoneyCustomerApi(id, { is_verify_money: true })
+        .then((res) => {
+          dispatch(
+            getTopupCustomer.getTopupCustomerRequest({
+              start: startPage,
+              length: 10,
+            })
+          );
+          setModalConfirm(false);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
         });
-        dispatch(loadingAction.loadingRequest(false));
-      });
-  }, []);
+    },
+    [startPage]
+  );
 
-  const onCancel = useCallback((id) => {
-    dispatch(loadingAction.loadingRequest(true));
-    cancelMoneyCustomerApi(id)
-      .then((res) => {
-        dispatch(
-          getTopupCustomer.getTopupCustomerRequest({ start: 0, length: 10 })
-        );
-        setModalCancel(false);
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
+  const onCancel = useCallback(
+    (id) => {
+      dispatch(loadingAction.loadingRequest(true));
+      cancelMoneyCustomerApi(id)
+        .then((res) => {
+          dispatch(
+            getTopupCustomer.getTopupCustomerRequest({
+              start: startPage,
+              length: 10,
+            })
+          );
+          setModalCancel(false);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
         });
-        dispatch(loadingAction.loadingRequest(false));
-      });
-  }, []);
+    },
+    [startPage]
+  );
 
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueSearch(value);
-      searchTopupCustomerApi(value, 0, 10)
+      searchTopupCustomerApi(value, startPage, 10)
         .then((res) => {
           setDataFilter(res.data);
           setTotalFilter(res.totalItem);
         })
         .catch((err) => console.log(err));
     }, 1000),
-    []
+    [startPage]
   );
 
   const onChange = (page) => {
@@ -133,6 +152,8 @@ export default function TopupCustomerManage() {
       dataFilter.length > 0
         ? page * dataFilter.length - dataFilter.length
         : page * listCustomer.length - listCustomer.length;
+
+    setStartPage(start);
 
     dataFilter.length > 0
       ? searchTopupCustomerApi(valueSearch, 0, 10)

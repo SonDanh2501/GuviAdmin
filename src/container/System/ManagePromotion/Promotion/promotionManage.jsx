@@ -1,6 +1,7 @@
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import {
   Dropdown,
+  Image,
   Input,
   notification,
   Pagination,
@@ -56,6 +57,7 @@ export default function PromotionManage({
   const promotion = useSelector(getPromotionSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(0);
   const [totalSearch, setTotalSearch] = useState("");
   const [valueSearch, setValueSearch] = useState("");
   const [totalFilter, setTotalFilter] = useState("");
@@ -99,7 +101,7 @@ export default function PromotionManage({
         .then((res) => {
           dispatch(
             getPromotion.getPromotionRequest({
-              start: 0,
+              start: startPage,
               length: 10,
               type: type,
               brand: brand,
@@ -117,19 +119,18 @@ export default function PromotionManage({
           dispatch(loadingAction.loadingRequest(false));
         });
     },
-    [type, brand, idService]
+    [type, brand, idService, startPage]
   );
 
   const onActive = useCallback(
     (id, is_active) => {
       dispatch(loadingAction.loadingRequest(true));
-
       if (is_active) {
         activePromotion(id, { is_active: false })
           .then((res) => {
             dispatch(
               getPromotion.getPromotionRequest({
-                start: 0,
+                start: startPage,
                 length: 10,
                 type: type,
                 brand: brand,
@@ -151,7 +152,7 @@ export default function PromotionManage({
           .then((res) => {
             dispatch(
               getPromotion.getPromotionRequest({
-                start: 0,
+                start: startPage,
                 length: 10,
                 type: type,
                 brand: brand,
@@ -170,7 +171,7 @@ export default function PromotionManage({
           });
       }
     },
-    [type, brand, idService]
+    [type, brand, idService, startPage]
   );
 
   const onChange = (page) => {
@@ -181,6 +182,8 @@ export default function PromotionManage({
         : dataFilter.length > 0
         ? page * dataFilter.length - dataFilter.length
         : page * promotion.length - promotion.length;
+
+    setStartPage(startPage);
     dataSearch.length > 0
       ? searchPromotion(
           valueSearch,
@@ -227,7 +230,7 @@ export default function PromotionManage({
       setValueSearch(value);
       setIsLoading(true);
       if (value !== "") {
-        searchPromotion(value, 0, 10, type, brand, idService, exchange)
+        searchPromotion(value, startPage, 10, type, brand, idService, exchange)
           .then((res) => {
             setIsLoading(false);
 
@@ -242,13 +245,13 @@ export default function PromotionManage({
         setDataSearch([]);
       }
     }, 1000),
-    [type, brand, idService]
+    [type, brand, idService, startPage]
   );
 
   const handleChange = (value) => {
     setValueFilter(value);
     setIsLoading(true);
-    filterPromotion(value, 0, 10, type, brand, idService, exchange)
+    filterPromotion(value, startPage, 10, type, brand, idService, exchange)
       .then((res) => {
         setIsLoading(false);
         setDataFilter(res?.data);
@@ -295,16 +298,11 @@ export default function PromotionManage({
             render: (data) => {
               return (
                 <div className="div-img-promotion">
-                  <img
-                    className="img-customer-promotion"
+                  <Image
                     src={data?.thumbnail}
+                    className="img-customer-promotion"
                   />
-                  <a className="text-title-promotion">
-                    {/* {data.title.vi.length > 25
-                      ? data.title.vi.slice(0, 25) + "..."
-                      : data.title.vi} */}
-                    {data.title.vi}
-                  </a>
+                  <a className="text-title-promotion">{data.title.vi}</a>
                 </div>
               );
             },

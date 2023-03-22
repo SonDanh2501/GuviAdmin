@@ -139,7 +139,7 @@ const ReportManager = () => {
         return (
           <div className="div-title-collaborator-id">
             <div className="div-title-report">
-              <a>Cộng tác viên</a>
+              <a className="text-title-column">Cộng tác viên</a>
             </div>
             <div className="div-top"></div>
           </div>
@@ -167,10 +167,10 @@ const ReportManager = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Số ca</a>
+              <a className="text-title-column">Số ca</a>
             </div>
             <a className="text-money-title">
-              {totalColumn?.total_order > 0 ? totalColumn?.total_order : 0}
+              {totalColumn?.total_item > 0 ? totalColumn?.total_item : 0}
             </a>
           </div>
         );
@@ -185,11 +185,11 @@ const ReportManager = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Doanh số</a>
+              <a className="text-title-column">Doanh số</a>
             </div>
             <a className="text-money-title">
-              {totalColumn?.gross_income > 0
-                ? formatMoney(totalColumn?.gross_income)
+              {totalColumn?.total_gross_income > 0
+                ? formatMoney(totalColumn?.total_gross_income)
                 : formatMoney(0)}
             </a>
           </div>
@@ -212,7 +212,7 @@ const ReportManager = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Phí dịch vụ</a>
+              <a className="text-title-column">Phí dịch vụ</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -220,8 +220,8 @@ const ReportManager = () => {
               </Popover>
             </div>
             <a className="text-money-title">
-              {totalColumn?.collabotator_fee > 0
-                ? formatMoney(totalColumn?.collabotator_fee)
+              {totalColumn?.total_collabotator_fee > 0
+                ? formatMoney(totalColumn?.total_collabotator_fee)
                 : formatMoney(0)}
             </a>
           </div>
@@ -248,16 +248,16 @@ const ReportManager = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Doanh thu</a>
+              <a className="text-title-column-blue">Doanh thu</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
                 </Button>
               </Popover>
             </div>
-            <a className="text-money-title">
-              {totalColumn?.income > 0
-                ? formatMoney(totalColumn?.income)
+            <a className="text-money-title-blue">
+              {totalColumn?.total_income > 0
+                ? formatMoney(totalColumn?.total_income)
                 : formatMoney(0)}
             </a>
           </div>
@@ -265,7 +265,9 @@ const ReportManager = () => {
       },
       align: "center",
       render: (data) => {
-        return <a className="text-money">{formatMoney(data?.total_income)}</a>;
+        return (
+          <a className="text-money-blue">{formatMoney(data?.total_income)}</a>
+        );
       },
     },
     {
@@ -278,7 +280,7 @@ const ReportManager = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Giảm giá</a>
+              <a className="text-title-column">Giảm giá</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -286,8 +288,8 @@ const ReportManager = () => {
               </Popover>
             </div>
             <a className="text-money-title">
-              {totalColumn?.discount > 0
-                ? formatMoney(totalColumn?.discount)
+              {totalColumn?.total_discount > 0
+                ? formatMoney(totalColumn?.total_discount)
                 : formatMoney(0)}
             </a>
           </div>
@@ -313,7 +315,7 @@ const ReportManager = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Doanh thu thuần</a>
+              <a className="text-title-column">Doanh thu thuần</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -321,8 +323,8 @@ const ReportManager = () => {
               </Popover>
             </div>
             <a className="text-money-title">
-              {totalColumn?.net_income > 0
-                ? formatMoney(totalColumn?.net_income)
+              {totalColumn?.total_net_income > 0
+                ? formatMoney(totalColumn?.total_net_income)
                 : formatMoney(0)}
             </a>
           </div>
@@ -341,8 +343,8 @@ const ReportManager = () => {
           <div className="div-title-collaborator">
             <a>Phí áp dụng</a>
             <a className="text-money-title">
-              {totalColumn?.serviceFee > 0
-                ? formatMoney(totalColumn?.serviceFee)
+              {totalColumn?.total_service_fee > 0
+                ? formatMoney(totalColumn?.total_service_fee)
                 : formatMoney(0)}
             </a>
           </div>
@@ -368,7 +370,7 @@ const ReportManager = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Tổng hoá đơn</a>
+              <a className="text-title-column">Tổng hoá đơn</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -376,8 +378,8 @@ const ReportManager = () => {
               </Popover>
             </div>
             <a className="text-money-title">
-              {totalColumn?.order_fee > 0
-                ? formatMoney(totalColumn?.order_fee)
+              {totalColumn?.total_order_fee > 0
+                ? formatMoney(totalColumn?.total_order_fee)
                 : formatMoney(0)}
             </a>
           </div>
@@ -402,7 +404,7 @@ const ReportManager = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Lợi nhuận</a>
+              <a className="text-title-column">Lợi nhuận</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -410,8 +412,8 @@ const ReportManager = () => {
               </Popover>
             </div>
             <a className="text-money-title">
-              {totalColumn?.net_income_business > 0
-                ? formatMoney(totalColumn?.net_income_business)
+              {totalColumn?.total_net_income_business > 0
+                ? formatMoney(totalColumn?.total_net_income_business)
                 : formatMoney(0)}
             </a>
           </div>
@@ -438,7 +440,7 @@ const ReportManager = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>% lợi nhuận</a>
+              <a className="text-title-column">% lợi nhuận</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>

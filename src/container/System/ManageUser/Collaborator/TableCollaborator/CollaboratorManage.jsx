@@ -42,6 +42,7 @@ export default function CollaboratorManage(props) {
   const { data, total, status } = props;
   const [dataFilter, setDataFilter] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(0);
   const [totalFilter, setTotalFilter] = useState("");
   const [valueFilter, setValueFilter] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -69,6 +70,7 @@ export default function CollaboratorManage(props) {
       dataFilter.length > 0
         ? page * dataFilter.length - dataFilter.length
         : page * data.length - data.length;
+    setStartPage(start);
     dataFilter.length > 0
       ? searchCollaborators(start, 20, status, valueFilter)
           .then((res) => {
@@ -105,69 +107,75 @@ export default function CollaboratorManage(props) {
     [status]
   );
 
-  const onDelete = useCallback((id) => {
-    dispatch(loadingAction.loadingRequest(true));
-    deleteCollaborator(id, { is_delete: true })
-      .then((res) => {
-        dispatch(
-          getCollaborators.getCollaboratorsRequest({
-            start: 0,
-            length: 20,
-            type: status,
-          })
-        );
-        dispatch(loadingAction.loadingRequest(false));
-        setModal(false);
-      })
-      .catch((err) => {
-        dispatch(loadingAction.loadingRequest(false));
-        errorNotify({
-          message: err,
+  const onDelete = useCallback(
+    (id) => {
+      dispatch(loadingAction.loadingRequest(true));
+      deleteCollaborator(id, { is_delete: true })
+        .then((res) => {
+          dispatch(
+            getCollaborators.getCollaboratorsRequest({
+              start: startPage,
+              length: 20,
+              type: status,
+            })
+          );
+          dispatch(loadingAction.loadingRequest(false));
+          setModal(false);
+        })
+        .catch((err) => {
+          dispatch(loadingAction.loadingRequest(false));
+          errorNotify({
+            message: err,
+          });
         });
-      });
-  }, []);
+    },
+    [startPage, status]
+  );
 
-  const blockCollaborator = useCallback((id, is_active) => {
-    dispatch(loadingAction.loadingRequest(true));
-    if (is_active === true) {
-      activeCollaborator(id, { is_active: false })
-        .then((res) => {
-          dispatch(
-            getCollaborators.getCollaboratorsRequest({
-              start: 0,
-              length: 20,
-              type: status,
-            })
-          );
-          setModalBlock(false);
-        })
-        .catch((err) => {
-          dispatch(loadingAction.loadingRequest(false));
-          errorNotify({
-            message: err,
+  const blockCollaborator = useCallback(
+    (id, is_active) => {
+      dispatch(loadingAction.loadingRequest(true));
+      if (is_active === true) {
+        activeCollaborator(id, { is_active: false })
+          .then((res) => {
+            dispatch(
+              getCollaborators.getCollaboratorsRequest({
+                start: startPage,
+                length: 20,
+                type: status,
+              })
+            );
+            setModalBlock(false);
+          })
+          .catch((err) => {
+            dispatch(loadingAction.loadingRequest(false));
+            errorNotify({
+              message: err,
+            });
           });
-        });
-    } else {
-      activeCollaborator(id, { is_active: true })
-        .then((res) => {
-          dispatch(
-            getCollaborators.getCollaboratorsRequest({
-              start: 0,
-              length: 20,
-              type: status,
-            })
-          );
-          setModalBlock(false);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          dispatch(loadingAction.loadingRequest(false));
-          errorNotify({
-            message: err,
+      } else {
+        activeCollaborator(id, { is_active: true })
+          .then((res) => {
+            dispatch(
+              getCollaborators.getCollaboratorsRequest({
+                start: startPage,
+                length: 20,
+                type: status,
+              })
+            );
+            setModalBlock(false);
+            dispatch(loadingAction.loadingRequest(false));
+          })
+          .catch((err) => {
+            dispatch(loadingAction.loadingRequest(false));
+            errorNotify({
+              message: err,
+            });
           });
-        });
-    }
-  }, []);
+      }
+    },
+    [startPage, status]
+  );
 
   const onLockTimeCollaborator = useCallback(
     (id, is_lock_time) => {
@@ -177,7 +185,7 @@ export default function CollaboratorManage(props) {
           .then((res) => {
             dispatch(
               getCollaborators.getCollaboratorsRequest({
-                start: 0,
+                start: startPage,
                 length: 20,
                 type: status,
               })
@@ -199,7 +207,7 @@ export default function CollaboratorManage(props) {
           .then((res) => {
             dispatch(
               getCollaborators.getCollaboratorsRequest({
-                start: 0,
+                start: startPage,
                 length: 20,
                 type: status,
               })
@@ -215,73 +223,79 @@ export default function CollaboratorManage(props) {
           });
       }
     },
-    [timeValue, dispatch]
+    [timeValue, dispatch, startPage, status]
   );
-  const onVerifyCollaborator = useCallback((id, is_verify) => {
-    dispatch(loadingAction.loadingRequest(true));
-    if (is_verify === true) {
-      verifyCollaborator(id)
-        .then((res) => {
-          dispatch(
-            getCollaborators.getCollaboratorsRequest({
-              start: 0,
-              length: 20,
-              type: status,
-            })
-          );
-          setModalVerify(false);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          dispatch(loadingAction.loadingRequest(false));
-          errorNotify({
-            message: err,
-          });
-        });
-    } else {
-      verifyCollaborator(id)
-        .then((res) => {
-          dispatch(
-            getCollaborators.getCollaboratorsRequest({
-              start: 0,
-              length: 20,
-              type: status,
-            })
-          );
-          setModalVerify(false);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          dispatch(loadingAction.loadingRequest(false));
-          errorNotify({
-            message: err,
-          });
-        });
-    }
-  }, []);
-
-  const onContected = useCallback((id) => {
-    dispatch(loadingAction.loadingRequest(true));
-
-    changeContactedCollaborator(id)
-      .then((res) => {
-        dispatch(
-          getCollaborators.getCollaboratorsRequest({
-            start: 0,
-            length: 20,
-            type: status,
+  const onVerifyCollaborator = useCallback(
+    (id, is_verify) => {
+      dispatch(loadingAction.loadingRequest(true));
+      if (is_verify === true) {
+        verifyCollaborator(id)
+          .then((res) => {
+            dispatch(
+              getCollaborators.getCollaboratorsRequest({
+                start: startPage,
+                length: 20,
+                type: status,
+              })
+            );
+            setModalVerify(false);
+            dispatch(loadingAction.loadingRequest(false));
           })
-        );
-        setModalContected(false);
-        dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => {
-        dispatch(loadingAction.loadingRequest(false));
-        errorNotify({
-          message: err,
+          .catch((err) => {
+            dispatch(loadingAction.loadingRequest(false));
+            errorNotify({
+              message: err,
+            });
+          });
+      } else {
+        verifyCollaborator(id)
+          .then((res) => {
+            dispatch(
+              getCollaborators.getCollaboratorsRequest({
+                start: startPage,
+                length: 20,
+                type: status,
+              })
+            );
+            setModalVerify(false);
+            dispatch(loadingAction.loadingRequest(false));
+          })
+          .catch((err) => {
+            dispatch(loadingAction.loadingRequest(false));
+            errorNotify({
+              message: err,
+            });
+          });
+      }
+    },
+    [startPage, status]
+  );
+
+  const onContected = useCallback(
+    (id) => {
+      dispatch(loadingAction.loadingRequest(true));
+
+      changeContactedCollaborator(id)
+        .then((res) => {
+          dispatch(
+            getCollaborators.getCollaboratorsRequest({
+              start: startPage,
+              length: 20,
+              type: status,
+            })
+          );
+          setModalContected(false);
+          dispatch(loadingAction.loadingRequest(false));
+        })
+        .catch((err) => {
+          dispatch(loadingAction.loadingRequest(false));
+          errorNotify({
+            message: err,
+          });
         });
-      });
-  }, []);
+    },
+    [startPage, status]
+  );
 
   const items = [
     {

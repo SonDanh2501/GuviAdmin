@@ -164,10 +164,12 @@ export default function OrderManage(props) {
                 state: { id: data?.id_customer?._id },
               })
             }
-            className="div-name"
+            className="div-name-order-cutomer"
           >
             <a className="text-name-customer">{data?.id_customer?.full_name}</a>
-            <a className="text-phone-customer">{data?.id_customer?.phone}</a>
+            <a className="text-phone-order-customer">
+              {data?.id_customer?.phone}
+            </a>
           </div>
         );
       },
@@ -197,7 +199,6 @@ export default function OrderManage(props) {
         return (
           <div className="div-worktime-order">
             <a className="text-worktime">
-              {" "}
               {moment(new Date(data?.date_work_schedule[0].date)).format(
                 "DD/MM/YYYY"
               )}

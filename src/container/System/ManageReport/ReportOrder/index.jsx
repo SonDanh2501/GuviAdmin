@@ -63,7 +63,7 @@ const ReportOrder = () => {
         return (
           <div className="div-title-collaborator-id">
             <div className="div-title-report">
-              <a>Mã đơn</a>
+              <a className="text-title-column">Mã đơn</a>
             </div>
             <div className="div-top"></div>
           </div>
@@ -71,7 +71,7 @@ const ReportOrder = () => {
       },
       render: (data) => (
         <a
-          className="text-id "
+          className="text-id-report-order"
           onClick={() =>
             navigate("/details-order", {
               state: { id: data?._id },
@@ -81,13 +81,14 @@ const ReportOrder = () => {
           {data?.id_view}
         </a>
       ),
+      width: "5%",
     },
     {
       title: () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Số ca</a>
+              <a className="text-title-column">Số ca</a>
             </div>
             <a className="text-money-title">
               {dataTotal?.total_item > 0 ? dataTotal?.total_item : 0}
@@ -99,13 +100,14 @@ const ReportOrder = () => {
         return <a className="text-money">1</a>;
       },
       align: "center",
+      width: "5%",
     },
     {
       title: () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Doanh số</a>
+              <a className="text-title-column">Doanh số</a>
             </div>
             <a className="text-money-title">
               {dataTotal?.total_gross_income > 0
@@ -121,6 +123,7 @@ const ReportOrder = () => {
           <a className="text-money">{formatMoney(data?.total_gross_income)}</a>
         );
       },
+      width: "8%",
     },
     {
       title: () => {
@@ -132,7 +135,7 @@ const ReportOrder = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Phí dịch vụ</a>
+              <a className="text-title-column">Phí dịch vụ</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -155,6 +158,7 @@ const ReportOrder = () => {
           </a>
         );
       },
+      width: "10%",
     },
     {
       title: () => {
@@ -168,14 +172,14 @@ const ReportOrder = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Doanh thu</a>
+              <a className="text-title-column-blue">Doanh thu</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
                 </Button>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <a className="text-money-title-blue">
               {dataTotal?.total_income > 0
                 ? formatMoney(dataTotal?.total_income)
                 : formatMoney(0)}
@@ -185,8 +189,11 @@ const ReportOrder = () => {
       },
       align: "center",
       render: (data) => {
-        return <a className="text-money">{formatMoney(data?.total_income)}</a>;
+        return (
+          <a className="text-money-blue">{formatMoney(data?.total_income)}</a>
+        );
       },
+      width: "8%",
     },
     {
       title: () => {
@@ -198,7 +205,7 @@ const ReportOrder = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Giảm giá</a>
+              <a className="text-title-column">Giảm giá</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -219,6 +226,7 @@ const ReportOrder = () => {
           <a className="text-money">{formatMoney(data?.total_discount)}</a>
         );
       },
+      width: "8%",
     },
     {
       title: () => {
@@ -233,7 +241,7 @@ const ReportOrder = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Doanh thu thuần</a>
+              <a className="text-title-column">Doanh thu thuần</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -254,13 +262,14 @@ const ReportOrder = () => {
           <a className="text-money">{formatMoney(data?.total_net_income)}</a>
         );
       },
+      width: "11%",
     },
     {
       title: () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Phí áp dụng</a>
+              <a className="text-title-column">Phí áp dụng</a>
             </div>
             <a className="text-money-title">
               {dataTotal?.total_service_fee > 0
@@ -276,6 +285,7 @@ const ReportOrder = () => {
         );
       },
       align: "center",
+      width: "7%",
     },
     {
       title: () => {
@@ -290,7 +300,7 @@ const ReportOrder = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Tổng hoá đơn</a>
+              <a className="text-title-column">Tổng hoá đơn</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -311,6 +321,7 @@ const ReportOrder = () => {
           <a className="text-money">{formatMoney(data?.total_order_fee)}</a>
         );
       },
+      width: "10%",
     },
     {
       title: () => {
@@ -324,7 +335,7 @@ const ReportOrder = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>Lợi nhuận</a>
+              <a className="text-title-column">Lợi nhuận</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -347,6 +358,7 @@ const ReportOrder = () => {
           </a>
         );
       },
+      width: "8%",
     },
     {
       title: () => {
@@ -358,9 +370,9 @@ const ReportOrder = () => {
           </div>
         );
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-order-report">
             <div className="div-title-report">
-              <a style={{ textAlign: "center" }}>% lợi nhuận</a>
+              <a className="text-title-column">% lợi nhuận</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
