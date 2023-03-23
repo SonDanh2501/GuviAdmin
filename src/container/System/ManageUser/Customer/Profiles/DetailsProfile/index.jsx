@@ -112,173 +112,123 @@ const DetailsProfile = ({ id }) => {
   const age = moment().diff(data?.birthday, "years");
 
   return (
-    <div className="mt-2">
-      {/* Page content */}
-      <Container className="mt-7" fluid>
-        <Row>
-          <Col className="order-xl-2 mb-5 mb-xl-0 " xl="4">
-            <div className="text-center">
-              <Image
-                style={{ width: 100, height: 100, alignSelf: "center" }}
-                src={data?.avatar ? data?.avatar : user}
-              />
-              <h3 className="mt-5">
+    <>
+      <div className="div-profile-customer">
+        <div className="div-infomation-name">
+          <div className="div-image-customer">
+            <Image
+              style={{ width: 100, height: 100, alignSelf: "center" }}
+              src={data?.avatar ? data?.avatar : user}
+            />
+            <div className="div-name">
+              <a className="text-name">
                 {data?.full_name}{" "}
-                <span className="font-weight-light">
-                  {!data.birthday ? "" : "-" + age + "tuổi"}
-                </span>
-              </h3>
+                <a>{!data.birthday ? "" : "-" + age + "tuổi"}</a>
+              </a>
               <a className="text-invite">Mã giới thiệu: {data?.invite_code}</a>
             </div>
-            <div className="row-heading">
-              <div className="col-heading">
-                <span className="heading">{formatMoney(data?.pay_point)}</span>
-                <span className="description">G-pay</span>
+          </div>
+          <div className="div-row-heading">
+            <div className="col-heading">
+              <span className="heading">{formatMoney(data?.pay_point)}</span>
+              <span className="description">G-pay</span>
+            </div>
+            <div className="col-heading">
+              <span className="heading">{rank}</span>
+              <span className="description">Hạng thành viên</span>
+            </div>
+            <div className="col-heading">
+              <span className="heading">{formatMoney(data?.total_price)}</span>
+              <span className="description">Total Price</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-5 div-infomation">
+          <h3 className="">Thông tin</h3>
+
+          <div className="div-detail-infomation">
+            <div className="div-left">
+              <FormGroup>
+                <label className="form-control-label" htmlFor="input-email">
+                  Họ tên
+                </label>
+                <Input
+                  className="input"
+                  id="input-email"
+                  type="email"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </FormGroup>
+
+              <div className="div-select">
+                <a>Giới tính</a>
+                <Input
+                  className="input-select-gender"
+                  type="select"
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                >
+                  <>
+                    <option value={"other"}>Khác</option>
+                    <option value={"male"}>Nam</option>
+                    <option value={"female"}>Nữ</option>
+                  </>
+                </Input>
               </div>
-              <div className="col-heading">
-                <span className="heading">{rank}</span>
-                <span className="description">Hạng thành viên</span>
-              </div>
-              <div className="col-heading">
-                <span className="heading">
-                  {formatMoney(data?.total_price)}
-                </span>
-                <span className="description">Total Price</span>
+
+              <div className="mt-3">
+                <label className="form-control-label" htmlFor="input-last-name">
+                  Số điện thoại
+                </label>
+                <Input
+                  className="input"
+                  id="input-last-name"
+                  type="text"
+                  value={data?.phone}
+                  disabled={true}
+                />
               </div>
             </div>
-          </Col>
-          <Col className="order-xl-1" xl="8">
-            <div className="pl-lg-4">
-              <h3 className="">Thông tin</h3>
-              <Col lg="6">
-                <Row>
-                  <Col lg="6">
-                    <FormGroup>
-                      <label
-                        className="form-control-label"
-                        htmlFor="input-email"
-                      >
-                        Họ tên
-                      </label>
-                      <Input
-                        className="form-control-alternative"
-                        id="input-email"
-                        type="email"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                      />
-                    </FormGroup>
-
-                    <FormGroup className="div-select">
-                      <label
-                        className="form-control-label"
-                        htmlFor="input-last-name"
-                      >
-                        Giới tính
-                      </label>
-                      <Input
-                        className="input-select"
-                        id="input-last-name"
-                        type="select"
-                        value={gender}
-                        onChange={(e) => setGender(e.target.value)}
-                      >
-                        <>
-                          <option value={"other"}>Khác</option>
-                          <option value={"male"}>Nam</option>
-                          <option value={"female"}>Nữ</option>
-                        </>
-                      </Input>
-                    </FormGroup>
-
-                    <FormGroup>
-                      <label
-                        className="form-control-label"
-                        htmlFor="input-last-name"
-                      >
-                        Số điện thoại
-                      </label>
-                      <Input
-                        className="form-control-alternative"
-                        id="input-last-name"
-                        type="text"
-                        value={data?.phone}
-                        disabled={true}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col lg="6">
-                    <FormGroup>
-                      <label
-                        className="form-control-label"
-                        htmlFor="input-email"
-                      >
-                        Ngày sinh
-                      </label>
-                      <Input
-                        className="form-control-alternative"
-                        id="input-email"
-                        type="date"
-                        value={birthday}
-                        onChange={(e) => {
-                          setBirthday(e.target.value);
-                        }}
-                      />
-                      <FormGroup className="mt-3">
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-email"
-                        >
-                          Email
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-email"
-                          placeholder="Nhập email"
-                          type="email"
-                          value={mail}
-                          onChange={(e) => setMail(e.target.value)}
-                        />
-                      </FormGroup>
-                    </FormGroup>
-                  </Col>
-                </Row>
-              </Col>
-              <Col lg="6">
-                {/* <h3 className="">Điểm thưởng</h3>
-                <FormGroup>
-                  <label className="form-control-label">Point</label>
+            <div className="div-right">
+              <FormGroup>
+                <label className="form-control-label" htmlFor="input-email">
+                  Ngày sinh
+                </label>
+                <Input
+                  className="input"
+                  id="input-email"
+                  type="date"
+                  value={birthday}
+                  onChange={(e) => {
+                    setBirthday(e.target.value);
+                  }}
+                />
+                <FormGroup className="mt-3">
+                  <label className="form-control-label" htmlFor="input-email">
+                    Email
+                  </label>
                   <Input
-                    className="form-control-alternative"
+                    className="input"
                     id="input-email"
-                    type="number"
-                    placeholder="Nhập số điểm thưởng"
-                    value={point}
-                    onChange={(e) => setPoint(e.target.value)}
+                    placeholder="Nhập email"
+                    type="email"
+                    value={mail}
+                    onChange={(e) => setMail(e.target.value)}
                   />
                 </FormGroup>
-                <FormGroup>
-                  <label className="form-control-label">Rank Point</label>
-                  <Input
-                    className="form-control-alternative"
-                    id="input-email"
-                    type="number"
-                    placeholder="Nhập số điểm thăng hạng"
-                    value={rankPoint}
-                    onChange={(e) => setRankPoint(e.target.value)}
-                  />
-                </FormGroup> */}
-
-                <Button className="btn-update-point" onClick={updateUser}>
-                  Cập nhật
-                </Button>
-              </Col>
+              </FormGroup>
             </div>
-          </Col>
-        </Row>
-      </Container>
+          </div>
+
+          <Button className="btn-update-point" onClick={updateUser}>
+            Cập nhật
+          </Button>
+        </div>
+      </div>
       <FloatButton.BackTop />
-    </div>
+    </>
   );
 };
 

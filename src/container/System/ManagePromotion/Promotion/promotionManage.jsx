@@ -461,7 +461,7 @@ export default function PromotionManage({
                     className="img-customer-promotion"
                     src={data?.thumbnail}
                   /> */}
-                  <a>
+                  <a className="text-title-promotion">
                     {data.title.vi.length > 25
                       ? data.title.vi.slice(0, 25) + "..."
                       : data.title.vi}
@@ -506,7 +506,7 @@ export default function PromotionManage({
                 "DD/MM/YYYY"
               );
               return (
-                <a>
+                <a className="text-time-promotion">
                   {data?.is_limit_date
                     ? startDate + "-" + endDate
                     : "Không có hạn"}

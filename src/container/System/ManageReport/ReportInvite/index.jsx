@@ -100,8 +100,8 @@ const ReportInvite = () => {
   ];
 
   const onChangeDayTop = (start, end) => {
-    const dayStart = moment(start).toISOString();
-    const dayEnd = moment(end).toISOString();
+    const dayStart = moment(start).startOf("date").toISOString();
+    const dayEnd = moment(end).endOf("date").toISOString();
     getTopCustomerInvite(dayStart, dayEnd)
       .then((res) => {
         setDataTop(res);
@@ -110,8 +110,8 @@ const ReportInvite = () => {
   };
 
   const onChangeDay = (start, end) => {
-    const dayStart = moment(start).toISOString();
-    const dayEnd = moment(end).toISOString();
+    const dayStart = moment(start).startOf("date").toISOString();
+    const dayEnd = moment(end).endOf("date").toISOString();
     getReportCustomerInviteDay(0, 20, dayStart, dayEnd)
       .then((res) => {
         setData(res?.data);

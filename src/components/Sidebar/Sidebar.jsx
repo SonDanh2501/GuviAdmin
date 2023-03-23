@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useState } from "react";
 import { getBrand } from "../../redux/actions/brand";
 import logo from "../../assets/images/LogoS.png";
+import home from "../../assets/images/home.svg";
 import "./Sidebar.scss";
 import { Collapse, Input, Nav, NavbarToggler, NavItem } from "reactstrap";
 import { Menu } from "antd";
@@ -43,7 +44,8 @@ const Sidebar = ({ onClick }) => {
               <NavLink to="/">
                 {({ isActive }) => (
                   <div className={isActive ? "active-link" : "unactive-link"}>
-                    <i className="uil uil-estate icon"></i>
+                    {/* <i className="uil uil-estate icon"></i> */}
+                    <img src={home} className="img-icon" />
                     <a className={isActive ? "active-text" : "unactive-text"}>
                       Tổng quan
                     </a>
@@ -132,6 +134,18 @@ const Sidebar = ({ onClick }) => {
                   </NavItem>
                 </Nav>
               </Collapse>
+            </li>
+            <li>
+              <NavLink to="/system/deep-cleaning">
+                {({ isActive }) => (
+                  <div className={isActive ? "active-link" : "unactive-link"}>
+                    <i className="uil uil-user-square icon"></i>
+                    <a className={isActive ? "active-text" : "unactive-text"}>
+                      Yêu cầu dịch vụ
+                    </a>
+                  </div>
+                )}
+              </NavLink>
             </li>
             <li>
               <NavLink to="/system/user-manage">
@@ -472,6 +486,18 @@ const Sidebar = ({ onClick }) => {
               </Collapse>
             </li>
             <li>
+              <NavLink to="/system/deep-cleaning">
+                {({ isActive }) => (
+                  <div className={isActive ? "active-link" : "unactive-link"}>
+                    <i className="uil uil-user-square icon"></i>
+                    <a className={isActive ? "active-text" : "unactive-text"}>
+                      Yêu cầu dịch vụ
+                    </a>
+                  </div>
+                )}
+              </NavLink>
+            </li>
+            <li>
               <NavLink to="/system/user-manage">
                 {({ isActive }) => (
                   <div className={isActive ? "active-link" : "unactive-link"}>
@@ -679,6 +705,18 @@ const Sidebar = ({ onClick }) => {
                   </NavItem>
                 </Nav>
               </Collapse>
+            </li>
+            <li>
+              <NavLink to="/system/deep-cleaning">
+                {({ isActive }) => (
+                  <div className={isActive ? "active-link" : "unactive-link"}>
+                    <i className="uil uil-user-square icon"></i>
+                    <a className={isActive ? "active-text" : "unactive-text"}>
+                      Yêu cầu dịch vụ
+                    </a>
+                  </div>
+                )}
+              </NavLink>
             </li>
             <li>
               <NavLink to="/system/user-manage">

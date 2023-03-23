@@ -730,6 +730,7 @@ const CleaningSchedule = (props) => {
               {dataCollaborator?.map((item, index) => {
                 return (
                   <div
+                    className="div-item-add-order"
                     key={index}
                     onClick={(e) => {
                       setIdCollaborator(item?._id);
@@ -738,6 +739,7 @@ const CleaningSchedule = (props) => {
                       setErrorCollaborator("");
                     }}
                   >
+                    <img src={item?.avatar} className="img-collaborator" />
                     <a>
                       {item?.full_name} - {item?.phone} - {item?.id_view}
                     </a>

@@ -427,8 +427,30 @@ const ReportOrder = () => {
 
   const onChangeFilter = useCallback((start, end) => {
     setIsLoading(true);
-    const dayStart = moment(start).startOf("date").toISOString();
-    const dayEnd = moment(end).endOf("date").toISOString();
+    const dayStart = moment(start)
+      .startOf(
+        type === "month"
+          ? "month"
+          : type === "week"
+          ? "week"
+          : type === "day"
+          ? "date"
+          : "quarter"
+      )
+      .toISOString();
+    const dayEnd = moment(end)
+      .endOf(
+        type === "month"
+          ? "month"
+          : type === "week"
+          ? "week"
+          : type === "day"
+          ? "date"
+          : "quarter"
+      )
+      .toISOString();
+
+    console.log(dayStart);
     getReportOrder(0, 20, dayStart, dayEnd)
       .then((res) => {
         setIsLoading(false);
