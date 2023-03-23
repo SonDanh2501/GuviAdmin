@@ -419,10 +419,10 @@ export default function UserManage(props) {
           {
             title: "Địa Chỉ",
             render: (data) => (
-              <a className="text-address-customer">
+              <a className="text-address-customer-default">
                 {!data?.default_address
                   ? "Chưa có"
-                  : data?.default_address.address}
+                  : data?.default_address?.address}
               </a>
             ),
 

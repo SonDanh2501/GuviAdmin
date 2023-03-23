@@ -40,7 +40,7 @@ import { loadingAction } from "../../../../../redux/actions/loading";
 import "./index.scss";
 
 const CleaningSchedule = (props) => {
-  const { extendService, id, name, setErrorNameCustomer } = props;
+  const { extendService, id, name, setErrorNameCustomer, idService } = props;
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState("");
   const [long, setLong] = useState("");
@@ -85,10 +85,10 @@ const CleaningSchedule = (props) => {
   };
 
   useEffect(() => {
-    getPromotionByCustomerApi(id)
+    getPromotionByCustomerApi(id, 0, 20, idService)
       .then((res) => setPromotionCustomer(res.data))
       .catch((err) => console.log(err));
-  }, [id]);
+  }, [id, idService]);
 
   const months = eachMonthOfInterval({
     start: new Date(),

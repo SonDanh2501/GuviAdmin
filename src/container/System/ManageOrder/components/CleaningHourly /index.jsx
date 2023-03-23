@@ -29,7 +29,14 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import { searchCollaborators } from "../../../../../api/collaborator";
 
 const CleaningHourly = (props) => {
-  const { extendService, addService, id, name, setErrorNameCustomer } = props;
+  const {
+    extendService,
+    addService,
+    id,
+    name,
+    setErrorNameCustomer,
+    idService,
+  } = props;
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState("");
   const [long, setLong] = useState("");
@@ -64,7 +71,7 @@ const CleaningHourly = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getPromotionByCustomerApi(id)
+    getPromotionByCustomerApi(id, 0, 20, idService)
       .then((res) => setPromotionCustomer(res.data))
       .catch((err) => console.log(err));
   }, [id]);

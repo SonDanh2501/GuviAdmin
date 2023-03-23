@@ -74,8 +74,9 @@ const ReportManager = () => {
       ? filterReportCollaborator(start, 20, startDate, endDate)
           .then((res) => {
             setIsLoading(false);
-            setDataFilter(res?.data);
-            setTotalFilter(res?.totalItem);
+            setData(res?.data);
+            setTotal(res?.totalItem);
+            setTotalColumn(res?.total);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -84,8 +85,9 @@ const ReportManager = () => {
       ? searchReportCollaborator(0, 20, valueSearch)
           .then((res) => {
             setIsLoading(false);
-            setDataSearch(res.data);
-            setTotalSearch(res.totalItem);
+            setData(res?.data);
+            setTotal(res?.totalItem);
+            setTotalColumn(res?.total);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -95,6 +97,7 @@ const ReportManager = () => {
             setIsLoading(false);
             setData(res?.data);
             setTotal(res?.totalItem);
+            setTotalColumn(res?.total);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -107,9 +110,10 @@ const ReportManager = () => {
     const dayEnd = moment(end).endOf("date").toISOString();
     filterReportCollaborator(0, 20, dayStart, dayEnd)
       .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+        setTotalColumn(res?.total);
         setIsLoading(false);
-        setDataFilter(res?.data);
-        setTotalFilter(res?.totalItem);
       })
       .catch((err) => console.log(err));
     setStartDate(dayStart);
@@ -122,8 +126,9 @@ const ReportManager = () => {
       setValueSearch(value);
       searchReportCollaborator(0, 20, value)
         .then((res) => {
-          setDataSearch(res.data);
-          setTotalSearch(res.totalItem);
+          setData(res?.data);
+          setTotal(res?.totalItem);
+          setTotalColumn(res?.total);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -498,38 +503,19 @@ const ReportManager = () => {
         <Table
           columns={columns}
           pagination={false}
-          dataSource={
-            dataFilter.length > 0
-              ? dataFilter
-              : dataSearch.length > 0
-              ? dataSearch
-              : data
-          }
-          locale={{
-            emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
-          }}
+          dataSource={data}
+          // locale={{
+          //   emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
+          // }}
         />
       </div>
       <div className="mt-2 div-pagination p-2">
-        <a>
-          Tổng:{" "}
-          {totalFilter > 0
-            ? totalFilter
-            : totalSearch > 0
-            ? totalSearch
-            : total}
-        </a>
+        <a>Tổng: {total}</a>
         <div>
           <Pagination
             current={currentPage}
             onChange={onChange}
-            total={
-              totalFilter > 0
-                ? totalFilter
-                : totalSearch > 0
-                ? totalSearch
-                : total
-            }
+            total={total}
             showSizeChanger={false}
             pageSize={20}
           />

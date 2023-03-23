@@ -70,13 +70,12 @@ const AddOrder = () => {
   const onChangeServiceApply = (e) => {
     setIsLoading(true);
     setAddService([]);
+    setServiceApply(e.target.value);
     getOptionalServiceByServiceApi(e.target.value)
       .then((res) => {
         setOptionalService(res?.data);
       })
       .catch((err) => console.log(err));
-
-    setServiceApply(e.target.value);
   };
 
   const valueSearch = (value) => {
@@ -172,6 +171,7 @@ const AddOrder = () => {
             id={id}
             name={name}
             setErrorNameCustomer={setErrorNameCustomer}
+            idService={serviceApply}
           />
         ) : (
           <CleaningSchedule
@@ -179,6 +179,7 @@ const AddOrder = () => {
             id={id}
             name={name}
             setErrorNameCustomer={setErrorNameCustomer}
+            idService={serviceApply}
           />
         )}
       </div>
