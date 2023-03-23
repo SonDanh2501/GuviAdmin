@@ -39,11 +39,9 @@
   font-size: 12px;
   line-height: 16px;
   color: black;
-  width: 200px !important;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  width: 250px !important;
   text-decoration: none !important;
+  display: block;
 }
 
 .text-id-customer {

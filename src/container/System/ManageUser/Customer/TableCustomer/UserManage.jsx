@@ -422,7 +422,7 @@ export default function UserManage(props) {
               <a className="text-address-customer">
                 {!data?.default_address
                   ? "Chưa có"
-                  : data?.default_address.slice(0, 60) + "..."}
+                  : data?.default_address.address}
               </a>
             ),
 
