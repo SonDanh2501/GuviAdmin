@@ -62,9 +62,9 @@ export const getExtendOptionalByOptionalServiceApi = (id) => {
   );
 };
 
-export const getPromotionByCustomerApi = (id) => {
+export const getPromotionByCustomerApi = (id, start, length, idService) => {
   return axiosClient.get(
-    `/admin/promotion_manager/code_available/${id}?brand=guvi`
+    `/admin/promotion_manager/code_available/${id}?brand=guvi&start=${start}&length=${length}&&id_service=${idService}`
   );
 };
 

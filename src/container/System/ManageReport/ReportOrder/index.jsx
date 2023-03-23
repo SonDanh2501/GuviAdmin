@@ -408,6 +408,7 @@ const ReportOrder = () => {
             setIsLoading(false);
             setData(res?.data);
             setTotal(res?.totalItem);
+            setDataTotal(res?.total[0]);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -417,6 +418,7 @@ const ReportOrder = () => {
             setIsLoading(false);
             setData(res?.data);
             setTotal(res?.totalItem);
+            setDataTotal(res?.total[0]);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -432,6 +434,7 @@ const ReportOrder = () => {
         setIsLoading(false);
         setData(res?.data);
         setTotal(res?.totalItem);
+        setDataTotal(res?.total[0]);
       })
       .catch((err) => console.log(err));
     setStartDate(dayStart);
@@ -492,9 +495,9 @@ const ReportOrder = () => {
           columns={columns}
           pagination={false}
           dataSource={data}
-          locale={{
-            emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
-          }}
+          // locale={{
+          //   emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
+          // }}
         />
       </div>
       <div className="mt-2 div-pagination p-2">
