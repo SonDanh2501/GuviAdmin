@@ -1,0 +1,184 @@
+.div-time-create {
+  display: flex;
+  flex-direction: column;
+
+  .text-date-create {
+    color: #000000;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+  }
+}
+
+.div-customer {
+  display: flex;
+  flex-direction: column;
+
+  .text-name {
+    color: #000000;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+  }
+
+  .text-phone {
+    color: #000000;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+  }
+}
+
+.text-description {
+  color: #000000;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  display: block;
+  width: 200px;
+}
+
+.text-address-cleaning {
+  color: #000000;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  display: block;
+  width: 150px;
+}
+
+.text-contacted {
+  color: #00cf3a;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  display: block;
+  width: 150px;
+}
+
+.text-uncontacted {
+  color: #ff0000;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  display: block;
+  width: 150px;
+}
+
+.div-uncontacted {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .btn-contacted {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    width: 50px;
+    height: 25px;
+    background-color: #00cf3a;
+    border-radius: 6px;
+
+    .text-btn-contacted {
+      color: #000000;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+    }
+  }
+}
+
+.title-header-modal {
+  color: #000000;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.text-body-modal {
+  color: #000000;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+}
+
+.div-btn-change-status {
+  display: flex;
+  flex-direction: column;
+
+  .btn-change-done {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    width: 60px;
+    height: 25px;
+    background-color: #00cf3a;
+
+    .text-change-done {
+      color: #ffffff;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+    }
+  }
+
+  .btn-change-cancel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    width: 60px;
+    height: 25px;
+    background-color: #ff0000;
+    margin-top: 5px;
+
+    .text-change-cancel {
+      color: #ffffff;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+    }
+  }
+}
+
+.text-pending-request {
+  color: #efd10d;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.text-done-request {
+  color: #00cf3a;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.text-cancel-request {
+  color: #ff0000;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  text-decoration: none;
+}

@@ -620,13 +620,13 @@ const CleaningHourly = (props) => {
                       : "select-time-default"
                   }
                   onClick={() => onChangeTime(item.time)}
-                  disabled={
-                    dateWork === dayNow
-                      ? timeNow >= timeChosse
-                        ? true
-                        : false
-                      : false
-                  }
+                  // disabled={
+                  //   dateWork === dayNow
+                  //     ? timeNow >= timeChosse
+                  //       ? true
+                  //       : false
+                  //     : false
+                  // }
                 >
                   {item.title}
                 </Button>
@@ -674,12 +674,14 @@ const CleaningHourly = (props) => {
                 return (
                   <div
                     key={index}
+                    className="div-item-add-order"
                     onClick={(e) => {
                       setIdCollaborator(item?._id);
                       setNameCollaborator(item?.full_name);
                       setDataCollaborator([]);
                     }}
                   >
+                    <img src={item?.avatar} className="img-collaborator" />
                     <a>
                       {item?.full_name} - {item?.phone} - {item?.id_view}
                     </a>

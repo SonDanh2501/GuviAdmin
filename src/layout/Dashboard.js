@@ -12,6 +12,7 @@ import AppCollaborator from "../container/System/ManageConfiguration/ScreenConfi
 import AppCustomer from "../container/System/ManageConfiguration/ScreenConfiguration/AppCustomer";
 import GroupCustomerManage from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer";
 import SettingQrCode from "../container/System/ManageConfiguration/ScreenConfiguration/SettingQrcode";
+import DeepCleaningManager from "../container/System/ManageDeepCleaning";
 import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
 import ManageOrder from "../container/System/ManageOrder";
 import AddOrder from "../container/System/ManageOrder/DrawerAddOrder";
@@ -80,8 +81,11 @@ const Dashboard = () => {
           >
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route
+                path="/system/deep-cleaning"
+                element={<DeepCleaningManager />}
+              />
               <Route path="/details-order" element={<DetailsOrder />} />
-
               <Route
                 path="/details-collaborator"
                 element={<ProfileCollaborator />}
