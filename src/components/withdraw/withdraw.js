@@ -4,7 +4,10 @@ import IntlCurrencyInput from "react-intl-currency-input";
 import { useDispatch } from "react-redux";
 import { Form, Input, Label, List } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
-import { withdrawMoneyCollaboratorApi } from "../../api/topup";
+import {
+  getTopupCollaboratorApi,
+  withdrawMoneyCollaboratorApi,
+} from "../../api/topup";
 import { loadingAction } from "../../redux/actions/loading";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
@@ -17,7 +20,7 @@ import {
 import { errorNotify, successNotify } from "../../helper/toast";
 import moment from "moment";
 
-const Withdraw = () => {
+const Withdraw = ({ type, setDataT, setTotal }) => {
   const [state, setState] = useState(false);
   const [money, setMoney] = useState("");
   const [note, setNote] = useState("");
@@ -68,12 +71,12 @@ const Withdraw = () => {
         transfer_note: note,
       })
         .then((res) => {
-          dispatch(
-            getTopupCollaborator.getTopupCollaboratorRequest({
-              start: 0,
-              length: 20,
+          getTopupCollaboratorApi(0, 20, type)
+            .then((res) => {
+              setDataT(res?.data);
+              setTotal(res?.totalItem);
             })
-          );
+            .catch((err) => {});
           dispatch(
             getRevenueCollaborator.getRevenueCollaboratorRequest({
               startDate: moment().startOf("year").toISOString(),
@@ -93,7 +96,7 @@ const Withdraw = () => {
           dispatch(loadingAction.loadingRequest(false));
         });
     }
-  }, [id, money, note, name]);
+  }, [id, money, note, name, type, setDataT, setTotal]);
 
   const currencyConfig = {
     locale: "vi",

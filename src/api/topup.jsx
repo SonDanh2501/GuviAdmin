@@ -1,14 +1,14 @@
 import axiosClient from "../axios";
 
-export const getTopupCollaboratorApi = (start, length) => {
+export const getTopupCollaboratorApi = (start, length, type) => {
   return axiosClient.get(
-    `/admin/collaborator_manager/get_list_transitions?start=${start}&length=${length}`
+    `/admin/collaborator_manager/get_list_transitions?start=${start}&length=${length}&type_transition=${type}`
   );
 };
 
-export const searchTopupCollaboratorApi = (search, start, length) => {
+export const searchTopupCollaboratorApi = (search, start, length, type) => {
   return axiosClient.get(
-    `/admin/collaborator_manager/get_list_transitions?search=${search}&start=${start}&length=${length}`
+    `/admin/collaborator_manager/get_list_transitions?search=${search}&start=${start}&length=${length}&type_transition=${type}`
   );
 };
 

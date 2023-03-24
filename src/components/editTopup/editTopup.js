@@ -5,7 +5,10 @@ import IntlCurrencyInput from "react-intl-currency-input";
 import { useDispatch } from "react-redux";
 import { Form, Input, Label, List, Modal } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
-import { updateMoneyCollaboratorApi } from "../../api/topup";
+import {
+  getTopupCollaboratorApi,
+  updateMoneyCollaboratorApi,
+} from "../../api/topup";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
 import {
@@ -16,7 +19,7 @@ import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./editTopup.scss";
 
-const EditTopup = ({ state, setState, item }) => {
+const EditTopup = ({ state, setState, item, type, setDataT, setTotal }) => {
   const [money, setMoney] = useState("");
   const [note, setNote] = useState("");
   const [data, setData] = useState([]);
@@ -59,12 +62,12 @@ const EditTopup = ({ state, setState, item }) => {
       transfer_note: note,
     })
       .then((res) => {
-        dispatch(
-          getTopupCollaborator.getTopupCollaboratorRequest({
-            start: 0,
-            length: 20,
+        getTopupCollaboratorApi(0, 20, type)
+          .then((res) => {
+            setDataT(res?.data);
+            setTotal(res?.totalItem);
           })
-        );
+          .catch((err) => {});
         dispatch(
           getRevenueCollaborator.getRevenueCollaboratorRequest({
             startDate: moment().startOf("year").toISOString(),
@@ -80,7 +83,7 @@ const EditTopup = ({ state, setState, item }) => {
         });
         dispatch(loadingAction.loadingRequest(false));
       });
-  }, [id, money, note]);
+  }, [id, money, note, type, setDataT, setTotal]);
 
   const currencyConfig = {
     locale: "vi",

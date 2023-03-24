@@ -117,39 +117,35 @@ const DetailsProfile = ({ id }) => {
         <div className="div-infomation-name">
           <div className="div-image-customer">
             <Image
-              style={{ width: 100, height: 100, alignSelf: "center" }}
+              className="img-avatar"
               src={data?.avatar ? data?.avatar : user}
             />
             <div className="div-name">
-              <a className="text-name">
-                {data?.full_name}{" "}
-                <a>{!data.birthday ? "" : "-" + age + "tuổi"}</a>
-              </a>
+              <a className="text-name">{data?.full_name}</a>
+              {data?.birthday && <a className="text-invite">Tuổi: {age}</a>}
               <a className="text-invite">Mã giới thiệu: {data?.invite_code}</a>
             </div>
           </div>
-          <div className="div-row-heading">
-            <div className="col-heading">
-              <span className="heading">{formatMoney(data?.pay_point)}</span>
-              <span className="description">G-pay</span>
+          <div className="div-rank-pay-member">
+            <div className="div-member">
+              <a className="text-money">{formatMoney(data?.pay_point)}</a>
+              <a className="text-title">G-pay</a>
             </div>
-            <div className="col-heading">
-              <span className="heading">{rank}</span>
-              <span className="description">Hạng thành viên</span>
+            <div className="div-member">
+              <a className="text-money">{rank}</a>
+              <a className="text-title">Hạng thành viên</a>
             </div>
-            <div className="col-heading">
-              <span className="heading">{formatMoney(data?.total_price)}</span>
-              <span className="description">Total Price</span>
+            <div className="div-member">
+              <a className="text-money">{formatMoney(data?.total_price)}</a>
+              <a className="text-title">Total Price</a>
             </div>
           </div>
         </div>
-
         <div className="mt-5 div-infomation">
           <h3 className="">Thông tin</h3>
-
           <div className="div-detail-infomation">
             <div className="div-left">
-              <FormGroup>
+              <div>
                 <label className="form-control-label" htmlFor="input-email">
                   Họ tên
                 </label>
@@ -160,7 +156,7 @@ const DetailsProfile = ({ id }) => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
-              </FormGroup>
+              </div>
 
               <div className="div-select">
                 <a>Giới tính</a>
@@ -192,7 +188,7 @@ const DetailsProfile = ({ id }) => {
               </div>
             </div>
             <div className="div-right">
-              <FormGroup>
+              <div>
                 <label className="form-control-label" htmlFor="input-email">
                   Ngày sinh
                 </label>
@@ -205,23 +201,23 @@ const DetailsProfile = ({ id }) => {
                     setBirthday(e.target.value);
                   }}
                 />
-                <FormGroup className="mt-3">
-                  <label className="form-control-label" htmlFor="input-email">
-                    Email
-                  </label>
-                  <Input
-                    className="input"
-                    id="input-email"
-                    placeholder="Nhập email"
-                    type="email"
-                    value={mail}
-                    onChange={(e) => setMail(e.target.value)}
-                  />
-                </FormGroup>
-              </FormGroup>
+              </div>
+
+              <div className="mt-3">
+                <label className="form-control-label" htmlFor="input-email">
+                  Email
+                </label>
+                <Input
+                  className="input"
+                  id="input-email"
+                  placeholder="Nhập email"
+                  type="email"
+                  value={mail}
+                  onChange={(e) => setMail(e.target.value)}
+                />
+              </div>
             </div>
           </div>
-
           <Button className="btn-update-point" onClick={updateUser}>
             Cập nhật
           </Button>

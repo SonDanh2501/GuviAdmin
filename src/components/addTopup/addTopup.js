@@ -4,7 +4,10 @@ import IntlCurrencyInput from "react-intl-currency-input";
 import { useDispatch } from "react-redux";
 import { Form, Input, Label, List, Modal } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
-import { TopupMoneyCollaboratorApi } from "../../api/topup";
+import {
+  getTopupCollaboratorApi,
+  TopupMoneyCollaboratorApi,
+} from "../../api/topup";
 import { loadingAction } from "../../redux/actions/loading";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
@@ -17,7 +20,7 @@ import {
 import moment from "moment";
 import { errorNotify, successNotify } from "../../helper/toast";
 
-const AddPopup = () => {
+const AddPopup = ({ type, setDataT, setTotal }) => {
   const [state, setState] = useState(false);
   const [money, setMoney] = useState("");
   const [note, setNote] = useState("");
@@ -77,12 +80,12 @@ const AddPopup = () => {
         type_wallet: wallet,
       })
         .then((res) => {
-          dispatch(
-            getTopupCollaborator.getTopupCollaboratorRequest({
-              start: 0,
-              length: 20,
+          getTopupCollaboratorApi(0, 20, type)
+            .then((res) => {
+              setDataT(res?.data);
+              setTotal(res?.totalItem);
             })
-          );
+            .catch((err) => {});
           dispatch(
             getRevenueCollaborator.getRevenueCollaboratorRequest({
               startDate: moment().startOf("year").toISOString(),
@@ -102,7 +105,7 @@ const AddPopup = () => {
           dispatch(loadingAction.loadingRequest(false));
         });
     }
-  }, [id, money, note, name, wallet]);
+  }, [id, money, note, name, wallet, type, setDataT, setTotal]);
 
   const currencyConfig = {
     locale: "vi",
