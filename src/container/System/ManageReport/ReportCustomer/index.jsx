@@ -245,7 +245,7 @@ const ReportCustomer = () => {
           </div>
         </div>
       </div>
-      <div className="div-chart">
+      <div className="div-chart-user">
         <div className="div-time-area">
           <div>
             <a className="text-time">Thời gian</a>

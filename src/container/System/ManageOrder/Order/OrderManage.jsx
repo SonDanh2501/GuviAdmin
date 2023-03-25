@@ -214,7 +214,9 @@ export default function OrderManage(props) {
     },
     {
       title: "Địa điểm",
-      render: (data) => <a className="text-address-order">{data?.address}</a>,
+      render: (data) => {
+        return <a className="text-address-order">{data?.address}</a>;
+      },
     },
     {
       title: "Cộng tác viên",
@@ -272,6 +274,20 @@ export default function OrderManage(props) {
             : "Đã huỷ"}
         </a>
       ),
+    },
+    {
+      title: "Thanh toán",
+      render: (data) => {
+        return (
+          <a className="text-payment-method">
+            {data?.payment_method === "cash"
+              ? "Tiền mặt"
+              : data?.payment_method === "point"
+              ? "Chuyển khoản"
+              : ""}
+          </a>
+        );
+      },
     },
     {
       key: "action",

@@ -48,7 +48,7 @@ const CleaningHourly = (props) => {
   const [errorDateWork, setErrorDateWork] = useState("");
   const [timeWork, setTimeWork] = useState("");
   const [errorTimeWork, setErrorTimeWork] = useState("");
-  const [errorExtendService, setErrorExtendService] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("cash");
   const [mutipleSelected, setMutipleSelected] = useState([]);
   const [promotionCustomer, setPromotionCustomer] = useState([]);
   const [priceOrder, setPriceOrder] = useState();
@@ -225,7 +225,7 @@ const CleaningHourly = (props) => {
         is_auto_order: false,
         date_work_schedule: [timeW],
         extend_optional: mutipleSelected.concat(time),
-        payment_method: "cash",
+        payment_method: paymentMethod,
       })
         .then((res) => {
           setPriceOrder(res?.initial_fee);
@@ -247,7 +247,7 @@ const CleaningHourly = (props) => {
         is_auto_order: false,
         date_work_schedule: [timeW],
         extend_optional: mutipleSelected.concat(time),
-        payment_method: "cash",
+        payment_method: paymentMethod,
       })
         .then((res) => {
           const totalEventFee =
@@ -286,7 +286,7 @@ const CleaningHourly = (props) => {
         is_auto_order: false,
         date_work_schedule: [timeW],
         extend_optional: mutipleSelected.concat(time),
-        payment_method: "cash",
+        payment_method: paymentMethod,
       })
         .then((res) => {
           const totalEventFee =
@@ -306,7 +306,7 @@ const CleaningHourly = (props) => {
           });
         });
     }
-  }, [lat, long, timeWork, dateWork, mutipleSelected, time, id]);
+  }, [lat, long, timeWork, dateWork, mutipleSelected, time, id, paymentMethod]);
 
   const checkPromotion = useCallback(
     (item) => {
@@ -322,7 +322,7 @@ const CleaningHourly = (props) => {
         date_work_schedule: [timeW],
         extend_optional: mutipleSelected.concat(time),
         code_promotion: item?.code,
-        payment_method: "cash",
+        payment_method: paymentMethod,
       })
         .then((res) => {
           setIsLoading(false);
@@ -337,7 +337,7 @@ const CleaningHourly = (props) => {
           setIsLoading(false);
         });
     },
-    [id, lat, long, timeWork, dateWork, mutipleSelected, time]
+    [id, lat, long, timeWork, dateWork, mutipleSelected, time, paymentMethod]
   );
 
   const onCreateOrder = useCallback(() => {
@@ -391,7 +391,7 @@ const CleaningHourly = (props) => {
           date_work_schedule: [timeW],
           extend_optional: mutipleSelected.concat(time),
           code_promotion: codePromotion,
-          payment_method: "cash",
+          payment_method: paymentMethod,
         })
           .then((res) => {
             navigate("/group-order/manage-order");
@@ -438,6 +438,7 @@ const CleaningHourly = (props) => {
     isAutoOrder,
     note,
     idCollaborator,
+    paymentMethod,
   ]);
 
   const searchValue = (value) => {
@@ -644,6 +645,21 @@ const CleaningHourly = (props) => {
             onChange={() => setIsAutoOrder(!isAutoOrder)}
           />
         </div>
+
+        <CustomTextInput
+          label="Phương thức thanh toán"
+          type="select"
+          classNameForm="input-form-select-payment"
+          className="input-select-payment"
+          value={paymentMethod}
+          onChange={(e) => setPaymentMethod(e.target.value)}
+          body={
+            <>
+              <option value={"cash"}>Tiền mặt</option>
+              <option value={"point"}>G-pay</option>
+            </>
+          }
+        />
 
         <CustomTextInput
           label="Ghi chú"
