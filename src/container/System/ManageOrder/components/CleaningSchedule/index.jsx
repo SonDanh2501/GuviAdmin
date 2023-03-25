@@ -50,7 +50,7 @@ const CleaningSchedule = (props) => {
   const [errorTime, setErrorTime] = useState("");
   const [timeWork, setTimeWork] = useState("");
   const [errorTimeWork, setErrorTimeWork] = useState("");
-  const [errorExtendService, setErrorExtendService] = useState("");
+
   const [selectedDate, setSelectedDate] = useState([]);
   const [promotionCustomer, setPromotionCustomer] = useState([]);
   const [priceOrder, setPriceOrder] = useState();

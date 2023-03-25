@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Bar,
+  BarChart,
   CartesianGrid,
   ComposedChart,
   Legend,
@@ -123,40 +124,71 @@ const ReportInvite = () => {
   return (
     <div>
       <a className="title">Tổng lượt giới thiệu</a>
+
+      <div className="mt-3">
+        <RangePicker
+          picker="day"
+          onChange={(e) => onChangeDayTop(e[0]?.$d, e[1]?.$d)}
+        />
+      </div>
+
       <div className="div-chart">
-        <a className="title-chart">Top 10 người giới thiệu nhiều nhất</a>
-        <div>
-          <RangePicker
-            picker="day"
-            onChange={(e) => onChangeDayTop(e[0]?.$d, e[1]?.$d)}
-          />
+        <div className="div-chart-left">
+          <ResponsiveContainer width={"100%"} height={350} min-width={350}>
+            <BarChart width={500} height={400} data={dataTop}>
+              <CartesianGrid stroke="#f5f5f5" strokeDasharray="3 3" />
+              <XAxis type="number" />
+              <YAxis dataKey="customer" />
+              <Tooltip />
+              <Legend />
+              <Bar
+                dataKey="total_inviter"
+                barSize={20}
+                fill="#413ea0"
+                // minPointSize={5}
+                // label={{ position: "centerTop", fill: "white" }}
+                // name="total_inviter"
+              />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
-        <ResponsiveContainer width={"100%"} height={350} min-width={350}>
-          <ComposedChart
-            layout="vertical"
-            width={500}
-            height={400}
-            data={dataTop}
-            margin={{
-              top: 20,
-              right: 20,
-            }}
-          >
-            <CartesianGrid stroke="#f5f5f5" />
-            <XAxis type="number" />
-            <YAxis dataKey="customer" type="category" scale="band" />
-            <Tooltip />
-            <Legend />
-            <Bar
-              dataKey="total_inviter"
-              barSize={20}
-              fill="#413ea0"
-              minPointSize={5}
-              label={{ position: "centerTop", fill: "white" }}
-              name="total_inviter"
-            />
-          </ComposedChart>
-        </ResponsiveContainer>
+        <div className="div-chart-right">
+          {data_test.length > 4 && (
+            <div className="div-item-top">
+              <a>{data_test[4].invite}</a>
+              <div className={"column-top-5"} />
+              <a className="text-name-column">{data_test[4].name}</a>
+            </div>
+          )}
+          {data_test.length > 3 && (
+            <div className="div-item-top">
+              <a>{data_test[3].invite}</a>
+              <div className={"column-top-4"} />
+              <a className="text-name-column">{data_test[3].name}</a>
+            </div>
+          )}
+          {data_test.length > 2 && (
+            <div className="div-item-top">
+              <a>{data_test[2].invite}</a>
+              <div className={"column-top-3"} />
+              <a className="text-name-column">{data_test[2].name}</a>
+            </div>
+          )}
+          {data_test.length > 1 && (
+            <div className="div-item-top">
+              <a>{data_test[1].invite}</a>
+              <div className={"column-top-2"} />
+              <a className="text-name-column">{data_test[1].name}</a>
+            </div>
+          )}
+          {data_test.length > 0 && (
+            <div className="div-item-top">
+              <a>{data_test[0].invite}</a>
+              <div className={"column-top-1"} />
+              <a className="text-name-column">{data_test[0].name}</a>
+            </div>
+          )}
+        </div>
       </div>
       <a className="title">Bảng thống kê</a>
       <div className="mt-3">
@@ -188,39 +220,23 @@ export default ReportInvite;
 
 const data_test = [
   {
-    name: "Page A",
-    uv: 590,
-    pv: 800,
-    amt: 1400,
+    name: "LE MINH DANG",
+    invite: 50,
   },
   {
-    name: "Page B",
-    uv: 868,
-    pv: 967,
-    amt: 1506,
+    name: "LE MINH DANG",
+    invite: 40,
   },
   {
-    name: "Page C",
-    uv: 1397,
-    pv: 1098,
-    amt: 989,
+    name: "LE MINH DANG",
+    invite: 30,
   },
   {
-    name: "Page D",
-    uv: 1480,
-    pv: 1200,
-    amt: 1228,
+    name: "LE MINH DANG",
+    invite: 20,
   },
   {
-    name: "Page E",
-    uv: 1520,
-    pv: 1108,
-    amt: 1100,
-  },
-  {
-    name: "Page F",
-    uv: 1400,
-    pv: 680,
-    amt: 1700,
+    name: "LE MINH DANG",
+    invite: 10,
   },
 ];
