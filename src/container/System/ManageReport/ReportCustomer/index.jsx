@@ -294,7 +294,7 @@ const ReportCustomer = () => {
                 fill="#4376CC"
                 minPointSize={5}
                 label={{ position: "centerTop", fill: "white" }}
-                name="total"
+                name="Khách hàng"
               />
             </BarChart>
           </ResponsiveContainer>

@@ -109,6 +109,19 @@
   text-decoration: none;
 }
 
+.div-money-customer {
+  display: flex;
+  flex-direction: column;
+
+  .text-money-customer-topup {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000;
+    text-decoration: none;
+  }
+}
 .text-money-customer-topup {
   font-family: "Roboto";
   font-style: normal;
@@ -117,7 +130,6 @@
   color: #000000;
   text-decoration: none;
 }
-
 .text-description-topup {
   font-family: "Roboto";
   font-style: normal;
@@ -126,5 +138,5 @@
   color: #000000;
   text-decoration: none;
   display: block;
-  width: 250px;
+  width: 200px;
 }

@@ -450,7 +450,6 @@ const ReportOrder = () => {
       )
       .toISOString();
 
-    console.log(dayStart);
     getReportOrder(0, 20, dayStart, dayEnd)
       .then((res) => {
         setIsLoading(false);

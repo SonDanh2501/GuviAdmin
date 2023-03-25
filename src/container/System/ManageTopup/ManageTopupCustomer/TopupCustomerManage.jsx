@@ -239,9 +239,14 @@ export default function TopupCustomerManage() {
     {
       title: "Ngày nạp",
       render: (data) => (
-        <a className="text-money-customer-topup">
-          {moment(new Date(data?.date_created)).format("DD/MM/yyy - HH:mm")}
-        </a>
+        <div className="div-money-customer">
+          <a className="text-money-customer-topup">
+            {moment(new Date(data?.date_create)).format("DD/MM/yyy")}
+          </a>
+          <a className="text-money-customer-topup" v>
+            {moment(new Date(data?.date_create)).format("HH:mm")}
+          </a>
+        </div>
       ),
     },
     {
@@ -263,6 +268,7 @@ export default function TopupCustomerManage() {
       },
       align: "center",
     },
+
     {
       title: "",
       key: "action",
