@@ -11,7 +11,7 @@ import CustomTextInput from "../../../../components/CustomTextInput/customTextIn
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
 import { getService } from "../../../../redux/selectors/service";
-import CleaningHourly from "../components/CleaningHourly ";
+import CleaningHourly from "../components/CleaningHourly";
 import CleaningSchedule from "../components/CleaningSchedule";
 import "./index.scss";
 
