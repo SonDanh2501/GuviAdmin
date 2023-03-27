@@ -459,7 +459,7 @@ const AddPromotion = ({ idService, tab }) => {
                       wrapperStyle={{ color: "#000" }}
                     />
                   </div>
-                  <Label>Tiếng Việt</Label>
+                  <Label>Tiếng Anh</Label>
                   <div className="form-description">
                     <Editor
                       editorState={descriptionEN}

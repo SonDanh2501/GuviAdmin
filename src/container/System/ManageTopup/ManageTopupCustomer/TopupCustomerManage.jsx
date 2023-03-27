@@ -70,7 +70,7 @@ export default function TopupCustomerManage() {
           dispatch(
             getTopupCustomer.getTopupCustomerRequest({
               start: startPage,
-              length: 10,
+              length: 20,
             })
           );
           setModal(false);
@@ -95,7 +95,7 @@ export default function TopupCustomerManage() {
           dispatch(
             getTopupCustomer.getTopupCustomerRequest({
               start: startPage,
-              length: 10,
+              length: 20,
             })
           );
           setModalConfirm(false);
@@ -118,7 +118,7 @@ export default function TopupCustomerManage() {
           dispatch(
             getTopupCustomer.getTopupCustomerRequest({
               start: startPage,
-              length: 10,
+              length: 20,
             })
           );
           setModalCancel(false);
@@ -165,7 +165,7 @@ export default function TopupCustomerManage() {
       : dispatch(
           getTopupCustomer.getTopupCustomerRequest({
             start: start > 0 ? start : 0,
-            length: 10,
+            length: 20,
           })
         );
   };

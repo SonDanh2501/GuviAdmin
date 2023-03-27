@@ -1,0 +1,46 @@
+.btn-date-picker {
+  border: 1px solid #d6d6d6;
+  padding: 5px;
+  border-radius: 6px;
+}
+
+.div-body-modal {
+  display: flex;
+  flex-direction: row;
+
+  .div-right-body-modal {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #d6d6d6;
+
+    .div-btn-date {
+      padding: 10px;
+
+      .text-btn-date {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 16px;
+        color: rgb(78, 77, 77);
+        text-decoration: none !important;
+      }
+    }
+
+    .div-btn-date-select {
+      padding: 10px;
+      background-color: blue;
+
+      .text-btn-date {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 16px;
+        color: rgb(78, 77, 77);
+        text-decoration: none !important;
+        color: white;
+      }
+    }
+  }
+}
