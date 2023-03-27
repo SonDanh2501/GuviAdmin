@@ -333,6 +333,7 @@ export default function Home() {
                         dataKey="total_income"
                         stroke="#00CF3A"
                         fill="#00CF3A"
+                        name="Tổng tiền"
                       />
                     </AreaChart>
                   </ResponsiveContainer>

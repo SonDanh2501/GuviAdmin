@@ -27,6 +27,7 @@ import _debounce from "lodash/debounce";
 
 import "./index.scss";
 import LoadingPagination from "../../../../components/paginationLoading";
+import CustomDatePicker from "../../../../components/customDatePicker";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -479,6 +480,17 @@ const ReportOrder = () => {
   //   []
   // );
 
+  const onChangeDay = () => {
+    getReportOrder(0, 20, startDate, endDate)
+      .then((res) => {
+        setIsLoading(false);
+        setData(res?.data);
+        setTotal(res?.totalItem);
+        setDataTotal(res?.total[0]);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div>
       <div className="div-header-report">
@@ -503,6 +515,11 @@ const ReportOrder = () => {
             />
           </div>
         </div>
+        {/* <CustomDatePicker
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          onClick={onChangeDay}
+        /> */}
         {/* <Input
           placeholder="Tìm kiếm"
           type="text"
