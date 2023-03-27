@@ -21,19 +21,18 @@ import {
   deleteMoneyCustomerApi,
   searchTopupCustomerApi,
   verifyMoneyCustomerApi,
-} from "../../../../api/topup";
-import AddTopupCustomer from "../../../../components/addTopupCustomer/addTopupCustomer";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
-import EditPopup from "../../../../components/editTopup/editTopup";
-import { formatMoney } from "../../../../helper/formatMoney";
-import { errorNotify } from "../../../../helper/toast";
-import { loadingAction } from "../../../../redux/actions/loading";
-import { getTopupCustomer } from "../../../../redux/actions/topup";
-import { getUser } from "../../../../redux/selectors/auth";
-import { getTopupKH, totalTopupKH } from "../../../../redux/selectors/topup";
+} from "../../../../../api/topup";
+import AddTopupCustomer from "../../../../../components/addTopupCustomer/addTopupCustomer";
+import EditPopup from "../../../../../components/editTopup/editTopup";
+import { formatMoney } from "../../../../../helper/formatMoney";
+import { errorNotify } from "../../../../../helper/toast";
+import { loadingAction } from "../../../../../redux/actions/loading";
+import { getTopupCustomer } from "../../../../../redux/actions/topup";
+import { getUser } from "../../../../../redux/selectors/auth";
+import { getTopupKH, totalTopupKH } from "../../../../../redux/selectors/topup";
 import "./TopupCustomerManage.scss";
 
-export default function TopupCustomerManage() {
+export default function TopupCustomer() {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState();
   const [valueSearch, setValueSearch] = useState();

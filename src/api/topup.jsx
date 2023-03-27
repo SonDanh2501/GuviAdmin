@@ -98,3 +98,11 @@ export const cancelMoneyCustomerApi = (id) => {
     `/admin/customer_manager/cancel_transition/${id}?lang=vi`
   );
 };
+
+// point customer
+
+export const getTopupPointCustomerApi = (start, length) => {
+  return axiosClient.get(
+    `/admin/customer_manager/get_list_transition_point_customer?lang=vi&start=${start}&length=${length}`
+  );
+};
