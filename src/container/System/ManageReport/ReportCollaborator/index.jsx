@@ -26,6 +26,7 @@ import _debounce from "lodash/debounce";
 
 import "./index.scss";
 import LoadingPagination from "../../../../components/paginationLoading";
+import CustomDatePicker from "../../../../components/customDatePicker";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -104,21 +105,19 @@ const ReportManager = () => {
           });
   };
 
-  const onChangeFilter = useCallback((start, end) => {
+  const onChangeDay = () => {
     setIsLoading(true);
-    const dayStart = moment(start).startOf("date").toISOString();
-    const dayEnd = moment(end).endOf("date").toISOString();
-    filterReportCollaborator(0, 20, dayStart, dayEnd)
+    filterReportCollaborator(0, 20, startDate, endDate)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
         setTotalColumn(res?.total);
         setIsLoading(false);
       })
-      .catch((err) => console.log(err));
-    setStartDate(dayStart);
-    setEndDate(dayEnd);
-  }, []);
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  };
 
   const handleSearch = useCallback(
     _debounce((value) => {
@@ -471,25 +470,17 @@ const ReportManager = () => {
     <div>
       <div className="div-header-report">
         <div className="div-date">
-          <Input.Group compact>
-            <Select
-              defaultValue={type}
-              onChange={(e) => setType(e)}
-              className="input-picker"
-            >
-              <Option value="day">Ngày</Option>
-              <Option value="week">Tuần </Option>
-              <Option value="month">Tháng</Option>
-              <Option value="quarter">Quý</Option>
-            </Select>
-          </Input.Group>
-          <div>
-            <RangePicker
-              picker={type}
-              className="picker"
-              onChange={(e) => onChangeFilter(e[0]?.$d, e[1]?.$d)}
-            />
-          </div>
+          <CustomDatePicker
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            onClick={onChangeDay}
+          />
+          {startDate && (
+            <a className="text-date">
+              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+              {moment(new Date(endDate)).format("DD/MM/YYYY")}
+            </a>
+          )}
         </div>
         <Input
           placeholder="Tìm kiếm"

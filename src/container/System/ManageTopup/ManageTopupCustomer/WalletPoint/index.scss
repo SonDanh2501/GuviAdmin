@@ -1,0 +1,106 @@
+.div-name-point {
+  display: flex;
+  flex-direction: column;
+  .text-name {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: #000000;
+  }
+
+  .text-phone-point {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000;
+  }
+}
+
+.text-point {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  color: #000000;
+}
+.text-type-point {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  color: #000000;
+}
+
+.div-day-create-point {
+  display: flex;
+  flex-direction: column;
+
+  .text-day {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: #000000;
+  }
+}
+
+.text-pending-point {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  color: #ece200;
+}
+
+.text-done-point {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  color: #00cf3a;
+}
+
+.text-cancel-point {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  color: #ff0000;
+}
+
+.btn-delete-point {
+  background-color: transparent;
+  border: none;
+  color: #ff0000;
+}
+
+.text-cancel-point {
+  color: #000000;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.text-description-topup-point {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  color: #000000;
+  text-decoration: none;
+  display: block;
+  width: 200px;
+}
+
+.div-head-point {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .input-search-topup-point {
+    width: 60%;
+  }
+}

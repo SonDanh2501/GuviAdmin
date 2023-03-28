@@ -106,3 +106,34 @@ export const getTopupPointCustomerApi = (start, length) => {
     `/admin/customer_manager/get_list_transition_point_customer?lang=vi&start=${start}&length=${length}`
   );
 };
+
+export const searchTopupPointCustomerApi = (start, length, search) => {
+  return axiosClient.get(
+    `/admin/customer_manager/get_list_transition_point_customer?lang=vi&start=${start}&length=${length}&search=${search}`
+  );
+};
+
+export const deletePointCustomerApi = (id) => {
+  return axiosClient.post(
+    `/admin/customer_manager/delete_point_customer/${id}?lang=vi`
+  );
+};
+
+export const topupPointCustomerApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/customer_manager/top_up_point_customer/${id}?lang=vi`,
+    data
+  );
+};
+
+export const verifyPointCustomerApi = (id) => {
+  return axiosClient.post(
+    `/admin/customer_manager/verify_point_customer/${id}?lang=vi`
+  );
+};
+
+export const cancelPointCustomerApi = (id) => {
+  return axiosClient.post(
+    `/admin/customer_manager/cancel_point_customer/${id}?lang=vi`
+  );
+};

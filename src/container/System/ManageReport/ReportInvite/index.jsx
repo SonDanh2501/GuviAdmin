@@ -18,6 +18,8 @@ import {
   getTopCustomerInvite,
   getTopCustomerInviteTime,
 } from "../../../../api/report";
+import CustomDatePicker from "../../../../components/customDatePicker";
+import LoadingPage from "../../../../components/LoadingPage";
 import "./index.scss";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -30,6 +32,9 @@ const ReportInvite = () => {
   const [type, setType] = useState("daily");
   const [typeTime, setTypeTime] = useState("day");
   const [currentPage, setCurrentPage] = useState(1);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -147,10 +152,8 @@ const ReportInvite = () => {
       .catch((err) => {});
   };
 
-  const onChangeDay = (start, end) => {
-    const dayStart = moment(start).startOf("date").toISOString();
-    const dayEnd = moment(end).endOf("date").toISOString();
-    getReportCustomerInviteDay(0, 20, dayStart, dayEnd)
+  const onChangeDay = () => {
+    getReportCustomerInviteDay(0, 20, startDate, endDate)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -281,10 +284,19 @@ const ReportInvite = () => {
       </div>
       <a className="title">Bảng thống kê</a>
       <div className="mt-3">
-        <RangePicker
-          picker="day"
-          onChange={(e) => onChangeDay(e[0]?.$d, e[1]?.$d)}
-        />
+        <div className="div-date">
+          <CustomDatePicker
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            onClick={onChangeDay}
+          />
+          {startDate && (
+            <a className="text-date">
+              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+              {moment(new Date(endDate)).format("DD/MM/YYYY")}
+            </a>
+          )}
+        </div>
       </div>
       <div className="mt-2">
         <Table columns={columns} dataSource={data} pagination={false} />
@@ -301,6 +313,7 @@ const ReportInvite = () => {
           />
         </div>
       </div>
+      {isLoading && <LoadingPage />}
     </div>
   );
 };

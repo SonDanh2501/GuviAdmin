@@ -6,10 +6,10 @@ const TopupCustomerManage = () => {
   return (
     <div>
       <Tabs>
-        <Tabs.TabPane tab="Nạp tiền" key="1">
+        <Tabs.TabPane tab="Ví G-pay" key="1">
           <TopupCustomer />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Ví thưởng" key="2">
+        <Tabs.TabPane tab="Điểm thưởng" key="2">
           <TopupPoint />
         </Tabs.TabPane>
       </Tabs>

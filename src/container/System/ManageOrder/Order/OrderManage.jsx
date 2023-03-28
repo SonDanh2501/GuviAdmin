@@ -283,7 +283,7 @@ export default function OrderManage(props) {
             {data?.payment_method === "cash"
               ? "Tiền mặt"
               : data?.payment_method === "point"
-              ? "Chuyển khoản"
+              ? "Ví G-pay"
               : ""}
           </a>
         );

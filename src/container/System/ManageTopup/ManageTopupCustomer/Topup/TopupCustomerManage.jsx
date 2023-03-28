@@ -209,26 +209,26 @@ export default function TopupCustomer() {
         <a className="text-money-customer-topup">{formatMoney(data?.money)}</a>
       ),
     },
-    {
-      title: "Nạp/rút",
-      render: (data) => {
-        return (
-          <>
-            {data?.type_transfer === "top_up" ? (
-              <div>
-                <i class="uil uil-money-insert icon-topup"></i>
-                <a className="text-topup">Nạp</a>
-              </div>
-            ) : (
-              <div>
-                <i class="uil uil-money-withdraw icon-withdraw"></i>
-                <a className="text-withdraw">Rút</a>
-              </div>
-            )}
-          </>
-        );
-      },
-    },
+    // {
+    //   title: "Nạp/rút",
+    //   render: (data) => {
+    //     return (
+    //       <>
+    //         {data?.type_transfer === "top_up" ? (
+    //           <div>
+    //             <i class="uil uil-money-insert icon-topup"></i>
+    //             <a className="text-topup">Nạp</a>
+    //           </div>
+    //         ) : (
+    //           <div>
+    //             <i class="uil uil-money-withdraw icon-withdraw"></i>
+    //             <a className="text-withdraw">Rút</a>
+    //           </div>
+    //         )}
+    //       </>
+    //     );
+    //   },
+    // },
     {
       title: "Nội dung",
       render: (data) => (
@@ -267,7 +267,16 @@ export default function TopupCustomer() {
       },
       align: "center",
     },
-
+    {
+      title: "Phương thức",
+      render: (data) => {
+        return (
+          <a className="text-money-customer-topup">
+            {data?.method_transfer === "vnpay" ? "VNPay" : "Chuyển khoản"}
+          </a>
+        );
+      },
+    },
     {
       title: "",
       key: "action",

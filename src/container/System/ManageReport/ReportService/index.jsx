@@ -13,6 +13,7 @@ import {
   YAxis,
 } from "recharts";
 import {
+  getReportCustomer,
   getTotalCustomerDay,
   getTotalCustomerYear,
   getTotalReportCustomer,
@@ -39,6 +40,14 @@ const ReportService = () => {
   const dataChart = [];
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getReportCustomer(
+      moment().startOf("month").toISOString(),
+      moment().endOf("month").toISOString()
+    ).then((res) => console.log(res));
+  });
+
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work_schedule[0].date)).format(
       "HH:mm"
