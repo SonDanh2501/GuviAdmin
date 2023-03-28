@@ -1,11 +1,18 @@
-import { Modal } from "antd";
+import { DatePicker, Modal } from "antd";
 import moment from "moment";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import "./index.scss";
+const { RangePicker } = DatePicker;
+
 const CustomDatePicker = (props) => {
   const { setStartDate, setEndDate, onClick } = props;
   const [open, setOpen] = useState(false);
+  const [start, setStart] = useState();
+  const [end, setEnd] = useState();
   const [valueTab, setValueTab] = useState("");
+  const [tabTime, setTabTime] = useState("day");
   const [title, setTitle] = useState("Chọn thời gian");
 
   const handleOk = () => {
@@ -37,40 +44,93 @@ const CustomDatePicker = (props) => {
     switch (item?.value) {
       case "last_seven":
         setStartDate(lastSeven);
+        setStart(moment().subtract(7, "d"));
         setEndDate(today);
+        setEnd(moment());
         setTitle(item?.title);
         break;
       case "last_thirty":
         setStartDate(lastThirty);
+        setStart(moment().subtract(30, "d"));
         setEndDate(today);
+        setEnd(moment());
         setTitle(item?.title);
 
         break;
       case "last_ninety":
         setStartDate(lastNinety);
+        setStart(moment().subtract(90, "d"));
         setEndDate(today);
+        setEnd(moment());
         setTitle(item?.title);
         break;
       case "this_month":
         setStartDate(startThisMonth);
+        setStart(moment().startOf("month"));
         setEndDate(endThisMonth);
+        setEnd(moment().endOf("month"));
         setTitle(item?.title);
         break;
       case "last_month":
         setStartDate(startLastMonth);
+        setStart(moment().subtract(1, "months").startOf("month"));
         setEndDate(endLastMonth);
+        setEnd(moment().subtract(1, "months").endOf("month"));
         setTitle(item?.title);
+        break;
+      case "setting":
+        setTitle(item?.title);
+        setStart("");
+        setEnd("");
         break;
       default:
         break;
     }
   };
 
+  const onChange = (value, event) => {
+    setStart(value[0]);
+    setEnd(value[1]);
+    setStartDate(value[0].toISOString());
+    setEndDate(value[1].toISOString());
+  };
+
+  const onChangeFilter = useCallback((start, end) => {
+    const dayStart = moment(start)
+      .startOf(
+        tabTime === "month"
+          ? "month"
+          : tabTime === "week"
+          ? "week"
+          : tabTime === "day"
+          ? "date"
+          : "quarter"
+      )
+      .toISOString();
+    const dayEnd = moment(end)
+      .endOf(
+        tabTime === "month"
+          ? "month"
+          : tabTime === "week"
+          ? "week"
+          : tabTime === "day"
+          ? "date"
+          : "quarter"
+      )
+      .toISOString();
+    setStartDate(dayStart);
+    setEndDate(dayEnd);
+  }, []);
+
   return (
     <div>
-      <div className="btn-date-picker" onClick={() => setOpen(!open)}>
-        <a>{title}</a>
+      <div>
+        {/* <a className="title-time">Thời gian</a> */}
+        <div className="btn-date-picker" onClick={() => setOpen(!open)}>
+          <a>{title}</a>
+        </div>
       </div>
+
       <Modal
         title="Chọn thời gian"
         open={open}
@@ -80,10 +140,11 @@ const CustomDatePicker = (props) => {
         cancelText="Huỷ"
       >
         <div className="div-body-modal">
-          <div className="div-right-body-modal">
-            {DATA_TAB.map((item) => {
+          <div className="div-left-body-modal">
+            {DATA_TAB.map((item, index) => {
               return (
                 <div
+                  key={index}
                   className={
                     valueTab === item?.value
                       ? "div-btn-date-select"
@@ -96,7 +157,46 @@ const CustomDatePicker = (props) => {
               );
             })}
           </div>
-          <div className="div-left-body-modal"></div>
+          <div className="div-right-body-modal">
+            {valueTab === "setting" ? (
+              <>
+                <div className="div-tab-time">
+                  {OPTION.map((item, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className={
+                          tabTime === item?.value
+                            ? "div-tab-item-select"
+                            : "div-tab-item"
+                        }
+                        onClick={() => {
+                          setTabTime(item?.value);
+                        }}
+                      >
+                        <a>{item?.title}</a>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="ml-5 mt-4">
+                  <RangePicker
+                    picker={tabTime}
+                    className="picker"
+                    onChange={(e) => onChangeFilter(e[0]?.$d, e[1]?.$d)}
+                  />
+                </div>
+              </>
+            ) : (
+              <Calendar
+                onChange={onChange}
+                value={[start, end]}
+                selectRange={true}
+                view="month"
+                className="calendar"
+              />
+            )}
+          </div>
         </div>
       </Modal>
     </div>
@@ -135,5 +235,28 @@ const DATA_TAB = [
     id: 6,
     title: "Tuỳ chỉnh",
     value: "setting",
+  },
+];
+
+const OPTION = [
+  {
+    id: 1,
+    title: "Ngày",
+    value: "day",
+  },
+  {
+    id: 3,
+    title: "Tuần",
+    value: "week",
+  },
+  {
+    id: 1,
+    title: "Tháng",
+    value: "month",
+  },
+  {
+    id: 1,
+    title: "Quý",
+    value: "quarter",
   },
 ];

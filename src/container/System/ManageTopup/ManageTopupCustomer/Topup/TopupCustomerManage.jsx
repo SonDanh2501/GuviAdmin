@@ -21,19 +21,18 @@ import {
   deleteMoneyCustomerApi,
   searchTopupCustomerApi,
   verifyMoneyCustomerApi,
-} from "../../../../api/topup";
-import AddTopupCustomer from "../../../../components/addTopupCustomer/addTopupCustomer";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
-import EditPopup from "../../../../components/editTopup/editTopup";
-import { formatMoney } from "../../../../helper/formatMoney";
-import { errorNotify } from "../../../../helper/toast";
-import { loadingAction } from "../../../../redux/actions/loading";
-import { getTopupCustomer } from "../../../../redux/actions/topup";
-import { getUser } from "../../../../redux/selectors/auth";
-import { getTopupKH, totalTopupKH } from "../../../../redux/selectors/topup";
+} from "../../../../../api/topup";
+import AddTopupCustomer from "../../../../../components/addTopupCustomer/addTopupCustomer";
+import EditPopup from "../../../../../components/editTopup/editTopup";
+import { formatMoney } from "../../../../../helper/formatMoney";
+import { errorNotify } from "../../../../../helper/toast";
+import { loadingAction } from "../../../../../redux/actions/loading";
+import { getTopupCustomer } from "../../../../../redux/actions/topup";
+import { getUser } from "../../../../../redux/selectors/auth";
+import { getTopupKH, totalTopupKH } from "../../../../../redux/selectors/topup";
 import "./TopupCustomerManage.scss";
 
-export default function TopupCustomerManage() {
+export default function TopupCustomer() {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState();
   const [valueSearch, setValueSearch] = useState();
@@ -210,26 +209,26 @@ export default function TopupCustomerManage() {
         <a className="text-money-customer-topup">{formatMoney(data?.money)}</a>
       ),
     },
-    {
-      title: "Nạp/rút",
-      render: (data) => {
-        return (
-          <>
-            {data?.type_transfer === "top_up" ? (
-              <div>
-                <i class="uil uil-money-insert icon-topup"></i>
-                <a className="text-topup">Nạp</a>
-              </div>
-            ) : (
-              <div>
-                <i class="uil uil-money-withdraw icon-withdraw"></i>
-                <a className="text-withdraw">Rút</a>
-              </div>
-            )}
-          </>
-        );
-      },
-    },
+    // {
+    //   title: "Nạp/rút",
+    //   render: (data) => {
+    //     return (
+    //       <>
+    //         {data?.type_transfer === "top_up" ? (
+    //           <div>
+    //             <i class="uil uil-money-insert icon-topup"></i>
+    //             <a className="text-topup">Nạp</a>
+    //           </div>
+    //         ) : (
+    //           <div>
+    //             <i class="uil uil-money-withdraw icon-withdraw"></i>
+    //             <a className="text-withdraw">Rút</a>
+    //           </div>
+    //         )}
+    //       </>
+    //     );
+    //   },
+    // },
     {
       title: "Nội dung",
       render: (data) => (
@@ -268,7 +267,16 @@ export default function TopupCustomerManage() {
       },
       align: "center",
     },
-
+    {
+      title: "Phương thức",
+      render: (data) => {
+        return (
+          <a className="text-money-customer-topup">
+            {data?.method_transfer === "vnpay" ? "VNPay" : "Chuyển khoản"}
+          </a>
+        );
+      },
+    },
     {
       title: "",
       key: "action",

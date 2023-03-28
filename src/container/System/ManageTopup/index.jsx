@@ -1,7 +1,8 @@
 import { Tabs } from "antd";
 
 import TopupManage from "./ManageTopupCollaborator/TopupManage";
-import TopupCustomerManage from "./ManageTopupCustomer/TopupCustomerManage";
+import TopupCustomerManage from "./ManageTopupCustomer";
+
 import "./styles.scss";
 
 const ManageTopup = () => {

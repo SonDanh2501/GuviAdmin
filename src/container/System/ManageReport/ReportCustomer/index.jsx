@@ -19,6 +19,7 @@ import {
 } from "../../../../api/report";
 import caculator from "../../../../assets/images/caculator.png";
 import collaborator from "../../../../assets/images/collaborator.png";
+import CustomDatePicker from "../../../../components/customDatePicker";
 import LoadingPagination from "../../../../components/paginationLoading";
 import "./index.scss";
 
@@ -34,6 +35,8 @@ const ReportCustomer = () => {
   const [year, setYear] = useState(0);
   const [data, setData] = useState([]);
   const [dataTable, setDataTable] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const dataChart = [];
@@ -111,43 +114,9 @@ const ReportCustomer = () => {
       });
   };
 
-  const onChangeDay = (start, end) => {
+  const onChangeDay = () => {
     setIsLoading(true);
-
-    const dayStart = moment(start).startOf("date").toISOString();
-    const dayEnd = moment(end).endOf("date").toISOString();
-    getTotalCustomerDay(dayStart, dayEnd)
-      .then((res) => {
-        setDataTable(res);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
-      });
-  };
-
-  const onChangeMonth = (date, dateString) => {
-    setIsLoading(true);
-    getTotalCustomerDay(
-      moment(dateString).startOf("month").toISOString(),
-      moment(dateString).endOf("month").toISOString()
-    )
-      .then((res) => {
-        setDataTable(res);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-      });
-  };
-
-  const onChangeWeek = (date, dateString) => {
-    setIsLoading(true);
-    getTotalCustomerDay(
-      moment(date?.$d).startOf("week").toISOString(),
-      moment(date?.$d).endOf("week").toISOString()
-    )
+    getTotalCustomerDay(startDate, endDate)
       .then((res) => {
         setDataTable(res);
         setIsLoading(false);
@@ -303,22 +272,18 @@ const ReportCustomer = () => {
       <a className="text-title">SỐ LƯỢT ĐĂNG KÝ USER THEO THỜI GIAN</a>
       <div className="mt-3 div-table">
         <div className="div-header-table">
-          <div>
-            <a className="text-time">Thời gian</a>
-            <RangePicker
-              picker="day"
-              onChange={(e) => onChangeDay(e[0]?.$d, e[1]?.$d)}
+          <div className="div-date">
+            <CustomDatePicker
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+              onClick={onChangeDay}
             />
-          </div>
-
-          <div className="ml-5">
-            <a className="text-time">Tuần</a>
-            <DatePicker picker="week" onChange={onChangeWeek} />
-          </div>
-
-          <div className="ml-5">
-            <a className="text-time">Tháng</a>
-            <DatePicker picker="month" onChange={onChangeMonth} />
+            {startDate && (
+              <a className="text-date">
+                {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+                {moment(new Date(endDate)).format("DD/MM/YYYY")}
+              </a>
+            )}
           </div>
         </div>
 

@@ -50,6 +50,7 @@ import {
 import { formatMoney } from "../../../helper/formatMoney";
 import MoreTopCollaborator from "../../../components/moreTopCollaborator";
 import MoreActivity from "./MoreActivity";
+import CustomDatePicker from "../../../components/customDatePicker";
 moment.locale("vi");
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -66,6 +67,8 @@ export default function Home() {
   const [arrResult, setArrResult] = useState([]);
   const [day, setDay] = useState([]);
   const [type, setType] = useState("day");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const historyActivity = useSelector(getHistoryActivitys);
   const activeUser = useSelector(getActiveUsers);
   const lastestService = useSelector(getLastestServices);
@@ -112,17 +115,15 @@ export default function Home() {
     return setDay(dateArray);
   }
 
-  const onChange = useCallback((start, end) => {
-    const dayStart = moment(start).startOf("date").toISOString();
-    const dayEnd = moment(end).endOf("date").toISOString();
-    getDayReportApi(dayStart, dayEnd)
+  const onChange = useCallback(() => {
+    getDayReportApi(startDate, endDate)
       .then((res) => {
         setArrResult(res.arrResult);
       })
       .catch((err) => console.log(err));
 
-    getDates(dayStart, dayEnd);
-  }, []);
+    getDates(startDate, endDate);
+  }, [startDate, endDate]);
 
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work_schedule[0].date)).format(
@@ -282,25 +283,17 @@ export default function Home() {
             <Col lg="9">
               <div className="chart">
                 <div className="div-date">
-                  <Input.Group compact>
-                    <Select
-                      defaultValue={type}
-                      onChange={(e) => setType(e)}
-                      className="input-picker"
-                    >
-                      <Option value="day">Ngày</Option>
-                      <Option value="week">Tuần </Option>
-                      <Option value="month">Tháng</Option>
-                      <Option value="quarter">Quý</Option>
-                    </Select>
-                  </Input.Group>
-                  <div>
-                    <RangePicker
-                      picker={type}
-                      className="picker"
-                      onChange={(e) => onChange(e[0]?.$d, e[1]?.$d)}
-                    />
-                  </div>
+                  <CustomDatePicker
+                    setStartDate={setStartDate}
+                    setEndDate={setEndDate}
+                    onClick={onChange}
+                  />
+                  {startDate && (
+                    <a className="text-date">
+                      {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+                      {moment(new Date(endDate)).format("DD/MM/YYYY")}
+                    </a>
+                  )}
                 </div>
                 <div>
                   <ResponsiveContainer

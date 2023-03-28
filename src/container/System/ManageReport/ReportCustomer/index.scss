@@ -156,6 +156,21 @@
     .div-header-table {
       display: flex;
       flex-direction: row;
+
+      .div-date {
+        display: flex;
+        flex-direction: row;
+        width: 40%;
+        align-items: center;
+
+        .text-date {
+          color: #000000;
+          font-family: "Roboto";
+          font-style: normal;
+          font-size: 12px;
+          margin-left: 10px;
+        }
+      }
       .text-time {
         font-family: "Roboto";
         font-style: normal;

@@ -426,43 +426,6 @@ const ReportOrder = () => {
           });
   };
 
-  const onChangeFilter = useCallback((start, end) => {
-    setIsLoading(true);
-    const dayStart = moment(start)
-      .startOf(
-        type === "month"
-          ? "month"
-          : type === "week"
-          ? "week"
-          : type === "day"
-          ? "date"
-          : "quarter"
-      )
-      .toISOString();
-    const dayEnd = moment(end)
-      .endOf(
-        type === "month"
-          ? "month"
-          : type === "week"
-          ? "week"
-          : type === "day"
-          ? "date"
-          : "quarter"
-      )
-      .toISOString();
-
-    getReportOrder(0, 20, dayStart, dayEnd)
-      .then((res) => {
-        setIsLoading(false);
-        setData(res?.data);
-        setTotal(res?.totalItem);
-        setDataTotal(res?.total[0]);
-      })
-      .catch((err) => console.log(err));
-    setStartDate(dayStart);
-    setEndDate(dayEnd);
-  }, []);
-
   // const handleSearch = useCallback(
   //   _debounce((value) => {
   //     setIsLoading(true);
@@ -481,6 +444,8 @@ const ReportOrder = () => {
   // );
 
   const onChangeDay = () => {
+    setIsLoading(true);
+
     getReportOrder(0, 20, startDate, endDate)
       .then((res) => {
         setIsLoading(false);
@@ -488,38 +453,27 @@ const ReportOrder = () => {
         setTotal(res?.totalItem);
         setDataTotal(res?.total[0]);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setIsLoading(false);
+      });
   };
 
   return (
     <div>
       <div className="div-header-report">
         <div className="div-date">
-          <Input.Group compact>
-            <Select
-              defaultValue={type}
-              onChange={(e) => setType(e)}
-              className="input-picker"
-            >
-              <Option value="day">Ngày</Option>
-              <Option value="week">Tuần </Option>
-              <Option value="month">Tháng</Option>
-              <Option value="quarter">Quý</Option>
-            </Select>
-          </Input.Group>
-          <div>
-            <RangePicker
-              picker={type}
-              className="picker"
-              onChange={(e) => onChangeFilter(e[0]?.$d, e[1]?.$d)}
-            />
-          </div>
+          <CustomDatePicker
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            onClick={onChangeDay}
+          />
+          {startDate && (
+            <a className="text-date">
+              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+              {moment(new Date(endDate)).format("DD/MM/YYYY")}
+            </a>
+          )}
         </div>
-        {/* <CustomDatePicker
-          setStartDate={setStartDate}
-          setEndDate={setEndDate}
-          onClick={onChangeDay}
-        /> */}
         {/* <Input
           placeholder="Tìm kiếm"
           type="text"
@@ -528,7 +482,7 @@ const ReportOrder = () => {
           onChange={(e) => handleSearch(e.target.value)}
         /> */}
       </div>
-      <div className="mt-3">
+      <div className="mt-2">
         <Table
           columns={columns}
           pagination={false}
