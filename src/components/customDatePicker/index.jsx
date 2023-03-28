@@ -125,7 +125,7 @@ const CustomDatePicker = (props) => {
   return (
     <div>
       <div>
-        <a className="title-time">Thời gian</a>
+        {/* <a className="title-time">Thời gian</a> */}
         <div className="btn-date-picker" onClick={() => setOpen(!open)}>
           <a>{title}</a>
         </div>
