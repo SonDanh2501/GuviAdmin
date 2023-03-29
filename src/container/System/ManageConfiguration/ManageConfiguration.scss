@@ -1,5 +1,5 @@
 .container-configuration {
-  width: 98, 5%;
+  width: 90%;
   background-color: white;
   min-height: 50%;
   margin: 10px;
@@ -11,5 +11,29 @@
     border: none;
     color: black;
     box-shadow: 2px 3px 5px rgb(177, 177, 177);
+  }
+
+  .div-list-btn {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .btn-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #1b76ed;
+      padding: 5px;
+      border-radius: 4px;
+      margin-right: 20px;
+
+      .text-btn {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        color: #ffffff;
+      }
+    }
   }
 }

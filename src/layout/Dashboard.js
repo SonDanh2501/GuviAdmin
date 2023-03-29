@@ -10,6 +10,7 @@ import DetailsOrder from "../container/System/DetailsOrder";
 import ManageConfiguration from "../container/System/ManageConfiguration/ManageConfiguration";
 import AppCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/AppCollaborator";
 import AppCustomer from "../container/System/ManageConfiguration/ScreenConfiguration/AppCustomer";
+import CreateAccount from "../container/System/ManageConfiguration/ScreenConfiguration/CreateAccount";
 import GroupCustomerManage from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer";
 import SettingQrCode from "../container/System/ManageConfiguration/ScreenConfiguration/SettingQrcode";
 import DeepCleaningManager from "../container/System/ManageDeepCleaning";
@@ -74,7 +75,7 @@ const Dashboard = () => {
             style={{
               padding: 24,
               margin: 0,
-              minHeight: 280,
+              minHeight: 750,
               background: "white",
               borderRadius: 4,
             }}
@@ -206,6 +207,10 @@ const Dashboard = () => {
               <Route
                 path="/adminManage/manage-configuration/setting-qrcode"
                 element={<SettingQrCode />}
+              />
+              <Route
+                path="/adminManage/manage-configuration/create-account"
+                element={<CreateAccount />}
               />
             </Routes>
           </Content>

@@ -6,57 +6,82 @@ import "./ManageConfiguration.scss";
 
 const ManageConfiguration = () => {
   const navigate = useNavigate();
+
+  const onClick = (item) => {
+    switch (item?.value) {
+      case "reason_cancel":
+        navigate("/adminManage/manage-configuration/manage-reason");
+        break;
+      case "group_customer":
+        navigate("/adminManage/manage-configuration/manage-group-customer");
+        break;
+      case "app_customer":
+        navigate("/adminManage/manage-configuration/manage-app-customer");
+        break;
+      case "app_collaborator":
+        navigate("/adminManage/manage-configuration/manage-app-collaborator");
+        break;
+      case "config_qr":
+        navigate("/adminManage/manage-configuration/setting-qrcode");
+        break;
+      case "create_account":
+        navigate("/adminManage/manage-configuration/create-account");
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="container-configuration">
-      <Row>
-        <Button
-          className="btn"
-          onClick={() => {
-            navigate("/adminManage/manage-configuration/manage-reason");
-          }}
-        >
-          Nguyên nhân huỷ
-        </Button>
-        <Button
-          className="btn ml-5"
-          onClick={() => {
-            navigate("/adminManage/manage-configuration/manage-group-customer");
-          }}
-        >
-          Nhóm khách hàng
-        </Button>
-
-        <Button
-          className="btn ml-5"
-          onClick={() => {
-            navigate("/adminManage/manage-configuration/manage-app-customer");
-          }}
-        >
-          Cấu hình app Khách hàng
-        </Button>
-        <Button
-          className="btn ml-5"
-          onClick={() => {
-            navigate(
-              "/adminManage/manage-configuration/manage-app-collaborator"
-            );
-          }}
-        >
-          Cấu hình app CTV
-        </Button>
-      </Row>
-      <Row className="mt-5">
-        <Button
-          className="btn"
-          onClick={() => {
-            navigate("/adminManage/manage-configuration/setting-qrcode");
-          }}
-        >
-          Cấu hình QrCode
-        </Button>
-      </Row>
+      <div className="div-list-btn">
+        {DATA.map((item) => {
+          return (
+            <div
+              key={item?.id}
+              className="btn-item"
+              onClick={() => onClick(item)}
+            >
+              <a className="text-btn">{item?.title}</a>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
 
 export default ManageConfiguration;
+
+const DATA = [
+  {
+    id: 1,
+    title: "Nguyên nhân huỷ",
+    value: "reason_cancel",
+  },
+  {
+    id: 2,
+    title: "Nhóm khách hàng",
+    value: "group_customer",
+  },
+  {
+    id: 3,
+    title: "Ứng dụng khách hàng",
+    value: "app_customer",
+  },
+  {
+    id: 4,
+    title: "Ứng dụng CTV",
+    value: "app_collaborator",
+  },
+  {
+    id: 5,
+    title: "Cấu hình QrCode",
+    value: "config_qr",
+  },
+  {
+    id: 6,
+    title: "Tạo tài khoản",
+    value: "create_account",
+  },
+];
