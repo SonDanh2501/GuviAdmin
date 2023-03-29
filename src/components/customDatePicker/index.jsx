@@ -131,74 +131,77 @@ const CustomDatePicker = (props) => {
         </div>
       </div>
 
-      <Modal
-        title="Chọn thời gian"
-        open={open}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        okText="Áp dụng"
-        cancelText="Huỷ"
-      >
+      {open && (
         <div className="div-body-modal">
-          <div className="div-left-body-modal">
-            {DATA_TAB.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className={
-                    valueTab === item?.value
-                      ? "div-btn-date-select"
-                      : "div-btn-date"
-                  }
-                  onClick={() => onSelectTab(item)}
-                >
-                  <a className="text-btn-date">{item?.title}</a>
-                </div>
-              );
-            })}
+          <div className="div-main">
+            <div className="div-left-body-modal">
+              {DATA_TAB.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={
+                      valueTab === item?.value
+                        ? "div-btn-date-select"
+                        : "div-btn-date"
+                    }
+                    onClick={() => onSelectTab(item)}
+                  >
+                    <a className="text-btn-date">{item?.title}</a>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="div-right-body-modal">
+              {valueTab === "setting" ? (
+                <>
+                  <div className="div-tab-time">
+                    {OPTION.map((item, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className={
+                            tabTime === item?.value
+                              ? "div-tab-item-select"
+                              : "div-tab-item"
+                          }
+                          onClick={() => {
+                            setTabTime(item?.value);
+                          }}
+                        >
+                          <a>{item?.title}</a>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="ml-5 mt-4">
+                    <RangePicker
+                      picker={tabTime}
+                      className="picker"
+                      onChange={(e) => onChangeFilter(e[0]?.$d, e[1]?.$d)}
+                    />
+                  </div>
+                </>
+              ) : (
+                <Calendar
+                  onChange={onChange}
+                  value={[start, end]}
+                  selectRange={true}
+                  view="month"
+                  className="calendar"
+                />
+              )}
+            </div>
           </div>
-          <div className="div-right-body-modal">
-            {valueTab === "setting" ? (
-              <>
-                <div className="div-tab-time">
-                  {OPTION.map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className={
-                          tabTime === item?.value
-                            ? "div-tab-item-select"
-                            : "div-tab-item"
-                        }
-                        onClick={() => {
-                          setTabTime(item?.value);
-                        }}
-                      >
-                        <a>{item?.title}</a>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="ml-5 mt-4">
-                  <RangePicker
-                    picker={tabTime}
-                    className="picker"
-                    onChange={(e) => onChangeFilter(e[0]?.$d, e[1]?.$d)}
-                  />
-                </div>
-              </>
-            ) : (
-              <Calendar
-                onChange={onChange}
-                value={[start, end]}
-                selectRange={true}
-                view="month"
-                className="calendar"
-              />
-            )}
+          <div className="div-btn">
+            <button className="btn-cancel-date" onClick={handleCancel}>
+              Huỷ
+            </button>
+            <button className="btn-confirm-date" onClick={handleOk}>
+              Áp dụng
+            </button>
           </div>
         </div>
-      </Modal>
+      )}
     </div>
   );
 };
