@@ -33,7 +33,6 @@
     "react-custom-scrollbars": "~4.2.1",
     "react-dom": "^18.2.0",
     "react-draft-wysiwyg": "~1.15.0",
-    "react-google-maps": "~9.4.5",
     "react-image-file-resizer": "~0.4.8",
     "react-intl-currency-input": "0.2.6",
     "react-native-mmkv": "~2.5.1",

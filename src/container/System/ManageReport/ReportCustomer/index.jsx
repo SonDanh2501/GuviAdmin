@@ -236,7 +236,7 @@ const ReportCustomer = () => {
             <a className="text-number-total">{totalYear}</a>
           </div>
         </div>
-        <div className="mt-5">
+        <div className="mt-3">
           <ResponsiveContainer width={"100%"} height={350} min-width={350}>
             <BarChart
               width={500}
@@ -255,13 +255,14 @@ const ReportCustomer = () => {
                 dataKey="month"
                 tickFormatter={(tickItem) => "Tháng " + tickItem}
               />
-              <YAxis dataKey="total" fontSize={12} />
+              <YAxis />
               <Tooltip />
               <Legend />
               <Bar
                 dataKey="total"
                 fill="#4376CC"
                 minPointSize={5}
+                barSize={50}
                 label={{ position: "centerTop", fill: "white" }}
                 name="Khách hàng"
               />
