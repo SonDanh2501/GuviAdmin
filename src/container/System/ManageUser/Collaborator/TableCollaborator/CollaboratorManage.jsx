@@ -383,9 +383,9 @@ export default function CollaboratorManage(props) {
       align: "center",
       render: (data) => {
         const now = moment(new Date()).format("DD/MM/YYYY hh:mm:ss");
-        const then = moment(new Date(data?.date_lock)).format(
-          "DD/MM/YYYY hh:mm:ss"
-        );
+        const then = data?.date_lock
+          ? moment(new Date(data?.date_lock)).format("DD/MM/YYYY hh:mm:ss")
+          : "";
         return (
           <div>
             {!data?.is_verify ? (
@@ -399,7 +399,7 @@ export default function CollaboratorManage(props) {
                   <img src={pending} />
                   <a className="text-lock-time">Block</a>
                 </div>
-                <a className="text-lock-time">{then}</a>
+                {then !== "" && <a className="text-lock-time">{then}</a>}
               </div>
             ) : data?.is_active ? (
               <div>
