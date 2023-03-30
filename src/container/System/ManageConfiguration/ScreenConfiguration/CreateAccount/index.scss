@@ -1,0 +1,51 @@
+.title-create {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  color: black;
+}
+
+.div-body {
+  width: 60%;
+  margin-top: 20px;
+
+  .text-label {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 30px;
+    color: #19202c;
+  }
+
+  .input-pass {
+    height: 40px;
+    border-color: #cecece;
+  }
+
+  .input-role {
+    border-radius: 4px;
+    width: 30%;
+  }
+
+  .div-form-role {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.div-add-role {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10%;
+
+  .btn-add-role {
+    background-color: aqua;
+    border: none;
+    width: 100px;
+    border-radius: 4px;
+    color: black;
+    margin-top: 10px;
+  }
+}

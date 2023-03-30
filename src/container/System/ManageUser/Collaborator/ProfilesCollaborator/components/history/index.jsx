@@ -50,7 +50,7 @@ const History = ({ id }) => {
   const onChange = (page) => {
     setCurrentPage(page);
     const start = page * data.length - data.length;
-    getHistoryActivityCollaborator(id, start, 10)
+    getHistoryCollaboratorRemainder(id, start, 10)
       .then((res) => {
         setData(res.data);
         setTotalData(res.totalItem);
