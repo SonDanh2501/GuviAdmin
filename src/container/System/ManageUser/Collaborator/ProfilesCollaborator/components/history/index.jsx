@@ -98,21 +98,35 @@ const History = ({ id }) => {
                 )}
               </a>
               <div>
-                <a className="text-title-surplus">Ví CTV:</a>
+                <a className="text-title-surplus">
+                  Ví CTV:{" "}
+                  {item?.current_remainder
+                    ? formatMoney(item?.current_remainder)
+                    : formatMoney(0)}
+                </a>
                 <a className="text-surplus"></a>
-                {money.slice(0, 1) === "-" ? (
+                {item?.status_current_remainder === "down" ? (
                   <i class="uil uil-arrow-down icon-deduction"></i>
-                ) : (
+                ) : item?.status_current_remainder === "up" ? (
                   <i class="uil uil-arrow-up icon-plus"></i>
+                ) : (
+                  <></>
                 )}
               </div>
               <div>
-                <a className="text-title-surplus">Ví thưởng:</a>
+                <a className="text-title-surplus">
+                  Ví thưởng:{" "}
+                  {item?.current_gift_remainder
+                    ? formatMoney(item?.current_gift_remainder)
+                    : formatMoney(0)}
+                </a>
                 <a className="text-surplus"></a>
-                {money.slice(0, 1) === "-" ? (
+                {item?.status_current_gift_remainder === "down" ? (
                   <i class="uil uil-arrow-down icon-deduction"></i>
-                ) : (
+                ) : item?.status_current_remainder === "up" ? (
                   <i class="uil uil-arrow-up icon-plus"></i>
+                ) : (
+                  <></>
                 )}
               </div>
             </div>

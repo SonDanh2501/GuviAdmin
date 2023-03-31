@@ -51,6 +51,7 @@ import { formatMoney } from "../../../helper/formatMoney";
 import MoreTopCollaborator from "../../../components/moreTopCollaborator";
 import MoreActivity from "./MoreActivity";
 import CustomDatePicker from "../../../components/customDatePicker";
+import { number_processing } from "../../../helper/numberProcessing";
 moment.locale("vi");
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -274,6 +275,25 @@ export default function Home() {
     },
   ];
 
+  const renderTooltipContent = (o) => {
+    const { payload, label } = o;
+
+    return (
+      <div className="div-content-tool-chart">
+        <a className="date-text">
+          Ngày: {moment(new Date(label)).format("DD/MM/YYYY")}
+        </a>
+
+        <a className="money-text-dashboard">
+          Tổng tiền:{" "}
+          {payload?.length > 0
+            ? formatMoney(payload[0]?.payload?.total_income)
+            : 0}
+        </a>
+      </div>
+    );
+  };
+
   return (
     <div className="container-dash">
       <Header />
@@ -299,7 +319,7 @@ export default function Home() {
                   <ResponsiveContainer
                     width={"100%"}
                     height={350}
-                    min-width={350}
+                    min-width={300}
                   >
                     <AreaChart
                       width={window.screen.height / 1.2}
@@ -319,8 +339,14 @@ export default function Home() {
                           moment(tickItem).format("DD/MM")
                         }
                       />
-                      <YAxis dataKey="total_income" fontSize={12} />
-                      <Tooltip />
+                      <YAxis
+                        dataKey="total_income"
+                        fontSize={12}
+                        tickFormatter={(tickItem) =>
+                          number_processing(tickItem)
+                        }
+                      />
+                      <Tooltip content={renderTooltipContent} />
                       <Area
                         type="monotone"
                         dataKey="total_income"

@@ -66,6 +66,7 @@ const CleaningHourly = (props) => {
   const [nameCollaborator, setNameCollaborator] = useState("");
   const [idCollaborator, setIdCollaborator] = useState("");
   const [errorCollaborator, setErrorCollaborator] = useState("");
+  const [estimate, setEstimate] = useState();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -93,6 +94,7 @@ const CleaningHourly = (props) => {
       count: value?.count,
       _id: value?._id,
     });
+    setEstimate(value?.estimate);
   };
 
   const onChooseMultiple = useCallback(
@@ -564,13 +566,20 @@ const CleaningHourly = (props) => {
           <div className="div-service">
             {addService.slice(0, 3).map((item) => {
               return (
-                <div
+                <button
                   className={
                     mutipleSelected.some((items) => items._id === item?._id)
                       ? "select-service"
                       : "select-service-default"
                   }
                   onClick={() => onChooseMultiple(item?._id)}
+                  disabled={
+                    estimate === 4 && item?.estimate === 0
+                      ? false
+                      : estimate !== 4
+                      ? false
+                      : true
+                  }
                 >
                   <a
                     className={
@@ -590,7 +599,7 @@ const CleaningHourly = (props) => {
                   >
                     {item?.description?.vi}
                   </a>
-                </div>
+                </button>
               );
             })}
           </div>

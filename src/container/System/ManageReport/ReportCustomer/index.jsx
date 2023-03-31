@@ -1,16 +1,16 @@
-import { DatePicker, Select, Table, Tooltip } from "antd";
+import { DatePicker, Select, Table } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useNavigate, useNavigation } from "react-router-dom";
 import {
-  Bar,
   BarChart,
   CartesianGrid,
-  LabelList,
-  Legend,
   ResponsiveContainer,
   XAxis,
   YAxis,
+  Tooltip,
+  Bar,
+  Legend,
 } from "recharts";
 import {
   getTotalCustomerDay,
@@ -175,6 +175,21 @@ const ReportCustomer = () => {
     },
   ];
 
+  const renderTooltipContent = (o) => {
+    const { payload, label } = o;
+
+    return (
+      <div className="div-content-tool-chart">
+        <a className="date-text">Tháng {label}</a>
+
+        <a className="money-text">
+          Số người đăng kí:{" "}
+          {payload?.length > 0 ? payload[0]?.payload?.total : 0}
+        </a>
+      </div>
+    );
+  };
+
   return (
     <div className="div-container-report-customer">
       <a className="text-title">BÁO CÁO SỐ LƯỢNG USER</a>
@@ -256,7 +271,7 @@ const ReportCustomer = () => {
                 tickFormatter={(tickItem) => "Tháng " + tickItem}
               />
               <YAxis />
-              <Tooltip />
+              <Tooltip content={renderTooltipContent} />
               <Legend />
               <Bar
                 dataKey="total"

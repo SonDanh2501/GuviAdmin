@@ -161,6 +161,23 @@ const ReportInvite = () => {
       .catch((err) => console.log(err));
   };
 
+  const renderTooltipContent = (o) => {
+    const { payload, label } = o;
+
+    return (
+      <div className="div-content-tool-chart">
+        <a className="date-text">
+          Ngày: {moment(new Date(label)).format("DD/MM/YYYY")}
+        </a>
+
+        <a className="money-text">
+          Lượt giới thiệu:{" "}
+          {payload?.length > 0 ? payload[0]?.payload?.total : 0}
+        </a>
+      </div>
+    );
+  };
+
   return (
     <div>
       <a className="title">Tổng lượt giới thiệu</a>
@@ -228,13 +245,13 @@ const ReportInvite = () => {
                 />
               )}
               <YAxis />
-              <Tooltip />
+              <Tooltip content={renderTooltipContent} />
               <Legend />
               <Bar
                 dataKey="total"
                 fill="#4376CC"
                 barSize={15}
-                minPointSize={5}
+                minPointSize={10}
                 label={{ position: "centerTop", fill: "white" }}
                 name="Tổng lượt giới thiệu"
               />
