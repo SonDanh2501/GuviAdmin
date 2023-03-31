@@ -48,15 +48,27 @@ const Dashboard = () => {
           width={230}
           style={{
             background: "white",
+            overflow: "auto",
+            height: "100vh",
+            position: "fixed",
+            left: 0,
+            top: 0,
+            bottom: 0,
           }}
         >
           <Sidebar />
         </Sider>
       )}
 
-      <Layout>
+      <Layout
+        className="site-layout"
+        style={{ marginLeft: hideSidebar ? 230 : 0 }}
+      >
         <Header
           style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 1,
             marginLeft: 20,
             marginRight: 20,
             borderRadius: 4,

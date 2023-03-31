@@ -70,12 +70,19 @@ const HistoryTransition = ({ id }) => {
                 )}
               </a>
               <div>
-                <a className="text-title-surplus">Số dư:</a>
+                <a className="text-title-surplus">
+                  Số dư:{" "}
+                  {item?.current_pay_point
+                    ? formatMoney(item?.current_pay_point)
+                    : formatMoney(0)}
+                </a>
                 <a className="text-surplus"></a>
-                {money.slice(0, 1) === "-" ? (
+                {item?.status_current_pay_point === "down" ? (
                   <i class="uil uil-arrow-down icon-deduction"></i>
-                ) : (
+                ) : item?.status_current_pay_point === "up" ? (
                   <i class="uil uil-arrow-up icon-plus"></i>
+                ) : (
+                  <></>
                 )}
               </div>
             </div>

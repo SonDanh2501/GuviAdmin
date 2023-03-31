@@ -3,6 +3,8 @@ import moment from "moment";
 import { useCallback, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import "dayjs/locale/zh-cn";
+import vi from "antd/locale/vi_VN";
 import "./index.scss";
 const { RangePicker } = DatePicker;
 
@@ -173,11 +175,12 @@ const CustomDatePicker = (props) => {
                       );
                     })}
                   </div>
-                  <div className="ml-5 mt-4">
+                  <div className="ml-3 mt-4">
                     <RangePicker
                       picker={tabTime}
                       className="picker"
                       onChange={(e) => onChangeFilter(e[0]?.$d, e[1]?.$d)}
+                      locale={vi}
                     />
                   </div>
                 </>
@@ -188,6 +191,7 @@ const CustomDatePicker = (props) => {
                   selectRange={true}
                   view="month"
                   className="calendar"
+                  locale={"vi-VI"}
                 />
               )}
             </div>

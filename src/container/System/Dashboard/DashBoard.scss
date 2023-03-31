@@ -652,6 +652,29 @@
   }
 }
 
+.div-content-tool-chart {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+
+  .date-text {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: black;
+  }
+  .money-text-dashboard {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #00cf3a !important;
+  }
+}
+
 @media screen and (max-width: 1440px) {
   .text-address-dashboard {
     font-family: "Roboto";

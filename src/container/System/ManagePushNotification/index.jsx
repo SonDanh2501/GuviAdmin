@@ -142,6 +142,16 @@ const ManagePushNotification = () => {
       render: (data) => <a>{data?.body}</a>,
     },
     {
+      title: "Ngày thông báo",
+      render: (data) => (
+        <a>
+          {data?.date_schedule
+            ? moment(new Date(data?.date_schedule)).format("DD/MM/YYYY - HH:mm")
+            : ""}
+        </a>
+      ),
+    },
+    {
       key: "action",
       align: "center",
       render: (data) => {

@@ -158,3 +158,26 @@
     margin-left: 10px;
   }
 }
+
+.div-content-tool-chart {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+
+  .date-text {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: black;
+  }
+  .money-text {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: black;
+  }
+}
