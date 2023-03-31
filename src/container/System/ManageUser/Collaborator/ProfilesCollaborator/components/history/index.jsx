@@ -50,7 +50,7 @@ const History = ({ id }) => {
   const onChange = (page) => {
     setCurrentPage(page);
     const start = page * data.length - data.length;
-    getHistoryActivityCollaborator(id, start, 10)
+    getHistoryCollaboratorRemainder(id, start, 10)
       .then((res) => {
         setData(res.data);
         setTotalData(res.totalItem);
@@ -82,12 +82,12 @@ const History = ({ id }) => {
                 </a>
                 <a
                   className={
-                    money.slice(0, 1) === "-"
+                    money?.slice(0, 1) === "-"
                       ? "text-money-deduction"
                       : "text-money-plus"
                   }
                 >
-                  {money.slice(0, 1) === "-"
+                  {money?.slice(0, 1) === "-"
                     ? formatMoney(item?.value)
                     : "+" + formatMoney(item?.value)}
                 </a>

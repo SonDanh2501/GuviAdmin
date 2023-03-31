@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { FormGroup, Label, Input } from "reactstrap";
+import "./styles.scss";
 
 const CustomTextInput = ({
   label,
@@ -27,9 +28,10 @@ const CustomTextInput = ({
   return (
     <FormGroup className={classNameForm}>
       {label && (
-        <Label for="exampleAddress" style={{ fontSize: 20 }}>
-          {label}
-        </Label>
+        // <Label for="exampleAddress" style={{ fontSize: 18 }}>
+        //   {label}
+        // </Label>
+        <a className="text-label">{label}</a>
       )}
       <Input
         id={id}
