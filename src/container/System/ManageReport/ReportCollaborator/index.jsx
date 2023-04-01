@@ -59,6 +59,9 @@ const ReportManager = () => {
         setTotalColumn(res?.total);
       })
       .catch((err) => console.log(err));
+
+    setStartDate(moment().startOf("year").toISOString());
+    setEndDate(moment(new Date()).toISOString());
   }, []);
 
   const onChange = (page) => {
@@ -93,7 +96,7 @@ const ReportManager = () => {
           .catch((err) => {
             setIsLoading(false);
           })
-      : getReportCollaborator(start > 0 ? start : 0, 20)
+      : getReportCollaborator(start > 0 ? start : 0, 20, startDate, endDate)
           .then((res) => {
             setIsLoading(false);
             setData(res?.data);
