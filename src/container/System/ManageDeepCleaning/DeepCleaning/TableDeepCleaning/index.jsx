@@ -1,5 +1,5 @@
 import { MoreOutlined } from "@ant-design/icons";
-import { Button, Dropdown, Space, Table } from "antd";
+import { Button, Dropdown, Space, Table, Pagination } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +20,7 @@ const TableDeepCleaning = (props) => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [statusModal, setStatusModal] = useState("done");
   const [modal, setModal] = useState(false);
   const [modalContacted, setModalContacted] = useState(false);
@@ -277,6 +278,17 @@ const TableDeepCleaning = (props) => {
     },
   ];
 
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const start = page * data.length - data.length;
+    getCusomerRequest(status, start, 20, "")
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+
   return (
     <div>
       <div className="mt-3">
@@ -292,6 +304,18 @@ const TableDeepCleaning = (props) => {
             };
           }}
         />
+      </div>
+      <div className="mt-1 div-pagination p-2">
+        <a>Tổng: {total}</a>
+        <div>
+          <Pagination
+            current={currentPage}
+            onChange={onChange}
+            total={total}
+            showSizeChanger={false}
+            pageSize={20}
+          />
+        </div>
       </div>
 
       <div>
