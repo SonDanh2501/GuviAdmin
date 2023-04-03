@@ -22,7 +22,7 @@ import OrderUsePromotion from "../container/System/ManagePromotion/OrderUsePromo
 import ManagePushNotification from "../container/System/ManagePushNotification";
 import ManageReport from "../container/System/ManageReport";
 import DetailReportManager from "../container/System/ManageReport/DetailsReportCollaborator";
-import DetailRegisterCustomer from "../container/System/ManageReport/ReportCustomer/DetailRegisterCustomer";
+import DetailRegisterCustomer from "../container/System/ManageReport/ReportUser/DetailRegisterCustomer";
 import ReportInviteDetails from "../container/System/ManageReport/ReportInvite/ReportInviteDetails";
 import GroupServiceManage from "../container/System/ManageService/ManageGroupService/ManageGroupService/GroupServiceManage";
 import ServiceManage from "../container/System/ManageService/ManageService/ServiceManage";

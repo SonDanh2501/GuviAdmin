@@ -2,11 +2,12 @@ import { Tabs } from "antd";
 
 import "./index.scss";
 import ReportManager from "./ReportCollaborator";
-import ReportCustomer from "./ReportCustomer";
 import ReportInvite from "./ReportInvite";
 import ReportOrder from "./ReportOrder";
 import ReportService from "./ReportService";
 import ReportArea from "./ReportArea";
+import ReportUser from "./ReportUser";
+import ReportCustomer from "./ReportCutomer";
 
 const ManageReport = () => {
   return (
@@ -23,13 +24,13 @@ const ManageReport = () => {
             <ReportManager />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Báo cáo số lượng user" key="3">
-            <ReportCustomer />
+            <ReportUser />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Báo cáo lượt giới thiệu" key="4">
             <ReportInvite />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo khu vực" key="5">
-            {/* <ReportArea /> */}
+          <Tabs.TabPane tab="Báo cáo khách hàng" key="5">
+            <ReportCustomer />
           </Tabs.TabPane>
         </Tabs>
       </div>

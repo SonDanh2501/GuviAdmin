@@ -25,7 +25,7 @@ import "./index.scss";
 
 const { RangePicker } = DatePicker;
 
-const ReportCustomer = () => {
+const ReportUser = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [rowIndex, setRowIndex] = useState();
   const [totalMonth, setTotalMonth] = useState(0);
@@ -339,4 +339,4 @@ const ReportCustomer = () => {
     </div>
   );
 };
-export default ReportCustomer;
+export default ReportUser;
