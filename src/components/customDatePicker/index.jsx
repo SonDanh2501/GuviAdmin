@@ -28,19 +28,37 @@ const CustomDatePicker = (props) => {
 
   const onSelectTab = (item) => {
     setValueTab(item?.value);
-    const today = moment().toISOString();
-    const lastSeven = moment().subtract(7, "d").toISOString();
-    const lastThirty = moment().subtract(30, "d").toISOString();
-    const lastNinety = moment().subtract(90, "d").toISOString();
-    const startThisMonth = moment().startOf("month").toISOString();
-    const endThisMonth = moment().endOf("month").toISOString();
-    const startLastMonth = moment()
-      .subtract(1, "months")
-      .startOf("month")
+    const today = moment(moment().toISOString()).add(7, "hours").toISOString();
+    const lastSeven = moment(
+      moment().subtract(7, "d").startOf("date").toISOString()
+    )
+      .add(7, "hours")
       .toISOString();
-    const endLastMonth = moment()
-      .subtract(1, "months")
-      .endOf("month")
+    const lastThirty = moment(
+      moment().subtract(30, "d").startOf("date").toISOString()
+    )
+      .add(7, "hours")
+      .toISOString();
+    const lastNinety = moment(
+      moment().subtract(90, "d").startOf("date").toISOString()
+    )
+      .add(7, "hours")
+      .toISOString();
+    const startThisMonth = moment(moment().startOf("month").toISOString())
+      .add(7, "hours")
+      .toISOString();
+    const endThisMonth = moment(moment().endOf("month").toISOString())
+      .add(7, "hours")
+      .toISOString();
+    const startLastMonth = moment(
+      moment().subtract(1, "months").startOf("month").toISOString()
+    )
+      .add(7, "hours")
+      .toISOString();
+    const endLastMonth = moment(
+      moment().subtract(1, "months").endOf("month").toISOString()
+    )
+      .add(7, "hours")
       .toISOString();
 
     switch (item?.value) {

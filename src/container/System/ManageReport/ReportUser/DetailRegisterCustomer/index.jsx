@@ -15,8 +15,12 @@ const DetailRegisterCustomer = () => {
 
   useEffect(() => {
     getTotalDetailCustomerDay(
-      moment(date).startOf("date").toISOString(),
-      moment(date).endOf("date").toISOString()
+      moment(moment(date).startOf("date").toISOString())
+        .add(7, "hours")
+        .toISOString(),
+      moment(moment(date).endOf("date").toISOString())
+        .add(7, "hours")
+        .toISOString()
     )
       .then((res) => {
         setData(res?.data);

@@ -89,7 +89,7 @@ export default function TopupCustomer() {
   const onConfirm = useCallback(
     (id) => {
       dispatch(loadingAction.loadingRequest(true));
-      verifyMoneyCustomerApi(id, { is_verify_money: true })
+      verifyMoneyCustomerApi(id)
         .then((res) => {
           dispatch(
             getTopupCustomer.getTopupCustomerRequest({
