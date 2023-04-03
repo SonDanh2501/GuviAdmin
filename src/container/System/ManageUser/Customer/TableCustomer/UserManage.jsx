@@ -129,6 +129,7 @@ export default function UserManage(props) {
       ? searchCustomers(start, 20, status, valueFilter)
           .then((res) => {
             setDataFilter(res.data);
+            setTotalFilter(res.totalItems);
           })
           .catch((err) => {})
       : dispatch(
@@ -148,7 +149,7 @@ export default function UserManage(props) {
         .then((res) => {
           setIsLoading(false);
           setDataFilter(res.data);
-          setTotalFilter(res.totalItem);
+          setTotalFilter(res.totalItems);
         })
         .catch((err) => {
           setIsLoading(false);
