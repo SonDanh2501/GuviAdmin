@@ -79,8 +79,10 @@ export default function Home() {
   const dispatch = useDispatch();
   useEffect(() => {
     getDayReportApi(
-      moment().startOf("month").toISOString(),
-      moment(new Date()).toISOString()
+      moment(moment().startOf("month").toISOString())
+        .add(7, "hours")
+        .toISOString(),
+      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
     )
       .then((res) => {
         setArrResult(res.arrResult);
@@ -97,7 +99,9 @@ export default function Home() {
     );
     dispatch(
       getTopCollaborator.getTopCollaboratorRequest({
-        startDate: moment().startOf("year").toISOString(),
+        startDate: moment(moment().startOf("year").toISOString())
+          .add(7, "hours")
+          .toISOString(),
         endDate: moment(new Date()).toISOString(),
         start: 0,
         length: 10,
@@ -334,7 +338,7 @@ export default function Home() {
                     >
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis
-                        dataKey="date_end"
+                        dataKey="date_start"
                         tickFormatter={(tickItem) =>
                           moment(tickItem).format("DD/MM")
                         }

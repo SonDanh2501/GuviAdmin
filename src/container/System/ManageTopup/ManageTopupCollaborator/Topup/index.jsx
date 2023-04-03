@@ -14,7 +14,7 @@ import {
 } from "../../../../../api/topup";
 import { errorNotify, successNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
-import { DatePicker, Input, Pagination, Select, Table } from "antd";
+import { DatePicker, Input, Pagination, Select, Table, Tooltip } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { getUser } from "../../../../../redux/selectors/auth";
 import moment from "moment";
@@ -308,39 +308,45 @@ const TopupCollaborator = ({ type }) => {
             <div className="mt-1 ml-3">
               {(data?.status === "pending" ||
                 data?.status === "transfered") && (
-                <a className="text-cancel-topup" onClick={toggleCancel}>
-                  Huỷ
-                </a>
+                <Tooltip placement="bottom" title={"Huỷ giao dịch CTV"}>
+                  <a className="text-cancel-topup" onClick={toggleCancel}>
+                    Huỷ
+                  </a>
+                </Tooltip>
               )}
             </div>
             <div className="mt-1">
-              <button
-                className="btn-edit"
-                disabled={
-                  (!data?.is_verify_money && data?.status === "cancel") ||
-                  data?.is_verify_money
-                    ? true
-                    : false
-                }
-                onClick={() => {
-                  toggleEdit();
-                  setItemEdit(data);
-                }}
-              >
-                <i
-                  className={
+              <Tooltip placement="bottom" title={"Chỉnh sửa giao dịch CTV"}>
+                <button
+                  className="btn-edit-topup"
+                  disabled={
                     (!data?.is_verify_money && data?.status === "cancel") ||
                     data?.is_verify_money
-                      ? "uil uil-edit-alt icon-edit"
-                      : "uil uil-edit-alt"
+                      ? true
+                      : false
                   }
-                ></i>
-              </button>
+                  onClick={() => {
+                    toggleEdit();
+                    setItemEdit(data);
+                  }}
+                >
+                  <i
+                    className={
+                      (!data?.is_verify_money && data?.status === "cancel") ||
+                      data?.is_verify_money
+                        ? "uil uil-edit-alt icon-edit"
+                        : "uil uil-edit-alt"
+                    }
+                  ></i>
+                </button>
+              </Tooltip>
 
               {user?.role === "admin" && (
-                <button className="btn-delete" onClick={toggle}>
-                  <i className="uil uil-trash"></i>
-                </button>
+                <Tooltip placement="bottom" title={"Xoá giao dịch CTV"}>
+                  <button className="btn-delete" onClick={toggle}>
+                    <i className="uil uil-trash"></i>
+                  </button>
+                </Tooltip>
               )}
             </div>
           </div>

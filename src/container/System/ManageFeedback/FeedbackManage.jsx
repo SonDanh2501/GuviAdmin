@@ -1,5 +1,5 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Input, Pagination, Table } from "antd";
+import { Input, Pagination, Table, Tooltip } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { useCallback, useState } from "react";
@@ -129,9 +129,11 @@ export default function FeedbackManage() {
       align: "center",
       render: (data) =>
         user?.role === "admin" && (
-          <button className="btn-delete" onClick={toggle}>
-            <i className="uil uil-trash"></i>
-          </button>
+          <Tooltip placement="bottom" title="Xoá phản hồi">
+            <button className="btn-delete" onClick={toggle}>
+              <i className="uil uil-trash"></i>
+            </button>
+          </Tooltip>
         ),
     },
   ];

@@ -50,8 +50,10 @@ const ReportManager = () => {
     getReportCollaborator(
       0,
       20,
-      moment().startOf("year").toISOString(),
-      moment(new Date()).toISOString()
+      moment(moment().startOf("year").toISOString())
+        .add(7, "hours")
+        .toISOString(),
+      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
     )
       .then((res) => {
         setData(res?.data);
@@ -60,8 +62,14 @@ const ReportManager = () => {
       })
       .catch((err) => console.log(err));
 
-    setStartDate(moment().startOf("year").toISOString());
-    setEndDate(moment(new Date()).toISOString());
+    setStartDate(
+      moment(moment().startOf("year").toISOString())
+        .add(7, "hours")
+        .toISOString()
+    );
+    setEndDate(
+      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
+    );
   }, []);
 
   const onChange = (page) => {
