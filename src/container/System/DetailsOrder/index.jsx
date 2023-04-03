@@ -1,10 +1,12 @@
 import {
   Button,
   Col,
+  Dropdown,
   FloatButton,
   Image,
   Popconfirm,
   Row,
+  Space,
   Table,
   Tabs,
 } from "antd";
@@ -26,6 +28,7 @@ import { errorNotify } from "../../../helper/toast";
 import { loadingAction } from "../../../redux/actions/loading";
 import "./index.scss";
 import { getUser } from "../../../redux/selectors/auth";
+import { MoreOutlined } from "@ant-design/icons";
 
 const DetailsOrder = () => {
   const { state } = useLocation();
@@ -43,6 +46,7 @@ const DetailsOrder = () => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [serviceFee, setServiceFee] = useState(0);
   const [rowIndex, setRowIndex] = useState();
+  const [itemEdit, setItemEdit] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toggle = () => setModal(!modal);
@@ -306,7 +310,7 @@ const DetailsOrder = () => {
       ),
     },
     {
-      key: "actions",
+      key: "action",
       render: (data, record, index) => {
         return (
           <>
@@ -377,6 +381,42 @@ const DetailsOrder = () => {
         );
       },
     },
+    {
+      key: "action",
+      align: "center",
+      render: (data) => (
+        <Space size="middle">
+          <Dropdown
+            menu={{
+              items,
+            }}
+            placement="bottom"
+            trigger={["click"]}
+          >
+            <a>
+              <MoreOutlined className="icon-more" />
+            </a>
+          </Dropdown>
+        </Space>
+      ),
+    },
+  ];
+
+  const items = [
+    {
+      key: "1",
+      label: (
+        <a
+          onClick={() =>
+            navigate("/details-order/details-order-schedule", {
+              state: { id: itemEdit?._id },
+            })
+          }
+        >
+          Chi tiết
+        </a>
+      ),
+    },
   ];
 
   return (
@@ -389,7 +429,7 @@ const DetailsOrder = () => {
                 <div className="div-container">
                   <a className="label">Chi tiết công việc</a>
                   <Row>
-                    <Col span={16} className="col-left">
+                    <Col span={14} className="col-left">
                       <a className="label-customer">Khách hàng</a>
                       <div className="div-body">
                         <Image
@@ -421,7 +461,7 @@ const DetailsOrder = () => {
                       </div>
                     </Col>
                     {dataGroup?.id_collaborator && (
-                      <Col span={8} className="col-right">
+                      <Col span={10} className="col-right">
                         <a className="label-ctv">Cộng tác viên hiện tại</a>
                         <div className="div-body">
                           <Image
@@ -508,19 +548,23 @@ const DetailsOrder = () => {
                           <a className="text-service">{dataGroup?.note}</a>
                         </a>
                       )}
-                      <div style={{ flexDirection: "row" }}>
+                      <div className="div-add-service">
                         <a className="title">Dịch vụ thêm: </a>
-                        {dataGroup?.service?.optional_service.map((item) => {
-                          return (
-                            <a>
-                              {item?._id === "632148d02bacd0aa8648657c"
-                                ? item?.extend_optional?.map((item) => (
-                                    <a>- {item?.title?.vi}</a>
-                                  ))
-                                : null}
-                            </a>
-                          );
-                        })}
+                        <div className="div-add">
+                          {dataGroup?.service?.optional_service.map((item) => {
+                            return (
+                              <>
+                                {item?._id === "632148d02bacd0aa8648657c"
+                                  ? item?.extend_optional?.map((item) => (
+                                      <a className="text-title-add">
+                                        - {item?.title?.vi}
+                                      </a>
+                                    ))
+                                  : null}
+                              </>
+                            );
+                          })}
+                        </div>
                       </div>
 
                       <a className="title">
@@ -532,7 +576,7 @@ const DetailsOrder = () => {
                         </a>
                       </a>
                       <div className="div-price-order">
-                        <a className="title">Tạm tính:</a>
+                        <a className="title-price-order">Tạm tính:</a>
                         <div className="detail-price">
                           <div className="div-total">
                             <a>- Tổng tiền:</a>
@@ -652,6 +696,7 @@ const DetailsOrder = () => {
                         return {
                           onClick: (event) => {
                             setRowIndex(rowIndex);
+                            setItemEdit(record);
                           },
                         };
                       }}

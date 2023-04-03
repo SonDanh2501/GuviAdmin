@@ -36,6 +36,7 @@ import ManageCustomer from "../container/System/ManageUser/Customer";
 import Profiles from "../container/System/ManageUser/Customer/Profiles";
 
 import "./Dashboard.scss";
+import DetailsOrderSchedule from "../container/System/DetailsOrder/OrderScheduleDetails";
 const { Header, Content, Sider } = Layout;
 
 const Dashboard = () => {
@@ -99,6 +100,10 @@ const Dashboard = () => {
                 element={<DeepCleaningManager />}
               />
               <Route path="/details-order" element={<DetailsOrder />} />
+              <Route
+                path="/details-order/details-order-schedule"
+                element={<DetailsOrderSchedule />}
+              />
               <Route
                 path="/details-collaborator"
                 element={<ProfileCollaborator />}

@@ -45,16 +45,22 @@ const ReportCustomer = () => {
 
   useEffect(() => {
     getTotalReportCustomer(
-      moment().startOf("month").toISOString(),
-      moment().endOf("month").toISOString()
+      moment(moment().startOf("month").toISOString())
+        .add(7, "hours")
+        .toISOString(),
+      moment(moment().endOf("month").toISOString())
+        .add(7, "hours")
+        .toISOString()
     )
       .then((res) => {
         setTotalMonth(res?.totalCustomer);
       })
       .catch((err) => {});
     getTotalReportCustomer(
-      moment().startOf("date").toISOString(),
-      moment().endOf("date").toISOString()
+      moment(moment().startOf("date").toISOString())
+        .add(7, "hours")
+        .toISOString(),
+      moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
     )
       .then((res) => {
         setTotalDay(res?.totalCustomer);
@@ -76,7 +82,9 @@ const ReportCustomer = () => {
       .catch((err) => {});
 
     getTotalCustomerDay(
-      moment().startOf("month").toISOString(),
+      moment(moment().startOf("month").toISOString())
+        .add(7, "hours")
+        .toISOString(),
       moment(new Date()).toISOString()
     )
       .then((res) => {

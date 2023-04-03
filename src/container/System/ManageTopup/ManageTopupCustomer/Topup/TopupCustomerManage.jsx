@@ -1,5 +1,5 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Empty, Input, Pagination, Skeleton, Table } from "antd";
+import { Empty, Input, Pagination, Skeleton, Table, Tooltip } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
@@ -300,9 +300,11 @@ export default function TopupCustomer() {
               )}
 
               {user?.role === "admin" && (
-                <button className="btn-delete" onClick={toggle}>
-                  <i className="uil uil-trash"></i>
-                </button>
+                <Tooltip placement="bottom" title={"Xoá giao dịch KH"}>
+                  <button className="btn-delete" onClick={toggle}>
+                    <i className="uil uil-trash"></i>
+                  </button>
+                </Tooltip>
               )}
             </div>
           </div>
