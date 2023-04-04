@@ -1,0 +1,96 @@
+.title-review {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 28px;
+  color: #000000;
+}
+
+.div-head-review {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.div-date {
+  display: flex;
+  flex-direction: row;
+  width: 40%;
+  align-items: center;
+  margin-top: 20px;
+
+  .text-date {
+    color: #000000;
+    font-family: "Roboto";
+    font-style: normal;
+    font-size: 12px;
+    margin-left: 10px;
+  }
+}
+
+.div-create-review {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  .text-date-review {
+    color: #000000;
+    font-weight: 400;
+    font-family: "Roboto";
+    font-style: normal;
+    font-size: 12px;
+  }
+}
+
+.div-customer-review {
+  display: flex;
+  flex-direction: column;
+  .text-name-review {
+    color: #000000;
+    font-weight: 400;
+    font-family: "Roboto";
+    font-style: normal;
+    font-size: 12px;
+  }
+}
+
+.div-collaborator-review {
+  display: flex;
+  flex-direction: column;
+  .text-name-review {
+    color: #000000;
+    font-weight: 400;
+    font-family: "Roboto";
+    font-style: normal;
+    font-size: 12px;
+  }
+}
+
+.star-review {
+  color: #000000;
+  font-weight: 400;
+  font-family: "Roboto";
+  font-style: normal;
+  font-size: 12px;
+}
+
+.text-review {
+  display: block;
+  color: #000000;
+  font-weight: 400;
+  font-family: "Roboto";
+  font-style: normal;
+  font-size: 12px;
+  width: 200px;
+}
+
+.text-short-review {
+  color: #000000;
+  font-weight: 400;
+  font-family: "Roboto";
+  font-style: normal;
+  font-size: 12px;
+}

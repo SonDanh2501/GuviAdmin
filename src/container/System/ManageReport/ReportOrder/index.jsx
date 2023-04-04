@@ -28,6 +28,9 @@ import _debounce from "lodash/debounce";
 import "./index.scss";
 import LoadingPagination from "../../../../components/paginationLoading";
 import CustomDatePicker from "../../../../components/customDatePicker";
+import { getDistrictApi } from "../../../../api/file";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -41,6 +44,10 @@ const ReportOrder = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [dataCity, setDataCity] = useState([]);
+  const [codeCity, setCodeCity] = useState();
+  const [dataDistrict, setDataDistrict] = useState([]);
+  const [codeDistrict, setCodeDistrict] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -58,6 +65,14 @@ const ReportOrder = () => {
         setDataTotal(res?.total[0]);
       })
       .catch((err) => console.log(err));
+
+    getDistrictApi()
+      .then((res) => {
+        setDataCity(res?.aministrative_division);
+        setCodeCity(res?.aministrative_division[0]?.code);
+        setDataDistrict(res?.aministrative_division[0]?.districts);
+      })
+      .catch((err) => {});
 
     setStartDate(
       moment(moment().startOf("year").toISOString())
@@ -471,6 +486,71 @@ const ReportOrder = () => {
 
   return (
     <div>
+      <div className="div-chart-pie-total">
+        <div className="div-select-city">
+          <CustomTextInput
+            type="select"
+            className="select-city"
+            body={
+              <>
+                {dataCity?.map((item, index) => {
+                  return <option>{item?.name}</option>;
+                })}
+              </>
+            }
+          />
+
+          <CustomTextInput
+            type="select"
+            className="select-city"
+            body={
+              <>
+                {dataDistrict?.map((item, index) => {
+                  return <option>{item?.name}</option>;
+                })}
+              </>
+            }
+          />
+        </div>
+        <div className="div-pie-chart">
+          <div className="div-title-note">
+            <div className="div-square-ser">
+              <div className="square-two" />
+              <a>2 giờ</a>
+            </div>
+            <div className="div-square-ser">
+              <div className="square-three" />
+              <a>3 giờ</a>
+            </div>
+            <div className="div-square-ser">
+              <div className="square-four" />
+              <a>4 giờ</a>
+            </div>
+          </div>
+
+          <ResponsiveContainer height={200} min-width={500}>
+            <PieChart>
+              <Pie
+                data={DATA}
+                cx={100}
+                cy={100}
+                innerRadius={60}
+                outerRadius={80}
+                fill="#8884d8"
+                paddingAngle={5}
+                dataKey="value"
+              >
+                {DATA.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
       <div className="div-header-report">
         <div className="div-date">
           <CustomDatePicker
@@ -521,3 +601,10 @@ const ReportOrder = () => {
 };
 
 export default ReportOrder;
+
+const DATA = [
+  { name: "Group A", value: 100 },
+  { name: "Group B", value: 300 },
+  { name: "Group C", value: 600 },
+];
+const COLORS = ["#0088FE", "#48cae4", "#00CF3A"];

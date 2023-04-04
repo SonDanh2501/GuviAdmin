@@ -1,4 +1,4 @@
-import { Button, DatePicker, Pagination, Popover, Table } from "antd";
+import { Button, DatePicker, Pagination, Popover, Progress, Table } from "antd";
 import moment from "moment";
 import vi from "moment/locale/vi";
 import { useEffect, useState } from "react";
@@ -452,6 +452,12 @@ const ReportCustomer = () => {
           </div>
           <div className="div-text-tab">
             <div className="div-t">
+              <a className="text-tab-header">Tổng đơn</a>
+              <a className="text-tab-header">{0}</a>
+            </div>
+          </div>
+          <div className="div-text-tab">
+            <div className="div-t">
               <a className="text-tab-header">Tổng tiền</a>
               <a className="text-tab-header">{formatMoney(moneyNew)}</a>
             </div>
@@ -478,6 +484,63 @@ const ReportCustomer = () => {
             <div className="div-t">
               <a className="text-tab-header">Tổng tiền</a>
               <a className="text-tab-header">{formatMoney(moneyOld)}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="div-ratio">
+        <a className="title">Tỉ lệ chuyển đổi</a>
+        <div className="div-date">
+          <CustomDatePicker />
+        </div>
+        <div className="div-progress">
+          <div className="div-progress-item">
+            <div className="div-square-cus">
+              <div>
+                <div className="div-square-cus">
+                  <div className="div-square" />
+                  <a className="title-square-cus">Khách hàng mới</a>
+                </div>
+                <div className="div-square-cus">
+                  <div className="div-unsquare" />
+                  <a className="title-square-cus">Đơn hàng</a>
+                </div>
+              </div>
+            </div>
+            <div className="div-cus-job">
+              <a className="label-cus-job">Khách hàng mới / đơn hàng</a>
+              <Progress
+                percent={30}
+                gapDegree={5}
+                strokeColor={"#48CAE4"}
+                strokeWidth={15}
+                width={150}
+                type="dashboard"
+              />
+            </div>
+          </div>
+
+          <div className="div-progress-item">
+            <div>
+              <div className="div-square-cus">
+                <div className="div-square" />
+                <a>Khách hàng</a>
+              </div>
+              <div className="div-square-cus">
+                <div className="div-unsquare" />
+                <a>Đơn hàng</a>
+              </div>
+            </div>
+            <div className="div-cus-job">
+              <a className="label-cus-job">Khách hàng / đơn hàng</a>
+              <Progress
+                percent={30}
+                gapDegree={5}
+                strokeColor={"#48CAE4"}
+                strokeWidth={15}
+                width={150}
+                type="dashboard"
+              />
             </div>
           </div>
         </div>

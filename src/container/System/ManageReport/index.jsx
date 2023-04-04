@@ -8,6 +8,7 @@ import ReportService from "./ReportService";
 import ReportArea from "./ReportArea";
 import ReportUser from "./ReportUser";
 import ReportCustomer from "./ReportCutomer";
+import ReviewCollaborator from "./ReviewCollaborator";
 
 const ManageReport = () => {
   return (
@@ -31,6 +32,9 @@ const ManageReport = () => {
           </Tabs.TabPane>
           <Tabs.TabPane tab="Báo cáo khách hàng" key="5">
             <ReportCustomer />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Đánh giá CTV" key="6">
+            <ReviewCollaborator />
           </Tabs.TabPane>
         </Tabs>
       </div>
