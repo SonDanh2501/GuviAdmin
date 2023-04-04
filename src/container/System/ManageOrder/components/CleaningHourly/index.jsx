@@ -356,56 +356,30 @@ const CleaningHourly = (props) => {
         id) ||
       idCollaborator
     ) {
-      if (idCollaborator) {
-        createOrderApi({
-          id_customer: id,
-          token: accessToken.toString(),
-          type: "loop",
-          type_address_work: "house",
-          note_address: "",
-          note: note,
-          is_auto_order: isAutoOrder,
-          date_work_schedule: [timeW],
-          extend_optional: mutipleSelected.concat(time),
-          code_promotion: codePromotion,
-          payment_method: "cash",
-          id_collaborator: idCollaborator,
+      createOrderApi({
+        id_customer: id,
+        token: accessToken.toString(),
+        type: "loop",
+        type_address_work: "house",
+        note_address: "",
+        note: note,
+        is_auto_order: isAutoOrder,
+        date_work_schedule: [timeW],
+        extend_optional: mutipleSelected.concat(time),
+        code_promotion: codePromotion,
+        payment_method: paymentMethod,
+        id_collaborator: idCollaborator,
+      })
+        .then((res) => {
+          navigate("/group-order/manage-order");
+          window.location.reload();
         })
-          .then((res) => {
-            navigate("/group-order/manage-order");
-            window.location.reload();
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err,
-            });
-            dispatch(loadingAction.loadingRequest(false));
+        .catch((err) => {
+          errorNotify({
+            message: err,
           });
-      } else {
-        createOrderApi({
-          id_customer: id,
-          token: accessToken.toString(),
-          type: "loop",
-          type_address_work: "house",
-          note_address: "",
-          note: note,
-          is_auto_order: isAutoOrder,
-          date_work_schedule: [timeW],
-          extend_optional: mutipleSelected.concat(time),
-          code_promotion: codePromotion,
-          payment_method: paymentMethod,
-        })
-          .then((res) => {
-            navigate("/group-order/manage-order");
-            window.location.reload();
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err,
-            });
-            dispatch(loadingAction.loadingRequest(false));
-          });
-      }
+          dispatch(loadingAction.loadingRequest(false));
+        });
     } else if (!id) {
       setErrorNameCustomer("Vui lòng chọn khách hàng");
       dispatch(loadingAction.loadingRequest(false));

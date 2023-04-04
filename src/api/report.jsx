@@ -116,3 +116,16 @@ export const getReportCustomerNewOld = (
     `/admin/report_mananger/report_group_order?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
   );
 };
+
+export const getReportReviewCollaborator = (
+  start,
+  length,
+  start_date,
+  end_date,
+  star,
+  search
+) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_review?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&star=${star}&search=${search}`
+  );
+};

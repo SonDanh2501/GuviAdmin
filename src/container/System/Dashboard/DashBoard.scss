@@ -21,25 +21,38 @@
       height: 500px;
     }
 
-    .div-date {
+    .div-head-chart {
       display: flex;
       flex-direction: row;
-      width: 40%;
-      margin-bottom: 10px;
+      align-items: center;
+      justify-content: space-between;
 
-      .text-date {
+      .text-total-money {
         color: #000000;
         font-family: "Roboto";
         font-style: normal;
         font-size: 12px;
-        margin-left: 10px;
       }
+      .div-date {
+        display: flex;
+        flex-direction: row;
+        width: 40%;
+        margin-bottom: 10px;
 
-      .input-picker {
-        width: 100px;
-      }
-      .picker {
-        width: 300px;
+        .text-date {
+          color: #000000;
+          font-family: "Roboto";
+          font-style: normal;
+          font-size: 12px;
+          margin-left: 10px;
+        }
+
+        .input-picker {
+          width: 100px;
+        }
+        .picker {
+          width: 300px;
+        }
       }
     }
 

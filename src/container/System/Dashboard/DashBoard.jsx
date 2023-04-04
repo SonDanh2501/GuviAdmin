@@ -66,6 +66,7 @@ const COLORS = ["#BAE6FD", " #F477EF", "#FCD34D", "#2ACB9E"];
 
 export default function Home() {
   const [arrResult, setArrResult] = useState([]);
+  const [totalMoneyChart, setTotalMoneyChart] = useState(0);
   const [day, setDay] = useState([]);
   const [type, setType] = useState("day");
   const [startDate, setStartDate] = useState("");
@@ -86,6 +87,7 @@ export default function Home() {
     )
       .then((res) => {
         setArrResult(res.arrResult);
+        // setTotalMoneyChart(res?.total_money);
         getDates(res?.arrResult[0]?.date_start, res?.arrResult?.date_end);
       })
       .catch((err) => console.log(err));
@@ -294,6 +296,10 @@ export default function Home() {
             ? formatMoney(payload[0]?.payload?.total_income)
             : 0}
         </a>
+
+        <a className="date-text">
+          Tổng đơn: {payload?.length > 0 ? payload[0]?.payload?.total_job : 0}
+        </a>
       </div>
     );
   };
@@ -306,18 +312,23 @@ export default function Home() {
           <Row>
             <Col lg="9">
               <div className="chart">
-                <div className="div-date">
-                  <CustomDatePicker
-                    setStartDate={setStartDate}
-                    setEndDate={setEndDate}
-                    onClick={onChange}
-                  />
-                  {startDate && (
-                    <a className="text-date">
-                      {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-                      {moment(new Date(endDate)).format("DD/MM/YYYY")}
-                    </a>
-                  )}
+                <div className="div-head-chart">
+                  <div className="div-date">
+                    <CustomDatePicker
+                      setStartDate={setStartDate}
+                      setEndDate={setEndDate}
+                      onClick={onChange}
+                    />
+                    {startDate && (
+                      <a className="text-date">
+                        {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+                        {moment(new Date(endDate)).format("DD/MM/YYYY")}
+                      </a>
+                    )}
+                  </div>
+                  <a className="text-total-money">
+                    Tổng tiền: {formatMoney(totalMoneyChart)}
+                  </a>
                 </div>
                 <div>
                   <ResponsiveContainer
