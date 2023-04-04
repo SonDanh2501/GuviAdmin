@@ -1,36 +1,23 @@
-import { SearchOutlined } from "@ant-design/icons";
 import {
   Button,
   DatePicker,
-  Dropdown,
-  Empty,
-  Input,
+  List,
   Pagination,
   Popover,
   Select,
-  Skeleton,
-  Space,
-  Spin,
   Table,
 } from "antd";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  filterReportCollaborator,
-  getReportCollaborator,
-  getReportOrder,
-  searchReportCollaborator,
-} from "../../../../api/report";
+import { getReportOrder, getReportTypeService } from "../../../../api/report";
 import { formatMoney } from "../../../../helper/formatMoney";
-import _debounce from "lodash/debounce";
 
-import "./index.scss";
-import LoadingPagination from "../../../../components/paginationLoading";
-import CustomDatePicker from "../../../../components/customDatePicker";
-import { getDistrictApi } from "../../../../api/file";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
+import { getDistrictApi } from "../../../../api/file";
+import CustomDatePicker from "../../../../components/customDatePicker";
+import LoadingPagination from "../../../../components/paginationLoading";
+import "./index.scss";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -44,10 +31,16 @@ const ReportOrder = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [dataCity, setDataCity] = useState([]);
+  const [titleCity, setTitleCity] = useState("Chọn thành phố");
+  const [city, setCity] = useState(false);
   const [codeCity, setCodeCity] = useState();
+  const [dataCity, setDataCity] = useState([]);
   const [dataDistrict, setDataDistrict] = useState([]);
-  const [codeDistrict, setCodeDistrict] = useState();
+  const [codeDistrict, setCodeDistrict] = useState(-1);
+  const [district, setDistrict] = useState(false);
+  const [titleDistrict, setTitleDistrict] = useState("Chọn quận");
+  const [dataChartPie, setDataChartPie] = useState([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -70,7 +63,20 @@ const ReportOrder = () => {
       .then((res) => {
         setDataCity(res?.aministrative_division);
         setCodeCity(res?.aministrative_division[0]?.code);
-        setDataDistrict(res?.aministrative_division[0]?.districts);
+        getReportTypeService(
+          moment(moment().startOf("year").toISOString())
+            .add(7, "hours")
+            .toISOString(),
+          moment(moment(new Date()).toISOString())
+            .add(7, "hours")
+            .toISOString(),
+          res?.aministrative_division[0]?.code,
+          codeDistrict
+        )
+          .then((res) => {
+            setDataChartPie(res?.percent);
+          })
+          .catch((err) => {});
       })
       .catch((err) => {});
 
@@ -469,6 +475,35 @@ const ReportOrder = () => {
   //   []
   // );
 
+  const onChangeCity = useCallback(
+    (item) => {
+      setCodeCity(item?.code);
+      setDataDistrict(item?.districts);
+      setCity(!city);
+      setTitleCity(item?.name);
+      getReportTypeService(startDate, endDate, item?.code, codeDistrict)
+        .then((res) => {
+          setDataChartPie(res?.percent);
+        })
+        .catch((err) => {});
+    },
+    [city, startDate, endDate, codeDistrict]
+  );
+
+  const onChangeDistrict = useCallback(
+    (item) => {
+      setCodeDistrict(item?.code);
+      setDistrict(!district);
+      setTitleDistrict(item?.name);
+      getReportTypeService(startDate, endDate, codeCity, item?.code)
+        .then((res) => {
+          setDataChartPie(res?.percent);
+        })
+        .catch((err) => {});
+    },
+    [district, startDate, endDate, codeCity]
+  );
+
   const onChangeDay = () => {
     setIsLoading(true);
 
@@ -486,71 +521,6 @@ const ReportOrder = () => {
 
   return (
     <div>
-      <div className="div-chart-pie-total">
-        <div className="div-select-city">
-          <CustomTextInput
-            type="select"
-            className="select-city"
-            body={
-              <>
-                {dataCity?.map((item, index) => {
-                  return <option>{item?.name}</option>;
-                })}
-              </>
-            }
-          />
-
-          <CustomTextInput
-            type="select"
-            className="select-city"
-            body={
-              <>
-                {dataDistrict?.map((item, index) => {
-                  return <option>{item?.name}</option>;
-                })}
-              </>
-            }
-          />
-        </div>
-        <div className="div-pie-chart">
-          <div className="div-title-note">
-            <div className="div-square-ser">
-              <div className="square-two" />
-              <a>2 giờ</a>
-            </div>
-            <div className="div-square-ser">
-              <div className="square-three" />
-              <a>3 giờ</a>
-            </div>
-            <div className="div-square-ser">
-              <div className="square-four" />
-              <a>4 giờ</a>
-            </div>
-          </div>
-
-          <ResponsiveContainer height={200} min-width={500}>
-            <PieChart>
-              <Pie
-                data={DATA}
-                cx={100}
-                cy={100}
-                innerRadius={60}
-                outerRadius={80}
-                fill="#8884d8"
-                paddingAngle={5}
-                dataKey="value"
-              >
-                {DATA.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
       <div className="div-header-report">
         <div className="div-date">
           <CustomDatePicker
@@ -593,6 +563,92 @@ const ReportOrder = () => {
             showSizeChanger={false}
             pageSize={20}
           />
+        </div>
+      </div>
+
+      <div className="div-chart-pie-total">
+        <a className="title-chart"> Thống kê đơn hàng theo khu vực</a>
+        <div className="div-select-city">
+          <div className="div-select-item">
+            <div
+              className="div-select-city-input"
+              onClick={() => setCity(!city)}
+            >
+              <a>{titleCity}</a>
+            </div>
+            {city && (
+              <List
+                className="div-item-city"
+                dataSource={dataCity}
+                renderItem={(item) => {
+                  return (
+                    <div onClick={() => onChangeCity(item)}>
+                      <a>{item?.name}</a>
+                    </div>
+                  );
+                }}
+              />
+            )}
+          </div>
+          <div className="div-select-item">
+            <div
+              className="div-select-city-input"
+              onClick={() => setDistrict(!district)}
+            >
+              <a>{titleDistrict}</a>
+            </div>
+            {district && (
+              <List
+                className="div-item-city"
+                dataSource={dataDistrict}
+                renderItem={(item) => {
+                  return (
+                    <div onClick={() => onChangeDistrict(item)}>
+                      <a>{item?.name}</a>
+                    </div>
+                  );
+                }}
+              />
+            )}
+          </div>
+        </div>
+        <div className="div-pie-chart">
+          <div className="div-title-note">
+            <div className="div-square-ser">
+              <div className="square-two" />
+              <a>2 giờ</a>
+            </div>
+            <div className="div-square-ser">
+              <div className="square-three" />
+              <a>3 giờ</a>
+            </div>
+            <div className="div-square-ser">
+              <div className="square-four" />
+              <a>4 giờ</a>
+            </div>
+          </div>
+
+          <ResponsiveContainer height={200} min-width={500}>
+            <PieChart>
+              <Pie
+                data={dataChartPie}
+                cx={100}
+                cy={100}
+                innerRadius={60}
+                outerRadius={80}
+                fill="#8884d8"
+                paddingAngle={5}
+                dataKey="value"
+              >
+                {DATA.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
         </div>
       </div>
       {isLoading && <LoadingPagination />}
