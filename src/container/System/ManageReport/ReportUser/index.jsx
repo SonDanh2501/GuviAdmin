@@ -301,6 +301,7 @@ const ReportUser = () => {
               setStartDate={setStartDate}
               setEndDate={setEndDate}
               onClick={onChangeDay}
+              onCancel={() => {}}
             />
             {startDate && (
               <a className="text-date">

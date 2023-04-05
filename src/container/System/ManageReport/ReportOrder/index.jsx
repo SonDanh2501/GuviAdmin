@@ -31,15 +31,6 @@ const ReportOrder = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [titleCity, setTitleCity] = useState("Chọn thành phố");
-  const [city, setCity] = useState(false);
-  const [codeCity, setCodeCity] = useState();
-  const [dataCity, setDataCity] = useState([]);
-  const [dataDistrict, setDataDistrict] = useState([]);
-  const [codeDistrict, setCodeDistrict] = useState(-1);
-  const [district, setDistrict] = useState(false);
-  const [titleDistrict, setTitleDistrict] = useState("Chọn quận");
-  const [dataChartPie, setDataChartPie] = useState([]);
 
   const navigate = useNavigate();
 
@@ -58,27 +49,6 @@ const ReportOrder = () => {
         setDataTotal(res?.total[0]);
       })
       .catch((err) => console.log(err));
-
-    getDistrictApi()
-      .then((res) => {
-        setDataCity(res?.aministrative_division);
-        setCodeCity(res?.aministrative_division[0]?.code);
-        getReportTypeService(
-          moment(moment().startOf("year").toISOString())
-            .add(7, "hours")
-            .toISOString(),
-          moment(moment(new Date()).toISOString())
-            .add(7, "hours")
-            .toISOString(),
-          res?.aministrative_division[0]?.code,
-          codeDistrict
-        )
-          .then((res) => {
-            setDataChartPie(res?.percent);
-          })
-          .catch((err) => {});
-      })
-      .catch((err) => {});
 
     setStartDate(
       moment(moment().startOf("year").toISOString())
@@ -475,35 +445,6 @@ const ReportOrder = () => {
   //   []
   // );
 
-  const onChangeCity = useCallback(
-    (item) => {
-      setCodeCity(item?.code);
-      setDataDistrict(item?.districts);
-      setCity(!city);
-      setTitleCity(item?.name);
-      getReportTypeService(startDate, endDate, item?.code, codeDistrict)
-        .then((res) => {
-          setDataChartPie(res?.percent);
-        })
-        .catch((err) => {});
-    },
-    [city, startDate, endDate, codeDistrict]
-  );
-
-  const onChangeDistrict = useCallback(
-    (item) => {
-      setCodeDistrict(item?.code);
-      setDistrict(!district);
-      setTitleDistrict(item?.name);
-      getReportTypeService(startDate, endDate, codeCity, item?.code)
-        .then((res) => {
-          setDataChartPie(res?.percent);
-        })
-        .catch((err) => {});
-    },
-    [district, startDate, endDate, codeCity]
-  );
-
   const onChangeDay = () => {
     setIsLoading(true);
 
@@ -527,6 +468,7 @@ const ReportOrder = () => {
             setStartDate={setStartDate}
             setEndDate={setEndDate}
             onClick={onChangeDay}
+            onCancel={() => {}}
           />
           {startDate && (
             <a className="text-date">
@@ -566,101 +508,9 @@ const ReportOrder = () => {
         </div>
       </div>
 
-      <div className="div-chart-pie-total">
-        <a className="title-chart"> Thống kê đơn hàng theo khu vực</a>
-        <div className="div-select-city">
-          <div className="div-select-item">
-            <div
-              className="div-select-city-input"
-              onClick={() => setCity(!city)}
-            >
-              <a>{titleCity}</a>
-            </div>
-            {city && (
-              <List
-                className="div-item-city"
-                dataSource={dataCity}
-                renderItem={(item) => {
-                  return (
-                    <div onClick={() => onChangeCity(item)}>
-                      <a>{item?.name}</a>
-                    </div>
-                  );
-                }}
-              />
-            )}
-          </div>
-          <div className="div-select-item">
-            <div
-              className="div-select-city-input"
-              onClick={() => setDistrict(!district)}
-            >
-              <a>{titleDistrict}</a>
-            </div>
-            {district && (
-              <List
-                className="div-item-city"
-                dataSource={dataDistrict}
-                renderItem={(item) => {
-                  return (
-                    <div onClick={() => onChangeDistrict(item)}>
-                      <a>{item?.name}</a>
-                    </div>
-                  );
-                }}
-              />
-            )}
-          </div>
-        </div>
-        <div className="div-pie-chart">
-          <div className="div-title-note">
-            <div className="div-square-ser">
-              <div className="square-two" />
-              <a>2 giờ</a>
-            </div>
-            <div className="div-square-ser">
-              <div className="square-three" />
-              <a>3 giờ</a>
-            </div>
-            <div className="div-square-ser">
-              <div className="square-four" />
-              <a>4 giờ</a>
-            </div>
-          </div>
-
-          <ResponsiveContainer height={200} min-width={500}>
-            <PieChart>
-              <Pie
-                data={dataChartPie}
-                cx={100}
-                cy={100}
-                innerRadius={60}
-                outerRadius={80}
-                fill="#8884d8"
-                paddingAngle={5}
-                dataKey="value"
-              >
-                {DATA.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
       {isLoading && <LoadingPagination />}
     </div>
   );
 };
 
 export default ReportOrder;
-
-const DATA = [
-  { name: "Group A", value: 100 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 600 },
-];
-const COLORS = ["#0088FE", "#48cae4", "#00CF3A"];

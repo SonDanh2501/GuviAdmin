@@ -88,6 +88,17 @@ const ReviewCollaborator = () => {
       });
   };
 
+  const onCancelPicker = () => {
+    setStartDate(
+      moment(moment().startOf("year").toISOString())
+        .add(7, "hours")
+        .toISOString()
+    );
+    setEndDate(
+      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
+    );
+  };
+
   const onChange = (page) => {
     setCurrentPage(page);
     setIsLoading(true);
@@ -211,6 +222,7 @@ const ReviewCollaborator = () => {
           setStartDate={setStartDate}
           setEndDate={setEndDate}
           onClick={onChangeDay}
+          onCancel={onCancelPicker}
         />
         {startDate && (
           <a className="text-date">

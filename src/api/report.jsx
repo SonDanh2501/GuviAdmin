@@ -135,3 +135,20 @@ export const getReportTypeService = (start_date, end_date, city, district) => {
     `/admin/report_mananger/report_type_service?lang=vi&start_date=${start_date}&end_date=${end_date}&city=${city}&district=${district}`
   );
 };
+
+export const getReportCancelReport = (start_date, end_date, city, district) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_cancel_order?lang=vi&start_date=${start_date}&end_date=${end_date}&city=${city}&district=${district}`
+  );
+};
+
+export const getReportOverviewCancelReport = (
+  start,
+  length,
+  start_date,
+  end_date
+) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_overview_cancel_order?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
+  );
+};
