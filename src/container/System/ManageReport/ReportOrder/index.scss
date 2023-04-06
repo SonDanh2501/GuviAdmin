@@ -243,3 +243,15 @@
     }
   }
 }
+
+.div-date-report-order {
+  display: flex;
+  flex-direction: column;
+  .text-date-report-order {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px !important;
+    color: #000000;
+  }
+}

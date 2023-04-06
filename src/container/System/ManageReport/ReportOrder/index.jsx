@@ -66,6 +66,29 @@ const ReportOrder = () => {
         return (
           <div className="div-title-collaborator-id">
             <div className="div-title-report">
+              <a className="text-title-column">Thời gian</a>
+            </div>
+            <div className="div-top"></div>
+          </div>
+        );
+      },
+      render: (data) => (
+        <div className="div-date-report-order">
+          <a className="text-date-report-order">
+            {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
+          </a>
+          <a className="text-date-report-order">
+            {moment(new Date(data?.date_create)).format("HH:mm")}
+          </a>
+        </div>
+      ),
+      width: "5%",
+    },
+    {
+      title: () => {
+        return (
+          <div className="div-title-collaborator-id">
+            <div className="div-title-report">
               <a className="text-title-column">Mã đơn</a>
             </div>
             <div className="div-top"></div>

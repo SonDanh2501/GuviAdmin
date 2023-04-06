@@ -22,9 +22,9 @@ export const getOrderDetailApi = (id) => {
   return axiosClient.get(`/admin/order_manager/get_detail/${id}`);
 };
 
-export const getHistoryOrderApi = (id) => {
+export const getHistoryOrderApi = (id, start, length) => {
   return axiosClient.get(
-    `/admin/group-order-manager/get_history_order_by_group_order/${id}`
+    `/admin/group-order-manager/get_history_order_by_group_order/${id}?start=${start}&length=${length}`
   );
 };
 

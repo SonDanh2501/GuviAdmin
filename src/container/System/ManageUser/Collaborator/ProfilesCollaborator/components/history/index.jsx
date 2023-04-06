@@ -97,37 +97,49 @@ const History = ({ id }) => {
                   "DD/MM/yyy - HH:mm"
                 )}
               </a>
-              <div>
-                <a className="text-title-surplus">
-                  Ví CTV:{" "}
-                  {item?.current_remainder
-                    ? formatMoney(item?.current_remainder)
-                    : formatMoney(0)}
-                </a>
-                <a className="text-surplus"></a>
-                {item?.status_current_remainder === "down" ? (
-                  <i class="uil uil-arrow-down icon-deduction"></i>
-                ) : item?.status_current_remainder === "up" ? (
-                  <i class="uil uil-arrow-up icon-plus"></i>
-                ) : (
-                  <></>
-                )}
+              <div className="div-surplus">
+                <div className="div-text-title-surplus">
+                  <a className="text-title-surplus">Ví CTV</a>
+                </div>
+                <a>:</a>
+                <div className="div-money">
+                  <a className="text-money">
+                    {item?.current_remainder
+                      ? formatMoney(item?.current_remainder)
+                      : formatMoney(0)}
+                  </a>
+                </div>
+                <div className="div-icon">
+                  {item?.status_current_remainder === "down" ? (
+                    <i class="uil uil-arrow-down icon-deduction"></i>
+                  ) : item?.status_current_remainder === "up" ? (
+                    <i class="uil uil-arrow-up icon-plus"></i>
+                  ) : (
+                    <i class="uil uil-minus icon-minus"></i>
+                  )}
+                </div>
               </div>
-              <div>
-                <a className="text-title-surplus">
-                  Ví thưởng:{" "}
-                  {item?.current_gift_remainder
-                    ? formatMoney(item?.current_gift_remainder)
-                    : formatMoney(0)}
-                </a>
-                <a className="text-surplus"></a>
-                {item?.status_current_gift_remainder === "down" ? (
-                  <i class="uil uil-arrow-down icon-deduction"></i>
-                ) : item?.status_current_remainder === "up" ? (
-                  <i class="uil uil-arrow-up icon-plus"></i>
-                ) : (
-                  <></>
-                )}
+              <div className="div-surplus">
+                <div className="div-text-title-surplus">
+                  <a className="text-title-surplus">Ví thưởng</a>
+                </div>
+                <a>:</a>
+                <div className="div-money">
+                  <a className="text-money">
+                    {item?.current_gift_remainder
+                      ? formatMoney(item?.current_gift_remainder)
+                      : formatMoney(0)}
+                  </a>
+                </div>
+                <div className="div-icon">
+                  {item?.status_current_gift_remainder === "down" ? (
+                    <i class="uil uil-arrow-down icon-deduction"></i>
+                  ) : item?.status_current_remainder === "up" ? (
+                    <i class="uil uil-arrow-up icon-plus"></i>
+                  ) : (
+                    <i class="uil uil-minus icon-minus"></i>
+                  )}
+                </div>
               </div>
             </div>
           );

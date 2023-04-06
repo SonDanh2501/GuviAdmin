@@ -4,6 +4,7 @@ import {
   Dropdown,
   FloatButton,
   Image,
+  Pagination,
   Popconfirm,
   Row,
   Space,
@@ -38,6 +39,7 @@ const DetailsOrder = () => {
   });
   const [dataList, setDataList] = useState([]);
   const [dataHistory, setDataHistory] = useState([]);
+  const [totalHistory, setTotalHistory] = useState([]);
   const [hideShow, setHideShow] = useState(false);
   const [modal, setModal] = useState(false);
   const [open, setOpen] = useState(false);
@@ -47,6 +49,7 @@ const DetailsOrder = () => {
   const [serviceFee, setServiceFee] = useState(0);
   const [rowIndex, setRowIndex] = useState();
   const [itemEdit, setItemEdit] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toggle = () => setModal(!modal);
@@ -68,9 +71,10 @@ const DetailsOrder = () => {
         dispatch(loadingAction.loadingRequest(false));
       });
 
-    getHistoryOrderApi(id)
+    getHistoryOrderApi(id, 0, 20)
       .then((res) => {
         setDataHistory(res?.data);
+        setTotalHistory(res?.totalItem);
       })
       .catch((err) => {
         dispatch(loadingAction.loadingRequest(false));
@@ -192,6 +196,20 @@ const DetailsOrder = () => {
 
   const handleCancel = () => {
     setOpen(false);
+  };
+
+  const onChange = (page) => {
+    setCurrentPage(page);
+
+    const start = page * dataHistory.length - dataHistory.length;
+    getHistoryOrderApi(id, start, 20)
+      .then((res) => {
+        setDataHistory(res?.data);
+        setTotalHistory(res?.totalItem);
+      })
+      .catch((err) => {
+        dispatch(loadingAction.loadingRequest(false));
+      });
   };
 
   const columns = [
@@ -819,6 +837,19 @@ const DetailsOrder = () => {
                     </div>
                   );
                 })}
+              </div>
+
+              <div className="mt-2 div-pagination p-2">
+                <a>Tổng: {totalHistory}</a>
+                <div>
+                  <Pagination
+                    current={currentPage}
+                    onChange={onChange}
+                    total={totalHistory}
+                    showSizeChanger={false}
+                    pageSize={20}
+                  />
+                </div>
               </div>
             </div>
           </Tabs.TabPane>
