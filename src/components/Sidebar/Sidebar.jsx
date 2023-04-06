@@ -16,6 +16,7 @@ import like from "../../assets/images/like.svg";
 import document from "../../assets/images/document.svg";
 import service from "../../assets/images/service.svg";
 import request from "../../assets/images/request.svg";
+import finance from "../../assets/images/finance.svg";
 import "./Sidebar.scss";
 import { Collapse, Input, Nav, NavbarToggler, NavItem } from "reactstrap";
 import { Menu } from "antd";
@@ -270,6 +271,18 @@ const Sidebar = ({ onClick }) => {
                     <img src={like} className="img-icon" />
                     <a className={isActive ? "active-text" : "unactive-text"}>
                       Hỗ trợ
+                    </a>
+                  </div>
+                )}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/finance/manage-finance">
+                {({ isActive }) => (
+                  <div className={isActive ? "active-link" : "unactive-link"}>
+                    <img src={finance} className="img-icon" />
+                    <a className={isActive ? "active-text" : "unactive-text"}>
+                      Tài chính
                     </a>
                   </div>
                 )}

@@ -44,17 +44,40 @@
     .text-date {
       font-family: "Roboto";
       font-weight: 400;
-      font-size: 14px;
-      color: black;
+      font-size: 12px;
+      color: rgb(170, 170, 170);
       text-decoration: none;
     }
 
-    .text-title-surplus {
-      font-family: "Roboto";
-      font-weight: 500;
-      font-size: 12px;
-      color: black;
-      text-decoration: none;
+    .div-surplus {
+      display: flex;
+      flex-direction: row;
+
+      .div-text-title-surplus {
+        width: 60px;
+        .text-title-surplus {
+          font-family: "Roboto";
+          font-weight: 500;
+          font-size: 12px;
+          color: black;
+          text-decoration: none;
+        }
+      }
+
+      .div-money {
+        display: flex;
+        width: 80px;
+        align-items: flex-end;
+        justify-content: flex-end;
+
+        .text-money {
+          font-family: "Roboto";
+          font-weight: 500;
+          font-size: 12px;
+          color: black;
+          text-decoration: none;
+        }
+      }
     }
 
     .text-surplus {
@@ -66,11 +89,17 @@
       margin-left: 5px;
     }
 
-    .icon-plus {
-      color: #00cf3a;
-    }
-    .icon-deduction {
-      color: #ff0000;
+    .div-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      .icon-plus {
+        color: #00cf3a;
+      }
+      .icon-deduction {
+        color: #ff0000;
+      }
     }
   }
 }

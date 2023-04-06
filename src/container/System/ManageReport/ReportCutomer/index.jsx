@@ -488,7 +488,7 @@ const ReportCustomer = () => {
           </div>
         </div>
       </div>
-      <div className="div-ratio">
+      {/* <div className="div-ratio">
         <a className="title">Tỉ lệ chuyển đổi</a>
         <div className="div-date">
           <CustomDatePicker />
@@ -544,7 +544,7 @@ const ReportCustomer = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="mt-5 div-table">
         <div className="div-date">
@@ -552,6 +552,7 @@ const ReportCustomer = () => {
             setStartDate={setStartDate}
             setEndDate={setEndDate}
             onClick={onChangeDay}
+            onCancel={() => {}}
           />
           {startDate && (
             <a className="text-date">

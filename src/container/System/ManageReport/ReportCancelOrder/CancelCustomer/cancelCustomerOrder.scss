@@ -6,23 +6,13 @@
   width: 30%;
 }
 
-.div-chart-pie-total {
+.div-chart-pie-total-cancel {
   display: flex;
   flex-direction: column;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
   background-color: white;
   border-radius: 10px;
   padding: 10px;
-
-  .title-chart-area {
-    color: black;
-    font-weight: 500;
-    font-size: 20px;
-    font-family: "Roboto", sans-serif;
-    text-decoration: none;
-    text-decoration: none;
-    margin-bottom: 10px;
-  }
 
   .div-select-city {
     display: flex;
@@ -38,12 +28,10 @@
         flex-direction: column;
         background-color: rgb(255, 255, 255);
         padding: 5px;
-        position: absolute;
         width: 180px;
         border: 1px solid rgb(175, 175, 175);
         border-radius: 5px;
-        z-index: 9999999;
-        margin-top: 40px;
+        z-index: 1000;
         margin-left: 10px;
 
         .div-item-list {
@@ -86,7 +74,7 @@
     .div-title-note {
       display: flex;
       flex-direction: column;
-      width: 200px;
+      width: 250px;
 
       .div-square-ser {
         display: flex;
@@ -95,7 +83,7 @@
         .square-two {
           width: 20px;
           height: 20px;
-          background-color: #0088fe;
+          background-color: #ff8000;
           border-radius: 5px;
           margin-right: 10px;
         }
@@ -103,19 +91,42 @@
         .square-three {
           width: 20px;
           height: 20px;
-          background-color: #48cae4;
-          border-radius: 5px;
-          margin-right: 10px;
-        }
-
-        .square-four {
-          width: 20px;
-          height: 20px;
-          background-color: #00cf3a;
+          background-color: #ff1919;
           border-radius: 5px;
           margin-right: 10px;
         }
       }
     }
   }
+}
+
+.div-create-cancel {
+  display: flex;
+  flex-direction: column;
+
+  .text-create-cancel {
+    color: #000000;
+    font-weight: 400;
+    font-family: "Roboto";
+    font-style: normal;
+    font-size: 12px;
+  }
+}
+
+.text-user-cancel {
+  color: #000000;
+  font-weight: 400;
+  font-family: "Roboto";
+  font-style: normal;
+  font-size: 12px;
+}
+
+.text-address-cancel {
+  color: #000000;
+  font-weight: 400;
+  font-family: "Roboto";
+  font-style: normal;
+  font-size: 12px;
+  display: block;
+  width: 200px;
 }

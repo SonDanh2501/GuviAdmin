@@ -1,0 +1,31 @@
+.div-map-item {
+  display: flex;
+  flex-direction: row;
+
+  .div-item-finance {
+    padding: 5px;
+    margin: 10px;
+    .text-item {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      color: #000000;
+      text-decoration: none;
+    }
+  }
+
+  .div-item-finance-select {
+    padding: 5px;
+    margin: 10px;
+    border-bottom: 1px solid #1a7dff;
+    .text-item {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      color: #000000;
+      text-decoration: none;
+    }
+  }
+}

@@ -87,7 +87,7 @@ export default function Home() {
     )
       .then((res) => {
         setArrResult(res.arrResult);
-        // setTotalMoneyChart(res?.total_money);
+        setTotalMoneyChart(res?.total_money);
         getDates(res?.arrResult[0]?.date_start, res?.arrResult?.date_end);
       })
       .catch((err) => console.log(err));
@@ -126,6 +126,7 @@ export default function Home() {
     getDayReportApi(startDate, endDate)
       .then((res) => {
         setArrResult(res.arrResult);
+        setTotalMoneyChart(res?.total_money);
       })
       .catch((err) => console.log(err));
 
@@ -318,6 +319,7 @@ export default function Home() {
                       setStartDate={setStartDate}
                       setEndDate={setEndDate}
                       onClick={onChange}
+                      onCancel={() => {}}
                     />
                     {startDate && (
                       <a className="text-date">

@@ -37,6 +37,7 @@ import Profiles from "../container/System/ManageUser/Customer/Profiles";
 
 import "./Dashboard.scss";
 import DetailsOrderSchedule from "../container/System/DetailsOrder/OrderScheduleDetails";
+import ManageFinance from "../container/System/ManageFinance";
 const { Header, Content, Sider } = Layout;
 
 const Dashboard = () => {
@@ -176,6 +177,10 @@ const Dashboard = () => {
               />
 
               <Route path="/topup/manage-topup" element={<ManageTopup />} />
+              <Route
+                path="/finance/manage-finance"
+                element={<ManageFinance />}
+              />
 
               <Route
                 path="/adminManage/manage-configuration/manage-group-customer"
