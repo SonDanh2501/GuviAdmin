@@ -62,4 +62,49 @@
     font-size: 18px;
     color: #000000;
   }
+
+  .div-date-finance-collaborator {
+    display: flex;
+    flex-direction: column;
+
+    .text-date-finance {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      color: #000000;
+    }
+  }
+
+  .text-topup-finance {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: #00a830;
+  }
+
+  .text-withdraw-finance {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: #ff0000;
+  }
+
+  .text-money-finance {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: #000000;
+  }
+
+  .text-wallet-finance {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: #000000;
+  }
 }

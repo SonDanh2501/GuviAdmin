@@ -40,9 +40,9 @@ const ManageReport = () => {
           <Tabs.TabPane tab="Báo cáo khu vực" key="7">
             <ReportArea />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo đơn huỷ" key="8">
+          {/* <Tabs.TabPane tab="Báo cáo đơn huỷ" key="8">
             <ReportCancelOrder />
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
         </Tabs>
       </div>
     </>
