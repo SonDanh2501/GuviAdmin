@@ -1,15 +1,28 @@
 import { useEffect, useState } from "react";
 import { formatMoney } from "../../../../helper/formatMoney";
 import "./index.scss";
-import { getBalanceCollaborator } from "../../../../api/finance";
+import {
+  getBalanceCollaborator,
+  getBalanceCustomer,
+} from "../../../../api/finance";
 import { Pagination, Table } from "antd";
+import moment from "moment";
 
 const FinanceCustomer = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
+  const [totalPayPoint, setTotalPayPoint] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getBalanceCustomer(startDate, endDate)
+      .then((res) => {
+        setTotalPayPoint(res?.total_pay_point);
+      })
+      .catch((err) => {});
+  }, []);
 
   const columns = [
     {
@@ -40,21 +53,25 @@ const FinanceCustomer = () => {
       <div className="div-head-finance-customer">
         <div className="div-total-money">
           <a className="title-total">Ví G-pay</a>
-          <a className="text-money"></a>
+          <a className="text-money">{formatMoney(totalPayPoint)}</a>
         </div>
-        <div className="div-total-money">
-          <a className="title-total">Điểm thưởng</a>
-          <a className="text-money"></a>
-        </div>
-        <div className="div-total-money">
+
+        {/* <div className="div-total-money">
           <a className="title-total">Tổng nạp</a>
           <a className="text-money">
             <i class="uil uil-money-insert icon-plus"></i>
           </a>
-        </div>
+        </div> */}
+        {/* <div className="div-total-money">
+          <a className="title-total">Tổng rút</a>
+          <a className="text-money">
+            {formatMoney(totalWithdraw)}{" "}
+            <img src={withdraw} className="img-icon" />
+          </a>
+        </div> */}
       </div>
 
-      <div className="div-body-finance-customer">
+      {/* <div className="div-body-finance-customer">
         <a className="title-table">Bảng chi tiết lịch sử giao dịch</a>
         <div className="mt-3">
           <Table columns={columns} pagination={false} dataSource={data} />
@@ -71,7 +88,7 @@ const FinanceCustomer = () => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

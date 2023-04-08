@@ -31,6 +31,7 @@ import { getTopupCustomer } from "../../../../../redux/actions/topup";
 import { getUser } from "../../../../../redux/selectors/auth";
 import { getTopupKH, totalTopupKH } from "../../../../../redux/selectors/topup";
 import "./TopupCustomerManage.scss";
+import WithdrawCustomer from "../../../../../components/withdrawCustomer/withdrawCustomer";
 
 export default function TopupCustomer() {
   const [dataFilter, setDataFilter] = useState([]);
@@ -317,6 +318,7 @@ export default function TopupCustomer() {
     <React.Fragment>
       <div className="div-header-customer-topup mt-2">
         <AddTopupCustomer />
+        <WithdrawCustomer />
 
         <Input
           placeholder="Tìm kiếm"

@@ -245,7 +245,7 @@ const CleaningSchedule = (props) => {
   const onSelectDay = useCallback(
     (title) => {
       if (selectDay.includes(title)) {
-        if (selectDay.length > 4) {
+        if (selectDay.length > 3) {
           setSelectDay((prev) => prev.filter((p) => p !== title));
         }
       } else {

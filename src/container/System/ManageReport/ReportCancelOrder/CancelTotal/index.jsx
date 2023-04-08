@@ -1,17 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
-import "./cancelCustomerOrder.scss";
+import { Select } from "antd";
+import moment from "moment";
+import { useCallback, useEffect, useState } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { getDistrictApi } from "../../../../../api/file";
-import moment from "moment";
 import {
-  getCancelReportCustomer,
   getReportCancelReport,
   getReportOverviewCancelReport,
-  getReportTypeService,
 } from "../../../../../api/report";
-import { List, Pagination, Select, Table } from "antd";
 
-const CancelOrderCustomer = () => {
+import "./index.scss";
+
+const TotalCancel = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +37,7 @@ const CancelOrderCustomer = () => {
         setCodeCity(res?.aministrative_division[0]?.code);
         setTitleCity(res?.aministrative_division[0]?.name);
         setDataDistrict(res?.aministrative_division[0]?.districts);
-        getCancelReportCustomer(
+        getReportCancelReport(
           moment(moment().startOf("year").toISOString())
             .add(7, "hours")
             .toISOString(),
@@ -49,7 +48,7 @@ const CancelOrderCustomer = () => {
           codeDistrict
         )
           .then((res) => {
-            setDataPie(res?.arrPercent);
+            setDataPie(res?.percent);
           })
           .catch((err) => {});
       })
@@ -99,9 +98,9 @@ const CancelOrderCustomer = () => {
       setCodeCity(value);
       setDataDistrict(label?.district);
       setCity(!city);
-      getCancelReportCustomer(startDate, endDate, value, codeDistrict)
+      getReportCancelReport(startDate, endDate, value, codeDistrict)
         .then((res) => {
-          setDataPie(res?.arrPercent);
+          setDataPie(res?.percent);
         })
         .catch((err) => {});
     },
@@ -112,83 +111,14 @@ const CancelOrderCustomer = () => {
     (value, label) => {
       setCodeDistrict(label?.value);
       setDistrict(!district);
-      getCancelReportCustomer(startDate, endDate, codeCity, value)
+      getReportCancelReport(startDate, endDate, codeCity, value)
         .then((res) => {
-          setDataPie(res?.arrPercent);
+          setDataPie(res?.percent);
         })
         .catch((err) => {});
     },
     [district, startDate, endDate, codeCity]
   );
-
-  const onChange = (page) => {
-    setCurrentPage(page);
-    const start = page * data.length - data.length;
-    getReportOverviewCancelReport(start, 20, startDate, endDate)
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  };
-
-  const columns = [
-    {
-      title: "Thời gian",
-      render: (data) => {
-        return (
-          <div className="div-create-cancel">
-            <a className="text-create-cancel">
-              {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-create-cancel">
-              {moment(new Date(data?.date_create)).format("HH/mm")}
-            </a>
-          </div>
-        );
-      },
-    },
-    {
-      title: "Người huỷ",
-      render: (data) => {
-        return (
-          <a className="text-user-cancel">
-            {data?.id_cancel_user_system
-              ? data?.id_cancel_user_system?.id_user_system?.full_name
-              : data?.id_cancel_system
-              ? "Hệ thống"
-              : data?.name_customer}
-          </a>
-        );
-      },
-    },
-    {
-      title: "Đơn hàng",
-      render: (data) => {
-        return <a className="text-user-cancel">{data?.id_view}</a>;
-      },
-    },
-    {
-      title: "Lí do",
-      render: (data) => {
-        return (
-          <a className="text-user-cancel">
-            {data?.id_cancel_user_system
-              ? ""
-              : data?.id_cancel_system
-              ? data?.id_cancel_system?.id_reason_cancel?.title?.vi
-              : data?.id_cancel_customer?.id_reason_cancel?.title?.vi}
-          </a>
-        );
-      },
-    },
-    {
-      title: "Địa chỉ",
-      render: (data) => {
-        return <a className="text-address-cancel">{data?.address}</a>;
-      },
-    },
-  ];
 
   return (
     <>
@@ -208,19 +138,43 @@ const CancelOrderCustomer = () => {
             options={districtData}
           />
         </div>
-        <div className="div-pie-chart ml-4">
+        <div className="div-pie-chart">
+          <div className="div-title-note">
+            <div className="div-square-ser">
+              <div className="square-system" />
+              <a>
+                Hệ thống{" "}
+                {dataPie[0]?.value ? "- " + dataPie[0]?.value + "%" : ""}
+              </a>
+            </div>
+            <div className="div-square-ser">
+              <div className="square-customer" />
+              <a>
+                Khách hàng{" "}
+                {dataPie[1]?.value ? "- " + dataPie[1]?.value + "%" : ""}
+              </a>
+            </div>
+            <div className="div-square-ser">
+              <div className="square-user-system" />
+              <a>
+                Quản trị viên{" "}
+                {dataPie[2]?.value ? "- " + dataPie[2]?.value + "%" : ""}
+              </a>
+            </div>
+          </div>
           <ResponsiveContainer height={200} min-width={500}>
             <PieChart>
               <Pie
                 data={dataPie}
                 cx={100}
                 cy={100}
+                innerRadius={60}
                 outerRadius={80}
                 fill="#8884d8"
+                paddingAngle={5}
                 dataKey="value"
-                label
               >
-                {data.map((entry, index) => (
+                {dataPie.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}
@@ -231,25 +185,10 @@ const CancelOrderCustomer = () => {
           </ResponsiveContainer>
         </div>
       </div>
-      <div className="mt-5">
-        <Table pagination={false} columns={columns} dataSource={data} />
-      </div>
-      <div className="mt-1 div-pagination p-2">
-        <a>Tổng: {total}</a>
-        <div>
-          <Pagination
-            current={currentPage}
-            onChange={onChange}
-            total={total}
-            showSizeChanger={false}
-            pageSize={20}
-          />
-        </div>
-      </div>
     </>
   );
 };
 
-export default CancelOrderCustomer;
+export default TotalCancel;
 
-const COLORS = ["#ff8000", "#ff1919"];
+const COLORS = ["#ffad2a", "#ff8000", "#ff1919"];

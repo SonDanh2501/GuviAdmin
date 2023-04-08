@@ -152,3 +152,14 @@ export const getReportOverviewCancelReport = (
     `/admin/report_mananger/report_overview_cancel_order?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
   );
 };
+
+export const getCancelReportCustomer = (
+  start_date,
+  end_date,
+  city,
+  district
+) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_customer_cancel_order?lang=vi&start_date=${start_date}&end_date=${end_date}&city=${city}&district=${district}`
+  );
+};
