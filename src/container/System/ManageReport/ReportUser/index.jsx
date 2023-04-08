@@ -68,7 +68,7 @@ const ReportUser = () => {
       .catch((err) => {});
     getTotalReportCustomer(
       moment(new Date("2020-01-01")).toISOString(),
-      moment(new Date()).toISOString()
+      moment(moment(new Date()).endOf("date")).add(7, "hours").toISOString()
     )
       .then((res) => {
         setTotal(res?.totalCustomer);
@@ -85,7 +85,7 @@ const ReportUser = () => {
       moment(moment().startOf("month").toISOString())
         .add(7, "hours")
         .toISOString(),
-      moment(new Date()).toISOString()
+      moment(moment(new Date()).endOf("date")).add(7, "hours").toISOString()
     )
       .then((res) => {
         setDataTable(res);

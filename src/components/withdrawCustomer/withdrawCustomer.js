@@ -8,12 +8,12 @@ import CustomButton from "../customButton/customButton";
 import IntlCurrencyInput from "react-intl-currency-input";
 import _debounce from "lodash/debounce";
 import CustomTextInput from "../CustomTextInput/customTextInput";
-import "./addTopupCustomer.scss";
+import "./withdrawCustomer.scss";
 import { Drawer } from "antd";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { getTopupCustomer } from "../../redux/actions/topup";
 
-const AddTopupCustomer = () => {
+const WithdrawCustomer = () => {
   const [state, setState] = useState(false);
   const [money, setMoney] = useState("");
   const [note, setNote] = useState("");
@@ -57,7 +57,7 @@ const AddTopupCustomer = () => {
     []
   );
 
-  const addMoney = useCallback(() => {
+  const withdrawMoney = useCallback(() => {
     if (name === "" || money === "") {
       !name
         ? setErrorName("Vui lòng nhập thông tin")
@@ -111,14 +111,14 @@ const AddTopupCustomer = () => {
     <>
       {/* Button trigger modal */}
       <CustomButton
-        title="Nạp tiền"
-        className="btn-add-topup-customer"
+        title="Rút tiền"
+        className="btn-withdraw-customer"
         type="button"
         onClick={showDrawer}
       />
 
       <Drawer
-        title="Nạp tiền khách hàng"
+        title="Rút tiền khách hàng"
         width={500}
         onClose={onClose}
         open={open}
@@ -186,7 +186,7 @@ const AddTopupCustomer = () => {
               title="Nạp "
               className="float-left btn-add-topup-customer"
               type="button"
-              onClick={addMoney}
+              // onClick={addMoney}
             />
           </Form>
         </div>
@@ -195,4 +195,4 @@ const AddTopupCustomer = () => {
   );
 };
 
-export default memo(AddTopupCustomer);
+export default memo(WithdrawCustomer);

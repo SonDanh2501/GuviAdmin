@@ -2,12 +2,15 @@ import React, { useCallback, useEffect, useState } from "react";
 import "./index.scss";
 import { Tabs } from "antd";
 import CancelOrderCustomer from "./CancelCustomer";
+import TotalCancel from "./CancelTotal";
 
 const ReportCancelOrder = () => {
   return (
     <>
       <Tabs>
-        <Tabs.TabPane tab="Tổng" key="1"></Tabs.TabPane>
+        <Tabs.TabPane tab="Tổng" key="1">
+          <TotalCancel />
+        </Tabs.TabPane>
         <Tabs.TabPane tab="Khách hàng" key="2">
           <CancelOrderCustomer />
         </Tabs.TabPane>
