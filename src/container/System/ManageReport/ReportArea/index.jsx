@@ -128,6 +128,37 @@ const ReportArea = () => {
     );
   };
 
+  const renderLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    value,
+    name,
+  }) => {
+    const RADIAN = Math.PI / 180;
+    // eslint-disable-next-line
+    const radius = 25 + innerRadius + (outerRadius - innerRadius);
+    // eslint-disable-next-line
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    // eslint-disable-next-line
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="#000000"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
+        {name === "2_hour" ? "2 Giờ" : name === "3_hour" ? "3 Giờ" : "4 Giờ"} (
+        {value} {"%"})
+      </text>
+    );
+  };
+
   return (
     <>
       <div className="div-chart-pie-total">
@@ -153,47 +184,16 @@ const ReportArea = () => {
           />
         </div>
         <div className="div-pie-chart">
-          <div className="div-title-note">
-            <div className="div-square-ser">
-              <div className="square-two" />
-              <a>
-                2 giờ{" "}
-                {dataChartPie[0]?.value
-                  ? "- " + dataChartPie[0]?.value + "%"
-                  : ""}
-              </a>
-            </div>
-            <div className="div-square-ser">
-              <div className="square-three" />
-              <a>
-                3 giờ{" "}
-                {dataChartPie[1]?.value
-                  ? "- " + dataChartPie[1]?.value + "%"
-                  : ""}
-              </a>
-            </div>
-            <div className="div-square-ser">
-              <div className="square-four" />
-              <a>
-                4 giờ{" "}
-                {dataChartPie[2]?.value
-                  ? "- " + dataChartPie[2]?.value + "%"
-                  : ""}
-              </a>
-            </div>
-          </div>
-
-          <ResponsiveContainer height={200} min-width={500}>
-            <PieChart>
+          <ResponsiveContainer height={300} min-width={500}>
+            <PieChart height={250}>
               <Pie
                 data={dataChartPie}
-                cx={100}
-                cy={100}
-                innerRadius={60}
+                cx="50%"
+                cy="50%"
                 outerRadius={80}
                 fill="#8884d8"
-                paddingAngle={5}
                 dataKey="value"
+                label={renderLabel}
               >
                 {dataChartPie.map((entry, index) => (
                   <Cell

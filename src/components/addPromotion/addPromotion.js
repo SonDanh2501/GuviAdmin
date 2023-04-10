@@ -85,6 +85,12 @@ const AddPromotion = ({ idService, tab }) => {
   const [imgNoti, setImgNoti] = useState("");
   const [isDateSchedule, setIsDateSchedule] = useState(true);
   const [dateSchedule, setDateSchedule] = useState("");
+  const [isApplyTime, setIsApplyTime] = useState(false);
+  const [timeStartApply, setTimeStartApply] = useState("");
+  const [timeEndApply, setTimeEndApply] = useState("");
+  const [isEndTime, setIsEndTime] = useState(false);
+  const [isApllyWeek, setIsApllyWeek] = useState(false);
+
   const options = [];
   const optionsCustomer = [];
   const dispatch = useDispatch();
@@ -881,9 +887,7 @@ const AddPromotion = ({ idService, tab }) => {
                   </div>
                   <div>
                     <FormGroup check inline>
-                      <Label check className="text-first">
-                        12. Gửi thông báo
-                      </Label>
+                      <h5 className="mt-2">18. Gửi thông báo</h5>
                       <Input
                         type="checkbox"
                         className="ml-2"
@@ -932,6 +936,48 @@ const AddPromotion = ({ idService, tab }) => {
                       </div>
                     )}
                   </div>
+                  {/* <div>
+                    <FormGroup check inline>
+                      <h5 className="mt-2">19. Thời gian áp dụng</h5>
+                      <Input
+                        type="checkbox"
+                        className="ml-2"
+                        defaultChecked={isApplyTime}
+                        onClick={() => setIsApplyTime(!isApplyTime)}
+                      />
+                    </FormGroup>
+
+                    <>
+                      <CustomTextInput
+                        label="Ngày bắt đầu"
+                        className="input-promo-code"
+                        type="datetime-local"
+                        value={timeStartApply}
+                        onChange={(e) => setTimeStartApply(e.target.value)}
+                      />
+                      <Checkbox
+                        value={isEndTime}
+                        onChange={(e) => setIsEndTime(e.target.checked)}
+                      >
+                        Thời gian kết thúc
+                      </Checkbox>
+                      {isEndTime && (
+                        <CustomTextInput
+                          label="Ngày kết thúc"
+                          className="input-promo-code"
+                          type="datetime-local"
+                          value={timeEndApply}
+                          onChange={(e) => setTimeEndApply(e.target.value)}
+                        />
+                      )}
+                      <Checkbox
+                        value={isApllyWeek}
+                        onChange={(e) => setIsApllyWeek(e.target.checked)}
+                      >
+                        Áp dụng các thứ trong tuần
+                      </Checkbox>
+                    </>
+                  </div> */}
                   <Button
                     className="btn_add mt-3"
                     color="warning"
