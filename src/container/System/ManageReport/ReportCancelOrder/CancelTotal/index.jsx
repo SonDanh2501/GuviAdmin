@@ -162,7 +162,7 @@ const TotalCancel = () => {
             options={cityData}
           />
           <Select
-            style={{ width: 180, marginLeft: 20 }}
+            style={{ width: 180, marginLeft: 20, marginRight: 20 }}
             placeholder="Chọn quận"
             onChange={onChangeDistrict}
             options={districtData}

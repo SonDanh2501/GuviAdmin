@@ -9,6 +9,8 @@ import "./Dashboard.scss";
 import Admin from "./admin";
 import Marketing from "./marketing";
 import SupportCustomer from "./supportCustomer";
+import Support from "./support";
+import Accountant from "./accountant";
 const { Header, Content, Sider } = Layout;
 
 const Dashboard = () => {
@@ -73,6 +75,10 @@ const Dashboard = () => {
               <Marketing />
             ) : user?.role === "support_customer" ? (
               <SupportCustomer />
+            ) : user?.role === "support" ? (
+              <Support />
+            ) : user?.role === "accountant" ? (
+              <Accountant />
             ) : (
               ""
             )}

@@ -662,7 +662,7 @@ const Sidebar = ({ onClick }) => {
               <NavLink to="/group-order/manage-order" onClick={toggleNavbar}>
                 {({ isActive }) => (
                   <div className={isActive ? "active-link" : "unactive-link"}>
-                    <i class="uil uil-shopping-bag icon"></i>
+                    <img src={bag} className="img-icon" />
                     <a className={isActive ? "active-text" : "unactive-text"}>
                       GUVIJOBS
                     </a>
@@ -744,7 +744,7 @@ const Sidebar = ({ onClick }) => {
               <NavLink to="/system/deep-cleaning">
                 {({ isActive }) => (
                   <div className={isActive ? "active-link" : "unactive-link"}>
-                    <i className="uil uil-user-square icon"></i>
+                    <img src={request} className="img-icon" />
                     <a className={isActive ? "active-text" : "unactive-text"}>
                       Yêu cầu dịch vụ
                     </a>
@@ -756,7 +756,7 @@ const Sidebar = ({ onClick }) => {
               <NavLink to="/system/user-manage">
                 {({ isActive }) => (
                   <div className={isActive ? "active-link" : "unactive-link"}>
-                    <i className="uil uil-user-square icon"></i>
+                    <img src={customer} className="img-icon" />
                     <a className={isActive ? "active-text" : "unactive-text"}>
                       Khách hàng
                     </a>
@@ -771,7 +771,7 @@ const Sidebar = ({ onClick }) => {
               >
                 {({ isActive }) => (
                   <div className={isActive ? "active-link" : "unactive-link"}>
-                    <i className="uil uil-user-square icon"></i>
+                    <img src={collaborator} className="img-icon" />
                     <a className={isActive ? "active-text" : "unactive-text"}>
                       Cộng tác viên
                     </a>
@@ -783,7 +783,7 @@ const Sidebar = ({ onClick }) => {
               <NavLink to="/topup/manage-topup">
                 {({ isActive }) => (
                   <div className={isActive ? "active-link" : "unactive-link"}>
-                    <i class="uil uil-money-withdrawal icon"></i>
+                    <img src={cards} className="img-icon" />
                     <a className={isActive ? "active-text" : "unactive-text"}>
                       Sổ Quỹ
                     </a>
@@ -795,7 +795,7 @@ const Sidebar = ({ onClick }) => {
               <NavLink to="/report/manage-report" onClick={toggleReportNavbar}>
                 {({ isActive }) => (
                   <div className={isActive ? "active-link" : "unactive-link"}>
-                    <i class="uil uil-cancel icon"></i>
+                    <img src={document} className="img-icon" />
                     <a className={isActive ? "active-text" : "unactive-text"}>
                       Báo cáo
                     </a>
