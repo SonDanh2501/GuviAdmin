@@ -4,8 +4,7 @@ const validPhoneMessage = "Vui lòng điền đúng định dạng sđt";
 const validEmailMessage = "Vui lòng điền đúng định dạng email";
 const validPasswordMessage = "Password phải có ít nhất 8 ký tự, 1 chữ số";
 const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-const regexPhone =
-  /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
+const regexPhone = /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-9]|9[0-4|6-9])[0-9]{7}$/;
 const regexEmail =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -24,9 +23,7 @@ const validateAddCustomerSchema = Yup.object().shape({
   phone: Yup.string()
     .matches(regexPhone, validPhoneMessage)
     .required(requiredErrorMessage),
-  password:
-    Yup.string()
-    .required(requiredErrorMessage),
+  password: Yup.string().required(requiredErrorMessage),
 
   name: Yup.string().required(requiredErrorMessage),
 });

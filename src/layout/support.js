@@ -8,6 +8,7 @@ import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDo
 import ManageOrder from "../container/System/ManageOrder";
 import ManageTopup from "../container/System/ManageTopup";
 import ManageReport from "../container/System/ManageReport";
+import DetailsOrder from "../container/System/DetailsOrder";
 
 const Support = () => {
   return (
@@ -33,6 +34,12 @@ const Support = () => {
         path="/system/collaborator-manage/details-collaborator"
         element={<ProfileCollaborator />}
       />
+      <Route
+        path="/group-order/manage-order/details-collaborator"
+        element={<ProfileCollaborator />}
+      />
+      <Route path="/details-order" element={<DetailsOrder />} />
+      <Route path="/details-collaborator" element={<ProfileCollaborator />} />
       <Route path="/topup/manage-topup" element={<ManageTopup />} />
       <Route path="/report/manage-report" element={<ManageReport />} />
       <Route path="/report/manage-report/all" element={<ManageReport />} />
