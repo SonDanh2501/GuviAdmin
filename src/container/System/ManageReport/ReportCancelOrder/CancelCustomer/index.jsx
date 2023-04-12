@@ -199,7 +199,6 @@ const CancelOrderCustomer = () => {
     value,
     name,
   }) => {
-    console.log("handling label?");
     const RADIAN = Math.PI / 180;
     // eslint-disable-next-line
     const radius = 25 + innerRadius + (outerRadius - innerRadius);
@@ -241,7 +240,7 @@ const CancelOrderCustomer = () => {
         </div>
         <div className="div-pie-chart ml-4">
           <ResponsiveContainer width="100%" height={250}>
-            <PieChart height={250}>
+            <PieChart>
               <Pie
                 data={dataPie}
                 cx="50%"
@@ -251,7 +250,7 @@ const CancelOrderCustomer = () => {
                 dataKey="value"
                 label={renderLabel}
               >
-                {data.map((entry, index) => (
+                {dataPie.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}

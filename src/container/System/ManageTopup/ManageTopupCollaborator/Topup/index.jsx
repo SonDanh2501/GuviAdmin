@@ -316,30 +316,30 @@ const TopupCollaborator = ({ type }) => {
               )}
             </div>
             <div className="mt-1">
-              <Tooltip placement="bottom" title={"Chỉnh sửa giao dịch CTV"}>
-                <button
-                  className="btn-edit-topup"
-                  disabled={
-                    (!data?.is_verify_money && data?.status === "cancel") ||
-                    data?.is_verify_money
-                      ? true
-                      : false
-                  }
-                  onClick={() => {
-                    toggleEdit();
-                    setItemEdit(data);
-                  }}
-                >
-                  <i
-                    className={
-                      (!data?.is_verify_money && data?.status === "cancel") ||
-                      data?.is_verify_money
-                        ? "uil uil-edit-alt icon-edit"
-                        : "uil uil-edit-alt"
-                    }
-                  ></i>
-                </button>
-              </Tooltip>
+              {!data?.is_verify_money && data?.status === "cancel" ? (
+                <></>
+              ) : data?.is_verify_money ? (
+                <></>
+              ) : (
+                <Tooltip placement="bottom" title={"Chỉnh sửa giao dịch CTV"}>
+                  <button
+                    className="btn-edit-topup"
+                    onClick={() => {
+                      toggleEdit();
+                      setItemEdit(data);
+                    }}
+                  >
+                    <i
+                      className={
+                        (!data?.is_verify_money && data?.status === "cancel") ||
+                        data?.is_verify_money
+                          ? "uil uil-edit-alt icon-edit"
+                          : "uil uil-edit-alt"
+                      }
+                    ></i>
+                  </button>
+                </Tooltip>
+              )}
 
               {user?.role === "admin" && (
                 <Tooltip placement="bottom" title={"Xoá giao dịch CTV"}>

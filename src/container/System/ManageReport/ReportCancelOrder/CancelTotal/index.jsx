@@ -9,6 +9,7 @@ import {
 } from "../../../../../api/report";
 
 import "./index.scss";
+import CustomDatePicker from "../../../../../components/customDatePicker";
 
 const TotalCancel = () => {
   const [startDate, setStartDate] = useState("");
@@ -51,20 +52,6 @@ const TotalCancel = () => {
             setDataPie(res?.percent);
           })
           .catch((err) => {});
-      })
-      .catch((err) => {});
-
-    getReportOverviewCancelReport(
-      0,
-      20,
-      moment(moment().startOf("year").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
-    )
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
       })
       .catch((err) => {});
 
@@ -120,6 +107,49 @@ const TotalCancel = () => {
     [district, startDate, endDate, codeCity]
   );
 
+  const renderLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    value,
+    name,
+  }) => {
+    const RADIAN = Math.PI / 180;
+    // eslint-disable-next-line
+    const radius = 25 + innerRadius + (outerRadius - innerRadius);
+    // eslint-disable-next-line
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    // eslint-disable-next-line
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="#000000"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
+        {name === "system_cancel"
+          ? "Hệ thống"
+          : name === "customer_cancel"
+          ? "Khách hàng"
+          : "Quản trị viên"}{" "}
+        ({value} {"%"})
+      </text>
+    );
+  };
+
+  const onChangeDay = () => {
+    getReportCancelReport(startDate, endDate, codeCity, codeDistrict)
+      .then((res) => {
+        setDataPie(res?.percent);
+      })
+      .catch((err) => {});
+  };
+
   return (
     <>
       <div className="div-chart-pie-total-cancel">
@@ -132,47 +162,29 @@ const TotalCancel = () => {
             options={cityData}
           />
           <Select
-            style={{ width: 180, marginLeft: 20 }}
+            style={{ width: 180, marginLeft: 20, marginRight: 20 }}
             placeholder="Chọn quận"
             onChange={onChangeDistrict}
             options={districtData}
           />
+          <CustomDatePicker
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            onClick={onChangeDay}
+            onCancel={() => {}}
+          />
         </div>
         <div className="div-pie-chart">
-          <div className="div-title-note">
-            <div className="div-square-ser">
-              <div className="square-system" />
-              <a>
-                Hệ thống{" "}
-                {dataPie[0]?.value ? "- " + dataPie[0]?.value + "%" : ""}
-              </a>
-            </div>
-            <div className="div-square-ser">
-              <div className="square-customer" />
-              <a>
-                Khách hàng{" "}
-                {dataPie[1]?.value ? "- " + dataPie[1]?.value + "%" : ""}
-              </a>
-            </div>
-            <div className="div-square-ser">
-              <div className="square-user-system" />
-              <a>
-                Quản trị viên{" "}
-                {dataPie[2]?.value ? "- " + dataPie[2]?.value + "%" : ""}
-              </a>
-            </div>
-          </div>
-          <ResponsiveContainer height={200} min-width={500}>
+          <ResponsiveContainer height={300} min-width={500}>
             <PieChart>
               <Pie
                 data={dataPie}
-                cx={100}
-                cy={100}
-                innerRadius={60}
+                cx="50%"
+                cy="50%"
                 outerRadius={80}
                 fill="#8884d8"
-                paddingAngle={5}
                 dataKey="value"
+                label={renderLabel}
               >
                 {dataPie.map((entry, index) => (
                   <Cell
