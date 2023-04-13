@@ -172,6 +172,7 @@ const DetailsProfile = ({ id }) => {
                       : iconMember
                   }
                 />
+                <a className="text-money">{rankPoint} điểm</a>
               </div>
             </div>
             <div className="div-member">

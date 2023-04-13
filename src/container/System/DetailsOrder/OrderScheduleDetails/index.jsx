@@ -227,7 +227,11 @@ const DetailsOrderSchedule = () => {
                               return (
                                 <div className="div-event-promo">
                                   <a>- {item?.title?.vi}</a>
-                                  <a> +{formatMoney(item?.price)}</a>
+                                  <a>
+                                    {item?.price !== 0
+                                      ? "+" + formatMoney(item?.price)
+                                      : ""}
+                                  </a>
                                 </div>
                               );
                             })
