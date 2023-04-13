@@ -134,7 +134,7 @@ const History = ({ id }) => {
                 <div className="div-icon">
                   {item?.status_current_gift_remainder === "down" ? (
                     <i class="uil uil-arrow-down icon-deduction"></i>
-                  ) : item?.status_current_remainder === "up" ? (
+                  ) : item?.status_current_gift_remainder === "up" ? (
                     <i class="uil uil-arrow-up icon-plus"></i>
                   ) : (
                     <i class="uil uil-minus icon-minus"></i>

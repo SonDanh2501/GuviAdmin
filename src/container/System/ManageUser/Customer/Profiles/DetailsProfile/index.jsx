@@ -16,6 +16,10 @@ import {
 } from "reactstrap";
 import { formatMoney } from "../../../../../../helper/formatMoney";
 import user from "../../../../../../assets/images/user.png";
+import iconMember from "../../../../../../assets/images/iconMember.svg";
+import iconSilver from "../../../../../../assets/images/iconSilver.svg";
+import iconGold from "../../../../../../assets/images/iconGold.svg";
+import iconPlatinum from "../../../../../../assets/images/iconPlatinum.svg";
 import "./index.scss";
 import {
   fetchCustomerById,
@@ -25,6 +29,7 @@ import {
 import { FloatButton, Image } from "antd";
 import { errorNotify } from "../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../redux/actions/loading";
+import { QRCode } from "react-qrcode-logo";
 // core components
 
 const DetailsProfile = ({ id }) => {
@@ -35,7 +40,9 @@ const DetailsProfile = ({ id }) => {
   const [birthday, setBirthday] = useState("");
   const [gender, setGender] = useState("other");
   const [rank, setRank] = useState("");
+  const [checkRank, setCheckRank] = useState("");
   const [data, setData] = useState([]);
+  const [valueQr, setValueQr] = useState("");
   const [point, setPoint] = useState();
   const [rankPoint, setRankPoint] = useState();
   const dispatch = useDispatch();
@@ -55,15 +62,20 @@ const DetailsProfile = ({ id }) => {
   useEffect(() => {
     if (data?.rank_point < 100) {
       setRank("Thành viên");
+      setCheckRank("member");
     } else if (data?.rank_point >= 100 && data?.rank_point < 300) {
       setRank("Bạc");
+      setCheckRank("silver");
     } else if (data?.rank_point >= 300 && data?.rank_point < 1500) {
       setRank("Vàng");
+      setCheckRank("gold");
     } else {
-      setRank("Kim cương");
+      setRank("Bạch kim");
+      setCheckRank("platinum");
     }
     setPoint(data?.point);
     setRankPoint(data?.rank_point);
+    setValueQr("https://qr.guvico.com?code=" + data?.phone);
   }, [data]);
 
   const updateUser = () => {
@@ -122,26 +134,56 @@ const DetailsProfile = ({ id }) => {
             />
             <div className="div-name">
               <a className="text-name">{data?.full_name}</a>
+              <a className="text-invite">Mã: {data?.id_view}</a>
               {data?.birthday && <a className="text-invite">Tuổi: {age}</a>}
               <a className="text-invite">Mã giới thiệu: {data?.invite_code}</a>
+            </div>
+            <div className="ml-5">
+              <QRCode
+                value={valueQr}
+                ecLevel={"H"}
+                removeQrCodeBehindLogo={true}
+                renderAs={"svg"}
+                id="QRCode-svg"
+                size={100}
+              />
             </div>
           </div>
           <div className="div-rank-pay-member">
             <div className="div-member">
-              <a className="text-money">{formatMoney(data?.pay_point)}</a>
               <a className="text-title">G-pay</a>
+              <div className="div-rank-customer">
+                <a className="text-money">{formatMoney(data?.pay_point)}</a>
+              </div>
             </div>
             <div className="div-member">
-              <a className="text-money">{rank}</a>
-              <a className="text-title">Hạng thành viên</a>
+              <a className="text-title">Thành viên</a>
+              <div className="div-rank-customer">
+                <a className="text-money">{rank}</a>
+                <img
+                  className="icon-rank"
+                  src={
+                    checkRank === "silver"
+                      ? iconSilver
+                      : checkRank === "gold"
+                      ? iconGold
+                      : checkRank === "platinum"
+                      ? iconPlatinum
+                      : iconMember
+                  }
+                />
+                <a className="text-money">{rankPoint} điểm</a>
+              </div>
             </div>
             <div className="div-member">
-              <a className="text-money">{formatMoney(data?.total_price)}</a>
               <a className="text-title">Total Price</a>
+              <div className="div-rank-customer">
+                <a className="text-money">{formatMoney(data?.total_price)}</a>
+              </div>
             </div>
           </div>
         </div>
-        <div className="mt-5 div-infomation">
+        <div className="div-infomation">
           <h3 className="">Thông tin</h3>
           <div className="div-detail-infomation">
             <div className="div-left">

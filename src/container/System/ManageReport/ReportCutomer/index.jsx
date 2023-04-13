@@ -29,6 +29,8 @@ const ReportCustomer = () => {
   const [customerOld, setCustomerOld] = useState(0);
   const [moneyNew, setMoneyNew] = useState(0);
   const [moneyOld, setMoneyOld] = useState(0);
+  const [dataNew, setDataNew] = useState([]);
+  const [dataOld, setDataOld] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const dataChart = [];
@@ -64,8 +66,10 @@ const ReportCustomer = () => {
       .then((res) => {
         setCustomerNew(res?.newCustomer?.totalItem);
         setMoneyNew(res?.newCustomer?.totalMoney);
+        setDataNew(res?.newCustomer?.data);
         setCustomerOld(res?.oldCustomer?.totalItem);
         setMoneyOld(res?.oldCustomer?.totalMoney);
+        setDataOld(res?.oldCustomer?.data);
       })
       .catch((err) => {});
 
@@ -453,7 +457,7 @@ const ReportCustomer = () => {
           <div className="div-text-tab">
             <div className="div-t">
               <a className="text-tab-header">Tổng đơn</a>
-              <a className="text-tab-header">{0}</a>
+              <a className="text-tab-header">{dataNew?.length}</a>
             </div>
           </div>
           <div className="div-text-tab">
@@ -479,6 +483,12 @@ const ReportCustomer = () => {
         <div className="div-tab-header-service">
           <div className="div-img">
             <img src={add} className="img" />
+          </div>
+          <div className="div-text-tab">
+            <div className="div-t">
+              <a className="text-tab-header">Tổng đơn</a>
+              <a className="text-tab-header">{dataOld?.length}</a>
+            </div>
           </div>
           <div className="div-text-tab">
             <div className="div-t">

@@ -527,12 +527,15 @@ const DetailsOrder = () => {
                       </Col>
                     )}
                   </Row>
-                  <Row>
+                  <div>
                     <div className="div-details-service">
                       <a className="label-details">Chi tiết</a>
-                      <a className="title">
-                        Dịch vụ:{" "}
-                        <a className="text-service">
+                      <div className="div-details-order">
+                        <div className="div-title-details">
+                          <a className="title">Dịch vụ</a>
+                        </div>
+                        <a className="text-colon">:</a>
+                        <a className="text-service-order">
                           {dataGroup?.type === "schedule"
                             ? "Giúp việc cố định"
                             : dataGroup?.type === "loop" &&
@@ -543,31 +546,52 @@ const DetailsOrder = () => {
                             ? "Lặp lại hàng tuần"
                             : ""}
                         </a>
-                      </a>
-                      <div className="div-datework">
-                        <a className="title">Thời gian: </a>
+                      </div>
+                      <div className="div-details-order">
+                        <div className="div-title-details">
+                          <a className="title">Thời gian</a>
+                        </div>
+                        <a className="text-colon">:</a>
                         <div className="div-times">
-                          <a>
-                            -Ngày làm:{" "}
+                          <a className="text-date">
+                            - Ngày làm:{" "}
                             {moment(
                               new Date(dataGroup?.date_work_schedule[0]?.date)
                             ).format("DD/MM/YYYY")}
                           </a>
-                          <a>-Giờ làm: {timeWork(dataGroup)}</a>
+                          <a className="text-date">
+                            - Giờ làm: {timeWork(dataGroup)}
+                          </a>
                         </div>
                       </div>
-                      <a className="title">
-                        Địa điểm:{" "}
-                        <a className="text-service">{dataGroup?.address}</a>
-                      </a>
-                      {dataGroup?.note && (
-                        <a className="title">
-                          Ghi chú:{" "}
-                          <a className="text-service">{dataGroup?.note}</a>
+
+                      <div className="div-details-order">
+                        <div className="div-title-details">
+                          <a className="title"> Địa điểm</a>
+                        </div>
+                        <a className="text-colon">:</a>
+                        <a className="text-address-details">
+                          {dataGroup?.address}
                         </a>
+                      </div>
+
+                      {dataGroup?.note && (
+                        <div className="div-details-order">
+                          <div className="div-title-details">
+                            <a className="title">Ghi chú</a>
+                          </div>
+                          <a className="text-colon">:</a>
+                          <a className="text-address-details">
+                            {dataGroup?.note}
+                          </a>
+                        </div>
                       )}
-                      <div className="div-add-service">
-                        <a className="title">Dịch vụ thêm: </a>
+
+                      <div className="div-details-order">
+                        <div className="div-title-details">
+                          <a className="title">Dịch vụ thêm</a>
+                        </div>
+                        <a className="text-colon">:</a>
                         <div className="div-add">
                           {dataGroup?.service?.optional_service.map((item) => {
                             return (
@@ -585,67 +609,113 @@ const DetailsOrder = () => {
                         </div>
                       </div>
 
-                      <a className="title">
-                        Thanh toán:{" "}
-                        <a className="text-service">
+                      <div className="div-details-order">
+                        <div className="div-title-details">
+                          <a className="title">Thanh toán</a>
+                        </div>
+                        <a className="text-colon">:</a>
+                        <a className="text-address-details">
                           {dataGroup?.payment_method === "cash"
                             ? "Tiền mặt"
                             : "G-point"}
                         </a>
-                      </a>
-                      <div className="div-price-order">
-                        <a className="title-price-order">Tạm tính:</a>
-                        <div className="detail-price">
-                          <div className="div-total">
-                            <a>- Tổng tiền:</a>
-                            <a>{formatMoney(dataGroup?.initial_fee)}</a>
+                      </div>
+
+                      <div className="div-details-order">
+                        <div className="div-title-details">
+                          <a className="title">Tạm tính</a>
+                        </div>
+                        <a className="text-colon">:</a>
+                        <div className="div-details-price">
+                          <div className="div-price">
+                            <div className="div-title-colon">
+                              <div className="div-title-details">
+                                <a className="title">- Tồng tiền</a>
+                              </div>
+                              <a className="text-colon">:</a>
+                            </div>
+                            <a className="text-moeny-details">
+                              {formatMoney(dataGroup?.initial_fee)}
+                            </a>
                           </div>
-                          <div className="div-total">
-                            <a>- Phí nền tảng:</a>
+
+                          <div className="div-price">
+                            <div className="div-title-colon">
+                              <div className="div-title-details">
+                                <a className="title">- Dịch vụ thêm</a>
+                              </div>
+                              <a className="text-colon">:</a>
+                            </div>
                             {dataGroup?.service_fee?.map((item) => (
-                              <a>+{formatMoney(item?.fee)}</a>
+                              <a className="text-moeny-details">
+                                +{formatMoney(item?.fee)}
+                              </a>
                             ))}
                           </div>
+
                           {dataGroup?.service?.optional_service.map((item) => {
                             return (
-                              <div>
+                              <>
                                 {item?._id === "632148d02bacd0aa8648657c"
                                   ? item?.extend_optional?.map((item) => {
                                       return (
-                                        <div className="div-event-promo">
-                                          <a>- {item?.title?.vi}</a>
-                                          <a> +{formatMoney(item?.price)}</a>
+                                        <div className="div-price">
+                                          <div className="div-title-colon">
+                                            <div className="div-title-details">
+                                              <a className="title">
+                                                - {item?.title?.vi}
+                                              </a>
+                                            </div>
+                                            <a className="text-colon">:</a>
+                                          </div>
+
+                                          <a className="text-moeny-details">
+                                            {item?.price !== 0
+                                              ? "+" + formatMoney(item?.price)
+                                              : ""}
+                                          </a>
                                         </div>
                                       );
                                     })
                                   : null}
-                              </div>
+                              </>
                             );
                           })}
 
-                          <div className="div-total-promo">
-                            <a>- Khuyến mãi:</a>
+                          <div className="div-price">
+                            <div className="div-title-colon">
+                              <div className="div-title-details">
+                                <a className="title">- Khuyến mãi</a>
+                              </div>
+                              <a className="text-colon">:</a>
+                            </div>
+
                             {dataGroup?.code_promotion && (
-                              <div className="div-promo">
-                                <a>
+                              <>
+                                <a className="text-moeny-details">
                                   + Mã code: {dataGroup?.code_promotion?.code}
                                 </a>
-                                <a style={{ color: "red", marginLeft: 5 }}>
+                                <a className="money-red">
                                   {formatMoney(
                                     -dataGroup?.code_promotion?.discount
                                   )}
                                 </a>
-                              </div>
+                              </>
                             )}
                           </div>
 
                           {dataGroup?.event_promotion && (
-                            <div className="div-event-promo">
-                              <a>- Chương trình:</a>
+                            <div className="div-price">
+                              <div className="div-title-colon">
+                                <div className="div-title-details">
+                                  <a className="title">- Chương trình</a>
+                                </div>
+                                <a className="text-colon">:</a>
+                              </div>
                               <div className="div-price-event">
                                 {dataGroup?.event_promotion.map((item, key) => {
                                   return (
-                                    <a className="text-event-discount">
+                                    <a className="money-event-discount">
                                       {formatMoney(-item?.discount)}
                                     </a>
                                   );
@@ -654,6 +724,31 @@ const DetailsOrder = () => {
                             </div>
                           )}
 
+                          <div className="div-price">
+                            <div className="div-title-colon">
+                              <div className="div-title-details">
+                                <a className="title-total">- Giá</a>
+                              </div>
+                              <a className="text-colon">:</a>
+                            </div>
+                            <a className="text-moeny-details-total">
+                              {formatMoney(dataGroup?.final_fee)}
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 
+                     
+
+                      <div className="div-price-order">
+                        <a className="title-price-order">Tạm tính:</a>
+                        <div className="detail-price">
+                      
+                         
+
+                    
+
                           <div className="div-total">
                             <a className="title">- Giá: </a>
                             <a className="title">
@@ -661,7 +756,7 @@ const DetailsOrder = () => {
                             </a>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
 
                       {/* <a className="title">
                 Trạng thái:{" "}
@@ -678,7 +773,7 @@ const DetailsOrder = () => {
                 )}
               </a> */}
                     </div>
-                  </Row>
+                  </div>
                   {user?.role !== "support_customer" &&
                     dataGroup?.type === "schedule" && (
                       <div>
