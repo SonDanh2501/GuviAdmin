@@ -150,84 +150,137 @@ const DetailsOrderSchedule = () => {
               </Col>
             )}
           </Row>
-          <Row>
+          <div>
             <div className="div-details-service">
               <a className="label-details">Chi tiết</a>
-              <a className="title">
-                Dịch vụ:{" "}
-                <a className="text-service">
-                  {data?.id_group_order?.type === "schedule"
+              <div className="div-details-order">
+                <div className="div-title-details">
+                  <a className="title">Dịch vụ</a>
+                </div>
+                <a className="text-colon">:</a>
+                <a className="text-service-order">
+                  {data?.type === "schedule"
                     ? "Giúp việc cố định"
-                    : data?.id_group_order?.type === "loop" &&
-                      !data?.id_group_order?.is_auto_order
+                    : data?.type === "loop" && !data?.is_auto_order
                     ? "Giúp việc theo giờ"
-                    : data?.id_group_order?.type === "loop" &&
-                      data?.id_group_order?.is_auto_order
+                    : data?.type === "loop" && data?.is_auto_order
                     ? "Lặp lại hàng tuần"
                     : ""}
                 </a>
-              </a>
-              <div className="div-datework">
-                <a className="title">Thời gian: </a>
+              </div>
+              <div className="div-details-order">
+                <div className="div-title-details">
+                  <a className="title">Thời gian</a>
+                </div>
+                <a className="text-colon">:</a>
                 <div className="div-times">
-                  <a>
-                    -Ngày làm:{" "}
+                  <a className="text-date">
+                    - Ngày làm:{" "}
                     {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
                   </a>
-                  <a>-Giờ làm: {timeWork(data)}</a>
+                  <a className="text-date">- Giờ làm: {timeWork(data)}</a>
                 </div>
               </div>
-              <a className="title">
-                Địa điểm: <a className="text-service">{data?.address}</a>
-              </a>
-              {data?.note && (
-                <a className="title">
-                  Ghi chú: <a className="text-service">{data?.note}</a>
-                </a>
-              )}
-              <div style={{ flexDirection: "row" }}>
-                <a className="title">Dịch vụ thêm: </a>
-                {data?.service?.optional_service.map((item) => {
-                  return (
-                    <a>
-                      {item?._id === "632148d02bacd0aa8648657c"
-                        ? item?.extend_optional?.map((item) => (
-                            <a>- {item?.title?.vi}</a>
-                          ))
-                        : null}
-                    </a>
-                  );
-                })}
+
+              <div className="div-details-order">
+                <div className="div-title-details">
+                  <a className="title"> Địa điểm</a>
+                </div>
+                <a className="text-colon">:</a>
+                <a className="text-address-details">{data?.address}</a>
               </div>
 
-              <a className="title">
-                Thanh toán:{" "}
-                <a className="text-service">
-                  {data?.payment_method === "cash" ? "Tiền mặt" : "G-point"}
-                </a>
-              </a>
-              <div className="div-price-order">
-                <a className="title">Tạm tính:</a>
-                <div className="detail-price">
-                  <div className="div-total">
-                    <a>- Tổng tiền:</a>
-                    <a>{formatMoney(data?.initial_fee)}</a>
+              {data?.note && (
+                <div className="div-details-order">
+                  <div className="div-title-details">
+                    <a className="title">Ghi chú</a>
                   </div>
-                  <div className="div-total">
-                    <a>- Phí nền tảng:</a>
-                    {data?.service_fee?.map((item) => (
-                      <a>+{formatMoney(item?.fee)}</a>
-                    ))}
-                  </div>
+                  <a className="text-colon">:</a>
+                  <a className="text-address-details">{data?.note}</a>
+                </div>
+              )}
+
+              <div className="div-details-order">
+                <div className="div-title-details">
+                  <a className="title">Dịch vụ thêm</a>
+                </div>
+                <a className="text-colon">:</a>
+                <div className="div-add">
                   {data?.service?.optional_service.map((item) => {
                     return (
-                      <div>
+                      <>
+                        {item?._id === "632148d02bacd0aa8648657c"
+                          ? item?.extend_optional?.map((item) => (
+                              <a className="text-title-add">
+                                - {item?.title?.vi}
+                              </a>
+                            ))
+                          : null}
+                      </>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="div-details-order">
+                <div className="div-title-details">
+                  <a className="title">Thanh toán</a>
+                </div>
+                <a className="text-colon">:</a>
+                <a className="text-address-details">
+                  {data?.payment_method === "cash" ? "Tiền mặt" : "G-point"}
+                </a>
+              </div>
+
+              <div className="div-details-order">
+                <div className="div-title-details">
+                  <a className="title">Tạm tính</a>
+                </div>
+                <a className="text-colon">:</a>
+                <div className="div-details-price">
+                  <div className="div-price">
+                    <div className="div-title-colon">
+                      <div className="div-title-details">
+                        <a className="title">- Tồng tiền</a>
+                      </div>
+                      <a className="text-colon">:</a>
+                    </div>
+                    <a className="text-moeny-details">
+                      {formatMoney(data?.initial_fee)}
+                    </a>
+                  </div>
+
+                  <div className="div-price">
+                    <div className="div-title-colon">
+                      <div className="div-title-details">
+                        <a className="title">- Dịch vụ thêm</a>
+                      </div>
+                      <a className="text-colon">:</a>
+                    </div>
+                    {data?.service_fee?.map((item) => (
+                      <a className="text-moeny-details">
+                        +{formatMoney(item?.fee)}
+                      </a>
+                    ))}
+                  </div>
+
+                  {data?.service?.optional_service.map((item) => {
+                    return (
+                      <>
                         {item?._id === "632148d02bacd0aa8648657c"
                           ? item?.extend_optional?.map((item) => {
                               return (
-                                <div className="div-event-promo">
-                                  <a>- {item?.title?.vi}</a>
-                                  <a>
+                                <div className="div-price">
+                                  <div className="div-title-colon">
+                                    <div className="div-title-details">
+                                      <a className="title">
+                                        - {item?.title?.vi}
+                                      </a>
+                                    </div>
+                                    <a className="text-colon">:</a>
+                                  </div>
+
+                                  <a className="text-moeny-details">
                                     {item?.price !== 0
                                       ? "+" + formatMoney(item?.price)
                                       : ""}
@@ -236,29 +289,42 @@ const DetailsOrderSchedule = () => {
                               );
                             })
                           : null}
-                      </div>
+                      </>
                     );
                   })}
 
-                  <div className="div-total-promo">
-                    <a>- Khuyến mãi:</a>
+                  <div className="div-price">
+                    <div className="div-title-colon">
+                      <div className="div-title-details">
+                        <a className="title">- Khuyến mãi</a>
+                      </div>
+                      <a className="text-colon">:</a>
+                    </div>
+
                     {data?.code_promotion && (
-                      <div className="div-promo">
-                        <a>+ Mã code: {data?.code_promotion?.code}</a>
-                        <a style={{ color: "red", marginLeft: 5 }}>
+                      <>
+                        <a className="text-moeny-details">
+                          + Mã code: {data?.code_promotion?.code}
+                        </a>
+                        <a className="money-red">
                           {formatMoney(-data?.code_promotion?.discount)}
                         </a>
-                      </div>
+                      </>
                     )}
                   </div>
 
                   {data?.event_promotion && (
-                    <div className="div-event-promo">
-                      <a>- Chương trình:</a>
+                    <div className="div-price">
+                      <div className="div-title-colon">
+                        <div className="div-title-details">
+                          <a className="title">- Chương trình</a>
+                        </div>
+                        <a className="text-colon">:</a>
+                      </div>
                       <div className="div-price-event">
                         {data?.event_promotion.map((item, key) => {
                           return (
-                            <a className="text-event-discount">
+                            <a className="money-event-discount">
                               {formatMoney(-item?.discount)}
                             </a>
                           );
@@ -267,29 +333,36 @@ const DetailsOrderSchedule = () => {
                     </div>
                   )}
 
-                  <div className="div-total">
-                    <a className="title">- Giá: </a>
-                    <a className="title">{formatMoney(data?.final_fee)}</a>
+                  <div className="div-price">
+                    <div className="div-title-colon">
+                      <div className="div-title-details">
+                        <a className="title-total">- Giá</a>
+                      </div>
+                      <a className="text-colon">:</a>
+                    </div>
+                    <a className="text-moeny-details-total">
+                      {formatMoney(data?.final_fee)}
+                    </a>
                   </div>
                 </div>
               </div>
 
               {/* <a className="title">
-    Trạng thái:{" "}
-    {data?.status === "pending" ? (
-      <a className="text-pending ">Đang chờ làm</a>
-    ) : dataGroup?.status === "confirm" ? (
-      <a className="text-confirm">Đã nhận</a>
-    ) : dataGroup?.status === "doing" ? (
-      <a className="text-doing">Đang làm</a>
-    ) : dataGroup?.status === "done" ? (
-      <a className="text-done">Đã xong</a>
-    ) : (
-      <a className="text-cancel">Đã huỷ</a>
-    )}
-  </a> */}
+                Trạng thái:{" "}
+                {dataGroup?.status === "pending" ? (
+                  <a className="text-pending ">Đang chờ làm</a>
+                ) : dataGroup?.status === "confirm" ? (
+                  <a className="text-confirm">Đã nhận</a>
+                ) : dataGroup?.status === "doing" ? (
+                  <a className="text-doing">Đang làm</a>
+                ) : dataGroup?.status === "done" ? (
+                  <a className="text-done">Đã xong</a>
+                ) : (
+                  <a className="text-cancel">Đã huỷ</a>
+                )}
+              </a> */}
             </div>
-          </Row>
+          </div>
           {user?.role !== "support_customer" && data?.type === "schedule" && (
             <div>
               {data?.status === "pending" || data?.status === "confirm" ? (

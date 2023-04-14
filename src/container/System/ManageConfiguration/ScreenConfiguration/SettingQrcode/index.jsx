@@ -15,9 +15,9 @@ const SettingQrCode = () => {
       />
       <QRCode
         value={value}
-        logoImage={Logo}
-        logoWidth={50}
-        logoHeight={20}
+        // logoImage={Logo}
+        // logoWidth={50}
+        // logoHeight={20}
         ecLevel={"H"}
         removeQrCodeBehindLogo={true}
         renderAs={"svg"}

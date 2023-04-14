@@ -117,6 +117,17 @@ export const getReportCustomerNewOld = (
   );
 };
 
+export const getReportConnectionCustomer = (
+  start,
+  length,
+  start_date,
+  end_date
+) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_connection_rate_customer?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
+  );
+};
+
 export const getReportReviewCollaborator = (
   start,
   length,
