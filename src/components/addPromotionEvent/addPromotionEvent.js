@@ -1,8 +1,6 @@
 import { Checkbox, List, Select } from "antd";
-import { convertToRaw, EditorState } from "draft-js";
-import draftToHtml from "draftjs-to-html";
+import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { Editor } from "react-draft-wysiwyg";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -21,46 +19,41 @@ import { createPromotion, getGroupCustomerApi } from "../../api/promotion";
 import resizeFile from "../../helper/resizer";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
-import { createPromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
-import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
-import _debounce from "lodash/debounce";
+import CustomButton from "../customButton/customButton";
 
-import "./addPromotionEvent.scss";
 import { createPushNotification } from "../../api/notification";
+import CustomTextEditor from "../customTextEdittor";
+import "./addPromotionEvent.scss";
 
 const AddPromotionEvent = ({ idService, tab }) => {
   const [state, setState] = useState(false);
-  const [formDiscount, setFormDiscount] = React.useState("amount");
-  const [discountUnit, setDiscountUnit] = React.useState("amount");
-  const [dataGroupCustomer, setDataGroupCustomer] = React.useState([]);
-  const [isGroupCustomer, setIsGroupCustomer] = React.useState(false);
-  const [groupCustomer, setGroupCustomer] = React.useState([]);
-  const [dataCustomer, setDataCustomer] = React.useState([]);
-  const [isCustomer, setIsCustomer] = React.useState(false);
-  const [customer, setCustomer] = React.useState([]);
-  const [titleVN, setTitleVN] = React.useState("");
-  const [titleEN, setTitleEN] = React.useState("");
-  const [descriptionVN, setDescriptionVN] = React.useState(
-    EditorState.createEmpty()
-  );
-  const [descriptionEN, setDescriptionEN] = React.useState(
-    EditorState.createEmpty()
-  );
-  const [promoCode, setPromoCode] = React.useState("");
-  const [minimumOrder, setMinimumOrder] = React.useState();
-  const [namebrand, setNamebrand] = React.useState("");
-  const [codebrand, setCodebrand] = React.useState("");
-  const [reducedValue, setReducedValue] = React.useState(0);
-  const [maximumDiscount, setMaximumDiscount] = React.useState(0);
-  const [limitedQuantity, setLimitedQuantity] = React.useState(false);
-  const [amount, setAmount] = React.useState("");
-  const [limitedDate, setLimitedDate] = React.useState(false);
-  const [startDate, setStartDate] = React.useState("");
-  const [endDate, setEndDate] = React.useState("");
-  const [isUsePromo, setIsUsePromo] = React.useState(false);
-  const [usePromo, setUsePromo] = React.useState("");
+  const [formDiscount, setFormDiscount] = useState("amount");
+  const [discountUnit, setDiscountUnit] = useState("amount");
+  const [dataGroupCustomer, setDataGroupCustomer] = useState([]);
+  const [isGroupCustomer, setIsGroupCustomer] = useState(false);
+  const [groupCustomer, setGroupCustomer] = useState([]);
+  const [dataCustomer, setDataCustomer] = useState([]);
+  const [isCustomer, setIsCustomer] = useState(false);
+  const [customer, setCustomer] = useState([]);
+  const [titleVN, setTitleVN] = useState("");
+  const [titleEN, setTitleEN] = useState("");
+  const [descriptionVN, setDescriptionVN] = useState("");
+  const [descriptionEN, setDescriptionEN] = useState("");
+  const [promoCode, setPromoCode] = useState("");
+  const [minimumOrder, setMinimumOrder] = useState();
+  const [namebrand, setNamebrand] = useState("");
+  const [codebrand, setCodebrand] = useState("");
+  const [reducedValue, setReducedValue] = useState(0);
+  const [maximumDiscount, setMaximumDiscount] = useState(0);
+  const [limitedQuantity, setLimitedQuantity] = useState(false);
+  const [amount, setAmount] = useState("");
+  const [limitedDate, setLimitedDate] = useState(false);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [isUsePromo, setIsUsePromo] = useState(false);
+  const [usePromo, setUsePromo] = useState("");
   const [serviceApply, setServiceApply] = useState("");
   const [isPaymentMethod, setIsPaymentMethod] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState([]);
@@ -132,10 +125,6 @@ const AddPromotionEvent = ({ idService, tab }) => {
   const handleChangePaymentMethod = (value) => {
     setPaymentMethod(value);
   };
-
-  const onEditorVNStateChange = (editorState) => setDescriptionVN(editorState);
-
-  const onEditorENStateChange = (editorState) => setDescriptionEN(editorState);
 
   const onChangeImageNoti = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -229,8 +218,8 @@ const AddPromotionEvent = ({ idService, tab }) => {
         en: "",
       },
       description: {
-        vi: draftToHtml(convertToRaw(descriptionVN.getCurrentContent())),
-        en: draftToHtml(convertToRaw(descriptionEN.getCurrentContent())),
+        vi: descriptionVN,
+        en: descriptionEN,
       },
       thumbnail: "",
       image_background: "",
@@ -381,27 +370,15 @@ const AddPromotionEvent = ({ idService, tab }) => {
                   />
                   <h5>2. Mô tả chi tiết</h5>
                   <Label>Tiếng Việt</Label>
-                  <div className="form-description">
-                    <Editor
-                      editorState={descriptionVN}
-                      onEditorStateChange={onEditorVNStateChange}
-                      toolbarClassName="toolbarClassName"
-                      wrapperClassName="wrapperClassName wrapperStyle"
-                      editorClassName="editorClassName"
-                      wrapperStyle={{ color: "#000" }}
-                    />
-                  </div>
+                  <CustomTextEditor
+                    value={descriptionVN}
+                    onChangeValue={setDescriptionVN}
+                  />
                   <Label>Tiếng Anh</Label>
-                  <div className="form-description">
-                    <Editor
-                      editorState={descriptionEN}
-                      onEditorStateChange={onEditorENStateChange}
-                      toolbarClassName="toolbarClassName"
-                      wrapperClassName="wrapperClassName wrapperStyle"
-                      editorClassName="editorClassName"
-                      wrapperStyle={{ color: "#000" }}
-                    />
-                  </div>
+                  <CustomTextEditor
+                    value={descriptionEN}
+                    onChangeValue={setDescriptionEN}
+                  />
                 </Col>
                 <Col md={4}>
                   <div>

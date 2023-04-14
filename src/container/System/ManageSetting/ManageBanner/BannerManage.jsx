@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { searchBanners } from "../../../../api/banner";
 import { UilEllipsisV } from "@iconscout/react-unicons";
@@ -33,7 +33,7 @@ export default function BannerManage() {
   const banners = useSelector(getBanner);
   const totalBanner = useSelector(getBannerTotal);
   const dispatch = useDispatch();
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(getBanners.getBannersRequest(0, 10));
   }, [dispatch]);
 
@@ -143,10 +143,12 @@ export default function BannerManage() {
     {
       title: "Type link",
       render: (data) => <a className="text-title-banner">{data?.type_link}</a>,
+      align: "center",
     },
     {
-      title: "Position",
+      title: "Vị trí",
       render: (data) => <a className="text-title-banner">{data?.position}</a>,
+      align: "center",
     },
     {
       title: "Link ID",

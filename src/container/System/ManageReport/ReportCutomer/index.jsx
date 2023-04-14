@@ -4,6 +4,7 @@ import vi from "moment/locale/vi";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  getReportConnectionCustomer,
   getReportCustomer,
   getReportCustomerNewOld,
 } from "../../../../api/report";

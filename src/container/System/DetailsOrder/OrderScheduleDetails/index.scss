@@ -1,10 +1,10 @@
 .div-container {
   background-color: white;
   border-radius: 5px;
-  width: 99%;
   min-height: 100%;
   margin: 10px;
   padding: 10px;
+  width: 100%;
 
   .label {
     font-family: "Roboto";
@@ -37,6 +37,7 @@
     .div-body {
       display: flex;
       flex-direction: row;
+
       .img-customer {
         width: 100px;
         height: 100px;
@@ -78,29 +79,10 @@
     display: flex;
     flex-direction: column;
 
-    .div-add-service {
-      display: flex;
-      flex-direction: row;
-
-      .div-add {
-        display: flex;
-        flex-direction: column;
-        margin-left: 20px;
-        margin-top: 5px;
-
-        .text-title-add {
-          font-family: "Roboto";
-          font-style: normal;
-          font-weight: 400;
-          font-size: 14px;
-          color: #19202c;
-        }
-      }
-    }
-
     .div-price-order {
       display: flex;
       flex-direction: row;
+      width: 50%;
       .title-price-order {
         font-family: "Roboto";
         font-style: normal;
@@ -110,101 +92,156 @@
         color: #000000;
         width: 15%;
       }
-
-      .detail-price {
-        display: flex;
-        flex-direction: column;
-        margin-left: 10px;
-        width: 100%;
-
-        .div-total {
-          flex-direction: row;
-          justify-content: space-between;
-        }
-        .div-total-promo {
-          flex-direction: row;
-          justify-content: space-between;
-          .div-promo {
-            display: flex;
-            margin-left: 30px;
-            flex-direction: row;
-            justify-content: space-between;
-          }
-        }
-
-        .div-event-promo {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-
-          .div-price-event {
-            display: flex;
-            flex-direction: column;
-            .text-event-discount {
-              color: #ff0000;
-              margin-left: 10px;
-              font-family: "Roboto";
-              font-style: normal;
-              font-weight: 400;
-              font-size: 14px;
-              text-align: right;
-            }
-          }
-        }
-      }
     }
 
-    .title {
-      font-family: "Roboto";
-      font-style: normal;
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 30px;
-      color: #19202c;
-      align-items: center;
-
-      .text-service {
-        font-family: "Roboto";
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 30px;
-        color: #19202c;
-        align-items: center;
-      }
-
-      .text-add-service {
-        display: flex;
-        flex-wrap: wrap;
-        font-family: "Roboto";
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 30px;
-        color: #19202c;
-        align-items: center;
-        margin-left: 10%;
-        margin-top: -10px;
-      }
-    }
-
-    .div-datework {
+    .div-details-order {
       display: flex;
       flex-direction: row;
-      .title {
+      align-items: center;
+
+      .div-title-details {
+        width: 100px;
+        .title {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          color: #000000;
+        }
+      }
+      .text-colon {
         font-family: "Roboto";
         font-style: normal;
         font-weight: 600;
         font-size: 16px;
-        line-height: 30px;
-        color: #19202c;
-        align-items: center;
+        color: #000000;
+        margin-right: 5px;
+      }
+      .text-service-order {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        color: #000000;
       }
 
       .div-times {
         display: flex;
         flex-direction: column;
-        margin-top: 5px;
+        padding-top: 5px;
+
+        .text-date {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          color: #000000;
+        }
+      }
+
+      .text-address-details {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        color: #000000;
+      }
+
+      .div-add {
+        display: flex;
+        flex-direction: column;
+
+        .text-title-add {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          color: #19202c;
+        }
+      }
+
+      .div-details-price {
+        display: flex;
+        flex-direction: column;
+        width: 60%;
+
+        .div-price {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          border-top: 1px solid #d6d6d6;
+
+          .div-title-colon {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .div-title-details {
+              width: 150px;
+              .title {
+                font-family: "Roboto";
+                font-style: normal;
+                font-weight: 400;
+                font-size: 14px;
+                color: #000000;
+              }
+
+              .title-total {
+                font-family: "Roboto";
+                font-style: normal;
+                font-weight: 500;
+                font-size: 16px;
+                color: #000000;
+              }
+            }
+            .text-colon {
+              font-family: "Roboto";
+              font-style: normal;
+              font-weight: 600;
+              font-size: 16px;
+              color: #000000;
+              margin-right: 5px;
+            }
+          }
+
+          .text-moeny-details {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            color: #000000;
+          }
+
+          .text-moeny-details-total {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 500;
+            font-size: 16px;
+            color: #000000;
+          }
+
+          .money-red {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            color: #ff0000;
+          }
+
+          .div-price-event {
+            display: flex;
+            flex-direction: column;
+
+            .money-event-discount {
+              font-family: "Roboto";
+              font-style: normal;
+              font-weight: 400;
+              font-size: 14px;
+              color: #ff0000;
+              text-align: right;
+            }
+          }
+        }
       }
     }
 
@@ -274,6 +311,7 @@
     .div-body {
       display: flex;
       flex-direction: row;
+      width: 100%;
 
       .img-collaborator {
         width: 100px;
