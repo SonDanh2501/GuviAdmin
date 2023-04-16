@@ -642,7 +642,7 @@ const DetailsOrder = () => {
                           <div className="div-price">
                             <div className="div-title-colon">
                               <div className="div-title-details">
-                                <a className="title">- Dịch vụ thêm</a>
+                                <a className="title">- Phí nền tảng</a>
                               </div>
                               <a className="text-colon">:</a>
                             </div>
