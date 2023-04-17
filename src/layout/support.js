@@ -10,12 +10,17 @@ import ManageTopup from "../container/System/ManageTopup";
 import ManageReport from "../container/System/ManageReport";
 import DetailsOrder from "../container/System/DetailsOrder";
 import ManageFeedback from "../container/System/ManageFeedback";
+import AddOrder from "../container/System/ManageOrder/DrawerAddOrder";
 
 const Support = () => {
   return (
     <Routes>
       <Route path="/group-order/manage-order" element={<ManageOrder />} />
       <Route path="/group-order/manage-order/all" element={<ManageOrder />} />
+      <Route
+        path="/group-order/manage-order/create-order"
+        element={<AddOrder />}
+      />
       <Route
         path="/group-order/manage-order/doing"
         element={<OrderDoingManage />}
