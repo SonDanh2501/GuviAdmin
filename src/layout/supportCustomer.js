@@ -7,13 +7,17 @@ import ManageOrder from "../container/System/ManageOrder";
 import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDoingManage";
 import ManageCustomer from "../container/System/ManageUser/Customer";
 import Profiles from "../container/System/ManageUser/Customer/Profiles";
+import AddOrder from "../container/System/ManageOrder/DrawerAddOrder";
 
 const SupportCustomer = () => {
   return (
     <Routes>
       <Route path="/group-order/manage-order" element={<ManageOrder />} />
       <Route path="/details-customer" element={<Profiles />} />
-
+      <Route
+        path="/group-order/manage-order/create-order"
+        element={<AddOrder />}
+      />
       <Route path="/group-order/manage-order/all" element={<ManageOrder />} />
       <Route
         path="/group-order/manage-order/doing"
