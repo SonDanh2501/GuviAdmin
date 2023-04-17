@@ -792,6 +792,21 @@ const Sidebar = ({ onClick }) => {
               </NavLink>
             </li>
             <li>
+              <NavLink
+                to="/feedback/manage-feedback"
+                onClick={() => changeBrand("Quản lý phản hồi")}
+              >
+                {({ isActive }) => (
+                  <div className={isActive ? "active-link" : "unactive-link"}>
+                    <img src={like} className="img-icon" />
+                    <a className={isActive ? "active-text" : "unactive-text"}>
+                      Hỗ trợ
+                    </a>
+                  </div>
+                )}
+              </NavLink>
+            </li>
+            <li>
               <NavLink to="/report/manage-report" onClick={toggleReportNavbar}>
                 {({ isActive }) => (
                   <div className={isActive ? "active-link" : "unactive-link"}>

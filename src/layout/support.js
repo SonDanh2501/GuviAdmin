@@ -9,6 +9,7 @@ import ManageOrder from "../container/System/ManageOrder";
 import ManageTopup from "../container/System/ManageTopup";
 import ManageReport from "../container/System/ManageReport";
 import DetailsOrder from "../container/System/DetailsOrder";
+import ManageFeedback from "../container/System/ManageFeedback";
 
 const Support = () => {
   return (
@@ -43,6 +44,7 @@ const Support = () => {
       <Route path="/topup/manage-topup" element={<ManageTopup />} />
       <Route path="/report/manage-report" element={<ManageReport />} />
       <Route path="/report/manage-report/all" element={<ManageReport />} />
+      <Route path="/feedback/manage-feedback" element={<ManageFeedback />} />
     </Routes>
   );
 };
