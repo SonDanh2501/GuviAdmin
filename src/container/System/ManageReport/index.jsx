@@ -8,7 +8,6 @@ import ReportService from "./ReportService";
 import ReportArea from "./ReportArea";
 import ReportUser from "./ReportUser";
 import ReportCustomer from "./ReportCutomer";
-import ReviewCollaborator from "./ReviewCollaborator";
 import ReportCancelOrder from "./ReportCancelOrder";
 
 const ManageReport = () => {
@@ -34,13 +33,10 @@ const ManageReport = () => {
           <Tabs.TabPane tab="Báo cáo khách hàng" key="5">
             <ReportCustomer />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Đánh giá CTV" key="6">
-            <ReviewCollaborator />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo khu vực" key="7">
+          <Tabs.TabPane tab="Báo cáo khu vực" key="6">
             <ReportArea />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo đơn huỷ" key="8">
+          <Tabs.TabPane tab="Báo cáo đơn huỷ" key="7">
             <ReportCancelOrder />
           </Tabs.TabPane>
         </Tabs>

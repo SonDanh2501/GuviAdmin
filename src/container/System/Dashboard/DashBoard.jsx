@@ -324,7 +324,7 @@ export default function Home() {
                     {startDate && (
                       <a className="text-date">
                         {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-                        {moment(new Date(endDate)).format("DD/MM/YYYY")}
+                        {moment(endDate).utc().format("DD/MM/YYYY")}
                       </a>
                     )}
                   </div>
@@ -691,15 +691,15 @@ export default function Home() {
                           item?.id_admin_action?._id,
                           item?.id_admin_action?.full_name
                         )
-                      : item?.id_collaborator
-                      ? item?.title_admin.replace(
-                          item?.id_collaborator?._id,
-                          item?.id_collaborator?.full_name
-                        )
                       : item?.id_customer
                       ? item?.title_admin.replace(
                           item?.id_customer?._id,
                           item?.id_customer?.full_name
+                        )
+                      : item?.id_collaborator
+                      ? item?.title_admin.replace(
+                          item?.id_collaborator?._id,
+                          item?.id_collaborator?.full_name
                         )
                       : "";
 

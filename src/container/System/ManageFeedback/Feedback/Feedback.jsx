@@ -2,7 +2,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { Input, Pagination, Table, Tooltip } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -16,33 +16,33 @@ import {
   ModalHeader,
   Row,
 } from "reactstrap";
-import { deleteFeedbackApi, searchFeedbackApi } from "../../../api/feedback";
-import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
-import { errorNotify } from "../../../helper/toast";
-import { getFeedback } from "../../../redux/actions/feedback";
-import { loadingAction } from "../../../redux/actions/loading";
-import { getUser } from "../../../redux/selectors/auth";
+
 import {
   getFeedbacks,
   getFeedbackTotal,
-} from "../../../redux/selectors/feedback";
-import "./FeedbackManage.scss";
+} from "../../../../redux/selectors/feedback";
+import "./Feedback.scss";
+import { getFeedback } from "../../../../redux/actions/feedback";
+import { getUser } from "../../../../redux/selectors/auth";
+import { loadingAction } from "../../../../redux/actions/loading";
+import { deleteFeedbackApi, searchFeedbackApi } from "../../../../api/feedback";
+import { errorNotify } from "../../../../helper/toast";
 
-export default function FeedbackManage() {
+export default function Feedback() {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [itemEdit, setItemEdit] = React.useState([]);
+  const [itemEdit, setItemEdit] = useState([]);
   const dispatch = useDispatch();
   const listFeedback = useSelector(getFeedbacks);
   const feedbackTotal = useSelector(getFeedbackTotal);
-  const [modal, setModal] = React.useState(false);
+  const [modal, setModal] = useState(false);
   const user = useSelector(getUser);
   const navigate = useNavigate();
   const toggle = () => setModal(!modal);
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(getFeedback.getFeedbackRequest({ start: 0, length: 20 }));
   }, [dispatch]);
 
@@ -141,7 +141,6 @@ export default function FeedbackManage() {
   return (
     <React.Fragment>
       <div>
-        <h5>Phản hồi</h5>
         <Input
           placeholder="Tìm kiếm theo tên hoặc số điện thoại"
           type="text"

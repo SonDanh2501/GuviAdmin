@@ -1,14 +1,12 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
-import ManagePushNotification from "../container/System/ManagePushNotification";
-import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
-import ManageSetting from "../container/System/ManageSetting";
-import ManageCustomer from "../container/System/ManageUser/Customer";
-import Profiles from "../container/System/ManageUser/Customer/Profiles";
-import DeepCleaningManager from "../container/System/ManageDeepCleaning";
 import DetailsOrder from "../container/System/DetailsOrder";
+import DeepCleaningManager from "../container/System/ManageDeepCleaning";
+import ManageFeedback from "../container/System/ManageFeedback";
 import ManageOrder from "../container/System/ManageOrder";
 import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDoingManage";
+import ManageCustomer from "../container/System/ManageUser/Customer";
+import Profiles from "../container/System/ManageUser/Customer/Profiles";
 
 const SupportCustomer = () => {
   return (
@@ -30,7 +28,7 @@ const SupportCustomer = () => {
       />
       <Route path="/profile-customer" element={<Profiles />} />
 
-      <Route path="/feedback/manage-feedback" element={<FeedbackManage />} />
+      <Route path="/feedback/manage-feedback" element={<ManageFeedback />} />
     </Routes>
   );
 };

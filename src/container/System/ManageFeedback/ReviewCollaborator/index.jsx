@@ -188,6 +188,7 @@ const ReviewCollaborator = () => {
     },
     {
       title: "Đơn hàng",
+      render: (data) => <a className="star-review">{data?.id_view}</a>,
     },
   ];
 
@@ -227,7 +228,7 @@ const ReviewCollaborator = () => {
         {startDate && (
           <a className="text-date">
             {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-            {moment(new Date(endDate)).format("DD/MM/YYYY")}
+            {moment(endDate).utc().format("DD/MM/YYYY")}
           </a>
         )}
       </div>
