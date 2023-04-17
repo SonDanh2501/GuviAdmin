@@ -1,36 +1,36 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
-import ManagePushNotification from "../container/System/ManagePushNotification";
-import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
-import ManageSetting from "../container/System/ManageSetting";
 import Home from "../container/System/Dashboard/DashBoard";
-import DeepCleaningManager from "../container/System/ManageDeepCleaning";
 import DetailsOrder from "../container/System/DetailsOrder";
 import DetailsOrderSchedule from "../container/System/DetailsOrder/OrderScheduleDetails";
-import ProfileCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/ProfileCollaborator";
-import Profiles from "../container/System/ManageUser/Customer/Profiles";
-import ManageCustomer from "../container/System/ManageUser/Customer";
-import ManageCollaborator from "../container/System/ManageUser/Collaborator";
-import DetailActivityCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/components/DetailActivity";
-import OrderUsePromotion from "../container/System/ManagePromotion/OrderUsePromotion";
-import GroupServiceManage from "../container/System/ManageService/ManageGroupService/ManageGroupService/GroupServiceManage";
-import ServiceManage from "../container/System/ManageService/ManageService/ServiceManage";
+import ManageConfiguration from "../container/System/ManageConfiguration/ManageConfiguration";
+import AppCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/AppCollaborator";
+import AppCustomer from "../container/System/ManageConfiguration/ScreenConfiguration/AppCustomer";
+import CreateAccount from "../container/System/ManageConfiguration/ScreenConfiguration/CreateAccount";
+import GroupCustomerManage from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer";
+import SettingQrCode from "../container/System/ManageConfiguration/ScreenConfiguration/SettingQrcode";
+import DeepCleaningManager from "../container/System/ManageDeepCleaning";
+import ManageFeedback from "../container/System/ManageFeedback";
+import ManageFinance from "../container/System/ManageFinance";
 import ManageOrder from "../container/System/ManageOrder";
 import AddOrder from "../container/System/ManageOrder/DrawerAddOrder";
 import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDoingManage";
-import ManageTopup from "../container/System/ManageTopup";
-import ManageFinance from "../container/System/ManageFinance";
-import GroupCustomerManage from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer";
+import OrderUsePromotion from "../container/System/ManagePromotion/OrderUsePromotion";
+import ManagePushNotification from "../container/System/ManagePushNotification";
 import ManageReport from "../container/System/ManageReport";
 import DetailReportManager from "../container/System/ManageReport/DetailsReportCollaborator";
-import DetailRegisterCustomer from "../container/System/ManageReport/ReportUser/DetailRegisterCustomer";
 import ReportInviteDetails from "../container/System/ManageReport/ReportInvite/ReportInviteDetails";
-import ManageConfiguration from "../container/System/ManageConfiguration/ManageConfiguration";
+import DetailRegisterCustomer from "../container/System/ManageReport/ReportUser/DetailRegisterCustomer";
+import GroupServiceManage from "../container/System/ManageService/ManageGroupService/ManageGroupService/GroupServiceManage";
+import ServiceManage from "../container/System/ManageService/ManageService/ServiceManage";
+import ManageSetting from "../container/System/ManageSetting";
 import ReasonManage from "../container/System/ManageSetting/ManageReason/ReasonManage";
-import AppCustomer from "../container/System/ManageConfiguration/ScreenConfiguration/AppCustomer";
-import AppCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/AppCollaborator";
-import SettingQrCode from "../container/System/ManageConfiguration/ScreenConfiguration/SettingQrcode";
-import CreateAccount from "../container/System/ManageConfiguration/ScreenConfiguration/CreateAccount";
+import ManageTopup from "../container/System/ManageTopup";
+import ManageCollaborator from "../container/System/ManageUser/Collaborator";
+import ProfileCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/ProfileCollaborator";
+import DetailActivityCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/components/DetailActivity";
+import ManageCustomer from "../container/System/ManageUser/Customer";
+import Profiles from "../container/System/ManageUser/Customer/Profiles";
 
 const Admin = () => {
   return (
@@ -76,7 +76,7 @@ const Admin = () => {
         path="/services/manage-group-service/manage-service"
         element={<ServiceManage />}
       />
-      <Route path="/feedback/manage-feedback" element={<FeedbackManage />} />
+      <Route path="/feedback/manage-feedback" element={<ManageFeedback />} />
       <Route path="/group-order/manage-order" element={<ManageOrder />} />
 
       <Route

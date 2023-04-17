@@ -22,7 +22,7 @@ function* loginSaga(action) {
     } else if (user.role === "marketing" || user.role === "marketing-manager") {
       action.payload.naviga("/promotion/manage-setting");
     } else if (user.role === "support_customer") {
-      action.payload.naviga("/");
+      action.payload.naviga("/group-order/manage-order");
     } else if (user.role === "accountant") {
       action.payload.naviga("/topup/manage-topup");
     } else if (user.role === "support") {

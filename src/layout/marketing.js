@@ -1,7 +1,7 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
+import ManageFeedback from "../container/System/ManageFeedback";
 import ManagePushNotification from "../container/System/ManagePushNotification";
-import FeedbackManage from "../container/System/ManageFeedback/FeedbackManage";
 import ManageSetting from "../container/System/ManageSetting";
 
 const Marketing = () => {
@@ -12,7 +12,7 @@ const Marketing = () => {
         path="/notification/manage-push-notification"
         element={<ManagePushNotification />}
       />
-      <Route path="/feedback/manage-feedback" element={<FeedbackManage />} />
+      <Route path="/feedback/manage-feedback" element={<ManageFeedback />} />
     </Routes>
   );
 };

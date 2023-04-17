@@ -490,7 +490,7 @@ const ReportManager = () => {
           {startDate && (
             <a className="text-date">
               {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-              {moment(new Date(endDate)).format("DD/MM/YYYY")}
+              {moment(endDate).utc().format("DD/MM/YYYY")}
             </a>
           )}
         </div>

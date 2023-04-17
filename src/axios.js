@@ -6,12 +6,11 @@ import { logoutAction } from "./redux/actions/auth";
 let token;
 getToken().then((res) => (token = res));
 
-// baseURL: 'https://guvico-be-production.up.railway.app'
-// https://server.guvico.com
-// https://guvico-be-develop.up.railway.app
+const BaseUrl = process.env.REACT_APP_BASE_URL;
+const TestUrl = process.env.REACT_APP_TEST_URL;
 
 const axiosClient = axios.create({
-  baseURL: "https://guvico-be-develop.up.railway.app",
+  baseURL: TestUrl,
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
