@@ -194,7 +194,7 @@ const ReviewCollaborator = () => {
 
   return (
     <>
-      <a className="title-review">Đánh giá cộng tác viên</a>
+      {/* <a className="title-review">Đánh giá cộng tác viên</a> */}
       <div className="div-head-review">
         <Select
           defaultValue="0"

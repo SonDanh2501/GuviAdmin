@@ -58,7 +58,7 @@ const ReportManager = () => {
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
-        setTotalColumn(res?.total);
+        setTotalColumn(res?.total[0]);
       })
       .catch((err) => console.log(err));
 
@@ -71,6 +71,8 @@ const ReportManager = () => {
       moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
     );
   }, []);
+
+  console.log(totalColumn);
 
   const onChange = (page) => {
     setIsLoading(true);
@@ -167,11 +169,13 @@ const ReportManager = () => {
             className="div-name-ctv-report"
             onClick={() =>
               navigate("/report/manage-report/report-details", {
-                state: { id: data?.code_collaborator },
+                state: { id: data?.id_collaborator?._id },
               })
             }
           >
-            <a className="text-name-report"> {data?.full_name}</a>
+            <a className="text-name-report">
+              {data?.id_collaborator?.full_name}
+            </a>
             {/* <a className="text-id">{data?.id_view}</a> */}
           </div>
         );
@@ -191,7 +195,7 @@ const ReportManager = () => {
         );
       },
       render: (data) => {
-        return <a className="text-money">{data?.total_order}</a>;
+        return <a className="text-money">{data?.total_item}</a>;
       },
       align: "center",
     },
@@ -367,7 +371,7 @@ const ReportManager = () => {
       },
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_serviceFee)}</a>
+          <a className="text-money">{formatMoney(data?.total_service_fee)}</a>
         );
       },
       align: "center",
