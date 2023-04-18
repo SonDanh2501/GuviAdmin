@@ -1,0 +1,32 @@
+.div-contai-feedback {
+  display: flex;
+  flex-direction: row;
+
+  .div-tab-feedback {
+    padding: 5px;
+    margin-right: 10px;
+    .text-tab {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      color: #9a9a9a;
+      text-decoration: none;
+    }
+  }
+
+  .div-tab-feedback-selected {
+    border-bottom: 1px solid #1302ff;
+    padding: 5px;
+    margin-right: 10px;
+
+    .text-tab-selected {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      color: #000000;
+      text-decoration: none;
+    }
+  }
+}

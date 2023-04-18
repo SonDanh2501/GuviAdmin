@@ -50,7 +50,7 @@ const ReportCustomer = () => {
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
-        setTotalColumn(res?.total);
+        setTotalColumn(res?.total[0]);
       })
       .catch((err) => {});
 
@@ -126,11 +126,11 @@ const ReportCustomer = () => {
             className="div-name-ctv-report"
             onClick={() =>
               navigate("/report/manage-report/report-details", {
-                state: { id: data?.code_customer },
+                state: { id: data?.id_customer?._id },
               })
             }
           >
-            <a className="text-name-report"> {data?.full_name}</a>
+            <a className="text-name-report"> {data?.id_customer?.full_name}</a>
             {/* <a className="text-id">{data?.id_view}</a> */}
           </div>
         );
@@ -150,7 +150,7 @@ const ReportCustomer = () => {
         );
       },
       render: (data) => {
-        return <a className="text-money">{data?.total_order}</a>;
+        return <a className="text-money">{data?.total_item}</a>;
       },
       align: "center",
     },
@@ -326,7 +326,7 @@ const ReportCustomer = () => {
       },
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_serviceFee)}</a>
+          <a className="text-money">{formatMoney(data?.total_service_fee)}</a>
         );
       },
       align: "center",

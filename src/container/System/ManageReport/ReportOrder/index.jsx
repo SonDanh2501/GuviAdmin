@@ -75,10 +75,14 @@ const ReportOrder = () => {
       render: (data) => (
         <div className="div-date-report-order">
           <a className="text-date-report-order">
-            {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
+            {moment(new Date(data?.id_group_order?.date_create)).format(
+              "DD/MM/YYYY"
+            )}
           </a>
           <a className="text-date-report-order">
-            {moment(new Date(data?.date_create)).format("HH:mm")}
+            {moment(new Date(data?.id_group_order?.date_create)).format(
+              "HH:mm"
+            )}
           </a>
         </div>
       ),
@@ -100,11 +104,11 @@ const ReportOrder = () => {
           className="text-id-report-order"
           onClick={() =>
             navigate("/details-order", {
-              state: { id: data?._id },
+              state: { id: data?.id_group_order?._id },
             })
           }
         >
-          {data?.id_view}
+          {data?.id_group_order?.id_view}
         </a>
       ),
       width: "5%",
@@ -307,7 +311,7 @@ const ReportOrder = () => {
       },
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_serviceFee)}</a>
+          <a className="text-money">{formatMoney(data?.total_service_fee)}</a>
         );
       },
       align: "center",
