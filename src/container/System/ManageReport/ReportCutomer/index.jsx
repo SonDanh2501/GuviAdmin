@@ -42,7 +42,7 @@ const ReportCustomer = () => {
     getReportCustomer(
       0,
       20,
-      moment(moment().startOf("month").toISOString())
+      moment(moment().startOf("year").toISOString())
         .add(7, "hours")
         .toISOString(),
       moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
@@ -57,9 +57,7 @@ const ReportCustomer = () => {
     getReportCustomerNewOld(
       0,
       20,
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString(),
+      moment("2022-01-02").toISOString(),
       moment(moment().endOf("month").toISOString())
         .add(7, "hours")
         .toISOString()
@@ -75,7 +73,7 @@ const ReportCustomer = () => {
       .catch((err) => {});
 
     setStartDate(
-      moment(moment().startOf("month").toISOString())
+      moment(moment().startOf("year").toISOString())
         .add(7, "hours")
         .toISOString()
     );

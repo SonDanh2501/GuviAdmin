@@ -77,16 +77,21 @@ export const DATA_STATUS = [
   },
   {
     id: 3,
+    title: "Đã nhận",
+    value: "confirm",
+  },
+  {
+    id: 4,
     title: "Chưa hoàn tất",
     value: "doing",
   },
   {
-    id: 4,
+    id: 5,
     title: "Việc đã huỷ",
     value: "cancel",
   },
   {
-    id: 5,
+    id: 6,
     title: "Hoàn tất",
     value: "done",
   },
