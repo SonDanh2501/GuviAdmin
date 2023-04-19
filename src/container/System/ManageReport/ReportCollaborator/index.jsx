@@ -90,7 +90,7 @@ const ReportManager = () => {
             setIsLoading(false);
             setData(res?.data);
             setTotal(res?.totalItem);
-            setTotalColumn(res?.total);
+            setTotalColumn(res?.total[0]);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -101,7 +101,7 @@ const ReportManager = () => {
             setIsLoading(false);
             setData(res?.data);
             setTotal(res?.totalItem);
-            setTotalColumn(res?.total);
+            setTotalColumn(res?.total[0]);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -111,7 +111,7 @@ const ReportManager = () => {
             setIsLoading(false);
             setData(res?.data);
             setTotal(res?.totalItem);
-            setTotalColumn(res?.total);
+            setTotalColumn(res?.total[0]);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -124,7 +124,7 @@ const ReportManager = () => {
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
-        setTotalColumn(res?.total);
+        setTotalColumn(res?.total[0]);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -140,7 +140,7 @@ const ReportManager = () => {
         .then((res) => {
           setData(res?.data);
           setTotal(res?.totalItem);
-          setTotalColumn(res?.total);
+          setTotalColumn(res?.total[0]);
           setIsLoading(false);
         })
         .catch((err) => {

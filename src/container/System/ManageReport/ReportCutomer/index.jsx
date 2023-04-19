@@ -89,7 +89,7 @@ const ReportCustomer = () => {
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
-        setTotalColumn(res?.total);
+        setTotalColumn(res?.total[0]);
       })
       .catch((err) => {});
   };
@@ -102,7 +102,7 @@ const ReportCustomer = () => {
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
-        setTotalColumn(res?.total);
+        setTotalColumn(res?.total[0]);
       })
       .catch((err) => {});
   };
