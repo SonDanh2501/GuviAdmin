@@ -69,13 +69,13 @@ const DetailsProfile = ({ id }) => {
     } else if (data?.rank_point >= 300 && data?.rank_point < 1500) {
       setRank("Vàng");
       setCheckRank("gold");
-    } else {
+    } else if (data?.rank_point > 1500) {
       setRank("Bạch kim");
       setCheckRank("platinum");
     }
     setPoint(data?.point);
     setRankPoint(data?.rank_point);
-    setValueQr("https://qr.guvico.com?code=" + data?.phone);
+    setValueQr("https://guvico.github.io/qr-app-test?code=" + data?.phone);
   }, [data]);
 
   const updateUser = () => {
@@ -145,7 +145,7 @@ const DetailsProfile = ({ id }) => {
                 removeQrCodeBehindLogo={true}
                 renderAs={"svg"}
                 id="QRCode-svg"
-                size={100}
+                size={150}
               />
             </div>
           </div>

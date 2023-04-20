@@ -27,16 +27,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import _debounce from "lodash/debounce";
 
 export default function OrderManage(props) {
-  const {
-    data,
-    total,
-    status,
-    // dataSearch,
-    // value,
-    kind,
-    // setDataSearch,
-    // setTotalSearch,
-  } = props;
+  const { data, total, status, kind } = props;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [item, setItem] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);

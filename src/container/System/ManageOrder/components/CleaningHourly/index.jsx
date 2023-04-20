@@ -480,6 +480,34 @@ const CleaningHourly = (props) => {
             })}
           </List>
         )}
+
+        {/* <div className="mt-2">
+          <a>Danh sách địa chỉ</a>
+          <List type={"unstyled"} className="list-item-address-customer">
+            {DATA_AD?.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className={
+                    address === item?.address
+                      ? "div-item-address-selected"
+                      : "div-item-address"
+                  }
+                  onClick={() => setAddress(item?.address)}
+                >
+                  <i class="uil uil-map-marker"></i>
+                  <div className="div-name-address">
+                    <a className="title-address">
+                      {item?.address.slice(0, item?.address.indexOf(","))}
+                    </a>
+                    <a className="title-details-address">{item?.address}</a>
+                  </div>
+                </div>
+              );
+            })}
+          </List>
+        </div> */}
+
         <a className="text-error">{errorAddress}</a>
         <div className="div-add-service mt-3">
           <a className="label">
@@ -750,3 +778,20 @@ const CleaningHourly = (props) => {
 };
 
 export default CleaningHourly;
+
+const DATA_AD = [
+  {
+    id: 1,
+    address:
+      "CÔNG TY TNHH KIẾN TRÚC XÂY DỰNG NỘI THẤT 2NT, Đường Số 9, Trường Thọ, Thủ Đức, Thành phố Hồ Chí Minh",
+    lat: 10.8482128075937,
+    long: 106.75899072883614,
+  },
+  {
+    id: 2,
+    address:
+      "CÔNG TY Đồ cúng việt, Đường Số 9, Trường Thọ, Thủ Đức, Thành phố Hồ Chí Minh",
+    lat: 10.8482128075937,
+    long: 106.75899072883614,
+  },
+];

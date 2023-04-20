@@ -40,7 +40,7 @@
   color: black;
 }
 
-.div-service {
+.div-service-activity {
   display: flex;
   flex-direction: column;
 
@@ -48,14 +48,14 @@
     font-family: "Roboto";
     font-style: normal;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 16px;
     color: black;
     text-decoration: none;
   }
 }
 
-.div-create {
+.div-create-activity {
   display: flex;
   flex-direction: column;
 
@@ -63,33 +63,32 @@
     font-family: "Roboto";
     font-style: normal;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 16px;
     color: #6e6893;
   }
 }
 
-.div-worktime {
+.div-worktime-activity {
   display: flex;
   flex-direction: column;
 
   .text-worktime {
     font-family: "Roboto";
     font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;
+    font-weight: 500;
+    font-size: 12px;
     text-decoration: none;
-    color: black;
+    color: rgb(0, 0, 0);
+    text-transform: capitalize;
   }
 }
 
-.text-address {
+.text-address-activity {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 16px;
+  font-size: 12px;
   color: black;
   width: 200px;
   overflow: hidden;
@@ -124,7 +123,7 @@
   color: #000000;
 }
 
-.text-pending-order {
+.text-pending-activity {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 700;
@@ -134,41 +133,37 @@
   text-decoration: none;
 }
 
-.text-confirm {
+.text-confirm-activity {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 16px;
+  font-weight: 500;
+  font-size: 12px;
   color: #023e8a;
   text-decoration: none;
 }
 
-.text-doing {
+.text-doing-activity {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 16px;
+  font-weight: 500;
+  font-size: 12px;
   color: #023e8a;
   text-decoration: none;
 }
 
-.text-cancel {
+.text-cancel-activity {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 16px;
+  font-weight: 500;
+  font-size: 12px;
   color: #ff0000;
   text-decoration: none;
 }
-.text-done {
+.text-done-activity {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 16px;
+  font-weight: 500;
+  font-size: 12px;
   color: #00cf3a;
   text-decoration: none;
 }
