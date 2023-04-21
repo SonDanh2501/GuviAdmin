@@ -20,10 +20,11 @@ export const searchPromotion = (
   type,
   brand,
   id_service,
-  exchange
+  exchange,
+  status
 ) => {
   return axiosClient.get(
-    `/admin/promotion_manager/get_list?search=${search}&start=${start}&length=${length}&typeSort=${type}&brand=${brand}&id_service=${id_service}&exchange=${exchange}`
+    `/admin/promotion_manager/get_list?search=${search}&start=${start}&length=${length}&typeSort=${type}&brand=${brand}&id_service=${id_service}&exchange=${exchange}&status=${status}`
   );
 };
 
@@ -70,5 +71,11 @@ export const activePromotion = (id, data) => {
 export const getOrderUsePromotion = (id, status) => {
   return axiosClient.get(
     `/admin/promotion_manager/detail_used_promotion/${id}?lang=vi&status=${status}`
+  );
+};
+
+export const getChildPromotion = (code, status, start, length) => {
+  return axiosClient.get(
+    `/admin/promotion_manager/get_child_promotion/${code}?lang=vi&status=${status}&start=${start}&length=${length}`
   );
 };

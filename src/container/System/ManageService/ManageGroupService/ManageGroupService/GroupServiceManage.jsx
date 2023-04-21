@@ -101,7 +101,11 @@ export default function GroupServiceManage() {
       width: "30%",
       render: (data) => {
         return (
-          <div>
+          <div
+            onClick={() => {
+              navigate("/services/manage-group-service/manage-price-service");
+            }}
+          >
             <img className="img-customer-service" src={data?.thumbnail} />
           </div>
         );

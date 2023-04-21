@@ -1,0 +1,92 @@
+.div-header-promotion {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  .input-search {
+    width: 75%;
+    height: 48px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-left: 15px;
+    align-items: center;
+  }
+}
+
+.div-img-promotion {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .img-customer-promotion {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    margin-right: 5px;
+  }
+}
+
+.text-title-promotion {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  color: #000000;
+}
+
+.text-upcoming {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  color: #2c9349;
+}
+
+.text-cancel {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400 !important;
+  font-size: 12px !important;
+  color: #ff0000;
+}
+
+.text-time-promotion {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400 !important;
+  font-size: 12px !important;
+  color: #000000;
+}
+
+.div-tab-child-promotion {
+  display: flex;
+  flex-direction: row;
+
+  .div-title-child {
+    padding: 5px;
+
+    .title-child-promotion {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      color: #8a8a8a;
+      text-decoration: none;
+    }
+  }
+
+  .div-title-child-selected {
+    padding: 5px;
+    border-bottom: 1px solid #0d09d9;
+
+    .title-child-promotion {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      color: #000000;
+      text-decoration: none;
+    }
+  }
+}

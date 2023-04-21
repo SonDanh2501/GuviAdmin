@@ -46,10 +46,10 @@ const DetailsOrder = () => {
   const [openStatus, setOpenStatus] = useState(false);
   const [openCancelOrder, setOpenCancelOrder] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [serviceFee, setServiceFee] = useState(0);
   const [rowIndex, setRowIndex] = useState();
   const [itemEdit, setItemEdit] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [price, setPrice] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toggle = () => setModal(!modal);
@@ -80,6 +80,20 @@ const DetailsOrder = () => {
         dispatch(loadingAction.loadingRequest(false));
       });
   }, [id]);
+
+  useEffect(() => {
+    dataGroup?.service?.optional_service.map((item) => {
+      return (
+        <>
+          {item?.type === "select_horizontal_no_thumbnail"
+            ? item?.extend_optional?.map((i) => {
+                setPrice(i?.price);
+              })
+            : null}
+        </>
+      );
+    });
+  }, [dataGroup]);
 
   const timeWork = (data) => {
     const start = moment(new Date(data?.date_work_schedule[0]?.date)).format(
@@ -587,27 +601,29 @@ const DetailsOrder = () => {
                         </div>
                       )}
 
-                      <div className="div-details-order">
-                        <div className="div-title-details">
-                          <a className="title">Dịch vụ thêm</a>
-                        </div>
-                        <a className="text-colon">:</a>
-                        <div className="div-add">
-                          {dataGroup?.service?.optional_service.map((item) => {
-                            return (
-                              <>
-                                {item?._id === "632148d02bacd0aa8648657c"
-                                  ? item?.extend_optional?.map((item) => (
-                                      <a className="text-title-add">
-                                        - {item?.title?.vi}
-                                      </a>
-                                    ))
-                                  : null}
-                              </>
-                            );
-                          })}
-                        </div>
-                      </div>
+                      {dataGroup?.service?.optional_service.map((item) => {
+                        return (
+                          <>
+                            {item?.type === "multi_select_horizontal_thumbnail"
+                              ? item?.extend_optional?.map((item) => {
+                                  return (
+                                    <div className="div-details-order">
+                                      <div className="div-title-details">
+                                        <a className="title">Dịch vụ thêm</a>
+                                      </div>
+                                      <a className="text-colon">:</a>
+                                      <div className="div-add">
+                                        <a className="text-title-add">
+                                          - {item?.title?.vi}
+                                        </a>
+                                      </div>
+                                    </div>
+                                  );
+                                })
+                              : null}
+                          </>
+                        );
+                      })}
 
                       <div className="div-details-order">
                         <div className="div-title-details">
@@ -630,12 +646,20 @@ const DetailsOrder = () => {
                           <div className="div-price">
                             <div className="div-title-colon">
                               <div className="div-title-details">
-                                <a className="title">- Tồng tiền</a>
+                                <a className="title">- Giá tạm tính</a>
                               </div>
                               <a className="text-colon">:</a>
                             </div>
                             <a className="text-moeny-details">
-                              {formatMoney(dataGroup?.initial_fee)}
+                              {dataGroup?.type === "schedule"
+                                ? formatMoney(dataGroup?.initial_fee)
+                                : dataGroup?.type === "loop" &&
+                                  !dataGroup?.is_auto_order
+                                ? formatMoney(price)
+                                : dataGroup?.type === "loop" &&
+                                  dataGroup?.is_auto_order
+                                ? formatMoney(price)
+                                : ""}
                             </a>
                           </div>
 
@@ -656,7 +680,8 @@ const DetailsOrder = () => {
                           {dataGroup?.service?.optional_service.map((item) => {
                             return (
                               <>
-                                {item?._id === "632148d02bacd0aa8648657c"
+                                {item?.type ===
+                                "multi_select_horizontal_thumbnail"
                                   ? item?.extend_optional?.map((item) => {
                                       return (
                                         <div className="div-price">
@@ -682,27 +707,29 @@ const DetailsOrder = () => {
                             );
                           })}
 
-                          <div className="div-price">
-                            <div className="div-title-colon">
-                              <div className="div-title-details">
-                                <a className="title">- Khuyến mãi</a>
+                          {dataGroup?.code_promotion && (
+                            <div className="div-price">
+                              <div className="div-title-colon">
+                                <div className="div-title-details">
+                                  <a className="title">- Khuyến mãi</a>
+                                </div>
+                                <a className="text-colon">:</a>
                               </div>
-                              <a className="text-colon">:</a>
-                            </div>
 
-                            {dataGroup?.code_promotion && (
-                              <>
-                                <a className="text-moeny-details">
-                                  + Mã code: {dataGroup?.code_promotion?.code}
-                                </a>
-                                <a className="money-red">
-                                  {formatMoney(
-                                    -dataGroup?.code_promotion?.discount
-                                  )}
-                                </a>
-                              </>
-                            )}
-                          </div>
+                              {dataGroup?.code_promotion && (
+                                <>
+                                  <a className="text-moeny-details">
+                                    + Mã code: {dataGroup?.code_promotion?.code}
+                                  </a>
+                                  <a className="money-red">
+                                    {formatMoney(
+                                      -dataGroup?.code_promotion?.discount
+                                    )}
+                                  </a>
+                                </>
+                              )}
+                            </div>
+                          )}
 
                           {dataGroup?.event_promotion && (
                             <div className="div-price">
@@ -727,7 +754,7 @@ const DetailsOrder = () => {
                           <div className="div-price">
                             <div className="div-title-colon">
                               <div className="div-title-details">
-                                <a className="title-total">- Giá</a>
+                                <a className="title-total">- Tổng tiền</a>
                               </div>
                               <a className="text-colon">:</a>
                             </div>
@@ -737,41 +764,6 @@ const DetailsOrder = () => {
                           </div>
                         </div>
                       </div>
-
-                      {/* 
-                     
-
-                      <div className="div-price-order">
-                        <a className="title-price-order">Tạm tính:</a>
-                        <div className="detail-price">
-                      
-                         
-
-                    
-
-                          <div className="div-total">
-                            <a className="title">- Giá: </a>
-                            <a className="title">
-                              {formatMoney(dataGroup?.final_fee)}
-                            </a>
-                          </div>
-                        </div>
-                      </div> */}
-
-                      {/* <a className="title">
-                Trạng thái:{" "}
-                {dataGroup?.status === "pending" ? (
-                  <a className="text-pending ">Đang chờ làm</a>
-                ) : dataGroup?.status === "confirm" ? (
-                  <a className="text-confirm">Đã nhận</a>
-                ) : dataGroup?.status === "doing" ? (
-                  <a className="text-doing">Đang làm</a>
-                ) : dataGroup?.status === "done" ? (
-                  <a className="text-done">Đã xong</a>
-                ) : (
-                  <a className="text-cancel">Đã huỷ</a>
-                )}
-              </a> */}
                     </div>
                   </div>
                   {user?.role !== "support_customer" &&

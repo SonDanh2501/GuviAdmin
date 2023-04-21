@@ -94,7 +94,7 @@ const ProfileCollaborator = () => {
       {/* Page content */}
       <Container className="mt-3" fluid>
         <Row>
-          <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
+          <Col className="order-xl-2 mb-5 mb-xl-0" xl="3">
             <Card className="card-profile shadow">
               <CardHeader className="headerCard">
                 <Image
@@ -123,18 +123,17 @@ const ProfileCollaborator = () => {
                   {data?.password_default && (
                     <a>Mật khẩu mặc định: {data?.password_default}</a>
                   )}
-                  <a className="text-name">
-                    {data?.full_name}
-                    {"-"}
+                  <a className="text-name">{data?.full_name}</a>
+                  <a>
                     {!data?.birthday
                       ? ""
-                      : moment().diff(data?.birthday, "years") + " " + "tuổi "}
+                      : "Tuổi:" + " " + moment().diff(data?.birthday, "years")}
                   </a>
                 </div>
               </CardBody>
             </Card>
           </Col>
-          <Col className="order-xl-1" xl="8">
+          <Col className="order-xl-1" xl="9">
             <Card className="bg-white shadow">
               <CardBody>
                 <Tabs defaultActiveKey="1">

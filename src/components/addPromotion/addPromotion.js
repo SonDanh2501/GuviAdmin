@@ -83,6 +83,8 @@ const AddPromotion = ({ idService, tab }) => {
   const [timeEndApply, setTimeEndApply] = useState("");
   const [isEndTime, setIsEndTime] = useState(false);
   const [isApllyWeek, setIsApllyWeek] = useState(false);
+  const [isParrentPromotion, setIsParrentPromotion] = useState(false);
+  const [totalChildPromotion, setTotalChildPromotion] = useState();
 
   const options = [];
   const optionsCustomer = [];
@@ -301,6 +303,8 @@ const AddPromotion = ({ idService, tab }) => {
       position: position,
       is_payment_method: isPaymentMethod,
       payment_method: paymentMethod,
+      is_parrent_promotion: isParrentPromotion,
+      total_child_promotion: totalChildPromotion,
     })
       .then((res) => {
         if (isSendNotification) {
@@ -378,6 +382,8 @@ const AddPromotion = ({ idService, tab }) => {
     descriptionNoti,
     isDateSchedule,
     dateSchedule,
+    isParrentPromotion,
+    totalChildPromotion,
   ]);
 
   return (
@@ -958,6 +964,31 @@ const AddPromotion = ({ idService, tab }) => {
                       </Checkbox>
                     </>
                   </div> */}
+
+                  <div>
+                    <FormGroup check inline>
+                      <h5 className="mt-2">19. Đa dạng khuyến mãi</h5>
+                      <Input
+                        type="checkbox"
+                        className="ml-2"
+                        defaultChecked={isParrentPromotion}
+                        onClick={() =>
+                          setIsParrentPromotion(!isParrentPromotion)
+                        }
+                      />
+                    </FormGroup>
+
+                    {isParrentPromotion && (
+                      <CustomTextInput
+                        placeholder="Số lượng"
+                        className="input-promo-code mt-2"
+                        type="number"
+                        value={totalChildPromotion}
+                        onChange={(e) => setTotalChildPromotion(e.target.value)}
+                      />
+                    )}
+                  </div>
+
                   <Button
                     className="btn_add mt-3"
                     color="warning"

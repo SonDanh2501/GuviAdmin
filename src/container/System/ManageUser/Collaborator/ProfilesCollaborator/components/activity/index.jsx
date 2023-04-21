@@ -77,7 +77,7 @@ const Activity = ({ id }) => {
       title: "Ngày tạo",
       render: (data) => {
         return (
-          <div className="div-create">
+          <div className="div-create-activity">
             <a className="text-create">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
             </a>
@@ -111,7 +111,7 @@ const Activity = ({ id }) => {
       title: "Dịch vụ",
       render: (data) => {
         return (
-          <div className="div-service">
+          <div className="div-service-activity">
             <a className="text-service">
               {data?.type === "schedule"
                 ? "Giúp việc cố định"
@@ -130,7 +130,7 @@ const Activity = ({ id }) => {
       title: "Ngày làm",
       render: (data) => {
         return (
-          <div className="div-worktime">
+          <div className="div-worktime-activity">
             <a className="text-worktime">
               {" "}
               {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
@@ -146,7 +146,9 @@ const Activity = ({ id }) => {
     },
     {
       title: "Địa điểm",
-      render: (data) => <p className="text-address">{data?.address}</p>,
+      render: (data) => (
+        <p className="text-address-activity">{data?.address}</p>
+      ),
     },
     {
       title: "Trạng thái",
@@ -154,14 +156,14 @@ const Activity = ({ id }) => {
         <a
           className={
             data?.status === "pending"
-              ? "text-pending-order"
+              ? "text-pending-activity"
               : data?.status === "confirm"
-              ? "text-confirm"
+              ? "text-confirm-activity"
               : data?.status === "doing"
-              ? "text-doing"
+              ? "text-doing-activity"
               : data?.status === "done"
-              ? "text-done"
-              : "text-cancel"
+              ? "text-done-activity"
+              : "text-cancel-activity"
           }
         >
           {data?.status === "pending"

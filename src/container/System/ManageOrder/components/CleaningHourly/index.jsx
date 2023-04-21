@@ -18,6 +18,7 @@ import {
   checkCodePromotionOrderApi,
   checkEventCodePromotionOrderApi,
   createOrderApi,
+  getAddressCustomerApi,
   getServiceFeeOrderApi,
 } from "../../../../../api/order";
 import { formatMoney } from "../../../../../helper/formatMoney";
@@ -66,6 +67,7 @@ const CleaningHourly = (props) => {
   const [nameCollaborator, setNameCollaborator] = useState("");
   const [idCollaborator, setIdCollaborator] = useState("");
   const [errorCollaborator, setErrorCollaborator] = useState("");
+  const [dataAddress, setDataAddress] = useState([]);
   const [estimate, setEstimate] = useState();
 
   const navigate = useNavigate();
@@ -75,6 +77,12 @@ const CleaningHourly = (props) => {
     getPromotionByCustomerApi(id, 0, 20, idService)
       .then((res) => setPromotionCustomer(res.data))
       .catch((err) => console.log(err));
+
+    getAddressCustomerApi(id, 0, 20)
+      .then((res) => {
+        setDataAddress(res?.data);
+      })
+      .catch((err) => {});
   }, [id]);
 
   const dateFormat = "YYYY-MM-DD";
@@ -480,6 +488,40 @@ const CleaningHourly = (props) => {
             })}
           </List>
         )}
+
+        {dataAddress.length > 0 && (
+          <div className="mt-2">
+            <a>Danh sách địa chỉ</a>
+            <List type={"unstyled"} className="list-item-address-customer">
+              {dataAddress?.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={
+                      address === item?.address
+                        ? "div-item-address-selected"
+                        : "div-item-address"
+                    }
+                    onClick={() => {
+                      setAddress(item?.address);
+                      setLat(item?.lat);
+                      setLong(item?.lng);
+                    }}
+                  >
+                    <i class="uil uil-map-marker"></i>
+                    <div className="div-name-address">
+                      <a className="title-address">
+                        {item?.address.slice(0, item?.address.indexOf(","))}
+                      </a>
+                      <a className="title-details-address">{item?.address}</a>
+                    </div>
+                  </div>
+                );
+              })}
+            </List>
+          </div>
+        )}
+
         <a className="text-error">{errorAddress}</a>
         <div className="div-add-service mt-3">
           <a className="label">
@@ -750,3 +792,20 @@ const CleaningHourly = (props) => {
 };
 
 export default CleaningHourly;
+
+const DATA_AD = [
+  {
+    id: 1,
+    address:
+      "CÔNG TY TNHH KIẾN TRÚC XÂY DỰNG NỘI THẤT 2NT, Đường Số 9, Trường Thọ, Thủ Đức, Thành phố Hồ Chí Minh",
+    lat: 10.8482128075937,
+    long: 106.75899072883614,
+  },
+  {
+    id: 2,
+    address:
+      "CÔNG TY Đồ cúng việt, Đường Số 9, Trường Thọ, Thủ Đức, Thành phố Hồ Chí Minh",
+    lat: 10.8482128075937,
+    long: 106.75899072883614,
+  },
+];
