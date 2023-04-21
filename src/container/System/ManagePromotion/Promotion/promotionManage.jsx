@@ -183,21 +183,8 @@ export default function PromotionManage({
         : page * promotion.length - promotion.length;
 
     setStartPage(startPage);
-    dataSearch.length > 0
-      ? searchPromotion(
-          valueSearch,
-          start,
-          10,
-          type,
-          brand,
-          idService,
-          exchange
-        )
-          .then((res) => {
-            setDataSearch(res.data);
-          })
-          .catch((err) => console.log(err))
-      : dataFilter.length > 0
+
+    dataFilter.length > 0
       ? filterPromotion(
           valueFilter,
           start,
@@ -208,7 +195,23 @@ export default function PromotionManage({
           exchange
         )
           .then((res) => {
-            setDataSearch(res?.data);
+            setDataFilter(res?.data);
+            setTotalFilter(res?.totalItem);
+          })
+          .catch((err) => console.log(err))
+      : dataSearch.length > 0
+      ? searchPromotion(
+          valueSearch,
+          start,
+          10,
+          type,
+          brand,
+          idService,
+          exchange,
+          valueFilter
+        )
+          .then((res) => {
+            setDataSearch(res.data);
             setTotalSearch(res?.totalItem);
           })
           .catch((err) => console.log(err))
@@ -227,9 +230,20 @@ export default function PromotionManage({
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueSearch(value);
+      setDataFilter([]);
+      setTotalFilter(0);
       setIsLoading(true);
       if (value !== "") {
-        searchPromotion(value, startPage, 10, type, brand, idService, exchange)
+        searchPromotion(
+          value,
+          startPage,
+          10,
+          type,
+          brand,
+          idService,
+          exchange,
+          valueFilter
+        )
           .then((res) => {
             setIsLoading(false);
 
@@ -244,12 +258,14 @@ export default function PromotionManage({
         setDataSearch([]);
       }
     }, 1000),
-    [type, brand, idService, startPage]
+    [type, brand, idService, startPage, valueFilter]
   );
 
   const handleChange = (value) => {
     setValueFilter(value);
     setIsLoading(true);
+    setDataSearch([]);
+    setTotalSearch(0);
     filterPromotion(value, startPage, 10, type, brand, idService, exchange)
       .then((res) => {
         setIsLoading(false);
@@ -286,6 +302,20 @@ export default function PromotionManage({
     {
       key: "2",
       label: user.role === "admin" && <a onClick={toggle}>Xoá</a>,
+    },
+    {
+      key: "3",
+      label: itemEdit?.is_parrent_promotion && (
+        <a
+          onClick={() => {
+            navigate("/promotion/manage-setting/child-promotion", {
+              state: { code: itemEdit?.code },
+            });
+          }}
+        >
+          Chi tiết
+        </a>
+      ),
     },
   ];
 

@@ -163,7 +163,6 @@
       .div-details-price {
         display: flex;
         flex-direction: column;
-        width: 60%;
 
         .div-price {
           display: flex;
@@ -171,6 +170,7 @@
           align-items: center;
           justify-content: space-between;
           border-top: 1px solid #d6d6d6;
+          width: 80%;
 
           .div-title-colon {
             display: flex;

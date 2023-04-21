@@ -31,6 +31,8 @@ import ProfileCollaborator from "../container/System/ManageUser/Collaborator/Pro
 import DetailActivityCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/components/DetailActivity";
 import ManageCustomer from "../container/System/ManageUser/Customer";
 import Profiles from "../container/System/ManageUser/Customer/Profiles";
+import ChildPromotion from "../container/System/ManagePromotion/ChildPromotion";
+import PriceService from "../container/System/ManageService/PriceService";
 
 const Admin = () => {
   return (
@@ -62,6 +64,10 @@ const Admin = () => {
         element={<DetailActivityCollaborator />}
       />
       <Route path="/promotion/manage-setting" element={<ManageSetting />} />
+      <Route
+        path="/promotion/manage-setting/child-promotion"
+        element={<ChildPromotion />}
+      />
 
       <Route
         path="/promotion/manage-setting/order-promotion"
@@ -75,6 +81,10 @@ const Admin = () => {
       <Route
         path="/services/manage-group-service/manage-service"
         element={<ServiceManage />}
+      />
+      <Route
+        path="/services/manage-group-service/manage-price-service"
+        element={<PriceService />}
       />
       <Route path="/feedback/manage-feedback" element={<ManageFeedback />} />
       <Route path="/group-order/manage-order" element={<ManageOrder />} />

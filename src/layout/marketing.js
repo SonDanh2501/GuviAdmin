@@ -3,11 +3,16 @@ import { Route, Routes } from "react-router-dom";
 import ManageFeedback from "../container/System/ManageFeedback";
 import ManagePushNotification from "../container/System/ManagePushNotification";
 import ManageSetting from "../container/System/ManageSetting";
+import ChildPromotion from "../container/System/ManagePromotion/ChildPromotion";
 
 const Marketing = () => {
   return (
     <Routes>
       <Route path="/promotion/manage-setting" element={<ManageSetting />} />
+      <Route
+        path="/promotion/manage-setting/child-promotion"
+        element={<ChildPromotion />}
+      />
       <Route
         path="/notification/manage-push-notification"
         element={<ManagePushNotification />}

@@ -19,6 +19,7 @@ const DetailsOrderSchedule = () => {
   const [modal, setModal] = useState(false);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [price, setPrice] = useState(0);
   const user = useSelector(getUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -33,6 +34,20 @@ const DetailsOrderSchedule = () => {
       })
       .catch((err) => {});
   }, [id]);
+
+  useEffect(() => {
+    data?.service?.optional_service.map((item) => {
+      return (
+        <>
+          {item?.type === "select_horizontal_no_thumbnail"
+            ? item?.extend_optional?.map((i) => {
+                setPrice(i?.price);
+              })
+            : null}
+        </>
+      );
+    });
+  }, [data]);
 
   const showPopconfirm = () => {
     setOpen(true);
@@ -245,9 +260,7 @@ const DetailsOrderSchedule = () => {
                       </div>
                       <a className="text-colon">:</a>
                     </div>
-                    <a className="text-moeny-details">
-                      {formatMoney(data?.initial_fee)}
-                    </a>
+                    <a className="text-moeny-details">{formatMoney(price)}</a>
                   </div>
 
                   <div className="div-price">

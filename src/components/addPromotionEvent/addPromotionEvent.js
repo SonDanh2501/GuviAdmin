@@ -69,6 +69,7 @@ const AddPromotionEvent = ({ idService, tab }) => {
   const [name, setName] = useState("");
   const [isDateSchedule, setIsDateSchedule] = useState(true);
   const [dateSchedule, setDateSchedule] = useState("");
+
   const options = [];
   const optionsCustomer = [];
   const dispatch = useDispatch();
