@@ -180,7 +180,7 @@ const CleaningHourly = (props) => {
           setIsLoading(false);
           setPlaces([]);
         });
-    }, 3000),
+    }, 1500),
     []
   );
 
@@ -491,7 +491,7 @@ const CleaningHourly = (props) => {
 
         {dataAddress.length > 0 && (
           <div className="mt-2">
-            <a>Danh sách địa chỉ</a>
+            <a className="title-list-address">Địa chỉ mặc định</a>
             <List type={"unstyled"} className="list-item-address-customer">
               {dataAddress?.map((item, index) => {
                 return (
@@ -747,7 +747,7 @@ const CleaningHourly = (props) => {
                   checkPromotion(item);
                 }}
               >
-                <a className="text-code">{item?.code}</a>
+                <a className="text-code-promotion">{item?.code}</a>
                 <a className="text-title-promotion">{item?.title?.vi}</a>
               </div>
             );

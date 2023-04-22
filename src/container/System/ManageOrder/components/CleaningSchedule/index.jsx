@@ -215,7 +215,7 @@ const CleaningSchedule = (props) => {
           setIsLoading(false);
           setPlaces([]);
         });
-    }, 2000),
+    }, 1500),
     []
   );
 
@@ -590,7 +590,7 @@ const CleaningSchedule = (props) => {
 
         {dataAddress.length > 0 && (
           <div className="mt-2">
-            <a>Danh sách địa chỉ</a>
+            <a className="title-list-address">Địa chỉ mặc định</a>
             <List type={"unstyled"} className="list-item-address-customer">
               {dataAddress?.map((item, index) => {
                 return (
@@ -806,7 +806,7 @@ const CleaningSchedule = (props) => {
                   checkPromotion(item);
                 }}
               >
-                <a className="text-code">{item?.code}</a>
+                <a className="text-code-promotion">{item?.code}</a>
                 <a className="text-title-promotion">{item?.title?.vi}</a>
               </div>
             );

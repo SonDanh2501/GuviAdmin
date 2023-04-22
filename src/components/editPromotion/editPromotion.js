@@ -51,14 +51,14 @@ const EditPromotion = ({ state, setState, data }) => {
   const [maximumDiscount, setMaximumDiscount] = useState();
   const [orderFirst, setOrderFirst] = useState(false);
   const [limitedQuantity, setLimitedQuantity] = useState(false);
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState();
   const [limitedDate, setLimitedDate] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isExchangePoint, setIsExchangePoint] = useState(false);
   const [exchangePoint, setExchangePoint] = useState("");
   const [isUsePromo, setIsUsePromo] = useState(false);
-  const [usePromo, setUsePromo] = useState("");
+  const [usePromo, setUsePromo] = useState();
   const [imgThumbnail, setImgThumbnail] = useState("");
   const [imgBackground, setImgBackground] = useState("");
   const [serviceApply, setServiceApply] = useState("");
