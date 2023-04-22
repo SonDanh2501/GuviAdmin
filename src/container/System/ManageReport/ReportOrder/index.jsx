@@ -127,7 +127,7 @@ const ReportOrder = () => {
         );
       },
       render: (data) => {
-        return <a className="text-money">1</a>;
+        return <a className="text-money">{data?.totalItem}</a>;
       },
       align: "center",
       width: "5%",

@@ -8,13 +8,14 @@ import {
 } from "../../../../../redux/selectors/customer";
 import { Pagination, Table } from "antd";
 import moment from "moment";
-import AddGroupCustomer from "../../../../../components/addGroupCustomer";
+import { useNavigate } from "react-router-dom";
 
 const GroupCustomerManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const listGroupCustomers = useSelector(getGroupCustomer);
   const totalGroupCustomers = useSelector(getGroupCustomerTotalItem);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(
       getGroupCustomers.getGroupCustomersRequest({ start: 0, length: 10 })
@@ -50,8 +51,17 @@ const GroupCustomerManage = () => {
 
   return (
     <div className="content">
+      <div
+        className="btn-add-group-customer"
+        onClick={() =>
+          navigate(
+            "/adminManage/manage-configuration/manage-group-customer/create"
+          )
+        }
+      >
+        <a>Thêm nhóm khách hàng</a>
+      </div>
       <div className="mt-3 p-3 ">
-        <AddGroupCustomer />
         <div className="mt-3 table">
           <Table
             columns={columns}

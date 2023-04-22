@@ -731,7 +731,7 @@ const DetailsOrder = () => {
                             </div>
                           )}
 
-                          {dataGroup?.event_promotion && (
+                          {/* {dataGroup?.event_promotion && (
                             <div className="div-price">
                               <div className="div-title-colon">
                                 <div className="div-title-details">
@@ -742,14 +742,39 @@ const DetailsOrder = () => {
                               <div className="div-price-event">
                                 {dataGroup?.event_promotion.map((item, key) => {
                                   return (
-                                    <a className="money-event-discount">
-                                      {formatMoney(-item?.discount)}
-                                    </a>
+                                    <div
+                                      key={key}
+                                      className="div-details-price-event"
+                                    >
+                                      <a>-{item?._id?.title?.vi}</a>
+                                      <a className="money-event-discount">
+                                        {formatMoney(-item?.discount)}
+                                      </a>
+                                    </div>
                                   );
                                 })}
                               </div>
                             </div>
-                          )}
+                          )} */}
+
+                          {dataGroup?.event_promotion?.map((item, key) => {
+                            return (
+                              <div className="div-price">
+                                <div className="div-title-colon">
+                                  <div className="div-title-details">
+                                    <a className="title">- Chương trình</a>
+                                  </div>
+                                  <a className="text-colon">:</a>
+                                </div>
+                                <>
+                                  <a>+ {item?._id?.title?.vi}</a>
+                                  <a className="money-event-discount">
+                                    {formatMoney(-item?.discount)}
+                                  </a>
+                                </>
+                              </div>
+                            );
+                          })}
 
                           <div className="div-price">
                             <div className="div-title-colon">

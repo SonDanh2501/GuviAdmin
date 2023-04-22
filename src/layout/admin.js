@@ -33,6 +33,7 @@ import ManageCustomer from "../container/System/ManageUser/Customer";
 import Profiles from "../container/System/ManageUser/Customer/Profiles";
 import ChildPromotion from "../container/System/ManagePromotion/ChildPromotion";
 import PriceService from "../container/System/ManageService/PriceService";
+import AddGroupCustomer from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer/addGroupCustomer";
 
 const Admin = () => {
   return (
@@ -159,6 +160,10 @@ const Admin = () => {
       <Route
         path="/adminManage/manage-configuration/create-account"
         element={<CreateAccount />}
+      />
+      <Route
+        path="/adminManage/manage-configuration/manage-group-customer/create"
+        element={<AddGroupCustomer />}
       />
     </Routes>
   );

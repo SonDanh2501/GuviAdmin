@@ -76,6 +76,24 @@
       align-items: center;
       justify-content: center;
       background-color: rgb(59, 109, 184);
+
+      .text-service {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        color: rgb(255, 255, 255);
+        text-align: center;
+      }
+
+      .text-service-default {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        color: rgb(159, 159, 159);
+        text-align: center;
+      }
     }
 
     .select-service-default {
@@ -186,22 +204,20 @@
     padding-left: 8px;
     margin-top: 10px;
 
-    .text-code {
-      font-size: 18px;
+    .text-code-promotion {
+      font-size: 16px;
       font-family: "Roboto";
       font-weight: 500;
-      line-height: 16px;
-      color: black;
       text-transform: uppercase;
+      color: #000000;
     }
     .text-title-promotion {
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
-      font-size: 16px;
+      font-size: 14px;
       font-family: "Roboto";
       font-weight: 200;
-      line-height: 16px;
       color: black;
       margin-top: 5px;
     }
@@ -219,11 +235,10 @@
     padding-left: 8px;
     background-color: plum;
 
-    .text-code {
-      font-size: 18px;
+    .text-code-promotion {
+      font-size: 16px;
       font-family: "Roboto";
       font-weight: 500;
-      line-height: 16px;
       color: black;
       text-transform: uppercase;
     }
@@ -232,10 +247,9 @@
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
-      font-size: 16px;
+      font-size: 14px;
       font-family: "Roboto";
       font-weight: 200;
-      line-height: 16px;
       color: black;
       margin-top: 5px;
     }
@@ -423,4 +437,12 @@
       }
     }
   }
+}
+
+.title-list-address {
+  font-size: 14px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  color: #000000;
 }

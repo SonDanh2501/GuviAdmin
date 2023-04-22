@@ -228,18 +228,13 @@
             color: #ff0000;
           }
 
-          .div-price-event {
-            display: flex;
-            flex-direction: column;
-
-            .money-event-discount {
-              font-family: "Roboto";
-              font-style: normal;
-              font-weight: 400;
-              font-size: 14px;
-              color: #ff0000;
-              text-align: right;
-            }
+          .money-event-discount {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            color: #ff0000;
+            text-align: right;
           }
         }
       }
