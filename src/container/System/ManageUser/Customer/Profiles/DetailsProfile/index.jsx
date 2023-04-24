@@ -30,6 +30,7 @@ import { FloatButton, Image } from "antd";
 import { errorNotify } from "../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../redux/actions/loading";
 import { QRCode } from "react-qrcode-logo";
+import LoadingPagination from "../../../../../../components/paginationLoading";
 // core components
 
 const DetailsProfile = ({ id }) => {
@@ -45,9 +46,11 @@ const DetailsProfile = ({ id }) => {
   const [valueQr, setValueQr] = useState("");
   const [point, setPoint] = useState();
   const [rankPoint, setRankPoint] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(loadingAction.loadingRequest(true));
     fetchCustomerById(id)
       .then((res) => {
         setData(res);
@@ -55,8 +58,9 @@ const DetailsProfile = ({ id }) => {
         setMail(res?.email);
         setBirthday(res?.birthday ? res?.birthday?.slice(0, 10) : "");
         setGender(res?.gender);
+        dispatch(loadingAction.loadingRequest(false));
       })
-      .catch((err) => console.log(err));
+      .catch((err) => dispatch(loadingAction.loadingRequest(false)));
   }, [id]);
 
   useEffect(() => {
@@ -266,6 +270,7 @@ const DetailsProfile = ({ id }) => {
         </div>
       </div>
       <FloatButton.BackTop />
+      {isLoading && <LoadingPagination />}
     </>
   );
 };

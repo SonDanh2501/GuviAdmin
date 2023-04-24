@@ -346,69 +346,67 @@ const DetailsOrder = () => {
       render: (data, record, index) => {
         return (
           <>
-            {user?.role !== "support_customer" && (
+            <div>
               <div>
-                <div>
-                  {data?.status === "doing" || data?.status === "confirm" ? (
-                    <div>
-                      {rowIndex === index && (
-                        <Popconfirm
-                          title="Bạn có chuyển trạng thái công việc"
-                          // description="Open Popconfirm with async logic"
-                          open={openStatus}
-                          onConfirm={() => handleChangeStatus(data?._id)}
-                          okButtonProps={{
-                            loading: confirmLoading,
-                          }}
-                          onCancel={() => setOpenStatus(false)}
-                        />
-                      )}
+                {data?.status === "doing" || data?.status === "confirm" ? (
+                  <div>
+                    {rowIndex === index && (
+                      <Popconfirm
+                        title="Bạn có chuyển trạng thái công việc"
+                        // description="Open Popconfirm with async logic"
+                        open={openStatus}
+                        onConfirm={() => handleChangeStatus(data?._id)}
+                        okButtonProps={{
+                          loading: confirmLoading,
+                        }}
+                        onCancel={() => setOpenStatus(false)}
+                      />
+                    )}
 
-                      <Button
-                        className="btn-confirm-order"
-                        onClick={() =>
-                          rowIndex === index ? showPopStatusconfirm() : ""
-                        }
-                      >
-                        {data?.status === "confirm"
-                          ? "Bắt đầu"
-                          : data?.status === "doing"
-                          ? "Hoàn thành"
-                          : ""}
-                      </Button>
-                    </div>
-                  ) : (
-                    " "
-                  )}
-                </div>
-
-                <div>
-                  {data?.status === "pending" || data?.status === "confirm" ? (
-                    <div>
-                      {rowIndex === index && (
-                        <Popconfirm
-                          title="Bạn có muốn huỷ việc"
-                          open={openCancelOrder}
-                          onConfirm={() => handleCancelOrder(data?._id)}
-                          okButtonProps={{
-                            loading: confirmLoading,
-                          }}
-                          onCancel={() => setOpenCancelOrder(false)}
-                        />
-                      )}
-                      <Button
-                        className="btn-confirm-order mt-1"
-                        onClick={() =>
-                          rowIndex === index ? showPopCancelOrder() : ""
-                        }
-                      >
-                        Huỷ việc
-                      </Button>
-                    </div>
-                  ) : null}
-                </div>
+                    <Button
+                      className="btn-confirm-order"
+                      onClick={() =>
+                        rowIndex === index ? showPopStatusconfirm() : ""
+                      }
+                    >
+                      {data?.status === "confirm"
+                        ? "Bắt đầu"
+                        : data?.status === "doing"
+                        ? "Hoàn thành"
+                        : ""}
+                    </Button>
+                  </div>
+                ) : (
+                  " "
+                )}
               </div>
-            )}
+
+              <div>
+                {data?.status === "pending" || data?.status === "confirm" ? (
+                  <div>
+                    {rowIndex === index && (
+                      <Popconfirm
+                        title="Bạn có muốn huỷ việc"
+                        open={openCancelOrder}
+                        onConfirm={() => handleCancelOrder(data?._id)}
+                        okButtonProps={{
+                          loading: confirmLoading,
+                        }}
+                        onCancel={() => setOpenCancelOrder(false)}
+                      />
+                    )}
+                    <Button
+                      className="btn-confirm-order mt-1"
+                      onClick={() =>
+                        rowIndex === index ? showPopCancelOrder() : ""
+                      }
+                    >
+                      Huỷ việc
+                    </Button>
+                  </div>
+                ) : null}
+              </div>
+            </div>
           </>
         );
       },
@@ -463,7 +461,7 @@ const DetailsOrder = () => {
                   <Row>
                     <Col span={14} className="col-left">
                       <a className="label-customer">Khách hàng</a>
-                      <div className="div-body">
+                      <div className="div-body-details">
                         <Image
                           src={
                             dataGroup?.id_customer?.avatar
@@ -495,7 +493,7 @@ const DetailsOrder = () => {
                     {dataGroup?.id_collaborator && (
                       <Col span={10} className="col-right">
                         <a className="label-ctv">Cộng tác viên hiện tại</a>
-                        <div className="div-body">
+                        <div className="div-body-details">
                           <Image
                             style={{
                               with: 100,

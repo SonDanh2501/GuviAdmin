@@ -7,92 +7,138 @@
   text-decoration: none;
 }
 
-.div-tab-condition {
-  display: flex;
-  flex-direction: row;
-  box-shadow: 2px 3px 2px rgb(216, 216, 216);
-  width: 100px;
-  border-radius: 30px;
-  padding: 5px;
-  align-items: center;
-  justify-content: space-between;
-  background-color: white;
-
-  .div-tab {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    border-radius: 30px;
-    padding: 2px;
-
-    .text-tab {
-      font-family: "Roboto";
-      font-style: normal;
-      font-weight: 400;
-      font-size: 14px;
-      color: rgb(147, 147, 147);
-      text-decoration: none;
-    }
-  }
-
-  .div-tab-selected {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: aqua;
-    width: 50px;
-    border-radius: 30px;
-    padding: 2px;
-
-    .text-tab {
-      font-family: "Roboto";
-      font-style: normal;
-      font-weight: 400;
-      font-size: 14px;
-      color: black;
-      text-decoration: none;
-    }
-  }
-}
-
-.div-body {
-  display: flex;
-  flex-direction: row;
-  background-color: rgba(239, 238, 238, 0.261);
-  width: 100%;
-  min-height: 100px;
+.condition-level {
+  background-color: rgba(211, 211, 211, 0.545);
   border-radius: 8px;
+  padding: 5px;
   box-shadow: 2px 3px 2px rgb(239, 239, 239);
 
-  .div-input {
+  .div-tab-condition {
     display: flex;
     flex-direction: row;
+    box-shadow: 2px 3px 2px rgb(216, 216, 216);
+    width: 100px;
+    border-radius: 30px;
+    padding: 5px;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
 
-    .input-condition {
-      margin-right: 40px;
+    .div-tab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      border-radius: 30px;
+      padding: 2px;
+
+      .text-tab {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        color: rgb(147, 147, 147);
+        text-decoration: none;
+      }
+    }
+
+    .div-tab-selected {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: aqua;
+      width: 50px;
+      border-radius: 30px;
+      padding: 2px;
+
+      .text-tab {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        color: black;
+        text-decoration: none;
+      }
     }
   }
 
-  .div-footer-body {
+  .div-body {
     display: flex;
-    flex-direction: column;
-    background-color: rgb(199, 255, 255);
-    padding: 10px;
-    border-radius: 8px 0px 0px 8px;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: row;
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+    min-height: 100px;
+    border-radius: 8px;
 
-    .btn-add-group {
-      border-radius: 20px;
-      box-shadow: 1px 2px 2px rgb(216, 216, 216);
-      font-family: "Roboto";
-      font-style: normal;
-      font-weight: 400;
-      font-size: 14px;
-      color: black;
-      text-decoration: none;
-      width: 150px;
+    .div-input {
+      display: flex;
+      flex-direction: column;
+
+      .div-input-condition {
+        display: flex;
+        flex-direction: row;
+        margin-top: 10px;
+
+        .div-select-kind {
+          display: flex;
+          flex-direction: column;
+          margin-right: 10px;
+
+          .label-kind {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            color: black;
+            text-decoration: none;
+          }
+
+          .select-kind {
+            width: 200px;
+            margin-top: 5px;
+          }
+
+          .select-date {
+            width: 200px;
+            margin-top: 5px;
+          }
+
+          .input-value {
+            width: 200px;
+            margin-top: 5px;
+          }
+        }
+
+        .input-condition {
+          margin-right: 40px;
+        }
+
+        .input-value-condition {
+          height: 30px;
+        }
+      }
+    }
+
+    .div-footer-body {
+      display: flex;
+      flex-direction: column;
+      background-color: rgb(199, 255, 255);
+      padding: 10px;
+      border-radius: 8px 0px 0px 8px;
+      justify-content: space-between;
+      align-items: center;
+
+      .btn-add-group {
+        border-radius: 20px;
+        box-shadow: 1px 2px 2px rgb(216, 216, 216);
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        color: black;
+        text-decoration: none;
+        width: 150px;
+      }
     }
   }
 }
