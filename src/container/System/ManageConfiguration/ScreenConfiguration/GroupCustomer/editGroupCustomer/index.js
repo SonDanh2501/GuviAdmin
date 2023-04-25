@@ -1,10 +1,11 @@
 import { Button, DatePicker, Drawer, Input, Radio, Select } from "antd";
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import CustomButton from "../../../../../../components/customButton/customButton";
 import CustomTextInput from "../../../../../../components/CustomTextInput/customTextInput";
 import "./index.scss";
 import { set } from "lodash";
+import dayjs from "dayjs";
 import {
   DATA_GENDER,
   DATA_KIND,
@@ -13,16 +14,24 @@ import {
   MONTH,
 } from "../../../../../../api/fakeData";
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
-import { createGroupCustomerApi } from "../../../../../../api/configuration";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  EditGroupCustomerApi,
+  createGroupCustomerApi,
+  editGroupCustomerApi,
+  getDetailsGroupCustomerApi,
+} from "../../../../../../api/configuration";
 import { errorNotify } from "../../../../../../helper/toast";
 import LoadingPagination from "../../../../../../components/paginationLoading";
 const { TextArea } = Input;
 
-const AddGroupCustomer = () => {
+const EditGroupCustomer = () => {
+  const { state } = useLocation();
+  const { id } = state || {};
   const [nameGroup, setNameGroup] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const dateFormat = "YYYY-MM-DD";
   const [conditionLevel, setConditionLevel] = useState([
     {
       type_condition: "and",
@@ -48,6 +57,37 @@ const AddGroupCustomer = () => {
   ]);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setIsLoading(true);
+    getDetailsGroupCustomerApi(id)
+      .then((res) => {
+        const newArray = [...conditionLevel];
+        const newOutArray = [...conditionLevelOut];
+        setNameGroup(res?.name);
+        setDescription(res?.description);
+        conditionLevel[0].type_condition = res?.condition_in?.type_condition;
+        conditionLevel[0].condition_level_1 =
+          res?.condition_in?.condition_level_1;
+        conditionLevelOut[0].type_condition =
+          res?.condition_out?.type_condition;
+        conditionLevelOut[0].condition_level_1 =
+          res?.condition_out?.condition_level_1?.length > 0
+            ? res?.condition_out?.condition_level_1
+            : [
+                {
+                  type_condition: "and",
+                  condition: [{ kind: "", operator: "", value: "" }],
+                },
+              ];
+        setConditionLevel(newArray);
+        setConditionLevelOut(newOutArray);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  }, [id]);
 
   const addConditionLevel = () => {
     const newArray = [...conditionLevel];
@@ -182,17 +222,17 @@ const AddGroupCustomer = () => {
     setConditionLevelOut(newArray);
   };
 
-  const onCreateGroupCustomer = useCallback(() => {
+  const onEditGroupCustomer = useCallback(() => {
     setIsLoading(true);
-    createGroupCustomerApi({
+    editGroupCustomerApi(id, {
       name: nameGroup,
       description: description,
       condition_in: conditionLevel[0],
       condition_out: conditionLevelOut[0],
     })
       .then((res) => {
-        window.location.reload();
-        navigate(-1);
+        // window.location.reload();
+        // navigate(-1);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -201,7 +241,7 @@ const AddGroupCustomer = () => {
         });
         setIsLoading(false);
       });
-  }, [nameGroup, description, conditionLevel, conditionLevelOut]);
+  }, [nameGroup, description, conditionLevel, conditionLevelOut, id]);
 
   return (
     <>
@@ -211,12 +251,14 @@ const AddGroupCustomer = () => {
         <Input
           className="input-name-group-customer"
           type="text"
+          value={nameGroup}
           onChange={(e) => setNameGroup(e.target.value)}
         />
         <a className="label-input">Mô tả</a>
 
         <TextArea
           rows={2}
+          value={description}
           className="input-name-group-customer"
           onChange={(e) => setDescription(e.target.value)}
         />
@@ -285,6 +327,7 @@ const AddGroupCustomer = () => {
                                     onChange={(value) =>
                                       onChangeKindIn(value, idx, ix)
                                     }
+                                    value={it?.kind}
                                     className="select-kind"
                                     options={DATA_KIND}
                                   />
@@ -296,6 +339,7 @@ const AddGroupCustomer = () => {
                                     onChange={(value) =>
                                       onChangeOperatorIn(value, idx, ix)
                                     }
+                                    value={it?.operator}
                                     className="select-kind"
                                     options={
                                       condition?.condition[idx].kind ===
@@ -313,6 +357,7 @@ const AddGroupCustomer = () => {
                                     <Select
                                       className="select-kind"
                                       options={DATA_GENDER}
+                                      value={it?.value}
                                       onChange={(value) =>
                                         onChangeValueIn(value, idx, ix)
                                       }
@@ -322,6 +367,7 @@ const AddGroupCustomer = () => {
                                     <Select
                                       className="select-kind"
                                       options={MONTH}
+                                      value={it?.value}
                                       onChange={(value) =>
                                         onChangeValueIn(value, idx, ix)
                                       }
@@ -330,6 +376,11 @@ const AddGroupCustomer = () => {
                                     "date_create" ? (
                                     <DatePicker
                                       className="select-date"
+                                      format={dateFormat}
+                                      value={dayjs(
+                                        it.value.slice(0, 11),
+                                        dateFormat
+                                      )}
                                       onChange={(date, dateString) =>
                                         onChangeValueIn(
                                           moment(
@@ -345,6 +396,7 @@ const AddGroupCustomer = () => {
                                   ) : (
                                     <Input
                                       className="input-value"
+                                      value={it?.value}
                                       type={"number"}
                                       onChange={(e) =>
                                         onChangeValueIn(e.target.value, idx, ix)
@@ -455,6 +507,7 @@ const AddGroupCustomer = () => {
                                     onChange={(value) =>
                                       onChangeKindOut(value, idx, ix)
                                     }
+                                    value={it?.kind}
                                     className="select-kind"
                                     options={DATA_KIND}
                                   />
@@ -467,6 +520,7 @@ const AddGroupCustomer = () => {
                                       onChangeOperatorOut(value, idx, ix)
                                     }
                                     className="select-kind"
+                                    value={it?.operator}
                                     options={
                                       condition?.condition[idx].kind ===
                                       "gender"
@@ -483,6 +537,7 @@ const AddGroupCustomer = () => {
                                     <Select
                                       className="select-kind"
                                       options={DATA_GENDER}
+                                      value={it?.value}
                                       onChange={(value) =>
                                         onChangeValueOut(value, idx, ix)
                                       }
@@ -492,6 +547,7 @@ const AddGroupCustomer = () => {
                                     <Select
                                       className="select-kind"
                                       options={MONTH}
+                                      value={it?.value}
                                       onChange={(value) =>
                                         onChangeValueOut(value, idx, ix)
                                       }
@@ -500,6 +556,11 @@ const AddGroupCustomer = () => {
                                     "date_create" ? (
                                     <DatePicker
                                       className="select-date"
+                                      format={dateFormat}
+                                      value={dayjs(
+                                        it.value.slice(0, 11),
+                                        dateFormat
+                                      )}
                                       onChange={(date, dateString) =>
                                         onChangeValueOut(
                                           moment(
@@ -516,6 +577,7 @@ const AddGroupCustomer = () => {
                                     <Input
                                       className="input-value"
                                       type={"number"}
+                                      value={it?.value}
                                       onChange={(e) =>
                                         onChangeValueOut(
                                           e.target.value,
@@ -567,9 +629,9 @@ const AddGroupCustomer = () => {
 
       <Button
         className="btn-create-group-customer"
-        onClick={onCreateGroupCustomer}
+        onClick={onEditGroupCustomer}
       >
-        Tạo nhóm khách hàng
+        Sửa nhóm khách hàng
       </Button>
 
       {isLoading && <LoadingPagination />}
@@ -577,7 +639,7 @@ const AddGroupCustomer = () => {
   );
 };
 
-export default memo(AddGroupCustomer);
+export default memo(EditGroupCustomer);
 
 const DATA_TAB = [
   {

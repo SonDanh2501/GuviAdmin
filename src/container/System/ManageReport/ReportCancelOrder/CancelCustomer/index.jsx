@@ -15,7 +15,7 @@ const CancelOrderCustomer = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [titleCity, setTitleCity] = useState("Chọn thành phố");
+  const [titleCity, setTitleCity] = useState("");
   const [city, setCity] = useState(false);
   const [codeCity, setCodeCity] = useState();
   const [dataCity, setDataCity] = useState([]);
@@ -98,6 +98,7 @@ const CancelOrderCustomer = () => {
     (value, label) => {
       setCodeCity(value);
       setDataDistrict(label?.district);
+      setTitleCity(label?.label);
       setCity(!city);
       getCancelReportCustomer(startDate, endDate, value, codeDistrict)
         .then((res) => {
@@ -227,15 +228,23 @@ const CancelOrderCustomer = () => {
         <div className="div-select-city">
           <Select
             style={{ width: 200 }}
-            defaultValue={"Thành phố Hồ Chí Minh"}
+            value={titleCity}
             onChange={onChangeCity}
             options={cityData}
+            showSearch
+            filterOption={(input, option) =>
+              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+            }
           />
           <Select
             style={{ width: 180, marginLeft: 20 }}
             placeholder="Chọn quận"
             onChange={onChangeDistrict}
             options={districtData}
+            showSearch
+            filterOption={(input, option) =>
+              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+            }
           />
         </div>
         <div className="div-pie-chart ml-4">

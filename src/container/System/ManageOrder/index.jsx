@@ -34,7 +34,9 @@ const ManageOrder = () => {
   const listOrderSearch = useSelector(searchOrderSelector);
   const totalOrderSearch = useSelector(searchOrderTotal);
   const navigate = useNavigate();
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   useEffect(() => {
     dispatch(
       getOrder.getOrderRequest({

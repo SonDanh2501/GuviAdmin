@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./index.scss";
 import FinanceCollaborator from "./FinanceCollaborator";
 import FinanceCustomer from "./FinanceCustomer";
@@ -6,7 +6,9 @@ import FinanceCustomer from "./FinanceCustomer";
 const ManageFinance = () => {
   const [tab, setTab] = useState("ctv");
 
-  console.log(tab);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <div className="div-map-item">

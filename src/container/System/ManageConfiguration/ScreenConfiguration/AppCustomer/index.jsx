@@ -159,7 +159,7 @@ const AppCustomer = () => {
   return (
     <div className="container-app-customer">
       <a className="label-kh">Cấu hình ứng dụng Khách hàng</a>
-      <div className="div-body">
+      <div className="div-body-app-customer">
         <div>
           <CustomTextInput
             label={"Phiên bản ứng dụng"}

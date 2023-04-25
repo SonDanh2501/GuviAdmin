@@ -9,8 +9,12 @@ import ReportArea from "./ReportArea";
 import ReportUser from "./ReportUser";
 import ReportCustomer from "./ReportCutomer";
 import ReportCancelOrder from "./ReportCancelOrder";
+import { useEffect } from "react";
 
 const ManageReport = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <div className="div-header-report">

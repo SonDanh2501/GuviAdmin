@@ -1,32 +1,31 @@
-.content {
-  background-color: white;
-  width: 100%;
-  min-height: 20%;
-  margin-left: 10px;
+.btn-add-group-customer {
+  width: 15%;
+  height: 40px;
+  border: none;
   border-radius: 5px;
+  background-color: #48cae4;
+  color: white;
+  margin-left: 20px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .btn-add-group-customer {
-    width: 15%;
-    height: 40px;
-    border: none;
-    border-radius: 5px;
-    background-color: #48cae4;
-    color: white;
-    margin-left: 20px;
-    box-shadow: 2px 3px 2px rgb(216, 216, 216);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.text-name-group-cutomer {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: black;
+  text-decoration: none;
+}
 
-  .table {
-    .text-name {
-      font-family: "Roboto";
-      font-style: normal;
-      font-weight: 300;
-      font-size: 14px;
-      color: black;
-      text-transform: capitalize;
-    }
-  }
+.text-date-group {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: black;
+  text-decoration: none;
 }

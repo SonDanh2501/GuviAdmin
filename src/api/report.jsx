@@ -174,3 +174,9 @@ export const getCancelReportCustomer = (
     `/admin/report_mananger/report_customer_cancel_order?lang=vi&start_date=${start_date}&end_date=${end_date}&city=${city}&district=${district}`
   );
 };
+
+export const getReportCustomerByCity = (start_date, end_date) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_customer_by_city?lang=vi&start_date=${start_date}&end_date=${end_date}`
+  );
+};

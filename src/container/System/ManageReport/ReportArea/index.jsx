@@ -3,21 +3,28 @@ import "./areaReport.scss";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { getDistrictApi } from "../../../../api/file";
 import moment from "moment";
-import { getReportTypeService } from "../../../../api/report";
+import {
+  getReportCustomerByCity,
+  getReportTypeService,
+} from "../../../../api/report";
 import { List, Select } from "antd";
 import CustomDatePicker from "../../../../components/customDatePicker";
 
 const ReportArea = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [startDateCity, setStartDateCity] = useState("");
+  const [endDateCity, setEndDateCity] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [city, setCity] = useState(false);
   const [codeCity, setCodeCity] = useState();
+  const [nameCity, setNameCity] = useState("");
   const [dataCity, setDataCity] = useState([]);
   const [dataDistrict, setDataDistrict] = useState([]);
   const [codeDistrict, setCodeDistrict] = useState(-1);
   const [district, setDistrict] = useState(false);
   const [dataChartPie, setDataChartPie] = useState([]);
+  const [dataChartCustomerCity, setDataChartCustomerCity] = useState([]);
 
   const districtData = [];
   const cityData = [];
@@ -27,6 +34,7 @@ const ReportArea = () => {
       .then((res) => {
         setDataCity(res?.aministrative_division);
         setCodeCity(res?.aministrative_division[0]?.code);
+        setNameCity(res?.aministrative_division[0]?.name);
         setDataDistrict(res?.aministrative_division[0]?.districts);
         getReportTypeService(
           moment(moment().startOf("year").toISOString())
@@ -45,12 +53,32 @@ const ReportArea = () => {
       })
       .catch((err) => {});
 
+    getReportCustomerByCity(
+      moment(moment().startOf("year").toISOString())
+        .add(7, "hours")
+        .toISOString(),
+      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
+    )
+      .then((res) => {
+        setDataChartCustomerCity(res?.data);
+      })
+      .catch((err) => {});
+
     setStartDate(
       moment(moment().startOf("year").toISOString())
         .add(7, "hours")
         .toISOString()
     );
+    setStartDateCity(
+      moment(moment().startOf("year").toISOString())
+        .add(7, "hours")
+        .toISOString()
+    );
+
     setEndDate(
+      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
+    );
+    setEndDateCity(
       moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
     );
   }, []);
@@ -72,6 +100,7 @@ const ReportArea = () => {
 
   const onChangeCity = useCallback(
     (value, label) => {
+      setNameCity(label?.label);
       setCodeCity(value);
       setDataDistrict(label?.district);
       setCity(!city);
@@ -101,6 +130,14 @@ const ReportArea = () => {
     getReportTypeService(startDate, endDate, codeCity, codeDistrict)
       .then((res) => {
         setDataChartPie(res?.percent);
+      })
+      .catch((err) => {});
+  };
+
+  const onChangeDayCustomer = () => {
+    getReportCustomerByCity(startDateCity, endDateCity)
+      .then((res) => {
+        setDataChartCustomerCity(res?.data);
       })
       .catch((err) => {});
   };
@@ -159,6 +196,36 @@ const ReportArea = () => {
     );
   };
 
+  const renderLabelCity = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+    city,
+  }) => {
+    const RADIAN = Math.PI / 180;
+    // eslint-disable-next-line
+    const radius = 25 + innerRadius + (outerRadius - innerRadius);
+    // eslint-disable-next-line
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    // eslint-disable-next-line
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="#000000"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
+        {city} ({percent} {"%"})
+      </text>
+    );
+  };
+
   return (
     <>
       <div className="div-chart-pie-total">
@@ -166,15 +233,23 @@ const ReportArea = () => {
         <div className="div-select-city">
           <Select
             style={{ width: 200 }}
-            defaultValue={"Thành phố Hồ Chí Minh"}
+            value={nameCity}
             onChange={onChangeCity}
             options={cityData}
+            showSearch
+            filterOption={(input, option) =>
+              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+            }
           />
           <Select
             style={{ width: 180, marginLeft: 20, marginRight: 20 }}
             placeholder="Chọn quận"
             onChange={onChangeDistrict}
             options={districtData}
+            showSearch
+            filterOption={(input, option) =>
+              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+            }
           />
           <CustomDatePicker
             setStartDate={setStartDate}
@@ -206,17 +281,44 @@ const ReportArea = () => {
           </ResponsiveContainer>
         </div>
       </div>
+
+      <div className="div-chart-pie-total mt-3">
+        <a className="title-chart-area"> Thống kê khách hàng theo khu vực</a>
+        <div className="div-select-city">
+          <CustomDatePicker
+            setStartDate={setStartDateCity}
+            setEndDate={setEndDateCity}
+            onClick={onChangeDayCustomer}
+            onCancel={onCancelPicker}
+          />
+        </div>
+        <div className="div-pie-chart">
+          <ResponsiveContainer height={300} min-width={500}>
+            <PieChart height={250}>
+              <Pie
+                data={dataChartCustomerCity}
+                cx="50%"
+                cy="50%"
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="percent"
+                label={renderLabelCity}
+              >
+                {dataChartCustomerCity.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
     </>
   );
 };
 
 export default ReportArea;
-
-const data = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 200 },
-];
 
 const COLORS = ["#0088FE", "#48cae4", "#00CF3A"];

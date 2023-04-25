@@ -260,6 +260,17 @@ export const DATA_OPERTATOR = [
   },
 ];
 
+export const DATA_OPERTATOR_GENDER = [
+  {
+    value: "==",
+    label: "Bằng",
+  },
+  {
+    value: "!=",
+    label: "Khác",
+  },
+];
+
 export const DATA_GENDER = [
   {
     value: "male",
