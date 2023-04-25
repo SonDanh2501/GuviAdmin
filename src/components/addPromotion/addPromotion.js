@@ -534,17 +534,6 @@ const AddPromotion = ({ idService, tab }) => {
                       >
                         Giảm theo phần trăm
                       </Button>
-                      {/* <Button
-                          className={
-                            discountUnit === "same_price"
-                              ? "btn-form-same-promotion"
-                              : "btn-form-same-promotion-default"
-                          }
-                          outline
-                          onClick={() => onFormDiscount("same_price")}
-                        >
-                          Đồng giá
-                        </Button> */}
                       {
                         discountUnit === "amount" ? (
                           <CustomTextInput

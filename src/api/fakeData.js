@@ -201,3 +201,138 @@ export const date = [
     title: "CN",
   },
 ];
+
+export const DATA_KIND = [
+  {
+    value: "gender",
+    label: "Giới tính",
+  },
+  {
+    value: "total_order",
+    label: "Tổng giá trị đơn hàng",
+  },
+  {
+    value: "rank_point",
+    label: "Điểm hạng",
+  },
+  {
+    value: "month_birthday",
+    label: "Tháng sinh",
+  },
+  {
+    value: "date_create",
+    label: "Ngày tạo",
+  },
+  {
+    value: "group_order_success_done",
+    label: "Số đơn hoàn thành",
+  },
+  {
+    value: "group_order_success",
+    label: "Số đơn đặt thành công",
+  },
+];
+
+export const DATA_OPERTATOR = [
+  {
+    value: ">",
+    label: "Lớn hơn",
+  },
+  {
+    value: "<",
+    label: "Nhỏ hơn",
+  },
+  {
+    value: "==",
+    label: "Bằng",
+  },
+  {
+    value: "!=",
+    label: "Khác",
+  },
+  {
+    value: ">=",
+    label: "Lớn hơn hoặc bằng",
+  },
+  {
+    value: "<=",
+    label: "Bé hơn hoặc bằng",
+  },
+];
+
+export const DATA_OPERTATOR_GENDER = [
+  {
+    value: "==",
+    label: "Bằng",
+  },
+  {
+    value: "!=",
+    label: "Khác",
+  },
+];
+
+export const DATA_GENDER = [
+  {
+    value: "male",
+    label: "Nam",
+  },
+  {
+    value: "female",
+    label: "Nữ",
+  },
+  {
+    value: "other",
+    label: "Khác",
+  },
+];
+
+export const MONTH = [
+  {
+    value: 1,
+    label: "Tháng 1",
+  },
+  {
+    value: 2,
+    label: "Tháng 2",
+  },
+  {
+    value: 3,
+    label: "Tháng 3",
+  },
+  {
+    value: 4,
+    label: "Tháng 4",
+  },
+  {
+    value: 5,
+    label: "Tháng 5",
+  },
+  {
+    value: 6,
+    label: "Tháng 6",
+  },
+  {
+    value: 7,
+    label: "Tháng 7",
+  },
+  {
+    value: 8,
+    label: "Tháng 8",
+  },
+  {
+    value: 9,
+    label: "Tháng 9",
+  },
+  {
+    value: 10,
+    label: "Tháng 10",
+  },
+  {
+    value: 11,
+    label: "Tháng 11",
+  },
+  {
+    value: 12,
+    label: "Tháng 12",
+  },
+];

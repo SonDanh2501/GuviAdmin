@@ -3,10 +3,13 @@ import Feedback from "./Feedback/Feedback";
 import ReviewCollaborator from "./ReviewCollaborator";
 
 import "./index.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ManageFeedback = () => {
   const [tab, setTab] = useState("review");
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <div className="div-contai-feedback">

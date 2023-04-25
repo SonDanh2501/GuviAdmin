@@ -24,7 +24,7 @@ import DetailRegisterCustomer from "../container/System/ManageReport/ReportUser/
 import GroupServiceManage from "../container/System/ManageService/ManageGroupService/ManageGroupService/GroupServiceManage";
 import ServiceManage from "../container/System/ManageService/ManageService/ServiceManage";
 import ManageSetting from "../container/System/ManageSetting";
-import ReasonManage from "../container/System/ManageSetting/ManageReason/ReasonManage";
+import ReasonManage from "../container/System/ManageConfiguration/ScreenConfiguration/ManageReason/ReasonManage";
 import ManageTopup from "../container/System/ManageTopup";
 import ManageCollaborator from "../container/System/ManageUser/Collaborator";
 import ProfileCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/ProfileCollaborator";
@@ -34,6 +34,7 @@ import Profiles from "../container/System/ManageUser/Customer/Profiles";
 import ChildPromotion from "../container/System/ManagePromotion/ChildPromotion";
 import PriceService from "../container/System/ManageService/PriceService";
 import AddGroupCustomer from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer/addGroupCustomer";
+import EditGroupCustomer from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer/editGroupCustomer";
 
 const Admin = () => {
   return (
@@ -164,6 +165,10 @@ const Admin = () => {
       <Route
         path="/adminManage/manage-configuration/manage-group-customer/create"
         element={<AddGroupCustomer />}
+      />
+      <Route
+        path="/adminManage/manage-configuration/manage-group-customer/details-edit"
+        element={<EditGroupCustomer />}
       />
     </Routes>
   );

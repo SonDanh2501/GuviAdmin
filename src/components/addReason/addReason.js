@@ -2,10 +2,13 @@ import React, { memo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Col, Form, Modal, Row } from "reactstrap";
 import { loadingAction } from "../../redux/actions/loading";
-import { createReason } from "../../redux/actions/reason";
+
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./addReason.scss";
+import { Button, Input } from "antd";
+import { createReason } from "../../api/reasons";
+import { getReasons } from "../../redux/actions/reason";
 
 const AddReason = () => {
   const [state, setState] = useState(false);
@@ -17,44 +20,131 @@ const AddReason = () => {
   const [max_time, setMaxtime] = useState();
   const [min_time, setMintime] = useState();
   const [value, setValue] = useState();
+  const [punishTime, setPunishTime] = useState([
+    {
+      max_time: 0,
+      min_time: 0,
+      value: 0,
+    },
+  ]);
+  const [punishCash, setPunishCash] = useState([
+    {
+      max_time: 0,
+      min_time: 0,
+      value: 0,
+    },
+  ]);
   const [note, setNote] = useState("");
   const [applyUser, setApplyUser] = useState("customer");
 
   const dispatch = useDispatch();
 
-  // const addReason = useCallback(() => {
-  //   dispatch(loadingAction.loadingRequest(true));
-  //   dispatch(
-  //     createReason.createReasonRequest({
-  //       title: {
-  //         vi: titleVN,
-  //         en: titleEN,
-  //       },
-  //       description: {
-  //         vi: descriptionVN,
-  //         en: descriptionEN,
-  //       },
-  //       punish_type: type,
-  //       punish_time: [
-  //         {
-  //           is_active: true,
-  //           max_time: 0,
-  //           min_time: 0,
-  //           value: 0,
-  //         },
-  //       ],
-  //       apply_user: applyUser,
-  //       note: note,
-  //     })
-  //   );
-  // }, [titleVN, titleEN, descriptionVN, descriptionEN, type, applyUser, note]);
+  const addPunish = () => {
+    setPunishTime((punish) => [
+      ...punish,
+      {
+        max_time: 0,
+        min_time: 0,
+        value: 0,
+      },
+    ]);
+  };
+  const addPunishCash = () => {
+    setPunishCash((punishCash) => [
+      ...punishCash,
+      {
+        max_time: 0,
+        min_time: 0,
+        value: 0,
+      },
+    ]);
+  };
+
+  const deletePunish = (index) => {
+    punishTime.splice(index, 1);
+    setPunishTime([...punishTime]);
+  };
+
+  const deletePunishCash = (index) => {
+    punishCash.splice(index, 1);
+    setPunishCash([...punishCash]);
+  };
+
+  const onChangeMaxTime = (value, index) => {
+    const newArr = [...punishTime];
+    punishTime[index].max_time = value;
+    setPunishTime(newArr);
+  };
+
+  const onChangeMaxTimeCash = (value, index) => {
+    const newArr = [...punishCash];
+    punishCash[index].max_time = value;
+    setPunishCash(newArr);
+  };
+
+  const onChangeMinTime = (value, index) => {
+    const newArr = [...punishTime];
+    punishTime[index].min_time = value;
+    setPunishTime(newArr);
+  };
+
+  const onChangeMinTimeCash = (value, index) => {
+    const newArr = [...punishCash];
+    punishCash[index].min_time = value;
+    setPunishCash(newArr);
+  };
+
+  const onChangeValueTime = (value, index) => {
+    const newArr = [...punishTime];
+    punishTime[index].value = value;
+    setPunishTime(newArr);
+  };
+
+  const onChangeValueCash = (value, index) => {
+    const newArr = [...punishCash];
+    punishCash[index].value = value;
+    setPunishCash(newArr);
+  };
+
+  const addReason = useCallback(() => {
+    createReason({
+      title: {
+        vi: titleVN,
+        en: titleEN,
+      },
+      description: {
+        vi: descriptionVN,
+        en: descriptionEN,
+      },
+      punish_type: type,
+      punish_time: punishTime,
+      punish_cash: punishCash,
+      apply_user: applyUser,
+      note: note,
+    })
+      .then((res) => {
+        dispatch(getReasons.getReasonsRequest({ start: 0, length: 10 }));
+        setState(false);
+      })
+      .catch((err) => {});
+  }, [
+    titleVN,
+    titleEN,
+    descriptionVN,
+    descriptionEN,
+    type,
+    applyUser,
+    note,
+    punishTime,
+    punishCash,
+  ]);
 
   return (
     <>
       {/* Button trigger modal */}
       <CustomButton
         title="Thêm lí do huỷ việc"
-        className="btn-modal"
+        className="btn-modal-add-reason"
         type="button"
         onClick={() => setState(!state)}
       />
@@ -66,7 +156,7 @@ const AddReason = () => {
         fullscreen={true}
         fade={true}
         size="lg"
-        style={{ maxWidth: "1200px", width: "100%" }}
+        style={{ maxWidth: 1800 }}
       >
         <div className="modal-header">
           <h3 className="modal-title" id="exampleModalLabel">
@@ -79,7 +169,7 @@ const AddReason = () => {
         <div className="modal-body">
           <Form>
             <Row>
-              <Col md={6}>
+              <Col md={4}>
                 <div>
                   <h5>Lý do huỷ việc</h5>
                   <CustomTextInput
@@ -147,44 +237,133 @@ const AddReason = () => {
                   onChange={(e) => setNote(e.target.value)}
                 />
               </Col>
-              <Col md={6}>
+              <Col md={4}>
                 <div>
                   <h5>Phạt thời gian</h5>
-                  <div className="div-ticket">
-                    <CustomTextInput
-                      id="exampleTitle"
-                      name="title"
-                      placeholder="Vui lòng nhập mốc thời gian tối đa"
-                      type="number"
-                      value={max_time}
-                      onChange={(e) => setMaxtime(e.target.value)}
-                    />
-                    <CustomTextInput
-                      id="exampleTitle"
-                      name="title"
-                      placeholder="Vui lòng nhập mốc thời gian tối thiểu"
-                      type="number"
-                      value={min_time}
-                      onChange={(e) => setMintime(e.target.value)}
-                    />
-                    <CustomTextInput
-                      id="exampleTitle"
-                      name="title"
-                      placeholder="Giá trị"
-                      type="number"
-                      value={value}
-                      onChange={(e) => setValue(e.target.value)}
-                    />
-                  </div>
+                  {punishTime?.map((item, index) => {
+                    return (
+                      <div
+                        className={
+                          index !== 0 ? "div-ticket mt-3" : "div-ticket"
+                        }
+                        key={index}
+                      >
+                        <div>
+                          <a>Thời gian tối đa</a>
+                          <Input
+                            type="number"
+                            onChange={(e) =>
+                              onChangeMaxTime(e.target.value, index)
+                            }
+                            min={0}
+                          />
+                        </div>
+                        <div>
+                          <a>Thời gian tối thiểu</a>
+                          <Input
+                            type="number"
+                            onChange={(e) =>
+                              onChangeMinTime(e.target.value, index)
+                            }
+                            min={0}
+                          />
+                        </div>
+                        <div>
+                          <a>Giá trị</a>
+                          <Input
+                            type="number"
+                            onChange={(e) =>
+                              onChangeValueTime(e.target.value, index)
+                            }
+                            min={0}
+                          />
+                        </div>
+
+                        {index !== 0 ? (
+                          <Button
+                            className="btn-delete-punish"
+                            onClick={() => deletePunish(index)}
+                          >
+                            Xoá
+                          </Button>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    );
+                  })}
+                  <Button className="btn-add-punish" onClick={addPunish}>
+                    Thêm điều kiện
+                  </Button>
+                </div>
+              </Col>
+              <Col md={4}>
+                <div>
+                  <h5>Phạt tiền</h5>
+                  {punishCash?.map((item, index) => {
+                    return (
+                      <div
+                        className={
+                          index !== 0 ? "div-ticket mt-3" : "div-ticket"
+                        }
+                        key={index}
+                      >
+                        <div>
+                          <a>Thời gian tối đa</a>
+                          <Input
+                            type="number"
+                            onChange={(e) =>
+                              onChangeMaxTimeCash(e.target.value, index)
+                            }
+                            min={0}
+                          />
+                        </div>
+                        <div>
+                          <a>Thời gian tối thiểu</a>
+                          <Input
+                            type="number"
+                            onChange={(e) =>
+                              onChangeMinTimeCash(e.target.value, index)
+                            }
+                            min={0}
+                          />
+                        </div>
+                        <div>
+                          <a>Số tiền</a>
+                          <Input
+                            type="number"
+                            onChange={(e) =>
+                              onChangeValueCash(e.target.value, index)
+                            }
+                            min={0}
+                          />
+                        </div>
+
+                        {index !== 0 ? (
+                          <Button
+                            className="btn-delete-punish"
+                            onClick={() => deletePunishCash(index)}
+                          >
+                            Xoá
+                          </Button>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    );
+                  })}
+                  <Button className="btn-add-punish" onClick={addPunishCash}>
+                    Thêm điều kiện
+                  </Button>
                 </div>
               </Col>
             </Row>
 
             <CustomButton
-              title="Thêm"
-              className="float-right btn-modal"
+              title="Tạo"
+              className="float-right btn-modal-add-reason"
               type="button"
-              // onClick={addReason}
+              onClick={addReason}
             />
           </Form>
         </div>

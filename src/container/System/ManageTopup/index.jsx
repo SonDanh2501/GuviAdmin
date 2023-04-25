@@ -4,8 +4,12 @@ import TopupManage from "./ManageTopupCollaborator/TopupManage";
 import TopupCustomerManage from "./ManageTopupCustomer";
 
 import "./styles.scss";
+import { useEffect } from "react";
 
 const ManageTopup = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="div-container">
       <Tabs defaultActiveKey="1">

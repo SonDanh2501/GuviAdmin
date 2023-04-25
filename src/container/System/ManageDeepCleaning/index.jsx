@@ -1,8 +1,12 @@
 import { Tabs } from "antd";
 import DeepCleaning from "./DeepCleaning";
 import "./index.scss";
+import { useEffect } from "react";
 
 const DeepCleaningManager = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div>
       <Tabs defaultActiveKey="1" size="large">

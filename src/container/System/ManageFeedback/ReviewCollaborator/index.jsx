@@ -7,6 +7,7 @@ import CustomDatePicker from "../../../../components/customDatePicker";
 import _debounce from "lodash/debounce";
 import { SearchOutlined } from "@ant-design/icons";
 import LoadingPagination from "../../../../components/paginationLoading";
+import { useNavigate } from "react-router-dom";
 
 const ReviewCollaborator = () => {
   const [data, setData] = useState([]);
@@ -17,6 +18,7 @@ const ReviewCollaborator = () => {
   const [star, setStar] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getReportReviewCollaborator(
@@ -142,7 +144,14 @@ const ReviewCollaborator = () => {
       title: "Tên khách hàng",
       render: (data) => {
         return (
-          <div className="div-customer-review">
+          <div
+            className="div-customer-review"
+            onClick={() =>
+              navigate("/details-customer", {
+                state: { id: data?.id_customer?._id },
+              })
+            }
+          >
             <a className="text-name-review">{data?.id_customer?.full_name}</a>
             <a className="text-name-review">{data?.id_customer?.phone}</a>
           </div>
@@ -153,7 +162,14 @@ const ReviewCollaborator = () => {
       title: "Tên cộng tác viên",
       render: (data) => {
         return (
-          <div className="div-collaborator-review">
+          <div
+            className="div-collaborator-review"
+            onClick={() =>
+              navigate("/details-collaborator", {
+                state: { id: data?.id_collaborator?._id },
+              })
+            }
+          >
             <a className="text-name-review">
               {data?.id_collaborator?.full_name}
             </a>
@@ -179,9 +195,7 @@ const ReviewCollaborator = () => {
       render: (data) => {
         return (
           <div>
-            {data?.short_review?.map((item) => (
-              <a className="text-short-review">{item}</a>
-            ))}
+            <a className="text-short-review">{data?.short_review[0]}</a>
           </div>
         );
       },

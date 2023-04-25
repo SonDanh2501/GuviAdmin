@@ -3,9 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "reactstrap";
 
 import "./ManageConfiguration.scss";
+import { useEffect } from "react";
 
 const ManageConfiguration = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const onClick = (item) => {
     switch (item?.value) {

@@ -11,6 +11,7 @@ import ManageReport from "../container/System/ManageReport";
 import DetailsOrder from "../container/System/DetailsOrder";
 import ManageFeedback from "../container/System/ManageFeedback";
 import AddOrder from "../container/System/ManageOrder/DrawerAddOrder";
+import DetailsOrderSchedule from "../container/System/DetailsOrder/OrderScheduleDetails";
 
 const Support = () => {
   return (
@@ -20,6 +21,10 @@ const Support = () => {
       <Route
         path="/group-order/manage-order/create-order"
         element={<AddOrder />}
+      />
+      <Route
+        path="/details-order/details-order-schedule"
+        element={<DetailsOrderSchedule />}
       />
       <Route
         path="/group-order/manage-order/doing"

@@ -174,9 +174,13 @@ export default function Home() {
         return (
           <div className="div-column-service">
             <a className="text-service">
-              {data?.service?._id?.kind === "giup_viec_theo_gio"
-                ? "Giúp việc theo giờ"
-                : "Giúp việc cố định"}
+              {data?.type === "schedule"
+                ? "Cố định"
+                : data?.type === "loop" && !data?.is_auto_order
+                ? "Theo giờ"
+                : data?.type === "loop" && data?.is_auto_order
+                ? "Lặp lại"
+                : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>
           </div>

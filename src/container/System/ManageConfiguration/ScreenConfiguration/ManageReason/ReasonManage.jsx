@@ -17,14 +17,17 @@ import {
 } from "reactstrap";
 import "./ReasonManage.scss";
 
-import AddReason from "../../../../components/addReason/addReason";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
-import { loadingAction } from "../../../../redux/actions/loading";
-import { getReasons } from "../../../../redux/actions/reason";
-import { getReason, getReasonTotal } from "../../../../redux/selectors/reason";
-import EditReason from "../../../../components/editReason/editReason";
-import { activeReason, deleteReason } from "../../../../api/reasons";
-import { formatMoney } from "../../../../helper/formatMoney";
+import AddReason from "../../../../../components/addReason/addReason";
+import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
+import { loadingAction } from "../../../../../redux/actions/loading";
+import { getReasons } from "../../../../../redux/actions/reason";
+import {
+  getReason,
+  getReasonTotal,
+} from "../../../../../redux/selectors/reason";
+import EditReason from "../../../../../components/editReason/editReason";
+import { activeReason, deleteReason } from "../../../../../api/reasons";
+import { formatMoney } from "../../../../../helper/formatMoney";
 
 export default function ReasonManage() {
   const dispatch = useDispatch();

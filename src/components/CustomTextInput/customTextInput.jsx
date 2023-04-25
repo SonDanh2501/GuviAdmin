@@ -31,7 +31,7 @@ const CustomTextInput = ({
         // <Label for="exampleAddress" style={{ fontSize: 18 }}>
         //   {label}
         // </Label>
-        <a className="text-label">{label}</a>
+        <a className="text-label-input">{label}</a>
       )}
       <Input
         id={id}
