@@ -9,6 +9,7 @@ import CustomTextInput from "../../../../../components/CustomTextInput/customTex
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import "./index.scss";
+import RoleAccount from "./RoleAccount";
 
 const CreateAccount = () => {
   const [fullName, setFullName] = useState("");
@@ -16,8 +17,7 @@ const CreateAccount = () => {
   const [password, setPassword] = useState("");
   const [idRole, setIdRole] = useState("");
   const [dataRole, setDataRole] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [role, setRole] = useState(DATA);
+
   const roleAdmin = [];
 
   const dispatch = useDispatch();
@@ -36,16 +36,6 @@ const CreateAccount = () => {
       value: item?._id,
     });
   });
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
   const onCreateAccount = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -105,108 +95,9 @@ const CreateAccount = () => {
         </button>
       </div>
 
-      <div className="div-add-role">
-        <a>
-          Phân quyền (Lưu ý: mọi chỉnh sửa trên đây chỉ là lưu tạm thời, giá trị
-          thay đổi chỉ lưu lại khi bạn bấm nút "Lưu lại")
-        </a>
-        <button className="btn-add-role" onClick={showModal}>
-          Phân quyền
-        </button>
-      </div>
-      <div>
-        <Modal
-          width={1000}
-          title="Phân quyền"
-          open={isModalOpen}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          okText="Lưu lại"
-          cancelText="Huỷ"
-        >
-          <>
-            <div className="div-title-role">
-              {role?.map((item, index) => {
-                return (
-                  <div key={index} className="div-item-role">
-                    <a className="title-role">{item?.name}</a>
-                    {item?.dropPermission?.map((per, i) => {
-                      return (
-                        <div className="div-item-per">
-                          <a className="text-name-per">{per?.name}</a>
-                          <Checkbox
-                            disabled={
-                              per?.value !== "get" && per?.active === false
-                                ? true
-                                : false
-                            }
-                            onChange={(e) => {}}
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
-                );
-              })}
-            </div>
-          </>
-        </Modal>
-      </div>
+      <RoleAccount />
     </div>
   );
 };
 
 export default CreateAccount;
-
-const DATA = [
-  {
-    id: 1,
-    name: "Admin cấp cao",
-    dropPermission: [
-      {
-        value: "get",
-        name: "Xem",
-        active: false,
-        activeLocal: ["add", "edit", "delete"],
-        dependency: false,
-      },
-      {
-        value: "add",
-        name: "Thêm",
-        active: false,
-        dependency: false,
-      },
-      {
-        value: "edit",
-        name: "Sửa",
-        active: false,
-        dependency: false,
-      },
-      {
-        value: "delete",
-        name: "Xóa",
-        active: false,
-        dependency: false,
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Dưới tay anh Tam",
-    dropPermission: [
-      {
-        value: "get",
-        name: "Xem",
-        active: false,
-        activeLocal: ["add", "edit", "delete"],
-        dependency: false,
-      },
-      {
-        value: "delete",
-        name: "Xóa",
-        active: false,
-        dependency: false,
-      },
-    ],
-  },
-];

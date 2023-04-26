@@ -202,6 +202,32 @@ const TableDeepCleaning = (props) => {
       align: "center",
     },
     {
+      title: "Ngày liên hệ",
+      align: "center",
+      render: (data) => {
+        return (
+          <div className="div-time-create">
+            {data?.date_admin_contact_create ? (
+              <>
+                <a className="text-date-create">
+                  {moment(new Date(data?.date_admin_contact_create)).format(
+                    "DD/MM/YYYY"
+                  )}
+                </a>
+                <a className="text-date-create">
+                  {moment(new Date(data?.date_admin_contact_create)).format(
+                    "HH:mm"
+                  )}
+                </a>
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
+        );
+      },
+    },
+    {
       title: "Trạng thái",
       render: (data) => {
         return (

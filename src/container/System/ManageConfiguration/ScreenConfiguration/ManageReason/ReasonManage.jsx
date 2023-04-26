@@ -142,6 +142,14 @@ export default function ReasonManage() {
           text: "Customer",
           value: "customer",
         },
+        {
+          text: "system_out_confirm",
+          value: "system_out_confirm",
+        },
+        {
+          text: "system_out_date",
+          value: "system_out_date",
+        },
       ],
       onFilter: (value, record) => record.apply_user.indexOf(value) === 0,
     },
