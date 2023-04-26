@@ -175,30 +175,37 @@ export const date = [
   {
     id: 1,
     title: "T2",
+    value: 1,
   },
   {
     id: 2,
     title: "T3",
+    value: 2,
   },
   {
     id: 3,
     title: "T4",
+    value: 3,
   },
   {
     id: 4,
     title: "T5",
+    value: 4,
   },
   {
     id: 5,
     title: "T6",
+    value: 5,
   },
   {
     id: 6,
     title: "T7",
+    value: 6,
   },
   {
     id: 7,
     title: "CN",
+    value: 0,
   },
 ];
 

@@ -156,7 +156,7 @@ const AddReason = () => {
         fullscreen={true}
         fade={true}
         size="lg"
-        style={{ maxWidth: 1800 }}
+        style={{ maxWidth: 1600 }}
       >
         <div className="modal-header">
           <h3 className="modal-title" id="exampleModalLabel">

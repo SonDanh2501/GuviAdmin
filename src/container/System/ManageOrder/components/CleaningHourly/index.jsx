@@ -528,7 +528,7 @@ const CleaningHourly = (props) => {
             Thời lượng <a style={{ color: "red" }}>(*)</a>
           </a>
           <div className="div-service">
-            {extendService.slice(0, 3).map((item) => {
+            {extendService.map((item) => {
               return (
                 <div
                   className={
@@ -580,7 +580,7 @@ const CleaningHourly = (props) => {
         <div className="div-add-service mt-3">
           <a className="label">Dịch vụ thêm</a>
           <div className="div-service">
-            {addService.slice(0, 3).map((item) => {
+            {addService.map((item) => {
               return (
                 <button
                   className={

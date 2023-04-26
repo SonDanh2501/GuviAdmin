@@ -16,39 +16,51 @@ const PriceService = () => {
           },
           {
             title: "7:00",
+            align: "center",
           },
           {
             title: "7:30",
+            align: "center",
           },
           {
             title: "8:00",
+            align: "center",
           },
           {
             title: "8:30",
+            align: "center",
           },
           {
             title: "9:00",
+            align: "center",
           },
           {
             title: "9:30",
+            align: "center",
           },
           {
             title: "10:00",
+            align: "center",
           },
           {
             title: "10:30",
+            align: "center",
           },
           {
             title: "11:00",
+            align: "center",
           },
           {
             title: "11:30",
+            align: "center",
           },
           {
             title: "12:00",
+            align: "center",
           },
           {
             title: "12:30",
+            align: "center",
           },
         ]
       : tab === "afternoon"
@@ -58,27 +70,35 @@ const PriceService = () => {
           },
           {
             title: "13:00",
+            align: "center",
           },
           {
             title: "13:30",
+            align: "center",
           },
           {
             title: "14:00",
+            align: "center",
           },
           {
             title: "14:30",
+            align: "center",
           },
           {
             title: "15:00",
+            align: "center",
           },
           {
             title: "15:30",
+            align: "center",
           },
           {
             title: "16:00",
+            align: "center",
           },
           {
             title: "16:30",
+            align: "center",
           },
         ]
       : [
@@ -87,24 +107,31 @@ const PriceService = () => {
           },
           {
             title: "17:00",
+            align: "center",
           },
           {
             title: "17:30",
+            align: "center",
           },
           {
             title: "18:00",
+            align: "center",
           },
           {
             title: "18:30",
+            align: "center",
           },
           {
             title: "19:00",
+            align: "center",
           },
           {
             title: "19:30",
+            align: "center",
           },
           {
             title: "20:00",
+            align: "center",
           },
         ];
 
