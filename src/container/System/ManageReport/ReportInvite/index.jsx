@@ -98,6 +98,7 @@ const ReportInvite = () => {
       title: "Lượt giới thiệu",
       render: (data) => <a>{data?.totalInvite}</a>,
       align: "center",
+      sorter: (a, b) => a.totalInvite - b.totalInvite,
     },
     {
       key: "action",

@@ -22,8 +22,9 @@ import collaborator from "../../../../assets/images/collaborator.png";
 import CustomDatePicker from "../../../../components/customDatePicker";
 import LoadingPagination from "../../../../components/paginationLoading";
 import "./index.scss";
-
-const { RangePicker } = DatePicker;
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
 
 const ReportUser = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -42,6 +43,7 @@ const ReportUser = () => {
   const dataChart = [];
 
   const navigate = useNavigate();
+  const yearFormat = "YYYY";
 
   useEffect(() => {
     getTotalReportCustomer(
@@ -241,7 +243,12 @@ const ReportUser = () => {
         <div className="div-time-area">
           <div>
             <a className="text-time">Thời gian</a>
-            <DatePicker picker="year" onChange={onChange} />
+            <DatePicker
+              picker="year"
+              onChange={onChange}
+              defaultValue={dayjs("2023", yearFormat)}
+              format={yearFormat}
+            />
           </div>
           <div>
             <a className="text-area">Khu vực</a>

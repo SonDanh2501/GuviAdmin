@@ -169,7 +169,11 @@ const ReportManager = () => {
             className="div-name-ctv-report"
             onClick={() =>
               navigate("/report/manage-report/report-details", {
-                state: { id: data?.id_collaborator?._id },
+                state: {
+                  id: data?.id_collaborator?._id,
+                  dateStart: startDate,
+                  dateEnd: endDate,
+                },
               })
             }
           >
@@ -198,6 +202,7 @@ const ReportManager = () => {
         return <a className="text-money">{data?.total_item}</a>;
       },
       align: "center",
+      sorter: (a, b) => a.total_item - b.total_item,
     },
     {
       title: () => {
@@ -220,6 +225,7 @@ const ReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_gross_income)}</a>
         );
       },
+      sorter: (a, b) => a.total_gross_income - b.total_gross_income,
     },
     {
       title: () => {
@@ -254,6 +260,7 @@ const ReportManager = () => {
           </a>
         );
       },
+      sorter: (a, b) => a.total_collabotator_fee - b.total_collabotator_fee,
     },
     {
       title: () => {
@@ -288,6 +295,7 @@ const ReportManager = () => {
           <a className="text-money-blue">{formatMoney(data?.total_income)}</a>
         );
       },
+      sorter: (a, b) => a.total_income - b.total_income,
     },
     {
       title: () => {
@@ -320,6 +328,7 @@ const ReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_discount)}</a>
         );
       },
+      sorter: (a, b) => a.total_discount - b.total_discount,
     },
     {
       title: () => {
@@ -355,6 +364,7 @@ const ReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_net_income)}</a>
         );
       },
+      sorter: (a, b) => a.total_net_income - b.total_net_income,
     },
     {
       title: () => {
@@ -410,6 +420,7 @@ const ReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_order_fee)}</a>
         );
       },
+      sorter: (a, b) => a.total_order_fee - b.total_order_fee,
     },
     {
       title: () => {
@@ -446,6 +457,8 @@ const ReportManager = () => {
           </a>
         );
       },
+      sorter: (a, b) =>
+        a.total_net_income_business - b.total_net_income_business,
     },
     {
       title: () => {

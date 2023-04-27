@@ -115,6 +115,7 @@ const FinanceCollaborator = () => {
         <a className="text-money-finance">{formatMoney(data?.money)}</a>
       ),
       align: "center",
+      sorter: (a, b) => a.money - b.money,
     },
     {
       title: "Nội dung",
@@ -183,11 +184,11 @@ const FinanceCollaborator = () => {
     <>
       <div className="div-head-finance">
         <div className="div-total-money">
-          <a className="title-total">Ví CTV</a>
+          <a className="title-total">Tổng ví CTV</a>
           <a className="text-money">{formatMoney(totalRemainder)}</a>
         </div>
         <div className="div-total-money">
-          <a className="title-total">Ví thưởng</a>
+          <a className="title-total">Tổng ví thưởng</a>
           <a className="text-money">{formatMoney(totalGiftRemainder)}</a>
         </div>
         <div className="div-total-money">

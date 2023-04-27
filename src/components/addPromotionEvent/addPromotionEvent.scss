@@ -145,3 +145,93 @@
     }
   }
 }
+
+.div-loop-time {
+  display: flex;
+  flex-direction: column;
+
+  .div-body-loop {
+    display: flex;
+    flex-direction: column;
+
+    .div-body-loop-time {
+      display: flex;
+      flex-direction: column;
+      padding: 5px;
+      background-color: #ececec90;
+      border-radius: 8px;
+
+      .div-day-time {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .div-day {
+          display: flex;
+          border: 1px solid #d6d6d6;
+          padding: 5px;
+          border-radius: 20px;
+          width: 30px;
+          height: 30px;
+          align-items: center;
+          justify-content: center;
+          background-color: white;
+          .text-day {
+            font-family: "Roboto";
+            font-weight: 500;
+            font-size: 14px;
+            color: #000000;
+            text-decoration: none;
+          }
+        }
+
+        .div-day-select {
+          display: flex;
+          padding: 5px;
+          border-radius: 20px;
+          width: 30px;
+          height: 30px;
+          align-items: center;
+          justify-content: center;
+          background-color: aqua;
+
+          .text-day {
+            font-family: "Roboto";
+            font-weight: 500;
+            font-size: 14px;
+            color: #000000;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+.btn-add-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: #000000;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #d7d7d7;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+.btn-close-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: #000000;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #d7d7d7;
+  border-radius: 30px;
+  align-self: flex-end;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}

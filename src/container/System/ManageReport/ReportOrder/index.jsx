@@ -127,7 +127,7 @@ const ReportOrder = () => {
         );
       },
       render: (data) => {
-        return <a className="text-money">{data?.totalItem}</a>;
+        return <a className="text-money">{data?.total_item}</a>;
       },
       align: "center",
       width: "5%",
@@ -154,6 +154,7 @@ const ReportOrder = () => {
         );
       },
       width: "8%",
+      sorter: (a, b) => a.total_gross_income - b.total_gross_income,
     },
     {
       title: () => {
@@ -189,6 +190,7 @@ const ReportOrder = () => {
         );
       },
       width: "10%",
+      sorter: (a, b) => a.total_collabotator_fee - b.total_collabotator_fee,
     },
     {
       title: () => {
@@ -224,6 +226,7 @@ const ReportOrder = () => {
         );
       },
       width: "8%",
+      sorter: (a, b) => a.total_income - b.total_income,
     },
     {
       title: () => {
@@ -257,6 +260,7 @@ const ReportOrder = () => {
         );
       },
       width: "8%",
+      sorter: (a, b) => a.total_discount - b.total_discount,
     },
     {
       title: () => {
@@ -293,6 +297,7 @@ const ReportOrder = () => {
         );
       },
       width: "11%",
+      sorter: (a, b) => a.total_net_income - b.total_net_income,
     },
     {
       title: () => {
@@ -349,6 +354,7 @@ const ReportOrder = () => {
         );
       },
       width: "10%",
+      sorter: (a, b) => a.total_order_fee - b.total_order_fee,
     },
     {
       title: () => {
@@ -386,6 +392,8 @@ const ReportOrder = () => {
         );
       },
       width: "8%",
+      sorter: (a, b) =>
+        a.total_net_income_business - b.total_net_income_business,
     },
     {
       title: () => {

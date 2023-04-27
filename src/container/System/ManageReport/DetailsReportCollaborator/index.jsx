@@ -12,11 +12,12 @@ import {
 import { formatMoney } from "../../../../helper/formatMoney";
 import { loadingAction } from "../../../../redux/actions/loading";
 import "./index.scss";
+import CustomDatePicker from "../../../../components/customDatePicker";
 const { RangePicker } = DatePicker;
 
 const DetailReportManager = () => {
   const { state } = useLocation();
-  const { id } = state || {};
+  const { id, dateStart, dateEnd } = state || {};
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,7 +32,7 @@ const DetailReportManager = () => {
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
-    getReportCollaboratorDetails(id, 0, 20)
+    getReportCollaboratorDetails(id, 0, 20, dateStart, dateEnd)
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
         setData(res?.data);
@@ -49,16 +50,27 @@ const DetailReportManager = () => {
       .catch((err) => {
         dispatch(loadingAction.loadingRequest(false));
       });
+    setStartDate(dateStart);
+    setEndDate(dateEnd);
   }, [id]);
 
   const columns = [
+    {
+      title: "STT",
+      render: (data, record, index) => <a className="text-stt">{index + 1}</a>,
+      align: "center",
+    },
     {
       title: "Ngày",
       render: (data) => {
         return (
           <div className="div-time-report">
-            <a>{moment(new Date(data?.date_work)).format("DD/MM/YYYY")} </a>
-            <a>{moment(new Date(data?.date_work)).format("HH:mm")} </a>
+            <a className="text-view-order">
+              {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}{" "}
+            </a>
+            <a className="text-view-order">
+              {moment(new Date(data?.date_work)).format("HH:mm")}{" "}
+            </a>
           </div>
         );
       },
@@ -294,7 +306,13 @@ const DetailReportManager = () => {
             setTotalFilter(res?.totalItem);
           })
           .catch((err) => console.log(err))
-      : getReportCollaborator(start > 0 ? start : 0, 20)
+      : getReportCollaboratorDetails(
+          id,
+          start > 0 ? start : 0,
+          20,
+          startDate,
+          endDate
+        )
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItem);
@@ -302,21 +320,14 @@ const DetailReportManager = () => {
           .catch((err) => console.log(err));
   };
 
-  const onChangeFilter = useCallback(
-    (start, end) => {
-      const dayStart = moment(start).startOf("date").toISOString();
-      const dayEnd = moment(end).endOf("date").toISOString();
-      filterReportCollaboratorDetails(id, 0, 20, dayStart, dayEnd)
-        .then((res) => {
-          setDataFilter(res?.data);
-          setTotalFilter(res?.totalItem);
-        })
-        .catch((err) => console.log(err));
-      setStartDate(dayStart);
-      setEndDate(dayEnd);
-    },
-    [id]
-  );
+  const onChangeFilter = useCallback(() => {
+    filterReportCollaboratorDetails(id, 0, 20, startDate, endDate)
+      .then((res) => {
+        setDataFilter(res?.data);
+        setTotalFilter(res?.totalItem);
+      })
+      .catch((err) => console.log(err));
+  }, [id, startDate, endDate]);
 
   return (
     <div>
@@ -345,12 +356,19 @@ const DetailReportManager = () => {
           </div>
         </div>
       </div>
-      <div className="mt-3">
-        <RangePicker
-          picker={"day"}
-          className="picker"
-          onChange={(e) => onChangeFilter(e[0]?.$d, e[1]?.$d)}
+      <div className="mt-3 div-date">
+        <CustomDatePicker
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          onClick={onChangeFilter}
+          onCancel={() => {}}
         />
+        {startDate && (
+          <a className="text-date">
+            {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+            {moment(endDate).utc().format("DD/MM/YYYY")}
+          </a>
+        )}
       </div>
       <div className="mt-3">
         <Table

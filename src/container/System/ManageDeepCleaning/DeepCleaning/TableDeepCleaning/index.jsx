@@ -169,6 +169,7 @@ const TableDeepCleaning = (props) => {
           </div>
         );
       },
+      sorter: (a, b) => a?.name_customer.localeCompare(b?.name_customer),
     },
     {
       title: "Nội dung",

@@ -61,7 +61,7 @@ function* handleRevenueCollaboratorSaga(action) {
     const response = yield call(
       getRevenueCollaboratorApi,
       action.payload.startDate,
-      action.payload.endState
+      action.payload.endDate
     );
 
     yield put(

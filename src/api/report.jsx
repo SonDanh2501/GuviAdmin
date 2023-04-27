@@ -23,9 +23,15 @@ export const searchReportCollaborator = (start, length, search) => {
   );
 };
 
-export const getReportCollaboratorDetails = (id, start, length) => {
+export const getReportCollaboratorDetails = (
+  id,
+  start,
+  length,
+  start_date,
+  end_date
+) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_collaborator/get_detail/${id}?start=${start}&length=${length}`
+    `/admin/report_mananger/report_collaborator/get_detail/${id}?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
   );
 };
 

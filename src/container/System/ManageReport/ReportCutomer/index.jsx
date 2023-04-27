@@ -57,10 +57,10 @@ const ReportCustomer = () => {
     getReportCustomerNewOld(
       0,
       20,
-      moment("2022-01-02").toISOString(),
-      moment(moment().endOf("month").toISOString())
+      moment(moment().startOf("year").toISOString())
         .add(7, "hours")
-        .toISOString()
+        .toISOString(),
+      moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
     )
       .then((res) => {
         setCustomerNew(res?.newCustomer?.totalItem);
@@ -83,13 +83,33 @@ const ReportCustomer = () => {
   }, []);
 
   const onChangeDay = () => {
+    setIsLoading(true);
     getReportCustomer(0, 20, startDate, endDate)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
         setTotalColumn(res?.total[0]);
+        setIsLoading(false);
       })
-      .catch((err) => {});
+
+      .catch((err) => {
+        setIsLoading(false);
+      });
+
+    getReportCustomerNewOld(0, 20, startDate, endDate)
+      .then((res) => {
+        setCustomerNew(res?.newCustomer?.totalItem);
+        setMoneyNew(res?.newCustomer?.totalMoney);
+        setDataNew(res?.newCustomer?.data);
+        setCustomerOld(res?.oldCustomer?.totalItem);
+        setMoneyOld(res?.oldCustomer?.totalMoney);
+        setDataOld(res?.oldCustomer?.data);
+        setIsLoading(false);
+      })
+
+      .catch((err) => {
+        setIsLoading(false);
+      });
   };
 
   const onChange = (page) => {
@@ -436,6 +456,20 @@ const ReportCustomer = () => {
 
   return (
     <div className="div-container-report-customer">
+      <div className="div-date">
+        <CustomDatePicker
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          onClick={onChangeDay}
+          onCancel={() => {}}
+        />
+        {startDate && (
+          <a className="text-date">
+            {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+            {moment(new Date(endDate)).format("DD/MM/YYYY")}
+          </a>
+        )}
+      </div>
       <div className="header-report-customer">
         <div className="div-tab-header-service">
           <div className="div-img">
@@ -556,20 +590,6 @@ const ReportCustomer = () => {
       </div> */}
 
       <div className="mt-5 div-table">
-        <div className="div-date">
-          <CustomDatePicker
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
-            onClick={onChangeDay}
-            onCancel={() => {}}
-          />
-          {startDate && (
-            <a className="text-date">
-              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-              {moment(new Date(endDate)).format("DD/MM/YYYY")}
-            </a>
-          )}
-        </div>
         <div className="mt-4">
           <Table
             columns={columns}

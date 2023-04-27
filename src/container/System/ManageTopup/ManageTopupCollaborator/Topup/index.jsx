@@ -216,6 +216,7 @@ const TopupCollaborator = ({ type }) => {
       render: (data) => (
         <a className="text-money-topup">{formatMoney(data?.money)}</a>
       ),
+      sorter: (a, b) => a.money - b.money,
     },
     {
       title: "Nạp/rút",

@@ -198,26 +198,7 @@ export default function ReasonManage() {
               </Col>
             </Row>
           </CardHeader>
-          {/* <Table
-            className="align-items-center table-flush"
-            responsive={true}
-            hover={true}
-          >
-            <thead>
-              <tr>
-                <th>Lý do huỷ việc</th>
-                <th>Mô tả</th>
-                <th>Hình thức phạt (phạt tiền hoặc khoá app)</th>
-                <th>Phạt tiền / Thời gian khoá app</th>
-                <th>Đối tượng áp dụng</th>
-                <th>Ghi chú</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {reason && reason.map((e) => <TableManageReason data={e} />)}
-            </tbody>
-          </Table> */}
+
           <Table
             columns={columns}
             dataSource={reason}

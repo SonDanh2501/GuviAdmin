@@ -9,7 +9,7 @@ import "./index.scss";
 const { RangePicker } = DatePicker;
 
 const CustomDatePicker = (props) => {
-  const { setStartDate, setEndDate, onClick, onCancel } = props;
+  const { setStartDate, setEndDate, onClick, onCancel, btnCustomer } = props;
   const [open, setOpen] = useState(false);
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
