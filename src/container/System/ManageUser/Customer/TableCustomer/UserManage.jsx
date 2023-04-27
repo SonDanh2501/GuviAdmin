@@ -198,7 +198,6 @@ export default function UserManage(props) {
           },
           {
             title: "Khách hàng",
-
             render: (data) => {
               return (
                 <div
@@ -208,14 +207,11 @@ export default function UserManage(props) {
                     })
                   }
                 >
-                  {/* <img
-              className="img_customer"
-              src={data?.avatar ? data?.avatar : user}
-            /> */}
                   <a className="text-name-customer"> {data?.full_name}</a>
                 </div>
               );
             },
+            sorter: true,
           },
           {
             title: "Số điện thoại",
@@ -346,7 +342,6 @@ export default function UserManage(props) {
       : [
           {
             title: "Mã",
-
             render: (data) => {
               return (
                 <div
@@ -381,6 +376,7 @@ export default function UserManage(props) {
                 </div>
               );
             },
+            sorter: (a, b) => a.full_name.localeCompare(b.full_name),
           },
           {
             title: "Số điện thoại",

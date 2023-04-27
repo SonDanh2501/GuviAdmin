@@ -1,4 +1,4 @@
-import { Checkbox, List, Select } from "antd";
+import { Checkbox, List, Select, TimePicker } from "antd";
 import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +13,7 @@ import {
   Row,
 } from "reactstrap";
 import { fetchCustomers, searchCustomers } from "../../api/customer";
-import { DATA_PAYMENT } from "../../api/fakeData";
+import { DATA_PAYMENT, date } from "../../api/fakeData";
 import { postFile } from "../../api/file";
 import { createPromotion, getGroupCustomerApi } from "../../api/promotion";
 import resizeFile from "../../helper/resizer";
@@ -26,6 +26,9 @@ import CustomButton from "../customButton/customButton";
 import { createPushNotification } from "../../api/notification";
 import CustomTextEditor from "../customTextEdittor";
 import "./addPromotionEvent.scss";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
 
 const AddPromotionEvent = ({ idService, tab }) => {
   const [state, setState] = useState(false);
@@ -69,6 +72,15 @@ const AddPromotionEvent = ({ idService, tab }) => {
   const [name, setName] = useState("");
   const [isDateSchedule, setIsDateSchedule] = useState(true);
   const [dateSchedule, setDateSchedule] = useState("");
+  const [isApplyTime, setIsApplyTime] = useState(false);
+  const [timeApply, setTimeApply] = useState([
+    {
+      day_local: 0,
+      start_time_local: "",
+      end_time_local: "",
+      timezone: "Asia/Ho_Chi_Minh",
+    },
+  ]);
 
   const options = [];
   const optionsCustomer = [];
@@ -207,6 +219,41 @@ const AddPromotionEvent = ({ idService, tab }) => {
     setListCustomers(newArray);
   };
 
+  const addTimeApply = () => {
+    setTimeApply((time) => [
+      ...time,
+      {
+        day_local: 0,
+        start_time_local: "",
+        end_time_local: "",
+        timezone: "Asia/Ho_Chi_Minh",
+      },
+    ]);
+  };
+
+  const deleteTimeApply = (index) => {
+    timeApply.splice(index, 1);
+    setTimeApply([...timeApply]);
+  };
+
+  const changeDayApply = (value, index) => {
+    const arr = [...timeApply];
+    timeApply[index].day_local = value;
+    setTimeApply(arr);
+  };
+
+  const changeTimeStartApply = (value, index) => {
+    const arr = [...timeApply];
+    timeApply[index].start_time_local = value;
+    setTimeApply(arr);
+  };
+
+  const changeTimeEndApply = (value, index) => {
+    const arr = [...timeApply];
+    timeApply[index].end_time_local = value;
+    setTimeApply(arr);
+  };
+
   const onCreatePromotion = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
     createPromotion({
@@ -251,6 +298,8 @@ const AddPromotionEvent = ({ idService, tab }) => {
       position: position,
       is_payment_method: isPaymentMethod,
       payment_method: paymentMethod,
+      is_loop: isApplyTime,
+      day_loop: isApplyTime ? timeApply : [],
     })
       .then((res) => {
         if (isSendNotification) {
@@ -320,6 +369,8 @@ const AddPromotionEvent = ({ idService, tab }) => {
     descriptionNoti,
     isDateSchedule,
     dateSchedule,
+    isApplyTime,
+    timeApply,
   ]);
 
   return (
@@ -695,9 +746,7 @@ const AddPromotionEvent = ({ idService, tab }) => {
                   </div>
                   <div>
                     <FormGroup check inline>
-                      <Label check className="text-first">
-                        12. Gửi thông báo
-                      </Label>
+                      <h5 className="mt-2">12. Gửi thông báo</h5>
                       <Input
                         type="checkbox"
                         className="ml-2"
@@ -742,6 +791,80 @@ const AddPromotionEvent = ({ idService, tab }) => {
                               onChange={(e) => setDateSchedule(e.target.value)}
                             />
                           )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="div-loop-time">
+                    <FormGroup check inline>
+                      <h5 className="mt-2">13. Thời gian áp dụng</h5>
+                      <Input
+                        type="checkbox"
+                        className="ml-2"
+                        defaultChecked={isApplyTime}
+                        onClick={() => setIsApplyTime(!isApplyTime)}
+                      />
+                    </FormGroup>
+
+                    {isApplyTime && (
+                      <div className="mb-3">
+                        {timeApply.map((item, index) => {
+                          return (
+                            <div key={index} className="div-body-loop">
+                              {index !== 0 && (
+                                <div
+                                  className="btn-close-day"
+                                  onClick={() => deleteTimeApply(index)}
+                                >
+                                  <i class="uil uil-multiply"></i>
+                                </div>
+                              )}
+                              <div className="div-body-loop-time">
+                                <div className="div-day-time">
+                                  {date.map((it, i) => {
+                                    return (
+                                      <div
+                                        key={i}
+                                        className={
+                                          item.day_local === it.value
+                                            ? "div-day-select"
+                                            : "div-day"
+                                        }
+                                        onClick={() =>
+                                          changeDayApply(it.value, index)
+                                        }
+                                      >
+                                        <a className="text-day">{it?.title}</a>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                                <a>Thời gian bắt đầu</a>
+                                <TimePicker
+                                  defaultOpenValue={dayjs(
+                                    "00:00:00",
+                                    "HH:mm:ss"
+                                  )}
+                                  onChange={(time, timeString) =>
+                                    changeTimeStartApply(timeString, index)
+                                  }
+                                />
+                                <a>Thời gian kết thúc</a>
+                                <TimePicker
+                                  defaultOpenValue={dayjs(
+                                    "00:00:00",
+                                    "HH:mm:ss"
+                                  )}
+                                  onChange={(time, timeString) =>
+                                    changeTimeEndApply(timeString, index)
+                                  }
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+                        <div className="btn-add-day" onClick={addTimeApply}>
+                          <i class="uil uil-plus"></i>
                         </div>
                       </div>
                     )}

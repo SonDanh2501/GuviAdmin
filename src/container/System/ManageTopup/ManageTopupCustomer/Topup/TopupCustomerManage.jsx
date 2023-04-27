@@ -209,6 +209,7 @@ export default function TopupCustomer() {
       render: (data) => (
         <a className="text-money-customer-topup">{formatMoney(data?.money)}</a>
       ),
+      sorter: (a, b) => a.money - b.money,
     },
     // {
     //   title: "Nạp/rút",

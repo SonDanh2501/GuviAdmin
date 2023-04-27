@@ -1,0 +1,29 @@
+.div-tab-expired {
+  display: flex;
+  flex-direction: row;
+
+  .div-item-tab {
+    padding: 5px;
+
+    .text-tab {
+      color: rgb(174, 174, 174);
+      font-weight: 400;
+      font-size: 16px;
+      font-family: "Roboto", sans-serif;
+      text-decoration: none;
+    }
+  }
+
+  .div-item-tab-select {
+    padding: 5px;
+    border-bottom: 2px solid blue;
+
+    .text-tab {
+      color: rgb(0, 0, 0);
+      font-weight: 400;
+      font-size: 16px;
+      font-family: "Roboto", sans-serif;
+      text-decoration: none;
+    }
+  }
+}

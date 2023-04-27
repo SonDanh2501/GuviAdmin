@@ -36,6 +36,8 @@ export default function TopupManage() {
     );
   }, [dispatch]);
 
+  console.log(moment(new Date()).toISOString());
+
   const onChangeTab = (active) => {
     if (active === "2") {
       setType("top_up");

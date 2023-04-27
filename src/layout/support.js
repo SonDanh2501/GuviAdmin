@@ -12,6 +12,7 @@ import DetailsOrder from "../container/System/DetailsOrder";
 import ManageFeedback from "../container/System/ManageFeedback";
 import AddOrder from "../container/System/ManageOrder/DrawerAddOrder";
 import DetailsOrderSchedule from "../container/System/DetailsOrder/OrderScheduleDetails";
+import OrderExpired from "../container/System/ManageOrder/OrderExpired";
 
 const Support = () => {
   return (
@@ -30,6 +31,7 @@ const Support = () => {
         path="/group-order/manage-order/doing"
         element={<OrderDoingManage />}
       />
+      <Route path="/group-order/manage-order/done" element={<OrderExpired />} />
       <Route path="/profile-customer" element={<Profiles />} />
       <Route path="/system/deep-cleaning" element={<DeepCleaningManager />} />
       <Route path="/system/user-manage" element={<ManageCustomer />} />

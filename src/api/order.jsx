@@ -6,6 +6,18 @@ export const getOrderApi = (start, length, status, kind) => {
   );
 };
 
+export const getOrderExpiredApi = (start, length, status) => {
+  return axiosClient.get(
+    `/admin/group-order-manager/get_list_group_order_expired?start=${start}&length=${length}&status=${status}`
+  );
+};
+
+export const searchOrderExpiredApi = (start, length, status, value) => {
+  return axiosClient.get(
+    `/admin/group-order-manager/get_list_group_order_expired?start=${start}&length=${length}&status=${status}&search=${value}`
+  );
+};
+
 export const filterOrderApi = (start, length, payload) => {
   return axiosClient.get(
     `/admin/order_manager/get_list?start=${start}&length=${length}&id_service=${payload}`

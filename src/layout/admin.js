@@ -35,6 +35,7 @@ import ChildPromotion from "../container/System/ManagePromotion/ChildPromotion";
 import PriceService from "../container/System/ManageService/PriceService";
 import AddGroupCustomer from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer/addGroupCustomer";
 import EditGroupCustomer from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer/editGroupCustomer";
+import OrderExpired from "../container/System/ManageOrder/OrderExpired";
 
 const Admin = () => {
   return (
@@ -109,6 +110,7 @@ const Admin = () => {
         path="/group-order/manage-order/doing"
         element={<OrderDoingManage />}
       />
+      <Route path="/group-order/manage-order/done" element={<OrderExpired />} />
 
       <Route path="/topup/manage-topup" element={<ManageTopup />} />
       <Route path="/finance/manage-finance" element={<ManageFinance />} />

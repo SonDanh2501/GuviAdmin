@@ -221,7 +221,8 @@ const ReportArea = () => {
         textAnchor={x > cx ? "start" : "end"}
         dominantBaseline="central"
       >
-        {city} ({percent} {"%"})
+        {percent > 1 ? city + " " + percent + " %" : ""}
+        {/* {city} ({percent} {"%"}) */}
       </text>
     );
   };

@@ -159,6 +159,7 @@ const TopupPoint = () => {
         return <a className="text-point">{data?.value}</a>;
       },
       align: "center",
+      sorter: (a, b) => a.value - b.value,
     },
     {
       title: "Loại điểm",

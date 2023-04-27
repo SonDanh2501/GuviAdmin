@@ -185,6 +185,7 @@ const ReviewCollaborator = () => {
           {data?.star} <i class="uil uil-star icon-star"></i>
         </a>
       ),
+      sorter: (a, b) => a.star - b.star,
     },
     {
       title: "Nội dung",

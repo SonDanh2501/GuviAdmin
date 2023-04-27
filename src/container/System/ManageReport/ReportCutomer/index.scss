@@ -8,6 +8,21 @@
     text-decoration: none;
   }
 
+  .div-date {
+    display: flex;
+    flex-direction: row;
+    width: 40%;
+    align-items: center;
+
+    .text-date {
+      color: #000000;
+      font-family: "Roboto";
+      font-style: normal;
+      font-size: 12px;
+      margin-left: 10px;
+    }
+  }
+
   .header-report-customer {
     display: flex;
     flex-direction: row;

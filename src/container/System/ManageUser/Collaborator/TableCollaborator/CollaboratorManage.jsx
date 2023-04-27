@@ -355,6 +355,7 @@ export default function CollaboratorManage(props) {
         );
       },
       width: "25%",
+      sorter: (a, b) => a.full_name.localeCompare(b.full_name),
     },
     {
       title: "Ngày tạo",

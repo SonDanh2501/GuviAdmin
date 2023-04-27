@@ -354,6 +354,7 @@ export default function PromotionManage({
                 </a>
               );
             },
+            sorter: (a, b) => a.total_used_promotion - b.total_used_promotion,
           },
           {
             title: "Vị trí",
@@ -361,6 +362,7 @@ export default function PromotionManage({
             render: (data) => (
               <a className="text-title-promotion">{data?.position}</a>
             ),
+            sorter: (a, b) => a.position - b.position,
           },
           {
             title: "Mã code",
@@ -516,6 +518,7 @@ export default function PromotionManage({
                 </a>
               );
             },
+            sorter: (a, b) => a.total_used_promotion - b.total_used_promotion,
           },
           {
             title: "Vị trí",
@@ -523,6 +526,7 @@ export default function PromotionManage({
             render: (data) => (
               <a className="text-title-promotion">{data?.position}</a>
             ),
+            sorter: (a, b) => a.position - b.position,
           },
           {
             title: "Hạn",

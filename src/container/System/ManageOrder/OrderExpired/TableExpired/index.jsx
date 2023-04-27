@@ -1,44 +1,38 @@
-import React, { useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getOrder, searchOrder } from "../../../../redux/actions/order";
-
+import { Dropdown, Input, Pagination, Space, Table } from "antd";
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import {
-  Dropdown,
-  Empty,
-  Input,
-  Pagination,
-  Skeleton,
-  Space,
-  Table,
-} from "antd";
 import moment from "moment";
-import vi from "moment/locale/vi";
+import "./index.scss";
+import { formatDayVN } from "../../../../../helper/formatDayVN";
 import { useNavigate } from "react-router-dom";
-import "./OrderManage.scss";
-import { deleteOrderApi, searchOrderApi } from "../../../../api/order";
-import EditOrder from "../DrawerEditOrder";
-import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { loadingAction } from "../../../../redux/actions/loading";
-import { errorNotify } from "../../../../helper/toast";
-import { getUser } from "../../../../redux/selectors/auth";
+import { useCallback, useEffect, useState } from "react";
+import {
+  getOrderExpiredApi,
+  searchOrderExpiredApi,
+} from "../../../../../api/order";
+import { useSelector } from "react-redux";
+import { getUser } from "../../../../../redux/selectors/auth";
 import { SearchOutlined } from "@ant-design/icons";
 import _debounce from "lodash/debounce";
 
-export default function OrderManage(props) {
-  const { data, total, status, kind } = props;
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+const TableExpired = ({ status }) => {
   const [item, setItem] = useState([]);
+  const [data, setData] = useState([]);
+  const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [modal, setModal] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const user = useSelector(getUser);
   const [dataSearch, setDataSearch] = useState([]);
   const [totalSearch, setTotalSearch] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
-  const toggle = () => setModal(!modal);
+  const user = useSelector(getUser);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getOrderExpiredApi(0, 20, status)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  }, [status]);
 
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work_schedule[0].date)).format(
@@ -51,42 +45,9 @@ export default function OrderManage(props) {
     return start + " - " + timeEnd;
   };
 
-  const deleteOrder = (id) => {
-    dispatch(loadingAction.loadingRequest(true));
-    deleteOrderApi(id)
-      .then((res) => {
-        dispatch(
-          getOrder.getOrderRequest({
-            start: 0,
-            length: 20,
-            status: status,
-            kind: kind,
-          })
-        );
-        setModal(false);
-        dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
-        });
-        setModal(false);
-        dispatch(loadingAction.loadingRequest(false));
-      });
-  };
-
   const items = [
     {
       key: "1",
-      label:
-        item?.status === "pending" ? (
-          <AddCollaboratorOrder idOrder={item?._id} />
-        ) : (
-          <></>
-        ),
-    },
-    {
-      key: "2",
       label: (
         <a
           onClick={() =>
@@ -99,19 +60,14 @@ export default function OrderManage(props) {
         </a>
       ),
     },
-    {
-      key: "3",
-      label:
-        user?.role === "admin" &&
-        (item?.status === "cancel" || item?.status === "done" ? (
-          <a onClick={toggle}>Xoá</a>
-        ) : (
-          ""
-        )),
-    },
   ];
 
   const columns = [
+    {
+      title: "STT",
+      render: (data, record, index) => <a>{index + 1}</a>,
+      align: "center",
+    },
     {
       title: "Mã",
       render: (data) => {
@@ -133,7 +89,7 @@ export default function OrderManage(props) {
       title: "Ngày tạo",
       render: (data) => {
         return (
-          <div className="div-create-order">
+          <div className="div-create">
             <a className="text-create">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
             </a>
@@ -146,7 +102,6 @@ export default function OrderManage(props) {
     },
     {
       title: "Tên khách hàng",
-      // dataIndex: ["id_customer", "full_name"],
       render: (data) => {
         return (
           <div
@@ -171,14 +126,14 @@ export default function OrderManage(props) {
       title: "Dịch vụ",
       render: (data) => {
         return (
-          <div className="div-service-order">
+          <div className="div-service">
             <a className="text-service">
               {data?.type === "schedule"
-                ? "Cố định"
+                ? "Giúp việc cố định"
                 : data?.type === "loop" && !data?.is_auto_order
-                ? "Theo giờ"
+                ? "Giúp việc theo giờ"
                 : data?.type === "loop" && data?.is_auto_order
-                ? "Lặp lại"
+                ? "Lặp lại hàng tuần"
                 : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>
@@ -190,16 +145,19 @@ export default function OrderManage(props) {
       title: "Ngày làm",
       render: (data) => {
         return (
-          <div className="div-worktime-order">
+          <div className="div-worktime">
             <a className="text-worktime">
-              {moment(new Date(data?.date_work_schedule[0].date)).format(
+              {" "}
+              {moment(new Date(data.date_work_schedule[0].date)).format(
                 "DD/MM/YYYY"
               )}
             </a>
             <a className="text-worktime">
-              {moment(new Date(data?.date_work_schedule[0].date))
-                .locale("vi", vi)
-                .format("dddd")}
+              {formatDayVN(
+                moment(new Date(data.date_work_schedule[0].date)).format(
+                  "DD/MM/YYYY"
+                )
+              )}
             </a>
           </div>
         );
@@ -207,9 +165,7 @@ export default function OrderManage(props) {
     },
     {
       title: "Địa điểm",
-      render: (data) => {
-        return <a className="text-address-order">{data?.address}</a>;
-      },
+      render: (data) => <p className="text-address">{data?.address}</p>,
     },
     {
       title: "Cộng tác viên",
@@ -246,14 +202,14 @@ export default function OrderManage(props) {
         <a
           className={
             data?.status === "pending"
-              ? "text-pen-order"
+              ? "text-pending"
               : data?.status === "confirm"
-              ? "text-confirm-order"
+              ? "text-confirm"
               : data?.status === "doing"
-              ? "text-doing-order"
+              ? "text-doing"
               : data?.status === "done"
-              ? "text-done-order"
-              : "text-cancel-order"
+              ? "text-done"
+              : "text-cancel"
           }
         >
           {data?.status === "pending"
@@ -269,20 +225,6 @@ export default function OrderManage(props) {
       ),
     },
     {
-      title: "Thanh toán",
-      render: (data) => {
-        return (
-          <a className="text-payment-method">
-            {data?.payment_method === "cash"
-              ? "Tiền mặt"
-              : data?.payment_method === "point"
-              ? "Ví G-pay"
-              : ""}
-          </a>
-        );
-      },
-    },
-    {
       key: "action",
       render: (data) => (
         <Space size="middle">
@@ -291,7 +233,6 @@ export default function OrderManage(props) {
               items,
             }}
             placement="bottom"
-            trigger={["click"]}
           >
             <div>
               <UilEllipsisV />
@@ -308,37 +249,36 @@ export default function OrderManage(props) {
       dataSearch.length > 0
         ? page * dataSearch.length - dataSearch.length
         : page * data.length - data.length;
-    dataSearch.length > 0
-      ? searchOrderApi(0, 20, status, valueSearch, kind).then((res) => {
+    dataSearch?.length > 0
+      ? searchOrderExpiredApi(start, 20, status, valueSearch).then((res) => {
           setDataSearch(res?.data);
           setTotalSearch(res?.totalItem);
         })
-      : dispatch(
-          getOrder.getOrderRequest({
-            start: start > 0 ? start : 0,
-            length: 20,
-            status: status,
-            kind: kind,
+      : getOrderExpiredApi(start, 20, status)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
           })
-        );
+          .catch((err) => {});
   };
 
   const handleSearch = useCallback(
     _debounce((value) => {
-      searchOrderApi(0, 20, status, value, kind).then((res) => {
+      searchOrderExpiredApi(0, 20, status, value).then((res) => {
         setDataSearch(res?.data);
         setTotalSearch(res?.totalItem);
       });
     }, 1000),
-    [status, kind]
+    [status]
   );
+
   return (
-    <React.Fragment>
+    <div>
       <div>
         <Input
           placeholder="Tìm kiếm"
           type="text"
-          className="field-search"
+          className="input-search-expired"
           value={valueSearch}
           prefix={<SearchOutlined />}
           onChange={(e) => {
@@ -347,60 +287,25 @@ export default function OrderManage(props) {
           }}
         />
       </div>
-      <div className="mt-3">
-        <Table
-          columns={columns}
-          dataSource={dataSearch?.length > 0 ? dataSearch : data}
-          pagination={false}
-          rowKey={(record) => record._id}
-          rowSelection={{
-            selectedRowKeys,
-            onChange: (selectedRowKeys, selectedRows) => {
-              setSelectedRowKeys(selectedRowKeys);
-            },
-          }}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                setItem(record);
-              },
-            };
-          }}
-        />
-
-        <div className="mt-2 div-pagination p-2">
-          <a>Tổng: {totalSearch > 0 ? totalSearch : total}</a>
-          <div>
-            <Pagination
-              current={currentPage}
-              onChange={onChange}
-              total={totalSearch > 0 ? totalSearch : total}
-              showSizeChanger={false}
-              pageSize={20}
-            />
-          </div>
-        </div>
-
+      <Table
+        columns={columns}
+        dataSource={dataSearch.length > 0 ? dataSearch : data}
+        pagination={false}
+      />
+      <div className="mt-2 div-pagination p-2">
+        <a>Tổng: {totalSearch > 0 ? totalSearch : total}</a>
         <div>
-          <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Xóa đơn hàng</ModalHeader>
-            <ModalBody>
-              <a>
-                Bạn có chắc muốn xóa đơn hàng{" "}
-                <a className="text-name-modal">{item?.id_view}</a> này không?
-              </a>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={() => deleteOrder(item?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggle}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+          <Pagination
+            current={currentPage}
+            onChange={onChange}
+            total={totalSearch > 0 ? totalSearch : total}
+            showSizeChanger={false}
+            pageSize={20}
+          />
         </div>
       </div>
-    </React.Fragment>
+    </div>
   );
-}
+};
+
+export default TableExpired;

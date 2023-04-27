@@ -290,6 +290,7 @@ export default function OrderDoingManage() {
                 onChange={onChange}
                 total={totalSearch > 0 ? totalSearch : total}
                 showSizeChanger={false}
+                pageSize={20}
               />
             </div>
           </div>

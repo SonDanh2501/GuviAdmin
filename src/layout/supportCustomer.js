@@ -9,6 +9,7 @@ import ManageCustomer from "../container/System/ManageUser/Customer";
 import Profiles from "../container/System/ManageUser/Customer/Profiles";
 import AddOrder from "../container/System/ManageOrder/DrawerAddOrder";
 import DetailsOrderSchedule from "../container/System/DetailsOrder/OrderScheduleDetails";
+import OrderExpired from "../container/System/ManageOrder/OrderExpired";
 
 const SupportCustomer = () => {
   return (
@@ -28,6 +29,7 @@ const SupportCustomer = () => {
         path="/group-order/manage-order/doing"
         element={<OrderDoingManage />}
       />
+      <Route path="/group-order/manage-order/done" element={<OrderExpired />} />
       <Route path="/system/deep-cleaning" element={<DeepCleaningManager />} />
       <Route path="/details-order" element={<DetailsOrder />} />
       <Route path="/system/user-manage" element={<ManageCustomer />} />
