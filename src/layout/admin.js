@@ -36,6 +36,7 @@ import PriceService from "../container/System/ManageService/PriceService";
 import AddGroupCustomer from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer/addGroupCustomer";
 import EditGroupCustomer from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer/editGroupCustomer";
 import OrderExpired from "../container/System/ManageOrder/OrderExpired";
+import CreateQuizz from "../container/System/ManageConfiguration/ScreenConfiguration/CreateQuizz";
 
 const Admin = () => {
   return (
@@ -171,6 +172,10 @@ const Admin = () => {
       <Route
         path="/adminManage/manage-configuration/manage-group-customer/details-edit"
         element={<EditGroupCustomer />}
+      />
+      <Route
+        path="/adminManage/manage-configuration/create_quizz"
+        element={<CreateQuizz />}
       />
     </Routes>
   );

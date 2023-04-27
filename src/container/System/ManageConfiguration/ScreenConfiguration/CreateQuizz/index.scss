@@ -1,0 +1,17 @@
+.div-container-question {
+  display: flex;
+  flex-direction: column;
+  .title-quizz {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    color: #000000;
+  }
+
+  .btn-add-question {
+    width: 150px;
+    height: 35px;
+    margin-top: 50px;
+  }
+}

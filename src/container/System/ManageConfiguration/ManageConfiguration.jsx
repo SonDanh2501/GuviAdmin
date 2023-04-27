@@ -32,6 +32,9 @@ const ManageConfiguration = () => {
       case "create_account":
         navigate("/adminManage/manage-configuration/create-account");
         break;
+      case "create_quizz":
+        navigate("/adminManage/manage-configuration/create_quizz");
+        break;
       default:
         break;
     }
@@ -88,5 +91,10 @@ const DATA = [
     id: 6,
     title: "Tạo tài khoản",
     value: "create_account",
+  },
+  {
+    id: 7,
+    title: "Tạo bộ câu hỏi",
+    value: "create_quizz",
   },
 ];
