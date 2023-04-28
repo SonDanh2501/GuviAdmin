@@ -10,7 +10,10 @@ import _debounce from "lodash/debounce";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { searchCollaborators } from "../../../../../api/collaborator";
+import {
+  searchCollaborators,
+  searchCollaboratorsCreateOrder,
+} from "../../../../../api/collaborator";
 import {
   DATA_DATE,
   DATA_MONTH,
@@ -532,7 +535,7 @@ const CleaningSchedule = (props) => {
     _debounce((value) => {
       setNameCollaborator(value);
       if (value) {
-        searchCollaborators(0, 100, "", value)
+        searchCollaboratorsCreateOrder(id, value)
           .then((res) => {
             if (value === "") {
               setDataCollaborator([]);
@@ -548,7 +551,7 @@ const CleaningSchedule = (props) => {
       }
       setIdCollaborator("");
     }, 500),
-    []
+    [id]
   );
 
   return (
@@ -771,9 +774,16 @@ const CleaningSchedule = (props) => {
             <List type={"unstyled"} className="list-item-add-order">
               {dataCollaborator?.map((item, index) => {
                 return (
-                  <div
-                    className="div-item-add-order"
+                  <button
+                    className={
+                      item?.is_block
+                        ? "div-item-add-order-block"
+                        : item?.is_favorite
+                        ? "div-item-add-order-favorite"
+                        : "div-item-add-order"
+                    }
                     key={index}
+                    disabled={item?.is_block ? true : false}
                     onClick={(e) => {
                       setIdCollaborator(item?._id);
                       setNameCollaborator(item?.full_name);
@@ -781,11 +791,18 @@ const CleaningSchedule = (props) => {
                       setErrorCollaborator("");
                     }}
                   >
-                    <img src={item?.avatar} className="img-collaborator" />
-                    <a>
-                      {item?.full_name} - {item?.phone} - {item?.id_view}
-                    </a>
-                  </div>
+                    <div>
+                      <img src={item?.avatar} className="img-collaborator" />
+                      <a>
+                        {item?.full_name} - {item?.phone} - {item?.id_view}
+                      </a>
+                    </div>
+                    {item?.is_favorite ? (
+                      <i class="uil uil-heart icon-heart"></i>
+                    ) : (
+                      <></>
+                    )}
+                  </button>
                 );
               })}
             </List>

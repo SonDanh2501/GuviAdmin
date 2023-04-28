@@ -1,13 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, DatePicker, Drawer, Input, List } from "antd";
 import "./index.scss";
-import { searchCollaborators } from "../../../../api/collaborator";
+import {
+  searchCollaborators,
+  searchCollaboratorsCreateOrder,
+} from "../../../../api/collaborator";
 import { errorNotify } from "../../../../helper/toast";
 import { addCollaboratorToOrderApi } from "../../../../api/order";
 import { useDispatch } from "react-redux";
 import { loadingAction } from "../../../../redux/actions/loading";
 import _debounce from "lodash/debounce";
-const AddCollaboratorOrder = ({ idOrder }) => {
+const AddCollaboratorOrder = ({ idOrder, idCustomer }) => {
   const [open, setOpen] = useState(false);
   const [dataFilter, setDataFilter] = useState([]);
   const [name, setName] = useState("");
@@ -28,7 +31,7 @@ const AddCollaboratorOrder = ({ idOrder }) => {
     _debounce((value) => {
       setName(value);
       if (value) {
-        searchCollaborators(0, 10, "all", value)
+        searchCollaboratorsCreateOrder(idCustomer, value)
           .then((res) => {
             setDataFilter(res.data);
           })
@@ -90,19 +93,34 @@ const AddCollaboratorOrder = ({ idOrder }) => {
               <List type={"unstyled"} className="list-item">
                 {dataFilter?.map((item, index) => {
                   return (
-                    <div
+                    <button
                       key={index}
+                      disabled={item?.is_block ? true : false}
+                      className={
+                        item?.is_block
+                          ? "div-item-add-order-block"
+                          : item?.is_favorite
+                          ? "div-item-add-order-favorite"
+                          : "div-item-add-order"
+                      }
                       onClick={(e) => {
                         setId(item?._id);
                         setName(item?.full_name);
                         setDataFilter([]);
                       }}
                     >
-                      <a>
-                        {" "}
-                        {item?.full_name} - {item?.phone} - {item?.id_view}
-                      </a>
-                    </div>
+                      <div>
+                        <img src={item?.avatar} className="img-collaborator" />
+                        <a>
+                          {item?.full_name} - {item?.phone} - {item?.id_view}
+                        </a>
+                      </div>
+                      {item?.is_favorite ? (
+                        <i class="uil uil-heart icon-heart"></i>
+                      ) : (
+                        <></>
+                      )}
+                    </button>
                   );
                 })}
               </List>

@@ -231,6 +231,40 @@
     border-radius: 15px;
     padding: 20px;
 
+    .div-tab-customer-report {
+      display: flex;
+      flex-direction: row;
+
+      .div-tab {
+        padding: 5px;
+        margin-right: 10px;
+
+        .title-tab {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          color: #b3b3b3;
+          text-decoration: none;
+        }
+      }
+
+      .div-tab-select {
+        padding: 5px;
+        margin-right: 10px;
+        border-bottom: 2px solid blue;
+
+        .title-tab {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          color: #000000;
+          text-decoration: none;
+        }
+      }
+    }
+
     .div-header-table {
       display: flex;
       flex-direction: row;
@@ -239,7 +273,6 @@
         font-style: normal;
         font-weight: 700;
         font-size: 16px;
-        line-height: 28px;
         color: #11263c;
         margin-right: 10px;
       }

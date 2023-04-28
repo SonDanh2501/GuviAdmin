@@ -94,7 +94,7 @@ const DATA = [
   },
   {
     id: 7,
-    title: "Tạo bộ câu hỏi",
+    title: "Tạo câu hỏi cho CTV",
     value: "create_quizz",
   },
 ];

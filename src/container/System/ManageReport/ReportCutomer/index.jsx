@@ -32,6 +32,7 @@ const ReportCustomer = () => {
   const [moneyOld, setMoneyOld] = useState(0);
   const [dataNew, setDataNew] = useState([]);
   const [dataOld, setDataOld] = useState([]);
+  const [type, setType] = useState("new");
   const [isLoading, setIsLoading] = useState(false);
 
   const dataChart = [];
@@ -39,21 +40,6 @@ const ReportCustomer = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getReportCustomer(
-      0,
-      20,
-      moment(moment().startOf("year").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
-    )
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-        setTotalColumn(res?.total[0]);
-      })
-      .catch((err) => {});
-
     getReportCustomerNewOld(
       0,
       20,
@@ -82,9 +68,29 @@ const ReportCustomer = () => {
     );
   }, []);
 
+  useEffect(() => {
+    getReportCustomer(
+      0,
+      20,
+      moment(moment().startOf("year").toISOString())
+        .add(7, "hours")
+        .toISOString(),
+      moment(moment().endOf("date").toISOString())
+        .add(7, "hours")
+        .toISOString(),
+      type
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+        setTotalColumn(res?.total[0]);
+      })
+      .catch((err) => {});
+  }, [type]);
+
   const onChangeDay = () => {
     setIsLoading(true);
-    getReportCustomer(0, 20, startDate, endDate)
+    getReportCustomer(0, 20, startDate, endDate, type)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -590,6 +596,19 @@ const ReportCustomer = () => {
       </div> */}
 
       <div className="mt-5 div-table">
+        <div className="div-tab-customer-report">
+          {TAB?.map((item, index) => {
+            return (
+              <div
+                key={index}
+                className={item?.value === type ? "div-tab-select" : "div-tab"}
+                onClick={() => setType(item?.value)}
+              >
+                <a className="title-tab">{item?.title}</a>
+              </div>
+            );
+          })}
+        </div>
         <div className="mt-4">
           <Table
             columns={columns}
@@ -631,3 +650,14 @@ const ReportCustomer = () => {
   );
 };
 export default ReportCustomer;
+
+const TAB = [
+  {
+    title: "Khách hàng mới",
+    value: "new",
+  },
+  {
+    title: "Khách hàng cũ",
+    value: "old",
+  },
+];

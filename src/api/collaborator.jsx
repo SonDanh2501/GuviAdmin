@@ -18,6 +18,12 @@ export const searchCollaborators = (start, length, type, payload) => {
   );
 };
 
+export const searchCollaboratorsCreateOrder = (id, payload) => {
+  return axiosClient.get(
+    `/admin/collaborator_manager/get_collaborator_block_or_favorite/${id}?search=${payload}`
+  );
+};
+
 export const updateCollaborator = (id, payload) => {
   return axiosClient.post(
     `/admin/collaborator_manager/edit_item/${id}`,

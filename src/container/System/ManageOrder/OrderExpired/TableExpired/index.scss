@@ -1,4 +1,4 @@
-.div-service {
+.div-service-expired {
   display: flex;
   flex-direction: column;
 
@@ -6,8 +6,7 @@
     font-family: "Roboto";
     font-style: normal;
     font-weight: 500;
-    font-size: 14px;
-    line-height: 16px;
+    font-size: 12px;
     color: black;
   }
 }
@@ -34,24 +33,18 @@
     font-family: "Roboto";
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;
-
+    font-size: 12px;
     color: black;
   }
 }
 
-.text-address {
+.text-address-expired {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 16px;
+  font-size: 12px;
   color: black;
   width: 200px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 .text-collaborator {
   font-family: "Roboto";

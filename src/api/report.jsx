@@ -106,9 +106,15 @@ export const getTopCustomerInviteTime = (start_date, end_date, type) => {
   );
 };
 
-export const getReportCustomer = (start, length, start_date, end_date) => {
+export const getReportCustomer = (
+  start,
+  length,
+  start_date,
+  end_date,
+  type
+) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_customer?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
+    `/admin/report_mananger/report_customer_old_new?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&type=${type}`
   );
 };
 

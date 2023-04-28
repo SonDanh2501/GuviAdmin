@@ -705,6 +705,11 @@ export default function Home() {
                           item?.id_collaborator?._id,
                           item?.id_collaborator?.full_name
                         )
+                      : item?.id_promotion
+                      ? item?.title_admin.replace(
+                          item?.id_promotion?._id,
+                          item?.id_promotion?.code
+                        )
                       : "";
 
                     const predicate = item?.id_address

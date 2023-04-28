@@ -43,6 +43,10 @@ const ChildPromotion = () => {
 
   const columns = [
     {
+      title: "STT",
+      render: (data, record, index) => <a>{index + 1}</a>,
+    },
+    {
       title: "Tên Promotion",
       render: (data) => {
         return (

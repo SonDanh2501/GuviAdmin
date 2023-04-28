@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { getUser } from "../../../../../redux/selectors/auth";
 import { SearchOutlined } from "@ant-design/icons";
 import _debounce from "lodash/debounce";
+import { vi } from "date-fns/locale";
 
 const TableExpired = ({ status }) => {
   const [item, setItem] = useState([]);
@@ -126,14 +127,14 @@ const TableExpired = ({ status }) => {
       title: "Dịch vụ",
       render: (data) => {
         return (
-          <div className="div-service">
+          <div className="div-service-expired">
             <a className="text-service">
               {data?.type === "schedule"
-                ? "Giúp việc cố định"
+                ? "Cố định"
                 : data?.type === "loop" && !data?.is_auto_order
-                ? "Giúp việc theo giờ"
+                ? "Theo giờ"
                 : data?.type === "loop" && data?.is_auto_order
-                ? "Lặp lại hàng tuần"
+                ? "Lặp lại"
                 : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>
@@ -153,11 +154,9 @@ const TableExpired = ({ status }) => {
               )}
             </a>
             <a className="text-worktime">
-              {formatDayVN(
-                moment(new Date(data.date_work_schedule[0].date)).format(
-                  "DD/MM/YYYY"
-                )
-              )}
+              {moment(new Date(data?.date_work_schedule[0].date))
+                .locale("vi", vi)
+                .format("dddd")}
             </a>
           </div>
         );
@@ -165,7 +164,7 @@ const TableExpired = ({ status }) => {
     },
     {
       title: "Địa điểm",
-      render: (data) => <p className="text-address">{data?.address}</p>,
+      render: (data) => <p className="text-address-expired">{data?.address}</p>,
     },
     {
       title: "Cộng tác viên",
@@ -291,6 +290,13 @@ const TableExpired = ({ status }) => {
         columns={columns}
         dataSource={dataSearch.length > 0 ? dataSearch : data}
         pagination={false}
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => {
+              setItem(record);
+            },
+          };
+        }}
       />
       <div className="mt-2 div-pagination p-2">
         <a>Tổng: {totalSearch > 0 ? totalSearch : total}</a>

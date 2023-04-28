@@ -513,7 +513,7 @@
   background-color: rgb(255, 255, 255);
   padding: 5px;
   position: absolute;
-  width: 42%;
+  width: 30%;
   border: 1px solid rgb(175, 175, 175);
   border-radius: 5px;
   z-index: 1000px;
@@ -522,14 +522,63 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    border-bottom: 1px solid #d6d6d6;
     margin-top: 5px;
+    border: none;
+    background-color: white;
+    width: 100%;
 
     .img-collaborator {
       width: 30px;
       height: 30px;
       border-radius: 4px;
       margin-right: 10px;
+    }
+  }
+
+  .div-item-add-order-block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #d6d6d6;
+    border-radius: 4px;
+    border: none;
+    width: 100%;
+    margin-top: 10px;
+    padding: 5px;
+
+    .img-collaborator {
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+  }
+
+  .div-item-add-order-favorite {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    border-radius: 4px;
+    border-bottom: 1px solid red;
+    border-top: 1px solid red;
+    border-left: none;
+    border-right: none;
+    width: 100%;
+    margin-top: 10px;
+    padding: 5px;
+
+    .img-collaborator {
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+
+    .icon-heart {
+      color: red;
+      margin-left: 50px;
     }
   }
 }
