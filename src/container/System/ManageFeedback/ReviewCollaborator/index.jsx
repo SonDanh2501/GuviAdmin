@@ -129,14 +129,20 @@ const ReviewCollaborator = () => {
       title: "Thời gian",
       render: (data) => {
         return (
-          <div className="div-create-review">
-            <a className="text-date-review">
-              {moment(new Date(data?.date_create_review)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-date-review">
-              {moment(new Date(data?.date_create_review)).format("HH:mm")}
-            </a>
-          </div>
+          <>
+            {data?.date_create_review && (
+              <div className="div-create-review">
+                <a className="text-date-review">
+                  {moment(new Date(data?.date_create_review)).format(
+                    "DD/MM/YYYY"
+                  )}
+                </a>
+                <a className="text-date-review">
+                  {moment(new Date(data?.date_create_review)).format("HH:mm")}
+                </a>
+              </div>
+            )}
+          </>
         );
       },
     },

@@ -320,100 +320,115 @@ const EditGroupCustomer = () => {
                         <div className="div-input">
                           {condition?.condition?.map((it, idx) => {
                             return (
-                              <div className="div-input-condition">
-                                <div className="div-select-kind">
-                                  <a className="label-kind">Loại</a>
-                                  <Select
-                                    onChange={(value) =>
-                                      onChangeKindIn(value, idx, ix)
-                                    }
-                                    value={it?.kind}
-                                    className="select-kind"
-                                    options={DATA_KIND}
-                                  />
-                                </div>
-
-                                <div className="div-select-kind">
-                                  <a className="label-kind">Phương thức</a>
-                                  <Select
-                                    onChange={(value) =>
-                                      onChangeOperatorIn(value, idx, ix)
-                                    }
-                                    value={it?.operator}
-                                    className="select-kind"
-                                    options={
-                                      condition?.condition[idx].kind ===
-                                      "gender"
-                                        ? DATA_OPERTATOR_GENDER
-                                        : DATA_OPERTATOR
-                                    }
-                                  />
-                                </div>
-
-                                <div className="div-select-kind">
-                                  <a className="label-kind">Giá trị</a>
-                                  {condition?.condition[idx].kind ===
-                                  "gender" ? (
+                              <>
+                                {idx !== 0 && (
+                                  <div className="condition-btn">
+                                    {condition?.type_condition === "and" ? (
+                                      <a className="text-btn">Và</a>
+                                    ) : (
+                                      <a className="text-btn">Hoặc</a>
+                                    )}
+                                  </div>
+                                )}
+                                <div className="div-input-condition">
+                                  <div className="div-select-kind">
+                                    <a className="label-kind">Loại</a>
                                     <Select
-                                      className="select-kind"
-                                      options={DATA_GENDER}
-                                      value={it?.value}
                                       onChange={(value) =>
-                                        onChangeValueIn(value, idx, ix)
+                                        onChangeKindIn(value, idx, ix)
+                                      }
+                                      value={it?.kind}
+                                      className="select-kind"
+                                      options={DATA_KIND}
+                                    />
+                                  </div>
+
+                                  <div className="div-select-kind">
+                                    <a className="label-kind">Phương thức</a>
+                                    <Select
+                                      onChange={(value) =>
+                                        onChangeOperatorIn(value, idx, ix)
+                                      }
+                                      className="select-kind"
+                                      value={it?.operator}
+                                      options={
+                                        condition?.condition[idx].kind ===
+                                        "gender"
+                                          ? DATA_OPERTATOR_GENDER
+                                          : DATA_OPERTATOR
                                       }
                                     />
-                                  ) : condition?.condition[idx].kind ===
-                                    "month_birthday" ? (
-                                    <Select
-                                      className="select-kind"
-                                      options={MONTH}
-                                      value={it?.value}
-                                      onChange={(value) =>
-                                        onChangeValueIn(value, idx, ix)
-                                      }
-                                    />
-                                  ) : condition?.condition[idx].kind ===
-                                    "date_create" ? (
-                                    <DatePicker
-                                      className="select-date"
-                                      format={dateFormat}
-                                      value={dayjs(
-                                        it.value.slice(0, 11),
-                                        dateFormat
-                                      )}
-                                      onChange={(date, dateString) =>
-                                        onChangeValueIn(
-                                          moment(
-                                            moment(dateString).toISOString()
+                                  </div>
+
+                                  <div className="div-select-kind">
+                                    <a className="label-kind">Giá trị</a>
+                                    {condition?.condition[idx].kind ===
+                                    "gender" ? (
+                                      <Select
+                                        className="select-kind"
+                                        options={DATA_GENDER}
+                                        value={it?.value}
+                                        onChange={(value) =>
+                                          onChangeValueIn(value, idx, ix)
+                                        }
+                                      />
+                                    ) : condition?.condition[idx].kind ===
+                                      "month_birthday" ? (
+                                      <Select
+                                        className="select-kind"
+                                        options={MONTH}
+                                        value={it?.value}
+                                        onChange={(value) =>
+                                          onChangeValueIn(value, idx, ix)
+                                        }
+                                      />
+                                    ) : condition?.condition[idx].kind ===
+                                      "date_create" ? (
+                                      <DatePicker
+                                        className="select-date"
+                                        format={dateFormat}
+                                        value={dayjs(
+                                          it.value.slice(0, 11),
+                                          dateFormat
+                                        )}
+                                        onChange={(date, dateString) =>
+                                          onChangeValueIn(
+                                            moment(
+                                              moment(dateString).toISOString()
+                                            )
+                                              .add(7, "hours")
+                                              .toISOString(),
+                                            idx,
+                                            ix
                                           )
-                                            .add(7, "hours")
-                                            .toISOString(),
-                                          idx,
-                                          ix
-                                        )
-                                      }
-                                    />
+                                        }
+                                      />
+                                    ) : (
+                                      <Input
+                                        className="input-value"
+                                        type={"number"}
+                                        value={it?.value}
+                                        onChange={(e) =>
+                                          onChangeValueIn(
+                                            e.target.value,
+                                            idx,
+                                            ix
+                                          )
+                                        }
+                                      />
+                                    )}
+                                  </div>
+
+                                  {idx === 0 ? (
+                                    <></>
                                   ) : (
-                                    <Input
-                                      className="input-value"
-                                      value={it?.value}
-                                      type={"number"}
-                                      onChange={(e) =>
-                                        onChangeValueIn(e.target.value, idx, ix)
-                                      }
-                                    />
+                                    <i
+                                      class="uil uil-times-circle"
+                                      onClick={() => deleteConditionIn(idx, ix)}
+                                    ></i>
                                   )}
                                 </div>
-
-                                {idx === 0 ? (
-                                  <></>
-                                ) : (
-                                  <i
-                                    class="uil uil-times-circle"
-                                    onClick={() => deleteConditionIn(idx, ix)}
-                                  ></i>
-                                )}
-                              </div>
+                              </>
                             );
                           })}
                         </div>
@@ -500,104 +515,115 @@ const EditGroupCustomer = () => {
                         <div className="div-input">
                           {condition?.condition?.map((it, idx) => {
                             return (
-                              <div className="div-input-condition">
-                                <div className="div-select-kind">
-                                  <a className="label-kind">Loại</a>
-                                  <Select
-                                    onChange={(value) =>
-                                      onChangeKindOut(value, idx, ix)
-                                    }
-                                    value={it?.kind}
-                                    className="select-kind"
-                                    options={DATA_KIND}
-                                  />
-                                </div>
-
-                                <div className="div-select-kind">
-                                  <a className="label-kind">Phương thức</a>
-                                  <Select
-                                    onChange={(value) =>
-                                      onChangeOperatorOut(value, idx, ix)
-                                    }
-                                    className="select-kind"
-                                    value={it?.operator}
-                                    options={
-                                      condition?.condition[idx].kind ===
-                                      "gender"
-                                        ? DATA_OPERTATOR_GENDER
-                                        : DATA_OPERTATOR
-                                    }
-                                  />
-                                </div>
-
-                                <div className="div-select-kind">
-                                  <a className="label-kind">Giá trị</a>
-                                  {condition?.condition[idx].kind ===
-                                  "gender" ? (
+                              <>
+                                {idx !== 0 && (
+                                  <div className="condition-btn">
+                                    {condition?.type_condition === "and" ? (
+                                      <a className="text-btn">Và</a>
+                                    ) : (
+                                      <a className="text-btn">Hoặc</a>
+                                    )}
+                                  </div>
+                                )}
+                                <div className="div-input-condition">
+                                  <div className="div-select-kind">
+                                    <a className="label-kind">Loại</a>
                                     <Select
-                                      className="select-kind"
-                                      options={DATA_GENDER}
-                                      value={it?.value}
                                       onChange={(value) =>
-                                        onChangeValueOut(value, idx, ix)
+                                        onChangeKindIn(value, idx, ix)
+                                      }
+                                      value={it?.kind}
+                                      className="select-kind"
+                                      options={DATA_KIND}
+                                    />
+                                  </div>
+
+                                  <div className="div-select-kind">
+                                    <a className="label-kind">Phương thức</a>
+                                    <Select
+                                      onChange={(value) =>
+                                        onChangeOperatorIn(value, idx, ix)
+                                      }
+                                      className="select-kind"
+                                      value={it?.operator}
+                                      options={
+                                        condition?.condition[idx].kind ===
+                                        "gender"
+                                          ? DATA_OPERTATOR_GENDER
+                                          : DATA_OPERTATOR
                                       }
                                     />
-                                  ) : condition?.condition[idx].kind ===
-                                    "month_birthday" ? (
-                                    <Select
-                                      className="select-kind"
-                                      options={MONTH}
-                                      value={it?.value}
-                                      onChange={(value) =>
-                                        onChangeValueOut(value, idx, ix)
-                                      }
-                                    />
-                                  ) : condition?.condition[idx].kind ===
-                                    "date_create" ? (
-                                    <DatePicker
-                                      className="select-date"
-                                      format={dateFormat}
-                                      value={dayjs(
-                                        it.value.slice(0, 11),
-                                        dateFormat
-                                      )}
-                                      onChange={(date, dateString) =>
-                                        onChangeValueOut(
-                                          moment(
-                                            moment(dateString).toISOString()
+                                  </div>
+
+                                  <div className="div-select-kind">
+                                    <a className="label-kind">Giá trị</a>
+                                    {condition?.condition[idx].kind ===
+                                    "gender" ? (
+                                      <Select
+                                        className="select-kind"
+                                        options={DATA_GENDER}
+                                        value={it?.value}
+                                        onChange={(value) =>
+                                          onChangeValueIn(value, idx, ix)
+                                        }
+                                      />
+                                    ) : condition?.condition[idx].kind ===
+                                      "month_birthday" ? (
+                                      <Select
+                                        className="select-kind"
+                                        options={MONTH}
+                                        value={it?.value}
+                                        onChange={(value) =>
+                                          onChangeValueIn(value, idx, ix)
+                                        }
+                                      />
+                                    ) : condition?.condition[idx].kind ===
+                                      "date_create" ? (
+                                      <DatePicker
+                                        className="select-date"
+                                        format={dateFormat}
+                                        value={dayjs(
+                                          it.value.slice(0, 11),
+                                          dateFormat
+                                        )}
+                                        onChange={(date, dateString) =>
+                                          onChangeValueIn(
+                                            moment(
+                                              moment(dateString).toISOString()
+                                            )
+                                              .add(7, "hours")
+                                              .toISOString(),
+                                            idx,
+                                            ix
                                           )
-                                            .add(7, "hours")
-                                            .toISOString(),
-                                          idx,
-                                          ix
-                                        )
-                                      }
-                                    />
+                                        }
+                                      />
+                                    ) : (
+                                      <Input
+                                        className="input-value"
+                                        type={"number"}
+                                        value={it?.value}
+                                        onChange={(e) =>
+                                          onChangeValueIn(
+                                            e.target.value,
+                                            idx,
+                                            ix
+                                          )
+                                        }
+                                      />
+                                    )}
+                                  </div>
+
+                                  {idx === 0 ? (
+                                    <></>
                                   ) : (
-                                    <Input
-                                      className="input-value"
-                                      type={"number"}
-                                      value={it?.value}
-                                      onChange={(e) =>
-                                        onChangeValueOut(
-                                          e.target.value,
-                                          idx,
-                                          ix
-                                        )
-                                      }
-                                    />
+                                    <i
+                                      class="uil uil-times-circle"
+                                      onClick={() => deleteConditionIn(idx, ix)}
+                                    ></i>
                                   )}
                                 </div>
-
-                                {idx === 0 ? (
-                                  <></>
-                                ) : (
-                                  <i
-                                    class="uil uil-times-circle"
-                                    onClick={() => deleteConditionOut(idx, ix)}
-                                  ></i>
-                                )}
-                              </div>
+                              </>
                             );
                           })}
                         </div>
