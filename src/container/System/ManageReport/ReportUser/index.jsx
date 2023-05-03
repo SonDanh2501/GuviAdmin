@@ -250,6 +250,60 @@ const ReportUser = () => {
               format={yearFormat}
             />
           </div>
+        </div>
+        <div className="mt-3 divl-total">
+          <a className="text-total-user">Tổng user</a>
+          <div className="div-total">
+            <a className="text-number-total">{totalYear}</a>
+          </div>
+        </div>
+        <div className="mt-3">
+          <ResponsiveContainer width={"100%"} height={350} min-width={350}>
+            <BarChart
+              width={500}
+              height={300}
+              data={dataChart}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+              barSize={50}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="month"
+                tickFormatter={(tickItem) => "Tháng " + tickItem}
+              />
+              <YAxis />
+              <Tooltip content={renderTooltipContent} />
+              <Legend />
+              <Bar
+                dataKey="total"
+                fill="#4376CC"
+                minPointSize={5}
+                barSize={50}
+                label={{ position: "centerTop", fill: "white" }}
+                name="Khách hàng"
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="div-chart-user">
+        <h5>Số lượng user theo khu vực</h5>
+        <div className="div-time-area">
+          <div>
+            <a className="text-time">Thời gian</a>
+            <DatePicker
+              picker="year"
+              onChange={onChange}
+              defaultValue={dayjs("2023", yearFormat)}
+              format={yearFormat}
+            />
+          </div>
           <div>
             <a className="text-area">Khu vực</a>
             <Select
@@ -300,6 +354,7 @@ const ReportUser = () => {
           </ResponsiveContainer>
         </div>
       </div>
+
       <a className="text-title">SỐ LƯỢT ĐĂNG KÝ USER THEO THỜI GIAN</a>
       <div className="mt-3 div-table">
         <div className="div-header-table">

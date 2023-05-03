@@ -153,19 +153,22 @@ export default function NewsManage() {
     {
       title: "Mô tả ngắn",
       render: (data) => (
-        <a className="text-title-new">{data?.short_description}</a>
+        <a className="text-description-new">{data?.short_description}</a>
       ),
-      width: "30%",
     },
     {
       title: "Link bài viết",
       render: (data) => {
-        return <a className="text-title-new">{data?.url}</a>;
+        return (
+          <a className="text-link-new">
+            {data?.url.length > 30 ? data?.url.slice(0, 30) + "..." : data?.url}
+          </a>
+        );
       },
     },
     {
-      title: "Loại tin",
-      render: (data) => <a className="text-title-new">{data?.type}</a>,
+      title: "Loại ",
+      render: (data) => <a className="text-new">{data?.type}</a>,
     },
     {
       title: "Position",
@@ -176,7 +179,10 @@ export default function NewsManage() {
       title: "Hình ",
       render: (data) => {
         return (
-          <Image src={data?.thumbnail} style={{ width: 100, height: 100 }} />
+          <Image
+            src={data?.thumbnail}
+            style={{ width: 100, height: 100, borderRadius: 8 }}
+          />
         );
       },
       align: "center",

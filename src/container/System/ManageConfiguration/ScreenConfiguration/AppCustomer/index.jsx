@@ -51,7 +51,6 @@ const AppCustomer = () => {
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
-        console.log(err);
         dispatch(loadingAction.loadingRequest(false));
       });
   }, []);

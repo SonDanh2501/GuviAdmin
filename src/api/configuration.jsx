@@ -43,3 +43,31 @@ export const activeGroupCustomerApi = (id, data) => {
     data
   );
 };
+
+// create quizz
+
+export const getListQuestionApi = (start, length) => {
+  return axiosClient.get(
+    `/admin/exam_test/get_list?start=${start}&length=${length}`
+  );
+};
+
+export const addQuestionApi = (data) => {
+  return axiosClient.post(`/admin/exam_test/create_question`, data);
+};
+
+export const getDetailsQuestionApi = (id) => {
+  return axiosClient.get(`/admin/exam_test/detail_question/${id}`);
+};
+
+export const editQuestionApi = (id, data) => {
+  return axiosClient.post(`/admin/exam_test/edit_question/${id}`, data);
+};
+
+export const deleteQuestionApi = (id) => {
+  return axiosClient.post(`/admin/exam_test/delete_question/${id}`);
+};
+
+export const activeQuestionApi = (id) => {
+  return axiosClient.post(`/admin/exam_test/acti_question/${id}`);
+};

@@ -36,8 +36,9 @@ export default function OrderDoingManage() {
       "HH:mm"
     );
 
-    const timeEnd =
-      Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
+    const timeEnd = moment(new Date(data.date_work_schedule[0].date))
+      .add(data?.total_estimate, "hours")
+      .format("HH:mm");
 
     return start + " - " + timeEnd;
   };

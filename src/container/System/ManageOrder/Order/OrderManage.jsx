@@ -45,8 +45,9 @@ export default function OrderManage(props) {
       "HH:mm"
     );
 
-    const timeEnd =
-      Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
+    const timeEnd = moment(new Date(data.date_work_schedule[0].date))
+      .add(data?.total_estimate, "hours")
+      .format("HH:mm");
 
     return start + " - " + timeEnd;
   };
@@ -83,6 +84,7 @@ export default function OrderManage(props) {
           <AddCollaboratorOrder
             idOrder={item?._id}
             idCustomer={item?.id_customer?._id}
+            status={item?.status}
           />
         ) : (
           <></>
@@ -104,6 +106,19 @@ export default function OrderManage(props) {
     },
     {
       key: "3",
+      label:
+        item?.status === "confirm" ? (
+          <AddCollaboratorOrder
+            idOrder={item?._id}
+            idCustomer={item?.id_customer?._id}
+            status={item?.status}
+          />
+        ) : (
+          <></>
+        ),
+    },
+    {
+      key: "4",
       label:
         user?.role === "admin" &&
         (item?.status === "cancel" || item?.status === "done" ? (

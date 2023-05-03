@@ -33,9 +33,9 @@ const ReportArea = () => {
     getDistrictApi()
       .then((res) => {
         setDataCity(res?.aministrative_division);
-        setCodeCity(res?.aministrative_division[0]?.code);
-        setNameCity(res?.aministrative_division[0]?.name);
-        setDataDistrict(res?.aministrative_division[0]?.districts);
+        setCodeCity(res?.aministrative_division[1]?.code);
+        setNameCity(res?.aministrative_division[1]?.name);
+        setDataDistrict(res?.aministrative_division[1]?.districts);
         getReportTypeService(
           moment(moment().startOf("year").toISOString())
             .add(7, "hours")
@@ -43,7 +43,7 @@ const ReportArea = () => {
           moment(moment(new Date()).toISOString())
             .add(7, "hours")
             .toISOString(),
-          res?.aministrative_division[0]?.code,
+          res?.aministrative_division[1]?.code,
           codeDistrict
         )
           .then((res) => {

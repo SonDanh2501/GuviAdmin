@@ -6,11 +6,14 @@ import {
   searchCollaboratorsCreateOrder,
 } from "../../../../api/collaborator";
 import { errorNotify } from "../../../../helper/toast";
-import { addCollaboratorToOrderApi } from "../../../../api/order";
+import {
+  addCollaboratorToOrderApi,
+  changeCollaboratorToOrderApi,
+} from "../../../../api/order";
 import { useDispatch } from "react-redux";
 import { loadingAction } from "../../../../redux/actions/loading";
 import _debounce from "lodash/debounce";
-const AddCollaboratorOrder = ({ idOrder, idCustomer }) => {
+const AddCollaboratorOrder = ({ idOrder, idCustomer, status }) => {
   const [open, setOpen] = useState(false);
   const [dataFilter, setDataFilter] = useState([]);
   const [name, setName] = useState("");
@@ -51,25 +54,44 @@ const AddCollaboratorOrder = ({ idOrder, idCustomer }) => {
 
   const addCollaboratorToOrder = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-    addCollaboratorToOrderApi(idOrder, { id_collaborator: id })
-      .then((res) => {
-        window.location.reload();
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
+    if (status === "confirm") {
+      changeCollaboratorToOrderApi(idOrder)
+        .then((res) => {
+          addCollaboratorToOrderApi(idOrder, { id_collaborator: id })
+            .then((res) => {
+              window.location.reload();
+            })
+            .catch((err) => {
+              errorNotify({
+                message: err,
+              });
+              dispatch(loadingAction.loadingRequest(false));
+            });
+        })
+        .catch((err) => {});
+    } else {
+      addCollaboratorToOrderApi(idOrder, { id_collaborator: id })
+        .then((res) => {
+          window.location.reload();
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
         });
-        dispatch(loadingAction.loadingRequest(false));
-      });
+    }
   }, [id, idOrder]);
 
   return (
     <>
       <a className="text-add" onClick={showDrawer}>
-        Thêm CTV
+        {status === "confirm" ? "Thay CTV" : "Thêm CTV"}
       </a>
       <Drawer
-        title="Thêm Cộng tác viên"
+        title={
+          status === "confirm" ? "Thay Cộng tác viên" : "Thêm Cộng tác viên"
+        }
         placement="right"
         onClose={onClose}
         width={500}

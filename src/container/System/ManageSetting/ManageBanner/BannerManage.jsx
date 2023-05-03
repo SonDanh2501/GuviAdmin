@@ -139,6 +139,7 @@ export default function BannerManage() {
     {
       title: "Tên banner",
       render: (data) => <a className="text-title-banner">{data?.title}</a>,
+      width: "30%",
     },
     {
       title: "Type link",
@@ -155,8 +156,8 @@ export default function BannerManage() {
       render: (data) => {
         return (
           <a className="text-link">
-            {data?.link_id.length > 60
-              ? data?.link_id.slice(0, 60) + "..."
+            {data?.link_id.length > 30
+              ? data?.link_id.slice(0, 30) + "..."
               : data?.link_id}
           </a>
         );

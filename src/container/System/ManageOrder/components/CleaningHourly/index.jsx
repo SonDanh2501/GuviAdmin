@@ -557,10 +557,12 @@ const CleaningHourly = (props) => {
                         : "text-service-default"
                     }
                   >
-                    {item?.description?.vi.slice(
-                      0,
-                      item?.description?.vi.indexOf("2")
-                    )}
+                    {item?.estimate === 0.5
+                      ? item?.description?.vi
+                      : item?.description?.vi.slice(
+                          0,
+                          item?.description?.vi.indexOf("2")
+                        )}
                   </a>
                   <a
                     className={
@@ -569,9 +571,10 @@ const CleaningHourly = (props) => {
                         : "text-service-default"
                     }
                   >
-                    {item?.description?.vi.slice(
-                      item?.description?.vi.indexOf(" ")
-                    )}
+                    {item?.estimate !== 0.5 &&
+                      item?.description?.vi.slice(
+                        item?.description?.vi.indexOf(" ")
+                      )}
                   </a>
                 </div>
               );
