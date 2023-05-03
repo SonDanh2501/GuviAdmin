@@ -2,12 +2,12 @@ import axiosClient from "../axios";
 
 export const fetchCustomers = (start, length, type) => {
   return axiosClient.get(
-    `/admin/customer_manager/get_customer_by_type?&start=${start}&length=${length}&customer_type=${type}`
+    `/admin/customer_manager/get_customer_by_type?start=${start}&length=${length}&customer_type=${type}`
   );
 };
 export const searchCustomers = (start, length, type, payload) => {
   return axiosClient.get(
-    `/admin/customer_manager/get_customer_by_type?&start=${start}&length=${length}&customer_type=${type}&search=${payload}`
+    `/admin/customer_manager/get_customer_by_type?start=${start}&length=${length}&customer_type=${type}&search=${payload}`
   );
 };
 export const fetchCustomerById = (id) => {

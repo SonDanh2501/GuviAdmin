@@ -47,6 +47,12 @@ export const addCollaboratorToOrderApi = (id, data) => {
   );
 };
 
+export const changeCollaboratorToOrderApi = (id) => {
+  return axiosClient.get(
+    `/admin/group-order-manager/change_collaborator/${id}?lang=vi`
+  );
+};
+
 export const createOrderApi = (data) => {
   return axiosClient.post(`/admin/group-order-manager/create`, data);
 };

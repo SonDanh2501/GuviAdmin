@@ -1,59 +1,72 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./index.scss";
-import { Button, Checkbox, Col, Drawer, Form, Input, Row, Select } from "antd";
+import {
+  Button,
+  Checkbox,
+  Col,
+  Drawer,
+  Dropdown,
+  Form,
+  Input,
+  Pagination,
+  Row,
+  Select,
+  Space,
+  Table,
+} from "antd";
 import CustomTextEditor from "../../../../../components/customTextEdittor";
+import {
+  addQuestionApi,
+  deleteQuestionApi,
+  editQuestionApi,
+  getDetailsQuestionApi,
+  getListQuestionApi,
+} from "../../../../../api/configuration";
+import { errorNotify } from "../../../../../helper/toast";
+import { MoreOutlined } from "@ant-design/icons";
+import LoadingPagination from "../../../../../components/paginationLoading";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import onToggle from "../../../../../assets/images/on-button.png";
+import offToggle from "../../../../../assets/images/off-button.png";
 const { TextArea } = Input;
 
 const CreateQuizz = () => {
-  // const [dataQuestion, setDataQuestion] = useState([
-  //   {
-  //     title: "",
-  //     description: "",
-  //     question: [
-  //       {
-  //         title: "",
-  //         isCorrect: false,
-  //       },
-  //       {
-  //         title: "",
-  //         isCorrect: false,
-  //       },
-  //       {
-  //         title: "",
-  //         isCorrect: false,
-  //       },
-  //       {
-  //         title: "",
-  //         isCorrect: false,
-  //       },
-  //     ],
-  //   },
-  // ]);
-
   const [dataQuestion, setDataQuestion] = useState([
     {
       title: "",
       description: "",
-      question: [
+      question: "",
+      choose: [
         {
-          A: "",
+          answer: "",
+          isCorrect: false,
         },
         {
-          B: "",
+          answer: "",
+          isCorrect: false,
         },
         {
-          C: "",
+          answer: "",
+          isCorrect: false,
         },
         {
-          D: "",
+          title: "",
+          isCorrect: false,
         },
       ],
-      answers: "",
     },
   ]);
-
+  const [data, setData] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(0);
+  const [edit, setEdit] = useState(false);
+  const [itemEdit, setItemEdit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [modal, setModal] = useState(false);
   const [open, setOpen] = useState(false);
 
+  const toggle = () => setModal(!modal);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -62,59 +75,284 @@ const CreateQuizz = () => {
     setOpen(false);
   };
 
-  // const addAnswer = () => {
-  //   const arr = [...dataQuestion];
-  //   dataQuestion[0].question = [
-  //     ...dataQuestion[0].question,
-  //     {
-  //       title: "",
-  //       isCorrect: false,
-  //     },
-  //   ];
-  //   setDataQuestion(arr);
-  // };
+  useEffect(() => {
+    getListQuestionApi(startPage, 20)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  }, []);
 
-  // const deleteAnswer = (index) => {
-  //   const arr = [...dataQuestion];
-  //   dataQuestion[0].question.splice(index, 1);
-  //   setDataQuestion(arr);
-  // };
+  const addAnswer = () => {
+    const arr = [...dataQuestion];
+    dataQuestion[0].choose = [
+      ...dataQuestion[0].choose,
+      {
+        title: "",
+        isCorrect: false,
+      },
+    ];
+    setDataQuestion(arr);
+  };
 
-  // const onChaggeTitleQuestion = useCallback((value, index) => {
-  //   const arr = [...dataQuestion];
-  //   dataQuestion[index].title = value;
-  //   setDataQuestion(arr);
-  // }, []);
+  const deleteAnswer = (index) => {
+    const arr = [...dataQuestion];
+    dataQuestion[0].choose.splice(index, 1);
+    setDataQuestion(arr);
+  };
 
-  // const onChaggeDescriptionQuestion = useCallback((value, index) => {
-  //   const arr = [...dataQuestion];
-  //   dataQuestion[index].description = value;
-  //   setDataQuestion(arr);
-  // }, []);
+  const onChaggeTitleQuestion = useCallback((value, index) => {
+    const arr = [...dataQuestion];
+    dataQuestion[index].title = value;
+    setDataQuestion(arr);
+  }, []);
 
-  // const onChaggeTitleAnswer = useCallback((value, index, id) => {
-  //   const arr = [...dataQuestion];
-  //   dataQuestion[index].question[id].title = value;
-  //   setDataQuestion(arr);
-  // }, []);
+  const onChaggeDescriptionQuestion = useCallback((value, index) => {
+    const arr = [...dataQuestion];
+    dataQuestion[index].description = value;
+    setDataQuestion(arr);
+  }, []);
 
-  // const onChangeCorrect = useCallback((value, index, id) => {
-  //   const arr = [...dataQuestion];
-  //   dataQuestion[index].question[id].isCorrect = value;
-  //   setDataQuestion(arr);
-  // }, []);
+  const onChaggeTitleAnswer = useCallback((value, index, id) => {
+    const arr = [...dataQuestion];
+    dataQuestion[index].choose[id].answer = value;
+    setDataQuestion(arr);
+  }, []);
 
-  console.log(dataQuestion);
+  const onChaggeQuestion = useCallback((value, index) => {
+    const arr = [...dataQuestion];
+    dataQuestion[index].question = value;
+    setDataQuestion(arr);
+  }, []);
+
+  const onChangeCorrect = useCallback((value, index, id) => {
+    const arr = [...dataQuestion];
+    dataQuestion[index].choose[id].isCorrect = value;
+    setDataQuestion(arr);
+  }, []);
+
+  const openEditQuestion = () => {
+    setEdit(true);
+    setIsLoading(true);
+    showDrawer();
+    getDetailsQuestionApi(itemEdit?._id)
+      .then((res) => {
+        const arr = [...dataQuestion];
+        dataQuestion[0].title = res?.title;
+        dataQuestion[0].description = res?.description;
+        dataQuestion[0].question = res?.question;
+        dataQuestion[0].choose = res?.choose;
+
+        setDataQuestion(arr);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  };
+
+  const editQuestion = useCallback(() => {
+    setIsLoading(true);
+    editQuestionApi(itemEdit?._id, dataQuestion[0])
+      .then((res) => {
+        setOpen(false);
+        getListQuestionApi(startPage, 20)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            setIsLoading(false);
+          });
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        errorNotify({
+          message: err,
+        });
+      });
+  }, [itemEdit, startPage]);
+
+  const addQuestion = useCallback(() => {
+    setIsLoading(true);
+    addQuestionApi(dataQuestion[0])
+      .then((res) => {
+        setOpen(false);
+        getListQuestionApi(startPage, 20)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            setIsLoading(false);
+          });
+      })
+      .catch((err) => {
+        setIsLoading(false);
+
+        errorNotify({
+          message: err,
+        });
+      });
+  }, [startPage]);
+
+  const deleteQuestion = useCallback(
+    (id) => {
+      setIsLoading(true);
+      deleteQuestionApi(id)
+        .then((res) => {
+          setModal(false);
+          getListQuestionApi(startPage, 20)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+              setIsLoading(false);
+            })
+            .catch((err) => {
+              setIsLoading(false);
+            });
+        })
+        .catch((err) => {
+          setIsLoading(false);
+
+          errorNotify({
+            message: err,
+          });
+        });
+    },
+    [startPage]
+  );
+
+  const columns = [
+    {
+      title: "Số câu",
+      render: (data) => {
+        return <a className="title-question">{data?.question}</a>;
+      },
+      align: "center",
+    },
+    {
+      title: "Câu hỏi",
+      render: (data) => {
+        return <a className="title-question">{data?.title}</a>;
+      },
+    },
+    {
+      title: "Câu trả lời",
+      render: (data) => {
+        return (
+          <div className="div-answer">
+            {data?.choose?.map((item, index) => {
+              return (
+                <a
+                  className={
+                    item?.isCorrect ? "title-answer-correct" : "title-answer"
+                  }
+                >
+                  {item?.answer}
+                </a>
+              );
+            })}
+          </div>
+        );
+      },
+    },
+    {
+      key: "action",
+      render: (data) => {
+        return (
+          <a>
+            {data?.is_active ? (
+              <img className="img-unlock-banner" src={onToggle} />
+            ) : (
+              <img className="img-unlock-banner" src={offToggle} />
+            )}
+          </a>
+        );
+      },
+    },
+    {
+      key: "action",
+      render: (data) => (
+        <Space size="middle">
+          <Dropdown
+            menu={{
+              items,
+            }}
+            placement="bottom"
+            trigger={["click"]}
+          >
+            <a>
+              <MoreOutlined className="icon-more" />
+            </a>
+          </Dropdown>
+        </Space>
+      ),
+    },
+  ];
+
+  const items = [
+    {
+      key: "1",
+      label: <a onClick={openEditQuestion}>Chỉnh sửa</a>,
+    },
+    {
+      key: "2",
+      label: <a onClick={toggle}>Xoá</a>,
+    },
+  ];
+
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const start = page * data?.length - data?.length;
+    setStartPage(start);
+    getListQuestionApi(start, 20)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
 
   return (
     <div className="div-container-question">
-      <a className="title-quizz">Tạo câu hỏi</a>
+      <div className="div-header-question">
+        <a className="title-quizz">Tạo câu hỏi</a>
+        <Button className="btn-add-question" onClick={showDrawer}>
+          Thêm câu hỏi
+        </Button>
+      </div>
+      <div className="mt-3">
+        <Table
+          dataSource={data}
+          columns={columns}
+          pagination={false}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setItemEdit(record);
+              },
+            };
+          }}
+        />
 
-      <Button className="btn-add-question" onClick={showDrawer}>
-        Thêm câu hỏi
-      </Button>
+        <div className="mt-2 div-pagination p-2">
+          <a>Tổng: {total}</a>
+          <div>
+            <Pagination
+              current={currentPage}
+              onChange={onChange}
+              total={total}
+              showSizeChanger={false}
+            />
+          </div>
+        </div>
+      </div>
 
-      {/* <div>
+      <div>
         <Drawer
           title="Tạo câu hỏi"
           placement="right"
@@ -127,18 +365,35 @@ const CreateQuizz = () => {
               return (
                 <Col>
                   <a style={{ fontSize: 18, fontFamily: "sans-serif" }}>
+                    Số câu
+                  </a>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={item?.question}
+                    onChange={(e) => onChaggeQuestion(e.target.value, index)}
+                  />
+                  <a style={{ fontSize: 18, fontFamily: "sans-serif" }}>
                     Câu hỏi
                   </a>
-                  <CustomTextEditor
+
+                  <TextArea
+                    autoSize
                     value={item?.title}
-                    onChangeValue={(e) => onChaggeTitleQuestion(e, index)}
+                    onChange={(e) =>
+                      onChaggeTitleQuestion(e.target.value, index)
+                    }
                   />
                   <a style={{ fontSize: 18, fontFamily: "sans-serif" }}>
                     Mô tả
                   </a>
-                  <CustomTextEditor
+
+                  <TextArea
+                    autoSize
                     value={item?.description}
-                    onChangeValue={(e) => onChaggeDescriptionQuestion(e, index)}
+                    onChange={(e) =>
+                      onChaggeDescriptionQuestion(e.target.value, index)
+                    }
                   />
                   <a
                     style={{
@@ -150,7 +405,7 @@ const CreateQuizz = () => {
                     Câu trả lời
                   </a>
 
-                  {item?.question?.map((answer, id) => {
+                  {item?.choose?.map((answer, id) => {
                     return (
                       <Row
                         gutter={16}
@@ -160,6 +415,7 @@ const CreateQuizz = () => {
                           <TextArea
                             placeholder={"Nhập câu trả lời" + " " + (id + 1)}
                             autoSize
+                            value={answer?.answer}
                             onChange={(e) =>
                               onChaggeTitleAnswer(e.target.value, index, id)
                             }
@@ -194,136 +450,38 @@ const CreateQuizz = () => {
               );
             })}
 
-            <Button type="primary" style={{ float: "right", marginTop: 20 }}>
-              Tạo
-            </Button>
-          </Form>
-        </Drawer>
-      </div> */}
-
-      <div>
-        <Drawer
-          title="Tạo câu hỏi"
-          placement="right"
-          onClose={onClose}
-          open={open}
-          width={500}
-        >
-          <Form layout="vertical">
-            <Col>
-              <a style={{ fontSize: 18, fontFamily: "sans-serif" }}>Câu hỏi</a>
-              <CustomTextEditor
-                value={dataQuestion[0].title}
-                onChangeValue={(e) => {
-                  const arr = [...dataQuestion];
-                  dataQuestion[0].title = e;
-                  setDataQuestion(arr);
-                }}
-              />
-              <a style={{ fontSize: 18, fontFamily: "sans-serif" }}>Mô tả</a>
-              <CustomTextEditor
-                value={dataQuestion[0].description}
-                onChangeValue={(e) => {
-                  const arr = [...dataQuestion];
-                  dataQuestion[0].description = e;
-                  setDataQuestion(arr);
-                }}
-              />
-              <a style={{ fontSize: 18, fontFamily: "sans-serif" }}>
-                Câu trả lời
-              </a>
-              <Row>
-                <Col span={2}>
-                  <a>A</a>
-                </Col>
-                <Col span={22}>
-                  <TextArea
-                    placeholder={"Nhập câu trả lời"}
-                    autoSize
-                    onChange={(e) => {
-                      const arr = [...dataQuestion];
-                      dataQuestion[0].question[0].A = e.target.value;
-                      setDataQuestion(arr);
-                    }}
-                  />
-                </Col>
-              </Row>
-              <Row className="mt-2">
-                <Col span={2}>
-                  <a>B</a>
-                </Col>
-                <Col span={22}>
-                  <TextArea
-                    placeholder={"Nhập câu trả lời"}
-                    autoSize
-                    onChange={(e) => {
-                      const arr = [...dataQuestion];
-                      dataQuestion[0].question[1].B = e.target.value;
-                      setDataQuestion(arr);
-                    }}
-                  />
-                </Col>
-              </Row>
-              <Row className="mt-2">
-                <Col span={2}>
-                  <a>C</a>
-                </Col>
-                <Col span={22}>
-                  <TextArea
-                    placeholder={"Nhập câu trả lời"}
-                    autoSize
-                    onChange={(e) => {
-                      const arr = [...dataQuestion];
-                      dataQuestion[0].question[2].C = e.target.value;
-                      setDataQuestion(arr);
-                    }}
-                  />
-                </Col>
-              </Row>
-              <Row className="mt-2">
-                <Col span={2}>
-                  <a>D</a>
-                </Col>
-                <Col span={22}>
-                  <TextArea
-                    placeholder={"Nhập câu trả lời"}
-                    autoSize
-                    onChange={(e) => {
-                      const arr = [...dataQuestion];
-                      dataQuestion[0].question[3].D = e.target.value;
-                      setDataQuestion(arr);
-                    }}
-                  />
-                </Col>
-              </Row>
-
-              <div className="mt-3">
-                <a style={{ fontSize: 18, fontFamily: "sans-serif" }}>
-                  Đáp án đúng
-                </a>
-                <Select
-                  style={{ width: 120, marginLeft: 10 }}
-                  onChange={(e) => {
-                    const arr = [...dataQuestion];
-                    dataQuestion[0].answers = e;
-                    setDataQuestion(arr);
-                  }}
-                  options={[
-                    { value: "A", label: "A" },
-                    { value: "B", label: "B" },
-                    { value: "C", label: "C" },
-                    { value: "D", label: "D" },
-                  ]}
-                />
-              </div>
-            </Col>
-
-            <Button type="primary" style={{ float: "right", marginTop: 20 }}>
-              Tạo
+            <Button
+              type="primary"
+              style={{ float: "right", marginTop: 20 }}
+              onClick={edit ? editQuestion : addQuestion}
+            >
+              {edit ? "Sửa" : "Tạo"}
             </Button>
           </Form>
         </Drawer>
       </div>
+
+      <div>
+        <Modal isOpen={modal} toggle={toggle}>
+          <ModalHeader toggle={toggle}>Xóa câu hỏi</ModalHeader>
+          <ModalBody>
+            <a>Bạn có chắc muốn xóa câu {itemEdit?.question} không?</a>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="primary"
+              onClick={() => deleteQuestion(itemEdit?._id)}
+            >
+              Có
+            </Button>
+            <Button color="#ddd" onClick={toggle}>
+              Không
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+
+      {isLoading && <LoadingPagination />}
     </div>
   );
 };

@@ -1,17 +1,83 @@
 .div-container-question {
   display: flex;
   flex-direction: column;
-  .title-quizz {
+
+  .div-header-question {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .title-quizz {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      color: #000000;
+      text-decoration: none;
+    }
+
+    .btn-add-question {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 150px;
+      height: 35px;
+      float: right;
+    }
+  }
+
+  .title-question {
     font-family: "Roboto";
     font-style: normal;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 14px;
     color: #000000;
+    text-decoration: none;
   }
 
-  .btn-add-question {
-    width: 150px;
-    height: 35px;
-    margin-top: 50px;
+  .title-answers {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+  }
+
+  .title-question {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+    width: 200px;
+  }
+
+  .div-answer {
+    display: flex;
+    flex-direction: column;
+
+    .title-answer {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      margin-left: 10px;
+      color: #000000;
+      text-decoration: none;
+      width: 60%;
+    }
+
+    .title-answer-correct {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      margin-left: 10px;
+      color: #ff0000;
+      text-decoration: none;
+      width: 60%;
+    }
   }
 }

@@ -35,9 +35,9 @@ const TotalCancel = () => {
     getDistrictApi()
       .then((res) => {
         setDataCity(res?.aministrative_division);
-        setCodeCity(res?.aministrative_division[0]?.code);
-        setTitleCity(res?.aministrative_division[0]?.name);
-        setDataDistrict(res?.aministrative_division[0]?.districts);
+        setCodeCity(res?.aministrative_division[1]?.code);
+        setTitleCity(res?.aministrative_division[1]?.name);
+        setDataDistrict(res?.aministrative_division[1]?.districts);
         getReportCancelReport(
           moment(moment().startOf("year").toISOString())
             .add(7, "hours")
@@ -45,7 +45,7 @@ const TotalCancel = () => {
           moment(moment(new Date()).toISOString())
             .add(7, "hours")
             .toISOString(),
-          res?.aministrative_division[0]?.code,
+          res?.aministrative_division[1]?.code,
           codeDistrict
         )
           .then((res) => {
