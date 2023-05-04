@@ -47,3 +47,9 @@ export const getHistoryTransitionByCustomers = (id, start, length) => {
     `/admin/customer_manager/get_history_activity_customer/${id}?start=${start}&length=${length}`
   );
 };
+
+export const getFavoriteAndBlockByCustomers = (id, status, start, length) => {
+  return axiosClient.get(
+    `/admin/collaborator_manager/get_list_collaborator_block_or_favourite/${id}?status=${status}&start=${start}&length=${length}`
+  );
+};

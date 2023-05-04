@@ -1,4 +1,4 @@
-import { Drawer } from "antd";
+import { Drawer, Select } from "antd";
 import React, { memo, useCallback, useState } from "react";
 import IntlCurrencyInput from "react-intl-currency-input";
 import { useDispatch } from "react-redux";
@@ -56,7 +56,7 @@ const AddPopup = ({ type, setDataT, setTotal }) => {
               setData(res.data);
             }
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {});
       } else if (id) {
         setData([]);
       } else {
@@ -202,21 +202,16 @@ const AddPopup = ({ type, setDataT, setTotal }) => {
               onChange={(e) => setNote(e.target.value)}
             />
 
-            <CustomTextInput
-              label={"Chọn ví nạp"}
-              id="exampleNote"
-              name="note"
-              type="select"
-              className="select-input-wallet"
-              body={
-                <>
-                  <option value={""}>Vui lòng chọn ví</option>
-                  <option value={"wallet"}>Ví chính</option>
-                  <option value={"gift_wallet"}>Ví thưởng</option>
-                </>
-              }
-              value={wallet}
-              onChange={(e) => setWallet(e.target.value)}
+            <Select
+              defaultValue="Vui lòng chọn ví"
+              style={{ width: "100%" }}
+              onChange={(e) => {
+                setWallet(e);
+              }}
+              options={[
+                { value: "wallet", label: "Ví chính" },
+                { value: "gift_wallet", label: "Ví thưởng" },
+              ]}
             />
 
             <CustomButton

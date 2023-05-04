@@ -1,0 +1,31 @@
+.tab-block {
+  display: flex;
+  flex-direction: row;
+
+  .div-tab-item {
+    padding: 5px;
+
+    .text-tab {
+      font-size: 14px;
+      font-family: "Roboto";
+      font-weight: 500;
+      font-style: normal;
+      color: rgb(188, 188, 188);
+      text-decoration: none;
+    }
+  }
+
+  .div-tab-item-select {
+    padding: 5px;
+    border-bottom: 2px solid blue;
+
+    .text-tab {
+      font-size: 14px;
+      font-family: "Roboto";
+      font-weight: 500;
+      font-style: normal;
+      color: black;
+      text-decoration: none;
+    }
+  }
+}

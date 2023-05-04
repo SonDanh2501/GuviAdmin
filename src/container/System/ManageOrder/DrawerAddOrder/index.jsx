@@ -1,4 +1,4 @@
-import { Input, List } from "antd";
+import { Input, List, Select } from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,11 +14,14 @@ import { getService } from "../../../../redux/selectors/service";
 import CleaningHourly from "../components/CleaningHourly";
 import CleaningSchedule from "../components/CleaningSchedule";
 import "./index.scss";
+import BussinessType from "../components/BussinessType";
 
 const AddOrder = () => {
   const [optionalService, setOptionalService] = useState([]);
   const [extendService, setExtendService] = useState([]);
-  const [errorExtendService, setErrorExtendService] = useState("");
+  const [bussinessType, setBussinessType] = useState([]);
+  const [kindService, setKindService] = useState("");
+  const [nameService, setNameService] = useState("");
   const [addService, setAddService] = useState([]);
   const [dataFilter, setDataFilter] = useState([]);
   const [name, setName] = useState("");
@@ -27,55 +30,91 @@ const AddOrder = () => {
   const service = useSelector(getService);
   const [serviceApply, setServiceApply] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const serviceSelect = [];
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getOptionalServiceByServiceApi(service[0]?._id)
+    setIsLoading(true);
+    getOptionalServiceByServiceApi(service[1]?._id)
       .then((res) => {
         setOptionalService(res?.data);
+        setIsLoading(false);
       })
-      .catch((err) => console.log(err));
-    setServiceApply(service[0]?._id);
+      .catch((err) => {
+        setIsLoading(false);
+      });
+    setServiceApply(service[1]?._id);
+    setKindService(service[1]?.kind);
+    setNameService(service[1]?.title?.vi);
   }, [service]);
 
-  useEffect(() => {
-    optionalService?.map(
-      (item) =>
-        item?.type === "select_horizontal_no_thumbnail" &&
-        getExtendOptionalByOptionalServiceApi(item?._id)
-          .then((res) => {
-            setExtendService(res?.data);
-            setIsLoading(false);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-          })
-    );
+  service?.map((item) => {
+    serviceSelect.push({
+      label: item?.title?.vi,
+      value: item?._id,
+      kind: item?.kind,
+    });
+  });
 
-    optionalService?.map(
-      (item) =>
-        item?.type === "multi_select_horizontal_thumbnail" &&
-        getExtendOptionalByOptionalServiceApi(item?._id)
-          .then((res) => {
-            setAddService(res?.data);
-            setIsLoading(false);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-          })
-    );
+  useEffect(() => {
+    if (optionalService?.length > 0) {
+      setIsLoading(true);
+      optionalService?.map(
+        (item) =>
+          item?.type === "select_horizontal_no_thumbnail" &&
+          getExtendOptionalByOptionalServiceApi(item?._id)
+            .then((res) => {
+              setExtendService(res?.data);
+              setIsLoading(false);
+            })
+            .catch((err) => {
+              setIsLoading(false);
+            })
+      );
+
+      optionalService?.map(
+        (item) =>
+          item?.type === "multi_select_horizontal_thumbnail" &&
+          getExtendOptionalByOptionalServiceApi(item?._id)
+            .then((res) => {
+              setAddService(res?.data);
+              setIsLoading(false);
+            })
+            .catch((err) => {
+              setIsLoading(false);
+            })
+      );
+    }
+
+    // optionalService?.map(
+    //   (item) =>
+    //     item?.type === "multi_select_horizontal_thumbnail" &&
+    //     getExtendOptionalByOptionalServiceApi(item?._id)
+    //       .then((res) => {
+    //         setAddService(res?.data);
+    //         setIsLoading(false);
+    //       })
+    //       .catch((err) => {
+    //         setIsLoading(false);
+    //       })
+    // );
   }, [optionalService]);
 
-  const onChangeServiceApply = (e) => {
+  const onChangeServiceApply = (value, kind) => {
     setIsLoading(true);
     setAddService([]);
-    setServiceApply(e.target.value);
-    getOptionalServiceByServiceApi(e.target.value)
+    setServiceApply(value);
+    setKindService(kind?.kind);
+    setNameService(kind?.label);
+    getOptionalServiceByServiceApi(value)
       .then((res) => {
+        setIsLoading(false);
         setOptionalService(res?.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setIsLoading(false);
+      });
   };
 
   const valueSearch = (value) => {
@@ -109,19 +148,11 @@ const AddOrder = () => {
     <>
       <h5>Tạo công việc</h5>
       <div className="mt-3">
-        <CustomTextInput
-          className="select-type-promo"
-          name="select"
-          type="select"
-          value={serviceApply}
+        <Select
+          style={{ width: 230 }}
+          value={nameService}
           onChange={onChangeServiceApply}
-          body={service.map((item, index) => {
-            return (
-              <option key={index} value={item?._id}>
-                {item?.title?.vi}
-              </option>
-            );
-          })}
+          options={serviceSelect}
         />
       </div>
       <div className="div-search-customer mt-4">
@@ -164,7 +195,7 @@ const AddOrder = () => {
       )}
 
       <div className="mt-3">
-        {addService.length > 0 ? (
+        {kindService === "giup_viec_theo_gio" ? (
           <CleaningHourly
             extendService={extendService}
             addService={addService}
@@ -173,7 +204,7 @@ const AddOrder = () => {
             setErrorNameCustomer={setErrorNameCustomer}
             idService={serviceApply}
           />
-        ) : (
+        ) : kindService === "giup_viec_co_dinh" ? (
           <CleaningSchedule
             extendService={extendService}
             id={id}
@@ -181,6 +212,18 @@ const AddOrder = () => {
             setErrorNameCustomer={setErrorNameCustomer}
             idService={serviceApply}
           />
+        ) : kindService === "phuc_vu_nha_hang" ? (
+          <BussinessType
+            extendService={extendService}
+            addService={addService}
+            bussinessType={[]}
+            id={id}
+            name={name}
+            setErrorNameCustomer={setErrorNameCustomer}
+            idService={serviceApply}
+          />
+        ) : (
+          <></>
         )}
       </div>
 

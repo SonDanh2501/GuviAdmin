@@ -25,6 +25,7 @@ import { errorNotify } from "../../../../helper/toast";
 import { getUser } from "../../../../redux/selectors/auth";
 import { SearchOutlined } from "@ant-design/icons";
 import _debounce from "lodash/debounce";
+import EditTimeOrder from "../EditTimeGroupOrder";
 
 export default function OrderManage(props) {
   const { data, total, status, kind } = props;
@@ -79,16 +80,13 @@ export default function OrderManage(props) {
   const items = [
     {
       key: "1",
-      label:
-        item?.status === "pending" ? (
-          <AddCollaboratorOrder
-            idOrder={item?._id}
-            idCustomer={item?.id_customer?._id}
-            status={item?.status}
-          />
-        ) : (
-          <></>
-        ),
+      label: item?.status === "pending" && (
+        <AddCollaboratorOrder
+          idOrder={item?._id}
+          idCustomer={item?.id_customer?._id}
+          status={item?.status}
+        />
+      ),
     },
     {
       key: "2",
@@ -107,18 +105,28 @@ export default function OrderManage(props) {
     {
       key: "3",
       label:
-        item?.status === "confirm" ? (
-          <AddCollaboratorOrder
+        item?.status === "pending" && data?.type !== "schedule" ? (
+          <EditTimeOrder
             idOrder={item?._id}
-            idCustomer={item?.id_customer?._id}
-            status={item?.status}
+            dateWork={item?.date_work_schedule[0].date}
+            code={item?.code_promotion ? item?.code_promotion?.code : ""}
           />
         ) : (
-          <></>
+          ""
         ),
     },
     {
       key: "4",
+      label: item?.status === "confirm" && (
+        <AddCollaboratorOrder
+          idOrder={item?._id}
+          idCustomer={item?.id_customer?._id}
+          status={item?.status}
+        />
+      ),
+    },
+    {
+      key: "5",
       label:
         user?.role === "admin" &&
         (item?.status === "cancel" || item?.status === "done" ? (

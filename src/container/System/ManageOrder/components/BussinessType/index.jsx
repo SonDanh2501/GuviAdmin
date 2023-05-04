@@ -1,29 +1,18 @@
-import { Button, Drawer, Input, List } from "antd";
-import {
-  addDays,
-  addMonths,
-  eachDayOfInterval,
-  eachMonthOfInterval,
-  endOfMonth,
-} from "date-fns";
-import _debounce from "lodash/debounce";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import {
-  searchCollaborators,
-  searchCollaboratorsCreateOrder,
-} from "../../../../../api/collaborator";
-import {
-  DATA_DATE,
-  DATA_MONTH,
-  DATA_TIME,
-  date,
-} from "../../../../../api/fakeData";
+import { Button, DatePicker, Input, List, Switch } from "antd";
+import { useCallback, useEffect, useState } from "react";
+import { searchCustomers } from "../../../../../api/customer";
 import {
   getPlaceDetailApi,
   googlePlaceAutocomplete,
 } from "../../../../../api/location";
+import {
+  getCalculateFeeApi,
+  getPromotionByCustomerApi,
+} from "../../../../../api/service";
+import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
+import { errorNotify } from "../../../../../helper/toast";
+import _debounce from "lodash/debounce";
+import { DATA_TIME_TOTAL } from "../../../../../api/fakeData";
 import {
   addCollaboratorToOrderApi,
   checkCodePromotionOrderApi,
@@ -32,30 +21,41 @@ import {
   getAddressCustomerApi,
   getServiceFeeOrderApi,
 } from "../../../../../api/order";
-import {
-  getCalculateFeeApi,
-  getPromotionByCustomerApi,
-} from "../../../../../api/service";
-import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
-import LoadingPagination from "../../../../../components/paginationLoading";
 import { formatMoney } from "../../../../../helper/formatMoney";
-import { errorNotify } from "../../../../../helper/toast";
+import { useDispatch } from "react-redux";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import "./index.scss";
+import { useNavigate } from "react-router-dom";
+import LoadingPagination from "../../../../../components/paginationLoading";
+import {
+  searchCollaborators,
+  searchCollaboratorsCreateOrder,
+} from "../../../../../api/collaborator";
 
-const CleaningSchedule = (props) => {
-  const { extendService, id, name, setErrorNameCustomer, idService } = props;
+const BussinessType = (props) => {
+  const {
+    extendService,
+    addService,
+    bussinessType,
+    id,
+    name,
+    setErrorNameCustomer,
+    idService,
+  } = props;
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState("");
   const [long, setLong] = useState("");
   const [errorAddress, setErrorAddress] = useState("");
   const [note, setNote] = useState("");
   const [time, setTime] = useState([]);
+  const [bussiness, setBussiness] = useState([]);
   const [errorTime, setErrorTime] = useState("");
+  const [dateWork, setDateWork] = useState("");
+  const [errorDateWork, setErrorDateWork] = useState("");
   const [timeWork, setTimeWork] = useState("");
   const [errorTimeWork, setErrorTimeWork] = useState("");
-
-  const [selectedDate, setSelectedDate] = useState([]);
+  const [paymentMethod, setPaymentMethod] = useState("cash");
+  const [mutipleSelected, setMutipleSelected] = useState([]);
   const [promotionCustomer, setPromotionCustomer] = useState([]);
   const [priceOrder, setPriceOrder] = useState();
   const [discount, setDiscount] = useState(0);
@@ -67,69 +67,35 @@ const CleaningSchedule = (props) => {
   const [itemPromotion, setItemPromotion] = useState(0);
   const [isAutoOrder, setIsAutoOrder] = useState(false);
   const [places, setPlaces] = useState([]);
-  const [chooseMonth, setChooseMonth] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [estimateMonth, setEstimateMonth] = useState(1);
-  const [estimateDateWork, setEstimateDateWork] = useState(0);
-  const [selectDay, setSelectDay] = useState([]);
   const [dataCollaborator, setDataCollaborator] = useState([]);
   const [nameCollaborator, setNameCollaborator] = useState("");
-  const [errorCollaborator, setErrorCollaborator] = useState("");
   const [idCollaborator, setIdCollaborator] = useState("");
+  const [errorCollaborator, setErrorCollaborator] = useState("");
   const [dataAddress, setDataAddress] = useState([]);
-  const [open, setOpen] = useState(false);
-  const inputRef = useRef();
+  const [estimate, setEstimate] = useState();
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const showDrawer = () => {
-    setOpen(true);
-  };
-  const onClose = () => {
-    setOpen(false);
-  };
-
   useEffect(() => {
-    if (id) {
-      getPromotionByCustomerApi(id, 0, 20, idService)
-        .then((res) => setPromotionCustomer(res.data))
-        .catch((err) => {});
+    getPromotionByCustomerApi(id, 0, 20, idService)
+      .then((res) => setPromotionCustomer(res.data))
+      .catch((err) => console.log(err));
 
-      getAddressCustomerApi(id, 0, 20)
-        .then((res) => {
-          setDataAddress(res?.data);
-        })
-        .catch((err) => {});
-    }
-  }, [id, idService]);
+    getAddressCustomerApi(id, 0, 20)
+      .then((res) => {
+        setDataAddress(res?.data);
+      })
+      .catch((err) => {});
+  }, [id]);
 
-  const months = eachMonthOfInterval({
-    start: new Date(),
-    end: addMonths(new Date(), estimateMonth + 1),
-  }).map((item) => {
-    const allDays = eachDayOfInterval({
-      start: item,
-      end: endOfMonth(item),
-    });
-    return allDays;
-  });
+  const dateFormat = "YYYY-MM-DD";
 
-  useEffect(() => {
-    months.map((month) => {
-      month.map((day) => {
-        selectedDate.includes(day.toString().slice(0, 3)) &&
-          day > addDays(new Date(), -1) &&
-          day < addDays(addDays(new Date(), 7), 30 * estimateMonth) &&
-          !selectDay.includes(day.toString()) &&
-          selectDay.push(day.toString());
-      });
-    });
-    const timeout = setTimeout(() => {
-      inputRef.current?.blur();
-      inputRef.current?.focus();
-    }, 100);
-    return () => clearTimeout(timeout);
-  }, [estimateMonth, selectedDate]);
+  const onChange = (date, dateString) => {
+    setDateWork(dateString);
+    setErrorDateWork("");
+  };
 
   const onChangeTime = (value) => {
     setTimeWork(value);
@@ -141,33 +107,39 @@ const CleaningSchedule = (props) => {
       count: value?.count,
       _id: value?._id,
     });
+    setEstimate(value?.estimate);
   };
 
-  const optionSelectedDate = useCallback(
-    (date) => {
-      months.map((month) => {
-        month.map((day) => {
-          setSelectDay((prev) => prev.filter((p) => p !== day.toString()));
-        });
-      });
-      if (selectedDate.includes(date?.value)) {
-        setSelectedDate((prev) => prev.filter((p) => p !== date?.value));
-        setEstimateDateWork(estimateDateWork - date?.estimate);
+  const onChangeBussinessService = (value) => {
+    setTime({
+      count: value?.count,
+      _id: value?._id,
+    });
+  };
+
+  const onChooseMultiple = useCallback(
+    (_id) => {
+      if (mutipleSelected.some((item) => item._id === _id)) {
+        function filterByID(item) {
+          if (item._id !== _id) {
+            return true;
+          }
+          return false;
+        }
+
+        setMutipleSelected((prev) => prev.filter(filterByID));
       } else {
-        setSelectedDate((prev) => [...prev, date?.value]);
-        setEstimateDateWork(estimateDateWork + date?.estimate);
+        setMutipleSelected((prev) => [...prev, { _id, count: 1 }]);
       }
     },
-    [estimateDateWork, months, selectedDate, chooseMonth, timeWork]
+    [mutipleSelected]
   );
 
-  const onChooseMonth = (value) => {
-    if (value !== estimateMonth) {
-      selectDay.splice(0, selectDay.length);
-    }
-    setChooseMonth(value);
-    setEstimateMonth(value);
-  };
+  const timeW = dateWork + "T" + timeWork + ".000Z";
+
+  const timeNow = Number(new Date().toTimeString().slice(0, 2));
+
+  const dayNow = new Date().toISOString().slice(0, 10);
 
   var AES = require("crypto-js/aes");
   const temp = JSON.stringify({
@@ -176,10 +148,6 @@ const CleaningSchedule = (props) => {
     address: address,
   });
   var accessToken = AES.encrypt(temp, "guvico");
-
-  const valueAddress = (value) => {
-    setAddress(value);
-  };
 
   const handleSearchLocation = useCallback(
     _debounce((value) => {
@@ -255,44 +223,27 @@ const CleaningSchedule = (props) => {
       });
   }, []);
 
-  const onSelectDay = useCallback(
-    (title) => {
-      if (selectDay.includes(title)) {
-        if (selectDay.length > 3) {
-          setSelectDay((prev) => prev.filter((p) => p !== title));
-        }
-      } else {
-        setSelectDay((prev) => [...prev, title]);
-      }
-    },
-    [selectDay]
-  );
-
-  var uploadDateFilter = selectDay.map(
-    (item) => new Date(item.replace("00:00:00", timeWork))
-  );
-
-  let date_work_schedule = uploadDateFilter.map((item) => item.toISOString());
-
   useEffect(() => {
     if (
       lat &&
       long &&
       address &&
       timeWork &&
-      time &&
-      date_work_schedule.length > 0
+      dateWork &&
+      mutipleSelected &&
+      time
     ) {
+      setIsLoading(true);
       getCalculateFeeApi({
         token: accessToken.toString(),
-        type: "schedule",
+        type: "loop",
         type_address_work: "house",
         note_address: "",
         note: note,
         is_auto_order: false,
-        date_work_schedule: date_work_schedule,
-        extend_optional: [time],
-        payment_method: "point",
+        date_work_schedule: [timeW],
+        extend_optional: mutipleSelected.concat(time),
+        payment_method: paymentMethod,
       })
         .then((res) => {
           setPriceOrder(res?.initial_fee);
@@ -304,38 +255,17 @@ const CleaningSchedule = (props) => {
             message: err,
           });
         });
-    }
-  }, [
-    lat,
-    long,
-    timeWork,
-    time,
-    note,
-    selectDay.toString(),
-    chooseMonth,
-    estimateMonth,
-    date_work_schedule,
-  ]);
 
-  useEffect(() => {
-    if (
-      lat &&
-      long &&
-      address &&
-      timeWork &&
-      time &&
-      date_work_schedule.length > 0
-    ) {
       getServiceFeeOrderApi({
         token: accessToken.toString(),
-        type: "schedule",
+        type: "loop",
         type_address_work: "house",
         note_address: "",
         note: note,
         is_auto_order: false,
-        date_work_schedule: date_work_schedule,
-        extend_optional: [time],
-        payment_method: "point",
+        date_work_schedule: [timeW],
+        extend_optional: mutipleSelected.concat(time),
+        payment_method: paymentMethod,
       })
         .then((res) => {
           const totalEventFee =
@@ -353,26 +283,28 @@ const CleaningSchedule = (props) => {
           });
         });
     }
+
     if (
       lat &&
       long &&
       address &&
       timeWork &&
+      dateWork &&
+      mutipleSelected &&
       time &&
-      id &&
-      date_work_schedule.length > 0
+      id
     ) {
       setIsLoading(true);
       checkEventCodePromotionOrderApi(id, {
         token: accessToken.toString(),
-        type: "schedule",
+        type: "loop",
         type_address_work: "house",
         note_address: "",
         note: note,
         is_auto_order: false,
-        date_work_schedule: date_work_schedule,
-        extend_optional: [time],
-        payment_method: "point",
+        date_work_schedule: [timeW],
+        extend_optional: mutipleSelected.concat(time),
+        payment_method: paymentMethod,
       })
         .then((res) => {
           const totalEventFee =
@@ -392,121 +324,78 @@ const CleaningSchedule = (props) => {
           });
         });
     }
-  }, [
-    lat,
-    long,
-    timeWork,
-    time,
-    id,
-    selectDay.toString(),
-    chooseMonth,
-    estimateMonth,
-    note,
-  ]);
+  }, [lat, long, timeWork, dateWork, mutipleSelected, time, id, paymentMethod]);
 
   const checkPromotion = useCallback(
     (item) => {
       setIsLoading(true);
-      if (item?.code === codePromotion) {
-        setCodePromotion("");
-        setDiscount(0);
-        setItemPromotion([]);
-        setIsLoading(false);
-      } else {
-        checkCodePromotionOrderApi(id, {
-          id_customer: id,
-          token: accessToken.toString(),
-          type: "schedule",
-          type_address_work: "house",
-          note_address: "",
-          note: note,
-          is_auto_order: false,
-          date_work_schedule: date_work_schedule,
-          extend_optional: [time],
-          code_promotion: item?.code,
-          payment_method: "point",
+      checkCodePromotionOrderApi(id, {
+        id_customer: id,
+        token: accessToken.toString(),
+        type: "loop",
+        type_address_work: "house",
+        note_address: "",
+        note: note,
+        is_auto_order: false,
+        date_work_schedule: [timeW],
+        extend_optional: mutipleSelected.concat(time),
+        code_promotion: item?.code,
+        payment_method: paymentMethod,
+      })
+        .then((res) => {
+          setIsLoading(false);
+          setCodePromotion(item?.code);
+          setDiscount(res?.discount);
+          setItemPromotion(item);
         })
-          .then((res) => {
-            setIsLoading(false);
-            setCodePromotion(item?.code);
-            setDiscount(res?.discount);
-            setItemPromotion(item);
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err,
-            });
-            setIsLoading(false);
+        .catch((err) => {
+          errorNotify({
+            message: err,
           });
-      }
+          setIsLoading(false);
+        });
     },
-    [
-      id,
-      lat,
-      long,
-      address,
-      timeWork,
-      date_work_schedule,
-      time,
-      chooseMonth,
-      estimateMonth,
-      codePromotion,
-    ]
+    [id, lat, long, timeWork, dateWork, mutipleSelected, time, paymentMethod]
   );
 
   const onCreateOrder = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-    if ((lat && long && address && timeWork && time && id) || idCollaborator) {
-      if (idCollaborator) {
-        createOrderApi({
-          id_customer: id,
-          token: accessToken.toString(),
-          type: "loop",
-          type_address_work: "house",
-          note_address: "",
-          note: note,
-          is_auto_order: false,
-          date_work_schedule: date_work_schedule,
-          extend_optional: [time],
-          code_promotion: codePromotion,
-          payment_method: "point",
-          id_collaborator: idCollaborator,
+
+    if (
+      (lat &&
+        long &&
+        address &&
+        timeWork &&
+        dateWork &&
+        mutipleSelected &&
+        time &&
+        id) ||
+      idCollaborator
+    ) {
+      createOrderApi({
+        id_customer: id,
+        token: accessToken.toString(),
+        type: "loop",
+        type_address_work: "house",
+        note_address: "",
+        note: note,
+        is_auto_order: isAutoOrder,
+        date_work_schedule: [timeW],
+        extend_optional: mutipleSelected.concat(time),
+        code_promotion: codePromotion,
+        payment_method: paymentMethod,
+        id_collaborator: idCollaborator,
+      })
+        .then((res) => {
+          navigate("/group-order/manage-order");
+          window.location.reload();
         })
-          .then((res) => {
-            navigate("/group-order/manage-order");
-            window.location.reload();
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err,
-            });
-            dispatch(loadingAction.loadingRequest(false));
+        .catch((err) => {
+          errorNotify({
+            message: err,
           });
-      } else {
-        createOrderApi({
-          id_customer: id,
-          token: accessToken.toString(),
-          type: "loop",
-          type_address_work: "house",
-          note_address: "",
-          note: note,
-          is_auto_order: false,
-          date_work_schedule: date_work_schedule,
-          extend_optional: [time],
-          code_promotion: codePromotion,
-          payment_method: "point",
-        })
-          .then((res) => {
-            navigate("/group-order/manage-order");
-            window.location.reload();
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err,
-            });
-            dispatch(loadingAction.loadingRequest(false));
-          });
-      }
+          dispatch(loadingAction.loadingRequest(false));
+        });
     } else if (!id) {
       setErrorNameCustomer("Vui lòng chọn khách hàng");
       dispatch(loadingAction.loadingRequest(false));
@@ -516,8 +405,14 @@ const CleaningSchedule = (props) => {
     } else if (time.length === 0) {
       setErrorTime("Vui lòng chọn dịch vụ");
       dispatch(loadingAction.loadingRequest(false));
+    } else if (!dateWork) {
+      setErrorDateWork("Vui lòng chọn ngày làm");
+      dispatch(loadingAction.loadingRequest(false));
     } else if (!timeWork) {
       setErrorTimeWork("Vui lòng chọn giờ làm");
+      dispatch(loadingAction.loadingRequest(false));
+    } else if (!idCollaborator) {
+      setErrorCollaborator("Vui lòng chọn CTV");
       dispatch(loadingAction.loadingRequest(false));
     } else {
       dispatch(loadingAction.loadingRequest(false));
@@ -528,13 +423,14 @@ const CleaningSchedule = (props) => {
     long,
     address,
     timeWork,
-    date_work_schedule,
+    dateWork,
+    mutipleSelected,
     time,
     codePromotion,
+    isAutoOrder,
     note,
-    chooseMonth,
-    estimateMonth,
     idCollaborator,
+    paymentMethod,
   ]);
 
   const searchValue = (value) => {
@@ -576,7 +472,7 @@ const CleaningSchedule = (props) => {
             value={address}
             type="text"
             onChange={(e) => {
-              valueAddress(e.target.value);
+              setAddress(e.target.value);
               handleSearchLocation(e.target.value);
             }}
             className="input-search"
@@ -640,7 +536,7 @@ const CleaningSchedule = (props) => {
             Thời lượng <a style={{ color: "red" }}>(*)</a>
           </a>
           <div className="div-service">
-            {extendService.slice(0, 3).map((item) => {
+            {extendService.map((item) => {
               return (
                 <div
                   className={
@@ -666,10 +562,12 @@ const CleaningSchedule = (props) => {
                         : "text-service-default"
                     }
                   >
-                    {item?.description?.vi.slice(
-                      0,
-                      item?.description?.vi.indexOf("2")
-                    )}
+                    {item?.estimate === 0.5
+                      ? item?.description?.vi
+                      : item?.description?.vi.slice(
+                          0,
+                          item?.description?.vi.indexOf("2")
+                        )}
                   </a>
                   <a
                     className={
@@ -678,9 +576,10 @@ const CleaningSchedule = (props) => {
                         : "text-service-default"
                     }
                   >
-                    {item?.description?.vi.slice(
-                      item?.description?.vi.indexOf(" ")
-                    )}
+                    {item?.estimate !== 0.5 &&
+                      item?.description?.vi.slice(
+                        item?.description?.vi.indexOf(" ")
+                      )}
                   </a>
                 </div>
               );
@@ -689,31 +588,124 @@ const CleaningSchedule = (props) => {
           <a className="text-error">{errorTime}</a>
         </div>
 
-        <div className="div-select-date mt-2">
-          <a className="label-date">Ngày làm (*)</a>
-          <div className="div-date">
-            {DATA_DATE?.map((item, index) => {
+        <div className="div-add-service mt-3">
+          <a className="label">
+            Loại hình kinh doanh <a style={{ color: "red" }}>(*)</a>
+          </a>
+          <div className="div-service">
+            {bussinessType?.map((item) => {
               return (
                 <div
-                  key={index}
                   className={
-                    selectedDate.includes(item?.value)
-                      ? "div-item-date"
-                      : "div-item-date-default"
+                    item?._id === time?._id
+                      ? "select-service"
+                      : "select-service-default"
                   }
-                  onClick={() => optionSelectedDate(item)}
+                  onClick={() => onChangeBussinessService(item)}
                 >
-                  <a>{item?.date}</a>
+                  <a
+                    className={
+                      item?._id === time?._id
+                        ? "text-service"
+                        : "text-service-default"
+                    }
+                  >
+                    {item?.title?.vi}
+                  </a>
+                  <a
+                    className={
+                      item?._id === time?._id
+                        ? "text-service"
+                        : "text-service-default"
+                    }
+                  >
+                    {item?.estimate === 0.5
+                      ? item?.description?.vi
+                      : item?.description?.vi.slice(
+                          0,
+                          item?.description?.vi.indexOf("2")
+                        )}
+                  </a>
+                  <a
+                    className={
+                      item?._id === time?._id
+                        ? "text-service"
+                        : "text-service-default"
+                    }
+                  >
+                    {item?.estimate !== 0.5 &&
+                      item?.description?.vi.slice(
+                        item?.description?.vi.indexOf(" ")
+                      )}
+                  </a>
                 </div>
+              );
+            })}
+          </div>
+          <a className="text-error">{errorTime}</a>
+        </div>
+
+        <div className="div-add-service mt-3">
+          <a className="label">Dịch vụ thêm</a>
+          <div className="div-service">
+            {addService.map((item) => {
+              return (
+                <button
+                  className={
+                    mutipleSelected.some((items) => items._id === item?._id)
+                      ? "select-service"
+                      : "select-service-default"
+                  }
+                  onClick={() => onChooseMultiple(item?._id)}
+                  disabled={
+                    estimate === 4 && item?.estimate === 0
+                      ? false
+                      : estimate !== 4
+                      ? false
+                      : true
+                  }
+                >
+                  <a
+                    className={
+                      mutipleSelected.some((items) => items._id === item?._id)
+                        ? "text-service"
+                        : "text-service-default"
+                    }
+                  >
+                    {item?.title?.vi}
+                  </a>
+                  <a
+                    className={
+                      mutipleSelected.some((items) => items._id === item?._id)
+                        ? "text-service"
+                        : "text-service-default"
+                    }
+                  >
+                    {item?.description?.vi}
+                  </a>
+                </button>
               );
             })}
           </div>
         </div>
 
+        <div className="form-picker">
+          <a className="label">
+            Ngày làm <a style={{ color: "red" }}>(*)</a>
+          </a>
+          <DatePicker
+            format={dateFormat}
+            onChange={onChange}
+            className="select-time"
+          />
+          <a className="text-error">{errorDateWork}</a>
+        </div>
+
         <div className="form-picker-hours">
           <a className="label-hours">Giờ làm (*)</a>
           <div className="div-hours">
-            {DATA_TIME.map((item) => {
+            {DATA_TIME_TOTAL.map((item) => {
+              const timeChosse = item?.title?.slice(0, 2);
               return (
                 <Button
                   className={
@@ -722,6 +714,13 @@ const CleaningSchedule = (props) => {
                       : "select-time-default"
                   }
                   onClick={() => onChangeTime(item.time)}
+                  // disabled={
+                  //   dateWork === dayNow
+                  //     ? timeNow >= timeChosse
+                  //       ? true
+                  //       : false
+                  //     : false
+                  // }
                 >
                   {item.title}
                 </Button>
@@ -731,57 +730,55 @@ const CleaningSchedule = (props) => {
           <a className="text-error">{errorTimeWork}</a>
         </div>
 
-        <div className="div-select-month">
-          <a className="label-month">Gói tháng (*)</a>
-          <div className="div-month">
-            {DATA_MONTH?.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className={
-                    item?.estimate === chooseMonth
-                      ? "div-item-month"
-                      : "div-item-month-default"
-                  }
-                  onClick={() => onChooseMonth(item?.estimate)}
-                >
-                  <a>{item?.title}</a>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        {/* <div className="div-auto-order">
+          <a className="label-hours">Lặp lại hàng tuần</a>
+          <Switch
+            defaultChecked={isAutoOrder}
+            style={{ width: 50, marginRight: 20 }}
+            onChange={() => setIsAutoOrder(!isAutoOrder)}
+          />
+        </div> */}
 
-        <Button
-          className="btn-see-time-work"
-          onClick={showDrawer}
-          disabled={lat && long && address && timeWork && time ? false : true}
-        >
-          Xem lịch trình làm việc
-        </Button>
+        <CustomTextInput
+          label="Phương thức thanh toán"
+          type="select"
+          classNameForm="input-form-select-payment"
+          className="input-select-payment"
+          value={paymentMethod}
+          onChange={(e) => setPaymentMethod(e.target.value)}
+          body={
+            <>
+              <option value={"cash"}>Tiền mặt</option>
+              <option value={"point"}>G-pay</option>
+            </>
+          }
+        />
 
         <CustomTextInput
           label="Ghi chú"
           type="textarea"
-          classNameForm="input-note"
+          className="input-note"
           placeholder="Vui lòng nhập ghi chú"
           onChange={(e) => setNote(e.target.value)}
         />
 
         <div>
           <h5>(*)Cộng tác viên</h5>
-          <Input
-            placeholder="Tìm kiếm theo số điện thoại"
-            value={nameCollaborator}
-            className="input-search-collaborator-order"
-            onChange={(e) => {
-              searchCollaborator(e.target.value);
-              searchValue(e.target.value);
-            }}
-          />
+          <div>
+            <Input
+              placeholder="Tìm kiếm theo số điện thoại"
+              value={nameCollaborator}
+              className="input-search-collaborator-order"
+              onChange={(e) => {
+                searchCollaborator(e.target.value);
+                searchValue(e.target.value);
+              }}
+            />
+            {<a className="text-error">{errorCollaborator}</a>}
+          </div>
 
           {dataCollaborator.length > 0 && (
-            <List type={"unstyled"} className="list-item-add-order">
+            <List type={"unstyled"} className="list-item-add-ctv-order">
               {dataCollaborator?.map((item, index) => {
                 return (
                   <button
@@ -798,7 +795,6 @@ const CleaningSchedule = (props) => {
                       setIdCollaborator(item?._id);
                       setNameCollaborator(item?.full_name);
                       setDataCollaborator([]);
-                      setErrorCollaborator("");
                     }}
                   >
                     <div>
@@ -841,7 +837,6 @@ const CleaningSchedule = (props) => {
         </div>
         {priceOrder && (
           <div className="div-total mt-3">
-            <a>Số buổi: {selectDay.length}</a>
             <a>Tạm tính: {formatMoney(priceOrder)}</a>
             <a>Phí nền tảng: {formatMoney(feeService)}</a>
             {eventPromotion.map((item, index) => {
@@ -873,199 +868,9 @@ const CleaningSchedule = (props) => {
           <Button onClick={onCreateOrder}>Đăng việc</Button>
         </div>
         {isLoading && <LoadingPagination />}
-
-        <div>
-          <Drawer
-            title="Xem lịch làm việc"
-            placement="right"
-            onClose={onClose}
-            width={420}
-            open={open}
-          >
-            <div>
-              {months?.map((month, i) => {
-                const theFirstDayInMonth = month[0].toString().split(" ")[0];
-                const year = month[0].toString().split(/\s/);
-
-                const formatMonthVN = (function (timess) {
-                  var a = new Date(timess).toString().split(/\s/);
-
-                  return {
-                    Jan: "Tháng 1",
-                    Feb: "Tháng 2",
-                    Mar: "Tháng 3",
-                    Apr: "Tháng 4",
-                    May: "Tháng 5",
-                    Jun: "Tháng 6",
-                    Jul: "Tháng 7",
-                    Aug: "Tháng 8",
-                    Sep: "Tháng 9",
-                    Oct: "Tháng 10",
-                    Nov: "Tháng 11",
-                    Dec: "Tháng 12",
-                  }[a[1]];
-                })(month[0]);
-
-                return (
-                  <div key={i} className="mt-2">
-                    <a className="title-month">
-                      {formatMonthVN} , {year[3]}
-                    </a>
-                    <div className="div-flex-date">
-                      {date.map((item) => (
-                        <div key={item.id} className="div-date">
-                          <a className="text-date">{item.title}</a>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="div-descrip-time">
-                      {theFirstDayInMonth === "Tue"
-                        ? Tue.map((item) => (
-                            <a key={item.id} className="div-date" />
-                          ))
-                        : theFirstDayInMonth === "Wed"
-                        ? Wed.map((item) => (
-                            <a key={item.id} className="div-date" />
-                          ))
-                        : theFirstDayInMonth === "Thu"
-                        ? Thu.map((item) => (
-                            <a key={item.id} className="div-date" />
-                          ))
-                        : theFirstDayInMonth === "Fri"
-                        ? Fri.map((item) => (
-                            <a key={item.id} className="div-date" />
-                          ))
-                        : theFirstDayInMonth === "Sat"
-                        ? Sat.map((item) => (
-                            <a key={item.id} className="div-date" />
-                          ))
-                        : theFirstDayInMonth === "Sun"
-                        ? Sun.map((item) => (
-                            <a key={item.id} className="div-date" />
-                          ))
-                        : null}
-
-                      {month.map((day, index) => {
-                        const words = day.toString().split(" ");
-
-                        return (
-                          <button
-                            key={index}
-                            disabled={
-                              day < addDays(new Date(), -1) ? true : false
-                            }
-                            className={
-                              day < addDays(new Date(), -1)
-                                ? "div-date"
-                                : selectDay.includes(day.toString())
-                                ? "div-date-selected"
-                                : "div-date"
-                            }
-                            onClick={() => onSelectDay(day.toString())}
-                          >
-                            <a
-                              className={
-                                day < addDays(new Date(), -1)
-                                  ? "date-not-use"
-                                  : selectDay.includes(day.toString())
-                                  ? "text-date-selected"
-                                  : "date-use"
-                              }
-                            >
-                              {words[2]}
-                            </a>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </Drawer>
-        </div>
       </div>
     </>
   );
 };
 
-export default CleaningSchedule;
-
-const Tue = [
-  {
-    id: 1,
-  },
-];
-
-const Wed = [
-  {
-    id: 1,
-  },
-  {
-    id: 2,
-  },
-];
-const Thu = [
-  {
-    id: 1,
-  },
-  {
-    id: 2,
-  },
-  {
-    id: 3,
-  },
-];
-const Fri = [
-  {
-    id: 1,
-  },
-  {
-    id: 2,
-  },
-  {
-    id: 3,
-  },
-  {
-    id: 4,
-  },
-];
-const Sat = [
-  {
-    id: 1,
-  },
-  {
-    id: 2,
-  },
-  {
-    id: 3,
-  },
-  {
-    id: 4,
-  },
-  {
-    id: 5,
-  },
-];
-
-const Sun = [
-  {
-    id: 1,
-  },
-  {
-    id: 2,
-  },
-  {
-    id: 3,
-  },
-  {
-    id: 4,
-  },
-  {
-    id: 5,
-  },
-  {
-    id: 6,
-  },
-];
+export default BussinessType;

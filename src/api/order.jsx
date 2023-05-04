@@ -111,3 +111,10 @@ export const changeOrderCancelToDoneApi = (id) => {
     `/admin/group-order-manager/change_cancel_to_done/${id}?lang=vi`
   );
 };
+
+export const editTimeOrderApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/group-order-manager/edit_item/${id}?lang=vi`,
+    data
+  );
+};

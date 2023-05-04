@@ -250,10 +250,10 @@ const TopupCollaborator = ({ type }) => {
         return (
           <div className="div-time-topup">
             <a className="text-time">
-              {moment(new Date(data?.date_created)).format("DD/MM/yyy")}
+              {moment(new Date(data?.date_create)).format("DD/MM/yyy")}
             </a>
             <a className="text-time">
-              {moment(new Date(data?.date_created)).format("HH:mm")}
+              {moment(new Date(data?.date_create)).format("HH:mm")}
             </a>
           </div>
         );
