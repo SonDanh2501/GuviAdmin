@@ -1,4 +1,4 @@
-import { Drawer } from "antd";
+import { Drawer, Select } from "antd";
 import React, { memo, useCallback, useState } from "react";
 import IntlCurrencyInput from "react-intl-currency-input";
 import { useDispatch } from "react-redux";
@@ -29,6 +29,7 @@ const Withdraw = ({ type, setDataT, setTotal }) => {
   const [errorName, setErrorName] = useState("");
   const [errorMoney, setErrorMoney] = useState("");
   const [id, setId] = useState("");
+  const [wallet, setWallet] = useState("");
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -69,6 +70,7 @@ const Withdraw = ({ type, setDataT, setTotal }) => {
       withdrawMoneyCollaboratorApi(id, {
         money: money,
         transfer_note: note,
+        type_wallet: wallet,
       })
         .then((res) => {
           getTopupCollaboratorApi(0, 20, type)
@@ -192,6 +194,19 @@ const Withdraw = ({ type, setDataT, setTotal }) => {
               value={note}
               onChange={(e) => setNote(e.target.value)}
             />
+
+            <Select
+              defaultValue="Vui lòng chọn ví"
+              style={{ width: "100%" }}
+              onChange={(e) => {
+                setWallet(e);
+              }}
+              options={[
+                { value: "wallet", label: "Ví chính" },
+                { value: "gift_wallet", label: "Ví thưởng" },
+              ]}
+            />
+
             <CustomButton
               title="Rút tiền"
               className="float-left btn-add-w"

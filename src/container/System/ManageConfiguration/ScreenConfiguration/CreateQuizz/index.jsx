@@ -16,6 +16,7 @@ import {
 } from "antd";
 import CustomTextEditor from "../../../../../components/customTextEdittor";
 import {
+  activeQuestionApi,
   addQuestionApi,
   deleteQuestionApi,
   editQuestionApi,
@@ -64,9 +65,11 @@ const CreateQuizz = () => {
   const [itemEdit, setItemEdit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [modal, setModal] = useState(false);
+  const [modalActive, setModalActive] = useState(false);
   const [open, setOpen] = useState(false);
 
   const toggle = () => setModal(!modal);
+  const toggleActive = () => setModalActive(!modalActive);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -75,13 +78,46 @@ const CreateQuizz = () => {
     setOpen(false);
   };
 
+  const openAddQuestion = () => {
+    setOpen(true);
+    setDataQuestion([
+      {
+        title: "",
+        description: "",
+        question: "",
+        choose: [
+          {
+            answer: "",
+            isCorrect: false,
+          },
+          {
+            answer: "",
+            isCorrect: false,
+          },
+          {
+            answer: "",
+            isCorrect: false,
+          },
+          {
+            title: "",
+            isCorrect: false,
+          },
+        ],
+      },
+    ]);
+  };
+
   useEffect(() => {
+    setIsLoading(true);
     getListQuestionApi(startPage, 20)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
+        setIsLoading(false);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false);
+      });
   }, []);
 
   const addAnswer = () => {
@@ -217,11 +253,58 @@ const CreateQuizz = () => {
         })
         .catch((err) => {
           setIsLoading(false);
-
           errorNotify({
             message: err,
           });
         });
+    },
+    [startPage]
+  );
+
+  const activeQuestion = useCallback(
+    (id, active) => {
+      setIsLoading(true);
+      if (active) {
+        activeQuestionApi(id, { is_active: false })
+          .then((res) => {
+            setModalActive(false);
+            getListQuestionApi(startPage, 20)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItem);
+                setIsLoading(false);
+              })
+              .catch((err) => {
+                setIsLoading(false);
+              });
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            errorNotify({
+              message: err,
+            });
+          });
+      } else {
+        activeQuestionApi(id, { is_active: true })
+          .then((res) => {
+            setModalActive(false);
+            getListQuestionApi(startPage, 20)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItem);
+                setIsLoading(false);
+              })
+              .catch((err) => {
+                setIsLoading(false);
+              });
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            errorNotify({
+              message: err,
+            });
+          });
+      }
     },
     [startPage]
   );
@@ -266,9 +349,17 @@ const CreateQuizz = () => {
         return (
           <a>
             {data?.is_active ? (
-              <img className="img-unlock-banner" src={onToggle} />
+              <img
+                className="img-unlock-banner"
+                src={onToggle}
+                onClick={toggleActive}
+              />
             ) : (
-              <img className="img-unlock-banner" src={offToggle} />
+              <img
+                className="img-unlock-banner"
+                src={offToggle}
+                onClick={toggleActive}
+              />
             )}
           </a>
         );
@@ -321,7 +412,7 @@ const CreateQuizz = () => {
     <div className="div-container-question">
       <div className="div-header-question">
         <a className="title-quizz">Tạo câu hỏi</a>
-        <Button className="btn-add-question" onClick={showDrawer}>
+        <Button className="btn-add-question" onClick={openAddQuestion}>
           Thêm câu hỏi
         </Button>
       </div>
@@ -475,6 +566,32 @@ const CreateQuizz = () => {
               Có
             </Button>
             <Button color="#ddd" onClick={toggle}>
+              Không
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+
+      <div>
+        <Modal isOpen={modalActive} toggle={toggleActive}>
+          <ModalHeader toggle={toggleActive}>
+            {itemEdit?.is_active ? "Ẩn câu hỏi" : "Hiện thị câu hỏi"}
+          </ModalHeader>
+          <ModalBody>
+            {itemEdit?.is_active ? (
+              <a>Bạn có chắc muốn ẩn câu {itemEdit?.question} không?</a>
+            ) : (
+              <a>Bạn có chắc muốn hiện câu {itemEdit?.question} không?</a>
+            )}
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="primary"
+              onClick={() => activeQuestion(itemEdit?._id, itemEdit?.is_active)}
+            >
+              Có
+            </Button>
+            <Button color="#ddd" onClick={toggleActive}>
               Không
             </Button>
           </ModalFooter>

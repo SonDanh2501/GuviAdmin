@@ -32,20 +32,22 @@ const ChildPromotion = () => {
   }, [code, tab]);
 
   const onChange = (page) => {
+    window.scrollTo(0, 0);
+    setIsLoading(true);
+    setCurrentPage(page);
     const start = page * data.length - data.length;
     getChildPromotion(code, tab, start, 20)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
+        setIsLoading(false);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false);
+      });
   };
 
   const columns = [
-    {
-      title: "STT",
-      render: (data, record, index) => <a>{index + 1}</a>,
-    },
     {
       title: "Tên Promotion",
       render: (data) => {
@@ -210,7 +212,10 @@ const ChildPromotion = () => {
                   ? "div-title-child-selected"
                   : "div-title-child"
               }
-              onClick={() => setTab(item?.value)}
+              onClick={() => {
+                setTab(item?.value);
+                setCurrentPage(1);
+              }}
             >
               <a className="title-child-promotion">{item?.title}</a>
             </div>

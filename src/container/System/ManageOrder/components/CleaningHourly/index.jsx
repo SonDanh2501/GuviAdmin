@@ -77,15 +77,17 @@ const CleaningHourly = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getPromotionByCustomerApi(id, 0, 20, idService)
-      .then((res) => setPromotionCustomer(res.data))
-      .catch((err) => console.log(err));
+    if (id) {
+      getPromotionByCustomerApi(id, 0, 20, idService)
+        .then((res) => setPromotionCustomer(res.data))
+        .catch((err) => {});
 
-    getAddressCustomerApi(id, 0, 20)
-      .then((res) => {
-        setDataAddress(res?.data);
-      })
-      .catch((err) => {});
+      getAddressCustomerApi(id, 0, 20)
+        .then((res) => {
+          setDataAddress(res?.data);
+        })
+        .catch((err) => {});
+    }
   }, [id]);
 
   const dateFormat = "YYYY-MM-DD";
@@ -139,10 +141,6 @@ const CleaningHourly = (props) => {
     address: address,
   });
   var accessToken = AES.encrypt(temp, "guvico");
-
-  const valueAddress = (value) => {
-    setAddress(value);
-  };
 
   const handleSearchLocation = useCallback(
     _debounce((value) => {
@@ -324,33 +322,51 @@ const CleaningHourly = (props) => {
   const checkPromotion = useCallback(
     (item) => {
       setIsLoading(true);
-      checkCodePromotionOrderApi(id, {
-        id_customer: id,
-        token: accessToken.toString(),
-        type: "loop",
-        type_address_work: "house",
-        note_address: "",
-        note: note,
-        is_auto_order: false,
-        date_work_schedule: [timeW],
-        extend_optional: mutipleSelected.concat(time),
-        code_promotion: item?.code,
-        payment_method: paymentMethod,
-      })
-        .then((res) => {
-          setIsLoading(false);
-          setCodePromotion(item?.code);
-          setDiscount(res?.discount);
-          setItemPromotion(item);
+      if (item?.code === codePromotion) {
+        setCodePromotion("");
+        setDiscount(0);
+        setItemPromotion([]);
+        setIsLoading(false);
+      } else {
+        setCodePromotion(item?.code);
+        checkCodePromotionOrderApi(id, {
+          id_customer: id,
+          token: accessToken.toString(),
+          type: "loop",
+          type_address_work: "house",
+          note_address: "",
+          note: note,
+          is_auto_order: false,
+          date_work_schedule: [timeW],
+          extend_optional: mutipleSelected.concat(time),
+          code_promotion: item?.code,
+          payment_method: paymentMethod,
         })
-        .catch((err) => {
-          errorNotify({
-            message: err,
+          .then((res) => {
+            setIsLoading(false);
+            setCodePromotion(item?.code);
+            setDiscount(res?.discount);
+            setItemPromotion(item);
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            setIsLoading(false);
           });
-          setIsLoading(false);
-        });
+      }
     },
-    [id, lat, long, timeWork, dateWork, mutipleSelected, time, paymentMethod]
+    [
+      id,
+      lat,
+      long,
+      timeWork,
+      dateWork,
+      mutipleSelected,
+      time,
+      paymentMethod,
+      codePromotion,
+    ]
   );
 
   const onCreateOrder = useCallback(() => {
@@ -467,7 +483,7 @@ const CleaningHourly = (props) => {
             value={address}
             type="text"
             onChange={(e) => {
-              valueAddress(e.target.value);
+              setAddress(e.target.value);
               handleSearchLocation(e.target.value);
             }}
             className="input-search"
@@ -643,7 +659,6 @@ const CleaningHourly = (props) => {
           <a className="label-hours">Giờ làm (*)</a>
           <div className="div-hours">
             {DATA_TIME_TOTAL.map((item) => {
-              const timeChosse = item?.title?.slice(0, 2);
               return (
                 <Button
                   className={
@@ -812,20 +827,3 @@ const CleaningHourly = (props) => {
 };
 
 export default CleaningHourly;
-
-const DATA_AD = [
-  {
-    id: 1,
-    address:
-      "CÔNG TY TNHH KIẾN TRÚC XÂY DỰNG NỘI THẤT 2NT, Đường Số 9, Trường Thọ, Thủ Đức, Thành phố Hồ Chí Minh",
-    lat: 10.8482128075937,
-    long: 106.75899072883614,
-  },
-  {
-    id: 2,
-    address:
-      "CÔNG TY Đồ cúng việt, Đường Số 9, Trường Thọ, Thủ Đức, Thành phố Hồ Chí Minh",
-    lat: 10.8482128075937,
-    long: 106.75899072883614,
-  },
-];
