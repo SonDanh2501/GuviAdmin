@@ -3,7 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
 import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
-import { Dropdown, FloatButton, Input, Pagination, Space, Table } from "antd";
+import {
+  Dropdown,
+  Empty,
+  FloatButton,
+  Input,
+  Pagination,
+  Skeleton,
+  Space,
+  Table,
+} from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
@@ -585,6 +594,10 @@ export default function UserManage(props) {
                   setRowIndex(rowIndex);
                 },
               };
+            }}
+            locale={{
+              emptyText:
+                data.length > 0 ? <Empty /> : <Skeleton active={true} />,
             }}
           />
         </div>

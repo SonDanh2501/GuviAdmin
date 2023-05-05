@@ -174,12 +174,14 @@ export default function Home() {
         return (
           <div className="div-column-service">
             <a className="text-service">
-              {data?.type === "schedule"
-                ? "Cố định"
-                : data?.type === "loop" && !data?.is_auto_order
-                ? "Theo giờ"
-                : data?.type === "loop" && data?.is_auto_order
+              {data?.type === "loop" && data?.is_auto_order
                 ? "Lặp lại"
+                : data?.service?._id?.kind === "giup_viec_theo_gio"
+                ? "Theo giờ"
+                : data?.service?._id?.kind === "giup_viec_co_dinh"
+                ? "Cố định"
+                : data?.service?._id?.kind === "phuc_vu_nha_hang"
+                ? "Phục vụ"
                 : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>

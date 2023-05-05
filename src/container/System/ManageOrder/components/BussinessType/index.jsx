@@ -79,15 +79,17 @@ const BussinessType = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getPromotionByCustomerApi(id, 0, 20, idService)
-      .then((res) => setPromotionCustomer(res.data))
-      .catch((err) => console.log(err));
+    if (id) {
+      getPromotionByCustomerApi(id, 0, 20, idService)
+        .then((res) => setPromotionCustomer(res.data))
+        .catch((err) => console.log(err));
 
-    getAddressCustomerApi(id, 0, 20)
-      .then((res) => {
-        setDataAddress(res?.data);
-      })
-      .catch((err) => {});
+      getAddressCustomerApi(id, 0, 20)
+        .then((res) => {
+          setDataAddress(res?.data);
+        })
+        .catch((err) => {});
+    }
   }, [id]);
 
   const dateFormat = "YYYY-MM-DD";
@@ -111,7 +113,7 @@ const BussinessType = (props) => {
   };
 
   const onChangeBussinessService = (value) => {
-    setTime({
+    setBussiness({
       count: value?.count,
       _id: value?._id,
     });
@@ -329,38 +331,56 @@ const BussinessType = (props) => {
   const checkPromotion = useCallback(
     (item) => {
       setIsLoading(true);
-      checkCodePromotionOrderApi(id, {
-        id_customer: id,
-        token: accessToken.toString(),
-        type: "loop",
-        type_address_work: "house",
-        note_address: "",
-        note: note,
-        is_auto_order: false,
-        date_work_schedule: [timeW],
-        extend_optional: mutipleSelected.concat(time),
-        code_promotion: item?.code,
-        payment_method: paymentMethod,
-      })
-        .then((res) => {
-          setIsLoading(false);
-          setCodePromotion(item?.code);
-          setDiscount(res?.discount);
-          setItemPromotion(item);
+      const extend = mutipleSelected.concat(time);
+      if (item?.code === codePromotion) {
+        setCodePromotion("");
+        setDiscount(0);
+        setItemPromotion([]);
+        setIsLoading(false);
+      } else {
+        checkCodePromotionOrderApi(id, {
+          id_customer: id,
+          token: accessToken.toString(),
+          type: "loop",
+          type_address_work: "house",
+          note_address: "",
+          note: note,
+          is_auto_order: false,
+          date_work_schedule: [timeW],
+          extend_optional: extend.concat(bussiness),
+          code_promotion: item?.code,
+          payment_method: paymentMethod,
         })
-        .catch((err) => {
-          errorNotify({
-            message: err,
+          .then((res) => {
+            setIsLoading(false);
+            setCodePromotion(item?.code);
+            setDiscount(res?.discount);
+            setItemPromotion(item);
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            setIsLoading(false);
           });
-          setIsLoading(false);
-        });
+      }
     },
-    [id, lat, long, timeWork, dateWork, mutipleSelected, time, paymentMethod]
+    [
+      id,
+      lat,
+      long,
+      timeWork,
+      dateWork,
+      mutipleSelected,
+      time,
+      paymentMethod,
+      bussiness,
+    ]
   );
 
   const onCreateOrder = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-
+    const extend = mutipleSelected.concat(time);
     if (
       (lat &&
         long &&
@@ -381,7 +401,7 @@ const BussinessType = (props) => {
         note: note,
         is_auto_order: isAutoOrder,
         date_work_schedule: [timeW],
-        extend_optional: mutipleSelected.concat(time),
+        extend_optional: extend.concat(bussiness),
         code_promotion: codePromotion,
         payment_method: paymentMethod,
         id_collaborator: idCollaborator,
@@ -431,6 +451,7 @@ const BussinessType = (props) => {
     note,
     idCollaborator,
     paymentMethod,
+    bussiness,
   ]);
 
   const searchValue = (value) => {
@@ -536,7 +557,7 @@ const BussinessType = (props) => {
             Thời lượng <a style={{ color: "red" }}>(*)</a>
           </a>
           <div className="div-service">
-            {extendService.map((item) => {
+            {extendService?.map((item) => {
               return (
                 <div
                   className={
@@ -597,7 +618,7 @@ const BussinessType = (props) => {
               return (
                 <div
                   className={
-                    item?._id === time?._id
+                    item?._id === bussiness?._id
                       ? "select-service"
                       : "select-service-default"
                   }
@@ -605,7 +626,7 @@ const BussinessType = (props) => {
                 >
                   <a
                     className={
-                      item?._id === time?._id
+                      item?._id === bussiness?._id
                         ? "text-service"
                         : "text-service-default"
                     }
@@ -614,7 +635,7 @@ const BussinessType = (props) => {
                   </a>
                   <a
                     className={
-                      item?._id === time?._id
+                      item?._id === bussiness?._id
                         ? "text-service"
                         : "text-service-default"
                     }
@@ -628,7 +649,7 @@ const BussinessType = (props) => {
                   </a>
                   <a
                     className={
-                      item?._id === time?._id
+                      item?._id === bussiness?._id
                         ? "text-service"
                         : "text-service-default"
                     }
@@ -648,7 +669,7 @@ const BussinessType = (props) => {
         <div className="div-add-service mt-3">
           <a className="label">Dịch vụ thêm</a>
           <div className="div-service">
-            {addService.map((item) => {
+            {addService?.map((item) => {
               return (
                 <button
                   className={

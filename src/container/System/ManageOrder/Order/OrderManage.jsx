@@ -77,65 +77,83 @@ export default function OrderManage(props) {
       });
   };
 
-  const items = [
-    {
-      key: "1",
-      label: item?.status === "pending" && (
-        <AddCollaboratorOrder
-          idOrder={item?._id}
-          idCustomer={item?.id_customer?._id}
-          status={item?.status}
-        />
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <a
-          onClick={() =>
-            navigate("/details-order", {
-              state: { id: item?._id },
-            })
-          }
-        >
-          Xem chi tiết
-        </a>
-      ),
-    },
-    {
-      key: "3",
-      label:
-        item?.status === "pending" && data?.type !== "schedule" ? (
-          <EditTimeOrder
-            idOrder={item?._id}
-            dateWork={item?.date_work_schedule[0].date}
-            code={item?.code_promotion ? item?.code_promotion?.code : ""}
-          />
-        ) : (
-          ""
-        ),
-    },
-    {
-      key: "4",
-      label: item?.status === "confirm" && (
-        <AddCollaboratorOrder
-          idOrder={item?._id}
-          idCustomer={item?.id_customer?._id}
-          status={item?.status}
-        />
-      ),
-    },
-    {
-      key: "5",
-      label:
-        user?.role === "admin" &&
-        (item?.status === "cancel" || item?.status === "done" ? (
-          <a onClick={toggle}>Xoá</a>
-        ) : (
-          ""
-        )),
-    },
-  ];
+  const items =
+    item?.status === "pending"
+      ? [
+          {
+            key: "1",
+            label: item?.status === "pending" && (
+              <AddCollaboratorOrder
+                idOrder={item?._id}
+                idCustomer={item?.id_customer?._id}
+                status={item?.status}
+              />
+            ),
+          },
+          {
+            key: "2",
+            label: (
+              <a
+                onClick={() =>
+                  navigate("/details-order", {
+                    state: { id: item?._id },
+                  })
+                }
+              >
+                Xem chi tiết
+              </a>
+            ),
+          },
+          {
+            key: "3",
+            label:
+              item?.status === "pending" && data?.type !== "schedule" ? (
+                <EditTimeOrder
+                  idOrder={item?._id}
+                  dateWork={item?.date_work_schedule[0].date}
+                  code={item?.code_promotion ? item?.code_promotion?.code : ""}
+                />
+              ) : (
+                ""
+              ),
+          },
+        ]
+      : [
+          {
+            key: "1",
+            label: (
+              <a
+                onClick={() =>
+                  navigate("/details-order", {
+                    state: { id: item?._id },
+                  })
+                }
+              >
+                Xem chi tiết
+              </a>
+            ),
+          },
+          {
+            key: "2",
+            label: item?.status === "confirm" && (
+              <AddCollaboratorOrder
+                idOrder={item?._id}
+                idCustomer={item?.id_customer?._id}
+                status={item?.status}
+              />
+            ),
+          },
+          {
+            key: "3",
+            label:
+              user?.role === "admin" &&
+              (item?.status === "cancel" || item?.status === "done" ? (
+                <a onClick={toggle}>Xoá</a>
+              ) : (
+                ""
+              )),
+          },
+        ];
 
   const columns = [
     {
@@ -199,12 +217,14 @@ export default function OrderManage(props) {
         return (
           <div className="div-service-order">
             <a className="text-service">
-              {data?.type === "schedule"
-                ? "Cố định"
-                : data?.type === "loop" && !data?.is_auto_order
-                ? "Theo giờ"
-                : data?.type === "loop" && data?.is_auto_order
+              {data?.type === "loop" && data?.is_auto_order
                 ? "Lặp lại"
+                : data?.service?._id?.kind === "giup_viec_theo_gio"
+                ? "Theo giờ"
+                : data?.service?._id?.kind === "giup_viec_co_dinh"
+                ? "Cố định"
+                : data?.service?._id?.kind === "phuc_vu_nha_hang"
+                ? "Phục vụ"
                 : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>

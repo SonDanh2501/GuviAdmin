@@ -389,7 +389,7 @@ const TopupCollaborator = ({ type }) => {
         {type === "all" ? (
           <div className="div-topwith">
             <AddTopup type={type} setDataT={setData} setTotal={setTotal} />
-            <Withdraw />
+            <Withdraw type={type} setDataT={setData} setTotal={setTotal} />
           </div>
         ) : type === "top_up" ? (
           <AddTopup type={type} setDataT={setData} setTotal={setTotal} />
