@@ -175,12 +175,14 @@ const DetailsOrderSchedule = () => {
                 </div>
                 <a className="text-colon">:</a>
                 <a className="text-service-order">
-                  {data?.type === "schedule"
-                    ? "Giúp việc cố định"
-                    : data?.type === "loop" && !data?.is_auto_order
-                    ? "Giúp việc theo giờ"
-                    : data?.type === "loop" && data?.is_auto_order
+                  {data?.type === "loop" && data?.is_auto_order
                     ? "Lặp lại hàng tuần"
+                    : data?.service?._id?.kind === "giup_viec_theo_gio"
+                    ? "Giúp việc theo giờ"
+                    : data?.service?._id?.kind === "giup_viec_co_dinh"
+                    ? "Giúp việc cố định"
+                    : data?.service?._id?.kind === "phuc_vu_nha_hang"
+                    ? "Phục vụ nhà hàng"
                     : ""}
                 </a>
               </div>
@@ -216,27 +218,53 @@ const DetailsOrderSchedule = () => {
                 </div>
               )}
 
-              <div className="div-details-order">
-                <div className="div-title-details">
-                  <a className="title">Dịch vụ thêm</a>
-                </div>
-                <a className="text-colon">:</a>
-                <div className="div-add">
-                  {data?.service?.optional_service.map((item) => {
-                    return (
-                      <>
-                        {item?._id === "632148d02bacd0aa8648657c"
-                          ? item?.extend_optional?.map((item) => (
-                              <a className="text-title-add">
-                                - {item?.title?.vi}
-                              </a>
-                            ))
-                          : null}
-                      </>
-                    );
-                  })}
-                </div>
-              </div>
+              {data?.service?.optional_service?.map((item) => {
+                return (
+                  <>
+                    {item?.type === "single_select_horizontal_thumbnail"
+                      ? item?.extend_optional?.map((item) => {
+                          return (
+                            <div className="div-details-order">
+                              <div className="div-title-details">
+                                <a className="title">Kinh doanh</a>
+                              </div>
+                              <a className="text-colon">:</a>
+                              <div className="div-add">
+                                <a className="text-title-add">
+                                  - {item?.title?.vi}
+                                </a>
+                              </div>
+                            </div>
+                          );
+                        })
+                      : null}
+                  </>
+                );
+              })}
+
+              {data?.service?.optional_service?.map((item) => {
+                return (
+                  <>
+                    {item?.type === "multi_select_horizontal_thumbnail"
+                      ? item?.extend_optional?.map((item) => {
+                          return (
+                            <div className="div-details-order">
+                              <div className="div-title-details">
+                                <a className="title">Dịch vụ thêm</a>
+                              </div>
+                              <a className="text-colon">:</a>
+                              <div className="div-add">
+                                <a className="text-title-add">
+                                  - {item?.title?.vi}
+                                </a>
+                              </div>
+                            </div>
+                          );
+                        })
+                      : null}
+                  </>
+                );
+              })}
 
               <div className="div-details-order">
                 <div className="div-title-details">
@@ -244,7 +272,7 @@ const DetailsOrderSchedule = () => {
                 </div>
                 <a className="text-colon">:</a>
                 <a className="text-address-details">
-                  {data?.payment_method === "cash" ? "Tiền mặt" : "G-point"}
+                  {data?.payment_method === "cash" ? "Tiền mặt" : "G-pay"}
                 </a>
               </div>
 
@@ -257,11 +285,15 @@ const DetailsOrderSchedule = () => {
                   <div className="div-price">
                     <div className="div-title-colon">
                       <div className="div-title-details">
-                        <a className="title">- Tồng tiền</a>
+                        <a className="title">- Giá tạm tính</a>
                       </div>
                       <a className="text-colon">:</a>
                     </div>
-                    <a className="text-moeny-details">{formatMoney(price)}</a>
+                    <a className="text-moeny-details">
+                      {data?.service?._id?.kind === "giup_viec_co_dinh"
+                        ? formatMoney(data?.initial_fee)
+                        : formatMoney(price)}
+                    </a>
                   </div>
 
                   <div className="div-price">
@@ -281,7 +313,7 @@ const DetailsOrderSchedule = () => {
                   {data?.service?.optional_service.map((item) => {
                     return (
                       <>
-                        {item?._id === "632148d02bacd0aa8648657c"
+                        {item?.type === "multi_select_horizontal_thumbnail"
                           ? item?.extend_optional?.map((item) => {
                               return (
                                 <div className="div-price">
@@ -307,50 +339,51 @@ const DetailsOrderSchedule = () => {
                     );
                   })}
 
-                  <div className="div-price">
-                    <div className="div-title-colon">
-                      <div className="div-title-details">
-                        <a className="title">- Khuyến mãi</a>
-                      </div>
-                      <a className="text-colon">:</a>
-                    </div>
-
-                    {data?.code_promotion && (
-                      <>
-                        <a className="text-moeny-details">
-                          + Mã code: {data?.code_promotion?.code}
-                        </a>
-                        <a className="money-red">
-                          {formatMoney(-data?.code_promotion?.discount)}
-                        </a>
-                      </>
-                    )}
-                  </div>
-
-                  {data?.event_promotion && (
+                  {data?.code_promotion && (
                     <div className="div-price">
                       <div className="div-title-colon">
                         <div className="div-title-details">
-                          <a className="title">- Chương trình</a>
+                          <a className="title">- Khuyến mãi</a>
                         </div>
                         <a className="text-colon">:</a>
                       </div>
-                      <div className="div-price-event">
-                        {data?.event_promotion.map((item, key) => {
-                          return (
-                            <a className="money-event-discount">
-                              {formatMoney(-item?.discount)}
-                            </a>
-                          );
-                        })}
-                      </div>
+
+                      {data?.code_promotion && (
+                        <>
+                          <a className="text-moeny-details">
+                            + Mã code: {data?.code_promotion?.code}
+                          </a>
+                          <a className="money-red">
+                            {formatMoney(-data?.code_promotion?.discount)}
+                          </a>
+                        </>
+                      )}
                     </div>
                   )}
+
+                  {data?.event_promotion?.map((item, key) => {
+                    return (
+                      <div className="div-price">
+                        <div className="div-title-colon">
+                          <div className="div-title-details">
+                            <a className="title">- Chương trình</a>
+                          </div>
+                          <a className="text-colon">:</a>
+                        </div>
+                        <>
+                          <a>+ {item?._id?.title?.vi}</a>
+                          <a className="money-event-discount">
+                            {formatMoney(-item?.discount)}
+                          </a>
+                        </>
+                      </div>
+                    );
+                  })}
 
                   <div className="div-price">
                     <div className="div-title-colon">
                       <div className="div-title-details">
-                        <a className="title-total">- Giá</a>
+                        <a className="title-total">- Tổng tiền</a>
                       </div>
                       <a className="text-colon">:</a>
                     </div>
@@ -360,21 +393,6 @@ const DetailsOrderSchedule = () => {
                   </div>
                 </div>
               </div>
-
-              {/* <a className="title">
-                Trạng thái:{" "}
-                {dataGroup?.status === "pending" ? (
-                  <a className="text-pending ">Đang chờ làm</a>
-                ) : dataGroup?.status === "confirm" ? (
-                  <a className="text-confirm">Đã nhận</a>
-                ) : dataGroup?.status === "doing" ? (
-                  <a className="text-doing">Đang làm</a>
-                ) : dataGroup?.status === "done" ? (
-                  <a className="text-done">Đã xong</a>
-                ) : (
-                  <a className="text-cancel">Đã huỷ</a>
-                )}
-              </a> */}
             </div>
           </div>
           {user?.role !== "support_customer" && data?.type === "schedule" && (

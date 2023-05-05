@@ -82,9 +82,9 @@ const EditPromotionOrther = ({ state, setState, data }) => {
       .then((res) => setDataGroupCustomer(res.data))
       .catch((err) => console.log(err));
 
-    fetchCustomers(0, 200, "")
-      .then((res) => setDataCustomer(res?.data))
-      .catch((err) => console.log(err));
+    // fetchCustomers(0, 200, "")
+    //   .then((res) => setDataCustomer(res?.data))
+    //   .catch((err) => console.log(err));
   }, []);
 
   dataGroupCustomer.map((item, index) => {

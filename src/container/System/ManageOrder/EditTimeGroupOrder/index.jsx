@@ -40,7 +40,6 @@ const EditTimeOrder = ({ idOrder, dateWork, code }) => {
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
-
         window.location.reload();
       })
       .catch((err) => {
@@ -83,7 +82,9 @@ const EditTimeOrder = ({ idOrder, dateWork, code }) => {
           })}
         </div>
 
-        <Button onClick={editOrder}>Cập nhật</Button>
+        <Button className="btn-update-time-order" onClick={editOrder}>
+          Cập nhật
+        </Button>
       </Drawer>
 
       {isLoading && <LoadingPagination />}

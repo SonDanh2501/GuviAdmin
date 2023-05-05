@@ -30,6 +30,7 @@ import { loadingAction } from "../../../redux/actions/loading";
 import "./index.scss";
 import { getUser } from "../../../redux/selectors/auth";
 import { MoreOutlined } from "@ant-design/icons";
+import EditTimeOrder from "../ManageOrder/EditTimeGroupOrder";
 
 const DetailsOrder = () => {
   const { state } = useLocation();
@@ -553,14 +554,18 @@ const DetailsOrder = () => {
                         </div>
                         <a className="text-colon">:</a>
                         <a className="text-service-order">
-                          {dataGroup?.type === "schedule"
-                            ? "Giúp việc cố định"
-                            : dataGroup?.type === "loop" &&
-                              !dataGroup?.is_auto_order
-                            ? "Giúp việc theo giờ"
-                            : dataGroup?.type === "loop" &&
-                              dataGroup?.is_auto_order
+                          {dataGroup?.type === "loop" &&
+                          dataGroup?.is_auto_order
                             ? "Lặp lại hàng tuần"
+                            : dataGroup?.service?._id?.kind ===
+                              "giup_viec_theo_gio"
+                            ? "Giúp việc theo giờ"
+                            : dataGroup?.service?._id?.kind ===
+                              "giup_viec_co_dinh"
+                            ? "Giúp việc cố định"
+                            : dataGroup?.service?._id?.kind ===
+                              "phuc_vu_nha_hang"
+                            ? "Phục vụ nhà hàng"
                             : ""}
                         </a>
                       </div>
@@ -574,12 +579,36 @@ const DetailsOrder = () => {
                             - Ngày làm:{" "}
                             {moment(
                               new Date(dataGroup?.date_work_schedule[0]?.date)
-                            ).format("DD/MM/YYYY")}
+                            ).format("DD/MM/YYYY")}{" "}
+                            (
+                            {moment(
+                              new Date(dataGroup?.date_work_schedule[0].date)
+                            )
+                              .locale("vi", vi)
+                              .format("dd")}
+                            )
                           </a>
                           <a className="text-date">
                             - Giờ làm: {timeWork(dataGroup)}
                           </a>
                         </div>
+                        {dataGroup?.status === "pending" &&
+                        dataGroup?.service?._id?.kind !==
+                          "giup_viec_co_dinh" ? (
+                          <div className="div-edit">
+                            <EditTimeOrder
+                              idOrder={dataGroup?._id}
+                              dateWork={dataGroup?.date_work_schedule[0].date}
+                              code={
+                                dataGroup?.code_promotion
+                                  ? dataGroup?.code_promotion?.code
+                                  : ""
+                              }
+                            />
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </div>
 
                       <div className="div-details-order">
@@ -604,7 +633,31 @@ const DetailsOrder = () => {
                         </div>
                       )}
 
-                      {dataGroup?.service?.optional_service.map((item) => {
+                      {dataGroup?.service?.optional_service?.map((item) => {
+                        return (
+                          <>
+                            {item?.type === "single_select_horizontal_thumbnail"
+                              ? item?.extend_optional?.map((item) => {
+                                  return (
+                                    <div className="div-details-order">
+                                      <div className="div-title-details">
+                                        <a className="title">Kinh doanh</a>
+                                      </div>
+                                      <a className="text-colon">:</a>
+                                      <div className="div-add">
+                                        <a className="text-title-add">
+                                          - {item?.title?.vi}
+                                        </a>
+                                      </div>
+                                    </div>
+                                  );
+                                })
+                              : null}
+                          </>
+                        );
+                      })}
+
+                      {dataGroup?.service?.optional_service?.map((item) => {
                         return (
                           <>
                             {item?.type === "multi_select_horizontal_thumbnail"
@@ -636,7 +689,7 @@ const DetailsOrder = () => {
                         <a className="text-address-details">
                           {dataGroup?.payment_method === "cash"
                             ? "Tiền mặt"
-                            : "G-point"}
+                            : "G-pay"}
                         </a>
                       </div>
 
@@ -733,32 +786,6 @@ const DetailsOrder = () => {
                               )}
                             </div>
                           )}
-
-                          {/* {dataGroup?.event_promotion && (
-                            <div className="div-price">
-                              <div className="div-title-colon">
-                                <div className="div-title-details">
-                                  <a className="title">- Chương trình</a>
-                                </div>
-                                <a className="text-colon">:</a>
-                              </div>
-                              <div className="div-price-event">
-                                {dataGroup?.event_promotion.map((item, key) => {
-                                  return (
-                                    <div
-                                      key={key}
-                                      className="div-details-price-event"
-                                    >
-                                      <a>-{item?._id?.title?.vi}</a>
-                                      <a className="money-event-discount">
-                                        {formatMoney(-item?.discount)}
-                                      </a>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          )} */}
 
                           {dataGroup?.event_promotion?.map((item, key) => {
                             return (

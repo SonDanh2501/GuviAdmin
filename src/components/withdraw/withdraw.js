@@ -98,7 +98,7 @@ const Withdraw = ({ type, setDataT, setTotal }) => {
           dispatch(loadingAction.loadingRequest(false));
         });
     }
-  }, [id, money, note, name, type, setDataT, setTotal]);
+  }, [id, money, note, name, type, setDataT, setTotal, wallet]);
 
   const currencyConfig = {
     locale: "vi",

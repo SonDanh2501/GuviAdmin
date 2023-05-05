@@ -87,18 +87,18 @@ const AddOrder = () => {
       );
     }
 
-    // optionalService?.map(
-    //   (item) =>
-    //     item?.type === "multi_select_horizontal_thumbnail" &&
-    //     getExtendOptionalByOptionalServiceApi(item?._id)
-    //       .then((res) => {
-    //         setAddService(res?.data);
-    //         setIsLoading(false);
-    //       })
-    //       .catch((err) => {
-    //         setIsLoading(false);
-    //       })
-    // );
+    optionalService?.map(
+      (item) =>
+        item?.type === "single_select_horizontal_thumbnail" &&
+        getExtendOptionalByOptionalServiceApi(item?._id)
+          .then((res) => {
+            setBussinessType(res?.data);
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            setIsLoading(false);
+          })
+    );
   }, [optionalService]);
 
   const onChangeServiceApply = (value, kind) => {
@@ -216,7 +216,7 @@ const AddOrder = () => {
           <BussinessType
             extendService={extendService}
             addService={addService}
-            bussinessType={[]}
+            bussinessType={bussinessType}
             id={id}
             name={name}
             setErrorNameCustomer={setErrorNameCustomer}

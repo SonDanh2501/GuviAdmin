@@ -82,9 +82,9 @@ const AddPromotionOther = () => {
       .then((res) => setDataGroupCustomer(res.data))
       .catch((err) => console.log(err));
 
-    fetchCustomers(0, 1000, "")
-      .then((res) => setDataCustomer(res?.data))
-      .catch((err) => console.log(err));
+    // fetchCustomers(0, 1000, "")
+    //   .then((res) => setDataCustomer(res?.data))
+    //   .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {

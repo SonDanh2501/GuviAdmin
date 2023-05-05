@@ -350,7 +350,11 @@ export default function PromotionManage({
                     })
                   }
                 >
-                  {data?.total_used_promotion}
+                  {data?.is_parrent_promotion
+                    ? data?.total_used_promotion +
+                      "/" +
+                      data?.total_child_promotion
+                    : data?.total_used_promotion}
                 </a>
               );
             },
@@ -504,7 +508,6 @@ export default function PromotionManage({
           {
             title: "Sử dụng",
             align: "center",
-
             render: (data) => {
               return (
                 <a
@@ -514,7 +517,11 @@ export default function PromotionManage({
                     })
                   }
                 >
-                  {data?.total_used_promotion}
+                  {data?.is_parrent_promotion
+                    ? data?.total_used_promotion +
+                      "/" +
+                      data?.total_child_promotion
+                    : data?.total_used_promotion}
                 </a>
               );
             },
