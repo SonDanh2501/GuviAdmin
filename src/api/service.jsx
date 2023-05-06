@@ -74,3 +74,18 @@ export const getCalculateFeeApi = (data) => {
     data
   );
 };
+
+//price
+export const getPriceServiceApi = (
+  id,
+  city,
+  district,
+  startDate,
+  endDate,
+  startTime,
+  endTime
+) => {
+  return axiosClient.get(
+    `/admin/service_manager/price_service/${id}?city=${city}&district=${district}&start_date=${startDate}&end_date=${endDate}&start_time=${startTime}&end_time=${endTime}&step=30&end_minute=30`
+  );
+};

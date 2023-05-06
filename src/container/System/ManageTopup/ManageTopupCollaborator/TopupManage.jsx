@@ -17,6 +17,7 @@ import {
 } from "../../../../redux/selectors/topup";
 import TopupCollaborator from "./Topup";
 import "./TopupManage.scss";
+import Punish from "./Punish";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -74,6 +75,9 @@ export default function TopupManage() {
           </Tabs.TabPane>
           <Tabs.TabPane tab="Rút tiền" key="3">
             <TopupCollaborator type={type} />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Phạt tiền" key="4">
+            <Punish />
           </Tabs.TabPane>
         </Tabs>
       </div>

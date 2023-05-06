@@ -103,7 +103,9 @@ export default function GroupServiceManage() {
         return (
           <div
             onClick={() => {
-              navigate("/services/manage-group-service/manage-price-service");
+              navigate("/services/manage-group-service/manage-price-service", {
+                state: { id: data?._id },
+              });
             }}
           >
             <img className="img-customer-service" src={data?.thumbnail} />

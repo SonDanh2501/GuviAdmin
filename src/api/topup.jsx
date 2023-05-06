@@ -19,6 +19,13 @@ export const TopupMoneyCollaboratorApi = (id, data) => {
   );
 };
 
+export const punishMoneyCollaboratorApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/collaborator_manager/monetary_fine/${id}?lang=vi`,
+    data
+  );
+};
+
 export const withdrawMoneyCollaboratorApi = (id, data) => {
   return axiosClient.post(
     `/admin/collaborator_manager/withdraw/${id}?lang=vi`,
