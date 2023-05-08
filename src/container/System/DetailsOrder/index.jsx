@@ -260,12 +260,14 @@ const DetailsOrder = () => {
         return (
           <div className="div-service">
             <a className="text-service">
-              {dataGroup?.type === "schedule"
-                ? "Giúp việc cố định"
-                : dataGroup?.type === "loop" && !dataGroup?.is_auto_order
-                ? "Giúp việc theo giờ"
-                : dataGroup?.type === "loop" && dataGroup?.is_auto_order
-                ? "Lặp lại hàng tuần"
+              {dataGroup?.type === "loop" && dataGroup?.is_auto_order
+                ? "Lặp lại"
+                : dataGroup?.service?._id?.kind === "giup_viec_theo_gio"
+                ? "Theo giờ"
+                : dataGroup?.service?._id?.kind === "giup_viec_co_dinh"
+                ? "Cố định"
+                : dataGroup?.service?._id?.kind === "phuc_vu_nha_hang"
+                ? "Phục vụ "
                 : ""}
             </a>
             <a className="text-service">{timeWorkList(data)}</a>
@@ -539,6 +541,10 @@ const DetailsOrder = () => {
                                     "years"
                                   )
                                 : "Chưa cập nhật"}
+                            </a>
+                            <a className="label-name">
+                              Số sao: {dataGroup?.id_collaborator?.star}
+                              <i class="uil uil-star icon-star"></i>
                             </a>
                           </div>
                         </div>

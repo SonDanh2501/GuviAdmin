@@ -593,18 +593,10 @@ export default function Home() {
                   columns={columns}
                   dataSource={lastestService}
                   pagination={false}
-                  // locale={{
-                  //   emptyText:
-                  //     lastestService.length > 0 ? (
-                  //       <Empty />
-                  //     ) : (
-                  //       <Skeleton active={true} />
-                  //     ),
-                  // }}
                 />
               </CardBody>
               <div className="div-entries">
-                <CustomTextInput
+                {/* <CustomTextInput
                   label={"Hiện"}
                   type="select"
                   className={"select-entries"}
@@ -616,6 +608,16 @@ export default function Home() {
                       <option value={"20"}>20</option>
                     </>
                   }
+                /> */}
+                <Select
+                  style={{ width: 60 }}
+                  defaultValue={"5"}
+                  onChange={onChangeNumberData}
+                  options={[
+                    { value: 5, label: "5" },
+                    { value: 10, label: "10" },
+                    { value: 20, label: "20" },
+                  ]}
                 />
               </div>
             </Card>

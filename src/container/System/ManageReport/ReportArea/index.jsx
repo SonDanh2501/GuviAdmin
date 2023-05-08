@@ -9,6 +9,7 @@ import {
 } from "../../../../api/report";
 import { List, Select } from "antd";
 import CustomDatePicker from "../../../../components/customDatePicker";
+import LoadingPagination from "../../../../components/paginationLoading";
 
 const ReportArea = () => {
   const [startDate, setStartDate] = useState("");
@@ -22,6 +23,7 @@ const ReportArea = () => {
   const [dataCity, setDataCity] = useState([]);
   const [dataDistrict, setDataDistrict] = useState([]);
   const [codeDistrict, setCodeDistrict] = useState(-1);
+  const [nameDistrict, setNameDistrict] = useState(-1);
   const [district, setDistrict] = useState(false);
   const [dataChartPie, setDataChartPie] = useState([]);
   const [dataChartCustomerCity, setDataChartCustomerCity] = useState([]);
@@ -30,6 +32,7 @@ const ReportArea = () => {
   const cityData = [];
 
   useEffect(() => {
+    setIsLoading(true);
     getDistrictApi()
       .then((res) => {
         setDataCity(res?.aministrative_division);
@@ -47,7 +50,8 @@ const ReportArea = () => {
           codeDistrict
         )
           .then((res) => {
-            setDataChartPie(res?.percent);
+            setDataChartPie(res);
+            setIsLoading(false);
           })
           .catch((err) => {});
       })
@@ -106,7 +110,7 @@ const ReportArea = () => {
       setCity(!city);
       getReportTypeService(startDate, endDate, value, codeDistrict)
         .then((res) => {
-          setDataChartPie(res?.percent);
+          setDataChartPie(res);
         })
         .catch((err) => {});
     },
@@ -119,7 +123,7 @@ const ReportArea = () => {
       setDistrict(!district);
       getReportTypeService(startDate, endDate, codeCity, value)
         .then((res) => {
-          setDataChartPie(res?.percent);
+          setDataChartPie(res);
         })
         .catch((err) => {});
     },
@@ -129,7 +133,7 @@ const ReportArea = () => {
   const onChangeDay = () => {
     getReportTypeService(startDate, endDate, codeCity, codeDistrict)
       .then((res) => {
-        setDataChartPie(res?.percent);
+        setDataChartPie(res);
       })
       .catch((err) => {});
   };
@@ -152,7 +156,7 @@ const ReportArea = () => {
       codeDistrict
     )
       .then((res) => {
-        setDataChartPie(res?.percent);
+        setDataChartPie(res);
       })
       .catch((err) => {});
     setStartDate(
@@ -258,28 +262,65 @@ const ReportArea = () => {
             onClick={onChangeDay}
             onCancel={onCancelPicker}
           />
+          {startDate && (
+            <a className="text-date mt-2">
+              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+              {moment(endDate).utc().format("DD/MM/YYYY")}
+            </a>
+          )}
         </div>
         <div className="div-pie-chart">
-          <ResponsiveContainer height={300} min-width={500}>
-            <PieChart height={250}>
-              <Pie
-                data={dataChartPie}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-                label={renderLabel}
-              >
-                {dataChartPie.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
+          <div className="div-total-piechart">
+            <div className="item-total">
+              <a className="title-total">Tổng đơn</a>
+              <a className="text-colon">:</a>
+              <a className="number-total">{dataChartPie?.total_order}</a>
+            </div>
+            <div className="item-total">
+              <a className="title-total">2 Giờ</a>
+              <a className="text-colon">:</a>
+              <a className="number-total">
+                {dataChartPie?.total_order_2_hours}/{dataChartPie?.total_order}
+              </a>
+            </div>
+            <div className="item-total">
+              <a className="title-total">3 Giờ</a>
+              <a className="text-colon">:</a>
+              <a className="number-total">
+                {dataChartPie?.total_order_3_hours}/{dataChartPie?.total_order}
+              </a>
+            </div>
+            <div className="item-total">
+              <a className="title-total">4 Giờ</a>
+              <a className="text-colon">:</a>
+              <a className="number-total">
+                {dataChartPie?.total_order_4_hours}/{dataChartPie?.total_order}
+              </a>
+            </div>
+          </div>
+
+          <div className="div-pie">
+            <ResponsiveContainer height={300} min-width={500}>
+              <PieChart height={250}>
+                <Pie
+                  data={dataChartPie?.percent}
+                  cx="50%"
+                  cy="140"
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label={renderLabel}
+                >
+                  {dataChartPie?.percent?.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 
@@ -316,6 +357,8 @@ const ReportArea = () => {
           </ResponsiveContainer>
         </div>
       </div>
+
+      {isLoading && <LoadingPagination />}
     </>
   );
 };

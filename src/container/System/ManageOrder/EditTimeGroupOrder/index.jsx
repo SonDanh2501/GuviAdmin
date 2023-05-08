@@ -9,6 +9,7 @@ import { DATA_TIME_TOTAL } from "../../../../api/fakeData";
 import moment from "moment";
 import { editTimeOrderApi } from "../../../../api/order";
 import LoadingPagination from "../../../../components/paginationLoading";
+import { errorNotify } from "../../../../helper/toast";
 const EditTimeOrder = ({ idOrder, dateWork, code }) => {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,6 +44,9 @@ const EditTimeOrder = ({ idOrder, dateWork, code }) => {
         window.location.reload();
       })
       .catch((err) => {
+        errorNotify({
+          message: err,
+        });
         dispatch(loadingAction.loadingRequest(false));
       });
   };

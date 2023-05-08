@@ -46,22 +46,28 @@ export const DATA = [
   },
   {
     id: 2,
-    title: "Giúp việc theo giờ",
+    title: "Theo giờ",
     value: "theo_gio",
     kind: "theo_gio",
   },
   {
     id: 3,
-    title: "Giúp việc cố định",
+    title: "Cố định",
     value: "co_dinh",
     kind: "co_dinh",
   },
   {
     id: 4,
-    title: "Lặp lại hằng tuần",
+    title: "Lặp lại",
     value: "lap_lai",
     kind: "lap_lai",
   },
+  // {
+  //   id: 5,
+  //   title: "Phục vụ",
+  //   value: "phuc_vu_nha_hang",
+  //   kind: "phuc_vu_nha_hang",
+  // },
 ];
 
 export const DATA_STATUS = [

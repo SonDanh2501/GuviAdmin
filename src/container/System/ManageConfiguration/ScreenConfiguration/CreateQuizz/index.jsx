@@ -51,7 +51,7 @@ const CreateQuizz = () => {
           isCorrect: false,
         },
         {
-          title: "",
+          answer: "",
           isCorrect: false,
         },
       ],
@@ -99,7 +99,7 @@ const CreateQuizz = () => {
             isCorrect: false,
           },
           {
-            title: "",
+            answer: "",
             isCorrect: false,
           },
         ],
@@ -125,7 +125,7 @@ const CreateQuizz = () => {
     dataQuestion[0].choose = [
       ...dataQuestion[0].choose,
       {
-        title: "",
+        answer: "",
         isCorrect: false,
       },
     ];
@@ -138,35 +138,50 @@ const CreateQuizz = () => {
     setDataQuestion(arr);
   };
 
-  const onChaggeTitleQuestion = useCallback((value, index) => {
-    const arr = [...dataQuestion];
-    dataQuestion[index].title = value;
-    setDataQuestion(arr);
-  }, []);
+  const onChaggeTitleQuestion = useCallback(
+    (value, index) => {
+      const arr = [...dataQuestion];
+      dataQuestion[index].title = value;
+      setDataQuestion(arr);
+    },
+    [dataQuestion]
+  );
 
-  const onChaggeDescriptionQuestion = useCallback((value, index) => {
-    const arr = [...dataQuestion];
-    dataQuestion[index].description = value;
-    setDataQuestion(arr);
-  }, []);
+  const onChaggeDescriptionQuestion = useCallback(
+    (value, index) => {
+      const arr = [...dataQuestion];
+      dataQuestion[index].description = value;
+      setDataQuestion(arr);
+    },
+    [dataQuestion]
+  );
 
-  const onChaggeTitleAnswer = useCallback((value, index, id) => {
-    const arr = [...dataQuestion];
-    dataQuestion[index].choose[id].answer = value;
-    setDataQuestion(arr);
-  }, []);
+  const onChaggeTitleAnswer = useCallback(
+    (value, index, id) => {
+      const arr = [...dataQuestion];
+      dataQuestion[index].choose[id].answer = value;
+      setDataQuestion(arr);
+    },
+    [dataQuestion]
+  );
 
-  const onChaggeQuestion = useCallback((value, index) => {
-    const arr = [...dataQuestion];
-    dataQuestion[index].question = value;
-    setDataQuestion(arr);
-  }, []);
+  const onChaggeQuestion = useCallback(
+    (value, index) => {
+      const arr = [...dataQuestion];
+      dataQuestion[index].question = value;
+      setDataQuestion(arr);
+    },
+    [dataQuestion]
+  );
 
-  const onChangeCorrect = useCallback((value, index, id) => {
-    const arr = [...dataQuestion];
-    dataQuestion[index].choose[id].isCorrect = value;
-    setDataQuestion(arr);
-  }, []);
+  const onChangeCorrect = useCallback(
+    (value, index, id) => {
+      const arr = [...dataQuestion];
+      dataQuestion[index].choose[id].isCorrect = value;
+      setDataQuestion(arr);
+    },
+    [dataQuestion]
+  );
 
   const openEditQuestion = () => {
     setEdit(true);
@@ -209,7 +224,7 @@ const CreateQuizz = () => {
           message: err,
         });
       });
-  }, [itemEdit, startPage]);
+  }, [itemEdit, startPage, dataQuestion]);
 
   const addQuestion = useCallback(() => {
     setIsLoading(true);
@@ -233,7 +248,7 @@ const CreateQuizz = () => {
           message: err,
         });
       });
-  }, [startPage]);
+  }, [startPage, dataQuestion]);
 
   const deleteQuestion = useCallback(
     (id) => {
