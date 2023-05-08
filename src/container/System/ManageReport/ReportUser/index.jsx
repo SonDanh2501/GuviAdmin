@@ -292,7 +292,7 @@ const ReportUser = () => {
         </div>
       </div>
 
-      <div className="div-chart-user">
+      {/* <div className="div-chart-user">
         <h5>Số lượng user theo khu vực</h5>
         <div className="div-time-area">
           <div>
@@ -353,7 +353,7 @@ const ReportUser = () => {
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </div> */}
 
       <a className="text-title">SỐ LƯỢT ĐĂNG KÝ USER THEO THỜI GIAN</a>
       <div className="mt-3 div-table">

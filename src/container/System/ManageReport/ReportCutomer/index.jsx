@@ -30,8 +30,8 @@ const ReportCustomer = () => {
   const [customerOld, setCustomerOld] = useState(0);
   const [moneyNew, setMoneyNew] = useState(0);
   const [moneyOld, setMoneyOld] = useState(0);
-  const [dataNew, setDataNew] = useState([]);
-  const [dataOld, setDataOld] = useState([]);
+  const [totalOrderNew, setTotalOrderNew] = useState([]);
+  const [totalOrderOld, setTotalOrderOld] = useState([]);
   const [type, setType] = useState("new");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -39,27 +39,77 @@ const ReportCustomer = () => {
 
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   getReportCustomerNewOld(
+  //     0,
+  //     20,
+  //     moment(moment().startOf("month").toISOString())
+  //       .add(7, "hours")
+  //       .toISOString(),
+  //     moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
+  //   )
+  //     .then((res) => {
+  //       setCustomerNew(res?.newCustomer?.totalItem);
+  //       setMoneyNew(res?.newCustomer?.totalMoney);
+  //       setDataNew(res?.newCustomer?.data);
+  //       setCustomerOld(res?.oldCustomer?.totalItem);
+  //       setMoneyOld(res?.oldCustomer?.totalMoney);
+  //       setDataOld(res?.oldCustomer?.data);
+  //     })
+  //     .catch((err) => {});
+
+  //   setStartDate(
+  //     moment(moment().startOf("month").toISOString())
+  //       .add(7, "hours")
+  //       .toISOString()
+  //   );
+  //   setEndDate(
+  //     moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
+  //   );
+  // }, []);
+
   useEffect(() => {
-    getReportCustomerNewOld(
+    getReportCustomer(
       0,
       20,
-      moment(moment().startOf("year").toISOString())
+      moment(moment().startOf("month").toISOString())
         .add(7, "hours")
         .toISOString(),
-      moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
+      moment(moment().endOf("date").toISOString())
+        .add(7, "hours")
+        .toISOString(),
+      "new"
     )
       .then((res) => {
-        setCustomerNew(res?.newCustomer?.totalItem);
-        setMoneyNew(res?.newCustomer?.totalMoney);
-        setDataNew(res?.newCustomer?.data);
-        setCustomerOld(res?.oldCustomer?.totalItem);
-        setMoneyOld(res?.oldCustomer?.totalMoney);
-        setDataOld(res?.oldCustomer?.data);
+        setData(res?.data);
+        setTotal(res?.totalItem);
+        setTotalColumn(res?.total[0]);
+        setCustomerNew(res?.totalItem);
+        setMoneyNew(res?.total[0]?.total_order_fee);
+        setTotalOrderNew(res?.total[0]?.total_item);
+      })
+      .catch((err) => {});
+
+    getReportCustomer(
+      0,
+      20,
+      moment(moment().startOf("month").toISOString())
+        .add(7, "hours")
+        .toISOString(),
+      moment(moment().endOf("date").toISOString())
+        .add(7, "hours")
+        .toISOString(),
+      "old"
+    )
+      .then((res) => {
+        setCustomerOld(res?.totalItem);
+        setMoneyOld(res?.total[0]?.total_order_fee);
+        setTotalOrderOld(res?.total[0]?.total_item);
       })
       .catch((err) => {});
 
     setStartDate(
-      moment(moment().startOf("year").toISOString())
+      moment(moment().startOf("month").toISOString())
         .add(7, "hours")
         .toISOString()
     );
@@ -68,26 +118,6 @@ const ReportCustomer = () => {
     );
   }, []);
 
-  useEffect(() => {
-    getReportCustomer(
-      0,
-      20,
-      moment(moment().startOf("year").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment().endOf("date").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      type
-    )
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-        setTotalColumn(res?.total[0]);
-      })
-      .catch((err) => {});
-  }, [type]);
-
   const onChangeDay = () => {
     setIsLoading(true);
     getReportCustomer(0, 20, startDate, endDate, type)
@@ -95,21 +125,6 @@ const ReportCustomer = () => {
         setData(res?.data);
         setTotal(res?.totalItem);
         setTotalColumn(res?.total[0]);
-        setIsLoading(false);
-      })
-
-      .catch((err) => {
-        setIsLoading(false);
-      });
-
-    getReportCustomerNewOld(0, 20, startDate, endDate)
-      .then((res) => {
-        setCustomerNew(res?.newCustomer?.totalItem);
-        setMoneyNew(res?.newCustomer?.totalMoney);
-        setDataNew(res?.newCustomer?.data);
-        setCustomerOld(res?.oldCustomer?.totalItem);
-        setMoneyOld(res?.oldCustomer?.totalMoney);
-        setDataOld(res?.oldCustomer?.data);
         setIsLoading(false);
       })
 
@@ -129,6 +144,22 @@ const ReportCustomer = () => {
         setTotalColumn(res?.total[0]);
       })
       .catch((err) => {});
+  };
+
+  const onChangeTab = (value) => {
+    setType(value);
+
+    getReportCustomer(0, 20, startDate, endDate, value)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+        setTotalColumn(res?.total[0]);
+        setIsLoading(false);
+      })
+
+      .catch((err) => {
+        setIsLoading(false);
+      });
   };
 
   const columns = [
@@ -472,7 +503,7 @@ const ReportCustomer = () => {
         {startDate && (
           <a className="text-date">
             {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-            {moment(new Date(endDate)).format("DD/MM/YYYY")}
+            {moment(endDate).utc().format("DD/MM/YYYY")}
           </a>
         )}
       </div>
@@ -496,13 +527,17 @@ const ReportCustomer = () => {
           <div className="div-text-tab">
             <div className="div-t">
               <a className="text-tab-header">Tổng đơn</a>
-              <a className="text-tab-header">{dataNew?.length}</a>
+              <a className="text-tab-header">
+                {totalOrderNew ? totalOrderNew : 0}
+              </a>
             </div>
           </div>
           <div className="div-text-tab">
             <div className="div-t">
               <a className="text-tab-header">Tổng tiền</a>
-              <a className="text-tab-header">{formatMoney(moneyNew)}</a>
+              <a className="text-tab-header">
+                {formatMoney(moneyNew ? moneyNew : 0)}
+              </a>
             </div>
           </div>
         </div>
@@ -526,7 +561,9 @@ const ReportCustomer = () => {
           <div className="div-text-tab">
             <div className="div-t">
               <a className="text-tab-header">Tổng đơn</a>
-              <a className="text-tab-header">{dataOld?.length}</a>
+              <a className="text-tab-header">
+                {totalOrderOld ? totalOrderOld : 0}
+              </a>
             </div>
           </div>
           <div className="div-text-tab">
@@ -602,7 +639,7 @@ const ReportCustomer = () => {
               <div
                 key={index}
                 className={item?.value === type ? "div-tab-select" : "div-tab"}
-                onClick={() => setType(item?.value)}
+                onClick={() => onChangeTab(item?.value)}
               >
                 <a className="title-tab">{item?.title}</a>
               </div>

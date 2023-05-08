@@ -174,7 +174,7 @@
           align-items: center;
           justify-content: space-between;
           border-top: 1px solid #d6d6d6;
-          width: 80%;
+          width: 100%;
 
           .div-title-colon {
             display: flex;
@@ -333,6 +333,10 @@
           line-height: 30px;
           color: #19202c;
           align-items: center;
+        }
+
+        .icon-star {
+          color: #f9be1d;
         }
       }
     }

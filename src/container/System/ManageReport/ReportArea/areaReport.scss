@@ -20,7 +20,6 @@
     font-size: 20px;
     font-family: "Roboto", sans-serif;
     text-decoration: none;
-    text-decoration: none;
     margin-bottom: 10px;
   }
 
@@ -82,6 +81,52 @@
     flex-direction: row;
     align-items: center;
     width: 100%;
+
+    .div-total-piechart {
+      display: flex;
+      flex-direction: column;
+      width: 10%;
+      min-height: 100px;
+      border-radius: 8px;
+      border: 1px solid #d6d6d6;
+      padding: 5px;
+
+      .item-total {
+        display: flex;
+        flex-direction: row;
+
+        .title-total {
+          color: black;
+          font-weight: 500;
+          font-size: 16px;
+          font-family: "Roboto", sans-serif;
+          text-decoration: none;
+          width: 70px;
+        }
+
+        .text-colon {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          color: #000000;
+        }
+
+        .number-total {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 16px;
+          color: #000000;
+          margin-left: 10px;
+        }
+      }
+    }
+
+    .div-pie {
+      width: 90%;
+      height: 100%;
+    }
 
     .div-title-note {
       display: flex;

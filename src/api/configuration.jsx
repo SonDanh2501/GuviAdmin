@@ -71,3 +71,9 @@ export const deleteQuestionApi = (id) => {
 export const activeQuestionApi = (id, data) => {
   return axiosClient.post(`/admin/exam_test/acti_question/${id}`, data);
 };
+
+// create account
+
+export const getSettingAccountApi = () => {
+  return axiosClient.get(`/admin/setting_general_manager/get_setting`);
+};

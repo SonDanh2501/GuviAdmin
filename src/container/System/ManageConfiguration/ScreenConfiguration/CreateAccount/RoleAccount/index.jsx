@@ -1,10 +1,41 @@
 import { Checkbox, Modal } from "antd";
 import "./index.scss";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
+import { getSettingAccountApi } from "../../../../../../api/configuration";
 
 const RoleAccount = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [role, setRole] = useState(DATA);
+  const [data, setData] = useState([]);
+
+  const dataRole = [];
+
+  const groupBy = (arr, key) => {
+    const initialValue = {};
+    return arr.reduce((acc, cval) => {
+      const myAttribute = cval[key];
+      acc[myAttribute] = [...(acc[myAttribute] || []), cval];
+      console.log([acc]);
+      return acc;
+    }, initialValue);
+  };
+
+  useEffect(() => {
+    getSettingAccountApi()
+      .then((res) => {
+        setData(res);
+      })
+      .catch((err) => {});
+  }, []);
+
+  data?.map((item) => {
+    dataRole?.push({
+      name: item?.name_api,
+      permission: item,
+    });
+  });
+
+  console.log(dataRole);
 
   const showModal = () => {
     setIsModalOpen(true);

@@ -31,3 +31,37 @@
     }
   }
 }
+
+.text-date-price {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  color: #000000;
+  text-decoration: none;
+}
+
+.div-time-date-price {
+  display: flex;
+  flex-direction: row;
+
+  .div-item {
+    display: flex;
+    flex-direction: column;
+
+    .text-item {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      color: #000000;
+      text-decoration: none;
+    }
+  }
+}
+
+.div-picker {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

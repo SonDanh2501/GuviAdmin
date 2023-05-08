@@ -6,23 +6,31 @@ import { getDistrictApi } from "../../../../api/file";
 import {
   getExtendOptionalByOptionalServiceApi,
   getOptionalServiceByServiceApi,
+  getPriceServiceApi,
   getServiceByIdApi,
 } from "../../../../api/service";
+import CustomDatePicker from "../../../../components/customDatePicker";
+import moment from "moment";
+import { formatMoney } from "../../../../helper/formatMoney";
+import LoadingPagination from "../../../../components/paginationLoading";
 
 const PriceService = () => {
   const { state } = useLocation();
   const { id } = state || {};
   const [data, setData] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
   const [tab, setTab] = useState("morning");
   const [codeCity, setCodeCity] = useState();
   const [nameCity, setNameCity] = useState("");
   const [dataCity, setDataCity] = useState([]);
   const [dataDistrict, setDataDistrict] = useState([]);
   const [codeDistrict, setCodeDistrict] = useState(-1);
+  const [nameDistrict, setNameDistrict] = useState(-1);
   const [extend, setExtend] = useState([]);
   const [idExtend, setIdExtend] = useState("");
+  const [valueExtend, setValueExtend] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const districtData = [];
   const cityData = [];
   const extendOption = [];
@@ -34,9 +42,15 @@ const PriceService = () => {
         setCodeCity(res?.aministrative_division[1]?.code);
         setNameCity(res?.aministrative_division[1]?.name);
         setDataDistrict(res?.aministrative_division[1]?.districts);
+        setCodeDistrict(res?.aministrative_division[1]?.districts[0]?.code);
+        setNameDistrict(res?.aministrative_division[1]?.districts[0]?.name);
       })
       .catch((err) => {});
+    setStartDate(moment().toISOString());
+    setEndDate(moment().add(3, "days").toISOString());
+  }, []);
 
+  useEffect(() => {
     getServiceByIdApi(id)
       .then((res) => {
         getOptionalServiceByServiceApi(res?.data[0]?._id)
@@ -46,14 +60,38 @@ const PriceService = () => {
                 getExtendOptionalByOptionalServiceApi(item?._id)
                   .then((res) => {
                     setExtend(res?.data);
+                    setIdExtend(res?.data[0]?._id);
+                    setValueExtend(res?.data[0]?.title?.vi);
                   })
                   .catch((err) => {});
             });
           })
           .catch((err) => {});
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false);
+      });
   }, [id]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getPriceServiceApi(
+      idExtend,
+      codeCity,
+      codeDistrict,
+      moment().toISOString(),
+      moment().add(3, "days").toISOString(),
+      7,
+      12
+    )
+      .then((res) => {
+        setData(res?.data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  }, [idExtend, codeCity, codeDistrict]);
 
   dataDistrict?.map((item) => {
     districtData?.push({
@@ -84,135 +122,95 @@ const PriceService = () => {
   }, []);
 
   const onChangeDistrict = useCallback((value, label) => {
-    setCodeDistrict(label?.value);
+    setCodeDistrict(value);
+    setNameDistrict(label?.label);
   }, []);
 
-  const columns =
-    tab === "morning"
-      ? [
-          {
-            title: "Ngày",
-          },
-          {
-            title: "7:00",
-            align: "center",
-          },
-          {
-            title: "7:30",
-            align: "center",
-          },
-          {
-            title: "8:00",
-            align: "center",
-          },
-          {
-            title: "8:30",
-            align: "center",
-          },
-          {
-            title: "9:00",
-            align: "center",
-          },
-          {
-            title: "9:30",
-            align: "center",
-          },
-          {
-            title: "10:00",
-            align: "center",
-          },
-          {
-            title: "10:30",
-            align: "center",
-          },
-          {
-            title: "11:00",
-            align: "center",
-          },
-          {
-            title: "11:30",
-            align: "center",
-          },
-          {
-            title: "12:00",
-            align: "center",
-          },
-          {
-            title: "12:30",
-            align: "center",
-          },
-        ]
-      : tab === "afternoon"
-      ? [
-          {
-            title: "Ngày",
-          },
-          {
-            title: "13:00",
-            align: "center",
-          },
-          {
-            title: "13:30",
-            align: "center",
-          },
-          {
-            title: "14:00",
-            align: "center",
-          },
-          {
-            title: "14:30",
-            align: "center",
-          },
-          {
-            title: "15:00",
-            align: "center",
-          },
-          {
-            title: "15:30",
-            align: "center",
-          },
-          {
-            title: "16:00",
-            align: "center",
-          },
-          {
-            title: "16:30",
-            align: "center",
-          },
-        ]
-      : [
-          {
-            title: "Ngày",
-          },
-          {
-            title: "17:00",
-            align: "center",
-          },
-          {
-            title: "17:30",
-            align: "center",
-          },
-          {
-            title: "18:00",
-            align: "center",
-          },
-          {
-            title: "18:30",
-            align: "center",
-          },
-          {
-            title: "19:00",
-            align: "center",
-          },
-          {
-            title: "19:30",
-            align: "center",
-          },
-          {
-            title: "20:00",
-            align: "center",
-          },
-        ];
+  const onChangeExtend = useCallback((value, label) => {
+    setIdExtend(value);
+    setValueExtend(label?.label);
+  }, []);
+
+  const onChangeDay = () => {
+    setIsLoading(true);
+    getPriceServiceApi(
+      idExtend,
+      codeCity,
+      codeDistrict,
+      startDate,
+      endDate,
+      tab == "morning" ? 7 : tab == "afternoon" ? 13 : 17,
+      tab == "morning" ? 12 : tab == "afternoon" ? 16 : 20
+    )
+      .then((res) => {
+        setData(res?.data);
+        setIsLoading(false);
+      })
+
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  };
+
+  const onChangeTab = useCallback(
+    (value) => {
+      setTab(value);
+      setIsLoading(true);
+
+      getPriceServiceApi(
+        idExtend,
+        codeCity,
+        codeDistrict,
+        startDate,
+        endDate,
+        value == "morning" ? 7 : value == "afternoon" ? 13 : 17,
+        value == "morning" ? 12 : value == "afternoon" ? 16 : 20
+      )
+        .then((res) => {
+          setData(res?.data);
+          setIsLoading(false);
+        })
+
+        .catch((err) => {
+          setIsLoading(false);
+        });
+    },
+    [idExtend, codeCity, codeDistrict, startDate, endDate]
+  );
+
+  const columns = [
+    {
+      title: "Ngày",
+      render: (data) => {
+        return (
+          <a className="text-date-price">
+            {" "}
+            {moment(new Date(data?.date)).utc().format("DD/MM/YYYY")}
+          </a>
+        );
+      },
+    },
+    {
+      title: " Giờ/Tiền",
+      render: (data) => {
+        return (
+          <div className="div-time-date-price">
+            {data?.arr_time?.map((item, key) => {
+              return (
+                <div className="div-item">
+                  <a className="text-item">
+                    {moment(new Date(item?.time)).utc().format("HH:mm")}
+                  </a>
+                  <a className="text-item">{formatMoney(item?.price)}</a>
+                </div>
+              );
+            })}
+          </div>
+        );
+      },
+      align: "center",
+    },
+  ];
 
   return (
     <>
@@ -232,6 +230,7 @@ const PriceService = () => {
           placeholder="Chọn quận"
           onChange={onChangeDistrict}
           options={districtData}
+          value={nameDistrict}
           showSearch
           filterOption={(input, option) =>
             (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
@@ -242,17 +241,33 @@ const PriceService = () => {
           style={{ width: 180, marginLeft: 20, marginRight: 20 }}
           placeholder="Chọn thời lượng"
           options={extendOption}
+          onChange={onChangeExtend}
+          value={valueExtend}
           showSearch
           filterOption={(input, option) =>
             (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
           }
         />
       </div>
+      <div className="mt-2 div-picker">
+        <CustomDatePicker
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          onClick={onChangeDay}
+          onCancel={() => {}}
+        />
+        {startDate && (
+          <a className="text-date">
+            {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+            {moment(endDate).utc().format("DD/MM/YYYY")}
+          </a>
+        )}
+      </div>
       <div className="div-tab-service mt-2">
         {TAB_DATA?.map((item, index) => {
           return (
             <div
-              onClick={() => setTab(item?.value)}
+              onClick={() => onChangeTab(item?.value)}
               className={
                 item?.value === tab ? "div-item-tab-selected" : "div-item-tab"
               }
@@ -265,17 +280,8 @@ const PriceService = () => {
       <div className="mt-4">
         <Table columns={columns} dataSource={data} pagination={false} />
       </div>
-      <div className="div-pagination p-2">
-        <a>Tổng: {total}</a>
-        <div>
-          <Pagination
-            current={currentPage}
-            // onChange={onChange}
-            total={total}
-            showSizeChanger={false}
-          />
-        </div>
-      </div>
+
+      {isLoading && <LoadingPagination />}
     </>
   );
 };

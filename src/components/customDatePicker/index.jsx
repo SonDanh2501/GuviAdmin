@@ -63,6 +63,8 @@ const CustomDatePicker = (props) => {
       .add(7, "hours")
       .toISOString();
 
+    const endNextDay = moment().add(3, "days").startOf("date").toISOString();
+
     switch (item?.value) {
       case "last_seven":
         setStartDate(lastSeven);
@@ -100,6 +102,13 @@ const CustomDatePicker = (props) => {
         setEnd(moment().subtract(1, "months").endOf("month"));
         setTitle(item?.title);
         break;
+      case "last_next_day":
+        setStartDate(today);
+        setStart(today);
+        setEndDate(endNextDay);
+        setEnd(moment().add(3, "days"));
+        setTitle(item?.title);
+        break;
       case "setting":
         setTitle(item?.title);
         setStart("");
@@ -128,6 +137,7 @@ const CustomDatePicker = (props) => {
           ? "date"
           : "quarter"
       )
+      .add(7, "hours")
       .toISOString();
     const dayEnd = moment(end)
       .endOf(
@@ -139,6 +149,7 @@ const CustomDatePicker = (props) => {
           ? "date"
           : "quarter"
       )
+      .add(7, "hours")
       .toISOString();
     setStartDate(dayStart);
     setEndDate(dayEnd);
@@ -260,6 +271,11 @@ const DATA_TAB = [
   },
   {
     id: 6,
+    title: "3 ngày tới",
+    value: "last_next_day",
+  },
+  {
+    id: 7,
     title: "Tuỳ chỉnh",
     value: "setting",
   },

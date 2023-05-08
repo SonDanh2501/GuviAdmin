@@ -261,13 +261,13 @@ const DetailsOrder = () => {
           <div className="div-service">
             <a className="text-service">
               {dataGroup?.type === "loop" && dataGroup?.is_auto_order
-                ? "Lặp lại hàng tuần"
+                ? "Lặp lại"
                 : dataGroup?.service?._id?.kind === "giup_viec_theo_gio"
-                ? "Giúp việc theo giờ"
+                ? "Theo giờ"
                 : dataGroup?.service?._id?.kind === "giup_viec_co_dinh"
-                ? "Giúp việc cố định"
+                ? "Cố định"
                 : dataGroup?.service?._id?.kind === "phuc_vu_nha_hang"
-                ? "Phục vụ nhà hàng"
+                ? "Phục vụ "
                 : ""}
             </a>
             <a className="text-service">{timeWorkList(data)}</a>
@@ -544,6 +544,7 @@ const DetailsOrder = () => {
                             </a>
                             <a className="label-name">
                               Số sao: {dataGroup?.id_collaborator?.star}
+                              <i class="uil uil-star icon-star"></i>
                             </a>
                           </div>
                         </div>
