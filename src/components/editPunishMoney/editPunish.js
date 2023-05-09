@@ -1,54 +1,55 @@
-import { Drawer, Select } from "antd";
-import React, { memo, useCallback, useState } from "react";
+import _debounce from "lodash/debounce";
+import moment from "moment";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import IntlCurrencyInput from "react-intl-currency-input";
 import { useDispatch } from "react-redux";
 import { Form, Input, Label, List, Modal } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
-import { getListPunishApi, punishMoneyCollaboratorApi } from "../../api/topup";
+import {
+  editMoneyPunishApi,
+  getListPunishApi,
+  getTopupCollaboratorApi,
+  updateMoneyCollaboratorApi,
+} from "../../api/topup";
+import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
+import {
+  getRevenueCollaborator,
+  getTopupCollaborator,
+} from "../../redux/actions/topup";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
-import _debounce from "lodash/debounce";
-import "./index.scss";
-import { errorNotify, successNotify } from "../../helper/toast";
+import "./editPunish.scss";
 
-const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
-  const [state, setState] = useState(false);
+const EditPunish = ({
+  state,
+  setState,
+  item,
+  setDataT,
+  setTotal,
+  setIsLoading,
+}) => {
   const [money, setMoney] = useState("");
   const [note, setNote] = useState("");
   const [data, setData] = useState([]);
   const [name, setName] = useState("");
-  const [errorName, setErrorName] = useState("");
-  const [errorMoney, setErrorMoney] = useState("");
-  const [wallet, setWallet] = useState("");
   const [id, setId] = useState("");
   const dispatch = useDispatch();
 
-  const [open, setOpen] = useState(false);
-  const showDrawer = () => {
-    setOpen(true);
-  };
-  const onClose = ({ data }) => {
-    setOpen(false);
-  };
-
-  const valueSearch = (value) => {
-    setName(value);
-  };
+  useEffect(() => {
+    setName(item?.id_collaborator?.full_name);
+    setId(item?._id);
+    setMoney(item?.money);
+    setNote(item?.note_admin);
+  }, [item]);
 
   const searchCollaborator = useCallback(
     _debounce((value) => {
       setName(value);
       if (value) {
-        searchCollaborators(0, 100, "", value)
-          .then((res) => {
-            if (value === "") {
-              setData([]);
-            } else {
-              setData(res.data);
-            }
-          })
-          .catch((err) => {});
+        searchCollaborators(value)
+          .then((res) => setData(res.data))
+          .catch((err) => console.log(err));
       } else if (id) {
         setData([]);
       } else {
@@ -59,36 +60,29 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
     []
   );
 
-  const punishMoney = useCallback(() => {
-    if (name === "" || money === "") {
-      !name
-        ? setErrorName("Vui lòng nhập thông tin")
-        : setErrorMoney("Vui lòng nhập số tiền phạt");
-    } else {
-      dispatch(loadingAction.loadingRequest(true));
-      punishMoneyCollaboratorApi(id, {
-        money: money,
-        punish_note: note,
-      })
-        .then((res) => {
-          setOpen(false);
-          getListPunishApi(0, 20).then((res) => {
+  const editMoney = useCallback(() => {
+    setIsLoading(true);
+    editMoneyPunishApi(id, {
+      money: money,
+      punish_note: note,
+    })
+      .then((res) => {
+        getListPunishApi(0, 20)
+          .then((res) => {
             setDataT(res?.data);
             setTotal(res?.totalItem);
-          });
-          successNotify({
-            message: "Hoàn tất phạt tiền",
-          });
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
+            setState(false);
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        errorNotify({
+          message: err,
         });
-    }
-  }, [id, money, note, name]);
+      });
+  }, [id, money, note, setDataT, setTotal]);
 
   const currencyConfig = {
     locale: "vi",
@@ -111,34 +105,31 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
 
   return (
     <>
-      <CustomButton
-        title="Phạt tiền"
-        className="btn-add-topup"
-        type="button"
-        onClick={showDrawer}
-      />
-      <Drawer
-        title="Phạt tiền cộng tác viên"
-        width={500}
-        onClose={onClose}
-        open={open}
-        bodyStyle={{
-          paddingBottom: 80,
-        }}
+      <Modal
+        className="modal-dialog-centered"
+        isOpen={state}
+        toggle={() => setState(!state)}
       >
+        <div className="modal-header">
+          <h3 className="modal-title" id="exampleModalLabel">
+            Sửa
+          </h3>
+          <button className="btn-close" onClick={() => setState(!state)}>
+            <i className="uil uil-times-square"></i>
+          </button>
+        </div>
         <div className="modal-body">
           <Form>
             <div>
-              <Label>Cộng tác viên(*)</Label>
+              <Label>Cộng tác viên</Label>
               <Input
                 placeholder="Tìm kiếm theo số điện thoại"
                 value={name}
                 onChange={(e) => {
                   searchCollaborator(e.target.value);
-                  valueSearch(e.target.value);
+                  setName(e.target.value);
                 }}
               />
-              {errorName && <a className="error">{errorName}</a>}
               {data.length > 0 && (
                 <List type={"unstyled"} className="list-item">
                   {data?.map((item, index) => {
@@ -152,7 +143,6 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
                         }}
                       >
                         <a>
-                          {" "}
                           {item?.full_name} - {item?.phone} - {item?.id_view}
                         </a>
                       </div>
@@ -163,9 +153,9 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
             </div>
 
             <div className="div-money">
-              <Label> Nhập số tiền (*)</Label>
+              <Label>(*) Nhập số tiền</Label>
               <IntlCurrencyInput
-                className="input-money-punish"
+                className="input-money"
                 currency="BRL"
                 config={currencyConfig}
                 onChange={handleChange}
@@ -183,18 +173,17 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
               value={note}
               onChange={(e) => setNote(e.target.value)}
             />
-
             <CustomButton
-              title="Phạt tiền"
-              className="float-left btn-add-t"
+              title="Sửa"
+              className="float-right btn-modal-edit-topup"
               type="button"
-              onClick={punishMoney}
+              onClick={editMoney}
             />
           </Form>
         </div>
-      </Drawer>
+      </Modal>
     </>
   );
 };
 
-export default memo(PunishMoneyCollaborator);
+export default memo(EditPunish);

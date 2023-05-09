@@ -19,13 +19,6 @@ export const TopupMoneyCollaboratorApi = (id, data) => {
   );
 };
 
-export const punishMoneyCollaboratorApi = (id, data) => {
-  return axiosClient.post(
-    `/admin/collaborator_manager/monetary_fine/${id}?lang=vi`,
-    data
-  );
-};
-
 export const withdrawMoneyCollaboratorApi = (id, data) => {
   return axiosClient.post(
     `/admin/collaborator_manager/withdraw/${id}?lang=vi`,
@@ -61,6 +54,39 @@ export const cancelMoneyCollaboratorApi = (id, data) => {
 export const getRevenueCollaboratorApi = (startDate, endDate) => {
   return axiosClient.get(
     `/admin/collaborator_manager/get_revenue_and_expenditure?lang=vi&start_date=${startDate}&end_date=${endDate}`
+  );
+};
+
+//punish collaborator
+export const getListPunishApi = (start, length) => {
+  return axiosClient.get(
+    `/admin/punish_manager/get_list_punish?lang=vi&start=${start}&length=${length}`
+  );
+};
+
+export const punishMoneyCollaboratorApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/punish_manager/monetary_fine/${id}?lang=vi`,
+    data
+  );
+};
+
+export const confirmMoneyPunishApi = (id) => {
+  return axiosClient.post(`/admin/punish_manager/verify_punish/${id}`);
+};
+
+export const cancelMoneyPunishApi = (id) => {
+  return axiosClient.post(`/admin/punish_manager/cancel_punish/${id}?lang=vi`);
+};
+
+export const deleteMoneyPunishApi = (id) => {
+  return axiosClient.post(`/admin/punish_manager/delete_punish/${id}`);
+};
+
+export const editMoneyPunishApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/punish_manager/edit_punish/${id}?lang=vi`,
+    data
   );
 };
 

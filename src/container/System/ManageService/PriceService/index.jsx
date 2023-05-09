@@ -36,6 +36,7 @@ const PriceService = () => {
   const extendOption = [];
 
   useEffect(() => {
+    setIsLoading(true);
     getDistrictApi()
       .then((res) => {
         setDataCity(res?.aministrative_division);
@@ -51,6 +52,7 @@ const PriceService = () => {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     getServiceByIdApi(id)
       .then((res) => {
         getOptionalServiceByServiceApi(res?.data[0]?._id)
@@ -81,8 +83,8 @@ const PriceService = () => {
       codeDistrict,
       moment().toISOString(),
       moment().add(3, "days").toISOString(),
-      7,
-      12
+      tab == "morning" ? 7 : tab == "afternoon" ? 13 : 17,
+      tab == "morning" ? 12 : tab == "afternoon" ? 16 : 20
     )
       .then((res) => {
         setData(res?.data);
@@ -91,7 +93,7 @@ const PriceService = () => {
       .catch((err) => {
         setIsLoading(false);
       });
-  }, [idExtend, codeCity, codeDistrict]);
+  }, [idExtend, codeCity, codeDistrict, tab]);
 
   dataDistrict?.map((item) => {
     districtData?.push({
@@ -199,7 +201,7 @@ const PriceService = () => {
               return (
                 <div className="div-item">
                   <a className="text-item">
-                    {moment(new Date(item?.time)).utc().format("HH:mm")}
+                    {moment(new Date(item?.time)).format("HH:mm")}
                   </a>
                   <a className="text-item">{formatMoney(item?.price)}</a>
                 </div>

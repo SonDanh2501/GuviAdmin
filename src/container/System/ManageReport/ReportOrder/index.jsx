@@ -38,7 +38,7 @@ const ReportOrder = () => {
     getReportOrder(
       0,
       20,
-      moment(moment().startOf("year").toISOString())
+      moment(moment().startOf("month").toISOString())
         .add(7, "hours")
         .toISOString(),
       moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
@@ -51,7 +51,7 @@ const ReportOrder = () => {
       .catch((err) => console.log(err));
 
     setStartDate(
-      moment(moment().startOf("year").toISOString())
+      moment(moment().startOf("month").toISOString())
         .add(7, "hours")
         .toISOString()
     );

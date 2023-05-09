@@ -1,18 +1,136 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import PunishMoneyCollaborator from "../../../../../components/punishMoneyCollaborator/punishMoneyCollaborator";
 import "./index.scss";
-import { Table, Tooltip } from "antd";
+import { Button, Pagination, Table, Tooltip } from "antd";
 import moment from "moment";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getUser } from "../../../../../redux/selectors/auth";
+import {
+  cancelMoneyPunishApi,
+  confirmMoneyPunishApi,
+  deleteMoneyPunishApi,
+  getListPunishApi,
+} from "../../../../../api/topup";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import LoadingPagination from "../../../../../components/paginationLoading";
+import { errorNotify } from "../../../../../helper/toast";
+import EditPunish from "../../../../../components/editPunishMoney/editPunish";
 
 const Punish = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(0);
+  const [modalConfirm, setModalConfirm] = useState(false);
+  const [modalCancel, setModalCancel] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
+  const [itemEdit, setItemEdit] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const user = useSelector(getUser);
   const navigate = useNavigate();
+  const toggleConfirm = () => setModalConfirm(!modalConfirm);
+  const toggleCancel = () => setModalCancel(!modalCancel);
+  const toggle = () => setModal(!modal);
+  const toggleEdit = () => setModalEdit(!modalEdit);
+
+  useEffect(() => {
+    getListPunishApi(0, 20)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  }, []);
+
+  const onConfirm = useCallback(
+    (id) => {
+      setIsLoading(true);
+      confirmMoneyPunishApi(id).then((res) => {
+        getListPunishApi(startPage, 20)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+            setIsLoading(false);
+            setModalConfirm(false);
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            errorNotify({
+              message: err,
+            });
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            errorNotify({
+              message: err,
+            });
+          });
+      });
+    },
+    [startPage]
+  );
+
+  const onCancel = useCallback(
+    (id) => {
+      setIsLoading(true);
+      cancelMoneyPunishApi(id)
+        .then((res) => {
+          setModalCancel(false);
+          getListPunishApi(startPage, 20)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+              setIsLoading(false);
+              setModalCancel(false);
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
+        });
+    },
+    [startPage]
+  );
+
+  const onDelete = useCallback((id) => {
+    setIsLoading(true);
+    deleteMoneyPunishApi(id)
+      .then((res) => {
+        setModalCancel(false);
+        getListPunishApi(startPage, 20)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+            setIsLoading(false);
+            setModal(false);
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        errorNotify({
+          message: err,
+        });
+      });
+  }, []);
+
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const start = page * data?.length - data?.length;
+    setStartPage(start);
+    getListPunishApi(start, 20)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
 
   const columns = [
     {
@@ -60,7 +178,7 @@ const Punish = () => {
     {
       title: "Nội dung",
       render: (data) => (
-        <a className="text-description-topup">{data?.transfer_note}</a>
+        <a className="text-description-topup">{data?.note_admin}</a>
       ),
     },
     {
@@ -115,10 +233,10 @@ const Punish = () => {
           <div>
             <button
               className="btn-confirm"
-              //   onClick={toggleConfirm}
+              onClick={toggleConfirm}
               disabled={
-                (!data?.is_verify_money && data?.status === "cancel") ||
-                data?.is_verify_money
+                (!data?.is_verify_punish && data?.status === "cancel") ||
+                data?.is_verify_punish
                   ? true
                   : false
               }
@@ -129,33 +247,31 @@ const Punish = () => {
               {(data?.status === "pending" ||
                 data?.status === "transfered") && (
                 <Tooltip placement="bottom" title={"Huỷ giao dịch CTV"}>
-                  <a
-                    className="text-cancel-topup"
-                    //    onClick={toggleCancel}
-                  >
+                  <a className="text-cancel-topup" onClick={toggleCancel}>
                     Huỷ
                   </a>
                 </Tooltip>
               )}
             </div>
             <div className="mt-1">
-              {!data?.is_verify_money && data?.status === "cancel" ? (
+              {!data?.is_verify_punish && data?.status === "cancel" ? (
                 <></>
-              ) : data?.is_verify_money ? (
+              ) : data?.is_verify_punish ? (
                 <></>
               ) : (
                 <Tooltip placement="bottom" title={"Chỉnh sửa giao dịch CTV"}>
                   <button
                     className="btn-edit-topup"
-                    // onClick={() => {
-                    //   toggleEdit();
-                    //   setItemEdit(data);
-                    // }}
+                    onClick={() => {
+                      toggleEdit();
+                      setItemEdit(data);
+                    }}
                   >
                     <i
                       className={
-                        (!data?.is_verify_money && data?.status === "cancel") ||
-                        data?.is_verify_money
+                        (!data?.is_verify_punish &&
+                          data?.status === "cancel") ||
+                        data?.is_verify_punish
                           ? "uil uil-edit-alt icon-edit"
                           : "uil uil-edit-alt"
                       }
@@ -166,7 +282,7 @@ const Punish = () => {
 
               {user?.role === "admin" && (
                 <Tooltip placement="bottom" title={"Xoá giao dịch CTV"}>
-                  <button className="btn-delete">
+                  <button className="btn-delete" onClick={toggle}>
                     <i className="uil uil-trash"></i>
                   </button>
                 </Tooltip>
@@ -180,28 +296,127 @@ const Punish = () => {
   return (
     <>
       <div>
-        <PunishMoneyCollaborator />
+        <PunishMoneyCollaborator setDataT={setData} setTotal={setTotal} />
       </div>
       <div className="mt-3">
         <Table
           dataSource={data}
           columns={columns}
           pagination={false}
-          //   rowKey={(record) => record._id}
-          //   rowSelection={{
-          //     selectedRowKeys,
-          //     onChange: (selectedRowKeys, selectedRows) => {
-          //       setSelectedRowKeys(selectedRowKeys);
-          //     },
-          //   }}
-          //   onRow={(record, rowIndex) => {
-          //     return {
-          //       onClick: (event) => {
-          //         setItemEdit(record);
-          //       },
-          //     };
-          //   }}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setItemEdit(record);
+              },
+            };
+          }}
         />
+        <div className="div-pagination p-2">
+          <a>Tổng: {total}</a>
+          <div>
+            <Pagination
+              current={currentPage}
+              onChange={onChange}
+              showSizeChanger={false}
+              total={total}
+              pageSize={20}
+            />
+          </div>
+        </div>
+
+        <div>
+          <Modal isOpen={modalConfirm} toggle={toggleConfirm}>
+            <ModalHeader toggle={toggleConfirm}>
+              Duyệt lệnh phạt tiền
+            </ModalHeader>
+            <ModalBody>
+              <>
+                <h4>Duyệt lệnh phạt tiền cho :</h4>
+                <div className="body-modal">
+                  <a className="text-content">
+                    CTV: {itemEdit?.id_collaborator?.full_name}
+                  </a>
+                  <a className="text-content">
+                    SĐT: {itemEdit?.id_collaborator?.phone}
+                  </a>
+                  <a className="text-content">
+                    Số tiền: {formatMoney(itemEdit?.money)}
+                  </a>
+                  <a className="text-content">
+                    Nội dung: {itemEdit?.note_admin}
+                  </a>
+                </div>
+              </>
+            </ModalBody>
+            <ModalFooter>
+              <Button type="primary" onClick={() => onConfirm(itemEdit?._id)}>
+                Có
+              </Button>
+              <Button color="#ddd" onClick={toggleConfirm}>
+                Không
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+
+        <div>
+          <Modal isOpen={modalCancel} toggle={toggleCancel}>
+            <ModalHeader toggle={toggleCancel}>Huỷ lệnh phạt</ModalHeader>
+            <ModalBody>
+              <a>
+                Bạn có chắc muốn huỷ lệnh phạt của cộng tác viên
+                <a className="text-name-modal">
+                  {itemEdit?.id_collaborator?.full_name}
+                </a>
+                này không?
+              </a>
+            </ModalBody>
+            <ModalFooter>
+              <Button type="primary" onClick={() => onCancel(itemEdit?._id)}>
+                Có
+              </Button>
+              <Button color="#ddd" onClick={toggleCancel}>
+                Không
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+
+        <div>
+          <Modal isOpen={modal} toggle={toggle}>
+            <ModalHeader toggle={toggle}>Xóa giao dịch</ModalHeader>
+            <ModalBody>
+              <a>
+                Bạn có chắc muốn xóa giao dịch của cộng tác viên
+                <a className="text-name-modal">
+                  {itemEdit?.id_collaborator?.full_name}
+                </a>
+                này không?
+              </a>
+            </ModalBody>
+            <ModalFooter>
+              <Button type="primary" onClick={() => onDelete(itemEdit?._id)}>
+                Có
+              </Button>
+              <Button color="#ddd" onClick={toggle}>
+                Không
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+
+        <div>
+          <EditPunish
+            item={itemEdit}
+            state={modalEdit}
+            setState={setModalEdit}
+            setDataT={setData}
+            setTotal={setTotal}
+            setIsLoading={setIsLoading}
+          />
+        </div>
+
+        {isLoading && <LoadingPagination />}
       </div>
     </>
   );

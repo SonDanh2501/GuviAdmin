@@ -40,7 +40,7 @@ const ReportArea = () => {
         setNameCity(res?.aministrative_division[1]?.name);
         setDataDistrict(res?.aministrative_division[1]?.districts);
         getReportTypeService(
-          moment(moment().startOf("year").toISOString())
+          moment(moment().startOf("month").toISOString())
             .add(7, "hours")
             .toISOString(),
           moment(moment(new Date()).toISOString())
@@ -58,7 +58,7 @@ const ReportArea = () => {
       .catch((err) => {});
 
     getReportCustomerByCity(
-      moment(moment().startOf("year").toISOString())
+      moment(moment().startOf("month").toISOString())
         .add(7, "hours")
         .toISOString(),
       moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
@@ -69,12 +69,12 @@ const ReportArea = () => {
       .catch((err) => {});
 
     setStartDate(
-      moment(moment().startOf("year").toISOString())
+      moment(moment().startOf("month").toISOString())
         .add(7, "hours")
         .toISOString()
     );
     setStartDateCity(
-      moment(moment().startOf("year").toISOString())
+      moment(moment().startOf("month").toISOString())
         .add(7, "hours")
         .toISOString()
     );

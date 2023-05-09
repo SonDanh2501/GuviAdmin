@@ -41,7 +41,7 @@ const ReportInvite = () => {
     getReportCustomerInviteDay(
       0,
       20,
-      moment("2022-08-30").startOf("year").toISOString(),
+      moment().startOf("month").toISOString(),
       moment(new Date()).toISOString()
     )
       .then((res) => {
@@ -51,7 +51,7 @@ const ReportInvite = () => {
       .catch((err) => console.log(err));
 
     getTopCustomerInvite(
-      moment("2022-08-30").startOf("year").toISOString(),
+      moment().startOf("month").toISOString(),
       moment(new Date()).toISOString()
     )
       .then((res) => {

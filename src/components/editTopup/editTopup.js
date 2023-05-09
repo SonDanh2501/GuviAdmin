@@ -34,10 +34,6 @@ const EditTopup = ({ state, setState, item, type, setDataT, setTotal }) => {
     setNote(item?.transfer_note);
   }, [item]);
 
-  const valueSearch = (value) => {
-    setName(value);
-  };
-
   const searchCollaborator = useCallback(
     _debounce((value) => {
       setName(value);
@@ -128,7 +124,7 @@ const EditTopup = ({ state, setState, item, type, setDataT, setTotal }) => {
                 value={name}
                 onChange={(e) => {
                   searchCollaborator(e.target.value);
-                  valueSearch(e.target.value);
+                  setName(e.target.value);
                 }}
               />
               {data.length > 0 && (

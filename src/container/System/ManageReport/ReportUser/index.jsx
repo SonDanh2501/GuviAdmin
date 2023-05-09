@@ -106,7 +106,9 @@ const ReportUser = () => {
 
   data.map((item, index) => {
     dataChart.push({
-      total: item?.total,
+      totalNew: item?.totalNew,
+      totalOld: item?.totalOld,
+      total: item?.totalAll,
       month: index + 1,
     });
   });
@@ -193,12 +195,18 @@ const ReportUser = () => {
         <a className="date-text">Tháng {label}</a>
 
         <a className="money-text">
-          Số người đăng kí:{" "}
-          {payload?.length > 0 ? payload[0]?.payload?.total : 0}
+          Số người đăng kí mới:{" "}
+          {payload?.length > 0 ? payload[0]?.payload?.totalNew : 0}
+        </a>
+        <a className="money-text">
+          Số người đăng kí cũ:{" "}
+          {payload?.length > 0 ? payload[0]?.payload?.totalOld : 0}
         </a>
       </div>
     );
   };
+
+  console.log(dataChart);
 
   return (
     <div className="div-container-report-customer">
@@ -279,13 +287,24 @@ const ReportUser = () => {
               <YAxis />
               <Tooltip content={renderTooltipContent} />
               <Legend />
+
               <Bar
-                dataKey="total"
+                dataKey="totalOld"
+                fill="#82ca9d"
+                minPointSize={20}
+                barSize={40}
+                // label={{ position: "centerTop", fill: "white" }}
+                name="Khách hàng cũ"
+                stackId="a"
+              />
+              <Bar
+                dataKey="totalNew"
                 fill="#4376CC"
-                minPointSize={5}
-                barSize={50}
-                label={{ position: "centerTop", fill: "white" }}
-                name="Khách hàng"
+                minPointSize={20}
+                barSize={40}
+                // label={{ position: "centerTop", fill: "white" }}
+                name="Khách hàng mới"
+                stackId="a"
               />
             </BarChart>
           </ResponsiveContainer>
