@@ -1,0 +1,9 @@
+.div-extend {
+  display: flex;
+  flex-direction: row;
+
+  .div-item-extend {
+    border: 1px solid #d6d6d6;
+    padding: 5px;
+  }
+}

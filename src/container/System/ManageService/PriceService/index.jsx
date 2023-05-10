@@ -52,7 +52,6 @@ const PriceService = () => {
   }, []);
 
   useEffect(() => {
-    setIsLoading(true);
     getServiceByIdApi(id)
       .then((res) => {
         getOptionalServiceByServiceApi(res?.data[0]?._id)

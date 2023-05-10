@@ -72,8 +72,6 @@ const ReportManager = () => {
     );
   }, []);
 
-  console.log(totalColumn);
-
   const onChange = (page) => {
     setIsLoading(true);
     setCurrentPage(page);

@@ -29,6 +29,7 @@ const AddCustomer = () => {
     email: "",
     password: "",
     name: "",
+    code: "",
   };
 
   const addCustomer = () => {
@@ -126,6 +127,15 @@ const AddCustomer = () => {
                     setFieldValue("password", text.target.value)
                   }
                   errors={errors?.password}
+                />
+
+                <CustomTextInput
+                  label="Mã giới thiệu"
+                  type="text"
+                  name="password"
+                  id="examplePassword"
+                  placeholder="Vui lòng nhập mã giới thiệu"
+                  onChange={(text) => setFieldValue("code", text.target.value)}
                 />
                 <CustomButton
                   title="Thêm"

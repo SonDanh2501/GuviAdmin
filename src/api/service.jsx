@@ -6,28 +6,33 @@ export const getGroupServiceApi = (start, length) => {
   );
 };
 
-export const createGroupServiceApi = (payload) => {
-  return axiosClient.post("/admin/group_service_manager/create_item", payload);
-};
-
-export const updateGroupServiceApi = (id, payload) => {
+export const createGroupServiceApi = (data) => {
   return axiosClient.post(
-    `/admin/group_service_manager/edit_item/${id}`,
-    payload
+    `/admin/group_service_manager/create_item?lang=vi`,
+    data
   );
 };
 
-export const deleteGroupServiceApi = (id) => {
-  return axiosClient.get(`/admin/group_service_manager/delete_soft/${id}`);
+export const updateGroupServiceApi = (id, data) => {
+  return axiosClient.post(`/admin/group_service_manager/edit_item/${id}`, data);
 };
 
-export const activeGroupServiceApi = (id) => {
-  return axiosClient.post(`/admin/group_service_manager/active/${id}`);
+export const deleteGroupServiceApi = (id) => {
+  return axiosClient.get(`/admin/group_service_manager/delete_item/${id}`);
+};
+
+export const activeGroupServiceApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/group_service_manager/active_item/${id}`,
+    data
+  );
 };
 
 //services
-export const getServiceApi = () => {
-  return axiosClient.get("/admin/service_manager/get_list");
+export const getServiceApi = (id) => {
+  return axiosClient.get(
+    `/admin/service_manager/get_list_service_by_group_service/${id}`
+  );
 };
 
 export const getServiceByIdApi = (id) => {
@@ -40,8 +45,22 @@ export const createServiceApi = (data) => {
   return axiosClient.post(`/admin/service_manager/create_item?lang=vi`, data);
 };
 
+export const editServiceApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/service_manager/edit_item/${id}?lang=vi`,
+    data
+  );
+};
+
+export const activeServiceApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/service_manager/active_item/${id}?lang=vi`,
+    data
+  );
+};
+
 export const deleteServiceApi = (id) => {
-  return axiosClient.get(`/admin/service_manager/delete_soft/${id}`);
+  return axiosClient.get(`/admin/service_manager/delete_item/${id}`);
 };
 
 //optional services

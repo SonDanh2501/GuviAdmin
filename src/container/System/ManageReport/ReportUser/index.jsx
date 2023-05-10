@@ -11,6 +11,7 @@ import {
   Tooltip,
   Bar,
   Legend,
+  LabelList,
 } from "recharts";
 import {
   getTotalCustomerDay,
@@ -100,7 +101,7 @@ const ReportUser = () => {
   useEffect(() => {
     let sum = 0;
     for (let i = 0; i < data.length; i++) {
-      setTotalYear((sum += data[i].total));
+      setTotalYear((sum += data[i].totalAll));
     }
   }, [data]);
 
@@ -193,7 +194,12 @@ const ReportUser = () => {
     return (
       <div className="div-content-tool-chart">
         <a className="date-text">Tháng {label}</a>
-
+        <a className="money-text">
+          Số tổng:{" "}
+          {payload?.length > 0
+            ? payload[0]?.payload?.totalNew + payload[0]?.payload?.totalOld
+            : 0}
+        </a>
         <a className="money-text">
           Số người đăng kí mới:{" "}
           {payload?.length > 0 ? payload[0]?.payload?.totalNew : 0}
@@ -205,8 +211,6 @@ const ReportUser = () => {
       </div>
     );
   };
-
-  console.log(dataChart);
 
   return (
     <div className="div-container-report-customer">
@@ -297,6 +301,7 @@ const ReportUser = () => {
                 name="Khách hàng cũ"
                 stackId="a"
               />
+
               <Bar
                 dataKey="totalNew"
                 fill="#4376CC"
