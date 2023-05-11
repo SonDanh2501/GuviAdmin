@@ -20,7 +20,7 @@ function* loginSaga(action) {
     if (user.role === "admin") {
       action.payload.naviga("/");
     } else if (user.role === "marketing" || user.role === "marketing-manager") {
-      action.payload.naviga("/promotion/manage-setting");
+      action.payload.naviga("/");
     } else if (user.role === "support_customer") {
       action.payload.naviga("/group-order/manage-order");
     } else if (user.role === "accountant") {

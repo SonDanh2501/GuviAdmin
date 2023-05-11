@@ -18,23 +18,30 @@ import {
 import TopupCollaborator from "./Topup";
 import "./TopupManage.scss";
 import Punish from "./Punish";
+import { getRevenueCollaboratorApi } from "../../../../api/topup";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 export default function TopupManage() {
   const [type, setType] = useState("all");
-  const revenue = useSelector(getRevenueCTV);
-  const expenditure = useSelector(totalExpenditureCTV);
+  const [totalTopup, setTotalTopup] = useState("");
+  const [totalWithdraw, setTotalWithdraw] = useState("");
+  const [totalPunish, setTotalPunish] = useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(
-      getRevenueCollaborator.getRevenueCollaboratorRequest({
-        startDate: moment().startOf("year").toISOString(),
-        endDate: moment(new Date()).toISOString(),
+    getRevenueCollaboratorApi(
+      moment().startOf("year").toISOString(),
+      moment().toISOString()
+    )
+      .then((res) => {
+        setTotalPunish(res?.totalPunish);
+        setTotalWithdraw(res?.totalWithdraw);
+        setTotalTopup(res?.totalTopUp);
       })
-    );
+      .catch((err) => {});
   }, [dispatch]);
 
   const onChangeTab = (active) => {
@@ -54,15 +61,19 @@ export default function TopupManage() {
           Tổng thu:
           <a className="text-money-revenue">
             <i class="uil uil-arrow-up icon-up"></i>
-            {formatMoney(revenue)}
+            {formatMoney(totalTopup)}
           </a>
         </a>
         <a className="total-expenditure">
           Tổng chi:
           <a className="text-money-expenditure">
             <i class="uil uil-arrow-down icon-down"></i>
-            {formatMoney(expenditure)}
+            {formatMoney(totalWithdraw)}
           </a>
+        </a>
+        <a className="total-expenditure">
+          Tổng phạt:
+          <a className="text-money-expenditure">{formatMoney(totalPunish)}</a>
         </a>
       </div>
       <div>
@@ -76,9 +87,9 @@ export default function TopupManage() {
           <Tabs.TabPane tab="Rút tiền" key="3">
             <TopupCollaborator type={type} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Phạt tiền" key="4">
+          {/* <Tabs.TabPane tab="Phạt tiền" key="4">
             <Punish />
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
         </Tabs>
       </div>
     </React.Fragment>

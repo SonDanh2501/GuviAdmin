@@ -530,7 +530,7 @@ const EditGroupCustomer = () => {
                                     <a className="label-kind">Loại</a>
                                     <Select
                                       onChange={(value) =>
-                                        onChangeKindIn(value, idx, ix)
+                                        onChangeKindOut(value, idx, ix)
                                       }
                                       value={it?.kind}
                                       className="select-kind"
@@ -542,7 +542,7 @@ const EditGroupCustomer = () => {
                                     <a className="label-kind">Phương thức</a>
                                     <Select
                                       onChange={(value) =>
-                                        onChangeOperatorIn(value, idx, ix)
+                                        onChangeOperatorOut(value, idx, ix)
                                       }
                                       className="select-kind"
                                       value={it?.operator}
@@ -564,7 +564,7 @@ const EditGroupCustomer = () => {
                                         options={DATA_GENDER}
                                         value={it?.value}
                                         onChange={(value) =>
-                                          onChangeValueIn(value, idx, ix)
+                                          onChangeValueOut(value, idx, ix)
                                         }
                                       />
                                     ) : condition?.condition[idx].kind ===
@@ -574,7 +574,7 @@ const EditGroupCustomer = () => {
                                         options={MONTH}
                                         value={it?.value}
                                         onChange={(value) =>
-                                          onChangeValueIn(value, idx, ix)
+                                          onChangeValueOut(value, idx, ix)
                                         }
                                       />
                                     ) : condition?.condition[idx].kind ===
@@ -587,7 +587,7 @@ const EditGroupCustomer = () => {
                                           dateFormat
                                         )}
                                         onChange={(date, dateString) =>
-                                          onChangeValueIn(
+                                          onChangeValueOut(
                                             moment(
                                               moment(dateString).toISOString()
                                             )
@@ -604,7 +604,7 @@ const EditGroupCustomer = () => {
                                         type={"number"}
                                         value={it?.value}
                                         onChange={(e) =>
-                                          onChangeValueIn(
+                                          onChangeValueOut(
                                             e.target.value,
                                             idx,
                                             ix
@@ -619,7 +619,9 @@ const EditGroupCustomer = () => {
                                   ) : (
                                     <i
                                       class="uil uil-times-circle"
-                                      onClick={() => deleteConditionIn(idx, ix)}
+                                      onClick={() =>
+                                        deleteConditionOut(idx, ix)
+                                      }
                                     ></i>
                                   )}
                                 </div>

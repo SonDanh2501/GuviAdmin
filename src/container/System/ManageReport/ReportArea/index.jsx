@@ -277,24 +277,24 @@ const ReportArea = () => {
               <a className="number-total">{dataChartPie?.total_order}</a>
             </div>
             <div className="item-total">
-              <a className="title-total">2 Giờ</a>
+              <a className="title-total">Đơn 2 Giờ</a>
               <a className="text-colon">:</a>
               <a className="number-total">
-                {dataChartPie?.total_order_2_hours}/{dataChartPie?.total_order}
+                {dataChartPie?.total_order_2_hours}
               </a>
             </div>
             <div className="item-total">
-              <a className="title-total">3 Giờ</a>
+              <a className="title-total">Đơn 3 Giờ</a>
               <a className="text-colon">:</a>
               <a className="number-total">
-                {dataChartPie?.total_order_3_hours}/{dataChartPie?.total_order}
+                {dataChartPie?.total_order_3_hours}
               </a>
             </div>
             <div className="item-total">
-              <a className="title-total">4 Giờ</a>
+              <a className="title-total">Đơn 4 Giờ</a>
               <a className="text-colon">:</a>
               <a className="number-total">
-                {dataChartPie?.total_order_4_hours}/{dataChartPie?.total_order}
+                {dataChartPie?.total_order_4_hours}
               </a>
             </div>
           </div>

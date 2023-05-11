@@ -141,11 +141,11 @@ export default function GroupServiceManage() {
       render: (data) => {
         return (
           <div
-            onClick={() => {
-              navigate("/services/manage-group-service/manage-service", {
-                state: { id: data?._id },
-              });
-            }}
+          // onClick={() => {
+          //   navigate("/services/manage-group-service/manage-service", {
+          //     state: { id: data?._id },
+          //   });
+          // }}
           >
             <img className="img-customer-service" src={data?.thumbnail} />
           </div>

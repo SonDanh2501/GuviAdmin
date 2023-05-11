@@ -87,6 +87,28 @@ export const getPromotionByCustomerApi = (id, start, length, idService) => {
   );
 };
 
+export const deleteOptionServiceApi = (id) => {
+  return axiosClient.post(`/admin/optional_service_manager/delete_item/${id}`);
+};
+
+export const activeOptionServiceApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/optional_service_manager/active_item/${id}`,
+    data
+  );
+};
+
+export const editOptionServiceApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/optional_service_manager/edit_item/${id}`,
+    data
+  );
+};
+
+export const createOptionServiceApi = (data) => {
+  return axiosClient.post(`/admin/optional_service_manager/create_item`, data);
+};
+
 export const getCalculateFeeApi = (data) => {
   return axiosClient.post(
     `/admin/group-order-manager/calculate_fee_group_order`,

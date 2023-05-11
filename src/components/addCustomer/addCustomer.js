@@ -41,6 +41,7 @@ const AddCustomer = () => {
         email: formikRef?.current?.values?.email,
         full_name: formikRef?.current?.values?.name,
         password: formikRef?.current?.values?.password,
+        code_inviter: formikRef?.current?.values?.code,
       })
     );
   };

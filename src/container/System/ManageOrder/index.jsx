@@ -19,6 +19,7 @@ import AddOrder from "./DrawerAddOrder";
 import { SearchOutlined } from "@ant-design/icons";
 import { DATA, DATA_STATUS } from "../../../api/fakeData";
 import { useNavigate } from "react-router-dom";
+import { getUser } from "../../../redux/selectors/auth";
 
 const ManageOrder = () => {
   const [dataSearch, setDataSearch] = useState([]);
@@ -33,6 +34,7 @@ const ManageOrder = () => {
   const orderTotal = useSelector(getOrderTotal);
   const listOrderSearch = useSelector(searchOrderSelector);
   const totalOrderSearch = useSelector(searchOrderTotal);
+  const user = useSelector(getUser);
   const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -100,12 +102,15 @@ const ManageOrder = () => {
             </a>
           </Dropdown>
         </div>
-        <Button
-          className="btn-create-order"
-          onClick={() => navigate("/group-order/manage-order/create-order")}
-        >
-          Tạo dịch vụ
-        </Button>
+        {user?.role !== "marketing_manager" ||
+          (user?.role !== "marketing_manager" && (
+            <Button
+              className="btn-create-order"
+              onClick={() => navigate("/group-order/manage-order/create-order")}
+            >
+              Tạo dịch vụ
+            </Button>
+          ))}
       </div>
 
       <div className="div-container">
