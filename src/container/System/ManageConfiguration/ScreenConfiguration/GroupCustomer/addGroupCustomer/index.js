@@ -478,7 +478,7 @@ const AddGroupCustomer = () => {
                                     <a className="label-kind">Loại</a>
                                     <Select
                                       onChange={(value) =>
-                                        onChangeKindIn(value, idx, ix)
+                                        onChangeKindOut(value, idx, ix)
                                       }
                                       className="select-kind"
                                       options={DATA_KIND}
@@ -489,7 +489,7 @@ const AddGroupCustomer = () => {
                                     <a className="label-kind">Phương thức</a>
                                     <Select
                                       onChange={(value) =>
-                                        onChangeOperatorIn(value, idx, ix)
+                                        onChangeOperatorOut(value, idx, ix)
                                       }
                                       className="select-kind"
                                       options={
@@ -509,7 +509,7 @@ const AddGroupCustomer = () => {
                                         className="select-kind"
                                         options={DATA_GENDER}
                                         onChange={(value) =>
-                                          onChangeValueIn(value, idx, ix)
+                                          onChangeValueOut(value, idx, ix)
                                         }
                                       />
                                     ) : condition?.condition[idx].kind ===
@@ -518,7 +518,7 @@ const AddGroupCustomer = () => {
                                         className="select-kind"
                                         options={MONTH}
                                         onChange={(value) =>
-                                          onChangeValueIn(value, idx, ix)
+                                          onChangeValueOut(value, idx, ix)
                                         }
                                       />
                                     ) : condition?.condition[idx].kind ===
@@ -526,7 +526,7 @@ const AddGroupCustomer = () => {
                                       <DatePicker
                                         className="select-date"
                                         onChange={(date, dateString) =>
-                                          onChangeValueIn(
+                                          onChangeValueOut(
                                             moment(
                                               moment(dateString).toISOString()
                                             )
@@ -542,7 +542,7 @@ const AddGroupCustomer = () => {
                                         className="input-value"
                                         type={"number"}
                                         onChange={(e) =>
-                                          onChangeValueIn(
+                                          onChangeValueOut(
                                             e.target.value,
                                             idx,
                                             ix
@@ -557,7 +557,9 @@ const AddGroupCustomer = () => {
                                   ) : (
                                     <i
                                       class="uil uil-times-circle"
-                                      onClick={() => deleteConditionIn(idx, ix)}
+                                      onClick={() =>
+                                        deleteConditionOut(idx, ix)
+                                      }
                                     ></i>
                                   )}
                                 </div>

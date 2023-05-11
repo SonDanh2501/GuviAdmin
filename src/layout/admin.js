@@ -21,7 +21,7 @@ import ManageReport from "../container/System/ManageReport";
 import DetailReportManager from "../container/System/ManageReport/DetailsReportCollaborator";
 import ReportInviteDetails from "../container/System/ManageReport/ReportInvite/ReportInviteDetails";
 import DetailRegisterCustomer from "../container/System/ManageReport/ReportUser/DetailRegisterCustomer";
-import GroupServiceManage from "../container/System/ManageService/ManageGroupService/ManageGroupService/GroupServiceManage";
+import GroupServiceManage from "../container/System/ManageService/ManageGroupService/GroupServiceManage";
 import ServiceManage from "../container/System/ManageService/ManageService/ServiceManage";
 import ManageSetting from "../container/System/ManageSetting";
 import ReasonManage from "../container/System/ManageConfiguration/ScreenConfiguration/ManageReason/ReasonManage";
@@ -37,6 +37,7 @@ import AddGroupCustomer from "../container/System/ManageConfiguration/ScreenConf
 import EditGroupCustomer from "../container/System/ManageConfiguration/ScreenConfiguration/GroupCustomer/editGroupCustomer";
 import OrderExpired from "../container/System/ManageOrder/OrderExpired";
 import CreateQuizz from "../container/System/ManageConfiguration/ScreenConfiguration/CreateQuizz";
+import ManageOptionService from "../container/System/ManageService/ManageOptionalService";
 
 const Admin = () => {
   return (
@@ -85,6 +86,10 @@ const Admin = () => {
       <Route
         path="/services/manage-group-service/manage-service"
         element={<ServiceManage />}
+      />
+      <Route
+        path="/services/manage-group-service/manage-service/option-service"
+        element={<ManageOptionService />}
       />
       <Route
         path="/services/manage-group-service/manage-price-service"

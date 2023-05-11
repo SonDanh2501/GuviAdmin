@@ -10,8 +10,10 @@ import {
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./editGroupService.scss";
+import { getGroupServiceApi, updateGroupServiceApi } from "../../api/service";
+import { errorNotify } from "../../helper/toast";
 
-const EditGroupService = ({ state, setState, data }) => {
+const EditGroupService = ({ state, setState, data, setData, setTotal }) => {
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
   const [imgThumbnail, setImgThumbnail] = useState("");
@@ -19,6 +21,7 @@ const EditGroupService = ({ state, setState, data }) => {
   const [descriptionVN, setDescriptionVN] = useState("");
   const [descriptionEN, setDescriptionEN] = useState("");
   const [type, setType] = useState("single");
+  const [kind, setKind] = useState("");
 
   const dispatch = useDispatch();
 
@@ -29,6 +32,7 @@ const EditGroupService = ({ state, setState, data }) => {
     setDescriptionEN(data?.description?.en);
     setImgThumbnail(data?.thumbnail);
     setType(data?.type);
+    setKind(data?.kind);
   }, [data]);
   const onChangeThumbnail = (e) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -53,28 +57,39 @@ const EditGroupService = ({ state, setState, data }) => {
       })
       .catch((err) => {
         dispatch(loadingAction.loadingRequest(false));
+        errorNotify({
+          message: err,
+        });
       });
   };
 
   const editGroupSerive = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      updateGroupServiceAction.updateGroupServiceRequest({
-        id: data?._id,
-        data: {
-          title: {
-            vi: titleVN,
-            en: titleEN,
-          },
-          description: {
-            vi: descriptionVN,
-            en: descriptionEN,
-          },
-          thumbnail: imgUrl,
-          type: type,
-        },
+    updateGroupServiceApi(data?._id, {
+      title: {
+        vi: titleVN,
+        en: titleEN,
+      },
+      description: {
+        vi: descriptionVN,
+        en: descriptionEN,
+      },
+      thumbnail: imgUrl,
+      type: type,
+    })
+      .then((res) => {
+        getGroupServiceApi(0, 20)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+          })
+          .catch((err) => {});
       })
-    );
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+      });
   }, [
     dispatch,
     titleVN,
@@ -84,6 +99,7 @@ const EditGroupService = ({ state, setState, data }) => {
     imgUrl,
     type,
     data,
+    kind,
   ]);
 
   return (
@@ -145,6 +161,15 @@ const EditGroupService = ({ state, setState, data }) => {
                 onChange={(e) => setDescriptionEN(e.target.value)}
               />
             </div>
+            <CustomTextInput
+              label={"Loại"}
+              id="exampleTitle"
+              name="title"
+              placeholder="Vui lòng nhập nội dung"
+              type="text"
+              value={kind}
+              onChange={(e) => setKind(e.target.value)}
+            />
             <CustomTextInput
               label={"Loại dịch vụ"}
               id="exampleType"

@@ -1,22 +1,21 @@
 import { MoreOutlined } from "@ant-design/icons";
 import { Dropdown, Empty, Skeleton, Space, Table } from "antd";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   activeGroupServiceApi,
   deleteGroupServiceApi,
-} from "../../../../../api/service";
-import AddGroupService from "../../../../../components/addGroupService/addGroupService";
-import EditGroupService from "../../../../../components/editGroupService/editGroupService";
-import { loadingAction } from "../../../../../redux/actions/loading";
-import { getGroupServiceAction } from "../../../../../redux/actions/service";
-import { getUser } from "../../../../../redux/selectors/auth";
-import {
-  getGroupService,
-  getGroupServiceTotal,
-} from "../../../../../redux/selectors/service";
+  getGroupServiceApi,
+} from "../../../../api/service";
+import offToggle from "../../../../assets/images/off-button.png";
+import onToggle from "../../../../assets/images/on-button.png";
+import AddGroupService from "../../../../components/addGroupService/addGroupService";
+import EditGroupService from "../../../../components/editGroupService/editGroupService";
+import LoadingPagination from "../../../../components/paginationLoading";
+import { errorNotify } from "../../../../helper/toast";
+import { getUser } from "../../../../redux/selectors/auth";
 import "./GroupServiceManage.scss";
 
 export default function GroupServiceManage() {
@@ -24,47 +23,81 @@ export default function GroupServiceManage() {
   const [dataFilter, setDataFilter] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
-  const [modal, setModal] = React.useState(false);
-  const [modalEdit, setModalEdit] = React.useState(false);
-  const [modalBlock, setModalBlock] = React.useState(false);
+  const [modal, setModal] = useState(false);
+  const [modalCreate, setModalCreate] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
+  const [modalBlock, setModalBlock] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const listGroupService = useSelector(getGroupService);
-  const totalGroupService = useSelector(getGroupServiceTotal);
+  const [data, setData] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const user = useSelector(getUser);
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-    dispatch(getGroupServiceAction.getGroupServiceRequest(0, 10));
-  }, [dispatch]);
+  useEffect(() => {
+    getGroupServiceApi(0, 20)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  }, []);
 
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
 
   const onDelete = useCallback((id) => {
-    dispatch(loadingAction.loadingRequest(true));
     deleteGroupServiceApi(id)
       .then((res) => {
-        window.location.reload();
+        setModal(false);
+        getGroupServiceApi(0, 20)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+          })
+          .catch((err) => {});
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+      });
   }, []);
 
   const blockGroupService = useCallback((id, is_active) => {
-    dispatch(loadingAction.loadingRequest(true));
     if (is_active === true) {
       activeGroupServiceApi(id, { is_active: false })
         .then((res) => {
-          setModalBlock(!modalBlock);
-          window.location.reload();
+          setModalBlock(false);
+          getGroupServiceApi(0, 20)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+            })
+            .catch((err) => {});
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+        });
     } else {
       activeGroupServiceApi(id, { is_active: true })
         .then((res) => {
-          setModalBlock(!modalBlock);
-
-          window.location.reload();
+          setModalBlock(false);
+          getGroupServiceApi(0, 20)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+            })
+            .catch((err) => {});
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+        });
     }
   }, []);
 
@@ -81,18 +114,24 @@ export default function GroupServiceManage() {
         </a>
       ),
     },
-    // {
-    //   key: "2",
-    //   label: itemEdit?.is_active ? (
-    //     <a onClick={toggleBlock}>Chặn</a>
-    //   ) : (
-    //     <a onClick={toggleBlock}>Kích hoạt</a>
-    //   ),
-    // },
-    // {
-    //   key: "3",
-    //   label: <a onClick={toggle}>Xoá</a>,
-    // },
+    {
+      key: "2",
+      label: (
+        <a
+          onClick={() => {
+            navigate("/services/manage-group-service/manage-price-service", {
+              state: { id: itemEdit?._id },
+            });
+          }}
+        >
+          Xem giá
+        </a>
+      ),
+    },
+    {
+      key: "3",
+      label: user.role === "admin" && <a onClick={toggle}>Xoá</a>,
+    },
   ];
 
   const columns = [
@@ -102,11 +141,11 @@ export default function GroupServiceManage() {
       render: (data) => {
         return (
           <div
-            onClick={() => {
-              navigate("/services/manage-group-service/manage-price-service", {
-                state: { id: data?._id },
-              });
-            }}
+          // onClick={() => {
+          //   navigate("/services/manage-group-service/manage-service", {
+          //     state: { id: data?._id },
+          //   });
+          // }}
           >
             <img className="img-customer-service" src={data?.thumbnail} />
           </div>
@@ -124,6 +163,28 @@ export default function GroupServiceManage() {
       title: "Loại dịch vụ",
       render: (data) => <a className="text-service">{data?.type}</a>,
       width: "30%",
+    },
+    {
+      key: "action",
+      render: (data) => {
+        return (
+          <div>
+            {user.role === "admin" && data?.is_active ? (
+              <img
+                className="img-lock-group-service"
+                src={onToggle}
+                onClick={toggleBlock}
+              />
+            ) : (
+              <img
+                className="img-lock-group-service"
+                src={offToggle}
+                onClick={toggleBlock}
+              />
+            )}
+          </div>
+        );
+      },
     },
     {
       key: "action",
@@ -151,12 +212,18 @@ export default function GroupServiceManage() {
     <React.Fragment>
       <div className="div-head-service">
         <a className="label-service"> Tất cả dịch vụ</a>
-        <AddGroupService />
+        <AddGroupService
+          state={modalCreate}
+          setState={setModalCreate}
+          setIsLoading={setIsLoading}
+          setData={setData}
+          setTotal={setTotal}
+        />
       </div>
       <div className="mt-3">
         <Table
           columns={columns}
-          dataSource={listGroupService}
+          dataSource={data}
           pagination={false}
           rowKey={(record) => record._id}
           rowSelection={{
@@ -169,19 +236,11 @@ export default function GroupServiceManage() {
             return {
               onClick: (event) => {
                 setItemEdit(record);
-                // navigate("/services/manage-group-service/manage-service", {
-                //   state: { id: record?._id },
-                // });
               },
             };
           }}
           locale={{
-            emptyText:
-              listGroupService.length > 0 ? (
-                <Empty />
-              ) : (
-                <Skeleton active={true} />
-              ),
+            emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
           }}
         />
       </div>
@@ -205,15 +264,14 @@ export default function GroupServiceManage() {
       <div>
         <Modal isOpen={modalBlock} toggle={toggleBlock}>
           <ModalHeader toggle={toggleBlock}>
-            {" "}
             {itemEdit?.is_active === true
-              ? "Khóa GroupService"
-              : "Mở GroupService"}
+              ? "Khóa nhóm dịch vụ"
+              : "Mở nhóm dịch vụ"}
           </ModalHeader>
           <ModalBody>
             {itemEdit?.is_active === true
-              ? "Bạn có muốn khóa GroupService"
-              : "Bạn có muốn kích hoạt GroupService này"}
+              ? "Bạn có muốn khóa nhóm dịch vụ " + itemEdit?.title?.vi
+              : "Bạn có muốn kích hoạt nhóm dịch vụ" + itemEdit?.title?.vi}
             <h3>{itemEdit?.full_name}</h3>
           </ModalBody>
           <ModalFooter>
@@ -234,11 +292,15 @@ export default function GroupServiceManage() {
       <div>
         <EditGroupService
           state={modalEdit}
-          setState={() => setModalEdit(!modalEdit)}
+          setState={setModalEdit}
           data={itemEdit}
+          setData={setData}
+          setTotal={setTotal}
         />
       </div>
       <Outlet />
+
+      {isLoading && <LoadingPagination />}
     </React.Fragment>
   );
 }

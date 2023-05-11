@@ -1,27 +1,41 @@
 import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Form, Input, Label, Modal } from "reactstrap";
+
 import { postFile } from "../../api/file";
-import { createServiceApi } from "../../api/service";
+import { createServiceApi, getServiceApi } from "../../api/service";
 import { loadingAction } from "../../redux/actions/loading";
 import { createGroupServiceAction } from "../../redux/actions/service";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./addService.scss";
+import { Drawer, Input, Select } from "antd";
+import { errorNotify } from "../../helper/toast";
 
-const AddService = ({ id }) => {
-  const [state, setState] = useState(false);
+const AddService = (props) => {
+  const { id, setData, setTotal, setIsLoading } = props;
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
   const [imgThumbnail, setImgThumbnail] = useState("");
   const [imgUrl, setImgUrl] = useState("");
   const [descriptionVN, setDescriptionVN] = useState("");
   const [descriptionEN, setDescriptionEN] = useState("");
+  const [position, setPosition] = useState("");
   const [type, setType] = useState("single");
-  const [position, setPosition] = useState("single");
-  const [timeMinium, setTimeMinium] = useState("");
+  const [kind, setKind] = useState("");
+  const [typeLoop, setTypeLoop] = useState("none");
+  const [typePage, setTypePage] = useState("one_page");
+
+  const [timeMin, setTimeMin] = useState("");
+  const [timeMax, setTimeMax] = useState("");
 
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
 
   const onChangeThumbnail = (e) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -43,10 +57,15 @@ const AddService = ({ id }) => {
         dispatch(loadingAction.loadingRequest(false));
         setImgUrl(res);
       })
-      .catch((err) => console.log("err", err));
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+      });
   };
 
-  const createGroupSerive = useCallback(() => {
+  const createSerive = useCallback(() => {
+    setIsLoading(true);
     createServiceApi({
       title: {
         vi: titleVN,
@@ -57,154 +76,195 @@ const AddService = ({ id }) => {
         en: descriptionEN,
       },
       thumbnail: imgUrl,
-      type: type,
-      is_active: true,
-      is_delete: false,
-      position: position,
       id_group_service: id,
-      minimum_time_order: timeMinium,
+      position: position,
+      type: type,
+      kind: kind,
+      type_loop_or_schedule: typeLoop,
+      is_auto_order: false,
+      time_repeat: 1,
+      time_schedule: [],
+      note: "",
+      type_page: typePage,
+      max_estimate: timeMax,
+      minimum_time_order: timeMin,
+      type_partner: "collaborator",
     })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        setIsLoading(false);
+        getServiceApi(id)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        errorNotify({
+          message: err,
+        });
+      });
   }, [
     titleVN,
     titleEN,
     descriptionVN,
     descriptionEN,
     imgUrl,
-    type,
     position,
+    kind,
+    type,
     id,
-    timeMinium,
+    typeLoop,
+    typePage,
+    timeMax,
+    timeMin,
   ]);
 
   return (
     <>
       {/* Button trigger modal */}
       <CustomButton
-        title="Thêm Service"
-        className="btn-modal"
+        title="Thêm dịch vụ"
+        className="btn-add-service"
         type="button"
-        onClick={() => setState(!state)}
+        onClick={showDrawer}
       />
-      {/* Modal */}
-      <Modal
-        className="modal-dialog-centered"
-        isOpen={state}
-        toggle={() => setState(!state)}
+      <Drawer
+        title="Thêm dịch vụ"
+        width={500}
+        onClose={onClose}
+        open={open}
+        bodyStyle={{
+          paddingBottom: 80,
+        }}
       >
-        <div className="modal-header">
-          <h4 className="modal-title" id="exampleModalLabel">
-            Thêm Service
-          </h4>
-          <button className="btn-close" onClick={() => setState(!state)}>
-            <i className="uil uil-times-square"></i>
-          </button>
+        <div>
+          <a className="title-service">Tiêu đề</a>
+          <Input
+            placeholder="Nhập tiêu đề tiếng Việt"
+            onChange={(e) => setTitleVN(e.target.value)}
+          />
+          <Input
+            className="input-enlish"
+            placeholder="Nhập tiêu đề tiếng Anh"
+            onChange={(e) => setTitleEN(e.target.value)}
+          />
         </div>
-        <div className="modal-body">
-          <Form>
-            <div>
-              <h5>Tiêu đề</h5>
-              <CustomTextInput
-                label={"Tiếng Việt"}
-                id="exampleTitle"
-                name="title"
-                placeholder="Vui lòng nhập tiêu đề Tiếng Việt"
-                type="text"
-                value={titleVN}
-                onChange={(e) => setTitleVN(e.target.value)}
-              />
-              <CustomTextInput
-                label={"Tiếng Anh"}
-                id="exampleTitle"
-                name="title"
-                placeholder="Vui lòng nhập tiêu đề Tiếng Anh"
-                type="text"
-                value={titleEN}
-                onChange={(e) => setTitleEN(e.target.value)}
-              />
-            </div>
-            <div>
-              <h5>Chi tiết</h5>
-              <CustomTextInput
-                label={"Tiếng Việt"}
-                id="exampleTitle"
-                name="title"
-                placeholder="Vui lòng nhập chi tiết Tiếng Việt"
-                type="text"
-                value={descriptionVN}
-                onChange={(e) => setDescriptionVN(e.target.value)}
-              />
-              <CustomTextInput
-                label={"Tiếng Anh"}
-                id="exampleTitle"
-                name="title"
-                placeholder="Vui lòng nhập chi tiết Tiếng Anh"
-                type="text"
-                value={descriptionEN}
-                onChange={(e) => setDescriptionEN(e.target.value)}
-              />
-            </div>
-            <CustomTextInput
-              label={"Hình thức dịch vụ"}
-              id="exampleType"
-              name="type"
-              type="select"
-              className="select-code-phone"
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              body={
-                <>
-                  <option value="single">Dịch vụ đơn lẻ</option>
-                  <option value="loop">Dịch vụ có tính năng lặp lại</option>
-                  <option value="schedule">Dịch vụ theo gói</option>
-                </>
-              }
-            />
-            <CustomTextInput
-              label={"Position"}
-              id="examplePosition"
-              name="position"
-              placeholder="Vui lòng nhập position (0,1,2...n)"
-              type="number"
-              min={0}
-              value={position}
-              onChange={(e) => setPosition(e.target.value)}
-            />
-            <CustomTextInput
-              label={"Thời gian đặt tối thiểu (phút)"}
-              id="examplePosition"
-              name="timeMinium"
-              placeholder="Vui lòng nhập thời gian đặt tối thiểu"
-              type="number"
-              min={0}
-              value={timeMinium}
-              onChange={(e) => setTimeMinium(e.target.value)}
-            />
-            <div>
-              <Label for="exampleImage">Thumbnail</Label>
-              <Input
-                id="exampleImage"
-                name="image"
-                type="file"
-                accept={".jpg,.png,.jpeg"}
-                className="input-group"
-                onChange={onChangeThumbnail}
-              />
-              {imgThumbnail && (
-                <img src={imgThumbnail} className="img-thumbnail" />
-              )}
-            </div>
+        <div className="mt-2">
+          <a className="title-service">Mô tả</a>
+          <Input
+            placeholder="Nhập mô tả tiếng Việt"
+            onChange={(e) => setDescriptionVN(e.target.value)}
+          />
+          <Input
+            className="input-enlish"
+            placeholder="Nhập mô tả tiếng Anh"
+            onChange={(e) => setDescriptionEN(e.target.value)}
+          />
+        </div>
+        <div className="mt-2">
+          <a className="title-service">Vị trí</a>
+          <Input
+            placeholder="Nhập vị trí"
+            type="number"
+            min={0}
+            onChange={(e) => setPosition(e.target.value)}
+          />
+        </div>
+        <div className="mt-2">
+          <a className="title-service">Loại</a>
+          <Select
+            style={{ width: "100%" }}
+            value={type}
+            onChange={(e) => setType(e)}
+            options={[
+              { value: "single", label: "Single" },
+              { value: "loop", label: "Loop" },
+              { value: "schedule", label: "Schedule" },
+            ]}
+          />
+        </div>
+        <div className="mt-2">
+          <a className="title-service">Kind</a>
+          <Input
+            placeholder="Nhập nội dung"
+            type="text"
+            onChange={(e) => setKind(e.target.value)}
+          />
+        </div>
+        <div className="mt-2">
+          <a className="title-service">Lặp lại theo</a>
+          <Select
+            style={{ width: "100%" }}
+            value={typeLoop}
+            onChange={(e) => setTypeLoop(e)}
+            options={[
+              { value: "none", label: "Không có" },
+              { value: "week", label: "Tuần" },
+              { value: "month", label: "Tháng" },
+            ]}
+          />
+        </div>
+        <div className="mt-2">
+          <a className="title-service">Số trang</a>
+          <Select
+            style={{ width: "100%" }}
+            value={typePage}
+            onChange={(e) => setTypePage(e)}
+            options={[
+              { value: "one_page", label: "Một trang" },
+              { value: "two_page", label: "Hai trang" },
+            ]}
+          />
+        </div>
+        <div className="mt-2">
+          <a className="title-service">Thời gian làm tối đa</a>
+          <Input
+            placeholder="Nhập thời gian làm tối đa"
+            type="number"
+            min={0}
+            onChange={(e) => setTimeMax(e.target.value)}
+          />
+          <a className="title-service mt-2">Thời gian làm tối thiểu</a>
+          <Input
+            placeholder="Nhập thời gian làm tối thiểu"
+            type="number"
+            min={0}
+            onChange={(e) => setTimeMin(e.target.value)}
+          />
+        </div>
+        {/* <div className="mt-2">
+          <a className="title-service">Người cộng tác</a>
+          <Select
+            style={{ width: "100%" }}
+            options={[
+              { value: "collaborator", label: "Cộng tác viên" },
+              { value: "group_collaborator", label: "Nhóm cộng tác viên" },
+              { value: "partner", label: "Phục vụ" },
+            ]}
+          />
+        </div> */}
+        <div className="mt-2">
+          <a className="title-service">Thumbnail</a>
+          <Input
+            id="exampleImage"
+            name="image"
+            type="file"
+            accept={".jpg,.png,.jpeg"}
+            className="input-group"
+            onChange={onChangeThumbnail}
+          />
+          {imgThumbnail && <img src={imgThumbnail} className="img-thumbnail" />}
+        </div>
 
-            <CustomButton
-              title="Thêm"
-              className="float-right btn-modal"
-              type="button"
-              onClick={createGroupSerive}
-            />
-          </Form>
-        </div>
-      </Modal>
+        <CustomButton
+          title="Thêm"
+          className="float-right btn-add-service-drawer"
+          type="button"
+          onClick={createSerive}
+        />
+      </Drawer>
     </>
   );
 };

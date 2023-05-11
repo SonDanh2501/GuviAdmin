@@ -55,7 +55,7 @@ const Information = ({ data, image }) => {
     setIssuedDay(data?.identity_date);
     setImgUrl(data?.avatar);
     setPhone(data?.phone);
-    setCodeInvite(data?.id_inviter);
+    setCodeInvite(data?.invite_code);
   }, [data]);
 
   const onChangeNumberIndentity = (value) => {
@@ -253,6 +253,14 @@ const Information = ({ data, image }) => {
                     <option value={"Tiến sĩ"}>Tiến sĩ</option>
                   </>
                 }
+              />
+            </Col>
+            <Col lg="6">
+              <CustomTextInput
+                label={"Mã giới thiệu"}
+                type="text"
+                value={codeInvite}
+                disabled={true}
               />
             </Col>
           </Row>

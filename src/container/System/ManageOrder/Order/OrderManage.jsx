@@ -330,21 +330,23 @@ export default function OrderManage(props) {
     },
     {
       key: "action",
-      render: (data) => (
-        <Space size="middle">
-          <Dropdown
-            menu={{
-              items,
-            }}
-            placement="bottom"
-            trigger={["click"]}
-          >
-            <div>
-              <UilEllipsisV />
-            </div>
-          </Dropdown>
-        </Space>
-      ),
+      render: (data) =>
+        user?.role !== "marketing_manager" ||
+        (user?.role !== "marketing_manager" && (
+          <Space size="middle">
+            <Dropdown
+              menu={{
+                items,
+              }}
+              placement="bottom"
+              trigger={["click"]}
+            >
+              <div>
+                <UilEllipsisV />
+              </div>
+            </Dropdown>
+          </Space>
+        )),
     },
   ];
 

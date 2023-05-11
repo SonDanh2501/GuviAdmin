@@ -331,21 +331,24 @@ export default function UserManage(props) {
             key: "action",
 
             align: "center",
-            render: (data) => (
-              <Space size="middle">
-                <Dropdown
-                  menu={{
-                    items,
-                  }}
-                  placement="bottom"
-                  trigger={["click"]}
-                >
-                  <a>
-                    <MoreOutlined className="icon-more" />
-                  </a>
-                </Dropdown>
-              </Space>
-            ),
+            render: (data) =>
+              user?.role !== "marketing_manager" ||
+              user?.role !==
+                "marketing_manager"(
+                  <Space size="middle">
+                    <Dropdown
+                      menu={{
+                        items,
+                      }}
+                      placement="bottom"
+                      trigger={["click"]}
+                    >
+                      <a>
+                        <MoreOutlined className="icon-more" />
+                      </a>
+                    </Dropdown>
+                  </Space>
+                ),
           },
         ]
       : [
@@ -503,21 +506,23 @@ export default function UserManage(props) {
             key: "action",
 
             align: "center",
-            render: (data) => (
-              <Space size="middle">
-                <Dropdown
-                  menu={{
-                    items,
-                  }}
-                  placement="bottom"
-                  trigger={["click"]}
-                >
-                  <a>
-                    <MoreOutlined className="icon-more" />
-                  </a>
-                </Dropdown>
-              </Space>
-            ),
+            render: (data) =>
+              user?.role !== "marketing_manager" ||
+              (user?.role !== "marketing_manager" && (
+                <Space size="middle">
+                  <Dropdown
+                    menu={{
+                      items,
+                    }}
+                    placement="bottom"
+                    trigger={["click"]}
+                  >
+                    <a>
+                      <MoreOutlined className="icon-more" />
+                    </a>
+                  </Dropdown>
+                </Space>
+              )),
           },
         ];
 

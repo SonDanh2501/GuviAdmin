@@ -123,6 +123,9 @@ const ProfileCollaborator = () => {
                   {data?.password_default && (
                     <a>Mật khẩu mặc định: {data?.password_default}</a>
                   )}
+                  {data?.invite_code && (
+                    <a>Mã giới thiệu: {data?.invite_code}</a>
+                  )}
                   <a className="text-name">{data?.full_name}</a>
                   <a>
                     {!data?.birthday

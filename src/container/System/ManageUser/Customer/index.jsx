@@ -11,6 +11,7 @@ import {
   getCustomerTotalItem,
 } from "../../../../redux/selectors/customer";
 import { useEffect, useState } from "react";
+import { getUser } from "../../../../redux/selectors/auth";
 
 const ManageCustomer = () => {
   const [status, setStatus] = useState("");
@@ -18,6 +19,7 @@ const ManageCustomer = () => {
   const customers = useSelector(getCustomer);
   const customerTotal = useSelector(getCustomerTotalItem);
   const dispatch = useDispatch();
+  const user = useSelector(getUser);
 
   useEffect(() => {
     dispatch(
@@ -79,7 +81,8 @@ const ManageCustomer = () => {
     <>
       <div className="div-header-customer">
         <a className="title-cv">Danh sách khách hàng</a>
-        <AddCustomer />
+        {user?.role !== "marketing_manager" ||
+          (user?.role !== "marketing_manager" && <AddCustomer />)}
       </div>
 
       <div className="div-container-customer">

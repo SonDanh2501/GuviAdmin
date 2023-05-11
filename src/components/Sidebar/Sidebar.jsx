@@ -397,6 +397,112 @@ const Sidebar = ({ onClick }) => {
         ) : user?.role === "marketing" || user?.role === "marketing_manager" ? (
           <ul className="nav nav-pills flex-column ">
             <li>
+              <NavLink to="/">
+                {({ isActive }) => (
+                  <div className={isActive ? "active-link" : "unactive-link"}>
+                    <img src={home} className="img-icon" />
+                    <a className={isActive ? "active-text" : "unactive-text"}>
+                      Tổng quan
+                    </a>
+                  </div>
+                )}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/group-order/manage-order" onClick={toggleNavbar}>
+                {({ isActive }) => (
+                  <div className={isActive ? "active-link" : "unactive-link"}>
+                    <img src={bag} className="img-icon" />
+                    <a className={isActive ? "active-text" : "unactive-text"}>
+                      GUVIJOBS
+                    </a>
+                    {collapsed ? (
+                      <i class="uil uil-angle-right icon-right"></i>
+                    ) : (
+                      <i class="uil uil-angle-down icon-right"></i>
+                    )}
+                  </div>
+                )}
+              </NavLink>
+
+              <Collapse isOpen={!collapsed}>
+                <Nav className="nav" navbar>
+                  <NavItem>
+                    <NavLink to="/group-order/manage-order/all">
+                      {({ isActive }) => (
+                        <div
+                          className={
+                            isActive ? "active-link-nav" : "unactive-link-nav"
+                          }
+                        >
+                          <i class="uil uil-shopping-bag icon"></i>
+                          <a
+                            className={
+                              isActive ? "active-text-nav" : "unactive-text-nav"
+                            }
+                          >
+                            Tất cả công việc
+                          </a>
+                        </div>
+                      )}
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink to="/group-order/manage-order/doing">
+                      {({ isActive }) => (
+                        <div
+                          className={
+                            isActive ? "active-link-nav" : "unactive-link-nav"
+                          }
+                        >
+                          <i class="uil uil-shopping-bag icon"></i>
+                          <a
+                            className={
+                              isActive ? "active-text-nav" : "unactive-text-nav"
+                            }
+                          >
+                            Dịch vụ chưa hoàn tất
+                          </a>
+                        </div>
+                      )}
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink to="/group-order/manage-order/done">
+                      {({ isActive }) => (
+                        <div
+                          className={
+                            isActive ? "active-link-nav" : "unactive-link-nav"
+                          }
+                        >
+                          <i class="uil uil-shopping-bag icon"></i>
+                          <a
+                            className={
+                              isActive ? "active-text-nav" : "unactive-text-nav"
+                            }
+                          >
+                            Dịch vụ hết hạn
+                          </a>
+                        </div>
+                      )}
+                    </NavLink>
+                  </NavItem>
+                </Nav>
+              </Collapse>
+            </li>
+            <li>
+              <NavLink to="/system/user-manage">
+                {({ isActive }) => (
+                  <div className={isActive ? "active-link" : "unactive-link"}>
+                    <img src={customer} className="img-icon" />
+                    <a className={isActive ? "active-text" : "unactive-text"}>
+                      Khách hàng
+                    </a>
+                  </div>
+                )}
+              </NavLink>
+            </li>
+            <li>
               <NavLink to="/promotion/manage-setting">
                 {({ isActive }) => (
                   <div className={isActive ? "active-link" : "unactive-link"}>
@@ -430,6 +536,18 @@ const Sidebar = ({ onClick }) => {
                     <img src={notification} className="img-icon" />
                     <a className={isActive ? "active-text" : "unactive-text"}>
                       Thông báo
+                    </a>
+                  </div>
+                )}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/report/manage-report" onClick={toggleReportNavbar}>
+                {({ isActive }) => (
+                  <div className={isActive ? "active-link" : "unactive-link"}>
+                    <img src={document} className="img-icon" />
+                    <a className={isActive ? "active-text" : "unactive-text"}>
+                      Báo cáo
                     </a>
                   </div>
                 )}

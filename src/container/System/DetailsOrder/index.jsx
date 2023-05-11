@@ -111,12 +111,9 @@ const DetailsOrder = () => {
   const timeWorkList = (data) => {
     const start = moment(new Date(data?.date_work)).format("HH:mm");
 
-    const timeEnd =
-      data?.total_estimate === 0.5
-        ? Number(start?.slice(0, 2)) + ":30"
-        : Number(start?.slice(0, 2)) +
-          data?.total_estimate +
-          start?.slice(2, 5);
+    const timeEnd = moment(new Date(data?.date_work))
+      .add(data?.total_estimate, "hours")
+      .format("HH:mm");
 
     return start + " - " + timeEnd;
   };

@@ -2,15 +2,20 @@ import React, { memo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, Input, Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
+import { createGroupServiceApi, getGroupServiceApi } from "../../api/service";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
-import { createGroupServiceAction } from "../../redux/actions/service";
-import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
+import CustomButton from "../customButton/customButton";
 import "./addGroupService.scss";
 
-const AddGroupService = () => {
-  const [state, setState] = useState(false);
+const AddGroupService = ({
+  state,
+  setState,
+  setIsLoading,
+  setData,
+  setTotal,
+}) => {
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
   const [imgThumbnail, setImgThumbnail] = useState("");
@@ -18,6 +23,7 @@ const AddGroupService = () => {
   const [descriptionVN, setDescriptionVN] = useState("");
   const [descriptionEN, setDescriptionEN] = useState("");
   const [type, setType] = useState("single");
+  const [kind, setKind] = useState("");
 
   const dispatch = useDispatch();
   const onChangeThumbnail = (e) => {
@@ -50,22 +56,36 @@ const AddGroupService = () => {
   };
 
   const createGroupSerive = useCallback(() => {
-    dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      createGroupServiceAction.createGroupServiceRequest({
-        title: {
-          vi: titleVN,
-          en: titleEN,
-        },
-        description: {
-          vi: descriptionVN,
-          en: descriptionEN,
-        },
-        thumbnail: imgUrl,
-        type: type,
+    setIsLoading(true);
+    createGroupServiceApi({
+      title: {
+        vi: titleVN,
+        en: titleEN,
+      },
+      description: {
+        vi: descriptionVN,
+        en: descriptionEN,
+      },
+      thumbnail: imgUrl,
+      type: type,
+      kind: kind,
+    })
+      .then((res) => {
+        setIsLoading(false);
+        getGroupServiceApi(0, 20)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+          })
+          .catch((err) => {});
       })
-    );
-  }, [dispatch, titleVN, titleEN, descriptionVN, descriptionEN, imgUrl, type]);
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        setIsLoading(false);
+      });
+  }, [titleVN, titleEN, descriptionVN, descriptionEN, imgUrl, type, kind]);
 
   return (
     <>
@@ -134,6 +154,16 @@ const AddGroupService = () => {
                 onChange={(e) => setDescriptionEN(e.target.value)}
               />
             </div>
+
+            <CustomTextInput
+              label={"Loại"}
+              id="exampleTitle"
+              name="title"
+              placeholder="Vui lòng nhập nội dung"
+              type="text"
+              value={kind}
+              onChange={(e) => setKind(e.target.value)}
+            />
             <CustomTextInput
               label={"Loại dịch vụ"}
               id="exampleType"
