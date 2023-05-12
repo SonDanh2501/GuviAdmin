@@ -102,15 +102,16 @@ const ManageOrder = () => {
             </a>
           </Dropdown>
         </div>
-        {user?.role !== "marketing_manager" ||
-          (user?.role !== "marketing_manager" && (
-            <Button
-              className="btn-create-order"
-              onClick={() => navigate("/group-order/manage-order/create-order")}
-            >
-              Tạo dịch vụ
-            </Button>
-          ))}
+        {user?.role !== "marketing" || user?.role !== "marketing_manager" ? (
+          <Button
+            className="btn-create-order"
+            onClick={() => navigate("/group-order/manage-order/create-order")}
+          >
+            Tạo dịch vụ
+          </Button>
+        ) : (
+          <></>
+        )}
       </div>
 
       <div className="div-container">

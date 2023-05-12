@@ -82,7 +82,11 @@ const ManageCustomer = () => {
       <div className="div-header-customer">
         <a className="title-cv">Danh sách khách hàng</a>
         {user?.role !== "marketing_manager" ||
-          (user?.role !== "marketing_manager" && <AddCustomer />)}
+        user?.role !== "marketing_manager" ? (
+          <AddCustomer />
+        ) : (
+          <></>
+        )}
       </div>
 
       <div className="div-container-customer">

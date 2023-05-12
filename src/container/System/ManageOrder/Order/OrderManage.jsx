@@ -332,7 +332,7 @@ export default function OrderManage(props) {
       key: "action",
       render: (data) =>
         user?.role !== "marketing_manager" ||
-        (user?.role !== "marketing_manager" && (
+        user?.role !== "marketing_manager" ? (
           <Space size="middle">
             <Dropdown
               menu={{
@@ -346,7 +346,9 @@ export default function OrderManage(props) {
               </div>
             </Dropdown>
           </Space>
-        )),
+        ) : (
+          <></>
+        ),
     },
   ];
 
