@@ -39,68 +39,74 @@ const ManageOptionService = () => {
       .catch((err) => {});
   }, [id]);
 
-  const onDelete = useCallback((idOption) => {
-    setIsLoading(true);
-    deleteOptionServiceApi(idOption)
-      .then((res) => {
-        setModal(false);
-        getOptionalServiceByServiceApi(id)
-          .then((res) => {
-            setData(res?.data);
-            setIsLoading(false);
-          })
-          .catch((err) => {});
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        errorNotify({
-          message: err,
+  const onDelete = useCallback(
+    (idOption) => {
+      setIsLoading(true);
+      deleteOptionServiceApi(idOption)
+        .then((res) => {
+          setModal(false);
+          getOptionalServiceByServiceApi(id)
+            .then((res) => {
+              setData(res?.data);
+              setIsLoading(false);
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
         });
-      });
-  }, []);
+    },
+    [id]
+  );
 
-  const onActive = useCallback((idActive, active) => {
-    setIsLoading(true);
-    if (active === true) {
-      activeOptionServiceApi(idActive, {
-        is_active: false,
-      })
-        .then((res) => {
-          setIsLoading(false);
-          setModalBlock(false);
-          getOptionalServiceByServiceApi(id)
-            .then((res) => {
-              setData(res?.data);
-            })
-            .catch((err) => {});
+  const onActive = useCallback(
+    (idActive, active) => {
+      setIsLoading(true);
+      if (active === true) {
+        activeOptionServiceApi(idActive, {
+          is_active: false,
         })
-        .then((err) => {
-          setIsLoading(false);
-          errorNotify({
-            message: err,
+          .then((res) => {
+            setIsLoading(false);
+            setModalBlock(false);
+            getOptionalServiceByServiceApi(id)
+              .then((res) => {
+                setData(res?.data);
+              })
+              .catch((err) => {});
+          })
+          .then((err) => {
+            setIsLoading(false);
+            errorNotify({
+              message: err,
+            });
           });
-        });
-    } else {
-      activeOptionServiceApi(idActive, {
-        is_active: true,
-      })
-        .then((res) => {
-          setIsLoading(false);
-          setModalBlock(false);
-          getOptionalServiceByServiceApi(id)
-            .then((res) => {
-              setData(res?.data);
-            })
-            .catch((err) => {});
+      } else {
+        activeOptionServiceApi(idActive, {
+          is_active: true,
         })
-        .then((err) => {
-          setIsLoading(false);
-          errorNotify({
-            message: err,
+          .then((res) => {
+            setIsLoading(false);
+            setModalBlock(false);
+            getOptionalServiceByServiceApi(id)
+              .then((res) => {
+                setData(res?.data);
+              })
+              .catch((err) => {});
+          })
+          .then((err) => {
+            setIsLoading(false);
+            errorNotify({
+              message: err,
+            });
           });
-        });
-    }
-  }, []);
+      }
+    },
+    [id]
+  );
 
   const contentOptional = (item) => {
     return (
@@ -178,6 +184,7 @@ const ManageOptionService = () => {
           </a>
         </Popover>
       ),
+      width: "40%",
     },
     {
       title: "Mô tả",

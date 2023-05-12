@@ -123,6 +123,17 @@ export const getExtendByOptionalApi = (id) => {
   );
 };
 
+export const deleteExtendOptionalApi = (id) => {
+  return axiosClient.post(`/admin/extend_optional_manager/delete_item/${id}`);
+};
+
+export const activeExtendOptionApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/extend_optional_manager/active_item/${id}`,
+    data
+  );
+};
+
 //price
 export const getPriceServiceApi = (
   id,

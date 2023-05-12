@@ -223,7 +223,7 @@ const EditOptional = (props) => {
                   style={{ marginTop: 5 }}
                   value={item?.value}
                   type="number"
-                  onChange={(e) => onChangePriceValue(e, index)}
+                  onChange={(e) => onChangePriceValue(e.target.value, index)}
                 />
 
                 <Button
