@@ -332,23 +332,24 @@ export default function UserManage(props) {
 
             align: "center",
             render: (data) =>
-              user?.role !== "marketing_manager" ||
-              user?.role !==
-                "marketing_manager"(
-                  <Space size="middle">
-                    <Dropdown
-                      menu={{
-                        items,
-                      }}
-                      placement="bottom"
-                      trigger={["click"]}
-                    >
-                      <a>
-                        <MoreOutlined className="icon-more" />
-                      </a>
-                    </Dropdown>
-                  </Space>
-                ),
+              user?.role !== "marketing" ||
+              user?.role !== "marketing_manager" ? (
+                <Space size="middle">
+                  <Dropdown
+                    menu={{
+                      items,
+                    }}
+                    placement="bottom"
+                    trigger={["click"]}
+                  >
+                    <a>
+                      <MoreOutlined className="icon-more" />
+                    </a>
+                  </Dropdown>
+                </Space>
+              ) : (
+                <></>
+              ),
           },
         ]
       : [
@@ -507,8 +508,8 @@ export default function UserManage(props) {
 
             align: "center",
             render: (data) =>
-              user?.role !== "marketing_manager" ||
-              (user?.role !== "marketing_manager" && (
+              user?.role !== "marketing" ||
+              user?.role !== "marketing_manager" ? (
                 <Space size="middle">
                   <Dropdown
                     menu={{
@@ -522,7 +523,9 @@ export default function UserManage(props) {
                     </a>
                   </Dropdown>
                 </Space>
-              )),
+              ) : (
+                <></>
+              ),
           },
         ];
 
