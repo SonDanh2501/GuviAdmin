@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { searchCustomers } from "../../../../api/customer";
 import {
   getExtendOptionalByOptionalServiceApi,
+  getGroupServiceApi,
   getOptionalServiceByServiceApi,
+  getServiceApi,
 } from "../../../../api/service";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import LoadingPagination from "../../../../components/paginationLoading";
@@ -31,12 +33,27 @@ const AddOrder = () => {
   const [serviceApply, setServiceApply] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const serviceSelect = [];
+  const [dataGroupService, setDataGroupService] = useState([]);
+  const [dataService, setDataService] = useState([]);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    getGroupServiceApi(0, 20)
+      .then((res) => {
+        setDataGroupService(res?.data);
+        getServiceApi(res?.data[0]?._id)
+          .then((res) => {
+            setDataService(res?.data);
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {});
+  }, []);
+
+  useEffect(() => {
     setIsLoading(true);
-    getOptionalServiceByServiceApi(service[1]?._id)
+    getOptionalServiceByServiceApi(dataService[0]?._id)
       .then((res) => {
         setOptionalService(res?.data);
         setIsLoading(false);
@@ -44,12 +61,12 @@ const AddOrder = () => {
       .catch((err) => {
         setIsLoading(false);
       });
-    setServiceApply(service[1]?._id);
-    setKindService(service[1]?.kind);
-    setNameService(service[1]?.title?.vi);
-  }, [service]);
+    setServiceApply(dataGroupService[1]?._id);
+    setKindService(dataGroupService[1]?.kind);
+    setNameService(dataGroupService[1]?.title?.vi);
+  }, [dataGroupService]);
 
-  service?.map((item) => {
+  dataGroupService?.map((item) => {
     serviceSelect.push({
       label: item?.title?.vi,
       value: item?._id,
@@ -104,17 +121,23 @@ const AddOrder = () => {
   const onChangeServiceApply = (value, kind) => {
     setIsLoading(true);
     setAddService([]);
-    setServiceApply(value);
+
     setKindService(kind?.kind);
     setNameService(kind?.label);
-    getOptionalServiceByServiceApi(value)
+    getServiceApi(value)
       .then((res) => {
-        setIsLoading(false);
-        setOptionalService(res?.data);
+        setDataService(res?.data);
+        setServiceApply(res?.data[0]?._id);
+        getOptionalServiceByServiceApi(res?.data[0]?._id)
+          .then((res) => {
+            setIsLoading(false);
+            setOptionalService(res?.data);
+          })
+          .catch((err) => {
+            setIsLoading(false);
+          });
       })
-      .catch((err) => {
-        setIsLoading(false);
-      });
+      .catch((err) => {});
   };
 
   const valueSearch = (value) => {
