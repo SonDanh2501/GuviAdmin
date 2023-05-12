@@ -167,8 +167,6 @@ const AddOrder = () => {
     []
   );
 
-  console.log(serviceSelect);
-
   return (
     <>
       <h5>Tạo công việc</h5>
