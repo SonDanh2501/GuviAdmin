@@ -48,9 +48,11 @@ export default function GroupServiceManage() {
   const toggleBlock = () => setModalBlock(!modalBlock);
 
   const onDelete = useCallback((id) => {
+    setIsLoading(true);
     deleteGroupServiceApi(id)
       .then((res) => {
         setModal(false);
+        setIsLoading(false);
         getGroupServiceApi(0, 20)
           .then((res) => {
             setData(res?.data);
@@ -59,6 +61,8 @@ export default function GroupServiceManage() {
           .catch((err) => {});
       })
       .catch((err) => {
+        setIsLoading(false);
+
         errorNotify({
           message: err,
         });
@@ -141,11 +145,11 @@ export default function GroupServiceManage() {
       render: (data) => {
         return (
           <div
-          // onClick={() => {
-          //   navigate("/services/manage-group-service/manage-service", {
-          //     state: { id: data?._id },
-          //   });
-          // }}
+            onClick={() => {
+              navigate("/services/manage-group-service/manage-service", {
+                state: { id: data?._id },
+              });
+            }}
           >
             <img className="img-customer-service" src={data?.thumbnail} />
           </div>

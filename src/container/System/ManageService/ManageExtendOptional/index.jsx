@@ -1,54 +1,50 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import "./styles.scss";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  activeOptionServiceApi,
-  deleteOptionServiceApi,
-  getOptionalServiceByServiceApi,
-} from "../../../../api/service";
-import { Button, Dropdown, Image, Popover, Space, Table } from "antd";
-import { DownOutlined, MoreOutlined } from "@ant-design/icons";
-import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { errorNotify } from "../../../../helper/toast";
-import LoadingPagination from "../../../../components/paginationLoading";
-import EditOptional from "./component/EditOptional";
-import CreateOptional from "./component/CreateOptional";
+import { useLocation } from "react-router-dom";
 import { formatMoney } from "../../../../helper/formatMoney";
+import { useCallback, useEffect, useState } from "react";
+import {
+  activeExtendOptionApi,
+  deleteExtendOptionalApi,
+  getExtendByOptionalApi,
+} from "../../../../api/service";
+import { Button, Dropdown, Popover, Space, Table } from "antd";
+import { MoreOutlined } from "@ant-design/icons";
 import onToggle from "../../../../assets/images/on-button.png";
 import offToggle from "../../../../assets/images/off-button.png";
+import { ModalBody, ModalFooter, ModalHeader, Modal } from "reactstrap";
+import LoadingPagination from "../../../../components/paginationLoading";
+import { errorNotify } from "../../../../helper/toast";
+import CreateExtend from "./component/CreateExtend";
 
-const ManageOptionService = () => {
+const ExtendOptional = () => {
   const { state } = useLocation();
   const { id } = state || {};
   const [data, setData] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
-  const [itemEditExtend, setItemEditExtend] = useState([]);
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
-
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
 
   useEffect(() => {
-    getOptionalServiceByServiceApi(id)
-      .then((res) => {
-        setData(res?.data);
-      })
-      .catch((err) => {});
+    if (id) {
+      getExtendByOptionalApi(id)
+        .then((res) => {
+          setData(res?.data);
+        })
+        .catch((err) => {});
+    }
   }, [id]);
 
   const onDelete = useCallback(
-    (idOption) => {
+    (_id) => {
       setIsLoading(true);
-      deleteOptionServiceApi(idOption)
+      deleteExtendOptionalApi(_id)
         .then((res) => {
-          setModal(false);
-          getOptionalServiceByServiceApi(id)
+          setIsLoading(false);
+          getExtendByOptionalApi(id)
             .then((res) => {
               setData(res?.data);
-              setIsLoading(false);
             })
             .catch((err) => {});
         })
@@ -66,13 +62,13 @@ const ManageOptionService = () => {
     (idActive, active) => {
       setIsLoading(true);
       if (active === true) {
-        activeOptionServiceApi(idActive, {
+        activeExtendOptionApi(idActive, {
           is_active: false,
         })
           .then((res) => {
             setIsLoading(false);
             setModalBlock(false);
-            getOptionalServiceByServiceApi(id)
+            getExtendByOptionalApi(id)
               .then((res) => {
                 setData(res?.data);
               })
@@ -85,13 +81,13 @@ const ManageOptionService = () => {
             });
           });
       } else {
-        activeOptionServiceApi(idActive, {
+        activeExtendOptionApi(idActive, {
           is_active: true,
         })
           .then((res) => {
             setIsLoading(false);
             setModalBlock(false);
-            getOptionalServiceByServiceApi(id)
+            getExtendByOptionalApi(id)
               .then((res) => {
                 setData(res?.data);
               })
@@ -108,7 +104,7 @@ const ManageOptionService = () => {
     [id]
   );
 
-  const contentOptional = (item) => {
+  const contentExtend = (item) => {
     return (
       <div className="div-content-option">
         <div className="div-title-option">
@@ -122,19 +118,9 @@ const ManageOptionService = () => {
           <a className="details">{item?.description?.vi}</a>
         </div>
         <div className="div-title-option">
-          <a className="title">Vị trí</a>
+          <a className="title">Giá</a>
           <a className="colon">:</a>
-          <a className="details">{item?.position}</a>
-        </div>
-        <div className="div-title-option">
-          <a className="title">Phí hệ thống</a>
-          <a className="colon">:</a>
-          <a className="details">{item?.platform_fee}</a>
-        </div>
-        <div className="div-title-option">
-          <a className="title">Hình ảnh</a>
-          <a className="colon">:</a>
-          <Image src={item?.thumbnail} style={{ width: 50, height: 50 }} />
+          <a className="details">{formatMoney(item?.price)}</a>
         </div>
       </div>
     );
@@ -143,57 +129,34 @@ const ManageOptionService = () => {
   const items = [
     {
       key: 1,
-      label: (
-        <EditOptional
-          data={itemEdit}
-          setIsLoading={setIsLoading}
-          setData={setData}
-        />
-      ),
+      label: <a>Chỉnh sửa</a>,
     },
     {
       key: 2,
-      label: <a onClick={toggleBlock}>{itemEdit?.is_active ? "Ẩn" : "Hiện"}</a>,
-    },
-    {
-      key: 3,
       label: <a onClick={toggle}>Xoá</a>,
     },
   ];
 
   const columns = [
     {
-      title: "Tiêu đề",
+      title: "Title",
       render: (data) => (
         <Popover
-          content={() => contentOptional(data)}
-          title="Title"
+          content={() => contentExtend(data)}
+          title="Thông tin chi tiết Extend"
           trigger="hover"
         >
-          <a
-            onClick={() => {
-              navigate(
-                "/services/manage-group-service/manage-service/option-service/extend-option",
-                {
-                  state: { id: data?._id },
-                }
-              );
-            }}
-          >
-            {data?.title?.vi}
-          </a>
+          <a>{data?.title?.vi}</a>
         </Popover>
       ),
-      width: "40%",
     },
     {
       title: "Mô tả",
       render: (data) => <a>{data?.description?.vi}</a>,
     },
     {
-      title: "Vị trí",
-      render: (data) => <a>{data?.position}</a>,
-      align: "center",
+      title: "Giá",
+      render: (data) => <a>{formatMoney(data?.price)}</a>,
     },
     {
       title: "Phí dịch vụ",
@@ -209,18 +172,21 @@ const ManageOptionService = () => {
               <img
                 className="img-unlock-options"
                 src={onToggle}
-                onClick={toggleBlock}
+                onClick={() => {
+                  toggleBlock();
+                }}
               />
             ) : (
               <img
                 className="img-unlock-options"
                 src={offToggle}
-                onClick={toggleBlock}
+                onClick={() => toggleBlock()}
               />
             )}
           </>
         );
       },
+      align: "center",
     },
     {
       key: "action",
@@ -239,20 +205,20 @@ const ManageOptionService = () => {
           </Dropdown>
         </Space>
       ),
+      align: "center",
     },
   ];
-
   return (
     <div>
-      <h3>Optional Service</h3>
-      {/* <div>
-        <CreateOptional />
-      </div> */}
+      <h3>Extend Optional</h3>
       <div>
+        <CreateExtend />
+      </div>
+      <div className="mt-3">
         <Table
           dataSource={data}
-          columns={columns}
           pagination={false}
+          columns={columns}
           onRow={(record, rowIndex) => {
             return {
               onClick: (event) => {
@@ -262,6 +228,7 @@ const ManageOptionService = () => {
           }}
         />
       </div>
+
       <div>
         <Modal isOpen={modal} toggle={toggle}>
           <ModalHeader toggle={toggle}>Xóa option service</ModalHeader>
@@ -298,12 +265,12 @@ const ManageOptionService = () => {
           </ModalBody>
           <ModalFooter>
             <Button
-              color="primary"
+              type="primary"
               onClick={() => onActive(itemEdit?._id, itemEdit?.is_active)}
             >
               Có
             </Button>
-            <Button color="#ddd" onClick={toggleBlock}>
+            <Button type="#ddd" onClick={toggleBlock}>
               Không
             </Button>
           </ModalFooter>
@@ -315,4 +282,4 @@ const ManageOptionService = () => {
   );
 };
 
-export default ManageOptionService;
+export default ExtendOptional;

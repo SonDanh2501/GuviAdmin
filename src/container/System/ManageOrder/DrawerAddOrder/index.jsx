@@ -42,29 +42,25 @@ const AddOrder = () => {
     getGroupServiceApi(0, 20)
       .then((res) => {
         setDataGroupService(res?.data);
+        setServiceApply(res?.data[0]?._id);
+        setKindService(res?.data[0]?.kind);
+        setNameService(res?.data[0]?.title?.vi);
         getServiceApi(res?.data[0]?._id)
           .then((res) => {
             setDataService(res?.data);
+            getOptionalServiceByServiceApi(res?.data[0]?._id)
+              .then((res) => {
+                setOptionalService(res?.data);
+                setIsLoading(false);
+              })
+              .catch((err) => {
+                setIsLoading(false);
+              });
           })
           .catch((err) => {});
       })
       .catch((err) => {});
   }, []);
-
-  useEffect(() => {
-    setIsLoading(true);
-    getOptionalServiceByServiceApi(dataService[0]?._id)
-      .then((res) => {
-        setOptionalService(res?.data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-      });
-    setServiceApply(dataGroupService[1]?._id);
-    setKindService(dataGroupService[1]?.kind);
-    setNameService(dataGroupService[1]?.title?.vi);
-  }, [dataGroupService]);
 
   dataGroupService?.map((item) => {
     serviceSelect.push({
@@ -75,12 +71,10 @@ const AddOrder = () => {
   });
 
   useEffect(() => {
-    if (optionalService?.length > 0) {
-      setIsLoading(true);
-      optionalService?.map(
-        (item) =>
-          item?.type === "select_horizontal_no_thumbnail" &&
-          getExtendOptionalByOptionalServiceApi(item?._id)
+    setIsLoading(true);
+    optionalService?.map((item) =>
+      item?.type === "select_horizontal_no_thumbnail"
+        ? getExtendOptionalByOptionalServiceApi(item?._id)
             .then((res) => {
               setExtendService(res?.data);
               setIsLoading(false);
@@ -88,12 +82,8 @@ const AddOrder = () => {
             .catch((err) => {
               setIsLoading(false);
             })
-      );
-
-      optionalService?.map(
-        (item) =>
-          item?.type === "multi_select_horizontal_thumbnail" &&
-          getExtendOptionalByOptionalServiceApi(item?._id)
+        : item?.type === "multi_select_horizontal_thumbnail"
+        ? getExtendOptionalByOptionalServiceApi(item?._id)
             .then((res) => {
               setAddService(res?.data);
               setIsLoading(false);
@@ -101,27 +91,22 @@ const AddOrder = () => {
             .catch((err) => {
               setIsLoading(false);
             })
-      );
-    }
-
-    optionalService?.map(
-      (item) =>
-        item?.type === "single_select_horizontal_thumbnail" &&
-        getExtendOptionalByOptionalServiceApi(item?._id)
-          .then((res) => {
-            setBussinessType(res?.data);
-            setIsLoading(false);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-          })
+        : item?.type === "single_select_horizontal_thumbnail"
+        ? getExtendOptionalByOptionalServiceApi(item?._id)
+            .then((res) => {
+              setBussinessType(res?.data);
+              setIsLoading(false);
+            })
+            .catch((err) => {
+              setIsLoading(false);
+            })
+        : null
     );
   }, [optionalService]);
 
   const onChangeServiceApply = (value, kind) => {
     setIsLoading(true);
     setAddService([]);
-
     setKindService(kind?.kind);
     setNameService(kind?.label);
     getServiceApi(value)

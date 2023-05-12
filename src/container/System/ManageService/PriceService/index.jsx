@@ -7,6 +7,7 @@ import {
   getExtendOptionalByOptionalServiceApi,
   getOptionalServiceByServiceApi,
   getPriceServiceApi,
+  getServiceApi,
   getServiceByIdApi,
 } from "../../../../api/service";
 import CustomDatePicker from "../../../../components/customDatePicker";
@@ -52,14 +53,21 @@ const PriceService = () => {
   }, []);
 
   useEffect(() => {
-    getServiceByIdApi(id)
+    getServiceApi(id)
       .then((res) => {
         getOptionalServiceByServiceApi(res?.data[0]?._id)
           .then((res) => {
-            console.log(res);
-            setExtend(res?.data[0]?.extend_optional);
-            setIdExtend(res?.data[0]?.extend_optional[0]?._id);
-            setValueExtend(res?.data[0]?.extend_optional[0]?.title?.vi);
+            res?.data?.map(
+              (item) =>
+                item?.type === "select_horizontal_no_thumbnail" &&
+                getExtendOptionalByOptionalServiceApi(item?._id)
+                  .then((res) => {
+                    setExtend(res?.data);
+                    setIdExtend(res?.data[0]?._id);
+                    setValueExtend(res?.data[0]?.title?.vi);
+                  })
+                  .catch((err) => {})
+            );
           })
           .catch((err) => {});
       })

@@ -1,0 +1,523 @@
+import {
+  Button,
+  Drawer,
+  Col,
+  Row,
+  Input,
+  Image,
+  Checkbox,
+  Select,
+  DatePicker,
+} from "antd";
+import { useCallback, useEffect, useState } from "react";
+import "./styles.scss";
+import resizeFile from "../../../../../../helper/resizer";
+import { getDistrictApi, postFile } from "../../../../../../api/file";
+import { errorNotify } from "../../../../../../helper/toast";
+import LoadingPagination from "../../../../../../components/paginationLoading";
+import moment from "moment";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+const CreateExtend = () => {
+  const [open, setOpen] = useState(false);
+  const [titleVN, setTitleVN] = useState("");
+  const [titleEN, setTitleEN] = useState("");
+  const [descriptionVN, setDescriptionVN] = useState("");
+  const [descriptionEN, setDescriptionEN] = useState("");
+  const [thumbnail, setThumbnail] = useState("");
+  const [thumbnailActive, setThumbnailActive] = useState("");
+  const [isPlatformFee, setIsPlatformFee] = useState(false);
+  const [platformFee, setPlatformFee] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showInApp, setShowInApp] = useState(false);
+  const [isPriceArea, setIsPriceArea] = useState(false);
+  const [codeCity, setCodeCity] = useState();
+  const [nameCity, setNameCity] = useState("");
+  const [dataCity, setDataCity] = useState([]);
+  const [dataDistrict, setDataDistrict] = useState([]);
+  const [codeDistrict, setCodeDistrict] = useState();
+  const districtData = [];
+  const cityData = [];
+  const [priceArea, setPriceArea] = useState([
+    {
+      district: [],
+      city: "",
+      value: "",
+      type_increase: "",
+    },
+  ]);
+  const [isPriceHoliday, setIsPriceHoliday] = useState(false);
+  const [priceHoliday, setPriceHoliday] = useState([
+    {
+      time_end: moment().toISOString(),
+      time_start: moment().toISOString(),
+      type_increase: "",
+      value: "",
+    },
+  ]);
+
+  const dateFormat = "YYYY-MM-DD";
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    getDistrictApi()
+      .then((res) => {
+        setDataCity(res?.aministrative_division);
+      })
+      .catch((err) => {});
+  }, []);
+
+  dataCity?.map((item) => {
+    cityData?.push({
+      value: item?.code,
+      label: item?.name,
+      district: item?.districts,
+    });
+  });
+
+  dataDistrict?.map((item) => {
+    districtData?.push({
+      value: item?.code,
+      label: item?.name,
+    });
+  });
+
+  const onChangeThumbnail = async (e) => {
+    setIsLoading(true);
+    try {
+      if (e.target.files[0]) {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          setThumbnail(reader.result);
+        });
+        reader.readAsDataURL(e.target.files[0]);
+      }
+      const file = e.target.files[0];
+      const image = await resizeFile(file);
+      const formData = new FormData();
+      formData.append("file", image);
+      postFile(formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((res) => {
+          setThumbnail(res);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
+        });
+    } catch (err) {
+      setIsLoading(false);
+    }
+  };
+
+  const onChangeThumbnailActive = async (e) => {
+    setIsLoading(true);
+    try {
+      if (e.target.files[0]) {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          setThumbnailActive(reader.result);
+        });
+        reader.readAsDataURL(e.target.files[0]);
+      }
+      const file = e.target.files[0];
+      const image = await resizeFile(file);
+      const formData = new FormData();
+      formData.append("file", image);
+      postFile(formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((res) => {
+          setThumbnailActive(res);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+
+          errorNotify({
+            message: err,
+          });
+        });
+    } catch (err) {
+      setIsLoading(false);
+    }
+  };
+  //area
+  const addPriceArea = useCallback(() => {
+    setPriceArea([
+      ...priceArea,
+      {
+        district: [],
+        city: "",
+        value: "",
+        type_increase: "",
+      },
+    ]);
+  }, [priceArea]);
+
+  const deletePriceArea = useCallback(
+    (index) => {
+      priceArea?.splice(index, 1);
+      setPriceArea([...priceArea]);
+    },
+    [priceArea]
+  );
+
+  const onChangeCity = useCallback(
+    (value, label, index) => {
+      const newArr = [...priceArea];
+      setDataDistrict(label?.district);
+      priceArea[index].city = value;
+      setPriceArea(newArr);
+    },
+    [priceArea]
+  );
+
+  const onChangeDistrict = useCallback(
+    (value, label, index) => {
+      const newArr = [...priceArea];
+      priceArea[index].district = value;
+      setPriceArea(newArr);
+    },
+    [priceArea]
+  );
+
+  const onChangeValueArea = useCallback(
+    (value, index) => {
+      const newArr = [...priceArea];
+      priceArea[index].value = value;
+      setPriceArea(newArr);
+    },
+    [priceArea]
+  );
+
+  const onChangeTypeIncreaseArea = useCallback(
+    (value, index) => {
+      const newArr = [...priceArea];
+      priceArea[index].type_increase = value;
+      setPriceArea(newArr);
+    },
+    [priceArea]
+  );
+
+  //holiday
+  const addPriceHoliday = () => {
+    const start = moment().toISOString();
+    setPriceHoliday([
+      ...priceHoliday,
+      {
+        time_end: start,
+        time_start: start,
+        type_increase: "",
+        value: "",
+      },
+    ]);
+  };
+
+  const onChangePriceTimeStart = (value, index) => {
+    const newArr = [...priceHoliday];
+    priceHoliday[index].time_start = value;
+    setPriceHoliday(newArr);
+  };
+
+  const onChangePriceTimeEnd = (value, index) => {
+    const newArr = [...priceHoliday];
+    priceHoliday[index].time_end = value;
+    setPriceHoliday(newArr);
+  };
+
+  const onChangePriceValue = (value, index) => {
+    const newArr = [...priceHoliday];
+    priceHoliday[index].value = value;
+    setPriceHoliday(newArr);
+  };
+
+  const onChangePriceType = (value, index) => {
+    const newArr = [...priceHoliday];
+    priceHoliday[index].type_increase = value;
+    setPriceHoliday(newArr);
+  };
+
+  const onDeletePriceHoliday = (index) => {
+    priceHoliday.splice(index, 1);
+
+    setPriceHoliday([...priceHoliday]);
+  };
+
+  return (
+    <div>
+      <Button type="primary" onClick={showDrawer} className="btn-create-extend">
+        Tạo extend
+      </Button>
+
+      <Drawer
+        title="Tạo extend option"
+        placement="right"
+        onClose={onClose}
+        open={open}
+        width={1200}
+      >
+        <Row>
+          <Col span={7}>
+            <div>
+              <a className="title-input-extend">Tiêu đề</a>
+              <Input
+                placeholder="Nhập tiêu đề Tiếng Việt"
+                value={titleVN}
+                onChange={(e) => setTitleVN(e.target.value)}
+              />
+              <Input
+                placeholder="Nhập tiêu đề Tiếng Anh"
+                style={{ marginTop: 5 }}
+                value={titleEN}
+                onChange={(e) => setTitleEN(e.target.value)}
+              />
+            </div>
+            <div className="mt-2">
+              <a className="title-input-extend">Mô tả</a>
+              <Input
+                placeholder="Nhập mô tả Tiếng Việt"
+                value={descriptionVN}
+                onChange={(e) => setDescriptionVN(e.target.value)}
+              />
+              <Input
+                placeholder="Nhập mô tả Tiếng Anh"
+                style={{ marginTop: 5 }}
+                value={descriptionEN}
+                onChange={(e) => setDescriptionEN(e.target.value)}
+              />
+            </div>
+            <div>
+              <a className="title-input-extend">Vị trí</a>
+              <Input placeholder="Nhập vị trí" />
+            </div>
+            <div>
+              <a className="title-input-extend">Giá</a>
+              <Input placeholder="Nhập giá" />
+            </div>
+            <div className="mt-2">
+              <a className="title-input-extend">Thumnail</a>
+              <Input
+                id="exampleImage"
+                name="image"
+                type="file"
+                accept={".jpg,.png,.jpeg"}
+                className="input-group"
+                onChange={onChangeThumbnail}
+              />
+              {thumbnail && <Image src={thumbnail} className="img-thumbnail" />}
+            </div>
+            <div className="mt-2">
+              <a className="title-input-extend">Thumnail Active</a>
+              <Input
+                id="exampleImage"
+                name="image"
+                type="file"
+                accept={".jpg,.png,.jpeg"}
+                className="input-group"
+                onChange={onChangeThumbnailActive}
+              />
+              {thumbnailActive && (
+                <Image src={thumbnailActive} className="img-thumbnail" />
+              )}
+            </div>
+          </Col>
+          <Col span={7} className="ml-2">
+            <div>
+              <Checkbox
+                checked={isPlatformFee}
+                onChange={(e) => setIsPlatformFee(e.target.checked)}
+              >
+                Phí dịch vụ
+              </Checkbox>
+              {isPlatformFee && (
+                <Input placeholder="Phần trăm" style={{ marginTop: 1 }} />
+              )}
+            </div>
+            <div className="mt-2">
+              <Checkbox
+                checked={showInApp}
+                onChange={(e) => setShowInApp(e.target.checked)}
+              >
+                Hiện thị trên ứng dụng
+              </Checkbox>
+            </div>
+            <div className="mt-2">
+              <Checkbox
+                checked={isPriceArea}
+                onChange={(e) => setIsPriceArea(e.target.checked)}
+              >
+                Giá theo khu vực
+              </Checkbox>
+              {isPriceArea && (
+                <div>
+                  {priceArea?.map((item, index) => {
+                    return (
+                      <div className="div-item-price-area" key={index}>
+                        <a>Tỉnh/thành:</a>
+                        <Select
+                          style={{ width: "100%", marginTop: 2 }}
+                          value={item?.city}
+                          options={cityData}
+                          onChange={(value, label) =>
+                            onChangeCity(value, label, index)
+                          }
+                        />
+                        <a>Huyện/quận:</a>
+                        <Select
+                          mode="multiple"
+                          style={{ width: "100%", marginTop: 2 }}
+                          options={districtData}
+                          onChange={(value, label) =>
+                            onChangeDistrict(value, label, index)
+                          }
+                        />
+                        <a>Giá trị</a>
+                        <Input
+                          placeholder="Nhập giá trị"
+                          type="number"
+                          onChange={(e) =>
+                            onChangeValueArea(e.target.value, index)
+                          }
+                        />
+                        <a>Loại</a>
+                        <Select
+                          style={{ width: "100%", marginTop: 2 }}
+                          onChange={(e) => onChangeTypeIncreaseArea(e, index)}
+                          options={[
+                            { value: "amount", label: "Thay đổi giá" },
+                            {
+                              value: "amount_by_root",
+                              label: "Lấy theo giá gốc",
+                            },
+                            {
+                              value: "percent_by_root",
+                              label: "Phần trăm trên giá gốc",
+                            },
+                          ]}
+                        />
+                        <Button
+                          onClick={() => deletePriceArea(index)}
+                          style={{ marginTop: 5 }}
+                        >
+                          Xoá
+                        </Button>
+                      </div>
+                    );
+                  })}
+                  <Button onClick={addPriceArea} style={{ marginTop: 5 }}>
+                    Thêm điều kiện
+                  </Button>
+                </div>
+              )}
+            </div>
+            <div className="mt-2">
+              <Checkbox
+                checked={isPriceHoliday}
+                onChange={(e) => setIsPriceHoliday(e.target.checked)}
+              >
+                Giá theo khu vực
+              </Checkbox>
+              {isPriceHoliday && (
+                <div>
+                  {priceHoliday?.map((item, index) => {
+                    return (
+                      <div key={index} className="mt-2 div-item-holiday">
+                        <a>Thời gian bắt đầu</a>
+                        <DatePicker
+                          style={{ width: "100%" }}
+                          format={dateFormat}
+                          value={dayjs(
+                            item?.time_start?.slice(0, 11),
+                            dateFormat
+                          )}
+                          onChange={(date, dateString) =>
+                            onChangePriceTimeStart(
+                              moment(moment(dateString).toISOString())
+                                .add(7, "hours")
+                                .toISOString(),
+                              index
+                            )
+                          }
+                        />
+                        <a>Thời gian kết đầu</a>
+                        <DatePicker
+                          style={{ width: "100%", marginTop: 5 }}
+                          value={dayjs(
+                            item?.time_end?.slice(0, 11),
+                            dateFormat
+                          )}
+                          onChange={(date, dateString) =>
+                            onChangePriceTimeEnd(
+                              moment(moment(dateString).toISOString())
+                                .add(7, "hours")
+                                .toISOString(),
+                              index
+                            )
+                          }
+                        />
+                        <a>Hình thức tăng giá</a>
+                        <Select
+                          style={{ width: "100%", marginTop: 5 }}
+                          value={item?.type_increase}
+                          onChange={(e) => onChangePriceType(e, index)}
+                          options={[
+                            {
+                              value: "amount_accumulate",
+                              label: "Tăng theo giá tiền",
+                            },
+                            {
+                              value: "percent_accumulate",
+                              label: "Tăng theo phần trăm",
+                            },
+                          ]}
+                        />
+                        <a>Giá trị</a>
+                        <Input
+                          style={{ marginTop: 5 }}
+                          value={item?.value}
+                          type="number"
+                          onChange={(e) =>
+                            onChangePriceValue(e.target.value, index)
+                          }
+                        />
+
+                        <Button
+                          style={{ marginTop: 5, marginBottom: 5 }}
+                          onClick={() => onDeletePriceHoliday(index)}
+                        >
+                          Xoá
+                        </Button>
+                      </div>
+                    );
+                  })}
+                  <Button onClick={addPriceHoliday}>Thêm</Button>
+                </div>
+              )}
+            </div>
+          </Col>
+          <Col span={7} className="ml-2"></Col>
+        </Row>
+      </Drawer>
+
+      {isLoading && <LoadingPagination />}
+    </div>
+  );
+};
+
+export default CreateExtend;
