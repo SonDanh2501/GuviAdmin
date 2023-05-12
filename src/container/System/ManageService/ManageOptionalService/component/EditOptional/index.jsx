@@ -226,14 +226,12 @@ const EditOptional = (props) => {
                   onChange={(e) => onChangePriceValue(e, index)}
                 />
 
-                {index !== 0 && (
-                  <Button
-                    style={{ marginTop: 5, marginBottom: 5 }}
-                    onClick={() => onDeletePriceHoliday(index)}
-                  >
-                    Xoá
-                  </Button>
-                )}
+                <Button
+                  style={{ marginTop: 5, marginBottom: 5 }}
+                  onClick={() => onDeletePriceHoliday(index)}
+                >
+                  Xoá
+                </Button>
               </div>
             );
           })}

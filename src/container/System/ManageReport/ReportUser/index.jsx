@@ -101,7 +101,7 @@ const ReportUser = () => {
   useEffect(() => {
     let sum = 0;
     for (let i = 0; i < data.length; i++) {
-      setTotalYear((sum += data[i].totalAll));
+      setTotalYear((sum += data[i].totalNew));
     }
   }, [data]);
 
@@ -274,7 +274,7 @@ const ReportUser = () => {
             <BarChart
               width={500}
               height={300}
-              data={dataChart}
+              data={dataChart?.slice(0, moment().utc().month() + 1)}
               margin={{
                 top: 5,
                 right: 30,

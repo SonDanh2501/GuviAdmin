@@ -38,6 +38,7 @@ import EditGroupCustomer from "../container/System/ManageConfiguration/ScreenCon
 import OrderExpired from "../container/System/ManageOrder/OrderExpired";
 import CreateQuizz from "../container/System/ManageConfiguration/ScreenConfiguration/CreateQuizz";
 import ManageOptionService from "../container/System/ManageService/ManageOptionalService";
+import ExtendOptional from "../container/System/ManageService/ManageExtendOptional";
 
 const Admin = () => {
   return (
@@ -90,6 +91,10 @@ const Admin = () => {
       <Route
         path="/services/manage-group-service/manage-service/option-service"
         element={<ManageOptionService />}
+      />
+      <Route
+        path="/services/manage-group-service/manage-service/option-service/extend-option"
+        element={<ExtendOptional />}
       />
       <Route
         path="/services/manage-group-service/manage-price-service"

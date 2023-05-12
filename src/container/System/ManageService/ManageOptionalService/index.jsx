@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./styles.scss";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -6,14 +6,16 @@ import {
   deleteOptionServiceApi,
   getOptionalServiceByServiceApi,
 } from "../../../../api/service";
-import { Button, Dropdown, Image, Popover, Space } from "antd";
-import { DownOutlined } from "@ant-design/icons";
+import { Button, Dropdown, Image, Popover, Space, Table } from "antd";
+import { DownOutlined, MoreOutlined } from "@ant-design/icons";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { errorNotify } from "../../../../helper/toast";
 import LoadingPagination from "../../../../components/paginationLoading";
 import EditOptional from "./component/EditOptional";
 import CreateOptional from "./component/CreateOptional";
 import { formatMoney } from "../../../../helper/formatMoney";
+import onToggle from "../../../../assets/images/on-button.png";
+import offToggle from "../../../../assets/images/off-button.png";
 
 const ManageOptionService = () => {
   const { state } = useLocation();
@@ -24,6 +26,7 @@ const ManageOptionService = () => {
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
@@ -131,28 +134,6 @@ const ManageOptionService = () => {
     );
   };
 
-  const contentExtend = (item) => {
-    return (
-      <div className="div-content-option">
-        <div className="div-title-option">
-          <a className="title">Tiêu đề</a>
-          <a className="colon">:</a>
-          <a className="details">{item?.title?.vi}</a>
-        </div>
-        <div className="div-title-option">
-          <a className="title">Mô tả</a>
-          <a className="colon">:</a>
-          <a className="details">{item?.description?.vi}</a>
-        </div>
-        <div className="div-title-option">
-          <a className="title">Giá</a>
-          <a className="colon">:</a>
-          <a className="details">{formatMoney(item?.price)}</a>
-        </div>
-      </div>
-    );
-  };
-
   const items = [
     {
       key: 1,
@@ -174,86 +155,106 @@ const ManageOptionService = () => {
     },
   ];
 
-  const itemsExtend = [
+  const columns = [
     {
-      key: 1,
-      label: <a>Xoá</a>,
+      title: "Tiêu đề",
+      render: (data) => (
+        <Popover
+          content={() => contentOptional(data)}
+          title="Title"
+          trigger="hover"
+        >
+          <a
+            onClick={() => {
+              navigate(
+                "/services/manage-group-service/manage-service/option-service/extend-option",
+                {
+                  state: { id: data?._id },
+                }
+              );
+            }}
+          >
+            {data?.title?.vi}
+          </a>
+        </Popover>
+      ),
+    },
+    {
+      title: "Mô tả",
+      render: (data) => <a>{data?.description?.vi}</a>,
+    },
+    {
+      title: "Vị trí",
+      render: (data) => <a>{data?.position}</a>,
+      align: "center",
+    },
+    {
+      title: "Phí dịch vụ",
+      render: (data) => <a>{data?.platform_fee}</a>,
+      align: "center",
+    },
+    {
+      key: "action",
+      render: (data) => {
+        return (
+          <>
+            {data?.is_active ? (
+              <img
+                className="img-unlock-options"
+                src={onToggle}
+                onClick={toggleBlock}
+              />
+            ) : (
+              <img
+                className="img-unlock-options"
+                src={offToggle}
+                onClick={toggleBlock}
+              />
+            )}
+          </>
+        );
+      },
+    },
+    {
+      key: "action",
+      render: (data) => (
+        <Space size="middle">
+          <Dropdown
+            menu={{
+              items,
+            }}
+            placement="bottom"
+            trigger={["click"]}
+          >
+            <a>
+              <MoreOutlined className="icon-more" />
+            </a>
+          </Dropdown>
+        </Space>
+      ),
     },
   ];
 
   return (
     <div>
+      <h3>Optional Service</h3>
       {/* <div>
         <CreateOptional />
       </div> */}
-      {data.map((item, index) => {
-        return (
-          <div className="mt-2" key={index}>
-            <div>
-              <Popover
-                placement="right"
-                title={"Thông tin chi tiết optoinal service"}
-                content={() => contentOptional(item?.optional_service)}
-              >
-                <Button className="btn-see-details-option">
-                  <a className="title-optional">
-                    {item?.optional_service?.title?.vi}
-                  </a>
-                </Button>
-              </Popover>
-
-              <Dropdown
-                menu={{
-                  items,
-                }}
-                trigger={["click"]}
-              >
-                <a
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setItemEdit(item?.optional_service);
-                  }}
-                >
-                  <Space>
-                    <i class="uil uil-ellipsis-v"></i>
-                  </Space>
-                </a>
-              </Dropdown>
-            </div>
-            <div className="div-extend">
-              {item?.extend_optional?.map((itemExtend, indexExtend) => {
-                return (
-                  <>
-                    <Popover
-                      key={indexExtend}
-                      placement="right"
-                      title={"Thông tin chi tiết extend optional"}
-                      content={() => contentExtend(itemExtend)}
-                    >
-                      <div className="div-item-extend">
-                        <a className="text-extend">{itemExtend?.title?.vi}</a>
-                      </div>
-                    </Popover>
-                    <Dropdown menu={{ items: itemsExtend }} trigger={["click"]}>
-                      <a
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setItemEditExtend(item);
-                        }}
-                      >
-                        <Space>
-                          <i class="uil uil-ellipsis-v"></i>
-                        </Space>
-                      </a>
-                    </Dropdown>
-                  </>
-                );
-              })}
-            </div>
-          </div>
-        );
-      })}
-
+      <div>
+        <Table
+          dataSource={data}
+          columns={columns}
+          pagination={false}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setItemEdit(record);
+              },
+            };
+          }}
+        />
+      </div>
       <div>
         <Modal isOpen={modal} toggle={toggle}>
           <ModalHeader toggle={toggle}>Xóa option service</ModalHeader>

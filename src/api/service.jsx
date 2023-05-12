@@ -18,7 +18,7 @@ export const updateGroupServiceApi = (id, data) => {
 };
 
 export const deleteGroupServiceApi = (id) => {
-  return axiosClient.get(`/admin/group_service_manager/delete_item/${id}`);
+  return axiosClient.post(`/admin/group_service_manager/delete_item/${id}`);
 };
 
 export const activeGroupServiceApi = (id, data) => {
@@ -60,7 +60,7 @@ export const activeServiceApi = (id, data) => {
 };
 
 export const deleteServiceApi = (id) => {
-  return axiosClient.get(`/admin/service_manager/delete_item/${id}`);
+  return axiosClient.post(`/admin/service_manager/delete_item/${id}`);
 };
 
 //optional services
@@ -113,6 +113,13 @@ export const getCalculateFeeApi = (data) => {
   return axiosClient.post(
     `/admin/group-order-manager/calculate_fee_group_order`,
     data
+  );
+};
+
+//extend optional
+export const getExtendByOptionalApi = (id) => {
+  return axiosClient.get(
+    `/admin/extend_optional_manager/get_list_extend_optional_by_optional_service/${id}`
   );
 };
 
