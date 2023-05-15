@@ -39,6 +39,7 @@ import OrderExpired from "../container/System/ManageOrder/OrderExpired";
 import CreateQuizz from "../container/System/ManageConfiguration/ScreenConfiguration/CreateQuizz";
 import ManageOptionService from "../container/System/ManageService/ManageOptionalService";
 import ExtendOptional from "../container/System/ManageService/ManageExtendOptional";
+import ReasonPunish from "../container/System/ManageConfiguration/ScreenConfiguration/ReasonPunish";
 
 const Admin = () => {
   return (
@@ -186,6 +187,10 @@ const Admin = () => {
       <Route
         path="/adminManage/manage-configuration/create_quizz"
         element={<CreateQuizz />}
+      />
+      <Route
+        path="/adminManage/manage-configuration/reason_punish"
+        element={<ReasonPunish />}
       />
     </Routes>
   );

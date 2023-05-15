@@ -15,3 +15,11 @@ export const searchFeedbackApi = (payload) => {
 export const deleteFeedbackApi = (id) => {
   return axiosClient.post(`/admin/feedback_manager/delete_feedback/${id}`);
 };
+
+//examtest
+
+export const getListTestCollaboratorApi = (start, length) => {
+  return axiosClient.get(
+    `/admin/info-test-collaborator/get_list?start=${start}&length=${length}`
+  );
+};

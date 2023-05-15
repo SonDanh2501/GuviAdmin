@@ -14,11 +14,13 @@ import { ModalBody, ModalFooter, ModalHeader, Modal } from "reactstrap";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
 import CreateExtend from "./component/CreateExtend";
+import EditExtend from "./component/EditExtend";
 
 const ExtendOptional = () => {
   const { state } = useLocation();
   const { id } = state || {};
   const [data, setData] = useState([]);
+  const [total, setTotal] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
@@ -31,6 +33,7 @@ const ExtendOptional = () => {
       getExtendByOptionalApi(id)
         .then((res) => {
           setData(res?.data);
+          setTotal(res?.totalItem);
         })
         .catch((err) => {});
     }
@@ -129,7 +132,9 @@ const ExtendOptional = () => {
   const items = [
     {
       key: 1,
-      label: <a>Chỉnh sửa</a>,
+      label: (
+        <EditExtend data={itemEdit} setData={setData} setTotal={setTotal} />
+      ),
     },
     {
       key: 2,
@@ -212,7 +217,7 @@ const ExtendOptional = () => {
     <div>
       <h3>Extend Optional</h3>
       <div>
-        <CreateExtend />
+        <CreateExtend idOption={id} setData={setData} setTotal={setTotal} />
       </div>
       <div className="mt-3">
         <Table

@@ -21,10 +21,11 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import {
   createExtendOptionApi,
+  editExtendOptionApi,
   getExtendByOptionalApi,
 } from "../../../../../../api/service";
 
-const CreateExtend = ({ idOption, setData, setTotal }) => {
+const EditExtend = ({ idOption, setData, setTotal, data }) => {
   const [open, setOpen] = useState(false);
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
@@ -98,6 +99,28 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
       })
       .catch((err) => {});
   }, []);
+
+  useEffect(() => {
+    setTitleVN(data?.title?.vi);
+    setTitleEN(data?.title?.en);
+    setDescriptionVN(data?.description?.vi);
+    setDescriptionEN(data?.description?.en);
+    setPosition(data?.position);
+    setPrice(data?.price);
+    setThumbnail(data?.thumbnail);
+    setThumbnailActive(data?.thumbnail_active);
+    setIsPriceArea(data?.is_price_option_area);
+    setPriceArea(data?.price_option_area);
+    setIsPriceHoliday(data?.is_price_option_holiday);
+    setPriceHoliday(data?.price_option_holiday);
+    setIsPriceRushDay(data?.is_price_option_rush_day);
+    setPriceRushDay(data?.price_option_rush_day);
+    setIsPriceRushHour(data?.is_price_option_rush_hour);
+    setPriceRushHour(data?.price_option_rush_hour);
+    setShowInApp(data?.is_show_in_app);
+    setIsPlatformFee(data?.is_platform_fee);
+    setPlatformFee(data?.platform_fee);
+  }, [data]);
 
   dataCity?.map((item) => {
     cityData?.push({
@@ -359,9 +382,9 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
     setPriceRushHour([...priceRushHour]);
   };
 
-  const onCreateExtend = () => {
+  const onEditExtend = () => {
     setIsLoading(true);
-    createExtendOptionApi({
+    editExtendOptionApi(data?._id, {
       title: {
         vi: titleVN,
         en: titleEN,
@@ -391,7 +414,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
       is_show_in_app: showInApp,
       is_platform_fee: isPlatformFee,
       platform_fee: platformFee,
-      id_optional_service: idOption,
+      id_optional_service: data?.id_optional_service,
     })
       .then((res) => {
         setIsLoading(false);
@@ -410,12 +433,10 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
 
   return (
     <div>
-      <Button type="primary" onClick={showDrawer} className="btn-create-extend">
-        Tạo extend
-      </Button>
+      <a onClick={showDrawer}>Chỉnh sửa</a>
 
       <Drawer
-        title="Tạo extend option"
+        title="Chỉnh sửa extend option"
         placement="right"
         onClose={onClose}
         open={open}
@@ -455,6 +476,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
               <a className="title-input-extend">Vị trí</a>
               <Input
                 placeholder="Nhập vị trí"
+                value={position}
                 onChange={(e) => setPosition(e.target.value)}
               />
             </div>
@@ -463,6 +485,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
               <Input
                 placeholder="Nhập giá"
                 type="number"
+                value={price}
                 onChange={(e) => setPrice(e.target.value)}
               />
             </div>
@@ -505,6 +528,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                 <Input
                   placeholder="Phần trăm"
                   style={{ marginTop: 1 }}
+                  value={platformFee}
                   onChange={(e) => setPlatformFee(e.target.value)}
                 />
               )}
@@ -542,6 +566,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                         <Select
                           mode="multiple"
                           style={{ width: "100%", marginTop: 2 }}
+                          value={item?.district}
                           options={districtData}
                           onChange={(value, label) =>
                             onChangeDistrict(value, label, index)
@@ -551,6 +576,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                         <Input
                           placeholder="Nhập giá trị"
                           type="number"
+                          value={item?.value}
                           onChange={(e) =>
                             onChangeValueArea(e.target.value, index)
                           }
@@ -558,6 +584,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                         <a>Loại</a>
                         <Select
                           style={{ width: "100%", marginTop: 2 }}
+                          value={item?.type_increase}
                           onChange={(e) => onChangeTypeIncreaseArea(e, index)}
                           options={[
                             { value: "amount", label: "Thay đổi giá" },
@@ -775,7 +802,10 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                         <a>Giờ bắt đầu</a>
                         <TimePicker
                           style={{ width: "100%", marginTop: 5 }}
-                          defaultOpenValue={dayjs("00:00", hourFormat)}
+                          value={dayjs(
+                            item?.time_start.slice(0, 5),
+                            hourFormat
+                          )}
                           format={hourFormat}
                           onChange={(time, timeString) =>
                             onChangeRushHourTimeStart(timeString, index)
@@ -784,7 +814,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                         <a>Giờ kết thúc</a>
                         <TimePicker
                           style={{ width: "100%", marginTop: 5 }}
-                          defaultOpenValue={dayjs("00:00", hourFormat)}
+                          value={dayjs(item?.time_end.slice(0, 5), hourFormat)}
                           format={hourFormat}
                           onChange={(time, timeString) =>
                             onChangeRushHourTimeEnd(timeString, index)
@@ -831,7 +861,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
             </div>
           </Col>
         </Row>
-        <Button className="btn-create-extend" onClick={onCreateExtend}>
+        <Button className="btn-create-extend" onClick={onEditExtend}>
           {" "}
           Tạo
         </Button>
@@ -842,4 +872,4 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
   );
 };
 
-export default CreateExtend;
+export default EditExtend;

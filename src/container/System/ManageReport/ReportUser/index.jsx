@@ -12,6 +12,8 @@ import {
   Bar,
   Legend,
   LabelList,
+  Line,
+  ComposedChart,
 } from "recharts";
 import {
   getTotalCustomerDay,
@@ -200,11 +202,11 @@ const ReportUser = () => {
             ? payload[0]?.payload?.totalNew + payload[0]?.payload?.totalOld
             : 0}
         </a>
-        <a className="money-text">
+        <a className="money-text-new">
           Số người đăng kí mới:{" "}
           {payload?.length > 0 ? payload[0]?.payload?.totalNew : 0}
         </a>
-        <a className="money-text">
+        <a className="money-text-old">
           Số người đăng kí cũ:{" "}
           {payload?.length > 0 ? payload[0]?.payload?.totalOld : 0}
         </a>
@@ -271,7 +273,7 @@ const ReportUser = () => {
         </div>
         <div className="mt-3">
           <ResponsiveContainer width={"100%"} height={350} min-width={350}>
-            <BarChart
+            <ComposedChart
               width={500}
               height={300}
               data={dataChart?.slice(0, moment().utc().month() + 1)}
@@ -311,7 +313,13 @@ const ReportUser = () => {
                 name="Khách hàng mới"
                 stackId="a"
               />
-            </BarChart>
+              <Line
+                type="monotone"
+                dataKey="totalNew"
+                stroke="#ff7300"
+                name="Khách hàng mới"
+              />
+            </ComposedChart>
           </ResponsiveContainer>
         </div>
       </div>

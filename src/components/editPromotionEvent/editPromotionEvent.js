@@ -81,6 +81,7 @@ const EditPromotionEvent = ({ state, setState, data }) => {
   ]);
   const options = [];
   const optionsCustomer = [];
+  const serviceOption = [];
 
   const dispatch = useDispatch();
   const service = useSelector(getService);
@@ -89,10 +90,6 @@ const EditPromotionEvent = ({ state, setState, data }) => {
     getGroupCustomerApi(0, 10)
       .then((res) => setDataGroupCustomer(res.data))
       .catch((err) => console.log(err));
-
-    // fetchCustomers(0, 200, "")
-    //   .then((res) => setDataCustomer(res?.data))
-    //   .catch((err) => console.log(err));
   }, []);
 
   dataGroupCustomer.map((item, index) => {
@@ -108,7 +105,12 @@ const EditPromotionEvent = ({ state, setState, data }) => {
       value: item?._id,
     });
   });
-
+  service.map((item, index) => {
+    serviceOption.push({
+      label: item?.title?.vi,
+      value: item?._id,
+    });
+  });
   const onFormDiscount = (title) => {
     setFormDiscount(title);
     if (title === "amount") {
@@ -481,22 +483,13 @@ const EditPromotionEvent = ({ state, setState, data }) => {
                   <div>
                     <h5>5. Dịch vụ áp dụng</h5>
                     <Label>Các dịch vụ</Label>
-
-                    <CustomTextInput
-                      className="select-type-promo"
-                      name="select"
-                      type="select"
+                    <Select
+                      style={{ width: "100%" }}
                       value={serviceApply}
                       onChange={(e) => {
-                        setServiceApply(e.target.value);
+                        setServiceApply(e);
                       }}
-                      body={service.map((item, index) => {
-                        return (
-                          <option key={index} value={item?._id}>
-                            {item?.title?.vi}
-                          </option>
-                        );
-                      })}
+                      options={serviceOption}
                     />
                   </div>
                   <div>

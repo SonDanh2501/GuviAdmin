@@ -1,5 +1,5 @@
 import { Drawer, Select } from "antd";
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import IntlCurrencyInput from "react-intl-currency-input";
 import { useDispatch } from "react-redux";
 import { Form, Input, Label, List, Modal } from "reactstrap";
@@ -11,6 +11,7 @@ import CustomTextInput from "../CustomTextInput/customTextInput";
 import _debounce from "lodash/debounce";
 import "./index.scss";
 import { errorNotify, successNotify } from "../../helper/toast";
+import { getReasonPunishApi } from "../../api/reasons";
 
 const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
   const [state, setState] = useState(false);
@@ -20,9 +21,11 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [errorMoney, setErrorMoney] = useState("");
-  const [wallet, setWallet] = useState("");
+  const [reason, setReason] = useState([]);
+  const [idReason, setIdReason] = useState([]);
   const [id, setId] = useState("");
   const dispatch = useDispatch();
+  const reasonOption = [];
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -31,6 +34,22 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
   const onClose = ({ data }) => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    getReasonPunishApi(0, 20)
+      .then((res) => {
+        setReason(res?.data);
+        setIdReason(res?.data[0]?._id);
+      })
+      .catch((err) => {});
+  }, []);
+
+  reason?.map((item) => {
+    reasonOption.push({
+      value: item?._id,
+      label: item?.title?.vi,
+    });
+  });
 
   const valueSearch = (value) => {
     setName(value);
@@ -59,6 +78,10 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
     []
   );
 
+  const handleChangeReason = (value) => {
+    setIdReason(value);
+  };
+
   const punishMoney = useCallback(() => {
     if (name === "" || money === "") {
       !name
@@ -69,6 +92,7 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
       punishMoneyCollaboratorApi(id, {
         money: money,
         punish_note: note,
+        id_punish: idReason,
       })
         .then((res) => {
           setOpen(false);
@@ -88,7 +112,7 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
           dispatch(loadingAction.loadingRequest(false));
         });
     }
-  }, [id, money, note, name]);
+  }, [id, money, note, name, idReason]);
 
   const currencyConfig = {
     locale: "vi",
@@ -170,6 +194,16 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
                 config={currencyConfig}
                 onChange={handleChange}
                 value={money}
+              />
+            </div>
+
+            <div className="div-money">
+              <Label>Chọn lí do phạt (*)</Label>
+              <Select
+                style={{ width: "100%" }}
+                value={idReason}
+                onChange={handleChangeReason}
+                options={reasonOption}
               />
             </div>
 

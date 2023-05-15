@@ -182,7 +182,7 @@ const Punish = () => {
       ),
     },
     {
-      title: "Ngày nạp",
+      title: "Ngày phạt",
       render: (data) => {
         return (
           <div className="div-time-topup">
@@ -235,8 +235,7 @@ const Punish = () => {
               className="btn-confirm"
               onClick={toggleConfirm}
               disabled={
-                (!data?.is_verify_punish && data?.status === "cancel") ||
-                data?.is_verify_punish
+                data?.status === "cancel" || data?.status === "done"
                   ? true
                   : false
               }
@@ -254,9 +253,7 @@ const Punish = () => {
               )}
             </div>
             <div className="mt-1">
-              {!data?.is_verify_punish && data?.status === "cancel" ? (
-                <></>
-              ) : data?.is_verify_punish ? (
+              {data?.status === "cancel" || data?.status === "done" ? (
                 <></>
               ) : (
                 <Tooltip placement="bottom" title={"Chỉnh sửa giao dịch CTV"}>

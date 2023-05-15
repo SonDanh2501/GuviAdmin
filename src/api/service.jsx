@@ -35,6 +35,10 @@ export const getServiceApi = (id) => {
   );
 };
 
+export const getListService = () => {
+  return axiosClient.get(`admin/service_manager/get_list`);
+};
+
 export const getServiceByIdApi = (id) => {
   return axiosClient.get(
     `/admin/service_manager/get_list_service_by_group_service/${id}`
@@ -83,7 +87,7 @@ export const getExtendOptionalByOptionalServiceApi = (id) => {
 
 export const getPromotionByCustomerApi = (id, start, length, idService) => {
   return axiosClient.get(
-    `/admin/promotion_manager/code_available/${id}?brand=guvi&start=${start}&length=${length}&&id_service=${idService}`
+    `/admin/promotion_manager/code_available/${id}?brand=guvi&start=${start}&length=${length}&id_service=${idService}`
   );
 };
 
@@ -130,6 +134,20 @@ export const deleteExtendOptionalApi = (id) => {
 export const activeExtendOptionApi = (id, data) => {
   return axiosClient.post(
     `/admin/extend_optional_manager/active_item/${id}`,
+    data
+  );
+};
+
+export const createExtendOptionApi = (data) => {
+  return axiosClient.post(
+    `/admin/extend_optional_manager/create_item?lang=vi`,
+    data
+  );
+};
+
+export const editExtendOptionApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/extend_optional_manager/edit_item/${id}?lang=vi`,
     data
   );
 };
