@@ -87,9 +87,9 @@ export default function TopupManage() {
           <Tabs.TabPane tab="Rút tiền" key="3">
             <TopupCollaborator type={type} />
           </Tabs.TabPane>
-          {/* <Tabs.TabPane tab="Phạt tiền" key="4">
+          <Tabs.TabPane tab="Phạt tiền" key="4">
             <Punish />
-          </Tabs.TabPane> */}
+          </Tabs.TabPane>
         </Tabs>
       </div>
     </React.Fragment>

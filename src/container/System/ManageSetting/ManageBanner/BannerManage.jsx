@@ -28,61 +28,74 @@ export default function BannerManage() {
   const [itemEdit, setItemEdit] = React.useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [startPage, setStartPage] = useState(0);
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
   const banners = useSelector(getBanner);
   const totalBanner = useSelector(getBannerTotal);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getBanners.getBannersRequest(0, 10));
+    dispatch(getBanners.getBannersRequest({ start: 0, length: 20 }));
   }, [dispatch]);
 
-  const onDelete = useCallback((id) => {
-    dispatch(loadingAction.loadingRequest(true));
-    deleteBanner(id, { is_delete: true })
-      .then((res) => {
-        dispatch(getBanners.getBannersRequest(0, 10));
-        setModal(false);
-        dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
+  const onDelete = useCallback(
+    (id) => {
+      dispatch(loadingAction.loadingRequest(true));
+      deleteBanner(id, { is_delete: true })
+        .then((res) => {
+          dispatch(
+            getBanners.getBannersRequest({ start: startPage, length: 20 })
+          );
+          setModal(false);
+          dispatch(loadingAction.loadingRequest(false));
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
         });
-        dispatch(loadingAction.loadingRequest(false));
-      });
-  }, []);
+    },
+    [startPage]
+  );
 
-  const blockBanner = useCallback((id, is_active) => {
-    dispatch(loadingAction.loadingRequest(true));
-    if (is_active === true) {
-      activeBanner(id, { is_active: false })
-        .then((res) => {
-          dispatch(getBanners.getBannersRequest(0, 10));
-          setModalBlock(false);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
+  const blockBanner = useCallback(
+    (id, is_active) => {
+      dispatch(loadingAction.loadingRequest(true));
+      if (is_active === true) {
+        activeBanner(id, { is_active: false })
+          .then((res) => {
+            dispatch(
+              getBanners.getBannersRequest({ start: startPage, length: 20 })
+            );
+            setModalBlock(false);
+            dispatch(loadingAction.loadingRequest(false));
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            dispatch(loadingAction.loadingRequest(false));
           });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    } else {
-      activeBanner(id, { is_active: true })
-        .then((res) => {
-          dispatch(getBanners.getBannersRequest(0, 10));
-          setModalBlock(false);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
+      } else {
+        activeBanner(id, { is_active: true })
+          .then((res) => {
+            dispatch(
+              getBanners.getBannersRequest({ start: startPage, length: 20 })
+            );
+            setModalBlock(false);
+            dispatch(loadingAction.loadingRequest(false));
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+            dispatch(loadingAction.loadingRequest(false));
           });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    }
-  }, []);
+      }
+    },
+    [startPage, getBanners, loadingAction]
+  );
 
   const handleSearch = useCallback(
     _debounce((value) => {
@@ -101,6 +114,8 @@ export default function BannerManage() {
         ? page * dataFilter.length - dataFilter.length
         : page * banners.length - banners.length;
 
+    setStartPage(start);
+
     dataFilter.length > 0
       ? searchBanners(valueSearch)
           .then((res) => {
@@ -109,9 +124,9 @@ export default function BannerManage() {
           })
           .catch((err) => console.log(err))
       : dispatch(
-          getPromotion.getPromotionRequest({
+          getBanners.getBannersRequest({
             start: start > 0 ? start : 0,
-            length: 10,
+            length: 20,
           })
         );
   };

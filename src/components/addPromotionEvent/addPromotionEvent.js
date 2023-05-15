@@ -84,6 +84,7 @@ const AddPromotionEvent = ({ idService, tab }) => {
 
   const options = [];
   const optionsCustomer = [];
+  const serviceOption = [];
   const dispatch = useDispatch();
 
   const service = useSelector(getService);
@@ -92,10 +93,6 @@ const AddPromotionEvent = ({ idService, tab }) => {
     getGroupCustomerApi(0, 10)
       .then((res) => setDataGroupCustomer(res.data))
       .catch((err) => console.log(err));
-
-    // fetchCustomers(0, 1000, "")
-    //   .then((res) => setDataCustomer(res?.data))
-    //   .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
@@ -112,6 +109,12 @@ const AddPromotionEvent = ({ idService, tab }) => {
   dataCustomer.map((item, index) => {
     optionsCustomer.push({
       label: item?.full_name,
+      value: item?._id,
+    });
+  });
+  service.map((item, index) => {
+    serviceOption.push({
+      label: item?.title?.vi,
       value: item?._id,
     });
   });
@@ -510,22 +513,12 @@ const AddPromotionEvent = ({ idService, tab }) => {
                     <div>
                       <h5>5. Dịch vụ áp dụng</h5>
                       <Label>Các dịch vụ</Label>
-
-                      <CustomTextInput
-                        className="select-type-promo"
-                        name="select"
-                        type="select"
-                        value={serviceApply}
+                      <Select
+                        style={{ width: "100%" }}
                         onChange={(e) => {
-                          setServiceApply(e.target.value);
+                          setServiceApply(e);
                         }}
-                        body={service.map((item, index) => {
-                          return (
-                            <option key={index} value={item?._id}>
-                              {item?.title?.vi}
-                            </option>
-                          );
-                        })}
+                        options={serviceOption}
                       />
                     </div>
                   )}

@@ -35,6 +35,9 @@ const ManageConfiguration = () => {
       case "create_quizz":
         navigate("/adminManage/manage-configuration/create_quizz");
         break;
+      case "reason_punish":
+        navigate("/adminManage/manage-configuration/reason_punish");
+        break;
       default:
         break;
     }
@@ -96,5 +99,10 @@ const DATA = [
     id: 7,
     title: "Tạo câu hỏi cho CTV",
     value: "create_quizz",
+  },
+  {
+    id: 8,
+    title: "Tạo lí do phạt",
+    value: "reason_punish",
   },
 ];

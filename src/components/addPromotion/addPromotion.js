@@ -95,6 +95,7 @@ const AddPromotion = ({ idService, tab }) => {
 
   const options = [];
   const optionsCustomer = [];
+  const serviceOption = [];
   const dispatch = useDispatch();
 
   const service = useSelector(getService);
@@ -103,10 +104,6 @@ const AddPromotion = ({ idService, tab }) => {
     getGroupCustomerApi(0, 10)
       .then((res) => setDataGroupCustomer(res.data))
       .catch((err) => console.log(err));
-
-    // fetchCustomers(0, 1000, "")
-    //   .then((res) => setDataCustomer(res?.data))
-    //   .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
@@ -123,6 +120,13 @@ const AddPromotion = ({ idService, tab }) => {
   dataCustomer.map((item, index) => {
     optionsCustomer.push({
       label: item?.full_name,
+      value: item?._id,
+    });
+  });
+
+  service.map((item, index) => {
+    serviceOption.push({
+      label: item?.title?.vi,
       value: item?._id,
     });
   });
@@ -635,27 +639,17 @@ const AddPromotion = ({ idService, tab }) => {
                     <div>
                       <h5>9. Dịch vụ áp dụng</h5>
                       <Label>Các dịch vụ</Label>
-
-                      <CustomTextInput
-                        className="select-type-promo"
-                        name="select"
-                        type="select"
-                        value={serviceApply}
+                      <Select
+                        style={{ width: "100%" }}
                         onChange={(e) => {
-                          setServiceApply(e.target.value);
+                          setServiceApply(e);
                         }}
-                        body={service.map((item, index) => {
-                          return (
-                            <option key={index} value={item?._id}>
-                              {item?.title?.vi}
-                            </option>
-                          );
-                        })}
+                        options={serviceOption}
                       />
                     </div>
                   )}
 
-                  <div>
+                  <div className="mt-2">
                     <h5>10. Đối tượng áp dụng</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">

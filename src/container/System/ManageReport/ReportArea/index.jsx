@@ -98,7 +98,7 @@ const ReportArea = () => {
     cityData?.push({
       value: item?.code,
       label: item?.name,
-      district: item?.districts,
+      districts: item?.districts,
     });
   });
 
@@ -106,8 +106,7 @@ const ReportArea = () => {
     (value, label) => {
       setNameCity(label?.label);
       setCodeCity(value);
-      setDataDistrict(label?.district);
-      setCity(!city);
+      setDataDistrict(label?.districts);
       getReportTypeService(startDate, endDate, value, codeDistrict)
         .then((res) => {
           setDataChartPie(res);
@@ -324,7 +323,7 @@ const ReportArea = () => {
         </div>
       </div>
 
-      <div className="div-chart-pie-total mt-3">
+      <div className="div-chart-pie-total">
         <a className="title-chart-area"> Thống kê khách hàng theo khu vực</a>
         <div className="div-select-city">
           <CustomDatePicker

@@ -31,6 +31,7 @@ import "./index.scss";
 import { getUser } from "../../../redux/selectors/auth";
 import { MoreOutlined } from "@ant-design/icons";
 import EditTimeOrder from "../ManageOrder/EditTimeGroupOrder";
+import EditTimeOrderSchedule from "./EditTimeOrderSchedule";
 
 const DetailsOrder = () => {
   const { state } = useLocation();
@@ -450,6 +451,16 @@ const DetailsOrder = () => {
         >
           Chi tiết
         </a>
+      ),
+    },
+    {
+      key: 2,
+      label: (
+        <EditTimeOrderSchedule
+          idOrder={itemEdit?._id}
+          dateWork={itemEdit?.date_work}
+          endDateWord={itemEdit?.end_date_work}
+        />
       ),
     },
   ];

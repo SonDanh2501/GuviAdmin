@@ -118,3 +118,10 @@ export const editTimeOrderApi = (id, data) => {
     data
   );
 };
+
+export const editTimeOrderScheduleApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/order_manager/edit_date_work/${id}?lang=vi`,
+    data
+  );
+};

@@ -88,7 +88,7 @@ const CleaningHourly = (props) => {
         })
         .catch((err) => {});
     }
-  }, [id]);
+  }, [id, idService]);
 
   const dateFormat = "YYYY-MM-DD";
 

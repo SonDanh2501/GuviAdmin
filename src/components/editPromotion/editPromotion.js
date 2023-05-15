@@ -85,6 +85,7 @@ const EditPromotion = ({ state, setState, data }) => {
   ]);
   const options = [];
   const optionsCustomer = [];
+  const serviceOption = [];
 
   const dispatch = useDispatch();
   const service = useSelector(getService);
@@ -93,10 +94,6 @@ const EditPromotion = ({ state, setState, data }) => {
     getGroupCustomerApi(0, 10)
       .then((res) => setDataGroupCustomer(res.data))
       .catch((err) => console.log(err));
-
-    // fetchCustomers(0, 200, "")
-    //   .then((res) => setDataCustomer(res?.data))
-    //   .catch((err) => console.log(err));
   }, []);
 
   dataGroupCustomer.map((item, index) => {
@@ -109,6 +106,13 @@ const EditPromotion = ({ state, setState, data }) => {
   dataCustomer.map((item, index) => {
     optionsCustomer.push({
       label: item?.full_name,
+      value: item?._id,
+    });
+  });
+
+  service.map((item, index) => {
+    serviceOption.push({
+      label: item?.title?.vi,
       value: item?._id,
     });
   });
@@ -641,22 +645,13 @@ const EditPromotion = ({ state, setState, data }) => {
                     <div>
                       <h5>9. Dịch vụ áp dụng</h5>
                       <Label>Các dịch vụ</Label>
-
-                      <CustomTextInput
-                        className="select-type-promo"
-                        name="select"
-                        type="select"
+                      <Select
+                        style={{ width: "100%" }}
                         value={serviceApply}
                         onChange={(e) => {
-                          setServiceApply(e.target.value);
+                          setServiceApply(e);
                         }}
-                        body={service.map((item, index) => {
-                          return (
-                            <option key={index} value={item?._id}>
-                              {item?.title?.vi}
-                            </option>
-                          );
-                        })}
+                        options={serviceOption}
                       />
                     </div>
                   )}

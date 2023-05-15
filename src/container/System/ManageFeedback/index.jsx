@@ -4,6 +4,7 @@ import ReviewCollaborator from "./ReviewCollaborator";
 
 import "./index.scss";
 import { useEffect, useState } from "react";
+import ExamTest from "./ExamTest";
 
 const ManageFeedback = () => {
   const [tab, setTab] = useState("review");
@@ -44,7 +45,14 @@ const ManageFeedback = () => {
         })}
       </div>
       <div className="mt-3">
-        {tab === "review" ? <ReviewCollaborator /> : <Feedback />}
+        {tab === "review" ? (
+          <ReviewCollaborator />
+        ) : tab === "feedback" ? (
+          <Feedback />
+        ) : (
+          // <ExamTest />
+          <></>
+        )}
       </div>
     </>
   );
@@ -63,4 +71,9 @@ const DATA_TAB = [
     title: "Phản hồi",
     value: "feedback",
   },
+  // {
+  //   id: 3,
+  //   title: "Bài kiểm tra",
+  //   value: "examTest",
+  // },
 ];

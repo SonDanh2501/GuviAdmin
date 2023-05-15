@@ -5,6 +5,7 @@ import { getType } from "../actions/banner";
 import {
   createGroupServiceApi,
   getGroupServiceApi,
+  getListService,
   getServiceApi,
   updateGroupServiceApi,
 } from "../../api/service";
@@ -72,7 +73,7 @@ function* updateGroupServiceSaga(action) {
 //services
 function* fetchServiceSaga() {
   try {
-    const response = yield call(getServiceApi);
+    const response = yield call(getListService);
     yield put(getServiceAction.getServiceSuccess(response.data));
   } catch (err) {
     console.error(err);
