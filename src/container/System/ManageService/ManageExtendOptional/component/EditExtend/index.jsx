@@ -96,6 +96,7 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
     getDistrictApi()
       .then((res) => {
         setDataCity(res?.aministrative_division);
+        setDataDistrict(res?.aministrative_division[1].districts);
       })
       .catch((err) => {});
   }, []);
@@ -427,6 +428,9 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
           .catch((err) => {});
       })
       .catch((err) => {
+        errorNotify({
+          message: err,
+        });
         setIsLoading(false);
       });
   };
@@ -862,12 +866,11 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
           </Col>
         </Row>
         <Button className="btn-create-extend" onClick={onEditExtend}>
-          {" "}
-          Tạo
+          Chỉnh sửa
         </Button>
-      </Drawer>
 
-      {isLoading && <LoadingPagination />}
+        {isLoading && <LoadingPagination />}
+      </Drawer>
     </div>
   );
 };

@@ -453,16 +453,16 @@ const DetailsOrder = () => {
         </a>
       ),
     },
-    {
-      key: 2,
-      label: (
-        <EditTimeOrderSchedule
-          idOrder={itemEdit?._id}
-          dateWork={itemEdit?.date_work}
-          endDateWord={itemEdit?.end_date_work}
-        />
-      ),
-    },
+    // {
+    //   key: 2,
+    //   label: (
+    //     <EditTimeOrderSchedule
+    //       idOrder={itemEdit?._id}
+    //       dateWork={itemEdit?.date_work}
+    //       endDateWord={itemEdit?.end_date_work}
+    //     />
+    //   ),
+    // },
   ];
 
   return (

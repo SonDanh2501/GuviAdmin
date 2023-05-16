@@ -36,6 +36,13 @@ const AddReason = () => {
   ]);
   const [note, setNote] = useState("");
   const [applyUser, setApplyUser] = useState("customer");
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
 
   const dispatch = useDispatch();
 

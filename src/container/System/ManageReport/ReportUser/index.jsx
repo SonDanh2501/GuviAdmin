@@ -276,7 +276,7 @@ const ReportUser = () => {
             <ComposedChart
               width={500}
               height={300}
-              data={dataChart?.slice(0, moment().utc().month() + 1)}
+              data={dataChart.slice(0, moment().utc().month() + 1)}
               margin={{
                 top: 5,
                 right: 30,
@@ -299,7 +299,6 @@ const ReportUser = () => {
                 fill="#82ca9d"
                 minPointSize={20}
                 barSize={40}
-                // label={{ position: "centerTop", fill: "white" }}
                 name="Khách hàng cũ"
                 stackId="a"
               />
@@ -309,7 +308,6 @@ const ReportUser = () => {
                 fill="#4376CC"
                 minPointSize={20}
                 barSize={40}
-                // label={{ position: "centerTop", fill: "white" }}
                 name="Khách hàng mới"
                 stackId="a"
               />
