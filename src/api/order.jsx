@@ -77,9 +77,10 @@ export const changeStatusOrderApi = (id, data) => {
   );
 };
 
-export const cancelGroupOrderApi = (id) => {
+export const cancelGroupOrderApi = (id, data) => {
   return axiosClient.post(
-    `/admin/group-order-manager/cancel_group_order_v2/${id}?lang=vi`
+    `/admin/group-order-manager/cancel_group_order_v2/${id}?lang=vi`,
+    data
   );
 };
 

@@ -7,6 +7,7 @@ import {
   Pagination,
   Popconfirm,
   Row,
+  Select,
   Space,
   Table,
   Tabs,
@@ -32,6 +33,8 @@ import { getUser } from "../../../redux/selectors/auth";
 import { MoreOutlined } from "@ant-design/icons";
 import EditTimeOrder from "../ManageOrder/EditTimeGroupOrder";
 import EditTimeOrderSchedule from "./EditTimeOrderSchedule";
+import { getListReasonCancel } from "../../../api/reasons";
+import { ModalBody, ModalFooter, ModalHeader, Modal } from "reactstrap";
 
 const DetailsOrder = () => {
   const { state } = useLocation();
@@ -44,6 +47,7 @@ const DetailsOrder = () => {
   const [totalHistory, setTotalHistory] = useState([]);
   const [hideShow, setHideShow] = useState(false);
   const [modal, setModal] = useState(false);
+  const [modalDelete, setModalDelete] = useState(false);
   const [open, setOpen] = useState(false);
   const [openStatus, setOpenStatus] = useState(false);
   const [openCancelOrder, setOpenCancelOrder] = useState(false);
@@ -52,10 +56,29 @@ const DetailsOrder = () => {
   const [itemEdit, setItemEdit] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [price, setPrice] = useState(0);
+  const [idReason, setIdReason] = useState("");
+  const [dataReason, setDataReason] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toggle = () => setModal(!modal);
+  const toggleDelete = () => setModalDelete(!modalDelete);
+  const reasonOption = [];
   const user = useSelector(getUser);
+
+  useEffect(() => {
+    getListReasonCancel()
+      .then((res) => {
+        setDataReason(res?.data);
+      })
+      .catch((err) => {});
+  }, []);
+
+  dataReason?.map((item) => {
+    reasonOption.push({
+      value: item?._id,
+      label: item?.title?.vi,
+    });
+  });
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -131,10 +154,13 @@ const DetailsOrder = () => {
     setOpenCancelOrder(true);
   };
 
-  const handleOk = (_id) => {
+  const handleCancelGroupOrder = (_id) => {
     dispatch(loadingAction.loadingRequest(true));
-    cancelGroupOrderApi(_id)
+    cancelGroupOrderApi(_id, {
+      id_reason_cancel: idReason,
+    })
       .then((res) => {
+        setModalDelete(false);
         getOrderByGroupOrderApi(id)
           .then((res) => {
             setHideShow(true);
@@ -150,7 +176,6 @@ const DetailsOrder = () => {
           });
       })
       .catch((err) => {
-        setModal(!modal);
         errorNotify({
           message: err,
         });
@@ -453,16 +478,16 @@ const DetailsOrder = () => {
         </a>
       ),
     },
-    // {
-    //   key: 2,
-    //   label: (
-    //     <EditTimeOrderSchedule
-    //       idOrder={itemEdit?._id}
-    //       dateWork={itemEdit?.date_work}
-    //       endDateWord={itemEdit?.end_date_work}
-    //     />
-    //   ),
-    // },
+    {
+      key: 2,
+      label: (
+        <EditTimeOrderSchedule
+          idOrder={itemEdit?._id}
+          dateWork={itemEdit?.date_work}
+          endDateWord={itemEdit?.end_date_work}
+        />
+      ),
+    },
   ];
 
   return (
@@ -840,23 +865,26 @@ const DetailsOrder = () => {
                       <div>
                         {dataGroup?.status === "pending" ||
                         dataGroup?.status === "confirm" ? (
-                          <Popconfirm
-                            title="Bạn có muốn huỷ việc"
-                            // description="Open Popconfirm with async logic"
-                            open={open}
-                            onConfirm={() => handleOk(dataGroup?._id)}
-                            okButtonProps={{
-                              loading: confirmLoading,
-                            }}
-                            onCancel={handleCancel}
-                          >
-                            <Button
-                              className="btn-cancel"
-                              onClick={showPopconfirm}
-                            >
-                              Huỷ việc
-                            </Button>
-                          </Popconfirm>
+                          // <Popconfirm
+                          //   title="Bạn có muốn huỷ việc"
+                          //   // description="Open Popconfirm with async logic"
+                          //   open={open}
+                          //   onConfirm={() => handleOk(dataGroup?._id)}
+                          //   okButtonProps={{
+                          //     loading: confirmLoading,
+                          //   }}
+                          //   onCancel={handleCancel}
+                          // >
+                          //   <Button
+                          //     className="btn-cancel"
+                          //     onClick={showPopconfirm}
+                          //   >
+                          //     Huỷ việc
+                          //   </Button>
+                          // </Popconfirm>
+                          <Button className="btn-cancel" onClick={toggleDelete}>
+                            Huỷ việc
+                          </Button>
                         ) : null}
                       </div>
                     )}
@@ -1011,6 +1039,38 @@ const DetailsOrder = () => {
           </Tabs.TabPane>
         </Tabs>
       </>
+
+      <div>
+        <Modal isOpen={modalDelete} toggle={toggleDelete}>
+          <ModalHeader toggle={toggleDelete}>Huỷ công việc</ModalHeader>
+          <ModalBody>
+            <a>
+              Bạn có chắc muốn huỷ việc
+              {dataGroup?.id_view} này không?
+            </a>
+            <div>
+              <a>Chọn lí do huỷ</a>
+              <Select
+                style={{ width: "100%" }}
+                value={idReason}
+                onChange={(e) => setIdReason(e)}
+                options={reasonOption}
+              />
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              type="primary"
+              onClick={() => handleCancelGroupOrder(dataGroup?._id)}
+            >
+              Có
+            </Button>
+            <Button type="#ddd" onClick={toggleDelete}>
+              Không
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
     </div>
   );
 };

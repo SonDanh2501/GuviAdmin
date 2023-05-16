@@ -1,4 +1,4 @@
-import { DatePicker, List } from "antd";
+import { DatePicker, List, Select } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -155,20 +155,19 @@ const Information = ({ data, image }) => {
               />
             </Col>
             <Col lg="6" className="gender">
-              <Label>Giới tính</Label>
-              <Input
-                className="select-gender"
-                placeholder="Chọn giới tính"
-                type="select"
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-              >
-                <>
-                  <option value={"other"}>Khác</option>
-                  <option value={"male"}>Nam</option>
-                  <option value={"female"}>Nữ</option>
-                </>
-              </Input>
+              <div>
+                <a>Giới tính</a>
+                <Select
+                  style={{ width: "100%" }}
+                  value={gender}
+                  onChange={(e) => setGender(e)}
+                  options={[
+                    { value: "other", label: "Khác" },
+                    { value: "male", label: "Nam" },
+                    { value: "female", label: "Nữ" },
+                  ]}
+                />
+              </div>
             </Col>
           </Row>
           <Row>
@@ -235,25 +234,23 @@ const Information = ({ data, image }) => {
           </Row>
           <Row>
             <Col lg="6">
-              <CustomTextInput
-                label={"Trình độ văn hoá"}
-                className="select"
-                type="select"
-                value={level}
-                onChange={(e) => setLevel(e.target.value)}
-                body={
-                  <>
-                    <option>Chọn trình độ văn hoá</option>
-                    <option value={"5/12"}>5/12</option>
-                    <option value={"9/12"}>9/12</option>
-                    <option value={"12/12"}>12/12</option>
-                    <option value={"Cao đẳng"}>Cao đẳng</option>
-                    <option value={"Đại học"}>Đại học</option>
-                    <option value={"Thạc sĩ"}>Thạc sĩ</option>
-                    <option value={"Tiến sĩ"}>Tiến sĩ</option>
-                  </>
-                }
-              />
+              <div>
+                <a>Trình độ văn hoá</a>
+                <Select
+                  style={{ width: "100%" }}
+                  value={level}
+                  onChange={(e) => setLevel(e)}
+                  options={[
+                    { value: "5/12", label: "5/12" },
+                    { value: "9/12", label: "9/12" },
+                    { value: "12/12", label: "12/12" },
+                    { value: "Cao đẳng", label: "Cao đẳng" },
+                    { value: "Đại học", label: "Đại học" },
+                    { value: "Thạc sĩ", label: "Thạc sĩ" },
+                    { value: "Tiến sĩ", label: "Tiến sĩ" },
+                  ]}
+                />
+              </div>
             </Col>
             <Col lg="6">
               <CustomTextInput

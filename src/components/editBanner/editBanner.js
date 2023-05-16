@@ -1,7 +1,6 @@
-import { Image } from "antd";
+import { Drawer, Image, Input, Select } from "antd";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Form, Input, Label, Modal } from "reactstrap";
 import { updateBanner } from "../../api/banner";
 import { postFile } from "../../api/file";
 import resizeFile from "../../helper/resizer";
@@ -15,19 +14,46 @@ import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./editBanner.scss";
 
-const EditBanner = ({ state, setState, data }) => {
+const EditBanner = ({ data }) => {
   const [title, setTitle] = useState("");
   const [imgThumbnail, setImgThumbnail] = useState("");
   const [typeLink, setTypeLink] = useState("url");
   const [linkID, setLinkId] = useState("");
   const [position, setPosition] = useState("");
-  const [kindService, setKindService] = useState("giup_viec_co_dinh");
+  const [kindService, setKindService] = useState("");
   const dispatch = useDispatch();
   const promotion = useSelector(getPromotionSelector);
   const service = useSelector(getService);
+  const promotionOption = [];
+  const serviceOption = [];
+  const [open, setOpen] = useState(false);
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
     dispatch(getPromotion.getPromotionRequest());
   }, [dispatch]);
+
+  promotion?.map((item) => {
+    promotionOption.push({
+      value: item?._id,
+      label: item?.title?.vi,
+    });
+  });
+
+  service?.map((item) => {
+    serviceOption?.push({
+      value: item?._id,
+      label: item?.title?.vi,
+      kind: item?.kind,
+    });
+  });
 
   useEffect(() => {
     setTitle(data?.title);
@@ -35,13 +61,7 @@ const EditBanner = ({ state, setState, data }) => {
     setTypeLink(data?.type_link);
     setLinkId(data?.link_id);
     setPosition(data?.position);
-    setKindService(
-      data?.link_id === "6321598ea6c81260452bf4f5"
-        ? "giup_viec_theo_gio"
-        : data?.link_id === "63215877a6c81260452bf4f0"
-        ? "giup_viec_co_dinh"
-        : ""
-    );
+    setKindService(data?.kind);
   }, [data]);
 
   const onChangeThumbnail = async (e) => {
@@ -89,8 +109,8 @@ const EditBanner = ({ state, setState, data }) => {
       kind: kindService,
     })
       .then((res) => {
-        dispatch(getBanners.getBannersRequest(0, 10));
-        setState(!state);
+        dispatch(getBanners.getBannersRequest({ start: 0, length: 20 }));
+        setOpen(false);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -98,143 +118,109 @@ const EditBanner = ({ state, setState, data }) => {
           message: err,
         });
         dispatch(loadingAction.loadingRequest(false));
-        setState(!state);
       });
   }, [data, title, imgThumbnail, typeLink, linkID, position, kindService]);
 
   return (
     <>
-      {/* Modal */}
-      <Modal
-        className="modal-dialog-centered"
-        isOpen={state}
-        toggle={() => setState(!state)}
+      <a onClick={showDrawer}>Chỉnh sửa</a>
+      <Drawer
+        title="Basic Drawer"
+        placement="right"
+        onClose={onClose}
+        open={open}
       >
-        <div className="modal-header">
-          <h3 className="modal-title" id="exampleModalLabel">
-            Sửa banner
-          </h3>
-          <button className="btn-close" onClick={() => setState(!state)}>
-            <i className="uil uil-times-square"></i>
-          </button>
+        <div>
+          <a>Tiêu đề</a>
+          <Input
+            style={{ width: "100%" }}
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
         </div>
-        <div className="modal-body">
-          <Form>
-            <CustomTextInput
-              label={"Tiêu đề"}
-              id="exampleTitle"
-              name="title"
-              placeholder="Enter your title"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
 
-            <CustomTextInput
-              label={"Kiểu banner"}
-              id="exampleType_link"
-              name="type_link"
-              className="select-code-phone"
-              type="select"
-              defaultValue={typeLink}
-              onChange={(e) => setTypeLink(e.target.value)}
-              body={
-                <>
-                  <option value={"url"}>URL</option>
-                  <option value={"promotion"}>Promotion</option>
-                  <option value={"service"}>Service</option>
-                </>
-              }
-            />
+        <div className="mt-2">
+          <a>Loại banner</a>
+          <Select
+            style={{ width: "100%" }}
+            value={typeLink}
+            onChange={(e) => setTypeLink(e)}
+            options={[
+              { value: "url", label: "URL" },
+              { value: "promotion", label: "Promotion" },
+              { value: "service", label: "Service" },
+            ]}
+          />
+        </div>
+
+        <div className="mt-2">
+          {typeLink === "url" ? (
             <div>
-              {typeLink === "url" ? (
-                <CustomTextInput
-                  label={"Link URL"}
-                  id="examplelink_url"
-                  name="link_url"
-                  type="text"
-                  value={linkID}
-                  onChange={(e) => setLinkId(e.target.value)}
-                />
-              ) : typeLink === "promotion" ? (
-                <CustomTextInput
-                  label={"Link ID"}
-                  className="select-code-phone"
-                  id="examplelink_id"
-                  name="link_id"
-                  type="select"
-                  value={linkID}
-                  onChange={(e) => {
-                    if (e.target.value === "6321598ea6c81260452bf4f5") {
-                      setLinkId(e.target.value);
-                      setKindService("giup_viec_theo_gio");
-                    } else if (e.target.value === "63215877a6c81260452bf4f0") {
-                      setLinkId(e.target.value);
-                      setKindService("giup_viec_co_dinh");
-                    }
-                  }}
-                  body={promotion.map((item, index) => {
-                    return (
-                      <option key={index} value={item?._id}>
-                        {item?.title?.vi}
-                      </option>
-                    );
-                  })}
-                />
-              ) : (
-                <CustomTextInput
-                  label={"Link ID"}
-                  className="select-code-phone"
-                  id="examplelink_id"
-                  name="link_id"
-                  type="select"
-                  value={linkID}
-                  onChange={(e) => setLinkId(e.target.value)}
-                  body={service.map((item, index) => {
-                    return (
-                      <option key={index} value={item?._id}>
-                        {item?.title?.vi}
-                      </option>
-                    );
-                  })}
-                />
-              )}
-            </div>
-            <CustomTextInput
-              label={"Position"}
-              iid="examplePosition"
-              name="position"
-              placeholder="0 or 1, 2, 3, ..."
-              type="number"
-              value={position}
-              onChange={(e) => setPosition(e.target.value)}
-            />
-
-            <div>
-              <a className="label">Hình ảnh 360px * 137px, tỉ lệ 2,62</a>
-
+              <a>Link URL</a>
               <Input
-                id="exampleImage"
-                name="image"
-                type="file"
-                accept={".jpg,.png,.jpeg"}
-                className="input-group"
-                onChange={onChangeThumbnail}
+                style={{ width: "100%" }}
+                type="text"
+                value={linkID}
+                onChange={(e) => setLinkId(e.target.value)}
               />
-              {imgThumbnail && (
-                <Image src={imgThumbnail} className="img-thumbnail-banner" />
-              )}
             </div>
-
-            <CustomButton
-              title="Sửa"
-              className="float-right btn-edit-banner"
-              type="button"
-              onClick={onEditBanner}
-            />
-          </Form>
+          ) : typeLink === "promotion" ? (
+            <div>
+              <a>Link ID</a>
+              <Select
+                style={{ width: "100%" }}
+                value={linkID}
+                onChange={(value, label) => {
+                  setLinkId(value);
+                  setKindService(label?.kind);
+                }}
+                options={promotionOption}
+              />
+            </div>
+          ) : (
+            <div>
+              <a>Link ID</a>
+              <Select
+                style={{ width: "100%" }}
+                value={linkID}
+                onChange={(e) => setLinkId(e)}
+                options={serviceOption}
+              />
+            </div>
+          )}
         </div>
-      </Modal>
+        <div className="mt-2">
+          <a>Vị trí</a>
+          <Input
+            type="number"
+            value={position}
+            onChange={(e) => setPosition(e.target.value)}
+          />
+        </div>
+
+        <div className="mt-2">
+          <a className="label-img">Hình ảnh 360px * 137px, tỉ lệ 2,62</a>
+          <Input
+            id="exampleImage"
+            name="image"
+            type="file"
+            accept={".jpg,.png,.jpeg"}
+            className="input-group"
+            onChange={onChangeThumbnail}
+          />
+          {imgThumbnail && (
+            <Image src={imgThumbnail} className="img-thumbnail-banner" />
+          )}
+        </div>
+
+        <CustomButton
+          title="Sửa"
+          className="float-right btn-edit-banner"
+          type="button"
+          onClick={onEditBanner}
+        />
+      </Drawer>
     </>
   );
 };

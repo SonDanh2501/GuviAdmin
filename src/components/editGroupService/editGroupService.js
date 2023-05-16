@@ -12,6 +12,7 @@ import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./editGroupService.scss";
 import { getGroupServiceApi, updateGroupServiceApi } from "../../api/service";
 import { errorNotify } from "../../helper/toast";
+import { Select } from "antd";
 
 const EditGroupService = ({ state, setState, data, setData, setTotal }) => {
   const [titleVN, setTitleVN] = useState("");
@@ -170,23 +171,22 @@ const EditGroupService = ({ state, setState, data, setData, setTotal }) => {
               value={kind}
               onChange={(e) => setKind(e.target.value)}
             />
-            <CustomTextInput
-              label={"Loại dịch vụ"}
-              id="exampleType"
-              name="type"
-              type="select"
-              className="select-code-phone"
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              body={
-                <>
-                  <option value="single">Single</option>
-                  <option value="multi_tab">MultipleTab</option>
-                </>
-              }
-            />
             <div>
-              <Label for="exampleImage">Thumbnail</Label>
+              <a>Loại dịch vụ</a>
+              <Select
+                value={type}
+                style={{ width: "100%" }}
+                onChange={(e) => {
+                  setType(e);
+                }}
+                options={[
+                  { value: "single", label: "Single" },
+                  { value: "multi_tab", label: "MultipleTab" },
+                ]}
+              />
+            </div>
+            <div>
+              <a for="exampleImage">Thumbnail</a>
               <Input
                 id="exampleImage"
                 name="image"

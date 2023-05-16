@@ -1,4 +1,4 @@
-import { Button, DatePicker, Input, List, Switch } from "antd";
+import { Button, DatePicker, Input, List, Select, Switch } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { searchCustomers } from "../../../../../api/customer";
 import {
@@ -760,20 +760,20 @@ const BussinessType = (props) => {
           />
         </div> */}
 
-        <CustomTextInput
-          label="Phương thức thanh toán"
-          type="select"
-          classNameForm="input-form-select-payment"
-          className="input-select-payment"
-          value={paymentMethod}
-          onChange={(e) => setPaymentMethod(e.target.value)}
-          body={
-            <>
-              <option value={"cash"}>Tiền mặt</option>
-              <option value={"point"}>G-pay</option>
-            </>
-          }
-        />
+        <div>
+          <a>Phương thức thanh toán</a>
+          <Select
+            value={paymentMethod}
+            style={{ width: "100%" }}
+            onChange={(e) => {
+              setPaymentMethod(e);
+            }}
+            options={[
+              { value: "cash", label: "Tiền mặt" },
+              { value: "point", label: "G-pay" },
+            ]}
+          />
+        </div>
 
         <CustomTextInput
           label="Ghi chú"

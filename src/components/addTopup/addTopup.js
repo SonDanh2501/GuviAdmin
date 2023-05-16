@@ -40,10 +40,6 @@ const AddPopup = ({ type, setDataT, setTotal }) => {
     setOpen(false);
   };
 
-  const valueSearch = (value) => {
-    setName(value);
-  };
-
   const searchCollaborator = useCallback(
     _debounce((value) => {
       setName(value);
@@ -153,7 +149,7 @@ const AddPopup = ({ type, setDataT, setTotal }) => {
                 value={name}
                 onChange={(e) => {
                   searchCollaborator(e.target.value);
-                  valueSearch(e.target.value);
+                  setName(e.target.value);
                 }}
               />
               {errorName && <a className="error">{errorName}</a>}
@@ -202,17 +198,20 @@ const AddPopup = ({ type, setDataT, setTotal }) => {
               onChange={(e) => setNote(e.target.value)}
             />
 
-            <Select
-              defaultValue="Vui lòng chọn ví"
-              style={{ width: "100%" }}
-              onChange={(e) => {
-                setWallet(e);
-              }}
-              options={[
-                { value: "wallet", label: "Ví chính" },
-                { value: "gift_wallet", label: "Ví thưởng" },
-              ]}
-            />
+            <div>
+              <a>Ví</a>
+              <Select
+                value={wallet}
+                style={{ width: "100%" }}
+                onChange={(e) => {
+                  setWallet(e);
+                }}
+                options={[
+                  { value: "wallet", label: "Ví chính" },
+                  { value: "gift_wallet", label: "Ví thưởng" },
+                ]}
+              />
+            </div>
 
             <CustomButton
               title="Nạp tiền"
