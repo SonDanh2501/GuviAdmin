@@ -189,13 +189,13 @@ export default function ReasonManage() {
               <Col className="text-left">
                 <AddReason />
               </Col>
-              <Col>
+              {/* <Col>
                 <CustomTextInput
                   placeholder="Tìm kiếm"
                   type="text"
                   // onChange={(e) => handleSearch(e.target.value)}
                 />
-              </Col>
+              </Col> */}
             </Row>
           </CardHeader>
 

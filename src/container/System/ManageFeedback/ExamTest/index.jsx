@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import "./styles.scss";
 import { getListTestCollaboratorApi } from "../../../../api/feedback";
-import { Table } from "antd";
+import { Pagination, Table } from "antd";
 import moment from "moment";
 
 const ExamTest = () => {
+  const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   useEffect(() => {
-    getListTestCollaboratorApi(0, 20)
+    getListTestCollaboratorApi(0, 10)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -49,11 +50,34 @@ const ExamTest = () => {
     },
   ];
 
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const start = page * data.length - data.length;
+    getListTestCollaboratorApi(start, 10)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+
   return (
     <div>
       <a></a>
       <div>
         <Table dataSource={data} pagination={false} columns={columns} />
+      </div>
+      <div className="mt-1 div-pagination p-2">
+        <a>Tổng: {total}</a>
+        <div>
+          <Pagination
+            current={currentPage}
+            onChange={onChange}
+            total={total}
+            showSizeChanger={false}
+            pageSize={10}
+          />
+        </div>
       </div>
     </div>
   );

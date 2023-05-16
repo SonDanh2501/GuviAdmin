@@ -45,6 +45,7 @@ const ExtendOptional = () => {
       deleteExtendOptionalApi(_id)
         .then((res) => {
           setIsLoading(false);
+          setModal(false);
           getExtendByOptionalApi(id)
             .then((res) => {
               setData(res?.data);
@@ -133,7 +134,12 @@ const ExtendOptional = () => {
     {
       key: 1,
       label: (
-        <EditExtend data={itemEdit} setData={setData} setTotal={setTotal} />
+        <EditExtend
+          data={itemEdit}
+          setData={setData}
+          setTotal={setTotal}
+          idOption={id}
+        />
       ),
     },
     {
