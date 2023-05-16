@@ -12,6 +12,8 @@ import { errorNotify } from "../../../../helper/toast";
 import { loadingAction } from "../../../../redux/actions/loading";
 import { getNews } from "../../../../redux/actions/news";
 import { getNewSelector, getNewTotal } from "../../../../redux/selectors/news";
+import onToggle from "../../../../assets/images/on-button.png";
+import offToggle from "../../../../assets/images/off-button.png";
 import "./NewsManage.scss";
 
 export default function NewsManage() {
@@ -121,26 +123,10 @@ export default function NewsManage() {
   const items = [
     {
       key: "1",
-      label: (
-        <a
-          onClick={() => {
-            setModalEdit(!modalEdit);
-          }}
-        >
-          Chỉnh sửa
-        </a>
-      ),
+      label: <EditNews data={itemEdit} />,
     },
     {
       key: "2",
-      label: itemEdit?.is_active ? (
-        <a onClick={toggleBlock}>Chặn </a>
-      ) : (
-        <a onClick={toggleBlock}>Kích hoạt</a>
-      ),
-    },
-    {
-      key: "3",
       label: <a onClick={toggle}> Xoá</a>,
     },
   ];
@@ -186,6 +172,26 @@ export default function NewsManage() {
         );
       },
       align: "center",
+    },
+    {
+      key: "action",
+      render: (data) => (
+        <div>
+          {data?.is_active ? (
+            <img
+              className="img-unlock-banner"
+              src={onToggle}
+              onClick={toggleBlock}
+            />
+          ) : (
+            <img
+              className="img-unlock-banner"
+              src={offToggle}
+              onClick={toggleBlock}
+            />
+          )}
+        </div>
+      ),
     },
     {
       key: "action",
@@ -295,14 +301,6 @@ export default function NewsManage() {
               </Button>
             </ModalFooter>
           </Modal>
-        </div>
-
-        <div>
-          <EditNews
-            state={modalEdit}
-            setState={() => setModalEdit(!modalEdit)}
-            data={itemEdit}
-          />
         </div>
       </div>
     </React.Fragment>

@@ -1,4 +1,4 @@
-import { Drawer } from "antd";
+import { Drawer, Select } from "antd";
 import React, { memo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, Input, Label, List, Modal } from "reactstrap";
@@ -34,10 +34,6 @@ const AddPoint = ({ start, setDataL, setTotal }) => {
   };
   const onClose = ({ data }) => {
     setOpen(false);
-  };
-
-  const valueSearch = (value) => {
-    setName(value);
   };
 
   const searchCustomer = useCallback(
@@ -129,7 +125,7 @@ const AddPoint = ({ start, setDataL, setTotal }) => {
                 value={name}
                 onChange={(e) => {
                   searchCustomer(e.target.value);
-                  valueSearch(e.target.value);
+                  setName(e.target.value);
                 }}
               />
               {errorName && <a className="error">{errorName}</a>}
@@ -180,22 +176,19 @@ const AddPoint = ({ start, setDataL, setTotal }) => {
               onChange={(e) => setNote(e.target.value)}
             />
 
-            <CustomTextInput
-              label={"Chọn loại điểm"}
-              id="exampleNote"
-              name="note"
-              type="select"
-              className="select-input-wallet"
-              body={
-                <>
-                  <option value={""}>Vui lòng chọn loại điểm</option>
-                  <option value={"point"}>Điểm thưởng</option>
-                  <option value={"rank_point"}>Điểm thành viên</option>
-                </>
-              }
-              value={wallet}
-              onChange={(e) => setWallet(e.target.value)}
-            />
+            <div>
+              <a>Chọn loại điểm</a>
+              <Select
+                style={{ width: "100%" }}
+                value={wallet}
+                onChange={(e) => setWallet(e)}
+                options={[
+                  { value: "", label: "Vui lòng chọn loại điểm" },
+                  { value: "point", label: "Điểm thưởng" },
+                  { value: "rank_point", label: "Điểm thành viên" },
+                ]}
+              />
+            </div>
 
             <CustomButton
               title="Nạp điểm"

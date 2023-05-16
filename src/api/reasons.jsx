@@ -7,8 +7,8 @@ export const fetchReasons = (start, length) => {
     `/admin/reason_cancel_manager/get_list?start=${start}&length=${length}`
   );
 };
-export const fetchReasonById = () => {
-  return axiosClient.get("/admin/reason_cancel_manager/detail_item/:id");
+export const fetchReasonById = (id) => {
+  return axiosClient.get(`/admin/reason_cancel_manager/detail_item/${id}`);
 };
 export const updateReason = (id, payload) => {
   return axiosClient.post(
@@ -26,6 +26,12 @@ export const deleteReason = (id, payload) => {
   return axiosClient.post(
     `/admin/reason_cancel_manager/delete_item/${id}`,
     payload
+  );
+};
+
+export const getListReasonCancel = () => {
+  return axiosClient.get(
+    `/admin/reason_cancel_manager/get_list_reason_admin?lang=vi`
   );
 };
 

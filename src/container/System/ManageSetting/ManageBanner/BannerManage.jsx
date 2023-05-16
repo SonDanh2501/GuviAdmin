@@ -134,15 +134,7 @@ export default function BannerManage() {
   const items = [
     {
       key: "1",
-      label: (
-        <a
-          onClick={() => {
-            setModalEdit(!modalEdit);
-          }}
-        >
-          Chỉnh sửa
-        </a>
-      ),
+      label: <EditBanner data={itemEdit} />,
     },
     {
       key: "2",
@@ -268,14 +260,6 @@ export default function BannerManage() {
               />
             </div>
           </div>
-        </div>
-
-        <div>
-          <EditBanner
-            state={modalEdit}
-            setState={() => setModalEdit(!modalEdit)}
-            data={itemEdit}
-          />
         </div>
 
         <div>

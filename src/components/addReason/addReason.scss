@@ -4,6 +4,8 @@
   border-radius: 5px;
   height: 35px;
   background-color: #48cae4;
+  margin-top: 30px;
+  color: #fff;
 }
 
 .img-thumbnail {
@@ -21,7 +23,7 @@
 }
 
 .div-ticket {
-  width: 75%;
+  width: 100%;
 
   .btn-delete-punish {
     float: right;
@@ -29,6 +31,10 @@
   }
 }
 
-.btn-add-punish {
-  margin-top: 30px;
+.title-reason {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 14px;
+  color: #000000;
+  text-decoration: none;
 }
