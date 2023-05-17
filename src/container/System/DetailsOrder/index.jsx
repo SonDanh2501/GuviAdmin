@@ -48,6 +48,7 @@ const DetailsOrder = () => {
   const [hideShow, setHideShow] = useState(false);
   const [modal, setModal] = useState(false);
   const [modalDelete, setModalDelete] = useState(false);
+  const [modalDeleteList, setModalDeleteList] = useState(false);
   const [open, setOpen] = useState(false);
   const [openStatus, setOpenStatus] = useState(false);
   const [openCancelOrder, setOpenCancelOrder] = useState(false);
@@ -62,6 +63,7 @@ const DetailsOrder = () => {
   const navigate = useNavigate();
   const toggle = () => setModal(!modal);
   const toggleDelete = () => setModalDelete(!modalDelete);
+  const toggleDeleteList = () => setModalDeleteList(!modalDeleteList);
   const reasonOption = [];
   const user = useSelector(getUser);
 
@@ -212,33 +214,23 @@ const DetailsOrder = () => {
 
   const handleCancelOrder = (_id) => {
     dispatch(loadingAction.loadingRequest(true));
-    changeStatusOrderApi(_id, { status: "cancel" })
+    changeStatusOrderApi(_id, { status: "cancel", id_reason_cancel: idReason })
       .then((res) => {
+        setModalDeleteList(false);
         getOrderByGroupOrderApi(id)
           .then((res) => {
-            setOpenCancelOrder(false);
             setDataGroup(res?.data?.groupOrder);
             setDataList(res?.data?.listOrder);
             dispatch(loadingAction.loadingRequest(false));
           })
-          .catch((err) => {
-            errorNotify({
-              message: err,
-            });
-            dispatch(loadingAction.loadingRequest(false));
-          });
+          .catch((err) => {});
       })
       .catch((err) => {
-        setModal(!modal);
         errorNotify({
           message: err,
         });
         dispatch(loadingAction.loadingRequest(false));
       });
-  };
-
-  const handleCancel = () => {
-    setOpen(false);
   };
 
   const onChange = (page) => {
@@ -415,22 +407,9 @@ const DetailsOrder = () => {
               <div>
                 {data?.status === "pending" || data?.status === "confirm" ? (
                   <div>
-                    {rowIndex === index && (
-                      <Popconfirm
-                        title="Bạn có muốn huỷ việc"
-                        open={openCancelOrder}
-                        onConfirm={() => handleCancelOrder(data?._id)}
-                        okButtonProps={{
-                          loading: confirmLoading,
-                        }}
-                        onCancel={() => setOpenCancelOrder(false)}
-                      />
-                    )}
                     <Button
                       className="btn-confirm-order mt-1"
-                      onClick={() =>
-                        rowIndex === index ? showPopCancelOrder() : ""
-                      }
+                      onClick={toggleDeleteList}
                     >
                       Huỷ việc
                     </Button>
@@ -897,7 +876,6 @@ const DetailsOrder = () => {
                       onRow={(record, rowIndex) => {
                         return {
                           onClick: (event) => {
-                            setRowIndex(rowIndex);
                             setItemEdit(record);
                           },
                         };
@@ -1066,6 +1044,35 @@ const DetailsOrder = () => {
               Có
             </Button>
             <Button type="#ddd" onClick={toggleDelete}>
+              Không
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+
+      <div>
+        <Modal isOpen={modalDeleteList} toggle={toggleDeleteList}>
+          <ModalHeader toggle={toggleDeleteList}>Huỷ công việc</ModalHeader>
+          <ModalBody>
+            <a>Bạn có chắc muốn huỷ việc {itemEdit?.id_view} này không?</a>
+            <div>
+              <a>Chọn lí do huỷ</a>
+              <Select
+                style={{ width: "100%" }}
+                value={idReason}
+                onChange={(e) => setIdReason(e)}
+                options={reasonOption}
+              />
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              type="primary"
+              onClick={() => handleCancelOrder(itemEdit?._id)}
+            >
+              Có
+            </Button>
+            <Button type="#ddd" onClick={toggleDeleteList}>
               Không
             </Button>
           </ModalFooter>

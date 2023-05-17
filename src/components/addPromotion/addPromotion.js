@@ -97,7 +97,7 @@ const AddPromotion = ({ idService, tab }) => {
   const optionsCustomer = [];
   const serviceOption = [];
   const dispatch = useDispatch();
-
+  const fomart = "HH:mm";
   const service = useSelector(getService);
 
   useEffect(() => {
@@ -1020,20 +1020,16 @@ const AddPromotion = ({ idService, tab }) => {
                                 </div>
                                 <a>Thời gian bắt đầu</a>
                                 <TimePicker
-                                  defaultOpenValue={dayjs(
-                                    "00:00:00",
-                                    "HH:mm:ss"
-                                  )}
+                                  defaultOpenValue={dayjs("00:00:00", fomart)}
+                                  format={fomart}
                                   onChange={(time, timeString) =>
                                     changeTimeStartApply(timeString, index)
                                   }
                                 />
                                 <a>Thời gian kết thúc</a>
                                 <TimePicker
-                                  defaultOpenValue={dayjs(
-                                    "00:00:00",
-                                    "HH:mm:ss"
-                                  )}
+                                  defaultOpenValue={dayjs("00:00:00", fomart)}
+                                  format={fomart}
                                   onChange={(time, timeString) =>
                                     changeTimeEndApply(timeString, index)
                                   }
