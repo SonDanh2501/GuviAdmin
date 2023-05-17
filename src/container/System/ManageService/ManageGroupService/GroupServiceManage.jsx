@@ -109,13 +109,11 @@ export default function GroupServiceManage() {
     {
       key: "1",
       label: (
-        <a
-          onClick={() => {
-            setModalEdit(!modalEdit);
-          }}
-        >
-          Chỉnh sửa
-        </a>
+        <EditGroupService
+          data={itemEdit}
+          setData={setData}
+          setTotal={setTotal}
+        />
       ),
     },
     {
@@ -217,8 +215,6 @@ export default function GroupServiceManage() {
       <div className="div-head-service">
         <a className="label-service"> Tất cả dịch vụ</a>
         <AddGroupService
-          state={modalCreate}
-          setState={setModalCreate}
           setIsLoading={setIsLoading}
           setData={setData}
           setTotal={setTotal}
@@ -293,15 +289,7 @@ export default function GroupServiceManage() {
           </ModalFooter>
         </Modal>
       </div>
-      <div>
-        <EditGroupService
-          state={modalEdit}
-          setState={setModalEdit}
-          data={itemEdit}
-          setData={setData}
-          setTotal={setTotal}
-        />
-      </div>
+
       <Outlet />
 
       {isLoading && <LoadingPagination />}

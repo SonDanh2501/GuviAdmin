@@ -50,8 +50,8 @@ const ManageFeedback = () => {
         ) : tab === "feedback" ? (
           <Feedback />
         ) : (
-          // <ExamTest />
-          <></>
+          <ExamTest />
+          // <></>
         )}
       </div>
     </>

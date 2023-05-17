@@ -64,7 +64,7 @@ const TopupCollaborator = ({ type }) => {
       dispatch(loadingAction.loadingRequest(true));
       deleteMoneyCollaboratorApi(id, { is_delete: true })
         .then((res) => {
-          getTopupCollaboratorApi(0, 20, type)
+          getTopupCollaboratorApi(startPage, 20, type)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);
@@ -89,7 +89,7 @@ const TopupCollaborator = ({ type }) => {
       dispatch(loadingAction.loadingRequest(true));
       verifyMoneyCollaboratorApi(id, { is_verify_money: true })
         .then((res) => {
-          getTopupCollaboratorApi(0, 20, type)
+          getTopupCollaboratorApi(startPage, 20, type)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);
@@ -117,7 +117,7 @@ const TopupCollaborator = ({ type }) => {
       dispatch(loadingAction.loadingRequest(true));
       cancelMoneyCollaboratorApi(id)
         .then((res) => {
-          getTopupCollaboratorApi(0, 20, type)
+          getTopupCollaboratorApi(startPage, 20, type)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);

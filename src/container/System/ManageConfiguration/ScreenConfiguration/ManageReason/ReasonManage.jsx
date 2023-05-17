@@ -1,5 +1,5 @@
 import { Dropdown, Empty, Skeleton, Space, Table, Pagination } from "antd";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -40,9 +40,8 @@ export default function ReasonManage() {
   const [modal, setModal] = React.useState(false);
   const [modalBlock, setModalBlock] = React.useState(false);
 
-  React.useEffect(() => {
-    // dispatch(loadingAction.loadingRequest(true));
-    dispatch(getReasons.getReasonsRequest({ start: 0, length: 10 }));
+  useEffect(() => {
+    // dispatch(getReasons.getReasonsRequest({ start: 0, length: 10 }));
   }, [dispatch]);
 
   const toggle = () => setModal(!modal);
@@ -90,15 +89,7 @@ export default function ReasonManage() {
   const items = [
     {
       key: "1",
-      label: (
-        <a
-          onClick={() => {
-            setModalEdit(!modalEdit);
-          }}
-        >
-          Chỉnh sửa
-        </a>
-      ),
+      label: <EditReason data={itemEdit} />,
     },
     {
       key: "2",
@@ -116,42 +107,8 @@ export default function ReasonManage() {
       dataIndex: ["description", "vi"],
     },
     {
-      title: "Hình thức phạt (phạt tiền hoặc khoá app)",
-      dataIndex: "punish_type",
-    },
-    {
-      title: "Phạt tiền / Thời gian khoá app",
-      key: "action",
-      render: (record) => (
-        <a>
-          {record?.punish_type === "cash"
-            ? formatMoney(record?.punish)
-            : record?.punish / (60 * 1000)}
-        </a>
-      ),
-    },
-    {
       title: "Đối tượng áp dụng",
       dataIndex: "apply_user",
-      filters: [
-        {
-          text: "Collaborator",
-          value: "collaborator",
-        },
-        {
-          text: "Customer",
-          value: "customer",
-        },
-        {
-          text: "system_out_confirm",
-          value: "system_out_confirm",
-        },
-        {
-          text: "system_out_date",
-          value: "system_out_date",
-        },
-      ],
-      onFilter: (value, record) => record.apply_user.indexOf(value) === 0,
     },
     {
       title: "Ghi chú",
@@ -201,7 +158,7 @@ export default function ReasonManage() {
 
           <Table
             columns={columns}
-            dataSource={reason}
+            dataSource={[]}
             pagination={false}
             rowKey={(record) => record._id}
             rowSelection={{
@@ -217,10 +174,6 @@ export default function ReasonManage() {
                 },
               };
             }}
-            // locale={{
-            //   emptyText:
-            //     reason.length > 0 ? <Empty /> : <Skeleton active={true} />,
-            // }}
           />
           <div className="mt-2 div-pagination p-2">
             <a>Tổng: {totalReason}</a>
@@ -234,13 +187,7 @@ export default function ReasonManage() {
             </div>
           </div>
         </Card>
-        <div>
-          <EditReason
-            state={modalEdit}
-            setState={() => setModalEdit(!modalEdit)}
-            data={itemEdit}
-          />
-        </div>
+
         <div>
           <Modal isOpen={modal} toggle={toggle}>
             <ModalHeader toggle={toggle}>Xóa lí do huỷ việc</ModalHeader>

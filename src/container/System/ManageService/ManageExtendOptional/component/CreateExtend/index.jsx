@@ -34,6 +34,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
   const [thumbnailActive, setThumbnailActive] = useState("");
   const [position, setPosition] = useState("");
   const [price, setPrice] = useState();
+  const [estimate, setEstimate] = useState();
   const [isPlatformFee, setIsPlatformFee] = useState(false);
   const [platformFee, setPlatformFee] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -392,6 +393,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
       is_platform_fee: isPlatformFee,
       platform_fee: platformFee,
       id_optional_service: idOption,
+      estimate: estimate,
     })
       .then((res) => {
         setIsLoading(false);
@@ -464,6 +466,14 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                 placeholder="Nhập giá"
                 type="number"
                 onChange={(e) => setPrice(e.target.value)}
+              />
+            </div>
+            <div className="mt-2">
+              <a className="title-input-extend">Ước lượng thời gian</a>
+              <Input
+                placeholder="Nhập giá"
+                type="number"
+                onChange={(e) => setEstimate(e.target.value)}
               />
             </div>
             <div className="mt-2">

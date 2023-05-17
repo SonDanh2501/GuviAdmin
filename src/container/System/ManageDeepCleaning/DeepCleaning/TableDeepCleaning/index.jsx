@@ -14,6 +14,7 @@ import {
 } from "../../../../../api/requestCustomer";
 import "./deepCleaning.scss";
 import { errorNotify } from "../../../../../helper/toast";
+import LoadingPagination from "../../../../../components/paginationLoading";
 
 const TableDeepCleaning = (props) => {
   const { status } = props;
@@ -21,10 +22,12 @@ const TableDeepCleaning = (props) => {
   const [total, setTotal] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(1);
   const [statusModal, setStatusModal] = useState("done");
   const [modal, setModal] = useState(false);
   const [modalContacted, setModalContacted] = useState(false);
   const [modalStatus, setModalStatus] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const toggleContacted = () => setModalContacted(!modalContacted);
   const toggle = () => setModal(!modal);
   const toggleStatus = () => setModalStatus(!modalStatus);
@@ -42,15 +45,14 @@ const TableDeepCleaning = (props) => {
 
   const onDelete = useCallback(
     (id) => {
-      dispatch(loadingAction.loadingRequest(true));
-
+      setIsLoading(true);
       deleteCusomerRequest(id)
         .then((res) => {
-          getCusomerRequest(status, 0, 20, "")
+          setIsLoading(false);
+          getCusomerRequest(status, startPage, 20, "")
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);
-              dispatch(loadingAction.loadingRequest(false));
               setModal(false);
             })
             .catch((err) => {});
@@ -59,22 +61,22 @@ const TableDeepCleaning = (props) => {
           errorNotify({
             message: err,
           });
-          dispatch(loadingAction.loadingRequest(false));
+          setIsLoading(false);
         });
     },
-    [status]
+    [status, startPage]
   );
 
   const onContacted = useCallback(
     (id) => {
-      dispatch(loadingAction.loadingRequest(true));
+      setIsLoading(true);
       contactedCusomerRequest(id)
         .then((res) => {
-          getCusomerRequest(status, 0, 20, "")
+          setIsLoading(false);
+          getCusomerRequest(status, startPage, 20, "")
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);
-              dispatch(loadingAction.loadingRequest(false));
               setModal(false);
             })
             .catch((err) => {});
@@ -84,56 +86,54 @@ const TableDeepCleaning = (props) => {
           errorNotify({
             message: err,
           });
-          dispatch(loadingAction.loadingRequest(false));
+          setIsLoading(false);
         });
     },
-    [status]
+    [status, startPage]
   );
 
   const onChangeStatus = useCallback(
     (id) => {
-      dispatch(loadingAction.loadingRequest(true));
+      setIsLoading(true);
       if (statusModal === "done") {
         changeStatusCusomerRequest(id, { status: "done" })
           .then((res) => {
-            getCusomerRequest(status, 0, 20, "")
+            setIsLoading(false);
+            getCusomerRequest(status, startPage, 20, "")
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
-                dispatch(loadingAction.loadingRequest(false));
               })
               .catch((err) => {});
             setModalStatus(false);
-            dispatch(loadingAction.loadingRequest(false));
           })
           .catch((err) => {
             errorNotify({
               message: err,
             });
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
           });
       } else if (statusModal === "cancel") {
         changeStatusCusomerRequest(id, { status: "cancel" })
           .then((res) => {
-            getCusomerRequest(status, 0, 20, "")
+            getCusomerRequest(status, startPage, 20, "")
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
-                dispatch(loadingAction.loadingRequest(false));
               })
               .catch((err) => {});
             setModalStatus(false);
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
           })
           .catch((err) => {
             errorNotify({
               message: err,
             });
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
           });
       }
     },
-    [status, statusModal]
+    [status, statusModal, startPage]
   );
 
   const items = [
@@ -308,6 +308,7 @@ const TableDeepCleaning = (props) => {
   const onChange = (page) => {
     setCurrentPage(page);
     const start = page * data.length - data.length;
+    setStartPage(start);
     getCusomerRequest(status, start, 20, "")
       .then((res) => {
         setData(res?.data);
@@ -448,6 +449,8 @@ const TableDeepCleaning = (props) => {
           </ModalFooter>
         </Modal>
       </div>
+
+      {isLoading && <LoadingPagination />}
     </div>
   );
 };

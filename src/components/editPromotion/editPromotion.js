@@ -86,7 +86,7 @@ const EditPromotion = ({ state, setState, data }) => {
   const options = [];
   const optionsCustomer = [];
   const serviceOption = [];
-
+  const fomart = "HH:mm";
   const dispatch = useDispatch();
   const service = useSelector(getService);
 
@@ -955,12 +955,10 @@ const EditPromotion = ({ state, setState, data }) => {
                                 <TimePicker
                                   defaultOpenValue={dayjs(
                                     item?.start_time_local,
-                                    "HH:mm:ss"
+                                    fomart
                                   )}
-                                  value={dayjs(
-                                    item?.start_time_local,
-                                    "HH:mm:ss"
-                                  )}
+                                  value={dayjs(item?.start_time_local, fomart)}
+                                  format={fomart}
                                   onChange={(time, timeString) =>
                                     changeTimeStartApply(timeString, index)
                                   }
@@ -969,12 +967,10 @@ const EditPromotion = ({ state, setState, data }) => {
                                 <TimePicker
                                   defaultOpenValue={dayjs(
                                     item?.end_time_local,
-                                    "HH:mm:ss"
+                                    fomart
                                   )}
-                                  value={dayjs(
-                                    item?.end_time_local,
-                                    "HH:mm:ss"
-                                  )}
+                                  value={dayjs(item?.end_time_local, fomart)}
+                                  format={fomart}
                                   onChange={(time, timeString) =>
                                     changeTimeEndApply(timeString, index)
                                   }
