@@ -4,8 +4,15 @@ import { useDispatch } from "react-redux";
 import { Drawer, Input, Select } from "antd";
 import CustomButton from "../customButton/customButton";
 import "./addReason.scss";
+import {
+  createReason,
+  fetchReasons,
+  getListReasonCancel,
+} from "../../api/reasons";
+import { errorNotify } from "../../helper/toast";
 
-const AddReason = () => {
+const AddReason = (props) => {
+  const { setIsLoading, setData, setTotal, startPage } = props;
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
   const [type, setType] = useState("cash");
@@ -21,16 +28,43 @@ const AddReason = () => {
     setOpen(false);
   };
 
-  const dispatch = useDispatch();
-
-  const addReason = useCallback(() => {}, [
+  const addReason = useCallback(() => {
+    setIsLoading(true);
+    createReason({
+      title: {
+        vi: titleVN,
+        en: titleEN,
+      },
+      description: {
+        vi: descriptionVN,
+        en: descriptionEN,
+      },
+      apply_user: applyUser,
+      note: note,
+    })
+      .then((res) => {
+        setIsLoading(false);
+        setOpen(false);
+        fetchReasons(startPage, 10)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+      });
+  }, [
     titleVN,
     titleEN,
     descriptionVN,
     descriptionEN,
-    type,
     applyUser,
     note,
+    startPage,
   ]);
 
   return (

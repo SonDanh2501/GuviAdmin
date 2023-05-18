@@ -15,7 +15,12 @@ import {
 import { fetchCustomers, searchCustomers } from "../../api/customer";
 import { DATA_PAYMENT } from "../../api/fakeData";
 import { postFile } from "../../api/file";
-import { getGroupCustomerApi, getPromotionDetails } from "../../api/promotion";
+import {
+  fetchPromotion,
+  getGroupCustomerApi,
+  getPromotionDetails,
+  updatePromotion,
+} from "../../api/promotion";
 import resizeFile from "../../helper/resizer";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
@@ -25,7 +30,19 @@ import CustomTextInput from "../CustomTextInput/customTextInput";
 import CustomTextEditor from "../customTextEdittor";
 import "./editPromotionOrther.scss";
 
-const EditPromotionOrther = ({ state, setState, data }) => {
+const EditPromotionOrther = (props) => {
+  const {
+    state,
+    setState,
+    data,
+    startPage,
+    setDataPromo,
+    setTotalPromo,
+    type,
+    brand,
+    exchange,
+    idService,
+  } = props;
   const [formDiscount, setFormDiscount] = useState("amount");
   const [discountUnit, setDiscountUnit] = useState("amount");
   const [create, setCreate] = useState(false);
@@ -294,56 +311,66 @@ const EditPromotionOrther = ({ state, setState, data }) => {
 
   const onEditPromotion = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      updatePromotionAction.updatePromotionRequest({
-        id: data?._id,
-        data: {
-          title: {
-            vi: titleVN,
-            en: titleEN,
-          },
-          short_description: {
-            vi: shortDescriptionVN,
-            en: shortDescriptionEN,
-          },
-          description: {
-            vi: descriptionVN,
-            en: descriptionEN,
-          },
-          thumbnail: imgThumbnail,
-          image_background: imgBackground,
-          code: promoCode,
-          is_limit_date: limitedDate,
-          limit_start_date: limitedDate
-            ? new Date(startDate).toISOString()
-            : null,
-          limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
-          is_limit_count: limitedQuantity,
-          limit_count: limitedQuantity ? amount : 0,
-          is_id_group_customer: isGroupCustomer,
-          id_group_customer: groupCustomer,
-          is_id_customer: isCustomer,
-          id_customer: listCustomers,
-          service_apply: [],
-          is_limited_use: isUsePromo,
-          limited_use: isUsePromo ? usePromo : 0,
-          type_discount: "partner_promotion",
-          type_promotion: "code",
-          price_min_order: minimumOrder,
-          discount_unit: discountUnit,
-          discount_max_price: maximumDiscount,
-          discount_value: reducedValue,
-          is_delete: false,
-          is_exchange_point: isExchangePoint,
-          exchange_point: exchangePoint,
-          brand: namebrand,
-          exp_date_exchange: dateExchange,
-          position: position,
-          is_payment_method: isPaymentMethod,
-          payment_method: paymentMethod,
-        },
+
+    updatePromotion(data?._id, {
+      title: {
+        vi: titleVN,
+        en: titleEN,
+      },
+      short_description: {
+        vi: shortDescriptionVN,
+        en: shortDescriptionEN,
+      },
+      description: {
+        vi: descriptionVN,
+        en: descriptionEN,
+      },
+      thumbnail: imgThumbnail,
+      image_background: imgBackground,
+      code: promoCode,
+      is_limit_date: limitedDate,
+      limit_start_date: limitedDate ? new Date(startDate).toISOString() : null,
+      limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
+      is_limit_count: limitedQuantity,
+      limit_count: limitedQuantity ? amount : 0,
+      is_id_group_customer: isGroupCustomer,
+      id_group_customer: groupCustomer,
+      is_id_customer: isCustomer,
+      id_customer: listCustomers,
+      service_apply: [],
+      is_limited_use: isUsePromo,
+      limited_use: isUsePromo ? usePromo : 0,
+      type_discount: "partner_promotion",
+      type_promotion: "code",
+      price_min_order: minimumOrder,
+      discount_unit: discountUnit,
+      discount_max_price: maximumDiscount,
+      discount_value: reducedValue,
+      is_delete: false,
+      is_exchange_point: isExchangePoint,
+      exchange_point: exchangePoint,
+      brand: namebrand,
+      exp_date_exchange: dateExchange,
+      position: position,
+      is_payment_method: isPaymentMethod,
+      payment_method: paymentMethod,
+    })
+      .then((res) => {
+        dispatch(loadingAction.loadingRequest(false));
+        setState(false);
+        fetchPromotion(startPage, 10, type, brand, idService, exchange)
+          .then((res) => {
+            setDataPromo(res?.data);
+            setTotalPromo(res?.totalItem);
+          })
+          .catch((err) => {});
       })
-    );
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
   }, [
     titleVN,
     titleEN,
@@ -381,6 +408,11 @@ const EditPromotionOrther = ({ state, setState, data }) => {
     isPaymentMethod,
     paymentMethod,
     listCustomers,
+    type,
+    brand,
+    idService,
+    exchange,
+    startPage,
   ]);
 
   return (

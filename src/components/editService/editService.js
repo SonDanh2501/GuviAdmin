@@ -142,13 +142,6 @@ const EditService = (props) => {
 
   return (
     <>
-      {/* Button trigger modal */}
-      {/* <CustomButton
-        title="Thêm dịch vụ"
-        className="btn-add-service"
-        type="button"
-        onClick={showDrawer}
-      /> */}
       <a onClick={showDrawer}>Chỉnh sửa</a>
       <Drawer
         title="Thêm dịch vụ"
@@ -167,7 +160,7 @@ const EditService = (props) => {
             onChange={(e) => setTitleVN(e.target.value)}
           />
           <Input
-            className="input-enlish"
+            style={{ width: 2 }}
             value={titleEN}
             placeholder="Nhập tiêu đề tiếng Anh"
             onChange={(e) => setTitleEN(e.target.value)}

@@ -1,24 +1,19 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Form, Modal } from "reactstrap";
-import { loadingAction } from "../../redux/actions/loading";
-import { createReason, updateReason } from "../../redux/actions/reason";
 import CustomButton from "../customButton/customButton";
-import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./editReason.scss";
 import { Drawer, Input, Select } from "antd";
+import { fetchReasons, updateReason } from "../../api/reasons";
+import { errorNotify } from "../../helper/toast";
 
-const EditReason = ({ data }) => {
+const EditReason = (props) => {
+  const { data, setIsLoading, setData, setTotal, startPage } = props;
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
-  const [type, setType] = useState("cash");
   const [descriptionVN, setDescriptionVN] = useState("");
   const [descriptionEN, setDescriptionEN] = useState("");
-  const [moneyReason, setMoneyReason] = useState();
-  const [timeReason, setTimeReason] = useState();
   const [note, setNote] = useState("");
-  const [applyUser, setApplyUser] = useState("customer");
-  const dispatch = useDispatch();
+  const [applyUser, setApplyUser] = useState("");
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -31,49 +26,51 @@ const EditReason = ({ data }) => {
   useEffect(() => {
     setTitleVN(data?.title?.vi);
     setTitleEN(data?.title?.en);
-    setType(data?.punish_type);
     setDescriptionVN(data?.description?.vi);
     setDescriptionEN(data?.description?.en);
     setApplyUser(data?.apply_user);
     setNote(data?.note);
-    setMoneyReason(data?.punish_type === "cash" ? data?.punish : 0);
-    setTimeReason(
-      data?.punish_type === "lock_time" ? data?.punish / (60 * 1000) : 0
-    );
   }, [data]);
 
   const editReason = useCallback(() => {
-    dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      updateReason.updateReasonRequest({
-        id: data?._id,
-        data: {
-          title: {
-            vi: titleVN,
-            en: titleEN,
-          },
-          description: {
-            vi: descriptionVN,
-            en: descriptionEN,
-          },
-          punish_type: type,
-          punish: type === "cash" ? moneyReason : timeReason * 60 * 1000,
-          apply_user: applyUser,
-          note: note,
-        },
+    setIsLoading(true);
+    updateReason(data?._id, {
+      title: {
+        vi: titleVN,
+        en: titleEN,
+      },
+      description: {
+        vi: descriptionVN,
+        en: descriptionEN,
+      },
+      apply_user: applyUser,
+      note: note,
+    })
+      .then((res) => {
+        setIsLoading(false);
+        setOpen(false);
+        fetchReasons(startPage, 10)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+          })
+          .catch((err) => {});
       })
-    );
+      .catch((err) => {
+        setIsLoading(false);
+        errorNotify({
+          message: err,
+        });
+      });
   }, [
     titleVN,
     titleEN,
     descriptionVN,
     descriptionEN,
-    type,
     applyUser,
     note,
-    moneyReason,
-    timeReason,
     data,
+    startPage,
   ]);
 
   return (
@@ -144,7 +141,7 @@ const EditReason = ({ data }) => {
         </div>
 
         <CustomButton
-          title="Tạo"
+          title="Chỉnh sửa"
           className="float-right btn-modal-add-reason"
           type="button"
           onClick={editReason}

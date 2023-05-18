@@ -5,7 +5,9 @@ import { getService } from "../../../../redux/selectors/service";
 import PromotionManage from "../Promotion/promotionManage";
 import "./index.scss";
 
-const ManagePromotionEvent = ({ type, brand }) => {
+const ManagePromotionEvent = (props) => {
+  const { type, brand, currentPage, setCurrentPage, startPage, setStartPage } =
+    props;
   const service = useSelector(getService);
   const [tab, setTab] = useState("tat_ca");
   const [id, setId] = useState("");
@@ -58,6 +60,10 @@ const ManagePromotionEvent = ({ type, brand }) => {
           idService={id}
           exchange={""}
           tab={tab}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          startPage={startPage}
+          setStartPage={setStartPage}
         />
       </div>
     </div>

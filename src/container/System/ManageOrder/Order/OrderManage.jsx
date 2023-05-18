@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrder, searchOrder } from "../../../../redux/actions/order";
 
@@ -16,7 +16,11 @@ import moment from "moment";
 import vi from "moment/locale/vi";
 import { useNavigate } from "react-router-dom";
 import "./OrderManage.scss";
-import { deleteOrderApi, searchOrderApi } from "../../../../api/order";
+import {
+  deleteOrderApi,
+  getOrderApi,
+  searchOrderApi,
+} from "../../../../api/order";
 import EditOrder from "../DrawerEditOrder";
 import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
@@ -26,19 +30,32 @@ import { getUser } from "../../../../redux/selectors/auth";
 import { SearchOutlined } from "@ant-design/icons";
 import _debounce from "lodash/debounce";
 import EditTimeOrder from "../EditTimeGroupOrder";
+import LoadingPagination from "../../../../components/paginationLoading";
 
-export default function OrderManage(props) {
-  const { data, total, status, kind } = props;
+const OrderManage = (props) => {
+  const {
+    data,
+    total,
+    status,
+    kind,
+    setData,
+    setTotal,
+    currentPage,
+    setCurrentPage,
+    setStartPage,
+    startPage,
+  } = props;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [item, setItem] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+
   const [modal, setModal] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const user = useSelector(getUser);
   const [dataSearch, setDataSearch] = useState([]);
   const [totalSearch, setTotalSearch] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const toggle = () => setModal(!modal);
 
   const timeWork = (data) => {
@@ -54,26 +71,31 @@ export default function OrderManage(props) {
   };
 
   const deleteOrder = (id) => {
-    dispatch(loadingAction.loadingRequest(true));
+    setIsLoading(true);
     deleteOrderApi(id)
       .then((res) => {
-        dispatch(
-          getOrder.getOrderRequest({
-            start: 0,
-            length: 20,
-            status: status,
-            kind: kind,
+        // dispatch(
+        //   getOrder.getOrderRequest({
+        //     start: 0,
+        //     length: 20,
+        //     status: status,
+        //     kind: kind,
+        //   })
+        // );
+        getOrderApi(startPage, 20, status, kind)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
           })
-        );
+          .catch((err) => {});
         setModal(false);
-        dispatch(loadingAction.loadingRequest(false));
+        setIsLoading(false);
       })
       .catch((err) => {
         errorNotify({
           message: err,
         });
-        setModal(false);
-        dispatch(loadingAction.loadingRequest(false));
+        setIsLoading(false);
       });
   };
 
@@ -87,6 +109,12 @@ export default function OrderManage(props) {
                 idOrder={item?._id}
                 idCustomer={item?.id_customer?._id}
                 status={item?.status}
+                type={status}
+                kind={kind}
+                startPage={startPage}
+                setData={setData}
+                setTotal={setTotal}
+                setIsLoading={setIsLoading}
               />
             ),
           },
@@ -112,6 +140,12 @@ export default function OrderManage(props) {
                   idOrder={item?._id}
                   dateWork={item?.date_work_schedule[0].date}
                   code={item?.code_promotion ? item?.code_promotion?.code : ""}
+                  status={status}
+                  kind={kind}
+                  startPage={startPage}
+                  setData={setData}
+                  setTotal={setTotal}
+                  setIsLoading={setIsLoading}
                 />
               ) : (
                 ""
@@ -140,6 +174,12 @@ export default function OrderManage(props) {
                 idOrder={item?._id}
                 idCustomer={item?.id_customer?._id}
                 status={item?.status}
+                type={status}
+                kind={kind}
+                startPage={startPage}
+                setData={setData}
+                setTotal={setTotal}
+                setIsLoading={setIsLoading}
               />
             ),
           },
@@ -358,19 +398,20 @@ export default function OrderManage(props) {
       dataSearch.length > 0
         ? page * dataSearch.length - dataSearch.length
         : page * data.length - data.length;
+
+    setStartPage(start);
+
     dataSearch.length > 0
       ? searchOrderApi(0, 20, status, valueSearch, kind).then((res) => {
           setDataSearch(res?.data);
           setTotalSearch(res?.totalItem);
         })
-      : dispatch(
-          getOrder.getOrderRequest({
-            start: start > 0 ? start : 0,
-            length: 20,
-            status: status,
-            kind: kind,
+      : getOrderApi(start, 20, status, kind)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
           })
-        );
+          .catch((err) => {});
   };
 
   const handleSearch = useCallback(
@@ -451,6 +492,10 @@ export default function OrderManage(props) {
           </Modal>
         </div>
       </div>
+
+      {isLoading && <LoadingPagination />}
     </React.Fragment>
   );
-}
+};
+
+export default memo(OrderManage);

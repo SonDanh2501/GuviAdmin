@@ -9,6 +9,8 @@ import ManagePromotionEvent from "./PromotionOrtherEvent";
 const ManagePromotions = () => {
   const [selected, setSelected] = useState("code");
   const [brand, setBrand] = useState("guvi");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(0);
   return (
     <div>
       <Button
@@ -20,6 +22,8 @@ const ManagePromotions = () => {
         onClick={() => {
           setSelected("code");
           setBrand("guvi");
+          setCurrentPage(1);
+          setStartPage(0);
         }}
       >
         Khuyến mãi Guvi
@@ -33,23 +37,50 @@ const ManagePromotions = () => {
         onClick={() => {
           setSelected("code");
           setBrand("orther");
+          setCurrentPage(1);
+          setStartPage(0);
         }}
       >
         Khuyến mãi đối tác
       </Button>
       <Button
         className={selected === "event" ? "btn-selected" : "btn-default"}
-        onClick={() => setSelected("event")}
+        onClick={() => {
+          setCurrentPage(1);
+          setStartPage(0);
+          setSelected("event");
+        }}
       >
         Chương trình khuyến mãi
       </Button>
 
       {selected === "code" && brand === "guvi" ? (
-        <ManagePromotionGuvi type={selected} brand={brand} />
+        <ManagePromotionGuvi
+          type={selected}
+          brand={brand}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          startPage={startPage}
+          setStartPage={setStartPage}
+        />
       ) : selected === "code" && brand === "orther" ? (
-        <ManagePromotionOrther type={selected} brand={brand} />
+        <ManagePromotionOrther
+          type={selected}
+          brand={brand}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          startPage={startPage}
+          setStartPage={setStartPage}
+        />
       ) : (
-        <ManagePromotionEvent type={selected} brand={""} />
+        <ManagePromotionEvent
+          type={selected}
+          brand={""}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          startPage={startPage}
+          setStartPage={setStartPage}
+        />
       )}
     </div>
   );

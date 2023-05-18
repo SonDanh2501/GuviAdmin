@@ -7,12 +7,23 @@ import dayjs from "dayjs";
 import _debounce from "lodash/debounce";
 import { DATA_TIME_TOTAL } from "../../../../api/fakeData";
 import moment from "moment";
-import { editTimeOrderApi } from "../../../../api/order";
+import { editTimeOrderApi, getOrderApi } from "../../../../api/order";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
-const EditTimeOrder = ({ idOrder, dateWork, code }) => {
+const EditTimeOrder = (props) => {
+  const {
+    idOrder,
+    dateWork,
+    code,
+    status,
+    kind,
+    startPage,
+    setData,
+    setTotal,
+    setIsLoading,
+  } = props;
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+
   const [timeWork, setTimeWork] = useState(
     moment(dateWork).utc().format("HH:mm:ss")
   );
@@ -34,20 +45,26 @@ const EditTimeOrder = ({ idOrder, dateWork, code }) => {
   const timeW = moment(wordDate).format(dateFormat) + "T" + timeWork + ".000Z";
 
   const editOrder = () => {
-    dispatch(loadingAction.loadingRequest(true));
+    setIsLoading(true);
     editTimeOrderApi(idOrder, {
       date_work_schedule: timeW,
       code_promotion: code,
     })
       .then((res) => {
-        dispatch(loadingAction.loadingRequest(false));
-        window.location.reload();
+        setIsLoading(false);
+        setOpen(false);
+        getOrderApi(startPage, 20, status, kind)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+          })
+          .catch((err) => {});
       })
       .catch((err) => {
         errorNotify({
           message: err,
         });
-        dispatch(loadingAction.loadingRequest(false));
+        setIsLoading(false);
       });
   };
 
@@ -90,8 +107,6 @@ const EditTimeOrder = ({ idOrder, dateWork, code }) => {
           Cập nhật
         </Button>
       </Drawer>
-
-      {isLoading && <LoadingPagination />}
     </>
   );
 };

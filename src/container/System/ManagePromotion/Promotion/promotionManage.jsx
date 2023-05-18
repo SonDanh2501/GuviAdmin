@@ -10,12 +10,13 @@ import {
   Table,
 } from "antd";
 import _debounce from "lodash/debounce";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   activePromotion,
   deletePromotion,
+  fetchPromotion,
   filterPromotion,
   searchPromotion,
 } from "../../../../api/promotion.jsx";
@@ -46,30 +47,34 @@ import EditPromotionOrther from "../../../../components/editPromotionOrther/edit
 import { errorNotify } from "../../../../helper/toast.js";
 import { useNavigate } from "react-router-dom";
 
-export default function PromotionManage({
+const PromotionManage = ({
   type,
   brand,
   idService,
   exchange,
   tab,
-}) {
+  currentPage,
+  setCurrentPage,
+  startPage,
+  setStartPage,
+}) => {
   const promotion = useSelector(getPromotionSelector);
   const [isLoading, setIsLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [startPage, setStartPage] = useState(0);
-  const [totalSearch, setTotalSearch] = useState("");
+  const [totalSearch, setTotalSearch] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
-  const [totalFilter, setTotalFilter] = useState("");
+  const [totalFilter, setTotalFilter] = useState(0);
   const [valueFilter, setValueFilter] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const total = useSelector(getTotalPromotion);
+  // const total = useSelector(getTotalPromotion);
   const dispatch = useDispatch();
   const [dataSearch, setDataSearch] = useState([]);
   const [dataFilter, setDataFilter] = useState([]);
-  const [itemEdit, setItemEdit] = React.useState([]);
-  const [modalEdit, setModalEdit] = React.useState(false);
-  const [modalActive, setModalActive] = React.useState(false);
-  const [modal, setModal] = React.useState(false);
+  const [itemEdit, setItemEdit] = useState([]);
+  const [modalEdit, setModalEdit] = useState(false);
+  const [modalActive, setModalActive] = useState(false);
+  const [data, setData] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
   const toggleActive = () => setModalActive(!modalActive);
   const [api, contextHolder] = notification.useNotification();
@@ -77,16 +82,22 @@ export default function PromotionManage({
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(
-      getPromotion.getPromotionRequest({
-        start: 0,
-        length: 10,
-        type: type,
-        brand: brand,
-        id_service: idService,
-        exchange: exchange,
+    // dispatch(
+    //   getPromotion.getPromotionRequest({
+    //     start: 0,
+    //     length: 10,
+    //     type: type,
+    //     brand: brand,
+    //     id_service: idService,
+    //     exchange: exchange,
+    //   })
+    // );
+    fetchPromotion(0, 10, type, brand, idService, exchange)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
       })
-    );
+      .catch((err) => {});
     setDataFilter([]);
     setDataSearch([]);
     setValueFilter("");
@@ -98,16 +109,22 @@ export default function PromotionManage({
       dispatch(loadingAction.loadingRequest(true));
       deletePromotion(id)
         .then((res) => {
-          dispatch(
-            getPromotion.getPromotionRequest({
-              start: startPage,
-              length: 10,
-              type: type,
-              brand: brand,
-              id_service: idService,
-              exchange: exchange,
+          // dispatch(
+          //   getPromotion.getPromotionRequest({
+          //     start: startPage,
+          //     length: 10,
+          //     type: type,
+          //     brand: brand,
+          //     id_service: idService,
+          //     exchange: exchange,
+          //   })
+          // );
+          fetchPromotion(startPage, 10, type, brand, idService, exchange)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
             })
-          );
+            .catch((err) => {});
           setModal(false);
           dispatch(loadingAction.loadingRequest(false));
         })
@@ -118,7 +135,7 @@ export default function PromotionManage({
           dispatch(loadingAction.loadingRequest(false));
         });
     },
-    [type, brand, idService, startPage]
+    [type, brand, idService, startPage, exchange]
   );
 
   const onActive = useCallback(
@@ -127,16 +144,22 @@ export default function PromotionManage({
       if (is_active) {
         activePromotion(id, { is_active: false })
           .then((res) => {
-            dispatch(
-              getPromotion.getPromotionRequest({
-                start: startPage,
-                length: 10,
-                type: type,
-                brand: brand,
-                id_service: idService,
-                exchange: exchange,
+            // dispatch(
+            //   getPromotion.getPromotionRequest({
+            //     start: startPage,
+            //     length: 10,
+            //     type: type,
+            //     brand: brand,
+            //     id_service: idService,
+            //     exchange: exchange,
+            //   })
+            // );
+            fetchPromotion(startPage, 10, type, brand, idService, exchange)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItem);
               })
-            );
+              .catch((err) => {});
             setModalActive(false);
             dispatch(loadingAction.loadingRequest(false));
           })
@@ -149,16 +172,22 @@ export default function PromotionManage({
       } else {
         activePromotion(id, { is_active: true })
           .then((res) => {
-            dispatch(
-              getPromotion.getPromotionRequest({
-                start: startPage,
-                length: 10,
-                type: type,
-                brand: brand,
-                id_service: idService,
-                exchange: exchange,
+            // dispatch(
+            //   getPromotion.getPromotionRequest({
+            //     start: startPage,
+            //     length: 10,
+            //     type: type,
+            //     brand: brand,
+            //     id_service: idService,
+            //     exchange: exchange,
+            //   })
+            // );
+            fetchPromotion(startPage, 10, type, brand, idService, exchange)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItem);
               })
-            );
+              .catch((err) => {});
             setModalActive(false);
             dispatch(loadingAction.loadingRequest(false));
           })
@@ -170,7 +199,7 @@ export default function PromotionManage({
           });
       }
     },
-    [type, brand, idService, startPage]
+    [type, brand, idService, startPage, exchange]
   );
 
   const onChange = (page) => {
@@ -180,7 +209,7 @@ export default function PromotionManage({
         ? page * dataSearch.length - dataSearch.length
         : dataFilter.length > 0
         ? page * dataFilter.length - dataFilter.length
-        : page * promotion.length - promotion.length;
+        : page * data.length - data.length;
 
     setStartPage(startPage);
 
@@ -215,16 +244,22 @@ export default function PromotionManage({
             setTotalSearch(res?.totalItem);
           })
           .catch((err) => console.log(err))
-      : dispatch(
-          getPromotion.getPromotionRequest({
-            start: start > 0 ? start : 0,
-            length: 10,
-            type: type,
-            brand: brand,
-            id_service: idService,
-            exchange: exchange,
+      : fetchPromotion(start, 10, type, brand, idService, exchange)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
           })
-        );
+          .catch((err) => {});
+    // : dispatch(
+    //     getPromotion.getPromotionRequest({
+    //       start: start > 0 ? start : 0,
+    //       length: 10,
+    //       type: type,
+    //       brand: brand,
+    //       id_service: idService,
+    //       exchange: exchange,
+    //     })
+    //   );
   };
 
   const handleSearch = useCallback(
@@ -670,11 +705,37 @@ export default function PromotionManage({
             onChange={(e) => handleSearch(e.target.value)}
           />
           {type === "code" && brand === "guvi" ? (
-            <AddPromotion idService={idService} tab={tab} />
+            <AddPromotion
+              idService={idService}
+              tab={tab}
+              startPage={startPage}
+              setDataPromo={setData}
+              setTotalPromo={setTotal}
+              type={type}
+              brand={brand}
+              exchange={exchange}
+            />
           ) : type === "code" && brand === "orther" ? (
-            <AddPromotionOrther />
+            <AddPromotionOrther
+              idService={idService}
+              startPage={startPage}
+              setDataPromo={setData}
+              setTotalPromo={setTotal}
+              type={type}
+              brand={brand}
+              exchange={exchange}
+            />
           ) : (
-            <AddPromotionEvent idService={idService} tab={tab} />
+            <AddPromotionEvent
+              idService={idService}
+              tab={tab}
+              startPage={startPage}
+              setDataPromo={setData}
+              setTotalPromo={setTotal}
+              type={type}
+              brand={brand}
+              exchange={exchange}
+            />
           )}
         </div>
         <div className="mt-3">
@@ -685,7 +746,7 @@ export default function PromotionManage({
                 ? dataSearch
                 : dataFilter.length > 0
                 ? dataFilter
-                : promotion
+                : data
             }
             pagination={false}
             rowKey={(record) => record._id}
@@ -702,10 +763,6 @@ export default function PromotionManage({
                 },
               };
             }}
-            // locale={{
-            //   emptyText:
-            //     promotion.length > 0 ? <Empty /> : <Skeleton active={true} />,
-            // }}
           />
           <div className="div-pagination p-2">
             <a>
@@ -739,18 +796,39 @@ export default function PromotionManage({
               state={modalEdit}
               setState={() => setModalEdit(!modalEdit)}
               data={itemEdit}
+              startPage={startPage}
+              setDataPromo={setData}
+              setTotalPromo={setTotal}
+              type={type}
+              brand={brand}
+              exchange={exchange}
+              idService={idService}
             />
           ) : type === "code" && brand === "orther" ? (
             <EditPromotionOrther
               state={modalEdit}
               setState={() => setModalEdit(!modalEdit)}
               data={itemEdit}
+              startPage={startPage}
+              setDataPromo={setData}
+              setTotalPromo={setTotal}
+              type={type}
+              brand={brand}
+              exchange={exchange}
+              idService={idService}
             />
           ) : (
             <EditPromotionEvent
               state={modalEdit}
               setState={() => setModalEdit(!modalEdit)}
               data={itemEdit}
+              startPage={startPage}
+              setDataPromo={setData}
+              setTotalPromo={setTotal}
+              type={type}
+              brand={brand}
+              exchange={exchange}
+              idService={idService}
             />
           )}
         </div>
@@ -805,4 +883,6 @@ export default function PromotionManage({
       </div>
     </React.Fragment>
   );
-}
+};
+
+export default memo(PromotionManage);

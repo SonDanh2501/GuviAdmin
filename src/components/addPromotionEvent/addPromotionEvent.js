@@ -15,7 +15,11 @@ import {
 import { fetchCustomers, searchCustomers } from "../../api/customer";
 import { DATA_PAYMENT, date } from "../../api/fakeData";
 import { postFile } from "../../api/file";
-import { createPromotion, getGroupCustomerApi } from "../../api/promotion";
+import {
+  createPromotion,
+  fetchPromotion,
+  getGroupCustomerApi,
+} from "../../api/promotion";
 import resizeFile from "../../helper/resizer";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
@@ -30,7 +34,17 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 
-const AddPromotionEvent = ({ idService, tab }) => {
+const AddPromotionEvent = (props) => {
+  const {
+    idService,
+    tab,
+    startPage,
+    setDataPromo,
+    setTotalPromo,
+    type,
+    brand,
+    exchange,
+  } = props;
   const [state, setState] = useState(false);
   const [formDiscount, setFormDiscount] = useState("amount");
   const [discountUnit, setDiscountUnit] = useState("amount");
@@ -319,7 +333,13 @@ const AddPromotionEvent = ({ idService, tab }) => {
           })
             .then(() => {
               dispatch(loadingAction.loadingRequest(false));
-              window.location.reload();
+              setState(false);
+              fetchPromotion(startPage, 10, type, brand, idService, exchange)
+                .then((res) => {
+                  setDataPromo(res?.data);
+                  setTotalPromo(res?.totalItem);
+                })
+                .catch((err) => {});
             })
             .catch((err) => {
               errorNotify({
@@ -329,7 +349,13 @@ const AddPromotionEvent = ({ idService, tab }) => {
             });
         } else {
           dispatch(loadingAction.loadingRequest(false));
-          window.location.reload();
+          setState(false);
+          fetchPromotion(startPage, 10, type, brand, idService, exchange)
+            .then((res) => {
+              setDataPromo(res?.data);
+              setTotalPromo(res?.totalItem);
+            })
+            .catch((err) => {});
         }
       })
       .catch((err) => {
@@ -374,6 +400,11 @@ const AddPromotionEvent = ({ idService, tab }) => {
     dateSchedule,
     isApplyTime,
     timeApply,
+    type,
+    brand,
+    idService,
+    exchange,
+    startPage,
   ]);
 
   return (

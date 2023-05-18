@@ -20,7 +20,8 @@ import {
 import { errorNotify, successNotify } from "../../helper/toast";
 import moment from "moment";
 
-const Withdraw = ({ type, setDataT, setTotal }) => {
+const Withdraw = (props) => {
+  const { type, setDataT, setTotal } = props;
   const [state, setState] = useState(false);
   const [money, setMoney] = useState("");
   const [note, setNote] = useState("");

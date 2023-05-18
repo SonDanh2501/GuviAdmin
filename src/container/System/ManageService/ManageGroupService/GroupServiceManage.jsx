@@ -113,6 +113,7 @@ export default function GroupServiceManage() {
           data={itemEdit}
           setData={setData}
           setTotal={setTotal}
+          setIsLoading={setIsLoading}
         />
       ),
     },
@@ -144,9 +145,11 @@ export default function GroupServiceManage() {
         return (
           <div
             onClick={() => {
-              navigate("/services/manage-group-service/manage-service", {
-                state: { id: data?._id },
-              });
+              if (user.role === "admin") {
+                navigate("/services/manage-group-service/manage-service", {
+                  state: { id: data?._id },
+                });
+              }
             }}
           >
             <img className="img-customer-service" src={data?.thumbnail} />
