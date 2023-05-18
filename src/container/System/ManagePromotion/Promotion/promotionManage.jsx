@@ -211,7 +211,7 @@ const PromotionManage = ({
         ? page * dataFilter.length - dataFilter.length
         : page * data.length - data.length;
 
-    setStartPage(startPage);
+    setStartPage(start);
 
     dataFilter.length > 0
       ? filterPromotion(

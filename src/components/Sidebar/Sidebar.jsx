@@ -270,7 +270,7 @@ const Sidebar = ({ onClick }) => {
                   <div className={isActive ? "active-link" : "unactive-link"}>
                     <img src={like} className="img-icon" />
                     <a className={isActive ? "active-text" : "unactive-text"}>
-                      Hỗ trợ
+                      CSKH
                     </a>
                   </div>
                 )}
@@ -523,7 +523,7 @@ const Sidebar = ({ onClick }) => {
                   <div className={isActive ? "active-link" : "unactive-link"}>
                     <img src={like} className="img-icon" />
                     <a className={isActive ? "active-text" : "unactive-text"}>
-                      Hỗ trợ
+                      CSKH
                     </a>
                   </div>
                 )}
@@ -671,7 +671,7 @@ const Sidebar = ({ onClick }) => {
                   <div className={isActive ? "active-link" : "unactive-link"}>
                     <img src={like} className="img-icon" />
                     <a className={isActive ? "active-text" : "unactive-text"}>
-                      Hỗ trợ
+                      CSKH
                     </a>
                   </div>
                 )}
@@ -918,7 +918,7 @@ const Sidebar = ({ onClick }) => {
                   <div className={isActive ? "active-link" : "unactive-link"}>
                     <img src={like} className="img-icon" />
                     <a className={isActive ? "active-text" : "unactive-text"}>
-                      Hỗ trợ
+                      CSKH
                     </a>
                   </div>
                 )}
