@@ -153,10 +153,6 @@ const ManageOptionService = () => {
     },
     {
       key: 2,
-      label: <a onClick={toggleBlock}>{itemEdit?.is_active ? "Ẩn" : "Hiện"}</a>,
-    },
-    {
-      key: 3,
       label: <a onClick={toggle}>Xoá</a>,
     },
   ];
@@ -245,9 +241,13 @@ const ManageOptionService = () => {
   return (
     <div>
       <h3>Optional Service</h3>
-      {/* <div>
-        <CreateOptional />
-      </div> */}
+      <div>
+        <CreateOptional
+          setIsLoading={setIsLoading}
+          setData={setData}
+          idService={id}
+        />
+      </div>
       <div>
         <Table
           dataSource={data}

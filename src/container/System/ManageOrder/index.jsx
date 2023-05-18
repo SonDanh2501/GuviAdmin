@@ -22,18 +22,14 @@ import { useNavigate } from "react-router-dom";
 import { getUser } from "../../../redux/selectors/auth";
 
 const ManageOrder = () => {
-  const [dataSearch, setDataSearch] = useState([]);
-  const [totalSearch, setTotalSearch] = useState(0);
-  const [valueSearch, setValueSearch] = useState("");
   const [tab, setTab] = useState("all");
   const [kind, setKind] = useState("");
   const [valueTab, setValueTab] = useState("tat_ca");
-
   const dispatch = useDispatch();
-  const listOrder = useSelector(getOrderSelector);
-  const orderTotal = useSelector(getOrderTotal);
-  const listOrderSearch = useSelector(searchOrderSelector);
-  const totalOrderSearch = useSelector(searchOrderTotal);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(0);
+  const [data, setData] = useState([]);
+  const [total, setTotal] = useState(0);
   const user = useSelector(getUser);
   const navigate = useNavigate();
   useEffect(() => {
@@ -48,24 +44,20 @@ const ManageOrder = () => {
         kind: kind,
       })
     );
+    getOrderApi(0, 20, tab, kind)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
   }, [dispatch, tab, kind]);
-
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      searchOrderApi(0, 20, tab, value, kind).then((res) => {
-        setDataSearch(res?.data);
-        setTotalSearch(res?.totalItem);
-      });
-    }, 1000),
-    [tab, kind]
-  );
 
   const items = [
     {
       label: (
         <div>
           <UilFileExport />
-          <ExportCSV csvData={listOrder} fileName={"order"} />
+          <ExportCSV csvData={data} fileName={"order"} />
         </div>
       ),
       key: "0",
@@ -76,17 +68,6 @@ const ManageOrder = () => {
     <>
       <div className="div-header">
         <a className="title-cv">Danh sách công việc</a>
-        {/* <Input
-          placeholder="Tìm kiếm"
-          type="text"
-          className="field-search"
-          value={valueSearch}
-          prefix={<SearchOutlined />}
-          onChange={(e) => {
-            handleSearch(e.target.value);
-            setValueSearch(e.target.value);
-          }}
-        /> */}
         <div className="div-add-export">
           <Dropdown
             menu={{
@@ -125,6 +106,8 @@ const ManageOrder = () => {
                   setTab(item?.value);
                   setKind("");
                   setValueTab("tat_ca");
+                  setCurrentPage(1);
+                  setStartPage(0);
                 }}
               >
                 <a
@@ -151,7 +134,8 @@ const ManageOrder = () => {
                   onClick={() => {
                     setKind(item?.kind);
                     setValueTab(item?.value);
-                    setDataSearch([]);
+                    setCurrentPage(1);
+                    setStartPage(0);
                   }}
                 >
                   <a
@@ -172,14 +156,16 @@ const ManageOrder = () => {
           </div>
 
           <OrderManage
-            data={listOrder}
-            total={orderTotal}
-            // dataSearch={dataSearch}
-            // value={valueSearch}
+            data={data}
+            total={total}
             status={tab}
             kind={kind}
-            // setDataSearch={setDataSearch}
-            // setTotalSearch={setTotalSearch}
+            setData={setData}
+            setTotal={setTotal}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            setStartPage={setStartPage}
+            startPage={startPage}
           />
         </div>
 

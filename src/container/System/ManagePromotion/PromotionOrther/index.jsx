@@ -5,7 +5,9 @@ import { getService } from "../../../../redux/selectors/service";
 import PromotionManage from "../Promotion/promotionManage";
 import "./index.scss";
 
-const ManagePromotionOrther = ({ type, brand }) => {
+const ManagePromotionOrther = (props) => {
+  const { type, brand, currentPage, setCurrentPage, startPage, setStartPage } =
+    props;
   const [tab, setTab] = useState("no_exchange");
   const [id, setId] = useState("");
 
@@ -40,6 +42,10 @@ const ManagePromotionOrther = ({ type, brand }) => {
           brand={brand}
           idService={""}
           exchange={tab}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          startPage={startPage}
+          setStartPage={setStartPage}
         />
       </div>
     </div>

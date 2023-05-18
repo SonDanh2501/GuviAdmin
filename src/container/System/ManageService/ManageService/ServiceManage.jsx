@@ -49,69 +49,73 @@ const ServiceManage = () => {
     }
   }, [id]);
 
-  const onDelete = useCallback((id) => {
-    setIsLoading(true);
-    deleteServiceApi(id)
-      .then((res) => {
-        setModal(false);
-        setIsLoading(false);
+  const onDelete = useCallback(
+    (_id) => {
+      setIsLoading(true);
+      deleteServiceApi(_id)
+        .then((res) => {
+          setModal(false);
+          setIsLoading(false);
+          getServiceApi(id)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
+        });
+    },
+    [id]
+  );
 
-        getServiceApi(id)
+  const blockService = useCallback(
+    (_id, is_active) => {
+      setIsLoading(true);
+      if (is_active === true) {
+        activeServiceApi(_id, { is_active: false })
           .then((res) => {
-            setData(res?.data);
-            setTotal(res?.totalItem);
+            setModalBlock(false);
+            setIsLoading(false);
+            getServiceApi(id)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItem);
+              })
+              .catch((err) => {});
           })
-          .catch((err) => {});
-      })
-      .catch((err) => {
-        setIsLoading(false);
-
-        errorNotify({
-          message: err,
-        });
-      });
-  }, []);
-
-  const blockService = useCallback((id, is_active) => {
-    setIsLoading(true);
-    if (is_active === true) {
-      activeServiceApi(id, { is_active: false })
-        .then((res) => {
-          setModalBlock(false);
-          setIsLoading(false);
-          getServiceApi(id)
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          errorNotify({
-            message: err,
+          .catch((err) => {
+            setIsLoading(false);
+            errorNotify({
+              message: err,
+            });
           });
-        });
-    } else {
-      activeServiceApi(id, { is_active: true })
-        .then((res) => {
-          setModalBlock(false);
-          setIsLoading(false);
-          getServiceApi(id)
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          errorNotify({
-            message: err,
+      } else {
+        activeServiceApi(_id, { is_active: true })
+          .then((res) => {
+            setModalBlock(false);
+            setIsLoading(false);
+            getServiceApi(id)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItem);
+              })
+              .catch((err) => {});
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            errorNotify({
+              message: err,
+            });
           });
-        });
-    }
-  }, []);
+      }
+    },
+    [id]
+  );
 
   const items = [
     {
@@ -126,10 +130,10 @@ const ServiceManage = () => {
         />
       ),
     },
-    // {
-    //   key: "2",
-    //   label: user.role === "admin" && <a onClick={toggle}>Xoá</a>,
-    // },
+    {
+      key: "2",
+      label: user.role === "admin" && <a onClick={toggle}>Xoá</a>,
+    },
   ];
 
   const columns = [

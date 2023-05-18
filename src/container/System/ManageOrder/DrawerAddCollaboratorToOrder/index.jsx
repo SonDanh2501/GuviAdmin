@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { Button, DatePicker, Drawer, Input, List } from "antd";
 import "./index.scss";
 import {
@@ -9,11 +9,23 @@ import { errorNotify } from "../../../../helper/toast";
 import {
   addCollaboratorToOrderApi,
   changeCollaboratorToOrderApi,
+  getOrderApi,
 } from "../../../../api/order";
 import { useDispatch } from "react-redux";
 import { loadingAction } from "../../../../redux/actions/loading";
 import _debounce from "lodash/debounce";
-const AddCollaboratorOrder = ({ idOrder, idCustomer, status }) => {
+const AddCollaboratorOrder = (props) => {
+  const {
+    idOrder,
+    idCustomer,
+    status,
+    type,
+    kind,
+    startPage,
+    setData,
+    setTotal,
+    setIsLoading,
+  } = props;
   const [open, setOpen] = useState(false);
   const [dataFilter, setDataFilter] = useState([]);
   const [name, setName] = useState("");
@@ -53,35 +65,54 @@ const AddCollaboratorOrder = ({ idOrder, idCustomer, status }) => {
   );
 
   const addCollaboratorToOrder = useCallback(() => {
-    dispatch(loadingAction.loadingRequest(true));
+    setIsLoading(true);
     if (status === "confirm") {
       changeCollaboratorToOrderApi(idOrder)
         .then((res) => {
           addCollaboratorToOrderApi(idOrder, { id_collaborator: id })
             .then((res) => {
-              window.location.reload();
+              setOpen(false);
+              setIsLoading(false);
+              getOrderApi(startPage, 20, type, kind)
+                .then((res) => {
+                  setData(res?.data);
+                  setTotal(res?.totalItem);
+                })
+                .catch((err) => {});
             })
             .catch((err) => {
               errorNotify({
                 message: err,
               });
-              dispatch(loadingAction.loadingRequest(false));
+              setIsLoading(false);
             });
-        })
-        .catch((err) => {});
-    } else {
-      addCollaboratorToOrderApi(idOrder, { id_collaborator: id })
-        .then((res) => {
-          window.location.reload();
         })
         .catch((err) => {
           errorNotify({
             message: err,
           });
-          dispatch(loadingAction.loadingRequest(false));
+          setIsLoading(false);
+        });
+    } else {
+      addCollaboratorToOrderApi(idOrder, { id_collaborator: id })
+        .then((res) => {
+          setIsLoading(false);
+          setOpen(false);
+          getOrderApi(startPage, 20, type, kind)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          setIsLoading(false);
         });
     }
-  }, [id, idOrder]);
+  }, [id, idOrder, startPage, type, kind]);
 
   return (
     <>
@@ -162,4 +193,4 @@ const AddCollaboratorOrder = ({ idOrder, idCustomer, status }) => {
     </>
   );
 };
-export default AddCollaboratorOrder;
+export default memo(AddCollaboratorOrder);

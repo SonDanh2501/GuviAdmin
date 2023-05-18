@@ -6,7 +6,9 @@ import { getService } from "../../../../redux/selectors/service";
 import PromotionManage from "../Promotion/promotionManage";
 import "./index.scss";
 
-const ManagePromotionGuvi = ({ type, brand }) => {
+const ManagePromotionGuvi = (props) => {
+  const { type, brand, currentPage, setCurrentPage, startPage, setStartPage } =
+    props;
   const service = useSelector(getService);
   const [tab, setTab] = useState("tat_ca");
   const [id, setId] = useState("");
@@ -38,6 +40,8 @@ const ManagePromotionGuvi = ({ type, brand }) => {
               onClick={() => {
                 setTab(item?.kind);
                 setId(item?.idService);
+                setStartPage(0);
+                setCurrentPage(1);
               }}
             >
               <a
@@ -61,6 +65,10 @@ const ManagePromotionGuvi = ({ type, brand }) => {
           idService={id}
           exchange={""}
           tab={tab}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          startPage={startPage}
+          setStartPage={setStartPage}
         />
       </div>
     </div>

@@ -20,7 +20,8 @@ import {
 import moment from "moment";
 import { errorNotify, successNotify } from "../../helper/toast";
 
-const AddPopup = ({ type, setDataT, setTotal }) => {
+const AddPopup = (props) => {
+  const { type, setDataT, setTotal } = props;
   const [state, setState] = useState(false);
   const [money, setMoney] = useState("");
   const [note, setNote] = useState("");

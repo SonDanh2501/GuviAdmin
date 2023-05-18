@@ -10,7 +10,7 @@ import CustomButton from "../customButton/customButton";
 import "./editGroupService.scss";
 
 const EditGroupService = (props) => {
-  const { data, setData, setTotal } = props;
+  const { data, setData, setTotal, setIsLoading } = props;
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
   const [imgThumbnail, setImgThumbnail] = useState("");
@@ -70,7 +70,7 @@ const EditGroupService = (props) => {
   };
 
   const editGroupSerive = useCallback(() => {
-    dispatch(loadingAction.loadingRequest(true));
+    setIsLoading(true);
     updateGroupServiceApi(data?._id, {
       title: {
         vi: titleVN,
@@ -84,6 +84,8 @@ const EditGroupService = (props) => {
       type: type,
     })
       .then((res) => {
+        setOpen(false);
+        setIsLoading(false);
         getGroupServiceApi(0, 20)
           .then((res) => {
             setData(res?.data);
@@ -92,6 +94,7 @@ const EditGroupService = (props) => {
           .catch((err) => {});
       })
       .catch((err) => {
+        setIsLoading(false);
         errorNotify({
           message: err,
         });

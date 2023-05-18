@@ -1,95 +1,144 @@
-import { Dropdown, Empty, Skeleton, Space, Table, Pagination } from "antd";
+import { Dropdown, Pagination, Space, Table } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   Card,
-  CardFooter,
   CardHeader,
   Col,
   Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
-  PaginationItem,
-  PaginationLink,
   Row,
 } from "reactstrap";
 import "./ReasonManage.scss";
 
+import {
+  activeReason,
+  deleteReason,
+  fetchReasons,
+  getListReasonCancel,
+} from "../../../../../api/reasons";
+import offToggle from "../../../../../assets/images/off-button.png";
+import onToggle from "../../../../../assets/images/on-button.png";
 import AddReason from "../../../../../components/addReason/addReason";
-import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
+import EditReason from "../../../../../components/editReason/editReason";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import { getReasons } from "../../../../../redux/actions/reason";
 import {
   getReason,
   getReasonTotal,
 } from "../../../../../redux/selectors/reason";
-import EditReason from "../../../../../components/editReason/editReason";
-import { activeReason, deleteReason } from "../../../../../api/reasons";
-import { formatMoney } from "../../../../../helper/formatMoney";
+import { errorNotify } from "../../../../../helper/toast";
+import LoadingPagination from "../../../../../components/paginationLoading";
 
 export default function ReasonManage() {
   const dispatch = useDispatch();
-  const reason = useSelector(getReason);
   const totalReason = useSelector(getReasonTotal);
   const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(0);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [itemEdit, setItemEdit] = React.useState([]);
-  const [modalEdit, setModalEdit] = React.useState(false);
-  const [modal, setModal] = React.useState(false);
-  const [modalBlock, setModalBlock] = React.useState(false);
+  const [itemEdit, setItemEdit] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [modalBlock, setModalBlock] = useState(false);
+  const [data, setData] = useState([]);
+  const [total, setTotal] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // dispatch(getReasons.getReasonsRequest({ start: 0, length: 10 }));
-  }, [dispatch]);
+    fetchReasons(0, 10)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  }, []);
 
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
 
-  const onDelete = useCallback((id) => {
-    dispatch(loadingAction.loadingRequest(true));
-    deleteReason(id, { is_delete: true })
-      .then((res) => {
-        window.location.reload();
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  const onDelete = useCallback(
+    (id) => {
+      setIsLoading(true);
+      deleteReason(id, { is_delete: true })
+        .then((res) => {
+          setIsLoading(false);
+          setModal(false);
+          fetchReasons(startPage, 10)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          setIsLoading(false);
 
-  const blockReason = useCallback((id, is_active) => {
-    dispatch(loadingAction.loadingRequest(true));
-    if (is_active === true) {
-      activeReason(id, { is_active: false })
-        .then((res) => {
-          setModalBlock(!modalBlock);
-          window.location.reload();
-        })
-        .catch((err) => console.log(err));
-    } else {
-      activeReason(id, { is_active: true })
-        .then((res) => {
-          setModalBlock(!modalBlock);
-          window.location.reload();
-        })
-        .catch((err) => console.log(err));
-    }
-  }, []);
+          errorNotify({
+            message: err,
+          });
+        });
+    },
+    [startPage]
+  );
+
+  const blockReason = useCallback(
+    (id, is_active) => {
+      dispatch(loadingAction.loadingRequest(true));
+      if (is_active === true) {
+        activeReason(id, { is_active: false })
+          .then((res) => {
+            setModalBlock(false);
+            fetchReasons(startPage, 10)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItem);
+              })
+              .catch((err) => {});
+          })
+          .catch((err) => console.log(err));
+      } else {
+        activeReason(id, { is_active: true })
+          .then((res) => {
+            setModalBlock(false);
+            fetchReasons(startPage, 10)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItem);
+              })
+              .catch((err) => {});
+          })
+          .catch((err) => console.log(err));
+      }
+    },
+    [startPage]
+  );
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * reason.length - reason.length;
-    dispatch(
-      getReasons.getReasonsRequest({
-        start: start > 0 ? start : 0,
-        length: 10,
+    const start = page * data.length - data.length;
+    setStartPage(start);
+    fetchReasons(start, 10)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
       })
-    );
+      .catch((err) => {});
   };
 
   const items = [
     {
       key: "1",
-      label: <EditReason data={itemEdit} />,
+      label: (
+        <EditReason
+          data={itemEdit}
+          setIsLoading={setIsLoading}
+          setData={setData}
+          setTotal={setTotal}
+          startPage={startPage}
+        />
+      ),
     },
     {
       key: "2",
@@ -100,28 +149,57 @@ export default function ReasonManage() {
   const columns = [
     {
       title: "Lý do huỷ việc",
-      dataIndex: ["title", "vi"],
+      render: (data) => <a>{data?.title?.vi}</a>,
     },
     {
       title: "Mô tả",
-      dataIndex: ["description", "vi"],
+      render: (data) => <a>{data?.description?.vi}</a>,
     },
     {
       title: "Đối tượng áp dụng",
-      dataIndex: "apply_user",
+      render: (data) => (
+        <a>
+          {data?.apply_user === "admin"
+            ? "Admin"
+            : data?.apply_user === "customer"
+            ? "Khách hàng"
+            : data?.apply_user === "collaborator"
+            ? "Cộng tác viên"
+            : "Hệ thống"}
+        </a>
+      ),
     },
     {
       title: "Ghi chú",
       dataIndex: "note",
     },
+    // {
+    //   key: "action",
+    //   render: (data) => {
+    //     return (
+    //       <div>
+    //         {data?.is_active ? (
+    //           <img
+    //             className="img-unlock-reason"
+    //             src={onToggle}
+    //             onClick={toggleBlock}
+    //           />
+    //         ) : (
+    //           <img
+    //             className="img-unlock-reason"
+    //             src={offToggle}
+    //             onClick={toggleBlock}
+    //           />
+    //         )}
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       title: "",
       key: "action",
-      render: (record) => (
+      render: (data) => (
         <Space size="middle">
-          <a onClick={toggleBlock}>
-            {record?.is_active ? " Chặn" : " Kích hoạt"}
-          </a>
           <Dropdown
             menu={{
               items,
@@ -144,7 +222,12 @@ export default function ReasonManage() {
           <CardHeader className="border-0 card-header">
             <Row className="align-items-center">
               <Col className="text-left">
-                <AddReason />
+                <AddReason
+                  setIsLoading={setIsLoading}
+                  setData={setData}
+                  setTotal={setTotal}
+                  startPage={startPage}
+                />
               </Col>
               {/* <Col>
                 <CustomTextInput
@@ -158,7 +241,7 @@ export default function ReasonManage() {
 
           <Table
             columns={columns}
-            dataSource={[]}
+            dataSource={data}
             pagination={false}
             rowKey={(record) => record._id}
             rowSelection={{
@@ -176,12 +259,12 @@ export default function ReasonManage() {
             }}
           />
           <div className="mt-2 div-pagination p-2">
-            <a>Tổng: {totalReason}</a>
+            <a>Tổng: {total}</a>
             <div>
               <Pagination
                 current={currentPage}
                 onChange={onChange}
-                total={totalReason}
+                total={total}
                 showSizeChanger={false}
               />
             </div>
@@ -235,6 +318,8 @@ export default function ReasonManage() {
             </ModalFooter>
           </Modal>
         </div>
+
+        {isLoading && <LoadingPagination />}
       </div>
     </React.Fragment>
   );

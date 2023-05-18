@@ -110,7 +110,10 @@ export const editOptionServiceApi = (id, data) => {
 };
 
 export const createOptionServiceApi = (data) => {
-  return axiosClient.post(`/admin/optional_service_manager/create_item`, data);
+  return axiosClient.post(
+    `/admin/optional_service_manager/create_item?lang=vi`,
+    data
+  );
 };
 
 export const getCalculateFeeApi = (data) => {

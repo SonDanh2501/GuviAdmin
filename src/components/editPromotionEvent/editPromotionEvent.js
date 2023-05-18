@@ -14,7 +14,12 @@ import {
 } from "reactstrap";
 import { fetchCustomers, searchCustomers } from "../../api/customer";
 import { DATA_PAYMENT, date } from "../../api/fakeData";
-import { getGroupCustomerApi, getPromotionDetails } from "../../api/promotion";
+import {
+  fetchPromotion,
+  getGroupCustomerApi,
+  getPromotionDetails,
+  updatePromotion,
+} from "../../api/promotion";
 import { loadingAction } from "../../redux/actions/loading";
 import { updatePromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
@@ -23,9 +28,22 @@ import CustomTextEditor from "../customTextEdittor";
 import "./editPromotionEvent.scss";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { errorNotify } from "../../helper/toast";
 dayjs.extend(customParseFormat);
 
-const EditPromotionEvent = ({ state, setState, data }) => {
+const EditPromotionEvent = (props) => {
+  const {
+    state,
+    setState,
+    data,
+    startPage,
+    setDataPromo,
+    setTotalPromo,
+    type,
+    brand,
+    exchange,
+    idService,
+  } = props;
   const [formPromorion, setFormPromotion] = useState("Mã khuyến mãi");
   const [typePromotion, setTypePromotion] = useState("code");
   const [formDiscount, setFormDiscount] = useState("amount");
@@ -271,58 +289,67 @@ const EditPromotionEvent = ({ state, setState, data }) => {
 
   const onEditPromotion = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      updatePromotionAction.updatePromotionRequest({
-        id: data?._id,
-        data: {
-          title: {
-            vi: titleVN,
-            en: titleEN,
-          },
-          short_description: {
-            vi: "",
-            en: "",
-          },
-          description: {
-            vi: descriptionVN,
-            en: descriptionEN,
-          },
-          thumbnail: "",
-          image_background: "",
-          code: promoCode,
-          is_limit_date: limitedDate,
-          limit_start_date: limitedDate
-            ? new Date(startDate).toISOString()
-            : null,
-          limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
-          is_limit_count: limitedQuantity,
-          limit_count: limitedQuantity ? amount : 0,
-          is_id_group_customer: isGroupCustomer,
-          id_group_customer: groupCustomer,
-          is_id_customer: isCustomer,
-          id_customer: id,
-          service_apply: [serviceApply],
-          is_limited_use: isUsePromo,
-          limited_use: isUsePromo ? usePromo : 0,
-          type_discount: "order",
-          type_promotion: "event",
-          price_min_order: minimumOrder,
-          discount_unit: discountUnit,
-          discount_max_price: maximumDiscount,
-          discount_value: reducedValue,
-          is_delete: false,
-          is_exchange_point: false,
-          exchange_point: 0,
-          brand: namebrand.toUpperCase(),
-          exp_date_exchange: 0,
-          position: position,
-          is_payment_method: isPaymentMethod,
-          payment_method: paymentMethod,
-          is_loop: isApplyTime,
-          day_loop: isApplyTime ? timeApply : [],
-        },
+    updatePromotion(data?._id, {
+      title: {
+        vi: titleVN,
+        en: titleEN,
+      },
+      short_description: {
+        vi: "",
+        en: "",
+      },
+      description: {
+        vi: descriptionVN,
+        en: descriptionEN,
+      },
+      thumbnail: "",
+      image_background: "",
+      code: promoCode,
+      is_limit_date: limitedDate,
+      limit_start_date: limitedDate ? new Date(startDate).toISOString() : null,
+      limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
+      is_limit_count: limitedQuantity,
+      limit_count: limitedQuantity ? amount : 0,
+      is_id_group_customer: isGroupCustomer,
+      id_group_customer: groupCustomer,
+      is_id_customer: isCustomer,
+      id_customer: id,
+      service_apply: [serviceApply],
+      is_limited_use: isUsePromo,
+      limited_use: isUsePromo ? usePromo : 0,
+      type_discount: "order",
+      type_promotion: "event",
+      price_min_order: minimumOrder,
+      discount_unit: discountUnit,
+      discount_max_price: maximumDiscount,
+      discount_value: reducedValue,
+      is_delete: false,
+      is_exchange_point: false,
+      exchange_point: 0,
+      brand: namebrand.toUpperCase(),
+      exp_date_exchange: 0,
+      position: position,
+      is_payment_method: isPaymentMethod,
+      payment_method: paymentMethod,
+      is_loop: isApplyTime,
+      day_loop: isApplyTime ? timeApply : [],
+    })
+      .then((res) => {
+        dispatch(loadingAction.loadingRequest(false));
+        setState(false);
+        fetchPromotion(startPage, 10, type, brand, idService, exchange)
+          .then((res) => {
+            setDataPromo(res?.data);
+            setTotalPromo(res?.totalItem);
+          })
+          .catch((err) => {});
       })
-    );
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
   }, [
     titleVN,
     titleEN,
