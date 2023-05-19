@@ -22,7 +22,7 @@ const ManageReport = () => {
       </div>
       <div className="div-container-report">
         <Tabs defaultActiveKey="1">
-          <Tabs.TabPane tab="Tổng quan" key="1">
+          <Tabs.TabPane tab="Báo cáo đơn hàng" key="1">
             <ReportOrder />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Báo cáo CTV" key="2">
@@ -34,7 +34,7 @@ const ManageReport = () => {
           <Tabs.TabPane tab="Báo cáo lượt giới thiệu" key="4">
             <ReportInvite />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo khách hàng" key="5">
+          <Tabs.TabPane tab="Báo cáo đơn hàng theo khách hàng" key="5">
             <ReportCustomer />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Báo cáo khu vực" key="6">

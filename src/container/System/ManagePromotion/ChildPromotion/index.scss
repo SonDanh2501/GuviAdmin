@@ -90,3 +90,17 @@
     }
   }
 }
+
+.btn-export-CSV {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 5px;
+  background-color: #48cae4;
+  color: white;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  width: 10%;
+  height: 38px;
+  float: right;
+}

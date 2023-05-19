@@ -48,14 +48,15 @@ const ProfileCollaborator = () => {
         setData(res);
         dispatch(loadingAction.loadingRequest(false));
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
 
     getDistrictApi()
       .then((res) => {
         setDataDistrict(res?.aministrative_division[0]?.districts);
       })
       .catch((err) => {
-        console.log(err);
+        {
+        }
       });
   }, [id]);
 
@@ -141,7 +142,12 @@ const ProfileCollaborator = () => {
               <CardBody>
                 <Tabs defaultActiveKey="1">
                   <Tabs.TabPane tab="Thông tin cơ bản" key="1">
-                    <Information data={data} image={img} />
+                    <Information
+                      data={data}
+                      image={img}
+                      idCTV={id}
+                      setData={setData}
+                    />
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Tài liệu" key="2">
                     <Document id={data?._id} />

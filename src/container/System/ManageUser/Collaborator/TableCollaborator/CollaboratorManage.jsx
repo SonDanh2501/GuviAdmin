@@ -10,13 +10,14 @@ import {
   Space,
   Table,
 } from "antd";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   activeCollaborator,
   changeContactedCollaborator,
   deleteCollaborator,
+  fetchCollaborators,
   lockTimeCollaborator,
   searchCollaborators,
   verifyCollaborator,
@@ -37,9 +38,11 @@ import "./CollaboratorManage.scss";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { getUser } from "../../../../../redux/selectors/auth.js";
+import LoadingPagination from "../../../../../components/paginationLoading/index.jsx";
+import AddCollaborator from "../../../../../components/addCollaborator/addCollaborator.js";
 
 export default function CollaboratorManage(props) {
-  const { data, total, status } = props;
+  const { status } = props;
   const [dataFilter, setDataFilter] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
@@ -47,6 +50,8 @@ export default function CollaboratorManage(props) {
   const [valueFilter, setValueFilter] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
+  const [data, setData] = useState([]);
+  const [total, setTotal] = useState(0);
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
   const [modalVerify, setModalVerify] = useState(false);
@@ -55,6 +60,7 @@ export default function CollaboratorManage(props) {
   const [modalEdit, setModalEdit] = useState(false);
   const [checkLock, setCheckLock] = useState(false);
   const [timeValue, setTimeValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const toggle = () => setModal(!modal);
   const toggleContected = () => setModalContected(!modalContected);
   const toggleBlock = () => setModalBlock(!modalBlock);
@@ -63,6 +69,15 @@ export default function CollaboratorManage(props) {
   const user = useSelector(getUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchCollaborators(0, 20, status)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItems);
+      })
+      .catch((err) => {});
+  }, [status]);
 
   const onChange = (page) => {
     setCurrentPage(page);
@@ -78,13 +93,12 @@ export default function CollaboratorManage(props) {
             setTotalFilter(res.totalItems);
           })
           .catch((err) => console.log(err))
-      : dispatch(
-          getCollaborators.getCollaboratorsRequest({
-            start: start > 0 ? start : 0,
-            length: 20,
-            type: status,
+      : fetchCollaborators(start, 20, status)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItems);
           })
-        );
+          .catch((err) => {});
   };
 
   const changeValueSearch = (value) => {
@@ -109,21 +123,20 @@ export default function CollaboratorManage(props) {
 
   const onDelete = useCallback(
     (id) => {
-      dispatch(loadingAction.loadingRequest(true));
+      setIsLoading(true);
       deleteCollaborator(id, { is_delete: true })
         .then((res) => {
-          dispatch(
-            getCollaborators.getCollaboratorsRequest({
-              start: startPage,
-              length: 20,
-              type: status,
+          fetchCollaborators(startPage, 20, status)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItems);
             })
-          );
-          dispatch(loadingAction.loadingRequest(false));
+            .catch((err) => {});
+          setIsLoading(false);
           setModal(false);
         })
         .catch((err) => {
-          dispatch(loadingAction.loadingRequest(false));
+          setIsLoading(false);
           errorNotify({
             message: err,
           });
@@ -134,18 +147,18 @@ export default function CollaboratorManage(props) {
 
   const blockCollaborator = useCallback(
     (id, is_active) => {
-      dispatch(loadingAction.loadingRequest(true));
+      setIsLoading(true);
       if (is_active === true) {
         activeCollaborator(id, { is_active: false })
           .then((res) => {
-            dispatch(
-              getCollaborators.getCollaboratorsRequest({
-                start: startPage,
-                length: 20,
-                type: status,
+            fetchCollaborators(startPage, 20, status)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItems);
               })
-            );
+              .catch((err) => {});
             setModalBlock(false);
+            setIsLoading(false);
           })
           .catch((err) => {
             dispatch(loadingAction.loadingRequest(false));
@@ -156,18 +169,17 @@ export default function CollaboratorManage(props) {
       } else {
         activeCollaborator(id, { is_active: true })
           .then((res) => {
-            dispatch(
-              getCollaborators.getCollaboratorsRequest({
-                start: startPage,
-                length: 20,
-                type: status,
+            fetchCollaborators(startPage, 20, status)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItems);
               })
-            );
+              .catch((err) => {});
             setModalBlock(false);
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
           })
           .catch((err) => {
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
             errorNotify({
               message: err,
             });
@@ -179,22 +191,21 @@ export default function CollaboratorManage(props) {
 
   const onLockTimeCollaborator = useCallback(
     (id, is_lock_time) => {
-      dispatch(loadingAction.loadingRequest(true));
+      setIsLoading(true);
       if (is_lock_time === true) {
         lockTimeCollaborator(id, { is_locked: false })
           .then((res) => {
-            dispatch(
-              getCollaborators.getCollaboratorsRequest({
-                start: startPage,
-                length: 20,
-                type: status,
+            fetchCollaborators(startPage, 20, status)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItems);
               })
-            );
+              .catch((err) => {});
             setModalLockTime(false);
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
           })
           .catch((err) => {
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
             errorNotify({
               message: err,
             });
@@ -205,18 +216,17 @@ export default function CollaboratorManage(props) {
           date_lock: moment(new Date(timeValue)).toISOString(),
         })
           .then((res) => {
-            dispatch(
-              getCollaborators.getCollaboratorsRequest({
-                start: startPage,
-                length: 20,
-                type: status,
+            fetchCollaborators(startPage, 20, status)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItems);
               })
-            );
+              .catch((err) => {});
             setModalLockTime(false);
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
           })
           .catch((err) => {
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
             errorNotify({
               message: err,
             });
@@ -227,22 +237,21 @@ export default function CollaboratorManage(props) {
   );
   const onVerifyCollaborator = useCallback(
     (id, is_verify) => {
-      dispatch(loadingAction.loadingRequest(true));
+      setIsLoading(true);
       if (is_verify === true) {
         verifyCollaborator(id)
           .then((res) => {
-            dispatch(
-              getCollaborators.getCollaboratorsRequest({
-                start: startPage,
-                length: 20,
-                type: status,
+            fetchCollaborators(startPage, 20, status)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItems);
               })
-            );
+              .catch((err) => {});
             setModalVerify(false);
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
           })
           .catch((err) => {
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
             errorNotify({
               message: err,
             });
@@ -250,18 +259,17 @@ export default function CollaboratorManage(props) {
       } else {
         verifyCollaborator(id)
           .then((res) => {
-            dispatch(
-              getCollaborators.getCollaboratorsRequest({
-                start: startPage,
-                length: 20,
-                type: status,
+            fetchCollaborators(startPage, 20, status)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItems);
               })
-            );
+              .catch((err) => {});
             setModalVerify(false);
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
           })
           .catch((err) => {
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
             errorNotify({
               message: err,
             });
@@ -273,22 +281,21 @@ export default function CollaboratorManage(props) {
 
   const onContected = useCallback(
     (id) => {
-      dispatch(loadingAction.loadingRequest(true));
+      setIsLoading(true);
 
       changeContactedCollaborator(id)
         .then((res) => {
-          dispatch(
-            getCollaborators.getCollaboratorsRequest({
-              start: startPage,
-              length: 20,
-              type: status,
+          fetchCollaborators(startPage, 20, status)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItems);
             })
-          );
+            .catch((err) => {});
           setModalContected(false);
-          dispatch(loadingAction.loadingRequest(false));
+          setIsLoading(false);
         })
         .catch((err) => {
-          dispatch(loadingAction.loadingRequest(false));
+          setIsLoading(false);
           errorNotify({
             message: err,
           });
@@ -504,6 +511,13 @@ export default function CollaboratorManage(props) {
               handleSearch(e.target.value);
             }}
           />
+          <AddCollaborator
+            setData={setData}
+            setTotal={setTotal}
+            startPage={startPage}
+            status={status}
+            setIsLoading={setIsLoading}
+          />
         </div>
         <div className="div-table mt-3">
           <Table
@@ -698,14 +712,8 @@ export default function CollaboratorManage(props) {
           </Modal>
         </div>
 
-        <div>
-          <EditCollaborator
-            state={modalEdit}
-            setState={() => setModalEdit(!modalEdit)}
-            data={itemEdit}
-          />
-        </div>
         <FloatButton.BackTop />
+        {isLoading && <LoadingPagination />}
       </div>
     </React.Fragment>
   );

@@ -15,7 +15,7 @@ import dayjs from "dayjs";
 import _debounce from "lodash/debounce";
 import "./index.scss";
 
-const Information = ({ data, image }) => {
+const Information = ({ data, image, idCTV, setData }) => {
   const [name, setName] = useState("");
   const [gender, setGender] = useState("other");
   const [birthday, setBirthday] = useState("2022-01-20T00:00:00.000Z");
@@ -30,6 +30,7 @@ const Information = ({ data, image }) => {
   const [imgUrl, setImgUrl] = useState("");
   const [phone, setPhone] = useState("");
   const [codeInvite, setCodeInvite] = useState("");
+  const [type, setType] = useState("");
   const [dataCollaborator, setDataCollaborator] = useState([]);
   const [nameCollaborator, setNameCollaborator] = useState("");
   const [idCollaborator, setIdCollaborator] = useState("");
@@ -56,6 +57,7 @@ const Information = ({ data, image }) => {
     setImgUrl(data?.avatar);
     setPhone(data?.phone);
     setCodeInvite(data?.invite_code);
+    setType(data?.type);
   }, [data]);
 
   const onChangeNumberIndentity = (value) => {
@@ -110,9 +112,15 @@ const Information = ({ data, image }) => {
       identity_date: indentityDay,
       avatar: image ? image : imgUrl,
       id_inviter: idCollaborator,
+      type: type,
     })
       .then((res) => {
-        window.location.reload();
+        dispatch(loadingAction.loadingRequest(false));
+        getCollaboratorsById(idCTV)
+          .then((res) => {
+            setData(res);
+          })
+          .catch((err) => {});
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -137,6 +145,8 @@ const Information = ({ data, image }) => {
     image,
     imgUrl,
     idCollaborator,
+    type,
+    idCTV,
   ]);
 
   return (
@@ -191,13 +201,22 @@ const Information = ({ data, image }) => {
             </Col>
           </Row>
           <Row>
-            <Col>
+            <Col lg="6">
               <CustomTextInput
                 label={"Địa chỉ thường trú"}
                 placeholder="Nhập địa chỉ thường trú"
                 type="text"
                 value={resident}
                 onChange={(e) => setResident(e.target.value)}
+              />
+            </Col>
+            <Col lg="6">
+              <CustomTextInput
+                label={"Đối tượng CTV"}
+                placeholder="Nhập đối tượng"
+                type="text"
+                value={type}
+                onChange={(e) => setType(e.target.value)}
               />
             </Col>
           </Row>

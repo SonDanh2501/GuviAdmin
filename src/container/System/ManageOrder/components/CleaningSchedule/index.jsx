@@ -474,7 +474,7 @@ const CleaningSchedule = (props) => {
         })
           .then((res) => {
             navigate("/group-order/manage-order");
-            window.location.reload();
+            // window.location.reload();
           })
           .catch((err) => {
             errorNotify({
@@ -560,7 +560,7 @@ const CleaningSchedule = (props) => {
         setDataCollaborator([]);
       }
       setIdCollaborator("");
-    }, 500),
+    }, 1000),
     [id]
   );
 

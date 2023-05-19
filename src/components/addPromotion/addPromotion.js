@@ -409,10 +409,21 @@ const AddPromotion = (props) => {
         }
       })
       .catch((err) => {
-        errorNotify({
-          message: err,
-        });
-        dispatch(loadingAction.loadingRequest(false));
+        if (isParrentPromotion) {
+          setState(false);
+          fetchPromotion(startPage, 10, type, brand, idService, exchange)
+            .then((res) => {
+              setDataPromo(res?.data);
+              setTotalPromo(res?.totalItem);
+            })
+            .catch((err) => {});
+          dispatch(loadingAction.loadingRequest(false));
+        } else {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
+        }
       });
   }, [
     titleVN,
@@ -1001,7 +1012,11 @@ const AddPromotion = (props) => {
                         className="input-promo-code mt-2"
                         type="number"
                         value={totalChildPromotion}
-                        onChange={(e) => setTotalChildPromotion(e.target.value)}
+                        onChange={(e) =>
+                          setTotalChildPromotion(
+                            Number.parseInt(e.target.value)
+                          )
+                        }
                       />
                     )}
                   </div>

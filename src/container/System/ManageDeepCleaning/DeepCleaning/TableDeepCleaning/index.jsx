@@ -22,7 +22,7 @@ const TableDeepCleaning = (props) => {
   const [total, setTotal] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [startPage, setStartPage] = useState(1);
+  const [startPage, setStartPage] = useState(0);
   const [statusModal, setStatusModal] = useState("done");
   const [modal, setModal] = useState(false);
   const [modalContacted, setModalContacted] = useState(false);

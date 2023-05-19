@@ -5,12 +5,14 @@ import { getChildPromotion } from "../../../../api/promotion.jsx";
 import moment from "moment";
 import "./index.scss";
 import LoadingPagination from "../../../../components/paginationLoading/index.jsx";
+import { ExportCSV } from "../../../../helper/export.js";
 
 const ChildPromotion = () => {
   const { state } = useLocation();
   const { code } = state || {};
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
+  const [dataDealtoday, setDataDealtoday] = useState([]);
   const [total, setTotal] = useState(0);
   const [tab, setTab] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +32,19 @@ const ChildPromotion = () => {
         setIsLoading(false);
       });
   }, [code, tab]);
+
+  useEffect(() => {
+    if (total) {
+      getChildPromotion(code, tab, 0, total)
+        .then((res) => {
+          setDataDealtoday(res?.data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+        });
+    }
+  }, [total]);
 
   const onChange = (page) => {
     window.scrollTo(0, 0);
@@ -110,53 +125,6 @@ const ChildPromotion = () => {
         );
       },
     },
-    // {
-    //   title: "Bật/tắt",
-    //   align: "center",
-
-    //   render: (data) => {
-    //     var date =
-    //       data?.limit_end_date &&
-    //       moment(data?.limit_end_date.slice(0, 10));
-    //     var now = moment();
-    //     return (
-    //       <div>
-    //         {contextHolder}
-    //         {data?.is_active ? (
-    //           <img
-    //             src={onToggle}
-    //             className="img-toggle"
-    //             onClick={toggleActive}
-    //           />
-    //         ) : (
-    //           <div>
-    //             {data?.is_limit_date ? (
-    //               date < now ? (
-    //                 <img
-    //                   src={offToggle}
-    //                   className="img-toggle"
-    //                   onClick={() => openNotificationWithIcon("warning")}
-    //                 />
-    //               ) : (
-    //                 <img
-    //                   src={offToggle}
-    //                   className="img-toggle"
-    //                   onClick={toggleActive}
-    //                 />
-    //               )
-    //             ) : (
-    //               <img
-    //                 src={offToggle}
-    //                 className="img-toggle"
-    //                 onClick={toggleActive}
-    //               />
-    //             )}
-    //           </div>
-    //         )}
-    //       </div>
-    //     );
-    //   },
-    // },
     {
       title: "Trạng thái",
       align: "center",
@@ -202,6 +170,11 @@ const ChildPromotion = () => {
 
   return (
     <>
+      {dataDealtoday.length > 0 && tab === "all" && (
+        <div className="btn-export-CSV">
+          <ExportCSV csvData={dataDealtoday} fileName={"DEALTODAY"} />
+        </div>
+      )}
       <div className="div-tab-child-promotion">
         {TAB_DATA?.map((item, index) => {
           return (

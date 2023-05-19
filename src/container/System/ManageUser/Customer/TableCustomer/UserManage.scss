@@ -72,11 +72,12 @@
   color: orangered;
 }
 
-.div-header {
+.div-header-customer-table {
   margin-bottom: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 100%;
   .dropdown {
     display: flex;
     height: 48px;

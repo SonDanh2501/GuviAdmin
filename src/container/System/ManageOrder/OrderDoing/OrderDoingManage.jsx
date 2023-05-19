@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Card, CardFooter } from "reactstrap";
 import { getOrder } from "../../../../redux/actions/order";
@@ -12,11 +12,12 @@ import CustomTextInput from "../../../../components/CustomTextInput/customTextIn
 import { formatDayVN } from "../../../../helper/formatDayVN";
 import "./OrderDoingManage.scss";
 
-export default function OrderDoingManage() {
+const OrderDoingManage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [dataSearch, setDataSearch] = useState([]);
   const [totalSearch, setTotalSearch] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [data, setData] = useState([]);
@@ -25,10 +26,12 @@ export default function OrderDoingManage() {
   const [item, setItem] = useState([]);
 
   useEffect(() => {
-    getOrderApi(0, 10, "doing", "").then((res) => {
-      setData(res.data);
-      setTotal(res.totalItem);
-    });
+    getOrderApi(0, 10, "doing", "")
+      .then((res) => {
+        setData(res.data);
+        setTotal(res.totalItem);
+      })
+      .catch((err) => {});
   }, []);
 
   const timeWork = (data) => {
@@ -103,12 +106,14 @@ export default function OrderDoingManage() {
         return (
           <div className="div-service">
             <a className="text-service">
-              {data?.type === "schedule"
-                ? "Giúp việc cố định"
-                : data?.type === "loop" && !data?.is_auto_order
-                ? "Giúp việc theo giờ"
-                : data?.type === "loop" && data?.is_auto_order
-                ? "Lặp lại hàng tuần"
+              {data?.type === "loop" && data?.is_auto_order
+                ? "Lặp lại"
+                : data?.service?._id?.kind === "giup_viec_theo_gio"
+                ? "Theo giờ"
+                : data?.service?._id?.kind === "giup_viec_co_dinh"
+                ? "Cố định"
+                : data?.service?._id?.kind === "phuc_vu_nha_hang"
+                ? "Phục vụ"
                 : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>
@@ -219,7 +224,7 @@ export default function OrderDoingManage() {
           setDataSearch(res.data);
           setTotalSearch(res.totalItem);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {});
     }, 1000),
     []
   );
@@ -230,20 +235,22 @@ export default function OrderDoingManage() {
       dataSearch.length > 0
         ? page * dataSearch.length - dataSearch.length
         : page * data.length - data.length;
+
+    setStartPage(start);
+
     dataSearch.length > 0
-      ? searchOrderApi(0, 10, valueSearch, "doing")
+      ? searchOrderApi(start, 10, valueSearch, "doing")
           .then((res) => {
             setDataSearch(res.data);
             setTotalSearch(res.totalItem);
           })
-          .catch((err) => console.log(err))
-      : dispatch(
-          getOrder.getOrderRequest({
-            start: start > 0 ? start : 0,
-            length: 10,
-            status: "doing",
+          .catch((err) => {})
+      : getOrderApi(start, 10, "doing", "")
+          .then((res) => {
+            setData(res.data);
+            setTotal(res.totalItem);
           })
-        );
+          .catch((err) => {});
   };
 
   return (
@@ -263,10 +270,6 @@ export default function OrderDoingManage() {
             columns={columns}
             dataSource={dataSearch.length > 0 ? dataSearch : data}
             pagination={false}
-            // locale={{
-            //   emptyText:
-            //     data.length > 0 ? <Empty /> : <Skeleton active={true} />,
-            // }}
             rowKey={(record) => record._id}
             rowSelection={{
               selectedRowKeys,
@@ -299,4 +302,6 @@ export default function OrderDoingManage() {
       </div>
     </React.Fragment>
   );
-}
+};
+
+export default memo(OrderDoingManage);

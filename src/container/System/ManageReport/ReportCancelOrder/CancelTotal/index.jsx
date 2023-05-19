@@ -24,6 +24,7 @@ const TotalCancel = () => {
   const [district, setDistrict] = useState(false);
   const [titleDistrict, setTitleDistrict] = useState("Chọn quận");
   const [dataPie, setDataPie] = useState([]);
+  const [dataTotalPie, setDataTotalPie] = useState([]);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,6 +51,7 @@ const TotalCancel = () => {
         )
           .then((res) => {
             setDataPie(res?.percent);
+            setDataTotalPie(res);
           })
           .catch((err) => {});
       })
@@ -89,6 +91,7 @@ const TotalCancel = () => {
       getReportCancelReport(startDate, endDate, value, codeDistrict)
         .then((res) => {
           setDataPie(res?.percent);
+          setDataTotalPie(res);
         })
         .catch((err) => {});
     },
@@ -102,6 +105,7 @@ const TotalCancel = () => {
       getReportCancelReport(startDate, endDate, codeCity, value)
         .then((res) => {
           setDataPie(res?.percent);
+          setDataTotalPie(res);
         })
         .catch((err) => {});
     },
@@ -183,27 +187,58 @@ const TotalCancel = () => {
             onCancel={() => {}}
           />
         </div>
-        <div className="div-pie-chart">
-          <ResponsiveContainer height={300} min-width={500}>
-            <PieChart>
-              <Pie
-                data={dataPie}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-                label={renderLabel}
-              >
-                {dataPie.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
+
+        <div className="div-pie-chart-cancel">
+          <div className="div-total-piechart">
+            <div className="item-total">
+              <a className="title-total">Tổng đơn huỷ</a>
+              <a className="text-colon">:</a>
+              <a className="number-total">{dataTotalPie?.total_cancel_order}</a>
+            </div>
+            <div className="item-total">
+              <a className="title-total">Đơn huỷ khách hàng</a>
+              <a className="text-colon">:</a>
+              <a className="number-total">
+                {dataTotalPie?.total_cancel_order_by_customer}
+              </a>
+            </div>
+            <div className="item-total">
+              <a className="title-total">Đơn huỷ hệ thống</a>
+              <a className="text-colon">:</a>
+              <a className="number-total">
+                {dataTotalPie?.total_cancel_order_by_system}
+              </a>
+            </div>
+            <div className="item-total">
+              <a className="title-total">Đơn huỷ quản trị viên</a>
+              <a className="text-colon">:</a>
+              <a className="number-total">
+                {dataTotalPie?.total_cancel_order_by_user_system}
+              </a>
+            </div>
+          </div>
+          <div className="div-pie-cancel">
+            <ResponsiveContainer height={300} min-width={500}>
+              <PieChart>
+                <Pie
+                  data={dataPie}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label={renderLabel}
+                >
+                  {dataPie.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </>
