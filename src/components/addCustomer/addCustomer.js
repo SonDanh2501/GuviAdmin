@@ -2,16 +2,17 @@ import { Drawer } from "antd";
 import { Formik } from "formik";
 import React, { memo, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Form, Modal } from "reactstrap";
-import { createCustomer } from "../../redux/actions/customerAction";
-import { loadingAction } from "../../redux/actions/loading";
+import { Form } from "reactstrap";
+
+import { createCustomer, fetchCustomers } from "../../api/customer";
+import { errorNotify } from "../../helper/toast";
 import { validateAddCustomerSchema } from "../../utils/schema";
-import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
+import CustomButton from "../customButton/customButton";
 import "./addCustomer.scss";
 
-const AddCustomer = () => {
-  const [state, setState] = useState(false);
+const AddCustomer = (props) => {
+  const { setIsLoading, setData, setTotal, startPage, status } = props;
   const formikRef = useRef();
   const dispatch = useDispatch();
 
@@ -33,17 +34,41 @@ const AddCustomer = () => {
   };
 
   const addCustomer = () => {
-    dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      createCustomer.createCustomerRequest({
-        code_phone_area: "+84",
-        phone: formikRef?.current?.values?.phone,
-        email: formikRef?.current?.values?.email,
-        full_name: formikRef?.current?.values?.name,
-        password: formikRef?.current?.values?.password,
-        code_inviter: formikRef?.current?.values?.code,
+    setIsLoading(true);
+    // dispatch(
+    //   createCustomer.createCustomerRequest({
+    //     code_phone_area: "+84",
+    //     phone: formikRef?.current?.values?.phone,
+    //     email: formikRef?.current?.values?.email,
+    //     full_name: formikRef?.current?.values?.name,
+    //     password: formikRef?.current?.values?.password,
+    //     code_inviter: formikRef?.current?.values?.code,
+    //   })
+    // );
+    createCustomer({
+      code_phone_area: "+84",
+      phone: formikRef?.current?.values?.phone,
+      email: formikRef?.current?.values?.email,
+      full_name: formikRef?.current?.values?.name,
+      password: formikRef?.current?.values?.password,
+      code_inviter: formikRef?.current?.values?.code,
+    })
+      .then((res) => {
+        setOpen(false);
+        setIsLoading(false);
+        fetchCustomers(startPage, 20, status)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItems);
+          })
+          .catch((err) => {});
       })
-    );
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        setIsLoading(false);
+      });
   };
 
   return (

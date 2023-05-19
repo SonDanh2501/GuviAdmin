@@ -31,7 +31,6 @@ function* fetchCustomersSaga(action) {
 }
 
 function* createCustomerSaga(action) {
-  console.log("saga createNewSaga");
   try {
     const Customer = yield call(api.createCustomer, action.payload);
     window.location.reload();

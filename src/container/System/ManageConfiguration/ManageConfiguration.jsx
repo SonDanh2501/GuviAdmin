@@ -38,6 +38,10 @@ const ManageConfiguration = () => {
       case "reason_punish":
         navigate("/adminManage/manage-configuration/reason_punish");
         break;
+      case "setting_service":
+        navigate("/services/manage-group-service");
+        break;
+
       default:
         break;
     }
@@ -104,5 +108,10 @@ const DATA = [
     id: 8,
     title: "Tạo lí do phạt",
     value: "reason_punish",
+  },
+  {
+    id: 9,
+    title: "Cấu hình dịch vụ",
+    value: "setting_service",
   },
 ];

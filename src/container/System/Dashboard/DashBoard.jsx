@@ -38,8 +38,12 @@ import { useNavigate } from "react-router-dom";
 import {
   Area,
   AreaChart,
+  Bar,
   CartesianGrid,
   Cell,
+  ComposedChart,
+  Legend,
+  Line,
   Pie,
   PieChart,
   ResponsiveContainer,
@@ -52,9 +56,15 @@ import MoreTopCollaborator from "../../../components/moreTopCollaborator";
 import MoreActivity from "./MoreActivity";
 import CustomDatePicker from "../../../components/customDatePicker";
 import { number_processing } from "../../../helper/numberProcessing";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import {
+  getReportTypeService,
+  getTotalCustomerYear,
+} from "../../../api/report";
+import { getDistrictApi } from "../../../api/file";
 moment.locale("vi");
-const { RangePicker } = DatePicker;
-const { Option } = Select;
+dayjs.extend(customParseFormat);
 
 const data = [
   { name: "Group A", value: 400 },
@@ -68,6 +78,15 @@ export default function Home() {
   const [arrResult, setArrResult] = useState([]);
   const [totalMoneyChart, setTotalMoneyChart] = useState(0);
   const [day, setDay] = useState([]);
+  const [dataUser, setDataUser] = useState([]);
+  const [totalYearUser, setTotalYearUser] = useState(0);
+  const [dataChartOrderDetails, setDataChartOrderDetails] = useState([]);
+  const [codeCity, setCodeCity] = useState();
+  const [nameCity, setNameCity] = useState("");
+  const [dataCity, setDataCity] = useState([]);
+  const [dataDistrict, setDataDistrict] = useState([]);
+  const [codeDistrict, setCodeDistrict] = useState(-1);
+  const [nameDistrict, setNameDistrict] = useState(-1);
   const [type, setType] = useState("day");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -78,6 +97,9 @@ export default function Home() {
   const topCollaborator = useSelector(getTopCollaborators);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const yearFormat = "YYYY";
+  const dataChartUser = [];
+
   useEffect(() => {
     getDayReportApi(
       moment(moment().startOf("month").toISOString())
@@ -101,7 +123,7 @@ export default function Home() {
     );
     dispatch(
       getTopCollaborator.getTopCollaboratorRequest({
-        startDate: moment(moment().startOf("year").toISOString())
+        startDate: moment(moment().startOf("month").toISOString())
           .add(7, "hours")
           .toISOString(),
         endDate: moment(new Date()).toISOString(),
@@ -109,7 +131,52 @@ export default function Home() {
         length: 10,
       })
     );
+
+    getTotalCustomerYear(moment().year())
+      .then((res) => {
+        setDataUser(res);
+      })
+      .catch((err) => {});
+
+    getDistrictApi()
+      .then((res) => {
+        setDataCity(res?.aministrative_division);
+        setCodeCity(res?.aministrative_division[1]?.code);
+        setNameCity(res?.aministrative_division[1]?.name);
+        setDataDistrict(res?.aministrative_division[1]?.districts);
+        getReportTypeService(
+          moment(moment().startOf("month").toISOString())
+            .add(7, "hours")
+            .toISOString(),
+          moment(moment(new Date()).toISOString())
+            .add(7, "hours")
+            .toISOString(),
+          res?.aministrative_division[1]?.code,
+          codeDistrict
+        )
+          .then((res) => {
+            setDataChartOrderDetails(res);
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {});
   }, []);
+
+  useEffect(() => {
+    let sum = 0;
+    for (let i = 0; i < dataUser.length; i++) {
+      setTotalYearUser((sum += dataUser[i].totalNew));
+    }
+  }, [dataUser]);
+
+  dataUser.map((item, index) => {
+    dataChartUser.push({
+      totalNew: item?.totalNew,
+      totalOld: item?.totalOld,
+      total: item?.totalAll,
+      month: index + 1,
+    });
+  });
 
   function getDates(startDate, stopDate) {
     var dateArray = [];
@@ -309,6 +376,61 @@ export default function Home() {
           Tổng đơn: {payload?.length > 0 ? payload[0]?.payload?.total_job : 0}
         </a>
       </div>
+    );
+  };
+
+  const renderTooltipContentUser = (o) => {
+    const { payload, label } = o;
+
+    return (
+      <div className="div-content-tool-chart-user">
+        <a className="date-text">Tháng {label}</a>
+        <a className="money-text">
+          Số tổng:{" "}
+          {payload?.length > 0
+            ? payload[0]?.payload?.totalNew + payload[0]?.payload?.totalOld
+            : 0}
+        </a>
+        <a className="money-text-new">
+          Số người đăng kí mới:{" "}
+          {payload?.length > 0 ? payload[0]?.payload?.totalNew : 0}
+        </a>
+        <a className="money-text-old">
+          Số người đăng kí cũ:{" "}
+          {payload?.length > 0 ? payload[0]?.payload?.totalOld : 0}
+        </a>
+      </div>
+    );
+  };
+
+  const renderLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    value,
+    name,
+  }) => {
+    const RADIAN = Math.PI / 180;
+    // eslint-disable-next-line
+    const radius = 25 + innerRadius + (outerRadius - innerRadius);
+    // eslint-disable-next-line
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    // eslint-disable-next-line
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="#000000"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
+        {name === "2_hour" ? "2 Giờ" : name === "3_hour" ? "3 Giờ" : "4 Giờ"} (
+        {value} {"%"})
+      </text>
     );
   };
 
@@ -597,19 +719,6 @@ export default function Home() {
                 />
               </CardBody>
               <div className="div-entries">
-                {/* <CustomTextInput
-                  label={"Hiện"}
-                  type="select"
-                  className={"select-entries"}
-                  onChange={(e) => onChangeNumberData(e.target.value)}
-                  body={
-                    <>
-                      <option value={"5"}>5</option>
-                      <option value={"10"}>10</option>
-                      <option value={"20"}>20</option>
-                    </>
-                  }
-                /> */}
                 <Select
                   style={{ width: 60 }}
                   defaultValue={"5"}
@@ -627,65 +736,102 @@ export default function Home() {
         <div>
           <Row>
             <Col lg="9">
-              {/* <div className="div-chart-pie">
-                <div>
-                  <a>TOP DỊCH VỤ</a>
-                </div>
-                <Row>
-                  <Col>
-                    <div className="div-pieChart">
-                      <div>
-                        <div className="div-service-hours">
-                          <div className="div-towhours" />
-                          <a>2 Giờ</a>
-                        </div>
-                        <div className="div-service-hours">
-                          <div className="div-threehours" />
-                          <a>3 Giờ</a>
-                        </div>
-                        <div className="div-service-hours">
-                          <div className="div-fourhours" />
-                          <a>4 Giờ</a>
-                        </div>
-                        <div className="div-service-hours">
-                          <div className="div-different" />
-                          <a>Khác</a>
-                        </div>
-                      </div>
-                      <div className="div-chart-de">
-                        <PieChart width={300} height={320}>
-                          <Pie
-                            data={data}
-                            cx={120}
-                            cy={200}
-                            innerRadius={60}
-                            outerRadius={80}
-                            fill="#8884d8"
-                            paddingAngle={5}
-                            dataKey="value"
-                          >
-                            {data.map((entry, index) => (
+              {/* <div className="div-chart-pie-total">
+                <a className="title-chart-area">
+                  {" "}
+                  Thống kê đơn hàng theo khu vực
+                </a>
+                <div className="div-select-city">
+          <Select
+            style={{ width: 200 }}
+            value={nameCity}
+            onChange={onChangeCity}
+            options={cityData}
+            showSearch
+            filterOption={(input, option) =>
+              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+            }
+          />
+          <Select
+            style={{ width: 180, marginLeft: 20, marginRight: 20 }}
+            placeholder="Chọn quận"
+            onChange={onChangeDistrict}
+            options={districtData}
+            showSearch
+            filterOption={(input, option) =>
+              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+            }
+          />
+          <CustomDatePicker
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            onClick={onChangeDay}
+            onCancel={onCancelPicker}
+          />
+          {startDate && (
+            <a className="text-date mt-2">
+              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+              {moment(endDate).utc().format("DD/MM/YYYY")}
+            </a>
+          )}
+        </div>
+                <div className="div-pie-chart">
+                  <div className="div-total-piechart">
+                    <div className="item-total">
+                      <a className="title-total">Tổng đơn</a>
+                      <a className="text-colon">:</a>
+                      <a className="number-total">
+                        {dataChartOrderDetails?.total_order}
+                      </a>
+                    </div>
+                    <div className="item-total">
+                      <a className="title-total">Đơn 2 Giờ</a>
+                      <a className="text-colon">:</a>
+                      <a className="number-total">
+                        {dataChartOrderDetails?.total_order_2_hours}
+                      </a>
+                    </div>
+                    <div className="item-total">
+                      <a className="title-total">Đơn 3 Giờ</a>
+                      <a className="text-colon">:</a>
+                      <a className="number-total">
+                        {dataChartOrderDetails?.total_order_3_hours}
+                      </a>
+                    </div>
+                    <div className="item-total">
+                      <a className="title-total">Đơn 4 Giờ</a>
+                      <a className="text-colon">:</a>
+                      <a className="number-total">
+                        {dataChartOrderDetails?.total_order_4_hours}
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="div-pie">
+                    <ResponsiveContainer height={300} min-width={500}>
+                      <PieChart height={250}>
+                        <Pie
+                          data={dataChartOrderDetails?.percent}
+                          cx="50%"
+                          cy="140"
+                          outerRadius={80}
+                          fill="#8884d8"
+                          dataKey="value"
+                          label={renderLabel}
+                        >
+                          {dataChartOrderDetails?.percent?.map(
+                            (entry, index) => (
                               <Cell
                                 key={`cell-${index}`}
                                 fill={COLORS[index % COLORS.length]}
                               />
-                            ))}
-                          </Pie>
-                        </PieChart>
-                      </div>
-                    </div>
-                  </Col>
-                  <Col className="mt-5">
-                    <div>
-                      <Progress
-                        percent={66}
-                        strokeWidth={10}
-                        strokeColor={"#48CAE4"}
-                      />
-                      <a>Hồ Chí Minh</a>
-                    </div>
-                  </Col>
-                </Row>
+                            )
+                          )}
+                        </Pie>
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
               </div> */}
             </Col>
             <Col lg="3">
@@ -796,6 +942,86 @@ export default function Home() {
                 <MoreActivity />
               </div>
             </Col>
+          </Row>
+        </div>
+        <div>
+          <Row>
+            <Col lg="6">
+              <div className="div-chart-user">
+                <h4>Tổng User</h4>
+                <div className="div-time-area">
+                  <div>
+                    <a className="text-time">Thời gian</a>
+                    <DatePicker
+                      picker="year"
+                      onChange={onChange}
+                      defaultValue={dayjs("2023", yearFormat)}
+                      format={yearFormat}
+                    />
+                  </div>
+                </div>
+                <div className="mt-3 divl-total">
+                  <a className="text-total-user">Tổng user</a>
+                  <div className="div-total">
+                    <a className="text-number-total">{totalYearUser}</a>
+                  </div>
+                </div>
+                <div className="mt-3">
+                  <ResponsiveContainer
+                    width={"100%"}
+                    height={350}
+                    min-width={350}
+                  >
+                    <ComposedChart
+                      width={500}
+                      height={300}
+                      data={dataChartUser.slice(0, moment().utc().month() + 1)}
+                      margin={{
+                        top: 5,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                      }}
+                      barSize={50}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis
+                        dataKey="month"
+                        tickFormatter={(tickItem) => "Tháng " + tickItem}
+                      />
+                      <YAxis />
+                      <Tooltip content={renderTooltipContentUser} />
+                      <Legend />
+
+                      <Bar
+                        dataKey="totalOld"
+                        fill="#82ca9d"
+                        minPointSize={20}
+                        barSize={40}
+                        name="Khách hàng cũ"
+                        stackId="a"
+                      />
+
+                      <Bar
+                        dataKey="totalNew"
+                        fill="#4376CC"
+                        minPointSize={20}
+                        barSize={40}
+                        name="Khách hàng mới"
+                        stackId="a"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="totalNew"
+                        stroke="#ff7300"
+                        name="Khách hàng mới"
+                      />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </Col>
+            <Col lg="6"></Col>
           </Row>
         </div>
       </div>

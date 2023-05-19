@@ -20,6 +20,7 @@ const TableExpired = ({ status }) => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(1);
   const [dataSearch, setDataSearch] = useState([]);
   const [totalSearch, setTotalSearch] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
@@ -130,12 +131,14 @@ const TableExpired = ({ status }) => {
         return (
           <div className="div-service-expired">
             <a className="text-service">
-              {data?.type === "schedule"
-                ? "Cố định"
-                : data?.type === "loop" && !data?.is_auto_order
-                ? "Theo giờ"
-                : data?.type === "loop" && data?.is_auto_order
+              {data?.type === "loop" && data?.is_auto_order
                 ? "Lặp lại"
+                : data?.service?._id?.kind === "giup_viec_theo_gio"
+                ? "Theo giờ"
+                : data?.service?._id?.kind === "giup_viec_co_dinh"
+                ? "Cố định"
+                : data?.service?._id?.kind === "phuc_vu_nha_hang"
+                ? "Phục vụ"
                 : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>
@@ -249,6 +252,8 @@ const TableExpired = ({ status }) => {
       dataSearch.length > 0
         ? page * dataSearch.length - dataSearch.length
         : page * data.length - data.length;
+
+    setStartPage(start);
     dataSearch?.length > 0
       ? searchOrderExpiredApi(start, 20, status, valueSearch).then((res) => {
           setDataSearch(res?.data);

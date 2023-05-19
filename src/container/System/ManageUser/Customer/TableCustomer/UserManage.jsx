@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import {
   activeCustomer,
   deleteCustomer,
+  fetchCustomers,
   searchCustomers,
 } from "../../../../../api/customer";
 import EditCustomer from "../../../../../components/editCustomer/editCustomer";
@@ -29,9 +30,10 @@ import { getCustomers } from "../../../../../redux/actions/customerAction";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import { getUser } from "../../../../../redux/selectors/auth";
 import "./UserManage.scss";
+import AddCustomer from "../../../../../components/addCustomer/addCustomer";
 
-export default function UserManage(props) {
-  const { data, total, status } = props;
+const UserManage = (props) => {
+  const { status } = props;
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState("");
   const [valueFilter, setValueFilter] = useState("");
@@ -47,32 +49,47 @@ export default function UserManage(props) {
   const [conditionFilter, setConditionFilter] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [rank, setRank] = useState("");
+  const [data, setData] = useState([]);
+  const [total, setTotal] = useState(0);
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(getUser);
 
+  useEffect(() => {
+    // dispatch(
+    //   getCustomers.getCustomersRequest({ start: 0, length: 20, type: "" })
+    // );
+    fetchCustomers(0, 20, status)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItems);
+      })
+      .catch((err) => {});
+    setCurrentPage(1);
+    setStartPage(0);
+  }, [status]);
+
   const onDelete = useCallback(
     (id) => {
-      dispatch(loadingAction.loadingRequest(true));
+      setIsLoading(true);
       deleteCustomer(id, { is_delete: true })
         .then((res) => {
-          dispatch(
-            getCustomers.getCustomersRequest({
-              start: startPage,
-              length: 20,
-              type: status,
+          fetchCustomers(startPage, 20, status)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItems);
             })
-          );
+            .catch((err) => {});
           setModal(false);
-          dispatch(loadingAction.loadingRequest(false));
+          setIsLoading(false);
         })
         .catch((err) => {
           errorNotify({
             message: err,
           });
-          dispatch(loadingAction.loadingRequest(false));
+          setIsLoading(false);
         });
     },
     [status, startPage]
@@ -80,44 +97,42 @@ export default function UserManage(props) {
 
   const blockCustomer = useCallback(
     (id, is_active) => {
-      dispatch(loadingAction.loadingRequest(true));
+      setIsLoading(true);
       if (is_active === true) {
         activeCustomer(id, { is_active: false })
           .then((res) => {
-            setModalBlock(!modalBlock);
-            dispatch(
-              getCustomers.getCustomersRequest({
-                start: startPage,
-                length: 20,
-                type: status,
+            setModalBlock(false);
+            fetchCustomers(startPage, 20, status)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItems);
               })
-            );
-            dispatch(loadingAction.loadingRequest(false));
+              .catch((err) => {});
+            setIsLoading(false);
           })
           .catch((err) => {
             errorNotify({
               message: err,
             });
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
           });
       } else {
         activeCustomer(id, { is_active: true })
           .then((res) => {
-            setModalBlock(!modalBlock);
-            dispatch(loadingAction.loadingRequest(false));
-            dispatch(
-              getCustomers.getCustomersRequest({
-                start: startPage,
-                length: 20,
-                type: status,
+            setModalBlock(false);
+            setIsLoading(false);
+            fetchCustomers(startPage, 20, status)
+              .then((res) => {
+                setData(res?.data);
+                setTotal(res?.totalItems);
               })
-            );
+              .catch((err) => {});
           })
           .catch((err) => {
             errorNotify({
               message: err,
             });
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
           });
       }
     },
@@ -141,13 +156,12 @@ export default function UserManage(props) {
             setTotalFilter(res.totalItems);
           })
           .catch((err) => {})
-      : dispatch(
-          getCustomers.getCustomersRequest({
-            start: start > 0 ? start : 0,
-            length: 20,
-            type: status,
+      : fetchCustomers(start, 20, status)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItems);
           })
-        );
+          .catch((err) => {});
   };
 
   const handleSearch = useCallback(
@@ -171,13 +185,14 @@ export default function UserManage(props) {
     {
       key: "1",
       label: (
-        <a
-          onClick={() => {
-            setModalEdit(!modalEdit);
-          }}
-        >
-          Chỉnh sửa
-        </a>
+        <EditCustomer
+          data={itemEdit}
+          setIsLoading={setIsLoading}
+          setData={setData}
+          setTotal={setTotal}
+          startPage={startPage}
+          status={status}
+        />
       ),
     },
     {
@@ -559,21 +574,7 @@ export default function UserManage(props) {
   return (
     <React.Fragment>
       <div>
-        <div className="div-header">
-          {/* <Dropdown
-            menu={{ items: itemFilter }}
-            trigger={["click"]}
-            className="dropdown"
-          >
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                <FilterOutlined className="icon" />
-                <a className="text-filter">
-                  {conditionFilter ? conditionFilter : "Thêm điều kiện lọc"}
-                </a>
-              </Space>
-            </a>
-          </Dropdown> */}
+        <div className="div-header-customer-table">
           <Input
             placeholder="Tìm kiếm"
             type="text"
@@ -581,6 +582,19 @@ export default function UserManage(props) {
             prefix={<SearchOutlined />}
             onChange={(e) => handleSearch(e.target.value)}
           />
+
+          {user?.role !== "marketing_manager" ||
+          user?.role !== "marketing_manager" ? (
+            <AddCustomer
+              setIsLoading={setIsLoading}
+              setData={setData}
+              setTotal={setTotal}
+              startPage={startPage}
+              status={status}
+            />
+          ) : (
+            <></>
+          )}
         </div>
 
         <div className="mt-3">
@@ -671,16 +685,12 @@ export default function UserManage(props) {
             </ModalFooter>
           </Modal>
         </div>
-        <div>
-          <EditCustomer
-            state={modalEdit}
-            setState={() => setModalEdit(!modalEdit)}
-            data={itemEdit}
-          />
-        </div>
+
         <FloatButton.BackTop />
         {isLoading && <LoadingPagination />}
       </div>
     </React.Fragment>
   );
-}
+};
+
+export default memo(UserManage);

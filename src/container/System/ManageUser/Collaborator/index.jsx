@@ -16,16 +16,16 @@ const ManageCollaborator = () => {
   const collaboratorTotal = useSelector(getCollaboratorTotal);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    // dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      getCollaborators.getCollaboratorsRequest({
-        start: 0,
-        length: 20,
-        type: "",
-      })
-    );
-  }, [dispatch]);
+  // useEffect(() => {
+  //   // dispatch(loadingAction.loadingRequest(true));
+  //   dispatch(
+  //     getCollaborators.getCollaboratorsRequest({
+  //       start: 0,
+  //       length: 20,
+  //       type: "",
+  //     })
+  //   );
+  // }, [dispatch]);
 
   const onChangeTab = (active) => {
     if (active === "2") {
@@ -34,40 +34,40 @@ const ManageCollaborator = () => {
       setStatus("offline");
     } else if (active === "4") {
       setStatus("locked");
-      dispatch(
-        getCollaborators.getCollaboratorsRequest({
-          start: 0,
-          length: 20,
-          type: "locked",
-        })
-      );
+      // dispatch(
+      //   getCollaborators.getCollaboratorsRequest({
+      //     start: 0,
+      //     length: 20,
+      //     type: "locked",
+      //   })
+      // );
     } else if (active === "5") {
       setStatus("verify");
-      dispatch(
-        getCollaborators.getCollaboratorsRequest({
-          start: 0,
-          length: 20,
-          type: "verify",
-        })
-      );
+      // dispatch(
+      //   getCollaborators.getCollaboratorsRequest({
+      //     start: 0,
+      //     length: 20,
+      //     type: "verify",
+      //   })
+      // );
     } else if (active === "6") {
       setStatus("not_verify");
-      dispatch(
-        getCollaborators.getCollaboratorsRequest({
-          start: 0,
-          length: 20,
-          type: "not_verify",
-        })
-      );
+      // dispatch(
+      //   getCollaborators.getCollaboratorsRequest({
+      //     start: 0,
+      //     length: 20,
+      //     type: "not_verify",
+      //   })
+      // );
     } else {
       setStatus("");
-      dispatch(
-        getCollaborators.getCollaboratorsRequest({
-          start: 0,
-          length: 20,
-          type: "",
-        })
-      );
+      // dispatch(
+      //   getCollaborators.getCollaboratorsRequest({
+      //     start: 0,
+      //     length: 20,
+      //     type: "",
+      //   })
+      // );
     }
   };
 
@@ -75,38 +75,25 @@ const ManageCollaborator = () => {
     <>
       <div className="div-header-collaborator">
         <a className="title-cv">Danh sách Cộng tác viên</a>
-        <AddCollaborator />
       </div>
 
       <div className="div-container-collaborator">
         <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
           <Tabs.TabPane tab="Tất cả Cộng Tác Viên" key="1">
-            <CollaboratorManage
-              data={collaborator}
-              total={collaboratorTotal}
-              status={status}
-            />
+            <CollaboratorManage status={status} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="CTV Đang Online" key="2"></Tabs.TabPane>
           <Tabs.TabPane tab="CTV Đang Offline" key="3"></Tabs.TabPane>
           <Tabs.TabPane tab="CTV Đã Khoá" key="4">
-            <CollaboratorManage
-              data={collaborator}
-              total={collaboratorTotal}
-              status={status}
-            />
+            <CollaboratorManage status={status} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="CTV Đã Xác Thực" key="5">
-            <CollaboratorManage
-              data={collaborator}
-              total={collaboratorTotal}
-              status={status}
-            />
+            <CollaboratorManage status={status} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="CTV Chưa Xác Thực" key="6">
             <CollaboratorManage
-              data={collaborator}
-              total={collaboratorTotal}
+              // data={collaborator}
+              // total={collaboratorTotal}
               status={status}
             />
           </Tabs.TabPane>

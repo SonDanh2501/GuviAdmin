@@ -1,17 +1,27 @@
+import { Drawer } from "antd";
 import { Formik } from "formik";
-import React, { memo, useCallback, useRef } from "react";
+import React, { memo, useCallback, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Button, Form, Modal } from "reactstrap";
-import { updateCustomer } from "../../redux/actions/customerAction";
+import { Form } from "reactstrap";
+import { fetchCustomers, updateCustomer } from "../../api/customer";
+import { errorNotify } from "../../helper/toast";
 import { validateAddCustomerSchema } from "../../utils/schema";
-import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
-import { loadingAction } from "../../redux/actions/loading";
+import CustomButton from "../customButton/customButton";
 import "./editCustomer.scss";
 
-const EditCustomer = ({ state, setState, data }) => {
+const EditCustomer = (props) => {
+  const { data, setIsLoading, setData, setTotal, startPage, status } = props;
   const formikRef = useRef();
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = ({ data }) => {
+    setOpen(false);
+  };
 
   const initialValues = {
     code_phone_area: data?.code_phone_area,
@@ -21,23 +31,47 @@ const EditCustomer = ({ state, setState, data }) => {
   };
 
   const editCustomer = useCallback(() => {
-    dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      updateCustomer.updateCustomerRequest({
-        id: data?._id,
-        data: {
-          code_phone_area: "+84",
-          phone: formikRef?.current?.values?.phone,
-          email: formikRef?.current?.values?.email,
-          full_name: formikRef?.current?.values?.name,
-          password: formikRef?.current?.values?.password,
-        },
+    setIsLoading(true);
+    // dispatch(
+    //   updateCustomer.updateCustomerRequest({
+    //     id: data?._id,
+    //     data: {
+    //       code_phone_area: "+84",
+    //       phone: formikRef?.current?.values?.phone,
+    //       email: formikRef?.current?.values?.email,
+    //       full_name: formikRef?.current?.values?.name,
+    //       password: formikRef?.current?.values?.password,
+    //     },
+    //   })
+    // );
+    updateCustomer(data?._id, {
+      code_phone_area: "+84",
+      phone: formikRef?.current?.values?.phone,
+      email: formikRef?.current?.values?.email,
+      full_name: formikRef?.current?.values?.name,
+      password: formikRef?.current?.values?.password,
+    })
+      .then((res) => {
+        setOpen(false);
+        setIsLoading(false);
+        fetchCustomers(startPage, 20, status)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItems);
+          })
+          .catch((err) => {});
       })
-    );
-  }, [formikRef, data]);
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        setIsLoading(false);
+      });
+  }, [formikRef, data, startPage, status]);
 
   return (
     <>
+      <a onClick={showDrawer}>Chỉnh sửa</a>
       <Formik
         innerRef={formikRef}
         initialValues={initialValues}
@@ -48,24 +82,15 @@ const EditCustomer = ({ state, setState, data }) => {
       >
         {({ values, setFieldValue, errors, handleSubmit }) => {
           return (
-            <Modal
-              className="modal-dialog-centered"
-              isOpen={state}
-              toggle={() => setState(!state)}
+            <Drawer
+              title="Sửa khách hàng"
+              width={500}
+              onClose={onClose}
+              open={open}
+              bodyStyle={{
+                paddingBottom: 80,
+              }}
             >
-              <div className="modal-header">
-                <h3 className="modal-title" id="exampleModalLabel">
-                  Sửa khách hàng
-                </h3>
-                <Button
-                  data-dismiss="modal"
-                  style={{ backgroundColor: "red", border: "none" }}
-                  type="button"
-                  onClick={() => setState(!state)}
-                >
-                  <span aria-hidden={true}>×</span>
-                </Button>
-              </div>
               <div className="modal-body">
                 <Form>
                   <CustomTextInput
@@ -126,7 +151,7 @@ const EditCustomer = ({ state, setState, data }) => {
                   />
                 </Form>
               </div>
-            </Modal>
+            </Drawer>
           );
         }}
       </Formik>

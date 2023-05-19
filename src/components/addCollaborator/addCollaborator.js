@@ -3,16 +3,16 @@ import { Formik } from "formik";
 import React, { memo, useCallback, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Form, Modal } from "reactstrap";
-import { createCollaborator } from "../../redux/actions/collaborator";
-import { createCustomer } from "../../redux/actions/customerAction";
 import { loadingAction } from "../../redux/actions/loading";
 import { validateAddCollaboratorSchema } from "../../utils/schema";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./addCollaborator.scss";
+import { createCollaborator, fetchCollaborators } from "../../api/collaborator";
+import { errorNotify } from "../../helper/toast";
 
-const AddCollaborator = () => {
-  const [state, setState] = useState(false);
+const AddCollaborator = (props) => {
+  const { setData, setTotal, startPage, status, setIsLoading } = props;
   const formikRef = useRef();
   const dispatch = useDispatch();
 
@@ -31,22 +31,49 @@ const AddCollaborator = () => {
     name: "",
     identify: "",
     code: "",
+    type: "",
   };
 
   const addCustomer = useCallback(() => {
-    dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      createCollaborator.createCollaboratorRequest({
-        code_phone_area: "+84",
-        phone: formikRef?.current?.values?.phone,
-        email: formikRef?.current?.values?.email,
-        full_name: formikRef?.current?.values?.name,
-        identity_number: formikRef?.current?.values?.identify,
-        city: 79,
-        id_inviter: formikRef?.current?.values?.code,
+    setIsLoading(true);
+    // dispatch(
+    //   createCollaborator.createCollaboratorRequest({
+    //     code_phone_area: "+84",
+    //     phone: formikRef?.current?.values?.phone,
+    //     email: formikRef?.current?.values?.email,
+    //     full_name: formikRef?.current?.values?.name,
+    //     identity_number: formikRef?.current?.values?.identify,
+    //     city: 79,
+    //     id_inviter: formikRef?.current?.values?.code,
+    //   })
+    // );
+    createCollaborator({
+      code_phone_area: "+84",
+      phone: formikRef?.current?.values?.phone,
+      email: formikRef?.current?.values?.email,
+      full_name: formikRef?.current?.values?.name,
+      identity_number: formikRef?.current?.values?.identify,
+      city: 79,
+      id_inviter: formikRef?.current?.values?.code,
+      type: formikRef?.current?.values?.type,
+    })
+      .then((res) => {
+        setOpen(false);
+        fetchCollaborators(startPage, 20, status)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItems);
+          })
+          .catch((err) => {});
+        setIsLoading(false);
       })
-    );
-  }, [formikRef]);
+      .catch((err) => {
+        setIsLoading(false);
+        errorNotify({
+          message: err,
+        });
+      });
+  }, [formikRef, startPage, status]);
 
   return (
     <>
@@ -117,6 +144,13 @@ const AddCollaborator = () => {
                   id="className"
                   placeholder="Nhập email"
                   onChange={(text) => setFieldValue("email", text.target.value)}
+                />
+                <CustomTextInput
+                  label="Type"
+                  type="text"
+                  id="className"
+                  placeholder="Nhập đối tượng CTV"
+                  onChange={(text) => setFieldValue("type", text.target.value)}
                 />
                 <CustomTextInput
                   label="CCCD/CMND"
