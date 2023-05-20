@@ -9,7 +9,6 @@ import CustomTextInput from "../../../../../components/CustomTextInput/customTex
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import "./index.scss";
-import RoleAccount from "./RoleAccount";
 
 const CreateAccount = () => {
   const [fullName, setFullName] = useState("");
@@ -55,6 +54,8 @@ const CreateAccount = () => {
       });
   }, [fullName, email, password, idRole]);
 
+  console.log(roleAdmin);
+
   return (
     <div>
       <a className="title-create">Tạo tài khoản</a>
@@ -94,8 +95,6 @@ const CreateAccount = () => {
           Tạo tài khoản
         </button>
       </div>
-
-      <RoleAccount />
     </div>
   );
 };

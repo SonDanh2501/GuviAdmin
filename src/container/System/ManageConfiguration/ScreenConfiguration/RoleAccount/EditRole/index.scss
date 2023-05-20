@@ -1,0 +1,61 @@
+.div-title-role {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 20px;
+
+  .title-role {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+  }
+
+  .div-item-role {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+
+    .div-item-per {
+      display: flex;
+      flex-direction: row;
+
+      align-items: center;
+      width: 100%;
+
+      .text-name-per {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        text-decoration: none;
+        color: #000000;
+        margin-left: 5px;
+      }
+    }
+  }
+}
+
+.div-add-role {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10%;
+
+  .btn-add-role {
+    background-color: rgb(9, 22, 255);
+    border: none;
+    width: 100px;
+    border-radius: 4px;
+    color: black;
+    margin-top: 10px;
+    color: white;
+    box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  }
+}
+
+.div-input {
+  display: flex;
+  flex-direction: column;
+}

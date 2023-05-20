@@ -1,35 +1,48 @@
-import { Input, Pagination, Select, Table } from "antd";
+import { Checkbox, Image, Input, Modal, Pagination, Select, Table } from "antd";
 import "./index.scss";
 import { useCallback, useEffect, useState } from "react";
-import { getReportReviewCollaborator } from "../../../../api/report";
+import {
+  checkReviewCollaborator,
+  getReportReviewCollaborator,
+} from "../../../../api/report";
 import moment from "moment";
 import CustomDatePicker from "../../../../components/customDatePicker";
 import _debounce from "lodash/debounce";
 import { SearchOutlined } from "@ant-design/icons";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { useNavigate } from "react-router-dom";
+import starImg from "../../../../assets/images/star.png";
+import { errorNotify } from "../../../../helper/toast";
 
 const ReviewCollaborator = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(0);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [star, setStar] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [tab, setTab] = useState("all");
+  const [modalCheck, setModalCheck] = useState(false);
+  const [itemEdit, setItemEdit] = useState([]);
+  const [note, setNote] = useState("");
   const navigate = useNavigate();
+
+  const toggleModalCheck = () => setModalCheck(!modalCheck);
 
   useEffect(() => {
     getReportReviewCollaborator(
       0,
       20,
-      moment(moment().startOf("year").toISOString())
+      moment(moment().startOf("month").toISOString())
         .add(7, "hours")
         .toISOString(),
       moment(moment(new Date()).toISOString()).add(7, "hours").toISOString(),
       star,
-      valueSearch
+      valueSearch,
+      tab
     )
       .then((res) => {
         setData(res?.data);
@@ -38,7 +51,7 @@ const ReviewCollaborator = () => {
       .catch((err) => {});
 
     setStartDate(
-      moment(moment().startOf("year").toISOString())
+      moment(moment().startOf("month").toISOString())
         .add(7, "hours")
         .toISOString()
     );
@@ -50,18 +63,27 @@ const ReviewCollaborator = () => {
   const handleFilter = useCallback(
     (star) => {
       setStar(star);
-      getReportReviewCollaborator(0, 20, startDate, endDate, star, valueSearch)
+      getReportReviewCollaborator(
+        startPage,
+        20,
+        startDate,
+        endDate,
+        star,
+        valueSearch
+      )
         .then((res) => {
           setData(res?.data);
           setTotal(res?.totalItem);
         })
         .catch((err) => {});
     },
-    [valueSearch, startDate, endDate]
+    [valueSearch, startDate, endDate, startPage]
   );
 
   const handleSearch = useCallback(
     _debounce((value) => {
+      setCurrentPage(1);
+      setStartPage(0);
       setValueSearch(value);
       setIsLoading(true);
       getReportReviewCollaborator(0, 20, startDate, endDate, star, value)
@@ -79,7 +101,17 @@ const ReviewCollaborator = () => {
 
   const onChangeDay = () => {
     setIsLoading(true);
-    getReportReviewCollaborator(0, 20, startDate, endDate, star, valueSearch)
+    setCurrentPage(1);
+    setStartPage(0);
+    getReportReviewCollaborator(
+      0,
+      20,
+      startDate,
+      endDate,
+      star,
+      valueSearch,
+      tab
+    )
       .then((res) => {
         setIsLoading(false);
         setData(res?.data);
@@ -104,15 +136,16 @@ const ReviewCollaborator = () => {
   const onChange = (page) => {
     setCurrentPage(page);
     setIsLoading(true);
-
     const start = page * data.length - data.length;
+    setStartPage(start);
     getReportReviewCollaborator(
       start,
       20,
       startDate,
       endDate,
       star,
-      valueSearch
+      valueSearch,
+      tab
     )
       .then((res) => {
         setIsLoading(false);
@@ -123,6 +156,63 @@ const ReviewCollaborator = () => {
         setIsLoading(false);
       });
   };
+
+  const onChangeTab = useCallback(
+    (value) => {
+      setTab(value);
+      setCurrentPage(1);
+      setStartPage(0);
+      getReportReviewCollaborator(
+        startPage,
+        20,
+        startDate,
+        endDate,
+        star,
+        valueSearch,
+        value
+      )
+        .then((res) => {
+          setData(res?.data);
+          setTotal(res?.totalItem);
+        })
+        .catch((err) => {});
+    },
+    [startDate, endDate, star, valueSearch, tab, startPage]
+  );
+
+  const onCheckReview = useCallback(
+    (id) => {
+      setIsLoading(true);
+      checkReviewCollaborator(id, {
+        note_admin: note,
+      })
+        .then((res) => {
+          setModalCheck(false);
+          setIsLoading(false);
+          getReportReviewCollaborator(
+            startPage,
+            20,
+            startDate,
+            endDate,
+            star,
+            valueSearch,
+            tab
+          )
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
+        });
+    },
+    [note, startDate, endDate, star, valueSearch, tab, startPage]
+  );
 
   const columns = [
     {
@@ -185,12 +275,26 @@ const ReviewCollaborator = () => {
       },
     },
     {
-      title: "Số sao",
-      render: (data) => (
-        <a className="star-review">
-          {data?.star} <i class="uil uil-star icon-star"></i>
-        </a>
-      ),
+      title: "Số sao/Đơn",
+      render: (data) => {
+        return (
+          <div
+            className="div-star-review"
+            onClick={() =>
+              navigate("/details-order", {
+                state: { id: data?.id_group_order },
+              })
+            }
+          >
+            <a className="text-order">{data?.id_view}</a>
+            <div className="div-star">
+              {[1, 2, 3, 4, 5]?.slice(0, data?.star)?.map((item) => {
+                return <img src={starImg} className="icon-star" />;
+              })}
+            </div>
+          </div>
+        );
+      },
       sorter: (a, b) => a.star - b.star,
     },
     {
@@ -208,8 +312,23 @@ const ReviewCollaborator = () => {
       },
     },
     {
-      title: "Đơn hàng",
-      render: (data) => <a className="star-review">{data?.id_view}</a>,
+      key: "action",
+      render: (data) => {
+        return (
+          <Checkbox
+            checked={data?.is_check_admin}
+            disabled={data?.star === 5 ? true : false}
+            onChange={(e) => {
+              toggleModalCheck();
+              console.log(e.target.checked);
+            }}
+          ></Checkbox>
+        );
+      },
+    },
+    {
+      title: "Ghi chú",
+      render: (data) => <a>{data?.note_admin}</a>,
     },
   ];
 
@@ -218,7 +337,7 @@ const ReviewCollaborator = () => {
       {/* <a className="title-review">Đánh giá cộng tác viên</a> */}
       <div className="div-head-review">
         <Select
-          defaultValue="0"
+          defaultValue={"Lọc theo số sao"}
           style={{ width: 150 }}
           onChange={handleFilter}
           options={[
@@ -253,9 +372,36 @@ const ReviewCollaborator = () => {
           </a>
         )}
       </div>
+      <div className="div-tab-review">
+        {TAB?.map((item, index) => {
+          return (
+            <div
+              className={
+                tab === item?.value
+                  ? "div-item-review-select"
+                  : "div-item-review"
+              }
+              onClick={() => onChangeTab(item?.value)}
+            >
+              <a className="text-tab">{item?.title}</a>
+            </div>
+          );
+        })}
+      </div>
 
-      <div>
-        <Table columns={columns} pagination={false} dataSource={data} />
+      <div className="mt-2">
+        <Table
+          columns={columns}
+          pagination={false}
+          dataSource={data}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setItemEdit(record);
+              },
+            };
+          }}
+        />
       </div>
       <div className="mt-1 div-pagination p-2">
         <a>Tổng: {total}</a>
@@ -270,9 +416,47 @@ const ReviewCollaborator = () => {
         </div>
       </div>
 
+      <div>
+        <Modal
+          title="Kiểm tra"
+          open={modalCheck}
+          onOk={() => onCheckReview(itemEdit?._id)}
+          okText={"Kiểm tra"}
+          onCancel={toggleModalCheck}
+          cancelText={"Huỷ"}
+        >
+          <div>
+            <a>Nội dung</a>
+            <Input
+              placeholder="Nhập nội dung"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+            />
+          </div>
+        </Modal>
+      </div>
+
       {isLoading && <LoadingPagination />}
     </>
   );
 };
 
 export default ReviewCollaborator;
+
+const TAB = [
+  {
+    id: 1,
+    title: "Tất cả",
+    value: "all",
+  },
+  {
+    id: 2,
+    title: "Đã xem",
+    value: "is_check",
+  },
+  {
+    id: 2,
+    title: "Chưa xem",
+    value: "is_not_check",
+  },
+];

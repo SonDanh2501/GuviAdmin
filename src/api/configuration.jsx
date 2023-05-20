@@ -75,5 +75,21 @@ export const activeQuestionApi = (id, data) => {
 // create account
 
 export const getSettingAccountApi = () => {
-  return axiosClient.get(`/admin/setting_general_manager/get_setting`);
+  return axiosClient.get(
+    `/admin/user_system_manager/get_setting_key_api?lang=vi`
+  );
+};
+
+export const createRoleApi = (data) => {
+  return axiosClient.post(
+    `/admin/user_system_manager/create_role_admin?lang=vi`,
+    data
+  );
+};
+
+export const editRoleApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/user_system_manager/edit_role_admin/${id}?lang=vi`,
+    data
+  );
 };

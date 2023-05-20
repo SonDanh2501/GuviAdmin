@@ -40,6 +40,8 @@ import CreateQuizz from "../container/System/ManageConfiguration/ScreenConfigura
 import ManageOptionService from "../container/System/ManageService/ManageOptionalService";
 import ExtendOptional from "../container/System/ManageService/ManageExtendOptional";
 import ReasonPunish from "../container/System/ManageConfiguration/ScreenConfiguration/ReasonPunish";
+import EditPriceService from "../container/System/ManageService/EditPriceService";
+import RoleAccount from "../container/System/ManageConfiguration/ScreenConfiguration/RoleAccount";
 
 const Admin = () => {
   return (
@@ -80,7 +82,7 @@ const Admin = () => {
         path="/promotion/manage-setting/order-promotion"
         element={<OrderUsePromotion />}
       />
-
+      <Route path="/services/edit-service" element={<EditPriceService />} />
       <Route
         path="/services/manage-group-service"
         element={<GroupServiceManage />}
@@ -191,6 +193,10 @@ const Admin = () => {
       <Route
         path="/adminManage/manage-configuration/reason_punish"
         element={<ReasonPunish />}
+      />
+      <Route
+        path="/adminManage/manage-configuration/setting_role"
+        element={<RoleAccount />}
       />
     </Routes>
   );

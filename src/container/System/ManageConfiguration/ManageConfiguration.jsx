@@ -41,6 +41,9 @@ const ManageConfiguration = () => {
       case "setting_service":
         navigate("/services/manage-group-service");
         break;
+      case "setting_role":
+        navigate("/adminManage/manage-configuration/setting_role");
+        break;
 
       default:
         break;
@@ -113,5 +116,10 @@ const DATA = [
     id: 9,
     title: "Cấu hình dịch vụ",
     value: "setting_service",
+  },
+  {
+    id: 10,
+    title: "Cấu hình quyền quản trị",
+    value: "setting_role",
   },
 ];
