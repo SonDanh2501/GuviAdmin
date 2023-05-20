@@ -66,13 +66,7 @@ import { getDistrictApi } from "../../../api/file";
 moment.locale("vi");
 dayjs.extend(customParseFormat);
 
-const data = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 100 },
-];
-const COLORS = ["#BAE6FD", " #F477EF", "#FCD34D", "#2ACB9E"];
+const COLORS = ["#0088FE", "#48cae4", "#00CF3A"];
 
 export default function Home() {
   const [arrResult, setArrResult] = useState([]);
@@ -99,6 +93,8 @@ export default function Home() {
   const dispatch = useDispatch();
   const yearFormat = "YYYY";
   const dataChartUser = [];
+  const districtData = [];
+  const cityData = [];
 
   useEffect(() => {
     getDayReportApi(
@@ -160,6 +156,15 @@ export default function Home() {
           .catch((err) => {});
       })
       .catch((err) => {});
+
+    setStartDate(
+      moment(moment().startOf("month").toISOString())
+        .add(7, "hours")
+        .toISOString()
+    );
+    setEndDate(
+      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
+    );
   }, []);
 
   useEffect(() => {
@@ -177,6 +182,47 @@ export default function Home() {
       month: index + 1,
     });
   });
+
+  dataDistrict?.map((item) => {
+    districtData?.push({
+      value: item?.code,
+      label: item?.name,
+    });
+  });
+
+  dataCity?.map((item) => {
+    cityData?.push({
+      value: item?.code,
+      label: item?.name,
+      districts: item?.districts,
+    });
+  });
+
+  const onChangeCity = useCallback(
+    (value, label) => {
+      setNameCity(label?.label);
+      setCodeCity(value);
+      setDataDistrict(label?.districts);
+      getReportTypeService(startDate, endDate, value, codeDistrict)
+        .then((res) => {
+          setDataChartOrderDetails(res);
+        })
+        .catch((err) => {});
+    },
+    [startDate, endDate, codeDistrict]
+  );
+
+  const onChangeDistrict = useCallback(
+    (value, label) => {
+      setCodeDistrict(label?.value);
+      getReportTypeService(startDate, endDate, codeCity, value)
+        .then((res) => {
+          setDataChartOrderDetails(res);
+        })
+        .catch((err) => {});
+    },
+    [startDate, endDate, codeCity]
+  );
 
   function getDates(startDate, stopDate) {
     var dateArray = [];
@@ -197,8 +243,14 @@ export default function Home() {
       })
       .catch((err) => console.log(err));
 
-    getDates(startDate, endDate);
-  }, [startDate, endDate]);
+    getReportTypeService(startDate, endDate, codeCity, codeDistrict)
+      .then((res) => {
+        setDataChartOrderDetails(res);
+      })
+      .catch((err) => {});
+
+    // getDates(startDate, endDate);
+  }, [startDate, endDate, codeCity, codeDistrict]);
 
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work_schedule[0].date)).format(
@@ -736,45 +788,46 @@ export default function Home() {
         <div>
           <Row>
             <Col lg="9">
-              {/* <div className="div-chart-pie-total">
-                <a className="title-chart-area">
-                  {" "}
-                  Thống kê đơn hàng theo khu vực
-                </a>
+              <div className="div-chart-pie-total">
+                <a className="title-chart-area">Thống kê đơn hàng</a>
                 <div className="div-select-city">
-          <Select
-            style={{ width: 200 }}
-            value={nameCity}
-            onChange={onChangeCity}
-            options={cityData}
-            showSearch
-            filterOption={(input, option) =>
-              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-            }
-          />
-          <Select
-            style={{ width: 180, marginLeft: 20, marginRight: 20 }}
-            placeholder="Chọn quận"
-            onChange={onChangeDistrict}
-            options={districtData}
-            showSearch
-            filterOption={(input, option) =>
-              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-            }
-          />
-          <CustomDatePicker
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
-            onClick={onChangeDay}
-            onCancel={onCancelPicker}
-          />
-          {startDate && (
-            <a className="text-date mt-2">
-              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-              {moment(endDate).utc().format("DD/MM/YYYY")}
-            </a>
-          )}
-        </div>
+                  <Select
+                    style={{ width: 200 }}
+                    value={nameCity}
+                    onChange={onChangeCity}
+                    options={cityData}
+                    showSearch
+                    filterOption={(input, option) =>
+                      (option?.label ?? "")
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
+                  />
+                  <Select
+                    style={{ width: 180, marginLeft: 20, marginRight: 20 }}
+                    placeholder="Chọn quận"
+                    onChange={onChangeDistrict}
+                    options={districtData}
+                    showSearch
+                    filterOption={(input, option) =>
+                      (option?.label ?? "")
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
+                  />
+                  {/* <CustomDatePicker
+                    setStartDate={setStartDate}
+                    setEndDate={setEndDate}
+                    onClick={onChangeDay}
+                    onCancel={onCancelPicker}
+                  />
+                  {startDate && (
+                    <a className="text-date mt-2">
+                      {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+                      {moment(endDate).utc().format("DD/MM/YYYY")}
+                    </a>
+                  )} */}
+                </div>
                 <div className="div-pie-chart">
                   <div className="div-total-piechart">
                     <div className="item-total">
@@ -832,7 +885,7 @@ export default function Home() {
                     </ResponsiveContainer>
                   </div>
                 </div>
-              </div> */}
+              </div>
             </Col>
             <Col lg="3">
               <div className="col-activity">
@@ -948,7 +1001,7 @@ export default function Home() {
           <Row>
             <Col lg="6">
               <div className="div-chart-user">
-                <h4>Tổng User</h4>
+                <h4>Tổng lượt đăng kí</h4>
                 <div className="div-time-area">
                   <div>
                     <a className="text-time">Thời gian</a>
@@ -997,7 +1050,7 @@ export default function Home() {
                         dataKey="totalOld"
                         fill="#82ca9d"
                         minPointSize={20}
-                        barSize={40}
+                        barSize={20}
                         name="Khách hàng cũ"
                         stackId="a"
                       />
@@ -1006,7 +1059,7 @@ export default function Home() {
                         dataKey="totalNew"
                         fill="#4376CC"
                         minPointSize={20}
-                        barSize={40}
+                        barSize={20}
                         name="Khách hàng mới"
                         stackId="a"
                       />

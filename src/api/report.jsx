@@ -146,10 +146,11 @@ export const getReportReviewCollaborator = (
   start_date,
   end_date,
   star,
-  search
+  search,
+  type
 ) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_review?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&star=${star}&search=${search}`
+    `/admin/report_mananger/report_review?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&star=${star}&search=${search}&type=${type}`
   );
 };
 
@@ -190,5 +191,12 @@ export const getCancelReportCustomer = (
 export const getReportCustomerByCity = (start_date, end_date) => {
   return axiosClient.get(
     `/admin/report_mananger/report_customer_by_city?lang=vi&start_date=${start_date}&end_date=${end_date}`
+  );
+};
+
+export const checkReviewCollaborator = (id, data) => {
+  return axiosClient.post(
+    `/admin/order_manager/admin_check_review/${id}?lang=vi`,
+    data
   );
 };

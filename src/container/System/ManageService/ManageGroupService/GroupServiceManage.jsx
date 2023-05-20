@@ -117,22 +117,22 @@ export default function GroupServiceManage() {
         />
       ),
     },
+    // {
+    //   key: "2",
+    //   label: (
+    //     <a
+    //       onClick={() => {
+    //         navigate("/services/manage-group-service/manage-price-service", {
+    //           state: { id: itemEdit?._id },
+    //         });
+    //       }}
+    //     >
+    //       Xem giá
+    //     </a>
+    //   ),
+    // },
     {
       key: "2",
-      label: (
-        <a
-          onClick={() => {
-            navigate("/services/manage-group-service/manage-price-service", {
-              state: { id: itemEdit?._id },
-            });
-          }}
-        >
-          Xem giá
-        </a>
-      ),
-    },
-    {
-      key: "3",
       label: user.role === "admin" && <a onClick={toggle}>Xoá</a>,
     },
   ];

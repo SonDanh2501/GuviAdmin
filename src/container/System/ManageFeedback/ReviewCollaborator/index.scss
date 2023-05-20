@@ -68,12 +68,35 @@
   }
 }
 
-.star-review {
-  color: #000000;
-  font-weight: 400;
-  font-family: "Roboto";
-  font-style: normal;
-  font-size: 12px;
+.div-star-review {
+  display: flex;
+  flex-direction: column;
+
+  .text-order {
+    color: #000000;
+    font-weight: 400;
+    font-family: "Roboto";
+    font-style: normal;
+    font-size: 12px;
+  }
+
+  .div-star {
+    display: flex;
+    flex-direction: row;
+    .icon-star {
+      width: 15px;
+      height: 15px;
+      margin-right: 5px;
+    }
+  }
+
+  .star-review {
+    color: #000000;
+    font-weight: 400;
+    font-family: "Roboto";
+    font-style: normal;
+    font-size: 12px;
+  }
 }
 
 .text-review {
@@ -92,4 +115,36 @@
   font-family: "Roboto";
   font-style: normal;
   font-size: 12px;
+}
+
+.div-tab-review {
+  display: flex;
+  flex-direction: row;
+
+  .div-item-review {
+    padding: 5px;
+
+    .text-tab {
+      color: #8c8c8c;
+      font-weight: 400;
+      font-family: "Roboto";
+      font-style: normal;
+      font-size: 16px;
+      text-decoration: none;
+    }
+  }
+
+  .div-item-review-select {
+    padding: 5px;
+    border-bottom: 1px solid blue;
+
+    .text-tab {
+      color: #000000;
+      font-weight: 400;
+      font-family: "Roboto";
+      font-style: normal;
+      font-size: 16px;
+      text-decoration: none;
+    }
+  }
 }

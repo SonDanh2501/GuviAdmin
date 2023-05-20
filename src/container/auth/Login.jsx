@@ -1,14 +1,11 @@
-import { Input } from "antd";
-import { Formik } from "formik";
+import { Button, Input } from "antd";
 import { useCallback, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, CardBody, Form } from "reactstrap";
-import logo from "../../assets/images/logo.png";
-import CustomTextInput from "../../components/CustomTextInput/customTextInput";
+
+import logo from "../../assets/images/logo.jpg";
 import { loginAction } from "../../redux/actions/auth";
 import { loadingAction } from "../../redux/actions/loading";
-import { validateLoginSchema } from "../../utils/schema";
 import "./Login.scss";
 
 const Login = () => {
@@ -39,42 +36,40 @@ const Login = () => {
 
   return (
     <div className="container-login">
-      <Card className="bg-white shadow border-0 card">
-        <CardBody className="px-lg-5 py-lg-5">
-          <div className="text-muted mb-4 div-head">
-            <img src={logo} className="img-logo" />
-            <a className="title-login">Đăng nhập hệ thống Guvi</a>
+      <div className="div-card-login">
+        <div className="div-head">
+          <img src={logo} className="img-logo" />
+          <a className="title-login">Đăng nhập hệ thống Guvi</a>
+        </div>
+        <div className="div-body-login">
+          <div>
+            <label>Email</label>
+            <Input
+              placeholder="Nhập email"
+              className="input-pass"
+              value={email}
+              type="email"
+              onChange={(text) => setEmail(text.target.value)}
+            />
           </div>
-          <Form role="form" onSubmit={onLogin}>
-            <div>
-              <label>Email</label>
-              <Input
-                placeholder="Nhập email"
-                className="input-pass"
-                value={email}
-                type="email"
-                onChange={(text) => setEmail(text.target.value)}
-              />
-            </div>
 
-            <div>
-              <label>Password</label>
-              <Input.Password
-                placeholder="Nhập mật khẩu"
-                className="input-pass"
-                value={password}
-                onChange={(text) => setPassword(text.target.value)}
-              />
-            </div>
+          <div>
+            <label>Password</label>
+            <Input.Password
+              placeholder="Nhập mật khẩu"
+              className="input-pass"
+              value={password}
+              onChange={(text) => setPassword(text.target.value)}
+            />
+          </div>
 
-            <div className="text-center">
-              <Button className="btn-login" onClick={onLogin}>
-                Đăng nhập
-              </Button>
-            </div>
-          </Form>
-        </CardBody>
-      </Card>
+          <div className="text-center">
+            <Button className="btn-login" onClick={onLogin}>
+              Đăng nhập
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

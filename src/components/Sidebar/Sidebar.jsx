@@ -187,7 +187,7 @@ const Sidebar = ({ onClick }) => {
             </li>
             <li>
               <NavLink
-                to="/services/manage-group-service"
+                to="/services/edit-service"
                 onClick={toggleServiceNavbar}
               >
                 {({ isActive }) => (
@@ -196,15 +196,10 @@ const Sidebar = ({ onClick }) => {
                     <a className={isActive ? "active-text" : "unactive-text"}>
                       Dịch vụ
                     </a>
-                    {collapsedService ? (
-                      <i class="uil uil-angle-right icon-right"></i>
-                    ) : (
-                      <i class="uil uil-angle-down icon-right"></i>
-                    )}
                   </div>
                 )}
               </NavLink>
-              <Collapse isOpen={!collapsedService}>
+              {/* <Collapse isOpen={!collapsedService}>
                 <Nav className="nav" navbar>
                   <NavItem>
                     <NavLink to="/services/manage-group-service/all">
@@ -247,7 +242,7 @@ const Sidebar = ({ onClick }) => {
                     </NavLink>
                   </NavItem>
                 </Nav>
-              </Collapse>
+              </Collapse> */}
             </li>
             <li>
               <NavLink to="/promotion/manage-setting">
