@@ -1,24 +1,20 @@
-import { Drawer, Select } from "antd";
+import { Drawer, Input, InputNumber, Select } from "antd";
+import _debounce from "lodash/debounce";
+import moment from "moment";
 import React, { memo, useCallback, useState } from "react";
-import IntlCurrencyInput from "react-intl-currency-input";
 import { useDispatch } from "react-redux";
-import { Form, Input, Label, List } from "reactstrap";
+import { List } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
 import {
   getTopupCollaboratorApi,
   withdrawMoneyCollaboratorApi,
 } from "../../api/topup";
-import { loadingAction } from "../../redux/actions/loading";
-import CustomButton from "../customButton/customButton";
-import CustomTextInput from "../CustomTextInput/customTextInput";
-import _debounce from "lodash/debounce";
-import "./withdraw.scss";
-import {
-  getRevenueCollaborator,
-  getTopupCollaborator,
-} from "../../redux/actions/topup";
 import { errorNotify, successNotify } from "../../helper/toast";
-import moment from "moment";
+import { loadingAction } from "../../redux/actions/loading";
+import { getRevenueCollaborator } from "../../redux/actions/topup";
+import CustomButton from "../customButton/customButton";
+import "./withdraw.scss";
+const { TextArea } = Input;
 
 const Withdraw = (props) => {
   const { type, setDataT, setTotal } = props;
@@ -101,25 +97,6 @@ const Withdraw = (props) => {
     }
   }, [id, money, note, name, type, setDataT, setTotal, wallet]);
 
-  const currencyConfig = {
-    locale: "vi",
-    formats: {
-      number: {
-        BRL: {
-          style: "currency",
-          currency: "VND",
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
-        },
-      },
-    },
-  };
-
-  const handleChange = (event, value) => {
-    event.preventDefault();
-    setMoney(value);
-  };
-
   return (
     <>
       {/* Button trigger modal */}
@@ -141,61 +118,63 @@ const Withdraw = (props) => {
         }}
       >
         <div className="modal-body">
-          <Form>
-            <div>
-              <Label>(*)Cộng tác viên</Label>
-              <Input
-                placeholder="Tìm kiếm theo số điện thoại"
-                value={name}
-                onChange={(e) => {
-                  searchCollaborator(e.target.value);
-                  valueSearch(e.target.value);
-                }}
-              />
-              {errorName && <a className="error">{errorName}</a>}
-              {data.length > 0 && (
-                <List type={"unstyled"} className="list-item">
-                  {data?.map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        onClick={(e) => {
-                          setId(item?._id);
-                          setName(item?.full_name);
-                          setData([]);
-                        }}
-                      >
-                        <a>
-                          {item?.full_name} - {item?.phone} - {item?.id_view}
-                        </a>
-                      </div>
-                    );
-                  })}
-                </List>
-              )}
-            </div>
+          <div>
+            <a>(*)Cộng tác viên</a>
+            <Input
+              placeholder="Tìm kiếm theo số điện thoại"
+              value={name}
+              onChange={(e) => {
+                searchCollaborator(e.target.value);
+                valueSearch(e.target.value);
+              }}
+            />
+            {errorName && <a className="error">{errorName}</a>}
+            {data.length > 0 && (
+              <List type={"unstyled"} className="list-item">
+                {data?.map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={(e) => {
+                        setId(item?._id);
+                        setName(item?.full_name);
+                        setData([]);
+                      }}
+                    >
+                      <a>
+                        {item?.full_name} - {item?.phone} - {item?.id_view}
+                      </a>
+                    </div>
+                  );
+                })}
+              </List>
+            )}
+          </div>
 
-            <div className="div-money">
-              <Label>(*) Nhập số tiền</Label>
-              <IntlCurrencyInput
-                className="input-money"
-                currency="BRL"
-                config={currencyConfig}
-                onChange={handleChange}
-                value={money}
-              />
-            </div>
-            <CustomTextInput
-              label={"Nhập nội dung"}
-              id="exampleNote"
-              name="note"
-              placeholder="Vui lòng nhập nội dung chuyển tiền"
-              type="textarea"
+          <div className="div-money">
+            <a>(*) Nhập số tiền</a>
+            <InputNumber
+              formatter={(value) =>
+                `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+              }
               min={0}
+              value={money}
+              onChange={(e) => setMoney(e)}
+              style={{ width: "100%" }}
+            />
+          </div>
+
+          <div className="mt-2">
+            <a>Nội dung</a>
+            <TextArea
+              placeholder="Vui lòng nhập nội dung chuyển tiền"
               value={note}
               onChange={(e) => setNote(e.target.value)}
             />
+          </div>
 
+          <div className="mt-2">
+            <a>Ví</a>
             <Select
               defaultValue="Vui lòng chọn ví"
               style={{ width: "100%" }}
@@ -207,14 +186,14 @@ const Withdraw = (props) => {
                 { value: "gift_wallet", label: "Ví thưởng" },
               ]}
             />
+          </div>
 
-            <CustomButton
-              title="Rút tiền"
-              className="float-left btn-add-w"
-              type="button"
-              onClick={onWithdraw}
-            />
-          </Form>
+          <CustomButton
+            title="Rút tiền"
+            className="float-left btn-add-w"
+            type="button"
+            onClick={onWithdraw}
+          />
         </div>
       </Drawer>
     </>

@@ -1,8 +1,8 @@
-import { Drawer, Select } from "antd";
+import { Drawer, InputNumber, Select, Input } from "antd";
 import React, { memo, useCallback, useState } from "react";
 import IntlCurrencyInput from "react-intl-currency-input";
 import { useDispatch } from "react-redux";
-import { Form, Input, Label, List, Modal } from "reactstrap";
+import { Form, List } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
 import {
   getTopupCollaboratorApi,
@@ -19,6 +19,7 @@ import {
 } from "../../redux/actions/topup";
 import moment from "moment";
 import { errorNotify, successNotify } from "../../helper/toast";
+import TextArea from "antd/es/input/TextArea";
 
 const AddPopup = (props) => {
   const { type, setDataT, setTotal } = props;
@@ -142,85 +143,82 @@ const AddPopup = (props) => {
         }}
       >
         <div className="modal-body">
-          <Form>
-            <div>
-              <Label>(*)Cộng tác viên</Label>
-              <Input
-                placeholder="Tìm kiếm theo số điện thoại"
-                value={name}
-                onChange={(e) => {
-                  searchCollaborator(e.target.value);
-                  setName(e.target.value);
-                }}
-              />
-              {errorName && <a className="error">{errorName}</a>}
-              {data.length > 0 && (
-                <List type={"unstyled"} className="list-item">
-                  {data?.map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        onClick={(e) => {
-                          setId(item?._id);
-                          setName(item?.full_name);
-                          setData([]);
-                        }}
-                      >
-                        <a>
-                          {" "}
-                          {item?.full_name} - {item?.phone} - {item?.id_view}
-                        </a>
-                      </div>
-                    );
-                  })}
-                </List>
-              )}
-            </div>
+          <div>
+            <a>(*)Cộng tác viên</a>
+            <Input
+              placeholder="Tìm kiếm theo số điện thoại"
+              value={name}
+              onChange={(e) => {
+                searchCollaborator(e.target.value);
+                setName(e.target.value);
+              }}
+            />
+            {errorName && <a className="error">{errorName}</a>}
+            {data.length > 0 && (
+              <List type={"unstyled"} className="list-item">
+                {data?.map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={(e) => {
+                        setId(item?._id);
+                        setName(item?.full_name);
+                        setData([]);
+                      }}
+                    >
+                      <a>
+                        {" "}
+                        {item?.full_name} - {item?.phone} - {item?.id_view}
+                      </a>
+                    </div>
+                  );
+                })}
+              </List>
+            )}
+          </div>
 
-            <div className="div-money">
-              <Label>(*) Nhập số tiền</Label>
-              <IntlCurrencyInput
-                className="input-money"
-                currency="BRL"
-                config={currencyConfig}
-                onChange={handleChange}
-                value={money}
-              />
-            </div>
+          <div className="div-money">
+            <a>(*) Nhập số tiền</a>
+            <InputNumber
+              formatter={(value) =>
+                `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+              }
+              // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+              onChange={(e) => setMoney(e)}
+              style={{ width: "100%" }}
+            />
+          </div>
 
-            <CustomTextInput
-              label={"Nhập nội dung"}
-              id="exampleNote"
-              name="note"
+          <div className="mt-2">
+            <a>Nội dung</a>
+            <TextArea
               placeholder="Vui lòng nhập nội dung chuyển tiền"
-              type="textarea"
-              min={0}
               value={note}
               onChange={(e) => setNote(e.target.value)}
             />
+          </div>
 
-            <div>
-              <a>Ví</a>
-              <Select
-                value={wallet}
-                style={{ width: "100%" }}
-                onChange={(e) => {
-                  setWallet(e);
-                }}
-                options={[
-                  { value: "wallet", label: "Ví chính" },
-                  { value: "gift_wallet", label: "Ví thưởng" },
-                ]}
-              />
-            </div>
-
-            <CustomButton
-              title="Nạp tiền"
-              className="float-left btn-add-t"
-              type="button"
-              onClick={addMoney}
+          <div className="mt-2">
+            <a>Ví</a>
+            <Select
+              value={wallet}
+              style={{ width: "100%" }}
+              onChange={(e) => {
+                setWallet(e);
+              }}
+              options={[
+                { value: "wallet", label: "Ví chính" },
+                { value: "gift_wallet", label: "Ví thưởng" },
+              ]}
             />
-          </Form>
+          </div>
+
+          <CustomButton
+            title="Nạp tiền"
+            className="float-left btn-add-t"
+            type="button"
+            onClick={addMoney}
+          />
         </div>
       </Drawer>
     </>

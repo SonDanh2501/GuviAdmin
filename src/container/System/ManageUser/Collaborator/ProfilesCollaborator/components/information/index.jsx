@@ -1,7 +1,7 @@
 import { DatePicker, List, Select } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Col, Form, Input, Label, Row } from "reactstrap";
 import {
   getCollaboratorsById,
@@ -14,6 +14,7 @@ import { loadingAction } from "../../../../../../../redux/actions/loading";
 import dayjs from "dayjs";
 import _debounce from "lodash/debounce";
 import "./index.scss";
+import { getService } from "../../../../../../../redux/selectors/service";
 
 const Information = ({ data, image, idCTV, setData }) => {
   const [name, setName] = useState("");
@@ -31,10 +32,13 @@ const Information = ({ data, image, idCTV, setData }) => {
   const [phone, setPhone] = useState("");
   const [codeInvite, setCodeInvite] = useState("");
   const [type, setType] = useState("");
+  const [serviceApply, setServiceApply] = useState([]);
   const [dataCollaborator, setDataCollaborator] = useState([]);
   const [nameCollaborator, setNameCollaborator] = useState("");
   const [idCollaborator, setIdCollaborator] = useState("");
   const dispatch = useDispatch();
+  const service = useSelector(getService);
+  const serviceOption = [];
 
   useEffect(() => {
     const birthdayD = !data?.birthday
@@ -58,7 +62,18 @@ const Information = ({ data, image, idCTV, setData }) => {
     setPhone(data?.phone);
     setCodeInvite(data?.invite_code);
     setType(data?.type);
+    data?.service_apply?.map((item) => {
+      serviceApply.push(item?._id);
+    });
+    // setServiceApply(data?.serviceApply);
   }, [data]);
+
+  service.map((item, index) => {
+    serviceOption.push({
+      label: item?.title?.vi,
+      value: item?._id,
+    });
+  });
 
   const onChangeNumberIndentity = (value) => {
     if (value.target.value <= 999999999990) {
@@ -113,6 +128,7 @@ const Information = ({ data, image, idCTV, setData }) => {
       avatar: image ? image : imgUrl,
       id_inviter: idCollaborator,
       type: type,
+      service_apply: serviceApply,
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
@@ -147,6 +163,7 @@ const Information = ({ data, image, idCTV, setData }) => {
     idCollaborator,
     type,
     idCTV,
+    serviceApply,
   ]);
 
   return (
@@ -221,7 +238,7 @@ const Information = ({ data, image, idCTV, setData }) => {
             </Col>
           </Row>
           <Row>
-            <Col>
+            <Col lg="6">
               <CustomTextInput
                 label={"Địa chỉ tạm trú"}
                 placeholder="Nhập địa chỉ tạm trú"
@@ -229,6 +246,19 @@ const Information = ({ data, image, idCTV, setData }) => {
                 value={staying}
                 onChange={(e) => setStaying(e.target.value)}
               />
+            </Col>
+            <Col lg="6">
+              <div>
+                <a>Loại dịch vụ</a>
+                <Select
+                  style={{ width: "100%" }}
+                  mode="multiple"
+                  allowClear
+                  value={serviceApply}
+                  onChange={(e) => setServiceApply(e)}
+                  options={serviceOption}
+                />
+              </div>
             </Col>
           </Row>
           <Row>

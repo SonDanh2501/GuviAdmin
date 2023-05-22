@@ -316,31 +316,34 @@ const TopupCollaborator = ({ type }) => {
                 </Tooltip>
               )}
             </div>
-            <div className="mt-1">
-              {!data?.is_verify_money && data?.status === "cancel" ? (
-                <></>
-              ) : data?.is_verify_money ? (
-                <></>
-              ) : (
-                <Tooltip placement="bottom" title={"Chỉnh sửa giao dịch CTV"}>
-                  <button
-                    className="btn-edit-topup"
-                    onClick={() => {
-                      toggleEdit();
-                      setItemEdit(data);
-                    }}
-                  >
-                    <i
-                      className={
-                        (!data?.is_verify_money && data?.status === "cancel") ||
-                        data?.is_verify_money
-                          ? "uil uil-edit-alt icon-edit"
-                          : "uil uil-edit-alt"
+            <div className="mt-1 div-delete-edit">
+              <div>
+                {!data?.is_verify_money && data?.status === "cancel" ? (
+                  <></>
+                ) : data?.is_verify_money ? (
+                  <></>
+                ) : (
+                  <Tooltip placement="bottom" title={"Chỉnh sửa giao dịch CTV"}>
+                    <EditTopup
+                      item={itemEdit}
+                      iconEdit={
+                        <i
+                          className={
+                            (!data?.is_verify_money &&
+                              data?.status === "cancel") ||
+                            data?.is_verify_money
+                              ? "uil uil-edit-alt icon-edit"
+                              : "uil uil-edit-alt"
+                          }
+                        ></i>
                       }
-                    ></i>
-                  </button>
-                </Tooltip>
-              )}
+                      type={type}
+                      setDataT={setData}
+                      setTotal={setTotal}
+                    />
+                  </Tooltip>
+                )}
+              </div>
 
               {user?.role === "admin" && (
                 <Tooltip placement="bottom" title={"Xoá giao dịch CTV"}>
@@ -532,16 +535,7 @@ const TopupCollaborator = ({ type }) => {
           </ModalFooter>
         </Modal>
       </div>
-      <div>
-        <EditTopup
-          item={itemEdit}
-          state={modalEdit}
-          setState={toggleEdit}
-          type={type}
-          setDataT={setData}
-          setTotal={setTotal}
-        />
-      </div>
+
       {isLoading && <LoadingPagination />}
     </div>
   );

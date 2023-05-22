@@ -42,6 +42,8 @@ import ExtendOptional from "../container/System/ManageService/ManageExtendOption
 import ReasonPunish from "../container/System/ManageConfiguration/ScreenConfiguration/ReasonPunish";
 import EditPriceService from "../container/System/ManageService/EditPriceService";
 import RoleAccount from "../container/System/ManageConfiguration/ScreenConfiguration/RoleAccount";
+import GroupService from "../container/System/ManageService/GroupService";
+import Service from "../container/System/ManageService/Service";
 
 const Admin = () => {
   return (
@@ -90,6 +92,14 @@ const Admin = () => {
       <Route
         path="/services/manage-group-service/manage-service"
         element={<ServiceManage />}
+      />
+      <Route
+        path="/services/manage-group-service/group-service"
+        element={<GroupService />}
+      />
+      <Route
+        path="/services/manage-group-service/service"
+        element={<Service />}
       />
       <Route
         path="/services/manage-group-service/manage-service/option-service"
