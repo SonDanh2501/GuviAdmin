@@ -1,4 +1,4 @@
-import { List, Select, TimePicker } from "antd";
+import { InputNumber, List, Select, TimePicker } from "antd";
 import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -91,6 +91,7 @@ const EditPromotion = (props) => {
   const [name, setName] = useState("");
   const [listCustomers, setListCustomers] = useState([]);
   const [listNameCustomers, setListNameCustomers] = useState([]);
+  const [isParrentPromotion, setIsParrentPromotion] = useState(false);
   const [isApplyTime, setIsApplyTime] = useState(false);
   const [timeApply, setTimeApply] = useState([
     {
@@ -301,6 +302,7 @@ const EditPromotion = (props) => {
         });
         setIsApplyTime(res?.is_loop);
         setTimeApply(res?.day_loop);
+        setIsParrentPromotion(res?.is_parrent_promotion);
       })
       .catch((err) => console.log(err));
   }, [data]);
@@ -420,10 +422,21 @@ const EditPromotion = (props) => {
           .catch((err) => {});
       })
       .catch((err) => {
-        errorNotify({
-          message: err,
-        });
-        dispatch(loadingAction.loadingRequest(false));
+        if (isParrentPromotion) {
+          setState(false);
+          fetchPromotion(startPage, 10, type, brand, idService, exchange)
+            .then((res) => {
+              setDataPromo(res?.data);
+              setTotalPromo(res?.totalItem);
+            })
+            .catch((err) => {});
+          dispatch(loadingAction.loadingRequest(false));
+        } else {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
+        }
       });
   }, [
     titleVN,
@@ -469,6 +482,7 @@ const EditPromotion = (props) => {
     idService,
     exchange,
     startPage,
+    isParrentPromotion,
   ]);
 
   return (
@@ -573,13 +587,14 @@ const EditPromotion = (props) => {
                   <div>
                     <h5>6. Giá đơn đặt tối thiểu</h5>
 
-                    <CustomTextInput
-                      placeholder="Nhập giá"
-                      className="input-promo-code"
-                      type="number"
+                    <InputNumber
+                      formatter={(value) =>
+                        `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+                      }
                       min={0}
                       value={minimumOrder}
-                      onChange={(e) => setMinimumOrder(e.target.value)}
+                      onChange={(e) => setMinimumOrder(e)}
+                      style={{ width: "100%" }}
                     />
                   </div>
 
@@ -621,39 +636,50 @@ const EditPromotion = (props) => {
                         </Button> */}
                       {
                         discountUnit === "amount" ? (
-                          <CustomTextInput
-                            label={"Giá giảm "}
-                            classNameForm="input-promo-amount"
-                            placeholder="VNĐ"
-                            type="number"
-                            min={0}
-                            value={maximumDiscount}
-                            onChange={(e) => setMaximumDiscount(e.target.value)}
-                          />
+                          <div className="ml-3">
+                            <a>Giá giảm</a>
+                            <InputNumber
+                              formatter={(value) =>
+                                `${value}  đ`.replace(
+                                  /(\d)(?=(\d\d\d)+(?!\d))/g,
+                                  "$1,"
+                                )
+                              }
+                              min={0}
+                              value={maximumDiscount}
+                              onChange={(e) => setMaximumDiscount(e)}
+                              style={{ width: "90%" }}
+                            />
+                          </div>
                         ) : (
                           <Row className="row-discount">
-                            <CustomTextInput
-                              label={"Giá trị giảm"}
-                              className="input-promo-discount"
-                              classNameForm="form-discount"
-                              placeholder="%"
-                              type="number"
-                              min={0}
-                              value={reducedValue}
-                              onChange={(e) => setReducedValue(e.target.value)}
-                            />
-                            <CustomTextInput
-                              label={"Giá giảm tối đa"}
-                              className="input-promo-discount"
-                              classNameForm="form-discount"
-                              min={0}
-                              placeholder="VNĐ"
-                              type="number"
-                              value={maximumDiscount}
-                              onChange={(e) =>
-                                setMaximumDiscount(e.target.value)
-                              }
-                            />
+                            <div className="div-reduced ml-4">
+                              <a>Giá trị giảm</a>
+                              <InputNumber
+                                min={0}
+                                max={100}
+                                formatter={(value) => `${value} %`}
+                                parser={(value) => value.replace("%", "")}
+                                value={reducedValue}
+                                onChange={(e) => setReducedValue(e)}
+                                style={{ width: "90%" }}
+                              />
+                            </div>
+                            <div className="div-reduced">
+                              <a>Giá giảm tối đa</a>
+                              <InputNumber
+                                formatter={(value) =>
+                                  `${value}  đ`.replace(
+                                    /(\d)(?=(\d\d\d)+(?!\d))/g,
+                                    "$1,"
+                                  )
+                                }
+                                min={0}
+                                value={maximumDiscount}
+                                onChange={(e) => setMaximumDiscount(e)}
+                                style={{ width: "90%" }}
+                              />
+                            </div>
                           </Row>
                         )
                         // ) : (
@@ -668,27 +694,26 @@ const EditPromotion = (props) => {
                         //   />
                         // )
                       }
+                      {promoType !== "partner_promotion" && (
+                        <div className="ml-3 mt-2">
+                          <h5>8. Dịch vụ áp dụng</h5>
+                          <Label>Các dịch vụ</Label>
+                          <Select
+                            style={{ width: "100%" }}
+                            value={serviceApply}
+                            onChange={(e) => {
+                              setServiceApply(e);
+                            }}
+                            options={serviceOption}
+                          />
+                        </div>
+                      )}
                     </Row>
                   </div>
                 </Col>
                 <Col md={4}>
-                  {promoType !== "partner_promotion" && (
-                    <div>
-                      <h5>9. Dịch vụ áp dụng</h5>
-                      <Label>Các dịch vụ</Label>
-                      <Select
-                        style={{ width: "100%" }}
-                        value={serviceApply}
-                        onChange={(e) => {
-                          setServiceApply(e);
-                        }}
-                        options={serviceOption}
-                      />
-                    </div>
-                  )}
-
                   <div>
-                    <h5>10. Đối tượng áp dụng</h5>
+                    <h5>9. Đối tượng áp dụng</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Nhóm khách hàng
@@ -778,7 +803,7 @@ const EditPromotion = (props) => {
                   </div>
 
                   <div>
-                    <h5 className="mt-2">11. Số lượng mã khuyến mãi</h5>
+                    <h5 className="mt-2">10. Số lượng mã khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Số lượng giới hạn
@@ -802,7 +827,7 @@ const EditPromotion = (props) => {
                     )}
                   </div>
                   <div>
-                    <h5 className="mt-2">12. Số lần sử dụng khuyến mãi</h5>
+                    <h5 className="mt-2">11. Số lần sử dụng khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Lần sử dụng khuyến mãi
@@ -826,7 +851,7 @@ const EditPromotion = (props) => {
                     )}
                   </div>
                   <div>
-                    <h5 className="mt-2">13. Thời gian khuyến mãi</h5>
+                    <h5 className="mt-2">12. Thời gian khuyến mãi</h5>
                     <FormGroup check inline>
                       <Label check className="text-first">
                         Giới hạn ngày

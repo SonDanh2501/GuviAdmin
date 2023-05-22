@@ -15,6 +15,7 @@ const EditRole = (props) => {
   const [data, setData] = useState([]);
   const [keyApi, setKeyApi] = useState([]);
   const [nameRole, setNameRole] = useState("");
+  const [check, setCheck] = useState(false);
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -30,12 +31,10 @@ const EditRole = (props) => {
         setData(res);
       })
       .catch((err) => {});
-  }, []);
 
-  useEffect(() => {
     setNameRole(item?.name_role);
     setKeyApi(item?.id_key_api);
-  }, [item]);
+  }, []);
 
   const onChangeRole = (check, item) => {
     if (check) {
@@ -100,7 +99,7 @@ const EditRole = (props) => {
                   return (
                     <div className="div-item-per" key={i}>
                       <Checkbox
-                        checked={keyApi.includes(per?._id) ? true : false}
+                        checked={keyApi?.includes(per?._id) ? true : false}
                         onChange={(e) => onChangeRole(e.target.checked, per)}
                       />
                       <a className="text-name-per">{per?.name_api}</a>

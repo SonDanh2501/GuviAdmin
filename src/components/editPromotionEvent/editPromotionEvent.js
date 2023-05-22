@@ -1,4 +1,4 @@
-import { List, Select, TimePicker } from "antd";
+import { InputNumber, List, Select, TimePicker } from "antd";
 import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -436,17 +436,19 @@ const EditPromotionEvent = (props) => {
                 <Col md={4}>
                   <div>
                     <h5>3. Giá đơn đặt tối thiểu</h5>
-                    <CustomTextInput
-                      placeholder="Nhập giá"
-                      className="input-promo-code"
-                      type="number"
+                    <InputNumber
+                      formatter={(value) =>
+                        `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+                      }
                       min={0}
+                      placeholder="Nhập giá"
                       value={minimumOrder}
-                      onChange={(e) => setMinimumOrder(e.target.value)}
+                      onChange={(e) => setMinimumOrder(e)}
+                      style={{ width: "100%" }}
                     />
                   </div>
 
-                  <div>
+                  <div className="mt-2">
                     <h5>4. Hình thức giảm giá</h5>
                     <Row>
                       <Button
@@ -472,42 +474,55 @@ const EditPromotionEvent = (props) => {
                         Giảm theo phần trăm
                       </Button>
                       {discountUnit === "amount" ? (
-                        <CustomTextInput
-                          label={"Giá giảm "}
-                          classNameForm="input-promo-amount"
-                          placeholder="VNĐ"
-                          type="number"
-                          min={0}
-                          value={maximumDiscount}
-                          onChange={(e) => setMaximumDiscount(e.target.value)}
-                        />
+                        <div className="ml-3">
+                          <a>Giá giảm</a>
+                          <InputNumber
+                            formatter={(value) =>
+                              `${value}  đ`.replace(
+                                /(\d)(?=(\d\d\d)+(?!\d))/g,
+                                "$1,"
+                              )
+                            }
+                            min={0}
+                            value={maximumDiscount}
+                            onChange={(e) => setMaximumDiscount(e)}
+                            style={{ width: "90%" }}
+                          />
+                        </div>
                       ) : (
                         <Row className="row-discount">
-                          <CustomTextInput
-                            label={"Giá trị giảm"}
-                            className="input-promo-discount"
-                            classNameForm="form-discount"
-                            placeholder="%"
-                            type="number"
-                            min={0}
-                            value={reducedValue}
-                            onChange={(e) => setReducedValue(e.target.value)}
-                          />
-                          <CustomTextInput
-                            label={"Giá giảm tối đa"}
-                            className="input-promo-discount"
-                            classNameForm="form-discount"
-                            min={0}
-                            placeholder="VNĐ"
-                            type="number"
-                            value={maximumDiscount}
-                            onChange={(e) => setMaximumDiscount(e.target.value)}
-                          />
+                          <div className="div-reduced ml-4">
+                            <a>Giá trị giảm</a>
+                            <InputNumber
+                              min={0}
+                              max={100}
+                              formatter={(value) => `${value} %`}
+                              parser={(value) => value.replace("%", "")}
+                              value={reducedValue}
+                              onChange={(e) => setReducedValue(e)}
+                              style={{ width: "90%" }}
+                            />
+                          </div>
+                          <div className="div-reduced">
+                            <a>Giá giảm tối đa</a>
+                            <InputNumber
+                              formatter={(value) =>
+                                `${value}  đ`.replace(
+                                  /(\d)(?=(\d\d\d)+(?!\d))/g,
+                                  "$1,"
+                                )
+                              }
+                              min={0}
+                              value={maximumDiscount}
+                              onChange={(e) => setMaximumDiscount(e)}
+                              style={{ width: "90%" }}
+                            />
+                          </div>
                         </Row>
                       )}
                     </Row>
                   </div>
-                  <div>
+                  <div className="mt-2">
                     <h5>5. Dịch vụ áp dụng</h5>
                     <Label>Các dịch vụ</Label>
                     <Select

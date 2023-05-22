@@ -1,17 +1,16 @@
-import { Drawer, Select } from "antd";
+import { Drawer, Select, Input, InputNumber } from "antd";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import IntlCurrencyInput from "react-intl-currency-input";
 import { useDispatch } from "react-redux";
-import { Form, Input, Label, List, Modal } from "reactstrap";
+import { Form, Label, List, Modal } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
 import { getListPunishApi, punishMoneyCollaboratorApi } from "../../api/topup";
 import { loadingAction } from "../../redux/actions/loading";
 import CustomButton from "../customButton/customButton";
-import CustomTextInput from "../CustomTextInput/customTextInput";
 import _debounce from "lodash/debounce";
 import "./index.scss";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { getReasonPunishApi } from "../../api/reasons";
+import TextArea from "antd/es/input/TextArea";
 
 const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
   const [state, setState] = useState(false);
@@ -40,6 +39,7 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
       .then((res) => {
         setReason(res?.data);
         setIdReason(res?.data[0]?._id);
+        setNote(res?.data[0]?.note);
       })
       .catch((err) => {});
   }, []);
@@ -48,6 +48,7 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
     reasonOption.push({
       value: item?._id,
       label: item?.title?.vi,
+      note: item?.note,
     });
   });
 
@@ -78,8 +79,9 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
     []
   );
 
-  const handleChangeReason = (value) => {
+  const handleChangeReason = (value, label) => {
     setIdReason(value);
+    setNote(label?.note);
   };
 
   const punishMoney = useCallback(() => {
@@ -114,23 +116,12 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
     }
   }, [id, money, note, name, idReason]);
 
-  const currencyConfig = {
-    locale: "vi",
-    formats: {
-      number: {
-        BRL: {
-          style: "currency",
-          currency: "VND",
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
-        },
-      },
-    },
-  };
-
-  const handleChange = (event, value) => {
-    event.preventDefault();
-    setMoney(value);
+  const onChangeMoney = (value) => {
+    const deleteComma = value.replace(/,/g, "");
+    console.log(deleteComma.toString());
+    // setMoney(
+    //   deleteComma.toString()?.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+    // );
   };
 
   return (
@@ -151,80 +142,77 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
         }}
       >
         <div className="modal-body">
-          <Form>
-            <div>
-              <Label>Cộng tác viên(*)</Label>
-              <Input
-                placeholder="Tìm kiếm theo số điện thoại"
-                value={name}
-                onChange={(e) => {
-                  searchCollaborator(e.target.value);
-                  valueSearch(e.target.value);
-                }}
-              />
-              {errorName && <a className="error">{errorName}</a>}
-              {data.length > 0 && (
-                <List type={"unstyled"} className="list-item">
-                  {data?.map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        onClick={(e) => {
-                          setId(item?._id);
-                          setName(item?.full_name);
-                          setData([]);
-                        }}
-                      >
-                        <a>
-                          {" "}
-                          {item?.full_name} - {item?.phone} - {item?.id_view}
-                        </a>
-                      </div>
-                    );
-                  })}
-                </List>
-              )}
-            </div>
+          <div>
+            <a>Cộng tác viên(*)</a>
+            <Input
+              placeholder="Tìm kiếm theo số điện thoại"
+              value={name}
+              onChange={(e) => {
+                searchCollaborator(e.target.value);
+                valueSearch(e.target.value);
+              }}
+            />
+            {errorName && <a className="error">{errorName}</a>}
+            {data.length > 0 && (
+              <List type={"unstyled"} className="list-item">
+                {data?.map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={(e) => {
+                        setId(item?._id);
+                        setName(item?.full_name);
+                        setData([]);
+                      }}
+                    >
+                      <a>
+                        {" "}
+                        {item?.full_name} - {item?.phone} - {item?.id_view}
+                      </a>
+                    </div>
+                  );
+                })}
+              </List>
+            )}
+          </div>
 
-            <div className="div-money">
-              <Label> Nhập số tiền (*)</Label>
-              <IntlCurrencyInput
-                className="input-money-punish"
-                currency="BRL"
-                config={currencyConfig}
-                onChange={handleChange}
-                value={money}
-              />
-            </div>
-
-            <div className="div-money">
-              <Label>Chọn lí do phạt (*)</Label>
-              <Select
-                style={{ width: "100%" }}
-                value={idReason}
-                onChange={handleChangeReason}
-                options={reasonOption}
-              />
-            </div>
-
-            <CustomTextInput
-              label={"Nhập nội dung"}
-              id="exampleNote"
-              name="note"
-              placeholder="Vui lòng nhập nội dung chuyển tiền"
-              type="textarea"
+          <div className="div-money">
+            <a> Nhập số tiền (*)</a>
+            <InputNumber
+              formatter={(value) =>
+                `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+              }
               min={0}
+              onChange={(e) => setMoney(e)}
+              style={{ width: "100%" }}
+            />
+          </div>
+
+          <div className="div-money">
+            <Label>Chọn lí do phạt (*)</Label>
+            <Select
+              style={{ width: "100%" }}
+              value={idReason}
+              onChange={handleChangeReason}
+              options={reasonOption}
+            />
+          </div>
+
+          <div className="mt-2">
+            <a>Nội dung</a>
+            <TextArea
               value={note}
               onChange={(e) => setNote(e.target.value)}
+              placeholder="Vui lòng nhập nội dung chuyển tiền"
             />
+          </div>
 
-            <CustomButton
-              title="Phạt tiền"
-              className="float-left btn-add-t"
-              type="button"
-              onClick={punishMoney}
-            />
-          </Form>
+          <CustomButton
+            title="Phạt tiền"
+            className="float-left btn-add-t"
+            type="button"
+            onClick={punishMoney}
+          />
         </div>
       </Drawer>
     </>

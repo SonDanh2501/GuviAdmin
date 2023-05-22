@@ -1,7 +1,7 @@
-import { Drawer } from "antd";
+import { Drawer, Select } from "antd";
 import { Formik } from "formik";
 import React, { memo, useCallback, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Form, Modal } from "reactstrap";
 import { loadingAction } from "../../redux/actions/loading";
 import { validateAddCollaboratorSchema } from "../../utils/schema";
@@ -10,12 +10,14 @@ import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./addCollaborator.scss";
 import { createCollaborator, fetchCollaborators } from "../../api/collaborator";
 import { errorNotify } from "../../helper/toast";
+import { getService } from "../../redux/selectors/service";
 
 const AddCollaborator = (props) => {
   const { setData, setTotal, startPage, status, setIsLoading } = props;
   const formikRef = useRef();
   const dispatch = useDispatch();
-
+  const service = useSelector(getService);
+  const serviceOption = [];
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -23,6 +25,13 @@ const AddCollaborator = (props) => {
   const onClose = ({ data }) => {
     setOpen(false);
   };
+
+  service.map((item, index) => {
+    serviceOption.push({
+      label: item?.title?.vi,
+      value: item?._id,
+    });
+  });
 
   const initialValues = {
     code_phone_area: "",
@@ -32,21 +41,12 @@ const AddCollaborator = (props) => {
     identify: "",
     code: "",
     type: "",
+    service_apply: [],
   };
 
   const addCustomer = useCallback(() => {
     setIsLoading(true);
-    // dispatch(
-    //   createCollaborator.createCollaboratorRequest({
-    //     code_phone_area: "+84",
-    //     phone: formikRef?.current?.values?.phone,
-    //     email: formikRef?.current?.values?.email,
-    //     full_name: formikRef?.current?.values?.name,
-    //     identity_number: formikRef?.current?.values?.identify,
-    //     city: 79,
-    //     id_inviter: formikRef?.current?.values?.code,
-    //   })
-    // );
+
     createCollaborator({
       code_phone_area: "+84",
       phone: formikRef?.current?.values?.phone,
@@ -56,6 +56,7 @@ const AddCollaborator = (props) => {
       city: 79,
       id_inviter: formikRef?.current?.values?.code,
       type: formikRef?.current?.values?.type,
+      service_apply: formikRef?.current?.values?.service_apply,
     })
       .then((res) => {
         setOpen(false);
@@ -114,22 +115,7 @@ const AddCollaborator = (props) => {
                   onChange={(text) => setFieldValue("name", text.target.value)}
                   errors={errors?.name}
                 />
-                {/* <CustomTextInput
-                  label="Mã vùng"
-                  type="select"
-                  id="codeArea"
-                  className="textInput"
-                  onChange={(text) =>
-                    setFieldValue("code_phone_area", text.target.value)
-                  }
-                  body={
-                    <>
-                      <option value="">Chọn mã vùng</option>
-                      <option value="+84">+84</option>
-                    </>
-                  }
-                  errors={errors?.code_phone_area}
-                /> */}
+
                 <CustomTextInput
                   label="Số điện thoại"
                   type="text"
@@ -162,6 +148,16 @@ const AddCollaborator = (props) => {
                   }
                   errors={errors?.identify}
                 />
+                <div className="mb-2">
+                  <a>Loại dịch vụ</a>
+                  <Select
+                    style={{ width: "100%" }}
+                    mode="multiple"
+                    allowClear
+                    onChange={(e) => setFieldValue("service_apply", e)}
+                    options={serviceOption}
+                  />
+                </div>
                 <CustomTextInput
                   label="Mã giới thiệu"
                   type="text"

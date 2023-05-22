@@ -257,23 +257,23 @@ const Punish = () => {
                 <></>
               ) : (
                 <Tooltip placement="bottom" title={"Chỉnh sửa giao dịch CTV"}>
-                  <button
-                    className="btn-edit-topup"
-                    onClick={() => {
-                      toggleEdit();
-                      setItemEdit(data);
-                    }}
-                  >
-                    <i
-                      className={
-                        (!data?.is_verify_punish &&
-                          data?.status === "cancel") ||
-                        data?.is_verify_punish
-                          ? "uil uil-edit-alt icon-edit"
-                          : "uil uil-edit-alt"
-                      }
-                    ></i>
-                  </button>
+                  <EditPunish
+                    iconEdit={
+                      <i
+                        className={
+                          (!data?.is_verify_punish &&
+                            data?.status === "cancel") ||
+                          data?.is_verify_punish
+                            ? "uil uil-edit-alt icon-edit"
+                            : "uil uil-edit-alt"
+                        }
+                      ></i>
+                    }
+                    item={itemEdit}
+                    setDataT={setData}
+                    setTotal={setTotal}
+                    setIsLoading={setIsLoading}
+                  />
                 </Tooltip>
               )}
 
@@ -400,17 +400,6 @@ const Punish = () => {
               </Button>
             </ModalFooter>
           </Modal>
-        </div>
-
-        <div>
-          <EditPunish
-            item={itemEdit}
-            state={modalEdit}
-            setState={setModalEdit}
-            setDataT={setData}
-            setTotal={setTotal}
-            setIsLoading={setIsLoading}
-          />
         </div>
 
         {isLoading && <LoadingPagination />}

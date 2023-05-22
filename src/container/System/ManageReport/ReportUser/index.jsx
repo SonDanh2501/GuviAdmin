@@ -310,6 +310,7 @@ const ReportUser = () => {
                 barSize={40}
                 name="Khách hàng mới"
                 stackId="a"
+                label={{ position: "centerTop", fill: "white" }}
               />
               <Line
                 type="monotone"

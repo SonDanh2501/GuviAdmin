@@ -1,27 +1,13 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
-import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useState } from "react";
-import { getBrand } from "../../redux/actions/brand";
+import { useDispatch, useSelector } from "react-redux";
+import { Collapse, Nav } from "reactstrap";
 import logo from "../../assets/images/LogoS.png";
-import home from "../../assets/images/home.svg";
-import bag from "../../assets/images/bag.svg";
-import customer from "../../assets/images/2user.svg";
-import collaborator from "../../assets/images/collaborator.svg";
-import notification from "../../assets/images/notification.svg";
-import setting from "../../assets/images/setting.svg";
-import ticket from "../../assets/images/ticket.svg";
-import cards from "../../assets/images/cards.svg";
-import like from "../../assets/images/like.svg";
-import document from "../../assets/images/document.svg";
-import service from "../../assets/images/service.svg";
-import request from "../../assets/images/request.svg";
-import finance from "../../assets/images/finance.svg";
-import "./Sidebar.scss";
-import { Collapse, Input, Nav, NavbarToggler, NavItem } from "reactstrap";
-import { Menu } from "antd";
-import { SettingOutlined } from "@ant-design/icons";
+import { getBrand } from "../../redux/actions/brand";
 import { getUser } from "../../redux/selectors/auth";
+import router from "../../routes/router";
+import "./Sidebar.scss";
 
 const Sidebar = ({ onClick }) => {
   const dispatch = useDispatch();
@@ -48,989 +34,131 @@ const Sidebar = ({ onClick }) => {
       <div className="div-logo">
         <img src={logo} className="img-logo" />
       </div>
-
-      <div className="container-sidebar" responsive>
-        {user?.role === "admin" ? (
-          <ul className="nav nav-pills flex-column ">
-            <li>
-              <NavLink to="/">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={home} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Tổng quan
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/group-order/manage-order" onClick={toggleNavbar}>
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={bag} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      GUVIJOBS
-                    </a>
-                    {collapsed ? (
-                      <i class="uil uil-angle-right icon-right"></i>
-                    ) : (
-                      <i class="uil uil-angle-down icon-right"></i>
-                    )}
-                  </div>
-                )}
-              </NavLink>
-
-              <Collapse isOpen={!collapsed}>
-                <Nav className="nav" navbar>
-                  <NavItem>
-                    <NavLink to="/group-order/manage-order/all">
-                      {({ isActive }) => (
-                        <div
-                          className={
-                            isActive ? "active-link-nav" : "unactive-link-nav"
-                          }
-                        >
-                          <i class="uil uil-shopping-bag icon"></i>
-                          <a
-                            className={
-                              isActive ? "active-text-nav" : "unactive-text-nav"
-                            }
-                          >
-                            Tất cả công việc
-                          </a>
-                        </div>
-                      )}
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink to="/group-order/manage-order/doing">
-                      {({ isActive }) => (
-                        <div
-                          className={
-                            isActive ? "active-link-nav" : "unactive-link-nav"
-                          }
-                        >
-                          <i class="uil uil-shopping-bag icon"></i>
-                          <a
-                            className={
-                              isActive ? "active-text-nav" : "unactive-text-nav"
-                            }
-                          >
-                            Dịch vụ chưa hoàn tất
-                          </a>
-                        </div>
-                      )}
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink to="/group-order/manage-order/done">
-                      {({ isActive }) => (
-                        <div
-                          className={
-                            isActive ? "active-link-nav" : "unactive-link-nav"
-                          }
-                        >
-                          <i class="uil uil-shopping-bag icon"></i>
-                          <a
-                            className={
-                              isActive ? "active-text-nav" : "unactive-text-nav"
-                            }
-                          >
-                            Dịch vụ hết hạn
-                          </a>
-                        </div>
-                      )}
-                    </NavLink>
-                  </NavItem>
-                </Nav>
-              </Collapse>
-            </li>
-            <li>
-              <NavLink to="/system/deep-cleaning">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={request} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Yêu cầu dịch vụ
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/system/user-manage">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={customer} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Khách hàng
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/system/collaborator-manage"
-                onClick={() => changeBrand("Quản lý CTV")}
-              >
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={collaborator} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Cộng tác viên
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/services/edit-service"
-                onClick={toggleServiceNavbar}
-              >
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={service} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Dịch vụ
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-              {/* <Collapse isOpen={!collapsedService}>
-                <Nav className="nav" navbar>
-                  <NavItem>
-                    <NavLink to="/services/manage-group-service/all">
-                      {({ isActive }) => (
-                        <div
-                          className={
-                            isActive ? "active-link-nav" : "unactive-link-nav"
-                          }
-                        >
-                          <i class="uil uil-shopping-bag icon"></i>
-                          <a
-                            className={
-                              isActive ? "active-text-nav" : "unactive-text-nav"
-                            }
-                          >
-                            Tất cả dịch vụ
-                          </a>
-                        </div>
-                      )}
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink to="/services/manage-group-service/doing">
-                      {({ isActive }) => (
-                        <div
-                          className={
-                            isActive ? "active-link-nav" : "unactive-link-nav"
-                          }
-                        >
-                          <i class="uil uil-shopping-bag icon"></i>
-                          <a
-                            className={
-                              isActive ? "active-text-nav" : "unactive-text-nav"
-                            }
-                          >
-                            Nhóm dịch vụ
-                          </a>
-                        </div>
-                      )}
-                    </NavLink>
-                  </NavItem>
-                </Nav>
-              </Collapse> */}
-            </li>
-            <li>
-              <NavLink to="/promotion/manage-setting">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={ticket} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Khuyến mãi
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/feedback/manage-feedback"
-                onClick={() => changeBrand("Quản lý phản hồi")}
-              >
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={like} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      CSKH
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/finance/manage-finance">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={finance} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Tài chính
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/topup/manage-topup">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={cards} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Sổ Quỹ
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/report/manage-report" onClick={toggleReportNavbar}>
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={document} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Báo cáo
-                    </a>
-                    {/* {collapsedReport ? (
-                    <i class="uil uil-angle-right icon-right"></i>
-                  ) : (
-                    <i class="uil uil-angle-down icon-right"></i>
-                  )} */}
-                  </div>
-                )}
-              </NavLink>
-              {/* <Collapse isOpen={!collapsedReport}>
-              <Nav className="nav" navbar>
-                <NavItem>
-                  <NavLink to="/report/manage-report/all">
-                    {({ isActive }) => (
-                      <div
-                        className={
-                          isActive ? "active-link-nav" : "unactive-link-nav"
-                        }
-                      >
-                        <i class="uil uil-shopping-bag icon"></i>
-                        <a
-                          className={
-                            isActive ? "active-text-nav" : "unactive-text-nav"
-                          }
-                        >
-                          Tổng quan
-                        </a>
-                      </div>
-                    )}
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to="/report/manage-report/finance">
-                    {({ isActive }) => (
-                      <div
-                        className={
-                          isActive ? "active-link-nav" : "unactive-link-nav"
-                        }
-                      >
-                        <i class="uil uil-shopping-bag icon"></i>
-                        <a
-                          className={
-                            isActive ? "active-text-nav" : "unactive-text-nav"
-                          }
-                        >
-                          Báo cáo tài chính
-                        </a>
-                      </div>
-                    )}
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to="/report/manage-report/service">
-                    {({ isActive }) => (
-                      <div
-                        className={
-                          isActive ? "active-link-nav" : "unactive-link-nav"
-                        }
-                      >
-                        <i class="uil uil-shopping-bag icon"></i>
-                        <a
-                          className={
-                            isActive ? "active-text-nav" : "unactive-text-nav"
-                          }
-                        >
-                          Báo cáo dịch vụ
-                        </a>
-                      </div>
-                    )}
-                  </NavLink>
-                </NavItem>
-              </Nav>
-            </Collapse> */}
-            </li>
-            <li>
-              <NavLink to="/notification/manage-push-notification">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={notification} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Thông báo
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-          </ul>
-        ) : user?.role === "marketing" || user?.role === "marketing_manager" ? (
-          <ul className="nav nav-pills flex-column ">
-            <li>
-              <NavLink to="/">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={home} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Tổng quan
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/group-order/manage-order" onClick={toggleNavbar}>
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={bag} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      GUVIJOBS
-                    </a>
-                    {collapsed ? (
-                      <i class="uil uil-angle-right icon-right"></i>
-                    ) : (
-                      <i class="uil uil-angle-down icon-right"></i>
-                    )}
-                  </div>
-                )}
-              </NavLink>
-
-              <Collapse isOpen={!collapsed}>
-                <Nav className="nav" navbar>
-                  <NavItem>
-                    <NavLink to="/group-order/manage-order/all">
-                      {({ isActive }) => (
-                        <div
-                          className={
-                            isActive ? "active-link-nav" : "unactive-link-nav"
-                          }
-                        >
-                          <i class="uil uil-shopping-bag icon"></i>
-                          <a
-                            className={
-                              isActive ? "active-text-nav" : "unactive-text-nav"
-                            }
-                          >
-                            Tất cả công việc
-                          </a>
-                        </div>
-                      )}
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink to="/group-order/manage-order/doing">
-                      {({ isActive }) => (
-                        <div
-                          className={
-                            isActive ? "active-link-nav" : "unactive-link-nav"
-                          }
-                        >
-                          <i class="uil uil-shopping-bag icon"></i>
-                          <a
-                            className={
-                              isActive ? "active-text-nav" : "unactive-text-nav"
-                            }
-                          >
-                            Dịch vụ chưa hoàn tất
-                          </a>
-                        </div>
-                      )}
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink to="/group-order/manage-order/done">
-                      {({ isActive }) => (
-                        <div
-                          className={
-                            isActive ? "active-link-nav" : "unactive-link-nav"
-                          }
-                        >
-                          <i class="uil uil-shopping-bag icon"></i>
-                          <a
-                            className={
-                              isActive ? "active-text-nav" : "unactive-text-nav"
-                            }
-                          >
-                            Dịch vụ hết hạn
-                          </a>
-                        </div>
-                      )}
-                    </NavLink>
-                  </NavItem>
-                </Nav>
-              </Collapse>
-            </li>
-            <li>
-              <NavLink to="/system/user-manage">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={customer} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Khách hàng
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/promotion/manage-setting">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={ticket} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Khuyến mãi
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/feedback/manage-feedback"
-                onClick={() => changeBrand("Quản lý phản hồi")}
-              >
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={like} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      CSKH
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/notification/manage-push-notification">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={notification} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Thông báo
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/report/manage-report" onClick={toggleReportNavbar}>
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={document} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Báo cáo
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-          </ul>
-        ) : user?.role === "support_customer" ? (
-          <ul className="nav nav-pills flex-column ">
-            <li>
-              <NavLink to="/group-order/manage-order" onClick={toggleNavbar}>
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={bag} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      GUVIJOBS
-                    </a>
-                    {collapsed ? (
-                      <i class="uil uil-angle-right icon-right"></i>
-                    ) : (
-                      <i class="uil uil-angle-down icon-right"></i>
-                    )}
-                  </div>
-                )}
-              </NavLink>
-
-              <Collapse isOpen={!collapsed}>
-                <Nav className="nav" navbar>
-                  <NavItem>
-                    <NavLink to="/group-order/manage-order/all">
-                      {({ isActive }) => (
-                        <div
-                          className={
-                            isActive ? "active-link-nav" : "unactive-link-nav"
-                          }
-                        >
-                          <i class="uil uil-shopping-bag icon"></i>
-                          <a
-                            className={
-                              isActive ? "active-text-nav" : "unactive-text-nav"
-                            }
-                          >
-                            Tất cả công việc
-                          </a>
-                        </div>
-                      )}
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink to="/group-order/manage-order/doing">
-                      {({ isActive }) => (
-                        <div
-                          className={
-                            isActive ? "active-link-nav" : "unactive-link-nav"
-                          }
-                        >
-                          <i class="uil uil-shopping-bag icon"></i>
-                          <a
-                            className={
-                              isActive ? "active-text-nav" : "unactive-text-nav"
-                            }
-                          >
-                            Dịch vụ chưa hoàn tất
-                          </a>
-                        </div>
-                      )}
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink to="/group-order/manage-order/done">
-                      {({ isActive }) => (
-                        <div
-                          className={
-                            isActive ? "active-link-nav" : "unactive-link-nav"
-                          }
-                        >
-                          <i class="uil uil-shopping-bag icon"></i>
-                          <a
-                            className={
-                              isActive ? "active-text-nav" : "unactive-text-nav"
-                            }
-                          >
-                            Dịch vụ hết hạn
-                          </a>
-                        </div>
-                      )}
-                    </NavLink>
-                  </NavItem>
-                </Nav>
-              </Collapse>
-            </li>
-            <li>
-              <NavLink to="/system/deep-cleaning">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={request} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Yêu cầu dịch vụ
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/system/user-manage">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={customer} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Khách hàng
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/feedback/manage-feedback"
-                onClick={() => changeBrand("Quản lý phản hồi")}
-              >
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={like} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      CSKH
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-          </ul>
-        ) : user?.role === "accountant" ? (
-          <ul className="nav nav-pills flex-column ">
-            <li>
-              <NavLink to="/topup/manage-topup">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={cards} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Sổ Quỹ
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/report/manage-report" onClick={toggleReportNavbar}>
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={document} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Báo cáo
-                    </a>
-                    {/* {collapsedReport ? (
-                    <i class="uil uil-angle-right icon-right"></i>
-                  ) : (
-                    <i class="uil uil-angle-down icon-right"></i>
-                  )} */}
-                  </div>
-                )}
-              </NavLink>
-              {/* <Collapse isOpen={!collapsedReport}>
-              <Nav className="nav" navbar>
-                <NavItem>
-                  <NavLink to="/report/manage-report/all">
-                    {({ isActive }) => (
-                      <div
-                        className={
-                          isActive ? "active-link-nav" : "unactive-link-nav"
-                        }
-                      >
-                        <i class="uil uil-shopping-bag icon"></i>
-                        <a
-                          className={
-                            isActive ? "active-text-nav" : "unactive-text-nav"
-                          }
-                        >
-                          Tổng quan
-                        </a>
-                      </div>
-                    )}
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to="/report/manage-report/finance">
-                    {({ isActive }) => (
-                      <div
-                        className={
-                          isActive ? "active-link-nav" : "unactive-link-nav"
-                        }
-                      >
-                        <i class="uil uil-shopping-bag icon"></i>
-                        <a
-                          className={
-                            isActive ? "active-text-nav" : "unactive-text-nav"
-                          }
-                        >
-                          Báo cáo tài chính
-                        </a>
-                      </div>
-                    )}
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to="/report/manage-report/service">
-                    {({ isActive }) => (
-                      <div
-                        className={
-                          isActive ? "active-link-nav" : "unactive-link-nav"
-                        }
-                      >
-                        <i class="uil uil-shopping-bag icon"></i>
-                        <a
-                          className={
-                            isActive ? "active-text-nav" : "unactive-text-nav"
-                          }
-                        >
-                          Báo cáo dịch vụ
-                        </a>
-                      </div>
-                    )}
-                  </NavLink>
-                </NavItem>
-              </Nav>
-            </Collapse> */}
-            </li>
-          </ul>
-        ) : user?.role === "support" ? (
-          <ul className="nav nav-pills flex-column ">
-            <li>
-              <NavLink to="/group-order/manage-order" onClick={toggleNavbar}>
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={bag} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      GUVIJOBS
-                    </a>
-                    {collapsed ? (
-                      <i class="uil uil-angle-right icon-right"></i>
-                    ) : (
-                      <i class="uil uil-angle-down icon-right"></i>
-                    )}
-                  </div>
-                )}
-              </NavLink>
-
-              <Collapse isOpen={!collapsed}>
-                <Nav className="nav" navbar>
-                  <NavItem>
-                    <NavLink to="/group-order/manage-order/all">
-                      {({ isActive }) => (
-                        <div
-                          className={
-                            isActive ? "active-link-nav" : "unactive-link-nav"
-                          }
-                        >
-                          <i class="uil uil-shopping-bag icon"></i>
-                          <a
-                            className={
-                              isActive ? "active-text-nav" : "unactive-text-nav"
-                            }
-                          >
-                            Tất cả công việc
-                          </a>
-                        </div>
-                      )}
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink to="/group-order/manage-order/doing">
-                      {({ isActive }) => (
-                        <div
-                          className={
-                            isActive ? "active-link-nav" : "unactive-link-nav"
-                          }
-                        >
-                          <i class="uil uil-shopping-bag icon"></i>
-                          <a
-                            className={
-                              isActive ? "active-text-nav" : "unactive-text-nav"
-                            }
-                          >
-                            Dịch vụ chưa hoàn tất
-                          </a>
-                        </div>
-                      )}
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink to="/group-order/manage-order/done">
-                      {({ isActive }) => (
-                        <div
-                          className={
-                            isActive ? "active-link-nav" : "unactive-link-nav"
-                          }
-                        >
-                          <i class="uil uil-shopping-bag icon"></i>
-                          <a
-                            className={
-                              isActive ? "active-text-nav" : "unactive-text-nav"
-                            }
-                          >
-                            Dịch vụ hết hạn
-                          </a>
-                        </div>
-                      )}
-                    </NavLink>
-                  </NavItem>
-                </Nav>
-              </Collapse>
-            </li>
-            <li>
-              <NavLink to="/system/deep-cleaning">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={request} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Yêu cầu dịch vụ
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/system/user-manage">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={customer} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Khách hàng
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/system/collaborator-manage"
-                onClick={() => changeBrand("Quản lý CTV")}
-              >
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={collaborator} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Cộng tác viên
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/topup/manage-topup">
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={cards} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Sổ Quỹ
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/feedback/manage-feedback"
-                onClick={() => changeBrand("Quản lý phản hồi")}
-              >
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={like} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      CSKH
-                    </a>
-                  </div>
-                )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/report/manage-report" onClick={toggleReportNavbar}>
-                {({ isActive }) => (
-                  <div className={isActive ? "active-link" : "unactive-link"}>
-                    <img src={document} className="img-icon" />
-                    <a className={isActive ? "active-text" : "unactive-text"}>
-                      Báo cáo
-                    </a>
-                    {/* {collapsedReport ? (
-                    <i class="uil uil-angle-right icon-right"></i>
-                  ) : (
-                    <i class="uil uil-angle-down icon-right"></i>
-                  )} */}
-                  </div>
-                )}
-              </NavLink>
-              {/* <Collapse isOpen={!collapsedReport}>
-              <Nav className="nav" navbar>
-                <NavItem>
-                  <NavLink to="/report/manage-report/all">
-                    {({ isActive }) => (
-                      <div
-                        className={
-                          isActive ? "active-link-nav" : "unactive-link-nav"
-                        }
-                      >
-                        <i class="uil uil-shopping-bag icon"></i>
-                        <a
-                          className={
-                            isActive ? "active-text-nav" : "unactive-text-nav"
-                          }
-                        >
-                          Tổng quan
-                        </a>
-                      </div>
-                    )}
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to="/report/manage-report/finance">
-                    {({ isActive }) => (
-                      <div
-                        className={
-                          isActive ? "active-link-nav" : "unactive-link-nav"
-                        }
-                      >
-                        <i class="uil uil-shopping-bag icon"></i>
-                        <a
-                          className={
-                            isActive ? "active-text-nav" : "unactive-text-nav"
-                          }
-                        >
-                          Báo cáo tài chính
-                        </a>
-                      </div>
-                    )}
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to="/report/manage-report/service">
-                    {({ isActive }) => (
-                      <div
-                        className={
-                          isActive ? "active-link-nav" : "unactive-link-nav"
-                        }
-                      >
-                        <i class="uil uil-shopping-bag icon"></i>
-                        <a
-                          className={
-                            isActive ? "active-text-nav" : "unactive-text-nav"
-                          }
-                        >
-                          Báo cáo dịch vụ
-                        </a>
-                      </div>
-                    )}
-                  </NavLink>
-                </NavItem>
-              </Nav>
-            </Collapse> */}
-            </li>
-          </ul>
-        ) : (
-          <></>
-        )}
-
-        {user?.role === "admin" && (
-          <div className="configuration">
-            <NavLink to="/adminManage/manage-configuration">
-              {({ isActive }) => (
-                <div
-                  className={
-                    isActive
-                      ? "active-link-configuration"
-                      : "unactive-link-configuration"
-                  }
-                >
-                  <img src={setting} className="img-icon" />
-                  <a
-                    className={
-                      isActive
-                        ? "active-text-configuration"
-                        : "unactive-text-configuration"
-                    }
-                  >
-                    Cấu hình
-                  </a>
+      <div responsive className="container-sidebar">
+        {router?.map((item, key) => {
+          return (
+            <div key={key}>
+              {item?.role === user?.role && (
+                <div>
+                  {item?.side?.map((itemSide, indexSide) => {
+                    return (
+                      <>
+                        <ul className="nav nav-pills flex-column">
+                          {itemSide?.tab.length === 0 && (
+                            <li>
+                              <NavLink to={itemSide?.path}>
+                                {({ isActive }) => (
+                                  <div
+                                    className={
+                                      isActive ? "active-link" : "unactive-link"
+                                    }
+                                  >
+                                    <img
+                                      src={itemSide?.icon}
+                                      className="img-icon"
+                                    />
+                                    <a
+                                      className={
+                                        isActive
+                                          ? "active-text"
+                                          : "unactive-text"
+                                      }
+                                    >
+                                      {itemSide?.name}
+                                    </a>
+                                  </div>
+                                )}
+                              </NavLink>
+                            </li>
+                          )}
+                          {itemSide?.tab?.length > 0 && (
+                            <li>
+                              <NavLink
+                                to={itemSide?.path}
+                                onClick={
+                                  itemSide?.layout === "job"
+                                    ? toggleNavbar
+                                    : itemSide?.layout === "group"
+                                    ? toggleServiceNavbar
+                                    : null
+                                }
+                              >
+                                {({ isActive }) => (
+                                  <div
+                                    className={
+                                      isActive ? "active-link" : "unactive-link"
+                                    }
+                                  >
+                                    <img
+                                      src={itemSide?.icon}
+                                      className="img-icon"
+                                    />
+                                    <a
+                                      className={
+                                        isActive
+                                          ? "active-text"
+                                          : "unactive-text"
+                                      }
+                                    >
+                                      {itemSide?.name}
+                                    </a>
+                                    {collapsed ? (
+                                      <i class="uil uil-angle-right icon-right"></i>
+                                    ) : (
+                                      <i class="uil uil-angle-down icon-right"></i>
+                                    )}
+                                  </div>
+                                )}
+                              </NavLink>
+                              <Collapse
+                                isOpen={
+                                  itemSide?.layout === "job"
+                                    ? !collapsed
+                                    : itemSide?.layout === "group"
+                                    ? !collapsedService
+                                    : null
+                                }
+                              >
+                                <Nav className="nav" navbar>
+                                  {itemSide?.tab?.map((i, index) => {
+                                    return (
+                                      <NavLink to={i?.path} key={index}>
+                                        {({ isActive }) => (
+                                          <div
+                                            className={
+                                              isActive
+                                                ? "active-link-nav"
+                                                : "unactive-link-nav"
+                                            }
+                                          >
+                                            <i class="uil uil-shopping-bag icon"></i>
+                                            <a
+                                              className={
+                                                isActive
+                                                  ? "active-text-nav"
+                                                  : "unactive-text-nav"
+                                              }
+                                            >
+                                              {i?.name}
+                                            </a>
+                                          </div>
+                                        )}
+                                      </NavLink>
+                                    );
+                                  })}
+                                </Nav>
+                              </Collapse>
+                            </li>
+                          )}
+                        </ul>
+                      </>
+                    );
+                  })}
                 </div>
               )}
-            </NavLink>
-          </div>
-        )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

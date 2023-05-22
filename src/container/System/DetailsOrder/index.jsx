@@ -969,10 +969,7 @@ const DetailsOrder = () => {
                         item?.id_reason_cancel?.title?.vi
                       );
                   return (
-                    <div
-                      key={index}
-                      className="div-item-list-activity-detail-order"
-                    >
+                    <div key={index} className="div-item-activity-detail-order">
                       <div className="div-name">
                         <a className="text-title">{object}</a>
                         {item?.type !== "customer_collect_points_order" && (

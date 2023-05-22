@@ -83,7 +83,6 @@ const Dashboard = () => {
               ""
             )}
           </Content>
-          {/* <Footer>Guvi Admin ©{moment().year()} Created by Le Minh Dang</Footer> */}
         </Layout>
       </Layout>
     </Layout>
