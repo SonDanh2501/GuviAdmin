@@ -10,6 +10,7 @@ import ReportUser from "./ReportUser";
 import ReportCustomer from "./ReportCutomer";
 import ReportCancelOrder from "./ReportCancelOrder";
 import { useEffect } from "react";
+import ReportOrderDaily from "./ReportOrderDaily";
 
 const ManageReport = () => {
   useEffect(() => {
@@ -25,22 +26,25 @@ const ManageReport = () => {
           <Tabs.TabPane tab="Báo cáo đơn hàng" key="1">
             <ReportOrder />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo CTV" key="2">
+          <Tabs.TabPane tab="Báo cáo đơn hàng theo ngày" key="2">
+            <ReportOrderDaily />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Báo cáo CTV" key="3">
             <ReportManager />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo số lượng user" key="3">
+          <Tabs.TabPane tab="Báo cáo số lượng user" key="4">
             <ReportUser />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo lượt giới thiệu" key="4">
+          <Tabs.TabPane tab="Báo cáo lượt giới thiệu" key="5">
             <ReportInvite />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo đơn hàng theo khách hàng" key="5">
+          <Tabs.TabPane tab="Báo cáo đơn hàng theo khách hàng" key="6">
             <ReportCustomer />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo khu vực" key="6">
+          <Tabs.TabPane tab="Báo cáo khu vực" key="7">
             <ReportArea />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo đơn huỷ" key="7">
+          <Tabs.TabPane tab="Báo cáo đơn huỷ" key="8">
             <ReportCancelOrder />
           </Tabs.TabPane>
         </Tabs>

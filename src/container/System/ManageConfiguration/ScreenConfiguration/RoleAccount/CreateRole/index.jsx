@@ -13,6 +13,7 @@ const CreateRole = (props) => {
   const { setDataList, setTotal, setIsLoading } = props;
   const [data, setData] = useState([]);
   const [keyApi, setKeyApi] = useState([]);
+  const [keyCheckApi, setKeyCheckApi] = useState([]);
   const [nameRole, setNameRole] = useState("");
 
   const [open, setOpen] = useState(false);
@@ -53,14 +54,44 @@ const CreateRole = (props) => {
   //   }
   // };
 
-  const onChangeRole = (check, item) => {
+  const onChangeRole = (check, item, role) => {
     if (check) {
+      for (var i = 0; i < role?.permission?.length; i++) {
+        const newArr = [...keyApi];
+        if (role?.permission[i]?.key_api_parent?.includes(item?._id)) {
+          keyApi.push(role.permission[i]?._id);
+          setKeyApi(newArr);
+        } else if (item?.key_api_parent?.includes(role?.permission[i]?._id)) {
+          keyApi.push(role.permission[i]?._id);
+          setKeyApi(newArr);
+        }
+      }
+
+      for (var i = 0; i < data?.length; i++) {
+        for (var j = 0; j < data[i]?.permission?.length; j++) {
+          const newArr = [...keyApi];
+
+          if (item?.key_api_parent?.includes(data[i]?.permission[j]?._id)) {
+            keyApi.push(data[i]?.permission[j]?._id);
+            setKeyApi(newArr);
+            setKeyCheckApi([...keyCheckApi, data[i]?.permission[j]?._id]);
+          }
+        }
+      }
+
       setKeyApi([...keyApi, item?._id]);
     } else {
+      for (var i = 0; i < role?.permission?.length; i++) {
+        if (role?.permission[i]?.key_api_parent?.includes(item?._id)) {
+        }
+      }
+
       const arr = keyApi.filter((e) => e !== item?._id);
       setKeyApi(arr);
     }
   };
+
+  console.log(keyApi);
 
   const onCreate = useCallback(() => {
     setIsLoading(true);
@@ -118,7 +149,11 @@ const CreateRole = (props) => {
                   return (
                     <div className="div-item-per" key={i}>
                       <Checkbox
-                        onChange={(e) => onChangeRole(e.target.checked, per)}
+                        checked={keyApi.includes(per?._id) ? true : false}
+                        disabled={keyCheckApi.includes(per?._id) ? true : false}
+                        onChange={(e) =>
+                          onChangeRole(e.target.checked, per, item)
+                        }
                       />
                       <a className="text-name-per">{per?.name_api}</a>
                     </div>

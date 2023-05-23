@@ -32,41 +32,12 @@ const ReportCustomer = () => {
   const [moneyOld, setMoneyOld] = useState(0);
   const [totalOrderNew, setTotalOrderNew] = useState([]);
   const [totalOrderOld, setTotalOrderOld] = useState([]);
-  const [type, setType] = useState("new");
+  const [type, setType] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
 
   const dataChart = [];
 
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   getReportCustomerNewOld(
-  //     0,
-  //     20,
-  //     moment(moment().startOf("month").toISOString())
-  //       .add(7, "hours")
-  //       .toISOString(),
-  //     moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
-  //   )
-  //     .then((res) => {
-  //       setCustomerNew(res?.newCustomer?.totalItem);
-  //       setMoneyNew(res?.newCustomer?.totalMoney);
-  //       setDataNew(res?.newCustomer?.data);
-  //       setCustomerOld(res?.oldCustomer?.totalItem);
-  //       setMoneyOld(res?.oldCustomer?.totalMoney);
-  //       setDataOld(res?.oldCustomer?.data);
-  //     })
-  //     .catch((err) => {});
-
-  //   setStartDate(
-  //     moment(moment().startOf("month").toISOString())
-  //       .add(7, "hours")
-  //       .toISOString()
-  //   );
-  //   setEndDate(
-  //     moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
-  //   );
-  // }, []);
 
   useEffect(() => {
     getReportCustomer(
@@ -78,7 +49,7 @@ const ReportCustomer = () => {
       moment(moment().endOf("date").toISOString())
         .add(7, "hours")
         .toISOString(),
-      "new"
+      type
     )
       .then((res) => {
         setData(res?.data);
@@ -514,7 +485,7 @@ const ReportCustomer = () => {
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">Khách hàng mới</a>
+              <a className="text-tab-header">Khách hàng mới / Đơn</a>
               <a className="text-tab-header">{customerNew}</a>
             </div>
           </div>
@@ -526,7 +497,7 @@ const ReportCustomer = () => {
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">Tổng đơn</a>
+              <a className="text-tab-header">Tổng ca</a>
               <a className="text-tab-header">
                 {totalOrderNew ? totalOrderNew : 0}
               </a>
@@ -548,7 +519,7 @@ const ReportCustomer = () => {
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">Khách hàng cũ</a>
+              <a className="text-tab-header">Khách hàng cũ / Đơn</a>
               <a className="text-tab-header">{customerOld}</a>
             </div>
           </div>
@@ -560,7 +531,7 @@ const ReportCustomer = () => {
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">Tổng đơn</a>
+              <a className="text-tab-header">Tổng ca</a>
               <a className="text-tab-header">
                 {totalOrderOld ? totalOrderOld : 0}
               </a>
@@ -574,63 +545,6 @@ const ReportCustomer = () => {
           </div>
         </div>
       </div>
-      {/* <div className="div-ratio">
-        <a className="title">Tỉ lệ chuyển đổi</a>
-        <div className="div-date">
-          <CustomDatePicker />
-        </div>
-        <div className="div-progress">
-          <div className="div-progress-item">
-            <div className="div-square-cus">
-              <div>
-                <div className="div-square-cus">
-                  <div className="div-square" />
-                  <a className="title-square-cus">Khách hàng mới</a>
-                </div>
-                <div className="div-square-cus">
-                  <div className="div-unsquare" />
-                  <a className="title-square-cus">Đơn hàng</a>
-                </div>
-              </div>
-            </div>
-            <div className="div-cus-job">
-              <a className="label-cus-job">Khách hàng mới / đơn hàng</a>
-              <Progress
-                percent={30}
-                gapDegree={5}
-                strokeColor={"#48CAE4"}
-                strokeWidth={15}
-                width={150}
-                type="dashboard"
-              />
-            </div>
-          </div>
-
-          <div className="div-progress-item">
-            <div>
-              <div className="div-square-cus">
-                <div className="div-square" />
-                <a>Khách hàng</a>
-              </div>
-              <div className="div-square-cus">
-                <div className="div-unsquare" />
-                <a>Đơn hàng</a>
-              </div>
-            </div>
-            <div className="div-cus-job">
-              <a className="label-cus-job">Khách hàng / đơn hàng</a>
-              <Progress
-                percent={30}
-                gapDegree={5}
-                strokeColor={"#48CAE4"}
-                strokeWidth={15}
-                width={150}
-                type="dashboard"
-              />
-            </div>
-          </div>
-        </div>
-      </div> */}
 
       <div className="mt-5 div-table">
         <div className="div-tab-customer-report">
@@ -689,6 +603,10 @@ const ReportCustomer = () => {
 export default ReportCustomer;
 
 const TAB = [
+  {
+    title: "Tất cả",
+    value: "all",
+  },
   {
     title: "Khách hàng mới",
     value: "new",

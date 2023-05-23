@@ -36,8 +36,35 @@ const EditRole = (props) => {
     setKeyApi(item?.id_key_api);
   }, []);
 
-  const onChangeRole = (check, item) => {
+  const onChangeRole = (check, item, role) => {
+    // if (check) {
+    //   setKeyApi([...keyApi, item?._id]);
+    // } else {
+    //   const arr = keyApi.filter((e) => e !== item?._id);
+    //   setKeyApi(arr);
+    // }
     if (check) {
+      for (var i = 0; i < role.permission.length; i++) {
+        const newArr = [...keyApi];
+        if (role?.permission[i]?.key_api_parent?.includes(item?._id)) {
+          keyApi.push(role.permission[i]?._id);
+          setKeyApi(newArr);
+        } else if (item?.key_api_parent?.includes(role?.permission[i]?._id)) {
+          keyApi.push(role.permission[i]?._id);
+          setKeyApi(newArr);
+        }
+      }
+
+      for (var i = 0; i < data?.length; i++) {
+        for (var j = 0; j < data[i]?.permission?.length; j++) {
+          const newArr = [...keyApi];
+          if (item?.key_api_parent?.includes(data[i]?.permission[j]?._id)) {
+            keyApi.push(data[i]?.permission[j]?._id);
+            setKeyApi(newArr);
+          }
+        }
+      }
+
       setKeyApi([...keyApi, item?._id]);
     } else {
       const arr = keyApi.filter((e) => e !== item?._id);
@@ -100,7 +127,9 @@ const EditRole = (props) => {
                     <div className="div-item-per" key={i}>
                       <Checkbox
                         checked={keyApi?.includes(per?._id) ? true : false}
-                        onChange={(e) => onChangeRole(e.target.checked, per)}
+                        onChange={(e) =>
+                          onChangeRole(e.target.checked, per, item)
+                        }
                       />
                       <a className="text-name-per">{per?.name_api}</a>
                     </div>

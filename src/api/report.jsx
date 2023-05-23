@@ -200,3 +200,9 @@ export const checkReviewCollaborator = (id, data) => {
     data
   );
 };
+
+export const getReportOrderDaily = (start, length, start_date, end_date) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_order_dayly?start=${start}&lenght=${length}&start_date=${start_date}&end_date=${end_date}`
+  );
+};

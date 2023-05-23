@@ -42,11 +42,12 @@ const AddOrder = () => {
     getGroupServiceApi(0, 20)
       .then((res) => {
         setDataGroupService(res?.data);
-        setServiceApply(res?.data[0]?._id);
+
         setKindService(res?.data[0]?.kind);
         setNameService(res?.data[0]?.title?.vi);
         getServiceApi(res?.data[0]?._id)
           .then((res) => {
+            setServiceApply(res?.data[0]?._id);
             setDataService(res?.data);
             getOptionalServiceByServiceApi(res?.data[0]?._id)
               .then((res) => {
