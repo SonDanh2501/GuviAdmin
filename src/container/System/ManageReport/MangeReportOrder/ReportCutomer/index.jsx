@@ -7,18 +7,19 @@ import {
   getReportConnectionCustomer,
   getReportCustomer,
   getReportCustomerNewOld,
-} from "../../../../api/report";
-import add from "../../../../assets/images/add.png";
-import collaborator from "../../../../assets/images/collaborator.png";
-import LoadingPagination from "../../../../components/paginationLoading";
+} from "../../../../../api/report";
+import add from "../../../../../assets/images/add.png";
+import collaborator from "../../../../../assets/images/collaborator.png";
+import LoadingPagination from "../../../../../components/paginationLoading";
 import "./index.scss";
-import { formatMoney } from "../../../../helper/formatMoney";
-import CustomDatePicker from "../../../../components/customDatePicker";
+import { formatMoney } from "../../../../../helper/formatMoney";
+import CustomDatePicker from "../../../../../components/customDatePicker";
 
 const { RangePicker } = DatePicker;
 
 const ReportCustomer = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [rowIndex, setRowIndex] = useState();
   const [data, setData] = useState([]);
@@ -32,41 +33,12 @@ const ReportCustomer = () => {
   const [moneyOld, setMoneyOld] = useState(0);
   const [totalOrderNew, setTotalOrderNew] = useState([]);
   const [totalOrderOld, setTotalOrderOld] = useState([]);
-  const [type, setType] = useState("new");
+  const [type, setType] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
 
   const dataChart = [];
 
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   getReportCustomerNewOld(
-  //     0,
-  //     20,
-  //     moment(moment().startOf("month").toISOString())
-  //       .add(7, "hours")
-  //       .toISOString(),
-  //     moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
-  //   )
-  //     .then((res) => {
-  //       setCustomerNew(res?.newCustomer?.totalItem);
-  //       setMoneyNew(res?.newCustomer?.totalMoney);
-  //       setDataNew(res?.newCustomer?.data);
-  //       setCustomerOld(res?.oldCustomer?.totalItem);
-  //       setMoneyOld(res?.oldCustomer?.totalMoney);
-  //       setDataOld(res?.oldCustomer?.data);
-  //     })
-  //     .catch((err) => {});
-
-  //   setStartDate(
-  //     moment(moment().startOf("month").toISOString())
-  //       .add(7, "hours")
-  //       .toISOString()
-  //   );
-  //   setEndDate(
-  //     moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
-  //   );
-  // }, []);
 
   useEffect(() => {
     getReportCustomer(
@@ -78,7 +50,7 @@ const ReportCustomer = () => {
       moment(moment().endOf("date").toISOString())
         .add(7, "hours")
         .toISOString(),
-      "new"
+      type
     )
       .then((res) => {
         setData(res?.data);
@@ -87,24 +59,6 @@ const ReportCustomer = () => {
         setCustomerNew(res?.totalItem);
         setMoneyNew(res?.total[0]?.total_order_fee);
         setTotalOrderNew(res?.total[0]?.total_item);
-      })
-      .catch((err) => {});
-
-    getReportCustomer(
-      0,
-      20,
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment().endOf("date").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      "old"
-    )
-      .then((res) => {
-        setCustomerOld(res?.totalItem);
-        setMoneyOld(res?.total[0]?.total_order_fee);
-        setTotalOrderOld(res?.total[0]?.total_item);
       })
       .catch((err) => {});
 
@@ -120,6 +74,7 @@ const ReportCustomer = () => {
 
   const onChangeDay = () => {
     setIsLoading(true);
+    setCurrentPage(1);
     getReportCustomer(0, 20, startDate, endDate, type)
       .then((res) => {
         setData(res?.data);
@@ -135,9 +90,10 @@ const ReportCustomer = () => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-
-    const start = page * data.length - data.length;
-    getReportCustomer(start, 20, startDate, endDate)
+    const lengthData = data.length < 20 ? 20 : data.length;
+    const start = page * lengthData - lengthData;
+    setStartPage(start);
+    getReportCustomer(start, 20, startDate, endDate, type)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -148,7 +104,7 @@ const ReportCustomer = () => {
 
   const onChangeTab = (value) => {
     setType(value);
-
+    setCurrentPage(1);
     getReportCustomer(0, 20, startDate, endDate, value)
       .then((res) => {
         setData(res?.data);
@@ -156,7 +112,6 @@ const ReportCustomer = () => {
         setTotalColumn(res?.total[0]);
         setIsLoading(false);
       })
-
       .catch((err) => {
         setIsLoading(false);
       });
@@ -493,6 +448,7 @@ const ReportCustomer = () => {
 
   return (
     <div className="div-container-report-customer">
+      <h3>Báo cáo đơn hàng theo khách hàng</h3>
       <div className="div-date">
         <CustomDatePicker
           setStartDate={setStartDate}
@@ -514,7 +470,7 @@ const ReportCustomer = () => {
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">Khách hàng mới</a>
+              <a className="text-tab-header">Khách hàng mới / Đơn</a>
               <a className="text-tab-header">{customerNew}</a>
             </div>
           </div>
@@ -526,7 +482,7 @@ const ReportCustomer = () => {
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">Tổng đơn</a>
+              <a className="text-tab-header">Tổng ca</a>
               <a className="text-tab-header">
                 {totalOrderNew ? totalOrderNew : 0}
               </a>
@@ -548,7 +504,7 @@ const ReportCustomer = () => {
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">Khách hàng cũ</a>
+              <a className="text-tab-header">Khách hàng cũ / Đơn</a>
               <a className="text-tab-header">{customerOld}</a>
             </div>
           </div>
@@ -560,7 +516,7 @@ const ReportCustomer = () => {
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">Tổng đơn</a>
+              <a className="text-tab-header">Tổng ca</a>
               <a className="text-tab-header">
                 {totalOrderOld ? totalOrderOld : 0}
               </a>
@@ -574,63 +530,6 @@ const ReportCustomer = () => {
           </div>
         </div>
       </div>
-      {/* <div className="div-ratio">
-        <a className="title">Tỉ lệ chuyển đổi</a>
-        <div className="div-date">
-          <CustomDatePicker />
-        </div>
-        <div className="div-progress">
-          <div className="div-progress-item">
-            <div className="div-square-cus">
-              <div>
-                <div className="div-square-cus">
-                  <div className="div-square" />
-                  <a className="title-square-cus">Khách hàng mới</a>
-                </div>
-                <div className="div-square-cus">
-                  <div className="div-unsquare" />
-                  <a className="title-square-cus">Đơn hàng</a>
-                </div>
-              </div>
-            </div>
-            <div className="div-cus-job">
-              <a className="label-cus-job">Khách hàng mới / đơn hàng</a>
-              <Progress
-                percent={30}
-                gapDegree={5}
-                strokeColor={"#48CAE4"}
-                strokeWidth={15}
-                width={150}
-                type="dashboard"
-              />
-            </div>
-          </div>
-
-          <div className="div-progress-item">
-            <div>
-              <div className="div-square-cus">
-                <div className="div-square" />
-                <a>Khách hàng</a>
-              </div>
-              <div className="div-square-cus">
-                <div className="div-unsquare" />
-                <a>Đơn hàng</a>
-              </div>
-            </div>
-            <div className="div-cus-job">
-              <a className="label-cus-job">Khách hàng / đơn hàng</a>
-              <Progress
-                percent={30}
-                gapDegree={5}
-                strokeColor={"#48CAE4"}
-                strokeWidth={15}
-                width={150}
-                type="dashboard"
-              />
-            </div>
-          </div>
-        </div>
-      </div> */}
 
       <div className="mt-5 div-table">
         <div className="div-tab-customer-report">
@@ -689,6 +588,10 @@ const ReportCustomer = () => {
 export default ReportCustomer;
 
 const TAB = [
+  {
+    title: "Tất cả",
+    value: "all",
+  },
   {
     title: "Khách hàng mới",
     value: "new",

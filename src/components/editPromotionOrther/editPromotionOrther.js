@@ -358,7 +358,7 @@ const EditPromotionOrther = (props) => {
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
         setState(false);
-        fetchPromotion(startPage, 10, type, brand, idService, exchange)
+        fetchPromotion(startPage, 20, type, brand, idService, exchange)
           .then((res) => {
             setDataPromo(res?.data);
             setTotalPromo(res?.totalItem);

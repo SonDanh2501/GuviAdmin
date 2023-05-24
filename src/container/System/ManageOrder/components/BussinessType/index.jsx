@@ -764,7 +764,7 @@ const BussinessType = (props) => {
           <a>Phương thức thanh toán</a>
           <Select
             value={paymentMethod}
-            style={{ width: "100%" }}
+            style={{ width: "40%" }}
             onChange={(e) => {
               setPaymentMethod(e);
             }}

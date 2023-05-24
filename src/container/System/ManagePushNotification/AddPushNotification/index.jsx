@@ -168,6 +168,14 @@ const AddPushNotification = ({ idOrder }) => {
         );
         dispatch(loadingAction.loadingRequest(false));
         setOpen(false);
+        setTitle("");
+        setDescription("");
+        setIsDateSchedule(false);
+        setDateSchedule("");
+        setIsCustomer(false);
+        setListCustomers([]);
+        setGroupCustomer([]);
+        setImgThumbnail("");
       })
       .catch((err) => {
         errorNotify({

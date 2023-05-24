@@ -384,7 +384,7 @@ const AddPromotion = (props) => {
             .then(() => {
               dispatch(loadingAction.loadingRequest(false));
               setState(false);
-              fetchPromotion(startPage, 10, type, brand, idService, exchange)
+              fetchPromotion(startPage, 20, type, brand, idService, exchange)
                 .then((res) => {
                   setDataPromo(res?.data);
                   setTotalPromo(res?.totalItem);
@@ -400,7 +400,7 @@ const AddPromotion = (props) => {
         } else {
           dispatch(loadingAction.loadingRequest(false));
           setState(false);
-          fetchPromotion(startPage, 10, type, brand, idService, exchange)
+          fetchPromotion(startPage, 20, type, brand, idService, exchange)
             .then((res) => {
               setDataPromo(res?.data);
               setTotalPromo(res?.totalItem);
@@ -411,7 +411,7 @@ const AddPromotion = (props) => {
       .catch((err) => {
         if (isParrentPromotion) {
           setState(false);
-          fetchPromotion(startPage, 10, type, brand, idService, exchange)
+          fetchPromotion(startPage, 20, type, brand, idService, exchange)
             .then((res) => {
               setDataPromo(res?.data);
               setTotalPromo(res?.totalItem);

@@ -57,28 +57,6 @@ const ReportArea = () => {
       })
       .catch((err) => {});
 
-    getReportCustomerByCity(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
-    )
-      .then((res) => {
-        setDataChartCustomerCity(res?.data);
-      })
-      .catch((err) => {});
-
-    setStartDate(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
-    setStartDateCity(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
-
     setEndDate(
       moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
     );
@@ -320,40 +298,6 @@ const ReportArea = () => {
               </PieChart>
             </ResponsiveContainer>
           </div>
-        </div>
-      </div>
-
-      <div className="div-chart-pie-total">
-        <a className="title-chart-area"> Thống kê khách hàng theo khu vực</a>
-        <div className="div-select-city">
-          <CustomDatePicker
-            setStartDate={setStartDateCity}
-            setEndDate={setEndDateCity}
-            onClick={onChangeDayCustomer}
-            onCancel={onCancelPicker}
-          />
-        </div>
-        <div className="div-pie-chart">
-          <ResponsiveContainer height={300} min-width={500}>
-            <PieChart height={250}>
-              <Pie
-                data={dataChartCustomerCity}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="percent"
-                label={renderLabelCity}
-              >
-                {dataChartCustomerCity.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
         </div>
       </div>
 

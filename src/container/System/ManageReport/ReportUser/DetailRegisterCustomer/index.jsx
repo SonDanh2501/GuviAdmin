@@ -1,9 +1,10 @@
-import { Table } from "antd";
+import { Pagination, Table } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getTotalDetailCustomerDay } from "../../../../../api/report";
 import "./index.scss";
+import { set } from "lodash";
 
 const DetailRegisterCustomer = () => {
   const { state } = useLocation();
@@ -11,10 +12,16 @@ const DetailRegisterCustomer = () => {
   const navigate = useNavigate();
   const [rowIndex, setRowIndex] = useState();
   const [hidePhone, setHidePhone] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
+  const [total, setTotal] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     getTotalDetailCustomerDay(
+      0,
+      20,
       moment(moment(date).startOf("date").toISOString())
         .add(7, "hours")
         .toISOString(),
@@ -24,9 +31,33 @@ const DetailRegisterCustomer = () => {
     )
       .then((res) => {
         setData(res?.data);
+        setTotal(res?.totalItem);
       })
       .catch((err) => {});
+
+    setStartDate(
+      moment(moment(date).startOf("date").toISOString())
+        .add(7, "hours")
+        .toISOString()
+    );
+    setEndDate(
+      moment(moment(date).endOf("date").toISOString())
+        .add(7, "hours")
+        .toISOString()
+    );
   }, []);
+
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const dataLength = data.length < 20 ? 20 : data.length;
+    const start = page * dataLength - dataLength;
+    getTotalDetailCustomerDay(start, 20, startDate, endDate)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
 
   const columns = [
     {
@@ -136,18 +167,33 @@ const DetailRegisterCustomer = () => {
         {moment(new Date(date)).format("DD/MM/YYYY")}
       </h4>
       <h5 className="mb-5">Tổng: {data.length}</h5>
-      <Table
-        columns={columns}
-        dataSource={data}
-        pagination={false}
-        onRow={(record, rowIndex) => {
-          return {
-            onClick: (event) => {
-              setRowIndex(rowIndex);
-            },
-          };
-        }}
-      />
+      <div className="mt-2">
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setRowIndex(rowIndex);
+              },
+            };
+          }}
+        />
+      </div>
+
+      <div className="mt-2 div-pagination p-2">
+        <a>Tổng: {total}</a>
+        <div>
+          <Pagination
+            current={currentPage}
+            onChange={onChange}
+            total={total}
+            showSizeChanger={false}
+            pageSize={20}
+          />
+        </div>
+      </div>
     </>
   );
 };

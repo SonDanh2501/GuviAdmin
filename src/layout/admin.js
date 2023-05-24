@@ -44,6 +44,10 @@ import EditPriceService from "../container/System/ManageService/EditPriceService
 import RoleAccount from "../container/System/ManageConfiguration/ScreenConfiguration/RoleAccount";
 import GroupService from "../container/System/ManageService/GroupService";
 import Service from "../container/System/ManageService/Service";
+import ReportOrder from "../container/System/ManageReport/MangeReportOrder/ReportOrder";
+import ReportOrderDaily from "../container/System/ManageReport/MangeReportOrder/ReportOrderDaily";
+import ReportOrderCity from "../container/System/ManageReport/MangeReportOrder/ReportOrderByCity";
+import ReportCustomer from "../container/System/ManageReport/MangeReportOrder/ReportCutomer";
 
 const Admin = () => {
   return (
@@ -143,8 +147,25 @@ const Admin = () => {
         path="/adminManage/manage-configuration/manage-group-customer"
         element={<GroupCustomerManage />}
       />
+
       <Route path="/report/manage-report" element={<ManageReport />} />
-      <Route path="/report/manage-report/all" element={<ManageReport />} />
+      <Route
+        path="/report/manage-report/report-order"
+        element={<ReportOrder />}
+      />
+      <Route
+        path="/report/manage-report/report-order-daily"
+        element={<ReportOrderDaily />}
+      />
+      <Route
+        path="/report/manage-report/report-order-area"
+        element={<ReportOrderCity />}
+      />
+      <Route
+        path="/report/manage-report/report-order-customer"
+        element={<ReportCustomer />}
+      />
+
       <Route
         path="/report/manage-report/report-details"
         element={<DetailReportManager />}

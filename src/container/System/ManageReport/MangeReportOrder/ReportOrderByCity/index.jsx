@@ -1,66 +1,50 @@
-import { SearchOutlined } from "@ant-design/icons";
-import {
-  Button,
-  DatePicker,
-  Dropdown,
-  Empty,
-  Input,
-  Pagination,
-  Popover,
-  Select,
-  Skeleton,
-  Space,
-  Spin,
-  Table,
-} from "antd";
+import { useEffect, useState } from "react";
+import { getReportOrderByCity } from "../../../../../api/report";
 import moment from "moment";
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  filterReportCollaborator,
-  getReportCollaborator,
-  searchReportCollaborator,
-} from "../../../../api/report";
-import { formatMoney } from "../../../../helper/formatMoney";
-import _debounce from "lodash/debounce";
+import { Button, Pagination, Popover, Select, Table } from "antd";
+import { formatMoney } from "../../../../../helper/formatMoney";
+import CustomDatePicker from "../../../../../components/customDatePicker";
+import { getDistrictApi } from "../../../../../api/file";
 
-import "./index.scss";
-import LoadingPagination from "../../../../components/paginationLoading";
-import CustomDatePicker from "../../../../components/customDatePicker";
-const { RangePicker } = DatePicker;
-const { Option } = Select;
-
-const ReportManager = () => {
-  const [dataFilter, setDataFilter] = useState([]);
-  const [totalFilter, setTotalFilter] = useState("");
-  const [dataSearch, setDataSearch] = useState([]);
-  const [totalSearch, setTotalSearch] = useState("");
-  const [valueSearch, setValueSearch] = useState("");
+const ReportOrderCity = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(1);
   const [data, setData] = useState([]);
-  const [total, setTotal] = useState([]);
-  const [totalColumn, setTotalColumn] = useState([]);
-  const [type, setType] = useState("day");
+  const [total, setTotal] = useState(0);
+  const [dataTotal, setDataTotal] = useState([]);
+  const [dataCity, setDataCity] = useState([]);
+  const [codeCity, setCodeCity] = useState(0);
+  const [nameCity, setNameCity] = useState(0);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const cityOptions = [];
 
   useEffect(() => {
-    getReportCollaborator(
+    getDistrictApi()
+      .then((res) => {
+        setCodeCity(res?.aministrative_division[1]?.code);
+        setNameCity(res?.aministrative_division[1]?.name);
+        setDataCity(res?.aministrative_division);
+      })
+      .catch((err) => {});
+
+    getReportOrderByCity(
       0,
       20,
       moment(moment().startOf("month").toISOString())
         .add(7, "hours")
         .toISOString(),
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
+      moment(moment().endOf("date").toISOString())
+        .add(7, "hours")
+        .toISOString(),
+      codeCity
     )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
-        setTotalColumn(res?.total[0]);
+        setDataTotal(res?.total[0]);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
 
     setStartDate(
       moment(moment().startOf("month").toISOString())
@@ -68,88 +52,53 @@ const ReportManager = () => {
         .toISOString()
     );
     setEndDate(
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
+      moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
     );
   }, []);
 
-  const onChange = (page) => {
-    setIsLoading(true);
-    setCurrentPage(page);
-    const lengthData = data.length < 20 ? 20 : data.length;
-    const lengthFilter = dataFilter.length < 20 ? 20 : dataFilter.length;
-    const lengthSearch = dataSearch.length < 20 ? 20 : dataSearch.length;
-    const start =
-      dataFilter.length > 0
-        ? page * lengthFilter - lengthFilter
-        : dataSearch.length > 0
-        ? page * lengthSearch - lengthSearch
-        : page * lengthData - lengthData;
-
-    dataFilter.length > 0
-      ? filterReportCollaborator(start, 20, startDate, endDate)
-          .then((res) => {
-            setIsLoading(false);
-            setData(res?.data);
-            setTotal(res?.totalItem);
-            setTotalColumn(res?.total[0]);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-          })
-      : dataSearch.length > 0
-      ? searchReportCollaborator(0, 20, valueSearch)
-          .then((res) => {
-            setIsLoading(false);
-            setData(res?.data);
-            setTotal(res?.totalItem);
-            setTotalColumn(res?.total[0]);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-          })
-      : getReportCollaborator(start > 0 ? start : 0, 20, startDate, endDate)
-          .then((res) => {
-            setIsLoading(false);
-            setData(res?.data);
-            setTotal(res?.totalItem);
-            setTotalColumn(res?.total[0]);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-          });
-  };
+  dataCity.map((item) => {
+    cityOptions?.push({
+      value: item?.code,
+      label: item?.name,
+    });
+  });
 
   const onChangeDay = () => {
-    setIsLoading(true);
-    filterReportCollaborator(0, 20, startDate, endDate)
+    getReportOrderByCity(0, 20, startDate, endDate, codeCity)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
-        setTotalColumn(res?.total[0]);
-        setIsLoading(false);
+        setDataTotal(res?.total[0]);
       })
-      .catch((err) => {
-        setIsLoading(false);
-      });
+      .catch((err) => {});
   };
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      setIsLoading(true);
-      setValueSearch(value);
-      searchReportCollaborator(0, 20, value)
-        .then((res) => {
-          setData(res?.data);
-          setTotal(res?.totalItem);
-          setTotalColumn(res?.total[0]);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          setIsLoading(false);
-        });
-    }, 1000),
-    []
-  );
+  const handleChangeCity = (value, label) => {
+    setCodeCity(value);
+    setNameCity(label?.label);
+    getReportOrderByCity(0, 20, startDate, endDate, value)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+        setDataTotal(res?.total[0]);
+      })
+      .catch((err) => {});
+  };
+
+  const onChange = (page) => {
+    setCurrentPage(page);
+
+    const start = page * data.length - data.length;
+    setStartPage(start);
+
+    getReportOrderByCity(start, 20, startDate, endDate, codeCity)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+        setDataTotal(res?.total[0]);
+      })
+      .catch((err) => {});
+  };
 
   const columns = [
     {
@@ -157,44 +106,27 @@ const ReportManager = () => {
         return (
           <div className="div-title-collaborator-id">
             <div className="div-title-report">
-              <a className="text-title-column">Cộng tác viên</a>
+              <a className="text-title-column">Khu vực</a>
             </div>
             <div className="div-top"></div>
           </div>
         );
       },
-      align: "left",
-      render: (data) => {
-        return (
-          <div
-            className="div-name-ctv-report"
-            onClick={() =>
-              navigate("/report/manage-report/report-details", {
-                state: {
-                  id: data?.id_collaborator?._id,
-                  dateStart: startDate,
-                  dateEnd: endDate,
-                },
-              })
-            }
-          >
-            <a className="text-name-report">
-              {data?.id_collaborator?.full_name}
-            </a>
-            {/* <a className="text-id">{data?.id_view}</a> */}
-          </div>
-        );
-      },
+      render: (data) => (
+        <div className="div-date-report-order">
+          <a className="text-date-report-order">{data?.city}</a>
+        </div>
+      ),
     },
     {
       title: () => {
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-order-report">
             <div className="div-title-report">
               <a className="text-title-column">Số ca</a>
             </div>
             <a className="text-money-title">
-              {totalColumn?.total_item > 0 ? totalColumn?.total_item : 0}
+              {dataTotal?.total_item > 0 ? dataTotal?.total_item : 0}
             </a>
           </div>
         );
@@ -203,18 +135,17 @@ const ReportManager = () => {
         return <a className="text-money">{data?.total_item}</a>;
       },
       align: "center",
-      sorter: (a, b) => a.total_item - b.total_item,
     },
     {
       title: () => {
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-order-report">
             <div className="div-title-report">
               <a className="text-title-column">Doanh số</a>
             </div>
             <a className="text-money-title">
-              {totalColumn?.total_gross_income > 0
-                ? formatMoney(totalColumn?.total_gross_income)
+              {dataTotal?.total_gross_income > 0
+                ? formatMoney(dataTotal?.total_gross_income)
                 : formatMoney(0)}
             </a>
           </div>
@@ -226,6 +157,7 @@ const ReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_gross_income)}</a>
         );
       },
+
       sorter: (a, b) => a.total_gross_income - b.total_gross_income,
     },
     {
@@ -236,7 +168,7 @@ const ReportManager = () => {
           </div>
         );
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-order-report">
             <div className="div-title-report">
               <a className="text-title-column">Phí dịch vụ</a>
               <Popover content={content} placement="bottom">
@@ -246,8 +178,8 @@ const ReportManager = () => {
               </Popover>
             </div>
             <a className="text-money-title">
-              {totalColumn?.total_collabotator_fee > 0
-                ? formatMoney(totalColumn?.total_collabotator_fee)
+              {dataTotal?.total_collabotator_fee > 0
+                ? formatMoney(dataTotal?.total_collabotator_fee)
                 : formatMoney(0)}
             </a>
           </div>
@@ -261,6 +193,7 @@ const ReportManager = () => {
           </a>
         );
       },
+
       sorter: (a, b) => a.total_collabotator_fee - b.total_collabotator_fee,
     },
     {
@@ -273,7 +206,7 @@ const ReportManager = () => {
           </div>
         );
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-order-report">
             <div className="div-title-report">
               <a className="text-title-column-blue">Doanh thu</a>
               <Popover content={content} placement="bottom">
@@ -283,8 +216,8 @@ const ReportManager = () => {
               </Popover>
             </div>
             <a className="text-money-title-blue">
-              {totalColumn?.total_income > 0
-                ? formatMoney(totalColumn?.total_income)
+              {dataTotal?.total_income > 0
+                ? formatMoney(dataTotal?.total_income)
                 : formatMoney(0)}
             </a>
           </div>
@@ -296,6 +229,7 @@ const ReportManager = () => {
           <a className="text-money-blue">{formatMoney(data?.total_income)}</a>
         );
       },
+
       sorter: (a, b) => a.total_income - b.total_income,
     },
     {
@@ -306,7 +240,7 @@ const ReportManager = () => {
           </div>
         );
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-order-report">
             <div className="div-title-report">
               <a className="text-title-column">Giảm giá</a>
               <Popover content={content} placement="bottom">
@@ -316,8 +250,8 @@ const ReportManager = () => {
               </Popover>
             </div>
             <a className="text-money-title">
-              {totalColumn?.total_discount > 0
-                ? formatMoney(totalColumn?.total_discount)
+              {dataTotal?.total_discount > 0
+                ? formatMoney(dataTotal?.total_discount)
                 : formatMoney(0)}
             </a>
           </div>
@@ -329,6 +263,7 @@ const ReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_discount)}</a>
         );
       },
+
       sorter: (a, b) => a.total_discount - b.total_discount,
     },
     {
@@ -342,7 +277,7 @@ const ReportManager = () => {
           </div>
         );
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-order-report">
             <div className="div-title-report">
               <a className="text-title-column">Doanh thu thuần</a>
               <Popover content={content} placement="bottom">
@@ -352,8 +287,8 @@ const ReportManager = () => {
               </Popover>
             </div>
             <a className="text-money-title">
-              {totalColumn?.total_net_income > 0
-                ? formatMoney(totalColumn?.total_net_income)
+              {dataTotal?.total_net_income > 0
+                ? formatMoney(dataTotal?.total_net_income)
                 : formatMoney(0)}
             </a>
           </div>
@@ -365,16 +300,19 @@ const ReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_net_income)}</a>
         );
       },
+
       sorter: (a, b) => a.total_net_income - b.total_net_income,
     },
     {
       title: () => {
         return (
-          <div className="div-title-collaborator">
-            <a>Phí áp dụng</a>
+          <div className="div-title-order-report">
+            <div className="div-title-report">
+              <a className="text-title-column">Phí áp dụng</a>
+            </div>
             <a className="text-money-title">
-              {totalColumn?.total_service_fee > 0
-                ? formatMoney(totalColumn?.total_service_fee)
+              {dataTotal?.total_service_fee > 0
+                ? formatMoney(dataTotal?.total_service_fee)
                 : formatMoney(0)}
             </a>
           </div>
@@ -391,14 +329,11 @@ const ReportManager = () => {
       title: () => {
         const content = (
           <div className="div-content">
-            <p className="text-content">
-              Tổng tiền trên dịch vụ. Tổng hoá đơn = Doanh thu thuần (+) Phí áp
-              dụng.
-            </p>
+            <p className="text-content">Tổng tiền trên dịch vụ.</p>
           </div>
         );
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-order-report">
             <div className="div-title-report">
               <a className="text-title-column">Tổng hoá đơn</a>
               <Popover content={content} placement="bottom">
@@ -408,8 +343,8 @@ const ReportManager = () => {
               </Popover>
             </div>
             <a className="text-money-title">
-              {totalColumn?.total_order_fee > 0
-                ? formatMoney(totalColumn?.total_order_fee)
+              {dataTotal?.total_order_fee > 0
+                ? formatMoney(dataTotal?.total_order_fee)
                 : formatMoney(0)}
             </a>
           </div>
@@ -421,6 +356,7 @@ const ReportManager = () => {
           <a className="text-money">{formatMoney(data?.total_order_fee)}</a>
         );
       },
+
       sorter: (a, b) => a.total_order_fee - b.total_order_fee,
     },
     {
@@ -433,7 +369,7 @@ const ReportManager = () => {
           </div>
         );
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-order-report">
             <div className="div-title-report">
               <a className="text-title-column">Lợi nhuận</a>
               <Popover content={content} placement="bottom">
@@ -443,8 +379,8 @@ const ReportManager = () => {
               </Popover>
             </div>
             <a className="text-money-title">
-              {totalColumn?.total_net_income_business > 0
-                ? formatMoney(totalColumn?.total_net_income_business)
+              {dataTotal?.total_net_income_business > 0
+                ? formatMoney(dataTotal?.total_net_income_business)
                 : formatMoney(0)}
             </a>
           </div>
@@ -458,6 +394,7 @@ const ReportManager = () => {
           </a>
         );
       },
+
       sorter: (a, b) =>
         a.total_net_income_business - b.total_net_income_business,
     },
@@ -471,7 +408,7 @@ const ReportManager = () => {
           </div>
         );
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-order-report">
             <div className="div-title-report">
               <a className="text-title-column">% lợi nhuận</a>
               <Popover content={content} placement="bottom">
@@ -497,39 +434,36 @@ const ReportManager = () => {
 
   return (
     <div>
-      <div className="div-header-report">
-        <div className="div-date">
-          <CustomDatePicker
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
-            onClick={onChangeDay}
-            onCancel={() => {}}
-          />
-          {startDate && (
-            <a className="text-date">
-              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-              {moment(endDate).utc().format("DD/MM/YYYY")}
-            </a>
-          )}
-        </div>
-        <Input
-          placeholder="Tìm kiếm"
-          type="text"
-          className="input-search-report"
-          prefix={<SearchOutlined />}
-          onChange={(e) => handleSearch(e.target.value)}
+      <h3>Báo cáo đơn hàng theo khu vực</h3>
+      <div className="div-date">
+        <CustomDatePicker
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          onClick={onChangeDay}
+          onCancel={() => {}}
+        />
+        {startDate && (
+          <a className="text-date">
+            {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+            {moment(endDate).utc().format("DD/MM/YYYY")}
+          </a>
+        )}
+      </div>
+      <div>
+        <Select
+          value={nameCity}
+          style={{
+            width: 220,
+          }}
+          onChange={handleChangeCity}
+          options={cityOptions}
         />
       </div>
+
       <div className="mt-3">
-        <Table
-          columns={columns}
-          pagination={false}
-          dataSource={data}
-          // locale={{
-          //   emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
-          // }}
-        />
+        <Table dataSource={data} columns={columns} pagination={false} />
       </div>
+
       <div className="mt-2 div-pagination p-2">
         <a>Tổng: {total}</a>
         <div>
@@ -542,9 +476,8 @@ const ReportManager = () => {
           />
         </div>
       </div>
-      {isLoading && <LoadingPagination />}
     </div>
   );
 };
 
-export default ReportManager;
+export default ReportOrderCity;
