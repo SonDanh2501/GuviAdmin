@@ -916,19 +916,7 @@ export default function Home() {
                         )
                       : "";
 
-                    const predicate = item?.id_address
-                      ? subject.replace(item?.id_address, item?.value_string)
-                      : item?.id_order
-                      ? subject.replace(
-                          item?.id_order?._id,
-                          item?.id_order?.id_view
-                        )
-                      : item?.id_promotion
-                      ? subject.replace(
-                          item?.id_promotion?._id,
-                          item?.id_promotion?.title?.vi
-                        )
-                      : item?.id_collaborator
+                    const predicate = item?.id_collaborator
                       ? subject.replace(
                           item?.id_collaborator?._id,
                           item?.id_collaborator?.full_name
@@ -943,6 +931,18 @@ export default function Home() {
                           item?.id_admin_action?._id,
                           item?.id_admin_action?.full_name
                         )
+                      : item?.id_address
+                      ? subject.replace(item?.id_address, item?.value_string)
+                      : item?.id_order
+                      ? subject.replace(
+                          item?.id_order?._id,
+                          item?.id_order?.id_view
+                        )
+                      : item?.id_promotion
+                      ? subject.replace(
+                          item?.id_promotion?._id,
+                          item?.id_promotion?.title?.vi
+                        )
                       : item?.id_transistion_collaborator
                       ? subject.replace(
                           item?.id_transistion_collaborator?._id,
@@ -955,7 +955,9 @@ export default function Home() {
                         )
                       : "";
 
-                    const object = item?.id_order
+                    const object = item?.id_address
+                      ? subject.replace(item?.id_address, item?.value_string)
+                      : item?.id_order
                       ? predicate.replace(
                           item?.id_order?._id,
                           item?.id_order?.id_view

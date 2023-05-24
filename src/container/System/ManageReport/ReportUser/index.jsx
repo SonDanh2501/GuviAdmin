@@ -100,6 +100,16 @@ const ReportUser = () => {
       .catch((err) => {
         console.log(err);
       });
+
+    setStartDate(
+      moment(moment().startOf("month").toISOString())
+        .add(7, "hours")
+        .toISOString()
+    );
+
+    setEndDate(
+      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
+    );
   }, []);
 
   useEffect(() => {

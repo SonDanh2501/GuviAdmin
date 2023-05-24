@@ -65,9 +65,14 @@ export const getTotalCustomerDay = (start_date, end_date) => {
   );
 };
 
-export const getTotalDetailCustomerDay = (start_date, end_date) => {
+export const getTotalDetailCustomerDay = (
+  start,
+  length,
+  start_date,
+  end_date
+) => {
   return axiosClient.get(
-    `/admin/customer_manager/detail_total_customer_daily?lang=vi&start_date=${start_date}&end_date=${end_date}`
+    `/admin/customer_manager/detail_total_customer_daily?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
   );
 };
 
@@ -203,6 +208,18 @@ export const checkReviewCollaborator = (id, data) => {
 
 export const getReportOrderDaily = (start, length, start_date, end_date) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_order_dayly?start=${start}&lenght=${length}&start_date=${start_date}&end_date=${end_date}`
+    `/admin/report_mananger/report_order_dayly?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
+  );
+};
+
+export const getReportOrderByCity = (
+  start,
+  length,
+  start_date,
+  end_date,
+  city
+) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_order_city?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&city=${city}`
   );
 };

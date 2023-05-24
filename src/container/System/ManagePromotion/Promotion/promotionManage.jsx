@@ -82,17 +82,7 @@ const PromotionManage = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    // dispatch(
-    //   getPromotion.getPromotionRequest({
-    //     start: 0,
-    //     length: 10,
-    //     type: type,
-    //     brand: brand,
-    //     id_service: idService,
-    //     exchange: exchange,
-    //   })
-    // );
-    fetchPromotion(0, 10, type, brand, idService, exchange)
+    fetchPromotion(0, 20, type, brand, idService, exchange)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -112,14 +102,14 @@ const PromotionManage = ({
           // dispatch(
           //   getPromotion.getPromotionRequest({
           //     start: startPage,
-          //     length: 10,
+          //     length: 20,
           //     type: type,
           //     brand: brand,
           //     id_service: idService,
           //     exchange: exchange,
           //   })
           // );
-          fetchPromotion(startPage, 10, type, brand, idService, exchange)
+          fetchPromotion(startPage, 20, type, brand, idService, exchange)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);
@@ -144,17 +134,7 @@ const PromotionManage = ({
       if (is_active) {
         activePromotion(id, { is_active: false })
           .then((res) => {
-            // dispatch(
-            //   getPromotion.getPromotionRequest({
-            //     start: startPage,
-            //     length: 10,
-            //     type: type,
-            //     brand: brand,
-            //     id_service: idService,
-            //     exchange: exchange,
-            //   })
-            // );
-            fetchPromotion(startPage, 10, type, brand, idService, exchange)
+            fetchPromotion(startPage, 20, type, brand, idService, exchange)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
@@ -172,17 +152,7 @@ const PromotionManage = ({
       } else {
         activePromotion(id, { is_active: true })
           .then((res) => {
-            // dispatch(
-            //   getPromotion.getPromotionRequest({
-            //     start: startPage,
-            //     length: 10,
-            //     type: type,
-            //     brand: brand,
-            //     id_service: idService,
-            //     exchange: exchange,
-            //   })
-            // );
-            fetchPromotion(startPage, 10, type, brand, idService, exchange)
+            fetchPromotion(startPage, 20, type, brand, idService, exchange)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
@@ -204,12 +174,15 @@ const PromotionManage = ({
 
   const onChange = (page) => {
     setCurrentPage(page);
+    const lengthData = data.length < 20 ? 20 : data.length;
+    const lengthFilter = dataFilter.length < 20 ? 20 : dataFilter.length;
+    const lengthSearch = dataSearch.length < 20 ? 20 : dataSearch.length;
     const start =
       dataSearch.length > 0
-        ? page * dataSearch.length - dataSearch.length
+        ? page * lengthSearch - lengthSearch
         : dataFilter.length > 0
-        ? page * dataFilter.length - dataFilter.length
-        : page * data.length - data.length;
+        ? page * lengthFilter - lengthFilter
+        : page * lengthData - lengthData;
 
     setStartPage(start);
 
@@ -217,7 +190,7 @@ const PromotionManage = ({
       ? filterPromotion(
           valueFilter,
           start,
-          10,
+          20,
           type,
           brand,
           idService,
@@ -232,7 +205,7 @@ const PromotionManage = ({
       ? searchPromotion(
           valueSearch,
           start,
-          10,
+          20,
           type,
           brand,
           idService,
@@ -244,22 +217,12 @@ const PromotionManage = ({
             setTotalSearch(res?.totalItem);
           })
           .catch((err) => console.log(err))
-      : fetchPromotion(start, 10, type, brand, idService, exchange)
+      : fetchPromotion(start, 20, type, brand, idService, exchange)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItem);
           })
           .catch((err) => {});
-    // : dispatch(
-    //     getPromotion.getPromotionRequest({
-    //       start: start > 0 ? start : 0,
-    //       length: 10,
-    //       type: type,
-    //       brand: brand,
-    //       id_service: idService,
-    //       exchange: exchange,
-    //     })
-    //   );
   };
 
   const handleSearch = useCallback(
@@ -272,7 +235,7 @@ const PromotionManage = ({
         searchPromotion(
           value,
           startPage,
-          10,
+          20,
           type,
           brand,
           idService,
@@ -301,7 +264,7 @@ const PromotionManage = ({
     setIsLoading(true);
     setDataSearch([]);
     setTotalSearch(0);
-    filterPromotion(value, startPage, 10, type, brand, idService, exchange)
+    filterPromotion(value, startPage, 20, type, brand, idService, exchange)
       .then((res) => {
         setIsLoading(false);
         setDataFilter(res?.data);
@@ -785,6 +748,7 @@ const PromotionManage = ({
                     : total
                 }
                 showSizeChanger={false}
+                pageSize={20}
               />
             </div>
           </div>

@@ -1,26 +1,37 @@
-import { useEffect, useState } from "react";
-import { getReportOrderDaily } from "../../../../api/report";
+import { Button, DatePicker, Pagination, Popover, Select, Table } from "antd";
 import moment from "moment";
-import { Button, Pagination, Popover, Table } from "antd";
-import { formatMoney } from "../../../../helper/formatMoney";
+import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getReportOrder } from "../../../../../api/report";
+import { formatMoney } from "../../../../../helper/formatMoney";
 
-const ReportOrderDaily = () => {
-  const [data, setData] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [dataTotal, setDataTotal] = useState([]);
+import CustomDatePicker from "../../../../../components/customDatePicker";
+import LoadingPagination from "../../../../../components/paginationLoading";
+import "./index.scss";
+const { RangePicker } = DatePicker;
+const { Option } = Select;
+
+const ReportOrder = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
+  const [data, setData] = useState([]);
+  const [total, setTotal] = useState([]);
+  const [dataTotal, setDataTotal] = useState([]);
+  const [type, setType] = useState("day");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    getReportOrderDaily(
+    getReportOrder(
       0,
       20,
       moment(moment().startOf("month").toISOString())
         .add(7, "hours")
         .toISOString(),
-      moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
+      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
     )
       .then((res) => {
         setData(res?.data);
@@ -35,22 +46,9 @@ const ReportOrderDaily = () => {
         .toISOString()
     );
     setEndDate(
-      moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
+      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
     );
   }, []);
-
-  const onChange = (page) => {
-    setCurrentPage(page);
-    const start = page * data.length - data.length;
-    setStartPage(start);
-    getReportOrderDaily(start, 20, startDate, endDate)
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-        setDataTotal(res?.total[0]);
-      })
-      .catch((err) => {});
-  };
 
   const columns = [
     {
@@ -66,9 +64,44 @@ const ReportOrderDaily = () => {
       },
       render: (data) => (
         <div className="div-date-report-order">
-          <a className="text-date-report-order">{data?._id}</a>
+          <a className="text-date-report-order">
+            {moment(
+              new Date(data?.id_group_order?.date_work_schedule[0]?.date)
+            ).format("DD/MM/YYYY")}
+          </a>
+          <a className="text-date-report-order">
+            {moment(
+              new Date(data?.id_group_order?.date_work_schedule[0]?.date)
+            ).format("HH:mm")}
+          </a>
         </div>
       ),
+      width: "5%",
+    },
+    {
+      title: () => {
+        return (
+          <div className="div-title-collaborator-id">
+            <div className="div-title-report">
+              <a className="text-title-column">Mã đơn</a>
+            </div>
+            <div className="div-top"></div>
+          </div>
+        );
+      },
+      render: (data) => (
+        <a
+          className="text-id-report-order"
+          onClick={() =>
+            navigate("/details-order", {
+              state: { id: data?.id_group_order?._id },
+            })
+          }
+        >
+          {data?.id_group_order?.id_view}
+        </a>
+      ),
+      width: "5%",
     },
     {
       title: () => {
@@ -87,6 +120,7 @@ const ReportOrderDaily = () => {
         return <a className="text-money">{data?.total_item}</a>;
       },
       align: "center",
+      width: "5%",
     },
     {
       title: () => {
@@ -109,7 +143,7 @@ const ReportOrderDaily = () => {
           <a className="text-money">{formatMoney(data?.total_gross_income)}</a>
         );
       },
-
+      width: "8%",
       sorter: (a, b) => a.total_gross_income - b.total_gross_income,
     },
     {
@@ -145,7 +179,7 @@ const ReportOrderDaily = () => {
           </a>
         );
       },
-
+      width: "10%",
       sorter: (a, b) => a.total_collabotator_fee - b.total_collabotator_fee,
     },
     {
@@ -181,7 +215,7 @@ const ReportOrderDaily = () => {
           <a className="text-money-blue">{formatMoney(data?.total_income)}</a>
         );
       },
-
+      width: "8%",
       sorter: (a, b) => a.total_income - b.total_income,
     },
     {
@@ -215,7 +249,7 @@ const ReportOrderDaily = () => {
           <a className="text-money">{formatMoney(data?.total_discount)}</a>
         );
       },
-
+      width: "8%",
       sorter: (a, b) => a.total_discount - b.total_discount,
     },
     {
@@ -252,7 +286,7 @@ const ReportOrderDaily = () => {
           <a className="text-money">{formatMoney(data?.total_net_income)}</a>
         );
       },
-
+      width: "11%",
       sorter: (a, b) => a.total_net_income - b.total_net_income,
     },
     {
@@ -276,6 +310,7 @@ const ReportOrderDaily = () => {
         );
       },
       align: "center",
+      width: "7%",
     },
     {
       title: () => {
@@ -308,7 +343,7 @@ const ReportOrderDaily = () => {
           <a className="text-money">{formatMoney(data?.total_order_fee)}</a>
         );
       },
-
+      width: "10%",
       sorter: (a, b) => a.total_order_fee - b.total_order_fee,
     },
     {
@@ -346,7 +381,7 @@ const ReportOrderDaily = () => {
           </a>
         );
       },
-
+      width: "8%",
       sorter: (a, b) =>
         a.total_net_income_business - b.total_net_income_business,
     },
@@ -384,13 +419,78 @@ const ReportOrderDaily = () => {
     },
   ];
 
+  const onChange = useCallback(
+    (page) => {
+      // setIsLoading(true);
+      setCurrentPage(page);
+      const lengthData = data.length < 20 ? 20 : data.length;
+      const start = page * lengthData - lengthData;
+      setStartPage(start);
+      getReportOrder(start, 20, startDate, endDate)
+        .then((res) => {
+          setIsLoading(false);
+          setData(res?.data);
+          setTotal(res?.totalItem);
+          setDataTotal(res?.total[0]);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+        });
+    },
+    [data, startDate, endDate]
+  );
+
+  const onChangeDay = () => {
+    setIsLoading(true);
+
+    getReportOrder(startPage, 20, startDate, endDate)
+      .then((res) => {
+        setIsLoading(false);
+        setData(res?.data);
+        setTotal(res?.totalItem);
+        setDataTotal(res?.total[0]);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  };
+
   return (
     <div>
-      <a></a>
-      <div className="mt-3">
-        <Table dataSource={data} columns={columns} pagination={false} />
+      <h3>Báo cáo đơn hàng</h3>
+      <div className="div-header-report">
+        <div className="div-date">
+          <CustomDatePicker
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            onClick={onChangeDay}
+            onCancel={() => {}}
+          />
+          {startDate && (
+            <a className="text-date">
+              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+              {moment(endDate).utc().format("DD/MM/YYYY")}
+            </a>
+          )}
+        </div>
+        {/* <Input
+          placeholder="Tìm kiếm"
+          type="text"
+          className="input-search-report"
+          prefix={<SearchOutlined />}
+          onChange={(e) => handleSearch(e.target.value)}
+        /> */}
       </div>
-
+      <div className="mt-2">
+        <Table
+          columns={columns}
+          pagination={false}
+          dataSource={data}
+          // locale={{
+          //   emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
+          // }}
+        />
+      </div>
       <div className="mt-2 div-pagination p-2">
         <a>Tổng: {total}</a>
         <div>
@@ -403,8 +503,10 @@ const ReportOrderDaily = () => {
           />
         </div>
       </div>
+
+      {isLoading && <LoadingPagination />}
     </div>
   );
 };
 
-export default ReportOrderDaily;
+export default ReportOrder;

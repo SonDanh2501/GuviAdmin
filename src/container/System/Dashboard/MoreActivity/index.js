@@ -76,15 +76,20 @@ const MoreActivity = () => {
                     item?.id_admin_action?._id,
                     item?.id_admin_action?.full_name
                   )
+                : item?.id_customer
+                ? item?.title_admin.replace(
+                    item?.id_customer?._id,
+                    item?.id_customer?.full_name
+                  )
                 : item?.id_collaborator
                 ? item?.title_admin.replace(
                     item?.id_collaborator?._id,
                     item?.id_collaborator?.full_name
                   )
-                : item?.id_customer
+                : item?.id_promotion
                 ? item?.title_admin.replace(
-                    item?.id_customer?._id,
-                    item?.id_customer?.full_name
+                    item?.id_promotion?._id,
+                    item?.id_promotion?.code
                   )
                 : "";
 
@@ -103,12 +108,35 @@ const MoreActivity = () => {
                     item?.id_admin_action?._id,
                     item?.id_admin_action?.full_name
                   )
-                : subject.replace(
+                : item?.id_address
+                ? subject.replace(item?.id_address, item?.value_string)
+                : item?.id_order
+                ? subject.replace(item?.id_order?._id, item?.id_order?.id_view)
+                : item?.id_promotion
+                ? subject.replace(
+                    item?.id_promotion?._id,
+                    item?.id_promotion?.title?.vi
+                  )
+                : item?.id_transistion_collaborator
+                ? subject.replace(
                     item?.id_transistion_collaborator?._id,
                     item?.id_transistion_collaborator?.transfer_note
-                  );
+                  )
+                : item?.id_transistion_customer
+                ? subject.replace(
+                    item?.id_transistion_customer?._id,
+                    item?.id_transistion_customer?.transfer_note
+                  )
+                : "";
 
-              const object = item?.id_transistion_collaborator
+              const object = item?.id_address
+                ? subject.replace(item?.id_address, item?.value_string)
+                : item?.id_order
+                ? predicate.replace(
+                    item?.id_order?._id,
+                    item?.id_order?.id_view
+                  )
+                : item?.id_transistion_collaborator
                 ? predicate.replace(
                     item?.id_transistion_collaborator?._id,
                     item?.id_transistion_collaborator?.transfer_note
@@ -120,7 +148,7 @@ const MoreActivity = () => {
                   )
                 : predicate.replace(
                     item?.id_reason_cancel?._id,
-                    item?.id_reason_cancel?.title.vi
+                    item?.id_reason_cancel?.title?.vi
                   );
 
               return (
