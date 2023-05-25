@@ -1,15 +1,12 @@
 import { Tabs } from "antd";
 
 import { useEffect } from "react";
+import ManageReportCustomer from "./ManageReportCustomer";
 import ManageReportOrder from "./MangeReportOrder";
 import ReportArea from "./ReportArea";
 import ReportCancelOrder from "./ReportCancelOrder";
 import ReportManager from "./ReportCollaborator";
-import ReportInvite from "./ReportInvite";
-import ReportUser from "./ReportUser";
 import "./index.scss";
-import ReportCustomerArea from "./ReportCustomerArea";
-import ManageReportCustomer from "./ManageReportCustomer";
 
 const ManageReport = () => {
   useEffect(() => {
