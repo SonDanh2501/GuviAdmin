@@ -1,4 +1,4 @@
-import { Select } from "antd";
+import { Pagination, Select, Table } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
@@ -11,13 +11,19 @@ import {
 import "./index.scss";
 import CustomDatePicker from "../../../../../components/customDatePicker";
 
-const TotalCancel = () => {
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+const TotalCancel = (props) => {
+  const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;
+
+  const [startDate, setStartDate] = useState(
+    moment(moment().startOf("year").toISOString()).add(7, "hours").toISOString()
+  );
+  const [endDate, setEndDate] = useState(
+    moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [titleCity, setTitleCity] = useState("");
   const [city, setCity] = useState(false);
-  const [codeCity, setCodeCity] = useState();
+  const [codeCity, setCodeCity] = useState(0);
   const [dataCity, setDataCity] = useState([]);
   const [dataDistrict, setDataDistrict] = useState([]);
   const [codeDistrict, setCodeDistrict] = useState(-1);
@@ -26,46 +32,38 @@ const TotalCancel = () => {
   const [dataPie, setDataPie] = useState([]);
   const [dataTotalPie, setDataTotalPie] = useState([]);
   const [data, setData] = useState([]);
-  const [total, setTotal] = useState();
-  const [currentPage, setCurrentPage] = useState(1);
+  const [total, setTotal] = useState(0);
 
   const districtData = [];
   const cityData = [];
-
   useEffect(() => {
-    getDistrictApi()
+    // getDistrictApi()
+    //   .then((res) => {
+    //     setDataCity(res?.aministrative_division);
+    //     setCodeCity(res?.aministrative_division[1]?.code);
+    //     setTitleCity(res?.aministrative_division[1]?.name);
+    //     setDataDistrict(res?.aministrative_division[1]?.districts);
+    //     getReportCancelReport(
+    //       startDate,
+    //       endDate,
+    //       res?.aministrative_division[1]?.code,
+    //       codeDistrict
+    //     )
+    //       .then((res) => {
+    //         setDataPie(res?.percent);
+    //         setDataTotalPie(res);
+    //       })
+    //       .catch((err) => {});
+    //   })
+    //   .catch((err) => {});
+
+    getReportOverviewCancelReport(0, 20, startDate, endDate, tab, codeCity)
       .then((res) => {
-        setDataCity(res?.aministrative_division);
-        setCodeCity(res?.aministrative_division[1]?.code);
-        setTitleCity(res?.aministrative_division[1]?.name);
-        setDataDistrict(res?.aministrative_division[1]?.districts);
-        getReportCancelReport(
-          moment(moment().startOf("year").toISOString())
-            .add(7, "hours")
-            .toISOString(),
-          moment(moment(new Date()).toISOString())
-            .add(7, "hours")
-            .toISOString(),
-          res?.aministrative_division[1]?.code,
-          codeDistrict
-        )
-          .then((res) => {
-            setDataPie(res?.percent);
-            setDataTotalPie(res);
-          })
-          .catch((err) => {});
+        setData(res?.data);
+        setTotal(res?.totalItem);
       })
       .catch((err) => {});
-
-    setStartDate(
-      moment(moment().startOf("year").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
-    setEndDate(
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
-    );
-  }, []);
+  }, [tab]);
 
   dataDistrict?.map((item) => {
     districtData?.push({
@@ -153,11 +151,111 @@ const TotalCancel = () => {
         setDataPie(res?.percent);
       })
       .catch((err) => {});
+
+    getReportOverviewCancelReport(
+      startPage,
+      20,
+      startDate,
+      endDate,
+      tab,
+      codeCity
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
   };
+
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const lengthData = data.length < 20 ? 20 : data.length;
+    const start = page * lengthData - lengthData;
+    setStartPage(start);
+
+    getReportOverviewCancelReport(start, 20, startDate, endDate, tab, codeCity)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+
+  const columns = [
+    {
+      title: "Thời gian",
+      render: (data) => {
+        return (
+          <div className="div-create-cancel">
+            <a className="text-create-cancel">
+              {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
+            </a>
+            <a className="text-create-cancel">
+              {moment(new Date(data?.date_create)).format("HH/mm")}
+            </a>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Người huỷ",
+      render: (data) => {
+        return (
+          <a className="text-user-cancel">
+            {data?.id_cancel_user_system
+              ? data?.id_cancel_user_system?.id_user_system?.full_name
+              : data?.id_cancel_system
+              ? "Hệ thống"
+              : data?.name_customer}
+          </a>
+        );
+      },
+    },
+    {
+      title: "Đơn hàng",
+      render: (data) => {
+        return <a className="text-user-cancel">{data?.id_view}</a>;
+      },
+    },
+    {
+      title: "Lí do",
+      render: (data) => {
+        return (
+          <a className="text-user-cancel">
+            {data?.id_cancel_user_system
+              ? ""
+              : data?.id_cancel_system
+              ? data?.id_cancel_system?.id_reason_cancel?.title?.vi
+              : data?.id_cancel_customer?.id_reason_cancel?.title?.vi}
+          </a>
+        );
+      },
+    },
+    {
+      title: "Địa chỉ",
+      render: (data) => {
+        return <a className="text-address-cancel">{data?.address}</a>;
+      },
+    },
+  ];
 
   return (
     <>
-      <div className="div-chart-pie-total-cancel">
+      <div className="div-date">
+        <CustomDatePicker
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          onClick={onChangeDay}
+          onCancel={() => {}}
+        />
+        {startDate && (
+          <a className="text-date">
+            {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+            {moment(endDate).utc().format("DD/MM/YYYY")}
+          </a>
+        )}
+      </div>
+      {/* <div className="div-chart-pie-total-cancel">
         <a className="title-chart"> Thống kê đơn huỷ theo khu vực</a>
         <div className="div-select-city">
           <Select
@@ -240,6 +338,22 @@ const TotalCancel = () => {
             </ResponsiveContainer>
           </div>
         </div>
+      </div> */}
+
+      <div className="mt-3">
+        <Table dataSource={data} columns={columns} pagination={false} />
+      </div>
+      <div className="mt-1 div-pagination p-2">
+        <a>Tổng: {total}</a>
+        <div>
+          <Pagination
+            current={currentPage}
+            onChange={onChange}
+            total={total}
+            showSizeChanger={false}
+            pageSize={20}
+          />
+        </div>
       </div>
     </>
   );
@@ -247,4 +361,4 @@ const TotalCancel = () => {
 
 export default TotalCancel;
 
-const COLORS = ["#ffad2a", "#ff8000", "#ff1919"];
+const COLORS = ["#FCD34D", "#FBBF24", "#F59E0B", "#ff8000", "#ff1919"];

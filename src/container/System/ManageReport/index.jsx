@@ -9,6 +9,7 @@ import ReportInvite from "./ReportInvite";
 import ReportUser from "./ReportUser";
 import "./index.scss";
 import ReportCustomerArea from "./ReportCustomerArea";
+import ManageReportCustomer from "./ManageReportCustomer";
 
 const ManageReport = () => {
   useEffect(() => {
@@ -54,20 +55,14 @@ const ManageReport = () => {
           <Tabs.TabPane tab="Báo cáo CTV" key="2">
             <ReportManager />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo số lượng user" key="3">
-            <ReportUser />
+          <Tabs.TabPane tab="Báo cáo khách hàng" key="3">
+            <ManageReportCustomer />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo lượt giới thiệu" key="4">
-            <ReportInvite />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo đơn huỷ" key="5">
+          <Tabs.TabPane tab="Báo cáo đơn huỷ" key="4">
             <ReportCancelOrder />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo khu vực" key="6">
+          <Tabs.TabPane tab="Báo cáo khu vực" key="5">
             <ReportArea />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo khách hàng theo khu vực" key="7">
-            <ReportCustomerArea />
           </Tabs.TabPane>
         </Tabs>
       </div>

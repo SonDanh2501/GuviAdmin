@@ -175,10 +175,12 @@ export const getReportOverviewCancelReport = (
   start,
   length,
   start_date,
-  end_date
+  end_date,
+  type,
+  city
 ) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_overview_cancel_order?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
+    `/admin/report_mananger/report_overview_cancel_order?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&type=${type}&city=${city}`
   );
 };
 
@@ -212,6 +214,12 @@ export const getReportOrderDaily = (start, length, start_date, end_date) => {
   );
 };
 
+export const getReportPercentOrderDaily = (start_date, end_date) => {
+  return axiosClient.get(
+    `/admin/report_mananger/total_order_daily?start_date=${start_date}&end_date=${end_date}`
+  );
+};
+
 export const getReportOrderByCity = (
   start,
   length,
@@ -221,5 +229,11 @@ export const getReportOrderByCity = (
 ) => {
   return axiosClient.get(
     `/admin/report_mananger/report_order_city?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&city=${city}`
+  );
+};
+
+export const getReportPercentOrderByCity = (start_date, end_date, city) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_percent_order_city?start_date=${start_date}&end_date=${end_date}&city=${city}`
   );
 };

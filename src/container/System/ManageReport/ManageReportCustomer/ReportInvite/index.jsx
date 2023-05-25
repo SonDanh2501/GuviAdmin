@@ -17,9 +17,9 @@ import {
   getReportCustomerInviteDay,
   getTopCustomerInvite,
   getTopCustomerInviteTime,
-} from "../../../../api/report";
-import CustomDatePicker from "../../../../components/customDatePicker";
-import LoadingPage from "../../../../components/LoadingPage";
+} from "../../../../../api/report";
+import CustomDatePicker from "../../../../../components/customDatePicker";
+import LoadingPage from "../../../../../components/LoadingPage";
 import "./index.scss";
 const { RangePicker } = DatePicker;
 const { Option } = Select;

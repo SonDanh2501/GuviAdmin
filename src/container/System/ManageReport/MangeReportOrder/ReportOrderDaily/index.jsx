@@ -1,29 +1,42 @@
 import { useEffect, useState } from "react";
-import { getReportOrderDaily } from "../../../../../api/report";
+import {
+  getReportOrderDaily,
+  getReportPercentOrderDaily,
+} from "../../../../../api/report";
 import moment from "moment";
 import { Button, Pagination, Popover, Table } from "antd";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import CustomDatePicker from "../../../../../components/customDatePicker";
 import "./styles.scss";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 const ReportOrderDaily = () => {
   const [data, setData] = useState([]);
+  const [dataChart, setDataChart] = useState([]);
   const [total, setTotal] = useState(0);
   const [dataTotal, setDataTotal] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(
+    moment(moment().startOf("month").toISOString())
+      .add(7, "hours")
+      .toISOString()
+  );
+  const [endDate, setEndDate] = useState(
+    moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
+  );
 
   useEffect(() => {
-    getReportOrderDaily(
-      0,
-      20,
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
-    )
+    getReportOrderDaily(0, 20, startDate, endDate)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -31,14 +44,11 @@ const ReportOrderDaily = () => {
       })
       .catch((err) => {});
 
-    setStartDate(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
-    setEndDate(
-      moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
-    );
+    getReportPercentOrderDaily(startDate, endDate)
+      .then((res) => {
+        setDataChart(res?.data);
+      })
+      .catch((err) => {});
   }, []);
 
   const onChange = (page) => {
@@ -60,6 +70,12 @@ const ReportOrderDaily = () => {
         setData(res?.data);
         setTotal(res?.totalItem);
         setDataTotal(res?.total[0]);
+      })
+      .catch((err) => {});
+
+    getReportPercentOrderDaily(startDate, endDate)
+      .then((res) => {
+        setDataChart(res?.data);
       })
       .catch((err) => {});
   };
@@ -412,6 +428,42 @@ const ReportOrderDaily = () => {
             {moment(endDate).utc().format("DD/MM/YYYY")}
           </a>
         )}
+      </div>
+      <div className="div-chart-order-daily">
+        <ResponsiveContainer width={"100%"} height={350} min-width={350}>
+          <BarChart
+            width={500}
+            height={400}
+            data={dataChart}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+
+            <XAxis
+              dataKey="_id"
+              tick={{ fontSize: 8 }}
+              angle={-30}
+              textAnchor="end"
+            />
+
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar
+              dataKey="total_item"
+              fill="#4376CC"
+              barSize={20}
+              minPointSize={10}
+              label={{ position: "centerTop", fill: "white", fontSize: 10 }}
+              name="Số ca làm"
+            />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
       <div className="mt-3">
         <Table dataSource={data} columns={columns} pagination={false} />

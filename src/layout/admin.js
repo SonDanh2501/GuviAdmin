@@ -48,6 +48,9 @@ import ReportOrder from "../container/System/ManageReport/MangeReportOrder/Repor
 import ReportOrderDaily from "../container/System/ManageReport/MangeReportOrder/ReportOrderDaily";
 import ReportOrderCity from "../container/System/ManageReport/MangeReportOrder/ReportOrderByCity";
 import ReportCustomer from "../container/System/ManageReport/MangeReportOrder/ReportCutomer";
+import ReportUser from "../container/System/ManageReport/ManageReportCustomer/ReportUser";
+import ReportInvite from "../container/System/ManageReport/ManageReportCustomer/ReportInvite";
+import ReportCustomerArea from "../container/System/ManageReport/ManageReportCustomer/ReportCustomerArea";
 
 const Admin = () => {
   return (
@@ -164,6 +167,18 @@ const Admin = () => {
       <Route
         path="/report/manage-report/report-order-customer"
         element={<ReportCustomer />}
+      />
+      <Route
+        path="/report/manage-report/report-user"
+        element={<ReportUser />}
+      />
+      <Route
+        path="/report/manage-report/report-customer-invite"
+        element={<ReportInvite />}
+      />
+      <Route
+        path="/report/manage-report/report-customer-area"
+        element={<ReportCustomerArea />}
       />
 
       <Route

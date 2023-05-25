@@ -4,6 +4,7 @@ import {
   Dropdown,
   FloatButton,
   Image,
+  Input,
   Pagination,
   Popconfirm,
   Row,
@@ -59,6 +60,7 @@ const DetailsOrder = () => {
   const [price, setPrice] = useState(0);
   const [idReason, setIdReason] = useState("");
   const [dataReason, setDataReason] = useState([]);
+  const [noteReason, setNoteReason] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toggle = () => setModal(!modal);
@@ -214,7 +216,11 @@ const DetailsOrder = () => {
 
   const handleCancelOrder = (_id) => {
     dispatch(loadingAction.loadingRequest(true));
-    changeStatusOrderApi(_id, { status: "cancel", id_reason_cancel: idReason })
+    changeStatusOrderApi(_id, {
+      status: "cancel",
+      id_reason_cancel: idReason,
+      note_admin: noteReason,
+    })
       .then((res) => {
         setModalDeleteList(false);
         getOrderByGroupOrderApi(id)
@@ -253,6 +259,8 @@ const DetailsOrder = () => {
       render: (data) => {
         return <a className="text-id">{data?.id_view}</a>;
       },
+      fixed: "left",
+      width: "10%",
     },
     {
       title: "Ngày tạo",
@@ -334,6 +342,7 @@ const DetailsOrder = () => {
           )}
         </>
       ),
+      align: "center",
     },
 
     {
@@ -389,7 +398,7 @@ const DetailsOrder = () => {
                     <Button
                       className="btn-confirm-order"
                       onClick={() =>
-                        rowIndex === index ? showPopStatusconfirm() : ""
+                        rowIndex === index ? setOpenStatus(true) : ""
                       }
                     >
                       {data?.status === "confirm"
@@ -477,9 +486,9 @@ const DetailsOrder = () => {
             <>
               {hideShow && (
                 <div className="div-container">
-                  <a className="label">Chi tiết công việc</a>
-                  <Row>
-                    <Col span={14} className="col-left">
+                  <a className="label-detail">Chi tiết công việc</a>
+                  <div className="div-details-kh-ctv">
+                    <div className="col-left">
                       <a className="label-customer">Khách hàng</a>
                       <div className="div-body-details">
                         <Image
@@ -509,17 +518,12 @@ const DetailsOrder = () => {
                           </a>
                         </div>
                       </div>
-                    </Col>
+                    </div>
                     {dataGroup?.id_collaborator && (
-                      <Col span={10} className="col-right">
+                      <div className="col-right">
                         <a className="label-ctv">Cộng tác viên hiện tại</a>
                         <div className="div-body-details">
                           <Image
-                            style={{
-                              with: 100,
-                              height: 100,
-                              backgroundColor: "transparent",
-                            }}
                             src={dataGroup?.id_collaborator?.avatar}
                             className="img-collaborator"
                           />
@@ -560,9 +564,9 @@ const DetailsOrder = () => {
                             </a>
                           </div>
                         </div>
-                      </Col>
+                      </div>
                     )}
-                  </Row>
+                  </div>
                   <div>
                     <div className="div-details-service">
                       <a className="label-details">Chi tiết</a>
@@ -631,7 +635,7 @@ const DetailsOrder = () => {
 
                       <div className="div-details-order">
                         <div className="div-title-details">
-                          <a className="title"> Địa điểm</a>
+                          <a className="title"> Địa chỉ</a>
                         </div>
                         <a className="text-colon">:</a>
                         <a className="text-address-details">
@@ -892,10 +896,15 @@ const DetailsOrder = () => {
                       onRow={(record, rowIndex) => {
                         return {
                           onClick: (event) => {
+                            setRowIndex(rowIndex);
                             setItemEdit(record);
                           },
                         };
                       }}
+                      // scroll={{
+                      //   x: 1500,
+                      //   y: 300,
+                      // }}
                     />
                   </div>
 
@@ -1075,6 +1084,13 @@ const DetailsOrder = () => {
                 value={idReason}
                 onChange={(e) => setIdReason(e)}
                 options={reasonOption}
+              />
+            </div>
+            <div>
+              <a>Nhập lí do khác</a>
+              <Input
+                placeholder="Vui lòng nhập nếu có lí do khác"
+                onChange={(e) => setNoteReason(e.target.value)}
               />
             </div>
           </ModalBody>
