@@ -19,8 +19,8 @@ import OrderUsePromotion from "../container/System/ManagePromotion/OrderUsePromo
 import ManagePushNotification from "../container/System/ManagePushNotification";
 import ManageReport from "../container/System/ManageReport";
 import DetailReportManager from "../container/System/ManageReport/DetailsReportCollaborator";
-import ReportInviteDetails from "../container/System/ManageReport/ReportInvite/ReportInviteDetails";
-import DetailRegisterCustomer from "../container/System/ManageReport/ReportUser/DetailRegisterCustomer";
+import ReportInviteDetails from "../container/System/ManageReport/ManageReportCustomer/ReportInvite/ReportInviteDetails";
+import DetailRegisterCustomer from "../container/System/ManageReport/ManageReportCustomer/ReportUser/DetailRegisterCustomer";
 import GroupServiceManage from "../container/System/ManageService/ManageGroupService/GroupServiceManage";
 import ServiceManage from "../container/System/ManageService/ManageService/ServiceManage";
 import ManageSetting from "../container/System/ManageSetting";
