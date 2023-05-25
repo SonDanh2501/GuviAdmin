@@ -1,7 +1,7 @@
 import { Pagination, Table } from "antd";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { getReportDetailsCustomerInvite } from "../../../../../api/report";
+import { getReportDetailsCustomerInvite } from "../../../../../../api/report";
 import "./index.scss";
 
 const ReportInviteDetails = () => {

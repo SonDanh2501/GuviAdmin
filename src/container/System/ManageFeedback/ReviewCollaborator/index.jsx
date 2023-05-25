@@ -136,7 +136,8 @@ const ReviewCollaborator = () => {
   const onChange = (page) => {
     setCurrentPage(page);
     setIsLoading(true);
-    const start = page * data.length - data.length;
+    const lengthData = data.length < 20 ? 20 : data.length;
+    const start = page * lengthData - lengthData;
     setStartPage(start);
     getReportReviewCollaborator(
       start,
@@ -317,7 +318,7 @@ const ReviewCollaborator = () => {
         return (
           <Checkbox
             checked={data?.is_check_admin}
-            disabled={data?.star === 5 ? true : false}
+            disabled={data?.star === 5 || data?.is_check_admin ? true : false}
             onChange={(e) => {
               toggleModalCheck();
               console.log(e.target.checked);

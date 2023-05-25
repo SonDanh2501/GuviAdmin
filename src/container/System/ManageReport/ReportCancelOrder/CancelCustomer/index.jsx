@@ -291,4 +291,4 @@ const CancelOrderCustomer = () => {
 
 export default CancelOrderCustomer;
 
-const COLORS = ["#ff8000", "#ff1919"];
+const COLORS = ["#FCD34D", "#FBBF24", "#F59E0B", "#ff8000", "#ff1919"];

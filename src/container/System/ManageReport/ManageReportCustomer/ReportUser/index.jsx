@@ -19,11 +19,11 @@ import {
   getTotalCustomerDay,
   getTotalCustomerYear,
   getTotalReportCustomer,
-} from "../../../../api/report";
-import caculator from "../../../../assets/images/caculator.png";
-import collaborator from "../../../../assets/images/collaborator.png";
-import CustomDatePicker from "../../../../components/customDatePicker";
-import LoadingPagination from "../../../../components/paginationLoading";
+} from "../../../../../api/report";
+import caculator from "../../../../../assets/images/caculator.png";
+import collaborator from "../../../../../assets/images/collaborator.png";
+import CustomDatePicker from "../../../../../components/customDatePicker";
+import LoadingPagination from "../../../../../components/paginationLoading";
 import "./index.scss";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";

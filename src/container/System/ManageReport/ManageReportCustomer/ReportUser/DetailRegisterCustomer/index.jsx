@@ -2,7 +2,7 @@ import { Pagination, Table } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getTotalDetailCustomerDay } from "../../../../../api/report";
+import { getTotalDetailCustomerDay } from "../../../../../../api/report";
 import "./index.scss";
 import { set } from "lodash";
 

@@ -17,12 +17,11 @@ import { errorNotify } from "../../../../../helper/toast";
 import LoadingPagination from "../../../../../components/paginationLoading";
 
 const TableDeepCleaning = (props) => {
-  const { status } = props;
+  const { status, currentPage, setCurrentPage, setStartPage, startPage } =
+    props;
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [startPage, setStartPage] = useState(0);
   const [statusModal, setStatusModal] = useState("done");
   const [modal, setModal] = useState(false);
   const [modalContacted, setModalContacted] = useState(false);
@@ -37,6 +36,7 @@ const TableDeepCleaning = (props) => {
   useEffect(() => {
     getCusomerRequest(status, 0, 20, "")
       .then((res) => {
+        setIsLoading(false);
         setData(res?.data);
         setTotal(res?.totalItem);
       })
@@ -307,7 +307,8 @@ const TableDeepCleaning = (props) => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * data.length - data.length;
+    const lenghtData = data.length < 20 ? 20 : data.length;
+    const start = page * lenghtData - lenghtData;
     setStartPage(start);
     getCusomerRequest(status, start, 20, "")
       .then((res) => {

@@ -1,10 +1,24 @@
 import { useEffect, useState } from "react";
-import { getReportOrderByCity } from "../../../../../api/report";
+import {
+  getReportOrderByCity,
+  getReportPercentOrderByCity,
+} from "../../../../../api/report";
 import moment from "moment";
 import { Button, Pagination, Popover, Select, Table } from "antd";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import CustomDatePicker from "../../../../../components/customDatePicker";
 import { getDistrictApi } from "../../../../../api/file";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import "./styles.scss";
 
 const ReportOrderCity = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,31 +28,26 @@ const ReportOrderCity = () => {
   const [dataTotal, setDataTotal] = useState([]);
   const [dataCity, setDataCity] = useState([]);
   const [codeCity, setCodeCity] = useState(0);
-  const [nameCity, setNameCity] = useState(0);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [nameCity, setNameCity] = useState("Tất cả");
+  const [dataChart, setDataChart] = useState([]);
+  const [startDate, setStartDate] = useState(
+    moment(moment().startOf("month").toISOString())
+      .add(7, "hours")
+      .toISOString()
+  );
+  const [endDate, setEndDate] = useState(
+    moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
+  );
   const cityOptions = [];
 
   useEffect(() => {
     getDistrictApi()
       .then((res) => {
-        setCodeCity(res?.aministrative_division[1]?.code);
-        setNameCity(res?.aministrative_division[1]?.name);
         setDataCity(res?.aministrative_division);
       })
       .catch((err) => {});
 
-    getReportOrderByCity(
-      0,
-      20,
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment().endOf("date").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      codeCity
-    )
+    getReportOrderByCity(0, 20, startDate, endDate, codeCity)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -46,14 +55,11 @@ const ReportOrderCity = () => {
       })
       .catch((err) => {});
 
-    setStartDate(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
-    setEndDate(
-      moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
-    );
+    getReportPercentOrderByCity(startDate, endDate, codeCity)
+      .then((res) => {
+        setDataChart(res?.data);
+      })
+      .catch((err) => {});
   }, []);
 
   dataCity.map((item) => {
@@ -69,6 +75,12 @@ const ReportOrderCity = () => {
         setData(res?.data);
         setTotal(res?.totalItem);
         setDataTotal(res?.total[0]);
+      })
+      .catch((err) => {});
+
+    getReportPercentOrderByCity(startDate, endDate, codeCity)
+      .then((res) => {
+        setDataChart(res?.data);
       })
       .catch((err) => {});
   };
@@ -460,10 +472,46 @@ const ReportOrderCity = () => {
         />
       </div>
 
-      <div className="mt-3">
-        <Table dataSource={data} columns={columns} pagination={false} />
+      <div className="div-chart-order-area">
+        <ResponsiveContainer width={"100%"} height={350} min-width={350}>
+          <BarChart
+            width={500}
+            height={400}
+            data={dataChart}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+
+            <XAxis
+              dataKey="city"
+              tick={{ fontSize: 8 }}
+              angle={-30}
+              textAnchor="end"
+            />
+
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar
+              dataKey="total_item"
+              fill="#4376CC"
+              barSize={20}
+              minPointSize={10}
+              label={{ position: "centerTop", fill: "white", fontSize: 10 }}
+              name="Số ca làm"
+            />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
 
+      <div className="mt-5">
+        <Table dataSource={data} columns={columns} pagination={false} />
+      </div>
       <div className="mt-2 div-pagination p-2">
         <a>Tổng: {total}</a>
         <div>
