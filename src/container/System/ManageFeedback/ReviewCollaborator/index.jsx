@@ -317,7 +317,7 @@ const ReviewCollaborator = () => {
       render: (data) => {
         return (
           <Checkbox
-            checked={data?.is_check_admin}
+            checked={data?.is_check_admin || data?.star === 5 ? true : false}
             disabled={data?.star === 5 || data?.is_check_admin ? true : false}
             onChange={(e) => {
               toggleModalCheck();
@@ -452,12 +452,12 @@ const TAB = [
   },
   {
     id: 2,
-    title: "Đã xem",
+    title: "Đã liên hệ",
     value: "is_check",
   },
   {
     id: 2,
-    title: "Chưa xem",
+    title: "Chưa liên hệ",
     value: "is_not_check",
   },
 ];

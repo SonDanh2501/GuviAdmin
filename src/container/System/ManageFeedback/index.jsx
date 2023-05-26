@@ -71,9 +71,9 @@ const DATA_TAB = [
     title: "Phản hồi",
     value: "feedback",
   },
-  // {
-  //   id: 3,
-  //   title: "Bài kiểm tra",
-  //   value: "examTest",
-  // },
+  {
+    id: 3,
+    title: "Bài kiểm tra",
+    value: "examTest",
+  },
 ];

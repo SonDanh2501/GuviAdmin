@@ -9,7 +9,7 @@ const ExamTest = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   useEffect(() => {
-    getListTestCollaboratorApi(0, 10)
+    getListTestCollaboratorApi(0, 20)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -43,6 +43,21 @@ const ExamTest = () => {
           </div>
         );
       },
+    },
+    {
+      title: "Số câu",
+      render: (data) => <a>{data?.total_answers}</a>,
+      align: "center",
+    },
+    {
+      title: "Câu đúng",
+      render: (data) => <a>{data?.correct_answers}</a>,
+      align: "center",
+    },
+    {
+      title: "Câu sai",
+      render: (data) => <a>{data?.total_answers - data?.correct_answers}</a>,
+      align: "center",
     },
     {
       title: "Điểm",

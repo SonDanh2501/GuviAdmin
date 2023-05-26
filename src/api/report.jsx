@@ -61,7 +61,7 @@ export const getTotalCustomerYear = (year) => {
 
 export const getTotalCustomerDay = (start_date, end_date) => {
   return axiosClient.get(
-    `/admin/customer_manager/total_customer_dayly?lang=vi&&start_date=${start_date}&end_date=${end_date}`
+    `/admin/customer_manager/total_customer_dayly?lang=vi&start_date=${start_date}&end_date=${end_date}`
   );
 };
 
@@ -165,6 +165,18 @@ export const getReportTypeService = (start_date, end_date, city, district) => {
   );
 };
 
+export const getReportServiceByArea = (start_date, end_date, city) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_service_by_area?lang=vi&start_date=${start_date}&end_date=${end_date}&city=${city}&district=-1`
+  );
+};
+
+export const getReportServiceDetails = (start_date, end_date, city) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_detail_service_by_area?lang=vi&start_date=${start_date}&end_date=${end_date}&city=${city}&district=-1`
+  );
+};
+
 export const getReportCancelReport = (start_date, end_date, city, district) => {
   return axiosClient.get(
     `/admin/report_mananger/report_cancel_order?lang=vi&start_date=${start_date}&end_date=${end_date}&city=${city}&district=${district}`
@@ -192,6 +204,12 @@ export const getCancelReportCustomer = (
 ) => {
   return axiosClient.get(
     `/admin/report_mananger/report_customer_cancel_order?lang=vi&start_date=${start_date}&end_date=${end_date}&city=${city}&district=${district}`
+  );
+};
+
+export const getCancelReportUserSystem = (start_date, end_date, city) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_user_system_cancel_order?lang=vi&start_date=${start_date}&end_date=${end_date}&city=${city}`
   );
 };
 

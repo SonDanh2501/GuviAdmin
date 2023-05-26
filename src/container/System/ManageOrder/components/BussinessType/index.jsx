@@ -760,7 +760,7 @@ const BussinessType = (props) => {
           />
         </div> */}
 
-        <div>
+        <div className="div-payment-method">
           <a>Phương thức thanh toán</a>
           <Select
             value={paymentMethod}
