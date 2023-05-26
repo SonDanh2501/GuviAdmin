@@ -41,12 +41,6 @@ const Information = ({ data, image, idCTV, setData }) => {
   const serviceOption = [];
 
   useEffect(() => {
-    const birthdayD = !data?.birthday
-      ? ""
-      : data?.birthday.slice(0, data?.birthday.indexOf("T"));
-    const identityD = !data?.identity_date
-      ? ""
-      : data?.identity_date.slice(0, data?.identity_date.indexOf("T"));
     setName(data?.full_name);
     setGender(data?.gender);
     setBirthday(data?.birthday);
@@ -132,6 +126,7 @@ const Information = ({ data, image, idCTV, setData }) => {
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
+        setServiceApply([]);
         getCollaboratorsById(idCTV)
           .then((res) => {
             setData(res);

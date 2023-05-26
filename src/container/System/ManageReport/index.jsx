@@ -3,7 +3,7 @@ import { Tabs } from "antd";
 import { useEffect } from "react";
 import ManageReportCustomer from "./ManageReportCustomer";
 import ManageReportOrder from "./MangeReportOrder";
-import ReportArea from "./ReportArea";
+import ReportArea from "./ReportService";
 import ReportCancelOrder from "./ReportCancelOrder";
 import ReportManager from "./ReportCollaborator";
 import "./index.scss";

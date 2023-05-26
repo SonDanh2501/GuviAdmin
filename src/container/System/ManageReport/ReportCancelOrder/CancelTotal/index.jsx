@@ -25,10 +25,7 @@ const TotalCancel = (props) => {
   const [city, setCity] = useState(false);
   const [codeCity, setCodeCity] = useState(0);
   const [dataCity, setDataCity] = useState([]);
-  const [dataDistrict, setDataDistrict] = useState([]);
   const [codeDistrict, setCodeDistrict] = useState(-1);
-  const [district, setDistrict] = useState(false);
-  const [titleDistrict, setTitleDistrict] = useState("Chọn quận");
   const [dataPie, setDataPie] = useState([]);
   const [dataTotalPie, setDataTotalPie] = useState([]);
   const [data, setData] = useState([]);
@@ -37,25 +34,24 @@ const TotalCancel = (props) => {
   const districtData = [];
   const cityData = [];
   useEffect(() => {
-    // getDistrictApi()
-    //   .then((res) => {
-    //     setDataCity(res?.aministrative_division);
-    //     setCodeCity(res?.aministrative_division[1]?.code);
-    //     setTitleCity(res?.aministrative_division[1]?.name);
-    //     setDataDistrict(res?.aministrative_division[1]?.districts);
-    //     getReportCancelReport(
-    //       startDate,
-    //       endDate,
-    //       res?.aministrative_division[1]?.code,
-    //       codeDistrict
-    //     )
-    //       .then((res) => {
-    //         setDataPie(res?.percent);
-    //         setDataTotalPie(res);
-    //       })
-    //       .catch((err) => {});
-    //   })
-    //   .catch((err) => {});
+    getDistrictApi()
+      .then((res) => {
+        setDataCity(res?.aministrative_division);
+        setCodeCity(res?.aministrative_division[1].code);
+        setTitleCity(res?.aministrative_division[1].name);
+        getReportCancelReport(
+          startDate,
+          endDate,
+          res?.aministrative_division[1].code,
+          codeDistrict
+        )
+          .then((res) => {
+            setDataPie(res?.percent);
+            setDataTotalPie(res);
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {});
 
     getReportOverviewCancelReport(0, 20, startDate, endDate, tab, codeCity)
       .then((res) => {
@@ -65,49 +61,32 @@ const TotalCancel = (props) => {
       .catch((err) => {});
   }, [tab]);
 
-  dataDistrict?.map((item) => {
-    districtData?.push({
-      value: item?.code,
-      label: item?.name,
-    });
-  });
-
   dataCity?.map((item) => {
     cityData?.push({
       value: item?.code,
       label: item?.name,
-      district: item?.districts,
     });
   });
 
   const onChangeCity = useCallback(
     (value, label) => {
       setCodeCity(value);
-      setDataDistrict(label?.district);
       setTitleCity(label?.label);
-      setCity(!city);
       getReportCancelReport(startDate, endDate, value, codeDistrict)
         .then((res) => {
           setDataPie(res?.percent);
           setDataTotalPie(res);
         })
         .catch((err) => {});
-    },
-    [city, startDate, endDate, codeDistrict]
-  );
 
-  const onChangeDistrict = useCallback(
-    (value, label) => {
-      setCodeDistrict(label?.value);
-      setDistrict(!district);
-      getReportCancelReport(startDate, endDate, codeCity, value)
+      getReportOverviewCancelReport(0, 20, startDate, endDate, tab, value)
         .then((res) => {
-          setDataPie(res?.percent);
-          setDataTotalPie(res);
+          setData(res?.data);
+          setTotal(res?.totalItem);
         })
         .catch((err) => {});
     },
-    [district, startDate, endDate, codeCity]
+    [city, startDate, endDate, codeDistrict]
   );
 
   const renderLabel = ({
@@ -255,37 +234,20 @@ const TotalCancel = (props) => {
           </a>
         )}
       </div>
-      {/* <div className="div-chart-pie-total-cancel">
-        <a className="title-chart"> Thống kê đơn huỷ theo khu vực</a>
-        <div className="div-select-city">
-          <Select
-            style={{ width: 200 }}
-            value={titleCity}
-            onChange={onChangeCity}
-            options={cityData}
-            showSearch
-            filterOption={(input, option) =>
-              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-            }
-          />
-          <Select
-            style={{ width: 180, marginLeft: 20, marginRight: 20 }}
-            placeholder="Chọn quận"
-            onChange={onChangeDistrict}
-            options={districtData}
-            showSearch
-            filterOption={(input, option) =>
-              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-            }
-          />
-          <CustomDatePicker
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
-            onClick={onChangeDay}
-            onCancel={() => {}}
-          />
-        </div>
-
+      <div className="div-select-city">
+        <Select
+          style={{ width: 200 }}
+          value={titleCity}
+          onChange={onChangeCity}
+          options={cityData}
+          showSearch
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          }
+        />
+      </div>
+      <div className="div-chart-pie-total-cancel">
+        {/* <a className="title-chart"> Thống kê đơn huỷ theo khu vực</a> */}
         <div className="div-pie-chart-cancel">
           <div className="div-total-piechart">
             <div className="item-total">
@@ -338,7 +300,7 @@ const TotalCancel = (props) => {
             </ResponsiveContainer>
           </div>
         </div>
-      </div> */}
+      </div>
 
       <div className="mt-3">
         <Table dataSource={data} columns={columns} pagination={false} />

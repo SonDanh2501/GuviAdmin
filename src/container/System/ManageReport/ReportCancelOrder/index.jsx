@@ -3,6 +3,8 @@ import "./index.scss";
 import { Tabs } from "antd";
 import CancelOrderCustomer from "./CancelCustomer";
 import TotalCancel from "./CancelTotal";
+import TotalCancelSystem from "./CancelTotalSystem";
+import TotalCancelUserSystem from "./CancelTotalUserSystem";
 
 const ReportCancelOrder = () => {
   const [tab, setTab] = useState("");
@@ -50,7 +52,7 @@ const ReportCancelOrder = () => {
         </Tabs.TabPane>
         <Tabs.TabPane tab="Khách hàng" key="2">
           {/* <CancelOrderCustomer /> */}
-          <TotalCancel
+          <CancelOrderCustomer
             tab={tab}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
@@ -59,7 +61,7 @@ const ReportCancelOrder = () => {
           />
         </Tabs.TabPane>
         <Tabs.TabPane tab="Hệ thống" key="3">
-          <TotalCancel
+          <TotalCancelSystem
             tab={tab}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
@@ -68,7 +70,7 @@ const ReportCancelOrder = () => {
           />
         </Tabs.TabPane>
         <Tabs.TabPane tab="Quản trị viên" key="4">
-          <TotalCancel
+          <TotalCancelUserSystem
             tab={tab}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}

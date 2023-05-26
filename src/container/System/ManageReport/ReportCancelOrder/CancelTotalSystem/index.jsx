@@ -1,52 +1,43 @@
-import React, { useCallback, useEffect, useState } from "react";
-import "./cancelCustomerOrder.scss";
+import { Pagination, Select, Table } from "antd";
+import moment from "moment";
+import { useCallback, useEffect, useState } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { getDistrictApi } from "../../../../../api/file";
-import moment from "moment";
 import {
-  getCancelReportCustomer,
+  getReportCancelReport,
   getReportOverviewCancelReport,
 } from "../../../../../api/report";
-import { Pagination, Select, Table } from "antd";
+
+import "./index.scss";
 import CustomDatePicker from "../../../../../components/customDatePicker";
 
-const CancelOrderCustomer = (props) => {
+const TotalCancelSystem = (props) => {
   const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;
+
   const [startDate, setStartDate] = useState(
     moment(moment().startOf("year").toISOString()).add(7, "hours").toISOString()
   );
   const [endDate, setEndDate] = useState(
     moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
   );
+  const [isLoading, setIsLoading] = useState(false);
   const [titleCity, setTitleCity] = useState("");
+  const [city, setCity] = useState(false);
   const [codeCity, setCodeCity] = useState(0);
   const [dataCity, setDataCity] = useState([]);
   const [codeDistrict, setCodeDistrict] = useState(-1);
   const [dataPie, setDataPie] = useState([]);
   const [dataTotalPie, setDataTotalPie] = useState([]);
-  const [totalCancerOrder, setTotalCancerOrder] = useState(0);
   const [data, setData] = useState([]);
-  const [total, setTotal] = useState();
-  const cityData = [];
+  const [total, setTotal] = useState(0);
 
+  const cityData = [];
   useEffect(() => {
     getDistrictApi()
       .then((res) => {
         setDataCity(res?.aministrative_division);
-        setCodeCity(res?.aministrative_division[1]?.code);
-        setTitleCity(res?.aministrative_division[1]?.name);
-        getCancelReportCustomer(
-          startDate,
-          endDate,
-          res?.aministrative_division[1]?.code,
-          codeDistrict
-        )
-          .then((res) => {
-            setDataPie(res?.arrPercent);
-            setDataTotalPie(res?.total);
-            setTotalCancerOrder(res?.total_cancel_order_by_customer);
-          })
-          .catch((err) => {});
+        setCodeCity(res?.aministrative_division[1].code);
+        setTitleCity(res?.aministrative_division[1].name);
       })
       .catch((err) => {});
 
@@ -56,13 +47,12 @@ const CancelOrderCustomer = (props) => {
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-  }, []);
+  }, [tab]);
 
   dataCity?.map((item) => {
     cityData?.push({
       value: item?.code,
       label: item?.name,
-      district: item?.districts,
     });
   });
 
@@ -70,26 +60,50 @@ const CancelOrderCustomer = (props) => {
     (value, label) => {
       setCodeCity(value);
       setTitleCity(label?.label);
-      getCancelReportCustomer(startDate, endDate, value, codeDistrict)
+      setCity(!city);
+      getReportCancelReport(startDate, endDate, value, codeDistrict)
         .then((res) => {
-          setDataPie(res?.arrPercent);
+          setDataPie(res?.percent);
+          setDataTotalPie(res);
         })
         .catch((err) => {});
     },
-    [startDate, endDate, codeDistrict]
+    [city, startDate, endDate, codeDistrict]
   );
 
-  const onChange = (page) => {
-    setCurrentPage(page);
-    const dataLength = data.length < 20 ? 20 : data.length;
-    const start = page * dataLength - dataLength;
-    setStartPage(start);
-    getReportOverviewCancelReport(start, 20, startDate, endDate, tab, codeCity)
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
+  const renderLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    value,
+    name,
+  }) => {
+    const RADIAN = Math.PI / 180;
+    // eslint-disable-next-line
+    const radius = 25 + innerRadius + (outerRadius - innerRadius);
+    // eslint-disable-next-line
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    // eslint-disable-next-line
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="#000000"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
+        {name === "system_cancel"
+          ? "Hệ thống"
+          : name === "customer_cancel"
+          ? "Khách hàng"
+          : "Quản trị viên"}{" "}
+        ({value} {"%"})
+      </text>
+    );
   };
 
   const onChangeDay = () => {
@@ -100,16 +114,24 @@ const CancelOrderCustomer = (props) => {
       endDate,
       tab,
       codeCity
-    ).then((res) => {
-      setData(res?.data);
-      setTotal(res?.totalItem);
-    });
-
-    getCancelReportCustomer(startDate, endDate, codeCity, codeDistrict)
+    )
       .then((res) => {
-        setDataPie(res?.arrPercent);
-        setDataTotalPie(res?.total);
-        setTotalCancerOrder(res?.total_cancel_order_by_customer);
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const lengthData = data.length < 20 ? 20 : data.length;
+    const start = page * lengthData - lengthData;
+    setStartPage(start);
+
+    getReportOverviewCancelReport(start, 20, startDate, endDate, tab, codeCity)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
       })
       .catch((err) => {});
   };
@@ -172,37 +194,6 @@ const CancelOrderCustomer = (props) => {
     },
   ];
 
-  const renderLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    value,
-    name,
-  }) => {
-    const RADIAN = Math.PI / 180;
-    // eslint-disable-next-line
-    const radius = 25 + innerRadius + (outerRadius - innerRadius);
-    // eslint-disable-next-line
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    // eslint-disable-next-line
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-      <text
-        x={x}
-        y={y}
-        fontSize={10}
-        fill="#000000"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-      >
-        {name} ({value} {"%"})
-      </text>
-    );
-  };
-
   return (
     <>
       <div className="div-date">
@@ -231,46 +222,9 @@ const CancelOrderCustomer = (props) => {
           }
         />
       </div>
-      <div className="div-chart-pie-total-cancel-customer">
-        <div className="div-total-cancel-order">
-          <a>Tổng: {totalCancerOrder}</a>
-          {dataTotalPie?.map((item, index) => {
-            return (
-              <div key={index} className="div-total-customer">
-                <a className="title-total-cancel-customer">
-                  {item?.reason_cancel[0]?.title?.vi}
-                </a>
-                <a className="text-colon">:</a>
-                <a className="text-number">{item?.total}</a>
-              </div>
-            );
-          })}
-        </div>
-        <div className="div-pie-chart ml-4">
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={dataPie}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-                label={renderLabel}
-              >
-                {dataPie.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-      <div className="mt-5">
-        <Table pagination={false} columns={columns} dataSource={data} />
+
+      <div className="mt-3">
+        <Table dataSource={data} columns={columns} pagination={false} />
       </div>
       <div className="mt-1 div-pagination p-2">
         <a>Tổng: {total}</a>
@@ -288,6 +242,6 @@ const CancelOrderCustomer = (props) => {
   );
 };
 
-export default CancelOrderCustomer;
+export default TotalCancelSystem;
 
 const COLORS = ["#FCD34D", "#FBBF24", "#F59E0B", "#ff8000", "#ff1919"];
