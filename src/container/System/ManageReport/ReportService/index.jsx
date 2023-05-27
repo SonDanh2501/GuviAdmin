@@ -24,7 +24,7 @@ import { List, Select } from "antd";
 import CustomDatePicker from "../../../../components/customDatePicker";
 import LoadingPagination from "../../../../components/paginationLoading";
 
-const ReportArea = () => {
+const ReportService = () => {
   const [startDate, setStartDate] = useState(
     moment(moment().startOf("month").toISOString())
       .add(7, "hours")
@@ -330,7 +330,7 @@ const ReportArea = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* <div className="div-chart-pie-total">
+      <div className="div-chart-pie-total">
         <a className="title-chart-area"> Thống kê đơn hàng theo dịch vụ</a>
         <div className="div-pie-chart">
           <div className="div-total-piechart">
@@ -361,7 +361,7 @@ const ReportArea = () => {
                   dataKey="percent"
                   label={renderLabelService}
                 >
-                  {dataChartPie?.percent?.map((entry, index) => (
+                  {dataChartService?.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={COLORS[index % COLORS.length]}
@@ -372,14 +372,14 @@ const ReportArea = () => {
             </ResponsiveContainer>
           </div>
         </div>
-      </div> */}
+      </div>
 
       {isLoading && <LoadingPagination />}
     </>
   );
 };
 
-export default ReportArea;
+export default ReportService;
 
 const COLORS = [
   "#38BDF8",

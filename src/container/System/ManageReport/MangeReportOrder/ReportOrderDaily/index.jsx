@@ -36,7 +36,7 @@ const ReportOrderDaily = () => {
   );
 
   useEffect(() => {
-    getReportOrderDaily(0, 20, startDate, endDate)
+    getReportOrderDaily(0, 40, startDate, endDate)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -53,9 +53,10 @@ const ReportOrderDaily = () => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * data.length - data.length;
+    const dataLength = data.length < 20 ? 20 : data.length;
+    const start = page * dataLength - dataLength;
     setStartPage(start);
-    getReportOrderDaily(start, 20, startDate, endDate)
+    getReportOrderDaily(start, 40, startDate, endDate)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -65,7 +66,7 @@ const ReportOrderDaily = () => {
   };
 
   const onChangeDay = () => {
-    getReportOrderDaily(startPage, 20, startDate, endDate)
+    getReportOrderDaily(startPage, 40, startDate, endDate)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -466,7 +467,11 @@ const ReportOrderDaily = () => {
         </ResponsiveContainer>
       </div>
       <div className="mt-3">
-        <Table dataSource={data} columns={columns} pagination={false} />
+        <Table
+          dataSource={data.reverse()}
+          columns={columns}
+          pagination={false}
+        />
       </div>
 
       <div className="mt-2 div-pagination p-2">
@@ -477,7 +482,7 @@ const ReportOrderDaily = () => {
             onChange={onChange}
             total={total}
             showSizeChanger={false}
-            pageSize={20}
+            pageSize={40}
           />
         </div>
       </div>

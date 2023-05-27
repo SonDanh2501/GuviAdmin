@@ -3,10 +3,10 @@ import { Tabs } from "antd";
 import { useEffect } from "react";
 import ManageReportCustomer from "./ManageReportCustomer";
 import ManageReportOrder from "./MangeReportOrder";
-import ReportArea from "./ReportService";
 import ReportCancelOrder from "./ReportCancelOrder";
 import ReportManager from "./ReportCollaborator";
 import "./index.scss";
+import ReportService from "./ReportService";
 
 const ManageReport = () => {
   useEffect(() => {
@@ -58,8 +58,8 @@ const ManageReport = () => {
           <Tabs.TabPane tab="Báo cáo đơn huỷ" key="4">
             <ReportCancelOrder />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo khu vực" key="5">
-            <ReportArea />
+          <Tabs.TabPane tab="Báo cáo dịch vụ" key="5">
+            <ReportService />
           </Tabs.TabPane>
         </Tabs>
       </div>
