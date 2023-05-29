@@ -2,18 +2,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  FormGroup,
-  Form,
-  Input,
-  Container,
-  Row,
-  Col,
-} from "reactstrap";
+
 import { formatMoney } from "../../../../../../helper/formatMoney";
 import user from "../../../../../../assets/images/user.png";
 import iconMember from "../../../../../../assets/images/iconMember.svg";
@@ -26,7 +15,7 @@ import {
   updateCustomer,
   updatePointCustomer,
 } from "../../../../../../api/customer";
-import { FloatButton, Image } from "antd";
+import { Button, FloatButton, Image, Input, Select } from "antd";
 import { errorNotify } from "../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../redux/actions/loading";
 import { QRCode } from "react-qrcode-logo";
@@ -142,7 +131,7 @@ const DetailsProfile = ({ id }) => {
               {data?.birthday && <a className="text-invite">Tuổi: {age}</a>}
               <a className="text-invite">Mã giới thiệu: {data?.invite_code}</a>
             </div>
-            <div className="ml-5">
+            {/* <div className="ml-5">
               <QRCode
                 value={valueQr}
                 ecLevel={"H"}
@@ -151,7 +140,7 @@ const DetailsProfile = ({ id }) => {
                 id="QRCode-svg"
                 size={150}
               />
-            </div>
+            </div> */}
           </div>
           <div className="div-rank-pay-member">
             <div className="div-member">
@@ -192,11 +181,8 @@ const DetailsProfile = ({ id }) => {
           <div className="div-detail-infomation">
             <div className="div-left">
               <div>
-                <label className="form-control-label" htmlFor="input-email">
-                  Họ tên
-                </label>
+                <a>Họ tên</a>
                 <Input
-                  className="input"
                   id="input-email"
                   type="email"
                   value={name}
@@ -206,26 +192,20 @@ const DetailsProfile = ({ id }) => {
 
               <div className="div-select">
                 <a>Giới tính</a>
-                <Input
-                  className="input-select-gender"
-                  type="select"
+                <Select
                   value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                >
-                  <>
-                    <option value={"other"}>Khác</option>
-                    <option value={"male"}>Nam</option>
-                    <option value={"female"}>Nữ</option>
-                  </>
-                </Input>
+                  onChange={(e) => setGender(e)}
+                  options={[
+                    { value: "other", label: "khác" },
+                    { value: "male", label: "Nam" },
+                    { value: "female", label: "Nữ" },
+                  ]}
+                />
               </div>
 
               <div className="mt-3">
-                <label className="form-control-label" htmlFor="input-last-name">
-                  Số điện thoại
-                </label>
+                <a>Số điện thoại</a>
                 <Input
-                  className="input"
                   id="input-last-name"
                   type="text"
                   value={data?.phone}
@@ -235,12 +215,8 @@ const DetailsProfile = ({ id }) => {
             </div>
             <div className="div-right">
               <div>
-                <label className="form-control-label" htmlFor="input-email">
-                  Ngày sinh
-                </label>
+                <a>Ngày sinh</a>
                 <Input
-                  className="input"
-                  id="input-email"
                   type="date"
                   value={birthday}
                   onChange={(e) => {
@@ -250,11 +226,8 @@ const DetailsProfile = ({ id }) => {
               </div>
 
               <div className="mt-3">
-                <label className="form-control-label" htmlFor="input-email">
-                  Email
-                </label>
+                <a htmlFor="input-email">Email</a>
                 <Input
-                  className="input"
                   id="input-email"
                   placeholder="Nhập email"
                   type="email"

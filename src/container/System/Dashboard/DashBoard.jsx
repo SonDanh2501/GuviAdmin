@@ -39,6 +39,7 @@ import {
   Area,
   AreaChart,
   Bar,
+  BarChart,
   CartesianGrid,
   Cell,
   ComposedChart,
@@ -59,6 +60,8 @@ import { number_processing } from "../../../helper/numberProcessing";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import {
+  getReportCancelReport,
+  getReportServiceDetails,
   getReportTypeService,
   getTotalCustomerYear,
 } from "../../../api/report";
@@ -74,16 +77,20 @@ export default function Home() {
   const [day, setDay] = useState([]);
   const [dataUser, setDataUser] = useState([]);
   const [totalYearUser, setTotalYearUser] = useState(0);
-  const [dataChartOrderDetails, setDataChartOrderDetails] = useState([]);
+  const [dataChartCancel, setDataChartCancel] = useState([]);
+  const [dataTotalChartCancel, setDataTotalChartCancel] = useState([]);
   const [codeCity, setCodeCity] = useState();
   const [nameCity, setNameCity] = useState("");
   const [dataCity, setDataCity] = useState([]);
-  const [dataDistrict, setDataDistrict] = useState([]);
-  const [codeDistrict, setCodeDistrict] = useState(-1);
-  const [nameDistrict, setNameDistrict] = useState(-1);
-  const [type, setType] = useState("day");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(
+    moment(moment().startOf("month").toISOString())
+      .add(7, "hours")
+      .toISOString()
+  );
+  const [endDate, setEndDate] = useState(
+    moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
+  );
+  const [dataChartServiceDetails, setDataChartServiceDetails] = useState([]);
   const historyActivity = useSelector(getHistoryActivitys);
   const activeUser = useSelector(getActiveUsers);
   const lastestService = useSelector(getLastestServices);
@@ -93,16 +100,11 @@ export default function Home() {
   const dispatch = useDispatch();
   const yearFormat = "YYYY";
   const dataChartUser = [];
-  const districtData = [];
   const cityData = [];
+  const dataChartDetail = [];
 
   useEffect(() => {
-    getDayReportApi(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
-    )
+    getDayReportApi(startDate, endDate)
       .then((res) => {
         setArrResult(res.arrResult);
         setTotalMoneyChart(res?.total_money);
@@ -119,10 +121,8 @@ export default function Home() {
     );
     dispatch(
       getTopCollaborator.getTopCollaboratorRequest({
-        startDate: moment(moment().startOf("month").toISOString())
-          .add(7, "hours")
-          .toISOString(),
-        endDate: moment(new Date()).toISOString(),
+        startDate: startDate,
+        endDate: endDate,
         start: 0,
         length: 10,
       })
@@ -139,32 +139,28 @@ export default function Home() {
         setDataCity(res?.aministrative_division);
         setCodeCity(res?.aministrative_division[1]?.code);
         setNameCity(res?.aministrative_division[1]?.name);
-        setDataDistrict(res?.aministrative_division[1]?.districts);
-        getReportTypeService(
-          moment(moment().startOf("month").toISOString())
-            .add(7, "hours")
-            .toISOString(),
-          moment(moment(new Date()).toISOString())
-            .add(7, "hours")
-            .toISOString(),
-          res?.aministrative_division[1]?.code,
-          codeDistrict
+        getReportServiceDetails(
+          startDate,
+          endDate,
+          res?.aministrative_division[1]?.code
         )
           .then((res) => {
-            setDataChartOrderDetails(res);
+            setDataChartServiceDetails(res?.detailData);
+          })
+          .catch((err) => {});
+        getReportCancelReport(
+          startDate,
+          endDate,
+          res?.aministrative_division[1].code,
+          -1
+        )
+          .then((res) => {
+            setDataChartCancel(res?.percent);
+            setDataTotalChartCancel(res);
           })
           .catch((err) => {});
       })
       .catch((err) => {});
-
-    setStartDate(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
-    setEndDate(
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
-    );
   }, []);
 
   useEffect(() => {
@@ -183,13 +179,6 @@ export default function Home() {
     });
   });
 
-  dataDistrict?.map((item) => {
-    districtData?.push({
-      value: item?.code,
-      label: item?.name,
-    });
-  });
-
   dataCity?.map((item) => {
     cityData?.push({
       value: item?.code,
@@ -198,30 +187,33 @@ export default function Home() {
     });
   });
 
+  dataChartServiceDetails?.map((item) => {
+    dataChartDetail?.push({
+      title: item?.title[0]?.vi,
+      percent_2_hour: item?.total_2_hour,
+      percent_3_hour: item?.total_3_hour,
+      percent_4_hour: item?.total_4_hour,
+    });
+  });
+
   const onChangeCity = useCallback(
     (value, label) => {
       setNameCity(label?.label);
       setCodeCity(value);
-      setDataDistrict(label?.districts);
-      getReportTypeService(startDate, endDate, value, codeDistrict)
+      getReportServiceDetails(startDate, endDate, value)
         .then((res) => {
-          setDataChartOrderDetails(res);
+          setDataChartServiceDetails(res?.detailData);
         })
         .catch((err) => {});
-    },
-    [startDate, endDate, codeDistrict]
-  );
 
-  const onChangeDistrict = useCallback(
-    (value, label) => {
-      setCodeDistrict(label?.value);
-      getReportTypeService(startDate, endDate, codeCity, value)
+      getReportCancelReport(startDate, endDate, value, -1)
         .then((res) => {
-          setDataChartOrderDetails(res);
+          setDataChartCancel(res?.percent);
+          setDataTotalChartCancel(res);
         })
         .catch((err) => {});
     },
-    [startDate, endDate, codeCity]
+    [startDate, endDate]
   );
 
   function getDates(startDate, stopDate) {
@@ -243,14 +235,13 @@ export default function Home() {
       })
       .catch((err) => console.log(err));
 
-    getReportTypeService(startDate, endDate, codeCity, codeDistrict)
+    getReportServiceDetails(startDate, endDate, codeCity)
       .then((res) => {
-        setDataChartOrderDetails(res);
+        setDataChartServiceDetails(res?.detailData);
       })
       .catch((err) => {});
-
     // getDates(startDate, endDate);
-  }, [startDate, endDate, codeCity, codeDistrict]);
+  }, [startDate, endDate, codeCity]);
 
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work_schedule[0].date)).format(
@@ -455,7 +446,7 @@ export default function Home() {
     );
   };
 
-  const renderLabel = ({
+  const renderLabelCancel = ({
     cx,
     cy,
     midAngle,
@@ -480,8 +471,12 @@ export default function Home() {
         textAnchor={x > cx ? "start" : "end"}
         dominantBaseline="central"
       >
-        {name === "2_hour" ? "2 Giờ" : name === "3_hour" ? "3 Giờ" : "4 Giờ"} (
-        {value} {"%"})
+        {name === "system_cancel"
+          ? "Hệ thống"
+          : name === "customer_cancel"
+          ? "Khách hàng"
+          : "Quản trị viên"}{" "}
+        ({value} {"%"})
       </text>
     );
   };
@@ -509,9 +504,24 @@ export default function Home() {
                       </a>
                     )}
                   </div>
+
                   <a className="text-total-money">
                     Tổng tiền: {formatMoney(totalMoneyChart)}
                   </a>
+                </div>
+                <div className="div-select-city mb-3">
+                  <Select
+                    style={{ width: 200 }}
+                    value={nameCity}
+                    onChange={onChangeCity}
+                    options={cityData}
+                    showSearch
+                    filterOption={(input, option) =>
+                      (option?.label ?? "")
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
+                  />
                 </div>
                 <div>
                   <ResponsiveContainer
@@ -788,100 +798,68 @@ export default function Home() {
         <div>
           <Row>
             <Col lg="9">
-              <div className="div-chart-pie-total">
+              <div className="div-chart-pie-total-dash">
                 <a className="title-chart-area">Thống kê đơn hàng</a>
-                <div className="div-select-city">
-                  <Select
-                    style={{ width: 200 }}
-                    value={nameCity}
-                    onChange={onChangeCity}
-                    options={cityData}
-                    showSearch
-                    filterOption={(input, option) =>
-                      (option?.label ?? "")
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                    }
-                  />
-                  <Select
-                    style={{ width: 180, marginLeft: 20, marginRight: 20 }}
-                    placeholder="Chọn quận"
-                    onChange={onChangeDistrict}
-                    options={districtData}
-                    showSearch
-                    filterOption={(input, option) =>
-                      (option?.label ?? "")
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                    }
-                  />
-                  {/* <CustomDatePicker
-                    setStartDate={setStartDate}
-                    setEndDate={setEndDate}
-                    onClick={onChangeDay}
-                    onCancel={onCancelPicker}
-                  />
-                  {startDate && (
-                    <a className="text-date mt-2">
-                      {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-                      {moment(endDate).utc().format("DD/MM/YYYY")}
-                    </a>
-                  )} */}
-                </div>
-                <div className="div-pie-chart">
-                  <div className="div-total-piechart">
-                    <div className="item-total">
-                      <a className="title-total">Tổng đơn</a>
-                      <a className="text-colon">:</a>
-                      <a className="number-total">
-                        {dataChartOrderDetails?.total_order}
-                      </a>
-                    </div>
-                    <div className="item-total">
-                      <a className="title-total">Đơn 2 Giờ</a>
-                      <a className="text-colon">:</a>
-                      <a className="number-total">
-                        {dataChartOrderDetails?.total_order_2_hours}
-                      </a>
-                    </div>
-                    <div className="item-total">
-                      <a className="title-total">Đơn 3 Giờ</a>
-                      <a className="text-colon">:</a>
-                      <a className="number-total">
-                        {dataChartOrderDetails?.total_order_3_hours}
-                      </a>
-                    </div>
-                    <div className="item-total">
-                      <a className="title-total">Đơn 4 Giờ</a>
-                      <a className="text-colon">:</a>
-                      <a className="number-total">
-                        {dataChartOrderDetails?.total_order_4_hours}
-                      </a>
-                    </div>
-                  </div>
-
+                <div className="div-pie-chart mt-3">
                   <div className="div-pie">
-                    <ResponsiveContainer height={300} min-width={500}>
-                      <PieChart height={250}>
-                        <Pie
-                          data={dataChartOrderDetails?.percent}
-                          cx="50%"
-                          cy="140"
-                          outerRadius={80}
+                    <ResponsiveContainer
+                      width={"100%"}
+                      height={350}
+                      min-width={350}
+                    >
+                      <BarChart
+                        width={500}
+                        height={300}
+                        data={dataChartDetail}
+                        margin={{
+                          top: 5,
+                          right: 30,
+                          left: 20,
+                          bottom: 5,
+                        }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="title" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Bar
+                          dataKey="percent_2_hour"
                           fill="#8884d8"
-                          dataKey="value"
-                          label={renderLabel}
-                        >
-                          {dataChartOrderDetails?.percent?.map(
-                            (entry, index) => (
-                              <Cell
-                                key={`cell-${index}`}
-                                fill={COLORS[index % COLORS.length]}
-                              />
-                            )
-                          )}
-                        </Pie>
-                      </PieChart>
+                          barSize={40}
+                          minPointSize={10}
+                          name="2 Giờ"
+                          label={{
+                            position: "top",
+                            fill: "black",
+                            fontSize: 14,
+                          }}
+                        />
+                        <Bar
+                          dataKey="percent_3_hour"
+                          fill="#82ca9d"
+                          barSize={40}
+                          minPointSize={10}
+                          name="3 Giờ"
+                          label={{
+                            position: "top",
+                            fill: "black",
+                            fontSize: 14,
+                          }}
+                        />
+                        <Bar
+                          dataKey="percent_4_hour"
+                          fill="#0088FE"
+                          barSize={40}
+                          minPointSize={10}
+                          name="4 Giờ"
+                          label={{
+                            position: "top",
+                            fill: "black",
+                            fontSize: 14,
+                          }}
+                        />
+                      </BarChart>
                     </ResponsiveContainer>
                   </div>
                 </div>
@@ -1032,7 +1010,7 @@ export default function Home() {
                       height={300}
                       data={dataChartUser.slice(0, moment().utc().month() + 1)}
                       margin={{
-                        top: 5,
+                        top: 20,
                         right: 30,
                         left: 20,
                         bottom: 5,
@@ -1064,6 +1042,7 @@ export default function Home() {
                         barSize={20}
                         name="Khách hàng mới"
                         stackId="a"
+                        label={{ position: "top", fill: "black", fontSize: 14 }}
                       />
                       <Line
                         type="monotone"
@@ -1076,7 +1055,67 @@ export default function Home() {
                 </div>
               </div>
             </Col>
-            <Col lg="6"></Col>
+            <Col lg="6">
+              <div className="div-chart-pie-total-cancel-dash">
+                <a className="title-chart"> Thống kê đơn huỷ </a>
+                <div className="div-pie-chart-cancel">
+                  <div className="div-total-piechart">
+                    <div className="item-total">
+                      <a className="title-total">Tổng đơn huỷ</a>
+                      <a className="text-colon">:</a>
+                      <a className="number-total">
+                        {dataTotalChartCancel?.total_cancel_order}
+                      </a>
+                    </div>
+                    <div className="item-total">
+                      <a className="title-total">Đơn huỷ khách hàng</a>
+                      <a className="text-colon">:</a>
+                      <a className="number-total">
+                        {dataTotalChartCancel?.total_cancel_order_by_customer}
+                      </a>
+                    </div>
+                    <div className="item-total">
+                      <a className="title-total">Đơn huỷ hệ thống</a>
+                      <a className="text-colon">:</a>
+                      <a className="number-total">
+                        {dataTotalChartCancel?.total_cancel_order_by_system}
+                      </a>
+                    </div>
+                    <div className="item-total">
+                      <a className="title-total">Đơn huỷ quản trị viên</a>
+                      <a className="text-colon">:</a>
+                      <a className="number-total">
+                        {
+                          dataTotalChartCancel?.total_cancel_order_by_user_system
+                        }
+                      </a>
+                    </div>
+                  </div>
+                  <div className="div-pie-cancel">
+                    <ResponsiveContainer height={300} min-width={500}>
+                      <PieChart>
+                        <Pie
+                          data={dataChartCancel}
+                          cx="50%"
+                          cy="50%"
+                          outerRadius={80}
+                          fill="#8884d8"
+                          dataKey="value"
+                          label={renderLabelCancel}
+                        >
+                          {dataChartCancel.map((entry, index) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={COLORS_CANCEL[index % COLORS_CANCEL.length]}
+                            />
+                          ))}
+                        </Pie>
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              </div>
+            </Col>
           </Row>
         </div>
       </div>
@@ -1084,3 +1123,5 @@ export default function Home() {
     </div>
   );
 }
+
+const COLORS_CANCEL = ["#FCD34D", "#FBBF24", "#F59E0B", "#ff8000", "#ff1919"];

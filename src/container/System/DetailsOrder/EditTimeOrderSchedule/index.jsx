@@ -10,13 +10,23 @@ import moment from "moment";
 import {
   editTimeOrderApi,
   editTimeOrderScheduleApi,
+  getOrderByGroupOrderApi,
 } from "../../../../api/order";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
 
-const EditTimeOrderSchedule = ({ idOrder, dateWork, endDateWord, code }) => {
+const EditTimeOrderSchedule = (props) => {
+  const {
+    idOrder,
+    dateWork,
+    endDateWord,
+    id,
+    setDataGroup,
+    setDataList,
+    setIsLoading,
+  } = props;
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+
   const [timeWork, setTimeWork] = useState(
     moment(dateWork).utc().format("HH:mm:ss")
   );
@@ -25,7 +35,6 @@ const EditTimeOrderSchedule = ({ idOrder, dateWork, endDateWord, code }) => {
     moment(endDateWord).utc().format("HH:mm:ss")
   );
   const [wordEndDate, setWordEndDate] = useState(endDateWord);
-  const dispatch = useDispatch();
   const showDrawer = () => {
     setOpen(true);
   };
@@ -47,20 +56,30 @@ const EditTimeOrderSchedule = ({ idOrder, dateWork, endDateWord, code }) => {
     moment(wordEndDate).format(dateFormat) + "T" + timeEndWork + ".000Z";
 
   const editOrder = () => {
-    dispatch(loadingAction.loadingRequest(true));
+    setIsLoading(true);
     editTimeOrderScheduleApi(idOrder, {
       date_work: timeW,
       end_date_work: timeWorkEnd,
     })
       .then((res) => {
-        dispatch(loadingAction.loadingRequest(false));
-        window.location.reload();
+        setIsLoading(false);
+        setOpen(false);
+        getOrderByGroupOrderApi(id)
+          .then((res) => {
+            setDataGroup(res?.data?.groupOrder);
+            setDataList(res?.data?.listOrder);
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+          });
       })
       .catch((err) => {
         errorNotify({
           message: err,
         });
-        dispatch(loadingAction.loadingRequest(false));
+        setIsLoading(false);
       });
   };
 
@@ -130,8 +149,6 @@ const EditTimeOrderSchedule = ({ idOrder, dateWork, endDateWord, code }) => {
           Cập nhật
         </Button>
       </Drawer>
-
-      {isLoading && <LoadingPagination />}
     </>
   );
 };

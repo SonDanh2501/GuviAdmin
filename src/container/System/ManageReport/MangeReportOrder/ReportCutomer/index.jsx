@@ -25,8 +25,6 @@ const ReportCustomer = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [totalColumn, setTotalColumn] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
   const [customerNew, setCustomerNew] = useState(0);
   const [customerOld, setCustomerOld] = useState(0);
   const [moneyNew, setMoneyNew] = useState(0);
@@ -35,41 +33,41 @@ const ReportCustomer = () => {
   const [totalOrderOld, setTotalOrderOld] = useState([]);
   const [type, setType] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
-
-  const dataChart = [];
+  const [startDate, setStartDate] = useState(
+    moment(moment().startOf("month").toISOString())
+      .add(7, "hours")
+      .toISOString()
+  );
+  const [endDate, setEndDate] = useState(
+    moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
+  );
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    getReportCustomer(
-      0,
-      20,
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment().endOf("date").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      type
-    )
+    getReportCustomer(0, 20, startDate, endDate, type)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
         setTotalColumn(res?.total[0]);
-        setCustomerNew(res?.totalItem);
-        setMoneyNew(res?.total[0]?.total_order_fee);
-        setTotalOrderNew(res?.total[0]?.total_item);
       })
       .catch((err) => {});
 
-    setStartDate(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
-    setEndDate(
-      moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
-    );
+    getReportCustomer(0, 20, startDate, endDate, "new")
+      .then((res) => {
+        setCustomerNew(res?.totalItem);
+        setTotalOrderNew(res?.total[0]?.total_item);
+        setMoneyNew(res?.total[0]?.total_net_income_business);
+      })
+      .catch((err) => {});
+
+    getReportCustomer(0, 20, startDate, endDate, "old")
+      .then((res) => {
+        setCustomerOld(res?.totalItem);
+        setTotalOrderOld(res?.total[0]?.total_item);
+        setMoneyOld(res?.total[0]?.total_net_income_business);
+      })
+      .catch((err) => {});
   }, []);
 
   const onChangeDay = () => {
@@ -86,6 +84,22 @@ const ReportCustomer = () => {
       .catch((err) => {
         setIsLoading(false);
       });
+
+    getReportCustomer(0, 20, startDate, endDate, "new")
+      .then((res) => {
+        setCustomerNew(res?.totalItem);
+        setTotalOrderNew(res?.total[0]?.total_item);
+        setMoneyNew(res?.total[0]?.total_net_income_business);
+      })
+      .catch((err) => {});
+
+    getReportCustomer(0, 20, startDate, endDate, "old")
+      .then((res) => {
+        setCustomerOld(res?.totalItem);
+        setTotalOrderOld(res?.total[0]?.total_item);
+        setMoneyOld(res?.total[0]?.total_net_income_business);
+      })
+      .catch((err) => {});
   };
 
   const onChange = (page) => {

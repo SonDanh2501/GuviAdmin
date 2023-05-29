@@ -146,3 +146,31 @@
     }
   }
 }
+
+.modal-header {
+  height: 60px;
+  align-items: center;
+  .modal-title {
+    font-family: "Roboto";
+    font-weight: 500;
+    font-size: 16px;
+    color: #000000;
+    text-decoration: none;
+  }
+}
+.title-add-promo {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 16px;
+  color: #000000;
+  text-decoration: none;
+}
+
+.btn-edit-promotion-orther {
+  display: flex;
+  float: right;
+  background-color: rgba(0, 0, 255, 0.499);
+  color: white;
+  border: none;
+  margin-top: 20px;
+}

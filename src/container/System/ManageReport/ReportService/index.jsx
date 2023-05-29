@@ -99,9 +99,9 @@ const ReportService = () => {
   dataChartServiceDetails?.map((item) => {
     dataChartDetail?.push({
       title: item?.title[0]?.vi,
-      percent_2_hour: item?.percent_2_hour,
-      percent_3_hour: item?.percent_3_hour,
-      percent_4_hour: item?.percent_4_hour,
+      percent_2_hour: item?.total_2_hour,
+      percent_3_hour: item?.total_3_hour,
+      percent_4_hour: item?.total_4_hour,
     });
   });
 
@@ -125,11 +125,11 @@ const ReportService = () => {
   );
 
   const onChangeDay = () => {
-    // getReportTypeService(startDate, endDate, codeCity, codeDistrict)
-    //   .then((res) => {
-    //     setDataChartPie(res);
-    //   })
-    //   .catch((err) => {});
+    getReportServiceDetails(startDate, endDate, codeCity)
+      .then((res) => {
+        setDataChartServiceDetails(res?.detailData);
+      })
+      .catch((err) => {});
 
     getReportServiceByArea(startDate, endDate, codeCity)
       .then((res) => {
@@ -227,71 +227,15 @@ const ReportService = () => {
           </a>
         )}
       </div>
-      {/* <div className="div-chart-pie-total">
-        <a className="title-chart-area"> Thống kê đơn hàng theo khu vực</a>
-        <div className="div-pie-chart">
-          <div className="div-total-piechart">
-            <div className="item-total">
-              <a className="title-total">Tổng đơn</a>
-              <a className="text-colon">:</a>
-              <a className="number-total">{dataChartPie?.total_order}</a>
-            </div>
-            <div className="item-total">
-              <a className="title-total">Đơn 2 Giờ</a>
-              <a className="text-colon">:</a>
-              <a className="number-total">
-                {dataChartPie?.total_order_2_hours}
-              </a>
-            </div>
-            <div className="item-total">
-              <a className="title-total">Đơn 3 Giờ</a>
-              <a className="text-colon">:</a>
-              <a className="number-total">
-                {dataChartPie?.total_order_3_hours}
-              </a>
-            </div>
-            <div className="item-total">
-              <a className="title-total">Đơn 4 Giờ</a>
-              <a className="text-colon">:</a>
-              <a className="number-total">
-                {dataChartPie?.total_order_4_hours}
-              </a>
-            </div>
-          </div>
 
-          <div className="div-pie">
-            <ResponsiveContainer height={300} min-width={500}>
-              <PieChart height={250}>
-                <Pie
-                  data={dataChartPie?.percent}
-                  cx="50%"
-                  cy="140"
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                  label={renderLabel}
-                >
-                  {dataChartPie?.percent?.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </div> */}
-
-      <div className="mt-3">
+      <div className="mt-3 div-chart-bar-service">
         <ResponsiveContainer width={"100%"} height={350} min-width={350}>
           <BarChart
             width={500}
             height={300}
             data={dataChartDetail}
             margin={{
-              top: 5,
+              top: 20,
               right: 30,
               left: 20,
               bottom: 5,
@@ -308,7 +252,7 @@ const ReportService = () => {
               barSize={40}
               minPointSize={10}
               name="2 Giờ"
-              label={{ position: "centerTop", fill: "white", fontSize: 10 }}
+              label={{ position: "top", fill: "black", fontSize: 14 }}
             />
             <Bar
               dataKey="percent_3_hour"
@@ -316,7 +260,7 @@ const ReportService = () => {
               barSize={40}
               minPointSize={10}
               name="3 Giờ"
-              label={{ position: "centerTop", fill: "white", fontSize: 10 }}
+              label={{ position: "top", fill: "black", fontSize: 14 }}
             />
             <Bar
               dataKey="percent_4_hour"
@@ -324,7 +268,7 @@ const ReportService = () => {
               barSize={40}
               minPointSize={10}
               name="4 Giờ"
-              label={{ position: "centerTop", fill: "white", fontSize: 10 }}
+              label={{ position: "top", fill: "black", fontSize: 14 }}
             />
           </BarChart>
         </ResponsiveContainer>

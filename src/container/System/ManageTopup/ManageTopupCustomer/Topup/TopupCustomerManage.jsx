@@ -319,7 +319,7 @@ export default function TopupCustomer() {
     <React.Fragment>
       <div className="div-header-customer-topup mt-2">
         <AddTopupCustomer />
-        <WithdrawCustomer />
+        {/* <WithdrawCustomer /> */}
 
         <Input
           placeholder="Tìm kiếm"

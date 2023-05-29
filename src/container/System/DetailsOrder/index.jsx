@@ -36,6 +36,7 @@ import EditTimeOrder from "../ManageOrder/EditTimeGroupOrder";
 import EditTimeOrderSchedule from "./EditTimeOrderSchedule";
 import { getListReasonCancel } from "../../../api/reasons";
 import { ModalBody, ModalFooter, ModalHeader, Modal } from "reactstrap";
+import LoadingPagination from "../../../components/paginationLoading";
 
 const DetailsOrder = () => {
   const { state } = useLocation();
@@ -61,6 +62,7 @@ const DetailsOrder = () => {
   const [idReason, setIdReason] = useState("");
   const [dataReason, setDataReason] = useState([]);
   const [noteReason, setNoteReason] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toggle = () => setModal(!modal);
@@ -473,6 +475,10 @@ const DetailsOrder = () => {
           idOrder={itemEdit?._id}
           dateWork={itemEdit?.date_work}
           endDateWord={itemEdit?.end_date_work}
+          id={id}
+          setDataGroup={setDataGroup}
+          setDataList={setDataList}
+          setIsLoading={setIsLoading}
         />
       ),
     },
@@ -626,6 +632,10 @@ const DetailsOrder = () => {
                                   ? dataGroup?.code_promotion?.code
                                   : ""
                               }
+                              setIsLoading={setIsLoading}
+                              idDetail={id}
+                              setDataGroup={setDataGroup}
+                              setDataList={setDataList}
                             />
                           </div>
                         ) : (
@@ -1107,6 +1117,7 @@ const DetailsOrder = () => {
           </ModalFooter>
         </Modal>
       </div>
+      {isLoading && <LoadingPagination />}
     </div>
   );
 };

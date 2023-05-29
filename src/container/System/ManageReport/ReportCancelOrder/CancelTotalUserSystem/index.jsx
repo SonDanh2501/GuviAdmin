@@ -294,7 +294,7 @@ const TotalCancelUserSystem = (props) => {
         </div>
       </div>
 
-      <div className="mt-3">
+      <div className="mt-5">
         <Table dataSource={data} columns={columns} pagination={false} />
       </div>
       <div className="mt-1 div-pagination p-2">

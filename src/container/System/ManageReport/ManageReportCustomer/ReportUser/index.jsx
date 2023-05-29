@@ -162,9 +162,9 @@ const ReportUser = () => {
             <a className="text-create">
               {moment(new Date(data?.day)).format("DD/MM/YYYY")}
             </a>
-            <a className="text-create">
+            {/* <a className="text-create">
               {moment(new Date(data?.day)).format("HH:mm")}
-            </a>
+            </a> */}
           </div>
         );
       },
@@ -283,8 +283,8 @@ const ReportUser = () => {
             <a className="text-number-total">{totalYear}</a>
           </div>
         </div>
-        <div className="mt-3">
-          <ResponsiveContainer width={"100%"} height={350} min-width={350}>
+        <div className="mt-3 ">
+          <ResponsiveContainer width={"100%"} height={350}>
             <ComposedChart
               width={500}
               height={300}
@@ -294,7 +294,7 @@ const ReportUser = () => {
                   : dataChart
               }
               margin={{
-                top: 5,
+                top: 20,
                 right: 30,
                 left: 20,
                 bottom: 5,
@@ -326,7 +326,7 @@ const ReportUser = () => {
                 barSize={40}
                 name="Khách hàng mới"
                 stackId="a"
-                label={{ position: "centerTop", fill: "white" }}
+                label={{ position: "top", fill: "black", fontSize: 14 }}
               />
               <Line
                 type="monotone"

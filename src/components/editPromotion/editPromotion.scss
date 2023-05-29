@@ -242,3 +242,29 @@
   flex-direction: column;
   justify-content: center;
 }
+
+.modal-header {
+  height: 60px;
+  align-items: center;
+  .modal-title {
+    font-family: "Roboto";
+    font-weight: 500;
+    font-size: 16px;
+    color: #000000;
+    text-decoration: none;
+  }
+}
+
+.title-add-promo {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 16px;
+  color: #000000;
+  text-decoration: none;
+}
+
+.btn-edit-promrion {
+  display: flex;
+  float: right;
+  background-color: rgba(49, 49, 251, 0.737);
+}

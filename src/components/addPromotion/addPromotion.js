@@ -1,10 +1,20 @@
-import { Checkbox, InputNumber, List, Select, TimePicker, Input } from "antd";
+import {
+  Checkbox,
+  DatePicker,
+  Input,
+  InputNumber,
+  List,
+  Select,
+  TimePicker,
+} from "antd";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Form, FormGroup, Label, Modal, Row } from "reactstrap";
-import { fetchCustomers, searchCustomers } from "../../api/customer";
+import { Button, Col, Form, Modal, Row } from "reactstrap";
+import { searchCustomers } from "../../api/customer";
 import { DATA_PAYMENT, date } from "../../api/fakeData";
 import { postFile } from "../../api/file";
 import { createPushNotification } from "../../api/notification";
@@ -21,8 +31,6 @@ import CustomTextInput from "../CustomTextInput/customTextInput";
 import CustomButton from "../customButton/customButton";
 import CustomTextEditor from "../customTextEdittor";
 import "./addPromotion.scss";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 const { TextArea } = Input;
 
@@ -105,6 +113,7 @@ const AddPromotion = (props) => {
   const serviceOption = [];
   const dispatch = useDispatch();
   const fomart = "HH:mm";
+  const dateFormat = "DD-MM-YYYY";
   const service = useSelector(getService);
 
   useEffect(() => {
@@ -493,638 +502,599 @@ const AddPromotion = (props) => {
         toggle={() => setState(!state)}
       >
         <div className="modal-header">
-          <h3 className="modal-title" id="exampleModalLabel">
-            Thêm mã khuyến mãi
-          </h3>
+          <a className="modal-title">Thêm mã khuyến mãi</a>
           <button className="btn-close" onClick={() => setState(!state)}>
             <i className="uil uil-times-square"></i>
           </button>
         </div>
         <div className="modal-body">
-          <div className="form-input">
-            <Form>
-              <Row>
-                <Col md={4}>
-                  <div>
-                    <a className="title-add-promo">1. Tiêu đề</a>
-                    <Input
-                      placeholder="Nhập tiêu đề tiếng việt"
-                      value={titleVN}
-                      onChange={(e) => setTitleVN(e.target.value)}
-                    />
-                    <Input
-                      placeholder="Nhập tiêu đề tiếng anh"
-                      value={titleEN}
-                      onChange={(e) => setTitleEN(e.target.value)}
-                      style={{ marginTop: 5 }}
-                    />
-                  </div>
-                  <div>
-                    <a className="title-add-promo">2. Mô tả</a>
-                    <TextArea
-                      placeholder="Nhập mô tả tiếng việt"
-                      value={shortDescriptionVN}
-                      onChange={(e) => setShortDescriptionVN(e.target.value)}
-                    />
-                    <TextArea
-                      label={"Tiếng Anh"}
-                      placeholder="Nhập mô tả tiếng anh"
-                      value={shortDescriptionEN}
-                      onChange={(e) => setShortDescriptionEN(e.target.value)}
-                      style={{ marginTop: 5 }}
-                    />
-                  </div>
-                  <div>
-                    <a className="title-add-promo">3. Mô tả chi tiết</a>
-                    <div>
-                      <a>Tiếng Việt</a>
-                      <CustomTextEditor
-                        value={descriptionVN}
-                        onChangeValue={setDescriptionVN}
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <a>Tiếng Anh</a>
-                      <CustomTextEditor
-                        value={descriptionEN}
-                        onChangeValue={setDescriptionEN}
-                      />
-                    </div>
-                  </div>
-                </Col>
-                <Col md={4}>
-                  <div>
-                    <a className="title-add-promo">4. Thumbnail/Background</a>
-                    <div>
-                      <a>Thumbnail 160px * 170px</a>
-                      <Input
-                        type="file"
-                        accept={".jpg,.png,.jpeg"}
-                        className="input-upload"
-                        onChange={onChangeThumbnail}
-                      />
-                      {imgThumbnail && (
-                        <img src={imgThumbnail} className="img-thumbnail" />
-                      )}
-                    </div>
-                    <div>
-                      <a>Background 414px * 200px</a>
-                      <Input
-                        type="file"
-                        accept={".jpg,.png,.jpeg"}
-                        className="input-upload"
-                        onChange={onChangeBackground}
-                      />
-                      {imgBackground && (
-                        <img src={imgBackground} className="img-background" />
-                      )}
-                    </div>
-                  </div>
-                  <div>
-                    <a className="title-add-promo">5. Mã khuyến mãi</a>
-
-                    <Input
-                      placeholder="Nhập mã khuyến mãi"
-                      type="text"
-                      value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <h5>6. Giá đơn đặt tối thiểu</h5>
-                    <InputNumber
-                      formatter={(value) =>
-                        `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
-                      }
-                      min={0}
-                      value={minimumOrder}
-                      onChange={(e) => setMinimumOrder(e)}
-                      style={{ width: "100%" }}
-                    />
-                  </div>
-
-                  <div className="mt-2">
-                    <h5>7. Hình thức giảm giá</h5>
-                    <Row>
-                      <Button
-                        className={
-                          discountUnit === "amount"
-                            ? "btn-form-same-promotion"
-                            : "btn-form-same-promotion-default"
-                        }
-                        outline
-                        onClick={() => onFormDiscount("amount")}
-                      >
-                        Giảm trực tiếp
-                      </Button>
-                      <Button
-                        className={
-                          discountUnit === "percent"
-                            ? "btn-form-same-promotion"
-                            : "btn-form-same-promotion-default"
-                        }
-                        outline
-                        onClick={() => onFormDiscount("percent")}
-                      >
-                        Giảm theo phần trăm
-                      </Button>
-                      {
-                        discountUnit === "amount" ? (
-                          <div className="ml-3">
-                            <a>Giá giảm</a>
-                            <InputNumber
-                              formatter={(value) =>
-                                `${value}  đ`.replace(
-                                  /(\d)(?=(\d\d\d)+(?!\d))/g,
-                                  "$1,"
-                                )
-                              }
-                              min={0}
-                              value={maximumDiscount}
-                              onChange={(e) => setMaximumDiscount(e)}
-                              style={{ width: "90%" }}
-                            />
-                          </div>
-                        ) : (
-                          <Row className="row-discount">
-                            <div className="div-reduced ml-4">
-                              <a>Giá trị giảm</a>
-                              <InputNumber
-                                min={0}
-                                max={100}
-                                formatter={(value) => `${value} %`}
-                                parser={(value) => value.replace("%", "")}
-                                value={reducedValue}
-                                onChange={(e) => setReducedValue(e)}
-                                style={{ width: "90%" }}
-                              />
-                            </div>
-                            <div className="div-reduced">
-                              <a>Giá giảm tối đa</a>
-                              <InputNumber
-                                formatter={(value) =>
-                                  `${value}  đ`.replace(
-                                    /(\d)(?=(\d\d\d)+(?!\d))/g,
-                                    "$1,"
-                                  )
-                                }
-                                min={0}
-                                value={maximumDiscount}
-                                onChange={(e) => setMaximumDiscount(e)}
-                                style={{ width: "90%" }}
-                              />
-                            </div>
-                          </Row>
-                        )
-                        // ) : (
-                        //   <CustomTextInput
-                        //     label={"Đơn giá"}
-                        //     placeholder="Nhập đơn giá"
-                        //     classNameForm="input-promo-amount"
-                        //     type="number"
-                        //     min={0}
-                        //     value={maximumDiscount}
-                        //     onChange={(e) => setMaximumDiscount(e.target.value)}
-                        //   />
-                        // )
-                      }
-                    </Row>
-                  </div>
-                  {tab === "tat_ca" && (
-                    <div className="mt-2">
-                      <h5>9. Dịch vụ áp dụng</h5>
-                      <Label>Các dịch vụ</Label>
-                      <Select
-                        style={{ width: "100%" }}
-                        onChange={(e) => {
-                          setServiceApply(e);
-                        }}
-                        options={serviceOption}
-                      />
-                    </div>
+          <Row>
+            <Col md={4}>
+              <div>
+                <a className="title-add-promo">1. Tiêu đề</a>
+                <Input
+                  placeholder="Nhập tiêu đề tiếng việt"
+                  value={titleVN}
+                  onChange={(e) => setTitleVN(e.target.value)}
+                />
+                <Input
+                  placeholder="Nhập tiêu đề tiếng anh"
+                  value={titleEN}
+                  onChange={(e) => setTitleEN(e.target.value)}
+                  style={{ marginTop: 5 }}
+                />
+              </div>
+              <div>
+                <a className="title-add-promo">2. Mô tả</a>
+                <TextArea
+                  placeholder="Nhập mô tả tiếng việt"
+                  value={shortDescriptionVN}
+                  onChange={(e) => setShortDescriptionVN(e.target.value)}
+                />
+                <TextArea
+                  label={"Tiếng Anh"}
+                  placeholder="Nhập mô tả tiếng anh"
+                  value={shortDescriptionEN}
+                  onChange={(e) => setShortDescriptionEN(e.target.value)}
+                  style={{ marginTop: 5 }}
+                />
+              </div>
+              <div>
+                <a className="title-add-promo">3. Mô tả chi tiết</a>
+                <div>
+                  <a>Tiếng Việt</a>
+                  <CustomTextEditor
+                    value={descriptionVN}
+                    onChangeValue={setDescriptionVN}
+                  />
+                </div>
+                <div className="mt-2">
+                  <a>Tiếng Anh</a>
+                  <CustomTextEditor
+                    value={descriptionEN}
+                    onChangeValue={setDescriptionEN}
+                  />
+                </div>
+              </div>
+            </Col>
+            <Col md={4}>
+              <div>
+                <a className="title-add-promo">4. Thumbnail/Background</a>
+                <div>
+                  <a>Thumbnail 160px * 170px</a>
+                  <Input
+                    type="file"
+                    accept={".jpg,.png,.jpeg"}
+                    className="input-upload"
+                    onChange={onChangeThumbnail}
+                  />
+                  {imgThumbnail && (
+                    <img src={imgThumbnail} className="img-thumbnail" />
                   )}
+                </div>
+                <div>
+                  <a>Background 414px * 200px</a>
+                  <Input
+                    type="file"
+                    accept={".jpg,.png,.jpeg"}
+                    className="input-upload"
+                    onChange={onChangeBackground}
+                  />
+                  {imgBackground && (
+                    <img src={imgBackground} className="img-background" />
+                  )}
+                </div>
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">5. Mã khuyến mãi</a>
+                <Input
+                  placeholder="Nhập mã khuyến mãi"
+                  type="text"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value)}
+                />
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">6. Giá đơn đặt tối thiểu</a>
+                <InputNumber
+                  formatter={(value) =>
+                    `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+                  }
+                  min={0}
+                  value={minimumOrder}
+                  onChange={(e) => setMinimumOrder(e)}
+                  style={{ width: "100%" }}
+                />
+              </div>
 
-                  <div className="mt-2">
-                    <h5>10. Đối tượng áp dụng</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Nhóm khách hàng
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isGroupCustomer}
-                        onClick={() => setIsGroupCustomer(!isGroupCustomer)}
-                      />
-                    </FormGroup>
-
-                    {isGroupCustomer && (
-                      <Select
-                        mode="multiple"
-                        allowClear
-                        style={{
-                          width: "100%",
-                        }}
-                        placeholder="Please select"
-                        onChange={handleChange}
-                        options={options}
-                      />
-                    )}
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Áp dụng cho khách hàng
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isCustomer}
-                        onClick={() => setIsCustomer(!isCustomer)}
-                      />
-                    </FormGroup>
-                    {isCustomer && (
-                      <div>
-                        <Input
-                          placeholder="Tìm kiếm theo tên và số điện thoại"
-                          value={name}
-                          onChange={(e) => {
-                            changeValue(e.target.value);
-                            searchCustomer(e.target.value);
-                          }}
+              <div className="mt-2">
+                <a className="title-add-promo">7. Hình thức giảm giá</a>
+                <Row>
+                  <Button
+                    className={
+                      discountUnit === "amount"
+                        ? "btn-form-same-promotion"
+                        : "btn-form-same-promotion-default"
+                    }
+                    outline
+                    onClick={() => onFormDiscount("amount")}
+                  >
+                    Giảm trực tiếp
+                  </Button>
+                  <Button
+                    className={
+                      discountUnit === "percent"
+                        ? "btn-form-same-promotion"
+                        : "btn-form-same-promotion-default"
+                    }
+                    outline
+                    onClick={() => onFormDiscount("percent")}
+                  >
+                    Giảm theo phần trăm
+                  </Button>
+                  {
+                    discountUnit === "amount" ? (
+                      <div className="ml-3">
+                        <a>Giá giảm</a>
+                        <InputNumber
+                          formatter={(value) =>
+                            `${value}  đ`.replace(
+                              /(\d)(?=(\d\d\d)+(?!\d))/g,
+                              "$1,"
+                            )
+                          }
+                          min={0}
+                          value={maximumDiscount}
+                          onChange={(e) => setMaximumDiscount(e)}
+                          style={{ width: "100%" }}
                         />
-                        {data.length > 0 && (
-                          <List type={"unstyled"} className="list-item-kh">
-                            {data?.map((item, index) => {
+                      </div>
+                    ) : (
+                      <Row className="row-discount">
+                        <div className="div-reduced ml-4">
+                          <a>Giá trị giảm</a>
+                          <InputNumber
+                            min={0}
+                            max={100}
+                            formatter={(value) => `${value} %`}
+                            parser={(value) => value.replace("%", "")}
+                            value={reducedValue}
+                            onChange={(e) => setReducedValue(e)}
+                            style={{ width: "90%" }}
+                          />
+                        </div>
+                        <div className="div-reduced">
+                          <a>Giá giảm tối đa</a>
+                          <InputNumber
+                            formatter={(value) =>
+                              `${value}  đ`.replace(
+                                /(\d)(?=(\d\d\d)+(?!\d))/g,
+                                "$1,"
+                              )
+                            }
+                            min={0}
+                            value={maximumDiscount}
+                            onChange={(e) => setMaximumDiscount(e)}
+                            style={{ width: "90%" }}
+                          />
+                        </div>
+                      </Row>
+                    )
+                    // ) : (
+                    //   <CustomTextInput
+                    //     label={"Đơn giá"}
+                    //     placeholder="Nhập đơn giá"
+                    //     classNameForm="input-promo-amount"
+                    //     type="number"
+                    //     min={0}
+                    //     value={maximumDiscount}
+                    //     onChange={(e) => setMaximumDiscount(e.target.value)}
+                    //   />
+                    // )
+                  }
+                </Row>
+              </div>
+              {tab === "tat_ca" && (
+                <div className="mt-2">
+                  <a className="title-add-promo">9. Dịch vụ áp dụng</a>
+
+                  <Select
+                    style={{ width: "100%" }}
+                    onChange={(e) => {
+                      setServiceApply(e);
+                    }}
+                    options={serviceOption}
+                  />
+                </div>
+              )}
+              <div className="mt-2">
+                <a className="title-add-promo">10. Đối tượng áp dụng</a>
+                <div>
+                  <Checkbox
+                    checked={isGroupCustomer}
+                    onChange={(e) => setIsGroupCustomer(e.target.checked)}
+                  >
+                    Nhóm khách hàng
+                  </Checkbox>
+                  {isGroupCustomer && (
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      style={{
+                        width: "100%",
+                      }}
+                      placeholder="Please select"
+                      onChange={handleChange}
+                      options={options}
+                    />
+                  )}
+                </div>
+                <div>
+                  <Checkbox
+                    checked={isCustomer}
+                    onChange={(e) => setIsCustomer(e.target.checked)}
+                  >
+                    Áp dụng cho khách hàng
+                  </Checkbox>
+                  {isCustomer && (
+                    <div>
+                      <Input
+                        placeholder="Tìm kiếm theo tên và số điện thoại"
+                        value={name}
+                        onChange={(e) => {
+                          changeValue(e.target.value);
+                          searchCustomer(e.target.value);
+                        }}
+                      />
+                      {data.length > 0 && (
+                        <List type={"unstyled"} className="list-item-kh">
+                          {data?.map((item, index) => {
+                            return (
+                              <div
+                                className="div-item"
+                                key={index}
+                                onClick={() => onChooseCustomer(item)}
+                              >
+                                <a className="text-name">
+                                  {item?.full_name} - {item?.phone} -{" "}
+                                  {item?.id_view}
+                                </a>
+                              </div>
+                            );
+                          })}
+                        </List>
+                      )}
+                      {listNameCustomers.length > 0 && (
+                        <div className="div-list-customer">
+                          <List type={"unstyled"}>
+                            {listNameCustomers.map((item) => {
                               return (
-                                <div
-                                  className="div-item"
-                                  key={index}
-                                  onClick={() => onChooseCustomer(item)}
-                                >
-                                  <a className="text-name">
-                                    {item?.full_name} - {item?.phone} -{" "}
+                                <div className="div-item-customer">
+                                  <a className="text-name-list">
+                                    - {item?.full_name} . {item?.phone} .{" "}
                                     {item?.id_view}
                                   </a>
+                                  <i
+                                    class="uil uil-times-circle"
+                                    onClick={() => removeItemCustomer(item)}
+                                  ></i>
                                 </div>
                               );
                             })}
                           </List>
-                        )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Col>
+            <Col md={4}>
+              <div>
+                <a className="title-add-promo">11. Số lượng mã khuyến mãi</a>
+                <div>
+                  <Checkbox
+                    checked={limitedQuantity}
+                    onChange={(e) => setLimitedQuantity(e.target.checked)}
+                  >
+                    Số lượng giới hạn
+                  </Checkbox>
+                  {limitedQuantity && (
+                    <Input
+                      placeholder="Số lượng"
+                      className="input-promo-code"
+                      type="number"
+                      min={0}
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                    />
+                  )}
+                </div>
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">12. Số lần sử dụng khuyến mãi</a>
+                <div>
+                  <Checkbox
+                    checked={isUsePromo}
+                    onChange={(e) => setIsUsePromo(e.target.checked)}
+                  >
+                    Lần sử dụng khuyến mãi
+                  </Checkbox>
+                  {isUsePromo && (
+                    <Input
+                      placeholder="Số lượng"
+                      className="input-promo-code"
+                      min={0}
+                      type="number"
+                      value={usePromo}
+                      onChange={(e) => setUsePromo(e.target.value)}
+                    />
+                  )}
+                </div>
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">13. Thời gian khuyến mãi</a>
+                <div>
+                  <Checkbox
+                    checked={limitedDate}
+                    onChange={(e) => setLimitedDate(e.target.checked)}
+                  >
+                    Giới hạn ngày
+                  </Checkbox>
+                  {limitedDate && (
+                    <>
+                      <div>
+                        <a>Ngày bắt đầu</a>
+                        <DatePicker
+                          onChange={(date, dateString) =>
+                            setStartDate(dateString)
+                          }
+                          style={{ marginLeft: 5, width: "100%" }}
+                        />
+                      </div>
+                      <div>
+                        <a>Ngày kết thúc</a>
+                        <DatePicker
+                          onChange={(date, dateString) =>
+                            setEndDate(dateString)
+                          }
+                          style={{ marginLeft: 5, width: "100%" }}
+                        />
+                        {/* <input
+                              className="input-promo-code"
+                              type={"date"}
+                              defaultValue={startDate}
+                              value={endDate}
+                              onChange={(e) => setEndDate(e.target.value)}
+                            /> */}
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">14. Điểm quy đổi</a>
+                <div>
+                  <Checkbox
+                    checked={isExchangePoint}
+                    onChange={(e) => setIsExchangePoint(e.target.checked)}
+                  >
+                    Điểm quy đổi
+                  </Checkbox>
+                  {isExchangePoint && (
+                    <Input
+                      placeholder="Nhập số điểm"
+                      type="number"
+                      min={0}
+                      value={exchangePoint}
+                      onChange={(e) => setExchangePoint(e.target.value)}
+                    />
+                  )}
+                </div>
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">15. Phương thức thanh toán</a>
+                <div>
+                  <Checkbox
+                    checked={isPaymentMethod}
+                    onChange={(e) => setIsPaymentMethod(e.target.checked)}
+                  >
+                    Thanh toán
+                  </Checkbox>
+                  {isPaymentMethod && (
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      style={{
+                        width: "100%",
+                      }}
+                      placeholder="Please select"
+                      onChange={handleChangePaymentMethod}
+                      options={DATA_PAYMENT}
+                    />
+                  )}
+                </div>
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">
+                  16. Thời gian sử dụng sau khi đổi
+                </a>
+                <Input
+                  placeholder="Nhập số ngày (1,2,3...,n"
+                  className="input-promo-code"
+                  type="number"
+                  min={0}
+                  value={dateExchange}
+                  onChange={(e) => setDateExchange(e.target.value)}
+                />
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">17. Thứ tự hiện thị</a>
+                <Input
+                  placeholder="Nhập số thứ tự (1,2,3...,n"
+                  className="input-promo-code"
+                  type="number"
+                  min={0}
+                  value={position}
+                  onChange={(e) => setPosition(e.target.value)}
+                />
+              </div>
+              <div className="mt-2">
+                <div>
+                  <a className="title-add-promo">18. Gửi thông báo</a>
+                  <Checkbox
+                    checked={isSendNotification}
+                    onChange={(e) => setIsSendNotification(e.target.checked)}
+                    style={{ marginLeft: 5 }}
+                  />
+                </div>
 
-                        {listNameCustomers.length > 0 && (
-                          <div className="div-list-customer">
-                            <List type={"unstyled"}>
-                              {listNameCustomers.map((item) => {
+                {isSendNotification && (
+                  <div>
+                    <Input
+                      placeholder="Nhập tiêu đề thông báo"
+                      className="input-promo-code mt-2"
+                      type="text"
+                      value={titleNoti}
+                      onChange={(e) => setTitleNoti(e.target.value)}
+                    />
+                    <Input
+                      placeholder="Nhập nội dung thông báo"
+                      className="input-promo-code"
+                      type="textarea"
+                      value={descriptionNoti}
+                      onChange={(e) => setDescriptionNoti(e.target.value)}
+                      style={{ marginTop: 5 }}
+                    />
+                    <div>
+                      <Checkbox
+                        checked={isDateSchedule}
+                        onChange={(e) => setIsDateSchedule(e.target.checked)}
+                      >
+                        Thời gian thông báo
+                      </Checkbox>
+                      {isDateSchedule && (
+                        <CustomTextInput
+                          type="datetime-local"
+                          name="time"
+                          className="text-input mt-2"
+                          value={dateSchedule}
+                          onChange={(e) => setDateSchedule(e.target.value)}
+                        />
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="mt-2">
+                <div>
+                  <a className="title-add-promo">19. Đa dạng khuyến mãi</a>
+                  <Checkbox
+                    checked={isParrentPromotion}
+                    onChange={(e) => setIsParrentPromotion(e.target.checked)}
+                    style={{ marginLeft: 5 }}
+                  ></Checkbox>
+                </div>
+                {isParrentPromotion && (
+                  <Input
+                    placeholder="Số lượng"
+                    className="input-promo-code mt-2"
+                    type="number"
+                    value={totalChildPromotion}
+                    onChange={(e) =>
+                      setTotalChildPromotion(Number.parseInt(e.target.value))
+                    }
+                  />
+                )}
+              </div>
+              <div className="div-loop-time">
+                <div>
+                  <a className="title-add-promo">20. Thời gian áp dụng</a>
+                  <Checkbox
+                    checked={isApplyTime}
+                    onChange={(e) => setIsApplyTime(e.target.checked)}
+                    style={{ marginLeft: 5 }}
+                  />
+                </div>
+                {isApplyTime && (
+                  <div className="mb-3">
+                    {timeApply.map((item, index) => {
+                      return (
+                        <div key={index} className="div-body-loop">
+                          {index !== 0 && (
+                            <div
+                              className="btn-close-day"
+                              onClick={() => deleteTimeApply(index)}
+                            >
+                              <i class="uil uil-multiply"></i>
+                            </div>
+                          )}
+                          <div className="div-body-loop-time">
+                            <div className="div-day-time">
+                              {date.map((it, i) => {
                                 return (
-                                  <div className="div-item-customer">
-                                    <a className="text-name-list">
-                                      - {item?.full_name} . {item?.phone} .{" "}
-                                      {item?.id_view}
-                                    </a>
-                                    <i
-                                      class="uil uil-times-circle"
-                                      onClick={() => removeItemCustomer(item)}
-                                    ></i>
+                                  <div
+                                    key={i}
+                                    className={
+                                      item.day_local === it.value
+                                        ? "div-day-select"
+                                        : "div-day"
+                                    }
+                                    onClick={() =>
+                                      changeDayApply(it.value, index)
+                                    }
+                                  >
+                                    <a className="text-day">{it?.title}</a>
                                   </div>
                                 );
                               })}
-                            </List>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </Col>
-                <Col md={4}>
-                  <div>
-                    <h5 className="mt-2">11. Số lượng mã khuyến mãi</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Số lượng giới hạn
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={limitedQuantity}
-                        onClick={() => setLimitedQuantity(!limitedQuantity)}
-                      />
-                    </FormGroup>
-                    {limitedQuantity && (
-                      <CustomTextInput
-                        placeholder="Số lượng"
-                        className="input-promo-code"
-                        type="number"
-                        min={0}
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    <h5 className="mt-2">12. Số lần sử dụng khuyến mãi</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Lần sử dụng khuyến mãi
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isUsePromo}
-                        onClick={() => setIsUsePromo(!isUsePromo)}
-                      />
-                    </FormGroup>
-                    {isUsePromo && (
-                      <CustomTextInput
-                        placeholder="Số lượng"
-                        className="input-promo-code"
-                        min={0}
-                        type="number"
-                        value={usePromo}
-                        onChange={(e) => setUsePromo(e.target.value)}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    <h5 className="mt-2">13. Thời gian khuyến mãi</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Giới hạn ngày
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={limitedDate}
-                        onClick={() => setLimitedDate(!limitedDate)}
-                      />
-                    </FormGroup>
-                    {limitedDate && (
-                      <>
-                        <FormGroup>
-                          <Label>Ngày bắt đầu</Label>
-                          <input
-                            className="input-promo-code"
-                            type={"date"}
-                            defaultValue={startDate}
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                          />
-                        </FormGroup>
-                        <FormGroup>
-                          <Label>Ngày kết thúc</Label>
-                          <input
-                            className="input-promo-code"
-                            type={"date"}
-                            defaultValue={startDate}
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                          />
-                        </FormGroup>
-                      </>
-                    )}
-                  </div>
-                  <div>
-                    <h5 className="mt-2">14. Điểm quy đổi</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Điểm quy đổi
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isExchangePoint}
-                        onClick={() => setIsExchangePoint(!isExchangePoint)}
-                      />
-                    </FormGroup>
-                    {isExchangePoint && (
-                      <CustomTextInput
-                        label={"Điểm"}
-                        placeholder="Nhập số điểm"
-                        className="input-promo-code"
-                        type="number"
-                        min={0}
-                        value={exchangePoint}
-                        onChange={(e) => setExchangePoint(e.target.value)}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    <h5 className="mt-2">15. Phương thức thanh toán</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Thanh toán
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isPaymentMethod}
-                        onClick={() => setIsPaymentMethod(!isPaymentMethod)}
-                      />
-                    </FormGroup>
-
-                    {isPaymentMethod && (
-                      <Select
-                        mode="multiple"
-                        allowClear
-                        style={{
-                          width: "100%",
-                        }}
-                        placeholder="Please select"
-                        onChange={handleChangePaymentMethod}
-                        options={DATA_PAYMENT}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    <h5 className="mt-2">16. Thời gian sử dụng sau khi đổi</h5>
-                    <CustomTextInput
-                      placeholder="Nhập số ngày (1,2,3...,n"
-                      className="input-promo-code"
-                      type="number"
-                      min={0}
-                      value={dateExchange}
-                      onChange={(e) => setDateExchange(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <h5 className="mt-2">17. Thứ tự hiện thị</h5>
-                    <CustomTextInput
-                      placeholder="Nhập số thứ tự (1,2,3...,n"
-                      className="input-promo-code"
-                      type="number"
-                      min={0}
-                      value={position}
-                      onChange={(e) => setPosition(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <FormGroup check inline>
-                      <h5 className="mt-2">18. Gửi thông báo</h5>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isSendNotification}
-                        onClick={() =>
-                          setIsSendNotification(!isSendNotification)
-                        }
-                      />
-                    </FormGroup>
-
-                    {isSendNotification && (
-                      <div>
-                        <CustomTextInput
-                          placeholder="Nhập tiêu đề thông báo"
-                          className="input-promo-code mt-2"
-                          type="text"
-                          value={titleNoti}
-                          onChange={(e) => setTitleNoti(e.target.value)}
-                        />
-                        <CustomTextInput
-                          placeholder="Nhập nội dung thông báo"
-                          className="input-promo-code"
-                          type="textarea"
-                          value={descriptionNoti}
-                          onChange={(e) => setDescriptionNoti(e.target.value)}
-                        />
-                        <div>
-                          <Checkbox
-                            checked={isDateSchedule}
-                            onChange={(e) =>
-                              setIsDateSchedule(e.target.checked)
-                            }
-                          >
-                            Thời gian thông báo
-                          </Checkbox>
-                          {isDateSchedule && (
-                            <CustomTextInput
-                              type="datetime-local"
-                              name="time"
-                              className="text-input mt-2"
-                              value={dateSchedule}
-                              onChange={(e) => setDateSchedule(e.target.value)}
-                            />
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <div>
-                    <FormGroup check inline>
-                      <h5 className="mt-2">19. Đa dạng khuyến mãi</h5>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isParrentPromotion}
-                        onClick={() =>
-                          setIsParrentPromotion(!isParrentPromotion)
-                        }
-                      />
-                    </FormGroup>
-
-                    {isParrentPromotion && (
-                      <CustomTextInput
-                        placeholder="Số lượng"
-                        className="input-promo-code mt-2"
-                        type="number"
-                        value={totalChildPromotion}
-                        onChange={(e) =>
-                          setTotalChildPromotion(
-                            Number.parseInt(e.target.value)
-                          )
-                        }
-                      />
-                    )}
-                  </div>
-                  <div className="div-loop-time">
-                    <FormGroup check inline>
-                      <h5 className="mt-2">20. Thời gian áp dụng</h5>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isApplyTime}
-                        onClick={() => setIsApplyTime(!isApplyTime)}
-                      />
-                    </FormGroup>
-
-                    {isApplyTime && (
-                      <div className="mb-3">
-                        {timeApply.map((item, index) => {
-                          return (
-                            <div key={index} className="div-body-loop">
-                              {index !== 0 && (
-                                <div
-                                  className="btn-close-day"
-                                  onClick={() => deleteTimeApply(index)}
-                                >
-                                  <i class="uil uil-multiply"></i>
-                                </div>
-                              )}
-                              <div className="div-body-loop-time">
-                                <div className="div-day-time">
-                                  {date.map((it, i) => {
-                                    return (
-                                      <div
-                                        key={i}
-                                        className={
-                                          item.day_local === it.value
-                                            ? "div-day-select"
-                                            : "div-day"
-                                        }
-                                        onClick={() =>
-                                          changeDayApply(it.value, index)
-                                        }
-                                      >
-                                        <a className="text-day">{it?.title}</a>
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                                <a>Thời gian bắt đầu</a>
-                                <TimePicker
-                                  defaultOpenValue={dayjs("00:00:00", fomart)}
-                                  format={fomart}
-                                  onChange={(time, timeString) =>
-                                    changeTimeStartApply(timeString, index)
-                                  }
-                                />
-                                <a>Thời gian kết thúc</a>
-                                <TimePicker
-                                  defaultOpenValue={dayjs("00:00:00", fomart)}
-                                  format={fomart}
-                                  onChange={(time, timeString) =>
-                                    changeTimeEndApply(timeString, index)
-                                  }
-                                />
-                              </div>
                             </div>
-                          );
-                        })}
-                        <div className="btn-add-day" onClick={addTimeApply}>
-                          <i class="uil uil-plus"></i>
+                            <a>Thời gian bắt đầu</a>
+                            <TimePicker
+                              defaultOpenValue={dayjs("00:00:00", fomart)}
+                              format={fomart}
+                              onChange={(time, timeString) =>
+                                changeTimeStartApply(timeString, index)
+                              }
+                            />
+                            <a>Thời gian kết thúc</a>
+                            <TimePicker
+                              defaultOpenValue={dayjs("00:00:00", fomart)}
+                              format={fomart}
+                              onChange={(time, timeString) =>
+                                changeTimeEndApply(timeString, index)
+                              }
+                            />
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      );
+                    })}
+                    <div className="btn-add-day" onClick={addTimeApply}>
+                      <i class="uil uil-plus"></i>
+                    </div>
                   </div>
+                )}
+              </div>
 
-                  <div className="div-check-show-app">
-                    <a className="title-check">21. Hiện thị mã trên app</a>
-                    <Checkbox
-                      onChange={(e) => {
-                        setIsShowInApp(e.target.checked);
-                      }}
-                      checked={isShowInApp}
-                      style={{ marginLeft: 5 }}
-                    />
-                  </div>
+              <div className="div-check-show-app">
+                <a className="title-check">21. Hiện thị mã trên app</a>
+                <Checkbox
+                  onChange={(e) => {
+                    setIsShowInApp(e.target.checked);
+                  }}
+                  checked={isShowInApp}
+                  style={{ marginLeft: 5 }}
+                />
+              </div>
 
-                  <Button
-                    className="btn-create-promotion mt-3"
-                    onClick={onCreatePromotion}
-                  >
-                    Thêm khuyến mãi
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
-          </div>
+              <Button
+                className="btn-create-promotion mt-5"
+                onClick={onCreatePromotion}
+              >
+                Thêm khuyến mãi
+              </Button>
+            </Col>
+          </Row>
         </div>
       </Modal>
     </>
