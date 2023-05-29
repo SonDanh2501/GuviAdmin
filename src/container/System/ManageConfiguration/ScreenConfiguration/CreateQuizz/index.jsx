@@ -453,6 +453,7 @@ const CreateQuizz = () => {
               onChange={onChange}
               total={total}
               showSizeChanger={false}
+              pageSize={20}
             />
           </div>
         </div>
