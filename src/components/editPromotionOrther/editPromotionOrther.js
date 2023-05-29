@@ -1,17 +1,8 @@
-import { List, Select } from "antd";
+import { List, Select, Input, Checkbox, DatePicker } from "antd";
 import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Button,
-  Col,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  Row,
-} from "reactstrap";
+import { Button, Col, Form, FormGroup, Label, Modal, Row } from "reactstrap";
 import { fetchCustomers, searchCustomers } from "../../api/customer";
 import { DATA_PAYMENT } from "../../api/fakeData";
 import { postFile } from "../../api/file";
@@ -29,6 +20,10 @@ import { getService } from "../../redux/selectors/service";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import CustomTextEditor from "../customTextEdittor";
 import "./editPromotionOrther.scss";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
+const { TextArea } = Input;
 
 const EditPromotionOrther = (props) => {
   const {
@@ -90,7 +85,7 @@ const EditPromotionOrther = (props) => {
   const [name, setName] = useState("");
   const options = [];
   const optionsCustomer = [];
-
+  const dateFormat = "YYYY-MM-DD";
   const dispatch = useDispatch();
   const service = useSelector(getService);
 
@@ -98,10 +93,6 @@ const EditPromotionOrther = (props) => {
     getGroupCustomerApi(0, 10)
       .then((res) => setDataGroupCustomer(res.data))
       .catch((err) => console.log(err));
-
-    // fetchCustomers(0, 200, "")
-    //   .then((res) => setDataCustomer(res?.data))
-    //   .catch((err) => console.log(err));
   }, []);
 
   dataGroupCustomer.map((item, index) => {
@@ -436,56 +427,61 @@ const EditPromotionOrther = (props) => {
         </div>
         <div className="modal-body">
           <div className="form-input">
-            <Form>
-              <Row>
-                <Col md={4}>
-                  <h5>1. Tiêu đề</h5>
-                  <CustomTextInput
-                    label={"Tiếng Việt"}
-                    name="titleVN"
+            <Row>
+              <Col md={4}>
+                <div>
+                  <a className="title-add-promo">1. Tiêu đề</a>
+                  <Input
                     placeholder="Nhập tiêu đề tiếng việt"
                     value={titleVN}
                     onChange={(e) => setTitleVN(e.target.value)}
                   />
-                  <CustomTextInput
-                    label={"Tiếng Anh"}
-                    name="titleEN"
+                  <Input
                     placeholder="Nhập tiêu đề tiếng anh"
                     value={titleEN}
                     onChange={(e) => setTitleEN(e.target.value)}
+                    style={{ marginTop: 5 }}
                   />
-                  <h5>2. Mô tả ngắn</h5>
-                  <CustomTextInput
-                    label={"Tiếng Việt"}
+                </div>
+                <div className="mt-2">
+                  <a className="title-add-promo">2. Mô tả</a>
+                  <TextArea
                     placeholder="Nhập mô tả tiếng việt"
                     value={shortDescriptionVN}
-                    type="textarea"
                     onChange={(e) => setShortDescriptionVN(e.target.value)}
                   />
-                  <CustomTextInput
+                  <TextArea
                     label={"Tiếng Anh"}
                     placeholder="Nhập mô tả tiếng anh"
-                    type="textarea"
                     value={shortDescriptionEN}
                     onChange={(e) => setShortDescriptionEN(e.target.value)}
+                    style={{ marginTop: 5 }}
                   />
-                  <h5>3. Mô tả chi tiết</h5>
-                  <Label>Tiếng Việt</Label>
-                  <CustomTextEditor
-                    value={descriptionVN}
-                    onChangeValue={setDescriptionVN}
-                  />
-                  <Label>Tiếng Anh</Label>
-                  <CustomTextEditor
-                    value={descriptionEN}
-                    onChangeValue={setDescriptionEN}
-                  />
-                </Col>
-                <Col md={4}>
+                </div>
+                <div className="mt-2">
+                  <a className="title-add-promo">3. Mô tả chi tiết</a>
                   <div>
-                    <h5>4. Thumbnail/Background</h5>
-                    <CustomTextInput
-                      label={"Thumbnail 160px * 170px"}
+                    <a>Tiếng Việt</a>
+                    <CustomTextEditor
+                      value={descriptionVN}
+                      onChangeValue={setDescriptionVN}
+                    />
+                  </div>
+                  <div className="mt-2">
+                    <a>Tiếng Anh</a>
+                    <CustomTextEditor
+                      value={descriptionEN}
+                      onChangeValue={setDescriptionEN}
+                    />
+                  </div>
+                </div>
+              </Col>
+              <Col md={4}>
+                <div>
+                  <a className="title-add-promo">4. Thumbnail/Background</a>
+                  <div>
+                    <a>Thumbnail 160px * 170px</a>
+                    <Input
                       type="file"
                       accept={".jpg,.png,.jpeg"}
                       className="input-upload"
@@ -494,8 +490,10 @@ const EditPromotionOrther = (props) => {
                     {imgThumbnail && (
                       <img src={imgThumbnail} className="img-thumbnail" />
                     )}
-                    <CustomTextInput
-                      label={"Background 414px * 200px"}
+                  </div>
+                  <div>
+                    <a>Background 414px * 200px</a>
+                    <Input
                       type="file"
                       accept={".jpg,.png,.jpeg"}
                       className="input-upload"
@@ -505,40 +503,35 @@ const EditPromotionOrther = (props) => {
                       <img src={imgBackground} className="img-background" />
                     )}
                   </div>
+                </div>
+                <div className="mt-2">
+                  <a className="title-add-promo">5. Mã khuyến mãi</a>
+                  <Input
+                    placeholder="Nhập mã khuyến mãi"
+                    type="text"
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value)}
+                  />
+                </div>
+                <div className="mt-2">
+                  <a className="title-add-promo">6. Tên đối tác</a>
+                  <Input
+                    placeholder="Nhập tên đối tác"
+                    className="input-promo-brand"
+                    type="text"
+                    value={namebrand}
+                    onChange={(e) => setNamebrand(e.target.value)}
+                  />
+                </div>
+                <div className="mt-2">
+                  <a className="title-add-promo">7. Đối tượng áp dụng</a>
                   <div>
-                    <h5>5. Mã khuyến mãi</h5>
-                    <CustomTextInput
-                      placeholder="Nhập mã khuyến mãi"
-                      type="text"
-                      value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <h5>6. Tên đối tác</h5>
-                    <CustomTextInput
-                      label={"Tên đối tác"}
-                      placeholder="Nhập tên đối tác"
-                      className="input-promo-brand"
-                      type="text"
-                      value={namebrand}
-                      onChange={(e) => setNamebrand(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <h5>7. Đối tượng áp dụng</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Nhóm khách hàng
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isGroupCustomer}
-                        onClick={() => setIsGroupCustomer(!isGroupCustomer)}
-                      />
-                    </FormGroup>
-
+                    <Checkbox
+                      checked={isGroupCustomer}
+                      onChange={(e) => setIsGroupCustomer(e.target.checked)}
+                    >
+                      Nhóm khách hàng
+                    </Checkbox>
                     {isGroupCustomer && (
                       <Select
                         mode="multiple"
@@ -549,20 +542,16 @@ const EditPromotionOrther = (props) => {
                         placeholder="Please select"
                         onChange={handleChange}
                         options={options}
-                        value={groupCustomer}
                       />
                     )}
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Áp dụng cho khách hàng
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isCustomer}
-                        onClick={() => setIsCustomer(!isCustomer)}
-                      />
-                    </FormGroup>
+                  </div>
+                  <div>
+                    <Checkbox
+                      checked={isCustomer}
+                      onChange={(e) => setIsCustomer(e.target.checked)}
+                    >
+                      Áp dụng cho khách hàng
+                    </Checkbox>
                     {isCustomer && (
                       <div>
                         <Input
@@ -573,9 +562,9 @@ const EditPromotionOrther = (props) => {
                             searchCustomer(e.target.value);
                           }}
                         />
-                        {dataL.length > 0 && (
+                        {data.length > 0 && (
                           <List type={"unstyled"} className="list-item-kh">
-                            {dataL?.map((item, index) => {
+                            {data?.map((item, index) => {
                               return (
                                 <div
                                   className="div-item"
@@ -614,23 +603,20 @@ const EditPromotionOrther = (props) => {
                       </div>
                     )}
                   </div>
-                </Col>
-                <Col md={4}>
+                </div>
+              </Col>
+              <Col md={4}>
+                <div>
+                  <a className="title-add-promo">8. Số lượng mã khuyến mãi</a>
                   <div>
-                    <h5 className="mt-2">8. Số lượng mã khuyến mãi</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Số lượng giới hạn
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={limitedQuantity}
-                        onClick={() => setLimitedQuantity(!limitedQuantity)}
-                      />
-                    </FormGroup>
+                    <Checkbox
+                      checked={limitedQuantity}
+                      onChange={(e) => setLimitedQuantity(e.target.checked)}
+                    >
+                      Số lượng giới hạn
+                    </Checkbox>
                     {limitedQuantity && (
-                      <CustomTextInput
+                      <Input
                         placeholder="Số lượng"
                         className="input-promo-code"
                         type="number"
@@ -640,21 +626,20 @@ const EditPromotionOrther = (props) => {
                       />
                     )}
                   </div>
+                </div>
+                <div className="mt-2">
+                  <a className="title-add-promo">
+                    9. Số lần sử dụng khuyến mãi
+                  </a>
                   <div>
-                    <h5 className="mt-2">9. Số lần sử dụng khuyến mãi</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Lần sử dụng khuyến mãi
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isUsePromo}
-                        onClick={() => setIsUsePromo(!isUsePromo)}
-                      />
-                    </FormGroup>
+                    <Checkbox
+                      checked={isUsePromo}
+                      onChange={(e) => setIsUsePromo(e.target.checked)}
+                    >
+                      Lần sử dụng khuyến mãi
+                    </Checkbox>
                     {isUsePromo && (
-                      <CustomTextInput
+                      <Input
                         placeholder="Số lượng"
                         className="input-promo-code"
                         min={0}
@@ -664,62 +649,63 @@ const EditPromotionOrther = (props) => {
                       />
                     )}
                   </div>
+                </div>
+                <div className="mt-2">
+                  <a className="title-add-promo">10. Thời gian khuyến mãi</a>
                   <div>
-                    <h5 className="mt-2">10. Thời gian khuyến mãi</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Giới hạn ngày
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={limitedDate}
-                        onClick={() => setLimitedDate(!limitedDate)}
-                      />
-                    </FormGroup>
+                    <Checkbox
+                      checked={limitedDate}
+                      onChange={(e) => setLimitedDate(e.target.checked)}
+                    >
+                      Giới hạn ngày
+                    </Checkbox>
                     {limitedDate && (
                       <>
-                        <FormGroup>
-                          <Label>Ngày bắt đầu</Label>
-                          <input
-                            className="input-promo-code"
-                            type={"date"}
-                            defaultValue={startDate}
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
+                        <div>
+                          <a>Ngày bắt đầu</a>
+                          <DatePicker
+                            onChange={(date, dateString) =>
+                              setStartDate(dateString)
+                            }
+                            style={{ marginLeft: 5, width: "100%" }}
+                            format={dateFormat}
+                            value={dayjs(startDate.slice(0, 11), dateFormat)}
                           />
-                        </FormGroup>
-                        <FormGroup>
-                          <Label>Ngày kết thúc</Label>
-                          <input
-                            className="input-promo-code"
-                            type={"date"}
-                            defaultValue={startDate}
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
+                        </div>
+                        <div>
+                          <a>Ngày kết thúc</a>
+                          <DatePicker
+                            onChange={(date, dateString) =>
+                              setEndDate(dateString)
+                            }
+                            style={{ marginLeft: 5, width: "100%" }}
+                            format={dateFormat}
+                            value={dayjs(endDate.slice(0, 11), dateFormat)}
                           />
-                        </FormGroup>
+                          {/* <input
+                              className="input-promo-code"
+                              type={"date"}
+                              defaultValue={startDate}
+                              value={endDate}
+                              onChange={(e) => setEndDate(e.target.value)}
+                            /> */}
+                        </div>
                       </>
                     )}
                   </div>
+                </div>
+                <div className="mt-2">
+                  <a className="title-add-promo">11. Điểm quy đổi</a>
                   <div>
-                    <h5 className="mt-2">11. Điểm quy đổi</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Điểm quy đổi
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isExchangePoint}
-                        onClick={() => setIsExchangePoint(!isExchangePoint)}
-                      />
-                    </FormGroup>
+                    <Checkbox
+                      checked={isExchangePoint}
+                      onChange={(e) => setIsExchangePoint(e.target.checked)}
+                    >
+                      Điểm quy đổi
+                    </Checkbox>
                     {isExchangePoint && (
-                      <CustomTextInput
-                        label={"Điểm"}
+                      <Input
                         placeholder="Nhập số điểm"
-                        className="input-promo-code"
                         type="number"
                         min={0}
                         value={exchangePoint}
@@ -727,20 +713,16 @@ const EditPromotionOrther = (props) => {
                       />
                     )}
                   </div>
+                </div>
+                <div className="mt-2">
+                  <a className="title-add-promo">12. Phương thức thanh toán</a>
                   <div>
-                    <h5 className="mt-2">12. Phương thức thanh toán</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Thanh toán
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isPaymentMethod}
-                        onClick={() => setIsPaymentMethod(!isPaymentMethod)}
-                      />
-                    </FormGroup>
-
+                    <Checkbox
+                      checked={isPaymentMethod}
+                      onChange={(e) => setIsPaymentMethod(e.target.checked)}
+                    >
+                      Thanh toán
+                    </Checkbox>
                     {isPaymentMethod && (
                       <Select
                         mode="multiple"
@@ -751,42 +733,42 @@ const EditPromotionOrther = (props) => {
                         placeholder="Please select"
                         onChange={handleChangePaymentMethod}
                         options={DATA_PAYMENT}
-                        value={paymentMethod}
                       />
                     )}
                   </div>
-                  <div>
-                    <h5 className="mt-2">13. Thời gian sử dụng sau khi đổi</h5>
-                    <CustomTextInput
-                      placeholder="Nhập số ngày (1,2,3...,n"
-                      className="input-promo-code"
-                      type="number"
-                      min={0}
-                      value={dateExchange}
-                      onChange={(e) => setDateExchange(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <h5 className="mt-2">14. Thứ tự hiện thị</h5>
-                    <CustomTextInput
-                      placeholder="Nhập số thứ tự (1,2,3...,n"
-                      className="input-promo-code"
-                      type="number"
-                      min={0}
-                      value={position}
-                      onChange={(e) => setPosition(e.target.value)}
-                    />
-                  </div>
-                  <Button
-                    className="btn_add"
-                    color="warning"
-                    onClick={onEditPromotion}
-                  >
-                    Sửa khuyến mãi
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
+                </div>
+                <div className="mt-2">
+                  <a className="title-add-promo">
+                    13. Thời gian sử dụng sau khi đổi
+                  </a>
+                  <Input
+                    placeholder="Nhập số ngày (1,2,3...,n"
+                    className="input-promo-code"
+                    type="number"
+                    min={0}
+                    value={dateExchange}
+                    onChange={(e) => setDateExchange(e.target.value)}
+                  />
+                </div>
+                <div className="mt-2">
+                  <a className="title-add-promo">14. Thứ tự hiện thị</a>
+                  <Input
+                    placeholder="Nhập số thứ tự (1,2,3...,n"
+                    className="input-promo-code"
+                    type="number"
+                    min={0}
+                    value={position}
+                    onChange={(e) => setPosition(e.target.value)}
+                  />
+                </div>
+                <Button
+                  className="btn-edit-promotion-orther"
+                  onClick={onEditPromotion}
+                >
+                  Sửa khuyến mãi
+                </Button>
+              </Col>
+            </Row>
           </div>
         </div>
       </Modal>

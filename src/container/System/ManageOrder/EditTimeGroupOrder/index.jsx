@@ -7,7 +7,11 @@ import dayjs from "dayjs";
 import _debounce from "lodash/debounce";
 import { DATA_TIME_TOTAL } from "../../../../api/fakeData";
 import moment from "moment";
-import { editTimeOrderApi, getOrderApi } from "../../../../api/order";
+import {
+  editTimeOrderApi,
+  getOrderApi,
+  getOrderByGroupOrderApi,
+} from "../../../../api/order";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
 const EditTimeOrder = (props) => {
@@ -21,6 +25,9 @@ const EditTimeOrder = (props) => {
     setData,
     setTotal,
     setIsLoading,
+    idDetail,
+    setDataGroup,
+    setDataList,
   } = props;
   const [open, setOpen] = useState(false);
 
@@ -59,6 +66,16 @@ const EditTimeOrder = (props) => {
             setTotal(res?.totalItem);
           })
           .catch((err) => {});
+        getOrderByGroupOrderApi(idDetail)
+          .then((res) => {
+            setDataGroup(res?.data?.groupOrder);
+            setDataList(res?.data?.listOrder);
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+          });
       })
       .catch((err) => {
         errorNotify({

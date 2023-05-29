@@ -1,7 +1,7 @@
-import { Checkbox, Image } from "antd";
+import { Checkbox, Image, Input } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
+import { Button, Col, Form, FormGroup, Label, Row } from "reactstrap";
 import {
   getCollaboratorsById,
   updateDocumentCollaboratorApi,
@@ -368,12 +368,14 @@ const Document = ({ id }) => {
             </Col>
 
             <Col lg="9">
-              <CustomTextInput
-                label="Mã hồ sơ"
-                placeholder={"Nhập mã hồ sơ"}
-                value={valueDeal}
-                onChange={(e) => setSetValueDeal(e.target.value)}
-              />
+              <div>
+                <a>Mã hồ sơ</a>
+                <Input
+                  placeholder={"Nhập mã hồ sơ"}
+                  value={valueDeal}
+                  onChange={(e) => setSetValueDeal(e.target.value)}
+                />
+              </div>
             </Col>
           </Row>
           <hr />

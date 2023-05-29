@@ -767,6 +767,7 @@ const PromotionManage = ({
               brand={brand}
               exchange={exchange}
               idService={idService}
+              tab={tab}
             />
           ) : type === "code" && brand === "orther" ? (
             <EditPromotionOrther
@@ -780,6 +781,7 @@ const PromotionManage = ({
               brand={brand}
               exchange={exchange}
               idService={idService}
+              tab={tab}
             />
           ) : (
             <EditPromotionEvent
@@ -793,6 +795,7 @@ const PromotionManage = ({
               brand={brand}
               exchange={exchange}
               idService={idService}
+              tab={tab}
             />
           )}
         </div>

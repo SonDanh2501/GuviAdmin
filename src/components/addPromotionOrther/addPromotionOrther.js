@@ -1,17 +1,8 @@
-import { List, Select } from "antd";
+import { List, Select, Input, Checkbox, DatePicker } from "antd";
 import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Button,
-  Col,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  Row,
-} from "reactstrap";
+import { Button, Col, Form, FormGroup, Label, Modal, Row } from "reactstrap";
 import { fetchCustomers, searchCustomers } from "../../api/customer";
 import { DATA_PAYMENT } from "../../api/fakeData";
 import { postFile } from "../../api/file";
@@ -29,6 +20,7 @@ import CustomTextInput from "../CustomTextInput/customTextInput";
 import CustomButton from "../customButton/customButton";
 import CustomTextEditor from "../customTextEdittor";
 import "./addPromotionOrther.scss";
+const { TextArea } = Input;
 
 const AddPromotionOther = (props) => {
   const {
@@ -371,9 +363,7 @@ const AddPromotionOther = (props) => {
         toggle={() => setState(!state)}
       >
         <div className="modal-header">
-          <h3 className="modal-title" id="exampleModalLabel">
-            Thêm khuyến mãi từ đối tác
-          </h3>
+          <a className="modal-title">Thêm khuyến mãi từ đối tác</a>
           <button className="btn-close" onClick={() => setState(!state)}>
             <i className="uil uil-times-square"></i>
           </button>
@@ -383,85 +373,93 @@ const AddPromotionOther = (props) => {
             <Form>
               <Row>
                 <Col md={4}>
-                  <h5>1. Tiêu đề</h5>
-                  <CustomTextInput
-                    label={"Tiếng Việt"}
-                    name="titleVN"
-                    placeholder="Nhập tiêu đề tiếng việt"
-                    value={titleVN}
-                    onChange={(e) => setTitleVN(e.target.value)}
-                  />
-                  <CustomTextInput
-                    label={"Tiếng Anh"}
-                    name="titleEN"
-                    placeholder="Nhập tiêu đề tiếng anh"
-                    value={titleEN}
-                    onChange={(e) => setTitleEN(e.target.value)}
-                  />
-                  <h5>2. Mô tả ngắn</h5>
-                  <CustomTextInput
-                    label={"Tiếng Việt"}
-                    placeholder="Nhập mô tả tiếng việt"
-                    value={shortDescriptionVN}
-                    type="textarea"
-                    onChange={(e) => setShortDescriptionVN(e.target.value)}
-                  />
-                  <CustomTextInput
-                    label={"Tiếng Anh"}
-                    placeholder="Nhập mô tả tiếng anh"
-                    type="textarea"
-                    value={shortDescriptionEN}
-                    onChange={(e) => setShortDescriptionEN(e.target.value)}
-                  />
-                  <h5>3. Mô tả chi tiết</h5>
-                  <Label>Tiếng Việt</Label>
-                  <CustomTextEditor
-                    value={descriptionVN}
-                    onChangeValue={setDescriptionVN}
-                  />
-                  <Label>Tiếng Anh</Label>
-                  <CustomTextEditor
-                    value={descriptionEN}
-                    onChangeValue={setDescriptionEN}
-                  />
+                  <div>
+                    <a className="title-add-promo">1. Tiêu đề</a>
+                    <Input
+                      placeholder="Nhập tiêu đề tiếng việt"
+                      value={titleVN}
+                      onChange={(e) => setTitleVN(e.target.value)}
+                    />
+                    <Input
+                      placeholder="Nhập tiêu đề tiếng anh"
+                      value={titleEN}
+                      onChange={(e) => setTitleEN(e.target.value)}
+                      style={{ marginTop: 5 }}
+                    />
+                  </div>
+                  <div className="mt-2">
+                    <a className="title-add-promo">2. Mô tả</a>
+                    <TextArea
+                      placeholder="Nhập mô tả tiếng việt"
+                      value={shortDescriptionVN}
+                      onChange={(e) => setShortDescriptionVN(e.target.value)}
+                    />
+                    <TextArea
+                      label={"Tiếng Anh"}
+                      placeholder="Nhập mô tả tiếng anh"
+                      value={shortDescriptionEN}
+                      onChange={(e) => setShortDescriptionEN(e.target.value)}
+                      style={{ marginTop: 5 }}
+                    />
+                  </div>
+                  <div className="mt-2">
+                    <a className="title-add-promo">3. Mô tả chi tiết</a>
+                    <div>
+                      <a>Tiếng Việt</a>
+                      <CustomTextEditor
+                        value={descriptionVN}
+                        onChangeValue={setDescriptionVN}
+                      />
+                    </div>
+                    <div className="mt-2">
+                      <a>Tiếng Anh</a>
+                      <CustomTextEditor
+                        value={descriptionEN}
+                        onChangeValue={setDescriptionEN}
+                      />
+                    </div>
+                  </div>
                 </Col>
                 <Col md={4}>
                   <div>
-                    <h5>4. Thumbnail/Background</h5>
-                    <CustomTextInput
-                      label={"Thumbnail 160px * 170px"}
-                      type="file"
-                      accept={".jpg,.png,.jpeg"}
-                      className="input-upload"
-                      onChange={onChangeThumbnail}
-                    />
-                    {imgThumbnail && (
-                      <img src={imgThumbnail} className="img-thumbnail" />
-                    )}
-                    <CustomTextInput
-                      label={"Background 414px * 200px"}
-                      type="file"
-                      accept={".jpg,.png,.jpeg"}
-                      className="input-upload"
-                      onChange={onChangeBackground}
-                    />
-                    {imgBackground && (
-                      <img src={imgBackground} className="img-background" />
-                    )}
+                    <a className="title-add-promo">4. Thumbnail/Background</a>
+                    <div>
+                      <a>Thumbnail 160px * 170px</a>
+                      <Input
+                        type="file"
+                        accept={".jpg,.png,.jpeg"}
+                        className="input-upload"
+                        onChange={onChangeThumbnail}
+                      />
+                      {imgThumbnail && (
+                        <img src={imgThumbnail} className="img-thumbnail" />
+                      )}
+                    </div>
+                    <div>
+                      <a>Background 414px * 200px</a>
+                      <Input
+                        type="file"
+                        accept={".jpg,.png,.jpeg"}
+                        className="input-upload"
+                        onChange={onChangeBackground}
+                      />
+                      {imgBackground && (
+                        <img src={imgBackground} className="img-background" />
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <h5>5. Mã khuyến mãi</h5>
-                    <CustomTextInput
+                  <div className="mt-2">
+                    <a className="title-add-promo">5. Mã khuyến mãi</a>
+                    <Input
                       placeholder="Nhập mã khuyến mãi"
                       type="text"
                       value={promoCode}
                       onChange={(e) => setPromoCode(e.target.value)}
                     />
                   </div>
-                  <div>
-                    <h5>6. Tên đối tác</h5>
-                    <CustomTextInput
-                      label={"Tên đối tác"}
+                  <div className="mt-2">
+                    <a className="title-add-promo">6. Tên đối tác</a>
+                    <Input
                       placeholder="Nhập tên đối tác"
                       className="input-promo-brand"
                       type="text"
@@ -469,237 +467,223 @@ const AddPromotionOther = (props) => {
                       onChange={(e) => setNamebrand(e.target.value)}
                     />
                   </div>
-                  <div>
-                    <h5>7. Đối tượng áp dụng</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
+                  <div className="mt-2">
+                    <a className="title-add-promo">7. Đối tượng áp dụng</a>
+                    <div>
+                      <Checkbox
+                        checked={isGroupCustomer}
+                        onChange={(e) => setIsGroupCustomer(e.target.checked)}
+                      >
                         Nhóm khách hàng
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isGroupCustomer}
-                        onClick={() => setIsGroupCustomer(!isGroupCustomer)}
-                      />
-                    </FormGroup>
-
-                    {isGroupCustomer && (
-                      <Select
-                        mode="multiple"
-                        allowClear
-                        style={{
-                          width: "100%",
-                        }}
-                        placeholder="Please select"
-                        onChange={handleChange}
-                        options={options}
-                      />
-                    )}
-                    <FormGroup check inline>
-                      <Label check className="text-first">
-                        Áp dụng cho khách hàng
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isCustomer}
-                        onClick={() => setIsCustomer(!isCustomer)}
-                      />
-                    </FormGroup>
-                    {isCustomer && (
-                      <div>
-                        <Input
-                          placeholder="Tìm kiếm theo tên và số điện thoại"
-                          value={name}
-                          onChange={(e) => {
-                            changeValue(e.target.value);
-                            searchCustomer(e.target.value);
+                      </Checkbox>
+                      {isGroupCustomer && (
+                        <Select
+                          mode="multiple"
+                          allowClear
+                          style={{
+                            width: "100%",
                           }}
+                          placeholder="Please select"
+                          onChange={handleChange}
+                          options={options}
                         />
-                        {data.length > 0 && (
-                          <List type={"unstyled"} className="list-item-kh">
-                            {data?.map((item, index) => {
-                              return (
-                                <div
-                                  className="div-item"
-                                  key={index}
-                                  onClick={() => onChooseCustomer(item)}
-                                >
-                                  <a className="text-name">
-                                    {item?.full_name} - {item?.phone} -{" "}
-                                    {item?.id_view}
-                                  </a>
-                                </div>
-                              );
-                            })}
-                          </List>
-                        )}
-                        {listNameCustomers.length > 0 && (
-                          <div className="div-list-customer">
-                            <List type={"unstyled"}>
-                              {listNameCustomers.map((item) => {
+                      )}
+                    </div>
+                    <div>
+                      <Checkbox
+                        checked={isCustomer}
+                        onChange={(e) => setIsCustomer(e.target.checked)}
+                      >
+                        Áp dụng cho khách hàng
+                      </Checkbox>
+                      {isCustomer && (
+                        <div>
+                          <Input
+                            placeholder="Tìm kiếm theo tên và số điện thoại"
+                            value={name}
+                            onChange={(e) => {
+                              changeValue(e.target.value);
+                              searchCustomer(e.target.value);
+                            }}
+                          />
+                          {data.length > 0 && (
+                            <List type={"unstyled"} className="list-item-kh">
+                              {data?.map((item, index) => {
                                 return (
-                                  <div className="div-item-customer">
-                                    <a className="text-name-list">
-                                      - {item?.full_name} . {item?.phone} .{" "}
+                                  <div
+                                    className="div-item"
+                                    key={index}
+                                    onClick={() => onChooseCustomer(item)}
+                                  >
+                                    <a className="text-name">
+                                      {item?.full_name} - {item?.phone} -{" "}
                                       {item?.id_view}
                                     </a>
-                                    <i
-                                      class="uil uil-times-circle"
-                                      onClick={() => removeItemCustomer(item)}
-                                    ></i>
                                   </div>
                                 );
                               })}
                             </List>
-                          </div>
-                        )}
-                      </div>
-                    )}
+                          )}
+                          {listNameCustomers.length > 0 && (
+                            <div className="div-list-customer">
+                              <List type={"unstyled"}>
+                                {listNameCustomers.map((item) => {
+                                  return (
+                                    <div className="div-item-customer">
+                                      <a className="text-name-list">
+                                        - {item?.full_name} . {item?.phone} .{" "}
+                                        {item?.id_view}
+                                      </a>
+                                      <i
+                                        class="uil uil-times-circle"
+                                        onClick={() => removeItemCustomer(item)}
+                                      ></i>
+                                    </div>
+                                  );
+                                })}
+                              </List>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </Col>
                 <Col md={4}>
                   <div>
-                    <h5 className="mt-2">8. Số lượng mã khuyến mãi</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
+                    <a className="title-add-promo">8. Số lượng mã khuyến mãi</a>
+                    <div>
+                      <Checkbox
+                        checked={limitedQuantity}
+                        onChange={(e) => setLimitedQuantity(e.target.checked)}
+                      >
                         Số lượng giới hạn
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={limitedQuantity}
-                        onClick={() => setLimitedQuantity(!limitedQuantity)}
-                      />
-                    </FormGroup>
-                    {limitedQuantity && (
-                      <CustomTextInput
-                        placeholder="Số lượng"
-                        className="input-promo-code"
-                        type="number"
-                        min={0}
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                      />
-                    )}
+                      </Checkbox>
+                      {limitedQuantity && (
+                        <Input
+                          placeholder="Số lượng"
+                          className="input-promo-code"
+                          type="number"
+                          min={0}
+                          value={amount}
+                          onChange={(e) => setAmount(e.target.value)}
+                        />
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <h5 className="mt-2">9. Số lần sử dụng khuyến mãi</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
+                  <div className="mt-2">
+                    <a className="title-add-promo">
+                      9. Số lần sử dụng khuyến mãi
+                    </a>
+                    <div>
+                      <Checkbox
+                        checked={isUsePromo}
+                        onChange={(e) => setIsUsePromo(e.target.checked)}
+                      >
                         Lần sử dụng khuyến mãi
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isUsePromo}
-                        onClick={() => setIsUsePromo(!isUsePromo)}
-                      />
-                    </FormGroup>
-                    {isUsePromo && (
-                      <CustomTextInput
-                        placeholder="Số lượng"
-                        className="input-promo-code"
-                        min={0}
-                        type="number"
-                        value={usePromo}
-                        onChange={(e) => setUsePromo(e.target.value)}
-                      />
-                    )}
+                      </Checkbox>
+                      {isUsePromo && (
+                        <Input
+                          placeholder="Số lượng"
+                          className="input-promo-code"
+                          min={0}
+                          type="number"
+                          value={usePromo}
+                          onChange={(e) => setUsePromo(e.target.value)}
+                        />
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <h5 className="mt-2">10. Thời gian khuyến mãi</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
+                  <div className="mt-2">
+                    <a className="title-add-promo">10. Thời gian khuyến mãi</a>
+                    <div>
+                      <Checkbox
+                        checked={limitedDate}
+                        onChange={(e) => setLimitedDate(e.target.checked)}
+                      >
                         Giới hạn ngày
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={limitedDate}
-                        onClick={() => setLimitedDate(!limitedDate)}
-                      />
-                    </FormGroup>
-                    {limitedDate && (
-                      <>
-                        <FormGroup>
-                          <Label>Ngày bắt đầu</Label>
-                          <input
-                            className="input-promo-code"
-                            type={"date"}
-                            defaultValue={startDate}
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                          />
-                        </FormGroup>
-                        <FormGroup>
-                          <Label>Ngày kết thúc</Label>
-                          <input
-                            className="input-promo-code"
-                            type={"date"}
-                            defaultValue={startDate}
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                          />
-                        </FormGroup>
-                      </>
-                    )}
+                      </Checkbox>
+                      {limitedDate && (
+                        <>
+                          <div>
+                            <a>Ngày bắt đầu</a>
+                            <DatePicker
+                              onChange={(date, dateString) =>
+                                setStartDate(dateString)
+                              }
+                              style={{ marginLeft: 5, width: "100%" }}
+                            />
+                          </div>
+                          <div>
+                            <a>Ngày kết thúc</a>
+                            <DatePicker
+                              onChange={(date, dateString) =>
+                                setEndDate(dateString)
+                              }
+                              style={{ marginLeft: 5, width: "100%" }}
+                            />
+                            {/* <input
+                              className="input-promo-code"
+                              type={"date"}
+                              defaultValue={startDate}
+                              value={endDate}
+                              onChange={(e) => setEndDate(e.target.value)}
+                            /> */}
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <h5 className="mt-2">11. Điểm quy đổi</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
+                  <div className="mt-2">
+                    <a className="title-add-promo">11. Điểm quy đổi</a>
+                    <div>
+                      <Checkbox
+                        checked={isExchangePoint}
+                        onChange={(e) => setIsExchangePoint(e.target.checked)}
+                      >
                         Điểm quy đổi
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isExchangePoint}
-                        onClick={() => setIsExchangePoint(!isExchangePoint)}
-                      />
-                    </FormGroup>
-                    {isExchangePoint && (
-                      <CustomTextInput
-                        label={"Điểm"}
-                        placeholder="Nhập số điểm"
-                        className="input-promo-code"
-                        type="number"
-                        min={0}
-                        value={exchangePoint}
-                        onChange={(e) => setExchangePoint(e.target.value)}
-                      />
-                    )}
+                      </Checkbox>
+                      {isExchangePoint && (
+                        <Input
+                          placeholder="Nhập số điểm"
+                          type="number"
+                          min={0}
+                          value={exchangePoint}
+                          onChange={(e) => setExchangePoint(e.target.value)}
+                        />
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <h5 className="mt-2">12. Phương thức thanh toán</h5>
-                    <FormGroup check inline>
-                      <Label check className="text-first">
+                  <div className="mt-2">
+                    <a className="title-add-promo">
+                      12. Phương thức thanh toán
+                    </a>
+                    <div>
+                      <Checkbox
+                        checked={isPaymentMethod}
+                        onChange={(e) => setIsPaymentMethod(e.target.checked)}
+                      >
                         Thanh toán
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        className="ml-2"
-                        defaultChecked={isPaymentMethod}
-                        onClick={() => setIsPaymentMethod(!isPaymentMethod)}
-                      />
-                    </FormGroup>
-
-                    {isPaymentMethod && (
-                      <Select
-                        mode="multiple"
-                        allowClear
-                        style={{
-                          width: "100%",
-                        }}
-                        placeholder="Please select"
-                        onChange={handleChangePaymentMethod}
-                        options={DATA_PAYMENT}
-                      />
-                    )}
+                      </Checkbox>
+                      {isPaymentMethod && (
+                        <Select
+                          mode="multiple"
+                          allowClear
+                          style={{
+                            width: "100%",
+                          }}
+                          placeholder="Please select"
+                          onChange={handleChangePaymentMethod}
+                          options={DATA_PAYMENT}
+                        />
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <h5 className="mt-2">13. Thời gian sử dụng sau khi đổi</h5>
-                    <CustomTextInput
+                  <div className="mt-2">
+                    <a className="title-add-promo">
+                      13. Thời gian sử dụng sau khi đổi
+                    </a>
+                    <Input
                       placeholder="Nhập số ngày (1,2,3...,n"
                       className="input-promo-code"
                       type="number"
@@ -708,9 +692,9 @@ const AddPromotionOther = (props) => {
                       onChange={(e) => setDateExchange(e.target.value)}
                     />
                   </div>
-                  <div>
-                    <h5 className="mt-2">14. Thứ tự hiện thị</h5>
-                    <CustomTextInput
+                  <div className="mt-2">
+                    <a className="title-add-promo">14. Thứ tự hiện thị</a>
+                    <Input
                       placeholder="Nhập số thứ tự (1,2,3...,n"
                       className="input-promo-code"
                       type="number"
@@ -720,7 +704,7 @@ const AddPromotionOther = (props) => {
                     />
                   </div>
                   <Button
-                    className="btn_add"
+                    className="btn_add_promotion_order"
                     color="warning"
                     onClick={onCreatePromotion}
                   >

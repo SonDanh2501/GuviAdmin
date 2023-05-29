@@ -69,16 +69,11 @@ const CreateRole = (props) => {
 
       for (var i = 0; i < data?.length; i++) {
         for (var j = 0; j < data[i]?.permission?.length; j++) {
-          const newArr = [...keyApi];
-
           if (item?.key_api_parent?.includes(data[i]?.permission[j]?._id)) {
-            keyApi.push(data[i]?.permission[j]?._id);
-            setKeyApi(newArr);
-            setKeyCheckApi([...keyCheckApi, data[i]?.permission[j]?._id]);
+            setKeyApi([...keyApi, data[i]?.permission[j]?._id]);
           }
         }
       }
-
       setKeyApi([...keyApi, item?._id]);
     } else {
       for (var i = 0; i < role?.permission?.length; i++) {
@@ -90,8 +85,6 @@ const CreateRole = (props) => {
       setKeyApi(arr);
     }
   };
-
-  console.log(keyApi);
 
   const onCreate = useCallback(() => {
     setIsLoading(true);
@@ -150,7 +143,6 @@ const CreateRole = (props) => {
                     <div className="div-item-per" key={i}>
                       <Checkbox
                         checked={keyApi.includes(per?._id) ? true : false}
-                        disabled={keyCheckApi.includes(per?._id) ? true : false}
                         onChange={(e) =>
                           onChangeRole(e.target.checked, per, item)
                         }

@@ -1,8 +1,8 @@
-import { DatePicker, List, Select } from "antd";
+import { DatePicker, Input, List, Select } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Form, Input, Label, Row } from "reactstrap";
+import { Button, Col, Form, Row } from "reactstrap";
 import {
   getCollaboratorsById,
   searchCollaborators,
@@ -39,6 +39,7 @@ const Information = ({ data, image, idCTV, setData }) => {
   const dispatch = useDispatch();
   const service = useSelector(getService);
   const serviceOption = [];
+  const dateFormat = "YYYY-MM-DD";
 
   useEffect(() => {
     setName(data?.full_name);
@@ -168,13 +169,15 @@ const Information = ({ data, image, idCTV, setData }) => {
           <h5>Thông tin</h5>
           <Row>
             <Col lg="6">
-              <CustomTextInput
-                label={"Họ và tên"}
-                placeholder="Nhập họ tên"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
+              <div>
+                <a>Họ và tên</a>
+                <Input
+                  placeholder="Nhập họ tên"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
             </Col>
             <Col lg="6" className="gender">
               <div>
@@ -194,53 +197,58 @@ const Information = ({ data, image, idCTV, setData }) => {
           </Row>
           <Row>
             <Col lg="6">
-              <CustomTextInput
-                label={"Ngày sinh"}
-                placeholder="Chọn ngày sinh"
-                type="date"
-                value={moment(birthday).format("YYYY-MM-DD")}
-                onChange={(e) => setBirthday(e.target.value)}
-              />
+              <div>
+                <a>Ngày sinh</a>
+                <DatePicker
+                  onChange={(date, dateString) => setBirthday(dateString)}
+                  style={{ width: "100%" }}
+                  format={dateFormat}
+                  value={dayjs(birthday.slice(0, 11), dateFormat)}
+                />
+              </div>
             </Col>
             <Col lg="6">
-              <CustomTextInput
-                label={"SĐT liên hệ"}
-                type="number"
-                value={phone}
-                disabled={true}
-                // onChange={(e) => setBirthday(e.target.value)}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col lg="6">
-              <CustomTextInput
-                label={"Địa chỉ thường trú"}
-                placeholder="Nhập địa chỉ thường trú"
-                type="text"
-                value={resident}
-                onChange={(e) => setResident(e.target.value)}
-              />
-            </Col>
-            <Col lg="6">
-              <CustomTextInput
-                label={"Đối tượng CTV"}
-                placeholder="Nhập đối tượng"
-                type="text"
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-              />
+              <div>
+                <a>SĐT liên hệ</a>
+                <Input type="number" value={phone} disabled={true} />
+              </div>
             </Col>
           </Row>
           <Row>
             <Col lg="6">
-              <CustomTextInput
-                label={"Địa chỉ tạm trú"}
-                placeholder="Nhập địa chỉ tạm trú"
-                type="text"
-                value={staying}
-                onChange={(e) => setStaying(e.target.value)}
-              />
+              <div>
+                <a>Địa chỉ thường trú</a>
+                <Input
+                  placeholder="Nhập địa chỉ thường trú"
+                  type="text"
+                  value={resident}
+                  onChange={(e) => setResident(e.target.value)}
+                />
+              </div>
+            </Col>
+            <Col lg="6">
+              <div>
+                <a>Đối tượng CTV</a>
+                <Input
+                  placeholder="Nhập đối tượng"
+                  type="text"
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                />
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col lg="6">
+              <div>
+                <a>Địa chỉ tạm trú</a>
+                <Input
+                  placeholder="Nhập địa chỉ tạm trú"
+                  type="text"
+                  value={staying}
+                  onChange={(e) => setStaying(e.target.value)}
+                />
+              </div>
             </Col>
             <Col lg="6">
               <div>
@@ -258,22 +266,26 @@ const Information = ({ data, image, idCTV, setData }) => {
           </Row>
           <Row>
             <Col lg="6">
-              <CustomTextInput
-                label={"Dân tộc"}
-                placeholder="Nhập dân tộc"
-                type="text"
-                value={ethnic}
-                onChange={(e) => setEthnic(e.target.value)}
-              />
+              <div>
+                <a>Dân tộc</a>
+                <Input
+                  placeholder="Nhập dân tộc"
+                  type="text"
+                  value={ethnic}
+                  onChange={(e) => setEthnic(e.target.value)}
+                />
+              </div>
             </Col>
             <Col lg="6">
-              <CustomTextInput
-                label={"Tôn giáo"}
-                placeholder="Nhập tôn giáo"
-                type="text"
-                value={religion}
-                onChange={(e) => setReligion(e.target.value)}
-              />
+              <div>
+                <a>Tôn giáo</a>
+                <Input
+                  placeholder="Nhập tôn giáo"
+                  type="text"
+                  value={religion}
+                  onChange={(e) => setReligion(e.target.value)}
+                />
+              </div>
             </Col>
           </Row>
           <Row>
@@ -297,46 +309,57 @@ const Information = ({ data, image, idCTV, setData }) => {
               </div>
             </Col>
             <Col lg="6">
-              <CustomTextInput
-                label={"Mã giới thiệu"}
-                type="text"
-                value={codeInvite}
-                disabled={true}
-              />
+              <div>
+                <a>Mã giới thiệu</a>
+                <Input
+                  label={"Mã giới thiệu"}
+                  type="text"
+                  value={codeInvite}
+                  disabled={true}
+                />
+              </div>
             </Col>
           </Row>
           <hr />
           <h5>CMND/CCCD</h5>
           <Row>
             <Col lg="6">
-              <CustomTextInput
-                label={"Số CCCD/CMND"}
-                placeholder="Nhập thông tin"
-                type="number"
-                value={number}
-                min={0}
-                onChange={(e) => onChangeNumberIndentity(e)}
-              />
+              <div>
+                <a>Số CCCD/CMND</a>
+                <Input
+                  placeholder="Nhập thông tin"
+                  type="number"
+                  value={number}
+                  min={0}
+                  onChange={(e) => onChangeNumberIndentity(e)}
+                />
+              </div>
             </Col>
           </Row>
           <Row>
             <Col lg="6">
-              <CustomTextInput
-                label={"Nơi cấp"}
-                placeholder="Nhập thông tin"
-                type="text"
-                value={issued}
-                onChange={(e) => setIssued(e.target.value)}
-              />
+              <div>
+                <a>Nơi cấp</a>
+                <Input
+                  placeholder="Nhập thông tin"
+                  type="text"
+                  value={issued}
+                  onChange={(e) => setIssued(e.target.value)}
+                />
+              </div>
             </Col>
             <Col lg="6">
-              <CustomTextInput
-                label={"Ngày cấp"}
-                placeholder="Nhập thông tin"
-                type="date"
-                value={moment(issuedDay).format("YYYY-MM-DD")}
-                onChange={(e) => setIssuedDay(e.target.value)}
-              />
+              <div>
+                <a>Ngày cấp</a>
+                <DatePicker
+                  onChange={(date, dateString) => setIssuedDay(dateString)}
+                  style={{ width: "100%" }}
+                  format={dateFormat}
+                  value={
+                    issuedDay ? dayjs(issuedDay.slice(0, 11), dateFormat) : ""
+                  }
+                />
+              </div>
             </Col>
           </Row>
           <hr />

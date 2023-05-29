@@ -183,7 +183,7 @@ const WithdrawCustomer = () => {
               onChange={(e) => setNote(e.target.value)}
             />
             <CustomButton
-              title="Nạp "
+              title="Rút"
               className="float-left btn-add-topup-customer"
               type="button"
               // onClick={addMoney}
