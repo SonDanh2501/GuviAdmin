@@ -1,18 +1,9 @@
-import { Checkbox, InputNumber, List, Select, TimePicker } from "antd";
+import { Checkbox, InputNumber, List, Select, TimePicker, Input } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Button,
-  Col,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  Row,
-} from "reactstrap";
+import { Button, Col, Form, FormGroup, Label, Modal, Row } from "reactstrap";
 import { fetchCustomers, searchCustomers } from "../../api/customer";
 import { DATA_PAYMENT, date } from "../../api/fakeData";
 import { postFile } from "../../api/file";
@@ -33,6 +24,7 @@ import "./addPromotion.scss";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
+const { TextArea } = Input;
 
 const AddPromotion = (props) => {
   const {
@@ -106,6 +98,7 @@ const AddPromotion = (props) => {
   ]);
   const [isParrentPromotion, setIsParrentPromotion] = useState(false);
   const [totalChildPromotion, setTotalChildPromotion] = useState();
+  const [isShowInApp, setIsShowInApp] = useState(false);
 
   const options = [];
   const optionsCustomer = [];
@@ -367,6 +360,7 @@ const AddPromotion = (props) => {
       total_child_promotion: totalChildPromotion,
       is_loop: isApplyTime,
       day_loop: isApplyTime ? timeApply : [],
+      is_show_in_app: isShowInApp,
     })
       .then((res) => {
         if (isSendNotification) {
@@ -476,6 +470,7 @@ const AddPromotion = (props) => {
     idService,
     exchange,
     startPage,
+    isShowInApp,
   ]);
 
   return (
@@ -510,78 +505,85 @@ const AddPromotion = (props) => {
             <Form>
               <Row>
                 <Col md={4}>
-                  <h5>1. Tiêu đề</h5>
-                  <CustomTextInput
-                    label={"Tiếng Việt"}
-                    name="titleVN"
-                    placeholder="Nhập tiêu đề tiếng việt"
-                    value={titleVN}
-                    onChange={(e) => setTitleVN(e.target.value)}
-                  />
-                  <CustomTextInput
-                    label={"Tiếng Anh"}
-                    name="titleEN"
-                    placeholder="Nhập tiêu đề tiếng anh"
-                    value={titleEN}
-                    onChange={(e) => setTitleEN(e.target.value)}
-                  />
-                  <h5>2. Mô tả ngắn</h5>
-                  <CustomTextInput
-                    label={"Tiếng Việt"}
-                    placeholder="Nhập mô tả tiếng việt"
-                    value={shortDescriptionVN}
-                    type="textarea"
-                    onChange={(e) => setShortDescriptionVN(e.target.value)}
-                  />
-                  <CustomTextInput
-                    label={"Tiếng Anh"}
-                    placeholder="Nhập mô tả tiếng anh"
-                    type="textarea"
-                    value={shortDescriptionEN}
-                    onChange={(e) => setShortDescriptionEN(e.target.value)}
-                  />
-                  <h5>3. Mô tả chi tiết</h5>
-                  <Label>Tiếng Việt</Label>
-
-                  <CustomTextEditor
-                    value={descriptionVN}
-                    onChangeValue={setDescriptionVN}
-                  />
-
-                  <Label>Tiếng Anh</Label>
-
-                  <CustomTextEditor
-                    value={descriptionEN}
-                    onChangeValue={setDescriptionEN}
-                  />
+                  <div>
+                    <a className="title-add-promo">1. Tiêu đề</a>
+                    <Input
+                      placeholder="Nhập tiêu đề tiếng việt"
+                      value={titleVN}
+                      onChange={(e) => setTitleVN(e.target.value)}
+                    />
+                    <Input
+                      placeholder="Nhập tiêu đề tiếng anh"
+                      value={titleEN}
+                      onChange={(e) => setTitleEN(e.target.value)}
+                      style={{ marginTop: 5 }}
+                    />
+                  </div>
+                  <div>
+                    <a className="title-add-promo">2. Mô tả</a>
+                    <TextArea
+                      placeholder="Nhập mô tả tiếng việt"
+                      value={shortDescriptionVN}
+                      onChange={(e) => setShortDescriptionVN(e.target.value)}
+                    />
+                    <TextArea
+                      label={"Tiếng Anh"}
+                      placeholder="Nhập mô tả tiếng anh"
+                      value={shortDescriptionEN}
+                      onChange={(e) => setShortDescriptionEN(e.target.value)}
+                      style={{ marginTop: 5 }}
+                    />
+                  </div>
+                  <div>
+                    <a className="title-add-promo">3. Mô tả chi tiết</a>
+                    <div>
+                      <a>Tiếng Việt</a>
+                      <CustomTextEditor
+                        value={descriptionVN}
+                        onChangeValue={setDescriptionVN}
+                      />
+                    </div>
+                    <div className="mt-2">
+                      <a>Tiếng Anh</a>
+                      <CustomTextEditor
+                        value={descriptionEN}
+                        onChangeValue={setDescriptionEN}
+                      />
+                    </div>
+                  </div>
                 </Col>
                 <Col md={4}>
                   <div>
-                    <h5>4. Thumbnail/Background</h5>
-                    <CustomTextInput
-                      label={"Thumbnail 160px * 170px"}
-                      type="file"
-                      accept={".jpg,.png,.jpeg"}
-                      className="input-upload"
-                      onChange={onChangeThumbnail}
-                    />
-                    {imgThumbnail && (
-                      <img src={imgThumbnail} className="img-thumbnail" />
-                    )}
-                    <CustomTextInput
-                      label={"Background 414px * 200px"}
-                      type="file"
-                      accept={".jpg,.png,.jpeg"}
-                      className="input-upload"
-                      onChange={onChangeBackground}
-                    />
-                    {imgBackground && (
-                      <img src={imgBackground} className="img-background" />
-                    )}
+                    <a className="title-add-promo">4. Thumbnail/Background</a>
+                    <div>
+                      <a>Thumbnail 160px * 170px</a>
+                      <Input
+                        type="file"
+                        accept={".jpg,.png,.jpeg"}
+                        className="input-upload"
+                        onChange={onChangeThumbnail}
+                      />
+                      {imgThumbnail && (
+                        <img src={imgThumbnail} className="img-thumbnail" />
+                      )}
+                    </div>
+                    <div>
+                      <a>Background 414px * 200px</a>
+                      <Input
+                        type="file"
+                        accept={".jpg,.png,.jpeg"}
+                        className="input-upload"
+                        onChange={onChangeBackground}
+                      />
+                      {imgBackground && (
+                        <img src={imgBackground} className="img-background" />
+                      )}
+                    </div>
                   </div>
                   <div>
-                    <h5>5. Mã khuyến mãi</h5>
-                    <CustomTextInput
+                    <a className="title-add-promo">5. Mã khuyến mãi</a>
+
+                    <Input
                       placeholder="Nhập mã khuyến mãi"
                       type="text"
                       value={promoCode}
@@ -1100,6 +1102,17 @@ const AddPromotion = (props) => {
                         </div>
                       </div>
                     )}
+                  </div>
+
+                  <div className="div-check-show-app">
+                    <a className="title-check">21. Hiện thị mã trên app</a>
+                    <Checkbox
+                      onChange={(e) => {
+                        setIsShowInApp(e.target.checked);
+                      }}
+                      checked={isShowInApp}
+                      style={{ marginLeft: 5 }}
+                    />
                   </div>
 
                   <Button

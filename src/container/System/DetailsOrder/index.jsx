@@ -414,7 +414,7 @@ const DetailsOrder = () => {
               </div>
 
               <div>
-                {data?.status === "pending" || data?.status === "confirm" ? (
+                {data?.status === "done" || data?.status === "cancel" ? null : (
                   <div>
                     <Button
                       className="btn-confirm-order mt-1"
@@ -423,7 +423,7 @@ const DetailsOrder = () => {
                       Huỷ việc
                     </Button>
                   </div>
-                ) : null}
+                )}
               </div>
             </div>
           </>
