@@ -260,6 +260,15 @@ const TopupCollaborator = ({ type }) => {
       },
     },
     {
+      title: "Ví",
+      render: (data) => (
+        <a className="text-name-verify">
+          {data?.type_wallet === "wallet" ? "Ví chính" : "Ví thưởng"}
+        </a>
+      ),
+      align: "center",
+    },
+    {
       title: "Trạng thái",
       render: (data) => {
         return (
