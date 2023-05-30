@@ -108,6 +108,13 @@ export const TopupMoneyCustomerApi = (id, data) => {
   return axiosClient.post(`/admin/customer_manager/top_up/${id}?lang=vi`, data);
 };
 
+export const withdrawMoneyCustomerApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/customer_manager/withdraw/${id}?lang=vi`,
+    data
+  );
+};
+
 export const updateMoneyCustomerApi = (id, data) => {
   return axiosClient.post(`/admin/customer_manager/edit_trans/${id}`, data);
 };

@@ -146,6 +146,7 @@ const OrderManage = (props) => {
                   setData={setData}
                   setTotal={setTotal}
                   setIsLoading={setIsLoading}
+                  details={false}
                 />
               ) : (
                 ""

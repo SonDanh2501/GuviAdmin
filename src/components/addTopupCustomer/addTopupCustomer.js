@@ -1,6 +1,5 @@
 import React, { memo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Form, Input, Label, List, Modal } from "reactstrap";
 import { searchCustomers } from "../../api/customer";
 import { TopupMoneyCustomerApi } from "../../api/topup";
 import { loadingAction } from "../../redux/actions/loading";
@@ -9,9 +8,10 @@ import IntlCurrencyInput from "react-intl-currency-input";
 import _debounce from "lodash/debounce";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./addTopupCustomer.scss";
-import { Drawer } from "antd";
+import { Drawer, Input, InputNumber, List } from "antd";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { getTopupCustomer } from "../../redux/actions/topup";
+const { TextArea } = Input;
 
 const AddTopupCustomer = () => {
   const [state, setState] = useState(false);
@@ -88,25 +88,6 @@ const AddTopupCustomer = () => {
     }
   }, [id, money, note, name]);
 
-  const currencyConfig = {
-    locale: "vi",
-    formats: {
-      number: {
-        BRL: {
-          style: "currency",
-          currency: "VND",
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
-        },
-      },
-    },
-  };
-
-  const handleChange = (event, value) => {
-    event.preventDefault();
-    setMoney(value);
-  };
-
   return (
     <>
       {/* Button trigger modal */}
@@ -127,68 +108,67 @@ const AddTopupCustomer = () => {
         }}
       >
         <div className="modal-body">
-          <Form>
-            <div>
-              <Label>(*)Khách hàng</Label>
-              <Input
-                placeholder="Tìm kiếm theo số điện thoại"
-                value={name}
-                onChange={(e) => {
-                  searchCollaborator(e.target.value);
-                  valueSearch(e.target.value);
-                }}
-              />
-              {errorName && <a className="error">{errorName}</a>}
-              {data.length > 0 && (
-                <List type={"unstyled"} className="list-item">
-                  {data?.map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        onClick={(e) => {
-                          setId(item?._id);
-                          setName(item?.name);
-                          setData([]);
-                        }}
-                      >
-                        <a>
-                          {" "}
-                          {item?.name} - {item?.phone} - {item?.id_view}
-                        </a>
-                      </div>
-                    );
-                  })}
-                </List>
-              )}
-            </div>
+          <div>
+            <a className="label-topup-customer">(*)Khách hàng</a>
+            <Input
+              placeholder="Tìm kiếm theo số điện thoại"
+              value={name}
+              onChange={(e) => {
+                searchCollaborator(e.target.value);
+                valueSearch(e.target.value);
+              }}
+            />
+            {errorName && <a className="error">{errorName}</a>}
+            {data.length > 0 && (
+              <List type={"unstyled"} className="list-item">
+                {data?.map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={(e) => {
+                        setId(item?._id);
+                        setName(item?.name);
+                        setData([]);
+                      }}
+                    >
+                      <a>
+                        {" "}
+                        {item?.name} - {item?.phone} - {item?.id_view}
+                      </a>
+                    </div>
+                  );
+                })}
+              </List>
+            )}
+          </div>
 
-            <div className="div-money">
-              <Label>(*) Nhập số tiền</Label>
-              <IntlCurrencyInput
-                className="input-money"
-                currency="BRL"
-                config={currencyConfig}
-                onChange={handleChange}
-                value={money}
-              />
-            </div>
-            <CustomTextInput
-              label={"Nhập nội dung"}
-              id="exampleNote"
-              name="note"
+          <div className="mt-2">
+            <a className="label-topup-customer">(*) Nhập số tiền</a>
+            <InputNumber
+              formatter={(value) =>
+                `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+              }
+              onChange={(e) => setMoney(e)}
+              style={{ width: "100%" }}
+            />
+          </div>
+
+          <div className="mt-2">
+            <a className="label-topup-customer">Nhập nội dung</a>
+            <TextArea
               placeholder="Vui lòng nhập nội dung chuyển tiền"
               type="textarea"
               min={0}
               value={note}
               onChange={(e) => setNote(e.target.value)}
             />
-            <CustomButton
-              title="Nạp "
-              className="float-left btn-add-topup-customer"
-              type="button"
-              onClick={addMoney}
-            />
-          </Form>
+          </div>
+          <CustomButton
+            title="Nạp "
+            className="float-right btn-add-draw-topup-customer"
+            type="button"
+            onClick={addMoney}
+          />
         </div>
       </Drawer>
     </>

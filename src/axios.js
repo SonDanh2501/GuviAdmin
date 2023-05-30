@@ -15,7 +15,7 @@ const axiosClient = axios.create({
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
   },
-  timeout: 30000,
+  timeout: 100000,
 });
 axiosClient.interceptors.request.use(async (req) => {
   if (!token) {
