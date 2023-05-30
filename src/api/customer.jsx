@@ -10,9 +10,17 @@ export const searchCustomers = (start, length, type, payload) => {
     `/admin/customer_manager/get_customer_by_type?start=${start}&length=${length}&customer_type=${type}&search=${payload}`
   );
 };
+
 export const fetchCustomerById = (id) => {
   return axiosClient.get(`/admin/customer_manager/get_detail/${id}`);
 };
+
+export const getInviteCustomerById = (id, start, length) => {
+  return axiosClient.get(
+    `/admin/customer_manager/get_invite_customer/${id}?start=${start}&length=${length}`
+  );
+};
+
 export const createCustomer = (payload) => {
   return axiosClient.post("/admin/customer_manager/create_item", payload);
 };

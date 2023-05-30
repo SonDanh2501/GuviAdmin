@@ -31,6 +31,23 @@ const CustomDatePicker = (props) => {
   const onSelectTab = (item) => {
     setValueTab(item?.value);
     const today = moment(moment().toISOString()).add(7, "hours").toISOString();
+    const startToday = moment(moment().toISOString())
+      .add(7, "hours")
+      .startOf("date")
+      .toISOString();
+
+    const startYesterday = moment(
+      moment().subtract(1, "d").startOf("date").toISOString()
+    )
+      .add(7, "hours")
+      .toISOString();
+
+    const endYesterday = moment(
+      moment().subtract(1, "d").endOf("date").toISOString()
+    )
+      .add(7, "hours")
+      .toISOString();
+
     const lastSeven = moment(
       moment().subtract(7, "d").startOf("date").toISOString()
     )
@@ -107,6 +124,20 @@ const CustomDatePicker = (props) => {
         setStart(today);
         setEndDate(endNextDay);
         setEnd(moment().add(3, "days"));
+        setTitle(item?.title);
+        break;
+      case "today":
+        setStartDate(startToday);
+        setStart(moment().startOf("date"));
+        setEndDate(today);
+        setEnd(moment());
+        setTitle(item?.title);
+        break;
+      case "yesterday":
+        setStartDate(startYesterday);
+        setStart(moment().subtract(1, "d").startOf("date"));
+        setEndDate(endYesterday);
+        setEnd(moment().subtract(1, "d").endOf("date"));
         setTitle(item?.title);
         break;
       case "setting":
@@ -245,37 +276,38 @@ export default CustomDatePicker;
 
 const DATA_TAB = [
   {
-    id: 1,
+    title: "Hôm nay",
+    value: "today",
+  },
+  {
+    title: "Hôm trước",
+    value: "yesterday",
+  },
+  {
     title: "7 ngày trước",
     value: "last_seven",
   },
   {
-    id: 2,
     title: "30 ngày trước",
     value: "last_thirty",
   },
   {
-    id: 3,
     title: "90 ngày trước",
     value: "last_ninety",
   },
   {
-    id: 4,
     title: "Tháng này",
     value: "this_month",
   },
   {
-    id: 5,
     title: "Tháng trước",
     value: "last_month",
   },
   {
-    id: 6,
     title: "3 ngày tới",
     value: "last_next_day",
   },
   {
-    id: 7,
     title: "Tuỳ chỉnh",
     value: "setting",
   },

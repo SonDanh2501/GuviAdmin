@@ -470,6 +470,7 @@ export default function Home() {
         fill="#000000"
         textAnchor={x > cx ? "start" : "end"}
         dominantBaseline="central"
+        fontSize={10}
       >
         {name === "system_cancel"
           ? "Hệ thống"
@@ -1102,6 +1103,12 @@ export default function Home() {
                           fill="#8884d8"
                           dataKey="value"
                           label={renderLabelCancel}
+                          margin={{
+                            top: 20,
+                            right: 50,
+                            left: 50,
+                            bottom: 5,
+                          }}
                         >
                           {dataChartCancel.map((entry, index) => (
                             <Cell

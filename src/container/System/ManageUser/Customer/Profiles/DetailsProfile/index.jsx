@@ -12,10 +12,20 @@ import iconPlatinum from "../../../../../../assets/images/iconPlatinum.svg";
 import "./index.scss";
 import {
   fetchCustomerById,
+  getInviteCustomerById,
   updateCustomer,
   updatePointCustomer,
 } from "../../../../../../api/customer";
-import { Button, FloatButton, Image, Input, Select } from "antd";
+import {
+  Button,
+  FloatButton,
+  Image,
+  Input,
+  Pagination,
+  Progress,
+  Select,
+  Tooltip,
+} from "antd";
 import { errorNotify } from "../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../redux/actions/loading";
 import { QRCode } from "react-qrcode-logo";
@@ -23,8 +33,6 @@ import LoadingPagination from "../../../../../../components/paginationLoading";
 // core components
 
 const DetailsProfile = ({ id }) => {
-  // const { state } = useLocation();
-  // const { id } = state || {};
   const [name, setName] = useState("");
   const [mail, setMail] = useState("");
   const [birthday, setBirthday] = useState("");
@@ -36,6 +44,9 @@ const DetailsProfile = ({ id }) => {
   const [point, setPoint] = useState();
   const [rankPoint, setRankPoint] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [dataInvite, setDataInvite] = useState([]);
+  const [totalInvite, setTotalInvite] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -50,6 +61,13 @@ const DetailsProfile = ({ id }) => {
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => dispatch(loadingAction.loadingRequest(false)));
+
+    getInviteCustomerById(id, 0, 20)
+      .then((res) => {
+        setDataInvite(res?.data);
+        setTotalInvite(res?.totalItem);
+      })
+      .catch((err) => {});
   }, [id]);
 
   useEffect(() => {
@@ -99,22 +117,21 @@ const DetailsProfile = ({ id }) => {
           });
       })
       .catch((err) => {});
-
-    // updatePointCustomer(data?._id, {
-    //   point: point,
-    //   rank_point: rankPoint,
-    // })
-    //   .then((res) => {
-
-    //   })
-    //   .catch((err) => {
-    //     errorNotify({
-    //       message: err,
-    //     });
-    //   });
   };
 
   const age = moment().diff(data?.birthday, "years");
+
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const lengthData = dataInvite.length < 20 ? 20 : dataInvite.length;
+    const start = page * lengthData - lengthData;
+    getInviteCustomerById(id, start, 20)
+      .then((res) => {
+        setDataInvite(res?.data);
+        setTotalInvite(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
 
   return (
     <>
@@ -180,16 +197,15 @@ const DetailsProfile = ({ id }) => {
           <h3 className="">Thông tin</h3>
           <div className="div-detail-infomation">
             <div className="div-left">
-              <div>
+              <div className="div-name">
                 <a>Họ tên</a>
                 <Input
-                  id="input-email"
-                  type="email"
+                  type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  style={{ width: "80%" }}
                 />
               </div>
-
               <div className="div-select">
                 <a>Giới tính</a>
                 <Select
@@ -200,16 +216,16 @@ const DetailsProfile = ({ id }) => {
                     { value: "male", label: "Nam" },
                     { value: "female", label: "Nữ" },
                   ]}
+                  style={{ width: "80%" }}
                 />
               </div>
-
               <div className="mt-3">
                 <a>Số điện thoại</a>
                 <Input
-                  id="input-last-name"
                   type="text"
                   value={data?.phone}
                   disabled={true}
+                  style={{ width: "80%" }}
                 />
               </div>
             </div>
@@ -222,26 +238,88 @@ const DetailsProfile = ({ id }) => {
                   onChange={(e) => {
                     setBirthday(e.target.value);
                   }}
+                  style={{ width: "80%" }}
                 />
               </div>
 
-              <div className="mt-3">
-                <a htmlFor="input-email">Email</a>
+              <div className="mt-3 div-name">
+                <a>Email</a>
                 <Input
                   id="input-email"
                   placeholder="Nhập email"
                   type="email"
                   value={mail}
                   onChange={(e) => setMail(e.target.value)}
+                  style={{ width: "80%" }}
                 />
               </div>
             </div>
           </div>
-          <Button className="btn-update-point" onClick={updateUser}>
+          <Button className="btn-update-customer" onClick={updateUser}>
             Cập nhật
           </Button>
         </div>
       </div>
+
+      {dataInvite.length > 0 && (
+        <div className="div-container-invite-code">
+          <a className="title-invite">Người giới thiệu gần đây</a>
+          <div className="div-list-invite">
+            {dataInvite.map((item, index) => {
+              return (
+                <div key={index} className="div-item-invite">
+                  <Image src={user} className="img-customer-invite" />
+                  <div className="div-invite-progress">
+                    <div className="div-row-info">
+                      <div>
+                        <div className="div-name">
+                          <a className="title-name">Tên</a>
+                          <a className="title-colon">:</a>
+                          <a className="text-name">{item?.full_name}</a>
+                        </div>
+                        <div className="div-name">
+                          <a className="title-name">SĐT</a>
+                          <a className="title-colon">:</a>
+                          <a className="text-name">{item?.phone}</a>
+                        </div>
+                        <div className="div-name">
+                          <a className="title-name">Mã</a>
+                          <a className="title-colon">:</a>
+                          <a className="text-name">{item?.id_view}</a>
+                        </div>
+                      </div>
+                      <a className="text-date-create">
+                        Ngày tạo:{" "}
+                        {moment(item?.date_create).format("DD-MM-YYYY")}
+                      </a>
+                    </div>
+                    <Progress percent={item?.total_price > 0 ? 100 : 70} />
+                    <a className="text-step">
+                      {item?.total_price > 0
+                        ? "Đã hoàn thành"
+                        : "Bước cuối: Hoàn thành đơn hàng đầu tiên"}
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-1 div-pagination p-2">
+            <a>Tổng: {totalInvite}</a>
+            <div>
+              <Pagination
+                current={currentPage}
+                onChange={onChange}
+                total={totalInvite}
+                showSizeChanger={false}
+                pageSize={20}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       <FloatButton.BackTop />
       {isLoading && <LoadingPagination />}
     </>

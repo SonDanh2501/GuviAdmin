@@ -244,6 +244,14 @@ export const DATA_KIND = [
     value: "group_order_success",
     label: "Số đơn đặt thành công",
   },
+  {
+    value: "last_order_date_work_success",
+    label: "Ngày làm gần nhất",
+  },
+  {
+    value: "last_order_date_create_success",
+    label: "Đơn tạo gần nhất",
+  },
 ];
 
 export const DATA_OPERTATOR = [

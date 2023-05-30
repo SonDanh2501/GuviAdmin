@@ -28,6 +28,7 @@ const EditTimeOrder = (props) => {
     idDetail,
     setDataGroup,
     setDataList,
+    details,
   } = props;
   const [open, setOpen] = useState(false);
 
@@ -60,22 +61,26 @@ const EditTimeOrder = (props) => {
       .then((res) => {
         setIsLoading(false);
         setOpen(false);
-        getOrderApi(startPage, 20, status, kind)
-          .then((res) => {
-            setData(res?.data);
-            setTotal(res?.totalItem);
-          })
-          .catch((err) => {});
-        getOrderByGroupOrderApi(idDetail)
-          .then((res) => {
-            setDataGroup(res?.data?.groupOrder);
-            setDataList(res?.data?.listOrder);
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err,
+
+        if (details) {
+          getOrderByGroupOrderApi(idDetail)
+            .then((res) => {
+              setDataGroup(res?.data?.groupOrder);
+              setDataList(res?.data?.listOrder);
+            })
+            .catch((err) => {
+              errorNotify({
+                message: err,
+              });
             });
-          });
+        } else {
+          getOrderApi(startPage, 20, status, kind)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+            })
+            .catch((err) => {});
+        }
       })
       .catch((err) => {
         errorNotify({

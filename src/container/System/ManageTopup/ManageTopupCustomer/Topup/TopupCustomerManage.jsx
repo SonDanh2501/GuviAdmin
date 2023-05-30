@@ -136,7 +136,7 @@ export default function TopupCustomer() {
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueSearch(value);
-      searchTopupCustomerApi(value, startPage, 10)
+      searchTopupCustomerApi(value, startPage, 20)
         .then((res) => {
           setDataFilter(res.data);
           setTotalFilter(res.totalItem);
@@ -319,7 +319,7 @@ export default function TopupCustomer() {
     <React.Fragment>
       <div className="div-header-customer-topup mt-2">
         <AddTopupCustomer />
-        {/* <WithdrawCustomer /> */}
+        <WithdrawCustomer />
 
         <Input
           placeholder="Tìm kiếm"

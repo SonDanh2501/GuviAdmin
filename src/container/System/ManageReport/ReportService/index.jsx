@@ -229,6 +229,7 @@ const ReportService = () => {
       </div>
 
       <div className="mt-3 div-chart-bar-service">
+        <a>Thống kê đơn hàng</a>
         <ResponsiveContainer width={"100%"} height={350} min-width={350}>
           <BarChart
             width={500}

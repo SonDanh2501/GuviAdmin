@@ -36,3 +36,23 @@
   color: red;
   font-size: 12px;
 }
+
+.label-input {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000000;
+}
+
+.btn-add-withdraw-customer {
+  width: 50px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background-color: #48cae4;
+  color: white;
+  margin-top: 20px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  float: right;
+}

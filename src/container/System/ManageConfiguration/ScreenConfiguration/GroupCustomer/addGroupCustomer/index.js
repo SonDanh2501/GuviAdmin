@@ -356,6 +356,7 @@ const AddGroupCustomer = () => {
                                       <Input
                                         className="input-value"
                                         type={"number"}
+                                        min={0}
                                         onChange={(e) =>
                                           onChangeValueIn(
                                             e.target.value,

@@ -194,12 +194,10 @@ const Admin = () => {
         path="/report/manage-report/details-customer-invite"
         element={<ReportInviteDetails />}
       />
-
       <Route
         path="/notification/manage-push-notification"
         element={<ManagePushNotification />}
       />
-
       <Route
         path="/adminManage/manage-configuration"
         element={<ManageConfiguration />}

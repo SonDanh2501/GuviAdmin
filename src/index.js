@@ -12,7 +12,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import createSagaMiddleware from "redux-saga";
 import LoadingPage from "./components/LoadingPage";
 import App from "./container/App";
-import "./index.css";
+import "./index.scss";
 import reducers from "./redux/reducers/rootReducer";
 import rootSaga from "./redux/sagas/rootSaga";
 import { loadingSelector } from "./redux/selectors/loading";

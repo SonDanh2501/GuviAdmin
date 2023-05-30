@@ -636,6 +636,7 @@ const DetailsOrder = () => {
                               idDetail={id}
                               setDataGroup={setDataGroup}
                               setDataList={setDataList}
+                              details={true}
                             />
                           </div>
                         ) : (
