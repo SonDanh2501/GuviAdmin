@@ -1,30 +1,21 @@
+import { Button, Checkbox, Drawer, Input, List, Select } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  Button,
-  Checkbox,
-  DatePicker,
-  Drawer,
-  Image,
-  Input,
-  List,
-  Select,
-} from "antd";
-import "./index.scss";
-import { searchCollaborators } from "../../../../api/collaborator";
-import { errorNotify } from "../../../../helper/toast";
-import { addCollaboratorToOrderApi } from "../../../../api/order";
 import { useDispatch } from "react-redux";
+import { errorNotify } from "../../../../helper/toast";
 import { loadingAction } from "../../../../redux/actions/loading";
+import "./index.scss";
 
 import _debounce from "lodash/debounce";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
-import { searchCustomers } from "../../../../api/customer";
-import { getGroupCustomerApi } from "../../../../api/promotion";
-import { createPushNotification } from "../../../../api/notification";
-import { getNotification } from "../../../../redux/actions/notification";
 import moment from "moment";
-import { postFile } from "../../../../api/file";
-import resizeFile from "../../../../helper/resizer";
+import { searchCustomers } from "../../../../api/customer";
+import { createPushNotification } from "../../../../api/notification";
+import { getGroupCustomerApi } from "../../../../api/promotion";
+import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
+import UploadImage from "../../../../components/uploadImage";
+import { getNotification } from "../../../../redux/actions/notification";
+
+const { TextArea } = Input;
+
 const AddPushNotification = ({ idOrder }) => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
@@ -111,40 +102,6 @@ const AddPushNotification = ({ idOrder }) => {
     setGroupCustomer(value);
   };
 
-  const onChangeThumbnail = async (e) => {
-    dispatch(loadingAction.loadingRequest(true));
-    try {
-      if (e.target.files[0]) {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          setImgThumbnail(reader.result);
-        });
-        reader.readAsDataURL(e.target.files[0]);
-      }
-      const file = e.target.files[0];
-      const image = await resizeFile(file);
-      const formData = new FormData();
-      formData.append("file", image);
-      postFile(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-        .then((res) => {
-          setImgThumbnail(res);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const onCreateNotification = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
     createPushNotification({
@@ -206,23 +163,26 @@ const AddPushNotification = ({ idOrder }) => {
         width={500}
         open={open}
       >
-        <CustomTextInput
-          label={"Tiêu đề"}
-          placeholder="Vui lòng nhập tiêu đề"
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-
-        <CustomTextInput
-          label={"Nội dung"}
-          placeholder="Vui lòng nhập nội dung"
-          type="textarea"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-
         <div>
+          <a>Tiêu đề</a>
+          <Input
+            placeholder="Vui lòng nhập tiêu đề"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+        <div>
+          <a>Nội dung</a>
+          <TextArea
+            placeholder="Vui lòng nhập nội dung"
+            type="textarea"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+
+        <div className="mt-2">
           <Checkbox
             checked={isDateSchedule}
             onChange={(e) => setIsDateSchedule(e.target.checked)}
@@ -322,20 +282,12 @@ const AddPushNotification = ({ idOrder }) => {
           )}
         </div>
 
-        <div className="mt-3">
-          <a className="label-noti">Hình ảnh 360px * 137px, tỉ lệ 2,62</a>
-          <Input
-            id="exampleImage"
-            name="image"
-            type="file"
-            accept={".jpg,.png,.jpeg"}
-            className="input-group"
-            onChange={onChangeThumbnail}
-          />
-          {imgThumbnail && (
-            <Image src={imgThumbnail} className="img-thumbnail-banner" />
-          )}
-        </div>
+        <UploadImage
+          title={"Hình ảnh 360px * 137px, tỉ lệ 2,62"}
+          image={imgThumbnail}
+          setImage={setImgThumbnail}
+          classImg={"img-thumbnail-banner"}
+        />
 
         <Button
           className="btn-create-notification"

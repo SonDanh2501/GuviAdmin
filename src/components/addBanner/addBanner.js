@@ -13,6 +13,7 @@ import { createBanner } from "../../api/banner";
 import resizeFile from "../../helper/resizer";
 import { getService } from "../../redux/selectors/service";
 import "./addBanner.scss";
+import UploadImage from "../uploadImage";
 
 const AddBanner = () => {
   const [title, setTitle] = useState("");
@@ -52,40 +53,6 @@ const AddBanner = () => {
       kind: item?.kind,
     });
   });
-
-  const onChangeThumbnail = async (e) => {
-    dispatch(loadingAction.loadingRequest(true));
-    try {
-      if (e.target.files[0]) {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          setImgThumbnail(reader.result);
-        });
-        reader.readAsDataURL(e.target.files[0]);
-      }
-      const file = e.target.files[0];
-      const image = await resizeFile(file);
-      const formData = new FormData();
-      formData.append("file", image);
-      postFile(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-        .then((res) => {
-          setImgThumbnail(res);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const addBanner = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -201,24 +168,16 @@ const AddBanner = () => {
           />
         </div>
 
-        <div className="mt-2">
-          <a className="label-img">Hình ảnh 360px * 137px, tỉ lệ 2,62</a>
-          <Input
-            id="exampleImage"
-            name="image"
-            type="file"
-            accept={".jpg,.png,.jpeg"}
-            className="input-group"
-            onChange={onChangeThumbnail}
-          />
-          {imgThumbnail && (
-            <Image src={imgThumbnail} className="img-thumbnail-banner" />
-          )}
-        </div>
+        <UploadImage
+          title={"Hình ảnh 360px * 137px, tỉ lệ 2,62"}
+          image={imgThumbnail}
+          setImage={setImgThumbnail}
+          classImg={"img-thumbnail-banner"}
+        />
 
         <CustomButton
           title="Thêm"
-          className="float-left btn-add-banner"
+          className="btn-add-banner-drawer"
           type="button"
           onClick={addBanner}
         />

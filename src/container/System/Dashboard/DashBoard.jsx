@@ -813,7 +813,7 @@ export default function Home() {
                         height={300}
                         data={dataChartDetail}
                         margin={{
-                          top: 5,
+                          top: 30,
                           right: 30,
                           left: 20,
                           bottom: 5,

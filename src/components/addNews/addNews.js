@@ -11,6 +11,7 @@ import resizeFile from "../../helper/resizer";
 import { createNew } from "../../api/news";
 import { getNews } from "../../redux/actions/news";
 import { Drawer, Input, Select } from "antd";
+import UploadImage from "../uploadImage";
 const { TextArea } = Input;
 
 const AddNews = () => {
@@ -29,40 +30,6 @@ const AddNews = () => {
     setOpen(false);
   };
   const dispatch = useDispatch();
-
-  const onChangeThumbnail = async (e) => {
-    dispatch(loadingAction.loadingRequest(true));
-    try {
-      if (e.target.files[0]) {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          setImgThumbnail(reader.result);
-        });
-        reader.readAsDataURL(e.target.files[0]);
-      }
-      const file = e.target.files[0];
-      const image = await resizeFile(file);
-      const formData = new FormData();
-      formData.append("file", image);
-      postFile(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-        .then((res) => {
-          setImgThumbnail(res);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const addNews = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -98,7 +65,7 @@ const AddNews = () => {
       />
       {/* Modal */}
       <Drawer
-        title="Thêm nói bài viết"
+        title="Thêm mới bài viết"
         placement="right"
         onClose={onClose}
         open={open}
@@ -149,18 +116,12 @@ const AddNews = () => {
             onChange={(e) => setPosition(e.target.value)}
           />
         </div>
-
-        <div className="mt-2">
-          <a>Thumbnail 171px * 171px, tỉ lệ 1:1</a>
-          <Input
-            id="exampleThumbnail"
-            type="file"
-            accept={".jpg,.png,.jpeg"}
-            className="chosse-image"
-            onChange={onChangeThumbnail}
-          />
-          {imgThumbnail && <img src={imgThumbnail} className="img-thumbnail" />}
-        </div>
+        <UploadImage
+          title={"Thumbnail 171px * 171px, tỉ lệ 1:1"}
+          image={imgThumbnail}
+          setImage={setImgThumbnail}
+          classImg={"img-thumbnail"}
+        />
 
         <CustomButton
           title="Thêm"

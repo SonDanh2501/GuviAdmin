@@ -9,6 +9,21 @@
   box-shadow: 2px 3px 2px rgb(216, 216, 216);
 }
 
+.btn-add-banner-drawer {
+  display: flex;
+  width: 50px;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  background-color: #48cae4;
+  color: white;
+  margin-left: 20px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  align-items: center;
+  justify-content: center;
+  float: right;
+}
+
 .img-thumbnail-banner {
   width: 200px !important;
   height: 50px !important;

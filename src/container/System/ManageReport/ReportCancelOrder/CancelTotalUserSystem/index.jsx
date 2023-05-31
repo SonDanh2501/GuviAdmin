@@ -5,12 +5,11 @@ import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { getDistrictApi } from "../../../../../api/file";
 import {
   getCancelReportUserSystem,
-  getReportCancelReport,
   getReportOverviewCancelReport,
 } from "../../../../../api/report";
 
-import "./index.scss";
 import CustomDatePicker from "../../../../../components/customDatePicker";
+import "./index.scss";
 
 const TotalCancelUserSystem = (props) => {
   const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;

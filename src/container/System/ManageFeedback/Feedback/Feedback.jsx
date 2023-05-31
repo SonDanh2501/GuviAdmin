@@ -154,13 +154,6 @@ export default function Feedback() {
             columns={columns}
             dataSource={dataFilter.length > 0 ? dataFilter : listFeedback}
             pagination={false}
-            // rowKey={(record) => record._id}
-            // rowSelection={{
-            //   selectedRowKeys,
-            //   onChange: (selectedRowKeys, selectedRows) => {
-            //     setSelectedRowKeys(selectedRowKeys);
-            //   },
-            // }}
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {

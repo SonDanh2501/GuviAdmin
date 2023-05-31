@@ -13,6 +13,7 @@ import { getService } from "../../redux/selectors/service";
 import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./editBanner.scss";
+import UploadImage from "../uploadImage";
 
 const EditBanner = ({ data }) => {
   const [title, setTitle] = useState("");
@@ -63,40 +64,6 @@ const EditBanner = ({ data }) => {
     setPosition(data?.position);
     setKindService(data?.kind);
   }, [data]);
-
-  const onChangeThumbnail = async (e) => {
-    dispatch(loadingAction.loadingRequest(true));
-    try {
-      if (e.target.files[0]) {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          setImgThumbnail(reader.result);
-        });
-        reader.readAsDataURL(e.target.files[0]);
-      }
-      const file = e.target.files[0];
-      const image = await resizeFile(file);
-      const formData = new FormData();
-      formData.append("file", image);
-      postFile(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-        .then((res) => {
-          setImgThumbnail(res);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const onEditBanner = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -199,20 +166,12 @@ const EditBanner = ({ data }) => {
           />
         </div>
 
-        <div className="mt-2">
-          <a className="label-img">Hình ảnh 360px * 137px, tỉ lệ 2,62</a>
-          <Input
-            id="exampleImage"
-            name="image"
-            type="file"
-            accept={".jpg,.png,.jpeg"}
-            className="input-group"
-            onChange={onChangeThumbnail}
-          />
-          {imgThumbnail && (
-            <Image src={imgThumbnail} className="img-thumbnail-banner" />
-          )}
-        </div>
+        <UploadImage
+          title={"Hình ảnh 360px * 137px, tỉ lệ 2,62"}
+          image={imgThumbnail}
+          setImage={setImgThumbnail}
+          classImg={"img-thumbnail-banner"}
+        />
 
         <CustomButton
           title="Sửa"

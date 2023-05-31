@@ -1,4 +1,4 @@
-import { Checkbox, Image, Input, Modal, Pagination, Select, Table } from "antd";
+import { Checkbox, Input, Modal, Pagination, Rate, Select, Table } from "antd";
 import "./index.scss";
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -11,7 +11,6 @@ import _debounce from "lodash/debounce";
 import { SearchOutlined } from "@ant-design/icons";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { useNavigate } from "react-router-dom";
-import starImg from "../../../../assets/images/star.png";
 import { errorNotify } from "../../../../helper/toast";
 
 const ReviewCollaborator = () => {
@@ -289,14 +288,20 @@ const ReviewCollaborator = () => {
           >
             <a className="text-order">{data?.id_view}</a>
             <div className="div-star">
-              {[1, 2, 3, 4, 5]?.slice(0, data?.star)?.map((item) => {
+              {/* {[1, 2, 3, 4, 5]?.slice(0, data?.star)?.map((item) => {
                 return <img src={starImg} className="icon-star" />;
-              })}
+              })} */}
+              <Rate
+                value={data?.star}
+                style={{ width: "100%" }}
+                disabled={true}
+              />
             </div>
           </div>
         );
       },
       sorter: (a, b) => a.star - b.star,
+      width: "15%",
     },
     {
       title: "Nội dung",
@@ -330,6 +335,7 @@ const ReviewCollaborator = () => {
     {
       title: "Ghi chú",
       render: (data) => <a>{data?.note_admin}</a>,
+      width: "10%",
     },
   ];
 
@@ -422,7 +428,7 @@ const ReviewCollaborator = () => {
           title="Kiểm tra"
           open={modalCheck}
           onOk={() => onCheckReview(itemEdit?._id)}
-          okText={"Kiểm tra"}
+          okText={"Lưu"}
           onCancel={toggleModalCheck}
           cancelText={"Huỷ"}
         >

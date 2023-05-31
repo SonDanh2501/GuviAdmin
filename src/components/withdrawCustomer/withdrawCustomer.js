@@ -75,9 +75,13 @@ const WithdrawCustomer = () => {
             getTopupCustomer.getTopupCustomerRequest({ start: 0, length: 20 })
           );
           successNotify({
-            message: "Nạp tiền cho khách hàng thành công",
+            message: "Rút tiền cho khách hàng thành công",
           });
           dispatch(loadingAction.loadingRequest(false));
+          setMoney(0);
+          setNote("");
+          setId("");
+          setName("");
         })
         .catch((err) => {
           dispatch(loadingAction.loadingRequest(false));

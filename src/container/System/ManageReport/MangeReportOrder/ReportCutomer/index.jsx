@@ -360,8 +360,8 @@ const ReportCustomer = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Tổng tiền trên dịch vụ. Tổng hoá đơn = Doanh thu thuần (+) Phí áp
-              dụng.
+              Tổng tiền trên dịch vụ. Tổng hoá đơn = Doanh số - Giảm giá + Phi
+              áp dụng
             </p>
           </div>
         );
