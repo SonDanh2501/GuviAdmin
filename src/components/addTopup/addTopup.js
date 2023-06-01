@@ -105,25 +105,6 @@ const AddPopup = (props) => {
     }
   }, [id, money, note, name, wallet, type, setDataT, setTotal]);
 
-  const currencyConfig = {
-    locale: "vi",
-    formats: {
-      number: {
-        BRL: {
-          style: "currency",
-          currency: "VND",
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
-        },
-      },
-    },
-  };
-
-  const handleChange = (event, value) => {
-    event.preventDefault();
-    setMoney(value);
-  };
-
   return (
     <>
       <CustomButton
@@ -183,7 +164,6 @@ const AddPopup = (props) => {
               formatter={(value) =>
                 `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
               }
-              // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
               onChange={(e) => setMoney(e)}
               style={{ width: "100%" }}
             />

@@ -1,4 +1,4 @@
-import { Button, DatePicker, Input, List, Switch } from "antd";
+import { Button, DatePicker, Input, InputNumber, List, Switch } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { searchCustomers } from "../../../../../api/customer";
 import {
@@ -72,6 +72,7 @@ const CleaningHourly = (props) => {
   const [errorCollaborator, setErrorCollaborator] = useState("");
   const [dataAddress, setDataAddress] = useState([]);
   const [estimate, setEstimate] = useState();
+  const [tipCollaborator, setTipCollaborator] = useState();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -129,11 +130,6 @@ const CleaningHourly = (props) => {
   );
 
   const timeW = dateWork + "T" + timeWork + ".000Z";
-
-  const timeNow = Number(new Date().toTimeString().slice(0, 2));
-
-  const dayNow = new Date().toISOString().slice(0, 10);
-
   var AES = require("crypto-js/aes");
   const temp = JSON.stringify({
     lat: lat,
@@ -141,6 +137,25 @@ const CleaningHourly = (props) => {
     address: address,
   });
   var accessToken = AES.encrypt(temp, "guvico");
+
+  const onChangeMoney = (value) => {
+    const money = value.toString();
+    if (money.length == 4) {
+      if (money.slice(1, 4) === "000") {
+        setTipCollaborator(value);
+      } else {
+        const tip = parseInt(money.slice(0, 1) + "000");
+        setTipCollaborator(tip);
+      }
+    } else if (money.length == 5) {
+      if (money.slice(2, 4) === "000") {
+        setTipCollaborator(value);
+      } else {
+        const tip = parseInt(money.slice(0, 2) + "000");
+        setTipCollaborator(tip);
+      }
+    }
+  };
 
   const handleSearchLocation = useCallback(
     _debounce((value) => {
@@ -328,7 +343,6 @@ const CleaningHourly = (props) => {
         setItemPromotion([]);
         setIsLoading(false);
       } else {
-        setCodePromotion(item?.code);
         checkCodePromotionOrderApi(id, {
           id_customer: id,
           token: accessToken.toString(),
@@ -349,6 +363,7 @@ const CleaningHourly = (props) => {
             setItemPromotion(item);
           })
           .catch((err) => {
+            setCodePromotion("");
             errorNotify({
               message: err,
             });
@@ -396,6 +411,7 @@ const CleaningHourly = (props) => {
         code_promotion: codePromotion,
         payment_method: paymentMethod,
         id_collaborator: idCollaborator,
+        tip_collaborator: tipCollaborator,
       })
         .then((res) => {
           navigate("/group-order/manage-order");
@@ -442,6 +458,7 @@ const CleaningHourly = (props) => {
     note,
     idCollaborator,
     paymentMethod,
+    tipCollaborator,
   ]);
 
   const searchValue = (value) => {
@@ -715,7 +732,21 @@ const CleaningHourly = (props) => {
           onChange={(e) => setNote(e.target.value)}
         />
 
-        <div>
+        <div className="div-money">
+          <a>(*) Tiền tip cho CTV</a>
+          <InputNumber
+            formatter={(value) =>
+              `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+            }
+            value={tipCollaborator}
+            onChange={(e) => onChangeMoney(e)}
+            style={{ width: "50%" }}
+            min={1000}
+            max={50000}
+          />
+        </div>
+
+        <div className="mt-3">
           <h5>(*)Cộng tác viên</h5>
           <div>
             <Input
@@ -792,6 +823,9 @@ const CleaningHourly = (props) => {
           <div className="div-total mt-3">
             <a>Tạm tính: {formatMoney(priceOrder)}</a>
             <a>Phí nền tảng: {formatMoney(feeService)}</a>
+            {tipCollaborator > 0 && (
+              <a>Tiền tip: {formatMoney(tipCollaborator)}</a>
+            )}
             {eventPromotion.map((item, index) => {
               return (
                 <a style={{ color: "red" }}>
@@ -814,7 +848,11 @@ const CleaningHourly = (props) => {
             Giá:{" "}
             {priceOrder > 0
               ? formatMoney(
-                  priceOrder + feeService - discount - eventFeePromotion
+                  priceOrder +
+                    feeService -
+                    discount -
+                    eventFeePromotion +
+                    tipCollaborator
                 )
               : formatMoney(0)}
           </a>

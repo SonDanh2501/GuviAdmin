@@ -81,10 +81,12 @@ export default function CollaboratorManage(props) {
 
   const onChange = (page) => {
     setCurrentPage(page);
+    const lenghtData = data.length < 20 ? 20 : data.length;
+    const lenghtFilter = dataFilter.length < 20 ? 20 : dataFilter.length;
     const start =
       dataFilter.length > 0
-        ? page * dataFilter.length - dataFilter.length
-        : page * data.length - data.length;
+        ? page * lenghtFilter - lenghtFilter
+        : page * lenghtData - lenghtData;
     setStartPage(start);
     dataFilter.length > 0
       ? searchCollaborators(start, 20, status, valueFilter)

@@ -67,7 +67,7 @@ const CreateQuizz = () => {
   const [modal, setModal] = useState(false);
   const [modalActive, setModalActive] = useState(false);
   const [open, setOpen] = useState(false);
-
+  const [tab, setTab] = useState("all");
   const toggle = () => setModal(!modal);
   const toggleActive = () => setModalActive(!modalActive);
   const showDrawer = () => {
@@ -108,17 +108,13 @@ const CreateQuizz = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    getListQuestionApi(startPage, 20)
+    getListQuestionApi(startPage, 20, tab)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
-        setIsLoading(false);
       })
-      .catch((err) => {
-        setIsLoading(false);
-      });
-  }, []);
+      .catch((err) => {});
+  }, [tab]);
 
   const addAnswer = () => {
     const arr = [...dataQuestion];
@@ -413,9 +409,10 @@ const CreateQuizz = () => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * data?.length - data?.length;
+    const lenghtData = data?.length < 20 ? 20 : data.length;
+    const start = page * lenghtData - lenghtData;
     setStartPage(start);
-    getListQuestionApi(start, 20)
+    getListQuestionApi(start, 20, tab)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -432,6 +429,19 @@ const CreateQuizz = () => {
         </Button>
       </div>
       <div className="mt-3">
+        <div className="div-tab-exam">
+          {DATA.map((item, index) => {
+            return (
+              <div
+                className={item?.value === tab ? "div-tab-select" : "div-tab"}
+                key={index}
+                onClick={() => setTab(item?.value)}
+              >
+                <a className="text-tab">{item?.title}</a>
+              </div>
+            );
+          })}
+        </div>
         <Table
           dataSource={data}
           columns={columns}
@@ -620,3 +630,11 @@ const CreateQuizz = () => {
 };
 
 export default CreateQuizz;
+
+const DATA = [
+  { title: "Tất cả", value: "all" },
+  {
+    title: "Đang hoạt động",
+    value: "active",
+  },
+];

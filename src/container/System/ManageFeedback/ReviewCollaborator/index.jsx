@@ -12,14 +12,21 @@ import { SearchOutlined } from "@ant-design/icons";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { useNavigate } from "react-router-dom";
 import { errorNotify } from "../../../../helper/toast";
+const { TextArea } = Input;
 
 const ReviewCollaborator = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
+  const [startDate, setStartDate] = useState(
+    moment(moment().subtract(30, "d").startOf("date").toISOString())
+      .add(7, "hours")
+      .toISOString()
+  );
+  const [endDate, setEndDate] = useState(
+    moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
+  );
   const [star, setStar] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -35,10 +42,8 @@ const ReviewCollaborator = () => {
     getReportReviewCollaborator(
       0,
       20,
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString(),
+      startDate,
+      endDate,
       star,
       valueSearch,
       tab
@@ -48,15 +53,6 @@ const ReviewCollaborator = () => {
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-
-    setStartDate(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
-    setEndDate(
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
-    );
   }, []);
 
   const handleFilter = useCallback(
@@ -434,7 +430,7 @@ const ReviewCollaborator = () => {
         >
           <div>
             <a>Nội dung</a>
-            <Input
+            <TextArea
               placeholder="Nhập nội dung"
               value={note}
               onChange={(e) => setNote(e.target.value)}
