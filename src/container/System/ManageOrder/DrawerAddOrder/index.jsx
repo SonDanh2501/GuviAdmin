@@ -2,7 +2,7 @@ import { Input, List, Select } from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { searchCustomers } from "../../../../api/customer";
+import { searchCustomers, searchCustomersApi } from "../../../../api/customer";
 import {
   getExtendOptionalByOptionalServiceApi,
   getGroupServiceApi,
@@ -42,7 +42,6 @@ const AddOrder = () => {
     getGroupServiceApi(0, 20)
       .then((res) => {
         setDataGroupService(res?.data);
-
         setKindService(res?.data[0]?.kind);
         setNameService(res?.data[0]?.title?.vi);
         getServiceApi(res?.data[0]?._id)
@@ -134,7 +133,7 @@ const AddOrder = () => {
     _debounce((value) => {
       setName(value);
       if (value) {
-        searchCustomers(0, 10, "", value)
+        searchCustomersApi(value)
           .then((res) => {
             setDataFilter(res.data);
           })

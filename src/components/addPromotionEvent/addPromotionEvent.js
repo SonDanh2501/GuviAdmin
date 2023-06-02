@@ -11,7 +11,7 @@ import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Col, FormGroup, Label, Modal, Row } from "reactstrap";
-import { searchCustomers } from "../../api/customer";
+import { searchCustomers, searchCustomersApi } from "../../api/customer";
 import { DATA_PAYMENT, date } from "../../api/fakeData";
 import { postFile } from "../../api/file";
 import {
@@ -155,39 +155,6 @@ const AddPromotionEvent = (props) => {
     setPaymentMethod(value);
   };
 
-  const onChangeImageNoti = async (e) => {
-    dispatch(loadingAction.loadingRequest(true));
-    try {
-      if (e.target.files[0]) {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          setImgNoti(reader.result);
-        });
-        reader.readAsDataURL(e.target.files[0]);
-      }
-      const file = e.target.files[0];
-      const image = await resizeFile(file);
-      const formData = new FormData();
-      formData.append("file", image);
-      postFile(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-        .then((res) => {
-          setImgNoti(res);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    } catch (err) {
-      dispatch(loadingAction.loadingRequest(false));
-    }
-  };
   const changeValue = (value) => {
     setName(value);
   };
@@ -196,7 +163,7 @@ const AddPromotionEvent = (props) => {
     _debounce((value) => {
       setName(value);
       if (value) {
-        searchCustomers(0, 20, "", value)
+        searchCustomersApi(value)
           .then((res) => {
             if (value === "") {
               setData([]);

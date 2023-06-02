@@ -14,7 +14,7 @@ import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Col, Form, Modal, Row } from "reactstrap";
-import { searchCustomers } from "../../api/customer";
+import { searchCustomers, searchCustomersApi } from "../../api/customer";
 import { DATA_PAYMENT, date } from "../../api/fakeData";
 import { postFile } from "../../api/file";
 import { createPushNotification } from "../../api/notification";
@@ -175,7 +175,7 @@ const AddPromotion = (props) => {
     _debounce((value) => {
       setName(value);
       if (value) {
-        searchCustomers(0, 20, "", value)
+        searchCustomersApi(value)
           .then((res) => {
             if (value === "") {
               setData([]);

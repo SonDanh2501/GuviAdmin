@@ -11,6 +11,12 @@ export const searchCustomers = (start, length, type, payload) => {
   );
 };
 
+export const searchCustomersApi = (value) => {
+  return axiosClient.get(
+    `/admin/customer_manager/search_customer?lang=vi&start=0&length=30&search=${value}`
+  );
+};
+
 export const fetchCustomerById = (id) => {
   return axiosClient.get(`/admin/customer_manager/get_detail/${id}`);
 };

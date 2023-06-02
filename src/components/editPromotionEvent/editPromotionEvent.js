@@ -11,7 +11,11 @@ import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Col, Form, FormGroup, Label, Modal, Row } from "reactstrap";
-import { fetchCustomers, searchCustomers } from "../../api/customer";
+import {
+  fetchCustomers,
+  searchCustomers,
+  searchCustomersApi,
+} from "../../api/customer";
 import { DATA_PAYMENT, date } from "../../api/fakeData";
 import {
   fetchPromotion,
@@ -163,7 +167,7 @@ const EditPromotionEvent = (props) => {
     _debounce((value) => {
       setName(value);
       if (value) {
-        searchCustomers(0, 20, "", value)
+        searchCustomersApi(value)
           .then((res) => {
             if (value === "") {
               setDataL([]);

@@ -1,0 +1,83 @@
+.title-test-exam {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 18px;
+  color: black;
+  text-decoration: none;
+}
+
+.note-answers {
+  display: flex;
+  flex-direction: column;
+
+  .text-true {
+    font-family: "Roboto";
+    font-weight: 400;
+    font-size: 14px;
+    color: #b2a4ff;
+    text-decoration: none;
+  }
+
+  .text-false {
+    font-family: "Roboto";
+    font-weight: 400;
+    font-size: 14px;
+    color: rgb(255, 5, 5);
+    text-decoration: none;
+  }
+}
+
+.div-head-test {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .title-score {
+    font-family: "Roboto";
+    font-weight: 400;
+    font-size: 16px;
+    color: black;
+    text-decoration: none;
+  }
+
+  .div-time-test {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.div-question-test {
+  display: flex;
+  flex-direction: column;
+  .title-question {
+    font-family: "Roboto";
+    font-weight: 500;
+    font-size: 16px;
+    color: black;
+    text-decoration: none;
+  }
+
+  .text-answer-default {
+    font-family: "Roboto";
+    font-weight: 400;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.558);
+    text-decoration: none;
+  }
+
+  .text-answer-true {
+    font-family: "Roboto";
+    font-weight: 400;
+    font-size: 14px;
+    color: #b2a4ff;
+    text-decoration: none;
+  }
+
+  .text-answer-false {
+    font-family: "Roboto";
+    font-weight: 400;
+    font-size: 14px;
+    color: rgb(255, 5, 5);
+    text-decoration: none;
+  }
+}
