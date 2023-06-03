@@ -60,6 +60,7 @@ const router = [
             icon: bag,
           },
         ],
+        id_sidebar: "guvi_job",
       },
       {
         path: "/system/deep-cleaning",
@@ -68,6 +69,7 @@ const router = [
         component: ManageOrder,
         layout: "admin",
         tab: [],
+        id_sidebar: "request_service",
       },
       {
         path: "/system/user-manage",
@@ -76,6 +78,7 @@ const router = [
         component: ManageCustomer,
         layout: "admin",
         tab: [],
+        id_sidebar: "customer",
       },
       {
         path: "/system/collaborator-manage",
@@ -84,6 +87,7 @@ const router = [
         component: ManageCollaborator,
         layout: "admin",
         tab: [],
+        id_sidebar: "collaborator",
       },
       {
         path: "/services/manage-group-service/service",
@@ -103,6 +107,7 @@ const router = [
             icon: bag,
           },
         ],
+        id_sidebar: "service",
       },
       {
         path: "/promotion/manage-setting",
@@ -111,6 +116,7 @@ const router = [
         component: ManageSetting,
         layout: "admin",
         tab: [],
+        id_sidebar: "promotion",
       },
       {
         path: "/feedback/manage-feedback",
@@ -119,6 +125,7 @@ const router = [
         component: ManageFeedback,
         layout: "admin",
         tab: [],
+        id_sidebar: "support_customer",
       },
       {
         path: "/finance/manage-finance",
@@ -127,6 +134,7 @@ const router = [
         component: ManageFinance,
         layout: "admin",
         tab: [],
+        id_sidebar: "cash_book",
       },
       {
         path: "/topup/manage-topup",
@@ -135,6 +143,7 @@ const router = [
         component: ManageTopup,
         layout: "admin",
         tab: [],
+        id_sidebar: "dasboard",
       },
       {
         path: "/report/manage-report",
@@ -143,6 +152,7 @@ const router = [
         component: ManageReport,
         layout: "admin",
         tab: [],
+        id_sidebar: "report",
       },
       {
         path: "/notification/manage-push-notification",
@@ -151,6 +161,7 @@ const router = [
         component: ManagePushNotification,
         layout: "admin",
         tab: [],
+        id_sidebar: "notification",
       },
       {
         path: "/adminManage/manage-configuration",
@@ -159,6 +170,7 @@ const router = [
         component: ManageConfiguration,
         layout: "admin",
         tab: [],
+        id_sidebar: "setting",
       },
     ],
   },

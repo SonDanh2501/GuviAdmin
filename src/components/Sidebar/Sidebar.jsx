@@ -8,18 +8,11 @@ import { getBrand } from "../../redux/actions/brand";
 import { getUser } from "../../redux/selectors/auth";
 import router from "../../routes/router";
 import "./Sidebar.scss";
+import { getToken } from "../../helper/tokenHelper";
 
 const Sidebar = ({ onClick }) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const user = useSelector(getUser);
-
-  const changeBrand = useCallback((title, brand) => {
-    dispatch(getBrand.getBrandRequest(title));
-    if (brand === "home") {
-      navigate("/");
-    }
-  });
+  const token = useSelector(getToken);
 
   const [collapsed, setCollapsed] = useState(true);
   const [collapsedService, setCollapsedService] = useState(true);

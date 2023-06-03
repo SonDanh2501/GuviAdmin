@@ -12,8 +12,8 @@ function* loginSaga(action) {
   try {
     const response = yield call(loginApi, action.payload.data);
     setToken(response?.token);
-
     const user = jwtDecode(response?.token);
+
     successNotify({
       message: "Đăng nhập thành công",
     });
