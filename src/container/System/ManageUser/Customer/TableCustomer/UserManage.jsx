@@ -28,7 +28,11 @@ import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
 import { getCustomers } from "../../../../../redux/actions/customerAction";
 import { loadingAction } from "../../../../../redux/actions/loading";
-import { getUser } from "../../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getPermissionState,
+  getUser,
+} from "../../../../../redux/selectors/auth";
 import "./UserManage.scss";
 import AddCustomer from "../../../../../components/addCustomer/addCustomer";
 
@@ -45,7 +49,6 @@ const UserManage = (props) => {
   const [itemEdit, setItemEdit] = useState([]);
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
-  const [modalEdit, setModalEdit] = useState(false);
   const [conditionFilter, setConditionFilter] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [rank, setRank] = useState("");
@@ -54,13 +57,10 @@ const UserManage = (props) => {
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const checkElement = useSelector(getElementState);
   const user = useSelector(getUser);
 
   useEffect(() => {
-    // dispatch(
-    //   getCustomers.getCustomersRequest({ start: 0, length: 20, type: "" })
-    // );
     fetchCustomers(0, 20, status)
       .then((res) => {
         setData(res?.data);
@@ -197,7 +197,9 @@ const UserManage = (props) => {
     },
     {
       key: "2",
-      label: user?.role === "admin" && <a onClick={toggle}>Xoá</a>,
+      label: checkElement?.includes("delete_customer") && (
+        <a onClick={toggle}>Xoá</a>
+      ),
     },
   ];
 
@@ -209,11 +211,13 @@ const UserManage = (props) => {
             render: (data) => {
               return (
                 <div
-                  onClick={() =>
-                    navigate("/profile-customer", {
-                      state: { id: data?._id },
-                    })
-                  }
+                  onClick={() => {
+                    if (checkElement?.includes("detail_customer")) {
+                      navigate("/profile-customer", {
+                        state: { id: data?._id },
+                      });
+                    }
+                  }}
                 >
                   <a className="text-id-customer"> {data?.id_view}</a>
                 </div>
@@ -225,11 +229,13 @@ const UserManage = (props) => {
             render: (data) => {
               return (
                 <div
-                  onClick={() =>
-                    navigate("/profile-customer", {
-                      state: { id: data?._id },
-                    })
-                  }
+                  onClick={() => {
+                    if (checkElement?.includes("detail_customer")) {
+                      navigate("/profile-customer", {
+                        state: { id: data?._id },
+                      });
+                    }
+                  }}
                 >
                   <a className="text-name-customer"> {data?.full_name}</a>
                 </div>
@@ -373,11 +379,13 @@ const UserManage = (props) => {
             render: (data) => {
               return (
                 <div
-                  onClick={() =>
-                    navigate("/profile-customer", {
-                      state: { id: data?._id },
-                    })
-                  }
+                  onClick={() => {
+                    if (checkElement?.includes("detail_customer")) {
+                      navigate("/profile-customer", {
+                        state: { id: data?._id },
+                      });
+                    }
+                  }}
                 >
                   <a className="text-id-customer"> {data?.id_view}</a>
                 </div>
@@ -390,11 +398,13 @@ const UserManage = (props) => {
             render: (data) => {
               return (
                 <div
-                  onClick={() =>
-                    navigate("/profile-customer", {
-                      state: { id: data?._id },
-                    })
-                  }
+                  onClick={() => {
+                    if (checkElement?.includes("detail_customer")) {
+                      navigate("/profile-customer", {
+                        state: { id: data?._id },
+                      });
+                    }
+                  }}
                 >
                   {/* <img
               className="img_customer"
@@ -543,33 +553,6 @@ const UserManage = (props) => {
               ),
           },
         ];
-
-  const itemFilter = [
-    {
-      key: "1",
-      label: (
-        <a
-          onClick={() => {
-            setConditionFilter("Khách hàng thân thiết");
-          }}
-        >
-          Khách hàng thân thiết
-        </a>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <a
-          onClick={() => {
-            setConditionFilter("Khách hàng sinh nhật");
-          }}
-        >
-          Khách hàng sinh nhật
-        </a>
-      ),
-    },
-  ];
 
   return (
     <React.Fragment>

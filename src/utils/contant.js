@@ -28,6 +28,8 @@ export const INIT_STATE = {
     token: "",
     isCheckLogin: false,
     user: {},
+    permission: [],
+    checkElement: [],
   },
   service: {
     groupService: [],

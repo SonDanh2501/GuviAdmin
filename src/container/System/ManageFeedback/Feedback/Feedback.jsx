@@ -23,7 +23,7 @@ import {
 } from "../../../../redux/selectors/feedback";
 import "./Feedback.scss";
 import { getFeedback } from "../../../../redux/actions/feedback";
-import { getUser } from "../../../../redux/selectors/auth";
+import { getElementState, getUser } from "../../../../redux/selectors/auth";
 import { loadingAction } from "../../../../redux/actions/loading";
 import { deleteFeedbackApi, searchFeedbackApi } from "../../../../api/feedback";
 import { errorNotify } from "../../../../helper/toast";
@@ -41,6 +41,7 @@ export default function Feedback() {
   const user = useSelector(getUser);
   const navigate = useNavigate();
   const toggle = () => setModal(!modal);
+  const checkElement = useSelector(getElementState);
 
   useEffect(() => {
     dispatch(getFeedback.getFeedbackRequest({ start: 0, length: 20 }));
@@ -128,7 +129,7 @@ export default function Feedback() {
       key: "action",
       align: "center",
       render: (data) =>
-        user?.role === "admin" && (
+        checkElement?.includes("delete_feedback") && (
           <Tooltip placement="bottom" title="Xoá phản hồi">
             <button className="btn-delete" onClick={toggle}>
               <i className="uil uil-trash"></i>

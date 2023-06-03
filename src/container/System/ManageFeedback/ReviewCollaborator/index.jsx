@@ -12,6 +12,8 @@ import { SearchOutlined } from "@ant-design/icons";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { useNavigate } from "react-router-dom";
 import { errorNotify } from "../../../../helper/toast";
+import { getElementState } from "../../../../redux/selectors/auth";
+import { useSelector } from "react-redux";
 const { TextArea } = Input;
 
 const ReviewCollaborator = () => {
@@ -35,7 +37,7 @@ const ReviewCollaborator = () => {
   const [itemEdit, setItemEdit] = useState([]);
   const [note, setNote] = useState("");
   const navigate = useNavigate();
-
+  const checkElement = useSelector(getElementState);
   const toggleModalCheck = () => setModalCheck(!modalCheck);
 
   useEffect(() => {
@@ -317,14 +319,22 @@ const ReviewCollaborator = () => {
       key: "action",
       render: (data) => {
         return (
-          <Checkbox
-            checked={data?.is_check_admin || data?.star === 5 ? true : false}
-            disabled={data?.star === 5 || data?.is_check_admin ? true : false}
-            onChange={(e) => {
-              toggleModalCheck();
-              console.log(e.target.checked);
-            }}
-          ></Checkbox>
+          <>
+            {checkElement?.includes("admin_check_review") && (
+              <Checkbox
+                checked={
+                  data?.is_check_admin || data?.star === 5 ? true : false
+                }
+                disabled={
+                  data?.star === 5 || data?.is_check_admin ? true : false
+                }
+                onChange={(e) => {
+                  toggleModalCheck();
+                  console.log(e.target.checked);
+                }}
+              ></Checkbox>
+            )}
+          </>
         );
       },
     },

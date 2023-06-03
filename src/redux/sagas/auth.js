@@ -1,10 +1,10 @@
 import jwtDecode from "jwt-decode";
 
 import { call, put, takeLatest } from "redux-saga/effects";
-import { loginApi } from "../../api/auth";
+import { getPermission, loginApi } from "../../api/auth";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { setToken } from "../../helper/tokenHelper";
-import { loginAction, logoutAction } from "../actions/auth";
+import { loginAction, logoutAction, permissionAction } from "../actions/auth";
 import * as actions from "../actions/banner";
 import { loadingAction } from "../actions/loading";
 
@@ -28,7 +28,14 @@ function* loginSaga(action) {
     } else if (user.role === "support") {
       action.payload.naviga("/group-order/manage-order");
     }
-    yield put(loginAction.loginSuccess({ token: response?.token, user: user }));
+
+    yield put(
+      loginAction.loginSuccess({
+        token: response?.token,
+        user: user,
+        // permission: permission,
+      })
+    );
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     yield put(loginAction.loginFailure(err));
@@ -51,10 +58,32 @@ function* logoutSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   }
 }
+function* permissionSaga() {
+  const checkElement = [];
+  try {
+    const permission = yield call(getPermission);
+    permission?.map((item) => {
+      item?.id_element?.map((i) => {
+        checkElement?.push(i);
+      });
+    });
+    yield put(
+      permissionAction.permissionSuccess({
+        permission: permission,
+        element: checkElement,
+      })
+    );
+    yield put(loadingAction.loadingRequest(false));
+  } catch (err) {
+    yield put(permissionAction.permissionFailure(err));
+    yield put(loadingAction.loadingRequest(false));
+  }
+}
 
 function* AuthSaga() {
   yield takeLatest(loginAction.loginRequest, loginSaga);
   yield takeLatest(logoutAction.logoutRequest, logoutSaga);
+  yield takeLatest(permissionAction.permissionRequest, permissionSaga);
 }
 
 export default AuthSaga;
