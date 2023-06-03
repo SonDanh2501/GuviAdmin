@@ -75,9 +75,41 @@
       font-weight: 400;
       font-size: 14px;
       margin-left: 10px;
-      color: #ff0000;
+      color: #00b106;
       text-decoration: none;
       width: 60%;
+    }
+  }
+
+  .div-tab-exam {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+
+    .div-tab {
+      padding: 5px;
+
+      .text-tab {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        color: #c1c1c1;
+        text-decoration: none;
+      }
+    }
+    .div-tab-select {
+      padding: 5px;
+      border-bottom: 1px solid blue;
+
+      .text-tab {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        color: #000000;
+        text-decoration: none;
+      }
     }
   }
 }

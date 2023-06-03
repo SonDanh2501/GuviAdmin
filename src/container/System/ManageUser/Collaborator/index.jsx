@@ -79,7 +79,7 @@ const ManageCollaborator = () => {
 
       <div className="div-container-collaborator">
         <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
-          <Tabs.TabPane tab="Tất cả Cộng Tác Viên" key="1">
+          <Tabs.TabPane tab="Tất cả" key="1">
             <CollaboratorManage status={status} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="CTV Đang Online" key="2"></Tabs.TabPane>

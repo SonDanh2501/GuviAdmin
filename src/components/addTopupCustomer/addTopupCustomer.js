@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { searchCustomers } from "../../api/customer";
+import { searchCustomers, searchCustomersApi } from "../../api/customer";
 import { TopupMoneyCustomerApi } from "../../api/topup";
 import { loadingAction } from "../../redux/actions/loading";
 import CustomButton from "../customButton/customButton";
@@ -40,7 +40,7 @@ const AddTopupCustomer = () => {
     _debounce((value) => {
       setName(value);
       if (value) {
-        searchCustomers(0, 100, "", value)
+        searchCustomersApi(value)
           .then((res) => {
             if (value === "") {
               setData([]);
@@ -77,6 +77,10 @@ const AddTopupCustomer = () => {
             message: "Nạp tiền cho khách hàng thành công",
           });
           dispatch(loadingAction.loadingRequest(false));
+          setMoney(0);
+          setNote("");
+          setId("");
+          setName("");
         })
         .catch((err) => {
           dispatch(loadingAction.loadingRequest(false));

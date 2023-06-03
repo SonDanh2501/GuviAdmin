@@ -13,7 +13,7 @@ import CustomTextInput from "../CustomTextInput/customTextInput";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import { errorNotify, successNotify } from "../../helper/toast";
-import { searchCustomers } from "../../api/customer";
+import { searchCustomers, searchCustomersApi } from "../../api/customer";
 import "./addPoint.scss";
 
 const AddPoint = ({ start, setDataL, setTotal }) => {
@@ -40,7 +40,7 @@ const AddPoint = ({ start, setDataL, setTotal }) => {
     _debounce((value) => {
       setName(value);
       if (value) {
-        searchCustomers(0, 100, "", value)
+        searchCustomersApi(value)
           .then((res) => {
             if (value === "") {
               setData([]);

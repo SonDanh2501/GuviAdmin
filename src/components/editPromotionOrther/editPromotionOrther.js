@@ -3,7 +3,11 @@ import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Col, Form, FormGroup, Label, Modal, Row } from "reactstrap";
-import { fetchCustomers, searchCustomers } from "../../api/customer";
+import {
+  fetchCustomers,
+  searchCustomers,
+  searchCustomersApi,
+} from "../../api/customer";
 import { DATA_PAYMENT } from "../../api/fakeData";
 import { postFile } from "../../api/file";
 import {
@@ -22,6 +26,7 @@ import CustomTextEditor from "../customTextEdittor";
 import "./editPromotionOrther.scss";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import UploadImage from "../uploadImage";
 dayjs.extend(customParseFormat);
 const { TextArea } = Input;
 
@@ -109,91 +114,8 @@ const EditPromotionOrther = (props) => {
     });
   });
 
-  const onChangeThumbnail = async (e) => {
-    dispatch(loadingAction.loadingRequest(true));
-    try {
-      if (e.target.files[0]) {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          setImgThumbnail(reader.result);
-        });
-        reader.readAsDataURL(e.target.files[0]);
-      }
-      const file = e.target.files[0];
-      const image = await resizeFile(file);
-      const formData = new FormData();
-      formData.append("file", image);
-      postFile(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-        .then((res) => {
-          setImgThumbnail(res);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const onChangeBackground = async (e) => {
-    dispatch(loadingAction.loadingRequest(true));
-    try {
-      if (e.target.files[0]) {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          setImgBackground(reader.result);
-        });
-        reader.readAsDataURL(e.target.files[0]);
-      }
-      const file = e.target.files[0];
-      const image = await resizeFile(file);
-      const formData = new FormData();
-      formData.append("file", image);
-      postFile(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-        .then((res) => {
-          setImgBackground(res);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const onFormDiscount = (title) => {
-    setFormDiscount(title);
-    if (title === "amount") {
-      setDiscountUnit("amount");
-    } else {
-      setDiscountUnit("percent");
-    }
-    // else {
-    //   setDiscountUnit("same_price");
-    // }
-  };
   const handleChange = (value) => {
     setGroupCustomer(value);
-  };
-
-  const handleChangeCustomer = (value) => {
-    setCustomer(value);
   };
 
   const handleChangePaymentMethod = (value) => {
@@ -208,7 +130,7 @@ const EditPromotionOrther = (props) => {
     _debounce((value) => {
       setName(value);
       if (value) {
-        searchCustomers(0, 20, "", value)
+        searchCustomersApi(value)
           .then((res) => {
             if (value === "") {
               setDataL([]);
@@ -479,30 +401,18 @@ const EditPromotionOrther = (props) => {
               <Col md={4}>
                 <div>
                   <a className="title-add-promo">4. Thumbnail/Background</a>
-                  <div>
-                    <a>Thumbnail 160px * 170px</a>
-                    <Input
-                      type="file"
-                      accept={".jpg,.png,.jpeg"}
-                      className="input-upload"
-                      onChange={onChangeThumbnail}
-                    />
-                    {imgThumbnail && (
-                      <img src={imgThumbnail} className="img-thumbnail" />
-                    )}
-                  </div>
-                  <div>
-                    <a>Background 414px * 200px</a>
-                    <Input
-                      type="file"
-                      accept={".jpg,.png,.jpeg"}
-                      className="input-upload"
-                      onChange={onChangeBackground}
-                    />
-                    {imgBackground && (
-                      <img src={imgBackground} className="img-background" />
-                    )}
-                  </div>
+                  <UploadImage
+                    title={"Thumbnail 160px * 170px"}
+                    image={imgThumbnail}
+                    setImage={setImgThumbnail}
+                    classImg={"img-thumbnail"}
+                  />
+                  <UploadImage
+                    title={"Background 414px * 200px"}
+                    image={imgBackground}
+                    setImage={setImgBackground}
+                    classImg={"img-background"}
+                  />
                 </div>
                 <div className="mt-2">
                   <a className="title-add-promo">5. Mã khuyến mãi</a>

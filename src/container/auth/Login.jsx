@@ -15,24 +15,22 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const onLogin = useCallback(() => {
-    dispatch(loadingAction.loadingRequest(true));
-    dispatch(
-      loginAction.loginRequest({
-        data: {
-          email: email,
-          password: password,
-        },
-        naviga: navigate,
-      })
-    );
-  }, [dispatch, navigate, email, password]);
-
-  const handlePress = (e) => {
-    if (e.key === 13) {
-      onLogin();
-    }
-  };
+  const onLogin = useCallback(
+    (e) => {
+      dispatch(loadingAction.loadingRequest(true));
+      e.preventDefault();
+      dispatch(
+        loginAction.loginRequest({
+          data: {
+            email: email,
+            password: password,
+          },
+          naviga: navigate,
+        })
+      );
+    },
+    [dispatch, navigate, email, password]
+  );
 
   return (
     <div className="container-login">
@@ -41,34 +39,36 @@ const Login = () => {
           <img src={logo} className="img-logo" />
           <a className="title-login">Đăng nhập hệ thống Guvi</a>
         </div>
-        <div className="div-body-login">
-          <div>
-            <label>Email</label>
-            <Input
-              placeholder="Nhập email"
-              className="input-pass"
-              value={email}
-              type="email"
-              onChange={(text) => setEmail(text.target.value)}
-            />
-          </div>
+        <form onSubmit={onLogin}>
+          <div className="div-body-login">
+            <div>
+              <label>Email</label>
+              <Input
+                placeholder="Nhập email"
+                className="input-pass"
+                value={email}
+                type="email"
+                onChange={(text) => setEmail(text.target.value)}
+              />
+            </div>
 
-          <div>
-            <label>Password</label>
-            <Input.Password
-              placeholder="Nhập mật khẩu"
-              className="input-pass"
-              value={password}
-              onChange={(text) => setPassword(text.target.value)}
-            />
-          </div>
+            <div>
+              <label>Password</label>
+              <Input.Password
+                placeholder="Nhập mật khẩu"
+                className="input-pass"
+                value={password}
+                onChange={(text) => setPassword(text.target.value)}
+              />
+            </div>
 
-          <div className="text-center">
-            <Button className="btn-login" onClick={onLogin}>
-              Đăng nhập
-            </Button>
+            <div className="text-center">
+              <button type="submit" className="btn-login">
+                Đăng nhập
+              </button>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

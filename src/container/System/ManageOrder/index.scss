@@ -88,3 +88,91 @@
     }
   }
 }
+
+@media screen and (max-width: 390px) {
+  .div-header {
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: center;
+
+    .btn-create-order {
+      width: 80px;
+      height: 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #48cae4;
+      color: white;
+      margin-left: 20px;
+      margin-top: 5px;
+      font-size: 10px;
+    }
+
+    .div-add-export {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+
+      .dropdown-export {
+        display: flex;
+        width: 0px;
+        height: 0px;
+        background-color: #e0e0e0;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+        box-shadow: 2px 3px 2px rgb(216, 216, 216);
+
+        .icon-menu {
+          color: black;
+        }
+      }
+    }
+
+    .title-cv {
+      color: rgb(255, 0, 0);
+      font-weight: 400;
+      font-size: 16px !important;
+      font-family: "Roboto";
+      text-decoration: none;
+    }
+  }
+
+  .div-tab {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .div-tab-item {
+      display: flex;
+      flex-direction: column;
+      margin-right: 30px;
+      margin-bottom: 20px;
+      margin-top: 10px;
+
+      .text-title-tab {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        color: #41a2f3;
+        text-decoration: none;
+      }
+
+      .text-title-tab-default {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        color: #000000;
+        text-decoration: none;
+      }
+
+      .tab-line {
+        border: 1px solid #41a2f3;
+      }
+    }
+  }
+}

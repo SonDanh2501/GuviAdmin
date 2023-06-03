@@ -1,4 +1,4 @@
-import { Checkbox, Image, Input, Modal, Pagination, Select, Table } from "antd";
+import { Checkbox, Input, Modal, Pagination, Rate, Select, Table } from "antd";
 import "./index.scss";
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -11,16 +11,22 @@ import _debounce from "lodash/debounce";
 import { SearchOutlined } from "@ant-design/icons";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { useNavigate } from "react-router-dom";
-import starImg from "../../../../assets/images/star.png";
 import { errorNotify } from "../../../../helper/toast";
+const { TextArea } = Input;
 
 const ReviewCollaborator = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
+  const [startDate, setStartDate] = useState(
+    moment(moment().subtract(30, "d").startOf("date").toISOString())
+      .add(7, "hours")
+      .toISOString()
+  );
+  const [endDate, setEndDate] = useState(
+    moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
+  );
   const [star, setStar] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -36,10 +42,8 @@ const ReviewCollaborator = () => {
     getReportReviewCollaborator(
       0,
       20,
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString(),
+      startDate,
+      endDate,
       star,
       valueSearch,
       tab
@@ -49,15 +53,6 @@ const ReviewCollaborator = () => {
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-
-    setStartDate(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
-    setEndDate(
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
-    );
   }, []);
 
   const handleFilter = useCallback(
@@ -289,14 +284,20 @@ const ReviewCollaborator = () => {
           >
             <a className="text-order">{data?.id_view}</a>
             <div className="div-star">
-              {[1, 2, 3, 4, 5]?.slice(0, data?.star)?.map((item) => {
+              {/* {[1, 2, 3, 4, 5]?.slice(0, data?.star)?.map((item) => {
                 return <img src={starImg} className="icon-star" />;
-              })}
+              })} */}
+              <Rate
+                value={data?.star}
+                style={{ width: "100%" }}
+                disabled={true}
+              />
             </div>
           </div>
         );
       },
       sorter: (a, b) => a.star - b.star,
+      width: "15%",
     },
     {
       title: "Nội dung",
@@ -330,6 +331,7 @@ const ReviewCollaborator = () => {
     {
       title: "Ghi chú",
       render: (data) => <a>{data?.note_admin}</a>,
+      width: "10%",
     },
   ];
 
@@ -422,13 +424,13 @@ const ReviewCollaborator = () => {
           title="Kiểm tra"
           open={modalCheck}
           onOk={() => onCheckReview(itemEdit?._id)}
-          okText={"Kiểm tra"}
+          okText={"Lưu"}
           onCancel={toggleModalCheck}
           cancelText={"Huỷ"}
         >
           <div>
             <a>Nội dung</a>
-            <Input
+            <TextArea
               placeholder="Nhập nội dung"
               value={note}
               onChange={(e) => setNote(e.target.value)}

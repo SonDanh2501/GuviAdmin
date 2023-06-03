@@ -35,23 +35,33 @@ const FavouriteBlock = ({ id }) => {
         })}
       </div>
       <div className="mt-3">
-        {data?.map((item, index) => {
-          return (
-            <div key={index} className="div-item-list-ctv">
-              <div>
-                <Image src={item?.avatar} className="image-ctv" />
-              </div>
-              <div className="div-name-item">
-                <a className="text-name">{item?.full_name}</a>
-                <a className="text-name">{item?.id_view}</a>
-                <a className="text-name">
-                  {item?.star}
-                  <i class="uil uil-star icon-star"></i>
-                </a>
-              </div>
-            </div>
-          );
-        })}
+        {data.length > 0 ? (
+          <>
+            {data?.map((item, index) => {
+              return (
+                <div key={index} className="div-item-list-ctv">
+                  <div>
+                    <Image src={item?.avatar} className="image-ctv" />
+                  </div>
+                  <div className="div-name-item">
+                    <a className="text-name">{item?.full_name}</a>
+                    <a className="text-name">{item?.id_view}</a>
+                    <a className="text-name">
+                      {item?.star}
+                      <i class="uil uil-star icon-star"></i>
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </>
+        ) : (
+          <a className="text-no-data">
+            {tab === "favourite"
+              ? "Chưa có CTV yêu thích"
+              : "Chưa có CTV hạn chế"}
+          </a>
+        )}
       </div>
 
       <div className="mt-3"></div>

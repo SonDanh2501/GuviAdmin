@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import "./styles.scss";
 import { getListTestCollaboratorApi } from "../../../../api/feedback";
-import { Pagination, Table } from "antd";
+import { Dropdown, Pagination, Space, Table } from "antd";
 import moment from "moment";
+import { MoreOutlined } from "@ant-design/icons";
+import DetailsExam from "./DetailsExam";
 
 const ExamTest = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
+  const [itemEdit, setItemEdit] = useState([]);
+
   useEffect(() => {
     getListTestCollaboratorApi(0, 20)
       .then((res) => {
@@ -63,12 +67,38 @@ const ExamTest = () => {
       title: "Điểm",
       render: (data) => <a>{data?.score}</a>,
     },
+    {
+      key: "action",
+      render: (data) => (
+        <Space size="middle">
+          <Dropdown
+            menu={{
+              items,
+            }}
+            placement="bottom"
+            trigger={["click"]}
+          >
+            <a>
+              <MoreOutlined className="icon-more" />
+            </a>
+          </Dropdown>
+        </Space>
+      ),
+    },
+  ];
+
+  const items = [
+    {
+      key: 1,
+      label: <DetailsExam id={itemEdit?._id} />,
+    },
   ];
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * data.length - data.length;
-    getListTestCollaboratorApi(start, 10)
+    const lengthData = data.length < 20 ? 20 : data.length;
+    const start = page * lengthData - lengthData;
+    getListTestCollaboratorApi(start, 20)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -78,9 +108,19 @@ const ExamTest = () => {
 
   return (
     <div>
-      <a></a>
       <div>
-        <Table dataSource={data} pagination={false} columns={columns} />
+        <Table
+          dataSource={data}
+          pagination={false}
+          columns={columns}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setItemEdit(record);
+              },
+            };
+          }}
+        />
       </div>
       <div className="mt-1 div-pagination p-2">
         <a>Tổng: {total}</a>
@@ -90,7 +130,7 @@ const ExamTest = () => {
             onChange={onChange}
             total={total}
             showSizeChanger={false}
-            pageSize={10}
+            pageSize={20}
           />
         </div>
       </div>

@@ -56,16 +56,15 @@ const Dashboard = () => {
         <Layout
           style={{
             padding: "24px 24px",
-            minHeight: "80%",
+            minHeight: "100%",
           }}
         >
           <Content
             style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 750,
+              minHeight: 680,
               background: "white",
               borderRadius: 4,
+              padding: 24,
             }}
           >
             {user?.role === "admin" ? (

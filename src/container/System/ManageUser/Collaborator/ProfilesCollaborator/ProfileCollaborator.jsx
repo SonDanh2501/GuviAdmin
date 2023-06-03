@@ -27,6 +27,7 @@ import Information from "./components/information";
 import Review from "./components/review";
 import WithdrawTopup from "./components/withdrawTopup";
 import "./ProfileCollaborator.scss";
+import TestExam from "./components/testExam";
 // core components
 
 const ProfileCollaborator = () => {
@@ -48,7 +49,12 @@ const ProfileCollaborator = () => {
         setData(res);
         dispatch(loadingAction.loadingRequest(false));
       })
-      .catch((err) => {});
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
 
     getDistrictApi()
       .then((res) => {
@@ -72,7 +78,7 @@ const ProfileCollaborator = () => {
     const image = await resizeFile(file);
     const formData = new FormData();
     formData.append("file", image);
-
+    dispatch(loadingAction.loadingRequest(true));
     postFile(formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -164,7 +170,10 @@ const ProfileCollaborator = () => {
                   <Tabs.TabPane tab="Đánh giá" key="6">
                     <Review id={id} totalReview={data?.star} />
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="Tài khoản ngân hàng" key="7">
+                  <Tabs.TabPane tab="Bài kiểm tra" key="7">
+                    <TestExam id={data?._id} />
+                  </Tabs.TabPane>
+                  <Tabs.TabPane tab="Tài khoản ngân hàng" key="8">
                     <BankAccount id={data?._id} />
                   </Tabs.TabPane>
                 </Tabs>

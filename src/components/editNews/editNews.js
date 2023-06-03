@@ -9,6 +9,7 @@ import { loadingAction } from "../../redux/actions/loading";
 import { getNews } from "../../redux/actions/news";
 import CustomButton from "../customButton/customButton";
 import "./editNews.scss";
+import UploadImage from "../uploadImage";
 const { TextArea } = Input;
 
 const EditNews = ({ data }) => {
@@ -150,18 +151,12 @@ const EditNews = ({ data }) => {
             onChange={(e) => setPosition(e.target.value)}
           />
         </div>
-
-        <div className="mt-2">
-          <a className="title-new">Thumbnail 171px * 171px, tỉ lệ 1:1</a>
-          <Input
-            id="exampleThumbnail"
-            type="file"
-            accept={".jpg,.png,.jpeg"}
-            className="chosse-image"
-            onChange={onChangeThumbnail}
-          />
-          {imgThumbnail && <img src={imgThumbnail} className="img-thumbnail" />}
-        </div>
+        <UploadImage
+          title={"Thumbnail 171px * 171px, tỉ lệ 1:1"}
+          image={imgThumbnail}
+          setImage={setImgThumbnail}
+          classImg={"img-thumbnail"}
+        />
 
         <CustomButton
           title="Sửa"

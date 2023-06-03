@@ -1,34 +1,23 @@
+import { Button, Checkbox, Drawer, Input, List, Select } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  Button,
-  Checkbox,
-  DatePicker,
-  Drawer,
-  Image,
-  Input,
-  List,
-  Select,
-} from "antd";
-import "./index.scss";
-import { searchCollaborators } from "../../../../api/collaborator";
-import { errorNotify } from "../../../../helper/toast";
-import { addCollaboratorToOrderApi } from "../../../../api/order";
 import { useDispatch } from "react-redux";
+import { errorNotify } from "../../../../helper/toast";
 import { loadingAction } from "../../../../redux/actions/loading";
+import "./index.scss";
 
 import _debounce from "lodash/debounce";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
+import moment from "moment";
 import { searchCustomers } from "../../../../api/customer";
-import { getGroupCustomerApi } from "../../../../api/promotion";
+import { postFile } from "../../../../api/file";
 import {
-  createPushNotification,
   editPushNotification,
   getDetailNotification,
 } from "../../../../api/notification";
-import { getNotification } from "../../../../redux/actions/notification";
-import moment from "moment";
-import { postFile } from "../../../../api/file";
+import { getGroupCustomerApi } from "../../../../api/promotion";
+import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
+import UploadImage from "../../../../components/uploadImage";
 import resizeFile from "../../../../helper/resizer";
+import { getNotification } from "../../../../redux/actions/notification";
 const EditPushNotification = ({ id }) => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
@@ -347,20 +336,12 @@ const EditPushNotification = ({ id }) => {
           )}
         </div>
 
-        <div className="mt-3">
-          <a className="label ">Hình ảnh 360px * 137px, tỉ lệ 2,62</a>
-          <Input
-            id="exampleImage"
-            name="image"
-            type="file"
-            accept={".jpg,.png,.jpeg"}
-            className="input-group"
-            onChange={onChangeThumbnail}
-          />
-          {imgThumbnail && (
-            <Image src={imgThumbnail} className="img-thumbnail-banner" />
-          )}
-        </div>
+        <UploadImage
+          title={"Hình ảnh 360px * 137px, tỉ lệ 2,62"}
+          image={imgThumbnail}
+          setImage={setImgThumbnail}
+          classImg={"img-thumbnail-banner"}
+        />
 
         <Button
           className="btn-create-notification"

@@ -460,7 +460,7 @@ const OrderManage = (props) => {
           }}
         />
 
-        <div className="mt-2 div-pagination p-2">
+        <div className="mt-2 div-pagination-order p-2">
           <a>Tổng: {totalSearch > 0 ? totalSearch : total}</a>
           <div>
             <Pagination

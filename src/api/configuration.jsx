@@ -46,9 +46,9 @@ export const activeGroupCustomerApi = (id, data) => {
 
 // create quizz
 
-export const getListQuestionApi = (start, length) => {
+export const getListQuestionApi = (start, length, type) => {
   return axiosClient.get(
-    `/admin/exam_test/get_list?start=${start}&length=${length}`
+    `/admin/exam_test/get_list?start=${start}&length=${length}&type=${type}`
   );
 };
 
@@ -70,6 +70,11 @@ export const deleteQuestionApi = (id) => {
 
 export const activeQuestionApi = (id, data) => {
   return axiosClient.post(`/admin/exam_test/acti_question/${id}`, data);
+};
+export const getListTestByCollabotatorApi = (id) => {
+  return axiosClient.get(
+    `/admin/info_test_collaborator/get_list_by_collaborator/${id}`
+  );
 };
 
 // create account

@@ -23,3 +23,9 @@ export const getListTestCollaboratorApi = (start, length) => {
     `/admin/info-test-collaborator/get_list?start=${start}&length=${length}`
   );
 };
+
+export const getDetailsTestCollaboratorApi = (id) => {
+  return axiosClient.get(
+    `/admin/info-test-collaborator/detail_info_test/${id}`
+  );
+};
