@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { INIT_STATE } from "../../utils/contant";
-import { loginAction, logoutAction } from "../actions/auth";
+import { loginAction, logoutAction, permissionAction } from "../actions/auth";
 import { getType } from "../actions/banner";
+import { getPermission } from "../../api/auth";
 
 export default function LoginReducers(state = INIT_STATE.auth, action) {
   switch (action.type) {
@@ -18,6 +20,12 @@ export default function LoginReducers(state = INIT_STATE.auth, action) {
     case getType(loginAction.loginFailure):
       return {
         ...state,
+      };
+    case getType(permissionAction.permissionSuccess):
+      return {
+        ...state,
+        permission: action.payload.permission,
+        checkElement: action.payload.element,
       };
     case getType(logoutAction.logoutRequest):
       return {

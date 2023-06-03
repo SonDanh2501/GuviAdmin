@@ -15,3 +15,9 @@ export const logoutAction = createActions({
   logoutSuccess: (payload) => payload,
   logoutFailure: (err) => err,
 });
+
+export const permissionAction = createActions({
+  permissionRequest: undefined,
+  permissionSuccess: (payload) => payload,
+  permissionFailure: (err) => err,
+});

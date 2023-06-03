@@ -28,7 +28,7 @@ import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import { getTopupCustomer } from "../../../../../redux/actions/topup";
-import { getUser } from "../../../../../redux/selectors/auth";
+import { getElementState, getUser } from "../../../../../redux/selectors/auth";
 import { getTopupKH, totalTopupKH } from "../../../../../redux/selectors/topup";
 import "./TopupCustomerManage.scss";
 import WithdrawCustomer from "../../../../../components/withdrawCustomer/withdrawCustomer";
@@ -52,6 +52,7 @@ export default function TopupCustomer() {
   const toggle = () => setModal(!modal);
   const toggleCancel = () => setModalCancel(!modalCancel);
   const user = useSelector(getUser);
+  const checkElement = useSelector(getElementState);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -286,22 +287,35 @@ export default function TopupCustomer() {
       render: (data) => {
         return (
           <div>
-            <button
-              className="btn-confirm"
-              onClick={toggleConfirm}
-              disabled={data?.status === "pending" ? false : true}
-            >
-              Duyệt lệnh
-            </button>
+            {checkElement?.includes("verify_transition_cash_book_customer") && (
+              <button
+                className="btn-confirm"
+                onClick={toggleConfirm}
+                disabled={data?.status === "pending" ? false : true}
+              >
+                Duyệt lệnh
+              </button>
+            )}
 
             <div className="mt-1 ml-3">
               {data?.status === "pending" && (
-                <a className="text-cancel-topup" onClick={toggleCancel}>
+                <a
+                  className={
+                    checkElement?.includes(
+                      "cancel_transition_cash_book_customer"
+                    )
+                      ? "text-cancel-topup"
+                      : "text-cancel-topup-hide"
+                  }
+                  onClick={toggleCancel}
+                >
                   Huỷ
                 </a>
               )}
 
-              {user?.role === "admin" && (
+              {checkElement?.includes(
+                "delete_transition_cash_book_customer"
+              ) && (
                 <Tooltip placement="bottom" title={"Xoá giao dịch KH"}>
                   <button className="btn-delete" onClick={toggle}>
                     <i className="uil uil-trash"></i>
@@ -320,7 +334,6 @@ export default function TopupCustomer() {
       <div className="div-header-customer-topup mt-2">
         <AddTopupCustomer />
         <WithdrawCustomer />
-
         <Input
           placeholder="Tìm kiếm"
           type="text"

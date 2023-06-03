@@ -1,7 +1,7 @@
 import { Drawer } from "antd";
 import { Formik } from "formik";
 import React, { memo, useCallback, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Form } from "reactstrap";
 import { fetchCustomers, updateCustomer } from "../../api/customer";
 import { errorNotify } from "../../helper/toast";
@@ -9,16 +9,16 @@ import { validateAddCustomerSchema } from "../../utils/schema";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import CustomButton from "../customButton/customButton";
 import "./editCustomer.scss";
+import { getElementState } from "../../redux/selectors/auth";
 
 const EditCustomer = (props) => {
   const { data, setIsLoading, setData, setTotal, startPage, status } = props;
   const formikRef = useRef();
-  const dispatch = useDispatch();
+  const checkElement = useSelector(getElementState);
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
   };
-
   const onClose = ({ data }) => {
     setOpen(false);
   };
@@ -71,7 +71,16 @@ const EditCustomer = (props) => {
 
   return (
     <>
-      <a onClick={showDrawer}>Chỉnh sửa</a>
+      <a
+        onClick={showDrawer}
+        className={
+          checkElement?.includes("edit_customer")
+            ? "text-edit"
+            : "text-edit-hide"
+        }
+      >
+        Chỉnh sửa
+      </a>
       <Formik
         innerRef={formikRef}
         initialValues={initialValues}

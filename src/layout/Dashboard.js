@@ -1,21 +1,23 @@
 import { Layout } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar/Sidebar";
 import HeaderBar from "../container/Header/Header";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../redux/selectors/auth";
 import "./Dashboard.scss";
 import Admin from "./admin";
-import Marketing from "./marketing";
-import SupportCustomer from "./supportCustomer";
-import Support from "./support";
-import Accountant from "./accountant";
+
+import { permissionAction } from "../redux/actions/auth";
 const { Header, Content, Sider } = Layout;
 
 const Dashboard = () => {
   const [hideSidebar, setHideSidebar] = useState(true);
+  const dispatch = useDispatch();
   const user = useSelector(getUser);
+  useEffect(() => {
+    dispatch(permissionAction.permissionRequest());
+  }, []);
 
   return (
     <Layout>
@@ -67,20 +69,7 @@ const Dashboard = () => {
               padding: 24,
             }}
           >
-            {user?.role === "admin" ? (
-              <Admin />
-            ) : user?.role === "marketing" ||
-              user?.role === "marketing_manager" ? (
-              <Marketing />
-            ) : user?.role === "support_customer" ? (
-              <SupportCustomer />
-            ) : user?.role === "support" ? (
-              <Support />
-            ) : user?.role === "accountant" ? (
-              <Accountant />
-            ) : (
-              ""
-            )}
+            <Admin />
           </Content>
         </Layout>
       </Layout>

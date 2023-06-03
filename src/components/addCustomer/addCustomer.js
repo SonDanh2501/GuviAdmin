@@ -1,7 +1,7 @@
 import { Drawer } from "antd";
 import { Formik } from "formik";
 import React, { memo, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Form } from "reactstrap";
 
 import { createCustomer, fetchCustomers } from "../../api/customer";
@@ -10,11 +10,13 @@ import { validateAddCustomerSchema } from "../../utils/schema";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import CustomButton from "../customButton/customButton";
 import "./addCustomer.scss";
+import { getElementState } from "../../redux/selectors/auth";
 
 const AddCustomer = (props) => {
   const { setIsLoading, setData, setTotal, startPage, status } = props;
   const formikRef = useRef();
   const dispatch = useDispatch();
+  const checkElement = useSelector(getElementState);
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -76,7 +78,11 @@ const AddCustomer = (props) => {
       {/* Button trigger modal */}
       <CustomButton
         title="Tạo mới"
-        className="btn-add-customer-show"
+        className={
+          checkElement?.includes("create_customer")
+            ? "btn-add-customer"
+            : "btn-add-customer-hide"
+        }
         type="button"
         onClick={showDrawer}
       />

@@ -16,11 +16,6 @@ import { getUser } from "../../../../redux/selectors/auth";
 const ManageCustomer = () => {
   const [status, setStatus] = useState("");
 
-  const customers = useSelector(getCustomer);
-  const customerTotal = useSelector(getCustomerTotalItem);
-  const dispatch = useDispatch();
-  const user = useSelector(getUser);
-
   const onChangeTab = (active) => {
     if (active === "2") {
       setStatus("member");

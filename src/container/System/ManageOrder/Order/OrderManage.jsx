@@ -26,7 +26,7 @@ import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { loadingAction } from "../../../../redux/actions/loading";
 import { errorNotify } from "../../../../helper/toast";
-import { getUser } from "../../../../redux/selectors/auth";
+import { getElementState, getUser } from "../../../../redux/selectors/auth";
 import { SearchOutlined } from "@ant-design/icons";
 import _debounce from "lodash/debounce";
 import EditTimeOrder from "../EditTimeGroupOrder";
@@ -57,6 +57,7 @@ const OrderManage = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toggle = () => setModal(!modal);
+  const checkElement = useSelector(getElementState);
 
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work_schedule[0].date)).format(
@@ -134,23 +135,22 @@ const OrderManage = (props) => {
           },
           {
             key: "3",
-            label:
-              item?.status === "pending" && data?.type !== "schedule" ? (
-                <EditTimeOrder
-                  idOrder={item?._id}
-                  dateWork={item?.date_work_schedule[0].date}
-                  code={item?.code_promotion ? item?.code_promotion?.code : ""}
-                  status={status}
-                  kind={kind}
-                  startPage={startPage}
-                  setData={setData}
-                  setTotal={setTotal}
-                  setIsLoading={setIsLoading}
-                  details={false}
-                />
-              ) : (
-                ""
-              ),
+            label: checkElement?.includes("edit_guvi_job") ? (
+              <EditTimeOrder
+                idOrder={item?._id}
+                dateWork={item?.date_work_schedule[0].date}
+                code={item?.code_promotion ? item?.code_promotion?.code : ""}
+                status={status}
+                kind={kind}
+                startPage={startPage}
+                setData={setData}
+                setTotal={setTotal}
+                setIsLoading={setIsLoading}
+                details={false}
+              />
+            ) : (
+              ""
+            ),
           },
         ]
       : [
@@ -158,11 +158,13 @@ const OrderManage = (props) => {
             key: "1",
             label: (
               <a
-                onClick={() =>
-                  navigate("/details-order", {
-                    state: { id: item?._id },
-                  })
-                }
+                onClick={() => {
+                  if (checkElement?.includes("detail_guvi_job")) {
+                    navigate("/details-order", {
+                      state: { id: item?._id },
+                    });
+                  }
+                }}
               >
                 Xem chi tiết
               </a>
@@ -203,11 +205,13 @@ const OrderManage = (props) => {
         return (
           <a
             className="text-id"
-            onClick={() =>
-              navigate("/details-order", {
-                state: { id: data?._id },
-              })
-            }
+            onClick={() => {
+              if (checkElement?.includes("detail_guvi_job")) {
+                navigate("/details-order", {
+                  state: { id: data?._id },
+                });
+              }
+            }}
           >
             {data?.id_view}
           </a>

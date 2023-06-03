@@ -11,9 +11,10 @@ import {
   changeCollaboratorToOrderApi,
   getOrderApi,
 } from "../../../../api/order";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadingAction } from "../../../../redux/actions/loading";
 import _debounce from "lodash/debounce";
+import { getElementState } from "../../../../redux/selectors/auth";
 const AddCollaboratorOrder = (props) => {
   const {
     idOrder,
@@ -31,6 +32,7 @@ const AddCollaboratorOrder = (props) => {
   const [name, setName] = useState("");
   const [id, setId] = useState("");
   const dispatch = useDispatch();
+  const checkElement = useSelector(getElementState);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -116,7 +118,15 @@ const AddCollaboratorOrder = (props) => {
 
   return (
     <>
-      <a className="text-add" onClick={showDrawer}>
+      <a
+        className={
+          checkElement?.includes("add_collaborator_guvi_job") ||
+          checkElement?.includes("add_collaborator_guvi_job")
+            ? "text-add-ctv-order"
+            : "text-add-ctv-order-hide"
+        }
+        onClick={showDrawer}
+      >
         {status === "confirm" ? "Thay CTV" : "Thêm CTV"}
       </a>
       <Drawer

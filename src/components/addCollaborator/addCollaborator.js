@@ -1,6 +1,6 @@
 import { Drawer, Select } from "antd";
 import { Formik } from "formik";
-import React, { memo, useCallback, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Form, Modal } from "reactstrap";
 import { loadingAction } from "../../redux/actions/loading";
@@ -11,13 +11,17 @@ import "./addCollaborator.scss";
 import { createCollaborator, fetchCollaborators } from "../../api/collaborator";
 import { errorNotify } from "../../helper/toast";
 import { getService } from "../../redux/selectors/service";
+import { getElementState } from "../../redux/selectors/auth";
+import { getDistrictApi } from "../../api/file";
 
 const AddCollaborator = (props) => {
   const { setData, setTotal, startPage, status, setIsLoading } = props;
   const formikRef = useRef();
-  const dispatch = useDispatch();
+  const checkElement = useSelector(getElementState);
   const service = useSelector(getService);
+  const [dataCity, setDataCity] = useState([]);
   const serviceOption = [];
+  const cityOption = [];
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -25,6 +29,21 @@ const AddCollaborator = (props) => {
   const onClose = ({ data }) => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    getDistrictApi()
+      .then((res) => {
+        setDataCity(res?.aministrative_division);
+      })
+      .catch((err) => {});
+  }, []);
+
+  dataCity?.map((item) => {
+    cityOption.push({
+      value: item?.code,
+      label: item?.name,
+    });
+  });
 
   service.map((item, index) => {
     serviceOption.push({
@@ -42,6 +61,7 @@ const AddCollaborator = (props) => {
     code: "",
     type: "",
     service_apply: [],
+    city: "",
   };
 
   const addCustomer = useCallback(() => {
@@ -53,7 +73,7 @@ const AddCollaborator = (props) => {
       email: formikRef?.current?.values?.email,
       full_name: formikRef?.current?.values?.name,
       identity_number: formikRef?.current?.values?.identify,
-      city: 79,
+      city: formikRef?.current?.values?.city,
       id_inviter: formikRef?.current?.values?.code,
       type: formikRef?.current?.values?.type,
       service_apply: formikRef?.current?.values?.service_apply,
@@ -81,7 +101,11 @@ const AddCollaborator = (props) => {
       {/* Button trigger modal */}
       <CustomButton
         title="Tạo cộng tác viên"
-        className="btn-add-collaborator"
+        className={
+          checkElement?.includes("create_collaborator")
+            ? "btn-add-collaborator"
+            : "btn-add-collaborator-hide"
+        }
         type="button"
         onClick={showDrawer}
         // onClick={() => setState(!state)}
@@ -156,6 +180,16 @@ const AddCollaborator = (props) => {
                     allowClear
                     onChange={(e) => setFieldValue("service_apply", e)}
                     options={serviceOption}
+                  />
+                </div>
+                <div className="mb-2">
+                  <a>Tỉnh / thành phố</a>
+                  <Select
+                    style={{ width: "100%" }}
+                    defaultValue={"Chọn tỉnh/ thành phố"}
+                    allowClear
+                    onChange={(e) => setFieldValue("city", e)}
+                    options={cityOption}
                   />
                 </div>
                 <CustomTextInput

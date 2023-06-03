@@ -37,7 +37,10 @@ import "./CollaboratorManage.scss";
 
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { getUser } from "../../../../../redux/selectors/auth.js";
+import {
+  getElementState,
+  getUser,
+} from "../../../../../redux/selectors/auth.js";
 import LoadingPagination from "../../../../../components/paginationLoading/index.jsx";
 import AddCollaborator from "../../../../../components/addCollaborator/addCollaborator.js";
 
@@ -57,7 +60,6 @@ export default function CollaboratorManage(props) {
   const [modalVerify, setModalVerify] = useState(false);
   const [modalLockTime, setModalLockTime] = useState(false);
   const [modalContected, setModalContected] = useState(false);
-  const [modalEdit, setModalEdit] = useState(false);
   const [checkLock, setCheckLock] = useState(false);
   const [timeValue, setTimeValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -67,6 +69,7 @@ export default function CollaboratorManage(props) {
   const toggleVerify = () => setModalVerify(!modalVerify);
   const toggleLockTime = () => setModalLockTime(!modalLockTime);
   const user = useSelector(getUser);
+  const checkElement = useSelector(getElementState);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -309,23 +312,24 @@ export default function CollaboratorManage(props) {
   const items = [
     {
       key: "1",
-      label: itemEdit?.is_active ? (
-        <a onClick={toggleBlock}>Chặn</a>
-      ) : (
-        <a onClick={toggleBlock}>Bỏ chặn</a>
+      label: (
+        <a
+          className={
+            checkElement?.includes("lock_unlock_collaborator")
+              ? "text-click-block"
+              : "text-click-block-hide"
+          }
+          onClick={toggleLockTime}
+        >
+          {itemEdit?.is_locked ? "Mở khoá" : "Khoá"}
+        </a>
       ),
     },
     {
       key: "2",
-      label: !itemEdit?.is_locked ? (
-        <a onClick={toggleLockTime}>Khoá</a>
-      ) : (
-        <a onClick={toggleLockTime}>Mở khoá</a>
+      label: checkElement?.includes("delete_collaborator") && (
+        <a onClick={toggle}>Xoá</a>
       ),
-    },
-    {
-      key: "3",
-      label: user?.role === "admin" && <a onClick={toggle}>Xoá</a>,
     },
   ];
 
@@ -335,11 +339,13 @@ export default function CollaboratorManage(props) {
       render: (data) => (
         <a
           className="text-id-collaborator"
-          onClick={() =>
-            navigate("/system/collaborator-manage/details-collaborator", {
-              state: { id: data?._id },
-            })
-          }
+          onClick={() => {
+            if (checkElement?.includes("detail_collaborator")) {
+              navigate("/system/collaborator-manage/details-collaborator", {
+                state: { id: data?._id },
+              });
+            }
+          }}
         >
           {data?.id_view}
         </a>
@@ -351,11 +357,13 @@ export default function CollaboratorManage(props) {
       render: (data) => {
         return (
           <div
-            onClick={() =>
-              navigate("/system/collaborator-manage/details-collaborator", {
-                state: { id: data?._id },
-              })
-            }
+            onClick={() => {
+              if (checkElement?.includes("detail_collaborator")) {
+                navigate("/system/collaborator-manage/details-collaborator", {
+                  state: { id: data?._id },
+                });
+              }
+            }}
             className="div-collaborator"
           >
             <img className="img_collaborator" src={data?.avatar} />
@@ -440,8 +448,17 @@ export default function CollaboratorManage(props) {
               <a className="text-nonverify">Chưa xác thực</a>
             )}
             {!data?.is_contacted && !data?.is_verify && (
-              <div className="btn-contacted" onClick={toggleContected}>
-                <a className="text-contacted">Liên hệ</a>
+              <div
+                className={
+                  checkElement?.includes("contacted_collaborator")
+                    ? "btn-contacted"
+                    : "btn-contacted-hide"
+                }
+                onClick={toggleContected}
+              >
+                {checkElement?.includes("contacted_collaborator") && (
+                  <a className="text-contacted">Liên hệ</a>
+                )}
               </div>
             )}
           </div>
@@ -453,17 +470,16 @@ export default function CollaboratorManage(props) {
       align: "center",
       render: (data) => (
         <Space size="middle">
-          <div>
-            {data?.is_verify ? (
-              <img src={onToggle} className="img-toggle" />
-            ) : (
-              <img
-                src={offToggle}
-                className="img-toggle"
-                onClick={toggleVerify}
-              />
-            )}
-          </div>
+          <img
+            onClick={data?.is_verify ? toggleVerify : null}
+            src={data?.is_verify ? onToggle : offToggle}
+            className={
+              checkElement?.includes("verify_collaborator")
+                ? "img-toggle"
+                : "img-toggle-hide"
+            }
+          />
+
           <Dropdown
             menu={{
               items,
@@ -477,13 +493,6 @@ export default function CollaboratorManage(props) {
           </Dropdown>
         </Space>
       ),
-    },
-  ];
-
-  const itemFilter = [
-    {
-      key: "1",
-      label: <a>Khách hàng thân thiết</a>,
     },
   ];
 

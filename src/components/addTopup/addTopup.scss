@@ -1,4 +1,4 @@
-.btn-add-topup {
+.btn-add-topup-collaborator {
   width: 200px;
   height: 40px;
   border: none;
@@ -7,6 +7,16 @@
   color: white;
   margin-left: 20px;
   box-shadow: 2px 3px 2px rgb(216, 216, 216);
+}
+
+.btn-add-topup-collaborator-hide {
+  width: 200px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background-color: #48cae4;
+  color: white;
+  margin-left: 20px;
 }
 
 .btn-add-t {

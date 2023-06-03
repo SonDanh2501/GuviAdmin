@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { searchCustomers, searchCustomersApi } from "../../api/customer";
 import { TopupMoneyCustomerApi } from "../../api/topup";
 import { loadingAction } from "../../redux/actions/loading";
@@ -11,10 +11,10 @@ import "./addTopupCustomer.scss";
 import { Drawer, Input, InputNumber, List } from "antd";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { getTopupCustomer } from "../../redux/actions/topup";
+import { getElementState } from "../../redux/selectors/auth";
 const { TextArea } = Input;
 
 const AddTopupCustomer = () => {
-  const [state, setState] = useState(false);
   const [money, setMoney] = useState("");
   const [note, setNote] = useState("");
   const [data, setData] = useState([]);
@@ -23,6 +23,7 @@ const AddTopupCustomer = () => {
   const [errorMoney, setErrorMoney] = useState("");
   const [id, setId] = useState("");
   const dispatch = useDispatch();
+  const checkElement = useSelector(getElementState);
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -97,7 +98,11 @@ const AddTopupCustomer = () => {
       {/* Button trigger modal */}
       <CustomButton
         title="Nạp tiền"
-        className="btn-add-topup-customer"
+        className={
+          checkElement?.includes("create_transition_cash_book_customer")
+            ? "btn-add-topup-customer"
+            : "btn-add-topup-customer-hide"
+        }
         type="button"
         onClick={showDrawer}
       />

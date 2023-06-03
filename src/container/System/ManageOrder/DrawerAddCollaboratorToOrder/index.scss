@@ -3,7 +3,6 @@
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
-  line-height: 16px;
   color: black;
   margin-bottom: 20px;
 }
@@ -94,4 +93,21 @@
   background-color: #48cae4;
   color: white;
   margin-top: 30px;
+}
+
+.text-add-ctv-order {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: black;
+}
+
+.text-add-ctv-order-hide {
+  display: none;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: black;
 }

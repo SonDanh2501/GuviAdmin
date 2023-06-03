@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { searchCustomers, searchCustomersApi } from "../../api/customer";
 import {
   TopupMoneyCustomerApi,
@@ -13,6 +13,7 @@ import "./withdrawCustomer.scss";
 import { Drawer, Input, InputNumber, List } from "antd";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { getTopupCustomer } from "../../redux/actions/topup";
+import { getElementState } from "../../redux/selectors/auth";
 const { TextArea } = Input;
 
 const WithdrawCustomer = () => {
@@ -24,6 +25,7 @@ const WithdrawCustomer = () => {
   const [errorMoney, setErrorMoney] = useState("");
   const [id, setId] = useState("");
   const dispatch = useDispatch();
+  const checkElement = useSelector(getElementState);
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -98,7 +100,11 @@ const WithdrawCustomer = () => {
       {/* Button trigger modal */}
       <CustomButton
         title="Rút tiền"
-        className="btn-withdraw-customer"
+        className={
+          checkElement?.includes("edit_transition_cash_book_customer")
+            ? "btn-withdraw-customer"
+            : "btn-withdraw-customer-hide"
+        }
         type="button"
         onClick={showDrawer}
       />
