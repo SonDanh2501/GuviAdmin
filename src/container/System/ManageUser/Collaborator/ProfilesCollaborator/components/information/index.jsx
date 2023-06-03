@@ -203,7 +203,9 @@ const Information = ({ data, image, idCTV, setData }) => {
                   onChange={(date, dateString) => setBirthday(dateString)}
                   style={{ width: "100%" }}
                   format={dateFormat}
-                  value={dayjs(birthday.slice(0, 11), dateFormat)}
+                  value={
+                    birthday ? dayjs(birthday.slice(0, 11), dateFormat) : ""
+                  }
                 />
               </div>
             </Col>

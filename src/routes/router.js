@@ -35,6 +35,7 @@ const router = [
         component: Home,
         layout: "admin",
         tab: [],
+        id_sidebar: "dasboard",
       },
       {
         path: "/group-order/manage-order",

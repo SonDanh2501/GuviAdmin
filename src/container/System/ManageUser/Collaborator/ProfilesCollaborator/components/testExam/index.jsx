@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { getListTestByCollabotatorApi } from "../../../../../../../api/configuration";
 import "./styles.scss";
-import moment from "moment";
 
 const TestExam = (props) => {
   const { id } = props;
