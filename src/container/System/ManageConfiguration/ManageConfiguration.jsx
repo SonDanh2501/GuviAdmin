@@ -4,9 +4,12 @@ import { Button } from "reactstrap";
 
 import "./ManageConfiguration.scss";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { getElementState } from "../../../redux/selectors/auth";
 
 const ManageConfiguration = () => {
   const navigate = useNavigate();
+  const checkElement = useSelector(getElementState);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -57,7 +60,11 @@ const ManageConfiguration = () => {
           return (
             <div
               key={item?.id}
-              className="btn-item"
+              className={
+                checkElement?.includes(item?.role)
+                  ? "btn-item"
+                  : "btn-item-hide"
+              }
               onClick={() => onClick(item)}
             >
               <a className="text-btn">{item?.title}</a>
@@ -76,21 +83,25 @@ const DATA = [
     id: 1,
     title: "Nguyên nhân huỷ",
     value: "reason_cancel",
+    role: "get_reason_cancel_setting",
   },
   {
     id: 2,
     title: "Nhóm khách hàng",
     value: "group_customer",
+    role: "get_group_customer_setting",
   },
   {
     id: 3,
     title: "Ứng dụng khách hàng",
     value: "app_customer",
+    role: "get_app_customer_setting",
   },
   {
     id: 4,
     title: "Ứng dụng CTV",
     value: "app_collaborator",
+    role: "get_app_collaborator_setting",
   },
   {
     id: 5,
@@ -101,16 +112,19 @@ const DATA = [
     id: 6,
     title: "Tạo tài khoản",
     value: "create_account",
+    role: "get_user_system",
   },
   {
     id: 7,
     title: "Tạo câu hỏi cho CTV",
     value: "create_quizz",
+    role: "get_exam_test_setting",
   },
   {
     id: 8,
     title: "Tạo lí do phạt",
     value: "reason_punish",
+    role: "get_reason_punish_setting",
   },
   {
     id: 9,
@@ -121,5 +135,6 @@ const DATA = [
     id: 10,
     title: "Cấu hình quyền quản trị",
     value: "setting_role",
+    role: "get_role_permission_setting",
   },
 ];

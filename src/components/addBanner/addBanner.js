@@ -14,6 +14,7 @@ import resizeFile from "../../helper/resizer";
 import { getService } from "../../redux/selectors/service";
 import "./addBanner.scss";
 import UploadImage from "../uploadImage";
+import { getPromotionList } from "../../api/promotion";
 
 const AddBanner = () => {
   const [title, setTitle] = useState("");
@@ -21,9 +22,9 @@ const AddBanner = () => {
   const [typeLink, setTypeLink] = useState("url");
   const [linkID, setLinkId] = useState("");
   const [position, setPosition] = useState("");
+  const [promotionData, setPromotionData] = useState([]);
   const [kindService, setKindService] = useState("giup_viec_co_dinh");
   const dispatch = useDispatch();
-  const promotion = useSelector(getPromotionSelector);
   const service = useSelector(getService);
   const [open, setOpen] = useState(false);
   const promotionOption = [];
@@ -36,10 +37,14 @@ const AddBanner = () => {
   };
 
   useEffect(() => {
-    dispatch(getPromotion.getPromotionRequest());
+    getPromotionList()
+      .then((res) => {
+        setPromotionData(res?.data);
+      })
+      .catch((err) => {});
   }, [dispatch]);
 
-  promotion?.map((item) => {
+  promotionData?.map((item) => {
     promotionOption.push({
       value: item?._id,
       label: item?.title?.vi,
@@ -134,7 +139,7 @@ const AddBanner = () => {
             </div>
           ) : typeLink === "promotion" ? (
             <div>
-              <a>Link ID</a>
+              <a>Chọn mã khuyến mãi</a>
               <Select
                 style={{ width: "100%" }}
                 value={linkID}

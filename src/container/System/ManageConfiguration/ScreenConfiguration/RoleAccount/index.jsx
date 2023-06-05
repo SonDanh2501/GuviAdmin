@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
 import CreateRole from "./CreateRole";
 import { getListRoleAdmin } from "../../../../../api/createAccount";
-import { Dropdown, Space, Table } from "antd";
+import { Button, Dropdown, Space, Table } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import EditRole from "./EditRole";
 import LoadingPagination from "../../../../../components/paginationLoading";
+import { useSelector } from "react-redux";
+import { getElementState } from "../../../../../redux/selectors/auth";
+import { useNavigate } from "react-router-dom";
 
 const RoleAccount = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [itemEdit, setItemEdit] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const checkElement = useSelector(getElementState);
+  const navigate = useNavigate();
+
   useEffect(() => {
     getListRoleAdmin()
       .then((res) => {
@@ -23,13 +29,19 @@ const RoleAccount = () => {
   const items = [
     {
       key: 1,
-      label: (
-        <EditRole
-          item={itemEdit}
-          setDataList={setData}
-          setTotal={setTotal}
-          setIsLoading={setIsLoading}
-        />
+      label: checkElement?.includes("edit_role_permission_setting") && (
+        <a
+          onClick={() =>
+            navigate(
+              "/adminManage/manage-configuration/setting_role/edit_role",
+              {
+                state: { item: itemEdit },
+              }
+            )
+          }
+        >
+          Chỉnh sửa
+        </a>
       ),
     },
   ];
@@ -44,30 +56,46 @@ const RoleAccount = () => {
       align: "center",
       render: (data) => {
         return (
-          <Space size="middle">
-            <Dropdown
-              menu={{
-                items,
-              }}
-              placement="bottom"
-              trigger={["click"]}
-            >
-              <a>
-                <MoreOutlined className="icon-more" />
-              </a>
-            </Dropdown>
-          </Space>
+          <>
+            {checkElement?.includes("edit_role_permission_setting") && (
+              <Space size="middle">
+                <Dropdown
+                  menu={{
+                    items,
+                  }}
+                  placement="bottom"
+                  trigger={["click"]}
+                >
+                  <a>
+                    <MoreOutlined className="icon-more" />
+                  </a>
+                </Dropdown>
+              </Space>
+            )}
+          </>
         );
       },
     },
   ];
   return (
     <div>
-      <CreateRole
-        setDataList={setData}
-        setTotal={setTotal}
-        setIsLoading={setIsLoading}
-      />
+      {checkElement?.includes("create_role_permission_setting") && (
+        // <CreateRole
+        //   setDataList={setData}
+        //   setTotal={setTotal}
+        //   setIsLoading={setIsLoading}
+        // />
+        <Button
+          type="primary"
+          onClick={() =>
+            navigate(
+              "/adminManage/manage-configuration/setting_role/create_role"
+            )
+          }
+        >
+          Thêm quyền
+        </Button>
+      )}
 
       <div className="mt-3">
         <Table

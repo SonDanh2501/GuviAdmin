@@ -18,20 +18,14 @@ import {
   activeReason,
   deleteReason,
   fetchReasons,
-  getListReasonCancel,
 } from "../../../../../api/reasons";
-import offToggle from "../../../../../assets/images/off-button.png";
-import onToggle from "../../../../../assets/images/on-button.png";
 import AddReason from "../../../../../components/addReason/addReason";
 import EditReason from "../../../../../components/editReason/editReason";
-import { loadingAction } from "../../../../../redux/actions/loading";
-import { getReasons } from "../../../../../redux/actions/reason";
-import {
-  getReason,
-  getReasonTotal,
-} from "../../../../../redux/selectors/reason";
-import { errorNotify } from "../../../../../helper/toast";
 import LoadingPagination from "../../../../../components/paginationLoading";
+import { errorNotify } from "../../../../../helper/toast";
+import { loadingAction } from "../../../../../redux/actions/loading";
+import { getElementState } from "../../../../../redux/selectors/auth";
+import { getReasonTotal } from "../../../../../redux/selectors/reason";
 
 export default function ReasonManage() {
   const dispatch = useDispatch();
@@ -45,6 +39,7 @@ export default function ReasonManage() {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const checkElement = useSelector(getElementState);
 
   useEffect(() => {
     fetchReasons(0, 10)
@@ -130,7 +125,7 @@ export default function ReasonManage() {
   const items = [
     {
       key: "1",
-      label: (
+      label: checkElement?.includes("edit_reason_cancel_setting") && (
         <EditReason
           data={itemEdit}
           setIsLoading={setIsLoading}
@@ -142,7 +137,9 @@ export default function ReasonManage() {
     },
     {
       key: "2",
-      label: <a onClick={toggle}>Xoá</a>,
+      label: checkElement?.includes("delete_reason_cancel_setting") && (
+        <a onClick={toggle}>Xoá</a>
+      ),
     },
   ];
 
@@ -222,12 +219,14 @@ export default function ReasonManage() {
           <CardHeader className="border-0 card-header">
             <Row className="align-items-center">
               <Col className="text-left">
-                <AddReason
-                  setIsLoading={setIsLoading}
-                  setData={setData}
-                  setTotal={setTotal}
-                  startPage={startPage}
-                />
+                {checkElement?.includes("create_reason_cancel_setting") && (
+                  <AddReason
+                    setIsLoading={setIsLoading}
+                    setData={setData}
+                    setTotal={setTotal}
+                    startPage={startPage}
+                  />
+                )}
               </Col>
               {/* <Col>
                 <CustomTextInput

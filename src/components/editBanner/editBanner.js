@@ -14,6 +14,7 @@ import CustomButton from "../customButton/customButton";
 import CustomTextInput from "../CustomTextInput/customTextInput";
 import "./editBanner.scss";
 import UploadImage from "../uploadImage";
+import { getPromotionList } from "../../api/promotion";
 
 const EditBanner = ({ data }) => {
   const [title, setTitle] = useState("");
@@ -23,7 +24,7 @@ const EditBanner = ({ data }) => {
   const [position, setPosition] = useState("");
   const [kindService, setKindService] = useState("");
   const dispatch = useDispatch();
-  const promotion = useSelector(getPromotionSelector);
+  const [promotionData, setPromotionData] = useState([]);
   const service = useSelector(getService);
   const promotionOption = [];
   const serviceOption = [];
@@ -38,10 +39,14 @@ const EditBanner = ({ data }) => {
   };
 
   useEffect(() => {
-    dispatch(getPromotion.getPromotionRequest());
+    getPromotionList()
+      .then((res) => {
+        setPromotionData(res?.data);
+      })
+      .catch((err) => {});
   }, [dispatch]);
 
-  promotion?.map((item) => {
+  promotionData?.map((item) => {
     promotionOption.push({
       value: item?._id,
       label: item?.title?.vi,
@@ -134,7 +139,7 @@ const EditBanner = ({ data }) => {
             </div>
           ) : typeLink === "promotion" ? (
             <div>
-              <a>Link ID</a>
+              <a>Chọn mã khuyến mãi</a>
               <Select
                 style={{ width: "100%" }}
                 value={linkID}

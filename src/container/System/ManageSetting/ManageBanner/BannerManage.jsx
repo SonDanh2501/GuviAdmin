@@ -17,6 +17,7 @@ import { loadingAction } from "../../../../redux/actions/loading";
 import onToggle from "../../../../assets/images/on-button.png";
 import offToggle from "../../../../assets/images/off-button.png";
 import { errorNotify } from "../../../../helper/toast";
+import { getElementState } from "../../../../redux/selectors/auth";
 
 export default function BannerManage() {
   const [dataFilter, setDataFilter] = useState([]);
@@ -33,6 +34,7 @@ export default function BannerManage() {
   const toggleBlock = () => setModalBlock(!modalBlock);
   const banners = useSelector(getBanner);
   const totalBanner = useSelector(getBannerTotal);
+  const checkElement = useSelector(getElementState);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getBanners.getBannersRequest({ start: 0, length: 20 }));
@@ -134,11 +136,15 @@ export default function BannerManage() {
   const items = [
     {
       key: "1",
-      label: <EditBanner data={itemEdit} />,
+      label: checkElement?.includes("edit_banner") && (
+        <EditBanner data={itemEdit} />
+      ),
     },
     {
       key: "2",
-      label: <a onClick={toggle}> Xoá</a>,
+      label: checkElement?.includes("delete_banner") && (
+        <a onClick={toggle}> Xoá</a>
+      ),
     },
   ];
 
@@ -186,20 +192,13 @@ export default function BannerManage() {
       key: "action",
       render: (data) => (
         <Space size="middle">
-          {data?.is_active ? (
+          {checkElement?.includes("active_banner") && (
             <img
               className="img-unlock-banner"
-              src={onToggle}
-              onClick={toggleBlock}
-            />
-          ) : (
-            <img
-              className="img-unlock-banner"
-              src={offToggle}
+              src={data?.is_active ? onToggle : offToggle}
               onClick={toggleBlock}
             />
           )}
-
           <Dropdown
             menu={{
               items,
@@ -227,7 +226,7 @@ export default function BannerManage() {
             prefix={<SearchOutlined />}
             onChange={(e) => handleSearch(e.target.value)}
           />
-          <AddBanner />
+          {checkElement?.includes("create_banner") && <AddBanner />}
         </div>
         <div className="mt-3">
           <Table

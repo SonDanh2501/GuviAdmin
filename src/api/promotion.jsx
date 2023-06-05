@@ -13,6 +13,10 @@ export const fetchPromotion = (
   );
 };
 
+export const getPromotionList = () => {
+  return axiosClient.get(`/admin/promotion_manager/get_list`);
+};
+
 export const searchPromotion = (
   search,
   start,

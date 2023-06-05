@@ -1,6 +1,6 @@
 import { Button, Image } from "antd";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getSettingAppCollaboratorApi,
   updateSettingAppCollaboratorApi,
@@ -11,11 +11,13 @@ import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import resizeFile from "../../../../../helper/resizer";
 import "./styles.scss";
+import { getElementState } from "../../../../../redux/selectors/auth";
 
 const AppCollaborator = () => {
   const [valueVersion, setValueVersion] = useState("");
   const [maxDistance, setMaxDistance] = useState("");
   const [imgThumbnail, setImgThumbnail] = useState("");
+  const checkElement = useSelector(getElementState);
 
   const dispatch = useDispatch();
 
@@ -135,9 +137,11 @@ const AppCollaborator = () => {
         />
       )}
 
-      <Button className="btn-update" onClick={updateApp}>
-        Cập nhật
-      </Button>
+      {checkElement?.includes("edit_app_collaborator_setting") && (
+        <Button className="btn-update" onClick={updateApp}>
+          Cập nhật
+        </Button>
+      )}
     </div>
   );
 };

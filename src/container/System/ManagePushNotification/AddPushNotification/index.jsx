@@ -155,14 +155,7 @@ const AddPushNotification = ({ idOrder }) => {
 
   return (
     <>
-      <div
-        className={
-          checkElement?.includes("create_notification")
-            ? "btn-push-noti"
-            : "btn-push-noti-hide"
-        }
-        onClick={showDrawer}
-      >
+      <div className={"btn-push-noti"} onClick={showDrawer}>
         <a>Tạo thông báo</a>
       </div>
       <Drawer

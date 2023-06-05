@@ -203,18 +203,14 @@ const TableDeepCleaning = (props) => {
             ) : (
               <div className="div-uncontacted">
                 <a className="text-uncontacted">Chưa liên hệ</a>
-                <div
-                  className={
-                    checkElement?.includes("contact_request_service")
-                      ? "btn-contacted-deep"
-                      : "btn-contacted-deep-hide"
-                  }
-                  onClick={toggleContacted}
-                >
-                  {checkElement?.includes("contact_request_service") && (
+                {checkElement?.includes("contact_request_service") && (
+                  <div
+                    className={"btn-contacted-deep"}
+                    onClick={toggleContacted}
+                  >
                     <a className="text-btn-contacted">Liên hệ</a>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             )}
           </div>

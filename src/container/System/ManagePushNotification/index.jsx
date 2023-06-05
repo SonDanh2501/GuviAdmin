@@ -199,7 +199,9 @@ const ManagePushNotification = () => {
     <div>
       <h5>Thông báo</h5>
       <div>
-        <AddPushNotification />
+        {checkElement?.includes("create_notification") && (
+          <AddPushNotification />
+        )}
       </div>
       <div className="div-tab mt-5">
         {DATA.map((item) => {

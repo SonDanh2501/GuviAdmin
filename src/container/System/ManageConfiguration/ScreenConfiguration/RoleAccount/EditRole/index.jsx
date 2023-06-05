@@ -1,29 +1,22 @@
-import { Button, Checkbox, Drawer, Input, Modal } from "antd";
-import "./index.scss";
+import { Button, Checkbox, Input } from "antd";
 import { memo, useCallback, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
-  createRoleApi,
   editRoleApi,
   getSettingAccountApi,
 } from "../../../../../../api/configuration";
-import { errorNotify } from "../../../../../../helper/toast";
 import LoadingPagination from "../../../../../../components/paginationLoading";
-import { getListRoleAdmin } from "../../../../../../api/createAccount";
+import { errorNotify } from "../../../../../../helper/toast";
+import "./index.scss";
 
 const EditRole = (props) => {
-  const { item, setIsLoading, setDataList, setTotal } = props;
+  const { state } = useLocation();
+  const { item } = state || {};
   const [data, setData] = useState([]);
   const [keyApi, setKeyApi] = useState([]);
   const [nameRole, setNameRole] = useState("");
-  const [check, setCheck] = useState(false);
-
-  const [open, setOpen] = useState(false);
-  const showDrawer = () => {
-    setOpen(true);
-  };
-  const onClose = () => {
-    setOpen(false);
-  };
+  const [isLoading, setIsLoading] = useState(false);
+  const naivigate = useNavigate();
 
   useEffect(() => {
     getSettingAccountApi()
@@ -80,13 +73,8 @@ const EditRole = (props) => {
     })
       .then((res) => {
         setIsLoading(false);
-        setOpen(false);
-        getListRoleAdmin()
-          .then((res) => {
-            setDataList(res.data);
-            setTotal(res?.totalItem);
-          })
-          .catch((err) => {});
+        naivigate(-1);
+        // window.location.reload();
       })
       .catch((err) => {
         errorNotify({
@@ -98,51 +86,53 @@ const EditRole = (props) => {
 
   return (
     <div>
-      <a onClick={showDrawer}>Chỉnh sửa</a>
-      <Drawer
+      {/* <a onClick={showDrawer}>Chỉnh sửa</a> */}
+      {/* <Drawer
         title="Chỉnh sửa quyền quản trị"
         placement="right"
         onClose={onClose}
         open={open}
         width={1000}
-      >
-        <div className="div-input">
-          <a>Tên quyền</a>
-          <Input
-            placeholder="Vui lòng nhập tên quyền"
-            style={{ width: "50%", marginTop: 2 }}
-            value={nameRole}
-            onChange={(e) => setNameRole(e.target.value)}
-          />
-        </div>
-        <div className="div-title-role">
-          {data?.map((item, index) => {
-            return (
-              <div key={index} className="div-item-role">
-                <a className="title-role">
-                  {item?.permission[0]?.name_group_api}
-                </a>
-                {item?.permission?.map((per, i) => {
-                  return (
-                    <div className="div-item-per" key={i}>
-                      <Checkbox
-                        checked={keyApi?.includes(per?._id) ? true : false}
-                        onChange={(e) =>
-                          onChangeRole(e.target.checked, per, item)
-                        }
-                      />
-                      <a className="text-name-per">{per?.name_api}</a>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
-        <Button onClick={onEdit} style={{ marginTop: 50 }}>
-          Sửa quyền
-        </Button>
-      </Drawer>
+      > */}
+      <div className="div-input">
+        <a className="label">Tên quyền</a>
+        <Input
+          placeholder="Vui lòng nhập tên quyền"
+          style={{ width: "50%" }}
+          value={nameRole}
+          onChange={(e) => setNameRole(e.target.value)}
+        />
+      </div>
+      <div className="div-title-role">
+        {data?.map((item, index) => {
+          return (
+            <div key={index} className="div-item-role">
+              <a className="title-role">
+                {item?.permission[0]?.name_group_api}
+              </a>
+              {item?.permission?.map((per, i) => {
+                return (
+                  <div className="div-item-per" key={i}>
+                    <Checkbox
+                      checked={keyApi?.includes(per?._id) ? true : false}
+                      onChange={(e) =>
+                        onChangeRole(e.target.checked, per, item)
+                      }
+                    />
+                    <a className="text-name-per">{per?.name_api}</a>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+      <Button onClick={onEdit} style={{ marginTop: 50 }}>
+        Sửa quyền
+      </Button>
+      {/* </Drawer> */}
+
+      {isLoading && <LoadingPagination />}
     </div>
   );
 };

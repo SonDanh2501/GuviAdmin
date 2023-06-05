@@ -8,7 +8,7 @@ export const fetchNews = (start, length) => {
   );
 };
 export const fetchNewById = () => {
-  return axiosClient.get("//admin/news_manager/get_detail/:id");
+  return axiosClient.get("/admin/news_manager/get_detail/:id");
 };
 export const updateNew = (id, payload) => {
   return axiosClient.post(`/admin/news_manager/edit_item/${id}`, payload);

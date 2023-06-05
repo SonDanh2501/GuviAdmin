@@ -7,8 +7,11 @@ import ReportCancelOrder from "./ReportCancelOrder";
 import ReportManager from "./ReportCollaborator";
 import "./index.scss";
 import ReportService from "./ReportService";
+import { useSelector } from "react-redux";
+import { getElementState } from "../../../redux/selectors/auth";
 
 const ManageReport = () => {
+  const checkElement = useSelector(getElementState);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -19,48 +22,27 @@ const ManageReport = () => {
       </div>
       <div className="div-container-report">
         <Tabs defaultActiveKey="1">
-          {/* <Tabs.TabPane tab="Báo cáo đơn hàng" key="1">
-            <ReportOrder />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo đơn hàng theo ngày" key="2">
-            <ReportOrderDaily />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo đơn hàng theo khu vực" key="3">
-            <ReportOrderCity />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo CTV" key="4">
-            <ReportManager />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo số lượng user" key="5">
-            <ReportUser />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo lượt giới thiệu" key="6">
-            <ReportInvite />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo đơn hàng theo khách hàng" key="7">
-            <ReportCustomer />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo khu vực" key="8">
-            <ReportArea />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo đơn huỷ" key="9">
-            <ReportCancelOrder />
-          </Tabs.TabPane> */}
           <Tabs.TabPane tab="Báo cáo đơn hàng" key="1">
             <ManageReportOrder />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo CTV" key="2">
-            <ReportManager />
-          </Tabs.TabPane>
+          {checkElement?.includes("collaborator_report") && (
+            <Tabs.TabPane tab="Báo cáo CTV" key="2">
+              <ReportManager />
+            </Tabs.TabPane>
+          )}
           <Tabs.TabPane tab="Báo cáo khách hàng" key="3">
             <ManageReportCustomer />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo đơn huỷ" key="4">
-            <ReportCancelOrder />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Báo cáo dịch vụ" key="5">
-            <ReportService />
-          </Tabs.TabPane>
+          {checkElement?.includes("order_cancel_report") && (
+            <Tabs.TabPane tab="Báo cáo đơn huỷ" key="4">
+              <ReportCancelOrder />
+            </Tabs.TabPane>
+          )}
+          {checkElement?.includes("order_by_service_report") && (
+            <Tabs.TabPane tab="Báo cáo dịch vụ" key="5">
+              <ReportService />
+            </Tabs.TabPane>
+          )}
         </Tabs>
       </div>
     </>
