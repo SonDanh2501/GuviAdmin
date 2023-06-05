@@ -1,6 +1,6 @@
 import { Button, Col, Image } from "antd";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Row } from "reactstrap";
 import {
   getSettingAppCustomerApi,
@@ -13,6 +13,7 @@ import { loadingAction } from "../../../../../redux/actions/loading";
 import resizeFile from "../../../../../helper/resizer";
 
 import "./styles.scss";
+import { getElementState } from "../../../../../redux/selectors/auth";
 
 const AppCustomer = () => {
   const [valueVersion, setValueVersion] = useState("");
@@ -28,6 +29,7 @@ const AppCustomer = () => {
   const [ratioSilver, setRatioSilver] = useState();
   const [ratioGold, setRatioGold] = useState();
   const [ratioPlatinum, setRatioPlatinum] = useState();
+  const checkElement = useSelector(getElementState);
 
   const dispatch = useDispatch();
 
@@ -285,7 +287,7 @@ const AppCustomer = () => {
           />
         </div>
       </div>
-
+      {checkElement?.includes("edit_app_customer_setting")} &&{" "}
       <Button className="btn-update" onClick={updateApp}>
         Cập nhật
       </Button>

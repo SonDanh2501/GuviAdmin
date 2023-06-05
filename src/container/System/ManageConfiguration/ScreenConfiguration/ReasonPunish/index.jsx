@@ -14,6 +14,8 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { errorNotify } from "../../../../../helper/toast";
 import offToggle from "../../../../../assets/images/off-button.png";
 import onToggle from "../../../../../assets/images/on-button.png";
+import { useSelector } from "react-redux";
+import { getElementState } from "../../../../../redux/selectors/auth";
 
 const ReasonPunish = () => {
   const [data, setData] = useState([]);
@@ -22,6 +24,7 @@ const ReasonPunish = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
+  const checkElement = useSelector(getElementState);
 
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
@@ -126,24 +129,24 @@ const ReasonPunish = () => {
         <a>{data?.apply_user === "collaborator" ? "Cộng tác viên" : ""}</a>
       ),
     },
-    {
-      key: "action",
-      render: (data) => {
-        return (
-          <div>
-            {data?.is_active ? (
-              <img src={onToggle} className="img-toggle" />
-            ) : (
-              <img
-                src={offToggle}
-                className="img-toggle"
-                onClick={toggleBlock}
-              />
-            )}
-          </div>
-        );
-      },
-    },
+    // {
+    //   key: "action",
+    //   render: (data) => {
+    //     return (
+    //       <div>
+    //         {data?.is_active ? (
+    //           <img src={onToggle} className="img-toggle" />
+    //         ) : (
+    //           <img
+    //             src={offToggle}
+    //             className="img-toggle"
+    //             onClick={toggleBlock}
+    //           />
+    //         )}
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       key: "action",
       render: (data) => (
@@ -167,7 +170,7 @@ const ReasonPunish = () => {
   const items = [
     {
       key: 1,
-      label: (
+      label: checkElement?.includes("edit_reason_punish_setting") && (
         <EditReasonPubnish
           setIsLoading={setIsLoading}
           setData={setData}
@@ -178,18 +181,22 @@ const ReasonPunish = () => {
     },
     {
       key: 2,
-      label: <a onClick={toggle}>Xoá</a>,
+      label: checkElement?.includes("delete_reason_punish_setting") && (
+        <a onClick={toggle}>Xoá</a>
+      ),
     },
   ];
   return (
     <>
       <h3>Lí do phạt</h3>
       <div>
-        <CreateReasonPubnish
-          setIsLoading={setIsLoading}
-          setData={setData}
-          setTotal={setTotal}
-        />
+        {checkElement?.includes("create_reason_punish_setting") && (
+          <CreateReasonPubnish
+            setIsLoading={setIsLoading}
+            setData={setData}
+            setTotal={setTotal}
+          />
+        )}
       </div>
       <div className="mt-3">
         <Table

@@ -17,6 +17,7 @@
     display: flex;
     flex-direction: column;
     padding: 10px;
+    width: 25%;
 
     .div-item-per {
       display: flex;
@@ -58,4 +59,13 @@
 .div-input {
   display: flex;
   flex-direction: column;
+
+  .label {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    text-decoration: none;
+    color: #000000;
+  }
 }

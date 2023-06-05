@@ -29,9 +29,12 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import onToggle from "../../../../../assets/images/on-button.png";
 import offToggle from "../../../../../assets/images/off-button.png";
+import { useSelector } from "react-redux";
+import { getElementState } from "../../../../../redux/selectors/auth";
 const { TextArea } = Input;
 
 const CreateQuizz = () => {
+  const checkElement = useSelector(getElementState);
   const [dataQuestion, setDataQuestion] = useState([
     {
       title: "",
@@ -359,16 +362,10 @@ const CreateQuizz = () => {
       render: (data) => {
         return (
           <a>
-            {data?.is_active ? (
+            {checkElement?.includes("active_exam_test_setting") && (
               <img
                 className="img-unlock-banner"
-                src={onToggle}
-                onClick={toggleActive}
-              />
-            ) : (
-              <img
-                className="img-unlock-banner"
-                src={offToggle}
+                src={data?.is_active ? onToggle : offToggle}
                 onClick={toggleActive}
               />
             )}
@@ -399,11 +396,15 @@ const CreateQuizz = () => {
   const items = [
     {
       key: "1",
-      label: <a onClick={openEditQuestion}>Chỉnh sửa</a>,
+      label: checkElement?.includes("edit_exam_test_setting") && (
+        <a onClick={openEditQuestion}>Chỉnh sửa</a>
+      ),
     },
     {
       key: "2",
-      label: <a onClick={toggle}>Xoá</a>,
+      label: checkElement?.includes("delete_exam_test_setting") && (
+        <a onClick={toggle}>Xoá</a>
+      ),
     },
   ];
 
@@ -424,9 +425,11 @@ const CreateQuizz = () => {
     <div className="div-container-question">
       <div className="div-header-question">
         <a className="title-quizz">Tạo câu hỏi</a>
-        <Button className="btn-add-question" onClick={openAddQuestion}>
-          Thêm câu hỏi
-        </Button>
+        {checkElement?.includes("create_exam_test_setting") && (
+          <Button className="btn-add-question" onClick={openAddQuestion}>
+            Thêm câu hỏi
+          </Button>
+        )}
       </div>
       <div className="mt-3">
         <div className="div-tab-exam">

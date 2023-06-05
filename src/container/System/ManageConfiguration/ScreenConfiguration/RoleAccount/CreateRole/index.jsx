@@ -8,13 +8,15 @@ import {
 import { errorNotify } from "../../../../../../helper/toast";
 import LoadingPagination from "../../../../../../components/paginationLoading";
 import { getListRoleAdmin } from "../../../../../../api/createAccount";
+import { useNavigate } from "react-router-dom";
 
 const CreateRole = (props) => {
-  const { setDataList, setTotal, setIsLoading } = props;
+  const { setDataList, setTotal } = props;
   const [data, setData] = useState([]);
   const [keyApi, setKeyApi] = useState([]);
-  const [keyCheckApi, setKeyCheckApi] = useState([]);
   const [nameRole, setNameRole] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -96,12 +98,7 @@ const CreateRole = (props) => {
       .then((res) => {
         setIsLoading(false);
         setOpen(false);
-        getListRoleAdmin()
-          .then((res) => {
-            setDataList(res.data);
-            setTotal(res?.totalItem);
-          })
-          .catch((err) => {});
+        navigate(-1);
       })
       .catch((err) => {
         errorNotify({
@@ -113,52 +110,54 @@ const CreateRole = (props) => {
 
   return (
     <div>
-      <Button type="primary" onClick={showDrawer}>
+      {/* <Button type="primary" onClick={showDrawer}>
         Thêm quyền
-      </Button>
-      <Drawer
+      </Button> */}
+      {/* <Drawer
         title="Thêm quyền quản trị"
         placement="right"
         onClose={onClose}
         open={open}
         width={1000}
-      >
-        <div className="div-input">
-          <a>Tên quyền</a>
-          <Input
-            placeholder="Vui lòng nhập tên quyền"
-            style={{ width: "50%", marginTop: 2 }}
-            onChange={(e) => setNameRole(e.target.value)}
-          />
-        </div>
-        <div className="div-title-role">
-          {data?.map((item, index) => {
-            return (
-              <div key={index} className="div-item-role">
-                <a className="title-role">
-                  {item?.permission[0]?.name_group_api}
-                </a>
-                {item?.permission?.map((per, i) => {
-                  return (
-                    <div className="div-item-per" key={i}>
-                      <Checkbox
-                        checked={keyApi.includes(per?._id) ? true : false}
-                        onChange={(e) =>
-                          onChangeRole(e.target.checked, per, item)
-                        }
-                      />
-                      <a className="text-name-per">{per?.name_api}</a>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
-        <Button onClick={onCreate} style={{ marginTop: 50 }}>
-          Tạo quyền
-        </Button>
-      </Drawer>
+      > */}
+      <div className="div-input">
+        <a>Tên quyền</a>
+        <Input
+          placeholder="Vui lòng nhập tên quyền"
+          style={{ width: "50%", marginTop: 2 }}
+          onChange={(e) => setNameRole(e.target.value)}
+        />
+      </div>
+      <div className="div-title-role">
+        {data?.map((item, index) => {
+          return (
+            <div key={index} className="div-item-role">
+              <a className="title-role">
+                {item?.permission[0]?.name_group_api}
+              </a>
+              {item?.permission?.map((per, i) => {
+                return (
+                  <div className="div-item-per" key={i}>
+                    <Checkbox
+                      checked={keyApi.includes(per?._id) ? true : false}
+                      onChange={(e) =>
+                        onChangeRole(e.target.checked, per, item)
+                      }
+                    />
+                    <a className="text-name-per">{per?.name_api}</a>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+      <Button onClick={onCreate} style={{ marginTop: 50 }}>
+        Tạo quyền
+      </Button>
+      {/* </Drawer> */}
+
+      {isLoading && <LoadingPagination />}
     </div>
   );
 };

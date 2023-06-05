@@ -19,6 +19,7 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import onToggle from "../../../../../assets/images/on-button.png";
 import offToggle from "../../../../../assets/images/off-button.png";
+import { getElementState } from "../../../../../redux/selectors/auth";
 
 const GroupCustomerManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,6 +33,7 @@ const GroupCustomerManage = () => {
   const dispatch = useDispatch();
   const toggle = () => setModal(!modal);
   const toggleActive = () => setModalActive(!modalActive);
+  const checkElement = useSelector(getElementState);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -131,16 +133,10 @@ const GroupCustomerManage = () => {
       render: (data) => {
         return (
           <>
-            {data?.is_active ? (
+            {checkElement?.includes("active_group_customer_setting") && (
               <img
                 className="img-unlock-banner"
-                src={onToggle}
-                onClick={toggleActive}
-              />
-            ) : (
-              <img
-                className="img-unlock-banner"
-                src={offToggle}
+                src={data?.is_active ? onToggle : offToggle}
                 onClick={toggleActive}
               />
             )}
@@ -172,7 +168,7 @@ const GroupCustomerManage = () => {
   const items = [
     {
       key: 1,
-      label: (
+      label: checkElement?.includes("edit_group_customer_setting") && (
         <a
           onClick={() =>
             navigate(
@@ -189,7 +185,9 @@ const GroupCustomerManage = () => {
     },
     {
       key: 2,
-      label: <a onClick={toggle}>Xoá</a>,
+      label: checkElement?.includes("delete_group_customer_setting") && (
+        <a onClick={toggle}>Xoá</a>
+      ),
     },
   ];
 
@@ -204,16 +202,18 @@ const GroupCustomerManage = () => {
 
   return (
     <div>
-      <div
-        className="btn-add-group-customer"
-        onClick={() =>
-          navigate(
-            "/adminManage/manage-configuration/manage-group-customer/create"
-          )
-        }
-      >
-        <a>Thêm nhóm khách hàng</a>
-      </div>
+      {checkElement?.includes("create_group_customer_setting") && (
+        <div
+          className="btn-add-group-customer"
+          onClick={() =>
+            navigate(
+              "/adminManage/manage-configuration/manage-group-customer/create"
+            )
+          }
+        >
+          <a>Thêm nhóm khách hàng</a>
+        </div>
+      )}
       <div className="mt-3 p-3 ">
         <div className="mt-3">
           <Table

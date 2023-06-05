@@ -51,6 +51,8 @@ import ReportCustomer from "../container/System/ManageReport/MangeReportOrder/Re
 import ReportUser from "../container/System/ManageReport/ManageReportCustomer/ReportUser";
 import ReportInvite from "../container/System/ManageReport/ManageReportCustomer/ReportInvite";
 import ReportCustomerArea from "../container/System/ManageReport/ManageReportCustomer/ReportCustomerArea";
+import CreateRole from "../container/System/ManageConfiguration/ScreenConfiguration/RoleAccount/CreateRole";
+import EditRole from "../container/System/ManageConfiguration/ScreenConfiguration/RoleAccount/EditRole";
 
 const Admin = () => {
   return (
@@ -241,6 +243,14 @@ const Admin = () => {
       <Route
         path="/adminManage/manage-configuration/setting_role"
         element={<RoleAccount />}
+      />
+      <Route
+        path="/adminManage/manage-configuration/setting_role/create_role"
+        element={<CreateRole />}
+      />
+      <Route
+        path="/adminManage/manage-configuration/setting_role/edit_role"
+        element={<EditRole />}
       />
     </Routes>
   );

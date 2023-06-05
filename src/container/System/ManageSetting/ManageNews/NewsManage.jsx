@@ -15,6 +15,7 @@ import { getNewSelector, getNewTotal } from "../../../../redux/selectors/news";
 import onToggle from "../../../../assets/images/on-button.png";
 import offToggle from "../../../../assets/images/off-button.png";
 import "./NewsManage.scss";
+import { getElementState } from "../../../../redux/selectors/auth";
 
 export default function NewsManage() {
   const [dataFilter, setDataFilter] = useState([]);
@@ -30,6 +31,7 @@ export default function NewsManage() {
   const totalNew = useSelector(getNewTotal);
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
+  const checkElement = useSelector(getElementState);
 
   const dispatch = useDispatch();
 
@@ -123,11 +125,15 @@ export default function NewsManage() {
   const items = [
     {
       key: "1",
-      label: <EditNews data={itemEdit} />,
+      label: checkElement?.includes("edit_news") && (
+        <EditNews data={itemEdit} />
+      ),
     },
     {
       key: "2",
-      label: <a onClick={toggle}> Xoá</a>,
+      label: checkElement?.includes("delete_news") && (
+        <a onClick={toggle}> Xoá</a>
+      ),
     },
   ];
 
@@ -177,16 +183,10 @@ export default function NewsManage() {
       key: "action",
       render: (data) => (
         <div>
-          {data?.is_active ? (
+          {checkElement?.includes("active_news") && (
             <img
               className="img-unlock-banner"
-              src={onToggle}
-              onClick={toggleBlock}
-            />
-          ) : (
-            <img
-              className="img-unlock-banner"
-              src={offToggle}
+              src={data?.is_active ? onToggle : offToggle}
               onClick={toggleBlock}
             />
           )}
@@ -224,7 +224,7 @@ export default function NewsManage() {
             prefix={<SearchOutlined />}
             onChange={(e) => handleSearch(e.target.value)}
           />
-          <AddNews />
+          {checkElement?.includes("create_news") && <AddNews />}
         </div>
         <div className="mt-3">
           <Table
