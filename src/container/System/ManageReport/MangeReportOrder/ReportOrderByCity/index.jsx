@@ -513,7 +513,14 @@ const ReportOrderCity = () => {
       </div>
 
       <div className="mt-5">
-        <Table dataSource={data} columns={columns} pagination={false} />
+        <Table
+          dataSource={data}
+          columns={columns}
+          pagination={false}
+          scroll={{
+            x: 1600,
+          }}
+        />
       </div>
       <div className="mt-2 div-pagination p-2">
         <a>Tổng: {total}</a>

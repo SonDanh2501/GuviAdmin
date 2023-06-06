@@ -746,6 +746,9 @@ const PromotionManage = ({
                 },
               };
             }}
+            scroll={{
+              x: 1600,
+            }}
           />
           <div className="div-pagination p-2">
             <a>

@@ -23,6 +23,8 @@ const Sidebar = ({ onClick }) => {
     checkPermission.push(item?.id_side_bar);
   });
 
+  useEffect(() => {}, [checkPermission]);
+
   return (
     <div className="div-sidebar">
       <div className="div-logo">
@@ -106,7 +108,7 @@ const Sidebar = ({ onClick }) => {
                           : null
                       }
                     >
-                      <Nav className="nav" navbar>
+                      <Nav className="nav-link-sidebar" navbar>
                         {item?.tab?.map((i, index) => {
                           return (
                             <NavLink to={i?.path} key={index}>

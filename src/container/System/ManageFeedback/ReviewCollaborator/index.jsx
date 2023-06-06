@@ -320,7 +320,7 @@ const ReviewCollaborator = () => {
       render: (data) => {
         return (
           <>
-            {checkElement?.includes("admin_check_review") && (
+            {checkElement?.includes("admin_check_review_support_customer") && (
               <Checkbox
                 checked={
                   data?.is_check_admin || data?.star === 5 ? true : false
@@ -366,7 +366,7 @@ const ReviewCollaborator = () => {
         <Input
           placeholder="Tìm kiếm"
           type="text"
-          className="input-search"
+          style={{ width: "60%" }}
           prefix={<SearchOutlined />}
           onChange={(e) => handleSearch(e.target.value)}
         />

@@ -105,19 +105,20 @@ const OrderManage = (props) => {
       ? [
           {
             key: "1",
-            label: item?.status === "pending" && (
-              <AddCollaboratorOrder
-                idOrder={item?._id}
-                idCustomer={item?.id_customer?._id}
-                status={item?.status}
-                type={status}
-                kind={kind}
-                startPage={startPage}
-                setData={setData}
-                setTotal={setTotal}
-                setIsLoading={setIsLoading}
-              />
-            ),
+            label: checkElement?.includes("add_collaborator_guvi_job") &&
+              item?.status === "pending" && (
+                <AddCollaboratorOrder
+                  idOrder={item?._id}
+                  idCustomer={item?.id_customer?._id}
+                  status={item?.status}
+                  type={status}
+                  kind={kind}
+                  startPage={startPage}
+                  setData={setData}
+                  setTotal={setTotal}
+                  setIsLoading={setIsLoading}
+                />
+              ),
           },
           {
             key: "2",
@@ -156,14 +157,12 @@ const OrderManage = (props) => {
       : [
           {
             key: "1",
-            label: (
+            label: checkElement?.includes("detail_guvi_job") && (
               <a
                 onClick={() => {
-                  if (checkElement?.includes("detail_guvi_job")) {
-                    navigate("/details-order", {
-                      state: { id: item?._id },
-                    });
-                  }
+                  navigate("/details-order", {
+                    state: { id: item?._id },
+                  });
                 }}
               >
                 Xem chi tiết
@@ -172,24 +171,25 @@ const OrderManage = (props) => {
           },
           {
             key: "2",
-            label: item?.status === "confirm" && (
-              <AddCollaboratorOrder
-                idOrder={item?._id}
-                idCustomer={item?.id_customer?._id}
-                status={item?.status}
-                type={status}
-                kind={kind}
-                startPage={startPage}
-                setData={setData}
-                setTotal={setTotal}
-                setIsLoading={setIsLoading}
-              />
-            ),
+            label: checkElement?.includes("add_collaborator_guvi_job") &&
+              item?.status === "confirm" && (
+                <AddCollaboratorOrder
+                  idOrder={item?._id}
+                  idCustomer={item?.id_customer?._id}
+                  status={item?.status}
+                  type={status}
+                  kind={kind}
+                  startPage={startPage}
+                  setData={setData}
+                  setTotal={setTotal}
+                  setIsLoading={setIsLoading}
+                />
+              ),
           },
           {
             key: "3",
             label:
-              user?.role === "admin" &&
+              checkElement?.includes("delete_order_guvi_job") &&
               (item?.status === "cancel" || item?.status === "done" ? (
                 <a onClick={toggle}>Xoá</a>
               ) : (
@@ -333,6 +333,8 @@ const OrderManage = (props) => {
 
     {
       title: "Trạng thái",
+      fixed: "right",
+      align: "center",
       render: (data) => (
         <a
           className={
@@ -361,6 +363,8 @@ const OrderManage = (props) => {
     },
     {
       title: "Thanh toán",
+      fixed: "right",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-payment-method">
@@ -375,25 +379,24 @@ const OrderManage = (props) => {
     },
     {
       key: "action",
-      render: (data) =>
-        user?.role !== "marketing_manager" ||
-        user?.role !== "marketing_manager" ? (
-          <Space size="middle">
-            <Dropdown
-              menu={{
-                items,
-              }}
-              placement="bottom"
-              trigger={["click"]}
-            >
-              <div>
-                <UilEllipsisV />
-              </div>
-            </Dropdown>
-          </Space>
-        ) : (
-          <></>
-        ),
+      fixed: "right",
+      width: "5%",
+      align: "center",
+      render: (data) => (
+        <Space size="middle">
+          <Dropdown
+            menu={{
+              items,
+            }}
+            placement="bottom"
+            trigger={["click"]}
+          >
+            <div>
+              <UilEllipsisV />
+            </div>
+          </Dropdown>
+        </Space>
+      ),
     },
   ];
 
@@ -461,6 +464,9 @@ const OrderManage = (props) => {
                 setItem(record);
               },
             };
+          }}
+          scroll={{
+            x: 1600,
           }}
         />
 

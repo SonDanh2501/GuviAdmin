@@ -141,13 +141,14 @@ $font-01: "Roboto", sans-serif;
       }
     }
 
-    .nav {
+    .nav-link-sidebar {
       .active-link-nav {
         width: "10%";
         height: 60px;
         padding: 20px 60px 20px 40px;
         display: flex;
         text-decoration: none;
+        background-color: antiquewhite;
 
         .active-text-nav {
           font-family: "Roboto";

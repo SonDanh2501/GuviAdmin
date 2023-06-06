@@ -247,6 +247,7 @@ const TableDeepCleaning = (props) => {
     },
     {
       title: "Trạng thái",
+      fixed: "right",
       render: (data) => {
         return (
           <div>
@@ -264,6 +265,7 @@ const TableDeepCleaning = (props) => {
     },
     {
       key: "action",
+      fixed: "right",
       render: (data) => {
         return (
           <div>
@@ -299,24 +301,24 @@ const TableDeepCleaning = (props) => {
     {
       key: "action",
       align: "center",
+      fixed: "right",
+      width: "5%",
       render: (data) => {
         return (
           <>
-            {user?.role === "admin" && (
-              <Space size="middle">
-                <Dropdown
-                  menu={{
-                    items,
-                  }}
-                  placement="bottom"
-                  trigger={["click"]}
-                >
-                  <a>
-                    <MoreOutlined className="icon-more" />
-                  </a>
-                </Dropdown>
-              </Space>
-            )}
+            <Space size="middle">
+              <Dropdown
+                menu={{
+                  items,
+                }}
+                placement="bottom"
+                trigger={["click"]}
+              >
+                <a>
+                  <MoreOutlined className="icon-more" />
+                </a>
+              </Dropdown>
+            </Space>
           </>
         );
       },
@@ -349,6 +351,10 @@ const TableDeepCleaning = (props) => {
                 setItemEdit(record);
               },
             };
+          }}
+          scroll={{
+            x: 1600,
+            y: 1000,
           }}
         />
       </div>

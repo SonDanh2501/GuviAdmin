@@ -52,6 +52,7 @@ const AddAccount = ({ setData, setTotal }) => {
     })
       .then((res) => {
         setOpen(false);
+        dispatch(loadingAction.loadingRequest(false));
         getListAccount(0, 20)
           .then((res) => {
             setData(res?.data);

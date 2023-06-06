@@ -32,7 +32,7 @@ const router = [
     component: Home,
     layout: "admin",
     tab: [],
-    id_sidebar: "dasboard",
+    id_sidebar: "dashboard",
   },
   {
     path: "/group-order/manage-order",
@@ -98,11 +98,11 @@ const router = [
         name: "Tất cả dịch vụ",
         icon: bag,
       },
-      {
-        path: "/services/manage-group-service/group-service",
-        name: "Nhóm dịch vụ",
-        icon: bag,
-      },
+      // {
+      //   path: "/services/manage-group-service/group-service",
+      //   name: "Nhóm dịch vụ",
+      //   icon: bag,
+      // },
     ],
     id_sidebar: "service",
   },
@@ -140,7 +140,7 @@ const router = [
     component: ManageTopup,
     layout: "admin",
     tab: [],
-    id_sidebar: "dasboard",
+    id_sidebar: "cash_book",
   },
   {
     path: "/report/manage-report",

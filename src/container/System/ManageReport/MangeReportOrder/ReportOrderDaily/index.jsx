@@ -474,6 +474,9 @@ const ReportOrderDaily = () => {
           dataSource={data.reverse()}
           columns={columns}
           pagination={false}
+          scroll={{
+            x: 1600,
+          }}
         />
       </div>
 

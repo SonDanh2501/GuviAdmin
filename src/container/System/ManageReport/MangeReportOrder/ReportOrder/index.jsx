@@ -62,6 +62,7 @@ const ReportOrder = () => {
           </div>
         );
       },
+      width: "15%",
       render: (data) => (
         <div className="div-date-report-order">
           <a className="text-date-report-order">
@@ -492,6 +493,9 @@ const ReportOrder = () => {
           // locale={{
           //   emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
           // }}
+          scroll={{
+            x: 1600,
+          }}
         />
       </div>
       <div className="mt-2 div-pagination p-2">

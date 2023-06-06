@@ -9,14 +9,15 @@ import "./Dashboard.scss";
 import Admin from "./admin";
 
 import { permissionAction } from "../redux/actions/auth";
+import { useNavigate } from "react-router-dom";
 const { Header, Content, Sider } = Layout;
 
 const Dashboard = () => {
   const [hideSidebar, setHideSidebar] = useState(true);
   const dispatch = useDispatch();
-  const user = useSelector(getUser);
+  const navigate = useNavigate();
   useEffect(() => {
-    dispatch(permissionAction.permissionRequest());
+    dispatch(permissionAction.permissionRequest({ navigate: navigate }));
   }, []);
 
   return (

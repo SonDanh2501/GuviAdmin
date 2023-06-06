@@ -8,6 +8,8 @@ import { Button, Switch, Table } from "antd";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
+import { getElementState } from "../../../../redux/selectors/auth";
+import { useSelector } from "react-redux";
 
 const Service = () => {
   const [data, setData] = useState([]);
@@ -17,6 +19,7 @@ const Service = () => {
   const [modalActive, setModalActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const toggleActive = () => setModalActive(!modalActive);
+  const checkElement = useSelector(getElementState);
 
   useEffect(() => {
     getListService()
@@ -106,14 +109,16 @@ const Service = () => {
       render: (data) => {
         return (
           <div>
-            <Switch
-              checkedChildren="Hiện"
-              unCheckedChildren="Ẩn"
-              checked={data?.is_active}
-              onChange={(e) => {
-                toggleActive();
-              }}
-            />
+            {checkElement?.includes("active_service") && (
+              <Switch
+                checkedChildren="Hiện"
+                unCheckedChildren="Ẩn"
+                checked={data?.is_active}
+                onChange={(e) => {
+                  toggleActive();
+                }}
+              />
+            )}
           </div>
         );
       },
