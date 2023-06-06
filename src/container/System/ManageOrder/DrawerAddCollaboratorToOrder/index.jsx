@@ -195,7 +195,7 @@ const AddCollaboratorOrder = (props) => {
               className="btn-add-collaborator-order"
               onClick={addCollaboratorToOrder}
             >
-              Thêm cộng tác viên
+              {status === "confirm" ? "Thay CTV" : "Thêm CTV"}
             </Button>
           )}
         </div>

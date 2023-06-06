@@ -332,8 +332,12 @@ export default function TopupCustomer() {
   return (
     <React.Fragment>
       <div className="div-header-customer-topup mt-2">
-        <AddTopupCustomer />
-        <WithdrawCustomer />
+        {checkElement?.includes("create_transition_cash_book_customer") && (
+          <AddTopupCustomer />
+        )}
+        {checkElement?.includes("edit_transition_cash_book_customer") && (
+          <WithdrawCustomer />
+        )}
         <Input
           placeholder="Tìm kiếm"
           type="text"

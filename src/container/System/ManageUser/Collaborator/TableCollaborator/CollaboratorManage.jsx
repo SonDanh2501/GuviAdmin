@@ -336,6 +336,7 @@ export default function CollaboratorManage(props) {
   const columns = [
     {
       title: "Mã CTV",
+      width: "15%",
       render: (data) => (
         <a
           className="text-id-collaborator"
@@ -399,6 +400,7 @@ export default function CollaboratorManage(props) {
     {
       title: "Trạng thái",
       align: "center",
+      width: "15%",
       render: (data) => {
         const now = moment(new Date()).format("DD/MM/YYYY hh:mm:ss");
         const then = data?.date_lock
@@ -437,6 +439,7 @@ export default function CollaboratorManage(props) {
     {
       title: "Tài khoản",
       align: "center",
+      width: "10%",
       render: (data) => {
         return (
           <div className="div-verify">
@@ -468,6 +471,8 @@ export default function CollaboratorManage(props) {
     {
       key: "action",
       align: "center",
+      fixed: "right",
+      width: "5%",
       render: (data) => (
         <Space size="middle">
           <img
@@ -552,6 +557,9 @@ export default function CollaboratorManage(props) {
             locale={{
               emptyText:
                 data.length > 0 ? <Empty /> : <Skeleton active={true} />,
+            }}
+            scroll={{
+              x: 1600,
             }}
           />
           <div className="div-pagination p-2">

@@ -28,11 +28,10 @@ import { loadingAction } from "../../../../redux/actions/loading";
 import { deleteFeedbackApi, searchFeedbackApi } from "../../../../api/feedback";
 import { errorNotify } from "../../../../helper/toast";
 
-export default function Feedback() {
+const Feedback = () => {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState();
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const dispatch = useDispatch();
   const listFeedback = useSelector(getFeedbacks);
@@ -129,7 +128,7 @@ export default function Feedback() {
       key: "action",
       align: "center",
       render: (data) =>
-        checkElement?.includes("delete_feedback") && (
+        checkElement?.includes("delete_feedback_support_customer") && (
           <Tooltip placement="bottom" title="Xoá phản hồi">
             <button className="btn-delete" onClick={toggle}>
               <i className="uil uil-trash"></i>
@@ -140,7 +139,7 @@ export default function Feedback() {
   ];
 
   return (
-    <React.Fragment>
+    <>
       <div>
         <Input
           placeholder="Tìm kiếm theo tên hoặc số điện thoại"
@@ -198,6 +197,8 @@ export default function Feedback() {
           </Modal>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
-}
+};
+
+export default Feedback;

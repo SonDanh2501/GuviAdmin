@@ -15,7 +15,7 @@ import {
 import AddPoint from "../../../../../components/addPointCustomer/addPoint";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import { loadingAction } from "../../../../../redux/actions/loading";
-import { getUser } from "../../../../../redux/selectors/auth";
+import { getElementState, getUser } from "../../../../../redux/selectors/auth";
 import "./index.scss";
 import { errorNotify } from "../../../../../helper/toast";
 
@@ -32,11 +32,11 @@ const TopupPoint = () => {
   const [modal, setModal] = useState(false);
   const [modalConfirm, setModalConfirm] = useState(false);
   const [modalCancel, setModalCancel] = useState(false);
-
   const user = useSelector(getUser);
   const dispatch = useDispatch();
-
   const toggle = () => setModal(!modal);
+  const checkElement = useSelector(getElementState);
+
   const toggleConfirm = () => setModalConfirm(!modalConfirm);
   const toggleCancel = () => setModalCancel(!modalCancel);
 
@@ -215,27 +215,32 @@ const TopupPoint = () => {
       render: (data) => {
         return (
           <div>
-            <button
-              className="btn-confirm"
-              disabled={
-                data?.is_verify ||
-                (!data?.is_verify && data?.status === "cancel")
-                  ? true
-                  : false
-              }
-              onClick={toggleConfirm}
-            >
-              Duyệt lệnh
-            </button>
+            {checkElement?.includes("verify_point_cash_book_customer") && (
+              <button
+                className="btn-confirm"
+                disabled={
+                  data?.is_verify ||
+                  (!data?.is_verify && data?.status === "cancel")
+                    ? true
+                    : false
+                }
+                onClick={toggleConfirm}
+              >
+                Duyệt lệnh
+              </button>
+            )}
 
             <div>
-              {data?.status === "pending" && (
-                <a className="text-cancel-point" onClick={toggleCancel}>
-                  Huỷ
-                </a>
+              {checkElement?.includes("cancel_point_cash_book_customer") && (
+                <>
+                  {data?.status === "pending" && (
+                    <a className="text-cancel-point" onClick={toggleCancel}>
+                      Huỷ
+                    </a>
+                  )}
+                </>
               )}
-
-              {user?.role === "admin" && (
+              {checkElement?.includes("delete_point_cash_book_customer") && (
                 <button className="btn-delete-point" onClick={toggle}>
                   <i className="uil uil-trash"></i>
                 </button>
@@ -272,7 +277,9 @@ const TopupPoint = () => {
   return (
     <div>
       <div className="div-head-point mt-2">
-        <AddPoint setDataL={setData} setTotal={setTotal} start={startPage} />
+        {checkElement?.includes("topup_point_cash_book_customer") && (
+          <AddPoint setDataL={setData} setTotal={setTotal} start={startPage} />
+        )}
         <Input
           placeholder="Tìm kiếm"
           type="text"

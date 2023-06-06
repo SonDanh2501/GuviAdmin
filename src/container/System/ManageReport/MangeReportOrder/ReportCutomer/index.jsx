@@ -579,6 +579,9 @@ const ReportCustomer = () => {
                 },
               };
             }}
+            scroll={{
+              x: 1600,
+            }}
           />
         </div>
         <div className="mt-2 div-pagination p-2">

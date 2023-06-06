@@ -184,7 +184,7 @@ const UserManage = (props) => {
   const items = [
     {
       key: "1",
-      label: (
+      label: checkElement?.includes("edit_customer") && (
         <EditCustomer
           data={itemEdit}
           setIsLoading={setIsLoading}
@@ -340,6 +340,8 @@ const UserManage = (props) => {
           },
           {
             title: " Tổng",
+            fixed: "right",
+            width: "10%",
             render: (data) => (
               <a className="text-address-customer">
                 {formatMoney(data?.total_price)}
@@ -350,27 +352,24 @@ const UserManage = (props) => {
           },
           {
             key: "action",
-
+            fixed: "right",
             align: "center",
-            render: (data) =>
-              user?.role !== "marketing" ||
-              user?.role !== "marketing_manager" ? (
-                <Space size="middle">
-                  <Dropdown
-                    menu={{
-                      items,
-                    }}
-                    placement="bottom"
-                    trigger={["click"]}
-                  >
-                    <a>
-                      <MoreOutlined className="icon-more" />
-                    </a>
-                  </Dropdown>
-                </Space>
-              ) : (
-                <></>
-              ),
+            width: "5%",
+            render: (data) => (
+              <Space size="middle">
+                <Dropdown
+                  menu={{
+                    items,
+                  }}
+                  placement="bottom"
+                  trigger={["click"]}
+                >
+                  <a>
+                    <MoreOutlined className="icon-more" />
+                  </a>
+                </Dropdown>
+              </Space>
+            ),
           },
         ]
       : [
@@ -520,6 +519,7 @@ const UserManage = (props) => {
           },
           {
             title: " Tổng",
+            width: "10%",
             render: (data) => (
               <a className="text-address-customer">
                 {formatMoney(data?.total_price)}
@@ -530,27 +530,24 @@ const UserManage = (props) => {
           },
           {
             key: "action",
-
+            fixed: "right",
             align: "center",
-            render: (data) =>
-              user?.role !== "marketing" ||
-              user?.role !== "marketing_manager" ? (
-                <Space size="middle">
-                  <Dropdown
-                    menu={{
-                      items,
-                    }}
-                    placement="bottom"
-                    trigger={["click"]}
-                  >
-                    <a>
-                      <MoreOutlined className="icon-more" />
-                    </a>
-                  </Dropdown>
-                </Space>
-              ) : (
-                <></>
-              ),
+            width: "5%",
+            render: (data) => (
+              <Space size="middle">
+                <Dropdown
+                  menu={{
+                    items,
+                  }}
+                  placement="bottom"
+                  trigger={["click"]}
+                >
+                  <a>
+                    <MoreOutlined className="icon-more" />
+                  </a>
+                </Dropdown>
+              </Space>
+            ),
           },
         ];
 
@@ -566,8 +563,7 @@ const UserManage = (props) => {
             onChange={(e) => handleSearch(e.target.value)}
           />
 
-          {user?.role !== "marketing_manager" ||
-          user?.role !== "marketing_manager" ? (
+          {checkElement?.includes("create_customer") && (
             <AddCustomer
               setIsLoading={setIsLoading}
               setData={setData}
@@ -575,8 +571,6 @@ const UserManage = (props) => {
               startPage={startPage}
               status={status}
             />
-          ) : (
-            <></>
           )}
         </div>
 
@@ -603,6 +597,9 @@ const UserManage = (props) => {
             locale={{
               emptyText:
                 data.length > 0 ? <Empty /> : <Skeleton active={true} />,
+            }}
+            scroll={{
+              x: 1600,
             }}
           />
         </div>

@@ -6,7 +6,7 @@ import moment from "moment";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { getUser } from "../../../../../redux/selectors/auth";
+import { getElementState, getUser } from "../../../../../redux/selectors/auth";
 import {
   cancelMoneyPunishApi,
   confirmMoneyPunishApi,
@@ -35,6 +35,7 @@ const Punish = () => {
   const toggleCancel = () => setModalCancel(!modalCancel);
   const toggle = () => setModal(!modal);
   const toggleEdit = () => setModalEdit(!modalEdit);
+  const checkElement = useSelector(getElementState);
 
   useEffect(() => {
     getListPunishApi(0, 20)
@@ -231,54 +232,68 @@ const Punish = () => {
       render: (data) => {
         return (
           <div>
-            <button
-              className="btn-confirm"
-              onClick={toggleConfirm}
-              disabled={
-                data?.status === "cancel" || data?.status === "done"
-                  ? true
-                  : false
-              }
-            >
-              Duyệt lệnh
-            </button>
-            <div className="mt-1 ml-3">
-              {(data?.status === "pending" ||
-                data?.status === "transfered") && (
-                <Tooltip placement="bottom" title={"Huỷ giao dịch CTV"}>
-                  <a className="text-cancel-topup" onClick={toggleCancel}>
-                    Huỷ
-                  </a>
-                </Tooltip>
-              )}
-            </div>
+            {checkElement?.includes("verify_punish_cash_book_collaborator") && (
+              <button
+                className="btn-confirm"
+                onClick={toggleConfirm}
+                disabled={
+                  data?.status === "cancel" || data?.status === "done"
+                    ? true
+                    : false
+                }
+              >
+                Duyệt lệnh
+              </button>
+            )}
+
+            {checkElement?.includes("cancel_punish_cash_book_collaborator") && (
+              <div className="mt-1 ml-3">
+                {(data?.status === "pending" ||
+                  data?.status === "transfered") && (
+                  <Tooltip placement="bottom" title={"Huỷ lệnh phạt CTV"}>
+                    <a className="text-cancel-topup" onClick={toggleCancel}>
+                      Huỷ
+                    </a>
+                  </Tooltip>
+                )}
+              </div>
+            )}
             <div className="mt-1">
-              {data?.status === "cancel" || data?.status === "done" ? (
-                <></>
-              ) : (
-                <Tooltip placement="bottom" title={"Chỉnh sửa giao dịch CTV"}>
-                  <EditPunish
-                    iconEdit={
-                      <i
-                        className={
-                          (!data?.is_verify_punish &&
-                            data?.status === "cancel") ||
-                          data?.is_verify_punish
-                            ? "uil uil-edit-alt icon-edit"
-                            : "uil uil-edit-alt"
+              {checkElement?.includes("edit_punish_cash_book_collaborator") && (
+                <>
+                  {data?.status === "cancel" || data?.status === "done" ? (
+                    <></>
+                  ) : (
+                    <Tooltip
+                      placement="bottom"
+                      title={"Chỉnh sửa lệnh phạt CTV"}
+                    >
+                      <EditPunish
+                        iconEdit={
+                          <i
+                            className={
+                              (!data?.is_verify_punish &&
+                                data?.status === "cancel") ||
+                              data?.is_verify_punish
+                                ? "uil uil-edit-alt icon-edit"
+                                : "uil uil-edit-alt"
+                            }
+                          ></i>
                         }
-                      ></i>
-                    }
-                    item={itemEdit}
-                    setDataT={setData}
-                    setTotal={setTotal}
-                    setIsLoading={setIsLoading}
-                  />
-                </Tooltip>
+                        item={itemEdit}
+                        setDataT={setData}
+                        setTotal={setTotal}
+                        setIsLoading={setIsLoading}
+                      />
+                    </Tooltip>
+                  )}
+                </>
               )}
 
-              {user?.role === "admin" && (
-                <Tooltip placement="bottom" title={"Xoá giao dịch CTV"}>
+              {checkElement?.includes(
+                "delete_punish_cash_book_collaborator"
+              ) && (
+                <Tooltip placement="bottom" title={"Xoá lệnh phạt CTV"}>
                   <button className="btn-delete" onClick={toggle}>
                     <i className="uil uil-trash"></i>
                   </button>
@@ -293,7 +308,9 @@ const Punish = () => {
   return (
     <>
       <div>
-        <PunishMoneyCollaborator setDataT={setData} setTotal={setTotal} />
+        {checkElement?.includes("create_punish_cash_book_collaborator") && (
+          <PunishMoneyCollaborator setDataT={setData} setTotal={setTotal} />
+        )}
       </div>
       <div className="mt-3">
         <Table
@@ -381,10 +398,10 @@ const Punish = () => {
 
         <div>
           <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Xóa giao dịch</ModalHeader>
+            <ModalHeader toggle={toggle}>Xóa lệnh phạt</ModalHeader>
             <ModalBody>
               <a>
-                Bạn có chắc muốn xóa giao dịch của cộng tác viên
+                Bạn có chắc muốn xóa lệnh phạt của cộng tác viên
                 <a className="text-name-modal">
                   {itemEdit?.id_collaborator?.full_name}
                 </a>
