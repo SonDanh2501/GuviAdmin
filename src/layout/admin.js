@@ -53,6 +53,7 @@ import ReportInvite from "../container/System/ManageReport/ManageReportCustomer/
 import ReportCustomerArea from "../container/System/ManageReport/ManageReportCustomer/ReportCustomerArea";
 import CreateRole from "../container/System/ManageConfiguration/ScreenConfiguration/RoleAccount/CreateRole";
 import EditRole from "../container/System/ManageConfiguration/ScreenConfiguration/RoleAccount/EditRole";
+import ReportDetailOrderDaily from "../container/System/ManageReport/MangeReportOrder/ReportOrderDaily/DetailOrderDaily";
 
 const Admin = () => {
   return (
@@ -161,6 +162,10 @@ const Admin = () => {
       <Route
         path="/report/manage-report/report-order-daily"
         element={<ReportOrderDaily />}
+      />
+      <Route
+        path="/report/manage-report/report-order-daily/details"
+        element={<ReportDetailOrderDaily />}
       />
       <Route
         path="/report/manage-report/report-order-area"

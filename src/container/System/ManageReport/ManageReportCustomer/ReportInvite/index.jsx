@@ -32,38 +32,28 @@ const ReportInvite = () => {
   const [type, setType] = useState("daily");
   const [typeTime, setTypeTime] = useState("day");
   const [currentPage, setCurrentPage] = useState(1);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(
+    moment().startOf("month").toISOString()
+  );
+  const [endDate, setEndDate] = useState(moment(new Date()).toISOString());
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getReportCustomerInviteDay(
-      0,
-      20,
-      moment().startOf("month").toISOString(),
-      moment(new Date()).toISOString()
-    )
+    getReportCustomerInviteDay(0, 20, startDate, endDate)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
       .catch((err) => console.log(err));
 
-    getTopCustomerInvite(
-      moment().startOf("month").toISOString(),
-      moment(new Date()).toISOString()
-    )
+    getTopCustomerInvite(startDate, endDate)
       .then((res) => {
         setDataTop(res);
       })
       .catch((err) => {});
 
-    getTopCustomerInviteTime(
-      moment().startOf("month").toISOString(),
-      moment(new Date()).toISOString(),
-      "daily"
-    )
+    getTopCustomerInviteTime(startDate, endDate, "daily")
       .then((res) => {
         setDataTimeInvite(res);
       })
@@ -73,7 +63,7 @@ const ReportInvite = () => {
   const onChange = (page) => {
     setCurrentPage(page);
     const start = page * data.length - data.length;
-    getReportCustomerInviteDay(start, 20)
+    getReportCustomerInviteDay(start, 20, startDate, endDate)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -266,35 +256,55 @@ const ReportInvite = () => {
               <div className="div-item-top">
                 <a>{dataTop[4].total_inviter}</a>
                 <div className={"column-top-5"} />
-                <a className="text-name-column">{dataTop[4].customer}</a>
+                <a className="text-name-column">
+                  {dataTop[4]?.customer
+                    ? dataTop[4]?.customer
+                    : dataTop[4]?.collaborator}
+                </a>
               </div>
             )}
             {dataTop.length > 3 && (
               <div className="div-item-top">
                 <a>{dataTop[3].total_inviter}</a>
                 <div className={"column-top-4"} />
-                <a className="text-name-column">{dataTop[3].customer}</a>
+                <a className="text-name-column">
+                  {dataTop[3]?.customer
+                    ? dataTop[3]?.customer
+                    : dataTop[3]?.collaborator}
+                </a>
               </div>
             )}
             {dataTop.length > 2 && (
               <div className="div-item-top">
                 <a>{dataTop[2].total_inviter}</a>
                 <div className={"column-top-3"} />
-                <a className="text-name-column">{dataTop[2].customer}</a>
+                <a className="text-name-column">
+                  {dataTop[2]?.customer
+                    ? dataTop[2]?.customer
+                    : dataTop[2]?.collaborator}
+                </a>
               </div>
             )}
             {dataTop.length > 1 && (
               <div className="div-item-top">
                 <a>{dataTop[1].total_inviter}</a>
                 <div className={"column-top-2"} />
-                <a className="text-name-column">{dataTop[1].customer}</a>
+                <a className="text-name-column">
+                  {dataTop[1]?.customer
+                    ? dataTop[1]?.customer
+                    : dataTop[1]?.collaborator}
+                </a>
               </div>
             )}
             {dataTop.length > 0 && (
               <div className="div-item-top">
                 <a>{dataTop[0].total_inviter}</a>
                 <div className={"column-top-1"} />
-                <a className="text-name-column">{dataTop[0].customer}</a>
+                <a className="text-name-column">
+                  {dataTop[0]?.customer
+                    ? dataTop[0]?.customer
+                    : dataTop[0]?.collaborator}
+                </a>
               </div>
             )}
           </div>
@@ -317,7 +327,14 @@ const ReportInvite = () => {
         </div>
       </div>
       <div className="mt-2">
-        <Table columns={columns} dataSource={data} pagination={false} />
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+          scroll={{
+            x: 1600,
+          }}
+        />
       </div>
       <div className="mt-1 div-pagination p-2">
         <a>Tổng: {total}</a>

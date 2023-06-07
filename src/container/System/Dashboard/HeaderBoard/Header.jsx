@@ -19,74 +19,45 @@ const Header = () => {
   }, []);
   return (
     <div className="container-header-board">
-      {/* <Input
-        name="selectType"
-        type="select"
-        className="selectType"
-        onChange={(e) => onChangeReport(e.target.value)}
-      >
-        <option value="all">Tổng</option>
-        <option value="day">Ngày hôm nay</option>
-      </Input> */}
+      <div className="card">
+        <img src={customer} className="img" />
+        <div className="div-details">
+          <a className="text-title">Khách hàng</a>
+          <a className="text-detail">
+            {!dataTotal?.total_customer ? 0 : dataTotal?.total_customer}
+          </a>
+        </div>
+      </div>
 
-      <div className="header pb-8  pt-md-6">
-        <div>
-          <div className="header-body">
-            {/* Card stats */}
-            <Row>
-              <Col lg="6" xl="3">
-                <div className="card">
-                  <img src={customer} className="img" />
-                  <div className="div-details">
-                    <a className="text-title">Khách hàng</a>
-                    <a className="text-detail">
-                      {!dataTotal?.total_customer
-                        ? 0
-                        : dataTotal?.total_customer}
-                    </a>
-                  </div>
-                </div>
-              </Col>
-              <Col lg="6" xl="3">
-                <div className="card">
-                  <img src={collaborator} className="img" />
-                  <div className="div-details">
-                    <a className="text-title"> Cộng tác viên</a>
-                    <a className="text-detail">
-                      {!dataTotal?.total_collaborator
-                        ? 0
-                        : dataTotal?.total_collaborator}
-                    </a>
-                  </div>
-                </div>
-              </Col>
+      <div className="card">
+        <img src={collaborator} className="img" />
+        <div className="div-details">
+          <a className="text-title"> Cộng tác viên</a>
+          <a className="text-detail">
+            {!dataTotal?.total_collaborator ? 0 : dataTotal?.total_collaborator}
+          </a>
+        </div>
+      </div>
 
-              <Col lg="6" xl="3">
-                <div className="card">
-                  <img src={add} className="img" />
-                  <div className="div-details">
-                    <a className="text-title"> Tổng đơn hàng</a>
-                    <a className="text-detail">
-                      {!dataTotal?.total_order ? 0 : dataTotal?.total_order}
-                    </a>
-                  </div>
-                </div>
-              </Col>
-              <Col lg="6" xl="3">
-                <div className="card">
-                  <img src={revenues} className="img" />
-                  <div className="div-details">
-                    <a className="text-title"> Doanh thu</a>
-                    <a className="text-detail">
-                      {formatMoney(
-                        !dataTotal?.total_revenue ? 0 : dataTotal?.total_revenue
-                      )}
-                    </a>
-                  </div>
-                </div>
-              </Col>
-            </Row>
-          </div>
+      <div className="card">
+        <img src={add} className="img" />
+        <div className="div-details">
+          <a className="text-title"> Tổng đơn hàng</a>
+          <a className="text-detail">
+            {!dataTotal?.total_order ? 0 : dataTotal?.total_order}
+          </a>
+        </div>
+      </div>
+
+      <div className="card">
+        <img src={revenues} className="img" />
+        <div className="div-details">
+          <a className="text-title"> Doanh thu</a>
+          <a className="text-detail">
+            {formatMoney(
+              !dataTotal?.total_revenue ? 0 : dataTotal?.total_revenue
+            )}
+          </a>
         </div>
       </div>
     </div>

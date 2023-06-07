@@ -333,7 +333,7 @@ const OrderManage = (props) => {
 
     {
       title: "Trạng thái",
-      fixed: "right",
+
       align: "center",
       render: (data) => (
         <a
@@ -363,7 +363,6 @@ const OrderManage = (props) => {
     },
     {
       title: "Thanh toán",
-      fixed: "right",
       align: "center",
       render: (data) => {
         return (

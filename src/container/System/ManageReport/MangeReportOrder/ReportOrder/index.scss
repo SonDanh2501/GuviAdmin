@@ -255,3 +255,35 @@
     color: #000000;
   }
 }
+
+.div-tab-report {
+  display: flex;
+  flex-direction: row;
+
+  .div-item-tab {
+    padding: 5px;
+
+    .text-tab {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px !important;
+      color: #b1b1b1;
+      text-decoration: none;
+    }
+  }
+
+  .div-item-tab-select {
+    padding: 5px;
+    border-bottom: 1px solid blue;
+
+    .text-tab {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px !important;
+      color: #000000;
+      text-decoration: none;
+    }
+  }
+}

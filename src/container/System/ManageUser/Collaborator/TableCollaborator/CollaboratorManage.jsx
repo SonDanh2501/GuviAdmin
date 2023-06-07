@@ -503,20 +503,18 @@ export default function CollaboratorManage(props) {
 
   return (
     <React.Fragment>
-      <div className="mt-2 p-3">
+      <div className="mt-2">
         <div className="div-header-colla">
-          {/* <Dropdown
-            menu={{ items: itemFilter }}
-            trigger={["click"]}
-            className="dropdown"
-          >
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                <FilterOutlined className="icon" />
-                <a className="text-filter">Thêm điều kiện lọc</a>
-              </Space>
-            </a>
-          </Dropdown> */}
+          {checkElement?.includes("create_collaborator") && (
+            <AddCollaborator
+              setData={setData}
+              setTotal={setTotal}
+              startPage={startPage}
+              status={status}
+              setIsLoading={setIsLoading}
+            />
+          )}
+
           <Input
             placeholder="Tìm kiếm"
             type="text"
@@ -526,13 +524,6 @@ export default function CollaboratorManage(props) {
               changeValueSearch(e.target.value);
               handleSearch(e.target.value);
             }}
-          />
-          <AddCollaborator
-            setData={setData}
-            setTotal={setTotal}
-            startPage={startPage}
-            status={status}
-            setIsLoading={setIsLoading}
           />
         </div>
         <div className="div-table mt-3">

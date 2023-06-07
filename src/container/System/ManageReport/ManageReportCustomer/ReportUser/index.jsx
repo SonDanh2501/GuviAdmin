@@ -377,6 +377,9 @@ const ReportUser = () => {
                 },
               };
             }}
+            scroll={{
+              x: 1600,
+            }}
           />
         </div>
       </div>

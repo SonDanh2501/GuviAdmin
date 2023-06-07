@@ -148,3 +148,21 @@
     }
   }
 }
+
+@media screen and (width: 490px) {
+  .div-date {
+    display: flex;
+    flex-direction: row;
+    width: 100% !important;
+    align-items: center;
+    margin-top: 20px;
+
+    .text-date {
+      color: #000000;
+      font-family: "Roboto";
+      font-style: normal;
+      font-size: 12px;
+      margin-left: 10px;
+    }
+  }
+}

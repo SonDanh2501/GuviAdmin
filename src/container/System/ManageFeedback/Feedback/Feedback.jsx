@@ -161,6 +161,9 @@ const Feedback = () => {
                 },
               };
             }}
+            scroll={{
+              x: 1600,
+            }}
           />
         </div>
         <div className="div-pagination p-2">

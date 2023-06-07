@@ -17,6 +17,7 @@ const AddCustomer = (props) => {
   const formikRef = useRef();
   const dispatch = useDispatch();
   const checkElement = useSelector(getElementState);
+  const width = window.innerWidth;
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -99,7 +100,7 @@ const AddCustomer = (props) => {
           return (
             <Drawer
               title="Tạo khách hàng"
-              width={500}
+              width={width > 490 ? 500 : 300}
               onClose={onClose}
               open={open}
               bodyStyle={{
