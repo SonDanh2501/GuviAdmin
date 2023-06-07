@@ -414,6 +414,9 @@ const ReviewCollaborator = () => {
               },
             };
           }}
+          scroll={{
+            x: 1600,
+          }}
         />
       </div>
       <div className="mt-1 div-pagination p-2">

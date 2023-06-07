@@ -41,6 +41,7 @@ const AddPushNotification = ({ idOrder }) => {
   const onClose = () => {
     setOpen(false);
   };
+  const width = window.innerWidth;
 
   useEffect(() => {
     getGroupCustomerApi(0, 10)
@@ -155,14 +156,14 @@ const AddPushNotification = ({ idOrder }) => {
 
   return (
     <>
-      <div className={"btn-push-noti"} onClick={showDrawer}>
+      <div className="btn-add-push-noti" onClick={showDrawer}>
         <a>Tạo thông báo</a>
       </div>
       <Drawer
         title="Tạo thông báo"
         placement="right"
         onClose={onClose}
-        width={500}
+        width={width > 490 ? 500 : 300}
         open={open}
       >
         <div>

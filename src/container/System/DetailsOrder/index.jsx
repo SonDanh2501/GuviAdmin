@@ -250,14 +250,13 @@ const DetailsOrder = () => {
       render: (data) => {
         return <a className="text-id">{data?.id_view}</a>;
       },
-      fixed: "left",
       width: "10%",
     },
     {
       title: "Ngày tạo",
       render: (data) => {
         return (
-          <div className="div-create">
+          <div className="div-create-details-order">
             <a className="text-create">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
             </a>
@@ -293,7 +292,7 @@ const DetailsOrder = () => {
       title: "Thời gian",
       render: (data) => {
         return (
-          <div className="div-worktime">
+          <div className="div-worktime-detail-order">
             <a className="text-worktime">
               {" "}
               {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
@@ -309,7 +308,7 @@ const DetailsOrder = () => {
     },
     {
       title: "Địa điểm",
-      render: (data) => <p className="text-address">{data?.address}</p>,
+      render: (data) => <p className="text-address-details">{data?.address}</p>,
     },
     {
       title: "Cộng tác viên",
@@ -366,6 +365,7 @@ const DetailsOrder = () => {
     },
     {
       key: "action",
+      align: "center",
       render: (data, record, index) => {
         return (
           <>
@@ -896,10 +896,9 @@ const DetailsOrder = () => {
                           },
                         };
                       }}
-                      // scroll={{
-                      //   x: 1500,
-                      //   y: 300,
-                      // }}
+                      scroll={{
+                        x: 1600,
+                      }}
                     />
                   </div>
 

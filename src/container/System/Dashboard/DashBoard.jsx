@@ -507,128 +507,122 @@ export default function Home() {
       )}
 
       <div>
-        <div className="mt-4 mb-4">
-          <Row>
-            <Col lg="9">
-              <div className="chart">
-                <div className="div-head-chart">
-                  <div className="div-date">
-                    <CustomDatePicker
-                      setStartDate={setStartDate}
-                      setEndDate={setEndDate}
-                      onClick={onChange}
-                      onCancel={() => {}}
-                    />
-                    {startDate && (
-                      <a className="text-date">
-                        {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-                        {moment(endDate).utc().format("DD/MM/YYYY")}
-                      </a>
-                    )}
-                  </div>
-                  {checkElement?.includes("total_finance_job_dashboard") && (
-                    <a className="text-total-money">
-                      Tổng tiền: {formatMoney(totalMoneyChart)}
-                    </a>
-                  )}
-                </div>
-                <div className="div-select-city mb-3">
-                  <Select
-                    style={{ width: 200 }}
-                    value={nameCity}
-                    onChange={onChangeCity}
-                    options={cityData}
-                    showSearch
-                    filterOption={(input, option) =>
-                      (option?.label ?? "")
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                    }
-                  />
-                </div>
-                {checkElement?.includes("total_finance_job_dashboard") && (
-                  <div>
-                    <ResponsiveContainer
-                      width={"100%"}
-                      height={350}
-                      min-width={300}
-                    >
-                      <AreaChart
-                        width={window.screen.height / 1.2}
-                        height={400}
-                        data={arrResult}
-                        margin={{
-                          top: 10,
-                          right: 30,
-                          left: 0,
-                          bottom: 0,
-                        }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis
-                          dataKey="date_start"
-                          tickFormatter={(tickItem) =>
-                            moment(tickItem).format("DD/MM")
-                          }
-                        />
-                        <YAxis
-                          dataKey="total_income"
-                          fontSize={12}
-                          tickFormatter={(tickItem) =>
-                            number_processing(tickItem)
-                          }
-                        />
-                        <Tooltip content={renderTooltipContent} />
-                        <Area
-                          type="monotone"
-                          dataKey="total_income"
-                          stroke="#00CF3A"
-                          fill="#00CF3A"
-                          name="Tổng tiền"
-                        />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  </div>
+        <div className="div-chart_total_service_collaborator">
+          <div className="chart">
+            <div className="div-head-chart">
+              <div className="div-date">
+                <CustomDatePicker
+                  setStartDate={setStartDate}
+                  setEndDate={setEndDate}
+                  onClick={onChange}
+                  onCancel={() => {}}
+                />
+                {startDate && (
+                  <a className="text-date">
+                    {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+                    {moment(endDate).utc().format("DD/MM/YYYY")}
+                  </a>
                 )}
-
-                <Row>
-                  <Col lg="7" className="pl-4">
-                    <p className="label-persen-active">Phần trăm hoạt động</p>
-                    <div className="div-persen">
-                      <p className="label-persen">{activeUser?.donePercent}%</p>
-                      <p className="label-total">Tổng</p>
-                    </div>
-                    <Progress
-                      percent={activeUser?.donePercent}
-                      showInfo={false}
-                      strokeColor={"#48CAE4"}
-                      className="progress-persent"
-                      strokeWidth={15}
+              </div>
+              {checkElement?.includes("total_finance_job_dashboard") && (
+                <a className="text-total-money">
+                  Tổng tiền: {formatMoney(totalMoneyChart)}
+                </a>
+              )}
+            </div>
+            <div className="div-select-city mb-3">
+              <Select
+                style={{ width: 200 }}
+                value={nameCity}
+                onChange={onChangeCity}
+                options={cityData}
+                showSearch
+                filterOption={(input, option) =>
+                  (option?.label ?? "")
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
+              />
+            </div>
+            {checkElement?.includes("total_finance_job_dashboard") && (
+              <div>
+                <ResponsiveContainer
+                  width={"100%"}
+                  height={350}
+                  min-width={300}
+                >
+                  <AreaChart
+                    width={window.screen.height / 1.2}
+                    height={400}
+                    data={arrResult}
+                    margin={{
+                      top: 10,
+                      right: 30,
+                      left: 0,
+                      bottom: 0,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="date_start"
+                      tickFormatter={(tickItem) =>
+                        moment(tickItem).format("DD/MM")
+                      }
                     />
-                    <div className="div-container-on">
-                      <div className="div-on">
-                        <div className="line-on" />
-                        <div className="total-div-on">
-                          <a className="text-on">Online</a>
-                          <a className="text-total-on">
-                            {activeUser?.ActiveUsers}
-                          </a>
-                        </div>
-                      </div>
+                    <YAxis
+                      dataKey="total_income"
+                      fontSize={12}
+                      tickFormatter={(tickItem) => number_processing(tickItem)}
+                    />
+                    <Tooltip content={renderTooltipContent} />
+                    <Area
+                      type="monotone"
+                      dataKey="total_income"
+                      stroke="#00CF3A"
+                      fill="#00CF3A"
+                      name="Tổng tiền"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            )}
 
-                      <div className="div-on">
-                        <div className="line-off" />
-                        <div className="total-div-on">
-                          <a className="text-on">Ofline</a>
-                          <a className="text-total-on">
-                            {activeUser?.OfflineUsers}
-                          </a>
-                        </div>
-                      </div>
+            <Row>
+              <Col lg="7" className="pl-4">
+                <p className="label-persen-active">Phần trăm hoạt động</p>
+                <div className="div-persen">
+                  <p className="label-persen">{activeUser?.donePercent}%</p>
+                  <p className="label-total">Tổng</p>
+                </div>
+                <Progress
+                  percent={activeUser?.donePercent}
+                  showInfo={false}
+                  strokeColor={"#48CAE4"}
+                  className="progress-persent"
+                  strokeWidth={15}
+                />
+                <div className="div-container-on">
+                  <div className="div-on">
+                    <div className="line-on" />
+                    <div className="total-div-on">
+                      <a className="text-on">Online</a>
+                      <a className="text-total-on">{activeUser?.ActiveUsers}</a>
                     </div>
-                  </Col>
-                  <Col lg="5">
-                    {/* <p className="label-persen-active">Active Users</p>
+                  </div>
+
+                  <div className="div-on">
+                    <div className="line-off" />
+                    <div className="total-div-on">
+                      <a className="text-on">Ofline</a>
+                      <a className="text-total-on">
+                        {activeUser?.OfflineUsers}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </Col>
+              <Col lg="5">
+                {/* <p className="label-persen-active">Active Users</p>
                     <p className="label-active">2154</p>
                     <div>
                       <Progress
@@ -639,7 +633,7 @@ export default function Home() {
                       />
                       <a>Hồ Chí Minh</a>
                     </div> */}
-                    {/* <div>
+                {/* <div>
                       <Progress
                         percent={73}
                         strokeWidth={10}
@@ -657,181 +651,173 @@ export default function Home() {
                       />
                       <a>Hà Nội</a>
                     </div> */}
-                  </Col>
-                </Row>
-              </div>
-            </Col>
-            <Col lg="3">
-              {checkElement?.includes("connection_service_dashboard") && (
-                <div className="div-connect-service">
-                  <div className="div-progress">
-                    <Progress
-                      type="dashboard"
-                      percent={
-                        !connectionService?.donePercent
-                          ? 0
-                          : connectionService?.donePercent
-                      }
-                      gapDegree={5}
-                      strokeColor={"#48CAE4"}
-                      strokeWidth={15}
-                      width={150}
-                    />
-                  </div>
-                  <div className="div-progress-text">
-                    <p className="title-progress">Tỉ lệ dịch vụ kết nối</p>
-                  </div>
-                  <div className="div-success">
-                    <a className="square" />
-                    <p className="text-success-square">Hoàn thành</p>
-                  </div>
-                  <div className="div-success">
-                    <a className="unsquare" />
-                    <p className="text-success-square">Chưa hoàn thành</p>
-                  </div>
+              </Col>
+            </Row>
+          </div>
+          <div>
+            {checkElement?.includes("connection_service_dashboard") && (
+              <div className="div-connect-service">
+                <div className="div-progress">
+                  <Progress
+                    type="dashboard"
+                    percent={
+                      !connectionService?.donePercent
+                        ? 0
+                        : connectionService?.donePercent
+                    }
+                    gapDegree={5}
+                    strokeColor={"#48CAE4"}
+                    strokeWidth={15}
+                    width={150}
+                  />
                 </div>
-              )}
-              {checkElement?.includes("top_collaborator_dashboard") && (
-                <>
-                  {topCollaborator.length > 0 && (
-                    <div className="div-top-collaborator">
-                      <p className="text-top">Top CTV</p>
-                      <div className="level">
+                <div className="div-progress-text">
+                  <p className="title-progress">Tỉ lệ dịch vụ kết nối</p>
+                </div>
+                <div className="div-success">
+                  <a className="square" />
+                  <p className="text-success-square">Hoàn thành</p>
+                </div>
+                <div className="div-success">
+                  <a className="unsquare" />
+                  <p className="text-success-square">Chưa hoàn thành</p>
+                </div>
+              </div>
+            )}
+            {checkElement?.includes("top_collaborator_dashboard") && (
+              <>
+                {topCollaborator.length > 0 && (
+                  <div className="div-top-collaborator">
+                    <p className="text-top">Top CTV</p>
+                    <div className="level">
+                      <div
+                        className="level-ctv1"
+                        onClick={() =>
+                          navigate("/details-collaborator", {
+                            state: {
+                              id: topCollaborator[0]?._id?.id_collaborator,
+                            },
+                          })
+                        }
+                      >
+                        <p className="text-level">
+                          {topCollaborator[0]?._id?.full_name}
+                        </p>
+                        <p className="text-level-number">
+                          {formatMoney(topCollaborator[0]?.sumIncome)}
+                        </p>
+                      </div>
+                      {topCollaborator.length > 1 && (
                         <div
-                          className="level-ctv1"
+                          className="level-ctv2"
                           onClick={() =>
                             navigate("/details-collaborator", {
                               state: {
-                                id: topCollaborator[0]?._id?.id_collaborator,
+                                id: topCollaborator[1]?._id?.id_collaborator,
                               },
                             })
                           }
                         >
                           <p className="text-level">
-                            {topCollaborator[0]?._id?.full_name}
+                            {topCollaborator[1]?._id?.name}
                           </p>
                           <p className="text-level-number">
-                            {formatMoney(topCollaborator[0]?.sumIncome)}
+                            {formatMoney(topCollaborator[1]?.sumIncome)}
                           </p>
                         </div>
-                        {topCollaborator.length > 1 && (
-                          <div
-                            className="level-ctv2"
-                            onClick={() =>
-                              navigate("/details-collaborator", {
-                                state: {
-                                  id: topCollaborator[1]?._id?.id_collaborator,
-                                },
-                              })
-                            }
-                          >
-                            <p className="text-level">
-                              {topCollaborator[1]?._id?.name}
-                            </p>
-                            <p className="text-level-number">
-                              {formatMoney(topCollaborator[1]?.sumIncome)}
-                            </p>
-                          </div>
-                        )}
-                        {topCollaborator.length > 2 && (
-                          <div
-                            className="level-ctv3"
-                            onClick={() =>
-                              navigate("/details-collaborator", {
-                                state: {
-                                  id: topCollaborator[2]?._id?.id_collaborator,
-                                },
-                              })
-                            }
-                          >
-                            <p className="text-level">
-                              {topCollaborator[2]?._id?.name}
-                            </p>
-                            <p className="text-level-number">
-                              {formatMoney(topCollaborator[2]?.sumIncome)}
-                            </p>
-                          </div>
-                        )}
-                        {topCollaborator.length > 3 && (
-                          <div
-                            className="level-ctv4"
-                            onClick={() =>
-                              navigate("/details-collaborator", {
-                                state: {
-                                  id: topCollaborator[3]?._id?.id_collaborator,
-                                },
-                              })
-                            }
-                          >
-                            <p className="text-level">
-                              {topCollaborator[3]?._id?.name}
-                            </p>
-                            <p className="text-level-number">
-                              {formatMoney(topCollaborator[3]?.sumIncome)}
-                            </p>
-                          </div>
-                        )}
-                        {topCollaborator.length > 4 && (
-                          <div
-                            className="level-ctv5"
-                            onClick={() =>
-                              navigate("/details-collaborator", {
-                                state: {
-                                  id: topCollaborator[4]?._id?.id_collaborator,
-                                },
-                              })
-                            }
-                          >
-                            <p className="text-level">
-                              {topCollaborator[4]?._id?.name}
-                            </p>
-                            <p className="text-level-number">
-                              {formatMoney(topCollaborator[4]?.sumIncome)}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                      <div className="div-seemore">
-                        <MoreTopCollaborator />
-                      </div>
+                      )}
+                      {topCollaborator.length > 2 && (
+                        <div
+                          className="level-ctv3"
+                          onClick={() =>
+                            navigate("/details-collaborator", {
+                              state: {
+                                id: topCollaborator[2]?._id?.id_collaborator,
+                              },
+                            })
+                          }
+                        >
+                          <p className="text-level">
+                            {topCollaborator[2]?._id?.name}
+                          </p>
+                          <p className="text-level-number">
+                            {formatMoney(topCollaborator[2]?.sumIncome)}
+                          </p>
+                        </div>
+                      )}
+                      {topCollaborator.length > 3 && (
+                        <div
+                          className="level-ctv4"
+                          onClick={() =>
+                            navigate("/details-collaborator", {
+                              state: {
+                                id: topCollaborator[3]?._id?.id_collaborator,
+                              },
+                            })
+                          }
+                        >
+                          <p className="text-level">
+                            {topCollaborator[3]?._id?.name}
+                          </p>
+                          <p className="text-level-number">
+                            {formatMoney(topCollaborator[3]?.sumIncome)}
+                          </p>
+                        </div>
+                      )}
+                      {topCollaborator.length > 4 && (
+                        <div
+                          className="level-ctv5"
+                          onClick={() =>
+                            navigate("/details-collaborator", {
+                              state: {
+                                id: topCollaborator[4]?._id?.id_collaborator,
+                              },
+                            })
+                          }
+                        >
+                          <p className="text-level">
+                            {topCollaborator[4]?._id?.name}
+                          </p>
+                          <p className="text-level-number">
+                            {formatMoney(topCollaborator[4]?.sumIncome)}
+                          </p>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </>
-              )}
-            </Col>
-          </Row>
+                    <div className="div-seemore">
+                      <MoreTopCollaborator />
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </div>
         {checkElement?.includes("total_finance_job_dashboard") && (
           <div>
             <p className="label-service">DỊCH VỤ GẦN NHẤT</p>
-            <Row className=" mb-5">
-              <Col className="mb-5 mb-xl-0">
-                <Card className="shadow">
-                  <CardBody className="sm:bg-red-500">
-                    <Table
-                      columns={columns}
-                      dataSource={lastestService}
-                      pagination={false}
-                      scroll={{
-                        x: 1600,
-                      }}
-                    />
-                  </CardBody>
-                  <div className="div-entries">
-                    <Select
-                      style={{ width: 60 }}
-                      defaultValue={"5"}
-                      onChange={onChangeNumberData}
-                      options={[
-                        { value: 5, label: "5" },
-                        { value: 10, label: "10" },
-                        { value: 20, label: "20" },
-                      ]}
-                    />
-                  </div>
-                </Card>
-              </Col>
-            </Row>
+            <div className="div-card-service">
+              <Table
+                columns={columns}
+                dataSource={lastestService}
+                pagination={false}
+                scroll={{
+                  x: 1600,
+                }}
+              />
+              <div className="div-entries">
+                <Select
+                  style={{ width: 60 }}
+                  defaultValue={"5"}
+                  onChange={onChangeNumberData}
+                  options={[
+                    { value: 5, label: "5" },
+                    { value: 10, label: "10" },
+                    { value: 20, label: "20" },
+                  ]}
+                />
+              </div>
+            </div>
           </div>
         )}
         <div>

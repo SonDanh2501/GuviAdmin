@@ -240,3 +240,73 @@
     color: #82ca9d;
   }
 }
+
+@media screen and (max-width: 490px) {
+  .header-report-customer {
+    display: flex;
+    flex-direction: column !important;
+    justify-content: space-between;
+    margin-top: 20px;
+
+    .div-tab-header {
+      width: 100% !important;
+      height: 65px;
+      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
+      background-color: white;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 30px;
+      padding-right: 30px;
+      margin-top: 10px;
+
+      .div-img {
+        width: 48px;
+        height: 48px;
+
+        .img {
+          width: 48px;
+          height: 48px;
+          position: relative;
+        }
+        .text-month {
+          position: absolute;
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 700;
+          font-size: 16px;
+          color: #000000;
+          left: 40px;
+          top: 30px;
+        }
+
+        .text-day {
+          position: absolute;
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 700;
+          font-size: 16px;
+          color: #000000;
+          left: 48px;
+          top: 30px;
+        }
+      }
+
+      .div-text-tab {
+        display: flex;
+        flex-direction: column;
+
+        .text-tab-header {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 700;
+          font-size: 16px;
+          text-align: center;
+          color: #11263c;
+        }
+      }
+    }
+  }
+}

@@ -47,3 +47,15 @@
   height: 50px;
   width: 40px;
 }
+
+@media screen and (max-width: 490px) {
+  .btn-add-collaborator {
+    width: 90%;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    background-color: #48cae4;
+    color: white;
+    box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  }
+}

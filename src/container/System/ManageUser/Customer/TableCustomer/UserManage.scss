@@ -153,3 +153,43 @@
   line-height: 30px;
   color: #19202c;
 }
+
+@media screen and (max-width: 490px) {
+  .div-header-customer-table {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    .dropdown {
+      display: flex;
+      height: 48px;
+      width: 15%;
+      border-radius: 5px;
+      border: 1px solid black;
+      align-items: center;
+      justify-content: center;
+
+      .icon {
+        color: #000000;
+      }
+      .text-filter {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        color: #000000;
+      }
+    }
+
+    .input-search {
+      width: 100%;
+      border-radius: 5px;
+      border: 1px solid black;
+      margin-left: 15px;
+      align-items: center;
+    }
+    .input {
+      border: none;
+    }
+  }
+}

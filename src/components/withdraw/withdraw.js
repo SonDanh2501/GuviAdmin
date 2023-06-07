@@ -30,6 +30,7 @@ const Withdraw = (props) => {
   const [wallet, setWallet] = useState("");
   const checkElement = useSelector(getElementState);
   const dispatch = useDispatch();
+  const width = window.innerWidth;
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -115,7 +116,7 @@ const Withdraw = (props) => {
 
       <Drawer
         title="Rút tiền cộng tác viên"
-        width={500}
+        width={width > 490 ? 500 : 300}
         onClose={onClose}
         open={open}
         bodyStyle={{

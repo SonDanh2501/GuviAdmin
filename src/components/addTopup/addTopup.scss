@@ -73,3 +73,14 @@
   border: 1px solid #d9d9d9;
   border-radius: 4px;
 }
+
+@media screen and (max-width: 490px) {
+  .btn-add-topup-collaborator {
+    width: 100% !important;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    background-color: #48cae4;
+    color: white;
+  }
+}

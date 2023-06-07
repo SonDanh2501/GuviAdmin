@@ -232,6 +232,9 @@ const ManagePushNotification = () => {
             };
           }}
           pagination={false}
+          scroll={{
+            x: 1600,
+          }}
         />
       </div>
       <div className="div-pagination p-2">

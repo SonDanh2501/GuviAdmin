@@ -325,3 +325,22 @@
     border-radius: 4px;
   }
 }
+
+@media screen and (max-width: 490px) {
+  .div-header-colla {
+    margin-bottom: 10px;
+    flex-direction: column;
+    display: flex;
+
+    .input-search {
+      width: 90%;
+      border-radius: 5px;
+      border: 1px solid black;
+      margin-left: 15px;
+      align-items: center;
+    }
+    .input {
+      border: none;
+    }
+  }
+}

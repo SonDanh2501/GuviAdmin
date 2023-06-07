@@ -395,23 +395,6 @@ const TopupCollaborator = ({ type }) => {
   }, []);
   return (
     <div>
-      {/* <div className="div-date">
-        <Input.Group compact>
-          <Select defaultValue={typeDate} onChange={(e) => setTypeDate(e)}>
-            <Option value="week">Tuần </Option>
-            <Option value="month">Tháng</Option>
-            <Option value="quarter">Quý</Option>
-          </Select>
-        </Input.Group>
-        <div>
-          <RangePicker
-            picker={typeDate}
-            className="picker"
-            onChange={(e) => onChangeDate(e[0]?.$d, e[1]?.$d)}
-          />
-        </div>
-      </div> */}
-
       <div className="div-header-topup">
         {type === "all" ? (
           <div className="div-topwith">
@@ -453,6 +436,9 @@ const TopupCollaborator = ({ type }) => {
                 setItemEdit(record);
               },
             };
+          }}
+          scroll={{
+            x: 1600,
           }}
         />
       </div>

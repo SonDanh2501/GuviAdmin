@@ -18,6 +18,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useNavigate } from "react-router-dom";
 
 const ReportOrderDaily = () => {
   const [data, setData] = useState([]);
@@ -34,6 +35,7 @@ const ReportOrderDaily = () => {
   const [endDate, setEndDate] = useState(
     moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
   );
+  const navigate = useNavigate();
 
   useEffect(() => {
     getReportOrderDaily(0, 40, startDate, endDate)
@@ -94,7 +96,14 @@ const ReportOrderDaily = () => {
         );
       },
       render: (data) => (
-        <div className="div-date-report-order">
+        <div
+          className="div-date-report-order"
+          // onClick={() =>
+          //   navigate("/report/manage-report/report-order-daily/details", {
+          //     state: { date: data?._id },
+          //   })
+          // }
+        >
           <a className="text-date-report-order">{data?._id}</a>
         </div>
       ),

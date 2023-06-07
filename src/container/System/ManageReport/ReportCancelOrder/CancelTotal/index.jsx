@@ -212,6 +212,7 @@ const TotalCancel = (props) => {
     },
     {
       title: "Địa chỉ",
+      responsive: ["xl"],
       render: (data) => {
         return <a className="text-address-cancel">{data?.address}</a>;
       },

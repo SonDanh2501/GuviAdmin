@@ -555,14 +555,6 @@ const UserManage = (props) => {
     <React.Fragment>
       <div>
         <div className="div-header-customer-table">
-          <Input
-            placeholder="Tìm kiếm"
-            type="text"
-            className="input-search"
-            prefix={<SearchOutlined />}
-            onChange={(e) => handleSearch(e.target.value)}
-          />
-
           {checkElement?.includes("create_customer") && (
             <AddCustomer
               setIsLoading={setIsLoading}
@@ -572,6 +564,13 @@ const UserManage = (props) => {
               status={status}
             />
           )}
+          <Input
+            placeholder="Tìm kiếm"
+            type="text"
+            className="input-search"
+            prefix={<SearchOutlined />}
+            onChange={(e) => handleSearch(e.target.value)}
+          />
         </div>
 
         <div className="mt-3">

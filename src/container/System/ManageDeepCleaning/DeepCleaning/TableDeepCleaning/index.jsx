@@ -247,7 +247,7 @@ const TableDeepCleaning = (props) => {
     },
     {
       title: "Trạng thái",
-      fixed: "right",
+
       render: (data) => {
         return (
           <div>
@@ -265,7 +265,7 @@ const TableDeepCleaning = (props) => {
     },
     {
       key: "action",
-      fixed: "right",
+
       render: (data) => {
         return (
           <div>

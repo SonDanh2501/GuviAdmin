@@ -35,7 +35,7 @@ const AddPopup = (props) => {
   const [id, setId] = useState("");
   const dispatch = useDispatch();
   const checkElement = useSelector(getElementState);
-
+  const width = window.innerWidth;
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -121,7 +121,7 @@ const AddPopup = (props) => {
       />
       <Drawer
         title="Nạp tiền cộng tác viên"
-        width={500}
+        width={width > 490 ? 500 : 300}
         onClose={onClose}
         open={open}
         bodyStyle={{

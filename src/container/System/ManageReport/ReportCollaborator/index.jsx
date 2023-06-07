@@ -528,6 +528,9 @@ const ReportManager = () => {
           // locale={{
           //   emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
           // }}
+          scroll={{
+            x: 1600,
+          }}
         />
       </div>
       <div className="mt-2 div-pagination p-2">

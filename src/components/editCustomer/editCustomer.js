@@ -22,6 +22,7 @@ const EditCustomer = (props) => {
   const onClose = ({ data }) => {
     setOpen(false);
   };
+  const width = window.innerWidth;
 
   const initialValues = {
     code_phone_area: data?.code_phone_area,
@@ -93,7 +94,7 @@ const EditCustomer = (props) => {
           return (
             <Drawer
               title="Sửa khách hàng"
-              width={500}
+              width={width > 490 ? 500 : 300}
               onClose={onClose}
               open={open}
               bodyStyle={{
