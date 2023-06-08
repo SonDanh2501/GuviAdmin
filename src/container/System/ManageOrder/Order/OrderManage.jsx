@@ -1,37 +1,26 @@
 import React, { memo, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getOrder, searchOrder } from "../../../../redux/actions/order";
 
+import { SearchOutlined } from "@ant-design/icons";
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import {
-  Dropdown,
-  Empty,
-  Input,
-  Pagination,
-  Skeleton,
-  Space,
-  Table,
-} from "antd";
+import { Dropdown, Input, Pagination, Space, Table } from "antd";
+import _debounce from "lodash/debounce";
 import moment from "moment";
 import vi from "moment/locale/vi";
 import { useNavigate } from "react-router-dom";
-import "./OrderManage.scss";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   deleteOrderApi,
   getOrderApi,
   searchOrderApi,
 } from "../../../../api/order";
-import EditOrder from "../DrawerEditOrder";
-import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { loadingAction } from "../../../../redux/actions/loading";
+import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
 import { getElementState, getUser } from "../../../../redux/selectors/auth";
-import { SearchOutlined } from "@ant-design/icons";
-import _debounce from "lodash/debounce";
+import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
 import EditTimeOrder from "../EditTimeGroupOrder";
-import LoadingPagination from "../../../../components/paginationLoading";
-
+import "./OrderManage.scss";
+const width = window.innerWidth;
 const OrderManage = (props) => {
   const {
     data,
@@ -47,7 +36,6 @@ const OrderManage = (props) => {
   } = props;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [item, setItem] = useState([]);
-
   const [modal, setModal] = useState(false);
   const user = useSelector(getUser);
   const [dataSearch, setDataSearch] = useState([]);
@@ -204,7 +192,7 @@ const OrderManage = (props) => {
       render: (data) => {
         return (
           <a
-            className="text-id"
+            className="text-id-view-order"
             onClick={() => {
               if (checkElement?.includes("detail_guvi_job")) {
                 navigate("/details-order", {
@@ -232,6 +220,7 @@ const OrderManage = (props) => {
           </div>
         );
       },
+      responsive: ["xl"],
     },
     {
       title: "Tên khách hàng",
@@ -301,13 +290,14 @@ const OrderManage = (props) => {
       render: (data) => {
         return <a className="text-address-order">{data?.address}</a>;
       },
+      responsive: ["xl"],
     },
     {
       title: "Cộng tác viên",
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
-            <a className="text-name-customer ">Đang tìm kiếm</a>
+            <a className="text-pending-search">Đang tìm kiếm</a>
           ) : (
             <div
               onClick={() => {
@@ -378,7 +368,6 @@ const OrderManage = (props) => {
     },
     {
       key: "action",
-      fixed: "right",
       width: "5%",
       align: "center",
       render: (data) => (
@@ -464,8 +453,27 @@ const OrderManage = (props) => {
               },
             };
           }}
-          scroll={{
-            x: 1600,
+          scroll={
+            width <= 490
+              ? {
+                  x: 1600,
+                }
+              : null
+          }
+          expandable={{
+            expandedRowRender: (record) => {
+              return (
+                <div className="div-plus">
+                  <a>Địa điểm: {record?.address}</a>
+                  <a>
+                    Ngày tạo:{" "}
+                    {moment(new Date(record?.date_create)).format(
+                      "DD/MM/YYYY - HH:mm"
+                    )}
+                  </a>
+                </div>
+              );
+            },
           }}
         />
 

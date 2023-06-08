@@ -238,7 +238,7 @@ const DetailsProfile = ({ id }) => {
                   onChange={(e) => {
                     setBirthday(e.target.value);
                   }}
-                  style={{ width: "80%" }}
+                  style={{ width: "100%" }}
                 />
               </div>
 
@@ -250,7 +250,7 @@ const DetailsProfile = ({ id }) => {
                   type="email"
                   value={mail}
                   onChange={(e) => setMail(e.target.value)}
-                  style={{ width: "80%" }}
+                  style={{ width: "100%" }}
                 />
               </div>
             </div>
@@ -293,7 +293,11 @@ const DetailsProfile = ({ id }) => {
                         {moment(item?.date_create).format("DD-MM-YYYY")}
                       </a>
                     </div>
-                    <Progress percent={item?.total_price > 0 ? 100 : 70} />
+
+                    <Progress
+                      percent={item?.total_price > 0 ? 100 : 70}
+                      strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
+                    />
                     <a className="text-step">
                       {item?.total_price > 0
                         ? "Đã hoàn thành"

@@ -4,11 +4,11 @@ import { useEffect } from "react";
 import ManageReportCustomer from "./ManageReportCustomer";
 import ManageReportOrder from "./MangeReportOrder";
 import ReportCancelOrder from "./ReportCancelOrder";
-import ReportManager from "./ReportCollaborator";
 import "./index.scss";
 import ReportService from "./ReportService";
 import { useSelector } from "react-redux";
 import { getElementState } from "../../../redux/selectors/auth";
+import ManageReportCollaborator from "./ManagerReportCollaborator";
 
 const ManageReport = () => {
   const checkElement = useSelector(getElementState);
@@ -27,7 +27,7 @@ const ManageReport = () => {
           </Tabs.TabPane>
           {checkElement?.includes("collaborator_report") && (
             <Tabs.TabPane tab="Báo cáo CTV" key="2">
-              <ReportManager />
+              <ManageReportCollaborator />
             </Tabs.TabPane>
           )}
           <Tabs.TabPane tab="Báo cáo khách hàng" key="3">

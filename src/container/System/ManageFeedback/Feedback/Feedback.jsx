@@ -27,6 +27,7 @@ import { getElementState, getUser } from "../../../../redux/selectors/auth";
 import { loadingAction } from "../../../../redux/actions/loading";
 import { deleteFeedbackApi, searchFeedbackApi } from "../../../../api/feedback";
 import { errorNotify } from "../../../../helper/toast";
+const width = window.innerWidth;
 
 const Feedback = () => {
   const [dataFilter, setDataFilter] = useState([]);
@@ -161,9 +162,13 @@ const Feedback = () => {
                 },
               };
             }}
-            scroll={{
-              x: 1600,
-            }}
+            scroll={
+              width <= 490
+                ? {
+                    x: 1600,
+                  }
+                : null
+            }
           />
         </div>
         <div className="div-pagination p-2">

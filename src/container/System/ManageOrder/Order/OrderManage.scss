@@ -1,9 +1,9 @@
-.text-id {
+.text-id-view-order {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
   font-size: 13px !important;
-  color: black;
+  color: blue;
 }
 
 .div-service-order {
@@ -13,7 +13,7 @@
   .text-service {
     font-family: "Roboto";
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 12px;
     color: black;
     text-decoration: none;
@@ -43,7 +43,7 @@
     font-weight: 700;
     font-size: 12px;
     text-decoration: none;
-    color: rgb(46, 174, 0);
+    color: blue;
     text-transform: capitalize;
   }
 }
@@ -90,7 +90,7 @@
 .text-pen-order {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 12px;
   line-height: 16px;
   color: #ece200 !important;
@@ -100,7 +100,7 @@
 .text-confirm-order {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 12px;
   line-height: 16px;
   color: #023e8a;
@@ -110,7 +110,7 @@
 .text-doing-order {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 12px;
   line-height: 16px;
   color: #023e8a;
@@ -129,7 +129,7 @@
 .text-done-order {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 12px;
   line-height: 16px;
   color: #00cf3a;
@@ -166,6 +166,19 @@
 }
 
 .text-payment-method {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  color: #000000 !important;
+}
+
+.div-plus {
+  display: flex;
+  flex-direction: column;
+}
+
+.text-pending-search {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;

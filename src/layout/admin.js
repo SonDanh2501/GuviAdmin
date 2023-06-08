@@ -54,6 +54,7 @@ import ReportCustomerArea from "../container/System/ManageReport/ManageReportCus
 import CreateRole from "../container/System/ManageConfiguration/ScreenConfiguration/RoleAccount/CreateRole";
 import EditRole from "../container/System/ManageConfiguration/ScreenConfiguration/RoleAccount/EditRole";
 import ReportDetailOrderDaily from "../container/System/ManageReport/MangeReportOrder/ReportOrderDaily/DetailOrderDaily";
+import ReportCollaborator from "../container/System/ManageReport/ManagerReportCollaborator/ReportCollaborator";
 
 const Admin = () => {
   return (
@@ -155,6 +156,10 @@ const Admin = () => {
       />
 
       <Route path="/report/manage-report" element={<ManageReport />} />
+      <Route
+        path="/report/manage-report/report-collaborator"
+        element={<ReportCollaborator />}
+      />
       <Route
         path="/report/manage-report/report-order"
         element={<ReportOrder />}

@@ -23,8 +23,7 @@ import EditTopup from "../../../../../components/editTopup/editTopup";
 import AddTopup from "../../../../../components/addTopup/addTopup";
 import Withdraw from "../../../../../components/withdraw/withdraw";
 import { getRevenueCollaborator } from "../../../../../redux/actions/topup";
-const { RangePicker } = DatePicker;
-const { Option } = Select;
+const width = window.innerWidth;
 
 const TopupCollaborator = ({ type }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -383,16 +382,6 @@ const TopupCollaborator = ({ type }) => {
     },
   ];
 
-  const onChangeDate = useCallback((start, end) => {
-    const dayStart = moment(start).toISOString();
-    const dayEnd = moment(end).toISOString();
-    dispatch(
-      getRevenueCollaborator.getRevenueCollaboratorRequest({
-        startDate: dayStart,
-        endDate: dayEnd,
-      })
-    );
-  }, []);
   return (
     <div>
       <div className="div-header-topup">
@@ -437,9 +426,13 @@ const TopupCollaborator = ({ type }) => {
               },
             };
           }}
-          scroll={{
-            x: 1600,
-          }}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1600,
+                }
+              : null
+          }
         />
       </div>
       <div className="div-pagination p-2">

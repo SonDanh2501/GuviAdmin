@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getTotalDetailCustomerDay } from "../../../../../../api/report";
 import "./index.scss";
-import { set } from "lodash";
 
 const DetailRegisterCustomer = () => {
   const { state } = useLocation();
@@ -15,36 +14,20 @@ const DetailRegisterCustomer = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(
+    moment(date).startOf("date").toISOString()
+  );
+  const [endDate, setEndDate] = useState(
+    moment(date).endOf("date").toISOString()
+  );
 
   useEffect(() => {
-    getTotalDetailCustomerDay(
-      0,
-      20,
-      moment(moment(date).startOf("date").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment(date).endOf("date").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    )
+    getTotalDetailCustomerDay(0, 20, startDate, endDate)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-
-    setStartDate(
-      moment(moment(date).startOf("date").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
-    setEndDate(
-      moment(moment(date).endOf("date").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
   }, []);
 
   const onChange = (page) => {
@@ -166,7 +149,7 @@ const DetailRegisterCustomer = () => {
         Số lượng khách hàng đăng kí ngày{" "}
         {moment(new Date(date)).format("DD/MM/YYYY")}
       </h4>
-      <h5 className="mb-5">Tổng: {data.length}</h5>
+      <h5 className="mb-5">Tổng: {total}</h5>
       <div className="mt-2">
         <Table
           columns={columns}

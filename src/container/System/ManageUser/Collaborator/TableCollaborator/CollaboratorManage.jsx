@@ -1,4 +1,4 @@
-import { FilterOutlined, SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import {
   Checkbox,
   Dropdown,
@@ -10,6 +10,7 @@ import {
   Space,
   Table,
 } from "antd";
+import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
@@ -22,27 +23,21 @@ import {
   searchCollaborators,
   verifyCollaborator,
 } from "../../../../../api/collaborator.jsx";
-import _debounce from "lodash/debounce";
 import offToggle from "../../../../../assets/images/off-button.png";
 import offline from "../../../../../assets/images/offline.svg";
 import onToggle from "../../../../../assets/images/on-button.png";
 import online from "../../../../../assets/images/online.svg";
 import pending from "../../../../../assets/images/pending.svg";
 import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput.jsx";
-import EditCollaborator from "../../../../../components/editCollaborator/editCollaborator.js";
 import { errorNotify } from "../../../../../helper/toast";
-import { getCollaborators } from "../../../../../redux/actions/collaborator";
 import { loadingAction } from "../../../../../redux/actions/loading.js";
 import "./CollaboratorManage.scss";
 
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import {
-  getElementState,
-  getUser,
-} from "../../../../../redux/selectors/auth.js";
-import LoadingPagination from "../../../../../components/paginationLoading/index.jsx";
 import AddCollaborator from "../../../../../components/addCollaborator/addCollaborator.js";
+import LoadingPagination from "../../../../../components/paginationLoading/index.jsx";
+import { getElementState } from "../../../../../redux/selectors/auth.js";
 
 export default function CollaboratorManage(props) {
   const { status } = props;
@@ -68,10 +63,10 @@ export default function CollaboratorManage(props) {
   const toggleBlock = () => setModalBlock(!modalBlock);
   const toggleVerify = () => setModalVerify(!modalVerify);
   const toggleLockTime = () => setModalLockTime(!modalLockTime);
-  const user = useSelector(getUser);
   const checkElement = useSelector(getElementState);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const width = window.innerWidth;
 
   useEffect(() => {
     fetchCollaborators(0, 20, status)
@@ -336,7 +331,6 @@ export default function CollaboratorManage(props) {
   const columns = [
     {
       title: "Mã CTV",
-      width: "15%",
       render: (data) => (
         <a
           className="text-id-collaborator"
@@ -351,7 +345,6 @@ export default function CollaboratorManage(props) {
           {data?.id_view}
         </a>
       ),
-      width: "10%",
     },
     {
       title: "Tên cộng tác viên",
@@ -372,7 +365,6 @@ export default function CollaboratorManage(props) {
           </div>
         );
       },
-      width: "25%",
       sorter: (a, b) => a.full_name.localeCompare(b.full_name),
     },
     {
@@ -389,18 +381,15 @@ export default function CollaboratorManage(props) {
           </div>
         );
       },
-      width: "10%",
     },
     {
       title: "SĐT",
       render: (data) => <a className="text-phone-ctv">{data?.phone}</a>,
       align: "center",
-      width: "10%",
     },
     {
       title: "Trạng thái",
       align: "center",
-      width: "15%",
       render: (data) => {
         const now = moment(new Date()).format("DD/MM/YYYY hh:mm:ss");
         const then = data?.date_lock
@@ -439,7 +428,6 @@ export default function CollaboratorManage(props) {
     {
       title: "Tài khoản",
       align: "center",
-      width: "10%",
       render: (data) => {
         return (
           <div className="div-verify">
@@ -471,12 +459,10 @@ export default function CollaboratorManage(props) {
     {
       key: "action",
       align: "center",
-      fixed: "right",
-      width: "5%",
       render: (data) => (
         <Space size="middle">
           <img
-            onClick={data?.is_verify ? toggleVerify : null}
+            onClick={!data?.is_verify ? toggleVerify : null}
             src={data?.is_verify ? onToggle : offToggle}
             className={
               checkElement?.includes("verify_collaborator")
@@ -549,9 +535,13 @@ export default function CollaboratorManage(props) {
               emptyText:
                 data.length > 0 ? <Empty /> : <Skeleton active={true} />,
             }}
-            scroll={{
-              x: 1600,
-            }}
+            scroll={
+              width <= 490
+                ? {
+                    x: 1600,
+                  }
+                : null
+            }
           />
           <div className="div-pagination p-2">
             <a>Tổng: {totalFilter > 0 ? totalFilter : total}</a>

@@ -23,6 +23,7 @@ import LoadingPage from "../../../../../components/LoadingPage";
 import "./index.scss";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
+const width = window.innerWidth;
 
 const ReportInvite = () => {
   const [data, setData] = useState([]);
@@ -35,12 +36,17 @@ const ReportInvite = () => {
   const [startDate, setStartDate] = useState(
     moment().startOf("month").toISOString()
   );
-  const [endDate, setEndDate] = useState(moment(new Date()).toISOString());
+  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getReportCustomerInviteDay(0, 20, startDate, endDate)
+    getReportCustomerInviteDay(
+      0,
+      20,
+      moment(new Date("01-01-2022")).toISOString(),
+      endDate
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -63,7 +69,12 @@ const ReportInvite = () => {
   const onChange = (page) => {
     setCurrentPage(page);
     const start = page * data.length - data.length;
-    getReportCustomerInviteDay(start, 20, startDate, endDate)
+    getReportCustomerInviteDay(
+      start,
+      20,
+      moment(new Date("01-01-2022")).toISOString(),
+      endDate
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -311,7 +322,7 @@ const ReportInvite = () => {
         </div>
       </div>
       <a className="title">Bảng thống kê</a>
-      <div className="mt-3">
+      {/* <div className="mt-3">
         <div className="div-date">
           <CustomDatePicker
             setStartDate={setStartDate}
@@ -325,15 +336,19 @@ const ReportInvite = () => {
             </a>
           )}
         </div>
-      </div>
+      </div> */}
       <div className="mt-2">
         <Table
           columns={columns}
           dataSource={data}
           pagination={false}
-          scroll={{
-            x: 1600,
-          }}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1600,
+                }
+              : null
+          }
         />
       </div>
       <div className="mt-1 div-pagination p-2">
@@ -354,26 +369,3 @@ const ReportInvite = () => {
 };
 
 export default ReportInvite;
-
-const data_test = [
-  {
-    name: "LE MINH DANG",
-    invite: 50,
-  },
-  {
-    name: "LE MINH DANG",
-    invite: 40,
-  },
-  {
-    name: "LE MINH DANG",
-    invite: 30,
-  },
-  {
-    name: "LE MINH DANG",
-    invite: 20,
-  },
-  {
-    name: "LE MINH DANG",
-    invite: 10,
-  },
-];

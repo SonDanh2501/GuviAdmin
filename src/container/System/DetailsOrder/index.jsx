@@ -37,6 +37,7 @@ import EditTimeOrderSchedule from "./EditTimeOrderSchedule";
 import { getListReasonCancel } from "../../../api/reasons";
 import { ModalBody, ModalFooter, ModalHeader, Modal } from "reactstrap";
 import LoadingPagination from "../../../components/paginationLoading";
+const width = window.innerWidth;
 
 const DetailsOrder = () => {
   const { state } = useLocation();
@@ -896,9 +897,13 @@ const DetailsOrder = () => {
                           },
                         };
                       }}
-                      scroll={{
-                        x: 1600,
-                      }}
+                      scroll={
+                        width <= 490
+                          ? {
+                              x: 1600,
+                            }
+                          : null
+                      }
                     />
                   </div>
 

@@ -21,6 +21,7 @@ import {
 import { loadingAction } from "../../../redux/actions/loading";
 import { errorNotify } from "../../../helper/toast";
 import { getElementState } from "../../../redux/selectors/auth";
+const width = window.innerWidth;
 
 const ManagePushNotification = () => {
   const listNotification = useSelector(getListNotifications);
@@ -232,9 +233,13 @@ const ManagePushNotification = () => {
             };
           }}
           pagination={false}
-          scroll={{
-            x: 1600,
-          }}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1600,
+                }
+              : null
+          }
         />
       </div>
       <div className="div-pagination p-2">
