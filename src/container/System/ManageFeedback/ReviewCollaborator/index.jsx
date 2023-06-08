@@ -15,6 +15,7 @@ import { errorNotify } from "../../../../helper/toast";
 import { getElementState } from "../../../../redux/selectors/auth";
 import { useSelector } from "react-redux";
 const { TextArea } = Input;
+const width = window.innerWidth;
 
 const ReviewCollaborator = () => {
   const [data, setData] = useState([]);
@@ -286,9 +287,6 @@ const ReviewCollaborator = () => {
           >
             <a className="text-order">{data?.id_view}</a>
             <div className="div-star">
-              {/* {[1, 2, 3, 4, 5]?.slice(0, data?.star)?.map((item) => {
-                return <img src={starImg} className="icon-star" />;
-              })} */}
               <Rate
                 value={data?.star}
                 style={{ width: "100%" }}
@@ -414,9 +412,13 @@ const ReviewCollaborator = () => {
               },
             };
           }}
-          scroll={{
-            x: 1600,
-          }}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1600,
+                }
+              : null
+          }
         />
       </div>
       <div className="mt-1 div-pagination p-2">

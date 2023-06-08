@@ -10,6 +10,7 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import "./index.scss";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
+const width = window.innerWidth;
 
 const ReportOrder = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,13 +19,9 @@ const ReportOrder = () => {
   const [total, setTotal] = useState([]);
   const [dataTotal, setDataTotal] = useState([]);
   const [startDate, setStartDate] = useState(
-    moment(moment().startOf("month").toISOString())
-      .add(7, "hours")
-      .toISOString()
+    moment().startOf("month").toISOString()
   );
-  const [endDate, setEndDate] = useState(
-    moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
-  );
+  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState("date_work");
 
@@ -57,12 +54,20 @@ const ReportOrder = () => {
         <div className="div-date-report-order">
           <a className="text-date-report-order">
             {moment(
-              new Date(data?.id_group_order?.date_work_schedule[0]?.date)
+              new Date(
+                type === "date_work"
+                  ? data?.id_group_order?.date_work_schedule[0]?.date
+                  : data?.id_group_order?.date_create
+              )
             ).format("DD/MM/YYYY")}
           </a>
           <a className="text-date-report-order">
             {moment(
-              new Date(data?.id_group_order?.date_work_schedule[0]?.date)
+              new Date(
+                type === "date_work"
+                  ? data?.id_group_order?.date_work_schedule[0]?.date
+                  : data?.id_group_order?.date_create
+              )
             ).format("HH:mm")}
           </a>
         </div>
@@ -462,7 +467,7 @@ const ReportOrder = () => {
           />
           {startDate && (
             <a className="text-date">
-              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+              {moment(startDate).format("DD/MM/YYYY")} -{" "}
               {moment(endDate).utc().format("DD/MM/YYYY")}
             </a>
           )}
@@ -491,9 +496,13 @@ const ReportOrder = () => {
           // locale={{
           //   emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
           // }}
-          scroll={{
-            x: 1600,
-          }}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1600,
+                }
+              : null
+          }
         />
       </div>
       <div className="mt-2 div-pagination p-2">

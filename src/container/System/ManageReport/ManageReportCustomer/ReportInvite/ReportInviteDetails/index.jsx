@@ -1,8 +1,9 @@
-import { Pagination, Table } from "antd";
+import { Pagination, Progress, Table } from "antd";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { getReportDetailsCustomerInvite } from "../../../../../../api/report";
 import "./index.scss";
+import moment from "moment";
 
 const ReportInviteDetails = () => {
   const { state } = useLocation();
@@ -22,7 +23,8 @@ const ReportInviteDetails = () => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * data.length - data.length;
+    const dataLength = data.length < 20 ? 20 : data.length;
+    const start = page * dataLength - dataLength;
     getReportDetailsCustomerInvite(id, start, 20)
       .then((res) => {
         setData(res?.data);
@@ -32,6 +34,21 @@ const ReportInviteDetails = () => {
   };
 
   const columns = [
+    {
+      title: "Ngày tạo",
+      render: (data) => {
+        return (
+          <div className="div-create-invite-detail">
+            <a className="text-invite">
+              {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
+            </a>
+            <a className="text-invite">
+              {moment(new Date(data?.date_create)).format("HH:mm")}
+            </a>
+          </div>
+        );
+      },
+    },
     {
       title: "Mã",
       render: (data) => <a>{data?.id_view}</a>,
@@ -43,6 +60,26 @@ const ReportInviteDetails = () => {
     {
       title: "Số điện thoại ",
       render: (data) => <a>{data?.phone}</a>,
+    },
+    {
+      title: "Tổng đơn",
+      render: (data) => <a>{data?.total_done_order}</a>,
+      align: "center",
+    },
+    {
+      title: "Giai đoạn",
+      render: (data) => (
+        <Progress
+          percent={
+            data?.total_order === 0
+              ? 33
+              : data?.total_order !== 0 && data?.total_done_order === 0
+              ? 66
+              : 100
+          }
+          strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
+        />
+      ),
     },
   ];
   return (

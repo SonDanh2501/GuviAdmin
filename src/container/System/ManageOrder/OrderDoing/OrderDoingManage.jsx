@@ -69,7 +69,7 @@ const OrderDoingManage = () => {
       render: (data) => {
         return (
           <a
-            className="text-id"
+            className="text-id-order-doing"
             onClick={() =>
               navigate("/details-order", {
                 state: { id: data?._id },
@@ -85,7 +85,7 @@ const OrderDoingManage = () => {
       title: "Ngày tạo",
       render: (data) => {
         return (
-          <div className="div-create">
+          <div className="div-create-doing">
             <a className="text-create">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
             </a>
@@ -98,7 +98,9 @@ const OrderDoingManage = () => {
     },
     {
       title: "Tên khách hàng",
-      dataIndex: ["id_customer", "full_name"],
+      render: (data) => (
+        <a className="text-name-doing">{data?.id_customer?.full_name}</a>
+      ),
     },
     {
       title: "Dịch vụ",
@@ -125,7 +127,7 @@ const OrderDoingManage = () => {
       title: "Ngày làm",
       render: (data) => {
         return (
-          <div className="div-worktime">
+          <div className="div-worktime-doing">
             <a className="text-worktime">
               {" "}
               {moment(new Date(data.date_work_schedule[0].date)).format(
@@ -175,14 +177,14 @@ const OrderDoingManage = () => {
         <a
           className={
             data?.status === "pending"
-              ? "text-pending"
+              ? "text-pending-doing"
               : data?.status === "confirm"
-              ? "text-confirm"
+              ? "text-confirm-doing"
               : data?.status === "doing"
-              ? "text-doing"
+              ? "text-doing-doing"
               : data?.status === "done"
-              ? "text-done"
-              : "text-cancel"
+              ? "text-done-doing"
+              : "text-cancel-doing"
           }
         >
           {data?.status === "pending"

@@ -22,26 +22,16 @@ const ReportCustomerArea = () => {
 
   useEffect(() => {
     getReportCustomerByCity(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
+      moment().startOf("month").toISOString(),
+      moment().endOf("date").toISOString()
     )
       .then((res) => {
         setData(res?.data);
       })
       .catch((err) => {});
 
-    setStartDate(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
-    setEndDate(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
+    setStartDate(moment().startOf("month").toISOString());
+    setEndDate(moment().startOf("month").toISOString());
   }, []);
 
   const onChangeDay = () => {

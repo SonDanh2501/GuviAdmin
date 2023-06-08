@@ -30,26 +30,56 @@ const CustomDatePicker = (props) => {
 
   const onSelectTab = (item) => {
     setValueTab(item?.value);
-    const today = moment().endOf("date").toISOString();
-    const startToday = moment().startOf("date").toISOString();
-    const startYesterday = moment()
-      .subtract(1, "d")
+    const today = moment(moment().toISOString()).add(7, "hours").toISOString();
+    const startToday = moment(moment().toISOString())
+      .add(7, "hours")
       .startOf("date")
       .toISOString();
-    const endYesterday = moment().subtract(1, "d").endOf("date").toISOString();
-    const lastSeven = moment().subtract(7, "d").startOf("date").toISOString();
-    const lastThirty = moment().subtract(30, "d").startOf("date").toISOString();
-    const lastNinety = moment().subtract(90, "d").startOf("date").toISOString();
-    const startThisMonth = moment().startOf("month").toISOString();
-    const endThisMonth = moment().endOf("month").toISOString();
-    const startLastMonth = moment()
-      .subtract(1, "months")
-      .startOf("month")
+
+    const startYesterday = moment(
+      moment().subtract(1, "d").startOf("date").toISOString()
+    )
+      .add(7, "hours")
       .toISOString();
-    const endLastMonth = moment()
-      .subtract(1, "months")
-      .endOf("month")
+
+    const endYesterday = moment(
+      moment().subtract(1, "d").endOf("date").toISOString()
+    )
+      .add(7, "hours")
       .toISOString();
+
+    const lastSeven = moment(
+      moment().subtract(7, "d").startOf("date").toISOString()
+    )
+      .add(7, "hours")
+      .toISOString();
+    const lastThirty = moment(
+      moment().subtract(30, "d").startOf("date").toISOString()
+    )
+      .add(7, "hours")
+      .toISOString();
+    const lastNinety = moment(
+      moment().subtract(90, "d").startOf("date").toISOString()
+    )
+      .add(7, "hours")
+      .toISOString();
+    const startThisMonth = moment(moment().startOf("month").toISOString())
+      .add(7, "hours")
+      .toISOString();
+    const endThisMonth = moment(moment().endOf("month").toISOString())
+      .add(7, "hours")
+      .toISOString();
+    const startLastMonth = moment(
+      moment().subtract(1, "months").startOf("month").toISOString()
+    )
+      .add(7, "hours")
+      .toISOString();
+    const endLastMonth = moment(
+      moment().subtract(1, "months").endOf("month").toISOString()
+    )
+      .add(7, "hours")
+      .toISOString();
+
     const endNextDay = moment().add(3, "days").startOf("date").toISOString();
 
     switch (item?.value) {

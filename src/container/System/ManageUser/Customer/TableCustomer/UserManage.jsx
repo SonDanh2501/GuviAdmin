@@ -15,7 +15,7 @@ import {
 } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   activeCustomer,
   deleteCustomer,
@@ -35,6 +35,7 @@ import {
 } from "../../../../../redux/selectors/auth";
 import "./UserManage.scss";
 import AddCustomer from "../../../../../components/addCustomer/addCustomer";
+const width = window.innerWidth;
 
 const UserManage = (props) => {
   const { status } = props;
@@ -58,7 +59,6 @@ const UserManage = (props) => {
   const toggleBlock = () => setModalBlock(!modalBlock);
   const navigate = useNavigate();
   const checkElement = useSelector(getElementState);
-  const user = useSelector(getUser);
 
   useEffect(() => {
     fetchCustomers(0, 20, status)
@@ -530,7 +530,6 @@ const UserManage = (props) => {
           },
           {
             key: "action",
-            fixed: "right",
             align: "center",
             width: "5%",
             render: (data) => (
@@ -597,9 +596,25 @@ const UserManage = (props) => {
               emptyText:
                 data.length > 0 ? <Empty /> : <Skeleton active={true} />,
             }}
-            scroll={{
-              x: 1600,
-            }}
+            scroll={
+              width <= 490
+                ? {
+                    x: 1600,
+                  }
+                : null
+            }
+            // expandable={{
+            //   expandedRowRender: (record) => (
+            //     <p
+            //       style={{
+            //         margin: 0,
+            //       }}
+            //     >
+            //       {record?.date_create}
+            //       {record?.default_address}
+            //     </p>
+            //   ),
+            // }}
           />
         </div>
 

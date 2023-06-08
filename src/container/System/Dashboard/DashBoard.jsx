@@ -70,7 +70,7 @@ import { getElementState } from "../../../redux/selectors/auth";
 moment.locale("vi");
 dayjs.extend(customParseFormat);
 
-const COLORS = ["#0088FE", "#48cae4", "#00CF3A"];
+const width = window.innerWidth;
 
 export default function Home() {
   const [arrResult, setArrResult] = useState([]);
@@ -801,9 +801,13 @@ export default function Home() {
                 columns={columns}
                 dataSource={lastestService}
                 pagination={false}
-                scroll={{
-                  x: 1600,
-                }}
+                scroll={
+                  width <= 490
+                    ? {
+                        x: 1600,
+                      }
+                    : null
+                }
               />
               <div className="div-entries">
                 <Select

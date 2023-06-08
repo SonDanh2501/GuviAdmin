@@ -8,6 +8,7 @@ import FavouriteBlock from "./CollaboratorFavoriteBlock";
 const Profiles = () => {
   const { state } = useLocation();
   const { id } = state || {};
+
   return (
     <div>
       <div className="div-container-customer">

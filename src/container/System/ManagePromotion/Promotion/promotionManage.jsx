@@ -46,6 +46,7 @@ import AddPromotionOrther from "../../../../components/addPromotionOrther/addPro
 import EditPromotionOrther from "../../../../components/editPromotionOrther/editPromotionOrther.js";
 import { errorNotify } from "../../../../helper/toast.js";
 import { useNavigate } from "react-router-dom";
+const width = window.innerWidth;
 
 const PromotionManage = ({
   type,
@@ -746,9 +747,13 @@ const PromotionManage = ({
                 },
               };
             }}
-            scroll={{
-              x: 1600,
-            }}
+            scroll={
+              width <= 490
+                ? {
+                    x: 1600,
+                  }
+                : null
+            }
           />
           <div className="div-pagination p-2">
             <a>
