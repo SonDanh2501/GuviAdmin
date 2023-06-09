@@ -289,7 +289,7 @@ export default function TopupCustomer() {
           <div>
             {checkElement?.includes("verify_transition_cash_book_customer") && (
               <button
-                className="btn-confirm"
+                className="btn-verify-topup-customer"
                 onClick={toggleConfirm}
                 disabled={data?.status === "pending" ? false : true}
               >

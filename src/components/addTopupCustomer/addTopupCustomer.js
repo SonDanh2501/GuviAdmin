@@ -136,13 +136,13 @@ const AddTopupCustomer = () => {
                       key={index}
                       onClick={(e) => {
                         setId(item?._id);
-                        setName(item?.name);
+                        setName(item?.full_name);
                         setData([]);
                       }}
                     >
                       <a>
                         {" "}
-                        {item?.name} - {item?.phone} - {item?.id_view}
+                        {item?.full_name} - {item?.phone} - {item?.id_view}
                       </a>
                     </div>
                   );

@@ -72,7 +72,7 @@ const CleaningHourly = (props) => {
   const [errorCollaborator, setErrorCollaborator] = useState("");
   const [dataAddress, setDataAddress] = useState([]);
   const [estimate, setEstimate] = useState();
-  const [tipCollaborator, setTipCollaborator] = useState();
+  const [tipCollaborator, setTipCollaborator] = useState(0);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();

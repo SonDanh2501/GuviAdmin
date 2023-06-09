@@ -15,6 +15,7 @@ import {
 import "./deepCleaning.scss";
 import { errorNotify } from "../../../../../helper/toast";
 import LoadingPagination from "../../../../../components/paginationLoading";
+const width = window.innerWidth;
 
 const TableDeepCleaning = (props) => {
   const { status, currentPage, setCurrentPage, setStartPage, startPage } =
@@ -140,15 +141,8 @@ const TableDeepCleaning = (props) => {
   const items = [
     {
       key: "1",
-      label: (
-        <a
-          className={
-            checkElement?.includes("delete_request_service")
-              ? "text-delete-deep"
-              : "text-delete-deep-hide"
-          }
-          onClick={toggle}
-        >
+      label: checkElement?.includes("delete_request_service") && (
+        <a className={"text-delete-deep"} onClick={toggle}>
           Xoá
         </a>
       ),
@@ -268,31 +262,34 @@ const TableDeepCleaning = (props) => {
 
       render: (data) => {
         return (
-          <div>
-            {data?.status === "pending" ||
-              (checkElement?.includes("change_status_request_service") && (
-                <div className="div-btn-change-status">
-                  <div
-                    className="btn-change-done"
-                    onClick={() => {
-                      toggleStatus();
-                      setStatusModal("done");
-                    }}
-                  >
-                    <a className="text-change-done">Hoàn tất</a>
+          <>
+            {checkElement?.includes("change_status_request_service") && (
+              <div>
+                {data?.status === "pending" && (
+                  <div className="div-btn-change-status">
+                    <div
+                      className="btn-change-done"
+                      onClick={() => {
+                        toggleStatus();
+                        setStatusModal("done");
+                      }}
+                    >
+                      <a className="text-change-done">Hoàn tất</a>
+                    </div>
+                    <div
+                      className="btn-change-cancel"
+                      onClick={() => {
+                        toggleStatus();
+                        setStatusModal("cancel");
+                      }}
+                    >
+                      <a className="text-change-cancel">Huỷ</a>
+                    </div>
                   </div>
-                  <div
-                    className="btn-change-cancel"
-                    onClick={() => {
-                      toggleStatus();
-                      setStatusModal("cancel");
-                    }}
-                  >
-                    <a className="text-change-cancel">Huỷ</a>
-                  </div>
-                </div>
-              ))}
-          </div>
+                )}
+              </div>
+            )}
+          </>
         );
       },
       align: "center",
@@ -301,7 +298,6 @@ const TableDeepCleaning = (props) => {
     {
       key: "action",
       align: "center",
-      fixed: "right",
       width: "5%",
       render: (data) => {
         return (
@@ -352,10 +348,13 @@ const TableDeepCleaning = (props) => {
               },
             };
           }}
-          scroll={{
-            x: 1600,
-            y: 1000,
-          }}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1600,
+                }
+              : null
+          }
         />
       </div>
       <div className="mt-1 div-pagination p-2">

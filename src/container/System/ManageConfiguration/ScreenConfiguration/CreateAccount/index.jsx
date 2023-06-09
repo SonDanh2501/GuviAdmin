@@ -110,8 +110,12 @@ const CreateAccount = () => {
       render: (data) => <a>{data?.email}</a>,
     },
     {
-      title: "Tên đăng nhập",
+      title: "Tên hiện thị",
       render: (data) => <a>{data?.full_name}</a>,
+    },
+    {
+      title: "Quyền",
+      render: (data) => <a>{data?.id_role_admin?.name_role}</a>,
     },
     {
       key: "action",
