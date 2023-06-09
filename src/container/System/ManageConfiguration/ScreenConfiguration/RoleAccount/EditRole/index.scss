@@ -69,3 +69,44 @@
     color: #000000;
   }
 }
+
+@media screen and (max-width: 490px) {
+  .div-title-role {
+    display: flex;
+    flex-direction: column !important;
+
+    .title-role {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      color: #000000;
+      text-decoration: none;
+    }
+
+    .div-item-role {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      width: 100% !important;
+
+      .div-item-per {
+        display: flex;
+        flex-direction: row;
+
+        align-items: center;
+        width: 100%;
+
+        .text-name-per {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 12px;
+          text-decoration: none;
+          color: #000000;
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+}

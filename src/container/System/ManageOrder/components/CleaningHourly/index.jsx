@@ -517,6 +517,7 @@ const CleaningHourly = (props) => {
                     setAddress(item?.description);
                     findPlace(item?.place_id);
                   }}
+                  className="item-option-place"
                 >
                   {item?.description}
                 </option>

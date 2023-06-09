@@ -287,10 +287,11 @@ const AppCustomer = () => {
           />
         </div>
       </div>
-      {checkElement?.includes("edit_app_customer_setting")} &&{" "}
-      <Button className="btn-update" onClick={updateApp}>
-        Cập nhật
-      </Button>
+      {checkElement?.includes("edit_app_customer_setting") && (
+        <Button className="btn-update" onClick={updateApp}>
+          Cập nhật
+        </Button>
+      )}
     </div>
   );
 };

@@ -52,8 +52,9 @@ const ManagePushNotification = () => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * listNotification.length - listNotification.length;
-
+    const dataLength =
+      listNotification.length < 20 ? 20 : listNotification.length;
+    const start = page * dataLength - dataLength;
     dispatch(
       getNotification.getNotificationRequest({
         status: status,
@@ -236,7 +237,7 @@ const ManagePushNotification = () => {
           scroll={
             width <= 490
               ? {
-                  x: 1600,
+                  x: 1000,
                 }
               : null
           }

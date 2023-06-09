@@ -233,10 +233,12 @@ const OrderDoingManage = () => {
 
   const onChange = (page) => {
     setCurrentPage(page);
+    const dataLength = data?.length < 20 ? 20 : data.length;
+    const searchLength = dataSearch?.length < 20 ? 20 : dataSearch.length;
     const start =
       dataSearch.length > 0
-        ? page * dataSearch.length - dataSearch.length
-        : page * data.length - data.length;
+        ? page * searchLength - searchLength
+        : page * dataLength - dataLength;
 
     setStartPage(start);
 

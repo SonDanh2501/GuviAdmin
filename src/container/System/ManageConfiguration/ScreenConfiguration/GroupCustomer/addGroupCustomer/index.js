@@ -271,10 +271,10 @@ const AddGroupCustomer = () => {
                           className="btn-add-group"
                           onClick={() => addConditionIn(ix)}
                         >
-                          Thêm điều kiện
+                          Thêm
                         </Button>
                       </div>
-                      <div className="ml-5 p-2">
+                      <div className="ml-2">
                         <div className="div-input">
                           {condition?.condition?.map((it, idx) => {
                             return (
@@ -457,10 +457,10 @@ const AddGroupCustomer = () => {
                           className="btn-add-group"
                           onClick={() => addConditionOut(ix)}
                         >
-                          Thêm điều kiện
+                          Thêm
                         </Button>
                       </div>
-                      <div className="ml-5 p-2">
+                      <div className="ml-2">
                         <div className="div-input">
                           {condition?.condition?.map((it, idx) => {
                             return (

@@ -77,7 +77,8 @@ const Feedback = () => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * listFeedback.length - listFeedback.length;
+    const dataLength = listFeedback?.length < 20 ? 20 : listFeedback?.length;
+    const start = page * dataLength - dataLength;
     dispatch(
       getFeedback.getFeedbackRequest({
         start: start > 0 ? start : 0,

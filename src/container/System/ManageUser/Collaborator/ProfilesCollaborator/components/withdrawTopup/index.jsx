@@ -59,7 +59,8 @@ const WithdrawTopup = ({ id }) => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * data.length - data.length;
+    const dataLength = data.length < 20 ? 20 : data.length;
+    const start = page * dataLength - dataLength;
     getListTransitionByCollaborator(id, start, 10)
       .then((res) => {
         setData(res.data);
