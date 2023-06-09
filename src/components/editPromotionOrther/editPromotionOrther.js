@@ -472,9 +472,9 @@ const EditPromotionOrther = (props) => {
                             searchCustomer(e.target.value);
                           }}
                         />
-                        {data.length > 0 && (
+                        {dataL.length > 0 && (
                           <List type={"unstyled"} className="list-item-kh">
-                            {data?.map((item, index) => {
+                            {dataL?.map((item, index) => {
                               return (
                                 <div
                                   className="div-item"

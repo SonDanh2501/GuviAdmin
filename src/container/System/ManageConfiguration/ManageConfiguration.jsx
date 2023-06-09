@@ -110,7 +110,7 @@ const DATA = [
   },
   {
     id: 6,
-    title: "Tạo tài khoản",
+    title: "Tạo tài khoản quản trị",
     value: "create_account",
     role: "get_user_system",
   },
