@@ -217,7 +217,7 @@ const TopupPoint = () => {
           <div>
             {checkElement?.includes("verify_point_cash_book_customer") && (
               <button
-                className="btn-confirm"
+                className="btn-verify-point-customer"
                 disabled={
                   data?.is_verify ||
                   (!data?.is_verify && data?.status === "cancel")

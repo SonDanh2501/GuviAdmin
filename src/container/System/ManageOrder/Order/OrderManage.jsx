@@ -460,21 +460,25 @@ const OrderManage = (props) => {
                 }
               : null
           }
-          expandable={{
-            expandedRowRender: (record) => {
-              return (
-                <div className="div-plus">
-                  <a>Địa điểm: {record?.address}</a>
-                  <a>
-                    Ngày tạo:{" "}
-                    {moment(new Date(record?.date_create)).format(
-                      "DD/MM/YYYY - HH:mm"
-                    )}
-                  </a>
-                </div>
-              );
-            },
-          }}
+          expandable={
+            width <= 1200
+              ? {
+                  expandedRowRender: (record) => {
+                    return (
+                      <div className="div-plus">
+                        <a>Địa điểm: {record?.address}</a>
+                        <a>
+                          Ngày tạo:{" "}
+                          {moment(new Date(record?.date_create)).format(
+                            "DD/MM/YYYY - HH:mm"
+                          )}
+                        </a>
+                      </div>
+                    );
+                  },
+                }
+              : ""
+          }
         />
 
         <div className="mt-2 div-pagination-order p-2">

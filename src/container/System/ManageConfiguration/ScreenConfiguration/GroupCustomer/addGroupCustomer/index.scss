@@ -43,6 +43,7 @@
     align-items: center;
     justify-content: space-between;
     background-color: white;
+    margin-bottom: 10px;
 
     .div-tab {
       display: flex;
@@ -94,8 +95,7 @@
       display: flex;
       flex-direction: column;
 
-
-      .condition-btn{
+      .condition-btn {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -104,13 +104,13 @@
         background-color: aqua;
         border-radius: 20px;
 
-        .text-btn{
+        .text-btn {
           font-family: "Roboto";
-            font-style: normal;
-            font-weight: 400;
-            font-size: 14px;
-            color: black;
-            text-decoration: none;
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          color: black;
+          text-decoration: none;
         }
       }
 
