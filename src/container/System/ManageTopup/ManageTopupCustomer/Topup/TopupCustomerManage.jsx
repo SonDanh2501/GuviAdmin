@@ -149,10 +149,12 @@ export default function TopupCustomer() {
 
   const onChange = (page) => {
     setCurrentPage(page);
+    const dataLength = listCustomer.length < 20 ? 20 : listCustomer.length;
+    const filterLength = dataFilter.length < 20 ? 20 : dataFilter.length;
     const start =
       dataFilter.length > 0
-        ? page * dataFilter.length - dataFilter.length
-        : page * listCustomer.length - listCustomer.length;
+        ? page * filterLength - filterLength
+        : page * dataLength - dataLength;
 
     setStartPage(start);
 

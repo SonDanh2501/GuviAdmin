@@ -233,8 +233,8 @@ const DetailsOrder = () => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-
-    const start = page * dataHistory.length - dataHistory.length;
+    const dataLength = dataHistory?.length < 20 ? 20 : dataHistory.length;
+    const start = page * dataLength - dataLength;
     getHistoryOrderApi(id, start, 20)
       .then((res) => {
         setDataHistory(res?.data);

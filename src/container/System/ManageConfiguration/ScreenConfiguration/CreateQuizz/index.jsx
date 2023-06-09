@@ -32,6 +32,7 @@ import offToggle from "../../../../../assets/images/off-button.png";
 import { useSelector } from "react-redux";
 import { getElementState } from "../../../../../redux/selectors/auth";
 const { TextArea } = Input;
+const width = window.innerWidth;
 
 const CreateQuizz = () => {
   const checkElement = useSelector(getElementState);
@@ -456,6 +457,13 @@ const CreateQuizz = () => {
               },
             };
           }}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1000,
+                }
+              : null
+          }
         />
 
         <div className="mt-2 div-pagination p-2">
@@ -478,7 +486,7 @@ const CreateQuizz = () => {
           placement="right"
           onClose={onClose}
           open={open}
-          width={500}
+          width={width <= 490 ? 340 : 500}
         >
           <Form layout="vertical">
             {dataQuestion?.map((item, index) => {

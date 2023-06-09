@@ -160,9 +160,8 @@ const FinanceCollaborator = () => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-
-    const start = page * data?.length - data?.length;
-
+    const dataLength = data?.length < 20 ? 20 : data.length;
+    const start = page * dataLength - dataLength;
     getReportTransitionCollaborator(start, 10, startDate, endDate)
       .then((res) => {
         setData(res?.data);

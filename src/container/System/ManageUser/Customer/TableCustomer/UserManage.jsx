@@ -141,11 +141,13 @@ const UserManage = (props) => {
 
   const onChange = (page) => {
     setCurrentPage(page);
+    const dataLength = data.length < 20 ? 20 : data.length;
+    const filterLength = dataFilter.length < 20 ? 20 : dataFilter.length;
 
     const start =
       dataFilter.length > 0
-        ? page * dataFilter.length - dataFilter.length
-        : page * data.length - data.length;
+        ? page * filterLength - filterLength
+        : page * dataLength - dataLength;
 
     setStartPage(start);
 
