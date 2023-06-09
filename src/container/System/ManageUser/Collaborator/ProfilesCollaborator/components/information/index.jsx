@@ -76,6 +76,8 @@ const Information = ({ data, image, idCTV, setData }) => {
       serviceApply.push(item?._id);
     });
     // setServiceApply(data?.serviceApply);
+    setCodeCity(data?.city);
+    setCodeDistrict(data?.district);
   }, [data]);
 
   service.map((item, index) => {
