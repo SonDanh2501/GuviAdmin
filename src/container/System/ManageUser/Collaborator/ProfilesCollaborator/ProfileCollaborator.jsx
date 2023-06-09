@@ -28,6 +28,7 @@ import Review from "./components/review";
 import WithdrawTopup from "./components/withdrawTopup";
 import "./ProfileCollaborator.scss";
 import TestExam from "./components/testExam";
+import InviteCollaborator from "./components/invite";
 // core components
 
 const ProfileCollaborator = () => {
@@ -39,7 +40,6 @@ const ProfileCollaborator = () => {
     identity_date: "2020-11-12T00:00:00.000Z",
   });
   const [img, setImg] = useState("");
-  const [dataDistrict, setDataDistrict] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -54,15 +54,6 @@ const ProfileCollaborator = () => {
           message: err,
         });
         dispatch(loadingAction.loadingRequest(false));
-      });
-
-    getDistrictApi()
-      .then((res) => {
-        setDataDistrict(res?.aministrative_division[0]?.districts);
-      })
-      .catch((err) => {
-        {
-        }
       });
   }, [id]);
 
@@ -173,7 +164,10 @@ const ProfileCollaborator = () => {
                   <Tabs.TabPane tab="Bài kiểm tra" key="7">
                     <TestExam id={data?._id} />
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="Tài khoản ngân hàng" key="8">
+                  <Tabs.TabPane tab="Lượt giới thiệu" key="8">
+                    <InviteCollaborator id={data?._id} />
+                  </Tabs.TabPane>
+                  <Tabs.TabPane tab="Tài khoản ngân hàng" key="9">
                     <BankAccount id={data?._id} />
                   </Tabs.TabPane>
                 </Tabs>

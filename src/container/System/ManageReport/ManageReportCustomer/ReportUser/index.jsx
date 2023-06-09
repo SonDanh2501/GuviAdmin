@@ -28,6 +28,7 @@ import "./index.scss";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
+const width = window.innerWidth;
 
 const ReportUser = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -50,22 +51,16 @@ const ReportUser = () => {
 
   useEffect(() => {
     getTotalReportCustomer(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment().endOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString()
+      moment().startOf("month").toISOString(),
+      moment().endOf("month").toISOString()
     )
       .then((res) => {
         setTotalMonth(res?.totalCustomer);
       })
       .catch((err) => {});
     getTotalReportCustomer(
-      moment(moment().startOf("date").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
+      moment().startOf("date").toISOString(),
+      moment().endOf("date").toISOString()
     )
       .then((res) => {
         setTotalDay(res?.totalCustomer);
@@ -73,7 +68,7 @@ const ReportUser = () => {
       .catch((err) => {});
     getTotalReportCustomer(
       moment(new Date("2020-01-01")).toISOString(),
-      moment(moment(new Date()).endOf("date")).add(7, "hours").toISOString()
+      moment().endOf("date").toISOString()
     )
       .then((res) => {
         setTotal(res?.totalCustomer);
@@ -89,10 +84,8 @@ const ReportUser = () => {
     setYear(moment().year());
 
     getTotalCustomerDay(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment(new Date()).endOf("date")).add(7, "hours").toISOString()
+      moment().startOf("month").toISOString(),
+      moment().endOf("date").toISOString()
     )
       .then((res) => {
         setDataTable(res);
@@ -101,15 +94,9 @@ const ReportUser = () => {
         console.log(err);
       });
 
-    setStartDate(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
+    setStartDate(moment().startOf("month").toISOString());
 
-    setEndDate(
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
-    );
+    setEndDate(moment().toISOString());
   }, []);
 
   useEffect(() => {
@@ -377,6 +364,13 @@ const ReportUser = () => {
                 },
               };
             }}
+            scroll={
+              width <= 490
+                ? {
+                    x: 1600,
+                  }
+                : null
+            }
           />
         </div>
       </div>

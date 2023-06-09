@@ -18,6 +18,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useNavigate } from "react-router-dom";
+const width = window.innerWidth;
 
 const ReportOrderDaily = () => {
   const [data, setData] = useState([]);
@@ -27,13 +29,10 @@ const ReportOrderDaily = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
   const [startDate, setStartDate] = useState(
-    moment(moment().startOf("month").toISOString())
-      .add(7, "hours")
-      .toISOString()
+    moment().startOf("month").toISOString()
   );
-  const [endDate, setEndDate] = useState(
-    moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
-  );
+  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
+  const navigate = useNavigate();
 
   useEffect(() => {
     getReportOrderDaily(0, 40, startDate, endDate)
@@ -94,7 +93,14 @@ const ReportOrderDaily = () => {
         );
       },
       render: (data) => (
-        <div className="div-date-report-order">
+        <div
+          className="div-date-report-order"
+          // onClick={() =>
+          //   navigate("/report/manage-report/report-order-daily/details", {
+          //     state: { date: data?._id },
+          //   })
+          // }
+        >
           <a className="text-date-report-order">{data?._id}</a>
         </div>
       ),
@@ -474,6 +480,13 @@ const ReportOrderDaily = () => {
           dataSource={data.reverse()}
           columns={columns}
           pagination={false}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1600,
+                }
+              : null
+          }
         />
       </div>
 

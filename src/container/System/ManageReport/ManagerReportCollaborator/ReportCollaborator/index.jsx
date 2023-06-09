@@ -20,17 +20,15 @@ import {
   filterReportCollaborator,
   getReportCollaborator,
   searchReportCollaborator,
-} from "../../../../api/report";
-import { formatMoney } from "../../../../helper/formatMoney";
+} from "../../../../../api/report";
+import { formatMoney } from "../../../../../helper/formatMoney";
 import _debounce from "lodash/debounce";
-
 import "./index.scss";
-import LoadingPagination from "../../../../components/paginationLoading";
-import CustomDatePicker from "../../../../components/customDatePicker";
-const { RangePicker } = DatePicker;
-const { Option } = Select;
+import CustomDatePicker from "../../../../../components/customDatePicker";
+import LoadingPagination from "../../../../../components/paginationLoading";
+const width = window.innerWidth;
 
-const ReportManager = () => {
+const ReportCollaborator = () => {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState("");
   const [dataSearch, setDataSearch] = useState([]);
@@ -41,35 +39,21 @@ const ReportManager = () => {
   const [total, setTotal] = useState([]);
   const [totalColumn, setTotalColumn] = useState([]);
   const [type, setType] = useState("day");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(
+    moment().startOf("month").toISOString()
+  );
+  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getReportCollaborator(
-      0,
-      20,
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
-    )
+    getReportCollaborator(0, 20, startDate, endDate)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
         setTotalColumn(res?.total[0]);
       })
       .catch((err) => console.log(err));
-
-    setStartDate(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
-    setEndDate(
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
-    );
   }, []);
 
   const onChange = (page) => {
@@ -497,6 +481,7 @@ const ReportManager = () => {
 
   return (
     <div>
+      <h5>Báo cáo cộng tác viên </h5>
       <div className="div-header-report">
         <div className="div-date">
           <CustomDatePicker
@@ -528,6 +513,13 @@ const ReportManager = () => {
           // locale={{
           //   emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
           // }}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1600,
+                }
+              : null
+          }
         />
       </div>
       <div className="mt-2 div-pagination p-2">
@@ -547,4 +539,4 @@ const ReportManager = () => {
   );
 };
 
-export default ReportManager;
+export default ReportCollaborator;

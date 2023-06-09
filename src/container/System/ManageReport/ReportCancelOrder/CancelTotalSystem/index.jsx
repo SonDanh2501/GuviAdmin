@@ -15,11 +15,9 @@ const TotalCancelSystem = (props) => {
   const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;
 
   const [startDate, setStartDate] = useState(
-    moment(moment().startOf("year").toISOString()).add(7, "hours").toISOString()
+    moment().startOf("year").toISOString()
   );
-  const [endDate, setEndDate] = useState(
-    moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
-  );
+  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);
   const [titleCity, setTitleCity] = useState("");
   const [city, setCity] = useState(false);

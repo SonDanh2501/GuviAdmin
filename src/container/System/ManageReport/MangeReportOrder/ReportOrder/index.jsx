@@ -10,6 +10,7 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import "./index.scss";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
+const width = window.innerWidth;
 
 const ReportOrder = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,38 +18,24 @@ const ReportOrder = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [dataTotal, setDataTotal] = useState([]);
-  const [type, setType] = useState("day");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(
+    moment().startOf("month").toISOString()
+  );
+  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);
+  const [type, setType] = useState("date_work");
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    getReportOrder(
-      0,
-      20,
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
-    )
+    getReportOrder(0, 20, startDate, endDate, type)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
         setDataTotal(res?.total[0]);
       })
       .catch((err) => {});
-
-    setStartDate(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
-    setEndDate(
-      moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
-    );
-  }, []);
+  }, [type]);
 
   const columns = [
     {
@@ -62,16 +49,25 @@ const ReportOrder = () => {
           </div>
         );
       },
+      width: "15%",
       render: (data) => (
         <div className="div-date-report-order">
           <a className="text-date-report-order">
             {moment(
-              new Date(data?.id_group_order?.date_work_schedule[0]?.date)
+              new Date(
+                type === "date_work"
+                  ? data?.id_group_order?.date_work_schedule[0]?.date
+                  : data?.id_group_order?.date_create
+              )
             ).format("DD/MM/YYYY")}
           </a>
           <a className="text-date-report-order">
             {moment(
-              new Date(data?.id_group_order?.date_work_schedule[0]?.date)
+              new Date(
+                type === "date_work"
+                  ? data?.id_group_order?.date_work_schedule[0]?.date
+                  : data?.id_group_order?.date_create
+              )
             ).format("HH:mm")}
           </a>
         </div>
@@ -429,7 +425,7 @@ const ReportOrder = () => {
       const lengthData = data.length < 20 ? 20 : data.length;
       const start = page * lengthData - lengthData;
       setStartPage(start);
-      getReportOrder(start, 20, startDate, endDate)
+      getReportOrder(start, 20, startDate, endDate, type)
         .then((res) => {
           setIsLoading(false);
           setData(res?.data);
@@ -440,13 +436,13 @@ const ReportOrder = () => {
           setIsLoading(false);
         });
     },
-    [data, startDate, endDate]
+    [data, startDate, endDate, type]
   );
 
   const onChangeDay = () => {
     setIsLoading(true);
 
-    getReportOrder(startPage, 20, startDate, endDate)
+    getReportOrder(startPage, 20, startDate, endDate, type)
       .then((res) => {
         setIsLoading(false);
         setData(res?.data);
@@ -471,18 +467,26 @@ const ReportOrder = () => {
           />
           {startDate && (
             <a className="text-date">
-              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+              {moment(startDate).format("DD/MM/YYYY")} -{" "}
               {moment(endDate).utc().format("DD/MM/YYYY")}
             </a>
           )}
         </div>
-        {/* <Input
-          placeholder="Tìm kiếm"
-          type="text"
-          className="input-search-report"
-          prefix={<SearchOutlined />}
-          onChange={(e) => handleSearch(e.target.value)}
-        /> */}
+      </div>
+      <div className="div-tab-report">
+        {DATA_TAB?.map((item, index) => {
+          return (
+            <div
+              key={index}
+              className={
+                item?.value === type ? "div-item-tab-select" : "div-item-tab"
+              }
+              onClick={() => setType(item?.value)}
+            >
+              <a className="text-tab">{item?.title}</a>
+            </div>
+          );
+        })}
       </div>
       <div className="mt-2">
         <Table
@@ -492,6 +496,13 @@ const ReportOrder = () => {
           // locale={{
           //   emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
           // }}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1600,
+                }
+              : null
+          }
         />
       </div>
       <div className="mt-2 div-pagination p-2">
@@ -513,3 +524,14 @@ const ReportOrder = () => {
 };
 
 export default ReportOrder;
+
+const DATA_TAB = [
+  {
+    title: "Ngày làm",
+    value: "date_work",
+  },
+  {
+    title: "Ngày tạo",
+    value: "date_create",
+  },
+];

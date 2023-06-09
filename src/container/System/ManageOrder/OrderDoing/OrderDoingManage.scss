@@ -12,32 +12,36 @@
   }
 }
 
-.div-create {
+.div-create-doing {
   display: flex;
   flex-direction: column;
 
   .text-create {
     font-family: "Roboto";
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 14px;
-    line-height: 16px;
-    color: #6e6893;
+    color: #000000;
   }
 }
+.text-name-doing {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #000000;
+}
 
-.div-worktime {
+.div-worktime-doing {
   display: flex;
   flex-direction: column;
 
   .text-worktime {
     font-family: "Roboto";
     font-style: normal;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 14px;
-    line-height: 16px;
-
-    color: black;
+    color: blue;
   }
 }
 
@@ -63,47 +67,42 @@
   color: #023e8a;
 }
 
-.text-pending {
+.text-pending-doing {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 14px;
-  line-height: 16px;
   color: #ece200 !important;
 }
 
-.text-confirm {
+.text-confirm-doing {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 14px;
-  line-height: 16px;
   color: #023e8a;
 }
 
-.text-doing {
+.text-doing-doing {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 14px;
-  line-height: 16px;
   color: #023e8a;
 }
 
-.text-cancel {
+.text-cancel-doing {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 14px;
-  line-height: 16px;
   color: #ff0000;
 }
-.text-done {
+.text-done-doing {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 14px;
-  line-height: 16px;
   color: #00cf3a;
   text-decoration: none;
 }
@@ -148,4 +147,12 @@
       color: black;
     }
   }
+}
+
+.text-id-order-doing {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px !important;
+  color: blue;
 }

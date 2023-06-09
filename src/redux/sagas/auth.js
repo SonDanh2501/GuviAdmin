@@ -1,11 +1,11 @@
 import jwtDecode from "jwt-decode";
 
+import axios from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
-import { loginApi } from "../../api/auth";
+import { getPermission, loginApi } from "../../api/auth";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { setToken } from "../../helper/tokenHelper";
-import { loginAction, logoutAction } from "../actions/auth";
-import * as actions from "../actions/banner";
+import { loginAction, logoutAction, permissionAction } from "../actions/auth";
 import { loadingAction } from "../actions/loading";
 
 function* loginSaga(action) {
@@ -13,22 +13,35 @@ function* loginSaga(action) {
     const response = yield call(loginApi, action.payload.data);
     setToken(response?.token);
     const user = jwtDecode(response?.token);
+    axios
+      .get(
+        "https://guvico-be-develop.up.railway.app/admin/auth/get_permission_by_token",
+        {
+          headers: {
+            Authorization: `Bearer ${response?.token}`,
+          },
+        }
+      )
+      .then((res) => {
+        res?.data?.map((item) => {
+          if (item?.id_side_bar === "dashboard") {
+            action.payload.naviga("/");
+          } else if (item?.id_side_bar === "guvi_job") {
+            action.payload.naviga("/group-order/manage-order");
+          }
+        });
+      });
 
     successNotify({
       message: "Đăng nhập thành công",
     });
-    if (user.role === "admin") {
-      action.payload.naviga("/");
-    } else if (user.role === "marketing" || user.role === "marketing-manager") {
-      action.payload.naviga("/");
-    } else if (user.role === "support_customer") {
-      action.payload.naviga("/group-order/manage-order");
-    } else if (user.role === "accountant") {
-      action.payload.naviga("/topup/manage-topup");
-    } else if (user.role === "support") {
-      action.payload.naviga("/group-order/manage-order");
-    }
-    yield put(loginAction.loginSuccess({ token: response?.token, user: user }));
+    yield put(
+      loginAction.loginSuccess({
+        token: response?.token,
+        user: user,
+        // permission: permission,
+      })
+    );
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     yield put(loginAction.loginFailure(err));
@@ -51,10 +64,33 @@ function* logoutSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   }
 }
+function* permissionSaga(action) {
+  const checkElement = [];
+  try {
+    const permission = yield call(getPermission);
+    permission?.map((item) => {
+      item?.id_element?.map((i) => {
+        checkElement?.push(i);
+      });
+    });
+
+    yield put(
+      permissionAction.permissionSuccess({
+        permission: permission,
+        element: checkElement,
+      })
+    );
+    yield put(loadingAction.loadingRequest(false));
+  } catch (err) {
+    yield put(permissionAction.permissionFailure(err));
+    yield put(loadingAction.loadingRequest(false));
+  }
+}
 
 function* AuthSaga() {
   yield takeLatest(loginAction.loginRequest, loginSaga);
   yield takeLatest(logoutAction.logoutRequest, logoutSaga);
+  yield takeLatest(permissionAction.permissionRequest, permissionSaga);
 }
 
 export default AuthSaga;

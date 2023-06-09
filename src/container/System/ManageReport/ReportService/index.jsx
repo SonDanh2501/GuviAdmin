@@ -26,13 +26,9 @@ import LoadingPagination from "../../../../components/paginationLoading";
 
 const ReportService = () => {
   const [startDate, setStartDate] = useState(
-    moment(moment().startOf("month").toISOString())
-      .add(7, "hours")
-      .toISOString()
+    moment().startOf("month").toISOString()
   );
-  const [endDate, setEndDate] = useState(
-    moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
-  );
+  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);
   const [city, setCity] = useState(false);
   const [codeCity, setCodeCity] = useState();

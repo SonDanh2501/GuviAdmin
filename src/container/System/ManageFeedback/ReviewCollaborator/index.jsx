@@ -12,7 +12,10 @@ import { SearchOutlined } from "@ant-design/icons";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { useNavigate } from "react-router-dom";
 import { errorNotify } from "../../../../helper/toast";
+import { getElementState } from "../../../../redux/selectors/auth";
+import { useSelector } from "react-redux";
 const { TextArea } = Input;
+const width = window.innerWidth;
 
 const ReviewCollaborator = () => {
   const [data, setData] = useState([]);
@@ -35,7 +38,7 @@ const ReviewCollaborator = () => {
   const [itemEdit, setItemEdit] = useState([]);
   const [note, setNote] = useState("");
   const navigate = useNavigate();
-
+  const checkElement = useSelector(getElementState);
   const toggleModalCheck = () => setModalCheck(!modalCheck);
 
   useEffect(() => {
@@ -284,9 +287,6 @@ const ReviewCollaborator = () => {
           >
             <a className="text-order">{data?.id_view}</a>
             <div className="div-star">
-              {/* {[1, 2, 3, 4, 5]?.slice(0, data?.star)?.map((item) => {
-                return <img src={starImg} className="icon-star" />;
-              })} */}
               <Rate
                 value={data?.star}
                 style={{ width: "100%" }}
@@ -317,14 +317,22 @@ const ReviewCollaborator = () => {
       key: "action",
       render: (data) => {
         return (
-          <Checkbox
-            checked={data?.is_check_admin || data?.star === 5 ? true : false}
-            disabled={data?.star === 5 || data?.is_check_admin ? true : false}
-            onChange={(e) => {
-              toggleModalCheck();
-              console.log(e.target.checked);
-            }}
-          ></Checkbox>
+          <>
+            {checkElement?.includes("admin_check_review_support_customer") && (
+              <Checkbox
+                checked={
+                  data?.is_check_admin || data?.star === 5 ? true : false
+                }
+                disabled={
+                  data?.star === 5 || data?.is_check_admin ? true : false
+                }
+                onChange={(e) => {
+                  toggleModalCheck();
+                  console.log(e.target.checked);
+                }}
+              ></Checkbox>
+            )}
+          </>
         );
       },
     },
@@ -356,7 +364,7 @@ const ReviewCollaborator = () => {
         <Input
           placeholder="Tìm kiếm"
           type="text"
-          className="input-search"
+          style={{ width: "60%" }}
           prefix={<SearchOutlined />}
           onChange={(e) => handleSearch(e.target.value)}
         />
@@ -404,6 +412,13 @@ const ReviewCollaborator = () => {
               },
             };
           }}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1600,
+                }
+              : null
+          }
         />
       </div>
       <div className="mt-1 div-pagination p-2">

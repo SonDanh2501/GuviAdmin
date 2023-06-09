@@ -41,6 +41,7 @@ const EditPushNotification = ({ id }) => {
   const onClose = () => {
     setOpen(false);
   };
+  const width = window.innerWidth;
 
   useEffect(() => {
     getDetailNotification(id)
@@ -216,7 +217,7 @@ const EditPushNotification = ({ id }) => {
         title="Tạo thông báo"
         placement="right"
         onClose={onClose}
-        width={500}
+        width={width > 490 ? 500 : 320}
         open={open}
       >
         <CustomTextInput

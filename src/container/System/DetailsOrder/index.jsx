@@ -30,13 +30,14 @@ import { formatMoney } from "../../../helper/formatMoney";
 import { errorNotify } from "../../../helper/toast";
 import { loadingAction } from "../../../redux/actions/loading";
 import "./index.scss";
-import { getUser } from "../../../redux/selectors/auth";
+import { getElementState, getUser } from "../../../redux/selectors/auth";
 import { MoreOutlined } from "@ant-design/icons";
 import EditTimeOrder from "../ManageOrder/EditTimeGroupOrder";
 import EditTimeOrderSchedule from "./EditTimeOrderSchedule";
 import { getListReasonCancel } from "../../../api/reasons";
 import { ModalBody, ModalFooter, ModalHeader, Modal } from "reactstrap";
 import LoadingPagination from "../../../components/paginationLoading";
+const width = window.innerWidth;
 
 const DetailsOrder = () => {
   const { state } = useLocation();
@@ -70,6 +71,7 @@ const DetailsOrder = () => {
   const toggleDeleteList = () => setModalDeleteList(!modalDeleteList);
   const reasonOption = [];
   const user = useSelector(getUser);
+  const checkElement = useSelector(getElementState);
 
   useEffect(() => {
     getListReasonCancel()
@@ -146,18 +148,6 @@ const DetailsOrder = () => {
       .format("HH:mm");
 
     return start + " - " + timeEnd;
-  };
-
-  const showPopconfirm = () => {
-    setOpen(true);
-  };
-
-  const showPopStatusconfirm = () => {
-    setOpenStatus(true);
-  };
-
-  const showPopCancelOrder = () => {
-    setOpenCancelOrder(true);
   };
 
   const handleCancelGroupOrder = (_id) => {
@@ -261,14 +251,13 @@ const DetailsOrder = () => {
       render: (data) => {
         return <a className="text-id">{data?.id_view}</a>;
       },
-      fixed: "left",
       width: "10%",
     },
     {
       title: "Ngày tạo",
       render: (data) => {
         return (
-          <div className="div-create">
+          <div className="div-create-details-order">
             <a className="text-create">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
             </a>
@@ -304,7 +293,7 @@ const DetailsOrder = () => {
       title: "Thời gian",
       render: (data) => {
         return (
-          <div className="div-worktime">
+          <div className="div-worktime-detail-order">
             <a className="text-worktime">
               {" "}
               {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
@@ -320,7 +309,7 @@ const DetailsOrder = () => {
     },
     {
       title: "Địa điểm",
-      render: (data) => <p className="text-address">{data?.address}</p>,
+      render: (data) => <p className="text-address-details">{data?.address}</p>,
     },
     {
       title: "Cộng tác viên",
@@ -377,56 +366,62 @@ const DetailsOrder = () => {
     },
     {
       key: "action",
+      align: "center",
       render: (data, record, index) => {
         return (
           <>
             <div>
-              <div>
-                {data?.status === "doing" || data?.status === "confirm" ? (
-                  <div>
-                    {rowIndex === index && (
-                      <Popconfirm
-                        title="Bạn có chuyển trạng thái công việc"
-                        // description="Open Popconfirm with async logic"
-                        open={openStatus}
-                        onConfirm={() => handleChangeStatus(data?._id)}
-                        okButtonProps={{
-                          loading: confirmLoading,
-                        }}
-                        onCancel={() => setOpenStatus(false)}
-                      />
-                    )}
+              {checkElement?.includes("change_status_order_guvi_job") && (
+                <div>
+                  {data?.status === "doing" || data?.status === "confirm" ? (
+                    <div>
+                      {rowIndex === index && (
+                        <Popconfirm
+                          title="Bạn có chuyển trạng thái công việc"
+                          // description="Open Popconfirm with async logic"
+                          open={openStatus}
+                          onConfirm={() => handleChangeStatus(data?._id)}
+                          okButtonProps={{
+                            loading: confirmLoading,
+                          }}
+                          onCancel={() => setOpenStatus(false)}
+                        />
+                      )}
 
-                    <Button
-                      className="btn-confirm-order"
-                      onClick={() =>
-                        rowIndex === index ? setOpenStatus(true) : ""
-                      }
-                    >
-                      {data?.status === "confirm"
-                        ? "Bắt đầu"
-                        : data?.status === "doing"
-                        ? "Hoàn thành"
-                        : ""}
-                    </Button>
-                  </div>
-                ) : (
-                  " "
-                )}
-              </div>
+                      <Button
+                        className="btn-confirm-order"
+                        onClick={() =>
+                          rowIndex === index ? setOpenStatus(true) : ""
+                        }
+                      >
+                        {data?.status === "confirm"
+                          ? "Bắt đầu"
+                          : data?.status === "doing"
+                          ? "Hoàn thành"
+                          : ""}
+                      </Button>
+                    </div>
+                  ) : (
+                    " "
+                  )}
+                </div>
+              )}
 
-              <div>
-                {data?.status === "done" || data?.status === "cancel" ? null : (
-                  <div>
-                    <Button
-                      className="btn-confirm-order mt-1"
-                      onClick={toggleDeleteList}
-                    >
-                      Huỷ việc
-                    </Button>
-                  </div>
-                )}
-              </div>
+              {checkElement?.includes("cancel_order_detail_guvi_job") && (
+                <div>
+                  {data?.status === "done" ||
+                  data?.status === "cancel" ? null : (
+                    <div>
+                      <Button
+                        className="btn-confirm-order mt-1"
+                        onClick={toggleDeleteList}
+                      >
+                        Huỷ việc
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </>
         );
@@ -870,34 +865,24 @@ const DetailsOrder = () => {
                       </div>
                     </div>
                   </div>
-                  {user?.role !== "support_customer" &&
-                    dataGroup?.type === "schedule" && (
-                      <div>
-                        {dataGroup?.status === "pending" ||
-                        dataGroup?.status === "confirm" ? (
-                          // <Popconfirm
-                          //   title="Bạn có muốn huỷ việc"
-                          //   // description="Open Popconfirm with async logic"
-                          //   open={open}
-                          //   onConfirm={() => handleOk(dataGroup?._id)}
-                          //   okButtonProps={{
-                          //     loading: confirmLoading,
-                          //   }}
-                          //   onCancel={handleCancel}
-                          // >
-                          //   <Button
-                          //     className="btn-cancel"
-                          //     onClick={showPopconfirm}
-                          //   >
-                          //     Huỷ việc
-                          //   </Button>
-                          // </Popconfirm>
-                          <Button className="btn-cancel" onClick={toggleDelete}>
-                            Huỷ việc
-                          </Button>
-                        ) : null}
-                      </div>
-                    )}
+
+                  {checkElement?.includes("cancel_order_detail_guvi_job") && (
+                    <>
+                      {dataGroup?.type === "schedule" && (
+                        <div>
+                          {dataGroup?.status === "pending" ||
+                          dataGroup?.status === "confirm" ? (
+                            <Button
+                              className="btn-cancel"
+                              onClick={toggleDelete}
+                            >
+                              Huỷ việc
+                            </Button>
+                          ) : null}
+                        </div>
+                      )}
+                    </>
+                  )}
 
                   <div className="mt-3">
                     <Table
@@ -912,10 +897,13 @@ const DetailsOrder = () => {
                           },
                         };
                       }}
-                      // scroll={{
-                      //   x: 1500,
-                      //   y: 300,
-                      // }}
+                      scroll={
+                        width <= 490
+                          ? {
+                              x: 1600,
+                            }
+                          : null
+                      }
                     />
                   </div>
 

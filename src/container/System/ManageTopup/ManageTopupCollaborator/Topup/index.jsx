@@ -16,15 +16,14 @@ import { errorNotify, successNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import { DatePicker, Input, Pagination, Select, Table, Tooltip } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { getUser } from "../../../../../redux/selectors/auth";
+import { getElementState, getUser } from "../../../../../redux/selectors/auth";
 import moment from "moment";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import EditTopup from "../../../../../components/editTopup/editTopup";
 import AddTopup from "../../../../../components/addTopup/addTopup";
 import Withdraw from "../../../../../components/withdraw/withdraw";
 import { getRevenueCollaborator } from "../../../../../redux/actions/topup";
-const { RangePicker } = DatePicker;
-const { Option } = Select;
+const width = window.innerWidth;
 
 const TopupCollaborator = ({ type }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -40,13 +39,13 @@ const TopupCollaborator = ({ type }) => {
   const [modal, setModal] = useState(false);
   const [modalConfirm, setModalConfirm] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
-  const [typeDate, setTypeDate] = useState("week");
   const toggleConfirm = () => setModalConfirm(!modalConfirm);
   const [modalCancel, setModalCancel] = useState(false);
   const toggleEdit = () => setModalEdit(!modalEdit);
   const toggle = () => setModal(!modal);
   const toggleCancel = () => setModalCancel(!modalCancel);
   const user = useSelector(getUser);
+  const checkElement = useSelector(getElementState);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -304,7 +303,13 @@ const TopupCollaborator = ({ type }) => {
         return (
           <div>
             <button
-              className="btn-confirm"
+              className={
+                checkElement?.includes(
+                  "verify_transition_cash_book_collaborator"
+                )
+                  ? "btn-confirm-topup-collaborator"
+                  : "btn-confirm-topup-collaborator-hide"
+              }
               onClick={toggleConfirm}
               disabled={
                 (!data?.is_verify_money && data?.status === "cancel") ||
@@ -332,29 +337,38 @@ const TopupCollaborator = ({ type }) => {
                 ) : data?.is_verify_money ? (
                   <></>
                 ) : (
-                  <Tooltip placement="bottom" title={"Chỉnh sửa giao dịch CTV"}>
-                    <EditTopup
-                      item={itemEdit}
-                      iconEdit={
-                        <i
-                          className={
-                            (!data?.is_verify_money &&
-                              data?.status === "cancel") ||
-                            data?.is_verify_money
-                              ? "uil uil-edit-alt icon-edit"
-                              : "uil uil-edit-alt"
+                  <>
+                    {checkElement?.includes("edit_cash_book_collaborator") && (
+                      <Tooltip
+                        placement="bottom"
+                        title={"Chỉnh sửa giao dịch CTV"}
+                      >
+                        <EditTopup
+                          item={itemEdit}
+                          iconEdit={
+                            <i
+                              className={
+                                (!data?.is_verify_money &&
+                                  data?.status === "cancel") ||
+                                data?.is_verify_money
+                                  ? "uil uil-edit-alt icon-edit"
+                                  : "uil uil-edit-alt"
+                              }
+                            ></i>
                           }
-                        ></i>
-                      }
-                      type={type}
-                      setDataT={setData}
-                      setTotal={setTotal}
-                    />
-                  </Tooltip>
+                          type={type}
+                          setDataT={setData}
+                          setTotal={setTotal}
+                        />
+                      </Tooltip>
+                    )}
+                  </>
                 )}
               </div>
 
-              {user?.role === "admin" && (
+              {checkElement?.includes(
+                "delete_transition_cash_book_collaborator"
+              ) && (
                 <Tooltip placement="bottom" title={"Xoá giao dịch CTV"}>
                   <button className="btn-delete" onClick={toggle}>
                     <i className="uil uil-trash"></i>
@@ -368,35 +382,8 @@ const TopupCollaborator = ({ type }) => {
     },
   ];
 
-  const onChangeDate = useCallback((start, end) => {
-    const dayStart = moment(start).toISOString();
-    const dayEnd = moment(end).toISOString();
-    dispatch(
-      getRevenueCollaborator.getRevenueCollaboratorRequest({
-        startDate: dayStart,
-        endDate: dayEnd,
-      })
-    );
-  }, []);
   return (
     <div>
-      {/* <div className="div-date">
-        <Input.Group compact>
-          <Select defaultValue={typeDate} onChange={(e) => setTypeDate(e)}>
-            <Option value="week">Tuần </Option>
-            <Option value="month">Tháng</Option>
-            <Option value="quarter">Quý</Option>
-          </Select>
-        </Input.Group>
-        <div>
-          <RangePicker
-            picker={typeDate}
-            className="picker"
-            onChange={(e) => onChangeDate(e[0]?.$d, e[1]?.$d)}
-          />
-        </div>
-      </div> */}
-
       <div className="div-header-topup">
         {type === "all" ? (
           <div className="div-topwith">
@@ -439,6 +426,13 @@ const TopupCollaborator = ({ type }) => {
               },
             };
           }}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1600,
+                }
+              : null
+          }
         />
       </div>
       <div className="div-pagination p-2">

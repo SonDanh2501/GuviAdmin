@@ -2,7 +2,7 @@ import { Drawer, Input, InputNumber, Select } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { memo, useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { List } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
 import {
@@ -14,6 +14,7 @@ import { loadingAction } from "../../redux/actions/loading";
 import { getRevenueCollaborator } from "../../redux/actions/topup";
 import CustomButton from "../customButton/customButton";
 import "./withdraw.scss";
+import { getElementState } from "../../redux/selectors/auth";
 const { TextArea } = Input;
 
 const Withdraw = (props) => {
@@ -27,7 +28,9 @@ const Withdraw = (props) => {
   const [errorMoney, setErrorMoney] = useState("");
   const [id, setId] = useState("");
   const [wallet, setWallet] = useState("");
+  const checkElement = useSelector(getElementState);
   const dispatch = useDispatch();
+  const width = window.innerWidth;
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -102,15 +105,18 @@ const Withdraw = (props) => {
       {/* Button trigger modal */}
       <CustomButton
         title="Rút tiền"
-        className="btn-add-withdraw "
+        className={
+          checkElement?.includes("withdraw_cash_book_collaborator")
+            ? "btn-add-withdraw-collaborator"
+            : "btn-add-withdraw-collaborator-hide"
+        }
         type="button"
-        // onClick={() => setState(!state)}
         onClick={showDrawer}
       />
 
       <Drawer
         title="Rút tiền cộng tác viên"
-        width={500}
+        width={width > 490 ? 500 : 300}
         onClose={onClose}
         open={open}
         bodyStyle={{

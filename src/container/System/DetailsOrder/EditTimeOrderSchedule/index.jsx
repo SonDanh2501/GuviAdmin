@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, DatePicker, Drawer, Input, List } from "antd";
+import { Button, Checkbox, DatePicker, Drawer, Input, List } from "antd";
 import "./index.scss";
 import { useDispatch } from "react-redux";
 import { loadingAction } from "../../../../redux/actions/loading";
@@ -35,6 +35,7 @@ const EditTimeOrderSchedule = (props) => {
     moment(endDateWord).utc().format("HH:mm:ss")
   );
   const [wordEndDate, setWordEndDate] = useState(endDateWord);
+  const [isCheckDateWork, setIsCheckDateWork] = useState(true);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -60,6 +61,7 @@ const EditTimeOrderSchedule = (props) => {
     editTimeOrderScheduleApi(idOrder, {
       date_work: timeW,
       end_date_work: timeWorkEnd,
+      is_check_date_work: isCheckDateWork,
     })
       .then((res) => {
         setIsLoading(false);
@@ -143,6 +145,15 @@ const EditTimeOrderSchedule = (props) => {
               </Button>
             );
           })}
+        </div>
+
+        <div className="mt-2">
+          <Checkbox
+            checked={isCheckDateWork}
+            onChange={(e) => setIsCheckDateWork(e.target.checked)}
+          >
+            Kiểm tra trùng giờ
+          </Checkbox>
         </div>
 
         <Button className="btn-update-time-order" onClick={editOrder}>

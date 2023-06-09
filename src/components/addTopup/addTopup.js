@@ -1,7 +1,7 @@
 import { Drawer, InputNumber, Select, Input } from "antd";
 import React, { memo, useCallback, useState } from "react";
 import IntlCurrencyInput from "react-intl-currency-input";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Form, List } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
 import {
@@ -20,6 +20,7 @@ import {
 import moment from "moment";
 import { errorNotify, successNotify } from "../../helper/toast";
 import TextArea from "antd/es/input/TextArea";
+import { getElementState } from "../../redux/selectors/auth";
 
 const AddPopup = (props) => {
   const { type, setDataT, setTotal } = props;
@@ -33,7 +34,8 @@ const AddPopup = (props) => {
   const [wallet, setWallet] = useState("");
   const [id, setId] = useState("");
   const dispatch = useDispatch();
-
+  const checkElement = useSelector(getElementState);
+  const width = window.innerWidth;
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -109,14 +111,17 @@ const AddPopup = (props) => {
     <>
       <CustomButton
         title="Nạp tiền"
-        className="btn-add-topup"
+        className={
+          checkElement?.includes("create_cash_book_collaborator")
+            ? "btn-add-topup-collaborator"
+            : "btn-add-topup-collaborator-hide"
+        }
         type="button"
-        // onClick={() => setState(!state)}
         onClick={showDrawer}
       />
       <Drawer
         title="Nạp tiền cộng tác viên"
-        width={500}
+        width={width > 490 ? 500 : 300}
         onClose={onClose}
         open={open}
         bodyStyle={{

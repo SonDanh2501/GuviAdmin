@@ -15,7 +15,7 @@ import {
 } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   activeCustomer,
   deleteCustomer,
@@ -28,9 +28,14 @@ import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
 import { getCustomers } from "../../../../../redux/actions/customerAction";
 import { loadingAction } from "../../../../../redux/actions/loading";
-import { getUser } from "../../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getPermissionState,
+  getUser,
+} from "../../../../../redux/selectors/auth";
 import "./UserManage.scss";
 import AddCustomer from "../../../../../components/addCustomer/addCustomer";
+const width = window.innerWidth;
 
 const UserManage = (props) => {
   const { status } = props;
@@ -45,7 +50,6 @@ const UserManage = (props) => {
   const [itemEdit, setItemEdit] = useState([]);
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
-  const [modalEdit, setModalEdit] = useState(false);
   const [conditionFilter, setConditionFilter] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [rank, setRank] = useState("");
@@ -54,13 +58,9 @@ const UserManage = (props) => {
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const user = useSelector(getUser);
+  const checkElement = useSelector(getElementState);
 
   useEffect(() => {
-    // dispatch(
-    //   getCustomers.getCustomersRequest({ start: 0, length: 20, type: "" })
-    // );
     fetchCustomers(0, 20, status)
       .then((res) => {
         setData(res?.data);
@@ -184,7 +184,7 @@ const UserManage = (props) => {
   const items = [
     {
       key: "1",
-      label: (
+      label: checkElement?.includes("edit_customer") && (
         <EditCustomer
           data={itemEdit}
           setIsLoading={setIsLoading}
@@ -197,7 +197,9 @@ const UserManage = (props) => {
     },
     {
       key: "2",
-      label: user?.role === "admin" && <a onClick={toggle}>Xoá</a>,
+      label: checkElement?.includes("delete_customer") && (
+        <a onClick={toggle}>Xoá</a>
+      ),
     },
   ];
 
@@ -209,11 +211,13 @@ const UserManage = (props) => {
             render: (data) => {
               return (
                 <div
-                  onClick={() =>
-                    navigate("/profile-customer", {
-                      state: { id: data?._id },
-                    })
-                  }
+                  onClick={() => {
+                    if (checkElement?.includes("detail_customer")) {
+                      navigate("/profile-customer", {
+                        state: { id: data?._id },
+                      });
+                    }
+                  }}
                 >
                   <a className="text-id-customer"> {data?.id_view}</a>
                 </div>
@@ -225,11 +229,13 @@ const UserManage = (props) => {
             render: (data) => {
               return (
                 <div
-                  onClick={() =>
-                    navigate("/profile-customer", {
-                      state: { id: data?._id },
-                    })
-                  }
+                  onClick={() => {
+                    if (checkElement?.includes("detail_customer")) {
+                      navigate("/profile-customer", {
+                        state: { id: data?._id },
+                      });
+                    }
+                  }}
                 >
                   <a className="text-name-customer"> {data?.full_name}</a>
                 </div>
@@ -334,6 +340,8 @@ const UserManage = (props) => {
           },
           {
             title: " Tổng",
+            fixed: "right",
+            width: "10%",
             render: (data) => (
               <a className="text-address-customer">
                 {formatMoney(data?.total_price)}
@@ -344,27 +352,24 @@ const UserManage = (props) => {
           },
           {
             key: "action",
-
+            fixed: "right",
             align: "center",
-            render: (data) =>
-              user?.role !== "marketing" ||
-              user?.role !== "marketing_manager" ? (
-                <Space size="middle">
-                  <Dropdown
-                    menu={{
-                      items,
-                    }}
-                    placement="bottom"
-                    trigger={["click"]}
-                  >
-                    <a>
-                      <MoreOutlined className="icon-more" />
-                    </a>
-                  </Dropdown>
-                </Space>
-              ) : (
-                <></>
-              ),
+            width: "5%",
+            render: (data) => (
+              <Space size="middle">
+                <Dropdown
+                  menu={{
+                    items,
+                  }}
+                  placement="bottom"
+                  trigger={["click"]}
+                >
+                  <a>
+                    <MoreOutlined className="icon-more" />
+                  </a>
+                </Dropdown>
+              </Space>
+            ),
           },
         ]
       : [
@@ -373,11 +378,13 @@ const UserManage = (props) => {
             render: (data) => {
               return (
                 <div
-                  onClick={() =>
-                    navigate("/profile-customer", {
-                      state: { id: data?._id },
-                    })
-                  }
+                  onClick={() => {
+                    if (checkElement?.includes("detail_customer")) {
+                      navigate("/profile-customer", {
+                        state: { id: data?._id },
+                      });
+                    }
+                  }}
                 >
                   <a className="text-id-customer"> {data?.id_view}</a>
                 </div>
@@ -390,11 +397,13 @@ const UserManage = (props) => {
             render: (data) => {
               return (
                 <div
-                  onClick={() =>
-                    navigate("/profile-customer", {
-                      state: { id: data?._id },
-                    })
-                  }
+                  onClick={() => {
+                    if (checkElement?.includes("detail_customer")) {
+                      navigate("/profile-customer", {
+                        state: { id: data?._id },
+                      });
+                    }
+                  }}
                 >
                   {/* <img
               className="img_customer"
@@ -510,6 +519,7 @@ const UserManage = (props) => {
           },
           {
             title: " Tổng",
+            width: "10%",
             render: (data) => (
               <a className="text-address-customer">
                 {formatMoney(data?.total_price)}
@@ -520,71 +530,31 @@ const UserManage = (props) => {
           },
           {
             key: "action",
-
             align: "center",
-            render: (data) =>
-              user?.role !== "marketing" ||
-              user?.role !== "marketing_manager" ? (
-                <Space size="middle">
-                  <Dropdown
-                    menu={{
-                      items,
-                    }}
-                    placement="bottom"
-                    trigger={["click"]}
-                  >
-                    <a>
-                      <MoreOutlined className="icon-more" />
-                    </a>
-                  </Dropdown>
-                </Space>
-              ) : (
-                <></>
-              ),
+            width: "5%",
+            render: (data) => (
+              <Space size="middle">
+                <Dropdown
+                  menu={{
+                    items,
+                  }}
+                  placement="bottom"
+                  trigger={["click"]}
+                >
+                  <a>
+                    <MoreOutlined className="icon-more" />
+                  </a>
+                </Dropdown>
+              </Space>
+            ),
           },
         ];
-
-  const itemFilter = [
-    {
-      key: "1",
-      label: (
-        <a
-          onClick={() => {
-            setConditionFilter("Khách hàng thân thiết");
-          }}
-        >
-          Khách hàng thân thiết
-        </a>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <a
-          onClick={() => {
-            setConditionFilter("Khách hàng sinh nhật");
-          }}
-        >
-          Khách hàng sinh nhật
-        </a>
-      ),
-    },
-  ];
 
   return (
     <React.Fragment>
       <div>
         <div className="div-header-customer-table">
-          <Input
-            placeholder="Tìm kiếm"
-            type="text"
-            className="input-search"
-            prefix={<SearchOutlined />}
-            onChange={(e) => handleSearch(e.target.value)}
-          />
-
-          {user?.role !== "marketing_manager" ||
-          user?.role !== "marketing_manager" ? (
+          {checkElement?.includes("create_customer") && (
             <AddCustomer
               setIsLoading={setIsLoading}
               setData={setData}
@@ -592,9 +562,14 @@ const UserManage = (props) => {
               startPage={startPage}
               status={status}
             />
-          ) : (
-            <></>
           )}
+          <Input
+            placeholder="Tìm kiếm"
+            type="text"
+            className="input-search"
+            prefix={<SearchOutlined />}
+            onChange={(e) => handleSearch(e.target.value)}
+          />
         </div>
 
         <div className="mt-3">
@@ -621,6 +596,25 @@ const UserManage = (props) => {
               emptyText:
                 data.length > 0 ? <Empty /> : <Skeleton active={true} />,
             }}
+            scroll={
+              width <= 490
+                ? {
+                    x: 1600,
+                  }
+                : null
+            }
+            // expandable={{
+            //   expandedRowRender: (record) => (
+            //     <p
+            //       style={{
+            //         margin: 0,
+            //       }}
+            //     >
+            //       {record?.date_create}
+            //       {record?.default_address}
+            //     </p>
+            //   ),
+            // }}
           />
         </div>
 

@@ -1,6 +1,6 @@
 import { Button, Checkbox, Drawer, Input, List, Select } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { errorNotify } from "../../../../helper/toast";
 import { loadingAction } from "../../../../redux/actions/loading";
 import "./index.scss";
@@ -13,6 +13,7 @@ import { getGroupCustomerApi } from "../../../../api/promotion";
 import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import UploadImage from "../../../../components/uploadImage";
 import { getNotification } from "../../../../redux/actions/notification";
+import { getElementState } from "../../../../redux/selectors/auth";
 
 const { TextArea } = Input;
 
@@ -32,6 +33,7 @@ const AddPushNotification = ({ idOrder }) => {
   const [dataGroupCustomer, setDataGroupCustomer] = useState([]);
   const [imgThumbnail, setImgThumbnail] = useState("");
   const options = [];
+  const checkElement = useSelector(getElementState);
   const dispatch = useDispatch();
   const showDrawer = () => {
     setOpen(true);
@@ -39,6 +41,7 @@ const AddPushNotification = ({ idOrder }) => {
   const onClose = () => {
     setOpen(false);
   };
+  const width = window.innerWidth;
 
   useEffect(() => {
     getGroupCustomerApi(0, 10)
@@ -153,14 +156,14 @@ const AddPushNotification = ({ idOrder }) => {
 
   return (
     <>
-      <div className="btn-push-noti" onClick={showDrawer}>
+      <div className="btn-add-push-noti" onClick={showDrawer}>
         <a>Tạo thông báo</a>
       </div>
       <Drawer
         title="Tạo thông báo"
         placement="right"
         onClose={onClose}
-        width={500}
+        width={width > 490 ? 500 : 300}
         open={open}
       >
         <div>

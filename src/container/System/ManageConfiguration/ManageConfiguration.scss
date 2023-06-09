@@ -23,10 +23,11 @@
       align-items: center;
       justify-content: center;
       background-color: #1b76ed;
-      padding: 5px;
+      padding: 10px;
       border-radius: 4px;
-      margin-right: 20px;
       margin-top: 10px;
+      margin-left: 10px;
+      width: 23%;
 
       .text-btn {
         font-family: "Roboto";
@@ -34,6 +35,66 @@
         font-weight: 500;
         font-size: 12px;
         color: #ffffff;
+      }
+    }
+
+    .btn-item-hide {
+      display: none;
+
+      .text-btn-hide {
+        display: none;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 490px) {
+  .container-configuration {
+    width: 90%;
+    background-color: white;
+    min-height: 50%;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 5px;
+
+    .btn {
+      background-color: bisque;
+      border: none;
+      color: black;
+      box-shadow: 2px 3px 5px rgb(177, 177, 177);
+    }
+
+    .div-list-btn {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+
+      .btn-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #1b76ed;
+        padding: 10px;
+        border-radius: 4px;
+        margin-right: 20px;
+        margin-top: 10px;
+        width: 100%;
+
+        .text-btn {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 500;
+          font-size: 12px;
+          color: #ffffff;
+        }
+      }
+
+      .btn-item-hide {
+        display: none;
+
+        .text-btn-hide {
+          display: none;
+        }
       }
     }
   }

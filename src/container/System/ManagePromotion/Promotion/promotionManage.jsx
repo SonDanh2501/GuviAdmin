@@ -40,12 +40,13 @@ import "./PromotionManage.scss";
 import onToggle from "../../../../assets/images/on-button.png";
 import offToggle from "../../../../assets/images/off-button.png";
 import LoadingPagination from "../../../../components/paginationLoading/index.jsx";
-import { getUser } from "../../../../redux/selectors/auth.js";
+import { getElementState, getUser } from "../../../../redux/selectors/auth.js";
 import EditPromotionEvent from "../../../../components/editPromotionEvent/editPromotionEvent.js";
 import AddPromotionOrther from "../../../../components/addPromotionOrther/addPromotionOrther.js";
 import EditPromotionOrther from "../../../../components/editPromotionOrther/editPromotionOrther.js";
 import { errorNotify } from "../../../../helper/toast.js";
 import { useNavigate } from "react-router-dom";
+const width = window.innerWidth;
 
 const PromotionManage = ({
   type,
@@ -79,6 +80,7 @@ const PromotionManage = ({
   const toggleActive = () => setModalActive(!modalActive);
   const [api, contextHolder] = notification.useNotification();
   const user = useSelector(getUser);
+  const checkElement = useSelector(getElementState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -287,7 +289,7 @@ const PromotionManage = ({
   const items = [
     {
       key: "1",
-      label: (
+      label: checkElement?.includes("edit_promotion") && (
         <a
           onClick={() => {
             setModalEdit(!modalEdit);
@@ -299,21 +301,24 @@ const PromotionManage = ({
     },
     {
       key: "2",
-      label: user.role === "admin" && <a onClick={toggle}>Xoá</a>,
+      label: checkElement?.includes("delete_promotion") && (
+        <a onClick={toggle}>Xoá</a>
+      ),
     },
     {
       key: "3",
-      label: itemEdit?.is_parrent_promotion && (
-        <a
-          onClick={() => {
-            navigate("/promotion/manage-setting/child-promotion", {
-              state: { code: itemEdit?.code },
-            });
-          }}
-        >
-          Chi tiết
-        </a>
-      ),
+      label: itemEdit?.is_parrent_promotion &&
+        checkElement?.includes("detail_promotion") && (
+          <a
+            onClick={() => {
+              navigate("/promotion/manage-setting/child-promotion", {
+                state: { code: itemEdit?.code },
+              });
+            }}
+          >
+            Chi tiết
+          </a>
+        ),
     },
   ];
 
@@ -407,36 +412,42 @@ const PromotionManage = ({
               return (
                 <div>
                   {contextHolder}
-                  {data?.is_active ? (
-                    <img
-                      src={onToggle}
-                      className="img-toggle"
-                      onClick={toggleActive}
-                    />
-                  ) : (
-                    <div>
-                      {data?.is_limit_date ? (
-                        date < now ? (
-                          <img
-                            src={offToggle}
-                            className="img-toggle"
-                            onClick={() => openNotificationWithIcon("warning")}
-                          />
-                        ) : (
-                          <img
-                            src={offToggle}
-                            className="img-toggle"
-                            onClick={toggleActive}
-                          />
-                        )
-                      ) : (
+                  {checkElement?.includes("active_promotion") && (
+                    <>
+                      {data?.is_active ? (
                         <img
-                          src={offToggle}
+                          src={onToggle}
                           className="img-toggle"
                           onClick={toggleActive}
                         />
+                      ) : (
+                        <div>
+                          {data?.is_limit_date ? (
+                            date < now ? (
+                              <img
+                                src={offToggle}
+                                className="img-toggle"
+                                onClick={() =>
+                                  openNotificationWithIcon("warning")
+                                }
+                              />
+                            ) : (
+                              <img
+                                src={offToggle}
+                                className="img-toggle"
+                                onClick={toggleActive}
+                              />
+                            )
+                          ) : (
+                            <img
+                              src={offToggle}
+                              className="img-toggle"
+                              onClick={toggleActive}
+                            />
+                          )}
+                        </div>
                       )}
-                    </div>
+                    </>
                   )}
                 </div>
               );
@@ -563,36 +574,42 @@ const PromotionManage = ({
               return (
                 <div>
                   {contextHolder}
-                  {data?.is_active ? (
-                    <img
-                      src={onToggle}
-                      className="img-toggle"
-                      onClick={toggleActive}
-                    />
-                  ) : (
-                    <div>
-                      {data?.is_limit_date ? (
-                        date < now ? (
-                          <img
-                            src={offToggle}
-                            className="img-toggle"
-                            onClick={() => openNotificationWithIcon("warning")}
-                          />
-                        ) : (
-                          <img
-                            src={offToggle}
-                            className="img-toggle"
-                            onClick={toggleActive}
-                          />
-                        )
-                      ) : (
+                  {checkElement?.includes("active_promotion") && (
+                    <>
+                      {data?.is_active ? (
                         <img
-                          src={offToggle}
+                          src={onToggle}
                           className="img-toggle"
                           onClick={toggleActive}
                         />
+                      ) : (
+                        <div>
+                          {data?.is_limit_date ? (
+                            date < now ? (
+                              <img
+                                src={offToggle}
+                                className="img-toggle"
+                                onClick={() =>
+                                  openNotificationWithIcon("warning")
+                                }
+                              />
+                            ) : (
+                              <img
+                                src={offToggle}
+                                className="img-toggle"
+                                onClick={toggleActive}
+                              />
+                            )
+                          ) : (
+                            <img
+                              src={offToggle}
+                              className="img-toggle"
+                              onClick={toggleActive}
+                            />
+                          )}
+                        </div>
                       )}
-                    </div>
+                    </>
                   )}
                 </div>
               );
@@ -667,38 +684,42 @@ const PromotionManage = ({
             prefix={<SearchOutlined />}
             onChange={(e) => handleSearch(e.target.value)}
           />
-          {type === "code" && brand === "guvi" ? (
-            <AddPromotion
-              idService={idService}
-              tab={tab}
-              startPage={startPage}
-              setDataPromo={setData}
-              setTotalPromo={setTotal}
-              type={type}
-              brand={brand}
-              exchange={exchange}
-            />
-          ) : type === "code" && brand === "orther" ? (
-            <AddPromotionOrther
-              idService={idService}
-              startPage={startPage}
-              setDataPromo={setData}
-              setTotalPromo={setTotal}
-              type={type}
-              brand={brand}
-              exchange={exchange}
-            />
-          ) : (
-            <AddPromotionEvent
-              idService={idService}
-              tab={tab}
-              startPage={startPage}
-              setDataPromo={setData}
-              setTotalPromo={setTotal}
-              type={type}
-              brand={brand}
-              exchange={exchange}
-            />
+          {checkElement?.includes("create_promotion") && (
+            <>
+              {type === "code" && brand === "guvi" ? (
+                <AddPromotion
+                  idService={idService}
+                  tab={tab}
+                  startPage={startPage}
+                  setDataPromo={setData}
+                  setTotalPromo={setTotal}
+                  type={type}
+                  brand={brand}
+                  exchange={exchange}
+                />
+              ) : type === "code" && brand === "orther" ? (
+                <AddPromotionOrther
+                  idService={idService}
+                  startPage={startPage}
+                  setDataPromo={setData}
+                  setTotalPromo={setTotal}
+                  type={type}
+                  brand={brand}
+                  exchange={exchange}
+                />
+              ) : (
+                <AddPromotionEvent
+                  idService={idService}
+                  tab={tab}
+                  startPage={startPage}
+                  setDataPromo={setData}
+                  setTotalPromo={setTotal}
+                  type={type}
+                  brand={brand}
+                  exchange={exchange}
+                />
+              )}
+            </>
           )}
         </div>
         <div className="mt-3">
@@ -726,6 +747,13 @@ const PromotionManage = ({
                 },
               };
             }}
+            scroll={
+              width <= 490
+                ? {
+                    x: 1600,
+                  }
+                : null
+            }
           />
           <div className="div-pagination p-2">
             <a>

@@ -1,24 +1,14 @@
-import { DatePicker, Input, Select, Tabs } from "antd";
+import { DatePicker, Select, Tabs } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getRevenueCollaboratorApi } from "../../../../api/topup";
 import { formatMoney } from "../../../../helper/formatMoney";
-import {
-  getRevenueCollaborator,
-  getTopupCollaborator,
-} from "../../../../redux/actions/topup";
-import { getUser } from "../../../../redux/selectors/auth";
-import {
-  getRevenueCTV,
-  getTopupCTV,
-  totalExpenditureCTV,
-  totalTopupCTV,
-} from "../../../../redux/selectors/topup";
+import Punish from "./Punish";
 import TopupCollaborator from "./Topup";
 import "./TopupManage.scss";
-import Punish from "./Punish";
-import { getRevenueCollaboratorApi } from "../../../../api/topup";
+import { getElementState } from "../../../../redux/selectors/auth";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -27,9 +17,8 @@ export default function TopupManage() {
   const [totalTopup, setTotalTopup] = useState("");
   const [totalWithdraw, setTotalWithdraw] = useState("");
   const [totalPunish, setTotalPunish] = useState("");
-
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const checkElement = useSelector(getElementState);
 
   useEffect(() => {
     getRevenueCollaboratorApi(
@@ -87,9 +76,11 @@ export default function TopupManage() {
           <Tabs.TabPane tab="Rút tiền" key="3">
             <TopupCollaborator type={type} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Phạt tiền" key="4">
-            <Punish />
-          </Tabs.TabPane>
+          {checkElement?.includes("get_punish_cash_book_collaborator") && (
+            <Tabs.TabPane tab="Phạt tiền" key="4">
+              <Punish />
+            </Tabs.TabPane>
+          )}
         </Tabs>
       </div>
     </React.Fragment>

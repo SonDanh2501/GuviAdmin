@@ -19,7 +19,7 @@ import AddOrder from "./DrawerAddOrder";
 import { SearchOutlined } from "@ant-design/icons";
 import { DATA, DATA_STATUS } from "../../../api/fakeData";
 import { useNavigate } from "react-router-dom";
-import { getUser } from "../../../redux/selectors/auth";
+import { getElementState, getUser } from "../../../redux/selectors/auth";
 
 const ManageOrder = () => {
   const [tab, setTab] = useState("all");
@@ -32,6 +32,8 @@ const ManageOrder = () => {
   const [total, setTotal] = useState(0);
   const user = useSelector(getUser);
   const navigate = useNavigate();
+  const checkElement = useSelector(getElementState);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -83,7 +85,7 @@ const ManageOrder = () => {
             </a>
           </Dropdown>
         </div>
-        {user?.role !== "marketing" || user?.role !== "marketing_manager" ? (
+        {checkElement?.includes("create_guvi_job") ? (
           <Button
             className="btn-create-order"
             onClick={() => navigate("/group-order/manage-order/create-order")}

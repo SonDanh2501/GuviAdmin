@@ -1,37 +1,26 @@
 import React, { memo, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getOrder, searchOrder } from "../../../../redux/actions/order";
 
+import { SearchOutlined } from "@ant-design/icons";
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import {
-  Dropdown,
-  Empty,
-  Input,
-  Pagination,
-  Skeleton,
-  Space,
-  Table,
-} from "antd";
+import { Dropdown, Input, Pagination, Space, Table } from "antd";
+import _debounce from "lodash/debounce";
 import moment from "moment";
 import vi from "moment/locale/vi";
 import { useNavigate } from "react-router-dom";
-import "./OrderManage.scss";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   deleteOrderApi,
   getOrderApi,
   searchOrderApi,
 } from "../../../../api/order";
-import EditOrder from "../DrawerEditOrder";
-import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { loadingAction } from "../../../../redux/actions/loading";
-import { errorNotify } from "../../../../helper/toast";
-import { getUser } from "../../../../redux/selectors/auth";
-import { SearchOutlined } from "@ant-design/icons";
-import _debounce from "lodash/debounce";
-import EditTimeOrder from "../EditTimeGroupOrder";
 import LoadingPagination from "../../../../components/paginationLoading";
-
+import { errorNotify } from "../../../../helper/toast";
+import { getElementState, getUser } from "../../../../redux/selectors/auth";
+import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
+import EditTimeOrder from "../EditTimeGroupOrder";
+import "./OrderManage.scss";
+const width = window.innerWidth;
 const OrderManage = (props) => {
   const {
     data,
@@ -47,7 +36,6 @@ const OrderManage = (props) => {
   } = props;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [item, setItem] = useState([]);
-
   const [modal, setModal] = useState(false);
   const user = useSelector(getUser);
   const [dataSearch, setDataSearch] = useState([]);
@@ -57,6 +45,7 @@ const OrderManage = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toggle = () => setModal(!modal);
+  const checkElement = useSelector(getElementState);
 
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work_schedule[0].date)).format(
@@ -104,58 +93,23 @@ const OrderManage = (props) => {
       ? [
           {
             key: "1",
-            label: item?.status === "pending" && (
-              <AddCollaboratorOrder
-                idOrder={item?._id}
-                idCustomer={item?.id_customer?._id}
-                status={item?.status}
-                type={status}
-                kind={kind}
-                startPage={startPage}
-                setData={setData}
-                setTotal={setTotal}
-                setIsLoading={setIsLoading}
-              />
-            ),
-          },
-          {
-            key: "2",
-            label: (
-              <a
-                onClick={() =>
-                  navigate("/details-order", {
-                    state: { id: item?._id },
-                  })
-                }
-              >
-                Xem chi tiết
-              </a>
-            ),
-          },
-          {
-            key: "3",
-            label:
-              item?.status === "pending" && data?.type !== "schedule" ? (
-                <EditTimeOrder
+            label: checkElement?.includes("add_collaborator_guvi_job") &&
+              item?.status === "pending" && (
+                <AddCollaboratorOrder
                   idOrder={item?._id}
-                  dateWork={item?.date_work_schedule[0].date}
-                  code={item?.code_promotion ? item?.code_promotion?.code : ""}
-                  status={status}
+                  idCustomer={item?.id_customer?._id}
+                  status={item?.status}
+                  type={status}
                   kind={kind}
                   startPage={startPage}
                   setData={setData}
                   setTotal={setTotal}
                   setIsLoading={setIsLoading}
-                  details={false}
                 />
-              ) : (
-                ""
               ),
           },
-        ]
-      : [
           {
-            key: "1",
+            key: "2",
             label: (
               <a
                 onClick={() =>
@@ -169,25 +123,61 @@ const OrderManage = (props) => {
             ),
           },
           {
-            key: "2",
-            label: item?.status === "confirm" && (
-              <AddCollaboratorOrder
+            key: "3",
+            label: checkElement?.includes("edit_guvi_job") ? (
+              <EditTimeOrder
                 idOrder={item?._id}
-                idCustomer={item?.id_customer?._id}
-                status={item?.status}
-                type={status}
+                dateWork={item?.date_work_schedule[0].date}
+                code={item?.code_promotion ? item?.code_promotion?.code : ""}
+                status={status}
                 kind={kind}
                 startPage={startPage}
                 setData={setData}
                 setTotal={setTotal}
                 setIsLoading={setIsLoading}
+                details={false}
               />
+            ) : (
+              ""
             ),
+          },
+        ]
+      : [
+          {
+            key: "1",
+            label: checkElement?.includes("detail_guvi_job") && (
+              <a
+                onClick={() => {
+                  navigate("/details-order", {
+                    state: { id: item?._id },
+                  });
+                }}
+              >
+                Xem chi tiết
+              </a>
+            ),
+          },
+          {
+            key: "2",
+            label: checkElement?.includes("add_collaborator_guvi_job") &&
+              item?.status === "confirm" && (
+                <AddCollaboratorOrder
+                  idOrder={item?._id}
+                  idCustomer={item?.id_customer?._id}
+                  status={item?.status}
+                  type={status}
+                  kind={kind}
+                  startPage={startPage}
+                  setData={setData}
+                  setTotal={setTotal}
+                  setIsLoading={setIsLoading}
+                />
+              ),
           },
           {
             key: "3",
             label:
-              user?.role === "admin" &&
+              checkElement?.includes("delete_order_guvi_job") &&
               (item?.status === "cancel" || item?.status === "done" ? (
                 <a onClick={toggle}>Xoá</a>
               ) : (
@@ -202,12 +192,14 @@ const OrderManage = (props) => {
       render: (data) => {
         return (
           <a
-            className="text-id"
-            onClick={() =>
-              navigate("/details-order", {
-                state: { id: data?._id },
-              })
-            }
+            className="text-id-view-order"
+            onClick={() => {
+              if (checkElement?.includes("detail_guvi_job")) {
+                navigate("/details-order", {
+                  state: { id: data?._id },
+                });
+              }
+            }}
           >
             {data?.id_view}
           </a>
@@ -228,6 +220,7 @@ const OrderManage = (props) => {
           </div>
         );
       },
+      responsive: ["xl"],
     },
     {
       title: "Tên khách hàng",
@@ -297,13 +290,14 @@ const OrderManage = (props) => {
       render: (data) => {
         return <a className="text-address-order">{data?.address}</a>;
       },
+      responsive: ["xl"],
     },
     {
       title: "Cộng tác viên",
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
-            <a className="text-name-customer ">Đang tìm kiếm</a>
+            <a className="text-pending-search">Đang tìm kiếm</a>
           ) : (
             <div
               onClick={() => {
@@ -329,6 +323,8 @@ const OrderManage = (props) => {
 
     {
       title: "Trạng thái",
+
+      align: "center",
       render: (data) => (
         <a
           className={
@@ -357,6 +353,7 @@ const OrderManage = (props) => {
     },
     {
       title: "Thanh toán",
+      align: "center",
       render: (data) => {
         return (
           <a className="text-payment-method">
@@ -371,25 +368,23 @@ const OrderManage = (props) => {
     },
     {
       key: "action",
-      render: (data) =>
-        user?.role !== "marketing_manager" ||
-        user?.role !== "marketing_manager" ? (
-          <Space size="middle">
-            <Dropdown
-              menu={{
-                items,
-              }}
-              placement="bottom"
-              trigger={["click"]}
-            >
-              <div>
-                <UilEllipsisV />
-              </div>
-            </Dropdown>
-          </Space>
-        ) : (
-          <></>
-        ),
+      width: "5%",
+      align: "center",
+      render: (data) => (
+        <Space size="middle">
+          <Dropdown
+            menu={{
+              items,
+            }}
+            placement="bottom"
+            trigger={["click"]}
+          >
+            <div>
+              <UilEllipsisV />
+            </div>
+          </Dropdown>
+        </Space>
+      ),
     },
   ];
 
@@ -457,6 +452,28 @@ const OrderManage = (props) => {
                 setItem(record);
               },
             };
+          }}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1600,
+                }
+              : null
+          }
+          expandable={{
+            expandedRowRender: (record) => {
+              return (
+                <div className="div-plus">
+                  <a>Địa điểm: {record?.address}</a>
+                  <a>
+                    Ngày tạo:{" "}
+                    {moment(new Date(record?.date_create)).format(
+                      "DD/MM/YYYY - HH:mm"
+                    )}
+                  </a>
+                </div>
+              );
+            },
           }}
         />
 

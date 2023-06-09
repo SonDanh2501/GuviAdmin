@@ -19,7 +19,15 @@
   }
 }
 
-.btn-confirm {
+.btn-confirm-topup-collaborator {
+  border: none;
+  font-family: "Roboto";
+  font-size: small;
+  border-radius: 5px;
+  background-color: aquamarine;
+}
+.btn-confirm-topup-collaborator-hide {
+  display: none;
   border: none;
   font-family: Arial, Helvetica, sans-serif;
   font-size: small;
@@ -287,5 +295,26 @@
     text-decoration: none;
     display: block;
     width: 150px !important;
+  }
+}
+
+@media screen and (max-width: 490px) {
+  .div-header-topup {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    justify-content: center;
+
+    .div-topwith {
+      display: flex;
+      flex-direction: column;
+      width: 90%;
+    }
+
+    .input-search-topup {
+      height: 40px;
+      width: 90%;
+      margin-top: 5px;
+    }
   }
 }

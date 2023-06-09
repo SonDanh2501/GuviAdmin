@@ -14,8 +14,7 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import "./index.scss";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import CustomDatePicker from "../../../../../components/customDatePicker";
-
-const { RangePicker } = DatePicker;
+const width = window.innerWidth;
 
 const ReportCustomer = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,13 +33,9 @@ const ReportCustomer = () => {
   const [type, setType] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
   const [startDate, setStartDate] = useState(
-    moment(moment().startOf("month").toISOString())
-      .add(7, "hours")
-      .toISOString()
+    moment().startOf("month").toISOString()
   );
-  const [endDate, setEndDate] = useState(
-    moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
-  );
+  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
 
   const navigate = useNavigate();
 
@@ -579,6 +574,13 @@ const ReportCustomer = () => {
                 },
               };
             }}
+            scroll={
+              width <= 490
+                ? {
+                    x: 1600,
+                  }
+                : null
+            }
           />
         </div>
         <div className="mt-2 div-pagination p-2">

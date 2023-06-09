@@ -20,6 +20,8 @@ import {
 } from "../../../api/notification";
 import { loadingAction } from "../../../redux/actions/loading";
 import { errorNotify } from "../../../helper/toast";
+import { getElementState } from "../../../redux/selectors/auth";
+const width = window.innerWidth;
 
 const ManagePushNotification = () => {
   const listNotification = useSelector(getListNotifications);
@@ -29,6 +31,7 @@ const ManagePushNotification = () => {
   const [status, setStatus] = useState("todo");
   const [modalVerify, setModalVerify] = useState(false);
   const [modal, setModal] = useState(false);
+  const checkElement = useSelector(getElementState);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -112,11 +115,16 @@ const ManagePushNotification = () => {
   const items = [
     {
       key: "1",
-      label: status === "todo" && <EditPushNotification id={itemEdit?._id} />,
+      label: status === "todo" &&
+        checkElement?.includes("edit_notification") && (
+          <EditPushNotification id={itemEdit?._id} />
+        ),
     },
     {
       key: "2",
-      label: <a onClick={toggle}>Xoá</a>,
+      label: checkElement?.includes("delete_notification") && (
+        <a onClick={toggle}>Xoá</a>
+      ),
     },
   ];
 
@@ -162,15 +170,9 @@ const ManagePushNotification = () => {
           <div>
             <Space size="middle">
               <div>
-                {data?.is_active ? (
+                {checkElement?.includes("active_notification") && (
                   <img
-                    src={onToggle}
-                    className="img-toggle"
-                    onClick={toggleVerify}
-                  />
-                ) : (
-                  <img
-                    src={offToggle}
+                    src={data?.is_active ? onToggle : offToggle}
                     className="img-toggle"
                     onClick={toggleVerify}
                   />
@@ -198,7 +200,9 @@ const ManagePushNotification = () => {
     <div>
       <h5>Thông báo</h5>
       <div>
-        <AddPushNotification />
+        {checkElement?.includes("create_notification") && (
+          <AddPushNotification />
+        )}
       </div>
       <div className="div-tab mt-5">
         {DATA.map((item) => {
@@ -229,6 +233,13 @@ const ManagePushNotification = () => {
             };
           }}
           pagination={false}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1600,
+                }
+              : null
+          }
         />
       </div>
       <div className="div-pagination p-2">

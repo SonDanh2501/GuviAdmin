@@ -182,3 +182,42 @@
   font-size: 12px;
   text-decoration: none;
 }
+
+.text-delete-deep {
+  color: #000000;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.text-delete-deep {
+  display: none;
+  color: #000000;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.btn-contacted-deep {
+  width: 50px;
+  height: 20px;
+  background-color: #00cf3a;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin-top: 5px;
+  border-radius: 4px;
+
+  .text-btn-contacted {
+    font-family: "Roboto";
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    color: #000000;
+    text-decoration: none;
+  }
+}

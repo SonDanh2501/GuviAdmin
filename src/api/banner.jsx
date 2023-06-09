@@ -11,7 +11,7 @@ export const searchBanners = (payload) => {
   return axiosClient.get(`/admin/banner_manager/get_list?search=${payload}`);
 };
 export const fetchBannerById = () => {
-  return axiosClient.get("//admin/banner_manager/get_detail_item/:id");
+  return axiosClient.get("/admin/banner_manager/get_detail_item/:id");
 };
 export const updateBanner = (id, payload) => {
   return axiosClient.post(`/admin/banner_manager/edit_item/${id}`, payload);

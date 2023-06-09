@@ -1,4 +1,4 @@
-import { FilterOutlined, SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import {
   Checkbox,
   Dropdown,
@@ -10,6 +10,7 @@ import {
   Space,
   Table,
 } from "antd";
+import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
@@ -22,24 +23,21 @@ import {
   searchCollaborators,
   verifyCollaborator,
 } from "../../../../../api/collaborator.jsx";
-import _debounce from "lodash/debounce";
 import offToggle from "../../../../../assets/images/off-button.png";
 import offline from "../../../../../assets/images/offline.svg";
 import onToggle from "../../../../../assets/images/on-button.png";
 import online from "../../../../../assets/images/online.svg";
 import pending from "../../../../../assets/images/pending.svg";
 import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput.jsx";
-import EditCollaborator from "../../../../../components/editCollaborator/editCollaborator.js";
 import { errorNotify } from "../../../../../helper/toast";
-import { getCollaborators } from "../../../../../redux/actions/collaborator";
 import { loadingAction } from "../../../../../redux/actions/loading.js";
 import "./CollaboratorManage.scss";
 
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { getUser } from "../../../../../redux/selectors/auth.js";
-import LoadingPagination from "../../../../../components/paginationLoading/index.jsx";
 import AddCollaborator from "../../../../../components/addCollaborator/addCollaborator.js";
+import LoadingPagination from "../../../../../components/paginationLoading/index.jsx";
+import { getElementState } from "../../../../../redux/selectors/auth.js";
 
 export default function CollaboratorManage(props) {
   const { status } = props;
@@ -57,7 +55,6 @@ export default function CollaboratorManage(props) {
   const [modalVerify, setModalVerify] = useState(false);
   const [modalLockTime, setModalLockTime] = useState(false);
   const [modalContected, setModalContected] = useState(false);
-  const [modalEdit, setModalEdit] = useState(false);
   const [checkLock, setCheckLock] = useState(false);
   const [timeValue, setTimeValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -66,9 +63,10 @@ export default function CollaboratorManage(props) {
   const toggleBlock = () => setModalBlock(!modalBlock);
   const toggleVerify = () => setModalVerify(!modalVerify);
   const toggleLockTime = () => setModalLockTime(!modalLockTime);
-  const user = useSelector(getUser);
+  const checkElement = useSelector(getElementState);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const width = window.innerWidth;
 
   useEffect(() => {
     fetchCollaborators(0, 20, status)
@@ -309,23 +307,24 @@ export default function CollaboratorManage(props) {
   const items = [
     {
       key: "1",
-      label: itemEdit?.is_active ? (
-        <a onClick={toggleBlock}>Chặn</a>
-      ) : (
-        <a onClick={toggleBlock}>Bỏ chặn</a>
+      label: (
+        <a
+          className={
+            checkElement?.includes("lock_unlock_collaborator")
+              ? "text-click-block"
+              : "text-click-block-hide"
+          }
+          onClick={toggleLockTime}
+        >
+          {itemEdit?.is_locked ? "Mở khoá" : "Khoá"}
+        </a>
       ),
     },
     {
       key: "2",
-      label: !itemEdit?.is_locked ? (
-        <a onClick={toggleLockTime}>Khoá</a>
-      ) : (
-        <a onClick={toggleLockTime}>Mở khoá</a>
+      label: checkElement?.includes("delete_collaborator") && (
+        <a onClick={toggle}>Xoá</a>
       ),
-    },
-    {
-      key: "3",
-      label: user?.role === "admin" && <a onClick={toggle}>Xoá</a>,
     },
   ];
 
@@ -335,27 +334,30 @@ export default function CollaboratorManage(props) {
       render: (data) => (
         <a
           className="text-id-collaborator"
-          onClick={() =>
-            navigate("/system/collaborator-manage/details-collaborator", {
-              state: { id: data?._id },
-            })
-          }
+          onClick={() => {
+            if (checkElement?.includes("detail_collaborator")) {
+              navigate("/system/collaborator-manage/details-collaborator", {
+                state: { id: data?._id },
+              });
+            }
+          }}
         >
           {data?.id_view}
         </a>
       ),
-      width: "10%",
     },
     {
       title: "Tên cộng tác viên",
       render: (data) => {
         return (
           <div
-            onClick={() =>
-              navigate("/system/collaborator-manage/details-collaborator", {
-                state: { id: data?._id },
-              })
-            }
+            onClick={() => {
+              if (checkElement?.includes("detail_collaborator")) {
+                navigate("/system/collaborator-manage/details-collaborator", {
+                  state: { id: data?._id },
+                });
+              }
+            }}
             className="div-collaborator"
           >
             <img className="img_collaborator" src={data?.avatar} />
@@ -363,7 +365,6 @@ export default function CollaboratorManage(props) {
           </div>
         );
       },
-      width: "25%",
       sorter: (a, b) => a.full_name.localeCompare(b.full_name),
     },
     {
@@ -380,13 +381,11 @@ export default function CollaboratorManage(props) {
           </div>
         );
       },
-      width: "10%",
     },
     {
       title: "SĐT",
       render: (data) => <a className="text-phone-ctv">{data?.phone}</a>,
       align: "center",
-      width: "10%",
     },
     {
       title: "Trạng thái",
@@ -440,8 +439,17 @@ export default function CollaboratorManage(props) {
               <a className="text-nonverify">Chưa xác thực</a>
             )}
             {!data?.is_contacted && !data?.is_verify && (
-              <div className="btn-contacted" onClick={toggleContected}>
-                <a className="text-contacted">Liên hệ</a>
+              <div
+                className={
+                  checkElement?.includes("contacted_collaborator")
+                    ? "btn-contacted"
+                    : "btn-contacted-hide"
+                }
+                onClick={toggleContected}
+              >
+                {checkElement?.includes("contacted_collaborator") && (
+                  <a className="text-contacted">Liên hệ</a>
+                )}
               </div>
             )}
           </div>
@@ -453,17 +461,16 @@ export default function CollaboratorManage(props) {
       align: "center",
       render: (data) => (
         <Space size="middle">
-          <div>
-            {data?.is_verify ? (
-              <img src={onToggle} className="img-toggle" />
-            ) : (
-              <img
-                src={offToggle}
-                className="img-toggle"
-                onClick={toggleVerify}
-              />
-            )}
-          </div>
+          <img
+            onClick={!data?.is_verify ? toggleVerify : null}
+            src={data?.is_verify ? onToggle : offToggle}
+            className={
+              checkElement?.includes("verify_collaborator")
+                ? "img-toggle"
+                : "img-toggle-hide"
+            }
+          />
+
           <Dropdown
             menu={{
               items,
@@ -480,29 +487,20 @@ export default function CollaboratorManage(props) {
     },
   ];
 
-  const itemFilter = [
-    {
-      key: "1",
-      label: <a>Khách hàng thân thiết</a>,
-    },
-  ];
-
   return (
     <React.Fragment>
-      <div className="mt-2 p-3">
+      <div className="mt-2">
         <div className="div-header-colla">
-          {/* <Dropdown
-            menu={{ items: itemFilter }}
-            trigger={["click"]}
-            className="dropdown"
-          >
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                <FilterOutlined className="icon" />
-                <a className="text-filter">Thêm điều kiện lọc</a>
-              </Space>
-            </a>
-          </Dropdown> */}
+          {checkElement?.includes("create_collaborator") && (
+            <AddCollaborator
+              setData={setData}
+              setTotal={setTotal}
+              startPage={startPage}
+              status={status}
+              setIsLoading={setIsLoading}
+            />
+          )}
+
           <Input
             placeholder="Tìm kiếm"
             type="text"
@@ -512,13 +510,6 @@ export default function CollaboratorManage(props) {
               changeValueSearch(e.target.value);
               handleSearch(e.target.value);
             }}
-          />
-          <AddCollaborator
-            setData={setData}
-            setTotal={setTotal}
-            startPage={startPage}
-            status={status}
-            setIsLoading={setIsLoading}
           />
         </div>
         <div className="div-table mt-3">
@@ -544,6 +535,13 @@ export default function CollaboratorManage(props) {
               emptyText:
                 data.length > 0 ? <Empty /> : <Skeleton active={true} />,
             }}
+            scroll={
+              width <= 490
+                ? {
+                    x: 1600,
+                  }
+                : null
+            }
           />
           <div className="div-pagination p-2">
             <a>Tổng: {totalFilter > 0 ? totalFilter : total}</a>

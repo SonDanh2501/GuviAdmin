@@ -67,16 +67,11 @@ const TableExpired = ({ status }) => {
 
   const columns = [
     {
-      title: "STT",
-      render: (data, record, index) => <a>{index + 1}</a>,
-      align: "center",
-    },
-    {
       title: "Mã",
       render: (data) => {
         return (
           <a
-            className="text-id"
+            className="text-id-expire"
             onClick={() =>
               navigate("/details-order", {
                 state: { id: data?._id },
@@ -92,7 +87,7 @@ const TableExpired = ({ status }) => {
       title: "Ngày tạo",
       render: (data) => {
         return (
-          <div className="div-create">
+          <div className="div-create-expire">
             <a className="text-create">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
             </a>
@@ -150,7 +145,7 @@ const TableExpired = ({ status }) => {
       title: "Ngày làm",
       render: (data) => {
         return (
-          <div className="div-worktime">
+          <div className="div-worktime-expire">
             <a className="text-worktime">
               {" "}
               {moment(new Date(data.date_work_schedule[0].date)).format(

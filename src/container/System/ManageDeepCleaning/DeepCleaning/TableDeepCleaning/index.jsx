@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { loadingAction } from "../../../../../redux/actions/loading";
-import { getUser } from "../../../../../redux/selectors/auth";
+import { getElementState, getUser } from "../../../../../redux/selectors/auth";
 import {
   getCusomerRequest,
   deleteCusomerRequest,
@@ -30,6 +30,7 @@ const TableDeepCleaning = (props) => {
   const toggleContacted = () => setModalContacted(!modalContacted);
   const toggle = () => setModal(!modal);
   const toggleStatus = () => setModalStatus(!modalStatus);
+  const checkElement = useSelector(getElementState);
   const dispatch = useDispatch();
   const user = useSelector(getUser);
 
@@ -139,7 +140,18 @@ const TableDeepCleaning = (props) => {
   const items = [
     {
       key: "1",
-      label: <a onClick={toggle}>Xoá</a>,
+      label: (
+        <a
+          className={
+            checkElement?.includes("delete_request_service")
+              ? "text-delete-deep"
+              : "text-delete-deep-hide"
+          }
+          onClick={toggle}
+        >
+          Xoá
+        </a>
+      ),
     },
   ];
 
@@ -191,9 +203,14 @@ const TableDeepCleaning = (props) => {
             ) : (
               <div className="div-uncontacted">
                 <a className="text-uncontacted">Chưa liên hệ</a>
-                <div className="btn-contacted" onClick={toggleContacted}>
-                  <a className="text-btn-contacted">Liên hệ</a>
-                </div>
+                {checkElement?.includes("contact_request_service") && (
+                  <div
+                    className={"btn-contacted-deep"}
+                    onClick={toggleContacted}
+                  >
+                    <a className="text-btn-contacted">Liên hệ</a>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -230,6 +247,7 @@ const TableDeepCleaning = (props) => {
     },
     {
       title: "Trạng thái",
+
       render: (data) => {
         return (
           <div>
@@ -247,31 +265,33 @@ const TableDeepCleaning = (props) => {
     },
     {
       key: "action",
+
       render: (data) => {
         return (
           <div>
-            {data?.status === "pending" && (
-              <div className="div-btn-change-status">
-                <div
-                  className="btn-change-done"
-                  onClick={() => {
-                    toggleStatus();
-                    setStatusModal("done");
-                  }}
-                >
-                  <a className="text-change-done">Hoàn tất</a>
+            {data?.status === "pending" ||
+              (checkElement?.includes("change_status_request_service") && (
+                <div className="div-btn-change-status">
+                  <div
+                    className="btn-change-done"
+                    onClick={() => {
+                      toggleStatus();
+                      setStatusModal("done");
+                    }}
+                  >
+                    <a className="text-change-done">Hoàn tất</a>
+                  </div>
+                  <div
+                    className="btn-change-cancel"
+                    onClick={() => {
+                      toggleStatus();
+                      setStatusModal("cancel");
+                    }}
+                  >
+                    <a className="text-change-cancel">Huỷ</a>
+                  </div>
                 </div>
-                <div
-                  className="btn-change-cancel"
-                  onClick={() => {
-                    toggleStatus();
-                    setStatusModal("cancel");
-                  }}
-                >
-                  <a className="text-change-cancel">Huỷ</a>
-                </div>
-              </div>
-            )}
+              ))}
           </div>
         );
       },
@@ -281,24 +301,24 @@ const TableDeepCleaning = (props) => {
     {
       key: "action",
       align: "center",
+      fixed: "right",
+      width: "5%",
       render: (data) => {
         return (
           <>
-            {user?.role === "admin" && (
-              <Space size="middle">
-                <Dropdown
-                  menu={{
-                    items,
-                  }}
-                  placement="bottom"
-                  trigger={["click"]}
-                >
-                  <a>
-                    <MoreOutlined className="icon-more" />
-                  </a>
-                </Dropdown>
-              </Space>
-            )}
+            <Space size="middle">
+              <Dropdown
+                menu={{
+                  items,
+                }}
+                placement="bottom"
+                trigger={["click"]}
+              >
+                <a>
+                  <MoreOutlined className="icon-more" />
+                </a>
+              </Dropdown>
+            </Space>
           </>
         );
       },
@@ -331,6 +351,10 @@ const TableDeepCleaning = (props) => {
                 setItemEdit(record);
               },
             };
+          }}
+          scroll={{
+            x: 1600,
+            y: 1000,
           }}
         />
       </div>

@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 import _debounce from "lodash/debounce";
 import "./index.scss";
 import { getService } from "../../../../../../../redux/selectors/service";
+import { getDistrictApi } from "../../../../../../../api/file";
 
 const Information = ({ data, image, idCTV, setData }) => {
   const [name, setName] = useState("");
@@ -36,10 +37,24 @@ const Information = ({ data, image, idCTV, setData }) => {
   const [dataCollaborator, setDataCollaborator] = useState([]);
   const [nameCollaborator, setNameCollaborator] = useState("");
   const [idCollaborator, setIdCollaborator] = useState("");
+  const [dataCity, setDataCity] = useState([]);
+  const [codeCity, setCodeCity] = useState();
+  const [dataDistrict, setDataDistrict] = useState([]);
+  const [codeDistrict, setCodeDistrict] = useState([]);
   const dispatch = useDispatch();
   const service = useSelector(getService);
   const serviceOption = [];
+  const cityOption = [];
+  const districtsOption = [];
   const dateFormat = "YYYY-MM-DD";
+
+  useEffect(() => {
+    getDistrictApi()
+      .then((res) => {
+        setDataCity(res?.aministrative_division);
+      })
+      .catch((err) => {});
+  }, []);
 
   useEffect(() => {
     setName(data?.full_name);
@@ -61,6 +76,8 @@ const Information = ({ data, image, idCTV, setData }) => {
       serviceApply.push(item?._id);
     });
     // setServiceApply(data?.serviceApply);
+    setCodeCity(data?.city);
+    setCodeDistrict(data?.district);
   }, [data]);
 
   service.map((item, index) => {
@@ -69,6 +86,30 @@ const Information = ({ data, image, idCTV, setData }) => {
       value: item?._id,
     });
   });
+
+  dataCity?.map((item) => {
+    cityOption.push({
+      label: item?.name,
+      value: item?.code,
+      district: item?.districts,
+    });
+  });
+
+  dataDistrict?.map((item) => {
+    districtsOption.push({
+      label: item?.name,
+      value: item?.code,
+    });
+  });
+
+  const onChangeCity = (value, label) => {
+    setCodeCity(value);
+    setDataDistrict(label?.district);
+  };
+
+  const onChangeDistrict = (value) => {
+    setCodeDistrict(value);
+  };
 
   const onChangeNumberIndentity = (value) => {
     if (value.target.value <= 999999999990) {
@@ -124,6 +165,8 @@ const Information = ({ data, image, idCTV, setData }) => {
       id_inviter: idCollaborator,
       type: type,
       service_apply: serviceApply,
+      district: codeDistrict,
+      city: codeCity,
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
@@ -160,6 +203,8 @@ const Information = ({ data, image, idCTV, setData }) => {
     type,
     idCTV,
     serviceApply,
+    codeDistrict,
+    codeCity,
   ]);
 
   return (
@@ -318,6 +363,33 @@ const Information = ({ data, image, idCTV, setData }) => {
                   type="text"
                   value={codeInvite}
                   disabled={true}
+                />
+              </div>
+            </Col>
+          </Row>
+          <Row className="mt-2">
+            <Col lg="6">
+              <div>
+                <a>Tỉnh/thành phố </a>
+                <Select
+                  value={codeCity}
+                  defaultValue={"Chọn tỉnh/thành phố làm việc"}
+                  options={cityOption}
+                  style={{ width: "100%" }}
+                  onChange={onChangeCity}
+                />
+              </div>
+            </Col>
+            <Col lg="6">
+              <div>
+                <a>Quận/huyện</a>
+                <Select
+                  value={codeDistrict}
+                  options={districtsOption}
+                  style={{ width: "100%" }}
+                  onChange={onChangeDistrict}
+                  mode="multiple"
+                  allowClear
                 />
               </div>
             </Col>

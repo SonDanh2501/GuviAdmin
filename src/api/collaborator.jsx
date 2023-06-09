@@ -74,6 +74,12 @@ export const getHistoryActivityCollaborator = (id, start, length) => {
   );
 };
 
+export const getInviteCollaborator = (id, start, length) => {
+  return axiosClient.get(
+    `/admin/collaborator_manager/get_list_invite_collaborator/${id}?start=${start}&length=${length}`
+  );
+};
+
 export const getDetailsHistoryActivityCollaborator = (id, data) => {
   return axiosClient.post(
     `/admin/collaborator_manager/detail_history_activity/${id}`,

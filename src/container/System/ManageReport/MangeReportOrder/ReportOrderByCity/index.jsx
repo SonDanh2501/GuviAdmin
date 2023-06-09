@@ -31,13 +31,9 @@ const ReportOrderCity = () => {
   const [nameCity, setNameCity] = useState("Tất cả");
   const [dataChart, setDataChart] = useState([]);
   const [startDate, setStartDate] = useState(
-    moment(moment().startOf("month").toISOString())
-      .add(7, "hours")
-      .toISOString()
+    moment().startOf("month").toISOString()
   );
-  const [endDate, setEndDate] = useState(
-    moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
-  );
+  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const cityOptions = [];
 
   useEffect(() => {
@@ -513,7 +509,14 @@ const ReportOrderCity = () => {
       </div>
 
       <div className="mt-5">
-        <Table dataSource={data} columns={columns} pagination={false} />
+        <Table
+          dataSource={data}
+          columns={columns}
+          pagination={false}
+          scroll={{
+            x: 1600,
+          }}
+        />
       </div>
       <div className="mt-2 div-pagination p-2">
         <a>Tổng: {total}</a>

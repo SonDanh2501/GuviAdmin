@@ -34,3 +34,11 @@
   line-height: 16px;
   color: #000000;
 }
+
+@media screen and (max-width: 490px) {
+  .input-search {
+    width: 100% !important;
+    height: 40px;
+    margin-top: 10px;
+  }
+}

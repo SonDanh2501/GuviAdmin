@@ -423,7 +423,33 @@
   }
 }
 
-@media screen and (max-width: 390px) {
+.div-create-details-order {
+  display: flex;
+  flex-direction: column;
+  .text-create {
+    font-family: "Roboto";
+    font-weight: 400;
+    font-size: 12px;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+  }
+}
+
+.div-worktime-detail-order {
+  display: flex;
+  flex-direction: column;
+
+  .text-worktime {
+    font-family: "Roboto";
+    font-weight: 500;
+    font-size: 14px;
+    color: rgb(46, 174, 0);
+    text-decoration: none;
+    text-transform: capitalize;
+  }
+}
+
+@media screen and (max-width: 490px) {
   .div-container {
     background-color: white;
     border-radius: 5px;
