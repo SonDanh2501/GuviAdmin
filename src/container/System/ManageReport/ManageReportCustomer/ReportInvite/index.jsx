@@ -68,7 +68,8 @@ const ReportInvite = () => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * data.length - data.length;
+    const dataLength = data.length < 20 ? 20 : data.length;
+    const start = page * dataLength - dataLength;
     getReportCustomerInviteDay(
       start,
       20,
@@ -227,8 +228,8 @@ const ReportInvite = () => {
               }
               margin={{
                 top: 5,
-                right: 30,
-                left: 20,
+                right: 0,
+                left: 0,
                 bottom: 5,
               }}
             >

@@ -638,6 +638,7 @@ const EditPromotion = (props) => {
                           placeholder="Please select"
                           onChange={handleChange}
                           options={options}
+                          value={groupCustomer}
                         />
                       )}
                     </div>

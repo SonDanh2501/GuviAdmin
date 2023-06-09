@@ -15,6 +15,7 @@ import { errorNotify } from "../../../../../helper/toast";
 import offToggle from "../../../../../assets/images/off-button.png";
 import onToggle from "../../../../../assets/images/on-button.png";
 import { activeAccountAdmin } from "../../../../../api/createAccount";
+const width = window.innerWidth;
 
 const CreateAccount = () => {
   const [data, setData] = useState([]);
@@ -199,6 +200,13 @@ const CreateAccount = () => {
               },
             };
           }}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1000,
+                }
+              : null
+          }
         />
       </div>
       <div className="div-pagination p-2">

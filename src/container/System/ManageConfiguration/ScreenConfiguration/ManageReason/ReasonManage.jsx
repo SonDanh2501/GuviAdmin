@@ -3,8 +3,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
-  Card,
-  CardHeader,
   Col,
   Modal,
   ModalBody,
@@ -26,8 +24,9 @@ import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import { getElementState } from "../../../../../redux/selectors/auth";
 import { getReasonTotal } from "../../../../../redux/selectors/reason";
+const width = window.innerWidth;
 
-export default function ReasonManage() {
+const ReasonManage = () => {
   const dispatch = useDispatch();
   const totalReason = useSelector(getReasonTotal);
   const [currentPage, setCurrentPage] = useState(1);
@@ -112,7 +111,8 @@ export default function ReasonManage() {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * data.length - data.length;
+    const dataLength = data.length < 20 ? 20 : data.length;
+    const start = page * dataLength - dataLength;
     setStartPage(start);
     fetchReasons(start, 10)
       .then((res) => {
@@ -147,10 +147,12 @@ export default function ReasonManage() {
     {
       title: "Lý do huỷ việc",
       render: (data) => <a>{data?.title?.vi}</a>,
+      width: "20%",
     },
     {
       title: "Mô tả",
       render: (data) => <a>{data?.description?.vi}</a>,
+      width: "20%",
     },
     {
       title: "Đối tượng áp dụng",
@@ -165,10 +167,12 @@ export default function ReasonManage() {
             : "Hệ thống"}
         </a>
       ),
+      width: "20%",
     },
     {
       title: "Ghi chú",
       dataIndex: "note",
+      width: "30%",
     },
     // {
     //   key: "action",
@@ -209,46 +213,38 @@ export default function ReasonManage() {
           </Dropdown>
         </Space>
       ),
+      width: "5%",
     },
   ];
 
   return (
     <React.Fragment>
       <div className="mt-2 p-3">
-        <Card className="shadow">
-          <CardHeader className="border-0 card-header">
-            <Row className="align-items-center">
-              <Col className="text-left">
-                {checkElement?.includes("create_reason_cancel_setting") && (
-                  <AddReason
-                    setIsLoading={setIsLoading}
-                    setData={setData}
-                    setTotal={setTotal}
-                    startPage={startPage}
-                  />
-                )}
-              </Col>
-              {/* <Col>
+        <Row className="align-items-center">
+          <Col className="text-left">
+            {checkElement?.includes("create_reason_cancel_setting") && (
+              <AddReason
+                setIsLoading={setIsLoading}
+                setData={setData}
+                setTotal={setTotal}
+                startPage={startPage}
+              />
+            )}
+          </Col>
+          {/* <Col>
                 <CustomTextInput
                   placeholder="Tìm kiếm"
                   type="text"
                   // onChange={(e) => handleSearch(e.target.value)}
                 />
               </Col> */}
-            </Row>
-          </CardHeader>
+        </Row>
 
+        <div className="mt-3">
           <Table
             columns={columns}
             dataSource={data}
             pagination={false}
-            rowKey={(record) => record._id}
-            rowSelection={{
-              selectedRowKeys,
-              onChange: (selectedRowKeys, selectedRows) => {
-                setSelectedRowKeys(selectedRowKeys);
-              },
-            }}
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {
@@ -256,19 +252,26 @@ export default function ReasonManage() {
                 },
               };
             }}
+            scroll={
+              width <= 490
+                ? {
+                    x: 1000,
+                  }
+                : null
+            }
           />
-          <div className="mt-2 div-pagination p-2">
-            <a>Tổng: {total}</a>
-            <div>
-              <Pagination
-                current={currentPage}
-                onChange={onChange}
-                total={total}
-                showSizeChanger={false}
-              />
-            </div>
+        </div>
+        <div className="mt-2 div-pagination p-2">
+          <a>Tổng: {total}</a>
+          <div>
+            <Pagination
+              current={currentPage}
+              onChange={onChange}
+              total={total}
+              showSizeChanger={false}
+            />
           </div>
-        </Card>
+        </div>
 
         <div>
           <Modal isOpen={modal} toggle={toggle}>
@@ -322,4 +325,6 @@ export default function ReasonManage() {
       </div>
     </React.Fragment>
   );
-}
+};
+
+export default ReasonManage;

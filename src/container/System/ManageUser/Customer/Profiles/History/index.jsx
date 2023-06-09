@@ -30,7 +30,8 @@ const HistoryTransition = ({ id }) => {
   const onChange = (page) => {
     setCurrentPage(page);
     setIsLoading(true);
-    const start = page * data.length - data.length;
+    const dataLength = data.length < 20 ? 20 : data.length;
+    const start = page * dataLength - dataLength;
     getHistoryTransitionByCustomers(id, start, 10)
       .then((res) => {
         setData(res?.data);

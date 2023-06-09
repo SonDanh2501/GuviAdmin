@@ -20,6 +20,7 @@ import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import onToggle from "../../../../../assets/images/on-button.png";
 import offToggle from "../../../../../assets/images/off-button.png";
 import { getElementState } from "../../../../../redux/selectors/auth";
+const width = window.innerWidth;
 
 const GroupCustomerManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -193,7 +194,9 @@ const GroupCustomerManage = () => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const start = page * listGroupCustomers.length - listGroupCustomers.length;
+    const dataLength =
+      listGroupCustomers?.length < 20 ? 20 : listGroupCustomers.length;
+    const start = page * dataLength - dataLength;
     startPage(start);
     dispatch(
       getGroupCustomers.getGroupCustomersRequest({ start: start, length: 10 })
@@ -227,6 +230,13 @@ const GroupCustomerManage = () => {
                 },
               };
             }}
+            scroll={
+              width <= 490
+                ? {
+                    x: 1000,
+                  }
+                : null
+            }
           />
         </div>
 

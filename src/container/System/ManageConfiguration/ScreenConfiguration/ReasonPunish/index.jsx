@@ -16,6 +16,7 @@ import offToggle from "../../../../../assets/images/off-button.png";
 import onToggle from "../../../../../assets/images/on-button.png";
 import { useSelector } from "react-redux";
 import { getElementState } from "../../../../../redux/selectors/auth";
+const width = window.innerWidth;
 
 const ReasonPunish = () => {
   const [data, setData] = useState([]);
@@ -210,6 +211,13 @@ const ReasonPunish = () => {
               },
             };
           }}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1000,
+                }
+              : null
+          }
         />
       </div>
 
