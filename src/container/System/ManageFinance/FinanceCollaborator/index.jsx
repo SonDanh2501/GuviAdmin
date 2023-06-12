@@ -10,6 +10,7 @@ import topup from "../../../../assets/images/topup.svg";
 import withdraw from "../../../../assets/images/withdraw.svg";
 import moment from "moment";
 import CustomDatePicker from "../../../../components/customDatePicker";
+const width = window.innerWidth;
 
 const FinanceCollaborator = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,11 +35,9 @@ const FinanceCollaborator = () => {
 
     getReportTransitionCollaborator(
       0,
-      10,
-      moment(moment().startOf("year").toISOString())
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
+      20,
+      moment().startOf("year").toISOString(),
+      moment().endOf("date").toISOString()
     )
       .then((res) => {
         setData(res?.data);
@@ -46,15 +45,8 @@ const FinanceCollaborator = () => {
       })
       .catch((err) => {});
 
-    setStartDate(
-      moment(moment().startOf("month").toISOString())
-        .add(7, "hours")
-        .toISOString()
-    );
-
-    setEndDate(
-      moment(moment().endOf("date").toISOString()).add(7, "hours").toISOString()
-    );
+    setStartDate(moment().startOf("month").toISOString());
+    setEndDate(moment().endOf("date").toISOString());
   }, []);
 
   const columns = [
@@ -162,7 +154,7 @@ const FinanceCollaborator = () => {
     setCurrentPage(page);
     const dataLength = data?.length < 20 ? 20 : data.length;
     const start = page * dataLength - dataLength;
-    getReportTransitionCollaborator(start, 10, startDate, endDate)
+    getReportTransitionCollaborator(start, 20, startDate, endDate)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -222,17 +214,22 @@ const FinanceCollaborator = () => {
           )}
         </div>
         <div className="mt-3">
-          <Table columns={columns} pagination={false} dataSource={data} />
+          <Table
+            columns={columns}
+            pagination={false}
+            dataSource={data}
+            scroll={width <= 490 ? { x: 1000 } : null}
+          />
         </div>
         <div className="mt-2 div-pagination p-2">
-          <a>Tổng: {total}</a>
+          <a className="text-total">Tổng: {total}</a>
           <div>
             <Pagination
               current={currentPage}
               onChange={onChange}
               total={total}
               showSizeChanger={false}
-              pageSize={10}
+              pageSize={20}
             />
           </div>
         </div>

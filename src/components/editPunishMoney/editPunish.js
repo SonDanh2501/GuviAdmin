@@ -140,7 +140,7 @@ const EditPunish = ({ item, setDataT, setTotal, setIsLoading, iconEdit }) => {
 
             <CustomButton
               title="Sửa"
-              className="float-right btn-modal-edit-topup"
+              className="float-right btn-modal-edit-topup-drawer"
               type="button"
               onClick={editMoney}
             />

@@ -399,6 +399,7 @@ const UserManage = (props) => {
             render: (data) => {
               return (
                 <div
+                  className="div-name-customer"
                   onClick={() => {
                     if (checkElement?.includes("detail_customer")) {
                       navigate("/profile-customer", {
@@ -407,11 +408,16 @@ const UserManage = (props) => {
                     }
                   }}
                 >
-                  {/* <img
-              className="img_customer"
-              src={data?.avatar ? data?.avatar : user}
-            /> */}
                   <a className="text-name-customer"> {data?.full_name}</a>
+                  <a className="text-rank">
+                    {data?.rank_point < 100
+                      ? "(Thành viên)"
+                      : data?.rank_point >= 100 && data?.rank_point < 300
+                      ? "(Bạc)"
+                      : data?.rank_point >= 300 && data?.rank_point < 1500
+                      ? "(Vàng)"
+                      : "(Bạch kim)"}
+                  </a>
                 </div>
               );
             },

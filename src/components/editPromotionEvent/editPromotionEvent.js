@@ -32,6 +32,7 @@ import "./editPromotionEvent.scss";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { errorNotify } from "../../helper/toast";
+import moment from "moment";
 dayjs.extend(customParseFormat);
 
 const { TextArea } = Input;
@@ -107,7 +108,7 @@ const EditPromotionEvent = (props) => {
   const optionsCustomer = [];
   const serviceOption = [];
   const fomart = "HH:mm";
-  const dateFormat = "YYYY-MM-DD";
+  const dateFormat = "DD/MM/YYYY";
   const dispatch = useDispatch();
   const service = useSelector(getService);
 
@@ -700,7 +701,11 @@ const EditPromotionEvent = (props) => {
                           }
                           style={{ marginLeft: 5, width: "100%" }}
                           format={dateFormat}
-                          value={dayjs(startDate.slice(0, 11), dateFormat)}
+                          value={dayjs(
+                            moment(startDate).format("DD/MM/YYYY"),
+                            dateFormat
+                          )}
+                          allowClear={false}
                         />
                       </div>
                       <div>
@@ -711,7 +716,11 @@ const EditPromotionEvent = (props) => {
                           }
                           style={{ marginLeft: 5, width: "100%" }}
                           format={dateFormat}
-                          value={dayjs(endDate.slice(0, 11), dateFormat)}
+                          value={dayjs(
+                            moment(endDate).format("DD/MM/YYYY"),
+                            dateFormat
+                          )}
+                          allowClear={false}
                         />
                         {/* <input
                               className="input-promo-code"

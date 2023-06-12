@@ -38,16 +38,6 @@ const AddCustomer = (props) => {
 
   const addCustomer = () => {
     setIsLoading(true);
-    // dispatch(
-    //   createCustomer.createCustomerRequest({
-    //     code_phone_area: "+84",
-    //     phone: formikRef?.current?.values?.phone,
-    //     email: formikRef?.current?.values?.email,
-    //     full_name: formikRef?.current?.values?.name,
-    //     password: formikRef?.current?.values?.password,
-    //     code_inviter: formikRef?.current?.values?.code,
-    //   })
-    // );
     createCustomer({
       code_phone_area: "+84",
       phone: formikRef?.current?.values?.phone,
@@ -116,22 +106,6 @@ const AddCustomer = (props) => {
                   onChange={(text) => setFieldValue("name", text.target.value)}
                   errors={errors?.name}
                 />
-                {/* <CustomTextInput
-                  label="Mã vùng"
-                  type="select"
-                  id="codeArea"
-                  className="textInput"
-                  onChange={(text) =>
-                    setFieldValue("code_phone_area", text.target.value)
-                  }
-                  body={
-                    <>
-                      <option value="">Chọn mã vùng</option>
-                      <option value="Nam">+84</option>
-                    </>
-                  }
-                  errors={errors?.code_phone_area}
-                /> */}
                 <CustomTextInput
                   label="Số điện thoại"
                   type="text"

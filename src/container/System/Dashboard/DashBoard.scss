@@ -440,6 +440,27 @@
     flex-direction: column;
   }
 
+  .div-column-date {
+    display: flex;
+    flex-direction: column;
+
+    .text-date {
+      color: blue;
+      font-weight: 500;
+      font-size: 12px;
+      font-family: "Roboto";
+      text-decoration: none;
+    }
+    .text-time {
+      color: blue;
+      font-weight: 500;
+      font-size: 12px;
+      font-family: "Roboto";
+      text-decoration: none;
+      text-transform: capitalize;
+    }
+  }
+
   .div-chart-pie {
     background-color: white;
     border-radius: 4px;

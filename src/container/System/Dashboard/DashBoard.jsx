@@ -322,13 +322,13 @@ export default function Home() {
       title: "Thời gian",
       render: (data) => {
         return (
-          <div className="div-column-service">
-            <a className="text-service">
+          <div className="div-column-date">
+            <a className="text-date">
               {moment(new Date(data.date_work_schedule[0].date)).format(
                 "DD/MM/YYYY"
               )}
             </a>
-            <a className="text-service">
+            <a className="text-time">
               {moment(new Date(data.date_work_schedule[0].date))
                 .lang("VI")
                 .format("dddd")}
@@ -336,6 +336,7 @@ export default function Home() {
           </div>
         );
       },
+      align: "center",
     },
     {
       title: "Địa điểm",

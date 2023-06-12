@@ -35,6 +35,7 @@ import "./editPromotion.scss";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import UploadImage from "../uploadImage";
+import moment from "moment";
 dayjs.extend(customParseFormat);
 const { TextArea } = Input;
 
@@ -111,7 +112,7 @@ const EditPromotion = (props) => {
   const optionsCustomer = [];
   const serviceOption = [];
   const fomart = "HH:mm";
-  const dateFormat = "YYYY-MM-DD";
+  const dateFormat = "DD/MM/YYYY";
   const dispatch = useDispatch();
   const service = useSelector(getService);
 
@@ -764,7 +765,11 @@ const EditPromotion = (props) => {
                               }
                               style={{ marginLeft: 5, width: "100%" }}
                               format={dateFormat}
-                              value={dayjs(startDate.slice(0, 11), dateFormat)}
+                              value={dayjs(
+                                moment(startDate).format("DD/MM/YYYY"),
+                                dateFormat
+                              )}
+                              allowClear={false}
                             />
                           </div>
                           <div>
@@ -775,7 +780,11 @@ const EditPromotion = (props) => {
                               }
                               style={{ marginLeft: 5, width: "100%" }}
                               format={dateFormat}
-                              value={dayjs(endDate.slice(0, 11), dateFormat)}
+                              value={dayjs(
+                                moment(endDate).format("DD/MM/YYYY"),
+                                dateFormat
+                              )}
+                              allowClear={false}
                             />
                             {/* <input
                               className="input-promo-code"
@@ -834,19 +843,22 @@ const EditPromotion = (props) => {
                       )}
                     </div>
                   </div>
-                  <div className="mt-2">
-                    <a className="title-add-promo">
-                      14. Thời gian sử dụng sau khi đổi
-                    </a>
-                    <Input
-                      placeholder="Nhập số ngày (1,2,3...,n"
-                      className="input-promo-code"
-                      type="number"
-                      min={0}
-                      value={dateExchange}
-                      onChange={(e) => setDateExchange(e.target.value)}
-                    />
-                  </div>
+                  {isExchangePoint && (
+                    <div className="mt-2">
+                      <a className="title-add-promo">
+                        14. Thời gian sử dụng sau khi đổi
+                      </a>
+                      <Input
+                        placeholder="Nhập số ngày (1,2,3...,n"
+                        className="input-promo-code"
+                        type="number"
+                        min={0}
+                        value={dateExchange}
+                        onChange={(e) => setDateExchange(e.target.value)}
+                      />
+                    </div>
+                  )}
+
                   <div className="mt-2">
                     <a className="title-add-promo">15. Thứ tự hiện thị</a>
                     <Input

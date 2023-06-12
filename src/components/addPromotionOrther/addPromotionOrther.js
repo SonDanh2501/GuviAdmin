@@ -589,19 +589,21 @@ const AddPromotionOther = (props) => {
                       )}
                     </div>
                   </div>
-                  <div className="mt-2">
-                    <a className="title-add-promo">
-                      13. Thời gian sử dụng sau khi đổi
-                    </a>
-                    <Input
-                      placeholder="Nhập số ngày (1,2,3...,n"
-                      className="input-promo-code"
-                      type="number"
-                      min={0}
-                      value={dateExchange}
-                      onChange={(e) => setDateExchange(e.target.value)}
-                    />
-                  </div>
+                  {isExchangePoint && (
+                    <div className="mt-2">
+                      <a className="title-add-promo">
+                        13. Thời gian sử dụng sau khi đổi
+                      </a>
+                      <Input
+                        placeholder="Nhập số ngày (1,2,3...,n"
+                        className="input-promo-code"
+                        type="number"
+                        min={0}
+                        value={dateExchange}
+                        onChange={(e) => setDateExchange(e.target.value)}
+                      />
+                    </div>
+                  )}
                   <div className="mt-2">
                     <a className="title-add-promo">14. Thứ tự hiện thị</a>
                     <Input

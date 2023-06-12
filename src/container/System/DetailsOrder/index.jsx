@@ -573,7 +573,7 @@ const DetailsOrder = () => {
                       <a className="label-details">Chi tiết</a>
                       <div className="div-details-order">
                         <div className="div-title-details">
-                          <a className="title">Dịch vụ</a>
+                          <a className="title">Dịch vụ </a>
                         </div>
                         <a className="text-colon">:</a>
                         <a className="text-service-order">
@@ -721,11 +721,11 @@ const DetailsOrder = () => {
                         </a>
                       </div>
 
-                      <div className="div-details-order">
+                      <div className="div-details-order-price">
                         <div className="div-title-details">
                           <a className="title">Tạm tính</a>
                         </div>
-                        <a className="text-colon">:</a>
+                        {/* <a className="text-colon">:</a> */}
                         <div className="div-details-price">
                           <div className="div-price">
                             <div className="div-title-colon">
@@ -825,7 +825,9 @@ const DetailsOrder = () => {
                                   <a className="text-colon">:</a>
                                 </div>
                                 <>
-                                  <a>+ {item?._id?.title?.vi}</a>
+                                  <a className="text-name-promotion">
+                                    + {item?._id?.title?.vi}
+                                  </a>
                                   <a className="money-event-discount">
                                     {formatMoney(-item?.discount)}
                                   </a>

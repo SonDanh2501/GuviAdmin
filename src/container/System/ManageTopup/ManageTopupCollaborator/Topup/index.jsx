@@ -1,10 +1,10 @@
+import { SearchOutlined } from "@ant-design/icons";
+import { Input, Pagination, Table, Tooltip } from "antd";
+import _debounce from "lodash/debounce";
+import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import LoadingPagination from "../../../../../components/paginationLoading";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import _debounce from "lodash/debounce";
-import "./index.scss";
 import {
   cancelMoneyCollaboratorApi,
   deleteMoneyCollaboratorApi,
@@ -12,17 +12,16 @@ import {
   searchTopupCollaboratorApi,
   verifyMoneyCollaboratorApi,
 } from "../../../../../api/topup";
+import AddTopup from "../../../../../components/addTopup/addTopup";
+import EditTopup from "../../../../../components/editTopup/editTopup";
+import ModalCustom from "../../../../../components/modalCustom";
+import LoadingPagination from "../../../../../components/paginationLoading";
+import Withdraw from "../../../../../components/withdraw/withdraw";
+import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify, successNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
-import { DatePicker, Input, Pagination, Select, Table, Tooltip } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
 import { getElementState, getUser } from "../../../../../redux/selectors/auth";
-import moment from "moment";
-import { formatMoney } from "../../../../../helper/formatMoney";
-import EditTopup from "../../../../../components/editTopup/editTopup";
-import AddTopup from "../../../../../components/addTopup/addTopup";
-import Withdraw from "../../../../../components/withdraw/withdraw";
-import { getRevenueCollaborator } from "../../../../../redux/actions/topup";
+import "./index.scss";
 const width = window.innerWidth;
 
 const TopupCollaborator = ({ type }) => {
@@ -451,19 +450,18 @@ const TopupCollaborator = ({ type }) => {
       </div>
 
       <div>
-        <Modal isOpen={modalConfirm} toggle={toggleConfirm}>
-          <ModalHeader toggle={toggleConfirm}>
-            {itemEdit?.type_transfer === "top_up"
+        <ModalCustom
+          isOpen={modalConfirm}
+          title={
+            itemEdit?.type_transfer === "top_up"
               ? "Duyệt lệnh nạp tiền"
-              : " Duyệt lệnh rút tiền"}
-          </ModalHeader>
-          <ModalBody>
+              : " Duyệt lệnh rút tiền"
+          }
+          handleOk={() => onConfirm(itemEdit?._id)}
+          handleCancel={toggleConfirm}
+          textOk="Duyệt"
+          body={
             <>
-              <h4>
-                {itemEdit?.type_transfer === "top_up"
-                  ? "Bạn có muốn duyệt lệnh nạp tiền cho :"
-                  : " Bạn có muốn duyệt lệnh rút tiền cho :"}
-              </h4>
               <div className="body-modal">
                 <a className="text-content">
                   CTV: {itemEdit?.id_collaborator?.full_name}
@@ -478,28 +476,24 @@ const TopupCollaborator = ({ type }) => {
                   Nội dung: {itemEdit?.transfer_note}
                 </a>
                 <a className="text-content">
-                  Loại ví:
+                  Loại ví:{" "}
                   {itemEdit?.type_wallet === "wallet"
                     ? "Ví chính"
                     : "Ví thưởng"}
                 </a>
               </div>
             </>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={() => onConfirm(itemEdit?._id)}>
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggleConfirm}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+          }
+        />
       </div>
       <div>
-        <Modal isOpen={modal} toggle={toggle}>
-          <ModalHeader toggle={toggle}>Xóa giao dịch</ModalHeader>
-          <ModalBody>
+        <ModalCustom
+          isOpen={modal}
+          title="Xóa giao dịch"
+          handleOk={() => onDelete(itemEdit?._id)}
+          handleCancel={toggle}
+          textOk="Xoá"
+          body={
             <a>
               Bạn có chắc muốn xóa giao dịch của cộng tác viên
               <a className="text-name-modal">
@@ -507,21 +501,17 @@ const TopupCollaborator = ({ type }) => {
               </a>
               này không?
             </a>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggle}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+          }
+        />
       </div>
       <div>
-        <Modal isOpen={modalCancel} toggle={toggleCancel}>
-          <ModalHeader toggle={toggleCancel}>Huỷ giao dịch</ModalHeader>
-          <ModalBody>
+        <ModalCustom
+          isOpen={modalCancel}
+          title="Huỷ giao dịch"
+          handleOk={() => onCancel(itemEdit?._id)}
+          handleCancel={toggleCancel}
+          textOk="Có"
+          body={
             <a>
               Bạn có chắc muốn huỷ giao dịch của cộng tác viên
               <a className="text-name-modal">
@@ -529,16 +519,8 @@ const TopupCollaborator = ({ type }) => {
               </a>
               này không?
             </a>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={() => onCancel(itemEdit?._id)}>
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggleCancel}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+          }
+        />
       </div>
 
       {isLoading && <LoadingPagination />}

@@ -1,21 +1,10 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Empty, Input, Pagination, Skeleton, Table, Tooltip } from "antd";
+import { Input, Pagination, Table, Tooltip } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  Button,
-  Card,
-  CardHeader,
-  Col,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Row,
-} from "reactstrap";
 import {
   cancelMoneyCustomerApi,
   deleteMoneyCustomerApi,
@@ -24,6 +13,8 @@ import {
 } from "../../../../../api/topup";
 import AddTopupCustomer from "../../../../../components/addTopupCustomer/addTopupCustomer";
 import EditPopup from "../../../../../components/editTopup/editTopup";
+import ModalCustom from "../../../../../components/modalCustom";
+import WithdrawCustomer from "../../../../../components/withdrawCustomer/withdrawCustomer";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
@@ -31,7 +22,6 @@ import { getTopupCustomer } from "../../../../../redux/actions/topup";
 import { getElementState, getUser } from "../../../../../redux/selectors/auth";
 import { getTopupKH, totalTopupKH } from "../../../../../redux/selectors/topup";
 import "./TopupCustomerManage.scss";
-import WithdrawCustomer from "../../../../../components/withdrawCustomer/withdrawCustomer";
 
 export default function TopupCustomer() {
   const [dataFilter, setDataFilter] = useState([]);
@@ -394,33 +384,30 @@ export default function TopupCustomer() {
       </div>
 
       <div>
-        <Modal isOpen={modalConfirm} toggle={toggleConfirm}>
-          <ModalHeader toggle={toggleConfirm}>Duyệt lệnh nạp tiền</ModalHeader>
-          <ModalBody>
-            <>
-              <h4>Bạn có muốn duyệt lệnh nạp tiền cho :</h4>
-              <div className="body-modal">
-                <a>Khách hàng: {itemEdit?.id_customer?.name}</a>
-                <a>SĐT: {itemEdit?.id_customer?.phone}</a>
-                <a>Số tiền: {formatMoney(itemEdit?.money)}</a>
-                <a>Nội dung: {itemEdit?.transfer_note}</a>
-              </div>
-            </>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={() => onConfirm(itemEdit?._id)}>
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggleConfirm}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+        <ModalCustom
+          isOpen={modalConfirm}
+          title="Duyệt lệnh nạp tiền"
+          handleOk={() => onConfirm(itemEdit?._id)}
+          handleCancel={toggleConfirm}
+          textOk="Duyệt"
+          body={
+            <div className="body-modal">
+              <a>Khách hàng: {itemEdit?.id_customer?.full_name}</a>
+              <a>SĐT: {itemEdit?.id_customer?.phone}</a>
+              <a>Số tiền: {formatMoney(itemEdit?.money)}</a>
+              <a>Nội dung: {itemEdit?.transfer_note}</a>
+            </div>
+          }
+        />
       </div>
       <div>
-        <Modal isOpen={modalCancel} toggle={toggleCancel}>
-          <ModalHeader toggle={toggleCancel}>Huỷ giao dịch</ModalHeader>
-          <ModalBody>
+        <ModalCustom
+          isOpen={modalCancel}
+          title="Huỷ giao dịch"
+          handleOk={() => onCancel(itemEdit?._id)}
+          handleCancel={toggleCancel}
+          textOk="Có"
+          body={
             <a>
               Bạn có chắc muốn huỷ giao dịch của khách hàng
               <a className="text-name-modal">
@@ -428,21 +415,17 @@ export default function TopupCustomer() {
               </a>
               này không?
             </a>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={() => onCancel(itemEdit?._id)}>
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggleCancel}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+          }
+        />
       </div>
       <div>
-        <Modal isOpen={modal} toggle={toggle}>
-          <ModalHeader toggle={toggle}>Xóa giao dịch</ModalHeader>
-          <ModalBody>
+        <ModalCustom
+          isOpen={modal}
+          title="Xóa giao dịch"
+          handleOk={() => onDelete(itemEdit?._id)}
+          handleCancel={toggle}
+          textOk="Có"
+          body={
             <a>
               Bạn có chắc muốn xóa giao dịch của khách hàng
               <a className="text-name-modal">
@@ -450,16 +433,8 @@ export default function TopupCustomer() {
               </a>
               này không?
             </a>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggle}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+          }
+        />
       </div>
       <div>
         <EditPopup item={itemEdit} state={modalEdit} setState={toggleEdit} />

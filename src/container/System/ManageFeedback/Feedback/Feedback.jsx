@@ -27,6 +27,7 @@ import { getElementState, getUser } from "../../../../redux/selectors/auth";
 import { loadingAction } from "../../../../redux/actions/loading";
 import { deleteFeedbackApi, searchFeedbackApi } from "../../../../api/feedback";
 import { errorNotify } from "../../../../helper/toast";
+import ModalCustom from "../../../../components/modalCustom";
 const width = window.innerWidth;
 
 const Feedback = () => {
@@ -186,24 +187,20 @@ const Feedback = () => {
         </div>
 
         <div>
-          <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Xóa phản hồi</ModalHeader>
-            <ModalBody>
+          <ModalCustom
+            isOpen={modal}
+            title="Xóa phản hồi"
+            handleOk={() => onDelete(itemEdit?._id)}
+            handleCancel={toggle}
+            textOk="Xoá"
+            body={
               <a>
                 Bạn có chắc muốn xóa phản hồi của khách hàng
                 <a className="text-name-modal">{itemEdit?.full_name}</a>
                 này không?
               </a>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggle}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+            }
+          />
         </div>
       </div>
     </>

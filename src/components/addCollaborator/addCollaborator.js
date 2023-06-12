@@ -132,7 +132,7 @@ const AddCollaborator = (props) => {
             >
               <Form>
                 <CustomTextInput
-                  label="Tạo cộng tác viên"
+                  label="Tên cộng tác viên"
                   type="text"
                   id="className"
                   placeholder="Nhập tên cộng tác viên"
