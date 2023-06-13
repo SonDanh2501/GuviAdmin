@@ -1,19 +1,17 @@
-import { Button, Col, Image } from "antd";
+import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Row } from "reactstrap";
 import {
   getSettingAppCustomerApi,
   updateSettingAppCustomerApi,
 } from "../../../../../api/configuration";
-import { postFile } from "../../../../../api/file";
-import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
-import resizeFile from "../../../../../helper/resizer";
 
-import "./styles.scss";
+import InputCustom from "../../../../../components/textInputCustom";
+import UploadImage from "../../../../../components/uploadImage";
 import { getElementState } from "../../../../../redux/selectors/auth";
+import "./styles.scss";
 
 const AppCustomer = () => {
   const [valueVersion, setValueVersion] = useState("");
@@ -56,40 +54,6 @@ const AppCustomer = () => {
         dispatch(loadingAction.loadingRequest(false));
       });
   }, []);
-
-  const onChangeBackground = async (e) => {
-    dispatch(loadingAction.loadingRequest(true));
-    try {
-      if (e.target.files[0]) {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          setImgThumbnail(reader.result);
-        });
-        reader.readAsDataURL(e.target.files[0]);
-      }
-      const file = e.target.files[0];
-      const image = await resizeFile(file);
-      const formData = new FormData();
-      formData.append("file", image);
-      postFile(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-        .then((res) => {
-          setImgThumbnail(res);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const updateApp = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -162,59 +126,41 @@ const AppCustomer = () => {
       <a className="label-kh">Cấu hình ứng dụng Khách hàng</a>
       <div className="div-body-app-customer">
         <div>
-          <CustomTextInput
-            label={"Phiên bản ứng dụng"}
-            classNameForm="form-input"
+          <InputCustom
+            title="Phiên bản ứng dụng"
             type="text"
             value={valueVersion}
             onChange={(e) => setValueVersion(e.target.value)}
           />
-          <CustomTextInput
-            label={"Phiên bản ứng dụng"}
-            className="input-image"
-            type="file"
-            accept={".jpg,.png,.jpeg"}
-            onChange={onChangeBackground}
+          <UploadImage
+            title={"Header"}
+            image={imgThumbnail}
+            setImage={setImgThumbnail}
+            classImg={"img-background-header"}
           />
-          {imgThumbnail && (
-            <Image
-              src={imgThumbnail}
-              className="img-background-header"
-              style={{
-                with: 500,
-                height: 150,
-                backgroundColor: "transparent",
-              }}
-            />
-          )}
         </div>
 
         <div className="div-col-right">
-          <CustomTextInput
-            label={"Điểm tối thiểu thành Member"}
-            classNameForm="form-input"
+          <InputCustom
+            title="Điểm tối thiểu thành Member"
             type="number"
             disabled={true}
             value={0}
-            // onChange={(e) => setMaxMember(e.target.value)}
           />
-          <CustomTextInput
-            label={"Điểm tối thiểu thành Silver"}
-            classNameForm="form-input"
+          <InputCustom
+            title="Điểm tối thiểu thành Silver"
             type="number"
             value={minSilver}
             onChange={(e) => setMinSilver(e.target.value)}
           />
-          <CustomTextInput
-            label={"Điểm tối thiểu thành Gold"}
-            classNameForm="form-input"
+          <InputCustom
+            title="Điểm tối thiểu thành Gold"
             type="number"
             value={minGold}
             onChange={(e) => setMinGold(e.target.value)}
           />
-          <CustomTextInput
-            label={"Điểm tối thiểu thành Platinum"}
-            classNameForm="form-input"
+          <InputCustom
+            title="Điểm tối thiểu thành Platinum"
             type="number"
             value={minPlatimun}
             onChange={(e) => setMinPlatinum(e.target.value)}
@@ -222,32 +168,26 @@ const AppCustomer = () => {
         </div>
 
         <div className="div-col-right">
-          <CustomTextInput
-            label={"Điểm tối đa thành Member"}
-            classNameForm="form-input"
+          <InputCustom
+            title="Điểm tối đa thành Member"
             type="number"
             value={maxMember}
             onChange={(e) => setMaxMember(e.target.value)}
           />
-          <CustomTextInput
-            label={"Điểm tối đa thành Silver"}
-            classNameForm="form-input"
+          <InputCustom
+            title="Điểm tối đa thành Silver"
             type="number"
             value={maxSilver}
             onChange={(e) => setMaxSilver(e.target.value)}
           />
-
-          <CustomTextInput
-            label={"Điểm tối đa thành Gold"}
-            classNameForm="form-input"
+          <InputCustom
+            title="Điểm tối đa thành Gold"
             type="number"
             value={maxGold}
             onChange={(e) => setMaxGold(e.target.value)}
           />
-
-          <CustomTextInput
-            label={"Điểm tối đa thành Platinum"}
-            classNameForm="form-input"
+          <InputCustom
+            title="Điểm tối đa thành Platinum"
             type="number"
             value={maxPlatinum}
             onChange={(e) => setMaxPlatinum(e.target.value)}
@@ -255,32 +195,26 @@ const AppCustomer = () => {
         </div>
 
         <div className="div-col-right">
-          <CustomTextInput
-            label={"Tỉ lệ quy đổi thành viên (10,000 VNĐ)"}
-            classNameForm="form-input"
+          <InputCustom
+            title="Tỉ lệ quy đổi thành viên (10,000 VNĐ)"
             type="number"
             value={ratioMember}
             onChange={(e) => setRatioMember(e.target.value)}
           />
-          <CustomTextInput
-            label={"Tỉ lệ quy đổi thành viên Silver (10,000 VNĐ)"}
-            classNameForm="form-input"
+          <InputCustom
+            title="Tỉ lệ quy đổi thành viên Silver (10,000 VNĐ)"
             type="number"
             value={ratioSilver}
             onChange={(e) => setRatioSilver(e.target.value)}
           />
-
-          <CustomTextInput
-            label={"Tỉ lệ quy đổi thành viên Gold (10,000 VNĐ)"}
-            classNameForm="form-input"
+          <InputCustom
+            title="Tỉ lệ quy đổi thành viên Gold (10,000 VNĐ)"
             type="number"
             value={ratioGold}
             onChange={(e) => setRatioGold(e.target.value)}
           />
-
-          <CustomTextInput
-            label={"Tỉ lệ quy đổi thành viên Platinum (10,000 VNĐ)"}
-            classNameForm="form-input"
+          <InputCustom
+            title="Tỉ lệ quy đổi thành viên Platinum (10,000 VNĐ)"
             type="number"
             value={ratioPlatinum}
             onChange={(e) => setRatioPlatinum(e.target.value)}

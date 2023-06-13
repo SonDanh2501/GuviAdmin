@@ -1,40 +1,13 @@
-import {
-  DatePicker,
-  Empty,
-  FloatButton,
-  List,
-  Progress,
-  Select,
-  Skeleton,
-  Table,
-  Input,
-} from "antd";
+import { DatePicker, FloatButton, List, Progress, Select, Table } from "antd";
 
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import moment from "moment";
-import React, { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { Card, CardBody, Col, Row } from "reactstrap";
-import { getDayReportApi } from "../../../api/statistic";
-import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
-import {
-  getActiveUser,
-  getHistoryActivity,
-  getLastestService,
-  getServiceConnect,
-  getTopCollaborator,
-} from "../../../redux/actions/statistic";
-import {
-  getActiveUsers,
-  getHistoryActivitys,
-  getLastestServices,
-  getServiceConnects,
-  getTopCollaborators,
-} from "../../../redux/selectors/statistic";
-import "./DashBoard.scss";
-import Header from "./HeaderBoard/Header";
 import "moment/locale/vi";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Col, Row } from "reactstrap";
 import {
   Area,
   AreaChart,
@@ -52,21 +25,35 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { formatMoney } from "../../../helper/formatMoney";
-import MoreTopCollaborator from "../../../components/moreTopCollaborator";
-import MoreActivity from "./MoreActivity";
-import CustomDatePicker from "../../../components/customDatePicker";
-import { number_processing } from "../../../helper/numberProcessing";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
+import { getDistrictApi } from "../../../api/file";
 import {
   getReportCancelReport,
   getReportServiceDetails,
-  getReportTypeService,
   getTotalCustomerYear,
 } from "../../../api/report";
-import { getDistrictApi } from "../../../api/file";
+import { getDayReportApi } from "../../../api/statistic";
+import CustomDatePicker from "../../../components/customDatePicker";
+import MoreTopCollaborator from "../../../components/moreTopCollaborator";
+import { formatMoney } from "../../../helper/formatMoney";
+import { number_processing } from "../../../helper/numberProcessing";
+import {
+  getActiveUser,
+  getHistoryActivity,
+  getLastestService,
+  getServiceConnect,
+  getTopCollaborator,
+} from "../../../redux/actions/statistic";
 import { getElementState } from "../../../redux/selectors/auth";
+import {
+  getActiveUsers,
+  getHistoryActivitys,
+  getLastestServices,
+  getServiceConnects,
+  getTopCollaborators,
+} from "../../../redux/selectors/statistic";
+import "./DashBoard.scss";
+import Header from "./HeaderBoard/Header";
+import MoreActivity from "./MoreActivity";
 moment.locale("vi");
 dayjs.extend(customParseFormat);
 

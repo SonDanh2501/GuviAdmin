@@ -27,7 +27,6 @@ import offline from "../../../../../assets/images/offline.svg";
 import onToggle from "../../../../../assets/images/on-button.png";
 import online from "../../../../../assets/images/online.svg";
 import pending from "../../../../../assets/images/pending.svg";
-import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput.jsx";
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading.js";
 import "./CollaboratorManage.scss";
@@ -35,9 +34,10 @@ import "./CollaboratorManage.scss";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import AddCollaborator from "../../../../../components/addCollaborator/addCollaborator.js";
-import LoadingPagination from "../../../../../components/paginationLoading/index.jsx";
-import { getElementState } from "../../../../../redux/selectors/auth.js";
 import ModalCustom from "../../../../../components/modalCustom/index.jsx";
+import LoadingPagination from "../../../../../components/paginationLoading/index.jsx";
+import InputCustom from "../../../../../components/textInputCustom/index.jsx";
+import { getElementState } from "../../../../../redux/selectors/auth.js";
 
 const CollaboratorManage = (props) => {
   const { status } = props;
@@ -585,10 +585,9 @@ const CollaboratorManage = (props) => {
                       Khoá theo thời gian (nếu không chọn sẽ khoá vĩnh viễn)
                     </Checkbox>
                     {checkLock && (
-                      <CustomTextInput
-                        label={"*Thời gian khoá (hh:mm)"}
+                      <InputCustom
+                        title={"*Thời gian khoá (hh:mm)"}
                         type="datetime-local"
-                        name="time"
                         className="text-input"
                         onChange={(e) => setTimeValue(e.target.value)}
                       />
@@ -667,7 +666,7 @@ const CollaboratorManage = (props) => {
             isOpen={modalContected}
             title="Liên hệ công tác viên"
             handleOk={() => onContected(itemEdit?._id)}
-            textOk="Xác thực"
+            textOk="Liên hệ"
             handleCancel={toggleContected}
             body={
               <a>

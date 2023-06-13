@@ -231,13 +231,6 @@ const ReasonManage = () => {
               />
             )}
           </Col>
-          {/* <Col>
-                <CustomTextInput
-                  placeholder="Tìm kiếm"
-                  type="text"
-                  // onChange={(e) => handleSearch(e.target.value)}
-                />
-              </Col> */}
         </Row>
 
         <div className="mt-3">

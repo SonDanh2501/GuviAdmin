@@ -14,7 +14,7 @@ import {
   getDetailNotification,
 } from "../../../../api/notification";
 import { getGroupCustomerApi } from "../../../../api/promotion";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
+import InputCustom from "../../../../components/textInputCustom";
 import UploadImage from "../../../../components/uploadImage";
 import resizeFile from "../../../../helper/resizer";
 import { getNotification } from "../../../../redux/actions/notification";
@@ -220,23 +220,22 @@ const EditPushNotification = ({ id }) => {
         width={width > 490 ? 500 : 320}
         open={open}
       >
-        <CustomTextInput
-          label={"Tiêu đề"}
+        <InputCustom
+          title="Tiêu đề"
           placeholder="Vui lòng nhập tiêu đề"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-
-        <CustomTextInput
-          label={"Nội dung"}
+        <InputCustom
+          title="Nội dung"
           placeholder="Vui lòng nhập nội dung"
-          type="textarea"
+          textArea={true}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
 
-        <div>
+        <div className="mt-2">
           <Checkbox
             checked={isDateSchedule}
             onChange={(e) => setIsDateSchedule(e.target.checked)}
@@ -244,10 +243,8 @@ const EditPushNotification = ({ id }) => {
             Thời gian thông báo
           </Checkbox>
           {isDateSchedule && (
-            <CustomTextInput
+            <InputCustom
               type="datetime-local"
-              name="time"
-              className="text-input mt-2"
               value={dateSchedule}
               onChange={(e) => setDateSchedule(e.target.value)}
             />

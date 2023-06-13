@@ -1,7 +1,22 @@
+import { Button } from "antd";
+import { useNavigate } from "react-router-dom";
+
 const RewardCollaborator = () => {
+  const navigate = useNavigate();
   return (
     <div>
-      <a>THưognr ctv</a>
+      <Button
+        type="primary"
+        onClick={() =>
+          navigate(
+            "/adminManage/manage-configuration/reward_collaborator/create"
+          )
+        }
+      >
+        Thêm thưởng
+      </Button>
+
+      <div></div>
     </div>
   );
 };

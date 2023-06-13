@@ -1,19 +1,15 @@
+import { Drawer, Input, InputNumber, List } from "antd";
+import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { searchCustomers, searchCustomersApi } from "../../api/customer";
-import {
-  TopupMoneyCustomerApi,
-  withdrawMoneyCustomerApi,
-} from "../../api/topup";
-import { loadingAction } from "../../redux/actions/loading";
-import CustomButton from "../customButton/customButton";
-import _debounce from "lodash/debounce";
-import CustomTextInput from "../CustomTextInput/customTextInput";
-import "./withdrawCustomer.scss";
-import { Drawer, Input, InputNumber, List } from "antd";
+import { searchCustomersApi } from "../../api/customer";
+import { withdrawMoneyCustomerApi } from "../../api/topup";
 import { errorNotify, successNotify } from "../../helper/toast";
+import { loadingAction } from "../../redux/actions/loading";
 import { getTopupCustomer } from "../../redux/actions/topup";
 import { getElementState } from "../../redux/selectors/auth";
+import CustomButton from "../customButton/customButton";
+import "./withdrawCustomer.scss";
 const { TextArea } = Input;
 
 const WithdrawCustomer = () => {

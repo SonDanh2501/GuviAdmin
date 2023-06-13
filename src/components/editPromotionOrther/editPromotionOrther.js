@@ -1,33 +1,25 @@
-import { List, Select, Input, Checkbox, DatePicker } from "antd";
+import { Checkbox, DatePicker, Input, List, Select } from "antd";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import _debounce from "lodash/debounce";
+import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Form, FormGroup, Label, Modal, Row } from "reactstrap";
-import {
-  fetchCustomers,
-  searchCustomers,
-  searchCustomersApi,
-} from "../../api/customer";
+import { Button, Col, Modal, Row } from "reactstrap";
+import { searchCustomersApi } from "../../api/customer";
 import { DATA_PAYMENT } from "../../api/fakeData";
-import { postFile } from "../../api/file";
 import {
   fetchPromotion,
   getGroupCustomerApi,
   getPromotionDetails,
   updatePromotion,
 } from "../../api/promotion";
-import resizeFile from "../../helper/resizer";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
-import { updatePromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
-import CustomTextInput from "../CustomTextInput/customTextInput";
 import CustomTextEditor from "../customTextEdittor";
-import "./editPromotionOrther.scss";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
 import UploadImage from "../uploadImage";
-import moment from "moment";
+import "./editPromotionOrther.scss";
 dayjs.extend(customParseFormat);
 const { TextArea } = Input;
 

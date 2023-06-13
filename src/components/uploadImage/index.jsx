@@ -45,7 +45,7 @@ const UploadImage = (props) => {
   };
 
   return (
-    <div className="mt-2">
+    <div className="mt-2 div-upload">
       <a className="title-upload">{title}</a>
       <Input
         id="actual-btn"

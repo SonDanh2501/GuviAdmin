@@ -35,6 +35,7 @@ import {
 } from "../../../../../redux/selectors/auth";
 import "./UserManage.scss";
 import AddCustomer from "../../../../../components/addCustomer/addCustomer";
+import ModalCustom from "../../../../../components/modalCustom";
 const width = window.innerWidth;
 
 const UserManage = (props) => {
@@ -186,19 +187,6 @@ const UserManage = (props) => {
   const items = [
     {
       key: "1",
-      label: checkElement?.includes("edit_customer") && (
-        <EditCustomer
-          data={itemEdit}
-          setIsLoading={setIsLoading}
-          setData={setData}
-          setTotal={setTotal}
-          startPage={startPage}
-          status={status}
-        />
-      ),
-    },
-    {
-      key: "2",
       label: checkElement?.includes("delete_customer") && (
         <a onClick={toggle}>Xoá</a>
       ),
@@ -639,53 +627,41 @@ const UserManage = (props) => {
           </div>
         </div>
         <div>
-          <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Xóa người dùng</ModalHeader>
-            <ModalBody>
+          <ModalCustom
+            isOpen={modal}
+            title="Xóa người dùng"
+            handleOk={() => onDelete(itemEdit?._id)}
+            textOk="Xoá"
+            handleCancel={toggle}
+            body={
               <a>
                 Bạn có chắc muốn xóa người dùng{" "}
                 <a className="text-name-modal">{itemEdit?.full_name}</a> này
                 không?
               </a>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggle}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+            }
+          />
         </div>
         <div>
-          <Modal isOpen={modalBlock} toggle={toggleBlock}>
-            <ModalHeader toggle={toggleBlock}>
-              {" "}
-              {itemEdit?.is_active === true
+          <ModalCustom
+            isOpen={modalBlock}
+            title={
+              itemEdit?.is_active === true
                 ? "Khóa tài khoản khách hàng"
-                : "Mở tài khoản khách hàng"}
-            </ModalHeader>
-            <ModalBody>
-              {itemEdit?.is_active === true
-                ? "Bạn có muốn khóa tài khoản khách hàng"
-                : "Bạn có muốn kích hoạt tài khoản khách hàng"}
-              <h3>{itemEdit?.full_name}</h3>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="primary"
-                onClick={() =>
-                  blockCustomer(itemEdit?._id, itemEdit?.is_active)
-                }
-              >
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggleBlock}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+                : "Mở tài khoản khách hàng"
+            }
+            handleOk={() => blockCustomer(itemEdit?._id, itemEdit?.is_active)}
+            textOk="Xoá"
+            handleCancel={toggleBlock}
+            body={
+              <>
+                {itemEdit?.is_active === true
+                  ? "Bạn có muốn khóa tài khoản khách hàng"
+                  : "Bạn có muốn kích hoạt tài khoản khách hàng"}
+                <h6>{itemEdit?.full_name}</h6>
+              </>
+            }
+          />
         </div>
 
         <FloatButton.BackTop />

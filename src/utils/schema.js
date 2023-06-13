@@ -25,9 +25,8 @@ const validateAddCustomerSchema = Yup.object().shape({
     .matches(regexPhone, validPhoneMessage)
     .required(requiredErrorMessage),
   password: Yup.string().required(requiredErrorMessage),
-  name: Yup.string()
-    .required(requiredErrorMessage)
-    .matches(regexName, validName),
+  name: Yup.string().required(requiredErrorMessage),
+  // .matches(regexName, validName),
 });
 
 const validateAddCollaboratorSchema = Yup.object().shape({
@@ -36,9 +35,8 @@ const validateAddCollaboratorSchema = Yup.object().shape({
     .matches(regexPhone, validPhoneMessage)
     .required(requiredErrorMessage),
   email: Yup.string(),
-  name: Yup.string()
-    .required(requiredErrorMessage)
-    .matches(regexName, validName),
+  name: Yup.string().required(requiredErrorMessage),
+  // .matches(regexName, validName),
   identify: Yup.string().required(requiredErrorMessage),
 });
 

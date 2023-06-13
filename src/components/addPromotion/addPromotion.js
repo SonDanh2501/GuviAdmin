@@ -13,25 +13,22 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Form, Modal, Row } from "reactstrap";
-import { searchCustomers, searchCustomersApi } from "../../api/customer";
+import { Button, Col, Modal, Row } from "reactstrap";
+import { searchCustomersApi } from "../../api/customer";
 import { DATA_PAYMENT, date } from "../../api/fakeData";
-import { postFile } from "../../api/file";
 import { createPushNotification } from "../../api/notification";
 import {
   createPromotion,
   fetchPromotion,
   getGroupCustomerApi,
 } from "../../api/promotion";
-import resizeFile from "../../helper/resizer";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
 import { getService } from "../../redux/selectors/service";
-import CustomTextInput from "../CustomTextInput/customTextInput";
 import CustomButton from "../customButton/customButton";
 import CustomTextEditor from "../customTextEdittor";
-import "./addPromotion.scss";
 import UploadImage from "../uploadImage";
+import "./addPromotion.scss";
 dayjs.extend(customParseFormat);
 const { TextArea } = Input;
 
@@ -306,7 +303,7 @@ const AddPromotion = (props) => {
             title: titleNoti,
             body: descriptionNoti,
             is_date_schedule: isDateSchedule,
-            date_schedule: moment(new Date(dateSchedule)).toISOString(),
+            date_schedule: moment(dateSchedule).toISOString(),
             is_id_customer: isCustomer,
             id_customer: listCustomers,
             is_id_group_customer: isGroupCustomer,
@@ -550,10 +547,38 @@ const AddPromotion = (props) => {
                   >
                     Giảm theo phần trăm
                   </Button>
-                  {
-                    discountUnit === "amount" ? (
-                      <div className="ml-3">
-                        <a>Giá giảm</a>
+                  {discountUnit === "amount" ? (
+                    <div className="ml-3">
+                      <a>Giá giảm</a>
+                      <InputNumber
+                        formatter={(value) =>
+                          `${value}  đ`.replace(
+                            /(\d)(?=(\d\d\d)+(?!\d))/g,
+                            "$1,"
+                          )
+                        }
+                        min={0}
+                        value={maximumDiscount}
+                        onChange={(e) => setMaximumDiscount(e)}
+                        style={{ width: "100%" }}
+                      />
+                    </div>
+                  ) : (
+                    <Row className="row-discount">
+                      <div className="div-reduced ml-4">
+                        <a>Giá trị giảm</a>
+                        <InputNumber
+                          min={0}
+                          max={100}
+                          formatter={(value) => `${value} %`}
+                          parser={(value) => value.replace("%", "")}
+                          value={reducedValue}
+                          onChange={(e) => setReducedValue(e)}
+                          style={{ width: "90%" }}
+                        />
+                      </div>
+                      <div className="div-reduced">
+                        <a>Giá giảm tối đa</a>
                         <InputNumber
                           formatter={(value) =>
                             `${value}  đ`.replace(
@@ -564,52 +589,11 @@ const AddPromotion = (props) => {
                           min={0}
                           value={maximumDiscount}
                           onChange={(e) => setMaximumDiscount(e)}
-                          style={{ width: "100%" }}
+                          style={{ width: "90%" }}
                         />
                       </div>
-                    ) : (
-                      <Row className="row-discount">
-                        <div className="div-reduced ml-4">
-                          <a>Giá trị giảm</a>
-                          <InputNumber
-                            min={0}
-                            max={100}
-                            formatter={(value) => `${value} %`}
-                            parser={(value) => value.replace("%", "")}
-                            value={reducedValue}
-                            onChange={(e) => setReducedValue(e)}
-                            style={{ width: "90%" }}
-                          />
-                        </div>
-                        <div className="div-reduced">
-                          <a>Giá giảm tối đa</a>
-                          <InputNumber
-                            formatter={(value) =>
-                              `${value}  đ`.replace(
-                                /(\d)(?=(\d\d\d)+(?!\d))/g,
-                                "$1,"
-                              )
-                            }
-                            min={0}
-                            value={maximumDiscount}
-                            onChange={(e) => setMaximumDiscount(e)}
-                            style={{ width: "90%" }}
-                          />
-                        </div>
-                      </Row>
-                    )
-                    // ) : (
-                    //   <CustomTextInput
-                    //     label={"Đơn giá"}
-                    //     placeholder="Nhập đơn giá"
-                    //     classNameForm="input-promo-amount"
-                    //     type="number"
-                    //     min={0}
-                    //     value={maximumDiscount}
-                    //     onChange={(e) => setMaximumDiscount(e.target.value)}
-                    //   />
-                    // )
-                  }
+                    </Row>
+                  )}
                 </Row>
               </div>
               {tab === "tat_ca" && (
@@ -895,10 +879,8 @@ const AddPromotion = (props) => {
                         Thời gian thông báo
                       </Checkbox>
                       {isDateSchedule && (
-                        <CustomTextInput
+                        <Input
                           type="datetime-local"
-                          name="time"
-                          className="text-input mt-2"
                           value={dateSchedule}
                           onChange={(e) => setDateSchedule(e.target.value)}
                         />
@@ -977,6 +959,7 @@ const AddPromotion = (props) => {
                               onChange={(time, timeString) =>
                                 changeTimeStartApply(timeString, index)
                               }
+                              allowClear={false}
                             />
                             <a>Thời gian kết thúc</a>
                             <TimePicker
@@ -985,6 +968,7 @@ const AddPromotion = (props) => {
                               onChange={(time, timeString) =>
                                 changeTimeEndApply(timeString, index)
                               }
+                              allowClear={false}
                             />
                           </div>
                         </div>
