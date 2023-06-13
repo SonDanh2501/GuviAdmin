@@ -5,7 +5,7 @@ import {
   editAccountBankCollaborator,
   getCollaboratorsById,
 } from "../../../../../../../api/collaborator";
-import CustomTextInput from "../../../../../../../components/CustomTextInput/customTextInput";
+import InputCustom from "../../../../../../../components/textInputCustom";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import "./index.scss";
@@ -54,23 +54,25 @@ const BankAccount = ({ id }) => {
   return (
     <div>
       <a className="title-info">Thông tin tài khoản</a>
-      <CustomTextInput
-        classNameForm="mt-5"
-        label={"Số tài khoản"}
+
+      <InputCustom
+        title={"Số tài khoản"}
         placeholder="Nhập số tài khoản"
         type="number"
         value={accountNumber}
         onChange={(e) => setAccountNumber(e.target.value)}
       />
-      <CustomTextInput
-        label={"Tên ngân hàng"}
+
+      <InputCustom
+        title={"Tên ngân hàng"}
         placeholder="Nhập tên ngân hàng"
         type="text"
         value={bankName}
         onChange={(e) => setBankName(e.target.value)}
       />
-      <CustomTextInput
-        label={"Tên chủ thẻ"}
+
+      <InputCustom
+        title={"Tên chủ thẻ"}
         placeholder="Nhập tên chủ thẻ"
         type="text"
         value={accountName}

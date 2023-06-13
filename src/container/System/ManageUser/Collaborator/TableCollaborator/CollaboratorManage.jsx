@@ -13,7 +13,6 @@ import {
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   activeCollaborator,
   changeContactedCollaborator,
@@ -28,7 +27,6 @@ import offline from "../../../../../assets/images/offline.svg";
 import onToggle from "../../../../../assets/images/on-button.png";
 import online from "../../../../../assets/images/online.svg";
 import pending from "../../../../../assets/images/pending.svg";
-import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput.jsx";
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading.js";
 import "./CollaboratorManage.scss";
@@ -36,10 +34,12 @@ import "./CollaboratorManage.scss";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import AddCollaborator from "../../../../../components/addCollaborator/addCollaborator.js";
+import ModalCustom from "../../../../../components/modalCustom/index.jsx";
 import LoadingPagination from "../../../../../components/paginationLoading/index.jsx";
+import InputCustom from "../../../../../components/textInputCustom/index.jsx";
 import { getElementState } from "../../../../../redux/selectors/auth.js";
 
-export default function CollaboratorManage(props) {
+const CollaboratorManage = (props) => {
   const { status } = props;
   const [dataFilter, setDataFilter] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -558,84 +558,64 @@ export default function CollaboratorManage(props) {
         </div>
 
         <div>
-          <Modal isOpen={modalLockTime} toggle={toggleLockTime}>
-            <ModalHeader toggle={toggleLockTime}>
-              {" "}
-              {itemEdit?.is_locked === false
+          <ModalCustom
+            isOpen={modalLockTime}
+            title={
+              itemEdit?.is_locked === false
                 ? "Khóa tài khoản cộng tác viên"
-                : "Mở tài khoản cộng tác viên"}
-            </ModalHeader>
-            <ModalBody>
-              {itemEdit?.is_locked === false
-                ? "Bạn có muốn khóa tài khoản cộng tác viên"
-                : "Bạn có muốn kích hoạt tài khoản cộng tác viên"}
-              <h3>{itemEdit?.full_name}</h3>
-              {itemEdit?.is_locked === false && (
-                <>
-                  <Checkbox
-                    checked={checkLock}
-                    onChange={(e) => setCheckLock(e.target.checked)}
-                  >
-                    Khoá theo thời gian (nếu không chọn sẽ khoá vĩnh viễn)
-                  </Checkbox>
-                  {checkLock && (
-                    <CustomTextInput
-                      label={"*Thời gian khoá (hh:mm)"}
-                      type="datetime-local"
-                      name="time"
-                      className="text-input"
-                      onChange={(e) => setTimeValue(e.target.value)}
-                    />
-                  )}
-                </>
-              )}
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="primary"
-                onClick={() =>
-                  onLockTimeCollaborator(itemEdit?._id, itemEdit?.is_locked)
-                }
-              >
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggleLockTime}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+                : "Mở tài khoản cộng tác viên"
+            }
+            handleOk={() =>
+              onLockTimeCollaborator(itemEdit?._id, itemEdit?.is_locked)
+            }
+            textOk={itemEdit?.is_locked === false ? "Khóa" : "Mở"}
+            handleCancel={toggleLockTime}
+            body={
+              <>
+                {itemEdit?.is_locked === false
+                  ? "Bạn có muốn khóa tài khoản cộng tác viên"
+                  : "Bạn có muốn kích hoạt tài khoản cộng tác viên"}
+                <h3>{itemEdit?.full_name}</h3>
+                {itemEdit?.is_locked === false && (
+                  <>
+                    <Checkbox
+                      checked={checkLock}
+                      onChange={(e) => setCheckLock(e.target.checked)}
+                    >
+                      Khoá theo thời gian (nếu không chọn sẽ khoá vĩnh viễn)
+                    </Checkbox>
+                    {checkLock && (
+                      <InputCustom
+                        title={"*Thời gian khoá (hh:mm)"}
+                        type="datetime-local"
+                        className="text-input"
+                        onChange={(e) => setTimeValue(e.target.value)}
+                      />
+                    )}
+                  </>
+                )}
+              </>
+            }
+          />
         </div>
         <div>
-          <Modal isOpen={modalVerify} toggle={toggleVerify}>
-            <ModalHeader toggle={toggleVerify}>
-              {" "}
-              {itemEdit?.is_verify === true
-                ? "Bỏ xác thực tài khoản cộng tác viên"
-                : "Xác thực tài khoản cộng tác viên"}
-            </ModalHeader>
-            <ModalBody>
-              {itemEdit?.is_verify === true
-                ? "Bạn có muốn bỏ xác thực tài khoản cộng tác viên"
-                : "Bạn có muốn xác thực tài khoản cộng tác viên"}
-              <h3>{itemEdit?.full_name}</h3>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="primary"
-                onClick={() =>
-                  onVerifyCollaborator(itemEdit?._id, itemEdit?.is_verify)
-                }
-              >
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggleVerify}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+          <ModalCustom
+            isOpen={modalVerify}
+            title="Xác thực tài khoản cộng tác viên"
+            handleOk={() =>
+              onVerifyCollaborator(itemEdit?._id, itemEdit?.is_verify)
+            }
+            textOk="Xác thực"
+            handleCancel={toggleVerify}
+            body={
+              <>
+                <a>Bạn có muốn xác thực tài khoản cộng tác viên</a>
+                <h3>{itemEdit?.full_name}</h3>
+              </>
+            }
+          />
         </div>
-
-        <div>
+        {/* <div>
           <Modal isOpen={modalBlock} toggle={toggleBlock}>
             <ModalHeader toggle={toggleBlock}>
               {" "}
@@ -646,7 +626,7 @@ export default function CollaboratorManage(props) {
             <ModalBody>
               {itemEdit?.is_active === true
                 ? "Bạn có muốn khóa tài khoản cộng tác viên"
-                : "Bạn có muốn kích hoạt tài khoản cộng tác viên"}
+                : "Bạn có muốn mở khoá tài khoản cộng tác viên"}
               <h3>{itemEdit?.full_name}</h3>
             </ModalBody>
             <ModalFooter>
@@ -663,53 +643,39 @@ export default function CollaboratorManage(props) {
               </Button>
             </ModalFooter>
           </Modal>
-        </div>
+        </div> */}
 
         <div>
-          <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Xóa cộng tác viên</ModalHeader>
-            <ModalBody>
+          <ModalCustom
+            isOpen={modal}
+            title="Xóa cộng tác viên"
+            handleOk={() => onDelete(itemEdit?._id)}
+            textOk="Xoá"
+            handleCancel={toggle}
+            body={
               <a>
                 Bạn có chắc muốn xóa cộng tác viên
                 <a className="text-name-modal">{itemEdit?.full_name}</a> này
                 không?
               </a>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggle}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+            }
+          />
         </div>
-
         <div>
-          <Modal isOpen={modalContected} toggle={toggleContected}>
-            <ModalHeader toggle={toggleContected}>
-              Liên hệ công tác viên
-            </ModalHeader>
-            <ModalBody>
+          <ModalCustom
+            isOpen={modalContected}
+            title="Liên hệ công tác viên"
+            handleOk={() => onContected(itemEdit?._id)}
+            textOk="Liên hệ"
+            handleCancel={toggleContected}
+            body={
               <a>
                 Bạn có chắc đã liên hệ cộng tác viên
                 <a className="text-name-modal">{itemEdit?.full_name}</a> này
                 không?
               </a>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="primary"
-                onClick={() => onContected(itemEdit?._id)}
-              >
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggleContected}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+            }
+          />
         </div>
 
         <FloatButton.BackTop />
@@ -717,4 +683,6 @@ export default function CollaboratorManage(props) {
       </div>
     </React.Fragment>
   );
-}
+};
+
+export default CollaboratorManage;

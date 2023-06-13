@@ -247,11 +247,25 @@ const ReviewCollaborator = () => {
               })
             }
           >
-            <a className="text-name-review">{data?.id_customer?.full_name}</a>
-            <a className="text-name-review">{data?.id_customer?.phone}</a>
+            <div className="div-name-info">
+              <a className="text-name-review">{data?.id_customer?.full_name}</a>
+              <a className="text-name-review">{data?.id_customer?.phone}</a>
+            </div>
+            <a className="rank-customer">
+              {data?.id_customer?.rank_point < 100
+                ? "(Thành viên)"
+                : data?.id_customer?.rank_point >= 100 &&
+                  data?.id_customer?.rank_point < 300
+                ? "(Bạc)"
+                : data?.id_customer?.rank_point >= 300 &&
+                  data?.id_customer?.rank_point < 1500
+                ? "(Vàng)"
+                : "(Bạch kim)"}
+            </a>
           </div>
         );
       },
+      width: "15%",
     },
     {
       title: "Tên cộng tác viên",
@@ -275,6 +289,7 @@ const ReviewCollaborator = () => {
     },
     {
       title: "Số sao/Đơn",
+      width: "15%",
       render: (data) => {
         return (
           <div
@@ -297,7 +312,6 @@ const ReviewCollaborator = () => {
         );
       },
       sorter: (a, b) => a.star - b.star,
-      width: "15%",
     },
     {
       title: "Nội dung",
@@ -339,7 +353,6 @@ const ReviewCollaborator = () => {
     {
       title: "Ghi chú",
       render: (data) => <a>{data?.note_admin}</a>,
-      width: "10%",
     },
   ];
 

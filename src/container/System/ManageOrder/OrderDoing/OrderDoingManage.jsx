@@ -1,14 +1,13 @@
+import { SearchOutlined } from "@ant-design/icons";
+import { UilEllipsisV } from "@iconscout/react-unicons";
+import { Dropdown, Pagination, Space, Table } from "antd";
+import _debounce from "lodash/debounce";
+import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Card, CardFooter } from "reactstrap";
-import { getOrder } from "../../../../redux/actions/order";
-import _debounce from "lodash/debounce";
-import { UilEllipsisV } from "@iconscout/react-unicons";
-import { Dropdown, Empty, Pagination, Skeleton, Space, Table } from "antd";
-import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { getOrderApi, searchOrderApi } from "../../../../api/order";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
+import InputCustom from "../../../../components/textInputCustom";
 import { formatDayVN } from "../../../../helper/formatDayVN";
 import "./OrderDoingManage.scss";
 
@@ -262,11 +261,13 @@ const OrderDoingManage = () => {
       <div className="mt-5 m-3">
         <div className="div-header">
           <a className="title-cv">Danh sách công việc</a>
-          <CustomTextInput
+
+          <InputCustom
             placeholder="Tìm kiếm"
             type="text"
             className="field-search"
             onChange={(e) => handleSearch(e.target.value)}
+            prefix={<SearchOutlined />}
           />
         </div>
         <div className="shadow">

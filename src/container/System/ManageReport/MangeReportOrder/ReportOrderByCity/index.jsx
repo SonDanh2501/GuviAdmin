@@ -19,6 +19,7 @@ import {
   YAxis,
 } from "recharts";
 import "./styles.scss";
+const width = window.innerWidth;
 
 const ReportOrderCity = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -513,9 +514,13 @@ const ReportOrderCity = () => {
           dataSource={data}
           columns={columns}
           pagination={false}
-          scroll={{
-            x: 1600,
-          }}
+          scroll={
+            width <= 490
+              ? {
+                  x: 1600,
+                }
+              : null
+          }
         />
       </div>
       <div className="mt-2 div-pagination p-2">

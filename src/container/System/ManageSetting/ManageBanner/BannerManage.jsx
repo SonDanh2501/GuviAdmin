@@ -1,25 +1,27 @@
+import { SearchOutlined } from "@ant-design/icons";
+import { UilEllipsisV } from "@iconscout/react-unicons";
+import { Dropdown, Image, Input, Pagination, Space, Table } from "antd";
+import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { searchBanners } from "../../../../api/banner";
-import { UilEllipsisV } from "@iconscout/react-unicons";
-import { SearchOutlined } from "@ant-design/icons";
+import {
+  activeBanner,
+  deleteBanner,
+  searchBanners,
+} from "../../../../api/banner";
+import offToggle from "../../../../assets/images/off-button.png";
+import onToggle from "../../../../assets/images/on-button.png";
 import AddBanner from "../../../../components/addBanner/addBanner";
+import EditBanner from "../../../../components/editBanner/editBanner";
+import ModalCustom from "../../../../components/modalCustom";
+import { errorNotify } from "../../../../helper/toast";
 import { getBanners } from "../../../../redux/actions/banner";
-import { getPromotion } from "../../../../redux/actions/promotion";
+import { loadingAction } from "../../../../redux/actions/loading";
+import { getElementState } from "../../../../redux/selectors/auth";
 import { getBanner, getBannerTotal } from "../../../../redux/selectors/banner";
 import "./BannerManage.scss";
-import _debounce from "lodash/debounce";
-import { Dropdown, Image, Pagination, Space, Table, Input } from "antd";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
-import EditBanner from "../../../../components/editBanner/editBanner";
-import { activeBanner, deleteBanner } from "../../../../api/banner";
-import { loadingAction } from "../../../../redux/actions/loading";
-import onToggle from "../../../../assets/images/on-button.png";
-import offToggle from "../../../../assets/images/off-button.png";
-import { errorNotify } from "../../../../helper/toast";
-import { getElementState } from "../../../../redux/selectors/auth";
 
-export default function BannerManage() {
+const BannerManage = () => {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
@@ -262,51 +264,41 @@ export default function BannerManage() {
         </div>
 
         <div>
-          <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Xóa banner</ModalHeader>
-            <ModalBody>
+          <ModalCustom
+            isOpen={modal}
+            title="Xóa banner"
+            handleOk={() => onDelete(itemEdit?._id)}
+            handleCancel={toggle}
+            textOk="Xoá"
+            body={
               <a>
                 Bạn có chắc muốn xóa banner{" "}
                 <a className="text-name-modal">{itemEdit?.title}</a> này không?
               </a>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggle}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+            }
+          />
         </div>
 
         <div>
-          <Modal isOpen={modalBlock} toggle={toggleBlock}>
-            <ModalHeader toggle={toggleBlock}>
-              {" "}
-              {itemEdit?.is_active === true ? "Khóa banners" : "Mở banners"}
-            </ModalHeader>
-            <ModalBody>
-              {itemEdit?.is_active === true
-                ? "Bạn có muốn khóa banner này"
-                : "Bạn có muốn kích hoạt banner này"}
-              <h3>{itemEdit?.title}</h3>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="primary"
-                onClick={() => blockBanner(itemEdit?._id, itemEdit?.is_active)}
-              >
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggleBlock}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+          <ModalCustom
+            isOpen={modalBlock}
+            title={itemEdit?.is_active === true ? "Khóa banners" : "Mở banners"}
+            handleOk={() => blockBanner(itemEdit?._id, itemEdit?.is_active)}
+            handleCancel={toggleBlock}
+            textOk={itemEdit?.is_active === true ? "Khóa" : "Mở"}
+            body={
+              <>
+                {itemEdit?.is_active === true
+                  ? "Bạn có muốn khóa banner này"
+                  : "Bạn có muốn kích hoạt banner này"}
+                <h6>{itemEdit?.title}</h6>
+              </>
+            }
+          />
         </div>
       </div>
     </React.Fragment>
   );
-}
+};
+
+export default BannerManage;

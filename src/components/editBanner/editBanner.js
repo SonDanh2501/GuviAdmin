@@ -1,20 +1,15 @@
-import { Drawer, Image, Input, Select } from "antd";
+import { Drawer, Input, Select } from "antd";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateBanner } from "../../api/banner";
-import { postFile } from "../../api/file";
-import resizeFile from "../../helper/resizer";
+import { getPromotionList } from "../../api/promotion";
 import { errorNotify } from "../../helper/toast";
 import { getBanners } from "../../redux/actions/banner";
 import { loadingAction } from "../../redux/actions/loading";
-import { getPromotion } from "../../redux/actions/promotion";
-import { getPromotionSelector } from "../../redux/selectors/promotion";
 import { getService } from "../../redux/selectors/service";
 import CustomButton from "../customButton/customButton";
-import CustomTextInput from "../CustomTextInput/customTextInput";
-import "./editBanner.scss";
 import UploadImage from "../uploadImage";
-import { getPromotionList } from "../../api/promotion";
+import "./editBanner.scss";
 
 const EditBanner = ({ data }) => {
   const [title, setTitle] = useState("");

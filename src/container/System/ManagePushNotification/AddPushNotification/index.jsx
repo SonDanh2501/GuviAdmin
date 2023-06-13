@@ -3,19 +3,17 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { errorNotify } from "../../../../helper/toast";
 import { loadingAction } from "../../../../redux/actions/loading";
-import "./index.scss";
-
+import { SearchOutlined } from "@ant-design/icons";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import { searchCustomers } from "../../../../api/customer";
 import { createPushNotification } from "../../../../api/notification";
 import { getGroupCustomerApi } from "../../../../api/promotion";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import UploadImage from "../../../../components/uploadImage";
 import { getNotification } from "../../../../redux/actions/notification";
 import { getElementState } from "../../../../redux/selectors/auth";
-
-const { TextArea } = Input;
+import InputCustom from "../../../../components/textInputCustom";
+import "./index.scss";
 
 const AddPushNotification = ({ idOrder }) => {
   const [open, setOpen] = useState(false);
@@ -111,7 +109,7 @@ const AddPushNotification = ({ idOrder }) => {
       title: title,
       body: description,
       is_date_schedule: isDateSchedule,
-      date_schedule: moment(new Date(dateSchedule)).toISOString(),
+      date_schedule: moment(dateSchedule).toISOString(),
       is_id_customer: isCustomer,
       id_customer: listCustomers,
       is_id_group_customer: isGroupCustomer,
@@ -166,24 +164,21 @@ const AddPushNotification = ({ idOrder }) => {
         width={width > 490 ? 500 : 300}
         open={open}
       >
-        <div>
-          <a>Tiêu đề</a>
-          <Input
-            placeholder="Vui lòng nhập tiêu đề"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-        <div>
-          <a>Nội dung</a>
-          <TextArea
-            placeholder="Vui lòng nhập nội dung"
-            type="textarea"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
+        <InputCustom
+          title="Tiêu đề"
+          placeholder="Vui lòng nhập tiêu đề"
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <InputCustom
+          title="Nội dung"
+          placeholder="Vui lòng nhập nội dung"
+          type="textarea"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          textArea={true}
+        />
 
         <div className="mt-2">
           <Checkbox
@@ -193,9 +188,8 @@ const AddPushNotification = ({ idOrder }) => {
             Thời gian thông báo
           </Checkbox>
           {isDateSchedule && (
-            <CustomTextInput
+            <Input
               type="datetime-local"
-              name="time"
               className="text-input mt-2"
               value={dateSchedule}
               onChange={(e) => setDateSchedule(e.target.value)}
@@ -212,10 +206,11 @@ const AddPushNotification = ({ idOrder }) => {
           </Checkbox>
           {isCustomer && (
             <div>
-              <Input
+              <InputCustom
                 placeholder="Tìm kiếm theo tên và số điện thoại"
-                className="mt-2"
+                type="text"
                 value={nameCustomer}
+                prefix={<SearchOutlined />}
                 onChange={(e) => {
                   changeValue(e.target.value);
                   searchCustomer(e.target.value);

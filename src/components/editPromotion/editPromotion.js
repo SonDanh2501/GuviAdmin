@@ -1,40 +1,33 @@
 import {
+  Checkbox,
+  DatePicker,
+  Input,
   InputNumber,
   List,
   Select,
   TimePicker,
-  Input,
-  Checkbox,
-  DatePicker,
 } from "antd";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import _debounce from "lodash/debounce";
+import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Form, FormGroup, Label, Modal, Row } from "reactstrap";
-import {
-  fetchCustomers,
-  searchCustomers,
-  searchCustomersApi,
-} from "../../api/customer";
+import { Button, Col, Form, Modal, Row } from "reactstrap";
+import { searchCustomersApi } from "../../api/customer";
 import { DATA_PAYMENT, date } from "../../api/fakeData";
-import { postFile } from "../../api/file";
 import {
   fetchPromotion,
   getGroupCustomerApi,
   getPromotionDetails,
   updatePromotion,
 } from "../../api/promotion";
-import resizeFile from "../../helper/resizer";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
-import { updatePromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
-import CustomTextInput from "../CustomTextInput/customTextInput";
 import CustomTextEditor from "../customTextEdittor";
-import "./editPromotion.scss";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
 import UploadImage from "../uploadImage";
+import "./editPromotion.scss";
 dayjs.extend(customParseFormat);
 const { TextArea } = Input;
 
@@ -111,7 +104,7 @@ const EditPromotion = (props) => {
   const optionsCustomer = [];
   const serviceOption = [];
   const fomart = "HH:mm";
-  const dateFormat = "YYYY-MM-DD";
+  const dateFormat = "DD/MM/YYYY";
   const dispatch = useDispatch();
   const service = useSelector(getService);
 
@@ -555,10 +548,38 @@ const EditPromotion = (props) => {
                       >
                         Giảm theo phần trăm
                       </Button>
-                      {
-                        discountUnit === "amount" ? (
-                          <div className="ml-3">
-                            <a>Giá giảm</a>
+                      {discountUnit === "amount" ? (
+                        <div className="ml-3">
+                          <a>Giá giảm</a>
+                          <InputNumber
+                            formatter={(value) =>
+                              `${value}  đ`.replace(
+                                /(\d)(?=(\d\d\d)+(?!\d))/g,
+                                "$1,"
+                              )
+                            }
+                            min={0}
+                            value={maximumDiscount}
+                            onChange={(e) => setMaximumDiscount(e)}
+                            style={{ width: "100%" }}
+                          />
+                        </div>
+                      ) : (
+                        <Row className="row-discount">
+                          <div className="div-reduced ml-4">
+                            <a>Giá trị giảm</a>
+                            <InputNumber
+                              min={0}
+                              max={100}
+                              formatter={(value) => `${value} %`}
+                              parser={(value) => value.replace("%", "")}
+                              value={reducedValue}
+                              onChange={(e) => setReducedValue(e)}
+                              style={{ width: "90%" }}
+                            />
+                          </div>
+                          <div className="div-reduced">
+                            <a>Giá giảm tối đa</a>
                             <InputNumber
                               formatter={(value) =>
                                 `${value}  đ`.replace(
@@ -569,52 +590,11 @@ const EditPromotion = (props) => {
                               min={0}
                               value={maximumDiscount}
                               onChange={(e) => setMaximumDiscount(e)}
-                              style={{ width: "100%" }}
+                              style={{ width: "90%" }}
                             />
                           </div>
-                        ) : (
-                          <Row className="row-discount">
-                            <div className="div-reduced ml-4">
-                              <a>Giá trị giảm</a>
-                              <InputNumber
-                                min={0}
-                                max={100}
-                                formatter={(value) => `${value} %`}
-                                parser={(value) => value.replace("%", "")}
-                                value={reducedValue}
-                                onChange={(e) => setReducedValue(e)}
-                                style={{ width: "90%" }}
-                              />
-                            </div>
-                            <div className="div-reduced">
-                              <a>Giá giảm tối đa</a>
-                              <InputNumber
-                                formatter={(value) =>
-                                  `${value}  đ`.replace(
-                                    /(\d)(?=(\d\d\d)+(?!\d))/g,
-                                    "$1,"
-                                  )
-                                }
-                                min={0}
-                                value={maximumDiscount}
-                                onChange={(e) => setMaximumDiscount(e)}
-                                style={{ width: "90%" }}
-                              />
-                            </div>
-                          </Row>
-                        )
-                        // ) : (
-                        //   <CustomTextInput
-                        //     label={"Đơn giá"}
-                        //     placeholder="Nhập đơn giá"
-                        //     classNameForm="input-promo-amount"
-                        //     type="number"
-                        //     min={0}
-                        //     value={maximumDiscount}
-                        //     onChange={(e) => setMaximumDiscount(e.target.value)}
-                        //   />
-                        // )
-                      }
+                        </Row>
+                      )}
                     </Row>
                   </div>
                 </Col>
@@ -764,7 +744,11 @@ const EditPromotion = (props) => {
                               }
                               style={{ marginLeft: 5, width: "100%" }}
                               format={dateFormat}
-                              value={dayjs(startDate.slice(0, 11), dateFormat)}
+                              value={dayjs(
+                                moment(startDate).format("DD/MM/YYYY"),
+                                dateFormat
+                              )}
+                              allowClear={false}
                             />
                           </div>
                           <div>
@@ -775,7 +759,11 @@ const EditPromotion = (props) => {
                               }
                               style={{ marginLeft: 5, width: "100%" }}
                               format={dateFormat}
-                              value={dayjs(endDate.slice(0, 11), dateFormat)}
+                              value={dayjs(
+                                moment(endDate).format("DD/MM/YYYY"),
+                                dateFormat
+                              )}
+                              allowClear={false}
                             />
                             {/* <input
                               className="input-promo-code"
@@ -834,19 +822,22 @@ const EditPromotion = (props) => {
                       )}
                     </div>
                   </div>
-                  <div className="mt-2">
-                    <a className="title-add-promo">
-                      14. Thời gian sử dụng sau khi đổi
-                    </a>
-                    <Input
-                      placeholder="Nhập số ngày (1,2,3...,n"
-                      className="input-promo-code"
-                      type="number"
-                      min={0}
-                      value={dateExchange}
-                      onChange={(e) => setDateExchange(e.target.value)}
-                    />
-                  </div>
+                  {isExchangePoint && (
+                    <div className="mt-2">
+                      <a className="title-add-promo">
+                        14. Thời gian sử dụng sau khi đổi
+                      </a>
+                      <Input
+                        placeholder="Nhập số ngày (1,2,3...,n"
+                        className="input-promo-code"
+                        type="number"
+                        min={0}
+                        value={dateExchange}
+                        onChange={(e) => setDateExchange(e.target.value)}
+                      />
+                    </div>
+                  )}
+
                   <div className="mt-2">
                     <a className="title-add-promo">15. Thứ tự hiện thị</a>
                     <Input

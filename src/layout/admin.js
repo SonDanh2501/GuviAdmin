@@ -55,6 +55,8 @@ import CreateRole from "../container/System/ManageConfiguration/ScreenConfigurat
 import EditRole from "../container/System/ManageConfiguration/ScreenConfiguration/RoleAccount/EditRole";
 import ReportDetailOrderDaily from "../container/System/ManageReport/MangeReportOrder/ReportOrderDaily/DetailOrderDaily";
 import ReportCollaborator from "../container/System/ManageReport/ManagerReportCollaborator/ReportCollaborator";
+import RewardCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/RewardCollaborator";
+import AddRewardCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/RewardCollaborator/AddRewardCollaborator";
 
 const Admin = () => {
   return (
@@ -261,6 +263,14 @@ const Admin = () => {
       <Route
         path="/adminManage/manage-configuration/setting_role/edit_role"
         element={<EditRole />}
+      />
+      <Route
+        path="/adminManage/manage-configuration/reward_collaborator"
+        element={<RewardCollaborator />}
+      />
+      <Route
+        path="/adminManage/manage-configuration/reward_collaborator/create"
+        element={<AddRewardCollaborator />}
       />
     </Routes>
   );

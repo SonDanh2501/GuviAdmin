@@ -1,11 +1,12 @@
-import { Button, DatePicker, Drawer, Input, Radio, Select } from "antd";
-import React, { memo, useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import CustomButton from "../../../../../../components/customButton/customButton";
-import CustomTextInput from "../../../../../../components/CustomTextInput/customTextInput";
-import "./index.scss";
-import { set } from "lodash";
+import { Button, DatePicker, Input, Select } from "antd";
 import dayjs from "dayjs";
+import moment from "moment";
+import React, { memo, useCallback, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  editGroupCustomerApi,
+  getDetailsGroupCustomerApi,
+} from "../../../../../../api/configuration";
 import {
   DATA_GENDER,
   DATA_KIND,
@@ -13,16 +14,9 @@ import {
   DATA_OPERTATOR_GENDER,
   MONTH,
 } from "../../../../../../api/fakeData";
-import moment from "moment";
-import { useLocation, useNavigate } from "react-router-dom";
-import {
-  EditGroupCustomerApi,
-  createGroupCustomerApi,
-  editGroupCustomerApi,
-  getDetailsGroupCustomerApi,
-} from "../../../../../../api/configuration";
-import { errorNotify } from "../../../../../../helper/toast";
 import LoadingPagination from "../../../../../../components/paginationLoading";
+import { errorNotify } from "../../../../../../helper/toast";
+import "./index.scss";
 const { TextArea } = Input;
 
 const EditGroupCustomer = () => {
@@ -483,7 +477,7 @@ const EditGroupCustomer = () => {
               {item?.condition_level_1?.map((condition, ix) => {
                 return (
                   <>
-                    <div className="div-body">
+                    <div className="div-body mb-2">
                       <div className="div-footer-body">
                         <div className="div-tab-condition">
                           {DATA_TAB.map((i, ind) => {

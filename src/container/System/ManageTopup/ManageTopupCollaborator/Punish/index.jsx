@@ -1,22 +1,22 @@
-import { useCallback, useEffect, useState } from "react";
-import PunishMoneyCollaborator from "../../../../../components/punishMoneyCollaborator/punishMoneyCollaborator";
-import "./index.scss";
 import { Button, Pagination, Table, Tooltip } from "antd";
 import moment from "moment";
-import { formatMoney } from "../../../../../helper/formatMoney";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getElementState, getUser } from "../../../../../redux/selectors/auth";
+import { useNavigate } from "react-router-dom";
 import {
   cancelMoneyPunishApi,
   confirmMoneyPunishApi,
   deleteMoneyPunishApi,
   getListPunishApi,
 } from "../../../../../api/topup";
-import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import LoadingPagination from "../../../../../components/paginationLoading";
-import { errorNotify } from "../../../../../helper/toast";
 import EditPunish from "../../../../../components/editPunishMoney/editPunish";
+import ModalCustom from "../../../../../components/modalCustom";
+import LoadingPagination from "../../../../../components/paginationLoading";
+import PunishMoneyCollaborator from "../../../../../components/punishMoneyCollaborator/punishMoneyCollaborator";
+import { formatMoney } from "../../../../../helper/formatMoney";
+import { errorNotify } from "../../../../../helper/toast";
+import { getElementState, getUser } from "../../../../../redux/selectors/auth";
+import "./index.scss";
 
 const Punish = () => {
   const [data, setData] = useState([]);
@@ -234,7 +234,7 @@ const Punish = () => {
         return (
           <div>
             {checkElement?.includes("verify_punish_cash_book_collaborator") && (
-              <button
+              <Button
                 className="btn-confirm"
                 onClick={toggleConfirm}
                 disabled={
@@ -244,7 +244,7 @@ const Punish = () => {
                 }
               >
                 Duyệt lệnh
-              </button>
+              </Button>
             )}
 
             {checkElement?.includes("cancel_punish_cash_book_collaborator") && (
@@ -340,13 +340,14 @@ const Punish = () => {
         </div>
 
         <div>
-          <Modal isOpen={modalConfirm} toggle={toggleConfirm}>
-            <ModalHeader toggle={toggleConfirm}>
-              Duyệt lệnh phạt tiền
-            </ModalHeader>
-            <ModalBody>
+          <ModalCustom
+            isOpen={modalConfirm}
+            title="Duyệt lệnh phạt tiền"
+            handleOk={() => onConfirm(itemEdit?._id)}
+            handleCancel={toggleConfirm}
+            textOk="Duyệt"
+            body={
               <>
-                <h4>Duyệt lệnh phạt tiền cho :</h4>
                 <div className="body-modal">
                   <a className="text-content">
                     CTV: {itemEdit?.id_collaborator?.full_name}
@@ -362,22 +363,17 @@ const Punish = () => {
                   </a>
                 </div>
               </>
-            </ModalBody>
-            <ModalFooter>
-              <Button type="primary" onClick={() => onConfirm(itemEdit?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggleConfirm}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+            }
+          />
         </div>
-
         <div>
-          <Modal isOpen={modalCancel} toggle={toggleCancel}>
-            <ModalHeader toggle={toggleCancel}>Huỷ lệnh phạt</ModalHeader>
-            <ModalBody>
+          <ModalCustom
+            isOpen={modalCancel}
+            title="Huỷ lệnh phạt"
+            handleOk={() => onCancel(itemEdit?._id)}
+            handleCancel={toggleCancel}
+            textOk="Có"
+            body={
               <a>
                 Bạn có chắc muốn huỷ lệnh phạt của cộng tác viên
                 <a className="text-name-modal">
@@ -385,22 +381,18 @@ const Punish = () => {
                 </a>
                 này không?
               </a>
-            </ModalBody>
-            <ModalFooter>
-              <Button type="primary" onClick={() => onCancel(itemEdit?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggleCancel}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+            }
+          />
         </div>
 
         <div>
-          <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Xóa lệnh phạt</ModalHeader>
-            <ModalBody>
+          <ModalCustom
+            isOpen={modal}
+            title="Xóa lệnh phạt"
+            handleOk={() => onDelete(itemEdit?._id)}
+            handleCancel={toggle}
+            textOk="Xoá"
+            body={
               <a>
                 Bạn có chắc muốn xóa lệnh phạt của cộng tác viên
                 <a className="text-name-modal">
@@ -408,16 +400,8 @@ const Punish = () => {
                 </a>
                 này không?
               </a>
-            </ModalBody>
-            <ModalFooter>
-              <Button type="primary" onClick={() => onDelete(itemEdit?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggle}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+            }
+          />
         </div>
 
         {isLoading && <LoadingPagination />}

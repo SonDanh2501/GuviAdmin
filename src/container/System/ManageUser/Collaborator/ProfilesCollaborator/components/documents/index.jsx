@@ -1,4 +1,7 @@
 import { Checkbox, Image, Input } from "antd";
+import { saveAs } from "file-saver";
+import JSZip from "jszip";
+import JSZipUtils from "jszip-utils";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Col, Form, FormGroup, Label, Row } from "reactstrap";
@@ -7,14 +10,10 @@ import {
   updateDocumentCollaboratorApi,
 } from "../../../../../../../api/collaborator";
 import { postFile, postMutipleFile } from "../../../../../../../api/file";
-import CustomTextInput from "../../../../../../../components/CustomTextInput/customTextInput";
+import resizeFile from "../../../../../../../helper/resizer";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
-import { saveAs } from "file-saver";
-import JSZip from "jszip";
 import "./index.scss";
-import JSZipUtils from "jszip-utils";
-import resizeFile from "../../../../../../../helper/resizer";
 
 const Document = ({ id }) => {
   const [deal, setDeal] = useState(false);

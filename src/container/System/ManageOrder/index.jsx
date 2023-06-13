@@ -1,25 +1,15 @@
-import { Space, Tabs, Dropdown, Input, FloatButton, Button } from "antd";
-import { ExportCSV } from "../../../helper/export";
-import CustomTextInput from "../../../components/CustomTextInput/customTextInput";
-import _debounce from "lodash/debounce";
-import "./index.scss";
-import OrderManage from "./Order/OrderManage";
 import { UilEllipsisH, UilFileExport } from "@iconscout/react-unicons";
-import {
-  getOrderSelector,
-  getOrderTotal,
-  searchOrderSelector,
-  searchOrderTotal,
-} from "../../../redux/selectors/order";
-import { getOrder, searchOrder } from "../../../redux/actions/order";
+import { Button, Dropdown, FloatButton, Space } from "antd";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useCallback, useEffect, useState } from "react";
-import { searchOrderApi, getOrderApi } from "../../../api/order";
-import AddOrder from "./DrawerAddOrder";
-import { SearchOutlined } from "@ant-design/icons";
-import { DATA, DATA_STATUS } from "../../../api/fakeData";
 import { useNavigate } from "react-router-dom";
+import { DATA, DATA_STATUS } from "../../../api/fakeData";
+import { getOrderApi } from "../../../api/order";
+import { ExportCSV } from "../../../helper/export";
+import { getOrder } from "../../../redux/actions/order";
 import { getElementState, getUser } from "../../../redux/selectors/auth";
+import OrderManage from "./Order/OrderManage";
+import "./index.scss";
 
 const ManageOrder = () => {
   const [tab, setTab] = useState("all");

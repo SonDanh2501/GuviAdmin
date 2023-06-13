@@ -4,18 +4,18 @@ import { Dropdown, Image, Input, Pagination, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { activeNew, deleteNew, searchNew } from "../../../../api/news";
+import offToggle from "../../../../assets/images/off-button.png";
+import onToggle from "../../../../assets/images/on-button.png";
 import AddNews from "../../../../components/addNews/addNews";
 import EditNews from "../../../../components/editNews/editNews";
+import ModalCustom from "../../../../components/modalCustom";
 import { errorNotify } from "../../../../helper/toast";
 import { loadingAction } from "../../../../redux/actions/loading";
 import { getNews } from "../../../../redux/actions/news";
-import { getNewSelector, getNewTotal } from "../../../../redux/selectors/news";
-import onToggle from "../../../../assets/images/on-button.png";
-import offToggle from "../../../../assets/images/off-button.png";
-import "./NewsManage.scss";
 import { getElementState } from "../../../../redux/selectors/auth";
+import { getNewSelector, getNewTotal } from "../../../../redux/selectors/news";
+import "./NewsManage.scss";
 
 export default function NewsManage() {
   const [dataFilter, setDataFilter] = useState([]);
@@ -261,46 +261,36 @@ export default function NewsManage() {
         </div>
 
         <div>
-          <Modal isOpen={modalBlock} toggle={toggleBlock}>
-            <ModalHeader toggle={toggleBlock}>
-              {" "}
-              {itemEdit?.is_active === true ? "Khóa bài viết" : "Mở bài viết"}
-            </ModalHeader>
-            <ModalBody>
-              {itemEdit?.is_active === true
-                ? "Bạn có muốn khóa bài viết này"
-                : "Bạn có muốn kích hoạt bài viết này"}
-              <h3>{itemEdit?.title}</h3>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="primary"
-                onClick={() => blockNew(itemEdit?._id, itemEdit?.is_active)}
-              >
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggleBlock}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+          <ModalCustom
+            isOpen={modalBlock}
+            title={
+              itemEdit?.is_active === true ? "Khóa bài viết" : "Mở bài viết"
+            }
+            handleOk={() => blockNew(itemEdit?._id, itemEdit?.is_active)}
+            handleCancel={toggleBlock}
+            textOk={itemEdit?.is_active === true ? "Khóa" : "Mở"}
+            body={
+              <>
+                {itemEdit?.is_active === true
+                  ? "Bạn có muốn khóa bài viết này"
+                  : "Bạn có muốn kích hoạt bài viết này"}
+                <h7>{itemEdit?.title}</h7>
+              </>
+            }
+          />
         </div>
 
         <div>
-          <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Xóa bài viết</ModalHeader>
-            <ModalBody>
-              Bạn có chắc muốn xóa bài viết {itemEdit?.title} này không?
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggle}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+          <ModalCustom
+            isOpen={modal}
+            title="Xóa bài viết"
+            handleOk={() => onDelete(itemEdit?._id)}
+            handleCancel={toggle}
+            textOk="Xoá"
+            body={
+              <a>Bạn có chắc muốn xóa bài viết {itemEdit?.title} này không?</a>
+            }
+          />
         </div>
       </div>
     </React.Fragment>

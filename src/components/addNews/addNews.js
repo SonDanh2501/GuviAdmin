@@ -1,18 +1,14 @@
+import { Drawer, Input, Select } from "antd";
 import React, { memo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Form, FormGroup, Label, Modal } from "reactstrap";
-import { postFile } from "../../api/file";
-import { loadingAction } from "../../redux/actions/loading";
-import CustomButton from "../customButton/customButton";
-import CustomTextInput from "../CustomTextInput/customTextInput";
-import { errorNotify } from "../../helper/toast";
-import "./addNews.scss";
-import resizeFile from "../../helper/resizer";
 import { createNew } from "../../api/news";
+import { errorNotify } from "../../helper/toast";
+import { loadingAction } from "../../redux/actions/loading";
 import { getNews } from "../../redux/actions/news";
-import { Drawer, Input, Select } from "antd";
+import CustomButton from "../customButton/customButton";
 import UploadImage from "../uploadImage";
-const { TextArea } = Input;
+import "./addNews.scss";
+import InputCustom from "../textInputCustom";
 
 const AddNews = () => {
   const [title, setTitle] = useState("");
@@ -70,31 +66,27 @@ const AddNews = () => {
         onClose={onClose}
         open={open}
       >
-        <div>
-          <a className="title-new">Tiêu đề</a>
-          <TextArea
-            placeholder="Vui lòng nhập tiêu đề"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-        <div className="mt-2">
-          <a>Mô tả</a>
-          <TextArea
-            placeholder="Vui lòng nhập mô tả ngắn"
-            value={shortDescription}
-            onChange={(e) => setShortDescription(e.target.value)}
-          />
-        </div>
-        <div className="mt-2">
-          <a>URL</a>
-          <Input
-            placeholder="Vui lòng nhập url"
-            type="text"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-          />
-        </div>
+        <InputCustom
+          title="Tiêu đề"
+          placeholder="Vui lòng nhập tiêu đề"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          textArea={true}
+        />
+        <InputCustom
+          title="Mô tả"
+          placeholder="Vui lòng nhập mô tả ngắn"
+          value={shortDescription}
+          onChange={(e) => setShortDescription(e.target.value)}
+          textArea={true}
+        />
+        <InputCustom
+          title="URL"
+          type="text"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+        />
+
         <div className="mt-2">
           <a>Type</a>
           <Select
@@ -107,25 +99,22 @@ const AddNews = () => {
             ]}
           />
         </div>
-        <div className="mt-2">
-          <a>Vị trí</a>
-          <Input
-            placeholder="Vui lòng nhập position"
-            type="text"
-            value={position}
-            onChange={(e) => setPosition(e.target.value)}
-          />
-        </div>
+        <InputCustom
+          title="Vị trí"
+          placeholder="Vui lòng nhập position"
+          type="text"
+          value={position}
+          onChange={(e) => setPosition(e.target.value)}
+        />
         <UploadImage
           title={"Thumbnail 171px * 171px, tỉ lệ 1:1"}
           image={imgThumbnail}
           setImage={setImgThumbnail}
           classImg={"img-thumbnail"}
         />
-
         <CustomButton
           title="Thêm"
-          className="float-right btn-add-new"
+          className="float-right btn-add-new mt-3"
           type="button"
           onClick={addNews}
         />

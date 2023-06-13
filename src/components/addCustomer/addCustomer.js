@@ -6,11 +6,11 @@ import { Form } from "reactstrap";
 
 import { createCustomer, fetchCustomers } from "../../api/customer";
 import { errorNotify } from "../../helper/toast";
-import { validateAddCustomerSchema } from "../../utils/schema";
-import CustomTextInput from "../CustomTextInput/customTextInput";
-import CustomButton from "../customButton/customButton";
-import "./addCustomer.scss";
 import { getElementState } from "../../redux/selectors/auth";
+import { validateAddCustomerSchema } from "../../utils/schema";
+import CustomButton from "../customButton/customButton";
+import InputCustom from "../textInputCustom";
+import "./addCustomer.scss";
 
 const AddCustomer = (props) => {
   const { setIsLoading, setData, setTotal, startPage, status } = props;
@@ -38,16 +38,6 @@ const AddCustomer = (props) => {
 
   const addCustomer = () => {
     setIsLoading(true);
-    // dispatch(
-    //   createCustomer.createCustomerRequest({
-    //     code_phone_area: "+84",
-    //     phone: formikRef?.current?.values?.phone,
-    //     email: formikRef?.current?.values?.email,
-    //     full_name: formikRef?.current?.values?.name,
-    //     password: formikRef?.current?.values?.password,
-    //     code_inviter: formikRef?.current?.values?.code,
-    //   })
-    // );
     createCustomer({
       code_phone_area: "+84",
       phone: formikRef?.current?.values?.phone,
@@ -108,70 +98,46 @@ const AddCustomer = (props) => {
               }}
             >
               <Form>
-                <CustomTextInput
-                  label="Tên khách hàng"
+                <InputCustom
+                  title="Tên khách hàng"
                   type="text"
-                  id="className"
                   placeholder="Nhập tên khách hàng"
                   onChange={(text) => setFieldValue("name", text.target.value)}
-                  errors={errors?.name}
+                  error={errors?.name}
                 />
-                {/* <CustomTextInput
-                  label="Mã vùng"
-                  type="select"
-                  id="codeArea"
-                  className="textInput"
-                  onChange={(text) =>
-                    setFieldValue("code_phone_area", text.target.value)
-                  }
-                  body={
-                    <>
-                      <option value="">Chọn mã vùng</option>
-                      <option value="Nam">+84</option>
-                    </>
-                  }
-                  errors={errors?.code_phone_area}
-                /> */}
-                <CustomTextInput
-                  label="Số điện thoại"
-                  type="text"
-                  id="className"
+                <InputCustom
+                  title="Số điện thoại"
+                  type="number"
                   placeholder="Nhập số điện thoại"
                   onChange={(text) => setFieldValue("phone", text.target.value)}
-                  errors={errors?.phone}
+                  error={errors?.phone}
                 />
-                <CustomTextInput
-                  label="Email"
-                  type="email"
-                  id="className"
+                <InputCustom
+                  title="Email"
+                  type="text"
                   placeholder="Nhập email"
                   onChange={(text) => setFieldValue("email", text.target.value)}
-                  errors={errors?.email}
+                  error={errors?.email}
                 />
-
-                <CustomTextInput
-                  label="Mật khẩu"
-                  type="password"
-                  name="password"
-                  id="examplePassword"
+                <InputCustom
+                  title="Mật khẩu"
+                  password={true}
                   placeholder="Nhập mật khẩu"
                   onChange={(text) =>
                     setFieldValue("password", text.target.value)
                   }
-                  errors={errors?.password}
+                  error={errors?.password}
                 />
-
-                <CustomTextInput
-                  label="Mã giới thiệu"
+                <InputCustom
+                  title="Mã giới thiệu"
                   type="text"
-                  name="password"
-                  id="examplePassword"
                   placeholder="Vui lòng nhập mã giới thiệu"
                   onChange={(text) => setFieldValue("code", text.target.value)}
                 />
+
                 <CustomButton
                   title="Thêm"
-                  className="float-right btn-add-cus"
+                  className="float-right btn-add-cus mt-5"
                   type="button"
                   onClick={handleSubmit}
                 />

@@ -2,25 +2,25 @@ import { Dropdown, Pagination, Space, Table } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postFile } from "../../../api/file";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import {
+  activePushNotification,
+  deletePushNotification,
+} from "../../../api/notification";
+import offToggle from "../../../assets/images/off-button.png";
+import onToggle from "../../../assets/images/on-button.png";
+import ModalCustom from "../../../components/modalCustom";
+import { errorNotify } from "../../../helper/toast";
+import { loadingAction } from "../../../redux/actions/loading";
 import { getNotification } from "../../../redux/actions/notification";
+import { getElementState } from "../../../redux/selectors/auth";
 import {
   getListNotifications,
   getNotificationTotal,
 } from "../../../redux/selectors/notification";
 import AddPushNotification from "./AddPushNotification";
 import EditPushNotification from "./EditPushNotification";
-import offToggle from "../../../assets/images/off-button.png";
-import onToggle from "../../../assets/images/on-button.png";
 import "./index.scss";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import {
-  activePushNotification,
-  deletePushNotification,
-} from "../../../api/notification";
-import { loadingAction } from "../../../redux/actions/loading";
-import { errorNotify } from "../../../helper/toast";
-import { getElementState } from "../../../redux/selectors/auth";
 const width = window.innerWidth;
 
 const ManagePushNotification = () => {
@@ -257,49 +257,40 @@ const ManagePushNotification = () => {
       </div>
 
       <div>
-        <Modal isOpen={modalVerify} toggle={toggleVerify}>
-          <ModalHeader toggle={toggleVerify}>
-            {!itemEdit?.is_active === true
+        <ModalCustom
+          isOpen={modalVerify}
+          title={
+            !itemEdit?.is_active === true
               ? "Bật hoạt động cho thông báo"
-              : "Ẩn hoạt động cho thông báo"}
-          </ModalHeader>
-          <ModalBody>
-            {!itemEdit?.is_active === true
-              ? "Bạn có muốn Bật hoạt động cho thông báo"
-              : "Bạn có muốn Ẩn hoạt động cho thông báo"}
-            <h3>{itemEdit?.title}</h3>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              color="primary"
-              onClick={() => onActive(itemEdit?._id, itemEdit?.is_active)}
-            >
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggleVerify}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+              : "Ẩn hoạt động cho thông báo"
+          }
+          handleOk={() => onActive(itemEdit?._id, itemEdit?.is_active)}
+          handleCancel={toggleVerify}
+          textOk={!itemEdit?.is_active === true ? "Bật" : "Ẩn"}
+          body={
+            <>
+              {!itemEdit?.is_active === true
+                ? "Bạn có muốn Bật hoạt động cho thông báo"
+                : "Bạn có muốn Ẩn hoạt động cho thông báo"}
+              <h6>{itemEdit?.title}</h6>
+            </>
+          }
+        />
       </div>
       <div>
-        <Modal isOpen={modal} toggle={toggle}>
-          <ModalHeader toggle={toggle}>Xóa thông báo</ModalHeader>
-          <ModalBody>
+        <ModalCustom
+          isOpen={modal}
+          title="Xóa thông báo"
+          handleOk={() => onDelete(itemEdit?._id)}
+          handleCancel={toggle}
+          textOk="Xoá"
+          body={
             <a>
               Bạn có chắc muốn xóa thông báo
               <a className="text-name-modal">{itemEdit?.title}</a> này không?
             </a>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggle}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+          }
+        />
       </div>
     </div>
   );

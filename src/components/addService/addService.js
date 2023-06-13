@@ -1,15 +1,13 @@
 import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 
+import { Drawer, Input, Select } from "antd";
 import { postFile } from "../../api/file";
 import { createServiceApi, getServiceApi } from "../../api/service";
-import { loadingAction } from "../../redux/actions/loading";
-import { createGroupServiceAction } from "../../redux/actions/service";
-import CustomButton from "../customButton/customButton";
-import CustomTextInput from "../CustomTextInput/customTextInput";
-import "./addService.scss";
-import { Drawer, Input, Select } from "antd";
 import { errorNotify } from "../../helper/toast";
+import { loadingAction } from "../../redux/actions/loading";
+import CustomButton from "../customButton/customButton";
+import "./addService.scss";
 
 const AddService = (props) => {
   const { id, setData, setTotal, setIsLoading } = props;

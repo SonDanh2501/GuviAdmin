@@ -10,10 +10,7 @@ import _debounce from "lodash/debounce";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  searchCollaborators,
-  searchCollaboratorsCreateOrder,
-} from "../../../../../api/collaborator";
+import { searchCollaboratorsCreateOrder } from "../../../../../api/collaborator";
 import {
   DATA_DATE,
   DATA_MONTH,
@@ -25,7 +22,6 @@ import {
   googlePlaceAutocomplete,
 } from "../../../../../api/location";
 import {
-  addCollaboratorToOrderApi,
   checkCodePromotionOrderApi,
   checkEventCodePromotionOrderApi,
   createOrderApi,
@@ -36,8 +32,8 @@ import {
   getCalculateFeeApi,
   getPromotionByCustomerApi,
 } from "../../../../../api/service";
-import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
 import LoadingPagination from "../../../../../components/paginationLoading";
+import InputCustom from "../../../../../components/textInputCustom";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
@@ -760,12 +756,12 @@ const CleaningSchedule = (props) => {
           Xem lịch trình làm việc
         </Button>
 
-        <CustomTextInput
-          label="Ghi chú"
-          type="textarea"
-          classNameForm="input-note"
+        <InputCustom
+          title="Ghi chú"
+          textArea={true}
           placeholder="Vui lòng nhập ghi chú"
           onChange={(e) => setNote(e.target.value)}
+          className="input-note"
         />
 
         <div>
