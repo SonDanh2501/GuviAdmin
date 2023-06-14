@@ -6,14 +6,14 @@ import { UilEllipsisV } from "@iconscout/react-unicons";
 import { Dropdown, Empty, Pagination, Skeleton, Space, Table } from "antd";
 import moment from "moment";
 import vi from "moment/locale/vi";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./index.scss";
 import { getOrderByCustomers } from "../../../../../../api/customer";
 import { formatMoney } from "../../../../../../helper/formatMoney";
 
-export default function OrderCustomer() {
-  const { state } = useLocation();
-  const { id } = state || {};
+export default function OrderCustomer({ id }) {
+  // const { state } = useLocation();
+  // const { id } = state || {};
   const [dataFilter, setDataFilter] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [item, setItem] = useState([]);
@@ -72,16 +72,9 @@ export default function OrderCustomer() {
       title: "Mã",
       render: (data) => {
         return (
-          <a
-            className="text-id"
-            onClick={() =>
-              navigate("/details-order", {
-                state: { id: data?._id },
-              })
-            }
-          >
-            {data?.id_view}
-          </a>
+          <Link to={`/details-order/${data?._id}`}>
+            <a className="text-id">{data?.id_view}</a>
+          </Link>
         );
       },
     },

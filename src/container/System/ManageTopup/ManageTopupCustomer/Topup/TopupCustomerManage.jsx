@@ -4,7 +4,7 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   cancelMoneyCustomerApi,
   deleteMoneyCustomerApi,
@@ -167,33 +167,22 @@ export default function TopupCustomer() {
     {
       title: "Mã",
       render: (data) => (
-        <a
-          className="text-id-topup-customer"
-          onClick={() =>
-            navigate("/profile-customer", {
-              state: { id: data?.id_customer?._id },
-            })
-          }
-        >
-          {data?.id_customer?.id_view}
-        </a>
+        <Link to={`/profile-customer/${data?.id_customer?._id}`}>
+          <a className="text-id-topup-customer">{data?.id_customer?.id_view}</a>
+        </Link>
       ),
     },
     {
       title: "Tên khách hàng",
       render: (data) => {
         return (
-          <div
+          <Link
+            to={`/profile-customer/${data?.id_customer?._id}`}
             className="div-name-topup"
-            onClick={() =>
-              navigate("/profile-customer", {
-                state: { id: data?.id_customer?._id },
-              })
-            }
           >
             <a className="text-name">{data?.id_customer?.full_name}</a>
             <a className="text-phone">{data?.id_customer?.phone}</a>
-          </div>
+          </Link>
         );
       },
     },

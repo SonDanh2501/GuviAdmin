@@ -19,11 +19,11 @@ const EditTimeOrderSchedule = (props) => {
   const {
     idOrder,
     dateWork,
-    endDateWord,
     id,
     setDataGroup,
     setDataList,
     setIsLoading,
+    estimate,
   } = props;
   const [open, setOpen] = useState(false);
 
@@ -31,10 +31,6 @@ const EditTimeOrderSchedule = (props) => {
     moment(dateWork).utc().format("HH:mm:ss")
   );
   const [wordDate, setWordDate] = useState(dateWork);
-  const [timeEndWork, setTimeEndWork] = useState(
-    moment(endDateWord).utc().format("HH:mm:ss")
-  );
-  const [wordEndDate, setWordEndDate] = useState(endDateWord);
   const [isCheckDateWork, setIsCheckDateWork] = useState(true);
   const showDrawer = () => {
     setOpen(true);
@@ -48,13 +44,11 @@ const EditTimeOrderSchedule = (props) => {
   const onChange = (date, dateString) => {
     setWordDate(moment(moment(dateString)).add(7, "hours").toISOString());
   };
-  const onChangeEnd = (date, dateString) => {
-    setWordEndDate(moment(moment(dateString)).add(7, "hours").toISOString());
-  };
 
   const timeW = moment(wordDate).format(dateFormat) + "T" + timeWork + ".000Z";
-  const timeWorkEnd =
-    moment(wordEndDate).format(dateFormat) + "T" + timeEndWork + ".000Z";
+  const timeWorkEnd = moment(new Date(timeW))
+    .add(estimate, "hours")
+    .toISOString();
 
   const editOrder = () => {
     setIsLoading(true);
@@ -121,15 +115,15 @@ const EditTimeOrderSchedule = (props) => {
           })}
         </div>
 
-        <a>Giờ kết thúc</a>
+        {/* <a>Giờ kết thúc</a>
         <DatePicker
           className="select-date"
           format={dateFormat}
           onChange={onChangeEnd}
           value={dayjs(wordEndDate.slice(0, 11), dateFormat)}
-        />
+        /> */}
 
-        <div className="mt-3">
+        {/* <div className="mt-3">
           {DATA_TIME_TOTAL.map((item, index) => {
             return (
               <Button
@@ -145,7 +139,7 @@ const EditTimeOrderSchedule = (props) => {
               </Button>
             );
           })}
-        </div>
+        </div> */}
 
         <div className="mt-2">
           <Checkbox

@@ -3,7 +3,7 @@ import { FloatButton, Image, Tabs } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import {
   Card,
   CardBody,
@@ -32,8 +32,8 @@ import InviteCollaborator from "./components/invite";
 // core components
 
 const ProfileCollaborator = () => {
-  const { state } = useLocation();
-  const { id } = state || {};
+  // const { state } = useLocation();
+  // const { id } = state || {};
   const [data, setData] = useState({
     avatar: "",
     birthday: "2000-06-07T00:00:00.000Z",
@@ -41,6 +41,8 @@ const ProfileCollaborator = () => {
   });
   const [img, setImg] = useState("");
   const dispatch = useDispatch();
+  const params = useParams();
+  const id = params?.id;
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));

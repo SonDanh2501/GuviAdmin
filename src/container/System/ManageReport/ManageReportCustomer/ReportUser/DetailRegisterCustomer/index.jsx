@@ -1,7 +1,7 @@
 import { Pagination, Table } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getTotalDetailCustomerDay } from "../../../../../../api/report";
 import "./index.scss";
 
@@ -64,19 +64,9 @@ const DetailRegisterCustomer = () => {
       width: "10%",
       render: (data) => {
         return (
-          <div
-            onClick={() =>
-              navigate("/system/user-manage/details-customer", {
-                state: { id: data?._id },
-              })
-            }
-          >
-            {/* <img
-                className="img_customer"
-                src={data?.avatar ? data?.avatar : user}
-              /> */}
+          <Link to={`/profile-customer/${data?._id}`}>
             <a className="text-id"> {data?.id_view}</a>
-          </div>
+          </Link>
         );
       },
     },
@@ -85,19 +75,9 @@ const DetailRegisterCustomer = () => {
       width: "20%",
       render: (data) => {
         return (
-          <div
-            onClick={() =>
-              navigate("/system/user-manage/details-customer", {
-                state: { id: data?._id },
-              })
-            }
-          >
-            {/* <img
-                className="img_customer"
-                src={data?.avatar ? data?.avatar : user}
-              /> */}
+          <Link to={`/profile-customer/${data?._id}`}>
             <a className="text-name-report-customer"> {data?.full_name}</a>
-          </div>
+          </Link>
         );
       },
     },

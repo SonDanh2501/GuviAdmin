@@ -2,7 +2,7 @@ import { List, Pagination, Table } from "antd";
 import moment from "moment";
 import { memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getHistoryActivityCollaborator } from "../../../../../../../api/collaborator";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
@@ -92,20 +92,15 @@ const Activity = ({ id }) => {
     },
     {
       title: "Khách hàng",
-      // dataIndex: ["id_customer", "full_name"],
       render: (data) => {
         return (
-          <div
-            onClick={() =>
-              navigate("/profile-customer", {
-                state: { id: data?.id_customer?._id },
-              })
-            }
+          <Link
+            to={`/profile-customer/${data?.id_customer?._id}`}
             className="div-name"
           >
             <a className="text-name-customer">{data?.id_customer?.full_name}</a>
             <a className="text-phone-customer">{data?.id_customer?.phone}</a>
-          </div>
+          </Link>
         );
       },
     },

@@ -14,7 +14,7 @@ import {
 } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   activeCustomer,
   deleteCustomer,
@@ -192,17 +192,15 @@ const UserManage = (props) => {
             title: "Mã",
             render: (data) => {
               return (
-                <div
-                  onClick={() => {
-                    if (checkElement?.includes("detail_customer")) {
-                      navigate("/profile-customer", {
-                        state: { id: data?._id },
-                      });
-                    }
-                  }}
+                <Link
+                  to={
+                    checkElement?.includes("detail_customer")
+                      ? `/profile-customer/${data?._id}`
+                      : ""
+                  }
                 >
                   <a className="text-id-customer"> {data?.id_view}</a>
-                </div>
+                </Link>
               );
             },
           },
@@ -210,17 +208,25 @@ const UserManage = (props) => {
             title: "Khách hàng",
             render: (data) => {
               return (
-                <div
-                  onClick={() => {
-                    if (checkElement?.includes("detail_customer")) {
-                      navigate("/profile-customer", {
-                        state: { id: data?._id },
-                      });
-                    }
-                  }}
+                <Link
+                  to={
+                    checkElement?.includes("detail_customer")
+                      ? `/profile-customer/${data?._id}`
+                      : ""
+                  }
+                  className="div-name-customer"
                 >
                   <a className="text-name-customer"> {data?.full_name}</a>
-                </div>
+                  <a className="text-rank">
+                    {data?.rank_point < 100
+                      ? "(Thành viên)"
+                      : data?.rank_point >= 100 && data?.rank_point < 300
+                      ? "(Bạc)"
+                      : data?.rank_point >= 300 && data?.rank_point < 1500
+                      ? "(Vàng)"
+                      : "(Bạch kim)"}
+                  </a>
+                </Link>
               );
             },
             sorter: true,
@@ -359,34 +365,29 @@ const UserManage = (props) => {
             title: "Mã",
             render: (data) => {
               return (
-                <div
-                  onClick={() => {
-                    if (checkElement?.includes("detail_customer")) {
-                      navigate("/profile-customer", {
-                        state: { id: data?._id },
-                      });
-                    }
-                  }}
+                <Link
+                  to={
+                    checkElement?.includes("detail_customer")
+                      ? `/profile-customer/${data?._id}`
+                      : ""
+                  }
                 >
                   <a className="text-id-customer"> {data?.id_view}</a>
-                </div>
+                </Link>
               );
             },
           },
           {
             title: "Khách hàng",
-
             render: (data) => {
               return (
-                <div
+                <Link
+                  to={
+                    checkElement?.includes("detail_customer")
+                      ? `/profile-customer/${data?._id}`
+                      : ""
+                  }
                   className="div-name-customer"
-                  onClick={() => {
-                    if (checkElement?.includes("detail_customer")) {
-                      navigate("/profile-customer", {
-                        state: { id: data?._id },
-                      });
-                    }
-                  }}
                 >
                   <a className="text-name-customer"> {data?.full_name}</a>
                   <a className="text-rank">
@@ -398,7 +399,7 @@ const UserManage = (props) => {
                       ? "(Vàng)"
                       : "(Bạch kim)"}
                   </a>
-                </div>
+                </Link>
               );
             },
             sorter: (a, b) => a.full_name.localeCompare(b.full_name),
