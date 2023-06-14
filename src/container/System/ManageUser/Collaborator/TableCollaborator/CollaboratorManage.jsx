@@ -32,7 +32,7 @@ import { loadingAction } from "../../../../../redux/actions/loading.js";
 import "./CollaboratorManage.scss";
 
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AddCollaborator from "../../../../../components/addCollaborator/addCollaborator.js";
 import ModalCustom from "../../../../../components/modalCustom/index.jsx";
 import LoadingPagination from "../../../../../components/paginationLoading/index.jsx";
@@ -332,36 +332,32 @@ const CollaboratorManage = (props) => {
     {
       title: "Mã CTV",
       render: (data) => (
-        <a
-          className="text-id-collaborator"
-          onClick={() => {
-            if (checkElement?.includes("detail_collaborator")) {
-              navigate("/system/collaborator-manage/details-collaborator", {
-                state: { id: data?._id },
-              });
-            }
-          }}
+        <Link
+          to={
+            checkElement?.includes("detail_collaborator")
+              ? `/details-collaborator/${data?._id}`
+              : ""
+          }
         >
-          {data?.id_view}
-        </a>
+          <a className="text-id-collaborator">{data?.id_view}</a>
+        </Link>
       ),
     },
     {
       title: "Tên cộng tác viên",
       render: (data) => {
         return (
-          <div
-            onClick={() => {
-              if (checkElement?.includes("detail_collaborator")) {
-                navigate("/system/collaborator-manage/details-collaborator", {
-                  state: { id: data?._id },
-                });
+          <div className="div-collaborator">
+            <Link
+              to={
+                checkElement?.includes("detail_collaborator")
+                  ? `/details-collaborator/${data?._id}`
+                  : ""
               }
-            }}
-            className="div-collaborator"
-          >
-            <img className="img_collaborator" src={data?.avatar} />
-            <a className="text-name-collaborator">{data?.full_name}</a>
+            >
+              <img className="img_collaborator" src={data?.avatar} />
+              <a className="text-name-collaborator">{data?.full_name}</a>
+            </Link>
           </div>
         );
       },

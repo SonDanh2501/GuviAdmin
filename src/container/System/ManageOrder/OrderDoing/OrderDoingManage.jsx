@@ -5,7 +5,7 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getOrderApi, searchOrderApi } from "../../../../api/order";
 import InputCustom from "../../../../components/textInputCustom";
 import { formatDayVN } from "../../../../helper/formatDayVN";
@@ -67,16 +67,9 @@ const OrderDoingManage = () => {
       title: "Mã",
       render: (data) => {
         return (
-          <a
-            className="text-id-order-doing"
-            onClick={() =>
-              navigate("/details-order", {
-                state: { id: data?._id },
-              })
-            }
-          >
-            {data?.id_view}
-          </a>
+          <Link to={`/details-order/${data?._id}`}>
+            <a className="text-id-order-doing">{data?.id_view}</a>
+          </Link>
         );
       },
     },
@@ -98,7 +91,9 @@ const OrderDoingManage = () => {
     {
       title: "Tên khách hàng",
       render: (data) => (
-        <a className="text-name-doing">{data?.id_customer?.full_name}</a>
+        <Link to={`/profile-customer/${data?.id_customer?._id}`}>
+          <a className="text-name-doing">{data?.id_customer?.full_name}</a>
+        </Link>
       ),
     },
     {
@@ -155,16 +150,11 @@ const OrderDoingManage = () => {
           {!data?.id_collaborator ? (
             <a>Đang tìm kiếm</a>
           ) : (
-            <a
-              onClick={() =>
-                navigate("/group-order/manage-order/details-collaborator", {
-                  state: { id: data?.id_collaborator?._id },
-                })
-              }
-              className="text-collaborator"
-            >
-              {data?.id_collaborator?.full_name}
-            </a>
+            <Link to={`/details-collaborator/${data?.id_collaborator?._id}`}>
+              <a className="text-collaborator">
+                {data?.id_collaborator?.full_name}
+              </a>
+            </Link>
           )}
         </>
       ),
@@ -270,7 +260,7 @@ const OrderDoingManage = () => {
             prefix={<SearchOutlined />}
           />
         </div>
-        <div className="shadow">
+        <div className="shadow mt-5">
           <Table
             columns={columns}
             dataSource={dataSearch.length > 0 ? dataSearch : data}

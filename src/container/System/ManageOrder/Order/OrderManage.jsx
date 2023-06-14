@@ -7,7 +7,7 @@ import { Dropdown, Input, Pagination, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import vi from "moment/locale/vi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   deleteOrderApi,
   getOrderApi,
@@ -146,15 +146,9 @@ const OrderManage = (props) => {
           {
             key: "1",
             label: checkElement?.includes("detail_guvi_job") && (
-              <a
-                onClick={() => {
-                  navigate("/details-order", {
-                    state: { id: item?._id },
-                  });
-                }}
-              >
-                Xem chi tiết
-              </a>
+              <Link to={`/details-order/${item?._id}`}>
+                <a>Xem chi tiết</a>
+              </Link>
             ),
           },
           {
@@ -191,18 +185,15 @@ const OrderManage = (props) => {
       title: "Mã",
       render: (data) => {
         return (
-          <a
-            className="text-id-view-order"
-            onClick={() => {
-              if (checkElement?.includes("detail_guvi_job")) {
-                navigate("/details-order", {
-                  state: { id: data?._id },
-                });
-              }
-            }}
+          <Link
+            to={
+              checkElement?.includes("detail_guvi_job")
+                ? `/details-order/${data?._id}`
+                : ""
+            }
           >
-            {data?.id_view}
-          </a>
+            <a className="text-id-view-order">{data?.id_view}</a>
+          </Link>
         );
       },
     },
@@ -224,22 +215,17 @@ const OrderManage = (props) => {
     },
     {
       title: "Tên khách hàng",
-      // dataIndex: ["id_customer", "full_name"],
       render: (data) => {
         return (
-          <div
-            onClick={() =>
-              navigate("/profile-customer", {
-                state: { id: data?.id_customer?._id },
-              })
-            }
+          <Link
+            to={`/profile-customer/${data?.id_customer?._id}`}
             className="div-name-order-cutomer"
           >
             <a className="text-name-customer">{data?.id_customer?.full_name}</a>
             <a className="text-phone-order-customer">
               {data?.id_customer?.phone}
             </a>
-          </div>
+          </Link>
         );
       },
       sorter: (a, b) =>
@@ -299,23 +285,16 @@ const OrderManage = (props) => {
           {!data?.id_collaborator ? (
             <a className="text-pending-search">Đang tìm kiếm</a>
           ) : (
-            <div
-              onClick={() => {
-                if (user?.role !== "support_customer") {
-                  navigate("/group-order/manage-order/details-collaborator", {
-                    state: { id: data?.id_collaborator?._id },
-                  });
-                }
-              }}
+            <Link
+              to={`/details-collaborator/${data?.id_collaborator?._id}`}
               className="div-name-order"
             >
               <a className="text-collaborator">
                 {data?.id_collaborator?.full_name}
               </a>
-              {user?.role !== "support_customer" && (
-                <a className="text-phone">{data?.id_collaborator?.phone}</a>
-              )}
-            </div>
+
+              <a className="text-phone">{data?.id_collaborator?.phone}</a>
+            </Link>
           )}
         </>
       ),

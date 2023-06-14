@@ -63,25 +63,19 @@ const Admin = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/system/deep-cleaning" element={<DeepCleaningManager />} />
-      <Route path="/details-order" element={<DetailsOrder />} />
+      <Route path="/details-order/:id" element={<DetailsOrder />} />
       <Route
-        path="/details-order/details-order-schedule"
+        path="/details-order/details-order-schedule/:id"
         element={<DetailsOrderSchedule />}
       />
-      <Route path="/details-collaborator" element={<ProfileCollaborator />} />
-      <Route path="/details-customer" element={<Profiles />} />
-      <Route path="/system/user-manage" element={<ManageCustomer />} />
       <Route
-        path="/system/user-manage/details-customer"
-        element={<Profiles />}
+        path="/details-collaborator/:id"
+        element={<ProfileCollaborator />}
       />
+      <Route path="/system/user-manage" element={<ManageCustomer />} />
       <Route
         path="/system/collaborator-manage"
         element={<ManageCollaborator />}
-      />
-      <Route
-        path="/system/collaborator-manage/details-collaborator"
-        element={<ProfileCollaborator />}
       />
       <Route
         path="/system/collaborator-manage/details-collaborator/details-activity"
@@ -133,15 +127,7 @@ const Admin = () => {
         path="/group-order/manage-order/create-order"
         element={<AddOrder />}
       />
-      <Route
-        path="/group-order/manage-order/details-collaborator"
-        element={<ProfileCollaborator />}
-      />
-      <Route
-        path="/group-order/manage-order/details-customer"
-        element={<Profiles />}
-      />
-      <Route path="/profile-customer" element={<Profiles />} />
+      <Route path="/profile-customer/:id" element={<Profiles />} />
       <Route path="/group-order/manage-order/all" element={<ManageOrder />} />
       <Route
         path="/group-order/manage-order/doing"
