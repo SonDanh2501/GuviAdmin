@@ -7,148 +7,113 @@
   text-decoration: none;
 }
 
-.div-condition-container {
-  display: flex;
-  flex-direction: column;
+.div-body-condition {
   width: 100%;
-  min-height: 50px;
-  background-color: white;
-  border-radius: 10px;
-  padding: 10px;
-  margin-top: 20px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.3));
+  min-height: 200px;
+  background-color: #fff;
+  filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
+  margin-top: 30px;
+  border-radius: 4px;
+  padding: 5px;
 
-  .div-condition-child {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    min-height: 50px;
-    background-color: white;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
+  .div-condition-level-one {
+    min-height: 100px;
+    background-color: #eaeaea7c;
     border-radius: 4px;
-    padding: 8px;
     margin-top: 10px;
-    margin-bottom: 10px;
+    padding: 10px;
 
-    .div-operator {
-      display: flex;
-      flex-direction: column;
-      border-right: 1px solid #000000;
-      align-items: center;
-      justify-content: space-between;
-      width: 12%;
-
-      .btn-add-child {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 50px;
-        margin-top: 10px;
+    .div-money {
+      .label-money {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        color: #000000;
+        text-decoration: none;
       }
     }
 
-    .div-value {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
+    .div-condition-level-two {
+      min-height: 100px;
+      background-color: #c9c8c87c;
+      border-radius: 4px;
+      margin-top: 10px;
+      padding: 10px;
 
-      .div-money {
+      .div-codition {
         display: flex;
-        flex-direction: column;
-        margin-left: 5px;
-        margin-bottom: 5px;
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
 
-        .label-money {
+        .input-select {
+          width: 400;
+        }
+
+        .delete-codition {
+          margin-left: 20px;
+          margin-top: 10px;
+        }
+      }
+
+      .btn-add-condition {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #d6d6d6;
+        width: 50px;
+        height: 25px;
+        margin-top: 20px;
+        border-radius: 4px;
+        .text-btn {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 400;
-          font-size: 16px;
+          font-weight: 500;
+          font-size: 12px;
           color: #000000;
           text-decoration: none;
         }
       }
+    }
+  }
+  .btn-delete-condition-level-one {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d6d6d6;
+    width: 50px;
+    height: 25px;
+    border-radius: 4px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 
-      .div-and-or {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 25px;
-        background-color: rgba(135, 195, 255, 0.394);
-        border-radius: 4px;
-        margin: 5px 3px;
-
-        .text-and-or {
-          font-family: "Roboto";
-          font-style: normal;
-          font-weight: 500;
-          font-size: 14px;
-          color: #1e1818;
-          text-decoration: none;
-        }
-      }
-
-      .div-value-conditon {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-
-        .div-select-kind {
-          display: flex;
-          flex-direction: column;
-          width: 22%;
-          margin-left: 5px;
-
-          .label-kind {
-            font-family: "Roboto";
-            font-style: normal;
-            font-weight: 400;
-            font-size: 16px;
-            color: #000000;
-            text-decoration: none;
-          }
-
-          .select-kind {
-            width: 100%;
-          }
-        }
-
-        .div-select-operator {
-          display: flex;
-          flex-direction: column;
-          width: 20%;
-          margin-left: 5px;
-          margin-right: 5px;
-
-          .label-kind {
-            font-family: "Roboto";
-            font-style: normal;
-            font-weight: 400;
-            font-size: 16px;
-            color: #000000;
-            text-decoration: none;
-          }
-
-          .select-kind {
-            width: 100%;
-          }
-        }
-      }
+    .text-btn {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      color: #000000;
+      text-decoration: none;
     }
   }
 
-  .btn-add-condition {
+  .btn-add-condition-level-one {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80px;
-    margin-top: 20px;
-  }
-
-  .btn-delete-condition-child {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border: 1px solid #d6d6d6;
     width: 50px;
+    height: 25px;
+    margin-top: 20px;
+    border-radius: 4px;
+    .text-add {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      color: #000000;
+      text-decoration: none;
+    }
   }
 }
