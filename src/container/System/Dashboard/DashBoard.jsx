@@ -6,7 +6,7 @@ import moment from "moment";
 import "moment/locale/vi";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Col, Row } from "reactstrap";
 import {
   Area,
@@ -271,16 +271,9 @@ export default function Home() {
       title: "Khách hàng",
       render: (data) => {
         return (
-          <a
-            className="text-collaborator"
-            onClick={() =>
-              navigate("/profile-customer", {
-                state: { id: data?.id_customer?._id },
-              })
-            }
-          >
-            {data?.id_customer?.full_name}
-          </a>
+          <Link to={`/profile-customer/${data?.id_customer?._id}`}>
+            <a className="text-collaborator">{data?.id_customer?.full_name}</a>
+          </Link>
         );
       },
     },
@@ -339,16 +332,11 @@ export default function Home() {
             {!data?.id_collaborator ? (
               <a className="text-find-collaborator">Đang tìm kiếm</a>
             ) : (
-              <a
-                onClick={() =>
-                  navigate("/details-collaborator", {
-                    state: { id: data?.id_collaborator?._id },
-                  })
-                }
-                className="text-collaborator"
-              >
-                {data?.id_collaborator.full_name}
-              </a>
+              <Link to={`/details-collaborator/${data?.id_collaborator?._id}`}>
+                <a className="text-collaborator">
+                  {data?.id_collaborator.full_name}
+                </a>
+              </Link>
             )}
           </div>
         );
@@ -388,17 +376,9 @@ export default function Home() {
       render: (data) => {
         return (
           <div className="div-action">
-            {/* <button className="btn-click">Thao tác</button> */}
-            <button
-              className="btn-details"
-              onClick={() =>
-                navigate("/details-order", {
-                  state: { id: data?._id },
-                })
-              }
-            >
-              Chi tiết
-            </button>
+            <Link to={`/details-order/${data?._id}`} className="btn-details">
+              <a>Chi tiết</a>
+            </Link>
           </div>
         );
       },

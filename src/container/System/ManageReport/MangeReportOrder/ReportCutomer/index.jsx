@@ -141,14 +141,7 @@ const ReportCustomer = () => {
       align: "left",
       render: (data) => {
         return (
-          <div
-            className="div-name-ctv-report"
-            onClick={() =>
-              navigate("/report/manage-report/report-details", {
-                state: { id: data?.id_customer?._id },
-              })
-            }
-          >
+          <div className="div-name-ctv-report">
             <a className="text-name-report"> {data?.id_customer?.full_name}</a>
             {/* <a className="text-id">{data?.id_view}</a> */}
           </div>

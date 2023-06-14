@@ -102,7 +102,7 @@ const EditPromotionEvent = (props) => {
   const optionsCustomer = [];
   const serviceOption = [];
   const fomart = "HH:mm";
-  const dateFormat = "DD/MM/YYYY";
+  const dateFormat = "YYYY-MM-DD";
   const dispatch = useDispatch();
   const service = useSelector(getService);
 
@@ -190,16 +190,8 @@ const EditPromotionEvent = (props) => {
         setDescriptionEN(res?.description?.en);
         setCodebrand(res?.code);
         setLimitedDate(res?.is_limit_date);
-        setStartDate(
-          res?.is_limit_date
-            ? res?.limit_start_date.slice(0, res?.limit_start_date.indexOf("T"))
-            : ""
-        );
-        setEndDate(
-          res?.is_limit_date
-            ? res?.limit_end_date.slice(0, res?.limit_start_date.indexOf("T"))
-            : ""
-        );
+        setStartDate(res?.is_limit_date ? res?.limit_start_date : "");
+        setEndDate(res?.is_limit_date ? res?.limit_end_date : "");
         setLimitedQuantity(res?.is_limit_count);
         setAmount(res?.limit_count);
         setIsGroupCustomer(res?.is_id_group_customer);
@@ -308,8 +300,8 @@ const EditPromotionEvent = (props) => {
       image_background: "",
       code: promoCode,
       is_limit_date: limitedDate,
-      limit_start_date: limitedDate ? new Date(startDate).toISOString() : null,
-      limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
+      limit_start_date: limitedDate ? startDate : null,
+      limit_end_date: limitedDate ? endDate : null,
       is_limit_count: limitedQuantity,
       limit_count: limitedQuantity ? amount : 0,
       is_id_group_customer: isGroupCustomer,
@@ -678,14 +670,19 @@ const EditPromotionEvent = (props) => {
                         <a>Ngày bắt đầu</a>
                         <DatePicker
                           onChange={(date, dateString) =>
-                            setStartDate(dateString)
+                            setStartDate(
+                              moment(moment(date?.$d).toISOString())
+                                .add("hours", 7)
+                                .toISOString()
+                            )
                           }
                           style={{ marginLeft: 5, width: "100%" }}
                           format={dateFormat}
-                          value={dayjs(
-                            moment(startDate).format("DD/MM/YYYY"),
-                            dateFormat
-                          )}
+                          value={
+                            startDate
+                              ? dayjs(startDate?.slice(0, 11), dateFormat)
+                              : ""
+                          }
                           allowClear={false}
                         />
                       </div>
@@ -693,14 +690,19 @@ const EditPromotionEvent = (props) => {
                         <a>Ngày kết thúc</a>
                         <DatePicker
                           onChange={(date, dateString) =>
-                            setEndDate(dateString)
+                            setEndDate(
+                              moment(moment(date?.$d).toISOString())
+                                .add("hours", 7)
+                                .toISOString()
+                            )
                           }
                           style={{ marginLeft: 5, width: "100%" }}
                           format={dateFormat}
-                          value={dayjs(
-                            moment(endDate).format("DD/MM/YYYY"),
-                            dateFormat
-                          )}
+                          value={
+                            endDate
+                              ? dayjs(endDate?.slice(0, 11), dateFormat)
+                              : ""
+                          }
                           allowClear={false}
                         />
                         {/* <input

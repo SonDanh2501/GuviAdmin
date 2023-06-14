@@ -1,13 +1,15 @@
 import { Tabs } from "antd";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import DetailsProfile from "./DetailsProfile";
 import HistoryTransition from "./History";
 import OrderCustomer from "./OrderCustomer";
 import FavouriteBlock from "./CollaboratorFavoriteBlock";
 
 const Profiles = () => {
-  const { state } = useLocation();
-  const { id } = state || {};
+  // const { state } = useLocation();
+  // const { id } = state || {};
+  const params = useParams();
+  const id = params?.id;
 
   return (
     <div>
@@ -17,7 +19,7 @@ const Profiles = () => {
             <DetailsProfile id={id} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Đơn hàng" key="2">
-            <OrderCustomer />
+            <OrderCustomer id={id} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Lịch sử tài khoản" key="3">
             <HistoryTransition id={id} />

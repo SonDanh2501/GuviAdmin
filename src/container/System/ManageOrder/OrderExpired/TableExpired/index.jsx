@@ -3,7 +3,7 @@ import { UilEllipsisV } from "@iconscout/react-unicons";
 import moment from "moment";
 import "./index.scss";
 import { formatDayVN } from "../../../../../helper/formatDayVN";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import {
   getOrderExpiredApi,
@@ -70,16 +70,9 @@ const TableExpired = ({ status }) => {
       title: "Mã",
       render: (data) => {
         return (
-          <a
-            className="text-id-expire"
-            onClick={() =>
-              navigate("/details-order", {
-                state: { id: data?._id },
-              })
-            }
-          >
-            {data?.id_view}
-          </a>
+          <Link to={`/details-order/${data?._id}`}>
+            <a className="text-id-expire">{data?.id_view}</a>
+          </Link>
         );
       },
     },
@@ -102,19 +95,15 @@ const TableExpired = ({ status }) => {
       title: "Tên khách hàng",
       render: (data) => {
         return (
-          <div
-            onClick={() =>
-              navigate("/profile-customer", {
-                state: { id: data?.id_customer?._id },
-              })
-            }
+          <Link
+            to={`/profile-customer/${data?.id_customer?._id}`}
             className="div-name-order-cutomer"
           >
             <a className="text-name-customer">{data?.id_customer?.full_name}</a>
             <a className="text-phone-order-customer">
               {data?.id_customer?.phone}
             </a>
-          </div>
+          </Link>
         );
       },
       sorter: (a, b) =>
@@ -172,14 +161,8 @@ const TableExpired = ({ status }) => {
           {!data?.id_collaborator ? (
             <a className="text-name-customer ">Đang tìm kiếm</a>
           ) : (
-            <div
-              onClick={() => {
-                if (user?.role !== "support_customer") {
-                  navigate("/group-order/manage-order/details-collaborator", {
-                    state: { id: data?.id_collaborator?._id },
-                  });
-                }
-              }}
+            <Link
+              to={`/details-collaborator/${data?.id_collaborator?._id}`}
               className="div-name-order"
             >
               <a className="text-collaborator">
@@ -188,7 +171,7 @@ const TableExpired = ({ status }) => {
               {user?.role !== "support_customer" && (
                 <a className="text-phone">{data?.id_collaborator?.phone}</a>
               )}
-            </div>
+            </Link>
           )}
         </>
       ),

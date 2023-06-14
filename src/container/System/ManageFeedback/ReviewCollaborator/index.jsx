@@ -10,7 +10,7 @@ import CustomDatePicker from "../../../../components/customDatePicker";
 import _debounce from "lodash/debounce";
 import { SearchOutlined } from "@ant-design/icons";
 import LoadingPagination from "../../../../components/paginationLoading";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { errorNotify } from "../../../../helper/toast";
 import { getElementState } from "../../../../redux/selectors/auth";
 import { useSelector } from "react-redux";
@@ -239,18 +239,14 @@ const ReviewCollaborator = () => {
       title: "Tên khách hàng",
       render: (data) => {
         return (
-          <div
-            className="div-customer-review"
-            onClick={() =>
-              navigate("/details-customer", {
-                state: { id: data?.id_customer?._id },
-              })
-            }
-          >
-            <div className="div-name-info">
+          <div className="div-customer-review">
+            <Link
+              to={`/profile-customer/${data?.id_customer?._id}`}
+              className="div-name-info"
+            >
               <a className="text-name-review">{data?.id_customer?.full_name}</a>
               <a className="text-name-review">{data?.id_customer?.phone}</a>
-            </div>
+            </Link>
             <a className="rank-customer">
               {data?.id_customer?.rank_point < 100
                 ? "(Thành viên)"
@@ -271,19 +267,15 @@ const ReviewCollaborator = () => {
       title: "Tên cộng tác viên",
       render: (data) => {
         return (
-          <div
+          <Link
+            to={`/details-collaborator/${data?.id_collaborator?._id}`}
             className="div-collaborator-review"
-            onClick={() =>
-              navigate("/details-collaborator", {
-                state: { id: data?.id_collaborator?._id },
-              })
-            }
           >
             <a className="text-name-review">
               {data?.id_collaborator?.full_name}
             </a>
             <a className="text-name-review">{data?.id_collaborator?.phone}</a>
-          </div>
+          </Link>
         );
       },
     },
@@ -292,13 +284,9 @@ const ReviewCollaborator = () => {
       width: "15%",
       render: (data) => {
         return (
-          <div
+          <Link
+            to={`/details-order/${data?.id_group_order}`}
             className="div-star-review"
-            onClick={() =>
-              navigate("/details-order", {
-                state: { id: data?.id_group_order },
-              })
-            }
           >
             <a className="text-order">{data?.id_view}</a>
             <div className="div-star">
@@ -308,7 +296,7 @@ const ReviewCollaborator = () => {
                 disabled={true}
               />
             </div>
-          </div>
+          </Link>
         );
       },
       sorter: (a, b) => a.star - b.star,

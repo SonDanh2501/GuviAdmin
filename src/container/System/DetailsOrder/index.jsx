@@ -16,7 +16,7 @@ import {
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import vi from "moment/locale/vi";
 import {
   changeStatusOrderApi,
@@ -40,8 +40,10 @@ import LoadingPagination from "../../../components/paginationLoading";
 const width = window.innerWidth;
 
 const DetailsOrder = () => {
-  const { state } = useLocation();
-  const { id } = state || {};
+  // const { state } = useLocation();
+  // const { id } = state || {};
+  const params = useParams();
+  const id = params?.id;
   const [dataGroup, setDataGroup] = useState({
     date_work_schedule: [{ data: "2023-02-21T00:30:00.000Z" }],
   });
@@ -318,18 +320,9 @@ const DetailsOrder = () => {
           {!data?.id_collaborator ? (
             <a>Đang tìm kiếm</a>
           ) : (
-            <a
-              onClick={() => {
-                if (user?.role !== "support_customer") {
-                  navigate("/group-order/manage-order/details-collaborator", {
-                    state: { id: data?.id_collaborator },
-                  });
-                }
-              }}
-              className="text-collaborator"
-            >
-              {data?.name_collaborator}
-            </a>
+            <Link to={`/details-collaborator/${data?.id_collaborator}`}>
+              <a className="text-collaborator">{data?.name_collaborator}</a>
+            </Link>
           )}
         </>
       ),
@@ -452,15 +445,9 @@ const DetailsOrder = () => {
     {
       key: "1",
       label: (
-        <a
-          onClick={() =>
-            navigate("/details-order/details-order-schedule", {
-              state: { id: itemEdit?._id },
-            })
-          }
-        >
-          Chi tiết
-        </a>
+        <Link to={`/details-order/details-order-schedule/${itemEdit?._id}`}>
+          <a>Chi tiết</a>
+        </Link>
       ),
     },
     {
@@ -469,11 +456,11 @@ const DetailsOrder = () => {
         <EditTimeOrderSchedule
           idOrder={itemEdit?._id}
           dateWork={itemEdit?.date_work}
-          endDateWord={itemEdit?.end_date_work}
           id={id}
           setDataGroup={setDataGroup}
           setDataList={setDataList}
           setIsLoading={setIsLoading}
+          estimate={itemEdit?.total_estimate}
         />
       ),
     },
@@ -530,23 +517,14 @@ const DetailsOrder = () => {
                           />
 
                           <div className="div-info">
-                            <a
-                              className="label-name"
-                              onClick={() => {
-                                if (user?.role !== "support_customer") {
-                                  navigate(
-                                    "/group-order/manage-order/details-collaborator",
-                                    {
-                                      state: {
-                                        id: dataGroup?.id_collaborator?._id,
-                                      },
-                                    }
-                                  );
-                                }
-                              }}
+                            <Link
+                              to={`/details-collaborator/${dataGroup?.id_collaborator?._id}`}
                             >
-                              Tên: {dataGroup?.id_collaborator?.full_name}
-                            </a>
+                              <a className="label-name">
+                                Tên: {dataGroup?.id_collaborator?.full_name}
+                              </a>
+                            </Link>
+
                             <a className="label-name">
                               SĐT: {dataGroup?.id_collaborator?.phone}
                             </a>

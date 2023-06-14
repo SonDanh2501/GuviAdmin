@@ -19,6 +19,7 @@ import { getElementState, getUser } from "../../../../../redux/selectors/auth";
 import "./index.scss";
 import { errorNotify } from "../../../../../helper/toast";
 import ModalCustom from "../../../../../components/modalCustom";
+import { Link } from "react-router-dom";
 
 const TopupPoint = () => {
   const [data, setData] = useState([]);
@@ -147,10 +148,13 @@ const TopupPoint = () => {
       title: "Tên",
       render: (data) => {
         return (
-          <div className="div-name-point">
+          <Link
+            to={`/profile-customer/${data?.id_customer?._id}`}
+            className="div-name-point"
+          >
             <a className="text-name">{data?.name_customer}</a>
             <a className="text-phone-point">{data?.phone_customer}</a>
-          </div>
+          </Link>
         );
       },
     },

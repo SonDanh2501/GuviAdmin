@@ -4,7 +4,7 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Button,
   Card,
@@ -101,16 +101,9 @@ const Feedback = () => {
       title: "Người phản hồi",
       render: (data) => {
         return (
-          <a
-            className="text-type"
-            onClick={() =>
-              navigate("/details-customer", {
-                state: { id: data?.id_customer },
-              })
-            }
-          >
-            {data?.full_name}
-          </a>
+          <Link to={`/profile-customer/${data?.id_customer}`}>
+            <a className="text-type">{data?.full_name}</a>
+          </Link>
         );
       },
     },

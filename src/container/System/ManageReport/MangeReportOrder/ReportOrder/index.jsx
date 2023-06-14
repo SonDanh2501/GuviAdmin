@@ -1,15 +1,13 @@
 import { Button, DatePicker, Pagination, Popover, Select, Table } from "antd";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getReportOrder } from "../../../../../api/report";
 import { formatMoney } from "../../../../../helper/formatMoney";
-
 import CustomDatePicker from "../../../../../components/customDatePicker";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import "./index.scss";
-const { RangePicker } = DatePicker;
-const { Option } = Select;
+
 const width = window.innerWidth;
 
 const ReportOrder = () => {
@@ -86,16 +84,11 @@ const ReportOrder = () => {
         );
       },
       render: (data) => (
-        <a
-          className="text-id-report-order"
-          onClick={() =>
-            navigate("/details-order", {
-              state: { id: data?.id_group_order?._id },
-            })
-          }
-        >
-          {data?.id_group_order?.id_view}
-        </a>
+        <Link to={`/details-order/${data?.id_group_order?._id}`}>
+          <a className="text-id-report-order">
+            {data?.id_group_order?.id_view}
+          </a>
+        </Link>
       ),
       width: "5%",
     },

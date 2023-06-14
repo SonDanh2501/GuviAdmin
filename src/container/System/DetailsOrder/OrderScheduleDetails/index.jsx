@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./index.scss";
 import { useEffect, useState } from "react";
 import { cancelGroupOrderApi, getOrderDetailApi } from "../../../../api/order";
@@ -13,8 +13,10 @@ import userIma from "../../../../assets/images/user.png";
 import { errorNotify } from "../../../../helper/toast";
 
 const DetailsOrderSchedule = () => {
-  const { state } = useLocation();
-  const { id } = state || {};
+  // const { state } = useLocation();
+  // const { id } = state || {};
+  const params = useParams();
+  const id = params?.id;
   const [hideShow, setHideShow] = useState(false);
   const [modal, setModal] = useState(false);
   const [open, setOpen] = useState(false);
@@ -23,7 +25,6 @@ const DetailsOrderSchedule = () => {
   const user = useSelector(getUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [data, setData] = useState([]);
 
   useEffect(() => {

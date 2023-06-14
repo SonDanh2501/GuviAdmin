@@ -4,7 +4,7 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   cancelMoneyCollaboratorApi,
   deleteMoneyCollaboratorApi,
@@ -195,19 +195,15 @@ const TopupCollaborator = ({ type }) => {
       title: "Tên cộng tác viên",
       render: (data) => {
         return (
-          <div
+          <Link
+            to={`/details-collaborator/${data?.id_collaborator?._id}`}
             className="div-name-topup"
-            onClick={() =>
-              navigate("/details-collaborator", {
-                state: { id: data?.id_collaborator?._id },
-              })
-            }
           >
             <a className="text-name-topup">
               {data?.id_collaborator?.full_name}
             </a>
             <a className="text-phone-topup">{data?.id_collaborator?.phone}</a>
-          </div>
+          </Link>
         );
       },
     },
