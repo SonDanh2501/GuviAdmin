@@ -12,7 +12,6 @@ import {
 import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   activePromotion,
   deletePromotion,
@@ -22,13 +21,7 @@ import {
 } from "../../../../api/promotion.jsx";
 import AddPromotion from "../../../../components/addPromotion/addPromotion.js";
 import AddPromotionEvent from "../../../../components/addPromotionEvent/addPromotionEvent.js";
-
 import { loadingAction } from "../../../../redux/actions/loading.js";
-import {
-  deletePromotionAction,
-  getPromotion,
-} from "../../../../redux/actions/promotion.js";
-
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import EditPromotion from "../../../../components/editPromotion/editPromotion.js";
@@ -46,6 +39,7 @@ import AddPromotionOrther from "../../../../components/addPromotionOrther/addPro
 import EditPromotionOrther from "../../../../components/editPromotionOrther/editPromotionOrther.js";
 import { errorNotify } from "../../../../helper/toast.js";
 import { useNavigate } from "react-router-dom";
+import ModalCustom from "../../../../components/modalCustom/index.jsx";
 const width = window.innerWidth;
 
 const PromotionManage = ({
@@ -828,51 +822,37 @@ const PromotionManage = ({
           )}
         </div>
         <div>
-          <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Xóa mã khuyến mãi</ModalHeader>
-            <ModalBody>
+          <ModalCustom
+            isOpen={modal}
+            title="Xóa mã khuyến mãi"
+            handleOk={() => onDelete(itemEdit?._id)}
+            handleCancel={toggle}
+            textOk="Xoá"
+            body={
               <a>
                 Bạn có chắc muốn xóa mã khuyến mãi{" "}
                 <a className="text-name-modal">{itemEdit?.title?.vi}</a> này
                 không?
               </a>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggle}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+            }
+          />
         </div>
         <div>
-          <Modal isOpen={modalActive} toggle={toggleActive}>
-            <ModalHeader>
-              {itemEdit?.is_active ? "Ẩn khuyến mãi" : "Mã khuyến mãi"}
-            </ModalHeader>
-            <ModalBody>
+          <ModalCustom
+            isOpen={modalActive}
+            title={itemEdit?.is_active ? "Khoá khuyến mãi" : "Mở khuyến mãi"}
+            handleOk={() => onActive(itemEdit?._id, itemEdit?.is_active)}
+            handleCancel={toggleActive}
+            textOk={itemEdit?.is_active ? "Khoá" : "Mở"}
+            body={
               <a>
                 {itemEdit?.is_active
-                  ? "Bạn có chắc muốn ẩn mã khuyến mãi"
-                  : "Bạn có chắc muốn hiện mã khuyến mãi"}
-
+                  ? "Bạn có chắc muốn khoá mã khuyến mãi"
+                  : "Bạn có chắc muốn mã mã khuyến mãi"}
                 <a className="text-name-modal">{itemEdit?.title?.vi}</a>
               </a>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="primary"
-                onClick={() => onActive(itemEdit?._id, itemEdit?.is_active)}
-              >
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggleActive}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+            }
+          />
         </div>
         {isLoading && <LoadingPagination />}
       </div>

@@ -1,21 +1,20 @@
 import {
+  Checkbox,
+  DatePicker,
+  Input,
   InputNumber,
   List,
   Select,
   TimePicker,
-  Input,
-  Checkbox,
-  DatePicker,
 } from "antd";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import _debounce from "lodash/debounce";
+import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Form, FormGroup, Label, Modal, Row } from "reactstrap";
-import {
-  fetchCustomers,
-  searchCustomers,
-  searchCustomersApi,
-} from "../../api/customer";
+import { Button, Col, Modal, Row } from "reactstrap";
+import { searchCustomersApi } from "../../api/customer";
 import { DATA_PAYMENT, date } from "../../api/fakeData";
 import {
   fetchPromotion,
@@ -23,15 +22,11 @@ import {
   getPromotionDetails,
   updatePromotion,
 } from "../../api/promotion";
+import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
-import { updatePromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
-import CustomTextInput from "../CustomTextInput/customTextInput";
 import CustomTextEditor from "../customTextEdittor";
 import "./editPromotionEvent.scss";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import { errorNotify } from "../../helper/toast";
 dayjs.extend(customParseFormat);
 
 const { TextArea } = Input;
@@ -107,7 +102,7 @@ const EditPromotionEvent = (props) => {
   const optionsCustomer = [];
   const serviceOption = [];
   const fomart = "HH:mm";
-  const dateFormat = "YYYY-MM-DD";
+  const dateFormat = "DD/MM/YYYY";
   const dispatch = useDispatch();
   const service = useSelector(getService);
 
@@ -480,10 +475,38 @@ const EditPromotionEvent = (props) => {
                   >
                     Giảm theo phần trăm
                   </Button>
-                  {
-                    discountUnit === "amount" ? (
-                      <div className="ml-3">
-                        <a>Giá giảm</a>
+                  {discountUnit === "amount" ? (
+                    <div className="ml-3">
+                      <a>Giá giảm</a>
+                      <InputNumber
+                        formatter={(value) =>
+                          `${value}  đ`.replace(
+                            /(\d)(?=(\d\d\d)+(?!\d))/g,
+                            "$1,"
+                          )
+                        }
+                        min={0}
+                        value={maximumDiscount}
+                        onChange={(e) => setMaximumDiscount(e)}
+                        style={{ width: "100%" }}
+                      />
+                    </div>
+                  ) : (
+                    <Row className="row-discount">
+                      <div className="div-reduced ml-4">
+                        <a>Giá trị giảm</a>
+                        <InputNumber
+                          min={0}
+                          max={100}
+                          formatter={(value) => `${value} %`}
+                          parser={(value) => value.replace("%", "")}
+                          value={reducedValue}
+                          onChange={(e) => setReducedValue(e)}
+                          style={{ width: "90%" }}
+                        />
+                      </div>
+                      <div className="div-reduced">
+                        <a>Giá giảm tối đa</a>
                         <InputNumber
                           formatter={(value) =>
                             `${value}  đ`.replace(
@@ -494,52 +517,11 @@ const EditPromotionEvent = (props) => {
                           min={0}
                           value={maximumDiscount}
                           onChange={(e) => setMaximumDiscount(e)}
-                          style={{ width: "100%" }}
+                          style={{ width: "90%" }}
                         />
                       </div>
-                    ) : (
-                      <Row className="row-discount">
-                        <div className="div-reduced ml-4">
-                          <a>Giá trị giảm</a>
-                          <InputNumber
-                            min={0}
-                            max={100}
-                            formatter={(value) => `${value} %`}
-                            parser={(value) => value.replace("%", "")}
-                            value={reducedValue}
-                            onChange={(e) => setReducedValue(e)}
-                            style={{ width: "90%" }}
-                          />
-                        </div>
-                        <div className="div-reduced">
-                          <a>Giá giảm tối đa</a>
-                          <InputNumber
-                            formatter={(value) =>
-                              `${value}  đ`.replace(
-                                /(\d)(?=(\d\d\d)+(?!\d))/g,
-                                "$1,"
-                              )
-                            }
-                            min={0}
-                            value={maximumDiscount}
-                            onChange={(e) => setMaximumDiscount(e)}
-                            style={{ width: "90%" }}
-                          />
-                        </div>
-                      </Row>
-                    )
-                    // ) : (
-                    //   <CustomTextInput
-                    //     label={"Đơn giá"}
-                    //     placeholder="Nhập đơn giá"
-                    //     classNameForm="input-promo-amount"
-                    //     type="number"
-                    //     min={0}
-                    //     value={maximumDiscount}
-                    //     onChange={(e) => setMaximumDiscount(e.target.value)}
-                    //   />
-                    // )
-                  }
+                    </Row>
+                  )}
                 </Row>
               </div>
               {tab === "tat_ca" && (
@@ -700,7 +682,11 @@ const EditPromotionEvent = (props) => {
                           }
                           style={{ marginLeft: 5, width: "100%" }}
                           format={dateFormat}
-                          value={dayjs(startDate.slice(0, 11), dateFormat)}
+                          value={dayjs(
+                            moment(startDate).format("DD/MM/YYYY"),
+                            dateFormat
+                          )}
+                          allowClear={false}
                         />
                       </div>
                       <div>
@@ -711,7 +697,11 @@ const EditPromotionEvent = (props) => {
                           }
                           style={{ marginLeft: 5, width: "100%" }}
                           format={dateFormat}
-                          value={dayjs(endDate.slice(0, 11), dateFormat)}
+                          value={dayjs(
+                            moment(endDate).format("DD/MM/YYYY"),
+                            dateFormat
+                          )}
+                          allowClear={false}
                         />
                         {/* <input
                               className="input-promo-code"

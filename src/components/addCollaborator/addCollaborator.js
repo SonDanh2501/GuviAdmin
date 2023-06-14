@@ -1,18 +1,17 @@
 import { Drawer, Select } from "antd";
 import { Formik } from "formik";
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Form, Modal } from "reactstrap";
-import { loadingAction } from "../../redux/actions/loading";
+import { useSelector } from "react-redux";
+import { Form } from "reactstrap";
+import { createCollaborator, fetchCollaborators } from "../../api/collaborator";
+import { getDistrictApi } from "../../api/file";
+import { errorNotify } from "../../helper/toast";
+import { getElementState } from "../../redux/selectors/auth";
+import { getService } from "../../redux/selectors/service";
 import { validateAddCollaboratorSchema } from "../../utils/schema";
 import CustomButton from "../customButton/customButton";
-import CustomTextInput from "../CustomTextInput/customTextInput";
+import InputCustom from "../textInputCustom";
 import "./addCollaborator.scss";
-import { createCollaborator, fetchCollaborators } from "../../api/collaborator";
-import { errorNotify } from "../../helper/toast";
-import { getService } from "../../redux/selectors/service";
-import { getElementState } from "../../redux/selectors/auth";
-import { getDistrictApi } from "../../api/file";
 
 const AddCollaborator = (props) => {
   const { setData, setTotal, startPage, status, setIsLoading } = props;
@@ -130,82 +129,73 @@ const AddCollaborator = (props) => {
                 paddingBottom: 80,
               }}
             >
-              <Form>
-                <CustomTextInput
-                  label="Tạo cộng tác viên"
-                  type="text"
-                  id="className"
-                  placeholder="Nhập tên cộng tác viên"
-                  onChange={(text) => setFieldValue("name", text.target.value)}
-                  errors={errors?.name}
+              <InputCustom
+                title="Tên cộng tác viên"
+                placeholder="Nhập tên cộng tác viên"
+                onChange={(text) => setFieldValue("name", text.target.value)}
+                error={errors?.name}
+              />
+              <InputCustom
+                title="Số điện thoại"
+                type="number"
+                placeholder="Nhập số điện thoại"
+                onChange={(text) => setFieldValue("phone", text.target.value)}
+                error={errors?.phone}
+              />
+              <InputCustom
+                title="Email"
+                type="email"
+                placeholder="Nhập email"
+                onChange={(text) => setFieldValue("email", text.target.value)}
+              />
+              <InputCustom
+                title="Type"
+                type="text"
+                placeholder="Nhập đối tượng CTV"
+                onChange={(text) => setFieldValue("type", text.target.value)}
+              />
+              <InputCustom
+                title="CCCD/CMND"
+                type="number"
+                placeholder="Nhập CCCD/CMND"
+                onChange={(text) =>
+                  setFieldValue("identify", text.target.value)
+                }
+                error={errors?.identify}
+              />
+              <div className="mb-2">
+                <a>Loại dịch vụ</a>
+                <Select
+                  style={{ width: "100%" }}
+                  mode="multiple"
+                  allowClear
+                  onChange={(e) => setFieldValue("service_apply", e)}
+                  options={serviceOption}
                 />
+              </div>
+              <div className="mb-2">
+                <a>Tỉnh / thành phố</a>
+                <Select
+                  style={{ width: "100%" }}
+                  defaultValue={"Chọn tỉnh/ thành phố"}
+                  allowClear
+                  onChange={(e) => setFieldValue("city", e)}
+                  options={cityOption}
+                />
+              </div>
+              <InputCustom
+                title="Mã giới thiệu"
+                type="text"
+                placeholder="Nhập mã giới thiệu"
+                onChange={(text) => setFieldValue("code", text.target.value)}
+              />
 
-                <CustomTextInput
-                  label="Số điện thoại"
-                  type="text"
-                  id="className"
-                  placeholder="Nhập số điện thoại"
-                  onChange={(text) => setFieldValue("phone", text.target.value)}
-                  errors={errors?.phone}
-                />
-                <CustomTextInput
-                  label="Email"
-                  type="email"
-                  id="className"
-                  placeholder="Nhập email"
-                  onChange={(text) => setFieldValue("email", text.target.value)}
-                />
-                <CustomTextInput
-                  label="Type"
-                  type="text"
-                  id="className"
-                  placeholder="Nhập đối tượng CTV"
-                  onChange={(text) => setFieldValue("type", text.target.value)}
-                />
-                <CustomTextInput
-                  label="CCCD/CMND"
-                  type="number"
-                  id="className"
-                  placeholder="Nhập CCCD/CMND"
-                  onChange={(text) =>
-                    setFieldValue("identify", text.target.value)
-                  }
-                  errors={errors?.identify}
-                />
-                <div className="mb-2">
-                  <a>Loại dịch vụ</a>
-                  <Select
-                    style={{ width: "100%" }}
-                    mode="multiple"
-                    allowClear
-                    onChange={(e) => setFieldValue("service_apply", e)}
-                    options={serviceOption}
-                  />
-                </div>
-                <div className="mb-2">
-                  <a>Tỉnh / thành phố</a>
-                  <Select
-                    style={{ width: "100%" }}
-                    defaultValue={"Chọn tỉnh/ thành phố"}
-                    allowClear
-                    onChange={(e) => setFieldValue("city", e)}
-                    options={cityOption}
-                  />
-                </div>
-                <CustomTextInput
-                  label="Mã giới thiệu"
-                  type="text"
-                  id="className"
-                  placeholder="Nhập mã giới thiệu"
-                  onChange={(text) => setFieldValue("code", text.target.value)}
-                />
-                <CustomButton
-                  title="Thêm"
-                  className="float-right btn-add-ctv"
-                  type="button"
-                  onClick={handleSubmit}
-                />
-              </Form>
+              <CustomButton
+                title="Thêm"
+                className="float-right btn-add-ctv mt-5"
+                type="button"
+                onClick={handleSubmit}
+              />
             </Drawer>
           );
         }}

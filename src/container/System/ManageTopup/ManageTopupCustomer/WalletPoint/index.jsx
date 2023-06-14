@@ -18,6 +18,7 @@ import { loadingAction } from "../../../../../redux/actions/loading";
 import { getElementState, getUser } from "../../../../../redux/selectors/auth";
 import "./index.scss";
 import { errorNotify } from "../../../../../helper/toast";
+import ModalCustom from "../../../../../components/modalCustom";
 
 const TopupPoint = () => {
   const [data, setData] = useState([]);
@@ -320,74 +321,59 @@ const TopupPoint = () => {
       </div>
 
       <div>
-        <Modal isOpen={modalConfirm} toggle={toggleConfirm}>
-          <ModalHeader toggle={toggleConfirm}>Duyệt lệnh nạp điểm</ModalHeader>
-          <ModalBody>
-            <>
-              <h4>Bạn có muốn duyệt lệnh nạp điểm cho :</h4>
-              <div className="body-modal">
-                <a>Khách hàng: {itemEdit?.name_customer}</a>
-                <a>Số điểm: {itemEdit?.value}</a>
-                <a>Nội dung: {itemEdit?.note}</a>
-                <a>
-                  Loại điểm:{" "}
-                  {itemEdit?.type_point === "point"
-                    ? "Điểm thưởng"
-                    : "Điểm thứ hạng"}
-                </a>
-              </div>
-            </>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={() => onConfirm(itemEdit?._id)}>
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggleConfirm}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+        <ModalCustom
+          isOpen={modalConfirm}
+          title="Duyệt lệnh nạp điểm"
+          handleOk={() => onConfirm(itemEdit?._id)}
+          handleCancel={toggleConfirm}
+          textOk="Duyệt"
+          body={
+            <div className="body-modal">
+              <a>Khách hàng: {itemEdit?.name_customer}</a>
+              <a>Số điểm: {itemEdit?.value}</a>
+              <a>Nội dung: {itemEdit?.note}</a>
+              <a>
+                Loại điểm:{" "}
+                {itemEdit?.type_point === "point"
+                  ? "Điểm thưởng"
+                  : "Điểm thứ hạng"}
+              </a>
+            </div>
+          }
+        />
       </div>
 
       <div>
-        <Modal isOpen={modal} toggle={toggle}>
-          <ModalHeader toggle={toggle}>Xóa lệnh nạp điểm</ModalHeader>
-          <ModalBody>
+        <ModalCustom
+          isOpen={modal}
+          title="Xóa lệnh nạp điểm"
+          handleOk={() => onDelete(itemEdit?._id)}
+          handleCancel={toggle}
+          textOk="Xoá"
+          body={
             <a>
               Bạn có chắc muốn xóa lệnh nạp điểm của khách hàng
               <a className="text-name-modal">{itemEdit?.name_customer}</a>
               này không?
             </a>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggle}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+          }
+        />
       </div>
       <div>
-        <Modal isOpen={modalCancel} toggle={toggleCancel}>
-          <ModalHeader toggle={toggleCancel}>Huỷ lệnh nạp tiền</ModalHeader>
-          <ModalBody>
+        <ModalCustom
+          isOpen={modalCancel}
+          title="Huỷ lệnh nạp điểm"
+          handleOk={() => onCancel(itemEdit?._id)}
+          handleCancel={toggleCancel}
+          textOk="Có"
+          body={
             <a>
               Bạn có chắc muốn huỷ lệnh nạp điểm của khách hàng
               <a className="text-name-modal">{itemEdit?.name_customer}</a>
               này không?
             </a>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={() => onCancel(itemEdit?._id)}>
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggleCancel}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+          }
+        />
       </div>
 
       {isLoading && <LoadingPagination />}

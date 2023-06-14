@@ -1,36 +1,31 @@
-import { Button, DatePicker, Input, List, Select, Switch } from "antd";
+import { Button, DatePicker, Input, List, Select } from "antd";
+import _debounce from "lodash/debounce";
 import { useCallback, useEffect, useState } from "react";
-import { searchCustomers } from "../../../../../api/customer";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { searchCollaboratorsCreateOrder } from "../../../../../api/collaborator";
+import { DATA_TIME_TOTAL } from "../../../../../api/fakeData";
 import {
   getPlaceDetailApi,
   googlePlaceAutocomplete,
 } from "../../../../../api/location";
 import {
-  getCalculateFeeApi,
-  getPromotionByCustomerApi,
-} from "../../../../../api/service";
-import CustomTextInput from "../../../../../components/CustomTextInput/customTextInput";
-import { errorNotify } from "../../../../../helper/toast";
-import _debounce from "lodash/debounce";
-import { DATA_TIME_TOTAL } from "../../../../../api/fakeData";
-import {
-  addCollaboratorToOrderApi,
   checkCodePromotionOrderApi,
   checkEventCodePromotionOrderApi,
   createOrderApi,
   getAddressCustomerApi,
   getServiceFeeOrderApi,
 } from "../../../../../api/order";
+import {
+  getCalculateFeeApi,
+  getPromotionByCustomerApi,
+} from "../../../../../api/service";
+import LoadingPagination from "../../../../../components/paginationLoading";
+import InputCustom from "../../../../../components/textInputCustom";
 import { formatMoney } from "../../../../../helper/formatMoney";
-import { useDispatch } from "react-redux";
+import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import "./index.scss";
-import { useNavigate } from "react-router-dom";
-import LoadingPagination from "../../../../../components/paginationLoading";
-import {
-  searchCollaborators,
-  searchCollaboratorsCreateOrder,
-} from "../../../../../api/collaborator";
 
 const BussinessType = (props) => {
   const {
@@ -775,10 +770,9 @@ const BussinessType = (props) => {
           />
         </div>
 
-        <CustomTextInput
-          label="Ghi chú"
-          type="textarea"
-          className="input-note"
+        <InputCustom
+          title="Ghi chú"
+          textArea={true}
           placeholder="Vui lòng nhập ghi chú"
           onChange={(e) => setNote(e.target.value)}
         />

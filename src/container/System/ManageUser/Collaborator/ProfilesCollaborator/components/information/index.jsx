@@ -1,4 +1,6 @@
 import { DatePicker, Input, List, Select } from "antd";
+import dayjs from "dayjs";
+import _debounce from "lodash/debounce";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,14 +10,11 @@ import {
   searchCollaborators,
   updateInformationCollaboratorApi,
 } from "../../../../../../../api/collaborator";
-import CustomTextInput from "../../../../../../../components/CustomTextInput/customTextInput";
+import { getDistrictApi } from "../../../../../../../api/file";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
-import dayjs from "dayjs";
-import _debounce from "lodash/debounce";
-import "./index.scss";
 import { getService } from "../../../../../../../redux/selectors/service";
-import { getDistrictApi } from "../../../../../../../api/file";
+import "./index.scss";
 
 const Information = ({ data, image, idCTV, setData }) => {
   const [name, setName] = useState("");

@@ -35,7 +35,7 @@ const ReportOrderDaily = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getReportOrderDaily(0, 40, startDate, endDate)
+    getReportOrderDaily(0, 40, startDate, endDate, "date_work")
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -55,7 +55,7 @@ const ReportOrderDaily = () => {
     const dataLength = data.length < 20 ? 20 : data.length;
     const start = page * dataLength - dataLength;
     setStartPage(start);
-    getReportOrderDaily(start, 40, startDate, endDate)
+    getReportOrderDaily(start, 40, startDate, endDate, "date_work")
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -65,7 +65,7 @@ const ReportOrderDaily = () => {
   };
 
   const onChangeDay = () => {
-    getReportOrderDaily(startPage, 40, startDate, endDate)
+    getReportOrderDaily(startPage, 40, startDate, endDate, "date_work")
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -95,11 +95,11 @@ const ReportOrderDaily = () => {
       render: (data) => (
         <div
           className="div-date-report-order"
-          // onClick={() =>
-          //   navigate("/report/manage-report/report-order-daily/details", {
-          //     state: { date: data?._id },
-          //   })
-          // }
+          onClick={() =>
+            navigate("/report/manage-report/report-order-daily/details", {
+              state: { date: data?._id },
+            })
+          }
         >
           <a className="text-date-report-order">{data?._id}</a>
         </div>

@@ -1,30 +1,22 @@
-import { List, Select, Input, Checkbox, DatePicker } from "antd";
+import { Checkbox, DatePicker, Input, List, Select } from "antd";
 import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Form, FormGroup, Label, Modal, Row } from "reactstrap";
-import {
-  fetchCustomers,
-  searchCustomers,
-  searchCustomersApi,
-} from "../../api/customer";
+import { Button, Col, Form, Modal, Row } from "reactstrap";
+import { searchCustomersApi } from "../../api/customer";
 import { DATA_PAYMENT } from "../../api/fakeData";
-import { postFile } from "../../api/file";
 import {
   createPromotion,
   fetchPromotion,
   getGroupCustomerApi,
 } from "../../api/promotion";
-import resizeFile from "../../helper/resizer";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
-import { createPromotionAction } from "../../redux/actions/promotion";
 import { getService } from "../../redux/selectors/service";
-import CustomTextInput from "../CustomTextInput/customTextInput";
 import CustomButton from "../customButton/customButton";
 import CustomTextEditor from "../customTextEdittor";
-import "./addPromotionOrther.scss";
 import UploadImage from "../uploadImage";
+import "./addPromotionOrther.scss";
 const { TextArea } = Input;
 
 const AddPromotionOther = (props) => {
@@ -589,19 +581,21 @@ const AddPromotionOther = (props) => {
                       )}
                     </div>
                   </div>
-                  <div className="mt-2">
-                    <a className="title-add-promo">
-                      13. Thời gian sử dụng sau khi đổi
-                    </a>
-                    <Input
-                      placeholder="Nhập số ngày (1,2,3...,n"
-                      className="input-promo-code"
-                      type="number"
-                      min={0}
-                      value={dateExchange}
-                      onChange={(e) => setDateExchange(e.target.value)}
-                    />
-                  </div>
+                  {isExchangePoint && (
+                    <div className="mt-2">
+                      <a className="title-add-promo">
+                        13. Thời gian sử dụng sau khi đổi
+                      </a>
+                      <Input
+                        placeholder="Nhập số ngày (1,2,3...,n"
+                        className="input-promo-code"
+                        type="number"
+                        min={0}
+                        value={dateExchange}
+                        onChange={(e) => setDateExchange(e.target.value)}
+                      />
+                    </div>
+                  )}
                   <div className="mt-2">
                     <a className="title-add-promo">14. Thứ tự hiện thị</a>
                     <Input

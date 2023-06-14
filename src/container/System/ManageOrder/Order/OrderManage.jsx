@@ -8,12 +8,12 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import vi from "moment/locale/vi";
 import { useNavigate } from "react-router-dom";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   deleteOrderApi,
   getOrderApi,
   searchOrderApi,
 } from "../../../../api/order";
+import ModalCustom from "../../../../components/modalCustom";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
 import { getElementState, getUser } from "../../../../redux/selectors/auth";
@@ -497,23 +497,19 @@ const OrderManage = (props) => {
         </div>
 
         <div>
-          <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Xóa đơn hàng</ModalHeader>
-            <ModalBody>
+          <ModalCustom
+            isOpen={modal}
+            title="Xóa đơn hàng"
+            handleOk={() => deleteOrder(item?._id)}
+            handleCancel={toggle}
+            textOk="Xoá"
+            body={
               <a>
                 Bạn có chắc muốn xóa đơn hàng{" "}
                 <a className="text-name-modal">{item?.id_view}</a> này không?
               </a>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={() => deleteOrder(item?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggle}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+            }
+          />
         </div>
       </div>
 

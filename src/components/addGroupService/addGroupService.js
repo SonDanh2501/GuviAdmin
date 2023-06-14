@@ -1,14 +1,12 @@
+import { Drawer, Input, Select } from "antd";
 import React, { memo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Label, Modal } from "reactstrap";
 import { postFile } from "../../api/file";
 import { createGroupServiceApi, getGroupServiceApi } from "../../api/service";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
-import CustomTextInput from "../CustomTextInput/customTextInput";
 import CustomButton from "../customButton/customButton";
 import "./addGroupService.scss";
-import { Drawer, Input, Select } from "antd";
 
 const AddGroupService = ({ setIsLoading, setData, setTotal }) => {
   const [titleVN, setTitleVN] = useState("");

@@ -1,6 +1,5 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { useSelector } from "react-redux";
 
 import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
 import {
@@ -15,26 +14,20 @@ import {
 } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   activeCustomer,
   deleteCustomer,
   fetchCustomers,
   searchCustomers,
 } from "../../../../../api/customer";
-import EditCustomer from "../../../../../components/editCustomer/editCustomer";
+import AddCustomer from "../../../../../components/addCustomer/addCustomer";
+import ModalCustom from "../../../../../components/modalCustom";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
-import { getCustomers } from "../../../../../redux/actions/customerAction";
-import { loadingAction } from "../../../../../redux/actions/loading";
-import {
-  getElementState,
-  getPermissionState,
-  getUser,
-} from "../../../../../redux/selectors/auth";
+import { getElementState } from "../../../../../redux/selectors/auth";
 import "./UserManage.scss";
-import AddCustomer from "../../../../../components/addCustomer/addCustomer";
 const width = window.innerWidth;
 
 const UserManage = (props) => {
@@ -186,19 +179,6 @@ const UserManage = (props) => {
   const items = [
     {
       key: "1",
-      label: checkElement?.includes("edit_customer") && (
-        <EditCustomer
-          data={itemEdit}
-          setIsLoading={setIsLoading}
-          setData={setData}
-          setTotal={setTotal}
-          startPage={startPage}
-          status={status}
-        />
-      ),
-    },
-    {
-      key: "2",
       label: checkElement?.includes("delete_customer") && (
         <a onClick={toggle}>Xoá</a>
       ),
@@ -399,6 +379,7 @@ const UserManage = (props) => {
             render: (data) => {
               return (
                 <div
+                  className="div-name-customer"
                   onClick={() => {
                     if (checkElement?.includes("detail_customer")) {
                       navigate("/profile-customer", {
@@ -407,11 +388,16 @@ const UserManage = (props) => {
                     }
                   }}
                 >
-                  {/* <img
-              className="img_customer"
-              src={data?.avatar ? data?.avatar : user}
-            /> */}
                   <a className="text-name-customer"> {data?.full_name}</a>
+                  <a className="text-rank">
+                    {data?.rank_point < 100
+                      ? "(Thành viên)"
+                      : data?.rank_point >= 100 && data?.rank_point < 300
+                      ? "(Bạc)"
+                      : data?.rank_point >= 300 && data?.rank_point < 1500
+                      ? "(Vàng)"
+                      : "(Bạch kim)"}
+                  </a>
                 </div>
               );
             },
@@ -633,53 +619,41 @@ const UserManage = (props) => {
           </div>
         </div>
         <div>
-          <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Xóa người dùng</ModalHeader>
-            <ModalBody>
+          <ModalCustom
+            isOpen={modal}
+            title="Xóa người dùng"
+            handleOk={() => onDelete(itemEdit?._id)}
+            textOk="Xoá"
+            handleCancel={toggle}
+            body={
               <a>
                 Bạn có chắc muốn xóa người dùng{" "}
                 <a className="text-name-modal">{itemEdit?.full_name}</a> này
                 không?
               </a>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggle}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+            }
+          />
         </div>
         <div>
-          <Modal isOpen={modalBlock} toggle={toggleBlock}>
-            <ModalHeader toggle={toggleBlock}>
-              {" "}
-              {itemEdit?.is_active === true
+          <ModalCustom
+            isOpen={modalBlock}
+            title={
+              itemEdit?.is_active === true
                 ? "Khóa tài khoản khách hàng"
-                : "Mở tài khoản khách hàng"}
-            </ModalHeader>
-            <ModalBody>
-              {itemEdit?.is_active === true
-                ? "Bạn có muốn khóa tài khoản khách hàng"
-                : "Bạn có muốn kích hoạt tài khoản khách hàng"}
-              <h3>{itemEdit?.full_name}</h3>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="primary"
-                onClick={() =>
-                  blockCustomer(itemEdit?._id, itemEdit?.is_active)
-                }
-              >
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggleBlock}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
+                : "Mở tài khoản khách hàng"
+            }
+            handleOk={() => blockCustomer(itemEdit?._id, itemEdit?.is_active)}
+            textOk="Xoá"
+            handleCancel={toggleBlock}
+            body={
+              <>
+                {itemEdit?.is_active === true
+                  ? "Bạn có muốn khóa tài khoản khách hàng"
+                  : "Bạn có muốn kích hoạt tài khoản khách hàng"}
+                <h6>{itemEdit?.full_name}</h6>
+              </>
+            }
+          />
         </div>
 
         <FloatButton.BackTop />

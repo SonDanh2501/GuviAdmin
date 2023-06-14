@@ -2,21 +2,20 @@ import { Input, List, Select } from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { searchCustomers, searchCustomersApi } from "../../../../api/customer";
+import { searchCustomersApi } from "../../../../api/customer";
 import {
   getExtendOptionalByOptionalServiceApi,
   getGroupServiceApi,
   getOptionalServiceByServiceApi,
   getServiceApi,
 } from "../../../../api/service";
-import CustomTextInput from "../../../../components/CustomTextInput/customTextInput";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
 import { getService } from "../../../../redux/selectors/service";
+import BussinessType from "../components/BussinessType";
 import CleaningHourly from "../components/CleaningHourly";
 import CleaningSchedule from "../components/CleaningSchedule";
 import "./index.scss";
-import BussinessType from "../components/BussinessType";
 
 const AddOrder = () => {
   const [optionalService, setOptionalService] = useState([]);

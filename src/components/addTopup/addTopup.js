@@ -1,26 +1,21 @@
-import { Drawer, InputNumber, Select, Input } from "antd";
+import { Drawer, Input, InputNumber, Select } from "antd";
+import TextArea from "antd/es/input/TextArea";
+import _debounce from "lodash/debounce";
+import moment from "moment";
 import React, { memo, useCallback, useState } from "react";
-import IntlCurrencyInput from "react-intl-currency-input";
 import { useDispatch, useSelector } from "react-redux";
-import { Form, List } from "reactstrap";
+import { List } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
 import {
-  getTopupCollaboratorApi,
   TopupMoneyCollaboratorApi,
+  getTopupCollaboratorApi,
 } from "../../api/topup";
-import { loadingAction } from "../../redux/actions/loading";
-import CustomButton from "../customButton/customButton";
-import CustomTextInput from "../CustomTextInput/customTextInput";
-import _debounce from "lodash/debounce";
-import "./addTopup.scss";
-import {
-  getRevenueCollaborator,
-  getTopupCollaborator,
-} from "../../redux/actions/topup";
-import moment from "moment";
 import { errorNotify, successNotify } from "../../helper/toast";
-import TextArea from "antd/es/input/TextArea";
+import { loadingAction } from "../../redux/actions/loading";
+import { getRevenueCollaborator } from "../../redux/actions/topup";
 import { getElementState } from "../../redux/selectors/auth";
+import CustomButton from "../customButton/customButton";
+import "./addTopup.scss";
 
 const AddPopup = (props) => {
   const { type, setDataT, setTotal } = props;
