@@ -28,6 +28,10 @@ export const DATA_TIME_TOTAL = [
   { id: 26, title: "19:00", time: "12:00:00", estimate: 4 },
   { id: 27, title: "19:30", time: "12:30:00", estimate: 3 },
   { id: 28, title: "20:00", time: "13:00:00", estimate: 3 },
+  { id: 29, title: "20:30", time: "13:30:00", estimate: 4 },
+  { id: 30, title: "21:00", time: "14:00:00", estimate: 4 },
+  { id: 31, title: "21:30", time: "14:30:00", estimate: 5 },
+  { id: 32, title: "22:00", time: "15:00:00", estimate: 5 },
 ];
 
 export const DATA_PAYMENT = [

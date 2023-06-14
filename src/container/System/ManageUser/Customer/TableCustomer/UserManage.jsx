@@ -1,6 +1,5 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { useSelector } from "react-redux";
 
 import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
 import {
@@ -15,27 +14,20 @@ import {
 } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   activeCustomer,
   deleteCustomer,
   fetchCustomers,
   searchCustomers,
 } from "../../../../../api/customer";
-import EditCustomer from "../../../../../components/editCustomer/editCustomer";
+import AddCustomer from "../../../../../components/addCustomer/addCustomer";
+import ModalCustom from "../../../../../components/modalCustom";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
-import { getCustomers } from "../../../../../redux/actions/customerAction";
-import { loadingAction } from "../../../../../redux/actions/loading";
-import {
-  getElementState,
-  getPermissionState,
-  getUser,
-} from "../../../../../redux/selectors/auth";
+import { getElementState } from "../../../../../redux/selectors/auth";
 import "./UserManage.scss";
-import AddCustomer from "../../../../../components/addCustomer/addCustomer";
-import ModalCustom from "../../../../../components/modalCustom";
 const width = window.innerWidth;
 
 const UserManage = (props) => {
