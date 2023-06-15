@@ -57,6 +57,7 @@ import ReportDetailOrderDaily from "../container/System/ManageReport/MangeReport
 import ReportCollaborator from "../container/System/ManageReport/ManagerReportCollaborator/ReportCollaborator";
 import RewardCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/RewardCollaborator";
 import AddRewardCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/RewardCollaborator/AddRewardCollaborator";
+import ReportOrderCreate from "../container/System/ManageReport/MangeReportOrder/ReportOrderCreate";
 
 const Admin = () => {
   return (
@@ -149,8 +150,12 @@ const Admin = () => {
         element={<ReportCollaborator />}
       />
       <Route
-        path="/report/manage-report/report-order"
+        path="/report/manage-report/report-order-work"
         element={<ReportOrder />}
+      />
+      <Route
+        path="/report/manage-report/report-order-create"
+        element={<ReportOrderCreate />}
       />
       <Route
         path="/report/manage-report/report-order-daily"

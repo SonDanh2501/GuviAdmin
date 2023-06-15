@@ -191,7 +191,7 @@ const TotalCancelUserSystem = (props) => {
         return (
           <a className="text-user-cancel">
             {data?.id_cancel_user_system
-              ? ""
+              ? data?.id_cancel_user_system?.id_reason_cancel?.title?.vi
               : data?.id_cancel_system
               ? data?.id_cancel_system?.id_reason_cancel?.title?.vi
               : data?.id_cancel_customer?.id_reason_cancel?.title?.vi}

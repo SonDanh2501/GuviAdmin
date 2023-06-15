@@ -895,7 +895,7 @@ const EditPromotion = (props) => {
                                 </div>
                                 <a>Thời gian bắt đầu</a>
                                 <TimePicker
-                                  defaultOpenValue={dayjs("00:00:00", fomart)}
+                                  value={dayjs(item?.start_time_local, fomart)}
                                   format={fomart}
                                   onChange={(time, timeString) =>
                                     changeTimeStartApply(timeString, index)
@@ -904,7 +904,7 @@ const EditPromotion = (props) => {
                                 />
                                 <a>Thời gian kết thúc</a>
                                 <TimePicker
-                                  defaultOpenValue={dayjs("00:00:00", fomart)}
+                                  value={dayjs(item?.end_time_local, fomart)}
                                   format={fomart}
                                   onChange={(time, timeString) =>
                                     changeTimeEndApply(timeString, index)

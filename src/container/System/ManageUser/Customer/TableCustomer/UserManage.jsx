@@ -6,6 +6,7 @@ import {
   Dropdown,
   Empty,
   FloatButton,
+  Image,
   Input,
   Pagination,
   Skeleton,
@@ -27,6 +28,10 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
 import { getElementState } from "../../../../../redux/selectors/auth";
+import member from "../../../../../assets/images/iconMember.svg";
+import silver from "../../../../../assets/images/iconSilver.svg";
+import gold from "../../../../../assets/images/iconGold.svg";
+import platinum from "../../../../../assets/images/iconPlatinum.svg";
 import "./UserManage.scss";
 const width = window.innerWidth;
 
@@ -217,15 +222,18 @@ const UserManage = (props) => {
                   className="div-name-customer"
                 >
                   <a className="text-name-customer"> {data?.full_name}</a>
-                  <a className="text-rank">
-                    {data?.rank_point < 100
-                      ? "(Thành viên)"
-                      : data?.rank_point >= 100 && data?.rank_point < 300
-                      ? "(Bạc)"
-                      : data?.rank_point >= 300 && data?.rank_point < 1500
-                      ? "(Vàng)"
-                      : "(Bạch kim)"}
-                  </a>
+                  <Image
+                    src={
+                      data?.rank_point < 100
+                        ? member
+                        : data?.rank_point >= 100 && data?.rank_point < 300
+                        ? silver
+                        : data?.rank_point >= 300 && data?.rank_point < 1500
+                        ? gold
+                        : platinum
+                    }
+                    style={{ width: 20, height: 20 }}
+                  />
                 </Link>
               );
             },
@@ -307,16 +315,11 @@ const UserManage = (props) => {
               return (
                 <>
                   {data?.id_group_order ? (
-                    <a
-                      className="text-id-order"
-                      onClick={() =>
-                        navigate("/details-order", {
-                          state: { id: data?.id_group_order },
-                        })
-                      }
-                    >
-                      {data?.id_view_group_order}
-                    </a>
+                    <Link to={`/details-order/${data?.id_group_order}`}>
+                      <a className="text-id-order">
+                        {data?.id_view_group_order}
+                      </a>
+                    </Link>
                   ) : (
                     <a className="text-address-customer">Không có</a>
                   )}
@@ -390,15 +393,19 @@ const UserManage = (props) => {
                   className="div-name-customer"
                 >
                   <a className="text-name-customer"> {data?.full_name}</a>
-                  <a className="text-rank">
-                    {data?.rank_point < 100
-                      ? "(Thành viên)"
-                      : data?.rank_point >= 100 && data?.rank_point < 300
-                      ? "(Bạc)"
-                      : data?.rank_point >= 300 && data?.rank_point < 1500
-                      ? "(Vàng)"
-                      : "(Bạch kim)"}
-                  </a>
+
+                  <Image
+                    src={
+                      data?.rank_point < 100
+                        ? member
+                        : data?.rank_point >= 100 && data?.rank_point < 300
+                        ? silver
+                        : data?.rank_point >= 300 && data?.rank_point < 1500
+                        ? gold
+                        : platinum
+                    }
+                    style={{ width: 20, height: 20 }}
+                  />
                 </Link>
               );
             },
@@ -487,16 +494,11 @@ const UserManage = (props) => {
               return (
                 <>
                   {data?.id_group_order ? (
-                    <a
-                      className="text-id-order"
-                      onClick={() =>
-                        navigate("/details-order", {
-                          state: { id: data?.id_group_order },
-                        })
-                      }
-                    >
-                      {data?.id_view_group_order}
-                    </a>
+                    <Link to={`/details-order/${data?.id_group_order}`}>
+                      <a className="text-id-order">
+                        {data?.id_view_group_order}
+                      </a>
+                    </Link>
                   ) : (
                     <a className="text-address-customer">Không có</a>
                   )}

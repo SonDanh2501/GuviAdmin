@@ -251,8 +251,8 @@ const EditPromotionEvent = (props) => {
       ...time,
       {
         day_local: 0,
-        start_time_local: "",
-        end_time_local: "",
+        start_time_local: "00:00:00",
+        end_time_local: "00:00:00",
         timezone: "Asia/Ho_Chi_Minh",
       },
     ]);
@@ -795,19 +795,21 @@ const EditPromotionEvent = (props) => {
                             </div>
                             <a>Thời gian bắt đầu</a>
                             <TimePicker
-                              defaultOpenValue={dayjs("00:00:00", fomart)}
+                              value={dayjs(item?.start_time_local, fomart)}
                               format={fomart}
                               onChange={(time, timeString) =>
                                 changeTimeStartApply(timeString, index)
                               }
+                              allowClear={false}
                             />
                             <a>Thời gian kết thúc</a>
                             <TimePicker
-                              defaultOpenValue={dayjs("00:00:00", fomart)}
+                              value={dayjs(item?.end_time_local, fomart)}
                               format={fomart}
                               onChange={(time, timeString) =>
                                 changeTimeEndApply(timeString, index)
                               }
+                              allowClear={false}
                             />
                           </div>
                         </div>
