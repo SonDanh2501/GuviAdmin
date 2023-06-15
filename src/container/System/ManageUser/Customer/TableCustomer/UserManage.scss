@@ -5,13 +5,14 @@
 .div-name-customer {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+
   .text-name-customer {
     font-family: "Roboto";
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
     color: #19202c;
+    margin-left: 10px;
   }
 
   .text-rank {
