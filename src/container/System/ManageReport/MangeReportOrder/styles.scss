@@ -1,8 +1,7 @@
-.container-report-order {
+.container-report-order-item {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  flex-wrap: wrap !important;
 
   .div-item-report {
     display: flex;
@@ -12,6 +11,7 @@
     border-radius: 8px;
     padding: 10px;
     margin-top: 20px;
+    margin-right: 20px;
 
     .text-title {
       color: #000000;
@@ -44,11 +44,10 @@
 }
 
 @media screen and (max-width: 490px) {
-  .container-report-order {
+  .container-report-order-item {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    justify-content: space-between;
 
     .div-item-report {
       display: flex;
@@ -58,6 +57,7 @@
       border-radius: 8px;
       padding: 10px;
       margin-top: 20px;
+      margin-right: 20px;
 
       .text-title {
         color: #000000;
