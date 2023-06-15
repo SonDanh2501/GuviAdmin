@@ -253,14 +253,7 @@ const ReviewCollaborator = () => {
       render: (data) => {
         return (
           <div className="div-customer-review">
-            <Link
-              to={`/profile-customer/${data?.id_customer?._id}`}
-              className="div-name-info"
-            >
-              <a className="text-name-review">{data?.id_customer?.full_name}</a>
-              <a className="text-name-review">{data?.id_customer?.phone}</a>
-            </Link>
-            <Image
+            <img
               src={
                 data?.rank_point < 100
                   ? member
@@ -272,6 +265,13 @@ const ReviewCollaborator = () => {
               }
               style={{ width: 20, height: 20 }}
             />
+            <Link
+              to={`/profile-customer/${data?.id_customer?._id}`}
+              className="div-name-info"
+            >
+              <a className="text-name-review">{data?.id_customer?.full_name}</a>
+              <a className="text-name-review">{data?.id_customer?.phone}</a>
+            </Link>
           </div>
         );
       },

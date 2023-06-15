@@ -1,7 +1,6 @@
 import React, { memo, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, StarFilled } from "@ant-design/icons";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import { Dropdown, Input, Pagination, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
@@ -289,10 +288,17 @@ const OrderManage = (props) => {
               to={`/details-collaborator/${data?.id_collaborator?._id}`}
               className="div-name-order"
             >
-              <a className="text-collaborator">
-                {data?.id_collaborator?.full_name}
-              </a>
-
+              <div className="div-name-star">
+                <a className="text-collaborator">
+                  {data?.id_collaborator?.full_name}
+                </a>
+                {data?.id_collaborator?.star && (
+                  <div className="div-star">
+                    <a className="text-star">{data?.id_collaborator?.star}</a>
+                    <StarFilled className="icon-star" />
+                  </div>
+                )}
+              </div>
               <a className="text-phone">{data?.id_collaborator?.phone}</a>
             </Link>
           )}

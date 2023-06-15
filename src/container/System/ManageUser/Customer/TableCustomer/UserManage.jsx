@@ -582,10 +582,10 @@ const UserManage = (props) => {
                 },
               };
             }}
-            locale={{
-              emptyText:
-                data.length > 0 ? <Empty /> : <Skeleton active={true} />,
-            }}
+            // locale={{
+            //   emptyText:
+            //     data.length > 0 ? <Empty /> : <Skeleton active={true} />,
+            // }}
             scroll={
               width <= 490
                 ? {
