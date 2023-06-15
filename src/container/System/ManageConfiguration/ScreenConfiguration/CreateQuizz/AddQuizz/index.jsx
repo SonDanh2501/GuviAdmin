@@ -110,6 +110,31 @@ const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab }) => {
     addQuestionApi(dataQuestion[0])
       .then((res) => {
         setOpen(false);
+        setDataQuestion([
+          {
+            title: "",
+            description: "",
+            question: "",
+            choose: [
+              {
+                answer: "",
+                isCorrect: false,
+              },
+              {
+                answer: "",
+                isCorrect: false,
+              },
+              {
+                answer: "",
+                isCorrect: false,
+              },
+              {
+                answer: "",
+                isCorrect: false,
+              },
+            ],
+          },
+        ]);
         getListQuestionApi(startPage, 20, tab)
           .then((res) => {
             setData(res?.data);
