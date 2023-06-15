@@ -31,6 +31,7 @@ import onToggle from "../../../../../assets/images/on-button.png";
 import offToggle from "../../../../../assets/images/off-button.png";
 import { useSelector } from "react-redux";
 import { getElementState } from "../../../../../redux/selectors/auth";
+import ModalCustom from "../../../../../components/modalCustom";
 const { TextArea } = Input;
 const width = window.innerWidth;
 
@@ -208,7 +209,7 @@ const CreateQuizz = () => {
     editQuestionApi(itemEdit?._id, dataQuestion[0])
       .then((res) => {
         setOpen(false);
-        getListQuestionApi(startPage, 20)
+        getListQuestionApi(startPage, 20, tab)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItem);
@@ -224,14 +225,14 @@ const CreateQuizz = () => {
           message: err,
         });
       });
-  }, [itemEdit, startPage, dataQuestion]);
+  }, [itemEdit, startPage, dataQuestion, tab]);
 
   const addQuestion = useCallback(() => {
     setIsLoading(true);
     addQuestionApi(dataQuestion[0])
       .then((res) => {
         setOpen(false);
-        getListQuestionApi(startPage, 20)
+        getListQuestionApi(startPage, 20, tab)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItem);
@@ -248,7 +249,7 @@ const CreateQuizz = () => {
           message: err,
         });
       });
-  }, [startPage, dataQuestion]);
+  }, [startPage, dataQuestion, tab]);
 
   const deleteQuestion = useCallback(
     (id) => {
@@ -256,7 +257,7 @@ const CreateQuizz = () => {
       deleteQuestionApi(id)
         .then((res) => {
           setModal(false);
-          getListQuestionApi(startPage, 20)
+          getListQuestionApi(startPage, 20, tab)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);
@@ -273,7 +274,7 @@ const CreateQuizz = () => {
           });
         });
     },
-    [startPage]
+    [startPage, tab]
   );
 
   const activeQuestion = useCallback(
@@ -283,7 +284,7 @@ const CreateQuizz = () => {
         activeQuestionApi(id, { is_active: false })
           .then((res) => {
             setModalActive(false);
-            getListQuestionApi(startPage, 20)
+            getListQuestionApi(startPage, 20, tab)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
@@ -303,7 +304,7 @@ const CreateQuizz = () => {
         activeQuestionApi(id, { is_active: true })
           .then((res) => {
             setModalActive(false);
-            getListQuestionApi(startPage, 20)
+            getListQuestionApi(startPage, 20, tab)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
@@ -321,7 +322,7 @@ const CreateQuizz = () => {
           });
       }
     },
-    [startPage]
+    [startPage, tab]
   );
 
   const columns = [
@@ -590,49 +591,33 @@ const CreateQuizz = () => {
       </div>
 
       <div>
-        <Modal isOpen={modal} toggle={toggle}>
-          <ModalHeader toggle={toggle}>Xóa câu hỏi</ModalHeader>
-          <ModalBody>
-            <a>Bạn có chắc muốn xóa câu {itemEdit?.question} không?</a>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              color="primary"
-              onClick={() => deleteQuestion(itemEdit?._id)}
-            >
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggle}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+        <ModalCustom
+          isOpen={modal}
+          title="Xóa câu hỏi"
+          handleOk={() => deleteQuestion(itemEdit?._id)}
+          textOk="Xoá"
+          handleCancel={toggle}
+          body={<a>Bạn có chắc muốn xóa câu {itemEdit?.question} không?</a>}
+        />
       </div>
 
       <div>
-        <Modal isOpen={modalActive} toggle={toggleActive}>
-          <ModalHeader toggle={toggleActive}>
-            {itemEdit?.is_active ? "Ẩn câu hỏi" : "Hiện thị câu hỏi"}
-          </ModalHeader>
-          <ModalBody>
-            {itemEdit?.is_active ? (
-              <a>Bạn có chắc muốn ẩn câu {itemEdit?.question} không?</a>
-            ) : (
-              <a>Bạn có chắc muốn hiện câu {itemEdit?.question} không?</a>
-            )}
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              color="primary"
-              onClick={() => activeQuestion(itemEdit?._id, itemEdit?.is_active)}
-            >
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggleActive}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+        <ModalCustom
+          isOpen={modalActive}
+          title={itemEdit?.is_active ? "Ẩn câu hỏi" : "Hiện thị câu hỏi"}
+          handleOk={() => activeQuestion(itemEdit?._id, itemEdit?.is_active)}
+          textOk={itemEdit?.is_active ? "Ẩn" : "Hiện"}
+          handleCancel={toggleActive}
+          body={
+            <>
+              {itemEdit?.is_active ? (
+                <a>Bạn có chắc muốn ẩn câu {itemEdit?.question} không?</a>
+              ) : (
+                <a>Bạn có chắc muốn hiện câu {itemEdit?.question} không?</a>
+              )}
+            </>
+          }
+        />
       </div>
 
       {isLoading && <LoadingPagination />}

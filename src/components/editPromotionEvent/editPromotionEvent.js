@@ -251,8 +251,8 @@ const EditPromotionEvent = (props) => {
       ...time,
       {
         day_local: 0,
-        start_time_local: "",
-        end_time_local: "",
+        start_time_local: "00:00:00",
+        end_time_local: "00:00:00",
         timezone: "Asia/Ho_Chi_Minh",
       },
     ]);

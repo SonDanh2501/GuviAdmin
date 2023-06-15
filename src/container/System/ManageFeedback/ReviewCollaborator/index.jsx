@@ -1,4 +1,13 @@
-import { Checkbox, Input, Modal, Pagination, Rate, Select, Table } from "antd";
+import {
+  Checkbox,
+  Image,
+  Input,
+  Modal,
+  Pagination,
+  Rate,
+  Select,
+  Table,
+} from "antd";
 import "./index.scss";
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -14,6 +23,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { errorNotify } from "../../../../helper/toast";
 import { getElementState } from "../../../../redux/selectors/auth";
 import { useSelector } from "react-redux";
+import member from "../../../../assets/images/iconMember.svg";
+import silver from "../../../../assets/images/iconSilver.svg";
+import gold from "../../../../assets/images/iconGold.svg";
+import platinum from "../../../../assets/images/iconPlatinum.svg";
 const { TextArea } = Input;
 const width = window.innerWidth;
 
@@ -247,17 +260,18 @@ const ReviewCollaborator = () => {
               <a className="text-name-review">{data?.id_customer?.full_name}</a>
               <a className="text-name-review">{data?.id_customer?.phone}</a>
             </Link>
-            <a className="rank-customer">
-              {data?.id_customer?.rank_point < 100
-                ? "(Thành viên)"
-                : data?.id_customer?.rank_point >= 100 &&
-                  data?.id_customer?.rank_point < 300
-                ? "(Bạc)"
-                : data?.id_customer?.rank_point >= 300 &&
-                  data?.id_customer?.rank_point < 1500
-                ? "(Vàng)"
-                : "(Bạch kim)"}
-            </a>
+            <Image
+              src={
+                data?.rank_point < 100
+                  ? member
+                  : data?.rank_point >= 100 && data?.rank_point < 300
+                  ? silver
+                  : data?.rank_point >= 300 && data?.rank_point < 1500
+                  ? gold
+                  : platinum
+              }
+              style={{ width: 20, height: 20 }}
+            />
           </div>
         );
       },

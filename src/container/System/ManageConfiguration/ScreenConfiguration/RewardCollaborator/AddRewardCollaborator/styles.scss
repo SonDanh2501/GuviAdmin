@@ -7,6 +7,26 @@
   text-decoration: none;
 }
 
+.div-check-date {
+  display: flex;
+  flex-direction: column;
+
+  .label-input-date {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000;
+    text-decoration: none;
+    margin-bottom: 5px;
+  }
+}
+
+.div-service-total {
+  display: flex;
+  flex-direction: column;
+}
+
 .div-body-condition {
   width: 100%;
   min-height: 200px;
@@ -15,6 +35,27 @@
   margin-top: 30px;
   border-radius: 4px;
   padding: 5px;
+  border: 1px solid #ebebeb;
+
+  .div-or-and-one {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eaeaea7c;
+    width: 35px;
+    height: 20px;
+    border-radius: 2px;
+    margin-top: 7px;
+
+    .text-and-or {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      color: #000000;
+      text-decoration: none;
+    }
+  }
 
   .div-condition-level-one {
     min-height: 100px;
@@ -22,6 +63,26 @@
     border-radius: 4px;
     margin-top: 10px;
     padding: 10px;
+
+    .div-or-and-two {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #c9c8c87c;
+      width: 35px;
+      height: 20px;
+      border-radius: 2px;
+      margin-top: 7px;
+
+      .text-and-or {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        color: #000000;
+        text-decoration: none;
+      }
+    }
 
     .div-money {
       .label-money {
@@ -41,6 +102,26 @@
       margin-top: 10px;
       padding: 10px;
 
+      .div-or-and-con {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f7f7f7;
+        width: 35px;
+        height: 20px;
+        border-radius: 2px;
+        margin-top: 7px;
+
+        .text-and-or {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 12px;
+          color: #000000;
+          text-decoration: none;
+        }
+      }
+
       .div-codition {
         display: flex;
         flex-direction: row;
@@ -56,17 +137,63 @@
           margin-top: 10px;
         }
       }
+      .div-add {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: 20px;
 
-      .btn-add-condition {
+        .btn-add-condition {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid #d6d6d6;
+          width: 20px;
+          height: 20px;
+          margin-right: 10px;
+
+          border-radius: 4px;
+          .text-btn {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            color: #000000;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+
+    .btn-delete-codition-level-two {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #d6d6d6;
+      width: 20px;
+      height: 20px;
+      margin-top: 10px;
+      border-radius: 4px;
+      padding: 5px;
+    }
+
+    .div-add {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-top: 10px;
+
+      .btn-add-codition-level-two {
         display: flex;
         align-items: center;
         justify-content: center;
         border: 1px solid #d6d6d6;
         width: 50px;
         height: 25px;
-        margin-top: 20px;
+        margin-right: 10px;
+
         border-radius: 4px;
-        .text-btn {
+        .text-add {
           font-family: "Roboto";
           font-style: normal;
           font-weight: 500;
@@ -98,22 +225,29 @@
     }
   }
 
-  .btn-add-condition-level-one {
+  .div-add {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    border: 1px solid #d6d6d6;
-    width: 50px;
-    height: 25px;
     margin-top: 20px;
-    border-radius: 4px;
-    .text-add {
-      font-family: "Roboto";
-      font-style: normal;
-      font-weight: 500;
-      font-size: 12px;
-      color: #000000;
-      text-decoration: none;
+
+    .btn-add-condition-level-one {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #d6d6d6;
+      width: 50px;
+      height: 25px;
+      border-radius: 4px;
+      margin-right: 10px;
+      .text-add {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        color: #000000;
+        text-decoration: none;
+      }
     }
   }
 }

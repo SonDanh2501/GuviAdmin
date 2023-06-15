@@ -424,7 +424,7 @@ const ReportOrderDaily = () => {
 
   return (
     <div>
-      <h3>Báo cáo đơn hàng theo ngày</h3>
+      <h3>Báo cáo đơn hàng hoàn thành theo ngày</h3>
       <div className="div-date">
         <CustomDatePicker
           setStartDate={setStartDate}

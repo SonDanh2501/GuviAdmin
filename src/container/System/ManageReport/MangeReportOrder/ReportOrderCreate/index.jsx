@@ -10,7 +10,7 @@ import "./index.scss";
 
 const width = window.innerWidth;
 
-const ReportOrder = () => {
+const ReportOrderCreate = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
   const [data, setData] = useState([]);
@@ -23,7 +23,7 @@ const ReportOrder = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getReportOrder(0, 20, startDate, endDate, "date_work")
+    getReportOrder(0, 20, startDate, endDate, "date_create")
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -48,14 +48,14 @@ const ReportOrder = () => {
       render: (data) => (
         <div className="div-date-report-order">
           <a className="text-date-report-order">
-            {moment(
-              new Date(data?.id_group_order?.date_work_schedule[0]?.date)
-            ).format("DD/MM/YYYY")}
+            {moment(new Date(data?.id_group_order?.date_create)).format(
+              "DD/MM/YYYY"
+            )}
           </a>
           <a className="text-date-report-order">
-            {moment(
-              new Date(data?.id_group_order?.date_work_schedule[0]?.date)
-            ).format("HH:mm")}
+            {moment(new Date(data?.id_group_order?.date_create)).format(
+              "HH:mm"
+            )}
           </a>
         </div>
       ),
@@ -407,7 +407,7 @@ const ReportOrder = () => {
       const lengthData = data.length < 20 ? 20 : data.length;
       const start = page * lengthData - lengthData;
       setStartPage(start);
-      getReportOrder(start, 20, startDate, endDate, "date_work")
+      getReportOrder(start, 20, startDate, endDate, "date_create")
         .then((res) => {
           setIsLoading(false);
           setData(res?.data);
@@ -424,7 +424,7 @@ const ReportOrder = () => {
   const onChangeDay = () => {
     setIsLoading(true);
 
-    getReportOrder(startPage, 20, startDate, endDate, "date_work")
+    getReportOrder(startPage, 20, startDate, endDate, "date_create")
       .then((res) => {
         setIsLoading(false);
         setData(res?.data);
@@ -438,7 +438,7 @@ const ReportOrder = () => {
 
   return (
     <div>
-      <h3>Báo cáo đơn hàng theo ngày làm</h3>
+      <h3>Báo cáo đơn hàng</h3>
       <div className="div-header-report">
         <div className="div-date">
           <CustomDatePicker
@@ -455,7 +455,6 @@ const ReportOrder = () => {
           )}
         </div>
       </div>
-
       <div className="mt-2">
         <Table
           columns={columns}
@@ -491,4 +490,4 @@ const ReportOrder = () => {
   );
 };
 
-export default ReportOrder;
+export default ReportOrderCreate;
