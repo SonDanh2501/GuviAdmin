@@ -73,13 +73,14 @@ const ManageConfiguration = () => {
         })}
       </div>
 
-      {/* <Button
+      <Button
         onClick={() =>
           navigate("/adminManage/manage-configuration/reward_collaborator")
         }
+        className="mt-5"
       >
         Phần thưởng
-      </Button> */}
+      </Button>
     </div>
   );
 };

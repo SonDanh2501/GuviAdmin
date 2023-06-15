@@ -21,6 +21,7 @@ const InputCustom = (props) => {
     defaultValue,
     disabled,
     prefix,
+    mode,
   } = props;
 
   return (
@@ -53,6 +54,7 @@ const InputCustom = (props) => {
           placeholder={placeholder}
           defaultValue={defaultValue}
           className={className}
+          mode={mode}
         />
       ) : (
         <Input
