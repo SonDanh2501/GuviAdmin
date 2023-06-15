@@ -221,8 +221,7 @@ const UserManage = (props) => {
                   }
                   className="div-name-customer"
                 >
-                  <a className="text-name-customer"> {data?.full_name}</a>
-                  <Image
+                  <img
                     src={
                       data?.rank_point < 100
                         ? member
@@ -234,6 +233,7 @@ const UserManage = (props) => {
                     }
                     style={{ width: 20, height: 20 }}
                   />
+                  <a className="text-name-customer"> {data?.full_name}</a>
                 </Link>
               );
             },
@@ -392,9 +392,7 @@ const UserManage = (props) => {
                   }
                   className="div-name-customer"
                 >
-                  <a className="text-name-customer"> {data?.full_name}</a>
-
-                  <Image
+                  <img
                     src={
                       data?.rank_point < 100
                         ? member
@@ -406,6 +404,7 @@ const UserManage = (props) => {
                     }
                     style={{ width: 20, height: 20 }}
                   />
+                  <a className="text-name-customer"> {data?.full_name}</a>
                 </Link>
               );
             },

@@ -7,10 +7,10 @@ const ManageReportOrder = () => {
   const checkElement = useSelector(getElementState);
   const navigate = useNavigate();
   return (
-    <div className="container-report-order">
+    <div className="container-report-order-item">
       {checkElement?.includes("order_report") && (
         <div className="div-item-report">
-          <a className="text-title">Báo cáo đơn hàng theo ngày làm</a>
+          <a className="text-title">Báo cáo chi tiết đơn hàng</a>
           <a className="text-details">
             Báo cáo chi tiết từng ca làm trong khoảng thời gian
           </a>
@@ -22,17 +22,30 @@ const ManageReportOrder = () => {
           </a>
         </div>
       )}
-      {checkElement?.includes("order_report") && (
+      {checkElement?.includes("order_by_customer_report") && (
         <div className="div-item-report">
-          <a className="text-title">Báo cáo đơn hàng theo ngày tạo</a>
+          <a className="text-title">Báo cáo đơn hàng theo khách hàng</a>
           <a className="text-details">
-            Báo cáo chi tiết từng ca làm trong khoảng thời gian
+            Báo cáo tổng số đơn hàng theo khách hàng mới cũ
           </a>
           <a
             className="text-see-report"
             onClick={() =>
-              navigate("/report/manage-report/report-order-create")
+              navigate("/report/manage-report/report-order-customer")
             }
+          >
+            Xem báo cáo
+          </a>
+        </div>
+      )}
+
+      {checkElement?.includes("order_by_arera_report") && (
+        <div className="div-item-report">
+          <a className="text-title">Báo cáo đơn hàng theo khu vực</a>
+          <a className="text-details">Báo cáo tổng số đơn hàng trong khu vực</a>
+          <a
+            className="text-see-report"
+            onClick={() => navigate("/report/manage-report/report-order-area")}
           >
             Xem báo cáo
           </a>
@@ -50,28 +63,16 @@ const ManageReportOrder = () => {
           </a>
         </div>
       )}
-      {checkElement?.includes("order_by_arera_report") && (
+      {checkElement?.includes("order_report") && (
         <div className="div-item-report">
-          <a className="text-title">Báo cáo đơn hàng theo khu vực</a>
-          <a className="text-details">Báo cáo tổng số đơn hàng trong khu vực</a>
-          <a
-            className="text-see-report"
-            onClick={() => navigate("/report/manage-report/report-order-area")}
-          >
-            Xem báo cáo
-          </a>
-        </div>
-      )}
-      {checkElement?.includes("order_by_customer_report") && (
-        <div className="div-item-report">
-          <a className="text-title">Báo cáo đơn hàng theo khách hàng</a>
+          <a className="text-title">Báo cáo đơn hàng theo ngày tạo</a>
           <a className="text-details">
-            Báo cáo tổng số đơn hàng theo khách hàng mới cũ
+            Báo cáo chi tiết từng ca làm trong khoảng thời gian
           </a>
           <a
             className="text-see-report"
             onClick={() =>
-              navigate("/report/manage-report/report-order-customer")
+              navigate("/report/manage-report/report-order-create")
             }
           >
             Xem báo cáo
