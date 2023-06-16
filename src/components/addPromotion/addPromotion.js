@@ -260,7 +260,7 @@ const AddPromotion = (props) => {
       },
       description: {
         vi: descriptionVN,
-        en: descriptionVN,
+        en: descriptionEN,
       },
       thumbnail: imgThumbnail,
       image_background: imgBackground,

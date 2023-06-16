@@ -9,6 +9,7 @@ import Punish from "./Punish";
 import TopupCollaborator from "./Topup";
 import "./TopupManage.scss";
 import { getElementState } from "../../../../redux/selectors/auth";
+import RewardCollaborator from "./Reward";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -79,6 +80,11 @@ export default function TopupManage() {
           {checkElement?.includes("get_punish_cash_book_collaborator") && (
             <Tabs.TabPane tab="Phạt tiền" key="4">
               <Punish />
+            </Tabs.TabPane>
+          )}
+          {checkElement?.includes("get_reward_cash_book_collaborator") && (
+            <Tabs.TabPane tab="Thưởng tiền" key="5">
+              <RewardCollaborator />
             </Tabs.TabPane>
           )}
         </Tabs>

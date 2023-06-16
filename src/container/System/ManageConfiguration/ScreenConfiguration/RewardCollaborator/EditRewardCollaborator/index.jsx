@@ -10,8 +10,12 @@ import {
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { createRewardCollaboratorApi } from "../../../../../../api/configuration";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  createRewardCollaboratorApi,
+  editRewardCollaboratorApi,
+  getDetailRewardCollaborator,
+} from "../../../../../../api/configuration";
 import { DATA_OPERTATOR } from "../../../../../../api/fakeData";
 import { getDistrictApi } from "../../../../../../api/file";
 import LoadingPagination from "../../../../../../components/paginationLoading";
@@ -20,7 +24,9 @@ import { errorNotify } from "../../../../../../helper/toast";
 import { getService } from "../../../../../../redux/selectors/service";
 import "./styles.scss";
 
-const AddRewardCollaborator = () => {
+const EditRewardCollaborator = () => {
+  const { state } = useLocation();
+  const { id } = state || null;
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
   const [descriptionVN, setDescriptionVN] = useState("");
@@ -70,7 +76,29 @@ const AddRewardCollaborator = () => {
         setDataCity(res?.aministrative_division);
       })
       .catch((err) => {});
-  }, []);
+
+    getDetailRewardCollaborator(id)
+      .then((res) => {
+        const newArr = [...condition];
+        setTitleVN(res?.title?.vi);
+        setTitleEN(res?.title?.en);
+        setDescriptionVN(res?.description?.vi);
+        setDescriptionEN(res?.description?.en);
+        setIsLimitDate(res?.is_limit_date);
+        setStartDate(res?.start_date);
+        setEndDate(res?.end_date);
+        setIsTotalReceived(res?.is_limit_total_received);
+        setTotalReceived(res?.totalReceived);
+        setIsCity(res?.is_city);
+        setCodeCity(res?.city);
+        setIsServiceApply(res?.is_service_apply);
+        setServiceApply(res?.service_apply);
+        condition[0].type_condition = res?.condition?.type_condition;
+        condition[0].condition_level_1 = res?.condition?.condition_level_1;
+        setCondition(newArr);
+      })
+      .catch((err) => {});
+  }, [id]);
 
   dataCity?.map((item) => {
     cityOptions.push({
@@ -202,7 +230,7 @@ const AddRewardCollaborator = () => {
 
   const onCreateReward = useCallback(() => {
     setIsLoading(true);
-    createRewardCollaboratorApi({
+    editRewardCollaboratorApi(id, {
       title: {
         vi: titleVN,
         en: titleEN,
@@ -230,7 +258,7 @@ const AddRewardCollaborator = () => {
     })
       .then((res) => {
         setIsLoading(false);
-        navigate(-1);
+        // navigate(-1);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -253,6 +281,7 @@ const AddRewardCollaborator = () => {
     condition,
     isServiceApply,
     serviceApply,
+    id,
   ]);
 
   return (
@@ -266,11 +295,13 @@ const AddRewardCollaborator = () => {
               placeholder="Vui lòng nhập nội dung Tiếng Việt"
               style={{ width: "90%" }}
               onChange={(e) => setTitleVN(e.target.value)}
+              value={titleVN}
             />
             <InputCustom
               placeholder="Vui lòng nhập nội dung Tiếng Anh"
               style={{ width: "90%", marginTop: 5 }}
               onChange={(e) => setTitleEN(e.target.value)}
+              value={titleEN}
             />
           </Col>
           <Col span={8}>
@@ -315,6 +346,7 @@ const AddRewardCollaborator = () => {
                 options={cityOptions}
                 onChange={(e) => setCodeCity(e)}
                 mode="multiple"
+                value={codeCity}
               />
             )}
           </Col>
@@ -327,12 +359,14 @@ const AddRewardCollaborator = () => {
               style={{ width: "90%" }}
               textArea={true}
               onChange={(e) => setDescriptionVN(e.target.value)}
+              value={descriptionVN}
             />
             <InputCustom
               placeholder="Vui lòng nhập nội dung Tiếng Anh"
               style={{ width: "90%", marginTop: 5 }}
               textArea={true}
               onChange={(e) => setDescriptionEN(e.target.value)}
+              value={descriptionEN}
             />
           </Col>
           <Col span={8}>
@@ -351,6 +385,7 @@ const AddRewardCollaborator = () => {
                   mode="multiple"
                   style={{ width: "90%" }}
                   onChange={(e) => setServiceApply(e)}
+                  value={serviceApply}
                 />
               )}
               <Checkbox
@@ -459,7 +494,7 @@ const AddRewardCollaborator = () => {
                                             title="So sánh"
                                             select={true}
                                             style={{
-                                              width: 50,
+                                              width: 60,
                                               marginLeft: 5,
                                             }}
                                             options={DATA_OPERTATOR}
@@ -520,7 +555,7 @@ const AddRewardCollaborator = () => {
                                     <i class="uil uil-plus"></i>
                                   </Button>
                                   <Radio.Group
-                                    defaultValue={conditionTwo?.type_condition}
+                                    value={conditionTwo?.type_condition}
                                     buttonStyle="solid"
                                     size="small"
                                     onChange={(e) =>
@@ -561,7 +596,7 @@ const AddRewardCollaborator = () => {
                           <a className="text-add">Thêm</a>
                         </Button>
                         <Radio.Group
-                          defaultValue={conditionOne?.type_condition}
+                          value={conditionOne?.type_condition}
                           buttonStyle="solid"
                           size="small"
                           onChange={(e) =>
@@ -596,7 +631,7 @@ const AddRewardCollaborator = () => {
                   <a className="text-add">Thêm</a>
                 </Button>
                 <Radio.Group
-                  defaultValue={item?.type_condition}
+                  value={item?.type_condition}
                   buttonStyle="solid"
                   size="small"
                   onChange={(e) => changeTypeCondition(e.target.value)}
@@ -613,7 +648,7 @@ const AddRewardCollaborator = () => {
           className="btn-create-condition-reward"
           onClick={onCreateReward}
         >
-          Tạo điều kiện thưởng
+          Chỉnh sửa điều kiện thưởng
         </Button>
       </div>
 
@@ -622,7 +657,7 @@ const AddRewardCollaborator = () => {
   );
 };
 
-export default AddRewardCollaborator;
+export default EditRewardCollaborator;
 
 const DATA_KIND = [
   {
