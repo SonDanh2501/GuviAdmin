@@ -438,7 +438,7 @@ const ReportOrder = () => {
 
   return (
     <div>
-      <h3>Báo cáo đơn hàng theo ngày làm</h3>
+      <h3>Báo cáo đơn hàng </h3>
       <div className="div-header-report">
         <div className="div-date">
           <CustomDatePicker

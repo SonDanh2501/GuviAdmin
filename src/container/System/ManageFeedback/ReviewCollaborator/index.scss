@@ -47,12 +47,13 @@
 .div-customer-review {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+
   align-items: center;
 
   .div-name-info {
     display: flex;
     flex-direction: column;
+    margin-left: 10px;
     .text-name-review {
       color: #000000;
       font-weight: 400;

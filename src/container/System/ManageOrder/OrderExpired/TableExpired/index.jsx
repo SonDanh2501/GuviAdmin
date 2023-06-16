@@ -154,28 +154,28 @@ const TableExpired = ({ status }) => {
       title: "Địa điểm",
       render: (data) => <p className="text-address-expired">{data?.address}</p>,
     },
-    {
-      title: "Cộng tác viên",
-      render: (data) => (
-        <>
-          {!data?.id_collaborator ? (
-            <a className="text-name-customer ">Đang tìm kiếm</a>
-          ) : (
-            <Link
-              to={`/details-collaborator/${data?.id_collaborator?._id}`}
-              className="div-name-order"
-            >
-              <a className="text-collaborator">
-                {data?.id_collaborator?.full_name}
-              </a>
-              {user?.role !== "support_customer" && (
-                <a className="text-phone">{data?.id_collaborator?.phone}</a>
-              )}
-            </Link>
-          )}
-        </>
-      ),
-    },
+    // {
+    //   title: "Cộng tác viên",
+    //   render: (data) => (
+    //     <>
+    //       {!data?.id_collaborator ? (
+    //         <a className="text-name-customer ">Đang tìm kiếm</a>
+    //       ) : (
+    //         <Link
+    //           to={`/details-collaborator/${data?.id_collaborator?._id}`}
+    //           className="div-name-order"
+    //         >
+    //           <a className="text-collaborator">
+    //             {data?.id_collaborator?.full_name}
+    //           </a>
+    //           {user?.role !== "support_customer" && (
+    //             <a className="text-phone">{data?.id_collaborator?.phone}</a>
+    //           )}
+    //         </Link>
+    //       )}
+    //     </>
+    //   ),
+    // },
 
     {
       title: "Trạng thái",

@@ -87,49 +87,6 @@ const CreateQuizz = () => {
       .catch((err) => {});
   }, [tab]);
 
-  // const openEditQuestion = () => {
-  //   setEdit(true);
-  //   setIsLoading(true);
-  //   showDrawer();
-  //   getDetailsQuestionApi(itemEdit?._id)
-  //     .then((res) => {
-  //       const arr = [...dataQuestion];
-  //       dataQuestion[0].title = res?.title;
-  //       dataQuestion[0].description = res?.description;
-  //       dataQuestion[0].question = res?.question;
-  //       dataQuestion[0].choose = res?.choose;
-
-  //       setDataQuestion(arr);
-  //       setIsLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       setIsLoading(false);
-  //     });
-  // };
-
-  const editQuestion = useCallback(() => {
-    setIsLoading(true);
-    editQuestionApi(itemEdit?._id, dataQuestion[0])
-      .then((res) => {
-        setOpen(false);
-        getListQuestionApi(startPage, 20, tab)
-          .then((res) => {
-            setData(res?.data);
-            setTotal(res?.totalItem);
-            setIsLoading(false);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-          });
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        errorNotify({
-          message: err,
-        });
-      });
-  }, [itemEdit, startPage, dataQuestion, tab]);
-
   const deleteQuestion = useCallback(
     (id) => {
       setIsLoading(true);
@@ -247,7 +204,7 @@ const CreateQuizz = () => {
               <img
                 className="img-unlock-banner"
                 src={data?.is_active ? onToggle : offToggle}
-                onClick={toggleActive}
+                onClick={() => activeQuestion(data?._id, data?.is_active)}
               />
             )}
           </a>

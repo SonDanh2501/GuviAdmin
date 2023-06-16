@@ -34,7 +34,7 @@ const Activity = ({ id }) => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const dataLength = data.length < 20 ? 20 : data.length;
+    const dataLength = data.length < 10 ? 10 : data.length;
     const start = page * dataLength - dataLength;
     getHistoryActivityCollaborator(id, start, 10)
       .then((res) => {
