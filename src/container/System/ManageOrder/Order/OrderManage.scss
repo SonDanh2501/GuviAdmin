@@ -146,14 +146,39 @@
   display: flex;
   flex-direction: column;
 
-  .text-collaborator {
-    font-family: "Roboto";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 16px;
-    text-decoration-line: underline;
-    color: #023e8a;
+  .div-name-star {
+    display: flex;
+    flex-direction: row;
+    .div-star {
+      display: flex;
+      flex-direction: row;
+      margin-left: 10px;
+
+      .text-star {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+        color: #000000;
+        text-decoration: none;
+      }
+      .icon-star {
+        color: #f2cc0e;
+        width: 10px;
+        height: 10px;
+      }
+    }
+
+    .text-collaborator {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 16px;
+      text-decoration-line: underline;
+      color: #023e8a;
+    }
   }
 
   .text-phone {

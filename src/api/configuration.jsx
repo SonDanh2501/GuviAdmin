@@ -98,3 +98,44 @@ export const editRoleApi = (id, data) => {
     data
   );
 };
+
+// rewards collaborators
+
+export const getListRewardCollaborator = (start, length) => {
+  return axiosClient.get(
+    `/admin/reward_collaborator_manager/get_list?lang=vi&start=${start}&length=${length}`
+  );
+};
+
+export const getDetailRewardCollaborator = (id) => {
+  return axiosClient.get(
+    `/admin/reward_collaborator_manager/detail_reward/${id}`
+  );
+};
+
+export const createRewardCollaboratorApi = (data) => {
+  return axiosClient.post(
+    `/admin/reward_collaborator_manager/create_reward`,
+    data
+  );
+};
+
+export const editRewardCollaboratorApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/reward_collaborator_manager/edit_reward/${id}`,
+    data
+  );
+};
+
+export const activeRewardCollaboratorApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/reward_collaborator_manager/acti_reward/${id}`,
+    data
+  );
+};
+
+export const deleteRewardCollaboratorApi = (id) => {
+  return axiosClient.post(
+    `/admin/reward_collaborator_manager/delete_reward/${id}`
+  );
+};

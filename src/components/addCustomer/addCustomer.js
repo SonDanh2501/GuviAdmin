@@ -49,7 +49,7 @@ const AddCustomer = (props) => {
       .then((res) => {
         setOpen(false);
         setIsLoading(false);
-        fetchCustomers(startPage, 20, status)
+        fetchCustomers(startPage, 50, status)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItems);

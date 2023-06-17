@@ -47,7 +47,9 @@ const ManageConfiguration = () => {
       case "setting_role":
         navigate("/adminManage/manage-configuration/setting_role");
         break;
-
+      case "reward_collaborator":
+        navigate("/adminManage/manage-configuration/reward_collaborator");
+        break;
       default:
         break;
     }
@@ -73,14 +75,14 @@ const ManageConfiguration = () => {
         })}
       </div>
 
-      <Button
+      {/* <Button
         onClick={() =>
           navigate("/adminManage/manage-configuration/reward_collaborator")
         }
         className="mt-5"
       >
         Phần thưởng
-      </Button>
+      </Button> */}
     </div>
   );
 };
@@ -119,7 +121,7 @@ const DATA = [
   },
   {
     id: 6,
-    title: "Tạo tài khoản quản trị",
+    title: "Quản lý tài khoản quản trị",
     value: "create_account",
     role: "get_user_system",
   },
@@ -145,5 +147,11 @@ const DATA = [
     title: "Cấu hình quyền quản trị",
     value: "setting_role",
     role: "get_role_permission_setting",
+  },
+  {
+    id: 11,
+    title: "Cấu hình điều kiện thưởng CTV",
+    value: "reward_collaborator",
+    role: "get_reward_collaborator_setting",
   },
 ];

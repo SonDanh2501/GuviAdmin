@@ -60,10 +60,11 @@ const CreateRole = (props) => {
     if (check) {
       for (var i = 0; i < role?.permission?.length; i++) {
         const newArr = [...keyApi];
-        if (role?.permission[i]?.key_api_parent?.includes(item?._id)) {
-          keyApi.push(role.permission[i]?._id);
-          setKeyApi(newArr);
-        } else if (item?.key_api_parent?.includes(role?.permission[i]?._id)) {
+        // if (role?.permission[i]?.key_api_parent?.includes(item?._id)) {
+        //   keyApi.push(role.permission[i]?._id);
+        //   setKeyApi(newArr);
+        //  } else
+        if (item?.key_api_parent?.includes(role?.permission[i]?._id)) {
           keyApi.push(role.permission[i]?._id);
           setKeyApi(newArr);
         }
@@ -87,6 +88,8 @@ const CreateRole = (props) => {
       setKeyApi(arr);
     }
   };
+
+  console.log(data);
 
   const onCreate = useCallback(() => {
     setIsLoading(true);

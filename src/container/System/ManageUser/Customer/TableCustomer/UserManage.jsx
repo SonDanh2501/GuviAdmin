@@ -59,7 +59,7 @@ const UserManage = (props) => {
   const checkElement = useSelector(getElementState);
 
   useEffect(() => {
-    fetchCustomers(0, 20, status)
+    fetchCustomers(0, 50, status)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItems);
@@ -74,7 +74,7 @@ const UserManage = (props) => {
       setIsLoading(true);
       deleteCustomer(id, { is_delete: true })
         .then((res) => {
-          fetchCustomers(startPage, 20, status)
+          fetchCustomers(startPage, 50, status)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItems);
@@ -100,7 +100,7 @@ const UserManage = (props) => {
         activeCustomer(id, { is_active: false })
           .then((res) => {
             setModalBlock(false);
-            fetchCustomers(startPage, 20, status)
+            fetchCustomers(startPage, 50, status)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -119,7 +119,7 @@ const UserManage = (props) => {
           .then((res) => {
             setModalBlock(false);
             setIsLoading(false);
-            fetchCustomers(startPage, 20, status)
+            fetchCustomers(startPage, 50, status)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -139,8 +139,8 @@ const UserManage = (props) => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const dataLength = data.length < 20 ? 20 : data.length;
-    const filterLength = dataFilter.length < 20 ? 20 : dataFilter.length;
+    const dataLength = data.length < 50 ? 50 : data.length;
+    const filterLength = dataFilter.length < 50 ? 50 : dataFilter.length;
 
     const start =
       dataFilter.length > 0
@@ -150,13 +150,13 @@ const UserManage = (props) => {
     setStartPage(start);
 
     dataFilter.length > 0
-      ? searchCustomers(start, 20, status, valueFilter)
+      ? searchCustomers(start, 50, status, valueFilter)
           .then((res) => {
             setDataFilter(res.data);
             setTotalFilter(res.totalItems);
           })
           .catch((err) => {})
-      : fetchCustomers(start, 20, status)
+      : fetchCustomers(start, 50, status)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItems);
@@ -168,7 +168,7 @@ const UserManage = (props) => {
     _debounce((value) => {
       setValueFilter(value);
       setIsLoading(true);
-      searchCustomers(0, 20, status, value)
+      searchCustomers(0, 50, status, value)
         .then((res) => {
           setIsLoading(false);
           setDataFilter(res.data);
@@ -582,10 +582,10 @@ const UserManage = (props) => {
                 },
               };
             }}
-            locale={{
-              emptyText:
-                data.length > 0 ? <Empty /> : <Skeleton active={true} />,
-            }}
+            // locale={{
+            //   emptyText:
+            //     data.length > 0 ? <Empty /> : <Skeleton active={true} />,
+            // }}
             scroll={
               width <= 490
                 ? {
@@ -616,7 +616,7 @@ const UserManage = (props) => {
               onChange={onChange}
               total={dataFilter.length > 0 ? totalFilter : total}
               showSizeChanger={false}
-              pageSize={20}
+              pageSize={50}
             />
           </div>
         </div>

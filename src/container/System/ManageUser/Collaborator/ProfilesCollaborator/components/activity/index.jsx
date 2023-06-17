@@ -8,6 +8,7 @@ import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import vi from "moment/locale/vi";
 import "./index.scss";
+const width = window.innerWidth;
 
 const Activity = ({ id }) => {
   const [data, setData] = useState([]);
@@ -34,7 +35,7 @@ const Activity = ({ id }) => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const dataLength = data.length < 20 ? 20 : data.length;
+    const dataLength = data.length < 10 ? 10 : data.length;
     const start = page * dataLength - dataLength;
     getHistoryActivityCollaborator(id, start, 10)
       .then((res) => {
@@ -179,7 +180,18 @@ const Activity = ({ id }) => {
 
   return (
     <>
-      <Table columns={columns} dataSource={data} pagination={false} />
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+        scroll={
+          width <= 490
+            ? {
+                x: 1000,
+              }
+            : ""
+        }
+      />
 
       <div className="div-pagination p-2">
         <a>Tổng: {totalData}</a>

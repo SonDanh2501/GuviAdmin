@@ -58,6 +58,7 @@ import ReportCollaborator from "../container/System/ManageReport/ManagerReportCo
 import RewardCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/RewardCollaborator";
 import AddRewardCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/RewardCollaborator/AddRewardCollaborator";
 import ReportOrderCreate from "../container/System/ManageReport/MangeReportOrder/ReportOrderCreate";
+import EditRewardCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/RewardCollaborator/EditRewardCollaborator";
 
 const Admin = () => {
   return (
@@ -262,6 +263,10 @@ const Admin = () => {
       <Route
         path="/adminManage/manage-configuration/reward_collaborator/create"
         element={<AddRewardCollaborator />}
+      />
+      <Route
+        path="/adminManage/manage-configuration/reward_collaborator/edit"
+        element={<EditRewardCollaborator />}
       />
     </Routes>
   );

@@ -90,6 +90,35 @@ export const editMoneyPunishApi = (id, data) => {
   );
 };
 
+//reward collaborator
+export const getListInfoRewardApi = (start, length) => {
+  return axiosClient.get(
+    `/admin/info_reward_collaborator/get_list?lang=vi&start=${start}&length=${length}`
+  );
+};
+
+export const verifyRewardApi = (id) => {
+  return axiosClient.post(`/admin/info_reward_collaborator/verify_item/${id}`);
+};
+
+export const noteRewardApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/info_reward_collaborator/note_admin_item/${id}`,
+    data
+  );
+};
+
+export const cancelRewardApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/info_reward_collaborator/cancel_item/${id}`,
+    data
+  );
+};
+
+export const deleteRewardApi = (id) => {
+  return axiosClient.post(`/admin/info_reward_collaborator/delete_item/${id}`);
+};
+
 //customer
 
 export const getTopupCustomerApi = (start, length) => {
