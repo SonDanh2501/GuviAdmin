@@ -7,6 +7,8 @@ import {
   Radio,
   Row,
 } from "antd";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -23,7 +25,7 @@ import InputCustom from "../../../../../../components/textInputCustom";
 import { errorNotify } from "../../../../../../helper/toast";
 import { getService } from "../../../../../../redux/selectors/service";
 import "./styles.scss";
-
+dayjs.extend(customParseFormat);
 const EditRewardCollaborator = () => {
   const { state } = useLocation();
   const { id } = state || null;
@@ -67,10 +69,12 @@ const EditRewardCollaborator = () => {
       ],
     },
   ]);
+  const dateFormat = "YYYY-MM-DD";
   const service = useSelector(getService);
   const navigate = useNavigate();
 
   useEffect(() => {
+    setIsLoading(true);
     getDistrictApi()
       .then((res) => {
         setDataCity(res?.aministrative_division);
@@ -85,8 +89,8 @@ const EditRewardCollaborator = () => {
         setDescriptionVN(res?.description?.vi);
         setDescriptionEN(res?.description?.en);
         setIsLimitDate(res?.is_limit_date);
-        setStartDate(res?.start_date);
-        setEndDate(res?.end_date);
+        setStartDate(res?.start_date ? res?.start_date : "");
+        setEndDate(res?.end_date ? res?.end_date : "");
         setIsTotalReceived(res?.is_limit_total_received);
         setTotalReceived(res?.totalReceived);
         setIsCity(res?.is_city);
@@ -96,6 +100,7 @@ const EditRewardCollaborator = () => {
         condition[0].type_condition = res?.condition?.type_condition;
         condition[0].condition_level_1 = res?.condition?.condition_level_1;
         setCondition(newArr);
+        setIsLoading(false);
       })
       .catch((err) => {});
   }, [id]);
@@ -258,7 +263,7 @@ const EditRewardCollaborator = () => {
     })
       .then((res) => {
         setIsLoading(false);
-        // navigate(-1);
+        navigate(-1);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -320,6 +325,13 @@ const EditRewardCollaborator = () => {
                     onChange={(date, dateString) =>
                       setStartDate(moment(dateString).toISOString())
                     }
+                    format={dateFormat}
+                    value={
+                      startDate
+                        ? dayjs(startDate?.slice(0, 11), dateFormat)
+                        : ""
+                    }
+                    allowClear={false}
                   />
                   <a className="label-input-date">Ngày kết thúc</a>
                   <DatePicker
@@ -327,6 +339,10 @@ const EditRewardCollaborator = () => {
                     onChange={(date, dateString) =>
                       setEndDate(moment(dateString).toISOString())
                     }
+                    value={
+                      endDate ? dayjs(endDate?.slice(0, 11), dateFormat) : ""
+                    }
+                    allowClear={false}
                   />
                 </>
               )}
@@ -369,7 +385,7 @@ const EditRewardCollaborator = () => {
               value={descriptionEN}
             />
           </Col>
-          <Col span={8}>
+          <Col span={8} className="mt-3">
             <div className="div-service-total">
               <Checkbox
                 checked={isServiceApply}
