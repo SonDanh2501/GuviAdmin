@@ -67,3 +67,27 @@ export const getFavoriteAndBlockByCustomers = (id, status, start, length) => {
     `/admin/collaborator_manager/get_list_collaborator_block_or_favourite/${id}?status=${status}&start=${start}&length=${length}`
   );
 };
+
+export const favouriteCustomerApi = (idUser, idCollaborator) => {
+  return axiosClient.post(
+    `/admin/customer_manager/add_favourite_collaborator/${idUser}?id_collaborator=${idCollaborator}`
+  );
+};
+
+export const unfavouriteCustomerApi = (idUser, idCollaborator) => {
+  return axiosClient.post(
+    `/admin/customer_manager/unfavourite_collaborator/${idUser}?id_collaborator=${idCollaborator}`
+  );
+};
+
+export const blockCustomerApi = (idUser, idCollaborator) => {
+  return axiosClient.post(
+    `/admin/customer_manager/block_collaborator/${idUser}?id_collaborator=${idCollaborator}`
+  );
+};
+
+export const unblockCustomerApi = (idUser, idCollaborator) => {
+  return axiosClient.post(
+    `/admin/customer_manager/unblock_collaborator/${idUser}?id_collaborator=${idCollaborator}`
+  );
+};

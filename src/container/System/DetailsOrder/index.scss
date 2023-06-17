@@ -73,15 +73,52 @@
       flex-direction: column;
       padding: 10px;
 
-      .label-ctv {
-        font-family: "Roboto";
-        font-style: normal;
-        font-weight: 600;
-        font-size: 20px;
-        line-height: 30px;
-        color: #19202c;
-        align-items: center;
-        margin-bottom: 20px;
+      .div-ctv-favourite {
+        display: flex;
+        flex-direction: row;
+
+        .label-ctv {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 600;
+          font-size: 20px;
+          line-height: 30px;
+          color: #19202c;
+          align-items: center;
+          margin-bottom: 20px;
+        }
+
+        .btn-favourite {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100px;
+          height: 30px;
+          margin-left: 50px;
+          background-color: #ff0000;
+          color: white;
+        }
+        .btn-unfavourite {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100px;
+          height: 30px;
+          margin-left: 50px;
+          background-color: #fefefe;
+          color: rgb(0, 0, 0);
+        }
+
+        .btn-add-block {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100px;
+          height: 30px;
+          margin-left: 50px;
+          background-color: #ffffff;
+          color: black;
+        }
       }
 
       .div-body-details {
