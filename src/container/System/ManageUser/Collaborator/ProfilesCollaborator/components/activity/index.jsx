@@ -8,6 +8,7 @@ import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import vi from "moment/locale/vi";
 import "./index.scss";
+const width = window.innerWidth;
 
 const Activity = ({ id }) => {
   const [data, setData] = useState([]);
@@ -179,7 +180,18 @@ const Activity = ({ id }) => {
 
   return (
     <>
-      <Table columns={columns} dataSource={data} pagination={false} />
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+        scroll={
+          width <= 490
+            ? {
+                x: 1000,
+              }
+            : ""
+        }
+      />
 
       <div className="div-pagination p-2">
         <a>Tổng: {totalData}</a>

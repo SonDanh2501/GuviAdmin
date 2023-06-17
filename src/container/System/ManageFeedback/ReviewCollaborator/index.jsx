@@ -255,11 +255,13 @@ const ReviewCollaborator = () => {
           <div className="div-customer-review">
             <img
               src={
-                data?.rank_point < 100
+                data?.id_customer?.rank_point < 100
                   ? member
-                  : data?.rank_point >= 100 && data?.rank_point < 300
+                  : data?.id_customer?.rank_point >= 100 &&
+                    data?.id_customer?.rank_point < 300
                   ? silver
-                  : data?.rank_point >= 300 && data?.rank_point < 1500
+                  : data?.id_customer?.rank_point >= 300 &&
+                    data?.id_customer?.rank_point < 1500
                   ? gold
                   : platinum
               }
