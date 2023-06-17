@@ -111,6 +111,25 @@
   justify-content: space-between;
   align-items: center;
 }
+.div-monney {
+  display: flex;
+  flex-direction: column;
+
+  .text-title-monney {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000000 !important;
+  }
+  .text-monney {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000 !important;
+  }
+}
 
 @media screen and (max-width: 490px) {
   .div-monney {

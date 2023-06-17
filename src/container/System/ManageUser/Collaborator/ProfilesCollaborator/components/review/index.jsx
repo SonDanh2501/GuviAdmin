@@ -6,6 +6,7 @@ import "./index.scss";
 
 const Review = ({ id, totalReview }) => {
   const [data, setData] = useState([]);
+
   useEffect(() => {
     getReviewCollaborator(id)
       .then((res) => {
