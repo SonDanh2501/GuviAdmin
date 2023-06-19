@@ -13,8 +13,6 @@ const HistoryTransition = ({ id }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
-
     getHistoryTransitionByCustomers(id, 0, 10)
       .then((res) => {
         setData(res?.data);

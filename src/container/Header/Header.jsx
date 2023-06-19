@@ -1,20 +1,25 @@
-import { BellOutlined, CaretDownOutlined } from "@ant-design/icons";
-import { Dropdown, List, Space } from "antd";
+import {
+  BellOutlined,
+  CaretDownOutlined,
+  MenuUnfoldOutlined,
+} from "@ant-design/icons";
+import { Dropdown, List, Select, Space } from "antd";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { removeToken } from "../../helper/tokenHelper";
-import { logoutAction } from "../../redux/actions/auth";
+import { languageAction, logoutAction } from "../../redux/actions/auth";
 import { loadingAction } from "../../redux/actions/loading";
-import { getUser } from "../../redux/selectors/auth";
+import { getLanguageState, getUser } from "../../redux/selectors/auth";
 import "./Header.scss";
 
-const Header = ({ onClick }) => {
+const Header = ({ onClick, hide }) => {
   const dispatch = useDispatch();
   const [data, setDate] = useState([]);
   const [status, setStatus] = useState(false);
   const user = useSelector(getUser);
   const navigate = useNavigate();
+  const lang = useSelector(getLanguageState);
 
   const onLogout = () => {
     removeToken();
@@ -29,10 +34,14 @@ const Header = ({ onClick }) => {
     },
   ];
 
+  const handleChange = (e) => {
+    dispatch(languageAction.languageRequest({ language: e }));
+  };
+
   return (
     <div className="div-container-header">
       <div className="menu-icon" onClick={onClick}>
-        <i class="uil uil-bars icon-menu"></i>
+        {hide ? <i class="uil uil-bars icon-menu"></i> : <MenuUnfoldOutlined />}
       </div>
 
       <div className="nav">
@@ -49,26 +58,37 @@ const Header = ({ onClick }) => {
             </Space>
           </a>
         </Dropdown>
-        <div className="div-noti" onClick={() => setStatus(!status)}>
-          {data.length > 0 && <div className="dot-noti" />}
-          <BellOutlined className="icon" />
-        </div>
-
-        {status && (
-          <div className="list">
-            <List
-              itemLayout="horizontal"
-              dataSource={[1, 2, 3, 4]}
-              renderItem={(item) => {
-                return (
-                  <div onClick={() => setStatus(false)}>
-                    <a>Lee Minh dang</a>
-                  </div>
-                );
-              }}
-            />
+        <>
+          <div className="div-noti" onClick={() => setStatus(!status)}>
+            {data.length > 0 && <div className="dot-noti" />}
+            <BellOutlined className="icon" />
           </div>
-        )}
+          {status && (
+            <div className="list">
+              <List
+                itemLayout="horizontal"
+                dataSource={[1, 2, 3, 4]}
+                renderItem={(item) => {
+                  return (
+                    <div onClick={() => setStatus(false)}>
+                      <a>Lee Minh dang</a>
+                    </div>
+                  );
+                }}
+              />
+            </div>
+          )}
+        </>
+
+        <Select
+          style={{ width: 120 }}
+          value={lang}
+          onChange={handleChange}
+          options={[
+            { value: "vi", label: "Việt Nam" },
+            { value: "en", label: "English" },
+          ]}
+        />
       </div>
     </div>
   );

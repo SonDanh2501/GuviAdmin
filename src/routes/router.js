@@ -27,7 +27,7 @@ import ManageConfiguration from "../container/System/ManageConfiguration/ManageC
 const router = [
   {
     path: "/",
-    name: "Tổng quan",
+    name: "dasboard",
     icon: home,
     component: Home,
     layout: "admin",
@@ -61,7 +61,7 @@ const router = [
   },
   {
     path: "/system/deep-cleaning",
-    name: "Yêu cầu dịch vụ",
+    name: "service_request",
     icon: request,
     component: ManageOrder,
     layout: "admin",
@@ -70,7 +70,7 @@ const router = [
   },
   {
     path: "/system/user-manage",
-    name: "Khách hàng",
+    name: "customer",
     icon: customer,
     component: ManageCustomer,
     layout: "admin",
@@ -79,7 +79,7 @@ const router = [
   },
   {
     path: "/system/collaborator-manage",
-    name: "Cộng tác viên",
+    name: "collaborator",
     icon: collaborator,
     component: ManageCollaborator,
     layout: "admin",
@@ -88,7 +88,7 @@ const router = [
   },
   {
     path: "/services/manage-group-service/service",
-    name: "Dịch vụ",
+    name: "service",
     icon: service,
     component: EditPriceService,
     layout: "group",
@@ -108,7 +108,7 @@ const router = [
   },
   {
     path: "/promotion/manage-setting",
-    name: "Khuyến mãi",
+    name: "promotion",
     icon: ticket,
     component: ManageSetting,
     layout: "admin",
@@ -126,7 +126,7 @@ const router = [
   },
   {
     path: "/finance/manage-finance",
-    name: "Tài chính",
+    name: "finance",
     icon: finance,
     component: ManageFinance,
     layout: "admin",
@@ -144,7 +144,7 @@ const router = [
   },
   {
     path: "/report/manage-report",
-    name: "Báo cáo",
+    name: "report",
     icon: document,
     component: ManageReport,
     layout: "admin",
@@ -153,7 +153,7 @@ const router = [
   },
   {
     path: "/notification/manage-push-notification",
-    name: "Thông báo",
+    name: "notification",
     icon: notification,
     component: ManagePushNotification,
     layout: "admin",
@@ -162,7 +162,7 @@ const router = [
   },
   {
     path: "/adminManage/manage-configuration",
-    name: "Cấu hình",
+    name: "setting",
     icon: setting,
     component: ManageConfiguration,
     layout: "admin",

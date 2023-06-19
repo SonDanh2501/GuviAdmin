@@ -12,20 +12,6 @@ import {
 
 const ManageCollaborator = () => {
   const [status, setStatus] = useState("");
-  const collaborator = useSelector(getCollaborator);
-  const collaboratorTotal = useSelector(getCollaboratorTotal);
-  const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   // dispatch(loadingAction.loadingRequest(true));
-  //   dispatch(
-  //     getCollaborators.getCollaboratorsRequest({
-  //       start: 0,
-  //       length: 20,
-  //       type: "",
-  //     })
-  //   );
-  // }, [dispatch]);
 
   const onChangeTab = (active) => {
     if (active === "2") {
@@ -34,40 +20,12 @@ const ManageCollaborator = () => {
       setStatus("offline");
     } else if (active === "4") {
       setStatus("locked");
-      // dispatch(
-      //   getCollaborators.getCollaboratorsRequest({
-      //     start: 0,
-      //     length: 20,
-      //     type: "locked",
-      //   })
-      // );
     } else if (active === "5") {
       setStatus("verify");
-      // dispatch(
-      //   getCollaborators.getCollaboratorsRequest({
-      //     start: 0,
-      //     length: 20,
-      //     type: "verify",
-      //   })
-      // );
     } else if (active === "6") {
       setStatus("not_verify");
-      // dispatch(
-      //   getCollaborators.getCollaboratorsRequest({
-      //     start: 0,
-      //     length: 20,
-      //     type: "not_verify",
-      //   })
-      // );
     } else {
       setStatus("");
-      // dispatch(
-      //   getCollaborators.getCollaboratorsRequest({
-      //     start: 0,
-      //     length: 20,
-      //     type: "",
-      //   })
-      // );
     }
   };
 
@@ -82,14 +40,16 @@ const ManageCollaborator = () => {
           <Tabs.TabPane tab="Tất cả" key="1">
             <CollaboratorManage status={status} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="CTV Đang Online" key="2"></Tabs.TabPane>
-          <Tabs.TabPane tab="CTV Đang Offline" key="3"></Tabs.TabPane>
+          <Tabs.TabPane tab="CTV Đang Online" key="2">
+            <CollaboratorManage status={status} />
+          </Tabs.TabPane>
+          {/* <Tabs.TabPane tab="CTV Đang Offline" key="3"></Tabs.TabPane> */}
           <Tabs.TabPane tab="CTV Đã Khoá" key="4">
             <CollaboratorManage status={status} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="CTV Đã Xác Thực" key="5">
+          {/* <Tabs.TabPane tab="CTV Đã Xác Thực" key="5">
             <CollaboratorManage status={status} />
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
           <Tabs.TabPane tab="CTV Chưa Xác Thực" key="6">
             <CollaboratorManage
               // data={collaborator}

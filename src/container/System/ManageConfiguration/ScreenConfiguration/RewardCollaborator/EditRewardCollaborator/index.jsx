@@ -696,4 +696,8 @@ const DATA_KIND = [
     value: "order_star",
     label: "Số sao đơn hàng",
   },
+  {
+    value: "total_late_start",
+    label: "Số lần bắt đầu ca trễ",
+  },
 ];

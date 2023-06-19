@@ -1,17 +1,19 @@
 // reactstrap components
-import moment from "moment";
-import { useCallback, useEffect, useState } from "react";
-import { Col, Row } from "reactstrap";
+import { useEffect, useState } from "react";
 import { getTotalReportApi } from "../../../../api/statistic";
 import add from "../../../../assets/images/add.png";
 import collaborator from "../../../../assets/images/collaborator.png";
 import customer from "../../../../assets/images/customer.png";
 import revenues from "../../../../assets/images/revenues.png";
 import { formatMoney } from "../../../../helper/formatMoney";
+import i18n from "../../../../i18n";
 import "./headerBoard.scss";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../redux/selectors/auth";
 
 const Header = () => {
   const [dataTotal, setDataTotal] = useState([]);
+  const lang = useSelector(getLanguageState);
   useEffect(() => {
     getTotalReportApi("", "")
       .then((res) => setDataTotal(res))
@@ -22,7 +24,7 @@ const Header = () => {
       <div className="card">
         <img src={customer} className="img" />
         <div className="div-details">
-          <a className="text-title">Khách hàng</a>
+          <a className="text-title">{`${i18n.t("customer", { lng: lang })}`}</a>
           <a className="text-detail">
             {!dataTotal?.total_customer ? 0 : dataTotal?.total_customer}
           </a>
@@ -32,7 +34,9 @@ const Header = () => {
       <div className="card">
         <img src={collaborator} className="img" />
         <div className="div-details">
-          <a className="text-title"> Cộng tác viên</a>
+          <a className="text-title">
+            {`${i18n.t("collaborator", { lng: lang })}`}
+          </a>
           <a className="text-detail">
             {!dataTotal?.total_collaborator ? 0 : dataTotal?.total_collaborator}
           </a>
@@ -42,7 +46,9 @@ const Header = () => {
       <div className="card">
         <img src={add} className="img" />
         <div className="div-details">
-          <a className="text-title"> Tổng đơn hàng</a>
+          <a className="text-title">{`${i18n.t("total_order", {
+            lng: lang,
+          })}`}</a>
           <a className="text-detail">
             {!dataTotal?.total_order ? 0 : dataTotal?.total_order}
           </a>
@@ -52,7 +58,7 @@ const Header = () => {
       <div className="card">
         <img src={revenues} className="img" />
         <div className="div-details">
-          <a className="text-title"> Doanh thu</a>
+          <a className="text-title"> {`${i18n.t("revenue", { lng: lang })}`}</a>
           <a className="text-detail">
             {formatMoney(
               !dataTotal?.total_revenue ? 0 : dataTotal?.total_revenue

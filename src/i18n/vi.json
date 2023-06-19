@@ -1,0 +1,16 @@
+{
+    "dasboard": "Tổng quan",
+    "service_request": "Yêu cầu dịch vụ",
+    "customer": "Khách hàng",
+    "collaborator": "Cộng tác viên",
+    "service":"Dịch vụ",
+    "promotion": "Khuyên mãi",
+    "finance":"Tài chính",
+    "report":"Báo cáo",
+    "notification": "Thông báo",
+    "setting": "Cấu hình",
+    "total_order": "Tổng đơn hàng",
+    "revenue": "Doanh thu",
+    "total_money": "Tổng tiền",
+    "total": "Tổng"
+}
