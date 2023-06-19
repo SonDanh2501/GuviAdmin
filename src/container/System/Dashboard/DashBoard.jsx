@@ -1,5 +1,4 @@
 import { DatePicker, FloatButton, List, Progress, Select, Table } from "antd";
-
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import moment from "moment";
@@ -43,7 +42,10 @@ import {
   getServiceConnect,
   getTopCollaborator,
 } from "../../../redux/actions/statistic";
-import { getElementState } from "../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../redux/selectors/auth";
 import {
   getActiveUsers,
   getHistoryActivitys,
@@ -54,6 +56,7 @@ import {
 import "./DashBoard.scss";
 import Header from "./HeaderBoard/Header";
 import MoreActivity from "./MoreActivity";
+import i18n from "../../../i18n";
 moment.locale("vi");
 dayjs.extend(customParseFormat);
 
@@ -91,6 +94,7 @@ export default function Home() {
   const cityData = [];
   const dataChartDetail = [];
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     if (checkElement?.includes("total_finance_job_dashboard")) {
@@ -494,7 +498,8 @@ export default function Home() {
               </div>
               {checkElement?.includes("total_finance_job_dashboard") && (
                 <a className="text-total-money">
-                  Tổng tiền: {formatMoney(totalMoneyChart)}
+                  {`${i18n.t("total_money", { lng: lang })}`}:{" "}
+                  {formatMoney(totalMoneyChart)}
                 </a>
               )}
             </div>
@@ -560,7 +565,9 @@ export default function Home() {
                 <p className="label-persen-active">Phần trăm hoạt động</p>
                 <div className="div-persen">
                   <p className="label-persen">{activeUser?.donePercent}%</p>
-                  <p className="label-total">Tổng</p>
+                  <p className="label-total">{`${i18n.t("total", {
+                    lng: lang,
+                  })}`}</p>
                 </div>
                 <Progress
                   percent={activeUser?.donePercent}

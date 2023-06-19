@@ -97,6 +97,10 @@ export const getListInfoRewardApi = (start, length) => {
   );
 };
 
+export const getDetailInfoRewardApi = (id) => {
+  return axiosClient.get(`/admin/info_reward_collaborator/detail_item/${id}`);
+};
+
 export const verifyRewardApi = (id) => {
   return axiosClient.post(`/admin/info_reward_collaborator/verify_item/${id}`);
 };

@@ -1,6 +1,11 @@
 import { useEffect } from "react";
 import { INIT_STATE } from "../../utils/contant";
-import { loginAction, logoutAction, permissionAction } from "../actions/auth";
+import {
+  languageAction,
+  loginAction,
+  logoutAction,
+  permissionAction,
+} from "../actions/auth";
 import { getType } from "../actions/banner";
 import { getPermission } from "../../api/auth";
 
@@ -26,6 +31,11 @@ export default function LoginReducers(state = INIT_STATE.auth, action) {
         ...state,
         permission: action.payload.permission,
         checkElement: action.payload.element,
+      };
+    case getType(languageAction.languageSuccess):
+      return {
+        ...state,
+        language: action.payload.language,
       };
     case getType(logoutAction.logoutRequest):
       return {

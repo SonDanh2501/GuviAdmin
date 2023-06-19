@@ -47,7 +47,7 @@ const ReportCollaborator = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getReportCollaborator(0, 20, startDate, endDate)
+    getReportCollaborator(0, 40, startDate, endDate)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -59,9 +59,9 @@ const ReportCollaborator = () => {
   const onChange = (page) => {
     setIsLoading(true);
     setCurrentPage(page);
-    const lengthData = data.length < 20 ? 20 : data.length;
-    const lengthFilter = dataFilter.length < 20 ? 20 : dataFilter.length;
-    const lengthSearch = dataSearch.length < 20 ? 20 : dataSearch.length;
+    const lengthData = data.length < 40 ? 40 : data.length;
+    const lengthFilter = dataFilter.length < 40 ? 40 : dataFilter.length;
+    const lengthSearch = dataSearch.length < 40 ? 40 : dataSearch.length;
     const start =
       dataFilter.length > 0
         ? page * lengthFilter - lengthFilter
@@ -70,7 +70,7 @@ const ReportCollaborator = () => {
         : page * lengthData - lengthData;
 
     dataFilter.length > 0
-      ? filterReportCollaborator(start, 20, startDate, endDate)
+      ? filterReportCollaborator(start, 40, startDate, endDate)
           .then((res) => {
             setIsLoading(false);
             setData(res?.data);
@@ -81,7 +81,7 @@ const ReportCollaborator = () => {
             setIsLoading(false);
           })
       : dataSearch.length > 0
-      ? searchReportCollaborator(0, 20, valueSearch)
+      ? searchReportCollaborator(0, 40, valueSearch)
           .then((res) => {
             setIsLoading(false);
             setData(res?.data);
@@ -91,7 +91,7 @@ const ReportCollaborator = () => {
           .catch((err) => {
             setIsLoading(false);
           })
-      : getReportCollaborator(start > 0 ? start : 0, 20, startDate, endDate)
+      : getReportCollaborator(start, 40, startDate, endDate)
           .then((res) => {
             setIsLoading(false);
             setData(res?.data);
@@ -105,7 +105,7 @@ const ReportCollaborator = () => {
 
   const onChangeDay = () => {
     setIsLoading(true);
-    filterReportCollaborator(0, 20, startDate, endDate)
+    filterReportCollaborator(0, 40, startDate, endDate)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -121,7 +121,7 @@ const ReportCollaborator = () => {
     _debounce((value) => {
       setIsLoading(true);
       setValueSearch(value);
-      searchReportCollaborator(0, 20, value)
+      searchReportCollaborator(0, 40, value)
         .then((res) => {
           setData(res?.data);
           setTotal(res?.totalItem);
@@ -530,7 +530,7 @@ const ReportCollaborator = () => {
             onChange={onChange}
             total={total}
             showSizeChanger={false}
-            pageSize={20}
+            pageSize={40}
           />
         </div>
       </div>

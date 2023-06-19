@@ -295,13 +295,32 @@ const DetailsProfile = ({ id }) => {
                     </div>
 
                     <Progress
-                      percent={item?.total_price > 0 ? 100 : 70}
+                      percent={
+                        item?.total_order === 0
+                          ? 33
+                          : item?.total_order !== 0 &&
+                            item?.total_done_order === 0
+                          ? 66
+                          : 100
+                      }
                       strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
                     />
-                    <a className="text-step">
-                      {item?.total_price > 0
-                        ? "Đã hoàn thành"
-                        : "Bước cuối: Hoàn thành đơn hàng đầu tiên"}
+                    <a
+                      className={
+                        item?.total_order === 0
+                          ? "text-step"
+                          : item?.total_order !== 0 &&
+                            item?.total_done_order === 0
+                          ? "text-step"
+                          : "text-step-done"
+                      }
+                    >
+                      {item?.total_order === 0
+                        ? "Bước 3: Đặt đơn đầu tiên"
+                        : item?.total_order !== 0 &&
+                          item?.total_done_order === 0
+                        ? "Bước cuối: Hoàn thành đơn hàng để nhận 20k"
+                        : "Giới thiệu thành công"}
                     </a>
                   </div>
                 </div>

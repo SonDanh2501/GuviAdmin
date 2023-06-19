@@ -134,8 +134,8 @@ export const changeContactedCollaborator = (id) => {
   );
 };
 
-export const getReviewCollaborator = (id) => {
+export const getReviewCollaborator = (id, start, length) => {
   return axiosClient.get(
-    `/admin/collaborator_manager/get_review/${id}?lang=vi`
+    `/admin/collaborator_manager/get_review/${id}?lang=vi&start=${start}&length=${length}`
   );
 };

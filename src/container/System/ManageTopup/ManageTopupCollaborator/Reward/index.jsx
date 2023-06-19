@@ -7,7 +7,7 @@ import {
   noteRewardApi,
   verifyRewardApi,
 } from "../../../../../api/topup";
-import { Button, Pagination, Table } from "antd";
+import { Button, Dropdown, Pagination, Space, Table } from "antd";
 import moment from "moment";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import ModalCustom from "../../../../../components/modalCustom";
@@ -16,6 +16,8 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import { errorNotify } from "../../../../../helper/toast";
 import { getElementState } from "../../../../../redux/selectors/auth";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { MoreOutlined } from "@ant-design/icons";
 const RewardCollaborator = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
@@ -149,10 +151,13 @@ const RewardCollaborator = () => {
       title: "Cộng tác viên",
       render: (data) => {
         return (
-          <div className="div-name-ctv-reward">
+          <Link
+            to={`/details-collaborator/${data?.id_collaborator?._id}`}
+            className="div-name-ctv-reward"
+          >
             <a className="text-name">{data?.id_collaborator?.full_name}</a>
             <a className="text-name">{data?.id_collaborator?.phone}</a>
-          </div>
+          </Link>
         );
       },
     },
@@ -162,7 +167,7 @@ const RewardCollaborator = () => {
       align: "center",
     },
     {
-      title: "Tổng đơn làm",
+      title: "Tổng giờ làm",
       render: (data) => <a className="text-total">{data?.total_job_hour}</a>,
       align: "center",
     },
@@ -248,6 +253,38 @@ const RewardCollaborator = () => {
         );
       },
       align: "right",
+    },
+    {
+      key: "action",
+      align: "center",
+      render: (data) => (
+        <Space size="middle">
+          <Dropdown
+            menu={{
+              items,
+            }}
+            placement="bottom"
+            trigger={["click"]}
+          >
+            <a>
+              <MoreOutlined className="icon-more" />
+            </a>
+          </Dropdown>
+        </Space>
+      ),
+    },
+  ];
+
+  const items = [
+    {
+      key: "1",
+      label: (
+        <Link
+          to={`/topup/manage-topup/details-reward-collaborator/${itemEdit?._id}`}
+        >
+          <a>Xem chi tiết</a>
+        </Link>
+      ),
     },
   ];
 

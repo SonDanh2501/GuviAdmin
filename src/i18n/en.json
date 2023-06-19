@@ -1,0 +1,16 @@
+{
+    "dasboard": "Dasboard",
+    "service_request": "Service request",
+    "customer": "Customer",
+    "collaborator": "Collaborator",
+    "service":"Service",
+    "promotion": "Promotion",
+    "finance":"Finance",
+    "report":"Report",
+    "notification": "Notification",
+    "setting" : "Setting",
+    "total_order": "Total order",
+    "revenue": "Revenue",
+    "total_money": "Total money",
+    "total": "Total"
+}

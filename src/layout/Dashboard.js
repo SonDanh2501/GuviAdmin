@@ -34,22 +34,20 @@ const Dashboard = () => {
     <Layout>
       {width > 490 ? (
         <>
-          {hideSidebar && (
-            <Sider
-              width={230}
-              style={{
-                background: "white",
-                overflow: "auto",
-                height: "100vh",
-                position: "fixed",
-                left: 0,
-                top: 0,
-                bottom: 0,
-              }}
-            >
-              <Sidebar />
-            </Sider>
-          )}
+          <Sider
+            width={hideSidebar ? 230 : 90}
+            style={{
+              background: "white",
+              overflow: "auto",
+              height: "100vh",
+              position: "fixed",
+              left: 0,
+              top: 0,
+              bottom: 0,
+            }}
+          >
+            <Sidebar hide={hideSidebar} />
+          </Sider>
         </>
       ) : (
         <Drawer
@@ -66,7 +64,7 @@ const Dashboard = () => {
         className="site-layout"
         style={
           width > 490
-            ? { marginLeft: hideSidebar ? 230 : 0 }
+            ? { marginLeft: hideSidebar ? 230 : 100 }
             : { marginLeft: 0 }
         }
       >
@@ -81,7 +79,10 @@ const Dashboard = () => {
             backgroundColor: "#7dbcea",
           }}
         >
-          <HeaderBar onClick={() => setHideSidebar(!hideSidebar)} />
+          <HeaderBar
+            onClick={() => setHideSidebar(!hideSidebar)}
+            hide={hideSidebar}
+          />
         </Header>
         <Layout
           style={{

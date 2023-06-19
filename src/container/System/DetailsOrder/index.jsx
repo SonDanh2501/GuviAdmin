@@ -601,9 +601,14 @@ const DetailsOrder = () => {
                         />
 
                         <div className="div-info">
-                          <a className="label-name">
-                            Tên: {dataGroup?.id_customer?.full_name}
-                          </a>
+                          <Link
+                            to={`/profile-customer/${dataGroup?.id_customer?._id}`}
+                          >
+                            <a className="label-name">
+                              Tên: {dataGroup?.id_customer?.full_name}
+                            </a>
+                          </Link>
+
                           <a className="label-name">
                             SĐT: {dataGroup?.id_customer?.phone}
                           </a>

@@ -20,7 +20,7 @@ export default function OrderCustomer({ id }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
-  const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,8 +39,9 @@ export default function OrderCustomer({ id }) {
       "HH:mm"
     );
 
-    const timeEnd =
-      Number(start?.slice(0, 2)) + data?.total_estimate + start?.slice(2, 5);
+    const timeEnd = moment(new Date(data?.date_work_schedule[0]?.date))
+      .add(data?.total_estimate, "hours")
+      .format("HH:mm");
 
     return start + " - " + timeEnd;
   };
@@ -203,11 +204,9 @@ export default function OrderCustomer({ id }) {
     getOrderByCustomers(id, start, 20)
       .then((res) => {
         setData(res?.data);
-        setTotal(res?.total);
+        setTotal(res?.totalItem);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   return (

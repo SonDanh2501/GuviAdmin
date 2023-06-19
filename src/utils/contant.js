@@ -30,6 +30,7 @@ export const INIT_STATE = {
     user: {},
     permission: [],
     checkElement: [],
+    language: "vi",
   },
   service: {
     groupService: [],
