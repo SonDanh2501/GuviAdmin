@@ -1,6 +1,10 @@
 import { Modal } from "antd";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../redux/selectors/auth";
+import i18n from "../../i18n";
 
 const ModalCustom = (props) => {
+  const lang = useSelector(getLanguageState);
   const { title, isOpen, textOk, handleOk, handleCancel, body } = props;
 
   return (
@@ -11,7 +15,7 @@ const ModalCustom = (props) => {
         okText={textOk}
         onOk={handleOk}
         onCancel={handleCancel}
-        cancelText="Huỷ"
+        cancelText={`${i18n.t("cancel_modal", { lng: lang })}`}
       >
         {body}
       </Modal>

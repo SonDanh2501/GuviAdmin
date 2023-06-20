@@ -16,6 +16,9 @@ import BussinessType from "../components/BussinessType";
 import CleaningHourly from "../components/CleaningHourly";
 import CleaningSchedule from "../components/CleaningSchedule";
 import "./index.scss";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import i18n from "../../../../i18n";
+import InputCustom from "../../../../components/textInputCustom";
 
 const AddOrder = () => {
   const [optionalService, setOptionalService] = useState([]);
@@ -34,6 +37,7 @@ const AddOrder = () => {
   const serviceSelect = [];
   const [dataGroupService, setDataGroupService] = useState([]);
   const [dataService, setDataService] = useState([]);
+  const lang = useSelector(getLanguageState);
 
   const dispatch = useDispatch();
 
@@ -42,7 +46,7 @@ const AddOrder = () => {
       .then((res) => {
         setDataGroupService(res?.data);
         setKindService(res?.data[0]?.kind);
-        setNameService(res?.data[0]?.title?.vi);
+        setNameService(res?.data[0]?.title?.[lang]);
         getServiceApi(res?.data[0]?._id)
           .then((res) => {
             setServiceApply(res?.data[0]?._id);
@@ -63,7 +67,7 @@ const AddOrder = () => {
 
   dataGroupService?.map((item) => {
     serviceSelect.push({
-      label: item?.title?.vi,
+      label: item?.title?.[lang],
       value: item?._id,
       kind: item?.kind,
     });
@@ -153,7 +157,7 @@ const AddOrder = () => {
 
   return (
     <>
-      <h5>Tạo công việc</h5>
+      <h5>{`${i18n.t("create_order", { lng: lang })}`}</h5>
       <div className="mt-3">
         <Select
           style={{ width: 230 }}
@@ -163,20 +167,18 @@ const AddOrder = () => {
         />
       </div>
       <div className="div-search-customer mt-4">
-        <a className="label-customer">
-          Khách hàng <a style={{ color: "red" }}>(*)</a>
-        </a>
-        <Input
-          placeholder="Tìm kiếm theo tên hoặc số điện thoại số điện thoại"
+        <InputCustom
+          title={`${i18n.t("customer", { lng: lang })}`}
           value={name}
+          style={{ width: "50%" }}
           type="text"
           onChange={(e) => {
             valueSearch(e.target.value);
             handleSearch(e.target.value);
           }}
-          className="input-search"
+          placeholder={`${i18n.t("search", { lng: lang })}`}
+          error={errorNameCustomer}
         />
-        <a className="text-error">{errorNameCustomer}</a>
       </div>
       {dataFilter.length > 0 && (
         <List type={"unstyled"} className="list-item-customer-add-order">

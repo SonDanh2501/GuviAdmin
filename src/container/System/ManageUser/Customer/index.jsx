@@ -2,19 +2,15 @@ import { FloatButton, Tabs } from "antd";
 
 import "./index.scss";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import UserManage from "./TableCustomer/UserManage";
-import AddCustomer from "../../../../components/addCustomer/addCustomer";
-import { getCustomers } from "../../../../redux/actions/customerAction";
-import {
-  getCustomer,
-  getCustomerTotalItem,
-} from "../../../../redux/selectors/customer";
-import { useEffect, useState } from "react";
-import { getUser } from "../../../../redux/selectors/auth";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import i18n from "../../../../i18n";
 
 const ManageCustomer = () => {
   const [status, setStatus] = useState("");
+  const lang = useSelector(getLanguageState);
 
   const onChangeTab = (active) => {
     if (active === "2") {
@@ -27,6 +23,8 @@ const ManageCustomer = () => {
       setStatus("platinum");
     } else if (active === "6") {
       setStatus("birthday");
+    } else if (active === "7") {
+      setStatus("block");
     } else {
       setStatus("");
     }
@@ -35,27 +33,50 @@ const ManageCustomer = () => {
   return (
     <>
       <div className="div-header-customer">
-        <a className="title-cv">Danh sách khách hàng</a>
+        <a className="title-cv">{`${i18n.t("list_customer", {
+          lng: lang,
+        })}`}</a>
       </div>
 
       <div className="div-container-customer">
         <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
-          <Tabs.TabPane tab="Tất cả Khách Hàng" key="1">
+          <Tabs.TabPane tab={`${i18n.t("all", { lng: lang })}`} key="1">
             <UserManage status={status} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Khách hàng Thành Viên" key="2">
+          <Tabs.TabPane
+            tab={`${i18n.t("member_customer", { lng: lang })}`}
+            key="2"
+          >
             <UserManage status={status} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Khách hàng Bạc" key="3">
+          <Tabs.TabPane
+            tab={`${i18n.t("silver_customer", { lng: lang })}`}
+            key="3"
+          >
             <UserManage status={status} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Khách hàng Vàng" key="4">
+          <Tabs.TabPane
+            tab={`${i18n.t("gold_customer", { lng: lang })}`}
+            key="4"
+          >
             <UserManage status={status} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Khách hàng Bạch Kim" key="5">
+          <Tabs.TabPane
+            tab={`${i18n.t("platinum_customer", { lng: lang })}`}
+            key="5"
+          >
             <UserManage status={status} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Sinh Nhật Trong Tháng" key="6">
+          <Tabs.TabPane
+            tab={`${i18n.t("month_birthday", { lng: lang })}`}
+            key="6"
+          >
+            <UserManage status={status} />
+          </Tabs.TabPane>
+          <Tabs.TabPane
+            tab={`${i18n.t("customer_block", { lng: lang })}`}
+            key="7"
+          >
             <UserManage status={status} />
           </Tabs.TabPane>
         </Tabs>

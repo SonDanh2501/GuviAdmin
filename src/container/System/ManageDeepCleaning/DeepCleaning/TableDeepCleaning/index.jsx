@@ -1,20 +1,23 @@
 import { MoreOutlined } from "@ant-design/icons";
-import { Button, Dropdown, Space, Table, Pagination } from "antd";
+import { Dropdown, Pagination, Space, Table } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { loadingAction } from "../../../../../redux/actions/loading";
-import { getElementState, getUser } from "../../../../../redux/selectors/auth";
+import { useSelector } from "react-redux";
 import {
-  getCusomerRequest,
-  deleteCusomerRequest,
-  contactedCusomerRequest,
   changeStatusCusomerRequest,
+  contactedCusomerRequest,
+  deleteCusomerRequest,
+  getCusomerRequest,
 } from "../../../../../api/requestCustomer";
-import "./deepCleaning.scss";
-import { errorNotify } from "../../../../../helper/toast";
+import ModalCustom from "../../../../../components/modalCustom";
 import LoadingPagination from "../../../../../components/paginationLoading";
+import { errorNotify } from "../../../../../helper/toast";
+import i18n from "../../../../../i18n";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../../redux/selectors/auth";
+import "./deepCleaning.scss";
 const width = window.innerWidth;
 
 const TableDeepCleaning = (props) => {
@@ -32,8 +35,7 @@ const TableDeepCleaning = (props) => {
   const toggle = () => setModal(!modal);
   const toggleStatus = () => setModalStatus(!modalStatus);
   const checkElement = useSelector(getElementState);
-  const dispatch = useDispatch();
-  const user = useSelector(getUser);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getCusomerRequest(status, 0, 20, "")
@@ -143,7 +145,7 @@ const TableDeepCleaning = (props) => {
       key: "1",
       label: checkElement?.includes("delete_request_service") && (
         <a className={"text-delete-deep"} onClick={toggle}>
-          Xoá
+          {`${i18n.t("delete", { lng: lang })}`}
         </a>
       ),
     },
@@ -151,7 +153,7 @@ const TableDeepCleaning = (props) => {
 
   const columns = [
     {
-      title: "Ngày",
+      title: `${i18n.t("date", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-time-create">
@@ -166,7 +168,7 @@ const TableDeepCleaning = (props) => {
       },
     },
     {
-      title: "Khách hàng",
+      title: `${i18n.t("customer", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-customer">
@@ -178,31 +180,37 @@ const TableDeepCleaning = (props) => {
       sorter: (a, b) => a?.name_customer.localeCompare(b?.name_customer),
     },
     {
-      title: "Nội dung",
+      title: `${i18n.t("content", { lng: lang })}`,
       render: (data) => <a className="text-description">{data?.description}</a>,
     },
     {
-      title: "Địa chỉ",
+      title: `${i18n.t("address", { lng: lang })}`,
       render: (data) => (
         <a className="text-address-cleaning">{data?.address}</a>
       ),
     },
     {
-      title: "Liên hệ",
+      title: `${i18n.t("contact", { lng: lang })}`,
       render: (data) => {
         return (
           <div>
             {data?.is_contacted ? (
-              <a className="text-contacted">Đã liên hệ</a>
+              <a className="text-contacted">
+                {`${i18n.t("contacted", { lng: lang })}`}
+              </a>
             ) : (
               <div className="div-uncontacted">
-                <a className="text-uncontacted">Chưa liên hệ</a>
+                <a className="text-uncontacted">{`${i18n.t("not_contacted", {
+                  lng: lang,
+                })}`}</a>
                 {checkElement?.includes("contact_request_service") && (
                   <div
                     className={"btn-contacted-deep"}
                     onClick={toggleContacted}
                   >
-                    <a className="text-btn-contacted">Liên hệ</a>
+                    <a className="text-btn-contacted">{`${i18n.t("contact", {
+                      lng: lang,
+                    })}`}</a>
                   </div>
                 )}
               </div>
@@ -214,7 +222,9 @@ const TableDeepCleaning = (props) => {
       align: "center",
     },
     {
-      title: "Ngày liên hệ",
+      title: `${i18n.t("contact_date", {
+        lng: lang,
+      })}`,
       align: "center",
       render: (data) => {
         return (
@@ -240,17 +250,22 @@ const TableDeepCleaning = (props) => {
       },
     },
     {
-      title: "Trạng thái",
-
+      title: `${i18n.t("status", { lng: lang })}`,
       render: (data) => {
         return (
           <div>
             {data?.status === "pending" ? (
-              <a className="text-pending-request">Đang chờ</a>
+              <a className="text-pending-request">{`${i18n.t("pending", {
+                lng: lang,
+              })}`}</a>
             ) : data?.status === "done" ? (
-              <a className="text-done-request">Hoàn tất</a>
+              <a className="text-done-request">{`${i18n.t("complete", {
+                lng: lang,
+              })}`}</a>
             ) : (
-              <a className="text-cancel-request">Huỷ</a>
+              <a className="text-cancel-request">{`${i18n.t("cancel_modal", {
+                lng: lang,
+              })}`}</a>
             )}
           </div>
         );
@@ -259,7 +274,6 @@ const TableDeepCleaning = (props) => {
     },
     {
       key: "action",
-
       render: (data) => {
         return (
           <>
@@ -274,7 +288,9 @@ const TableDeepCleaning = (props) => {
                         setStatusModal("done");
                       }}
                     >
-                      <a className="text-change-done">Hoàn tất</a>
+                      <a className="text-change-done">{`${i18n.t("complete", {
+                        lng: lang,
+                      })}`}</a>
                     </div>
                     <div
                       className="btn-change-cancel"
@@ -283,7 +299,12 @@ const TableDeepCleaning = (props) => {
                         setStatusModal("cancel");
                       }}
                     >
-                      <a className="text-change-cancel">Huỷ</a>
+                      <a className="text-change-cancel">{`${i18n.t(
+                        "cancel_modal",
+                        {
+                          lng: lang,
+                        }
+                      )}`}</a>
                     </div>
                   </div>
                 )}
@@ -358,7 +379,9 @@ const TableDeepCleaning = (props) => {
         />
       </div>
       <div className="mt-1 div-pagination p-2">
-        <a>Tổng: {total}</a>
+        <a>
+          {`${i18n.t("total", { lng: lang })}`}: {total}
+        </a>
         <div>
           <Pagination
             current={currentPage}
@@ -371,107 +394,57 @@ const TableDeepCleaning = (props) => {
       </div>
 
       <div>
-        <Modal isOpen={modal} toggle={toggle}>
-          <ModalHeader toggle={toggle}>
-            <a className="title-header-modal">Xóa yêu cầu</a>
-          </ModalHeader>
-          <ModalBody>
-            <a className="text-body-modal">
-              Bạn có chắc muốn xóa yêu cầu người dùng{" "}
-              <a className="text-name-modal">{itemEdit?.name_customer}</a> này
-              không?
-            </a>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggle}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
-      </div>
-
-      <div>
-        <Modal isOpen={modalContacted} toggle={toggleContacted}>
-          <ModalHeader toggle={toggleContacted}>
-            <a className="title-header-modal">Liên hệ khách hàng</a>
-          </ModalHeader>
-          <ModalBody>
-            <a className="text-body-modal">
-              Bạn có chắc đã liên hệ khách hàng
-              <a className="text-name-modal">{itemEdit?.name_customer}</a> này
-              không?
-            </a>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={() => onContacted(itemEdit?._id)}>
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggleContacted}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
-      </div>
-
-      <div>
-        <Modal isOpen={modalContacted} toggle={toggleContacted}>
-          <ModalHeader toggle={toggleContacted}>
-            <a className="title-header-modal">Liên hệ khách hàng</a>
-          </ModalHeader>
-          <ModalBody>
-            <a className="text-body-modal">
-              Bạn có chắc đã liên hệ khách hàng
-              <a className="text-name-modal">{itemEdit?.name_customer}</a> này
-              không?
-            </a>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={() => onContacted(itemEdit?._id)}>
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggleContacted}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
-      </div>
-
-      <div>
-        <Modal isOpen={modalStatus} toggle={toggleStatus}>
-          <ModalHeader toggle={toggleStatus}>
-            <a className="title-header-modal">Chuyển trạng thái yêu cầu</a>
-          </ModalHeader>
-          <ModalBody>
-            {statusModal === "done" && (
+        <ModalCustom
+          isOpen={modal}
+          handleOk={() => onDelete(itemEdit?._id)}
+          textOk={`${i18n.t("delete", { lng: lang })}`}
+          handleCancel={toggle}
+          title={`${i18n.t("delete_request", { lng: lang })}`}
+          body={
+            <div>
               <a className="text-body-modal">
-                Bạn có chắc muốn chuyển trạng thái yêu cầu của khách hàng
-                <a className="text-name-modal">{itemEdit?.name_customer}</a> này
-                sang hoàn tất không?
+                {`${i18n.t("what_remove_request", { lng: lang })}`}
               </a>
-            )}
-            {statusModal === "cancel" && (
+              <a className="text-name-modal">{itemEdit?.name_customer}</a>
+            </div>
+          }
+        />
+      </div>
+
+      <div>
+        <ModalCustom
+          isOpen={modalContacted}
+          handleOk={() => onContacted(itemEdit?._id)}
+          textOk={`${i18n.t("yes", { lng: lang })}`}
+          handleCancel={toggleContacted}
+          title={`${i18n.t("contact_customers", { lng: lang })}`}
+          body={
+            <div>
               <a className="text-body-modal">
-                Bạn có chắc muốn chuyển trạng thái yêu cầu của khách hàng
-                <a className="text-name-modal">{itemEdit?.name_customer}</a> này
-                sang huỷ không?
+                {`${i18n.t("sure_contact_customers", { lng: lang })}`}
               </a>
-            )}
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              color="primary"
-              onClick={() => onChangeStatus(itemEdit?._id)}
-            >
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggleStatus}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+              <a className="text-name-modal">{itemEdit?.name_customer}</a>
+            </div>
+          }
+        />
+      </div>
+
+      <div>
+        <ModalCustom
+          isOpen={modalStatus}
+          title={`${i18n.t("request_status_change", { lng: lang })}`}
+          handleOk={() => onChangeStatus(itemEdit?._id)}
+          textOk={`${i18n.t("yes", { lng: lang })}`}
+          handleCancel={toggleStatus}
+          body={
+            <div>
+              <a className="text-body-modal">
+                {`${i18n.t("sure_change_status", { lng: lang })}`}
+              </a>
+              <a className="text-name-modal">{itemEdit?.name_customer}</a>
+            </div>
+          }
+        />
       </div>
 
       {isLoading && <LoadingPagination />}

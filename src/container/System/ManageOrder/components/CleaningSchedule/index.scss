@@ -51,13 +51,13 @@
   flex-direction: column;
 
   .label {
-    font-size: 18px;
+    font-size: 14px !important;
     font-family: "Roboto";
     font-style: normal;
     font-weight: 400;
-    line-height: 16px;
     color: black;
     margin-bottom: 10px;
+    text-decoration: none;
   }
 
   .div-service {
@@ -119,14 +119,14 @@
   width: 50%;
 
   .label-hours {
-    font-size: 18px;
+    font-size: 14px !important;
     font-family: "Roboto";
     font-style: normal;
     font-weight: 400;
-    line-height: 16px;
     color: black;
     margin-bottom: 10px;
     margin-top: 15px;
+    text-decoration: none;
   }
 
   .div-hours {
@@ -352,12 +352,12 @@
 
 .div-select-month {
   .label-month {
-    font-size: 18px;
+    font-size: 14px;
     font-family: "Roboto";
     font-style: normal;
     font-weight: 400;
-    line-height: 16px;
     color: black;
+    text-decoration: none;
   }
 
   .div-month {

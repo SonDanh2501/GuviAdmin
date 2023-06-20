@@ -478,9 +478,12 @@ const Document = ({ id }) => {
                   />
                   <div className="div-thumbnail-infomation">
                     {imgInformation.length > 0 &&
-                      imgInformation.map((item) => {
+                      imgInformation.map((item, index) => {
                         return (
-                          <div className="div-item-thumbnail-infomation">
+                          <div
+                            className="div-item-thumbnail-infomation"
+                            key={index}
+                          >
                             <i
                               class="uil uil-times-circle"
                               onClick={() => removeItemInfomation(item)}
@@ -532,9 +535,12 @@ const Document = ({ id }) => {
                   />
                   <div className="div-thumbnail-infomation">
                     {imgRegistration.length > 0 &&
-                      imgRegistration.map((item) => {
+                      imgRegistration.map((item, index) => {
                         return (
-                          <div className="div-item-thumbnail-infomation">
+                          <div
+                            className="div-item-thumbnail-infomation"
+                            key={index}
+                          >
                             <i
                               class="uil uil-times-circle"
                               onClick={() => removeItemRegistration(item)}
@@ -587,9 +593,12 @@ const Document = ({ id }) => {
                   <div className="div-thumbnail-infomation">
                     <div className="div-thumbnail-infomation">
                       {imgCertification.length > 0 &&
-                        imgCertification.map((item) => {
+                        imgCertification.map((item, index) => {
                           return (
-                            <div className="div-item-thumbnail-infomation">
+                            <div
+                              className="div-item-thumbnail-infomation"
+                              key={index}
+                            >
                               <i
                                 class="uil uil-times-circle"
                                 onClick={() => removeItemCertification(item)}

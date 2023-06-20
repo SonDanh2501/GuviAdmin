@@ -8,7 +8,7 @@ import {
 } from "date-fns";
 import _debounce from "lodash/debounce";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { searchCollaboratorsCreateOrder } from "../../../../../api/collaborator";
 import {
@@ -38,6 +38,8 @@ import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import "./index.scss";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
 
 const CleaningSchedule = (props) => {
   const { extendService, id, name, setErrorNameCustomer, idService } = props;
@@ -74,6 +76,7 @@ const CleaningSchedule = (props) => {
   const [idCollaborator, setIdCollaborator] = useState("");
   const [dataAddress, setDataAddress] = useState([]);
   const [open, setOpen] = useState(false);
+  const lang = useSelector(getLanguageState);
   const inputRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -564,18 +567,16 @@ const CleaningSchedule = (props) => {
     <>
       <div>
         <div className="div-search-address">
-          <a className="label-customer">
-            Địa điểm <a style={{ color: "red" }}>(*)</a>
-          </a>
-          <Input
-            placeholder="Vui lòng chọn địa chỉ"
+          <InputCustom
+            title={`${i18n.t("address", { lng: lang })}`}
+            placeholder={`${i18n.t("enter_address", { lng: lang })}`}
+            style={{ width: "50%" }}
             value={address}
             type="text"
             onChange={(e) => {
               valueAddress(e.target.value);
               handleSearchLocation(e.target.value);
             }}
-            className="input-search"
           />
         </div>
 
@@ -599,7 +600,9 @@ const CleaningSchedule = (props) => {
 
         {dataAddress.length > 0 && (
           <div className="mt-2">
-            <a className="title-list-address">Địa chỉ mặc định</a>
+            <a className="title-list-address">{`${i18n.t("address_default", {
+              lng: lang,
+            })}`}</a>
             <List type={"unstyled"} className="list-item-address-customer">
               {dataAddress?.map((item, index) => {
                 return (
@@ -633,7 +636,8 @@ const CleaningSchedule = (props) => {
         <a className="text-error">{errorAddress}</a>
         <div className="div-add-service mt-3">
           <a className="label">
-            Thời lượng <a style={{ color: "red" }}>(*)</a>
+            {`${i18n.t("times", { lng: lang })}`}{" "}
+            <a style={{ color: "red" }}>(*)</a>
           </a>
           <div className="div-service">
             {extendService.slice(0, 3).map((item) => {
@@ -653,7 +657,7 @@ const CleaningSchedule = (props) => {
                         : "text-service-default"
                     }
                   >
-                    {item?.title?.vi}
+                    {item?.title?.[lang]}
                   </a>
                   <a
                     className={
@@ -662,9 +666,9 @@ const CleaningSchedule = (props) => {
                         : "text-service-default"
                     }
                   >
-                    {item?.description?.vi.slice(
+                    {item?.description?.[lang].slice(
                       0,
-                      item?.description?.vi.indexOf("2")
+                      item?.description?.[lang].indexOf("2")
                     )}
                   </a>
                   <a
@@ -674,8 +678,8 @@ const CleaningSchedule = (props) => {
                         : "text-service-default"
                     }
                   >
-                    {item?.description?.vi.slice(
-                      item?.description?.vi.indexOf(" ")
+                    {item?.description?.[lang].slice(
+                      item?.description?.[lang].indexOf(" ")
                     )}
                   </a>
                 </div>
@@ -707,7 +711,9 @@ const CleaningSchedule = (props) => {
         </div>
 
         <div className="form-picker-hours">
-          <a className="label-hours">Giờ làm (*)</a>
+          <a className="label-hours">
+            {`${i18n.t("date_work", { lng: lang })}`} (*)
+          </a>
           <div className="div-hours">
             {DATA_TIME.map((item) => {
               return (
@@ -728,7 +734,9 @@ const CleaningSchedule = (props) => {
         </div>
 
         <div className="div-select-month">
-          <a className="label-month">Gói tháng (*)</a>
+          <a className="label-month">
+            {`${i18n.t("subscription_duration", { lng: lang })}`} (*)
+          </a>
           <div className="div-month">
             {DATA_MONTH?.map((item, index) => {
               return (
@@ -741,7 +749,9 @@ const CleaningSchedule = (props) => {
                   }
                   onClick={() => onChooseMonth(item?.estimate)}
                 >
-                  <a>{item?.title}</a>
+                  <a>
+                    {item?.title} {`${i18n.t("month", { lng: lang })}`}
+                  </a>
                 </div>
               );
             })}
@@ -753,21 +763,21 @@ const CleaningSchedule = (props) => {
           onClick={showDrawer}
           disabled={lat && long && address && timeWork && time ? false : true}
         >
-          Xem lịch trình làm việc
+          {`${i18n.t("see_schedule", { lng: lang })}`}
         </Button>
 
         <InputCustom
-          title="Ghi chú"
+          title={`${i18n.t("note", { lng: lang })}`}
           textArea={true}
-          placeholder="Vui lòng nhập ghi chú"
+          placeholder={`${i18n.t("enter_note", { lng: lang })}`}
           onChange={(e) => setNote(e.target.value)}
-          className="input-note"
+          style={{ width: "50%" }}
         />
 
         <div>
-          <h5>(*)Cộng tác viên</h5>
-          <Input
-            placeholder="Tìm kiếm theo số điện thoại"
+          <InputCustom
+            title={`${i18n.t("collaborator", { lng: lang })}`}
+            placeholder={`${i18n.t("search", { lng: lang })}`}
             value={nameCollaborator}
             className="input-search-collaborator-order"
             onChange={(e) => {
@@ -830,27 +840,36 @@ const CleaningSchedule = (props) => {
                 }}
               >
                 <a className="text-code-promotion">{item?.code}</a>
-                <a className="text-title-promotion">{item?.title?.vi}</a>
+                <a className="text-title-promotion">{item?.title?.[lang]}</a>
               </div>
             );
           })}
         </div>
         {priceOrder && (
           <div className="div-total mt-3">
-            <a>Số buổi: {selectDay.length}</a>
-            <a>Tạm tính: {formatMoney(priceOrder)}</a>
-            <a>Phí nền tảng: {formatMoney(feeService)}</a>
+            <a>
+              {`${i18n.t("number_sessions", { lng: lang })}`}:{" "}
+              {selectDay.length}
+            </a>
+            <a>
+              {`${i18n.t("provisional", { lng: lang })}`}:{" "}
+              {formatMoney(priceOrder)}
+            </a>
+            <a>
+              {`${i18n.t("platform_fee", { lng: lang })}`}:{" "}
+              {formatMoney(feeService)}
+            </a>
             {eventPromotion.map((item, index) => {
               return (
                 <a style={{ color: "red" }}>
-                  {item?.title.vi}: {"-"}
+                  {item?.title?.[lang]}: {"-"}
                   {formatMoney(item?.discount)}
                 </a>
               );
             })}
             {discount > 0 && (
               <div>
-                <a style={{ color: "red" }}>{itemPromotion?.title?.vi}: </a>
+                <a style={{ color: "red" }}>{itemPromotion?.title?.[lang]}: </a>
                 <a style={{ color: "red" }}> {formatMoney(-discount)}</a>
               </div>
             )}
@@ -859,20 +878,22 @@ const CleaningSchedule = (props) => {
 
         <div className="div-footer mt-5">
           <a className="text-price">
-            Giá:{" "}
+            {`${i18n.t("price", { lng: lang })}`}:{" "}
             {priceOrder > 0
               ? formatMoney(
                   priceOrder + feeService - discount - eventFeePromotion
                 )
               : formatMoney(0)}
           </a>
-          <Button onClick={onCreateOrder}>Đăng việc</Button>
+          <Button onClick={onCreateOrder}>{`${i18n.t("post", {
+            lng: lang,
+          })}`}</Button>
         </div>
         {isLoading && <LoadingPagination />}
 
         <div>
           <Drawer
-            title="Xem lịch làm việc"
+            title={`${i18n.t("see_schedule", { lng: lang })}`}
             placement="right"
             onClose={onClose}
             width={420}
@@ -887,18 +908,18 @@ const CleaningSchedule = (props) => {
                   var a = new Date(timess).toString().split(/\s/);
 
                   return {
-                    Jan: "Tháng 1",
-                    Feb: "Tháng 2",
-                    Mar: "Tháng 3",
-                    Apr: "Tháng 4",
-                    May: "Tháng 5",
-                    Jun: "Tháng 6",
-                    Jul: "Tháng 7",
-                    Aug: "Tháng 8",
-                    Sep: "Tháng 9",
-                    Oct: "Tháng 10",
-                    Nov: "Tháng 11",
-                    Dec: "Tháng 12",
+                    Jan: i18n.t("January", { lng: lang }),
+                    Feb: i18n.t("February", { lng: lang }),
+                    Mar: i18n.t("March", { lng: lang }),
+                    Apr: i18n.t("April", { lng: lang }),
+                    May: i18n.t("May", { lng: lang }),
+                    Jun: i18n.t("June", { lng: lang }),
+                    Jul: i18n.t("July", { lng: lang }),
+                    Aug: i18n.t("August", { lng: lang }),
+                    Sep: i18n.t("September", { lng: lang }),
+                    Oct: i18n.t("October", { lng: lang }),
+                    Nov: i18n.t("November", { lng: lang }),
+                    Dec: i18n.t("December", { lng: lang }),
                   }[a[1]];
                 })(month[0]);
 
@@ -910,7 +931,7 @@ const CleaningSchedule = (props) => {
                     <div className="div-flex-date">
                       {date.map((item) => (
                         <div key={item.id} className="div-date">
-                          <a className="text-date">{item.title}</a>
+                          <a className="text-date">{item.title[lang]}</a>
                         </div>
                       ))}
                     </div>

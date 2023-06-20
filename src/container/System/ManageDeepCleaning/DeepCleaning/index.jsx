@@ -3,11 +3,15 @@ import { useEffect, useState } from "react";
 
 import "./index.scss";
 import TableDeepCleaning from "./TableDeepCleaning";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import { useSelector } from "react-redux";
+import i18n from "../../../../i18n";
 
 const DeepCleaning = () => {
   const [status, setStatus] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
+  const lang = useSelector(getLanguageState);
 
   const onChangeTab = (active) => {
     if (active === "2") {
@@ -31,7 +35,7 @@ const DeepCleaning = () => {
   return (
     <div>
       <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
-        <Tabs.TabPane tab="Tất cả" key="1">
+        <Tabs.TabPane tab={`${i18n.t("all", { lng: lang })}`} key="1">
           <TableDeepCleaning
             status={status}
             currentPage={currentPage}
@@ -40,7 +44,7 @@ const DeepCleaning = () => {
             startPage={startPage}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Đang chờ" key="2">
+        <Tabs.TabPane tab={`${i18n.t("pending", { lng: lang })}`} key="2">
           <TableDeepCleaning
             status={status}
             currentPage={currentPage}
@@ -49,7 +53,7 @@ const DeepCleaning = () => {
             startPage={startPage}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Hoàn tất" key="3">
+        <Tabs.TabPane tab={`${i18n.t("complete", { lng: lang })}`} key="3">
           <TableDeepCleaning
             status={status}
             currentPage={currentPage}
@@ -58,7 +62,7 @@ const DeepCleaning = () => {
             startPage={startPage}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Huỷ" key="4">
+        <Tabs.TabPane tab={`${i18n.t("cancel_modal", { lng: lang })}`} key="4">
           <TableDeepCleaning
             status={status}
             currentPage={currentPage}

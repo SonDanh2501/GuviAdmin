@@ -15,10 +15,15 @@ import {
 import ModalCustom from "../../../../components/modalCustom";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
-import { getElementState, getUser } from "../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+  getUser,
+} from "../../../../redux/selectors/auth";
 import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
 import EditTimeOrder from "../EditTimeGroupOrder";
 import "./OrderManage.scss";
+import i18n from "../../../../i18n";
 const width = window.innerWidth;
 const OrderManage = (props) => {
   const {
@@ -45,6 +50,7 @@ const OrderManage = (props) => {
   const navigate = useNavigate();
   const toggle = () => setModal(!modal);
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
 
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work_schedule[0].date)).format(
@@ -117,7 +123,7 @@ const OrderManage = (props) => {
                   })
                 }
               >
-                Xem chi tiết
+                {`${i18n.t("see_more", { lng: lang })}`}
               </a>
             ),
           },
@@ -146,7 +152,7 @@ const OrderManage = (props) => {
             key: "1",
             label: checkElement?.includes("detail_guvi_job") && (
               <Link to={`/details-order/${item?._id}`}>
-                <a>Xem chi tiết</a>
+                <a>{`${i18n.t("see_more", { lng: lang })}`}</a>
               </Link>
             ),
           },
@@ -172,7 +178,7 @@ const OrderManage = (props) => {
             label:
               checkElement?.includes("delete_order_guvi_job") &&
               (item?.status === "cancel" || item?.status === "done" ? (
-                <a onClick={toggle}>Xoá</a>
+                <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
               ) : (
                 ""
               )),
@@ -181,7 +187,7 @@ const OrderManage = (props) => {
 
   const columns = [
     {
-      title: "Mã",
+      title: `${i18n.t("code_order", { lng: lang })}`,
       render: (data) => {
         return (
           <Link
@@ -197,7 +203,7 @@ const OrderManage = (props) => {
       },
     },
     {
-      title: "Ngày tạo",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-create-order">
@@ -213,7 +219,7 @@ const OrderManage = (props) => {
       responsive: ["xl"],
     },
     {
-      title: "Tên khách hàng",
+      title: `${i18n.t("customer", { lng: lang })}`,
       render: (data) => {
         return (
           <Link
@@ -231,19 +237,19 @@ const OrderManage = (props) => {
         a.id_customer.full_name.localeCompare(b.id_customer.full_name),
     },
     {
-      title: "Dịch vụ",
+      title: `${i18n.t("service", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-service-order">
             <a className="text-service">
               {data?.type === "loop" && data?.is_auto_order
-                ? "Lặp lại"
+                ? `${i18n.t("repeat", { lng: lang })}`
                 : data?.service?._id?.kind === "giup_viec_theo_gio"
-                ? "Theo giờ"
+                ? `${i18n.t("cleaning", { lng: lang })}`
                 : data?.service?._id?.kind === "giup_viec_co_dinh"
-                ? "Cố định"
+                ? `${i18n.t("cleaning_subscription", { lng: lang })}`
                 : data?.service?._id?.kind === "phuc_vu_nha_hang"
-                ? "Phục vụ"
+                ? `${i18n.t("serve", { lng: lang })}`
                 : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>
@@ -252,7 +258,7 @@ const OrderManage = (props) => {
       },
     },
     {
-      title: "Ngày làm",
+      title: `${i18n.t("date_work", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-worktime-order">
@@ -263,7 +269,7 @@ const OrderManage = (props) => {
             </a>
             <a className="text-worktime">
               {moment(new Date(data?.date_work_schedule[0].date))
-                .locale("vi", vi)
+                .locale(lang)
                 .format("dddd")}
             </a>
           </div>
@@ -271,18 +277,20 @@ const OrderManage = (props) => {
       },
     },
     {
-      title: "Địa điểm",
+      title: `${i18n.t("address", { lng: lang })}`,
       render: (data) => {
         return <a className="text-address-order">{data?.address}</a>;
       },
       responsive: ["xl"],
     },
     {
-      title: "Cộng tác viên",
+      title: `${i18n.t("collaborator", { lng: lang })}`,
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
-            <a className="text-pending-search">Đang tìm kiếm</a>
+            <a className="text-pending-search">{`${i18n.t("searching", {
+              lng: lang,
+            })}`}</a>
           ) : (
             <Link
               to={`/details-collaborator/${data?.id_collaborator?._id}`}
@@ -307,7 +315,7 @@ const OrderManage = (props) => {
     },
 
     {
-      title: "Trạng thái",
+      title: `${i18n.t("status", { lng: lang })}`,
 
       align: "center",
       render: (data) => (
@@ -325,27 +333,27 @@ const OrderManage = (props) => {
           }
         >
           {data?.status === "pending"
-            ? "Đang chờ làm"
+            ? `${i18n.t("pending", { lng: lang })}`
             : data?.status === "confirm"
-            ? "Đã nhận"
+            ? `${i18n.t("confirm", { lng: lang })}`
             : data?.status === "doing"
-            ? "Đang làm"
+            ? `${i18n.t("doing", { lng: lang })}`
             : data?.status === "done"
-            ? "Hoàn thành"
-            : "Đã huỷ"}
+            ? `${i18n.t("complete", { lng: lang })}`
+            : `${i18n.t("cancel", { lng: lang })}`}
         </a>
       ),
     },
     {
-      title: "Thanh toán",
+      title: `${i18n.t("pay", { lng: lang })}`,
       align: "center",
       render: (data) => {
         return (
           <a className="text-payment-method">
             {data?.payment_method === "cash"
-              ? "Tiền mặt"
+              ? `${i18n.t("cash", { lng: lang })}`
               : data?.payment_method === "point"
-              ? "Ví G-pay"
+              ? `${i18n.t("wallet_gpay", { lng: lang })}`
               : ""}
           </a>
         );
@@ -410,7 +418,7 @@ const OrderManage = (props) => {
     <React.Fragment>
       <div>
         <Input
-          placeholder="Tìm kiếm"
+          placeholder={`${i18n.t("search", { lng: lang })}`}
           type="text"
           className="field-search"
           value={valueSearch}
@@ -453,9 +461,12 @@ const OrderManage = (props) => {
                   expandedRowRender: (record) => {
                     return (
                       <div className="div-plus">
-                        <a>Địa điểm: {record?.address}</a>
                         <a>
-                          Ngày tạo:{" "}
+                          {`${i18n.t("address", { lng: lang })}`}:{" "}
+                          {record?.address}
+                        </a>
+                        <a>
+                          {`${i18n.t("date_create", { lng: lang })}`}:{" "}
                           {moment(new Date(record?.date_create)).format(
                             "DD/MM/YYYY - HH:mm"
                           )}
@@ -469,7 +480,10 @@ const OrderManage = (props) => {
         />
 
         <div className="mt-2 div-pagination-order p-2">
-          <a>Tổng: {totalSearch > 0 ? totalSearch : total}</a>
+          <a>
+            {`${i18n.t("total", { lng: lang })}`}:{" "}
+            {totalSearch > 0 ? totalSearch : total}
+          </a>
           <div>
             <Pagination
               current={currentPage}
@@ -484,15 +498,15 @@ const OrderManage = (props) => {
         <div>
           <ModalCustom
             isOpen={modal}
-            title="Xóa đơn hàng"
+            title={`${i18n.t("delete_order", { lng: lang })}`}
             handleOk={() => deleteOrder(item?._id)}
             handleCancel={toggle}
-            textOk="Xoá"
+            textOk={`${i18n.t("delete", { lng: lang })}`}
             body={
-              <a>
-                Bạn có chắc muốn xóa đơn hàng{" "}
-                <a className="text-name-modal">{item?.id_view}</a> này không?
-              </a>
+              <>
+                <a>{`${i18n.t("confirm_delete", { lng: lang })}`}</a>
+                <a className="text-name-modal">{item?.id_view}</a>
+              </>
             }
           />
         </div>
