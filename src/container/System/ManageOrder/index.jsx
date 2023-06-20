@@ -7,9 +7,14 @@ import { DATA, DATA_STATUS } from "../../../api/fakeData";
 import { getOrderApi } from "../../../api/order";
 import { ExportCSV } from "../../../helper/export";
 import { getOrder } from "../../../redux/actions/order";
-import { getElementState, getUser } from "../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+  getUser,
+} from "../../../redux/selectors/auth";
 import OrderManage from "./Order/OrderManage";
 import "./index.scss";
+import i18n from "../../../i18n";
 
 const ManageOrder = () => {
   const [tab, setTab] = useState("all");
@@ -23,6 +28,7 @@ const ManageOrder = () => {
   const user = useSelector(getUser);
   const navigate = useNavigate();
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -59,7 +65,7 @@ const ManageOrder = () => {
   return (
     <>
       <div className="div-header">
-        <a className="title-cv">Danh sách công việc</a>
+        <a className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</a>
         <div className="div-add-export">
           <Dropdown
             menu={{
@@ -80,7 +86,7 @@ const ManageOrder = () => {
             className="btn-create-order"
             onClick={() => navigate("/group-order/manage-order/create-order")}
           >
-            Tạo dịch vụ
+            {`${i18n.t("create_order", { lng: lang })}`}
           </Button>
         ) : (
           <></>
@@ -109,7 +115,7 @@ const ManageOrder = () => {
                       : "text-title-tab-default"
                   }
                 >
-                  {item?.title}
+                  {`${i18n.t(item?.title, { lng: lang })}`}
                 </a>
                 <div className={tab === item?.value ? "tab-line" : ""}></div>
               </div>
@@ -137,7 +143,7 @@ const ManageOrder = () => {
                         : "text-title-tab-default"
                     }
                   >
-                    {item?.title}
+                    {`${i18n.t(item?.title, { lng: lang })}`}
                   </a>
                   <div
                     className={valueTab === item?.value ? "tab-line" : ""}

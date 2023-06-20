@@ -1,7 +1,7 @@
 import { Button, DatePicker, Input, InputNumber, List, Switch } from "antd";
 import _debounce from "lodash/debounce";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { searchCollaboratorsCreateOrder } from "../../../../../api/collaborator";
 import { DATA_TIME_TOTAL } from "../../../../../api/fakeData";
@@ -26,6 +26,8 @@ import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import "./index.scss";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
 
 const CleaningHourly = (props) => {
   const {
@@ -68,6 +70,7 @@ const CleaningHourly = (props) => {
   const [dataAddress, setDataAddress] = useState([]);
   const [estimate, setEstimate] = useState();
   const [tipCollaborator, setTipCollaborator] = useState(0);
+  const lang = useSelector(getLanguageState);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -487,18 +490,16 @@ const CleaningHourly = (props) => {
     <>
       <div>
         <div className="div-search-address">
-          <a className="label-customer">
-            Địa điểm <a style={{ color: "red" }}>(*)</a>
-          </a>
-          <Input
-            placeholder="Vui lòng chọn địa chỉ"
+          <InputCustom
+            title={`${i18n.t("address", { lng: lang })}`}
+            placeholder={`${i18n.t("enter_address", { lng: lang })}`}
+            style={{ width: "50%" }}
             value={address}
             type="text"
             onChange={(e) => {
               setAddress(e.target.value);
               handleSearchLocation(e.target.value);
             }}
-            className="input-search"
           />
         </div>
 
@@ -523,7 +524,9 @@ const CleaningHourly = (props) => {
 
         {dataAddress.length > 0 && (
           <div className="mt-2">
-            <a className="title-list-address">Địa chỉ mặc định</a>
+            <a className="title-list-address">{`${i18n.t("address_default", {
+              lng: lang,
+            })}`}</a>
             <List type={"unstyled"} className="list-item-address-customer">
               {dataAddress?.map((item, index) => {
                 return (
@@ -556,8 +559,9 @@ const CleaningHourly = (props) => {
 
         <a className="text-error">{errorAddress}</a>
         <div className="div-add-service mt-3">
-          <a className="label">
-            Thời lượng <a style={{ color: "red" }}>(*)</a>
+          <a className="label-time">
+            {`${i18n.t("times", { lng: lang })}`}{" "}
+            <a style={{ color: "red", fontSize: 12 }}>(*)</a>
           </a>
           <div className="div-service">
             {extendService.map((item) => {
@@ -577,7 +581,7 @@ const CleaningHourly = (props) => {
                         : "text-service-default"
                     }
                   >
-                    {item?.title?.vi}
+                    {item?.title?.[lang]}
                   </a>
                   <a
                     className={
@@ -590,7 +594,7 @@ const CleaningHourly = (props) => {
                       ? item?.description?.vi
                       : item?.description?.vi.slice(
                           0,
-                          item?.description?.vi.indexOf("2")
+                          item?.description?.[lang].indexOf("2")
                         )}
                   </a>
                   <a
@@ -601,8 +605,8 @@ const CleaningHourly = (props) => {
                     }
                   >
                     {item?.estimate !== 0.5 &&
-                      item?.description?.vi.slice(
-                        item?.description?.vi.indexOf(" ")
+                      item?.description?.[lang].slice(
+                        item?.description?.[lang].indexOf(" ")
                       )}
                   </a>
                 </div>
@@ -613,7 +617,9 @@ const CleaningHourly = (props) => {
         </div>
 
         <div className="div-add-service mt-3">
-          <a className="label">Dịch vụ thêm</a>
+          <a className="label-time">{`${i18n.t("extra_service", {
+            lng: lang,
+          })}`}</a>
           <div className="div-service">
             {addService.map((item) => {
               return (
@@ -639,7 +645,7 @@ const CleaningHourly = (props) => {
                         : "text-service-default"
                     }
                   >
-                    {item?.title?.vi}
+                    {item?.title?.[lang]}
                   </a>
                   <a
                     className={
@@ -648,7 +654,7 @@ const CleaningHourly = (props) => {
                         : "text-service-default"
                     }
                   >
-                    {item?.description?.vi}
+                    {item?.description?.[lang]}
                   </a>
                 </button>
               );
@@ -656,9 +662,10 @@ const CleaningHourly = (props) => {
           </div>
         </div>
 
-        <div className="form-picker">
+        <div className="form-picker mt-2">
           <a className="label">
-            Ngày làm <a style={{ color: "red" }}>(*)</a>
+            {`${i18n.t("date_work", { lng: lang })}`}{" "}
+            <a style={{ color: "red", fontSize: 14 }}>(*)</a>
           </a>
           <DatePicker
             format={dateFormat}
@@ -669,7 +676,9 @@ const CleaningHourly = (props) => {
         </div>
 
         <div className="form-picker-hours">
-          <a className="label-hours">Giờ làm (*)</a>
+          <a className="label-hours">
+            {`${i18n.t("time_work", { lng: lang })}`} (*)
+          </a>
           <div className="div-hours">
             {DATA_TIME_TOTAL.map((item) => {
               return (
@@ -697,7 +706,9 @@ const CleaningHourly = (props) => {
         </div>
 
         <div className="div-auto-order">
-          <a className="label-hours">Lặp lại hàng tuần</a>
+          <a className="label-hours">
+            {`${i18n.t("weeekly_schedule", { lng: lang })}`}
+          </a>
           <Switch
             defaultChecked={isAutoOrder}
             style={{ width: 50, marginRight: 20 }}
@@ -705,26 +716,29 @@ const CleaningHourly = (props) => {
           />
         </div>
         <InputCustom
-          title="Phương thức thanh toán"
+          title={`${i18n.t("payment_method", { lng: lang })}`}
           value={paymentMethod}
           onChange={(e) => setPaymentMethod(e)}
           options={[
-            { value: "cash", label: "Tiền mặt" },
-            { value: "point", label: "G-pay" },
+            { value: "cash", label: `${i18n.t("cash", { lng: lang })}` },
+            {
+              value: "point",
+              label: `${i18n.t("wallet_gpay", { lng: lang })}`,
+            },
           ]}
           className="input-form-select-payment"
           select={true}
         />
 
         <InputCustom
-          title="Ghi chú"
-          placeholder="Vui lòng nhập ghi chú"
+          title={`${i18n.t("note", { lng: lang })}`}
+          placeholder={`${i18n.t("enter_note", { lng: lang })}`}
           onChange={(e) => setNote(e.target.value)}
-          className="input-note"
+          style={{ width: "50%" }}
         />
 
         <div className="div-money">
-          <a>(*) Tiền tip cho CTV</a>
+          <a>(*) {`${i18n.t("tip_collaborator", { lng: lang })}`}</a>
           <InputNumber
             formatter={(value) =>
               `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
@@ -738,18 +752,18 @@ const CleaningHourly = (props) => {
         </div>
 
         <div className="mt-3">
-          <h5>(*)Cộng tác viên</h5>
           <div>
-            <Input
-              placeholder="Tìm kiếm theo số điện thoại"
-              value={nameCollaborator}
-              className="input-search-collaborator-order"
+            <InputCustom
+              title={`${i18n.t("collaborator", { lng: lang })}`}
+              style={{ width: "50%" }}
+              error={errorCollaborator}
               onChange={(e) => {
                 searchCollaborator(e.target.value);
                 searchValue(e.target.value);
               }}
+              value={nameCollaborator}
+              placeholder={`${i18n.t("search", { lng: lang })}`}
             />
-            {<a className="text-error">{errorCollaborator}</a>}
           </div>
 
           {dataCollaborator.length > 0 && (
@@ -805,29 +819,38 @@ const CleaningHourly = (props) => {
                 }}
               >
                 <a className="text-code-promotion">{item?.code}</a>
-                <a className="text-title-promotion">{item?.title?.vi}</a>
+                <a className="text-title-promotion">{item?.title?.[lang]}</a>
               </div>
             );
           })}
         </div>
         {priceOrder && (
           <div className="div-total mt-3">
-            <a>Tạm tính: {formatMoney(priceOrder)}</a>
-            <a>Phí nền tảng: {formatMoney(feeService)}</a>
+            <a>
+              {`${i18n.t("provisional", { lng: lang })}`}:{" "}
+              {formatMoney(priceOrder)}
+            </a>
+            <a>
+              {`${i18n.t("platform_fee", { lng: lang })}`}:{" "}
+              {formatMoney(feeService)}
+            </a>
             {tipCollaborator > 0 && (
-              <a>Tiền tip: {formatMoney(tipCollaborator)}</a>
+              <a>
+                {`${i18n.t("tips", { lng: lang })}`}:{" "}
+                {formatMoney(tipCollaborator)}
+              </a>
             )}
             {eventPromotion.map((item, index) => {
               return (
                 <a style={{ color: "red" }}>
-                  {item?.title.vi}: {"-"}
+                  {item?.title?.[lang]}: {"-"}
                   {formatMoney(item?.discount)}
                 </a>
               );
             })}
             {discount > 0 && (
               <div>
-                <a style={{ color: "red" }}>{itemPromotion?.title?.vi}: </a>
+                <a style={{ color: "red" }}>{itemPromotion?.title?.[lang]}: </a>
                 <a style={{ color: "red" }}> {formatMoney(-discount)}</a>
               </div>
             )}
@@ -836,7 +859,7 @@ const CleaningHourly = (props) => {
 
         <div className="div-footer mt-5">
           <a className="text-price">
-            Giá:{" "}
+            {`${i18n.t("price", { lng: lang })}`}:{" "}
             {priceOrder > 0
               ? formatMoney(
                   priceOrder +
@@ -847,7 +870,9 @@ const CleaningHourly = (props) => {
                 )
               : formatMoney(0)}
           </a>
-          <Button onClick={onCreateOrder}>Đăng việc</Button>
+          <Button onClick={onCreateOrder}>{`${i18n.t("post", {
+            lng: lang,
+          })}`}</Button>
         </div>
         {isLoading && <LoadingPagination />}
       </div>

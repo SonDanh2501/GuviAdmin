@@ -7,6 +7,8 @@ import { getHistoryActivity } from "../../../../redux/actions/statistic";
 import { getHistoryActivitys } from "../../../../redux/selectors/statistic";
 
 import "./index.scss";
+import i18n from "../../../../i18n";
+import { getLanguageState } from "../../../../redux/selectors/auth";
 
 const MoreActivity = () => {
   const dispatch = useDispatch();
@@ -14,6 +16,7 @@ const MoreActivity = () => {
   const [initLoading, setInitLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const historyActivity = useSelector(getHistoryActivitys);
+  const lang = useSelector(getLanguageState);
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -53,7 +56,10 @@ const MoreActivity = () => {
   return (
     <>
       <button onClick={showDrawer} className="btn-see-more ">
-        Xem chi tiết <i class="uil uil-angle-right"></i>
+        {`${i18n.t("see_more", {
+          lng: lang,
+        })}`}{" "}
+        <i class="uil uil-angle-right"></i>
       </button>
 
       <Drawer

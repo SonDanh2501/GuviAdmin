@@ -10,10 +10,11 @@ import {
   searchOrderExpiredApi,
 } from "../../../../../api/order";
 import { useSelector } from "react-redux";
-import { getUser } from "../../../../../redux/selectors/auth";
+import { getLanguageState, getUser } from "../../../../../redux/selectors/auth";
 import { SearchOutlined } from "@ant-design/icons";
 import _debounce from "lodash/debounce";
 import { vi } from "date-fns/locale";
+import i18n from "../../../../../i18n";
 
 const TableExpired = ({ status }) => {
   const [item, setItem] = useState([]);
@@ -24,7 +25,7 @@ const TableExpired = ({ status }) => {
   const [dataSearch, setDataSearch] = useState([]);
   const [totalSearch, setTotalSearch] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
-  const user = useSelector(getUser);
+  const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -59,7 +60,7 @@ const TableExpired = ({ status }) => {
             })
           }
         >
-          Xem chi tiết
+          {`${i18n.t("see_more", { lng: lang })}`}
         </a>
       ),
     },
@@ -67,7 +68,7 @@ const TableExpired = ({ status }) => {
 
   const columns = [
     {
-      title: "Mã",
+      title: `${i18n.t("code_order", { lng: lang })}`,
       render: (data) => {
         return (
           <Link to={`/details-order/${data?._id}`}>
@@ -77,7 +78,7 @@ const TableExpired = ({ status }) => {
       },
     },
     {
-      title: "Ngày tạo",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-create-expire">
@@ -92,7 +93,7 @@ const TableExpired = ({ status }) => {
       },
     },
     {
-      title: "Tên khách hàng",
+      title: `${i18n.t("customer", { lng: lang })}`,
       render: (data) => {
         return (
           <Link
@@ -110,19 +111,19 @@ const TableExpired = ({ status }) => {
         a.id_customer.full_name.localeCompare(b.id_customer.full_name),
     },
     {
-      title: "Dịch vụ",
+      title: `${i18n.t("service", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-service-expired">
             <a className="text-service">
               {data?.type === "loop" && data?.is_auto_order
-                ? "Lặp lại"
+                ? `${i18n.t("repeat", { lng: lang })}`
                 : data?.service?._id?.kind === "giup_viec_theo_gio"
-                ? "Theo giờ"
+                ? `${i18n.t("cleaning", { lng: lang })}`
                 : data?.service?._id?.kind === "giup_viec_co_dinh"
-                ? "Cố định"
+                ? `${i18n.t("cleaning_subscription", { lng: lang })}`
                 : data?.service?._id?.kind === "phuc_vu_nha_hang"
-                ? "Phục vụ"
+                ? `${i18n.t("serve", { lng: lang })}`
                 : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>
@@ -131,7 +132,7 @@ const TableExpired = ({ status }) => {
       },
     },
     {
-      title: "Ngày làm",
+      title: `${i18n.t("date_work", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-worktime-expire">
@@ -143,7 +144,7 @@ const TableExpired = ({ status }) => {
             </a>
             <a className="text-worktime">
               {moment(new Date(data?.date_work_schedule[0].date))
-                .locale("vi", vi)
+                .locale(lang)
                 .format("dddd")}
             </a>
           </div>
@@ -151,7 +152,7 @@ const TableExpired = ({ status }) => {
       },
     },
     {
-      title: "Địa điểm",
+      title: `${i18n.t("address", { lng: lang })}`,
       render: (data) => <p className="text-address-expired">{data?.address}</p>,
     },
     // {
@@ -178,7 +179,7 @@ const TableExpired = ({ status }) => {
     // },
 
     {
-      title: "Trạng thái",
+      title: `${i18n.t("status", { lng: lang })}`,
       render: (data) => (
         <a
           className={
@@ -194,14 +195,14 @@ const TableExpired = ({ status }) => {
           }
         >
           {data?.status === "pending"
-            ? "Đang chờ làm"
+            ? `${i18n.t("pending", { lng: lang })}`
             : data?.status === "confirm"
-            ? "Đã nhận"
+            ? `${i18n.t("confirm", { lng: lang })}`
             : data?.status === "doing"
-            ? "Đang làm"
+            ? `${i18n.t("doing", { lng: lang })}`
             : data?.status === "done"
-            ? "Hoàn thành"
-            : "Đã huỷ"}
+            ? `${i18n.t("complete", { lng: lang })}`
+            : `${i18n.t("cancel", { lng: lang })}`}
         </a>
       ),
     },
@@ -261,7 +262,7 @@ const TableExpired = ({ status }) => {
     <div>
       <div>
         <Input
-          placeholder="Tìm kiếm"
+          placeholder={`${i18n.t("pending", { lng: lang })}`}
           type="text"
           className="input-search-expired"
           value={valueSearch}
@@ -285,7 +286,10 @@ const TableExpired = ({ status }) => {
         }}
       />
       <div className="mt-2 div-pagination p-2">
-        <a>Tổng: {totalSearch > 0 ? totalSearch : total}</a>
+        <a>
+          {`${i18n.t("total", { lng: lang })}`}:{" "}
+          {totalSearch > 0 ? totalSearch : total}
+        </a>
         <div>
           <Pagination
             current={currentPage}

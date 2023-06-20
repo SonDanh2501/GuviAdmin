@@ -4,12 +4,14 @@ import { Dropdown, Pagination, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { getOrderApi, searchOrderApi } from "../../../../api/order";
 import InputCustom from "../../../../components/textInputCustom";
 import { formatDayVN } from "../../../../helper/formatDayVN";
 import "./OrderDoingManage.scss";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import i18n from "../../../../i18n";
 
 const OrderDoingManage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -23,6 +25,7 @@ const OrderDoingManage = () => {
   const [total, setTotal] = useState();
   const [valueSearch, setValueSearch] = useState("");
   const [item, setItem] = useState([]);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getOrderApi(0, 10, "doing", "")
@@ -56,7 +59,7 @@ const OrderDoingManage = () => {
             })
           }
         >
-          Xem chi tiết
+          {`${i18n.t("see_more", { lng: lang })}`}
         </a>
       ),
     },
@@ -64,7 +67,7 @@ const OrderDoingManage = () => {
 
   const columns = [
     {
-      title: "Mã",
+      title: `${i18n.t("code_order", { lng: lang })}`,
       render: (data) => {
         return (
           <Link to={`/details-order/${data?._id}`}>
@@ -74,7 +77,7 @@ const OrderDoingManage = () => {
       },
     },
     {
-      title: "Ngày tạo",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-create-doing">
@@ -89,7 +92,7 @@ const OrderDoingManage = () => {
       },
     },
     {
-      title: "Tên khách hàng",
+      title: `${i18n.t("customer", { lng: lang })}`,
       render: (data) => (
         <Link to={`/profile-customer/${data?.id_customer?._id}`}>
           <a className="text-name-doing">{data?.id_customer?.full_name}</a>
@@ -97,19 +100,19 @@ const OrderDoingManage = () => {
       ),
     },
     {
-      title: "Dịch vụ",
+      title: `${i18n.t("service", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-service">
             <a className="text-service">
               {data?.type === "loop" && data?.is_auto_order
-                ? "Lặp lại"
+                ? `${i18n.t("repeat", { lng: lang })}`
                 : data?.service?._id?.kind === "giup_viec_theo_gio"
-                ? "Theo giờ"
+                ? `${i18n.t("cleaning", { lng: lang })}`
                 : data?.service?._id?.kind === "giup_viec_co_dinh"
-                ? "Cố định"
+                ? `${i18n.t("cleaning_subscription", { lng: lang })}`
                 : data?.service?._id?.kind === "phuc_vu_nha_hang"
-                ? "Phục vụ"
+                ? `${i18n.t("serve", { lng: lang })}`
                 : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>
@@ -118,7 +121,7 @@ const OrderDoingManage = () => {
       },
     },
     {
-      title: "Ngày làm",
+      title: `${i18n.t("date_work", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-worktime-doing">
@@ -129,26 +132,26 @@ const OrderDoingManage = () => {
               )}
             </a>
             <a className="text-worktime">
-              {formatDayVN(
-                moment(new Date(data.date_work_schedule[0].date)).format(
-                  "DD/MM/YYYY"
-                )
-              )}
+              {moment(new Date(data?.date_work_schedule[0].date))
+                .locale(lang)
+                .format("dddd")}
             </a>
           </div>
         );
       },
     },
     {
-      title: "Địa điểm",
+      title: `${i18n.t("address", { lng: lang })}`,
       render: (data) => <p className="text-address">{data?.address}</p>,
     },
     {
-      title: "Cộng tác viên",
+      title: `${i18n.t("collaborator", { lng: lang })}`,
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
-            <a>Đang tìm kiếm</a>
+            <a>{`${i18n.t("searching", {
+              lng: lang,
+            })}`}</a>
           ) : (
             <Link to={`/details-collaborator/${data?.id_collaborator?._id}`}>
               <a className="text-collaborator">
@@ -161,7 +164,7 @@ const OrderDoingManage = () => {
     },
 
     {
-      title: "Trạng thái",
+      title: `${i18n.t("status", { lng: lang })}`,
       render: (data) => (
         <a
           className={
@@ -177,14 +180,14 @@ const OrderDoingManage = () => {
           }
         >
           {data?.status === "pending"
-            ? "Đang chờ làm"
+            ? `${i18n.t("pending", { lng: lang })}`
             : data?.status === "confirm"
-            ? "Đã nhận"
+            ? `${i18n.t("confirm", { lng: lang })}`
             : data?.status === "doing"
-            ? "Đang làm"
+            ? `${i18n.t("doing", { lng: lang })}`
             : data?.status === "done"
-            ? "Hoàn thành"
-            : "Đã huỷ"}
+            ? `${i18n.t("complete", { lng: lang })}`
+            : `${i18n.t("cancel", { lng: lang })}`}
         </a>
       ),
     },
@@ -250,10 +253,10 @@ const OrderDoingManage = () => {
     <React.Fragment>
       <div className="mt-5 m-3">
         <div className="div-header">
-          <a className="title-cv">Danh sách công việc</a>
+          <a className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</a>
 
           <InputCustom
-            placeholder="Tìm kiếm"
+            placeholder={`${i18n.t("search", { lng: lang })}`}
             type="text"
             className="field-search"
             onChange={(e) => handleSearch(e.target.value)}
@@ -282,7 +285,10 @@ const OrderDoingManage = () => {
           />
 
           <div className="mt-2 div-pagination p-2">
-            <a>Tổng: {totalSearch > 0 ? totalSearch : total}</a>
+            <a>
+              {`${i18n.t("total", { lng: lang })}`}:{" "}
+              {totalSearch > 0 ? totalSearch : total}
+            </a>
             <div>
               <Pagination
                 current={currentPage}

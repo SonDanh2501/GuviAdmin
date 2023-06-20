@@ -1,8 +1,12 @@
 import { useState } from "react";
 import "./index.scss";
 import TableExpired from "./TableExpired";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import i18n from "../../../../i18n";
 
 const OrderExpired = () => {
+  const lang = useSelector(getLanguageState);
   const [tab, setTab] = useState("system");
   return (
     <div>
@@ -16,7 +20,9 @@ const OrderExpired = () => {
                 tab === item.value ? "div-item-tab-select" : "div-item-tab"
               }
             >
-              <a className="text-tab">{item?.title}</a>
+              <a className="text-tab">{`${i18n.t(item?.title, {
+                lng: lang,
+              })}`}</a>
             </div>
           );
         })}
@@ -33,11 +39,11 @@ export default OrderExpired;
 
 const TAB = [
   {
-    title: "Hệ thống huỷ",
+    title: "cancel_system",
     value: "system",
   },
   {
-    title: "Cộng tác viên huỷ",
+    title: "cancel_collaborator",
     value: "collaborator",
   },
 ];

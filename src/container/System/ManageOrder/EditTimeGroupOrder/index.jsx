@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, DatePicker, Drawer, Input, List } from "antd";
 import "./index.scss";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadingAction } from "../../../../redux/actions/loading";
 import dayjs from "dayjs";
 import _debounce from "lodash/debounce";
@@ -14,6 +14,8 @@ import {
 } from "../../../../api/order";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import i18n from "../../../../i18n";
 const EditTimeOrder = (props) => {
   const {
     idOrder,
@@ -36,7 +38,7 @@ const EditTimeOrder = (props) => {
     moment(dateWork).utc().format("HH:mm:ss")
   );
   const [wordDate, setWordDate] = useState(dateWork);
-  const dispatch = useDispatch();
+  const lang = useSelector(getLanguageState);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -93,10 +95,10 @@ const EditTimeOrder = (props) => {
   return (
     <>
       <a className="text-add" onClick={showDrawer}>
-        Chỉnh sửa
+        {`${i18n.t("edit", { lng: lang })}`}
       </a>
       <Drawer
-        title="Chỉnh sửa thời gian làm việc"
+        title={`${i18n.t("edit_work_time", { lng: lang })}`}
         placement="right"
         onClose={onClose}
         width={400}
@@ -126,7 +128,7 @@ const EditTimeOrder = (props) => {
         </div>
 
         <Button className="btn-update-time-order" onClick={editOrder}>
-          Cập nhật
+          {`${i18n.t("update", { lng: lang })}`}
         </Button>
       </Drawer>
     </>

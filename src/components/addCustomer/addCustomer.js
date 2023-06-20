@@ -6,11 +6,12 @@ import { Form } from "reactstrap";
 
 import { createCustomer, fetchCustomers } from "../../api/customer";
 import { errorNotify } from "../../helper/toast";
-import { getElementState } from "../../redux/selectors/auth";
+import { getElementState, getLanguageState } from "../../redux/selectors/auth";
 import { validateAddCustomerSchema } from "../../utils/schema";
 import CustomButton from "../customButton/customButton";
 import InputCustom from "../textInputCustom";
 import "./addCustomer.scss";
+import i18n from "../../i18n";
 
 const AddCustomer = (props) => {
   const { setIsLoading, setData, setTotal, startPage, status } = props;
@@ -18,6 +19,7 @@ const AddCustomer = (props) => {
   const dispatch = useDispatch();
   const checkElement = useSelector(getElementState);
   const width = window.innerWidth;
+  const lang = useSelector(getLanguageState);
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -68,7 +70,7 @@ const AddCustomer = (props) => {
     <>
       {/* Button trigger modal */}
       <CustomButton
-        title="Tạo mới"
+        title={`${i18n.t("create_new_customer", { lng: lang })}`}
         className={
           checkElement?.includes("create_customer")
             ? "btn-add-customer"
@@ -89,7 +91,7 @@ const AddCustomer = (props) => {
         {({ values, setFieldValue, errors, handleSubmit }) => {
           return (
             <Drawer
-              title="Tạo khách hàng"
+              title={`${i18n.t("create_new_customer", { lng: lang })}`}
               width={width > 490 ? 500 : 300}
               onClose={onClose}
               open={open}
@@ -99,44 +101,44 @@ const AddCustomer = (props) => {
             >
               <Form>
                 <InputCustom
-                  title="Tên khách hàng"
+                  title={`${i18n.t("name_customer", { lng: lang })}`}
                   type="text"
-                  placeholder="Nhập tên khách hàng"
+                  placeholder={`${i18n.t("placeholder", { lng: lang })}`}
                   onChange={(text) => setFieldValue("name", text.target.value)}
                   error={errors?.name}
                 />
                 <InputCustom
-                  title="Số điện thoại"
+                  title={`${i18n.t("phone", { lng: lang })}`}
                   type="number"
-                  placeholder="Nhập số điện thoại"
+                  placeholder={`${i18n.t("placeholder", { lng: lang })}`}
                   onChange={(text) => setFieldValue("phone", text.target.value)}
                   error={errors?.phone}
                 />
                 <InputCustom
                   title="Email"
                   type="text"
-                  placeholder="Nhập email"
+                  placeholder={`${i18n.t("placeholder", { lng: lang })}`}
                   onChange={(text) => setFieldValue("email", text.target.value)}
                   error={errors?.email}
                 />
                 <InputCustom
-                  title="Mật khẩu"
+                  title={`${i18n.t("password", { lng: lang })}`}
                   password={true}
-                  placeholder="Nhập mật khẩu"
+                  placeholder={`${i18n.t("placeholder", { lng: lang })}`}
                   onChange={(text) =>
                     setFieldValue("password", text.target.value)
                   }
                   error={errors?.password}
                 />
                 <InputCustom
-                  title="Mã giới thiệu"
+                  title={`${i18n.t("code_invite", { lng: lang })}`}
                   type="text"
-                  placeholder="Vui lòng nhập mã giới thiệu"
+                  placeholder={`${i18n.t("placeholder", { lng: lang })}`}
                   onChange={(text) => setFieldValue("code", text.target.value)}
                 />
 
                 <CustomButton
-                  title="Thêm"
+                  title={`${i18n.t("add", { lng: lang })}`}
                   className="float-right btn-add-cus mt-5"
                   type="button"
                   onClick={handleSubmit}

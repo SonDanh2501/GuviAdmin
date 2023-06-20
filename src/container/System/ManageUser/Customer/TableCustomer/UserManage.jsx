@@ -27,12 +27,16 @@ import ModalCustom from "../../../../../components/modalCustom";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
-import { getElementState } from "../../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../../redux/selectors/auth";
 import member from "../../../../../assets/images/iconMember.svg";
 import silver from "../../../../../assets/images/iconSilver.svg";
 import gold from "../../../../../assets/images/iconGold.svg";
 import platinum from "../../../../../assets/images/iconPlatinum.svg";
 import "./UserManage.scss";
+import i18n from "../../../../../i18n";
 const width = window.innerWidth;
 
 const UserManage = (props) => {
@@ -57,6 +61,7 @@ const UserManage = (props) => {
   const toggleBlock = () => setModalBlock(!modalBlock);
   const navigate = useNavigate();
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     fetchCustomers(0, 50, status)
@@ -184,8 +189,18 @@ const UserManage = (props) => {
   const items = [
     {
       key: "1",
+      label: (
+        <a onClick={toggleBlock}>
+          {itemEdit?.is_active === true
+            ? `${i18n.t("lock", { lng: lang })}`
+            : `${i18n.t("unlock", { lng: lang })}`}
+        </a>
+      ),
+    },
+    {
+      key: "2",
       label: checkElement?.includes("delete_customer") && (
-        <a onClick={toggle}>Xoá</a>
+        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
       ),
     },
   ];
@@ -194,7 +209,7 @@ const UserManage = (props) => {
     status === "birthday"
       ? [
           {
-            title: "Mã",
+            title: `${i18n.t("code_customer", { lng: lang })}`,
             render: (data) => {
               return (
                 <Link
@@ -210,7 +225,7 @@ const UserManage = (props) => {
             },
           },
           {
-            title: "Khách hàng",
+            title: `${i18n.t("customer", { lng: lang })}`,
             render: (data) => {
               return (
                 <Link
@@ -240,7 +255,7 @@ const UserManage = (props) => {
             sorter: true,
           },
           {
-            title: "Số điện thoại",
+            title: `${i18n.t("phone", { lng: lang })}`,
             render: (data, record, index) => {
               const phone = data?.phone.slice(0, 7);
               return (
@@ -276,7 +291,7 @@ const UserManage = (props) => {
           },
 
           {
-            title: "Ngày sinh",
+            title: `${i18n.t("birthday", { lng: lang })}`,
             render: (data) => {
               return (
                 <a className="text-birtday-customer">
@@ -286,22 +301,22 @@ const UserManage = (props) => {
             },
           },
           {
-            title: "Hạng thành viên",
+            title: `${i18n.t("kind_member", { lng: lang })}`,
             render: (data) => {
               if (data?.rank_point >= 0 && data?.rank_point < 100) {
-                setRank("Hạng thành viên");
+                setRank(`${i18n.t("member", { lng: lang })}`);
               } else if (data?.rank_point >= 100 && data?.rank_point < 300) {
-                setRank("Bạc");
+                setRank(`${i18n.t("silver", { lng: lang })}`);
               } else if (data?.rank_point >= 300 && data?.rank_point < 1500) {
-                setRank("Vàng");
+                setRank(`${i18n.t("gold", { lng: lang })}`);
               } else {
-                setRank("Bạch kim");
+                setRank(`${i18n.t("platinum", { lng: lang })}`);
               }
               return <a className="text-address-customer">{rank}</a>;
             },
           },
           {
-            title: "Tổng Đơn",
+            title: `${i18n.t("total_order", { lng: lang })}`,
             render: (data) => (
               <a className="text-address-customer">{data?.total_order}</a>
             ),
@@ -310,7 +325,7 @@ const UserManage = (props) => {
             responsive: ["xl"],
           },
           {
-            title: "Đơn gần nhất",
+            title: `${i18n.t("nearest_order", { lng: lang })}`,
             render: (data) => {
               return (
                 <>
@@ -321,7 +336,10 @@ const UserManage = (props) => {
                       </a>
                     </Link>
                   ) : (
-                    <a className="text-address-customer">Không có</a>
+                    <a className="text-address-customer">{`${i18n.t(
+                      "not_available",
+                      { lng: lang }
+                    )}`}</a>
                   )}
                 </>
               );
@@ -330,7 +348,7 @@ const UserManage = (props) => {
             align: "center",
           },
           {
-            title: " Tổng",
+            title: `${i18n.t("total", { lng: lang })}`,
             fixed: "right",
             width: "10%",
             render: (data) => (
@@ -365,7 +383,7 @@ const UserManage = (props) => {
         ]
       : [
           {
-            title: "Mã",
+            title: `${i18n.t("code_customer", { lng: lang })}`,
             render: (data) => {
               return (
                 <Link
@@ -381,7 +399,7 @@ const UserManage = (props) => {
             },
           },
           {
-            title: "Khách hàng",
+            title: `${i18n.t("customer", { lng: lang })}`,
             render: (data) => {
               return (
                 <Link
@@ -411,7 +429,7 @@ const UserManage = (props) => {
             sorter: (a, b) => a.full_name.localeCompare(b.full_name),
           },
           {
-            title: "Số điện thoại",
+            title: `${i18n.t("phone", { lng: lang })}`,
             render: (data, record, index) => {
               const phone = data?.phone.slice(0, 7);
               return (
@@ -446,13 +464,13 @@ const UserManage = (props) => {
             },
           },
           {
-            title: "Địa Chỉ",
+            title: `${i18n.t("address", { lng: lang })}`,
             render: (data) => {
               const address = data?.default_address?.address.split(",");
               return (
                 <a className="text-address-customer-default">
                   {!data?.default_address
-                    ? "Chưa có"
+                    ? `${i18n.t("not_available", { lng: lang })}`
                     : address[address.length - 2] +
                       "," +
                       address[address.length - 1]}
@@ -463,7 +481,7 @@ const UserManage = (props) => {
             responsive: ["xl"],
           },
           {
-            title: "Ngày tạo",
+            title: `${i18n.t("date_create", { lng: lang })}`,
             render: (data) => {
               return (
                 <div className="div-create">
@@ -479,7 +497,7 @@ const UserManage = (props) => {
             responsive: ["xl"],
           },
           {
-            title: "Tổng Đơn",
+            title: `${i18n.t("total_order", { lng: lang })}`,
             render: (data) => (
               <a className="text-address-customer">{data?.total_order}</a>
             ),
@@ -488,7 +506,7 @@ const UserManage = (props) => {
             responsive: ["xl"],
           },
           {
-            title: "Đơn gần nhất",
+            title: `${i18n.t("nearest_order", { lng: lang })}`,
             render: (data) => {
               return (
                 <>
@@ -499,7 +517,10 @@ const UserManage = (props) => {
                       </a>
                     </Link>
                   ) : (
-                    <a className="text-address-customer">Không có</a>
+                    <a className="text-address-customer">{`${i18n.t(
+                      "not_available",
+                      { lng: lang }
+                    )}`}</a>
                   )}
                 </>
               );
@@ -508,7 +529,7 @@ const UserManage = (props) => {
             align: "center",
           },
           {
-            title: " Tổng",
+            title: `${i18n.t("total", { lng: lang })}`,
             width: "10%",
             render: (data) => (
               <a className="text-address-customer">
@@ -554,7 +575,7 @@ const UserManage = (props) => {
             />
           )}
           <Input
-            placeholder="Tìm kiếm"
+            placeholder={`${i18n.t("search", { lng: lang })}`}
             type="text"
             className="input-search"
             prefix={<SearchOutlined />}
@@ -593,23 +614,14 @@ const UserManage = (props) => {
                   }
                 : null
             }
-            // expandable={{
-            //   expandedRowRender: (record) => (
-            //     <p
-            //       style={{
-            //         margin: 0,
-            //       }}
-            //     >
-            //       {record?.date_create}
-            //       {record?.default_address}
-            //     </p>
-            //   ),
-            // }}
           />
         </div>
 
         <div className="mt-1 div-pagination p-2">
-          <a>Tổng: {dataFilter.length > 0 ? totalFilter : total}</a>
+          <a>
+            {`${i18n.t("total", { lng: lang })}`}:{" "}
+            {dataFilter.length > 0 ? totalFilter : total}
+          </a>
           <div>
             <Pagination
               current={currentPage}
@@ -623,16 +635,15 @@ const UserManage = (props) => {
         <div>
           <ModalCustom
             isOpen={modal}
-            title="Xóa người dùng"
+            title={`${i18n.t("customer_delete", { lng: lang })}`}
             handleOk={() => onDelete(itemEdit?._id)}
-            textOk="Xoá"
+            textOk={`${i18n.t("delete", { lng: lang })}`}
             handleCancel={toggle}
             body={
-              <a>
-                Bạn có chắc muốn xóa người dùng{" "}
-                <a className="text-name-modal">{itemEdit?.full_name}</a> này
-                không?
-              </a>
+              <>
+                <a>{`${i18n.t("sure_delete_customer", { lng: lang })}`}</a>
+                <a className="text-name-modal">{itemEdit?.full_name}</a>
+              </>
             }
           />
         </div>
@@ -641,17 +652,21 @@ const UserManage = (props) => {
             isOpen={modalBlock}
             title={
               itemEdit?.is_active === true
-                ? "Khóa tài khoản khách hàng"
-                : "Mở tài khoản khách hàng"
+                ? `${i18n.t("lock_cutomer_account", { lng: lang })}`
+                : `${i18n.t("unlock_cutomer_account", { lng: lang })}`
             }
             handleOk={() => blockCustomer(itemEdit?._id, itemEdit?.is_active)}
-            textOk="Xoá"
+            textOk={
+              itemEdit?.is_active === true
+                ? `${i18n.t("lock", { lng: lang })}`
+                : `${i18n.t("unlock", { lng: lang })}`
+            }
             handleCancel={toggleBlock}
             body={
               <>
                 {itemEdit?.is_active === true
-                  ? "Bạn có muốn khóa tài khoản khách hàng"
-                  : "Bạn có muốn kích hoạt tài khoản khách hàng"}
+                  ? `${i18n.t("want_lock_cutomer_account", { lng: lang })}`
+                  : `${i18n.t("want_unlock_cutomer_account", { lng: lang })}`}
                 <h6>{itemEdit?.full_name}</h6>
               </>
             }

@@ -7,6 +7,8 @@ import { getTopCollaborator } from "../../redux/actions/statistic";
 import { getTopCollaborators } from "../../redux/selectors/statistic";
 import { getTopCollaboratorApi } from "../../api/statistic";
 import "./index.scss";
+import i18n from "../../i18n";
+import { getLanguageState } from "../../redux/selectors/auth";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -15,7 +17,7 @@ const MoreTopCollaborator = () => {
   const topCollaborator = useSelector(getTopCollaborators);
   const [typeDate, setTypeDate] = useState("day");
   const [data, setData] = useState([]);
-
+  const lang = useSelector(getLanguageState);
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -46,7 +48,10 @@ const MoreTopCollaborator = () => {
   return (
     <>
       <button onClick={showDrawer} className="btn-see-more">
-        Xem chi tiết <i class="uil uil-angle-right"></i>
+        {`${i18n.t("see_more", {
+          lng: lang,
+        })}`}{" "}
+        <i class="uil uil-angle-right"></i>
       </button>
 
       <Drawer
