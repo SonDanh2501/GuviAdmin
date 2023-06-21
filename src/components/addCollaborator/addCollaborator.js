@@ -6,12 +6,13 @@ import { Form } from "reactstrap";
 import { createCollaborator, fetchCollaborators } from "../../api/collaborator";
 import { getDistrictApi } from "../../api/file";
 import { errorNotify } from "../../helper/toast";
-import { getElementState } from "../../redux/selectors/auth";
+import { getElementState, getLanguageState } from "../../redux/selectors/auth";
 import { getService } from "../../redux/selectors/service";
 import { validateAddCollaboratorSchema } from "../../utils/schema";
 import CustomButton from "../customButton/customButton";
 import InputCustom from "../textInputCustom";
 import "./addCollaborator.scss";
+import i18n from "../../i18n";
 
 const AddCollaborator = (props) => {
   const { setData, setTotal, startPage, status, setIsLoading } = props;
@@ -22,6 +23,7 @@ const AddCollaborator = (props) => {
   const serviceOption = [];
   const cityOption = [];
   const [open, setOpen] = useState(false);
+  const lang = useSelector(getLanguageState);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -99,7 +101,7 @@ const AddCollaborator = (props) => {
     <>
       {/* Button trigger modal */}
       <CustomButton
-        title="Tạo cộng tác viên"
+        title={`${i18n.t("create_collaborator", { lng: lang })}`}
         className={
           checkElement?.includes("create_collaborator")
             ? "btn-add-collaborator"
@@ -121,7 +123,7 @@ const AddCollaborator = (props) => {
         {({ values, setFieldValue, errors, handleSubmit }) => {
           return (
             <Drawer
-              title="Thêm cộng tác viên"
+              title={`${i18n.t("create_collaborator", { lng: lang })}`}
               width={500}
               onClose={onClose}
               open={open}
@@ -130,41 +132,41 @@ const AddCollaborator = (props) => {
               }}
             >
               <InputCustom
-                title="Tên cộng tác viên"
-                placeholder="Nhập tên cộng tác viên"
+                title={`${i18n.t("full_name", { lng: lang })}`}
+                placeholder={`${i18n.t("placeholder", { lng: lang })}`}
                 onChange={(text) => setFieldValue("name", text.target.value)}
                 error={errors?.name}
               />
               <InputCustom
-                title="Số điện thoại"
+                title={`${i18n.t("phone", { lng: lang })}`}
                 type="number"
-                placeholder="Nhập số điện thoại"
+                placeholder={`${i18n.t("placeholder", { lng: lang })}`}
                 onChange={(text) => setFieldValue("phone", text.target.value)}
                 error={errors?.phone}
               />
               <InputCustom
                 title="Email"
                 type="email"
-                placeholder="Nhập email"
+                placeholder={`${i18n.t("placeholder", { lng: lang })}`}
                 onChange={(text) => setFieldValue("email", text.target.value)}
               />
               <InputCustom
                 title="Type"
                 type="text"
-                placeholder="Nhập đối tượng CTV"
+                placeholder={`${i18n.t("placeholder", { lng: lang })}`}
                 onChange={(text) => setFieldValue("type", text.target.value)}
               />
               <InputCustom
                 title="CCCD/CMND"
                 type="number"
-                placeholder="Nhập CCCD/CMND"
+                placeholder={`${i18n.t("placeholder", { lng: lang })}`}
                 onChange={(text) =>
                   setFieldValue("identify", text.target.value)
                 }
                 error={errors?.identify}
               />
               <div className="mb-2">
-                <a>Loại dịch vụ</a>
+                <a>{`${i18n.t("type_service", { lng: lang })}`}</a>
                 <Select
                   style={{ width: "100%" }}
                   mode="multiple"
@@ -174,24 +176,23 @@ const AddCollaborator = (props) => {
                 />
               </div>
               <div className="mb-2">
-                <a>Tỉnh / thành phố</a>
+                <a>{`${i18n.t("province_city", { lng: lang })}`}</a>
                 <Select
                   style={{ width: "100%" }}
-                  defaultValue={"Chọn tỉnh/ thành phố"}
                   allowClear
                   onChange={(e) => setFieldValue("city", e)}
                   options={cityOption}
                 />
               </div>
               <InputCustom
-                title="Mã giới thiệu"
+                title={`${i18n.t("code_invite", { lng: lang })}`}
                 type="text"
-                placeholder="Nhập mã giới thiệu"
+                placeholder={`${i18n.t("placeholder", { lng: lang })}`}
                 onChange={(text) => setFieldValue("code", text.target.value)}
               />
 
               <CustomButton
-                title="Thêm"
+                title={`${i18n.t("add", { lng: lang })}`}
                 className="float-right btn-add-ctv mt-5"
                 type="button"
                 onClick={handleSubmit}

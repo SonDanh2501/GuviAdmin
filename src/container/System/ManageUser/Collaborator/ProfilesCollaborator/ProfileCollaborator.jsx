@@ -2,7 +2,7 @@ import { CameraOutlined } from "@material-ui/icons";
 import { FloatButton, Image, Tabs } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import {
   Card,
@@ -29,6 +29,8 @@ import WithdrawTopup from "./components/withdrawTopup";
 import "./ProfileCollaborator.scss";
 import TestExam from "./components/testExam";
 import InviteCollaborator from "./components/invite";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
 // core components
 
 const ProfileCollaborator = () => {
@@ -43,6 +45,7 @@ const ProfileCollaborator = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const id = params?.id;
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -107,7 +110,8 @@ const ProfileCollaborator = () => {
                   className="rounded-circle"
                 />
                 <label for="choose-image">
-                  <CameraOutlined /> Chọn ảnh khác
+                  <CameraOutlined />{" "}
+                  {`${i18n.t("choose_image", { lng: lang })}`}
                 </label>
                 <input
                   name="image"
@@ -121,16 +125,24 @@ const ProfileCollaborator = () => {
               <CardBody>
                 <div className="text-body">
                   {data?.password_default && (
-                    <a>Mật khẩu mặc định: {data?.password_default}</a>
+                    <a>
+                      {`${i18n.t("default_password", { lng: lang })}`}:{" "}
+                      {data?.password_default}
+                    </a>
                   )}
                   {data?.invite_code && (
-                    <a>Mã giới thiệu: {data?.invite_code}</a>
+                    <a>
+                      {`${i18n.t("code_invite", { lng: lang })}`}:{" "}
+                      {data?.invite_code}
+                    </a>
                   )}
                   <a className="text-name">{data?.full_name}</a>
                   <a>
                     {!data?.birthday
                       ? ""
-                      : "Tuổi:" + " " + moment().diff(data?.birthday, "years")}
+                      : `${i18n.t("age", { lng: lang })}` +
+                        ": " +
+                        moment().diff(data?.birthday, "years")}
                   </a>
                 </div>
               </CardBody>
@@ -140,7 +152,10 @@ const ProfileCollaborator = () => {
             <Card className="bg-white shadow">
               <CardBody>
                 <Tabs defaultActiveKey="1">
-                  <Tabs.TabPane tab="Thông tin cơ bản" key="1">
+                  <Tabs.TabPane
+                    tab={`${i18n.t("info", { lng: lang })}`}
+                    key="1"
+                  >
                     <Information
                       data={data}
                       image={img}
@@ -148,28 +163,52 @@ const ProfileCollaborator = () => {
                       setData={setData}
                     />
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="Tài liệu" key="2">
+                  <Tabs.TabPane
+                    tab={`${i18n.t("document", { lng: lang })}`}
+                    key="2"
+                  >
                     <Document id={data?._id} />
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="Hoạt động" key="3">
+                  <Tabs.TabPane
+                    tab={`${i18n.t("activity", { lng: lang })}`}
+                    key="3"
+                  >
                     <Activity id={id} />
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="Lịch sử tài khoản" key="4">
+                  <Tabs.TabPane
+                    tab={`${i18n.t("account_history", { lng: lang })}`}
+                    key="4"
+                  >
                     <History id={id} />
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="Yêu cầu nạp/rút" key="5">
+                  <Tabs.TabPane
+                    tab={`${i18n.t("topup_withdraw", { lng: lang })}`}
+                    key="5"
+                  >
                     <WithdrawTopup id={id} />
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="Đánh giá" key="6">
+                  <Tabs.TabPane
+                    tab={`${i18n.t("review", { lng: lang })}`}
+                    key="6"
+                  >
                     <Review id={id} totalReview={data?.star} />
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="Bài kiểm tra" key="7">
+                  <Tabs.TabPane
+                    tab={`${i18n.t("test", { lng: lang })}`}
+                    key="7"
+                  >
                     <TestExam id={data?._id} />
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="Lượt giới thiệu" key="8">
+                  <Tabs.TabPane
+                    tab={`${i18n.t("referrals", { lng: lang })}`}
+                    key="8"
+                  >
                     <InviteCollaborator id={data?._id} />
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="Tài khoản ngân hàng" key="9">
+                  <Tabs.TabPane
+                    tab={`${i18n.t("bank_account", { lng: lang })}`}
+                    key="9"
+                  >
                     <BankAccount id={data?._id} />
                   </Tabs.TabPane>
                 </Tabs>

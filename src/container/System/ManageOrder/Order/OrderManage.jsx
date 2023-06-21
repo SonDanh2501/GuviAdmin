@@ -115,16 +115,10 @@ const OrderManage = (props) => {
           },
           {
             key: "2",
-            label: (
-              <a
-                onClick={() =>
-                  navigate("/details-order", {
-                    state: { id: item?._id },
-                  })
-                }
-              >
-                {`${i18n.t("see_more", { lng: lang })}`}
-              </a>
+            label: checkElement?.includes("detail_guvi_job") && (
+              <Link to={`/details-order/${item?._id}`}>
+                <a>{`${i18n.t("see_more", { lng: lang })}`}</a>
+              </Link>
             ),
           },
           {

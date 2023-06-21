@@ -286,7 +286,9 @@ const DetailsProfile = ({ id }) => {
 
       {dataInvite.length > 0 && (
         <div className="div-container-invite-code">
-          <a className="title-invite">Người giới thiệu gần đây</a>
+          <a className="title-invite">{`${i18n.t("recent_referrals", {
+            lng: lang,
+          })}`}</a>
           <div className="div-list-invite">
             {dataInvite.map((item, index) => {
               return (
@@ -295,24 +297,30 @@ const DetailsProfile = ({ id }) => {
                   <div className="div-invite-progress">
                     <div className="div-row-info">
                       <div>
-                        <div className="div-name">
-                          <a className="title-name">Tên</a>
+                        <div className="div-name-invite">
+                          <a className="title-name">{`${i18n.t("name", {
+                            lng: lang,
+                          })}`}</a>
                           <a className="title-colon">:</a>
                           <a className="text-name">{item?.full_name}</a>
                         </div>
-                        <div className="div-name">
-                          <a className="title-name">SĐT</a>
+                        <div className="div-name-invite">
+                          <a className="title-name">{`${i18n.t("sdt", {
+                            lng: lang,
+                          })}`}</a>
                           <a className="title-colon">:</a>
                           <a className="text-name">{item?.phone}</a>
                         </div>
-                        <div className="div-name">
-                          <a className="title-name">Mã</a>
+                        <div className="div-name-invite">
+                          <a className="title-name">{`${i18n.t("code", {
+                            lng: lang,
+                          })}`}</a>
                           <a className="title-colon">:</a>
                           <a className="text-name">{item?.id_view}</a>
                         </div>
                       </div>
                       <a className="text-date-create">
-                        Ngày tạo:{" "}
+                        {`${i18n.t("date_create", { lng: lang })}`}:{" "}
                         {moment(item?.date_create).format("DD-MM-YYYY")}
                       </a>
                     </div>
@@ -339,11 +347,11 @@ const DetailsProfile = ({ id }) => {
                       }
                     >
                       {item?.total_order === 0
-                        ? "Bước 3: Đặt đơn đầu tiên"
+                        ? `${i18n.t("step_three", { lng: lang })}`
                         : item?.total_order !== 0 &&
                           item?.total_done_order === 0
-                        ? "Bước cuối: Hoàn thành đơn hàng để nhận 20k"
-                        : "Giới thiệu thành công"}
+                        ? `${i18n.t("last_step", { lng: lang })}`
+                        : `${i18n.t("successful_introduction", { lng: lang })}`}
                     </a>
                   </div>
                 </div>
@@ -352,7 +360,9 @@ const DetailsProfile = ({ id }) => {
           </div>
 
           <div className="mt-1 div-pagination p-2">
-            <a>Tổng: {totalInvite}</a>
+            <a>
+              {`${i18n.t("total", { lng: lang })}`}: {totalInvite}
+            </a>
             <div>
               <Pagination
                 current={currentPage}
