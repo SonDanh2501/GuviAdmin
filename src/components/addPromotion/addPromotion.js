@@ -1,9 +1,13 @@
 import {
+  Button,
   Checkbox,
+  Col,
   DatePicker,
   Input,
   InputNumber,
   List,
+  Modal,
+  Row,
   Select,
   TimePicker,
 } from "antd";
@@ -13,7 +17,6 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Modal, Row } from "reactstrap";
 import { searchCustomersApi } from "../../api/customer";
 import { DATA_PAYMENT, date } from "../../api/fakeData";
 import { createPushNotification } from "../../api/notification";
@@ -23,12 +26,15 @@ import {
   getGroupCustomerApi,
 } from "../../api/promotion";
 import { errorNotify } from "../../helper/toast";
+import i18n from "../../i18n";
 import { loadingAction } from "../../redux/actions/loading";
+import { getLanguageState } from "../../redux/selectors/auth";
 import { getService } from "../../redux/selectors/service";
 import CustomButton from "../customButton/customButton";
 import CustomTextEditor from "../customTextEdittor";
 import UploadImage from "../uploadImage";
 import "./addPromotion.scss";
+import InputCustom from "../textInputCustom";
 dayjs.extend(customParseFormat);
 const { TextArea } = Input;
 
@@ -105,7 +111,7 @@ const AddPromotion = (props) => {
   const [isParrentPromotion, setIsParrentPromotion] = useState(false);
   const [totalChildPromotion, setTotalChildPromotion] = useState();
   const [isShowInApp, setIsShowInApp] = useState(false);
-
+  const lang = useSelector(getLanguageState);
   const options = [];
   const optionsCustomer = [];
   const serviceOption = [];
@@ -140,7 +146,7 @@ const AddPromotion = (props) => {
 
   service.map((item, index) => {
     serviceOption.push({
-      label: item?.title?.vi,
+      label: item?.title?.[lang],
       value: item?._id,
     });
   });
@@ -412,7 +418,7 @@ const AddPromotion = (props) => {
     <>
       {/* Button trigger modal */}
       <CustomButton
-        title="Thêm khuyến mãi"
+        title={`${i18n.t("add_promotion", { lng: lang })}`}
         className="btn-add-promotion"
         type="button"
         onClick={() => setState(!state)}
@@ -420,62 +426,63 @@ const AddPromotion = (props) => {
 
       {/* Modal */}
       <Modal
-        fullscreen={true}
-        fade={true}
-        isOpen={state}
-        size="lg"
-        style={{ maxWidth: "1200px", width: "100%" }}
-        toggle={() => setState(!state)}
+        centered
+        open={state}
+        width={1200}
+        onCancel={() => setState(!state)}
+        footer={null}
+        title={`${i18n.t("add_promotion", { lng: lang })}`}
       >
-        <div className="modal-header">
-          <a className="modal-title">Thêm mã khuyến mãi</a>
-          <button className="btn-close" onClick={() => setState(!state)}>
-            <i className="uil uil-times-square"></i>
-          </button>
-        </div>
         <div className="modal-body">
           <Row>
-            <Col md={4}>
+            <Col span={8}>
               <div>
-                <a className="title-add-promo">1. Tiêu đề</a>
-                <Input
-                  placeholder="Nhập tiêu đề tiếng việt"
+                <a className="title-add-promo">
+                  1. {`${i18n.t("title", { lng: lang })}`}
+                </a>
+                <InputCustom
+                  title={`${i18n.t("vietnamese", { lng: lang })}`}
                   value={titleVN}
                   onChange={(e) => setTitleVN(e.target.value)}
                 />
-                <Input
-                  placeholder="Nhập tiêu đề tiếng anh"
+                <InputCustom
+                  title={`${i18n.t("english", { lng: lang })}`}
                   value={titleEN}
                   onChange={(e) => setTitleEN(e.target.value)}
                   style={{ marginTop: 5 }}
                 />
               </div>
-              <div>
-                <a className="title-add-promo">2. Mô tả</a>
-                <TextArea
-                  placeholder="Nhập mô tả tiếng việt"
+              <div className="mt-2">
+                <a className="title-add-promo">
+                  2. {`${i18n.t("describe", { lng: lang })}`}
+                </a>
+                <InputCustom
+                  title={`${i18n.t("vietnamese", { lng: lang })}`}
                   value={shortDescriptionVN}
                   onChange={(e) => setShortDescriptionVN(e.target.value)}
+                  textArea={true}
                 />
-                <TextArea
-                  label={"Tiếng Anh"}
-                  placeholder="Nhập mô tả tiếng anh"
+                <InputCustom
+                  title={`${i18n.t("english", { lng: lang })}`}
                   value={shortDescriptionEN}
                   onChange={(e) => setShortDescriptionEN(e.target.value)}
                   style={{ marginTop: 5 }}
+                  textArea={true}
                 />
               </div>
-              <div>
-                <a className="title-add-promo">3. Mô tả chi tiết</a>
+              <div className="mt-2">
+                <a className="title-add-promo">
+                  3. {`${i18n.t("detailed_description", { lng: lang })}`}
+                </a>
                 <div>
-                  <a>Tiếng Việt</a>
+                  <a>{`${i18n.t("vietnamese", { lng: lang })}`}</a>
                   <CustomTextEditor
                     value={descriptionVN}
                     onChangeValue={setDescriptionVN}
                   />
                 </div>
                 <div className="mt-2">
-                  <a>Tiếng Anh</a>
+                  <a>{`${i18n.t("english", { lng: lang })}`}</a>
                   <CustomTextEditor
                     value={descriptionEN}
                     onChangeValue={setDescriptionEN}
@@ -483,7 +490,7 @@ const AddPromotion = (props) => {
                 </div>
               </div>
             </Col>
-            <Col md={4}>
+            <Col span={8} className="ml-3">
               <div>
                 <a className="title-add-promo">4. Thumbnail/Background</a>
                 <UploadImage
@@ -501,16 +508,20 @@ const AddPromotion = (props) => {
                 />
               </div>
               <div className="mt-2">
-                <a className="title-add-promo">5. Mã khuyến mãi</a>
+                <a className="title-add-promo">
+                  5. {`${i18n.t("promotion_code", { lng: lang })}`}
+                </a>
                 <Input
-                  placeholder="Nhập mã khuyến mãi"
+                  placeholder={`${i18n.t("placeholder", { lng: lang })}`}
                   type="text"
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value)}
                 />
               </div>
               <div className="mt-2">
-                <a className="title-add-promo">6. Giá đơn đặt tối thiểu</a>
+                <a className="title-add-promo">
+                  6. {`${i18n.t("minimum_order_price", { lng: lang })}`}
+                </a>
                 <InputNumber
                   formatter={(value) =>
                     `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
@@ -523,33 +534,35 @@ const AddPromotion = (props) => {
               </div>
 
               <div className="mt-2">
-                <a className="title-add-promo">7. Hình thức giảm giá</a>
+                <a className="title-add-promo">
+                  7. {`${i18n.t("discount_form", { lng: lang })}`}
+                </a>
                 <Row>
                   <Button
                     className={
                       discountUnit === "amount"
-                        ? "btn-form-same-promotion"
-                        : "btn-form-same-promotion-default"
+                        ? "btn-form-amount-promotion"
+                        : "btn-form-amount-promotion-default"
                     }
                     outline
                     onClick={() => onFormDiscount("amount")}
                   >
-                    Giảm trực tiếp
+                    {`${i18n.t("direct_discount", { lng: lang })}`}
                   </Button>
                   <Button
                     className={
                       discountUnit === "percent"
-                        ? "btn-form-same-promotion"
-                        : "btn-form-same-promotion-default"
+                        ? "btn-form-amount-promotion"
+                        : "btn-form-amount-promotion-default"
                     }
                     outline
                     onClick={() => onFormDiscount("percent")}
                   >
-                    Giảm theo phần trăm
+                    {`${i18n.t("percentage_discount", { lng: lang })}`}
                   </Button>
                   {discountUnit === "amount" ? (
                     <div className="ml-3">
-                      <a>Giá giảm</a>
+                      <a>{`${i18n.t("reduced_price", { lng: lang })}`}</a>
                       <InputNumber
                         formatter={(value) =>
                           `${value}  đ`.replace(
@@ -565,8 +578,8 @@ const AddPromotion = (props) => {
                     </div>
                   ) : (
                     <Row className="row-discount">
-                      <div className="div-reduced ml-4">
-                        <a>Giá trị giảm</a>
+                      <div className="div-reduced ml-2">
+                        <a>{`${i18n.t("reduced_value", { lng: lang })}`}</a>
                         <InputNumber
                           min={0}
                           max={100}
@@ -578,7 +591,7 @@ const AddPromotion = (props) => {
                         />
                       </div>
                       <div className="div-reduced">
-                        <a>Giá giảm tối đa</a>
+                        <a>{`${i18n.t("discount_max", { lng: lang })}`}</a>
                         <InputNumber
                           formatter={(value) =>
                             `${value}  đ`.replace(
@@ -598,8 +611,9 @@ const AddPromotion = (props) => {
               </div>
               {tab === "tat_ca" && (
                 <div className="mt-2">
-                  <a className="title-add-promo">9. Dịch vụ áp dụng</a>
-
+                  <a className="title-add-promo">
+                    9. {`${i18n.t("apply_service", { lng: lang })}`}
+                  </a>
                   <Select
                     style={{ width: "100%" }}
                     onChange={(e) => {
@@ -610,13 +624,15 @@ const AddPromotion = (props) => {
                 </div>
               )}
               <div className="mt-2">
-                <a className="title-add-promo">10. Đối tượng áp dụng</a>
+                <a className="title-add-promo">
+                  10. {`${i18n.t("applicable_object", { lng: lang })}`}
+                </a>
                 <div>
                   <Checkbox
                     checked={isGroupCustomer}
                     onChange={(e) => setIsGroupCustomer(e.target.checked)}
                   >
-                    Nhóm khách hàng
+                    {`${i18n.t("customer_group", { lng: lang })}`}
                   </Checkbox>
                   {isGroupCustomer && (
                     <Select
@@ -636,12 +652,12 @@ const AddPromotion = (props) => {
                     checked={isCustomer}
                     onChange={(e) => setIsCustomer(e.target.checked)}
                   >
-                    Áp dụng cho khách hàng
+                    {`${i18n.t("customer_apply", { lng: lang })}`}
                   </Checkbox>
                   {isCustomer && (
                     <div>
                       <Input
-                        placeholder="Tìm kiếm theo tên và số điện thoại"
+                        placeholder={`${i18n.t("search", { lng: lang })}`}
                         value={name}
                         onChange={(e) => {
                           changeValue(e.target.value);
@@ -691,19 +707,20 @@ const AddPromotion = (props) => {
                 </div>
               </div>
             </Col>
-            <Col md={4}>
+            <Col span={7} className="ml-3">
               <div>
-                <a className="title-add-promo">11. Số lượng mã khuyến mãi</a>
+                <a className="title-add-promo">
+                  11. {`${i18n.t("number_promo", { lng: lang })}`}
+                </a>
                 <div>
                   <Checkbox
                     checked={limitedQuantity}
                     onChange={(e) => setLimitedQuantity(e.target.checked)}
                   >
-                    Số lượng giới hạn
+                    {`${i18n.t("limited_quantity", { lng: lang })}`}
                   </Checkbox>
                   {limitedQuantity && (
                     <Input
-                      placeholder="Số lượng"
                       className="input-promo-code"
                       type="number"
                       min={0}
@@ -714,17 +731,18 @@ const AddPromotion = (props) => {
                 </div>
               </div>
               <div className="mt-2">
-                <a className="title-add-promo">12. Số lần sử dụng khuyến mãi</a>
+                <a className="title-add-promo">
+                  12. {`${i18n.t("number_use_promotion", { lng: lang })}`}
+                </a>
                 <div>
                   <Checkbox
                     checked={isUsePromo}
                     onChange={(e) => setIsUsePromo(e.target.checked)}
                   >
-                    Lần sử dụng khuyến mãi
+                    {`${i18n.t("promo_use_time", { lng: lang })}`}
                   </Checkbox>
                   {isUsePromo && (
                     <Input
-                      placeholder="Số lượng"
                       className="input-promo-code"
                       min={0}
                       type="number"
@@ -735,18 +753,20 @@ const AddPromotion = (props) => {
                 </div>
               </div>
               <div className="mt-2">
-                <a className="title-add-promo">13. Thời gian khuyến mãi</a>
+                <a className="title-add-promo">
+                  13. {`${i18n.t("promotion_time", { lng: lang })}`}
+                </a>
                 <div>
                   <Checkbox
                     checked={limitedDate}
                     onChange={(e) => setLimitedDate(e.target.checked)}
                   >
-                    Giới hạn ngày
+                    {`${i18n.t("limit_date", { lng: lang })}`}
                   </Checkbox>
                   {limitedDate && (
                     <>
                       <div>
-                        <a>Ngày bắt đầu</a>
+                        <a>{`${i18n.t("start_date", { lng: lang })}`}</a>
                         <DatePicker
                           onChange={(date, dateString) =>
                             setStartDate(dateString)
@@ -755,37 +775,31 @@ const AddPromotion = (props) => {
                         />
                       </div>
                       <div>
-                        <a>Ngày kết thúc</a>
+                        <a>{`${i18n.t("end_date", { lng: lang })}`}</a>
                         <DatePicker
                           onChange={(date, dateString) =>
                             setEndDate(dateString)
                           }
                           style={{ marginLeft: 5, width: "100%" }}
                         />
-                        {/* <input
-                              className="input-promo-code"
-                              type={"date"}
-                              defaultValue={startDate}
-                              value={endDate}
-                              onChange={(e) => setEndDate(e.target.value)}
-                            /> */}
                       </div>
                     </>
                   )}
                 </div>
               </div>
               <div className="mt-2">
-                <a className="title-add-promo">14. Điểm quy đổi</a>
+                <a className="title-add-promo">
+                  14. {`${i18n.t("redemption_points", { lng: lang })}`}
+                </a>
                 <div>
                   <Checkbox
                     checked={isExchangePoint}
                     onChange={(e) => setIsExchangePoint(e.target.checked)}
                   >
-                    Điểm quy đổi
+                    {`${i18n.t("redemption_points", { lng: lang })}`}
                   </Checkbox>
                   {isExchangePoint && (
                     <Input
-                      placeholder="Nhập số điểm"
                       type="number"
                       min={0}
                       value={exchangePoint}
@@ -795,13 +809,15 @@ const AddPromotion = (props) => {
                 </div>
               </div>
               <div className="mt-2">
-                <a className="title-add-promo">15. Phương thức thanh toán</a>
+                <a className="title-add-promo">
+                  15. {`${i18n.t("payment_method", { lng: lang })}`}
+                </a>
                 <div>
                   <Checkbox
                     checked={isPaymentMethod}
                     onChange={(e) => setIsPaymentMethod(e.target.checked)}
                   >
-                    Thanh toán
+                    {`${i18n.t("payment", { lng: lang })}`}
                   </Checkbox>
                   {isPaymentMethod && (
                     <Select
@@ -820,10 +836,10 @@ const AddPromotion = (props) => {
               {isExchangePoint && (
                 <div className="mt-2">
                   <a className="title-add-promo">
-                    16. Thời gian sử dụng sau khi đổi
+                    16.{" "}
+                    {`${i18n.t("usage_time_after_exchange", { lng: lang })}`}
                   </a>
                   <Input
-                    placeholder="Nhập số ngày (1,2,3...,n"
                     className="input-promo-code"
                     type="number"
                     min={0}
@@ -834,7 +850,9 @@ const AddPromotion = (props) => {
               )}
 
               <div className="mt-2">
-                <a className="title-add-promo">17. Thứ tự hiện thị</a>
+                <a className="title-add-promo">
+                  17. {`${i18n.t("position", { lng: lang })}`}
+                </a>
                 <Input
                   placeholder="Nhập số thứ tự (1,2,3...,n"
                   className="input-promo-code"
@@ -846,7 +864,9 @@ const AddPromotion = (props) => {
               </div>
               <div className="mt-2">
                 <div>
-                  <a className="title-add-promo">18. Gửi thông báo</a>
+                  <a className="title-add-promo">
+                    18. {`${i18n.t("send_notifications", { lng: lang })}`}
+                  </a>
                   <Checkbox
                     checked={isSendNotification}
                     onChange={(e) => setIsSendNotification(e.target.checked)}
@@ -856,27 +876,28 @@ const AddPromotion = (props) => {
 
                 {isSendNotification && (
                   <div>
-                    <Input
-                      placeholder="Nhập tiêu đề thông báo"
+                    <InputCustom
+                      title={`${i18n.t("title", { lng: lang })}`}
                       className="input-promo-code mt-2"
                       type="text"
                       value={titleNoti}
                       onChange={(e) => setTitleNoti(e.target.value)}
                     />
-                    <Input
-                      placeholder="Nhập nội dung thông báo"
+                    <InputCustom
+                      title={`${i18n.t("describe", { lng: lang })}`}
                       className="input-promo-code"
                       type="textarea"
                       value={descriptionNoti}
                       onChange={(e) => setDescriptionNoti(e.target.value)}
                       style={{ marginTop: 5 }}
                     />
+
                     <div>
                       <Checkbox
                         checked={isDateSchedule}
                         onChange={(e) => setIsDateSchedule(e.target.checked)}
                       >
-                        Thời gian thông báo
+                        {`${i18n.t("time_notification", { lng: lang })}`}
                       </Checkbox>
                       {isDateSchedule && (
                         <Input
@@ -891,7 +912,9 @@ const AddPromotion = (props) => {
               </div>
               <div className="mt-2">
                 <div>
-                  <a className="title-add-promo">19. Đa dạng khuyến mãi</a>
+                  <a className="title-add-promo">
+                    19. {`${i18n.t("various_promotions", { lng: lang })}`}
+                  </a>
                   <Checkbox
                     checked={isParrentPromotion}
                     onChange={(e) => setIsParrentPromotion(e.target.checked)}
@@ -900,7 +923,6 @@ const AddPromotion = (props) => {
                 </div>
                 {isParrentPromotion && (
                   <Input
-                    placeholder="Số lượng"
                     className="input-promo-code mt-2"
                     type="number"
                     value={totalChildPromotion}
@@ -912,7 +934,9 @@ const AddPromotion = (props) => {
               </div>
               <div className="div-loop-time">
                 <div>
-                  <a className="title-add-promo">20. Thời gian áp dụng</a>
+                  <a className="title-add-promo">
+                    20. {`${i18n.t("time_apply", { lng: lang })}`}
+                  </a>
                   <Checkbox
                     checked={isApplyTime}
                     onChange={(e) => setIsApplyTime(e.target.checked)}
@@ -947,12 +971,14 @@ const AddPromotion = (props) => {
                                       changeDayApply(it.value, index)
                                     }
                                   >
-                                    <a className="text-day">{it?.title}</a>
+                                    <a className="text-day">
+                                      {it?.title?.[lang]}
+                                    </a>
                                   </div>
                                 );
                               })}
                             </div>
-                            <a>Thời gian bắt đầu</a>
+                            <a>{`${i18n.t("start_time", { lng: lang })}`}</a>
                             <TimePicker
                               defaultOpenValue={dayjs("00:00:00", fomart)}
                               format={fomart}
@@ -961,7 +987,7 @@ const AddPromotion = (props) => {
                               }
                               allowClear={false}
                             />
-                            <a>Thời gian kết thúc</a>
+                            <a>{`${i18n.t("end_time", { lng: lang })}`}</a>
                             <TimePicker
                               defaultOpenValue={dayjs("00:00:00", fomart)}
                               format={fomart}
@@ -982,7 +1008,9 @@ const AddPromotion = (props) => {
               </div>
 
               <div className="div-check-show-app">
-                <a className="title-check">21. Hiện thị mã trên app</a>
+                <a className="title-check">
+                  21. {`${i18n.t("show_code_app", { lng: lang })}`}
+                </a>
                 <Checkbox
                   onChange={(e) => {
                     setIsShowInApp(e.target.checked);
@@ -996,7 +1024,7 @@ const AddPromotion = (props) => {
                 className="btn-create-promotion mt-5"
                 onClick={onCreatePromotion}
               >
-                Thêm khuyến mãi
+                {`${i18n.t("add_promotion", { lng: lang })}`}
               </Button>
             </Col>
           </Row>

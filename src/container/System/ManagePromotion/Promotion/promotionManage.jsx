@@ -33,13 +33,18 @@ import "./PromotionManage.scss";
 import onToggle from "../../../../assets/images/on-button.png";
 import offToggle from "../../../../assets/images/off-button.png";
 import LoadingPagination from "../../../../components/paginationLoading/index.jsx";
-import { getElementState, getUser } from "../../../../redux/selectors/auth.js";
+import {
+  getElementState,
+  getLanguageState,
+  getUser,
+} from "../../../../redux/selectors/auth.js";
 import EditPromotionEvent from "../../../../components/editPromotionEvent/editPromotionEvent.js";
 import AddPromotionOrther from "../../../../components/addPromotionOrther/addPromotionOrther.js";
 import EditPromotionOrther from "../../../../components/editPromotionOrther/editPromotionOrther.js";
 import { errorNotify } from "../../../../helper/toast.js";
 import { useNavigate } from "react-router-dom";
 import ModalCustom from "../../../../components/modalCustom/index.jsx";
+import i18n from "../../../../i18n/index.js";
 const width = window.innerWidth;
 
 const PromotionManage = ({
@@ -73,8 +78,8 @@ const PromotionManage = ({
   const toggle = () => setModal(!modal);
   const toggleActive = () => setModalActive(!modalActive);
   const [api, contextHolder] = notification.useNotification();
-  const user = useSelector(getUser);
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -289,14 +294,14 @@ const PromotionManage = ({
             setModalEdit(!modalEdit);
           }}
         >
-          Chỉnh sửa
+          {`${i18n.t("edit", { lng: lang })}`}
         </a>
       ),
     },
     {
       key: "2",
       label: checkElement?.includes("delete_promotion") && (
-        <a onClick={toggle}>Xoá</a>
+        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
       ),
     },
     {
@@ -310,7 +315,7 @@ const PromotionManage = ({
               });
             }}
           >
-            Chi tiết
+            {`${i18n.t("detail", { lng: lang })}`}
           </a>
         ),
     },
@@ -320,7 +325,7 @@ const PromotionManage = ({
     type === "code"
       ? [
           {
-            title: "Tên Promotion",
+            title: `${i18n.t("promotion_name", { lng: lang })}`,
             render: (data) => {
               return (
                 <div className="div-img-promotion">
@@ -328,13 +333,13 @@ const PromotionManage = ({
                     src={data?.thumbnail}
                     className="img-customer-promotion"
                   />
-                  <a className="text-title-promotion">{data.title.vi}</a>
+                  <a className="text-title-promotion">{data?.title?.[lang]}</a>
                 </div>
               );
             },
           },
           {
-            title: "Sử dụng",
+            title: `${i18n.t("use", { lng: lang })}`,
             align: "center",
 
             render: (data) => {
@@ -358,7 +363,7 @@ const PromotionManage = ({
             sorter: (a, b) => a.total_used_promotion - b.total_used_promotion,
           },
           {
-            title: "Vị trí",
+            title: `${i18n.t("position", { lng: lang })}`,
             align: "center",
             render: (data) => (
               <a className="text-title-promotion">{data?.position}</a>
@@ -366,8 +371,7 @@ const PromotionManage = ({
             sorter: (a, b) => a.position - b.position,
           },
           {
-            title: "Mã code",
-
+            title: `${i18n.t("code", { lng: lang })}`,
             align: "center",
             render: (data) => (
               <a className="text-title-promotion">{data?.code}</a>
@@ -375,9 +379,8 @@ const PromotionManage = ({
           },
 
           {
-            title: "Hạn",
+            title: `${i18n.t("expiry", { lng: lang })}`,
             align: "center",
-
             render: (data) => {
               const startDate = moment(new Date(data?.limit_start_date)).format(
                 "DD/MM/YYYY"
@@ -389,15 +392,14 @@ const PromotionManage = ({
                 <a className="text-title-promotion">
                   {data?.is_limit_date
                     ? startDate + "-" + endDate
-                    : "Không có hạn"}
+                    : `${i18n.t("no_expiry", { lng: lang })}`}
                 </a>
               );
             },
           },
           {
-            title: "Bật/tắt",
+            title: `${i18n.t("on_off", { lng: lang })}`,
             align: "center",
-
             render: (data) => {
               var date =
                 data?.limit_end_date &&
@@ -448,21 +450,31 @@ const PromotionManage = ({
             },
           },
           {
-            title: "Trạng thái",
+            title: `${i18n.t("status", { lng: lang })}`,
             align: "center",
             render: (data) => {
               return (
                 <div>
                   {data?.status === "upcoming" ? (
-                    <a className="text-upcoming">Sắp diễn ra</a>
+                    <a className="text-upcoming">{`${i18n.t("upcoming", {
+                      lng: lang,
+                    })}`}</a>
                   ) : data?.status === "doing" ? (
-                    <a className="text-upcoming">Đang diễn ra</a>
+                    <a className="text-upcoming">{`${i18n.t("happenning", {
+                      lng: lang,
+                    })}`}</a>
                   ) : data?.status === "out_of_stock" ? (
-                    <a className="text-cancel">Hết số lượng</a>
+                    <a className="text-cancel">{`${i18n.t("out_stock", {
+                      lng: lang,
+                    })}`}</a>
                   ) : data?.status === "out_of_date" ? (
-                    <a className="text-cancel">Hết hạn</a>
+                    <a className="text-cancel">{`${i18n.t("out_date", {
+                      lng: lang,
+                    })}`}</a>
                   ) : (
-                    <a className="text-cancel">Kết thúc</a>
+                    <a className="text-cancel">{`${i18n.t("closed", {
+                      lng: lang,
+                    })}`}</a>
                   )}
                 </div>
               );
@@ -491,7 +503,9 @@ const PromotionManage = ({
         ]
       : [
           {
-            title: "Tên Promotion",
+            title: `${i18n.t("promotion_name", {
+              lng: lang,
+            })}`,
             render: (data) => {
               return (
                 <div className="div-img-promotion">
@@ -501,15 +515,15 @@ const PromotionManage = ({
                   /> */}
                   <a className="text-title-promotion">
                     {data.title.vi.length > 25
-                      ? data.title.vi.slice(0, 25) + "..."
-                      : data.title.vi}
+                      ? data?.title?.[lang].slice(0, 25) + "..."
+                      : data?.title?.[lang]}
                   </a>
                 </div>
               );
             },
           },
           {
-            title: "Sử dụng",
+            title: `${i18n.t("use", { lng: lang })}`,
             align: "center",
             render: (data) => {
               return (
@@ -531,7 +545,7 @@ const PromotionManage = ({
             sorter: (a, b) => a.total_used_promotion - b.total_used_promotion,
           },
           {
-            title: "Vị trí",
+            title: `${i18n.t("position", { lng: lang })}`,
             align: "center",
             render: (data) => (
               <a className="text-title-promotion">{data?.position}</a>
@@ -539,7 +553,7 @@ const PromotionManage = ({
             sorter: (a, b) => a.position - b.position,
           },
           {
-            title: "Hạn",
+            title: `${i18n.t("expiry", { lng: lang })}`,
             align: "center",
             render: (data) => {
               const startDate = moment(new Date(data?.limit_start_date)).format(
@@ -552,13 +566,13 @@ const PromotionManage = ({
                 <a className="text-time-promotion">
                   {data?.is_limit_date
                     ? startDate + "-" + endDate
-                    : "Không có hạn"}
+                    : `${i18n.t("no_expiry", { lng: lang })}`}
                 </a>
               );
             },
           },
           {
-            title: "Bật/tắt",
+            title: `${i18n.t("on_off", { lng: lang })}`,
             align: "center",
             render: (data) => {
               var date =
@@ -610,21 +624,31 @@ const PromotionManage = ({
             },
           },
           {
-            title: "Trạng thái",
+            title: `${i18n.t("status", { lng: lang })}`,
             align: "center",
             render: (data) => {
               return (
                 <div>
                   {data?.status === "upcoming" ? (
-                    <a className="text-upcoming">Sắp diễn ra</a>
+                    <a className="text-upcoming">{`${i18n.t("upcoming", {
+                      lng: lang,
+                    })}`}</a>
                   ) : data?.status === "doing" ? (
-                    <a className="text-upcoming">Đang diễn ra</a>
+                    <a className="text-upcoming">{`${i18n.t("happenning", {
+                      lng: lang,
+                    })}`}</a>
                   ) : data?.status === "out_of_stock" ? (
-                    <a className="text-cancel">Hết số lượng</a>
+                    <a className="text-cancel">{`${i18n.t("out_stock", {
+                      lng: lang,
+                    })}`}</a>
                   ) : data?.status === "out_of_date" ? (
-                    <a className="text-cancel">Hết hạn</a>
+                    <a className="text-cancel">{`${i18n.t("out_date", {
+                      lng: lang,
+                    })}`}</a>
                   ) : (
-                    <a className="text-cancel">Kết thúc</a>
+                    <a className="text-cancel">{`${i18n.t("closed", {
+                      lng: lang,
+                    })}`}</a>
                   )}
                 </div>
               );
@@ -657,25 +681,37 @@ const PromotionManage = ({
       <div className="mt-2 p-3">
         <div className="div-header-promotion">
           <Select
-            defaultValue="Lọc theo trạng thái"
+            defaultValue={`${i18n.t("filter_status", { lng: lang })}`}
             size={"large"}
             style={{ width: 190 }}
             onChange={handleChange}
             value={valueFilter}
             options={[
-              { value: "", label: "Lọc theo trạng thái" },
-              { value: "upcoming", label: "Sắp diễn ra" },
-              { value: "doing", label: "Đang diễn ra" },
-              { value: "out_of_stock", label: "Hết số lượng" },
-              { value: "out_of_date", label: "Hết hạn" },
-              { value: "done", label: "Kết thúc" },
+              { value: "", label: `${i18n.t("filter_status", { lng: lang })}` },
+              {
+                value: "upcoming",
+                label: `${i18n.t("upcoming", { lng: lang })}`,
+              },
+              {
+                value: "doing",
+                label: `${i18n.t("happenning", { lng: lang })}`,
+              },
+              {
+                value: "out_of_stock",
+                label: `${i18n.t("out_stock", { lng: lang })}`,
+              },
+              {
+                value: "out_of_date",
+                label: `${i18n.t("out_date", { lng: lang })}`,
+              },
+              { value: "done", label: `${i18n.t("closed", { lng: lang })}` },
             ]}
           />
           <Input
-            placeholder="Tìm kiếm"
+            placeholder={`${i18n.t("search", { lng: lang })}`}
             type="text"
-            className="input-search"
             prefix={<SearchOutlined />}
+            style={{ width: "60%", height: 38 }}
             onChange={(e) => handleSearch(e.target.value)}
           />
           {checkElement?.includes("create_promotion") && (
@@ -751,7 +787,7 @@ const PromotionManage = ({
           />
           <div className="div-pagination p-2">
             <a>
-              Tổng:{" "}
+              {`${i18n.t("total", { lng: lang })}`}:{" "}
               {dataSearch.length > 0
                 ? totalSearch
                 : dataFilter.length > 0
@@ -824,32 +860,39 @@ const PromotionManage = ({
         <div>
           <ModalCustom
             isOpen={modal}
-            title="Xóa mã khuyến mãi"
+            title={`${i18n.t("delete_promotion", { lng: lang })}`}
             handleOk={() => onDelete(itemEdit?._id)}
             handleCancel={toggle}
-            textOk="Xoá"
+            textOk={`${i18n.t("delete", { lng: lang })}`}
             body={
-              <a>
-                Bạn có chắc muốn xóa mã khuyến mãi{" "}
-                <a className="text-name-modal">{itemEdit?.title?.vi}</a> này
-                không?
-              </a>
+              <>
+                <a>{`${i18n.t("want_delete_promotion", { lng: lang })}`}</a>
+                <a className="text-name-modal">{itemEdit?.title?.[lang]}</a>
+              </>
             }
           />
         </div>
         <div>
           <ModalCustom
             isOpen={modalActive}
-            title={itemEdit?.is_active ? "Khoá khuyến mãi" : "Mở khuyến mãi"}
+            title={
+              itemEdit?.is_active
+                ? `${i18n.t("lock_promotion", { lng: lang })}`
+                : `${i18n.t("unlock_promotion", { lng: lang })}`
+            }
             handleOk={() => onActive(itemEdit?._id, itemEdit?.is_active)}
             handleCancel={toggleActive}
-            textOk={itemEdit?.is_active ? "Khoá" : "Mở"}
+            textOk={
+              itemEdit?.is_active
+                ? `${i18n.t("lock", { lng: lang })}`
+                : `${i18n.t("unlock", { lng: lang })}`
+            }
             body={
               <a>
                 {itemEdit?.is_active
-                  ? "Bạn có chắc muốn khoá mã khuyến mãi"
-                  : "Bạn có chắc muốn mã mã khuyến mãi"}
-                <a className="text-name-modal">{itemEdit?.title?.vi}</a>
+                  ? `${i18n.t("want_lock_promotion", { lng: lang })}`
+                  : `${i18n.t("want_unlock_promotion", { lng: lang })}`}
+                <a className="text-name-modal">{itemEdit?.title?.[lang]}</a>
               </a>
             }
           />

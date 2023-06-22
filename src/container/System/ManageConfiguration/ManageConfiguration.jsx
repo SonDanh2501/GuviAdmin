@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { getElementState } from "../../../redux/selectors/auth";
 import "./ManageConfiguration.scss";
+import { Button } from "antd";
 
 const ManageConfiguration = () => {
   const navigate = useNavigate();
@@ -73,13 +74,8 @@ const ManageConfiguration = () => {
         })}
       </div>
 
-      {/* <Button
-        onClick={() =>
-          navigate("/adminManage/manage-configuration/reward_collaborator")
-        }
-        className="mt-5"
-      >
-        Phần thưởng
+      {/* <Button onClick={() => {}} className="mt-5">
+        Quản lý hình ảnh
       </Button> */}
     </div>
   );
