@@ -3,11 +3,15 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { getReviewCollaborator } from "../../../../../../../api/collaborator";
 import "./index.scss";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../../i18n";
 
 const Review = ({ id, totalReview }) => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getReviewCollaborator(id, 0, 20)
@@ -32,7 +36,7 @@ const Review = ({ id, totalReview }) => {
 
   const columns = [
     {
-      title: "Thời gian",
+      title: `${i18n.t("date_create", { lng: lang })}`,
 
       render: (data) => {
         return (
@@ -46,7 +50,7 @@ const Review = ({ id, totalReview }) => {
       },
     },
     {
-      title: "Người đánh giá",
+      title: `${i18n.t("assessor", { lng: lang })}`,
 
       render: (data) => {
         return <a>{data?.id_customer?.full_name}</a>;
@@ -54,8 +58,7 @@ const Review = ({ id, totalReview }) => {
       align: "center",
     },
     {
-      title: "Số sao",
-
+      title: `${i18n.t("number_star", { lng: lang })}`,
       align: "center",
       render: (data) => {
         return (
@@ -66,14 +69,13 @@ const Review = ({ id, totalReview }) => {
       },
     },
     {
-      title: "Nội dung",
-
+      title: `${i18n.t("content", { lng: lang })}`,
       render: (data) => {
         return <a>{data?.review}</a>;
       },
     },
     {
-      title: "Đánh giá nhanh",
+      title: `${i18n.t("quick_review", { lng: lang })}`,
       render: (data) => {
         return (
           <div>
@@ -89,7 +91,7 @@ const Review = ({ id, totalReview }) => {
     <div>
       <div>
         <a className="text-total-star">
-          Tổng lượt đánh giá: {totalReview}
+          {`${i18n.t("total_review", { lng: lang })}`}: {totalReview}
           <i class="uil uil-star icon-star"></i>
         </a>
       </div>
@@ -98,7 +100,9 @@ const Review = ({ id, totalReview }) => {
         <Table columns={columns} dataSource={data} pagination={false} />
 
         <div className="div-pagination p-2">
-          <a>Tổng: {total}</a>
+          <a>
+            {`${i18n.t("total", { lng: lang })}`}: {total}
+          </a>
           <div>
             <Pagination
               current={currentPage}

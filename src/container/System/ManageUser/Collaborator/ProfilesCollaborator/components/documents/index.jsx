@@ -516,7 +516,7 @@ const Document = ({ id }) => {
                 checked={registration}
                 onChange={(e) => setRegistration(e.target.checked)}
               >
-                Sổ hổ khẩu
+                {`${i18n.t("household_book", { lng: lang })}`}
               </Checkbox>
             </Col>
 
