@@ -5,12 +5,17 @@ import PromotionManage from "./Promotion/promotionManage";
 import ManagePromotionGuvi from "./PromotionGuvi";
 import ManagePromotionOrther from "./PromotionOrther";
 import ManagePromotionEvent from "./PromotionOrtherEvent";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../redux/selectors/auth";
+import i18n from "../../../i18n";
 
 const ManagePromotions = () => {
   const [selected, setSelected] = useState("code");
   const [brand, setBrand] = useState("guvi");
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
+  const lang = useSelector(getLanguageState);
+
   return (
     <div>
       <Button
@@ -26,7 +31,7 @@ const ManagePromotions = () => {
           setStartPage(0);
         }}
       >
-        Khuyến mãi Guvi
+        {`${i18n.t("guvi_promotion", { lng: lang })}`}
       </Button>
       <Button
         className={
@@ -41,7 +46,7 @@ const ManagePromotions = () => {
           setStartPage(0);
         }}
       >
-        Khuyến mãi đối tác
+        {`${i18n.t("partner_promotion", { lng: lang })}`}
       </Button>
       <Button
         className={selected === "event" ? "btn-selected" : "btn-default"}
@@ -51,7 +56,7 @@ const ManagePromotions = () => {
           setSelected("event");
         }}
       >
-        Chương trình khuyến mãi
+        {`${i18n.t("promotions", { lng: lang })}`}
       </Button>
 
       {selected === "code" && brand === "guvi" ? (

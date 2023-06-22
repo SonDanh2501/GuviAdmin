@@ -28,4 +28,13 @@
     font-size: 16px;
     color: #000000;
   }
+
+  .div-image {
+    display: flex;
+    flex-direction: row;
+
+    .icon_delete_image {
+      margin-left: 2px;
+    }
+  }
 }

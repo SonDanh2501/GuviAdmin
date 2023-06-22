@@ -188,6 +188,7 @@ export const date = [
       vi: "T2",
       en: "Mo",
     },
+    value: 1,
   },
   {
     id: 2,
@@ -195,6 +196,7 @@ export const date = [
       vi: "T3",
       en: "Tu",
     },
+    value: 2,
   },
   {
     id: 3,
@@ -202,6 +204,7 @@ export const date = [
       vi: "T4",
       en: "We",
     },
+    value: 3,
   },
   {
     id: 4,
@@ -209,6 +212,7 @@ export const date = [
       vi: "T5",
       en: "Th",
     },
+    value: 4,
   },
   {
     id: 5,
@@ -216,6 +220,7 @@ export const date = [
       vi: "T6",
       en: "Fr",
     },
+    value: 5,
   },
   {
     id: 6,
@@ -223,6 +228,7 @@ export const date = [
       vi: "T7",
       en: "Sa",
     },
+    value: 6,
   },
   {
     id: 7,
@@ -230,6 +236,7 @@ export const date = [
       vi: "CN",
       en: "Su",
     },
+    value: 0,
   },
 ];
 

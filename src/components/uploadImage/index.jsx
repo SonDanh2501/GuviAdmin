@@ -1,4 +1,4 @@
-import { UploadOutlined } from "@ant-design/icons";
+import { CloseCircleOutlined, UploadOutlined } from "@ant-design/icons";
 import { Input } from "antd";
 import "./styles.scss";
 import { useState } from "react";
@@ -54,7 +54,15 @@ const UploadImage = (props) => {
         className="input-image"
         onChange={onChangeThumbnail}
       />
-      {image && <img src={image} className={classImg} />}
+      {image && (
+        <div className="div-image">
+          <img src={image} className={classImg} />
+          <CloseCircleOutlined
+            className="icon_delete_image"
+            onClick={() => setImage("")}
+          />
+        </div>
+      )}
     </div>
   );
 };
