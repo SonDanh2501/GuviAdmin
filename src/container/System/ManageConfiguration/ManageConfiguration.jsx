@@ -1,11 +1,9 @@
-import { Row } from "antd";
 import { useNavigate } from "react-router-dom";
-import { Button } from "reactstrap";
 
-import "./ManageConfiguration.scss";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { getElementState } from "../../../redux/selectors/auth";
+import "./ManageConfiguration.scss";
 
 const ManageConfiguration = () => {
   const navigate = useNavigate();

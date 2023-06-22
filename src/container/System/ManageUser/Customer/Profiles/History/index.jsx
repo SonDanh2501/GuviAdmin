@@ -5,12 +5,16 @@ import { getHistoryTransitionByCustomers } from "../../../../../../api/customer"
 import LoadingPagination from "../../../../../../components/paginationLoading";
 import { formatMoney } from "../../../../../../helper/formatMoney";
 import "./index.scss";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../i18n";
 
 const HistoryTransition = ({ id }) => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getHistoryTransitionByCustomers(id, 0, 10)
@@ -50,7 +54,7 @@ const HistoryTransition = ({ id }) => {
           return (
             <div className="div-item-list" key={index}>
               <div className="div-column-1">
-                <a className="text-title">{item?.title?.vi}</a>
+                <a className="text-title">{item?.title?.[lang]}</a>
                 <a
                   className={
                     money.slice(0, 1) === "-"
@@ -63,14 +67,14 @@ const HistoryTransition = ({ id }) => {
                     : "+" + formatMoney(item?.value)}
                 </a>
               </div>
-              <a className="text-date">
+              <a className="text-date-t">
                 {moment(new Date(item?.date_create)).format(
                   "DD/MM/yyy - HH:mm"
                 )}
               </a>
               <div>
                 <a className="text-title-surplus">
-                  Số dư:{" "}
+                  {`${i18n.t("surplus", { lng: lang })}`}:{" "}
                   {item?.current_pay_point
                     ? formatMoney(item?.current_pay_point)
                     : formatMoney(0)}
@@ -91,7 +95,9 @@ const HistoryTransition = ({ id }) => {
 
       {data.length > 0 && (
         <div className="div-pagination-customer-history p-2">
-          <a>Tổng: {total}</a>
+          <a>
+            {`${i18n.t("total", { lng: lang })}`}: {total}
+          </a>
           <div>
             <Pagination
               current={currentPage}

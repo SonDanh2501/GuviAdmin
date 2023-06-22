@@ -41,7 +41,7 @@
       }
     }
 
-    .text-date {
+    .text-date-history {
       font-family: "Roboto";
       font-weight: 400;
       font-size: 12px;
@@ -54,7 +54,7 @@
       flex-direction: row;
 
       .div-text-title-surplus {
-        width: 60px;
+        width: auto;
         .text-title-surplus {
           font-family: "Roboto";
           font-weight: 500;
@@ -198,7 +198,7 @@
         }
       }
 
-      .text-date {
+      .text-date-history {
         font-family: "Roboto";
         font-weight: 400;
         font-size: 12px;

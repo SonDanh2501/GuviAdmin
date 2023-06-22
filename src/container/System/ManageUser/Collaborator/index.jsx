@@ -1,17 +1,14 @@
 import { FloatButton, Tabs } from "antd";
-import "./index.scss";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import CollaboratorManage from "./TableCollaborator/CollaboratorManage";
-import AddCollaborator from "../../../../components/addCollaborator/addCollaborator";
-import { useEffect, useState } from "react";
-import { getCollaborators } from "../../../../redux/actions/collaborator";
-import {
-  getCollaborator,
-  getCollaboratorTotal,
-} from "../../../../redux/selectors/collaborator";
+import "./index.scss";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import i18n from "../../../../i18n";
 
 const ManageCollaborator = () => {
   const [status, setStatus] = useState("");
+  const lang = useSelector(getLanguageState);
 
   const onChangeTab = (active) => {
     if (active === "2") {
@@ -32,25 +29,27 @@ const ManageCollaborator = () => {
   return (
     <>
       <div className="div-header-collaborator">
-        <a className="title-cv">Danh sách Cộng tác viên</a>
+        <a className="title-cv">{`${i18n.t("collaborator_list", {
+          lng: lang,
+        })}`}</a>
       </div>
 
       <div className="div-container-collaborator">
         <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
-          <Tabs.TabPane tab="Tất cả" key="1">
+          <Tabs.TabPane tab={`${i18n.t("all", { lng: lang })}`} key="1">
             <CollaboratorManage status={status} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="CTV Đang Online" key="2">
+          <Tabs.TabPane tab={`${i18n.t("active", { lng: lang })}`} key="2">
             <CollaboratorManage status={status} />
           </Tabs.TabPane>
           {/* <Tabs.TabPane tab="CTV Đang Offline" key="3"></Tabs.TabPane> */}
-          <Tabs.TabPane tab="CTV Đã Khoá" key="4">
+          <Tabs.TabPane tab={`${i18n.t("locked", { lng: lang })}`} key="4">
             <CollaboratorManage status={status} />
           </Tabs.TabPane>
           {/* <Tabs.TabPane tab="CTV Đã Xác Thực" key="5">
             <CollaboratorManage status={status} />
           </Tabs.TabPane> */}
-          <Tabs.TabPane tab="CTV Chưa Xác Thực" key="6">
+          <Tabs.TabPane tab={`${i18n.t("unconfirmed", { lng: lang })}`} key="6">
             <CollaboratorManage
               // data={collaborator}
               // total={collaboratorTotal}

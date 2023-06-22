@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getOrder, searchOrder } from "../../../../../../redux/actions/order";
 
 import { UilEllipsisV } from "@iconscout/react-unicons";
@@ -10,6 +10,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./index.scss";
 import { getOrderByCustomers } from "../../../../../../api/customer";
 import { formatMoney } from "../../../../../../helper/formatMoney";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../i18n";
 
 export default function OrderCustomer({ id }) {
   // const { state } = useLocation();
@@ -20,6 +22,7 @@ export default function OrderCustomer({ id }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
+  const lang = useSelector(getLanguageState);
 
   const navigate = useNavigate();
 
@@ -70,7 +73,7 @@ export default function OrderCustomer({ id }) {
 
   const columns = [
     {
-      title: "Mã",
+      title: `${i18n.t("code_order", { lng: lang })}`,
       render: (data) => {
         return (
           <Link to={`/details-order/${data?._id}`}>
@@ -80,7 +83,7 @@ export default function OrderCustomer({ id }) {
       },
     },
     {
-      title: "Ngày tạo",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-create">
@@ -95,17 +98,19 @@ export default function OrderCustomer({ id }) {
       },
     },
     {
-      title: "Dịch vụ",
+      title: `${i18n.t("service", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-service">
             <a className="text-service">
-              {data?.type === "schedule"
-                ? "Cố định"
-                : data?.type === "loop" && !data?.is_auto_order
-                ? "Theo giờ"
-                : data?.type === "loop" && data?.is_auto_order
-                ? "Lặp lại"
+              {data?.type === "loop" && data?.is_auto_order
+                ? `${i18n.t("repeat", { lng: lang })}`
+                : data?.service?._id?.kind === "giup_viec_theo_gio"
+                ? `${i18n.t("cleaning", { lng: lang })}`
+                : data?.service?._id?.kind === "giup_viec_co_dinh"
+                ? `${i18n.t("cleaning_subscription", { lng: lang })}`
+                : data?.service?._id?.kind === "phuc_vu_nha_hang"
+                ? `${i18n.t("serve", { lng: lang })}`
                 : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>
@@ -114,7 +119,7 @@ export default function OrderCustomer({ id }) {
       },
     },
     {
-      title: "Thời gian",
+      title: `${i18n.t("date_work", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-worktime">
@@ -126,7 +131,7 @@ export default function OrderCustomer({ id }) {
             </a>
             <a className="text-worktime">
               {moment(new Date(data?.date_work_schedule[0].date))
-                .locale("vi", vi)
+                .locale(lang)
                 .format("dddd")}
             </a>
           </div>
@@ -134,15 +139,17 @@ export default function OrderCustomer({ id }) {
       },
     },
     {
-      title: "Địa điểm",
+      title: `${i18n.t("address", { lng: lang })}`,
       render: (data) => <p className="text-address">{data?.address}</p>,
     },
     {
-      title: "Cộng tác viên",
+      title: `${i18n.t("collaborator", { lng: lang })}`,
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
-            <a>Đang tìm kiếm</a>
+            <a>{`${i18n.t("searching", {
+              lng: lang,
+            })}`}</a>
           ) : (
             <a
               onClick={() =>
@@ -160,7 +167,7 @@ export default function OrderCustomer({ id }) {
     },
 
     {
-      title: "Trạng thái",
+      title: `${i18n.t("status", { lng: lang })}`,
       render: (data) => (
         <a
           className={
@@ -176,19 +183,19 @@ export default function OrderCustomer({ id }) {
           }
         >
           {data?.status === "pending"
-            ? "Đang chờ làm"
+            ? `${i18n.t("pending", { lng: lang })}`
             : data?.status === "confirm"
-            ? "Đã nhận"
+            ? `${i18n.t("confirm", { lng: lang })}`
             : data?.status === "doing"
-            ? "Đang làm"
+            ? `${i18n.t("doing", { lng: lang })}`
             : data?.status === "done"
-            ? "Hoàn thành"
-            : "Đã huỷ"}
+            ? `${i18n.t("complete", { lng: lang })}`
+            : `${i18n.t("cancel", { lng: lang })}`}
         </a>
       ),
     },
     {
-      title: "Tổng tiền",
+      title: `${i18n.t("total_money", { lng: lang })}`,
       render: (data) => (
         <a className="text-money-order-customer">
           {formatMoney(data?.final_fee)}

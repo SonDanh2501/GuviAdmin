@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./index.scss";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -92,16 +92,11 @@ const ReportDetailOrderDaily = () => {
         );
       },
       render: (data) => (
-        <a
-          className="text-id-report-order"
-          onClick={() =>
-            navigate("/details-order", {
-              state: { id: data?.id_group_order?._id },
-            })
-          }
-        >
-          {data?.id_group_order?.id_view}
-        </a>
+        <Link to={`/details-order/${data?.id_group_order?._id}`}>
+          <a className="text-id-report-order">
+            {data?.id_group_order?.id_view}
+          </a>
+        </Link>
       ),
       width: "5%",
     },

@@ -37,7 +37,11 @@ import AddCollaborator from "../../../../../components/addCollaborator/addCollab
 import ModalCustom from "../../../../../components/modalCustom/index.jsx";
 import LoadingPagination from "../../../../../components/paginationLoading/index.jsx";
 import InputCustom from "../../../../../components/textInputCustom/index.jsx";
-import { getElementState } from "../../../../../redux/selectors/auth.js";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../../redux/selectors/auth.js";
+import i18n from "../../../../../i18n/index.js";
 
 const CollaboratorManage = (props) => {
   const { status } = props;
@@ -64,7 +68,7 @@ const CollaboratorManage = (props) => {
   const toggleVerify = () => setModalVerify(!modalVerify);
   const toggleLockTime = () => setModalLockTime(!modalLockTime);
   const checkElement = useSelector(getElementState);
-  const navigate = useNavigate();
+  const lang = useSelector(getLanguageState);
   const dispatch = useDispatch();
   const width = window.innerWidth;
 
@@ -316,21 +320,23 @@ const CollaboratorManage = (props) => {
           }
           onClick={toggleLockTime}
         >
-          {itemEdit?.is_locked ? "Mở khoá" : "Khoá"}
+          {itemEdit?.is_locked
+            ? `${i18n.t("unlock", { lng: lang })}`
+            : `${i18n.t("lock", { lng: lang })}`}
         </a>
       ),
     },
     {
       key: "2",
       label: checkElement?.includes("delete_collaborator") && (
-        <a onClick={toggle}>Xoá</a>
+        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
       ),
     },
   ];
 
   const columns = [
     {
-      title: "Mã CTV",
+      title: `${i18n.t("code_collaborator", { lng: lang })}`,
       render: (data) => (
         <Link
           to={
@@ -344,7 +350,7 @@ const CollaboratorManage = (props) => {
       ),
     },
     {
-      title: "Tên cộng tác viên",
+      title: `${i18n.t("name", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-collaborator">
@@ -364,7 +370,7 @@ const CollaboratorManage = (props) => {
       sorter: (a, b) => a.full_name.localeCompare(b.full_name),
     },
     {
-      title: "Ngày tạo",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-create-ctv">
@@ -379,12 +385,12 @@ const CollaboratorManage = (props) => {
       },
     },
     {
-      title: "SĐT",
+      title: `${i18n.t("sdt", { lng: lang })}`,
       render: (data) => <a className="text-phone-ctv">{data?.phone}</a>,
       align: "center",
     },
     {
-      title: "Trạng thái",
+      title: `${i18n.t("status", { lng: lang })}`,
       align: "center",
       render: (data) => {
         const now = moment(new Date()).format("DD/MM/YYYY hh:mm:ss");
@@ -422,17 +428,23 @@ const CollaboratorManage = (props) => {
       },
     },
     {
-      title: "Tài khoản",
+      title: `${i18n.t("account", { lng: lang })}`,
       align: "center",
       render: (data) => {
         return (
           <div className="div-verify">
             {!data?.is_verify && data?.is_contacted ? (
-              <a className="text-nonverify">Đã liên hệ</a>
+              <a className="text-nonverify">{`${i18n.t("contacted", {
+                lng: lang,
+              })}`}</a>
             ) : data?.is_verify ? (
-              <a className="text-verify">Đã xác thực</a>
+              <a className="text-verify">{`${i18n.t("verified", {
+                lng: lang,
+              })}`}</a>
             ) : (
-              <a className="text-nonverify">Chưa xác thực</a>
+              <a className="text-nonverify">{`${i18n.t("unconfirmed", {
+                lng: lang,
+              })}`}</a>
             )}
             {!data?.is_contacted && !data?.is_verify && (
               <div
@@ -444,7 +456,9 @@ const CollaboratorManage = (props) => {
                 onClick={toggleContected}
               >
                 {checkElement?.includes("contacted_collaborator") && (
-                  <a className="text-contacted">Liên hệ</a>
+                  <a className="text-contacted">{`${i18n.t("contact", {
+                    lng: lang,
+                  })}`}</a>
                 )}
               </div>
             )}
@@ -498,14 +512,14 @@ const CollaboratorManage = (props) => {
           )}
 
           <Input
-            placeholder="Tìm kiếm"
+            placeholder={`${i18n.t("search", { lng: lang })}`}
             type="text"
-            className="input-search"
             prefix={<SearchOutlined />}
             onChange={(e) => {
               changeValueSearch(e.target.value);
               handleSearch(e.target.value);
             }}
+            style={{ width: "70%", marginLeft: 20 }}
           />
         </div>
         <div className="div-table mt-3">
@@ -540,7 +554,10 @@ const CollaboratorManage = (props) => {
             }
           />
           <div className="div-pagination p-2">
-            <a>Tổng: {totalFilter > 0 ? totalFilter : total}</a>
+            <a>
+              {`${i18n.t("total", { lng: lang })}`}:{" "}
+              {totalFilter > 0 ? totalFilter : total}
+            </a>
             <div>
               <Pagination
                 current={currentPage}
@@ -558,31 +575,35 @@ const CollaboratorManage = (props) => {
             isOpen={modalLockTime}
             title={
               itemEdit?.is_locked === false
-                ? "Khóa tài khoản cộng tác viên"
-                : "Mở tài khoản cộng tác viên"
+                ? `${i18n.t("lock_collaborator", { lng: lang })}`
+                : `${i18n.t("unlock_collaborator", { lng: lang })}`
             }
             handleOk={() =>
               onLockTimeCollaborator(itemEdit?._id, itemEdit?.is_locked)
             }
-            textOk={itemEdit?.is_locked === false ? "Khóa" : "Mở"}
+            textOk={
+              itemEdit?.is_locked === false
+                ? `${i18n.t("lock", { lng: lang })}`
+                : `${i18n.t("unlock", { lng: lang })}`
+            }
             handleCancel={toggleLockTime}
             body={
               <>
                 {itemEdit?.is_locked === false
-                  ? "Bạn có muốn khóa tài khoản cộng tác viên"
-                  : "Bạn có muốn kích hoạt tài khoản cộng tác viên"}
-                <h3>{itemEdit?.full_name}</h3>
+                  ? `${i18n.t("want_lock_collaborator", { lng: lang })}`
+                  : `${i18n.t("want_unlock_collaborator", { lng: lang })}`}
+                <h5>{itemEdit?.full_name}</h5>
                 {itemEdit?.is_locked === false && (
                   <>
                     <Checkbox
                       checked={checkLock}
                       onChange={(e) => setCheckLock(e.target.checked)}
                     >
-                      Khoá theo thời gian (nếu không chọn sẽ khoá vĩnh viễn)
+                      {`${i18n.t("lock_by_time", { lng: lang })}`}
                     </Checkbox>
                     {checkLock && (
                       <InputCustom
-                        title={"*Thời gian khoá (hh:mm)"}
+                        title={`${i18n.t("lock_time", { lng: lang })}`}
                         type="datetime-local"
                         className="text-input"
                         onChange={(e) => setTimeValue(e.target.value)}
@@ -597,49 +618,20 @@ const CollaboratorManage = (props) => {
         <div>
           <ModalCustom
             isOpen={modalVerify}
-            title="Xác thực tài khoản cộng tác viên"
+            title={`${i18n.t("verify_account", { lng: lang })}`}
             handleOk={() =>
               onVerifyCollaborator(itemEdit?._id, itemEdit?.is_verify)
             }
-            textOk="Xác thực"
+            textOk={`${i18n.t("verify", { lng: lang })}`}
             handleCancel={toggleVerify}
             body={
               <>
-                <a>Bạn có muốn xác thực tài khoản cộng tác viên</a>
-                <h3>{itemEdit?.full_name}</h3>
+                <a>{`${i18n.t("want_verify_account", { lng: lang })}`}</a>
+                <h5>{itemEdit?.full_name}</h5>
               </>
             }
           />
         </div>
-        {/* <div>
-          <Modal isOpen={modalBlock} toggle={toggleBlock}>
-            <ModalHeader toggle={toggleBlock}>
-              {" "}
-              {itemEdit?.is_active === true
-                ? "Khóa tài khoản cộng tác viên"
-                : "Mở tài khoản cộng tác viên"}
-            </ModalHeader>
-            <ModalBody>
-              {itemEdit?.is_active === true
-                ? "Bạn có muốn khóa tài khoản cộng tác viên"
-                : "Bạn có muốn mở khoá tài khoản cộng tác viên"}
-              <h3>{itemEdit?.full_name}</h3>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="primary"
-                onClick={() =>
-                  blockCollaborator(itemEdit?._id, itemEdit?.is_active)
-                }
-              >
-                Có
-              </Button>
-              <Button color="#ddd" onClick={toggleBlock}>
-                Không
-              </Button>
-            </ModalFooter>
-          </Modal>
-        </div> */}
 
         <div>
           <ModalCustom
@@ -660,16 +652,15 @@ const CollaboratorManage = (props) => {
         <div>
           <ModalCustom
             isOpen={modalContected}
-            title="Liên hệ công tác viên"
+            title={`${i18n.t("contact_collaborator", { lng: lang })}`}
             handleOk={() => onContected(itemEdit?._id)}
-            textOk="Liên hệ"
+            textOk={`${i18n.t("contact", { lng: lang })}`}
             handleCancel={toggleContected}
             body={
-              <a>
-                Bạn có chắc đã liên hệ cộng tác viên
-                <a className="text-name-modal">{itemEdit?.full_name}</a> này
-                không?
-              </a>
+              <>
+                <a>{`${i18n.t("want_contact_collaborator", { lng: lang })}`}</a>
+                <a className="text-name-modal">{itemEdit?.full_name}</a>
+              </>
             }
           />
         </div>

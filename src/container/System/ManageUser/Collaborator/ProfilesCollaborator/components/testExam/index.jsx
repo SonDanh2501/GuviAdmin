@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { getListTestByCollabotatorApi } from "../../../../../../../api/configuration";
 import "./styles.scss";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../../i18n";
 
 const TestExam = (props) => {
   const { id } = props;
   const [data, setData] = useState([]);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getListTestByCollabotatorApi(id)
@@ -16,10 +20,22 @@ const TestExam = (props) => {
 
   return (
     <div>
-      <a className="title-test-exam">Bài kiểm tra Cộng tác viên</a>
+      <a className="title-test-exam">{`${i18n.t("contributor_exam", {
+        lng: lang,
+      })}`}</a>
       <div className="note-answers">
-        <a className="text-false">* Màu đỏ đáp án sai</a>
-        <a className="text-true">* Màu xanh đáp án đúng</a>
+        <a className="text-false">
+          *{" "}
+          {`${i18n.t("wrong_answer", {
+            lng: lang,
+          })}`}
+        </a>
+        <a className="text-true">
+          *{" "}
+          {`${i18n.t("correct_answer", {
+            lng: lang,
+          })}`}
+        </a>
       </div>
       {data?.map((item, index) => {
         return (

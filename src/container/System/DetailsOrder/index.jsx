@@ -913,7 +913,21 @@ const DetailsOrder = () => {
                               </>
                             );
                           })}
-
+                          {dataGroup?.tip_collaborator !== 0 && (
+                            <div className="div-price">
+                              <div className="div-title-colon">
+                                <div className="div-title-details">
+                                  <a className="title">- Tiền tip</a>
+                                </div>
+                                <a className="text-colon">:</a>
+                              </div>
+                              <>
+                                <a className="text-moeny-details">
+                                  +{formatMoney(dataGroup?.tip_collaborator)}
+                                </a>
+                              </>
+                            </div>
+                          )}
                           {dataGroup?.code_promotion && (
                             <div className="div-price">
                               <div className="div-title-colon">
@@ -958,22 +972,6 @@ const DetailsOrder = () => {
                               </div>
                             );
                           })}
-
-                          {dataGroup?.tip_collaborator !== 0 && (
-                            <div className="div-price">
-                              <div className="div-title-colon">
-                                <div className="div-title-details">
-                                  <a className="title">- Tiền tip</a>
-                                </div>
-                                <a className="text-colon">:</a>
-                              </div>
-                              <>
-                                <a className="text-moeny-details">
-                                  +{formatMoney(dataGroup?.tip_collaborator)}
-                                </a>
-                              </>
-                            </div>
-                          )}
 
                           <div className="div-price">
                             <div className="div-title-colon">

@@ -3,6 +3,9 @@ import "./styles.scss";
 import { getInviteCollaborator } from "../../../../../../../api/collaborator";
 import { Pagination, Progress, Table } from "antd";
 import moment from "moment";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../../i18n";
 
 const InviteCollaborator = ({ id }) => {
   const [totalCustomer, setTotalCustomer] = useState();
@@ -11,6 +14,7 @@ const InviteCollaborator = ({ id }) => {
   const [dataCollaborator, setCollaborator] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [tab, setTab] = useState("collaborator");
+  const lang = useSelector(getLanguageState);
   useEffect(() => {
     getInviteCollaborator(id, 0, 20)
       .then((res) => {
@@ -145,7 +149,9 @@ const InviteCollaborator = ({ id }) => {
               }
               onClick={() => setTab(item?.value)}
             >
-              <a className="text-tab">{item?.title}</a>
+              <a className="text-tab">{`${i18n.t(item?.title, {
+                lng: lang,
+              })}`}</a>
             </div>
           );
         })}
@@ -159,7 +165,8 @@ const InviteCollaborator = ({ id }) => {
       </div>
       <div className="div-pagination p-2">
         <a>
-          Tổng: {tab === "collaborator" ? totalCollaborator : totalCustomer}
+          {`${i18n.t("total", { lng: lang })}`}:{" "}
+          {tab === "collaborator" ? totalCollaborator : totalCustomer}
         </a>
         <div>
           <Pagination
@@ -178,6 +185,6 @@ const InviteCollaborator = ({ id }) => {
 export default InviteCollaborator;
 
 const DATA_TAB = [
-  { title: "Giới thiệu cộng tác viên", value: "collaborator" },
-  { title: "Giới thiệu khách hàng", value: "customer" },
+  { title: "invite_collaborator", value: "collaborator" },
+  { title: "invite_customer", value: "customer" },
 ];

@@ -11,8 +11,11 @@ import {
   updateInformationCollaboratorApi,
 } from "../../../../../../../api/collaborator";
 import { getDistrictApi } from "../../../../../../../api/file";
+import InputCustom from "../../../../../../../components/textInputCustom";
 import { errorNotify } from "../../../../../../../helper/toast";
+import i18n from "../../../../../../../i18n";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import { getService } from "../../../../../../../redux/selectors/service";
 import "./index.scss";
 
@@ -46,6 +49,7 @@ const Information = ({ data, image, idCTV, setData }) => {
   const cityOption = [];
   const districtsOption = [];
   const dateFormat = "YYYY-MM-DD";
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getDistrictApi()
@@ -87,7 +91,7 @@ const Information = ({ data, image, idCTV, setData }) => {
 
   service.map((item, index) => {
     serviceOption.push({
-      label: item?.title?.vi,
+      label: item?.title?.[lang],
       value: item?._id,
     });
   });
@@ -216,39 +220,44 @@ const Information = ({ data, image, idCTV, setData }) => {
     <>
       <Form>
         <div className="pl-lg-4">
-          <h5>Thông tin</h5>
+          <h5>{`${i18n.t("info", { lng: lang })}`}</h5>
           <Row>
             <Col lg="6">
-              <div>
-                <a>Họ và tên</a>
-                <Input
-                  placeholder="Nhập họ tên"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
+              <InputCustom
+                title={`${i18n.t("full_name", { lng: lang })}`}
+                placeholder={`${i18n.t("placeholder", { lng: lang })}`}
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </Col>
             <Col lg="6" className="gender">
-              <div>
-                <a>Giới tính</a>
-                <Select
-                  style={{ width: "100%" }}
-                  value={gender}
-                  onChange={(e) => setGender(e)}
-                  options={[
-                    { value: "other", label: "Khác" },
-                    { value: "male", label: "Nam" },
-                    { value: "female", label: "Nữ" },
-                  ]}
-                />
-              </div>
+              <InputCustom
+                title={`${i18n.t("gender", { lng: lang })}`}
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                select={true}
+                options={[
+                  {
+                    value: "other",
+                    label: `${i18n.t("other", { lng: lang })}`,
+                  },
+                  {
+                    value: "male",
+                    label: `${i18n.t("male", { lng: lang })}`,
+                  },
+                  {
+                    value: "female",
+                    label: `${i18n.t("female", { lng: lang })}`,
+                  },
+                ]}
+              />
             </Col>
           </Row>
-          <Row>
+          <Row className="mt-2">
             <Col lg="6">
               <div>
-                <a>Ngày sinh</a>
+                <a>{`${i18n.t("birthday", { lng: lang })}`}</a>
                 <DatePicker
                   onChange={(date, dateString) => setBirthday(dateString)}
                   style={{ width: "100%" }}
@@ -260,26 +269,25 @@ const Information = ({ data, image, idCTV, setData }) => {
               </div>
             </Col>
             <Col lg="6">
-              <div>
-                <a>SĐT liên hệ</a>
-                <Input type="number" value={phone} disabled={true} />
-              </div>
+              <InputCustom
+                title={`${i18n.t("phone", { lng: lang })}`}
+                type="number"
+                value={phone}
+                disabled={true}
+              />
             </Col>
           </Row>
-          <Row>
+          <Row className="mt-2">
             <Col lg="6">
-              <div>
-                <a>Địa chỉ thường trú</a>
-                <Input
-                  placeholder="Nhập địa chỉ thường trú"
-                  type="text"
-                  value={resident}
-                  onChange={(e) => setResident(e.target.value)}
-                />
-              </div>
+              <InputCustom
+                title={`${i18n.t("permanent_address", { lng: lang })}`}
+                type="text"
+                value={resident}
+                onChange={(e) => setResident(e.target.value)}
+              />
             </Col>
             <Col lg="6">
-              <div>
+              {/* <div>
                 <a>Đối tượng CTV</a>
                 <Input
                   placeholder="Nhập đối tượng"
@@ -288,149 +296,144 @@ const Information = ({ data, image, idCTV, setData }) => {
                   onChange={(e) => setType(e.target.value)}
                   disabled={true}
                 />
-              </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col lg="6">
-              <div>
-                <a>Địa chỉ tạm trú</a>
-                <Input
-                  placeholder="Nhập địa chỉ tạm trú"
-                  type="text"
-                  value={staying}
-                  onChange={(e) => setStaying(e.target.value)}
+                <InputCustom 
+                 type="text"
+                 value={type}
+                 onChange={(e) => setType(e.target.value)}
+                 disabled={true}
                 />
-              </div>
-            </Col>
-            <Col lg="6">
-              <div>
-                <a>Loại dịch vụ</a>
-                <Select
-                  style={{ width: "100%" }}
-                  mode="multiple"
-                  allowClear
-                  value={serviceApply}
-                  onChange={(e) => setServiceApply(e)}
-                  options={serviceOption}
-                />
-              </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col lg="6">
-              <div>
-                <a>Dân tộc</a>
-                <Input
-                  placeholder="Nhập dân tộc"
-                  type="text"
-                  value={ethnic}
-                  onChange={(e) => setEthnic(e.target.value)}
-                />
-              </div>
-            </Col>
-            <Col lg="6">
-              <div>
-                <a>Tôn giáo</a>
-                <Input
-                  placeholder="Nhập tôn giáo"
-                  type="text"
-                  value={religion}
-                  onChange={(e) => setReligion(e.target.value)}
-                />
-              </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col lg="6">
-              <div>
-                <a>Trình độ văn hoá</a>
-                <Select
-                  style={{ width: "100%" }}
-                  value={level}
-                  onChange={(e) => setLevel(e)}
-                  options={[
-                    { value: "5/12", label: "5/12" },
-                    { value: "9/12", label: "9/12" },
-                    { value: "12/12", label: "12/12" },
-                    { value: "Cao đẳng", label: "Cao đẳng" },
-                    { value: "Đại học", label: "Đại học" },
-                    { value: "Thạc sĩ", label: "Thạc sĩ" },
-                    { value: "Tiến sĩ", label: "Tiến sĩ" },
-                  ]}
-                />
-              </div>
-            </Col>
-            <Col lg="6">
-              <div>
-                <a>Mã giới thiệu</a>
-                <Input
-                  label={"Mã giới thiệu"}
-                  type="text"
-                  value={codeInvite}
-                  disabled={true}
-                />
-              </div>
+              </div> */}
             </Col>
           </Row>
           <Row className="mt-2">
             <Col lg="6">
-              <div>
-                <a>Tỉnh/thành phố </a>
-                <Select
-                  value={codeCity}
-                  defaultValue={"Chọn tỉnh/thành phố làm việc"}
-                  options={cityOption}
-                  style={{ width: "100%" }}
-                  onChange={onChangeCity}
-                />
-              </div>
+              <InputCustom
+                title={`${i18n.t("temporary_address", { lng: lang })}`}
+                type="text"
+                value={staying}
+                onChange={(e) => setStaying(e.target.value)}
+              />
             </Col>
             <Col lg="6">
-              <div>
-                <a>Quận/huyện</a>
-                <Select
-                  value={codeDistrict}
-                  options={districtsOption}
-                  style={{ width: "100%" }}
-                  onChange={onChangeDistrict}
-                  mode="multiple"
-                  allowClear
-                />
-              </div>
+              <InputCustom
+                title={`${i18n.t("type_service", { lng: lang })}`}
+                style={{ width: "100%" }}
+                mode="multiple"
+                allowClear
+                value={serviceApply}
+                onChange={(e) => setServiceApply(e)}
+                options={serviceOption}
+                select={true}
+              />
+            </Col>
+          </Row>
+          <Row className="mt-2">
+            <Col lg="6">
+              <InputCustom
+                title={`${i18n.t("nation", { lng: lang })}`}
+                type="text"
+                value={ethnic}
+                onChange={(e) => setEthnic(e.target.value)}
+              />
+            </Col>
+            <Col lg="6">
+              <InputCustom
+                title={`${i18n.t("religion", { lng: lang })}`}
+                type="text"
+                value={religion}
+                onChange={(e) => setReligion(e.target.value)}
+              />
+            </Col>
+          </Row>
+          <Row className="mt-2">
+            <Col lg="6">
+              <InputCustom
+                title={`${i18n.t("cultural_level", { lng: lang })}`}
+                style={{ width: "100%" }}
+                value={level}
+                onChange={(e) => setLevel(e)}
+                options={[
+                  { value: "5/12", label: "5/12" },
+                  { value: "9/12", label: "9/12" },
+                  { value: "12/12", label: "12/12" },
+                  {
+                    value: "Cao đẳng",
+                    label: `${i18n.t("college", { lng: lang })}`,
+                  },
+                  {
+                    value: "Đại học",
+                    label: `${i18n.t("university", { lng: lang })}`,
+                  },
+                  {
+                    value: "Thạc sĩ",
+                    label: `${i18n.t("master", { lng: lang })}`,
+                  },
+                  {
+                    value: "Tiến sĩ",
+                    label: `${i18n.t("doctor_philosophy", { lng: lang })}`,
+                  },
+                ]}
+                select={true}
+              />
+            </Col>
+            <Col lg="6">
+              <InputCustom
+                title={`${i18n.t("code_invite", { lng: lang })}`}
+                type="text"
+                value={codeInvite}
+                disabled={true}
+              />
+            </Col>
+          </Row>
+          <Row className="mt-2">
+            <Col lg="6">
+              <InputCustom
+                title={`${i18n.t("province_city", { lng: lang })}`}
+                value={codeCity}
+                select={true}
+                options={cityOption}
+                style={{ width: "100%" }}
+                onChange={onChangeCity}
+              />
+            </Col>
+            <Col lg="6">
+              <InputCustom
+                title={`${i18n.t("county_district", { lng: lang })}`}
+                value={codeDistrict}
+                options={districtsOption}
+                style={{ width: "100%" }}
+                onChange={onChangeDistrict}
+                mode="multiple"
+                allowClear
+                select={true}
+              />
             </Col>
           </Row>
           <hr />
-          <h5>CMND/CCCD</h5>
+          <h5>{`${i18n.t("citizen_ID", { lng: lang })}`}</h5>
           <Row>
             <Col lg="6">
-              <div>
-                <a>Số CCCD/CMND</a>
-                <Input
-                  placeholder="Nhập thông tin"
-                  type="number"
-                  value={number}
-                  min={0}
-                  onChange={(e) => onChangeNumberIndentity(e)}
-                />
-              </div>
+              <InputCustom
+                title={`${i18n.t("citizen_ID", { lng: lang })}`}
+                type="number"
+                value={number}
+                min={0}
+                onChange={(e) => onChangeNumberIndentity(e)}
+              />
             </Col>
           </Row>
           <Row>
             <Col lg="6">
-              <div>
-                <a>Nơi cấp</a>
-                <Input
-                  placeholder="Nhập thông tin"
-                  type="text"
-                  value={issued}
-                  onChange={(e) => setIssued(e.target.value)}
-                />
-              </div>
+              <InputCustom
+                title={`${i18n.t("issued_by", { lng: lang })}`}
+                type="text"
+                value={issued}
+                onChange={(e) => setIssued(e.target.value)}
+              />
             </Col>
             <Col lg="6">
               <div>
-                <a>Ngày cấp</a>
+                <a>{`${i18n.t("issue_date", { lng: lang })}`}</a>
                 <DatePicker
                   onChange={(date, dateString) => setIssuedDay(dateString)}
                   style={{ width: "100%" }}
@@ -443,23 +446,20 @@ const Information = ({ data, image, idCTV, setData }) => {
             </Col>
           </Row>
           <hr />
-          <h5>Giới thiệu</h5>
+          <h5>{`${i18n.t("introduce", { lng: lang })}`}</h5>
           <Row>
             <Col lg="12">
               <div>
-                <h6>Mã giới thiệu</h6>
-                <div>
-                  <Input
-                    placeholder="Tìm kiếm theo số điện thoại"
-                    value={nameCollaborator}
-                    disabled={data?.is_verify ? true : false}
-                    className="input-seach-collaborator"
-                    onChange={(e) => {
-                      searchCollaborator(e.target.value);
-                      searchValue(e.target.value);
-                    }}
-                  />
-                </div>
+                <InputCustom
+                  title={`${i18n.t("code_invite", { lng: lang })}`}
+                  value={nameCollaborator}
+                  disabled={data?.is_verify ? true : false}
+                  className="input-seach-collaborator"
+                  onChange={(e) => {
+                    searchCollaborator(e.target.value);
+                    searchValue(e.target.value);
+                  }}
+                />
 
                 {dataCollaborator.length > 0 && (
                   <List type={"unstyled"} className="list-item">
@@ -488,7 +488,7 @@ const Information = ({ data, image, idCTV, setData }) => {
           </Row>
         </div>
         <Button className="btn-update mt-3" onClick={updateInformation}>
-          Cập nhật
+          {`${i18n.t("update", { lng: lang })}`}
         </Button>
       </Form>
     </>
