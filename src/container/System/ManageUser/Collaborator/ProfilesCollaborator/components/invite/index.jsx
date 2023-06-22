@@ -30,7 +30,7 @@ const InviteCollaborator = ({ id }) => {
     tab === "collaborator"
       ? [
           {
-            title: "Ngày tạo",
+            title: `${i18n.t("date_create", { lng: lang })}`,
             render: (data) => {
               return (
                 <div className="div-date-create-invite">
@@ -45,11 +45,11 @@ const InviteCollaborator = ({ id }) => {
             },
           },
           {
-            title: "Mã",
+            title: `${i18n.t("code_order", { lng: lang })}`,
             render: (data) => <a className="text-id-view">{data?.id_view}</a>,
           },
           {
-            title: "Tên",
+            title: `${i18n.t("name", { lng: lang })}`,
             render: (data) => {
               return (
                 <div className="div-name-invite-collaborator">
@@ -62,7 +62,7 @@ const InviteCollaborator = ({ id }) => {
         ]
       : [
           {
-            title: "Ngày tạo",
+            title: `${i18n.t("date_create", { lng: lang })}`,
             render: (data) => {
               return (
                 <div className="div-date-create-invite">
@@ -77,11 +77,11 @@ const InviteCollaborator = ({ id }) => {
             },
           },
           {
-            title: "Mã",
+            title: `${i18n.t("code_order", { lng: lang })}`,
             render: (data) => <a className="text-id-view">{data?.id_view}</a>,
           },
           {
-            title: "Tên",
+            title: `${i18n.t("name", { lng: lang })}`,
             render: (data) => {
               return (
                 <div className="div-name-invite-collaborator">
@@ -94,13 +94,6 @@ const InviteCollaborator = ({ id }) => {
           {
             title: "Giai đoạn",
             render: (data) => (
-              //   <a className="text-step">
-              //     {data?.total_order === 0
-              //       ? "Hoàn thành bước 1"
-              //       : data?.total_order !== 0 && data?.total_done_order === 0
-              //       ? "Hoàn thành bước 2"
-              //       : "Hoàn thành"}
-              //   </a>
               <Progress
                 percent={
                   data?.total_order === 0

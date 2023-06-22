@@ -1,6 +1,6 @@
 import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   editAccountBankCollaborator,
   getCollaboratorsById,
@@ -9,12 +9,15 @@ import InputCustom from "../../../../../../../components/textInputCustom";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import "./index.scss";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../../i18n";
 
 const BankAccount = ({ id }) => {
   const [accountNumber, setAccountNumber] = useState("");
   const [bankName, setBankName] = useState("");
   const [accountName, setAccountName] = useState("");
   const dispatch = useDispatch();
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -53,34 +56,38 @@ const BankAccount = ({ id }) => {
 
   return (
     <div>
-      <a className="title-info">Thông tin tài khoản</a>
-
+      <a className="title-info">{`${i18n.t("account_infomation", {
+        lng: lang,
+      })}`}</a>
       <InputCustom
-        title={"Số tài khoản"}
-        placeholder="Nhập số tài khoản"
+        title={`${i18n.t("bank_account_number", {
+          lng: lang,
+        })}`}
         type="number"
         value={accountNumber}
         onChange={(e) => setAccountNumber(e.target.value)}
       />
 
       <InputCustom
-        title={"Tên ngân hàng"}
-        placeholder="Nhập tên ngân hàng"
+        title={`${i18n.t("bank_name", { lng: lang })}`}
         type="text"
         value={bankName}
         onChange={(e) => setBankName(e.target.value)}
       />
 
       <InputCustom
-        title={"Tên chủ thẻ"}
-        placeholder="Nhập tên chủ thẻ"
+        title={`${i18n.t("account_name", {
+          lng: lang,
+        })}`}
         type="text"
         value={accountName}
         onChange={(e) => setAccountName(e.target.value)}
       />
 
       <Button className="btn-update mt-5" onClick={updateAccountBank}>
-        Cập nhật
+        {`${i18n.t("update", {
+          lng: lang,
+        })}`}
       </Button>
     </div>
   );

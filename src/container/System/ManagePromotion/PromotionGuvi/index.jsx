@@ -5,6 +5,8 @@ import LoadingPagination from "../../../../components/paginationLoading";
 import { getService } from "../../../../redux/selectors/service";
 import PromotionManage from "../Promotion/promotionManage";
 import "./index.scss";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import i18n from "../../../../i18n";
 
 const ManagePromotionGuvi = (props) => {
   const { type, brand, currentPage, setCurrentPage, startPage, setStartPage } =
@@ -12,12 +14,13 @@ const ManagePromotionGuvi = (props) => {
   const service = useSelector(getService);
   const [tab, setTab] = useState("tat_ca");
   const [id, setId] = useState("");
+  const lang = useSelector(getLanguageState);
 
   const dataTab = [
     {
       idService: "",
       kind: "tat_ca",
-      title: "Tất cả",
+      title: `${i18n.t("all", { lng: lang })}`,
     },
   ];
 
@@ -25,7 +28,7 @@ const ManagePromotionGuvi = (props) => {
     dataTab.push({
       idService: item?._id,
       kind: item?.kind,
-      title: item?.title?.vi,
+      title: item?.title?.[lang],
     });
   });
 

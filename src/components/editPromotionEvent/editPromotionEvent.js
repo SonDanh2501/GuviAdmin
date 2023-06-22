@@ -27,6 +27,7 @@ import { loadingAction } from "../../redux/actions/loading";
 import { getService } from "../../redux/selectors/service";
 import CustomTextEditor from "../customTextEdittor";
 import "./editPromotionEvent.scss";
+import { getLanguageState } from "../../redux/selectors/auth";
 dayjs.extend(customParseFormat);
 
 const { TextArea } = Input;
@@ -105,6 +106,7 @@ const EditPromotionEvent = (props) => {
   const dateFormat = "YYYY-MM-DD";
   const dispatch = useDispatch();
   const service = useSelector(getService);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getGroupCustomerApi(0, 10)
@@ -788,7 +790,9 @@ const EditPromotionEvent = (props) => {
                                       changeDayApply(it.value, index)
                                     }
                                   >
-                                    <a className="text-day">{it?.title}</a>
+                                    <a className="text-day">
+                                      {it?.title?.[lang]}
+                                    </a>
                                   </div>
                                 );
                               })}

@@ -4,12 +4,14 @@ import { useSelector } from "react-redux";
 import { getService } from "../../../../redux/selectors/service";
 import PromotionManage from "../Promotion/promotionManage";
 import "./index.scss";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import i18n from "../../../../i18n";
 
 const ManagePromotionOrther = (props) => {
   const { type, brand, currentPage, setCurrentPage, startPage, setStartPage } =
     props;
   const [tab, setTab] = useState("no_exchange");
-  const [id, setId] = useState("");
+  const lang = useSelector(getLanguageState);
 
   return (
     <div className=" ml-2 mt-3">
@@ -29,7 +31,7 @@ const ManagePromotionOrther = (props) => {
                     : "text-title-tab-default"
                 }
               >
-                {item?.title}
+                {`${i18n.t(item?.title, { lng: lang })}`}
               </a>
               <div className={tab === item?.tab ? "tab-line" : ""}></div>
             </div>
@@ -55,6 +57,6 @@ const ManagePromotionOrther = (props) => {
 export default ManagePromotionOrther;
 
 const DATA_TAB = [
-  { id: 1, title: "Tặng", tab: "no_exchange" },
-  { id: 2, title: "Điểm quy đổi", tab: "exchange" },
+  { id: 1, title: "give", tab: "no_exchange" },
+  { id: 2, title: "redemption_points", tab: "exchange" },
 ];
