@@ -14,7 +14,11 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { loadingAction } from "../../../../redux/actions/loading";
 import _debounce from "lodash/debounce";
-import { getElementState } from "../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../redux/selectors/auth";
+import i18n from "../../../../i18n";
 const AddCollaboratorOrder = (props) => {
   const {
     idOrder,
@@ -33,6 +37,7 @@ const AddCollaboratorOrder = (props) => {
   const [id, setId] = useState("");
   const dispatch = useDispatch();
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -127,11 +132,23 @@ const AddCollaboratorOrder = (props) => {
         }
         onClick={showDrawer}
       >
-        {status === "confirm" ? "Thay CTV" : "Thêm CTV"}
+        {status === "confirm"
+          ? `${i18n.t("change_ctv", {
+              lng: lang,
+            })}`
+          : `${i18n.t("add_ctv", {
+              lng: lang,
+            })}`}
       </a>
       <Drawer
         title={
-          status === "confirm" ? "Thay Cộng tác viên" : "Thêm Cộng tác viên"
+          status === "confirm"
+            ? `${i18n.t("change_collaborator", {
+                lng: lang,
+              })}`
+            : `${i18n.t("add_collaborator", {
+                lng: lang,
+              })}`
         }
         placement="right"
         onClose={onClose}
@@ -140,9 +157,13 @@ const AddCollaboratorOrder = (props) => {
       >
         <div>
           <div>
-            <a className="label">Cộng tác viên</a>
+            <a className="label">{`${i18n.t("collaborator", {
+              lng: lang,
+            })}`}</a>
             <Input
-              placeholder="Tìm kiếm theo tên hoặc số điện thoại số điện thoại"
+              placeholder={`${i18n.t("search", {
+                lng: lang,
+              })}`}
               value={name}
               type="text"
               onChange={(e) => {
@@ -195,7 +216,13 @@ const AddCollaboratorOrder = (props) => {
               className="btn-add-collaborator-order"
               onClick={addCollaboratorToOrder}
             >
-              {status === "confirm" ? "Thay CTV" : "Thêm CTV"}
+              {status === "confirm"
+                ? `${i18n.t("change_ctv", {
+                    lng: lang,
+                  })}`
+                : `${i18n.t("add_ctv", {
+                    lng: lang,
+                  })}`}
             </Button>
           )}
         </div>

@@ -1,13 +1,15 @@
 import { List, Pagination, Table } from "antd";
 import moment from "moment";
 import { memo, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { getHistoryActivityCollaborator } from "../../../../../../../api/collaborator";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import vi from "moment/locale/vi";
 import "./index.scss";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../../i18n";
 const width = window.innerWidth;
 
 const Activity = ({ id }) => {
@@ -16,6 +18,7 @@ const Activity = ({ id }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -57,7 +60,7 @@ const Activity = ({ id }) => {
 
   const columns = [
     {
-      title: "Mã",
+      title: `${i18n.t("code_order", { lng: lang })}`,
       render: (data) => {
         return (
           <a
@@ -77,7 +80,7 @@ const Activity = ({ id }) => {
       },
     },
     {
-      title: "Ngày tạo",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-create-activity">
@@ -92,7 +95,7 @@ const Activity = ({ id }) => {
       },
     },
     {
-      title: "Khách hàng",
+      title: `${i18n.t("customer", { lng: lang })}`,
       render: (data) => {
         return (
           <Link
@@ -106,17 +109,19 @@ const Activity = ({ id }) => {
       },
     },
     {
-      title: "Dịch vụ",
+      title: `${i18n.t("service", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-service-activity">
             <a className="text-service">
-              {data?.type === "schedule"
-                ? "Giúp việc cố định"
-                : data?.type === "loop" && !data?.is_auto_order
-                ? "Giúp việc theo giờ"
-                : data?.type === "loop" && data?.is_auto_order
-                ? "Lặp lại hàng tuần"
+              {data?.type === "loop" && data?.is_auto_order
+                ? `${i18n.t("repeat", { lng: lang })}`
+                : data?.service?._id?.kind === "giup_viec_theo_gio"
+                ? `${i18n.t("cleaning", { lng: lang })}`
+                : data?.service?._id?.kind === "giup_viec_co_dinh"
+                ? `${i18n.t("cleaning_subscription", { lng: lang })}`
+                : data?.service?._id?.kind === "phuc_vu_nha_hang"
+                ? `${i18n.t("serve", { lng: lang })}`
                 : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>
@@ -125,7 +130,7 @@ const Activity = ({ id }) => {
       },
     },
     {
-      title: "Ngày làm",
+      title: `${i18n.t("date_work", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-worktime-activity">
@@ -134,22 +139,20 @@ const Activity = ({ id }) => {
               {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
             </a>
             <a className="text-worktime">
-              {moment(new Date(data?.date_work))
-                .locale("vi", vi)
-                .format("dddd")}
+              {moment(new Date(data?.date_work)).locale(lang).format("dddd")}
             </a>
           </div>
         );
       },
     },
     {
-      title: "Địa điểm",
+      title: `${i18n.t("address", { lng: lang })}`,
       render: (data) => (
         <p className="text-address-activity">{data?.address}</p>
       ),
     },
     {
-      title: "Trạng thái",
+      title: `${i18n.t("status", { lng: lang })}`,
       render: (data) => (
         <a
           className={
@@ -165,14 +168,14 @@ const Activity = ({ id }) => {
           }
         >
           {data?.status === "pending"
-            ? "Đang chờ làm"
+            ? `${i18n.t("pending", { lng: lang })}`
             : data?.status === "confirm"
-            ? "Đã nhận"
+            ? `${i18n.t("confirm", { lng: lang })}`
             : data?.status === "doing"
-            ? "Đang làm"
+            ? `${i18n.t("doing", { lng: lang })}`
             : data?.status === "done"
-            ? "Hoàn thành"
-            : "Đã huỷ"}
+            ? `${i18n.t("complete", { lng: lang })}`
+            : `${i18n.t("cancel", { lng: lang })}`}
         </a>
       ),
     },

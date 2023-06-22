@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import "./index.scss";
 import { getFavoriteAndBlockByCustomers } from "../../../../../../api/customer";
 import { Image, Table } from "antd";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../i18n";
 
 const FavouriteBlock = ({ id }) => {
   const [tab, setTab] = useState("favourite");
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getFavoriteAndBlockByCustomers(id, tab, 0, 20)
@@ -29,7 +33,9 @@ const FavouriteBlock = ({ id }) => {
               }
               onClick={() => setTab(item?.value)}
             >
-              <a className="text-tab">{item?.title}</a>
+              <a className="text-tab">{`${i18n.t(item?.title, {
+                lng: lang,
+              })}`}</a>
             </div>
           );
         })}
@@ -58,8 +64,12 @@ const FavouriteBlock = ({ id }) => {
         ) : (
           <a className="text-no-data">
             {tab === "favourite"
-              ? "Chưa có CTV yêu thích"
-              : "Chưa có CTV hạn chế"}
+              ? `${i18n.t("no_favorite", {
+                  lng: lang,
+                })}`
+              : `${i18n.t("no_block", {
+                  lng: lang,
+                })}`}
           </a>
         )}
       </div>
@@ -73,11 +83,11 @@ export default FavouriteBlock;
 
 const TAB = [
   {
-    title: "Cộng tác viên yêu thích",
+    title: "favorite_collaborator",
     value: "favourite",
   },
   {
-    title: "Cộng tác viên hạn chế",
+    title: "block_collaborators",
     value: "block",
   },
 ];

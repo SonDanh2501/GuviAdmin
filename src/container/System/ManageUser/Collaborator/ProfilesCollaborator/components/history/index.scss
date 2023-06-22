@@ -41,7 +41,7 @@
       }
     }
 
-    .text-date {
+    .text-date-history {
       font-family: "Roboto";
       font-weight: 400;
       font-size: 12px;
@@ -54,7 +54,7 @@
       flex-direction: row;
 
       .div-text-title-surplus {
-        width: 60px;
+        width: auto;
         .text-title-surplus {
           font-family: "Roboto";
           font-weight: 500;
@@ -110,6 +110,25 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.div-monney {
+  display: flex;
+  flex-direction: column;
+
+  .text-title-monney {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000000 !important;
+  }
+  .text-monney {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000 !important;
+  }
 }
 
 @media screen and (max-width: 490px) {
@@ -179,7 +198,7 @@
         }
       }
 
-      .text-date {
+      .text-date-history {
         font-family: "Roboto";
         font-weight: 400;
         font-size: 12px;

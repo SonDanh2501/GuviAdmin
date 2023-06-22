@@ -4,27 +4,37 @@ import DetailsProfile from "./DetailsProfile";
 import HistoryTransition from "./History";
 import OrderCustomer from "./OrderCustomer";
 import FavouriteBlock from "./CollaboratorFavoriteBlock";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
 
 const Profiles = () => {
   // const { state } = useLocation();
   // const { id } = state || {};
   const params = useParams();
   const id = params?.id;
+  const lang = useSelector(getLanguageState);
 
   return (
     <div>
       <div className="div-container-customer">
         <Tabs defaultActiveKey="1" size="large">
-          <Tabs.TabPane tab="Chi tiết Khách Hàng" key="1">
+          <Tabs.TabPane tab={`${i18n.t("detail", { lng: lang })}`} key="1">
             <DetailsProfile id={id} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Đơn hàng" key="2">
+          <Tabs.TabPane tab={`${i18n.t("order", { lng: lang })}`} key="2">
             <OrderCustomer id={id} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Lịch sử tài khoản" key="3">
+          <Tabs.TabPane
+            tab={`${i18n.t("account_history", { lng: lang })}`}
+            key="3"
+          >
             <HistoryTransition id={id} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Yêu thích / Hạn chế" key="4">
+          <Tabs.TabPane
+            tab={`${i18n.t("favourite_block", { lng: lang })}`}
+            key="4"
+          >
             <FavouriteBlock id={id} />
           </Tabs.TabPane>
         </Tabs>

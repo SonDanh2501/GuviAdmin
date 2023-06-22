@@ -44,25 +44,25 @@ export const DATA_PAYMENT = [
 export const DATA = [
   {
     id: 1,
-    title: "Tất cả",
+    title: "all",
     value: "tat_ca",
     kind: "",
   },
   {
     id: 2,
-    title: "Theo giờ",
+    title: "cleaning",
     value: "theo_gio",
     kind: "theo_gio",
   },
   {
     id: 3,
-    title: "Cố định",
+    title: "cleaning_subscription",
     value: "co_dinh",
     kind: "co_dinh",
   },
   {
     id: 4,
-    title: "Lặp lại",
+    title: "repeat",
     value: "lap_lai",
     kind: "lap_lai",
   },
@@ -77,32 +77,32 @@ export const DATA = [
 export const DATA_STATUS = [
   {
     id: 1,
-    title: "Tất cả",
+    title: "all",
     value: "all",
   },
   {
     id: 2,
-    title: "Đang chờ",
+    title: "pending",
     value: "pending",
   },
   {
     id: 3,
-    title: "Đã nhận",
+    title: "confirm",
     value: "confirm",
   },
   {
     id: 4,
-    title: "Chưa hoàn tất",
+    title: "doing",
     value: "doing",
   },
   {
     id: 5,
-    title: "Việc đã huỷ",
+    title: "cancel",
     value: "cancel",
   },
   {
     id: 6,
-    title: "Hoàn tất",
+    title: "complete",
     value: "done",
   },
 ];
@@ -126,24 +126,24 @@ export const DATA_DATE = [
 export const DATA_MONTH = [
   {
     id: 1,
-    title: "1 tháng",
+    title: "1",
     estimate: 1,
   },
   {
     id: 2,
-    title: "2 tháng",
+    title: "2",
 
     estimate: 2,
   },
   {
     id: 3,
-    title: "3 tháng",
+    title: "3",
 
     estimate: 3,
   },
   {
     id: 4,
-    title: "6 tháng",
+    title: "6",
 
     estimate: 6,
   },
@@ -184,38 +184,52 @@ export const DATA_TIME = [
 export const date = [
   {
     id: 1,
-    title: "T2",
-    value: 1,
+    title: {
+      vi: "T2",
+      en: "Mo",
+    },
   },
   {
     id: 2,
-    title: "T3",
-    value: 2,
+    title: {
+      vi: "T3",
+      en: "Tu",
+    },
   },
   {
     id: 3,
-    title: "T4",
-    value: 3,
+    title: {
+      vi: "T4",
+      en: "We",
+    },
   },
   {
     id: 4,
-    title: "T5",
-    value: 4,
+    title: {
+      vi: "T5",
+      en: "Th",
+    },
   },
   {
     id: 5,
-    title: "T6",
-    value: 5,
+    title: {
+      vi: "T6",
+      en: "Fr",
+    },
   },
   {
     id: 6,
-    title: "T7",
-    value: 6,
+    title: {
+      vi: "T7",
+      en: "Sa",
+    },
   },
   {
     id: 7,
-    title: "CN",
-    value: 0,
+    title: {
+      vi: "CN",
+      en: "Su",
+    },
   },
 ];
 

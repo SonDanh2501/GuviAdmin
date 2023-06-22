@@ -1,0 +1,45 @@
+.title-reward {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  color: #000000;
+  text-decoration: none;
+}
+
+.div-total-detail-reward {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+
+  .text-total {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+  }
+}
+
+.div-time-detail-reward {
+  display: flex;
+  flex-direction: column;
+  .text-time {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+  }
+}
+
+.text-id-reward {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000000;
+  text-decoration: none;
+}

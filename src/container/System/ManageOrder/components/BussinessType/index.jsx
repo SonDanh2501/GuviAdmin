@@ -1,7 +1,7 @@
 import { Button, DatePicker, Input, List, Select } from "antd";
 import _debounce from "lodash/debounce";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { searchCollaboratorsCreateOrder } from "../../../../../api/collaborator";
 import { DATA_TIME_TOTAL } from "../../../../../api/fakeData";
@@ -26,6 +26,8 @@ import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import "./index.scss";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
 
 const BussinessType = (props) => {
   const {
@@ -69,7 +71,7 @@ const BussinessType = (props) => {
   const [errorCollaborator, setErrorCollaborator] = useState("");
   const [dataAddress, setDataAddress] = useState([]);
   const [estimate, setEstimate] = useState();
-
+  const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -480,18 +482,16 @@ const BussinessType = (props) => {
     <>
       <div>
         <div className="div-search-address">
-          <a className="label-customer">
-            Địa điểm <a style={{ color: "red" }}>(*)</a>
-          </a>
-          <Input
-            placeholder="Vui lòng chọn địa chỉ"
+          <InputCustom
+            title={`${i18n.t("address", { lng: lang })}`}
+            placeholder={`${i18n.t("enter_address", { lng: lang })}`}
+            style={{ width: "50%" }}
             value={address}
             type="text"
             onChange={(e) => {
               setAddress(e.target.value);
               handleSearchLocation(e.target.value);
             }}
-            className="input-search"
           />
         </div>
 
@@ -515,7 +515,9 @@ const BussinessType = (props) => {
 
         {dataAddress.length > 0 && (
           <div className="mt-2">
-            <a className="title-list-address">Địa chỉ mặc định</a>
+            <a className="title-list-address">{`${i18n.t("address_default", {
+              lng: lang,
+            })}`}</a>
             <List type={"unstyled"} className="list-item-address-customer">
               {dataAddress?.map((item, index) => {
                 return (
@@ -549,7 +551,8 @@ const BussinessType = (props) => {
         <a className="text-error">{errorAddress}</a>
         <div className="div-add-service mt-3">
           <a className="label">
-            Thời lượng <a style={{ color: "red" }}>(*)</a>
+            {`${i18n.t("times", { lng: lang })}`}{" "}
+            <a style={{ color: "red" }}>(*)</a>
           </a>
           <div className="div-service">
             {extendService?.map((item) => {
@@ -569,7 +572,7 @@ const BussinessType = (props) => {
                         : "text-service-default"
                     }
                   >
-                    {item?.title?.vi}
+                    {item?.title?.[lang]}
                   </a>
                   <a
                     className={
@@ -579,10 +582,10 @@ const BussinessType = (props) => {
                     }
                   >
                     {item?.estimate === 0.5
-                      ? item?.description?.vi
-                      : item?.description?.vi.slice(
+                      ? item?.description?.[lang]
+                      : item?.description?.[lang].slice(
                           0,
-                          item?.description?.vi.indexOf("2")
+                          item?.description?.[lang].indexOf("2")
                         )}
                   </a>
                   <a
@@ -593,8 +596,8 @@ const BussinessType = (props) => {
                     }
                   >
                     {item?.estimate !== 0.5 &&
-                      item?.description?.vi.slice(
-                        item?.description?.vi.indexOf(" ")
+                      item?.description?.[lang].slice(
+                        item?.description?.[lang].indexOf(" ")
                       )}
                   </a>
                 </div>
@@ -606,7 +609,8 @@ const BussinessType = (props) => {
 
         <div className="div-add-service mt-3">
           <a className="label">
-            Loại hình kinh doanh <a style={{ color: "red" }}>(*)</a>
+            {`${i18n.t("business_type", { lng: lang })}`}{" "}
+            <a style={{ color: "red" }}>(*)</a>
           </a>
           <div className="div-service">
             {bussinessType?.map((item) => {
@@ -626,7 +630,7 @@ const BussinessType = (props) => {
                         : "text-service-default"
                     }
                   >
-                    {item?.title?.vi}
+                    {item?.title?.[lang]}
                   </a>
                   <a
                     className={
@@ -636,10 +640,10 @@ const BussinessType = (props) => {
                     }
                   >
                     {item?.estimate === 0.5
-                      ? item?.description?.vi
-                      : item?.description?.vi.slice(
+                      ? item?.description?.[lang]
+                      : item?.description?.[lang].slice(
                           0,
-                          item?.description?.vi.indexOf("2")
+                          item?.description?.[lang].indexOf("2")
                         )}
                   </a>
                   <a
@@ -650,8 +654,8 @@ const BussinessType = (props) => {
                     }
                   >
                     {item?.estimate !== 0.5 &&
-                      item?.description?.vi.slice(
-                        item?.description?.vi.indexOf(" ")
+                      item?.description?.[lang].slice(
+                        item?.description?.[lang].indexOf(" ")
                       )}
                   </a>
                 </div>
@@ -662,7 +666,9 @@ const BussinessType = (props) => {
         </div>
 
         <div className="div-add-service mt-3">
-          <a className="label">Dịch vụ thêm</a>
+          <a className="label">{`${i18n.t("extra_service", {
+            lng: lang,
+          })}`}</a>
           <div className="div-service">
             {addService?.map((item) => {
               return (
@@ -688,7 +694,7 @@ const BussinessType = (props) => {
                         : "text-service-default"
                     }
                   >
-                    {item?.title?.vi}
+                    {item?.title?.[lang]}
                   </a>
                   <a
                     className={
@@ -697,7 +703,7 @@ const BussinessType = (props) => {
                         : "text-service-default"
                     }
                   >
-                    {item?.description?.vi}
+                    {item?.description?.[lang]}
                   </a>
                 </button>
               );
@@ -707,7 +713,8 @@ const BussinessType = (props) => {
 
         <div className="form-picker">
           <a className="label">
-            Ngày làm <a style={{ color: "red" }}>(*)</a>
+            {`${i18n.t("date_work", { lng: lang })}`}{" "}
+            <a style={{ color: "red" }}>(*)</a>
           </a>
           <DatePicker
             format={dateFormat}
@@ -718,7 +725,9 @@ const BussinessType = (props) => {
         </div>
 
         <div className="form-picker-hours">
-          <a className="label-hours">Giờ làm (*)</a>
+          <a className="label-hours">
+            {`${i18n.t("time_work", { lng: lang })}`} (*)
+          </a>
           <div className="div-hours">
             {DATA_TIME_TOTAL.map((item) => {
               const timeChosse = item?.title?.slice(0, 2);
@@ -756,40 +765,43 @@ const BussinessType = (props) => {
         </div> */}
 
         <div className="div-payment-method">
-          <a>Phương thức thanh toán</a>
-          <Select
+          <InputCustom
+            title={`${i18n.t("payment_method", { lng: lang })}`}
             value={paymentMethod}
-            style={{ width: "40%" }}
-            onChange={(e) => {
-              setPaymentMethod(e);
-            }}
+            onChange={(e) => setPaymentMethod(e)}
             options={[
-              { value: "cash", label: "Tiền mặt" },
-              { value: "point", label: "G-pay" },
+              { value: "cash", label: `${i18n.t("cash", { lng: lang })}` },
+              {
+                value: "point",
+                label: `${i18n.t("wallet_gpay", { lng: lang })}`,
+              },
             ]}
+            className="input-form-select-payment"
+            select={true}
           />
         </div>
 
         <InputCustom
-          title="Ghi chú"
+          title={`${i18n.t("note", { lng: lang })}`}
           textArea={true}
-          placeholder="Vui lòng nhập ghi chú"
+          placeholder={`${i18n.t("enter_note", { lng: lang })}`}
           onChange={(e) => setNote(e.target.value)}
+          style={{ width: "50%" }}
         />
 
         <div>
-          <h5>(*)Cộng tác viên</h5>
           <div>
-            <Input
-              placeholder="Tìm kiếm theo số điện thoại"
-              value={nameCollaborator}
-              className="input-search-collaborator-order"
+            <InputCustom
+              title={`${i18n.t("collaborator", { lng: lang })}`}
+              style={{ width: "50%" }}
+              error={errorCollaborator}
               onChange={(e) => {
                 searchCollaborator(e.target.value);
                 searchValue(e.target.value);
               }}
+              value={nameCollaborator}
+              placeholder={`${i18n.t("search", { lng: lang })}`}
             />
-            {<a className="text-error">{errorCollaborator}</a>}
           </div>
 
           {dataCollaborator.length > 0 && (
@@ -845,19 +857,25 @@ const BussinessType = (props) => {
                 }}
               >
                 <a className="text-code-promotion">{item?.code}</a>
-                <a className="text-title-promotion">{item?.title?.vi}</a>
+                <a className="text-title-promotion">{item?.title?.[lang]}</a>
               </div>
             );
           })}
         </div>
         {priceOrder && (
           <div className="div-total mt-3">
-            <a>Tạm tính: {formatMoney(priceOrder)}</a>
-            <a>Phí nền tảng: {formatMoney(feeService)}</a>
+            <a>
+              {`${i18n.t("provisional", { lng: lang })}`}:{" "}
+              {formatMoney(priceOrder)}
+            </a>
+            <a>
+              {`${i18n.t("platform_fee", { lng: lang })}`}:{" "}
+              {formatMoney(feeService)}
+            </a>
             {eventPromotion.map((item, index) => {
               return (
                 <a style={{ color: "red" }}>
-                  {item?.title.vi}: {"-"}
+                  {item?.title?.[lang]}: {"-"}
                   {formatMoney(item?.discount)}
                 </a>
               );
@@ -873,14 +891,16 @@ const BussinessType = (props) => {
 
         <div className="div-footer mt-5">
           <a className="text-price">
-            Giá:{" "}
+            {`${i18n.t("price", { lng: lang })}`}:{" "}
             {priceOrder > 0
               ? formatMoney(
                   priceOrder + feeService - discount - eventFeePromotion
                 )
               : formatMoney(0)}
           </a>
-          <Button onClick={onCreateOrder}>Đăng việc</Button>
+          <Button onClick={onCreateOrder}>{`${i18n.t("post", {
+            lng: lang,
+          })}`}</Button>
         </div>
         {isLoading && <LoadingPagination />}
       </div>

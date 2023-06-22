@@ -37,6 +37,13 @@ import EditTimeOrderSchedule from "./EditTimeOrderSchedule";
 import { getListReasonCancel } from "../../../api/reasons";
 import { ModalBody, ModalFooter, ModalHeader, Modal } from "reactstrap";
 import LoadingPagination from "../../../components/paginationLoading";
+import ModalCustom from "../../../components/modalCustom";
+import {
+  blockCustomerApi,
+  favouriteCustomerApi,
+  unblockCustomerApi,
+  unfavouriteCustomerApi,
+} from "../../../api/customer";
 const width = window.innerWidth;
 
 const DetailsOrder = () => {
@@ -54,7 +61,6 @@ const DetailsOrder = () => {
   const [modal, setModal] = useState(false);
   const [modalDelete, setModalDelete] = useState(false);
   const [modalDeleteList, setModalDeleteList] = useState(false);
-  const [open, setOpen] = useState(false);
   const [openStatus, setOpenStatus] = useState(false);
   const [openCancelOrder, setOpenCancelOrder] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -66,9 +72,9 @@ const DetailsOrder = () => {
   const [dataReason, setDataReason] = useState([]);
   const [noteReason, setNoteReason] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [modalFavourite, setModalFavourite] = useState(false);
+  const [modalBlock, setModalBlock] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const toggle = () => setModal(!modal);
   const toggleDelete = () => setModalDelete(!modalDelete);
   const toggleDeleteList = () => setModalDeleteList(!modalDeleteList);
   const reasonOption = [];
@@ -231,6 +237,112 @@ const DetailsOrder = () => {
         });
         dispatch(loadingAction.loadingRequest(false));
       });
+  };
+
+  const onHandleFavourite = () => {
+    setIsLoading(true);
+    const checkFavourite =
+      dataGroup?.id_customer?.id_favourite_collaborator?.includes(
+        dataGroup?.id_collaborator?._id
+      );
+    if (checkFavourite) {
+      unfavouriteCustomerApi(
+        dataGroup?.id_customer?._id,
+        dataGroup?.id_collaborator?._id
+      )
+        .then((res) => {
+          setIsLoading(false);
+          setModalFavourite(false);
+          getOrderByGroupOrderApi(id)
+            .then((res) => {
+              setDataGroup(res?.data?.groupOrder);
+              setDataList(res?.data?.listOrder);
+              dispatch(loadingAction.loadingRequest(false));
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
+        });
+    } else {
+      favouriteCustomerApi(
+        dataGroup?.id_customer?._id,
+        dataGroup?.id_collaborator?._id
+      )
+        .then((res) => {
+          setIsLoading(false);
+          setModalFavourite(false);
+          getOrderByGroupOrderApi(id)
+            .then((res) => {
+              setDataGroup(res?.data?.groupOrder);
+              setDataList(res?.data?.listOrder);
+              dispatch(loadingAction.loadingRequest(false));
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
+        });
+    }
+  };
+
+  const onHandleBlock = () => {
+    setIsLoading(true);
+    const checkFavourite =
+      dataGroup?.id_customer?.id_block_collaborator?.includes(
+        dataGroup?.id_collaborator?._id
+      );
+    if (checkFavourite) {
+      unblockCustomerApi(
+        dataGroup?.id_customer?._id,
+        dataGroup?.id_collaborator?._id
+      )
+        .then((res) => {
+          setIsLoading(false);
+          setModalBlock(false);
+          getOrderByGroupOrderApi(id)
+            .then((res) => {
+              setDataGroup(res?.data?.groupOrder);
+              setDataList(res?.data?.listOrder);
+              dispatch(loadingAction.loadingRequest(false));
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
+        });
+    } else {
+      blockCustomerApi(
+        dataGroup?.id_customer?._id,
+        dataGroup?.id_collaborator?._id
+      )
+        .then((res) => {
+          setIsLoading(false);
+          setModalBlock(false);
+          getOrderByGroupOrderApi(id)
+            .then((res) => {
+              setDataGroup(res?.data?.groupOrder);
+              setDataList(res?.data?.listOrder);
+              dispatch(loadingAction.loadingRequest(false));
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
+        });
+    }
   };
 
   const onChange = (page) => {
@@ -489,9 +601,14 @@ const DetailsOrder = () => {
                         />
 
                         <div className="div-info">
-                          <a className="label-name">
-                            Tên: {dataGroup?.id_customer?.full_name}
-                          </a>
+                          <Link
+                            to={`/profile-customer/${dataGroup?.id_customer?._id}`}
+                          >
+                            <a className="label-name">
+                              Tên: {dataGroup?.id_customer?.full_name}
+                            </a>
+                          </Link>
+
                           <a className="label-name">
                             SĐT: {dataGroup?.id_customer?.phone}
                           </a>
@@ -509,7 +626,35 @@ const DetailsOrder = () => {
                     </div>
                     {dataGroup?.id_collaborator && (
                       <div className="col-right">
-                        <a className="label-ctv">Cộng tác viên hiện tại</a>
+                        <div className="div-ctv-favourite">
+                          <a className="label-ctv">Cộng tác viên hiện tại</a>
+                          <Button
+                            onClick={() => setModalFavourite(true)}
+                            className={
+                              dataGroup?.id_customer?.id_favourite_collaborator?.includes(
+                                dataGroup?.id_collaborator?._id
+                              )
+                                ? "btn-favourite"
+                                : "btn-unfavourite"
+                            }
+                          >
+                            {dataGroup?.id_customer?.id_favourite_collaborator?.includes(
+                              dataGroup?.id_collaborator?._id
+                            )
+                              ? "Bỏ yêu thích"
+                              : "Yêu thích"}
+                          </Button>
+                          <Button
+                            onClick={() => setModalBlock(true)}
+                            className="btn-add-block"
+                          >
+                            {dataGroup?.id_customer?.id_block_collaborator?.includes(
+                              dataGroup?.id_collaborator?._id
+                            )
+                              ? "Bỏ chặn"
+                              : "Chặn"}
+                          </Button>
+                        </div>
                         <div className="div-body-details">
                           <Image
                             src={dataGroup?.id_collaborator?.avatar}
@@ -768,7 +913,21 @@ const DetailsOrder = () => {
                               </>
                             );
                           })}
-
+                          {dataGroup?.tip_collaborator !== 0 && (
+                            <div className="div-price">
+                              <div className="div-title-colon">
+                                <div className="div-title-details">
+                                  <a className="title">- Tiền tip</a>
+                                </div>
+                                <a className="text-colon">:</a>
+                              </div>
+                              <>
+                                <a className="text-moeny-details">
+                                  +{formatMoney(dataGroup?.tip_collaborator)}
+                                </a>
+                              </>
+                            </div>
+                          )}
                           {dataGroup?.code_promotion && (
                             <div className="div-price">
                               <div className="div-title-colon">
@@ -813,22 +972,6 @@ const DetailsOrder = () => {
                               </div>
                             );
                           })}
-
-                          {dataGroup?.tip_collaborator !== 0 && (
-                            <div className="div-price">
-                              <div className="div-title-colon">
-                                <div className="div-title-details">
-                                  <a className="title">- Tiền tip</a>
-                                </div>
-                                <a className="text-colon">:</a>
-                              </div>
-                              <>
-                                <a className="text-moeny-details">
-                                  +{formatMoney(dataGroup?.tip_collaborator)}
-                                </a>
-                              </>
-                            </div>
-                          )}
 
                           <div className="div-price">
                             <div className="div-title-colon">
@@ -1020,71 +1163,119 @@ const DetailsOrder = () => {
       </>
 
       <div>
-        <Modal isOpen={modalDelete} toggle={toggleDelete}>
-          <ModalHeader toggle={toggleDelete}>Huỷ công việc</ModalHeader>
-          <ModalBody>
+        <ModalCustom
+          isOpen={modalDelete}
+          title="Huỷ công việc"
+          handleOk={() => handleCancelGroupOrder(dataGroup?._id)}
+          textOk="Có"
+          handleCancel={toggleDelete}
+          body={
+            <>
+              <a>
+                Bạn có chắc muốn huỷ việc
+                {dataGroup?.id_view} này không?
+              </a>
+              <div>
+                <a>Chọn lí do huỷ</a>
+                <Select
+                  style={{ width: "100%" }}
+                  value={idReason}
+                  onChange={(e) => setIdReason(e)}
+                  options={reasonOption}
+                />
+              </div>
+            </>
+          }
+        />
+
+        <ModalCustom
+          isOpen={modalFavourite}
+          title={
+            dataGroup?.id_customer?.id_favourite_collaborator?.includes(
+              dataGroup?.id_collaborator?._id
+            )
+              ? "Bỏ yêu thích cộng tác viên"
+              : "Thêm công tác viên yêu thích"
+          }
+          handleOk={onHandleFavourite}
+          textOk={
+            dataGroup?.id_customer?.id_favourite_collaborator?.includes(
+              dataGroup?.id_collaborator?._id
+            )
+              ? "Bỏ"
+              : "Thêm"
+          }
+          handleCancel={() => setModalFavourite(false)}
+          body={
             <a>
-              Bạn có chắc muốn huỷ việc
-              {dataGroup?.id_view} này không?
+              {dataGroup?.id_customer?.id_favourite_collaborator?.includes(
+                dataGroup?.id_collaborator?._id
+              )
+                ? `Bạn có chắc muốn bỏ yêu thích cộng tác viên ${dataGroup?.id_collaborator?.full_name} cho khách hàng ${dataGroup?.id_customer?.full_name}`
+                : `Bạn có chắc muốn thêm công tác viên yêu thích ${dataGroup?.id_collaborator?.full_name} cho khách hàng ${dataGroup?.id_customer?.full_name}`}
             </a>
-            <div>
-              <a>Chọn lí do huỷ</a>
-              <Select
-                style={{ width: "100%" }}
-                value={idReason}
-                onChange={(e) => setIdReason(e)}
-                options={reasonOption}
-              />
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              type="primary"
-              onClick={() => handleCancelGroupOrder(dataGroup?._id)}
-            >
-              Có
-            </Button>
-            <Button type="#ddd" onClick={toggleDelete}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+          }
+        />
+
+        <ModalCustom
+          isOpen={modalBlock}
+          title={
+            dataGroup?.id_customer?.id_block_collaborator?.includes(
+              dataGroup?.id_collaborator?._id
+            )
+              ? "Bỏ chặn cộng tác viên"
+              : "Chặn công tác viên"
+          }
+          handleOk={onHandleBlock}
+          textOk={
+            dataGroup?.id_customer?.id_block_collaborator?.includes(
+              dataGroup?.id_collaborator?._id
+            )
+              ? "Bỏ chặn"
+              : "Chặn"
+          }
+          handleCancel={() => setModalBlock(false)}
+          body={
+            <a>
+              {dataGroup?.id_customer?.id_block_collaborator?.includes(
+                dataGroup?.id_collaborator?._id
+              )
+                ? `Bạn có chắc muốn bỏ chặn cộng tác viên ${dataGroup?.id_collaborator?.full_name} cho khách hàng ${dataGroup?.id_customer?.full_name}`
+                : `Bạn có chắc muốn chặn công tác viên ${dataGroup?.id_collaborator?.full_name} cho khách hàng ${dataGroup?.id_customer?.full_name}`}
+            </a>
+          }
+        />
       </div>
 
       <div>
-        <Modal isOpen={modalDeleteList} toggle={toggleDeleteList}>
-          <ModalHeader toggle={toggleDeleteList}>Huỷ công việc</ModalHeader>
-          <ModalBody>
-            <a>Bạn có chắc muốn huỷ việc {itemEdit?.id_view} này không?</a>
-            <div>
-              <a>Chọn lí do huỷ</a>
-              <Select
-                style={{ width: "100%" }}
-                value={idReason}
-                onChange={(e) => setIdReason(e)}
-                options={reasonOption}
-              />
-            </div>
-            <div>
-              <a>Nhập lí do khác</a>
-              <Input
-                placeholder="Vui lòng nhập nếu có lí do khác"
-                onChange={(e) => setNoteReason(e.target.value)}
-              />
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              type="primary"
-              onClick={() => handleCancelOrder(itemEdit?._id)}
-            >
-              Có
-            </Button>
-            <Button type="#ddd" onClick={toggleDeleteList}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+        <ModalCustom
+          isOpen={modalDeleteList}
+          title="Huỷ công việc"
+          handleOk={() => handleCancelOrder(itemEdit?._id)}
+          textOk="Có"
+          handleCancel={toggleDeleteList}
+          body={
+            <>
+              <a>Bạn có chắc muốn huỷ việc {itemEdit?.id_view} này không?</a>
+              <div>
+                <a>Chọn lí do huỷ</a>
+                <Select
+                  style={{ width: "100%" }}
+                  value={idReason}
+                  onChange={(e) => setIdReason(e)}
+                  options={reasonOption}
+                />
+              </div>
+              <div>
+                <a>Nhập lí do khác</a>
+                <Input
+                  placeholder="Vui lòng nhập nếu có lí do khác"
+                  onChange={(e) => setNoteReason(e.target.value)}
+                />
+              </div>
+            </>
+          }
+        />
       </div>
       {isLoading && <LoadingPagination />}
     </div>

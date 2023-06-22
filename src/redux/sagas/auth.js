@@ -5,7 +5,12 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import { getPermission, loginApi } from "../../api/auth";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { setToken } from "../../helper/tokenHelper";
-import { loginAction, logoutAction, permissionAction } from "../actions/auth";
+import {
+  languageAction,
+  loginAction,
+  logoutAction,
+  permissionAction,
+} from "../actions/auth";
 import { loadingAction } from "../actions/loading";
 
 function* loginSaga(action) {
@@ -86,11 +91,25 @@ function* permissionSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   }
 }
+function* languageSaga(action) {
+  try {
+    yield put(
+      languageAction.languageSuccess({
+        language: action?.payload?.language,
+      })
+    );
+    yield put(loadingAction.loadingRequest(false));
+  } catch (err) {
+    yield put(languageAction.languageFailure(err));
+    yield put(loadingAction.loadingRequest(false));
+  }
+}
 
 function* AuthSaga() {
   yield takeLatest(loginAction.loginRequest, loginSaga);
   yield takeLatest(logoutAction.logoutRequest, logoutSaga);
   yield takeLatest(permissionAction.permissionRequest, permissionSaga);
+  yield takeLatest(languageAction.languageRequest, languageSaga);
 }
 
 export default AuthSaga;

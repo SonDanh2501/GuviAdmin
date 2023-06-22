@@ -59,6 +59,7 @@ import RewardCollaborator from "../container/System/ManageConfiguration/ScreenCo
 import AddRewardCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/RewardCollaborator/AddRewardCollaborator";
 import ReportOrderCreate from "../container/System/ManageReport/MangeReportOrder/ReportOrderCreate";
 import EditRewardCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/RewardCollaborator/EditRewardCollaborator";
+import DetailReward from "../container/System/ManageTopup/ManageTopupCollaborator/Reward/DetailReward";
 
 const Admin = () => {
   return (
@@ -75,6 +76,7 @@ const Admin = () => {
         element={<ProfileCollaborator />}
       />
       <Route path="/system/user-manage" element={<ManageCustomer />} />
+      <Route path="/profile-customer/:id" element={<Profiles />} />
       <Route
         path="/system/collaborator-manage"
         element={<ManageCollaborator />}
@@ -129,7 +131,7 @@ const Admin = () => {
         path="/group-order/manage-order/create-order"
         element={<AddOrder />}
       />
-      <Route path="/profile-customer/:id" element={<Profiles />} />
+
       <Route path="/group-order/manage-order/all" element={<ManageOrder />} />
       <Route
         path="/group-order/manage-order/doing"
@@ -138,13 +140,15 @@ const Admin = () => {
       <Route path="/group-order/manage-order/done" element={<OrderExpired />} />
 
       <Route path="/topup/manage-topup" element={<ManageTopup />} />
+      <Route
+        path="/topup/manage-topup/details-reward-collaborator/:id"
+        element={<DetailReward />}
+      />
       <Route path="/finance/manage-finance" element={<ManageFinance />} />
-
       <Route
         path="/adminManage/manage-configuration/manage-group-customer"
         element={<GroupCustomerManage />}
       />
-
       <Route path="/report/manage-report" element={<ManageReport />} />
       <Route
         path="/report/manage-report/report-collaborator"

@@ -21,3 +21,9 @@ export const permissionAction = createActions({
   permissionSuccess: (payload) => payload,
   permissionFailure: (err) => err,
 });
+
+export const languageAction = createActions({
+  languageRequest: (payload) => payload,
+  languageSuccess: (payload) => payload,
+  languageFailure: (err) => err,
+});

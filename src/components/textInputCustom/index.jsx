@@ -1,6 +1,9 @@
 import { Input, Select } from "antd";
 
 import "./styles.scss";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../redux/selectors/auth";
+import i18n from "../../i18n";
 const { TextArea } = Input;
 
 const InputCustom = (props) => {
@@ -23,6 +26,7 @@ const InputCustom = (props) => {
     prefix,
     mode,
   } = props;
+  const lang = useSelector(getLanguageState);
 
   return (
     <div className="div-input-custom">
@@ -30,7 +34,7 @@ const InputCustom = (props) => {
       {textArea ? (
         <TextArea
           value={value}
-          placeholder={placeholder}
+          placeholder={`${i18n.t("placeholder", { lng: lang })}`}
           type={type}
           onChange={onChange}
           style={style}
@@ -39,7 +43,7 @@ const InputCustom = (props) => {
       ) : password ? (
         <Input.Password
           value={value}
-          placeholder={placeholder}
+          placeholder={`${i18n.t("placeholder", { lng: lang })}`}
           type={type}
           onChange={onChange}
           style={style}
@@ -59,7 +63,7 @@ const InputCustom = (props) => {
       ) : (
         <Input
           value={value}
-          placeholder={placeholder}
+          placeholder={`${i18n.t("placeholder", { lng: lang })}`}
           type={type}
           onChange={onChange}
           style={style}

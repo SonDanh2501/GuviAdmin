@@ -1,10 +1,9 @@
-import { Checkbox, Image, Input } from "antd";
+import { Button, Checkbox, Col, Form, Image, Input, Row } from "antd";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
 import JSZipUtils from "jszip-utils";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Button, Col, Form, FormGroup, Label, Row } from "reactstrap";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getCollaboratorsById,
   updateDocumentCollaboratorApi,
@@ -14,6 +13,9 @@ import resizeFile from "../../../../../../../helper/resizer";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import "./index.scss";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../../i18n";
+import InputCustom from "../../../../../../../components/textInputCustom";
 
 const Document = ({ id }) => {
   const [deal, setDeal] = useState(false);
@@ -27,8 +29,8 @@ const Document = ({ id }) => {
   const [imgInformation, setImgInformation] = useState([]);
   const [imgCertification, setImgCertification] = useState([]);
   const [imgRegistration, setImgRegistration] = useState([]);
-
   const dispatch = useDispatch();
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -357,40 +359,37 @@ const Document = ({ id }) => {
       <Form>
         <div className="pl-lg-5">
           <Row>
-            <Col lg="3" className="col-check">
+            <Col span="8" className="col-check">
               <Checkbox
                 checked={deal}
                 onChange={(e) => setDeal(e.target.checked)}
               >
-                Thoả thuận hợp tác
+                {`${i18n.t("cooperation_agreement", { lng: lang })}`}
               </Checkbox>
             </Col>
 
-            <Col lg="9">
-              <div>
-                <a>Mã hồ sơ</a>
-                <Input
-                  placeholder={"Nhập mã hồ sơ"}
-                  value={valueDeal}
-                  onChange={(e) => setSetValueDeal(e.target.value)}
-                />
-              </div>
+            <Col span="16">
+              <InputCustom
+                title={`${i18n.t("profile_ID", { lng: lang })}`}
+                value={valueDeal}
+                onChange={(e) => setSetValueDeal(e.target.value)}
+              />
             </Col>
           </Row>
           <hr />
           <Row>
-            <Col lg="3" className="col-check">
+            <Col span="8" className="col-check">
               <Checkbox
                 checked={identify}
                 onChange={(e) => setIdentify(e.target.checked)}
               >
-                CMND/CCCD
+                {`${i18n.t("citizen_ID", { lng: lang })}`}
               </Checkbox>
             </Col>
 
-            <Col lg="7">
-              <FormGroup>
-                <Label for="exampleThumbnail">CCCD/CMND mặt trước</Label>
+            <Col span="16">
+              <div>
+                <a>{`${i18n.t("citizen_ID_front", { lng: lang })}`}</a>
                 <div className="col-img">
                   <Input
                     id="exampleThumbnail"
@@ -414,9 +413,9 @@ const Document = ({ id }) => {
                     </div>
                   )}
                 </div>
-              </FormGroup>
-              <FormGroup>
-                <Label for="exampleThumbnail">CCCD/CMND mặt sau</Label>
+              </div>
+              <div>
+                <a>{`${i18n.t("citizen_ID_back", { lng: lang })}`}</a>
                 <div className="col-img">
                   <Input
                     id="exampleThumbnail"
@@ -440,10 +439,10 @@ const Document = ({ id }) => {
                     </div>
                   )}
                 </div>
-              </FormGroup>
+              </div>
             </Col>
             {imgIdentifyFronsite && (
-              <Col lg="2" className="div-col-download">
+              <Col span="2" className="div-col-download">
                 <Button
                   className="btn-download"
                   onClick={downloadImageIdentify}
@@ -455,32 +454,35 @@ const Document = ({ id }) => {
           </Row>
           <hr />
           <Row>
-            <Col lg="3" className="col-check">
+            <Col span="8" className="col-check">
               <Checkbox
                 checked={information}
                 onChange={(e) => setInformation(e.target.checked)}
               >
-                Sơ yếu lí lịch
+                {`${i18n.t("curriculum_vitae", { lng: lang })}`}
               </Checkbox>
             </Col>
 
-            <Col lg="7">
+            <Col span="16">
               <div className="div-infomation">
-                <Label for="exampleThumbnail">Hình ảnh</Label>
+                <a>{`${i18n.t("image", { lng: lang })}`}</a>
                 <div className="col-img">
                   <input
                     type="file"
                     id="files"
                     name="files"
                     accept=".jpg, .jpeg, .png"
-                    // multiple
+                    multiple
                     onChange={onChangeInformation}
                   />
                   <div className="div-thumbnail-infomation">
                     {imgInformation.length > 0 &&
-                      imgInformation.map((item) => {
+                      imgInformation.map((item, index) => {
                         return (
-                          <div className="div-item-thumbnail-infomation">
+                          <div
+                            className="div-item-thumbnail-infomation"
+                            key={index}
+                          >
                             <i
                               class="uil uil-times-circle"
                               onClick={() => removeItemInfomation(item)}
@@ -497,7 +499,7 @@ const Document = ({ id }) => {
               </div>
             </Col>
             {imgInformation.length > 0 && (
-              <Col lg="2" className="div-col-download">
+              <Col span="2" className="div-col-download">
                 <Button
                   className="btn-download"
                   onClick={downloadImageInformation}
@@ -509,18 +511,18 @@ const Document = ({ id }) => {
           </Row>
           <hr />
           <Row>
-            <Col lg="3" className="col-check">
+            <Col span="8" className="col-check">
               <Checkbox
                 checked={registration}
                 onChange={(e) => setRegistration(e.target.checked)}
               >
-                Sổ hổ khẩu
+                {`${i18n.t("household_book", { lng: lang })}`}
               </Checkbox>
             </Col>
 
-            <Col lg="7">
+            <Col span="16">
               <div className="div-infomation">
-                <Label for="exampleThumbnail">Hình ảnh</Label>
+                <a>{`${i18n.t("image", { lng: lang })}`}</a>
                 <div className="col-img">
                   <input
                     type="file"
@@ -532,9 +534,12 @@ const Document = ({ id }) => {
                   />
                   <div className="div-thumbnail-infomation">
                     {imgRegistration.length > 0 &&
-                      imgRegistration.map((item) => {
+                      imgRegistration.map((item, index) => {
                         return (
-                          <div className="div-item-thumbnail-infomation">
+                          <div
+                            className="div-item-thumbnail-infomation"
+                            key={index}
+                          >
                             <i
                               class="uil uil-times-circle"
                               onClick={() => removeItemRegistration(item)}
@@ -551,7 +556,7 @@ const Document = ({ id }) => {
               </div>
             </Col>
             {imgRegistration.length > 0 && (
-              <Col lg="2" className="div-col-download">
+              <Col span="2" className="div-col-download">
                 <Button
                   className="btn-download"
                   onClick={downloadImageRegistration}
@@ -563,18 +568,18 @@ const Document = ({ id }) => {
           </Row>
           <hr />
           <Row className="mb-5">
-            <Col lg="3" className="col-check">
+            <Col span="8" className="col-check">
               <Checkbox
                 checked={certification}
                 onChange={(e) => setCertification(e.target.checked)}
               >
-                Giấy xác nhận hạnh kiểm
+                {`${i18n.t("certificate_conduct", { lng: lang })}`}
               </Checkbox>
             </Col>
 
-            <Col lg="7">
+            <Col span="16">
               <div className="div-infomation">
-                <Label for="exampleThumbnail">Hình ảnh</Label>
+                <a>{`${i18n.t("image", { lng: lang })}`}</a>
                 <div className="col-img">
                   <input
                     type="file"
@@ -587,9 +592,12 @@ const Document = ({ id }) => {
                   <div className="div-thumbnail-infomation">
                     <div className="div-thumbnail-infomation">
                       {imgCertification.length > 0 &&
-                        imgCertification.map((item) => {
+                        imgCertification.map((item, index) => {
                           return (
-                            <div className="div-item-thumbnail-infomation">
+                            <div
+                              className="div-item-thumbnail-infomation"
+                              key={index}
+                            >
                               <i
                                 class="uil uil-times-circle"
                                 onClick={() => removeItemCertification(item)}
@@ -607,7 +615,7 @@ const Document = ({ id }) => {
               </div>
             </Col>
             {imgCertification.length > 0 && (
-              <Col lg="2" className="div-col-download">
+              <Col span="2" className="div-col-download">
                 <Button
                   className="btn-download"
                   onClick={downloadImageCertification}
@@ -619,7 +627,7 @@ const Document = ({ id }) => {
           </Row>
         </div>
         <Button className="btn-update" onClick={onUpdateDocument}>
-          Cập nhật
+          {`${i18n.t("update", { lng: lang })}`}
         </Button>
       </Form>
     </>

@@ -49,18 +49,6 @@ const ReportService = () => {
         setDataCity(res?.aministrative_division);
         setCodeCity(res?.aministrative_division[1]?.code);
         setNameCity(res?.aministrative_division[1]?.name);
-        // getReportTypeService(
-        //   startDate,
-        //   endDate,
-        //   res?.aministrative_division[1]?.code,
-        //   codeDistrict
-        // )
-        //   .then((res) => {
-        //     setDataChartPie(res);
-        //     setIsLoading(false);
-        //   })
-        //   .catch((err) => {});
-
         getReportServiceByArea(
           startDate,
           endDate,
@@ -105,11 +93,13 @@ const ReportService = () => {
     (value, label) => {
       setNameCity(label?.label);
       setCodeCity(value);
-      // getReportTypeService(startDate, endDate, value, codeDistrict)
-      //   .then((res) => {
-      //     setDataChartPie(res);
-      //   })
-      //   .catch((err) => {});
+
+      getReportServiceDetails(startDate, endDate, value)
+        .then((res) => {
+          setDataChartServiceDetails(res?.detailData);
+        })
+        .catch((err) => {});
+
       getReportServiceByArea(startDate, endDate, value)
         .then((res) => {
           setDataChartService(res?.data);

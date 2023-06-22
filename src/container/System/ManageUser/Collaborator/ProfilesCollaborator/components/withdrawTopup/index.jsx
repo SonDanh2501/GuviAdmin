@@ -1,7 +1,7 @@
 import { List, Pagination, Table } from "antd";
 import moment from "moment";
 import { memo, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getCollaboratorRemainder,
   getHistoryActivityCollaborator,
@@ -13,6 +13,8 @@ import { formatMoney } from "../../../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import "./index.scss";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../../i18n";
 
 const WithdrawTopup = ({ id }) => {
   const [data, setData] = useState([]);
@@ -23,6 +25,7 @@ const WithdrawTopup = ({ id }) => {
   const [topup, setTopup] = useState(0);
   const [withdraw, setWithdraw] = useState(0);
   const dispatch = useDispatch();
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -59,7 +62,7 @@ const WithdrawTopup = ({ id }) => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    const dataLength = data.length < 20 ? 20 : data.length;
+    const dataLength = data.length < 10 ? 10 : data.length;
     const start = page * dataLength - dataLength;
     getListTransitionByCollaborator(id, start, 10)
       .then((res) => {
@@ -71,7 +74,7 @@ const WithdrawTopup = ({ id }) => {
 
   const columns = [
     {
-      title: "Giờ",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => (
         <div className="div-time">
           <a>{moment(new Date(data?.date_created)).format("DD/MM/YYYY")}</a>
@@ -80,23 +83,27 @@ const WithdrawTopup = ({ id }) => {
       ),
     },
     {
-      title: "Số tiền",
+      title: `${i18n.t("money", { lng: lang })}`,
       render: (data) => <a>{formatMoney(data?.money)}</a>,
     },
     {
-      title: "Nạp/rút",
+      title: `${i18n.t("withdraw_topup", { lng: lang })}`,
       render: (data) => {
         return (
           <>
             {data?.type_transfer === "top_up" ? (
               <div>
                 <i class="uil uil-money-insert icon-topup"></i>
-                <a className="text-topup">Nạp</a>
+                <a className="text-topup">{`${i18n.t("topup", {
+                  lng: lang,
+                })}`}</a>
               </div>
             ) : (
               <div>
                 <i class="uil uil-money-withdraw icon-withdraw"></i>
-                <a className="text-withdraw">Rút</a>
+                <a className="text-withdraw">{`${i18n.t("withdraw", {
+                  lng: lang,
+                })}`}</a>
               </div>
             )}
           </>
@@ -104,28 +111,39 @@ const WithdrawTopup = ({ id }) => {
       },
     },
     {
-      title: "Nội dung",
+      title: `${i18n.t("content", { lng: lang })}`,
       dataIndex: "transfer_note",
     },
     {
-      title: "Ngày nạp",
+      title: `${i18n.t("recharge_date", { lng: lang })}`,
       render: (data) => (
-        <a>{moment(new Date(data?.date_created)).format("DD/MM/yyy HH:mm")}</a>
+        <div className="div-time">
+          <a>{moment(new Date(data?.date_created)).format("DD/MM/yyy")}</a>
+          <a>{moment(new Date(data?.date_created)).format("HH:mm")}</a>
+        </div>
       ),
     },
     {
-      title: "Trạng thái",
+      title: `${i18n.t("status", { lng: lang })}`,
       render: (data) => {
         return (
           <div>
             {data?.status === "pending" ? (
-              <a className="text-pending-topup">Đang xử lý</a>
+              <a className="text-pending-topup">{`${i18n.t("processing", {
+                lng: lang,
+              })}`}</a>
             ) : data?.status === "transfered" ? (
-              <a className="text-transfered">Đã chuyển tiền</a>
+              <a className="text-transfered">{`${i18n.t("money_transferred", {
+                lng: lang,
+              })}`}</a>
             ) : data?.status === "done" ? (
-              <a className="text-done">Hoàn tất</a>
+              <a className="text-done">{`${i18n.t("complete", {
+                lng: lang,
+              })}`}</a>
             ) : (
-              <a className="text-cancel">Đã huỷ</a>
+              <a className="text-cancel">{`${i18n.t("cancel", {
+                lng: lang,
+              })}`}</a>
             )}
           </div>
         );
@@ -140,36 +158,44 @@ const WithdrawTopup = ({ id }) => {
       <div className="div-head">
         <div className="div-monney">
           <div>
-            <a className="text-title-monney">Ví CTV:</a>
+            <a className="text-title-monney">
+              {`${i18n.t("wallet_ctv", { lng: lang })}`}:
+            </a>
             <a className="text-monney"> {formatMoney(remainder)}</a>
           </div>
           <div>
-            <a className="text-title-monney">Ví thưởng: </a>
+            <a className="text-title-monney">
+              {`${i18n.t("gift_wallet", { lng: lang })}`}:{" "}
+            </a>
             <a className="text-monney">{formatMoney(giftRemainder)}</a>
           </div>
         </div>
         <div className="div-monney">
-          <a className="total-revenue">
-            Tổng nạp:
+          <div className="total-revenue">
+            <a className="text">{`${i18n.t("total_topup", { lng: lang })}`}:</a>
             <a className="text-money-revenue">
-              <i class="uil uil-arrow-up icon-up"></i>
               {formatMoney(topup)}
+              <i class="uil uil-arrow-up icon-up"></i>
             </a>
-          </a>
-          <a className="total-expenditure">
-            Tổng rút:
+          </div>
+          <div className="total-expenditure">
+            <a className="text">
+              {`${i18n.t("total_withdraw", { lng: lang })}`}:
+            </a>
             <a className="text-money-expenditure">
-              <i class="uil uil-arrow-down icon-down"></i>
               {formatMoney(withdraw)}
+              <i class="uil uil-arrow-down icon-down"></i>
             </a>
-          </a>
+          </div>
         </div>
       </div>
       <div className="mt-5">
         <Table columns={columns} dataSource={data} pagination={false} />
       </div>
       <div className="div-pagination p-2">
-        <a>Tổng: {totalData}</a>
+        <a>
+          {`${i18n.t("total", { lng: lang })}`}: {totalData}
+        </a>
         <div>
           <Pagination
             current={currentPage}

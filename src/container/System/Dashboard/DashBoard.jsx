@@ -1,5 +1,4 @@
 import { DatePicker, FloatButton, List, Progress, Select, Table } from "antd";
-
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import moment from "moment";
@@ -43,7 +42,10 @@ import {
   getServiceConnect,
   getTopCollaborator,
 } from "../../../redux/actions/statistic";
-import { getElementState } from "../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../redux/selectors/auth";
 import {
   getActiveUsers,
   getHistoryActivitys,
@@ -54,6 +56,7 @@ import {
 import "./DashBoard.scss";
 import Header from "./HeaderBoard/Header";
 import MoreActivity from "./MoreActivity";
+import i18n from "../../../i18n";
 moment.locale("vi");
 dayjs.extend(customParseFormat);
 
@@ -91,6 +94,7 @@ export default function Home() {
   const cityData = [];
   const dataChartDetail = [];
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     if (checkElement?.includes("total_finance_job_dashboard")) {
@@ -194,7 +198,7 @@ export default function Home() {
 
   dataChartServiceDetails?.map((item) => {
     dataChartDetail?.push({
-      title: item?.title[0]?.vi,
+      title: item?.title[0]?.[lang],
       percent_2_hour: item?.total_2_hour,
       percent_3_hour: item?.total_3_hour,
       percent_4_hour: item?.total_4_hour,
@@ -268,7 +272,7 @@ export default function Home() {
 
   const columns = [
     {
-      title: "Khách hàng",
+      title: `${i18n.t("customer", { lng: lang })}`,
       render: (data) => {
         return (
           <Link to={`/profile-customer/${data?.id_customer?._id}`}>
@@ -278,19 +282,19 @@ export default function Home() {
       },
     },
     {
-      title: "Dịch vụ",
+      title: `${i18n.t("service", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-column-service">
             <a className="text-service">
               {data?.type === "loop" && data?.is_auto_order
-                ? "Lặp lại"
+                ? `${i18n.t("repeat", { lng: lang })}`
                 : data?.service?._id?.kind === "giup_viec_theo_gio"
-                ? "Theo giờ"
+                ? `${i18n.t("cleaning", { lng: lang })}`
                 : data?.service?._id?.kind === "giup_viec_co_dinh"
-                ? "Cố định"
+                ? `${i18n.t("cleaning_subscription", { lng: lang })}`
                 : data?.service?._id?.kind === "phuc_vu_nha_hang"
-                ? "Phục vụ"
+                ? `${i18n.t("serve", { lng: lang })}`
                 : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>
@@ -299,7 +303,7 @@ export default function Home() {
       },
     },
     {
-      title: "Thời gian",
+      title: `${i18n.t("time", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-column-date">
@@ -310,7 +314,7 @@ export default function Home() {
             </a>
             <a className="text-time">
               {moment(new Date(data.date_work_schedule[0].date))
-                .lang("VI")
+                .locale(lang)
                 .format("dddd")}
             </a>
           </div>
@@ -319,18 +323,20 @@ export default function Home() {
       align: "center",
     },
     {
-      title: "Địa điểm",
+      title: `${i18n.t("address", { lng: lang })}`,
       render: (data) => {
         return <a className="text-address-dashboard">{data?.address}</a>;
       },
     },
     {
-      title: "Cộng tác viên",
+      title: `${i18n.t("collaborator", { lng: lang })}`,
       render: (data) => {
         return (
           <div>
             {!data?.id_collaborator ? (
-              <a className="text-find-collaborator">Đang tìm kiếm</a>
+              <a className="text-find-collaborator">{`${i18n.t("searching", {
+                lng: lang,
+              })}`}</a>
             ) : (
               <Link to={`/details-collaborator/${data?.id_collaborator?._id}`}>
                 <a className="text-collaborator">
@@ -343,7 +349,7 @@ export default function Home() {
       },
     },
     {
-      title: "Tiến độ",
+      title: `${i18n.t("progress", { lng: lang })}`,
       render: (data) => (
         <a
           className={
@@ -359,25 +365,24 @@ export default function Home() {
           }
         >
           {data?.status === "pending"
-            ? "Đang chờ làm"
+            ? `${i18n.t("pending", { lng: lang })}`
             : data?.status === "confirm"
-            ? "Đã nhận"
+            ? `${i18n.t("confirm", { lng: lang })}`
             : data?.status === "doing"
-            ? "Đang làm"
+            ? `${i18n.t("doing", { lng: lang })}`
             : data?.status === "done"
-            ? "Hoàn thành"
-            : "Đã huỷ"}
+            ? `${i18n.t("complete", { lng: lang })}`
+            : `${i18n.t("cancel", { lng: lang })}`}
         </a>
       ),
     },
     {
-      title: "Hành động",
       key: "action",
       render: (data) => {
         return (
           <div className="div-action">
             <Link to={`/details-order/${data?._id}`} className="btn-details">
-              <a>Chi tiết</a>
+              <a>{`${i18n.t("detail", { lng: lang })}`}</a>
             </Link>
           </div>
         );
@@ -459,10 +464,10 @@ export default function Home() {
         fontSize={10}
       >
         {name === "system_cancel"
-          ? "Hệ thống"
+          ? `${i18n.t("system", { lng: lang })}`
           : name === "customer_cancel"
-          ? "Khách hàng"
-          : "Quản trị viên"}{" "}
+          ? `${i18n.t("customer", { lng: lang })}`
+          : `${i18n.t("admin", { lng: lang })}`}{" "}
         ({value} {"%"})
       </text>
     );
@@ -494,7 +499,8 @@ export default function Home() {
               </div>
               {checkElement?.includes("total_finance_job_dashboard") && (
                 <a className="text-total-money">
-                  Tổng tiền: {formatMoney(totalMoneyChart)}
+                  {`${i18n.t("total_money", { lng: lang })}`}:{" "}
+                  {formatMoney(totalMoneyChart)}
                 </a>
               )}
             </div>
@@ -557,10 +563,15 @@ export default function Home() {
 
             <Row>
               <Col lg="7" className="pl-4">
-                <p className="label-persen-active">Phần trăm hoạt động</p>
+                <p className="label-persen-active">{`${i18n.t(
+                  "percentage_of_activity",
+                  { lng: lang }
+                )}`}</p>
                 <div className="div-persen">
                   <p className="label-persen">{activeUser?.donePercent}%</p>
-                  <p className="label-total">Tổng</p>
+                  <p className="label-total">{`${i18n.t("total", {
+                    lng: lang,
+                  })}`}</p>
                 </div>
                 <Progress
                   percent={activeUser?.donePercent}
@@ -640,15 +651,24 @@ export default function Home() {
                   />
                 </div>
                 <div className="div-progress-text">
-                  <p className="title-progress">Tỉ lệ dịch vụ kết nối</p>
+                  <p className="title-progress">{`${i18n.t(
+                    "connection_service_rate",
+                    {
+                      lng: lang,
+                    }
+                  )}`}</p>
                 </div>
                 <div className="div-success">
                   <a className="square" />
-                  <p className="text-success-square">Hoàn thành</p>
+                  <p className="text-success-square">{`${i18n.t("complete", {
+                    lng: lang,
+                  })}`}</p>
                 </div>
                 <div className="div-success">
                   <a className="unsquare" />
-                  <p className="text-success-square">Chưa hoàn thành</p>
+                  <p className="text-success-square">{`${i18n.t("uncomplete", {
+                    lng: lang,
+                  })}`}</p>
                 </div>
               </div>
             )}
@@ -656,7 +676,9 @@ export default function Home() {
               <>
                 {topCollaborator.length > 0 && (
                   <div className="div-top-collaborator">
-                    <p className="text-top">Top CTV</p>
+                    <p className="text-top">{`${i18n.t("top_collaborator", {
+                      lng: lang,
+                    })}`}</p>
                     <div className="level">
                       <div
                         className="level-ctv1"
@@ -763,7 +785,9 @@ export default function Home() {
         </div>
         {checkElement?.includes("total_finance_job_dashboard") && (
           <div>
-            <p className="label-service">DỊCH VỤ GẦN NHẤT</p>
+            <p className="label-service">{`${i18n.t("nearest_service", {
+              lng: lang,
+            })}`}</p>
             <div className="div-card-service">
               <Table
                 columns={columns}
@@ -797,7 +821,12 @@ export default function Home() {
             <Col lg="9">
               {checkElement?.includes("report_detail_service_dashboard") && (
                 <div className="div-chart-pie-total-dash">
-                  <a className="title-chart-area">Thống kê đơn hàng</a>
+                  <a className="title-chart-area">{`${i18n.t(
+                    "order_statistic",
+                    {
+                      lng: lang,
+                    }
+                  )}`}</a>
                   <div className="div-pie-chart mt-3">
                     <div className="div-pie">
                       <ResponsiveContainer
@@ -826,7 +855,9 @@ export default function Home() {
                             fill="#8884d8"
                             barSize={40}
                             minPointSize={10}
-                            name="2 Giờ"
+                            name={`2 ${i18n.t("hour", {
+                              lng: lang,
+                            })}`}
                             label={{
                               position: "top",
                               fill: "black",
@@ -838,7 +869,9 @@ export default function Home() {
                             fill="#82ca9d"
                             barSize={40}
                             minPointSize={10}
-                            name="3 Giờ"
+                            name={`3 ${i18n.t("hour", {
+                              lng: lang,
+                            })}`}
                             label={{
                               position: "top",
                               fill: "black",
@@ -850,7 +883,9 @@ export default function Home() {
                             fill="#0088FE"
                             barSize={40}
                             minPointSize={10}
-                            name="4 Giờ"
+                            name={`4 ${i18n.t("hour", {
+                              lng: lang,
+                            })}`}
                             label={{
                               position: "top",
                               fill: "black",
@@ -867,7 +902,9 @@ export default function Home() {
             <Col lg="3">
               {checkElement?.includes("history_activity_dashboard") && (
                 <div className="col-activity">
-                  <p className="label-activity">Hoạt động</p>
+                  <p className="label-activity">{`${i18n.t("history_acivity", {
+                    lng: lang,
+                  })}`}</p>
                   <List
                     itemLayout="horizontal"
                     dataSource={historyActivity.slice(0, 4)}
@@ -1007,10 +1044,14 @@ export default function Home() {
             <Col lg="6">
               {checkElement?.includes("total_customer_monthly_dashboard") && (
                 <div className="div-chart-user">
-                  <h4>Tổng lượt đăng kí</h4>
+                  <h4>{`${i18n.t("total_register", {
+                    lng: lang,
+                  })}`}</h4>
                   <div className="div-time-area">
                     <div>
-                      <a className="text-time">Thời gian</a>
+                      <a className="text-time">{`${i18n.t("time", {
+                        lng: lang,
+                      })}`}</a>
                       <DatePicker
                         picker="year"
                         onChange={onChange}
@@ -1020,7 +1061,9 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="mt-3 divl-total">
-                    <a className="text-total-user">Tổng user</a>
+                    <a className="text-total-user">{`${i18n.t("total_user", {
+                      lng: lang,
+                    })}`}</a>
                     <div className="div-total">
                       <a className="text-number-total">{totalYearUser}</a>
                     </div>
@@ -1049,7 +1092,13 @@ export default function Home() {
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis
                           dataKey="month"
-                          tickFormatter={(tickItem) => "Tháng " + tickItem}
+                          tickFormatter={(tickItem) =>
+                            `${i18n.t("month", {
+                              lng: lang,
+                            })}` +
+                            " " +
+                            tickItem
+                          }
                         />
                         <YAxis />
                         <Tooltip content={renderTooltipContentUser} />
@@ -1060,7 +1109,9 @@ export default function Home() {
                           fill="#82ca9d"
                           minPointSize={20}
                           barSize={20}
-                          name="Khách hàng cũ"
+                          name={`${i18n.t("customer_old", {
+                            lng: lang,
+                          })}`}
                           stackId="a"
                         />
 
@@ -1069,7 +1120,9 @@ export default function Home() {
                           fill="#4376CC"
                           minPointSize={20}
                           barSize={20}
-                          name="Khách hàng mới"
+                          name={`${i18n.t("customer_new", {
+                            lng: lang,
+                          })}`}
                           stackId="a"
                           label={{
                             position: "top",
@@ -1081,7 +1134,9 @@ export default function Home() {
                           type="monotone"
                           dataKey="totalNew"
                           stroke="#ff7300"
-                          name="Khách hàng mới"
+                          name={`${i18n.t("customer_new", {
+                            lng: lang,
+                          })}`}
                         />
                       </ComposedChart>
                     </ResponsiveContainer>
@@ -1092,32 +1147,55 @@ export default function Home() {
             <Col lg="6">
               {checkElement?.includes("report_cancel_order_dashboard") && (
                 <div className="div-chart-pie-total-cancel-dash">
-                  <a className="title-chart"> Thống kê đơn huỷ </a>
+                  <a className="title-chart">
+                    {`${i18n.t("order_statistic_cancel", {
+                      lng: lang,
+                    })}`}
+                  </a>
                   <div className="div-pie-chart-cancel">
                     <div className="div-total-piechart">
                       <div className="item-total">
-                        <a className="title-total">Tổng đơn huỷ</a>
+                        <a className="title-total">
+                          {`${i18n.t("total_order_cancel", {
+                            lng: lang,
+                          })}`}
+                        </a>
                         <a className="text-colon">:</a>
                         <a className="number-total">
                           {dataTotalChartCancel?.total_cancel_order}
                         </a>
                       </div>
                       <div className="item-total">
-                        <a className="title-total">Đơn huỷ khách hàng</a>
+                        <a className="title-total">{`${i18n.t(
+                          "order_cancel_customer",
+                          {
+                            lng: lang,
+                          }
+                        )}`}</a>
                         <a className="text-colon">:</a>
                         <a className="number-total">
                           {dataTotalChartCancel?.total_cancel_order_by_customer}
                         </a>
                       </div>
                       <div className="item-total">
-                        <a className="title-total">Đơn huỷ hệ thống</a>
+                        <a className="title-total">{`${i18n.t(
+                          "order_cancel_system",
+                          {
+                            lng: lang,
+                          }
+                        )}`}</a>
                         <a className="text-colon">:</a>
                         <a className="number-total">
                           {dataTotalChartCancel?.total_cancel_order_by_system}
                         </a>
                       </div>
                       <div className="item-total">
-                        <a className="title-total">Đơn huỷ quản trị viên</a>
+                        <a className="title-total">{`${i18n.t(
+                          "order_cancel_admin",
+                          {
+                            lng: lang,
+                          }
+                        )}`}</a>
                         <a className="text-colon">:</a>
                         <a className="number-total">
                           {
