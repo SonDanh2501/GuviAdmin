@@ -375,7 +375,7 @@ const AddPromotionOther = (props) => {
               </div>
               <div className="mt-2">
                 <a className="title-add-promo">
-                  6. {`${i18n.t("partner_name", { lng: lang })}`}c
+                  6. {`${i18n.t("partner_name", { lng: lang })}`}
                 </a>
                 <Input
                   className="input-promo-brand"

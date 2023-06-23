@@ -1,9 +1,13 @@
 import {
+  Button,
   Checkbox,
+  Col,
   DatePicker,
   Input,
   InputNumber,
   List,
+  Modal,
+  Row,
   Select,
   TimePicker,
 } from "antd";
@@ -13,7 +17,6 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Modal, Row } from "reactstrap";
 import { searchCustomersApi } from "../../api/customer";
 import { DATA_PAYMENT, date } from "../../api/fakeData";
 import {
@@ -28,9 +31,9 @@ import { getService } from "../../redux/selectors/service";
 import CustomTextEditor from "../customTextEdittor";
 import "./editPromotionEvent.scss";
 import { getLanguageState } from "../../redux/selectors/auth";
+import InputCustom from "../textInputCustom";
+import i18n from "../../i18n";
 dayjs.extend(customParseFormat);
-
-const { TextArea } = Input;
 
 const EditPromotionEvent = (props) => {
   const {
@@ -382,47 +385,45 @@ const EditPromotionEvent = (props) => {
     <>
       {/* Modal */}
       <Modal
-        fullscreen={true}
-        fade={true}
-        isOpen={state}
-        size="lg"
-        style={{ maxWidth: "1200px", width: "100%" }}
-        toggle={() => setState(!state)}
+        centered
+        open={state}
+        width={1200}
+        onCancel={() => setState(!state)}
+        footer={null}
+        title={`${i18n.t("add_promotion", { lng: lang })}`}
       >
-        <div className="modal-header">
-          <a className="modal-title">Sửa chương trình khuyến mãi</a>
-          <button className="btn-close" onClick={() => setState(!state)}>
-            <i className="uil uil-times-square"></i>
-          </button>
-        </div>
         <div className="modal-body">
           <Row>
-            <Col md={4}>
+            <Col span={8}>
               <div>
-                <a className="title-add-promo">1. Tiêu đề</a>
-                <Input
-                  placeholder="Nhập tiêu đề tiếng việt"
+                <a className="title-add-promo">
+                  1. {`${i18n.t("title", { lng: lang })}`}
+                </a>
+                <InputCustom
+                  title={`${i18n.t("vietnamese", { lng: lang })}`}
                   value={titleVN}
                   onChange={(e) => setTitleVN(e.target.value)}
                 />
-                <Input
-                  placeholder="Nhập tiêu đề tiếng anh"
+                <InputCustom
+                  title={`${i18n.t("english", { lng: lang })}`}
                   value={titleEN}
                   onChange={(e) => setTitleEN(e.target.value)}
                   style={{ marginTop: 5 }}
                 />
               </div>
-              <div>
-                <a className="title-add-promo">2. Mô tả chi tiết</a>
+              <div className="mt-2">
+                <a className="title-add-promo">
+                  2. {`${i18n.t("detailed_description", { lng: lang })}`}
+                </a>
                 <div>
-                  <a>Tiếng Việt</a>
+                  <a>{`${i18n.t("vietnamese", { lng: lang })}`}</a>
                   <CustomTextEditor
                     value={descriptionVN}
                     onChangeValue={setDescriptionVN}
                   />
                 </div>
                 <div className="mt-2">
-                  <a>Tiếng Anh</a>
+                  <a>{`${i18n.t("english", { lng: lang })}`}</a>
                   <CustomTextEditor
                     value={descriptionEN}
                     onChangeValue={setDescriptionEN}
@@ -430,9 +431,11 @@ const EditPromotionEvent = (props) => {
                 </div>
               </div>
             </Col>
-            <Col md={4}>
+            <Col span={8} className="ml-3">
               <div>
-                <a className="title-add-promo">3. Giá đơn đặt tối thiểu</a>
+                <a className="title-add-promo">
+                  3. {`${i18n.t("minimum_order_price", { lng: lang })}`}
+                </a>
                 <InputNumber
                   formatter={(value) =>
                     `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
@@ -445,33 +448,35 @@ const EditPromotionEvent = (props) => {
               </div>
 
               <div className="mt-2">
-                <a className="title-add-promo">4. Hình thức giảm giá</a>
+                <a className="title-add-promo">
+                  4. {`${i18n.t("discount_form", { lng: lang })}`}
+                </a>
                 <Row>
                   <Button
                     className={
                       discountUnit === "amount"
-                        ? "btn-form-same-promotion"
-                        : "btn-form-same-promotion-default"
+                        ? "btn-form-amount-promotion"
+                        : "btn-form-amount-promotion-default"
                     }
                     outline
                     onClick={() => onFormDiscount("amount")}
                   >
-                    Giảm trực tiếp
+                    {`${i18n.t("direct_discount", { lng: lang })}`}
                   </Button>
                   <Button
                     className={
                       discountUnit === "percent"
-                        ? "btn-form-same-promotion"
-                        : "btn-form-same-promotion-default"
+                        ? "btn-form-amount-promotion"
+                        : "btn-form-amount-promotion-default"
                     }
                     outline
                     onClick={() => onFormDiscount("percent")}
                   >
-                    Giảm theo phần trăm
+                    {`${i18n.t("percentage_discount", { lng: lang })}`}
                   </Button>
                   {discountUnit === "amount" ? (
                     <div className="ml-3">
-                      <a>Giá giảm</a>
+                      <a>{`${i18n.t("reduced_price", { lng: lang })}`}</a>
                       <InputNumber
                         formatter={(value) =>
                           `${value}  đ`.replace(
@@ -488,7 +493,7 @@ const EditPromotionEvent = (props) => {
                   ) : (
                     <Row className="row-discount">
                       <div className="div-reduced ml-4">
-                        <a>Giá trị giảm</a>
+                        <a>{`${i18n.t("reduced_value", { lng: lang })}`}</a>
                         <InputNumber
                           min={0}
                           max={100}
@@ -500,7 +505,7 @@ const EditPromotionEvent = (props) => {
                         />
                       </div>
                       <div className="div-reduced">
-                        <a>Giá giảm tối đa</a>
+                        <a>{`${i18n.t("discount_max", { lng: lang })}`}</a>
                         <InputNumber
                           formatter={(value) =>
                             `${value}  đ`.replace(
@@ -520,7 +525,9 @@ const EditPromotionEvent = (props) => {
               </div>
               {tab === "tat_ca" && (
                 <div className="mt-2">
-                  <a className="title-add-promo">5. Dịch vụ áp dụng</a>
+                  <a className="title-add-promo">
+                    5. {`${i18n.t("apply_service", { lng: lang })}`}
+                  </a>
                   <Select
                     style={{ width: "100%" }}
                     value={serviceApply}
@@ -532,13 +539,15 @@ const EditPromotionEvent = (props) => {
                 </div>
               )}
               <div className="mt-2">
-                <a className="title-add-promo">6. Đối tượng áp dụng</a>
+                <a className="title-add-promo">
+                  6. {`${i18n.t("applicable_object", { lng: lang })}`}
+                </a>
                 <div>
                   <Checkbox
                     checked={isGroupCustomer}
                     onChange={(e) => setIsGroupCustomer(e.target.checked)}
                   >
-                    Nhóm khách hàng
+                    {`${i18n.t("customer_group", { lng: lang })}`}
                   </Checkbox>
                   {isGroupCustomer && (
                     <Select
@@ -559,7 +568,7 @@ const EditPromotionEvent = (props) => {
                     checked={isCustomer}
                     onChange={(e) => setIsCustomer(e.target.checked)}
                   >
-                    Áp dụng cho khách hàng
+                    {`${i18n.t("customer_apply", { lng: lang })}`}
                   </Checkbox>
                   {isCustomer && (
                     <div>
@@ -614,19 +623,20 @@ const EditPromotionEvent = (props) => {
                 </div>
               </div>
             </Col>
-            <Col md={4}>
+            <Col span={7} className="ml-3">
               <div>
-                <a className="title-add-promo">7. Số lượng mã khuyến mãi</a>
+                <a className="title-add-promo">
+                  7. {`${i18n.t("number_promo", { lng: lang })}`}
+                </a>
                 <div>
                   <Checkbox
                     checked={limitedQuantity}
                     onChange={(e) => setLimitedQuantity(e.target.checked)}
                   >
-                    Số lượng giới hạn
+                    {`${i18n.t("limited_quantity", { lng: lang })}`}
                   </Checkbox>
                   {limitedQuantity && (
                     <Input
-                      placeholder="Số lượng"
                       className="input-promo-code"
                       type="number"
                       min={0}
@@ -637,17 +647,18 @@ const EditPromotionEvent = (props) => {
                 </div>
               </div>
               <div className="mt-2">
-                <a className="title-add-promo">8. Số lần sử dụng khuyến mãi</a>
+                <a className="title-add-promo">
+                  8. {`${i18n.t("number_use_promotion", { lng: lang })}`}
+                </a>
                 <div>
                   <Checkbox
                     checked={isUsePromo}
                     onChange={(e) => setIsUsePromo(e.target.checked)}
                   >
-                    Lần sử dụng khuyến mãi
+                    {`${i18n.t("promo_use_time", { lng: lang })}`}
                   </Checkbox>
                   {isUsePromo && (
                     <Input
-                      placeholder="Số lượng"
                       className="input-promo-code"
                       min={0}
                       type="number"
@@ -658,18 +669,20 @@ const EditPromotionEvent = (props) => {
                 </div>
               </div>
               <div className="mt-2">
-                <a className="title-add-promo">9. Thời gian khuyến mãi</a>
+                <a className="title-add-promo">
+                  9. {`${i18n.t("promotion_time", { lng: lang })}`}
+                </a>
                 <div>
                   <Checkbox
                     checked={limitedDate}
                     onChange={(e) => setLimitedDate(e.target.checked)}
                   >
-                    Giới hạn ngày
+                    {`${i18n.t("limit_date", { lng: lang })}`}
                   </Checkbox>
                   {limitedDate && (
                     <>
                       <div>
-                        <a>Ngày bắt đầu</a>
+                        <a>{`${i18n.t("start_date", { lng: lang })}`}</a>
                         <DatePicker
                           onChange={(date, dateString) =>
                             setStartDate(
@@ -689,7 +702,7 @@ const EditPromotionEvent = (props) => {
                         />
                       </div>
                       <div>
-                        <a>Ngày kết thúc</a>
+                        <a>{`${i18n.t("end_date", { lng: lang })}`}</a>
                         <DatePicker
                           onChange={(date, dateString) =>
                             setEndDate(
@@ -707,26 +720,21 @@ const EditPromotionEvent = (props) => {
                           }
                           allowClear={false}
                         />
-                        {/* <input
-                              className="input-promo-code"
-                              type={"date"}
-                              defaultValue={startDate}
-                              value={endDate}
-                              onChange={(e) => setEndDate(e.target.value)}
-                            /> */}
                       </div>
                     </>
                   )}
                 </div>
               </div>
               <div className="mt-2">
-                <a className="title-add-promo">10. Phương thức thanh toán</a>
+                <a className="title-add-promo">
+                  10. {`${i18n.t("payment_method", { lng: lang })}`}
+                </a>
                 <div>
                   <Checkbox
                     checked={isPaymentMethod}
                     onChange={(e) => setIsPaymentMethod(e.target.checked)}
                   >
-                    Thanh toán
+                    {`${i18n.t("payment", { lng: lang })}`}
                   </Checkbox>
                   {isPaymentMethod && (
                     <Select
@@ -755,7 +763,9 @@ const EditPromotionEvent = (props) => {
               </div>
               <div className="div-loop-time">
                 <div>
-                  <a className="title-add-promo">12. Thời gian áp dụng</a>
+                  <a className="title-add-promo">
+                    12. {`${i18n.t("time_apply", { lng: lang })}`}
+                  </a>
                   <Checkbox
                     checked={isApplyTime}
                     onChange={(e) => setIsApplyTime(e.target.checked)}
@@ -797,7 +807,7 @@ const EditPromotionEvent = (props) => {
                                 );
                               })}
                             </div>
-                            <a>Thời gian bắt đầu</a>
+                            <a>{`${i18n.t("start_time", { lng: lang })}`}</a>
                             <TimePicker
                               value={dayjs(item?.start_time_local, fomart)}
                               format={fomart}
@@ -806,7 +816,7 @@ const EditPromotionEvent = (props) => {
                               }
                               allowClear={false}
                             />
-                            <a>Thời gian kết thúc</a>
+                            <a>{`${i18n.t("end_time", { lng: lang })}`}</a>
                             <TimePicker
                               value={dayjs(item?.end_time_local, fomart)}
                               format={fomart}
@@ -827,11 +837,11 @@ const EditPromotionEvent = (props) => {
               </div>
 
               <Button
-                className="btn_add mt-5"
+                className="btn-edit-promotion-orther mt-5"
                 color="warning"
                 onClick={onEditPromotion}
               >
-                Sửa khuyến mãi
+                {`${i18n.t("edit_promotion", { lng: lang })}`}
               </Button>
             </Col>
           </Row>

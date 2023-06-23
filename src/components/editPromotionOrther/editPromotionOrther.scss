@@ -169,8 +169,10 @@
 .btn-edit-promotion-orther {
   display: flex;
   float: right;
-  background-color: rgba(0, 0, 255, 0.499);
-  color: white;
-  border: none;
+  display: flex;
+  float: right;
+  background-color: #48cae4;
+  margin-top: 20px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
   margin-top: 20px;
 }

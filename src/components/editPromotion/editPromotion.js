@@ -533,8 +533,8 @@ const EditPromotion = (props) => {
                   <Button
                     className={
                       discountUnit === "amount"
-                        ? "btn-form-same-promotion"
-                        : "btn-form-same-promotion-default"
+                        ? "btn-form-amount-promotion"
+                        : "btn-form-amount-promotion-default"
                     }
                     outline
                     onClick={() => onFormDiscount("amount")}
@@ -544,8 +544,8 @@ const EditPromotion = (props) => {
                   <Button
                     className={
                       discountUnit === "percent"
-                        ? "btn-form-same-promotion"
-                        : "btn-form-same-promotion-default"
+                        ? "btn-form-amount-promotion"
+                        : "btn-form-amount-promotion-default"
                     }
                     outline
                     onClick={() => onFormDiscount("percent")}

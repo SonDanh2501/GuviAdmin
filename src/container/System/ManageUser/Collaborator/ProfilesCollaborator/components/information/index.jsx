@@ -235,7 +235,7 @@ const Information = ({ data, image, idCTV, setData }) => {
               <InputCustom
                 title={`${i18n.t("gender", { lng: lang })}`}
                 value={gender}
-                onChange={(e) => setGender(e.target.value)}
+                onChange={(e) => setGender(e)}
                 select={true}
                 options={[
                   {

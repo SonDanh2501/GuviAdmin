@@ -11,7 +11,7 @@ const ManageFinance = () => {
   }, []);
   return (
     <>
-      <div className="div-map-item">
+      {/* <div className="div-map-item">
         {DATA?.map((item, index) => {
           return (
             <div
@@ -27,7 +27,8 @@ const ManageFinance = () => {
           );
         })}
       </div>
-      {tab === "ctv" ? <FinanceCollaborator /> : <FinanceCustomer />}
+      {tab === "ctv" ? <FinanceCollaborator /> : <FinanceCustomer />} */}
+      <FinanceCollaborator />
     </>
   );
 };
