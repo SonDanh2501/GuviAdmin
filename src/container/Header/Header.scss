@@ -24,7 +24,7 @@
     height: 40px;
   }
 
-  .nav {
+  .nav-header {
     display: flex;
     margin-right: 20px;
     flex-direction: row;
@@ -76,6 +76,90 @@
       top: 6%;
       border-radius: 10px;
       padding: 10px;
+    }
+  }
+}
+
+@media screen and (max-width: 490px) {
+  .div-container-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 50px;
+    margin-left: 10px;
+    width: 100%;
+
+    .menu-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      .icon-menu {
+        color: black;
+      }
+    }
+
+    .img-user {
+      width: 40px;
+      height: 40px;
+    }
+
+    .nav-header {
+      display: flex;
+      margin-right: 20px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      width: auto;
+      height: auto;
+
+      .text-name {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 21px;
+        color: #ffffff !important;
+        margin-right: 5px;
+        text-decoration: none;
+      }
+
+      .icon-down {
+        color: white;
+        margin-right: 10px;
+      }
+
+      .div-noti {
+        width: 20px;
+        position: relative;
+
+        .icon {
+          color: white;
+        }
+
+        .dot-noti {
+          width: 10px;
+          height: 10px;
+          border-radius: 5px;
+          background-color: white;
+          position: absolute;
+          right: 1.8%;
+          top: 3.2%;
+        }
+      }
+
+      .list {
+        background-color: rgb(255, 255, 255);
+        z-index: 100;
+        position: absolute;
+        right: 1%;
+        top: 6%;
+        border-radius: 10px;
+        padding: 10px;
+      }
     }
   }
 }

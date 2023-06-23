@@ -1,6 +1,6 @@
 import { Drawer, Input, Select } from "antd";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { postFile } from "../../api/file";
 import { updateNew } from "../../api/news";
 import resizeFile from "../../helper/resizer";
@@ -10,6 +10,9 @@ import { getNews } from "../../redux/actions/news";
 import CustomButton from "../customButton/customButton";
 import "./editNews.scss";
 import UploadImage from "../uploadImage";
+import { getLanguageState } from "../../redux/selectors/auth";
+import InputCustom from "../textInputCustom";
+import i18n from "../../i18n";
 const { TextArea } = Input;
 
 const EditNews = ({ data }) => {
@@ -19,8 +22,8 @@ const EditNews = ({ data }) => {
   const [shortDescription, setShortDescription] = useState("");
   const [imgThumbnail, setImgThumbnail] = useState("");
   const [position, setPosition] = useState("");
-
   const dispatch = useDispatch();
+  const lang = useSelector(getLanguageState);
   const [open, setOpen] = useState(false);
 
   const showDrawer = () => {
@@ -97,42 +100,43 @@ const EditNews = ({ data }) => {
 
   return (
     <>
-      <a onClick={showDrawer}>Chỉnh sửa</a>
+      <a onClick={showDrawer}>{`${i18n.t("edit", { lng: lang })}`}</a>
       {/* Modal */}
       <Drawer
-        title="Thêm nói bài viết"
+        title={`${i18n.t("edit", { lng: lang })}`}
         placement="right"
         onClose={onClose}
         open={open}
       >
         <div>
-          <a className="title-new">Tiêu đề</a>
-          <TextArea
-            placeholder="Vui lòng nhập tiêu đề"
+          <InputCustom
+            title={`${i18n.t("title", { lng: lang })}`}
+            placeholder={`${i18n.t("placeholder", { lng: lang })}`}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            textArea={true}
           />
         </div>
         <div className="mt-2">
-          <a className="title-new">Mô tả</a>
-          <TextArea
-            placeholder="Vui lòng nhập mô tả ngắn"
+          <InputCustom
+            title={`${i18n.t("describe", { lng: lang })}`}
+            placeholder={`${i18n.t("placeholder", { lng: lang })}`}
             value={shortDescription}
             onChange={(e) => setShortDescription(e.target.value)}
+            textArea={true}
           />
         </div>
         <div className="mt-2">
-          <a className="title-new">URL</a>
-          <Input
-            placeholder="Vui lòng nhập url"
+          <InputCustom
+            title="URL"
             type="text"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
           />
         </div>
         <div className="mt-2">
-          <a className="title-new">Type</a>
-          <Select
+          <InputCustom
+            title="Type"
             value={type}
             style={{ width: "100%" }}
             onChange={(e) => setType(e)}
@@ -140,26 +144,29 @@ const EditNews = ({ data }) => {
               { value: "news", label: "News" },
               { value: "guvilover", label: "GUVILove" },
             ]}
+            select={true}
           />
         </div>
         <div className="mt-2">
-          <a className="title-new">Vị trí</a>
-          <Input
-            placeholder="Vui lòng nhập position"
+          <InputCustom
+            title={`${i18n.t("position", { lng: lang })}`}
+            placeholder={`${i18n.t("placeholder", { lng: lang })}`}
             type="text"
             value={position}
             onChange={(e) => setPosition(e.target.value)}
           />
         </div>
         <UploadImage
-          title={"Thumbnail 171px * 171px, tỉ lệ 1:1"}
+          title={`Thumbnail 171px * 171px, ${i18n.t("ratio", {
+            lng: lang,
+          })} 1:1`}
           image={imgThumbnail}
           setImage={setImgThumbnail}
           classImg={"img-thumbnail"}
         />
 
         <CustomButton
-          title="Sửa"
+          title={`${i18n.t("edit", { lng: lang })}`}
           className="float-right btn-modal-new"
           type="button"
           onClick={onEditNews}

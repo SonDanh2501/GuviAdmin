@@ -23,11 +23,16 @@ import {
 } from "../../../../redux/selectors/feedback";
 import "./Feedback.scss";
 import { getFeedback } from "../../../../redux/actions/feedback";
-import { getElementState, getUser } from "../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+  getUser,
+} from "../../../../redux/selectors/auth";
 import { loadingAction } from "../../../../redux/actions/loading";
 import { deleteFeedbackApi, searchFeedbackApi } from "../../../../api/feedback";
 import { errorNotify } from "../../../../helper/toast";
 import ModalCustom from "../../../../components/modalCustom";
+import i18n from "../../../../i18n";
 const width = window.innerWidth;
 
 const Feedback = () => {
@@ -39,8 +44,7 @@ const Feedback = () => {
   const listFeedback = useSelector(getFeedbacks);
   const feedbackTotal = useSelector(getFeedbackTotal);
   const [modal, setModal] = useState(false);
-  const user = useSelector(getUser);
-  const navigate = useNavigate();
+  const lang = useSelector(getLanguageState);
   const toggle = () => setModal(!modal);
   const checkElement = useSelector(getElementState);
 
@@ -90,15 +94,15 @@ const Feedback = () => {
 
   const columns = [
     {
-      title: "Loại phản hồi",
-      render: (data) => <a className="text-type">{data?.type?.name?.vi}</a>,
+      title: `${i18n.t("type_feedback", { lng: lang })}`,
+      render: (data) => <a className="text-type">{data?.type?.name?.[lang]}</a>,
     },
     {
-      title: "Nội dung",
+      title: `${i18n.t("content", { lng: lang })}`,
       render: (data) => <a className="text-content">{data?.body}</a>,
     },
     {
-      title: "Người phản hồi",
+      title: `${i18n.t("feedback_sender", { lng: lang })}`,
       render: (data) => {
         return (
           <Link to={`/profile-customer/${data?.id_customer}`}>
@@ -108,11 +112,11 @@ const Feedback = () => {
       },
     },
     {
-      title: "SĐT người phản hồi",
+      title: `${i18n.t("phone_feedback_sender", { lng: lang })}`,
       render: (data) => <a className="text-content">{data?.phone}</a>,
     },
     {
-      title: "Ngày phản hồi",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => (
         <a className="text-content">
           {moment(new Date(data?.date_create)).format("DD/MM/yyy - HH:mm")}
@@ -125,7 +129,10 @@ const Feedback = () => {
       align: "center",
       render: (data) =>
         checkElement?.includes("delete_feedback_support_customer") && (
-          <Tooltip placement="bottom" title="Xoá phản hồi">
+          <Tooltip
+            placement="bottom"
+            title={`${i18n.t("delete_feedback", { lng: lang })}`}
+          >
             <button className="btn-delete" onClick={toggle}>
               <i className="uil uil-trash"></i>
             </button>
@@ -138,7 +145,7 @@ const Feedback = () => {
     <>
       <div>
         <Input
-          placeholder="Tìm kiếm theo tên hoặc số điện thoại"
+          placeholder={`${i18n.t("search", { lng: lang })}`}
           type="text"
           className="input-search"
           prefix={<SearchOutlined />}
@@ -167,7 +174,10 @@ const Feedback = () => {
           />
         </div>
         <div className="div-pagination p-2">
-          <a>Tổng: {dataFilter.length > 0 ? totalFilter : feedbackTotal}</a>
+          <a>
+            {`${i18n.t("total", { lng: lang })}`}:{" "}
+            {dataFilter.length > 0 ? totalFilter : feedbackTotal}
+          </a>
           <div>
             <Pagination
               current={currentPage}
@@ -182,16 +192,15 @@ const Feedback = () => {
         <div>
           <ModalCustom
             isOpen={modal}
-            title="Xóa phản hồi"
+            title={`${i18n.t("delete_feedback", { lng: lang })}`}
             handleOk={() => onDelete(itemEdit?._id)}
             handleCancel={toggle}
-            textOk="Xoá"
+            textOk={`${i18n.t("delete", { lng: lang })}`}
             body={
-              <a>
-                Bạn có chắc muốn xóa phản hồi của khách hàng
+              <>
+                <a>{`${i18n.t("want_delete_feedback", { lng: lang })}`}</a>
                 <a className="text-name-modal">{itemEdit?.full_name}</a>
-                này không?
-              </a>
+              </>
             }
           />
         </div>

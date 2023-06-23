@@ -22,3 +22,14 @@ export const getBalanceCustomer = (startDate, endDate) => {
     `/admin/report_mananger/report_total_customer_balance?lang=vi&start_date=${startDate}&end_date=${endDate}`
   );
 };
+
+export const getReportBalanceCollaborator = (
+  start,
+  length,
+  startDate,
+  endDate
+) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_balance?start=${start}&length=${length}&start_date=${startDate}&end_date=${endDate}`
+  );
+};

@@ -99,7 +99,9 @@ const MoreActivity = () => {
                   )
                 : "";
 
-              const predicate = item?.id_reason_punish
+              const predicate = item?.id_order
+                ? subject.replace(item?.id_order?._id, item?.id_order?.id_view)
+                : item?.id_reason_punish
                 ? subject.replace(
                     item?.id_reason_punish?._id,
                     item?.id_reason_punish?.title?.vi
@@ -142,21 +144,24 @@ const MoreActivity = () => {
                   )
                 : item?.id_address
                 ? subject.replace(item?.id_address, item?.value_string)
-                : item?.id_order
-                ? subject.replace(item?.id_order?._id, item?.id_order?.id_view)
-                : item?.id_group_order
-                ? subject.replace(
-                    item?.id_group_order?._id,
-                    item?.id_group_order?.id_view
-                  )
-                : item?.id_transistion_customer
+                : // : item?.id_group_order
+                // ? subject.replace(
+                //     item?.id_group_order?._id,
+                //     item?.id_group_order?.id_view
+                //   )
+                item?.id_transistion_customer
                 ? subject.replace(
                     item?.id_transistion_customer?._id,
                     item?.id_transistion_customer?.transfer_note
                   )
                 : "";
 
-              const object = item?.id_collaborator
+              const object = item?.id_reason_cancel
+                ? predicate.replace(
+                    item?.id_reason_cancel?._id,
+                    item?.id_reason_cancel?.title?.vi
+                  )
+                : item?.id_collaborator
                 ? predicate.replace(
                     item?.id_collaborator?._id,
                     item?.id_collaborator?.full_name
@@ -178,10 +183,7 @@ const MoreActivity = () => {
                     item?.id_transistion_customer?._id,
                     item?.id_transistion_customer?.transfer_note
                   )
-                : predicate.replace(
-                    item?.id_reason_cancel?._id,
-                    item?.id_reason_cancel?.title?.vi
-                  );
+                : "";
 
               return (
                 <div className="div-item">

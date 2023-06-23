@@ -44,7 +44,7 @@ const Header = ({ onClick, hide }) => {
         {hide ? <i class="uil uil-bars icon-menu"></i> : <MenuUnfoldOutlined />}
       </div>
 
-      <div className="nav">
+      <div className="nav-header">
         <Dropdown
           menu={{
             items,

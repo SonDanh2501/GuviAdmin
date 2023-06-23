@@ -163,8 +163,9 @@
 .btn_add_promotion_order {
   display: flex;
   float: right;
-  background-color: rgba(0, 0, 255, 0.499);
+  background-color: #48cae4;
   color: white;
   border: none;
   margin-top: 20px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
 }

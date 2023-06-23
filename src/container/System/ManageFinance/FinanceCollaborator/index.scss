@@ -123,6 +123,57 @@
   }
 }
 
+.div-opening-all {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 20px;
+
+  .div-item_opening {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    height: 60px;
+    background-color: white;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.3));
+    border-radius: 4px;
+    padding: 5px 10px;
+    justify-content: space-between;
+
+    .text-opening {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      color: #000000;
+      text-decoration: none;
+    }
+
+    .div_wallet_money {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .text_wallet {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        color: #000000;
+        text-decoration: none;
+      }
+      .text_money {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        color: rgb(17, 197, 17);
+        text-decoration: none;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 490px) {
   .div-head-finance {
     display: flex;

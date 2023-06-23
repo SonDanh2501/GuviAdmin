@@ -1,6 +1,6 @@
 import { Drawer, Input, Select } from "antd";
 import React, { memo, useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createNew } from "../../api/news";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
@@ -9,6 +9,8 @@ import CustomButton from "../customButton/customButton";
 import UploadImage from "../uploadImage";
 import "./addNews.scss";
 import InputCustom from "../textInputCustom";
+import { getLanguageState } from "../../redux/selectors/auth";
+import i18n from "../../i18n";
 
 const AddNews = () => {
   const [title, setTitle] = useState("");
@@ -18,7 +20,7 @@ const AddNews = () => {
   const [imgThumbnail, setImgThumbnail] = useState("");
   const [position, setPosition] = useState("");
   const [open, setOpen] = useState(false);
-
+  const lang = useSelector(getLanguageState);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -54,28 +56,28 @@ const AddNews = () => {
     <>
       {/* Button trigger modal */}
       <CustomButton
-        title="Thêm bài viết"
+        title={`${i18n.t("create_post", { lng: lang })}`}
         className="btn-add-new"
         type="button"
         onClick={showDrawer}
       />
       {/* Modal */}
       <Drawer
-        title="Thêm mới bài viết"
+        title={`${i18n.t("create_post", { lng: lang })}`}
         placement="right"
         onClose={onClose}
         open={open}
       >
         <InputCustom
-          title="Tiêu đề"
-          placeholder="Vui lòng nhập tiêu đề"
+          title={`${i18n.t("title", { lng: lang })}`}
+          placeholder={`${i18n.t("placeholder", { lng: lang })}`}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           textArea={true}
         />
         <InputCustom
-          title="Mô tả"
-          placeholder="Vui lòng nhập mô tả ngắn"
+          title={`${i18n.t("describe", { lng: lang })}`}
+          placeholder={`${i18n.t("placeholder", { lng: lang })}`}
           value={shortDescription}
           onChange={(e) => setShortDescription(e.target.value)}
           textArea={true}
@@ -88,8 +90,8 @@ const AddNews = () => {
         />
 
         <div className="mt-2">
-          <a>Type</a>
-          <Select
+          <InputCustom
+            title="Type"
             value={type}
             style={{ width: "100%" }}
             onChange={(e) => setType(e)}
@@ -97,23 +99,26 @@ const AddNews = () => {
               { value: "news", label: "News" },
               { value: "guvilover", label: "GUVILove" },
             ]}
+            select={true}
           />
         </div>
         <InputCustom
-          title="Vị trí"
-          placeholder="Vui lòng nhập position"
+          title={`${i18n.t("position", { lng: lang })}`}
+          placeholder={`${i18n.t("placeholder", { lng: lang })}`}
           type="text"
           value={position}
           onChange={(e) => setPosition(e.target.value)}
         />
         <UploadImage
-          title={"Thumbnail 171px * 171px, tỉ lệ 1:1"}
+          title={`Thumbnail 171px * 171px, ${i18n.t("ratio", {
+            lng: lang,
+          })} 1:1`}
           image={imgThumbnail}
           setImage={setImgThumbnail}
           classImg={"img-thumbnail"}
         />
         <CustomButton
-          title="Thêm"
+          title={`${i18n.t("add", { lng: lang })}`}
           className="float-right btn-add-new mt-3"
           type="button"
           onClick={addNews}

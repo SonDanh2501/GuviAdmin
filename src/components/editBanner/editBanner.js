@@ -10,6 +10,9 @@ import { getService } from "../../redux/selectors/service";
 import CustomButton from "../customButton/customButton";
 import UploadImage from "../uploadImage";
 import "./editBanner.scss";
+import { getLanguageState } from "../../redux/selectors/auth";
+import i18n from "../../i18n";
+import InputCustom from "../textInputCustom";
 
 const EditBanner = ({ data }) => {
   const [title, setTitle] = useState("");
@@ -24,6 +27,7 @@ const EditBanner = ({ data }) => {
   const promotionOption = [];
   const serviceOption = [];
   const [open, setOpen] = useState(false);
+  const lang = useSelector(getLanguageState);
 
   const showDrawer = () => {
     setOpen(true);
@@ -44,14 +48,14 @@ const EditBanner = ({ data }) => {
   promotionData?.map((item) => {
     promotionOption.push({
       value: item?._id,
-      label: item?.title?.vi,
+      label: item?.title?.[lang],
     });
   });
 
   service?.map((item) => {
     serviceOption?.push({
       value: item?._id,
-      label: item?.title?.vi,
+      label: item?.title?.[lang],
       kind: item?.kind,
     });
   });
@@ -90,16 +94,16 @@ const EditBanner = ({ data }) => {
 
   return (
     <>
-      <a onClick={showDrawer}>Chỉnh sửa</a>
+      <a onClick={showDrawer}>{`${i18n.t("edit", { lng: lang })}`}</a>
       <Drawer
-        title="Basic Drawer"
+        title={`${i18n.t("edit", { lng: lang })}`}
         placement="right"
         onClose={onClose}
         open={open}
       >
         <div>
-          <a>Tiêu đề</a>
-          <Input
+          <InputCustom
+            title={`${i18n.t("title", { lng: lang })}`}
             style={{ width: "100%" }}
             type="text"
             value={title}
@@ -108,8 +112,8 @@ const EditBanner = ({ data }) => {
         </div>
 
         <div className="mt-2">
-          <a>Loại banner</a>
-          <Select
+          <InputCustom
+            title={`${i18n.t("banner_type", { lng: lang })}`}
             style={{ width: "100%" }}
             value={typeLink}
             onChange={(e) => setTypeLink(e)}
@@ -118,14 +122,15 @@ const EditBanner = ({ data }) => {
               { value: "promotion", label: "Promotion" },
               { value: "service", label: "Service" },
             ]}
+            select={true}
           />
         </div>
 
         <div className="mt-2">
           {typeLink === "url" ? (
             <div>
-              <a>Link URL</a>
-              <Input
+              <InputCustom
+                title="Link URL"
                 style={{ width: "100%" }}
                 type="text"
                 value={linkID}
@@ -134,47 +139,52 @@ const EditBanner = ({ data }) => {
             </div>
           ) : typeLink === "promotion" ? (
             <div>
-              <a>Chọn mã khuyến mãi</a>
-              <Select
+              <InputCustom
+                title={`${i18n.t("select_promotion", { lng: lang })}`}
+                style={{ width: "100%" }}
+                value={linkID}
+                onChange={(e) => setLinkId(e)}
+                options={promotionOption}
+                select={true}
+              />
+            </div>
+          ) : (
+            <div>
+              <InputCustom
+                title="Link ID"
                 style={{ width: "100%" }}
                 value={linkID}
                 onChange={(value, label) => {
                   setLinkId(value);
                   setKindService(label?.kind);
                 }}
-                options={promotionOption}
-              />
-            </div>
-          ) : (
-            <div>
-              <a>Link ID</a>
-              <Select
-                style={{ width: "100%" }}
-                value={linkID}
-                onChange={(e) => setLinkId(e)}
                 options={serviceOption}
+                select={true}
               />
             </div>
           )}
         </div>
         <div className="mt-2">
-          <a>Vị trí</a>
-          <Input
-            type="number"
+          <InputCustom
+            title={`${i18n.t("position", { lng: lang })}`}
+            style={{ width: "100%" }}
             value={position}
             onChange={(e) => setPosition(e.target.value)}
           />
         </div>
 
         <UploadImage
-          title={"Hình ảnh 360px * 137px, tỉ lệ 2,62"}
+          title={`${i18n.t("image", { lng: lang })} 360px * 137px, ${i18n.t(
+            "ratio",
+            { lng: lang }
+          )}  2,62`}
           image={imgThumbnail}
           setImage={setImgThumbnail}
           classImg={"img-thumbnail-banner"}
         />
 
         <CustomButton
-          title="Sửa"
+          title={`${i18n.t("edit", { lng: lang })}`}
           className="float-right btn-edit-banner"
           type="button"
           onClick={onEditBanner}
