@@ -73,10 +73,6 @@ const ManageConfiguration = () => {
           );
         })}
       </div>
-
-      {/* <Button onClick={() => {}} className="mt-5">
-        Quản lý hình ảnh
-      </Button> */}
     </div>
   );
 };
