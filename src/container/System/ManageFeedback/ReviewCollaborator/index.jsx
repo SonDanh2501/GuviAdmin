@@ -21,12 +21,18 @@ import { SearchOutlined } from "@ant-design/icons";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { Link, useNavigate } from "react-router-dom";
 import { errorNotify } from "../../../../helper/toast";
-import { getElementState } from "../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../redux/selectors/auth";
 import { useSelector } from "react-redux";
 import member from "../../../../assets/images/iconMember.svg";
 import silver from "../../../../assets/images/iconSilver.svg";
 import gold from "../../../../assets/images/iconGold.svg";
 import platinum from "../../../../assets/images/iconPlatinum.svg";
+import i18n from "../../../../i18n";
+import InputCustom from "../../../../components/textInputCustom";
+import ModalCustom from "../../../../components/modalCustom";
 const { TextArea } = Input;
 const width = window.innerWidth;
 
@@ -53,6 +59,7 @@ const ReviewCollaborator = () => {
   const navigate = useNavigate();
   const checkElement = useSelector(getElementState);
   const toggleModalCheck = () => setModalCheck(!modalCheck);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getReportReviewCollaborator(
@@ -228,7 +235,7 @@ const ReviewCollaborator = () => {
 
   const columns = [
     {
-      title: "Thời gian",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <>
@@ -249,7 +256,7 @@ const ReviewCollaborator = () => {
       },
     },
     {
-      title: "Tên khách hàng",
+      title: `${i18n.t("customer", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-customer-review">
@@ -280,7 +287,7 @@ const ReviewCollaborator = () => {
       width: "15%",
     },
     {
-      title: "Tên cộng tác viên",
+      title: `${i18n.t("collaborator", { lng: lang })}`,
       render: (data) => {
         return (
           <Link
@@ -296,7 +303,7 @@ const ReviewCollaborator = () => {
       },
     },
     {
-      title: "Số sao/Đơn",
+      title: `${i18n.t("star_order", { lng: lang })}`,
       width: "15%",
       render: (data) => {
         return (
@@ -318,11 +325,11 @@ const ReviewCollaborator = () => {
       sorter: (a, b) => a.star - b.star,
     },
     {
-      title: "Nội dung",
+      title: `${i18n.t("content", { lng: lang })}`,
       render: (data) => <a className="text-review">{data?.review}</a>,
     },
     {
-      title: "Đánh giá nhanh",
+      title: `${i18n.t("quick_review", { lng: lang })}`,
       render: (data) => {
         return (
           <div>
@@ -355,7 +362,7 @@ const ReviewCollaborator = () => {
       },
     },
     {
-      title: "Ghi chú",
+      title: `${i18n.t("note", { lng: lang })}`,
       render: (data) => <a>{data?.note_admin}</a>,
     },
   ];
@@ -365,21 +372,21 @@ const ReviewCollaborator = () => {
       {/* <a className="title-review">Đánh giá cộng tác viên</a> */}
       <div className="div-head-review">
         <Select
-          defaultValue={"Lọc theo số sao"}
-          style={{ width: 150 }}
+          defaultValue={`${i18n.t("filter_star", { lng: lang })}`}
+          style={{ width: 200 }}
           onChange={handleFilter}
           options={[
-            { value: 0, label: "Lọc theo số sao" },
-            { value: 1, label: "1 sao" },
-            { value: 2, label: "2 sao" },
-            { value: 3, label: "3 sao" },
-            { value: 4, label: "4 sao" },
-            { value: 5, label: "5 sao" },
+            { value: 0, label: `${i18n.t("filter_star", { lng: lang })}` },
+            { value: 1, label: `1 ${i18n.t("star", { lng: lang })}` },
+            { value: 2, label: `2 ${i18n.t("star", { lng: lang })}` },
+            { value: 3, label: `3 ${i18n.t("star", { lng: lang })}` },
+            { value: 4, label: `4 ${i18n.t("star", { lng: lang })}` },
+            { value: 5, label: `5 ${i18n.t("star", { lng: lang })}` },
           ]}
         />
 
         <Input
-          placeholder="Tìm kiếm"
+          placeholder={`${i18n.t("search", { lng: lang })}`}
           type="text"
           style={{ width: "60%" }}
           prefix={<SearchOutlined />}
@@ -411,7 +418,9 @@ const ReviewCollaborator = () => {
               }
               onClick={() => onChangeTab(item?.value)}
             >
-              <a className="text-tab">{item?.title}</a>
+              <a className="text-tab">{`${i18n.t(item?.title, {
+                lng: lang,
+              })}`}</a>
             </div>
           );
         })}
@@ -439,7 +448,9 @@ const ReviewCollaborator = () => {
         />
       </div>
       <div className="mt-1 div-pagination p-2">
-        <a>Tổng: {total}</a>
+        <a>
+          {`${i18n.t("total", { lng: lang })}`}: {total}
+        </a>
         <div>
           <Pagination
             current={currentPage}
@@ -452,23 +463,22 @@ const ReviewCollaborator = () => {
       </div>
 
       <div>
-        <Modal
-          title="Kiểm tra"
-          open={modalCheck}
-          onOk={() => onCheckReview(itemEdit?._id)}
-          okText={"Lưu"}
-          onCancel={toggleModalCheck}
-          cancelText={"Huỷ"}
-        >
-          <div>
-            <a>Nội dung</a>
-            <TextArea
-              placeholder="Nhập nội dung"
+        <ModalCustom
+          title={`${i18n.t("check", { lng: lang })}`}
+          isOpen={modalCheck}
+          handleOk={() => onCheckReview(itemEdit?._id)}
+          textOk={`${i18n.t("save", { lng: lang })}`}
+          handleCancel={toggleModalCheck}
+          body={
+            <InputCustom
+              title={`${i18n.t("content", { lng: lang })}`}
+              placeholder={`${i18n.t("placeholder", { lng: lang })}`}
+              textArea={true}
               value={note}
               onChange={(e) => setNote(e.target.value)}
             />
-          </div>
-        </Modal>
+          }
+        />
       </div>
 
       {isLoading && <LoadingPagination />}
@@ -481,17 +491,17 @@ export default ReviewCollaborator;
 const TAB = [
   {
     id: 1,
-    title: "Tất cả",
+    title: "all",
     value: "all",
   },
   {
     id: 2,
-    title: "Đã liên hệ",
+    title: "contacted",
     value: "is_check",
   },
   {
     id: 2,
-    title: "Chưa liên hệ",
+    title: "not_contacted",
     value: "is_not_check",
   },
 ];

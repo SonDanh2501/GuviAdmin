@@ -3,6 +3,7 @@ import { formatMoney } from "../../../../helper/formatMoney";
 import "./index.scss";
 import {
   getBalanceCollaborator,
+  getReportBalanceCollaborator,
   getReportTransitionCollaborator,
 } from "../../../../api/finance";
 import { Pagination, Table } from "antd";
@@ -20,33 +21,48 @@ const FinanceCollaborator = () => {
   const [totalGiftRemainder, setTotalGiftRemainder] = useState(0);
   const [totalTopup, setTotalTopup] = useState(0);
   const [totalWithdraw, setTotalWithdraw] = useState(0);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
+  const [totalEndingRemainder, setTotalEndingRemainder] = useState(0);
+  const [totalOpeningRemainder, setTotalOpeningRemainder] = useState(0);
+  const [totalEndingGiftRemainder, setTotalEndingGiftRemainder] = useState(0);
+  const [totalOpeningGiftRemainder, setTotalOpeningGiftRemainder] = useState(0);
+  const [totalEndingPayPoint, setTotalEndingPayPoint] = useState(0);
+  const [totalOpeningPayPoint, setTotalOpeningPayPoint] = useState(0);
+  const [startDate, setStartDate] = useState(
+    moment().startOf("month").toISOString()
+  );
+  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
 
   useEffect(() => {
-    getBalanceCollaborator()
+    // getBalanceCollaborator()
+    //   .then((res) => {
+    //     setTotalRemainder(res?.total_remainder);
+    //     setTotalGiftRemainder(res?.total_gift_remainder);
+    //     setTotalTopup(res?.total_top_up);
+    //     setTotalWithdraw(res?.total_withdraw);
+    //   })
+    //   .catch((err) => {});
+    // getReportTransitionCollaborator(
+    //   0,
+    //   20,
+    //   moment().startOf("year").toISOString(),
+    //   moment().endOf("date").toISOString()
+    // )
+    //   .then((res) => {
+    //     setData(res?.data);
+    //     setTotal(res?.totalItem);
+    //   })
+    //   .catch((err) => {});
+
+    getReportBalanceCollaborator(0, 20, startDate, endDate)
       .then((res) => {
-        setTotalRemainder(res?.total_remainder);
-        setTotalGiftRemainder(res?.total_gift_remainder);
-        setTotalTopup(res?.total_top_up);
-        setTotalWithdraw(res?.total_withdraw);
+        setTotalOpeningRemainder(res?.total_opening_remainder);
+        setTotalEndingRemainder(res?.total_ending_remainder);
+        setTotalOpeningGiftRemainder(res?.total_opening_gift_remainder);
+        setTotalEndingGiftRemainder(res?.total_ending_gift_remainder);
+        setTotalOpeningPayPoint(res?.total_opening_pay_point);
+        setTotalEndingPayPoint(res?.total_ending_pay_point);
       })
       .catch((err) => {});
-
-    getReportTransitionCollaborator(
-      0,
-      20,
-      moment().startOf("year").toISOString(),
-      moment().endOf("date").toISOString()
-    )
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-
-    setStartDate(moment().startOf("month").toISOString());
-    setEndDate(moment().endOf("date").toISOString());
   }, []);
 
   const columns = [
@@ -163,17 +179,27 @@ const FinanceCollaborator = () => {
   };
 
   const onChangeDay = () => {
-    getReportTransitionCollaborator(0, 10, startDate, endDate)
+    // getReportTransitionCollaborator(0, 10, startDate, endDate)
+    //   .then((res) => {
+    //     setData(res?.data);
+    //     setTotal(res?.totalItem);
+    //   })
+    //   .catch((err) => {});
+    getReportBalanceCollaborator(0, 20, startDate, endDate)
       .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
+        setTotalOpeningRemainder(res?.total_opening_remainder);
+        setTotalEndingRemainder(res?.total_ending_remainder);
+        setTotalOpeningGiftRemainder(res?.total_opening_gift_remainder);
+        setTotalEndingGiftRemainder(res?.total_ending_gift_remainder);
+        setTotalOpeningPayPoint(res?.total_opening_pay_point);
+        setTotalEndingPayPoint(res?.total_ending_pay_point);
       })
       .catch((err) => {});
   };
 
   return (
     <>
-      <div className="div-head-finance">
+      {/* <div className="div-head-finance">
         <div className="div-total-money">
           <a className="title-total">Tổng ví CTV</a>
           <a className="text-money">{formatMoney(totalRemainder)}</a>
@@ -231,6 +257,75 @@ const FinanceCollaborator = () => {
               showSizeChanger={false}
               pageSize={20}
             />
+          </div>
+        </div>
+      </div> */}
+      <h5>Số dư ví</h5>
+
+      <div className="div-date">
+        <CustomDatePicker
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          onClick={onChangeDay}
+          onCancel={() => {}}
+        />
+        {startDate && (
+          <a className="text-date">
+            {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+            {moment(new Date(endDate)).format("DD/MM/YYYY")}
+          </a>
+        )}
+      </div>
+
+      <div>
+        <div className="div-opening-all">
+          <div className="div-item_opening">
+            <a className="text-opening">Đầu kì</a>
+            <div className="div_wallet_money">
+              <a className="text_wallet">Ví chính CTV</a>
+              <a className="text_money">{formatMoney(totalOpeningRemainder)}</a>
+            </div>
+          </div>
+          <div className="div-item_opening">
+            <a className="text-opening">Đầu kì</a>
+            <div className="div_wallet_money">
+              <a className="text_wallet">Ví thưởng CTV</a>
+              <a className="text_money">
+                {formatMoney(totalOpeningGiftRemainder)}
+              </a>
+            </div>
+          </div>
+          <div className="div-item_opening">
+            <a className="text-opening">Đầu kì</a>
+            <div className="div_wallet_money">
+              <a className="text_wallet">Ví khách hàng</a>
+              <a className="text_money">{formatMoney(totalOpeningPayPoint)}</a>
+            </div>
+          </div>
+        </div>
+        <div className="div-opening-all">
+          <div className="div-item_opening">
+            <a className="text-opening">Cuối kì</a>
+            <div className="div_wallet_money">
+              <a className="text_wallet">Ví chính CTV</a>
+              <a className="text_money">{formatMoney(totalEndingRemainder)}</a>
+            </div>
+          </div>
+          <div className="div-item_opening">
+            <a className="text-opening">Cuối kì</a>
+            <div className="div_wallet_money">
+              <a className="text_wallet">Ví thưởng CTV</a>
+              <a className="text_money">
+                {formatMoney(totalEndingGiftRemainder)}
+              </a>
+            </div>
+          </div>
+          <div className="div-item_opening">
+            <a className="text-opening">Cuối kì</a>
+            <div className="div_wallet_money">
+              <a className="text_wallet">Ví khách hàng</a>
+              <a className="text_money">{formatMoney(totalEndingPayPoint)}</a>
+            </div>
           </div>
         </div>
       </div>

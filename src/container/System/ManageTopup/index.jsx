@@ -5,11 +5,16 @@ import TopupCustomerManage from "./ManageTopupCustomer";
 
 import "./styles.scss";
 import { useEffect } from "react";
-import { getElementState } from "../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../redux/selectors/auth";
 import { useSelector } from "react-redux";
+import i18n from "../../../i18n";
 
 const ManageTopup = () => {
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -17,12 +22,15 @@ const ManageTopup = () => {
     <div className="div-container">
       <Tabs defaultActiveKey="1">
         {checkElement?.includes("get_cash_book_collaborator") && (
-          <Tabs.TabPane tab="Cộng tác viên" key="1">
+          <Tabs.TabPane
+            tab={`${i18n.t("collaborator", { lng: lang })}`}
+            key="1"
+          >
             <TopupManage />
           </Tabs.TabPane>
         )}
         {checkElement?.includes("list_transition_cash_book_customer") && (
-          <Tabs.TabPane tab="Khách hàng" key="2">
+          <Tabs.TabPane tab={`${i18n.t("customer", { lng: lang })}`} key="2">
             <TopupCustomerManage />
           </Tabs.TabPane>
         )}

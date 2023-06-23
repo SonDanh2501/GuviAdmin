@@ -8,18 +8,23 @@ import { formatMoney } from "../../../../helper/formatMoney";
 import Punish from "./Punish";
 import TopupCollaborator from "./Topup";
 import "./TopupManage.scss";
-import { getElementState } from "../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../redux/selectors/auth";
 import RewardCollaborator from "./Reward";
+import i18n from "../../../../i18n";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
-export default function TopupManage() {
+const TopupManage = () => {
   const [type, setType] = useState("all");
   const [totalTopup, setTotalTopup] = useState("");
   const [totalWithdraw, setTotalWithdraw] = useState("");
   const [totalPunish, setTotalPunish] = useState("");
   const dispatch = useDispatch();
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getRevenueCollaboratorApi(
@@ -48,42 +53,48 @@ export default function TopupManage() {
     <React.Fragment>
       <div className="div-total">
         <a className="total-revenue">
-          Tổng thu:
+          {`${i18n.t("total_revenue", { lng: lang })}`}:
           <a className="text-money-revenue">
             <i class="uil uil-arrow-up icon-up"></i>
             {formatMoney(totalTopup)}
           </a>
         </a>
         <a className="total-expenditure">
-          Tổng chi:
+          {`${i18n.t("total_expenditure", { lng: lang })}`}:
           <a className="text-money-expenditure">
             <i class="uil uil-arrow-down icon-down"></i>
             {formatMoney(totalWithdraw)}
           </a>
         </a>
         <a className="total-expenditure">
-          Tổng phạt:
+          {`${i18n.t("total_fines", { lng: lang })}`}:
           <a className="text-money-expenditure">{formatMoney(totalPunish)}</a>
         </a>
       </div>
       <div>
         <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
-          <Tabs.TabPane tab="Tất cả" key="1">
+          <Tabs.TabPane tab={`${i18n.t("all", { lng: lang })}`} key="1">
             <TopupCollaborator type={type} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Nạp tiền" key="2">
+          <Tabs.TabPane tab={`${i18n.t("topup", { lng: lang })}`} key="2">
             <TopupCollaborator type={type} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Rút tiền" key="3">
+          <Tabs.TabPane tab={`${i18n.t("withdraw", { lng: lang })}`} key="3">
             <TopupCollaborator type={type} />
           </Tabs.TabPane>
           {checkElement?.includes("get_punish_cash_book_collaborator") && (
-            <Tabs.TabPane tab="Phạt tiền" key="4">
+            <Tabs.TabPane
+              tab={`${i18n.t("monetary_fine", { lng: lang })}`}
+              key="4"
+            >
               <Punish />
             </Tabs.TabPane>
           )}
           {checkElement?.includes("get_reward_cash_book_collaborator") && (
-            <Tabs.TabPane tab="Thưởng tiền" key="5">
+            <Tabs.TabPane
+              tab={`${i18n.t("bonus_money", { lng: lang })}`}
+              key="5"
+            >
               <RewardCollaborator />
             </Tabs.TabPane>
           )}
@@ -91,4 +102,6 @@ export default function TopupManage() {
       </div>
     </React.Fragment>
   );
-}
+};
+
+export default TopupManage;

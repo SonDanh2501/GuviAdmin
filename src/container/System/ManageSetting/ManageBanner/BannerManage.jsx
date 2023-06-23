@@ -17,9 +17,13 @@ import ModalCustom from "../../../../components/modalCustom";
 import { errorNotify } from "../../../../helper/toast";
 import { getBanners } from "../../../../redux/actions/banner";
 import { loadingAction } from "../../../../redux/actions/loading";
-import { getElementState } from "../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../redux/selectors/auth";
 import { getBanner, getBannerTotal } from "../../../../redux/selectors/banner";
 import "./BannerManage.scss";
+import i18n from "../../../../i18n";
 
 const BannerManage = () => {
   const [dataFilter, setDataFilter] = useState([]);
@@ -37,6 +41,7 @@ const BannerManage = () => {
   const banners = useSelector(getBanner);
   const totalBanner = useSelector(getBannerTotal);
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getBanners.getBannersRequest({ start: 0, length: 20 }));
@@ -145,14 +150,14 @@ const BannerManage = () => {
     {
       key: "2",
       label: checkElement?.includes("delete_banner") && (
-        <a onClick={toggle}> Xoá</a>
+        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
       ),
     },
   ];
 
   const columns = [
     {
-      title: "Tên banner",
+      title: `${i18n.t("name", { lng: lang })}`,
       render: (data) => <a className="text-title-banner">{data?.title}</a>,
       width: "30%",
     },
@@ -162,7 +167,7 @@ const BannerManage = () => {
       align: "center",
     },
     {
-      title: "Vị trí",
+      title: `${i18n.t("position", { lng: lang })}`,
       render: (data) => <a className="text-title-banner">{data?.position}</a>,
       align: "center",
     },
@@ -179,7 +184,7 @@ const BannerManage = () => {
       },
     },
     {
-      title: "Hình",
+      title: `${i18n.t("image", { lng: lang })}`,
       render: (data) => {
         return (
           <Image
@@ -222,7 +227,7 @@ const BannerManage = () => {
       <div className="mt-2 p-3">
         <div className="div-header-banner">
           <Input
-            placeholder="Tìm kiếm"
+            placeholder={`${i18n.t("search", { lng: lang })}`}
             type="text"
             className="field-search"
             prefix={<SearchOutlined />}
@@ -251,7 +256,10 @@ const BannerManage = () => {
             }}
           />
           <div className="mt-2 div-pagination p-2">
-            <a>Tổng: {totalFilter > 0 ? totalFilter : totalBanner}</a>
+            <a>
+              {`${i18n.t("total", { lng: lang })}`}:{" "}
+              {totalFilter > 0 ? totalFilter : totalBanner}
+            </a>
             <div>
               <Pagination
                 current={currentPage}
@@ -266,15 +274,15 @@ const BannerManage = () => {
         <div>
           <ModalCustom
             isOpen={modal}
-            title="Xóa banner"
+            title={`${i18n.t("delete_banner", { lng: lang })}`}
             handleOk={() => onDelete(itemEdit?._id)}
             handleCancel={toggle}
-            textOk="Xoá"
+            textOk={`${i18n.t("delete", { lng: lang })}`}
             body={
-              <a>
-                Bạn có chắc muốn xóa banner{" "}
-                <a className="text-name-modal">{itemEdit?.title}</a> này không?
-              </a>
+              <>
+                <a>{`${i18n.t("want_delete_banner", { lng: lang })}`}</a>
+                <a className="text-name-modal">{itemEdit?.title}</a>
+              </>
             }
           />
         </div>
@@ -282,15 +290,23 @@ const BannerManage = () => {
         <div>
           <ModalCustom
             isOpen={modalBlock}
-            title={itemEdit?.is_active === true ? "Khóa banners" : "Mở banners"}
+            title={
+              itemEdit?.is_active === true
+                ? `${i18n.t("lock", { lng: lang })} banners`
+                : `${i18n.t("unlock", { lng: lang })} banners`
+            }
             handleOk={() => blockBanner(itemEdit?._id, itemEdit?.is_active)}
             handleCancel={toggleBlock}
-            textOk={itemEdit?.is_active === true ? "Khóa" : "Mở"}
+            textOk={
+              itemEdit?.is_active === true
+                ? `${i18n.t("lock", { lng: lang })}`
+                : `${i18n.t("unlock", { lng: lang })}`
+            }
             body={
               <>
                 {itemEdit?.is_active === true
-                  ? "Bạn có muốn khóa banner này"
-                  : "Bạn có muốn kích hoạt banner này"}
+                  ? `${i18n.t("want_lock_banner", { lng: lang })}`
+                  : `${i18n.t("want_unlock_banner", { lng: lang })}`}
                 <h6>{itemEdit?.title}</h6>
               </>
             }

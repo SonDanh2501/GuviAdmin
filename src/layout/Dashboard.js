@@ -56,7 +56,7 @@ const Dashboard = () => {
           onClose={() => setHideSidebar(false)}
           placement="left"
         >
-          <Sidebar />
+          <Sidebar hide={true} />
         </Drawer>
       )}
 

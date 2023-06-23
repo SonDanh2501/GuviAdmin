@@ -2,7 +2,7 @@ import { UilEllipsisV } from "@iconscout/react-unicons";
 import { SearchOutlined } from "@material-ui/icons";
 import { Dropdown, Image, Input, Pagination, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { activeNew, deleteNew, searchNew } from "../../../../api/news";
 import offToggle from "../../../../assets/images/off-button.png";
@@ -13,29 +13,32 @@ import ModalCustom from "../../../../components/modalCustom";
 import { errorNotify } from "../../../../helper/toast";
 import { loadingAction } from "../../../../redux/actions/loading";
 import { getNews } from "../../../../redux/actions/news";
-import { getElementState } from "../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../redux/selectors/auth";
 import { getNewSelector, getNewTotal } from "../../../../redux/selectors/news";
 import "./NewsManage.scss";
+import i18n from "../../../../i18n";
 
-export default function NewsManage() {
+const NewsManage = () => {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [itemEdit, setItemEdit] = React.useState([]);
-  const [modalEdit, setModalEdit] = React.useState(false);
-  const [modal, setModal] = React.useState(false);
-  const [modalBlock, setModalBlock] = React.useState(false);
+  const [itemEdit, setItemEdit] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [modalBlock, setModalBlock] = useState(false);
   const listNew = useSelector(getNewSelector);
   const totalNew = useSelector(getNewTotal);
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
   const checkElement = useSelector(getElementState);
-
+  const lang = useSelector(getLanguageState);
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(getNews.getNewsRequest({ start: 0, length: 10 }));
   }, [dispatch]);
 
@@ -132,24 +135,24 @@ export default function NewsManage() {
     {
       key: "2",
       label: checkElement?.includes("delete_news") && (
-        <a onClick={toggle}> Xoá</a>
+        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
       ),
     },
   ];
 
   const columns = [
     {
-      title: "Tiêu đề",
+      title: `${i18n.t("title", { lng: lang })}`,
       render: (data) => <a className="text-title-new">{data?.title}</a>,
     },
     {
-      title: "Mô tả ngắn",
+      title: `${i18n.t("short_description", { lng: lang })}`,
       render: (data) => (
         <a className="text-description-new">{data?.short_description}</a>
       ),
     },
     {
-      title: "Link bài viết",
+      title: "Link",
       render: (data) => {
         return (
           <a className="text-link-new">
@@ -159,16 +162,16 @@ export default function NewsManage() {
       },
     },
     {
-      title: "Loại ",
+      title: `${i18n.t("type", { lng: lang })}`,
       render: (data) => <a className="text-new">{data?.type}</a>,
     },
     {
-      title: "Position",
+      title: `${i18n.t("position", { lng: lang })}`,
       render: (data) => <a className="text-title-new">{data?.position}</a>,
       align: "center",
     },
     {
-      title: "Hình ",
+      title: `${i18n.t("image", { lng: lang })}`,
       render: (data) => {
         return (
           <Image
@@ -218,7 +221,7 @@ export default function NewsManage() {
       <div className="mt-2 p-3">
         <div className="div-header-new">
           <Input
-            placeholder="Tìm kiếm"
+            placeholder={`${i18n.t("search", { lng: lang })}`}
             type="text"
             className="field-search"
             prefix={<SearchOutlined />}
@@ -248,7 +251,10 @@ export default function NewsManage() {
           />
 
           <div className="mt-2 div-pagination p-2">
-            <a>Tổng: {totalFilter > 0 ? totalFilter : totalNew}</a>
+            <a>
+              {`${i18n.t("total", { lng: lang })}`}:{" "}
+              {totalFilter > 0 ? totalFilter : totalNew}
+            </a>
             <div>
               <Pagination
                 current={currentPage}
@@ -264,17 +270,23 @@ export default function NewsManage() {
           <ModalCustom
             isOpen={modalBlock}
             title={
-              itemEdit?.is_active === true ? "Khóa bài viết" : "Mở bài viết"
+              itemEdit?.is_active === true
+                ? `${i18n.t("post_lock", { lng: lang })}`
+                : `${i18n.t("post_unlock", { lng: lang })}`
             }
             handleOk={() => blockNew(itemEdit?._id, itemEdit?.is_active)}
             handleCancel={toggleBlock}
-            textOk={itemEdit?.is_active === true ? "Khóa" : "Mở"}
+            textOk={
+              itemEdit?.is_active === true
+                ? `${i18n.t("lock", { lng: lang })}`
+                : `${i18n.t("unlock", { lng: lang })}`
+            }
             body={
               <>
                 {itemEdit?.is_active === true
-                  ? "Bạn có muốn khóa bài viết này"
-                  : "Bạn có muốn kích hoạt bài viết này"}
-                <h7>{itemEdit?.title}</h7>
+                  ? `${i18n.t("want_post_lock", { lng: lang })}`
+                  : `${i18n.t("want_post_unlock", { lng: lang })}`}
+                <h7> {itemEdit?.title}</h7>
               </>
             }
           />
@@ -283,16 +295,21 @@ export default function NewsManage() {
         <div>
           <ModalCustom
             isOpen={modal}
-            title="Xóa bài viết"
+            title={`${i18n.t("post_delete", { lng: lang })}`}
             handleOk={() => onDelete(itemEdit?._id)}
             handleCancel={toggle}
-            textOk="Xoá"
+            textOk={`${i18n.t("delete", { lng: lang })}`}
             body={
-              <a>Bạn có chắc muốn xóa bài viết {itemEdit?.title} này không?</a>
+              <>
+                <a>{`${i18n.t("want_post_delete", { lng: lang })}`}</a>
+                <a> {itemEdit?.title}</a>
+              </>
             }
           />
         </div>
       </div>
     </React.Fragment>
   );
-}
+};
+
+export default NewsManage;

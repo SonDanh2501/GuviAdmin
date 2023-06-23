@@ -1,10 +1,9 @@
-import { Drawer, Input, InputNumber, Select } from "antd";
+import { Drawer, Input, InputNumber, List, Select } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { memo, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { List } from "reactstrap";
 import { searchCollaborators } from "../../api/collaborator";
 import {
   TopupMoneyCollaboratorApi,
@@ -13,13 +12,14 @@ import {
 import { errorNotify, successNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
 import { getRevenueCollaborator } from "../../redux/actions/topup";
-import { getElementState } from "../../redux/selectors/auth";
+import { getElementState, getLanguageState } from "../../redux/selectors/auth";
 import CustomButton from "../customButton/customButton";
 import "./addTopup.scss";
+import i18n from "../../i18n";
+import InputCustom from "../textInputCustom";
 
 const AddPopup = (props) => {
   const { type, setDataT, setTotal } = props;
-  const [state, setState] = useState(false);
   const [money, setMoney] = useState("");
   const [note, setNote] = useState("");
   const [data, setData] = useState([]);
@@ -32,6 +32,7 @@ const AddPopup = (props) => {
   const checkElement = useSelector(getElementState);
   const width = window.innerWidth;
   const [open, setOpen] = useState(false);
+  const lang = useSelector(getLanguageState);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -105,7 +106,7 @@ const AddPopup = (props) => {
   return (
     <>
       <CustomButton
-        title="Nạp tiền"
+        title={`${i18n.t("recharge", { lng: lang })}`}
         className={
           checkElement?.includes("create_cash_book_collaborator")
             ? "btn-add-topup-collaborator"
@@ -115,7 +116,7 @@ const AddPopup = (props) => {
         onClick={showDrawer}
       />
       <Drawer
-        title="Nạp tiền cộng tác viên"
+        title={`${i18n.t("collaborator_recharge", { lng: lang })}`}
         width={width > 490 ? 500 : 300}
         onClose={onClose}
         open={open}
@@ -125,16 +126,16 @@ const AddPopup = (props) => {
       >
         <div className="modal-body">
           <div>
-            <a>(*)Cộng tác viên</a>
-            <Input
-              placeholder="Tìm kiếm theo số điện thoại"
+            <InputCustom
+              title={`${i18n.t("collaborator", { lng: lang })}`}
+              placeholder={`${i18n.t("search", { lng: lang })}`}
               value={name}
               onChange={(e) => {
                 searchCollaborator(e.target.value);
                 setName(e.target.value);
               }}
+              error={errorName}
             />
-            {errorName && <a className="error">{errorName}</a>}
             {data.length > 0 && (
               <List type={"unstyled"} className="list-item">
                 {data?.map((item, index) => {
@@ -159,7 +160,7 @@ const AddPopup = (props) => {
           </div>
 
           <div className="div-money">
-            <a>(*) Nhập số tiền</a>
+            <a>(*) {`${i18n.t("money", { lng: lang })}`}</a>
             <InputNumber
               formatter={(value) =>
                 `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
@@ -170,11 +171,11 @@ const AddPopup = (props) => {
           </div>
 
           <div className="mt-2">
-            <a>Nội dung</a>
-            <TextArea
-              placeholder="Vui lòng nhập nội dung chuyển tiền"
+            <InputCustom
+              title={`${i18n.t("content", { lng: lang })}`}
               value={note}
               onChange={(e) => setNote(e.target.value)}
+              textArea={true}
             />
           </div>
 

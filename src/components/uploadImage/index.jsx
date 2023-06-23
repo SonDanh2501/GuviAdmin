@@ -36,6 +36,7 @@ const UploadImage = (props) => {
           dispatch(loadingAction.loadingRequest(false));
         })
         .catch((err) => {
+          setImage("");
           errorNotify({
             message: err,
           });

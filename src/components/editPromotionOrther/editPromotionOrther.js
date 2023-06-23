@@ -1,11 +1,20 @@
-import { Checkbox, DatePicker, Input, List, Select } from "antd";
+import {
+  Button,
+  Checkbox,
+  Col,
+  DatePicker,
+  Input,
+  List,
+  Modal,
+  Row,
+  Select,
+} from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Modal, Row } from "reactstrap";
 import { searchCustomersApi } from "../../api/customer";
 import { DATA_PAYMENT } from "../../api/fakeData";
 import {
@@ -20,6 +29,9 @@ import { getService } from "../../redux/selectors/service";
 import CustomTextEditor from "../customTextEdittor";
 import UploadImage from "../uploadImage";
 import "./editPromotionOrther.scss";
+import i18n from "../../i18n";
+import { getLanguageState } from "../../redux/selectors/auth";
+import InputCustom from "../textInputCustom";
 dayjs.extend(customParseFormat);
 const { TextArea } = Input;
 
@@ -85,7 +97,7 @@ const EditPromotionOrther = (props) => {
   const optionsCustomer = [];
   const dateFormat = "YYYY-MM-DD";
   const dispatch = useDispatch();
-  const service = useSelector(getService);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getGroupCustomerApi(0, 10)
@@ -317,376 +329,377 @@ const EditPromotionOrther = (props) => {
     <>
       {/* Modal */}
       <Modal
-        fullscreen={true}
-        fade={true}
-        isOpen={state}
-        size="lg"
-        style={{ maxWidth: "1200px", width: "100%" }}
-        toggle={() => setState(!state)}
+        centered
+        open={state}
+        width={1200}
+        onCancel={() => setState(!state)}
+        footer={null}
+        title={`${i18n.t("edit_promotion", { lng: lang })}`}
       >
-        <div className="modal-header">
-          <h3 className="modal-title" id="exampleModalLabel">
-            Sửa khuyến mãi từ đối tác
-          </h3>
-          <button className="btn-close" onClick={() => setState(!state)}>
-            <i className="uil uil-times-square"></i>
-          </button>
-        </div>
         <div className="modal-body">
-          <div className="form-input">
-            <Row>
-              <Col md={4}>
+          <Row>
+            <Col span={8}>
+              <div>
+                <a className="title-add-promo">
+                  1. {`${i18n.t("title", { lng: lang })}`}
+                </a>
+                <InputCustom
+                  title={`${i18n.t("vietnamese", { lng: lang })}`}
+                  value={titleVN}
+                  onChange={(e) => setTitleVN(e.target.value)}
+                />
+                <InputCustom
+                  title={`${i18n.t("english", { lng: lang })}`}
+                  value={titleEN}
+                  onChange={(e) => setTitleEN(e.target.value)}
+                  style={{ marginTop: 5 }}
+                />
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">
+                  2. {`${i18n.t("describe", { lng: lang })}`}
+                </a>
+                <InputCustom
+                  title={`${i18n.t("vietnamese", { lng: lang })}`}
+                  value={shortDescriptionVN}
+                  onChange={(e) => setShortDescriptionVN(e.target.value)}
+                  textArea={true}
+                />
+                <InputCustom
+                  title={`${i18n.t("english", { lng: lang })}`}
+                  value={shortDescriptionEN}
+                  onChange={(e) => setShortDescriptionEN(e.target.value)}
+                  style={{ marginTop: 5 }}
+                  textArea={true}
+                />
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">
+                  3. {`${i18n.t("detailed_description", { lng: lang })}`}
+                </a>
                 <div>
-                  <a className="title-add-promo">1. Tiêu đề</a>
-                  <Input
-                    placeholder="Nhập tiêu đề tiếng việt"
-                    value={titleVN}
-                    onChange={(e) => setTitleVN(e.target.value)}
-                  />
-                  <Input
-                    placeholder="Nhập tiêu đề tiếng anh"
-                    value={titleEN}
-                    onChange={(e) => setTitleEN(e.target.value)}
-                    style={{ marginTop: 5 }}
+                  <a>{`${i18n.t("vietnamese", { lng: lang })}`}</a>
+                  <CustomTextEditor
+                    value={descriptionVN}
+                    onChangeValue={setDescriptionVN}
                   />
                 </div>
                 <div className="mt-2">
-                  <a className="title-add-promo">2. Mô tả</a>
-                  <TextArea
-                    placeholder="Nhập mô tả tiếng việt"
-                    value={shortDescriptionVN}
-                    onChange={(e) => setShortDescriptionVN(e.target.value)}
-                  />
-                  <TextArea
-                    label={"Tiếng Anh"}
-                    placeholder="Nhập mô tả tiếng anh"
-                    value={shortDescriptionEN}
-                    onChange={(e) => setShortDescriptionEN(e.target.value)}
-                    style={{ marginTop: 5 }}
+                  <a>{`${i18n.t("english", { lng: lang })}`}</a>
+                  <CustomTextEditor
+                    value={descriptionEN}
+                    onChangeValue={setDescriptionEN}
                   />
                 </div>
-                <div className="mt-2">
-                  <a className="title-add-promo">3. Mô tả chi tiết</a>
-                  <div>
-                    <a>Tiếng Việt</a>
-                    <CustomTextEditor
-                      value={descriptionVN}
-                      onChangeValue={setDescriptionVN}
-                    />
-                  </div>
-                  <div className="mt-2">
-                    <a>Tiếng Anh</a>
-                    <CustomTextEditor
-                      value={descriptionEN}
-                      onChangeValue={setDescriptionEN}
-                    />
-                  </div>
-                </div>
-              </Col>
-              <Col md={4}>
+              </div>
+            </Col>
+            <Col span={8} className="ml-3">
+              <div>
+                <a className="title-add-promo">4. Thumbnail/Background</a>
+                <UploadImage
+                  title={"Thumbnail 160px * 170px"}
+                  image={imgThumbnail}
+                  setImage={setImgThumbnail}
+                  classImg={"img-thumbnail"}
+                />
+                <UploadImage
+                  title={"Background 414px * 200px"}
+                  image={imgBackground}
+                  setImage={setImgBackground}
+                  classImg={"img-background"}
+                />
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">
+                  5. {`${i18n.t("promotion_code", { lng: lang })}`}
+                </a>
+                <Input
+                  placeholder={`${i18n.t("placeholder", { lng: lang })}`}
+                  type="text"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value)}
+                />
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">
+                  6. {`${i18n.t("partner_name", { lng: lang })}`}
+                </a>
+                <Input
+                  className="input-promo-brand"
+                  type="text"
+                  value={namebrand}
+                  onChange={(e) => setNamebrand(e.target.value)}
+                />
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">
+                  7. {`${i18n.t("applicable_object", { lng: lang })}`}
+                </a>
                 <div>
-                  <a className="title-add-promo">4. Thumbnail/Background</a>
-                  <UploadImage
-                    title={"Thumbnail 160px * 170px"}
-                    image={imgThumbnail}
-                    setImage={setImgThumbnail}
-                    classImg={"img-thumbnail"}
-                  />
-                  <UploadImage
-                    title={"Background 414px * 200px"}
-                    image={imgBackground}
-                    setImage={setImgBackground}
-                    classImg={"img-background"}
-                  />
+                  <Checkbox
+                    checked={isGroupCustomer}
+                    onChange={(e) => setIsGroupCustomer(e.target.checked)}
+                  >
+                    {`${i18n.t("customer_group", { lng: lang })}`}
+                  </Checkbox>
+                  {isGroupCustomer && (
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      style={{
+                        width: "100%",
+                      }}
+                      placeholder="Please select"
+                      onChange={handleChange}
+                      options={options}
+                      value={groupCustomer}
+                    />
+                  )}
                 </div>
-                <div className="mt-2">
-                  <a className="title-add-promo">5. Mã khuyến mãi</a>
-                  <Input
-                    placeholder="Nhập mã khuyến mãi"
-                    type="text"
-                    value={promoCode}
-                    onChange={(e) => setPromoCode(e.target.value)}
-                  />
-                </div>
-                <div className="mt-2">
-                  <a className="title-add-promo">6. Tên đối tác</a>
-                  <Input
-                    placeholder="Nhập tên đối tác"
-                    className="input-promo-brand"
-                    type="text"
-                    value={namebrand}
-                    onChange={(e) => setNamebrand(e.target.value)}
-                  />
-                </div>
-                <div className="mt-2">
-                  <a className="title-add-promo">7. Đối tượng áp dụng</a>
-                  <div>
-                    <Checkbox
-                      checked={isGroupCustomer}
-                      onChange={(e) => setIsGroupCustomer(e.target.checked)}
-                    >
-                      Nhóm khách hàng
-                    </Checkbox>
-                    {isGroupCustomer && (
-                      <Select
-                        mode="multiple"
-                        allowClear
-                        style={{
-                          width: "100%",
+                <div>
+                  <Checkbox
+                    checked={isCustomer}
+                    onChange={(e) => setIsCustomer(e.target.checked)}
+                  >
+                    {`${i18n.t("customer_apply", { lng: lang })}`}
+                  </Checkbox>
+                  {isCustomer && (
+                    <div>
+                      <Input
+                        placeholder={`${i18n.t("search", { lng: lang })}`}
+                        value={name}
+                        onChange={(e) => {
+                          changeValue(e.target.value);
+                          searchCustomer(e.target.value);
                         }}
-                        placeholder="Please select"
-                        onChange={handleChange}
-                        options={options}
-                        value={groupCustomer}
                       />
-                    )}
-                  </div>
-                  <div>
-                    <Checkbox
-                      checked={isCustomer}
-                      onChange={(e) => setIsCustomer(e.target.checked)}
-                    >
-                      Áp dụng cho khách hàng
-                    </Checkbox>
-                    {isCustomer && (
-                      <div>
-                        <Input
-                          placeholder="Tìm kiếm theo tên và số điện thoại"
-                          value={name}
-                          onChange={(e) => {
-                            changeValue(e.target.value);
-                            searchCustomer(e.target.value);
-                          }}
-                        />
-                        {dataL.length > 0 && (
-                          <List type={"unstyled"} className="list-item-kh">
-                            {dataL?.map((item, index) => {
+                      {dataL.length > 0 && (
+                        <List type={"unstyled"} className="list-item-kh">
+                          {dataL?.map((item, index) => {
+                            return (
+                              <div
+                                className="div-item"
+                                key={index}
+                                onClick={() => onChooseCustomer(item)}
+                              >
+                                <a className="text-name">
+                                  {item?.full_name} - {item?.phone} -{" "}
+                                  {item?.id_view}
+                                </a>
+                              </div>
+                            );
+                          })}
+                        </List>
+                      )}
+                      {listNameCustomers.length > 0 && (
+                        <div className="div-list-customer">
+                          <List type={"unstyled"}>
+                            {listNameCustomers.map((item) => {
                               return (
-                                <div
-                                  className="div-item"
-                                  key={index}
-                                  onClick={() => onChooseCustomer(item)}
-                                >
-                                  <a className="text-name">
-                                    {item?.full_name} - {item?.phone} -{" "}
+                                <div className="div-item-customer">
+                                  <a className="text-name-list">
+                                    - {item?.full_name} . {item?.phone} .{" "}
                                     {item?.id_view}
                                   </a>
+                                  <i
+                                    class="uil uil-times-circle"
+                                    onClick={() => removeItemCustomer(item)}
+                                  ></i>
                                 </div>
                               );
                             })}
                           </List>
-                        )}
-                        {listNameCustomers.length > 0 && (
-                          <div className="div-list-customer">
-                            <List type={"unstyled"}>
-                              {listNameCustomers.map((item) => {
-                                return (
-                                  <div className="div-item-customer">
-                                    <a className="text-name-list">
-                                      - {item?.full_name} . {item?.phone} .{" "}
-                                      {item?.id_view}
-                                    </a>
-                                    <i
-                                      class="uil uil-times-circle"
-                                      onClick={() => removeItemCustomer(item)}
-                                    ></i>
-                                  </div>
-                                );
-                              })}
-                            </List>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
-              </Col>
-              <Col md={4}>
+              </div>
+            </Col>
+            <Col span={7} className="ml-3">
+              <div>
+                <a className="title-add-promo">
+                  8. {`${i18n.t("number_promo", { lng: lang })}`}
+                </a>
                 <div>
-                  <a className="title-add-promo">8. Số lượng mã khuyến mãi</a>
-                  <div>
-                    <Checkbox
-                      checked={limitedQuantity}
-                      onChange={(e) => setLimitedQuantity(e.target.checked)}
-                    >
-                      Số lượng giới hạn
-                    </Checkbox>
-                    {limitedQuantity && (
-                      <Input
-                        placeholder="Số lượng"
-                        className="input-promo-code"
-                        type="number"
-                        min={0}
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                      />
-                    )}
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <a className="title-add-promo">
-                    9. Số lần sử dụng khuyến mãi
-                  </a>
-                  <div>
-                    <Checkbox
-                      checked={isUsePromo}
-                      onChange={(e) => setIsUsePromo(e.target.checked)}
-                    >
-                      Lần sử dụng khuyến mãi
-                    </Checkbox>
-                    {isUsePromo && (
-                      <Input
-                        placeholder="Số lượng"
-                        className="input-promo-code"
-                        min={0}
-                        type="number"
-                        value={usePromo}
-                        onChange={(e) => setUsePromo(e.target.value)}
-                      />
-                    )}
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <a className="title-add-promo">10. Thời gian khuyến mãi</a>
-                  <div>
-                    <Checkbox
-                      checked={limitedDate}
-                      onChange={(e) => setLimitedDate(e.target.checked)}
-                    >
-                      Giới hạn ngày
-                    </Checkbox>
-                    {limitedDate && (
-                      <>
-                        <div>
-                          <a>Ngày bắt đầu</a>
-                          <DatePicker
-                            onChange={(date, dateString) =>
-                              setStartDate(
-                                moment(moment(date?.$d).toISOString())
-                                  .add("hours", 7)
-                                  .toISOString()
-                              )
-                            }
-                            style={{ marginLeft: 5, width: "100%" }}
-                            format={dateFormat}
-                            value={
-                              startDate
-                                ? dayjs(startDate?.slice(0, 11), dateFormat)
-                                : ""
-                            }
-                            allowClear={false}
-                          />
-                        </div>
-                        <div>
-                          <a>Ngày kết thúc</a>
-                          <DatePicker
-                            onChange={(date, dateString) =>
-                              setEndDate(
-                                moment(moment(date?.$d).toISOString())
-                                  .add("hours", 7)
-                                  .toISOString()
-                              )
-                            }
-                            style={{ marginLeft: 5, width: "100%" }}
-                            format={dateFormat}
-                            value={
-                              endDate
-                                ? dayjs(endDate?.slice(0, 11), dateFormat)
-                                : ""
-                            }
-                            allowClear={false}
-                          />
-                          {/* <input
-                              className="input-promo-code"
-                              type={"date"}
-                              defaultValue={startDate}
-                              value={endDate}
-                              onChange={(e) => setEndDate(e.target.value)}
-                            /> */}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <a className="title-add-promo">11. Điểm quy đổi</a>
-                  <div>
-                    <Checkbox
-                      checked={isExchangePoint}
-                      onChange={(e) => setIsExchangePoint(e.target.checked)}
-                    >
-                      Điểm quy đổi
-                    </Checkbox>
-                    {isExchangePoint && (
-                      <Input
-                        placeholder="Nhập số điểm"
-                        type="number"
-                        min={0}
-                        value={exchangePoint}
-                        onChange={(e) => setExchangePoint(e.target.value)}
-                      />
-                    )}
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <a className="title-add-promo">12. Phương thức thanh toán</a>
-                  <div>
-                    <Checkbox
-                      checked={isPaymentMethod}
-                      onChange={(e) => setIsPaymentMethod(e.target.checked)}
-                    >
-                      Thanh toán
-                    </Checkbox>
-                    {isPaymentMethod && (
-                      <Select
-                        mode="multiple"
-                        allowClear
-                        style={{
-                          width: "100%",
-                        }}
-                        placeholder="Please select"
-                        onChange={handleChangePaymentMethod}
-                        options={DATA_PAYMENT}
-                      />
-                    )}
-                  </div>
-                </div>
-                {isExchangePoint && (
-                  <div className="mt-2">
-                    <a className="title-add-promo">
-                      13. Thời gian sử dụng sau khi đổi
-                    </a>
+                  <Checkbox
+                    checked={limitedQuantity}
+                    onChange={(e) => setLimitedQuantity(e.target.checked)}
+                  >
+                    {`${i18n.t("limited_quantity", { lng: lang })}`}
+                  </Checkbox>
+                  {limitedQuantity && (
                     <Input
-                      placeholder="Nhập số ngày (1,2,3...,n"
                       className="input-promo-code"
                       type="number"
                       min={0}
-                      value={dateExchange}
-                      onChange={(e) => setDateExchange(e.target.value)}
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
                     />
-                  </div>
-                )}
-
+                  )}
+                </div>
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">
+                  9. {`${i18n.t("number_use_promotion", { lng: lang })}`}
+                </a>
+                <div>
+                  <Checkbox
+                    checked={isUsePromo}
+                    onChange={(e) => setIsUsePromo(e.target.checked)}
+                  >
+                    {`${i18n.t("promo_use_time", { lng: lang })}`}
+                  </Checkbox>
+                  {isUsePromo && (
+                    <Input
+                      className="input-promo-code"
+                      min={0}
+                      type="number"
+                      value={usePromo}
+                      onChange={(e) => setUsePromo(e.target.value)}
+                    />
+                  )}
+                </div>
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">
+                  10. {`${i18n.t("promotion_time", { lng: lang })}`}
+                </a>
+                <div>
+                  <Checkbox
+                    checked={limitedDate}
+                    onChange={(e) => setLimitedDate(e.target.checked)}
+                  >
+                    {`${i18n.t("limit_date", { lng: lang })}`}
+                  </Checkbox>
+                  {limitedDate && (
+                    <>
+                      <div>
+                        <a>{`${i18n.t("start_date", { lng: lang })}`}</a>
+                        <DatePicker
+                          onChange={(date, dateString) =>
+                            setStartDate(
+                              moment(moment(date?.$d).toISOString())
+                                .add("hours", 7)
+                                .toISOString()
+                            )
+                          }
+                          style={{ marginLeft: 5, width: "100%" }}
+                          format={dateFormat}
+                          value={
+                            startDate
+                              ? dayjs(startDate?.slice(0, 11), dateFormat)
+                              : ""
+                          }
+                          allowClear={false}
+                        />
+                      </div>
+                      <div>
+                        <a>{`${i18n.t("end_date", { lng: lang })}`}</a>
+                        <DatePicker
+                          onChange={(date, dateString) =>
+                            setEndDate(
+                              moment(moment(date?.$d).toISOString())
+                                .add("hours", 7)
+                                .toISOString()
+                            )
+                          }
+                          style={{ marginLeft: 5, width: "100%" }}
+                          format={dateFormat}
+                          value={
+                            endDate
+                              ? dayjs(endDate?.slice(0, 11), dateFormat)
+                              : ""
+                          }
+                          allowClear={false}
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">
+                  11. {`${i18n.t("redemption_points", { lng: lang })}`}
+                </a>
+                <div>
+                  <Checkbox
+                    checked={isExchangePoint}
+                    onChange={(e) => setIsExchangePoint(e.target.checked)}
+                  >
+                    {`${i18n.t("redemption_points", { lng: lang })}`}
+                  </Checkbox>
+                  {isExchangePoint && (
+                    <Input
+                      type="number"
+                      min={0}
+                      value={exchangePoint}
+                      onChange={(e) => setExchangePoint(e.target.value)}
+                    />
+                  )}
+                </div>
+              </div>
+              <div className="mt-2">
+                <a className="title-add-promo">
+                  12. {`${i18n.t("payment_method", { lng: lang })}`}
+                </a>
+                <div>
+                  <Checkbox
+                    checked={isPaymentMethod}
+                    onChange={(e) => setIsPaymentMethod(e.target.checked)}
+                  >
+                    {`${i18n.t("payment", { lng: lang })}`}
+                  </Checkbox>
+                  {isPaymentMethod && (
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      style={{
+                        width: "100%",
+                      }}
+                      placeholder="Please select"
+                      onChange={handleChangePaymentMethod}
+                      options={DATA_PAYMENT}
+                    />
+                  )}
+                </div>
+              </div>
+              {isExchangePoint && (
                 <div className="mt-2">
-                  <a className="title-add-promo">14. Thứ tự hiện thị</a>
+                  <a className="title-add-promo">
+                    13.{" "}
+                    {`${i18n.t("usage_time_after_exchange", { lng: lang })}`}
+                  </a>
                   <Input
-                    placeholder="Nhập số thứ tự (1,2,3...,n"
                     className="input-promo-code"
                     type="number"
                     min={0}
-                    value={position}
-                    onChange={(e) => setPosition(e.target.value)}
+                    value={dateExchange}
+                    onChange={(e) => setDateExchange(e.target.value)}
                   />
                 </div>
-                <Button
-                  className="btn-edit-promotion-orther"
-                  onClick={onEditPromotion}
-                >
-                  Sửa khuyến mãi
-                </Button>
-              </Col>
-            </Row>
-          </div>
+              )}
+
+              <div className="mt-2">
+                <a className="title-add-promo">
+                  14. {`${i18n.t("position", { lng: lang })}`}
+                </a>
+                <Input
+                  className="input-promo-code"
+                  type="number"
+                  min={0}
+                  value={position}
+                  onChange={(e) => setPosition(e.target.value)}
+                />
+              </div>
+              <Button
+                className="btn-edit-promotion-orther"
+                onClick={onEditPromotion}
+              >
+                {`${i18n.t("edit_promotion", { lng: lang })}`}
+              </Button>
+            </Col>
+          </Row>
         </div>
       </Modal>
     </>

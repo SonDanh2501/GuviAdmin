@@ -20,8 +20,13 @@ import Withdraw from "../../../../../components/withdraw/withdraw";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify, successNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
-import { getElementState, getUser } from "../../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+  getUser,
+} from "../../../../../redux/selectors/auth";
 import "./index.scss";
+import i18n from "../../../../../i18n";
 const width = window.innerWidth;
 
 const TopupCollaborator = ({ type }) => {
@@ -45,6 +50,7 @@ const TopupCollaborator = ({ type }) => {
   const toggleCancel = () => setModalCancel(!modalCancel);
   const user = useSelector(getUser);
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -177,7 +183,7 @@ const TopupCollaborator = ({ type }) => {
 
   const columns = [
     {
-      title: "Mã",
+      title: `${i18n.t("code", { lng: lang })}`,
       render: (data) => (
         <a
           className="text-id"
@@ -192,7 +198,7 @@ const TopupCollaborator = ({ type }) => {
       ),
     },
     {
-      title: "Tên cộng tác viên",
+      title: `${i18n.t("collaborator", { lng: lang })}`,
       render: (data) => {
         return (
           <Link
@@ -208,26 +214,30 @@ const TopupCollaborator = ({ type }) => {
       },
     },
     {
-      title: "Số tiền",
+      title: `${i18n.t("money", { lng: lang })}`,
       render: (data) => (
         <a className="text-money-topup">{formatMoney(data?.money)}</a>
       ),
       sorter: (a, b) => a.money - b.money,
     },
     {
-      title: "Nạp/rút",
+      title: `${i18n.t("topup_withdraw", { lng: lang })}`,
       render: (data) => {
         return (
           <>
             {data?.type_transfer === "top_up" ? (
               <div>
                 <i class="uil uil-money-insert icon-topup"></i>
-                <a className="text-topup">Nạp</a>
+                <a className="text-topup">{`${i18n.t("topup", {
+                  lng: lang,
+                })}`}</a>
               </div>
             ) : (
               <div>
                 <i class="uil uil-money-withdraw icon-withdraw"></i>
-                <a className="text-withdraw">Rút</a>
+                <a className="text-withdraw">
+                  {`${i18n.t("withdraw", { lng: lang })}`}
+                </a>
               </div>
             )}
           </>
@@ -235,13 +245,13 @@ const TopupCollaborator = ({ type }) => {
       },
     },
     {
-      title: "Nội dung",
+      title: `${i18n.t("content", { lng: lang })}`,
       render: (data) => (
         <a className="text-description-topup">{data?.transfer_note}</a>
       ),
     },
     {
-      title: "Ngày nạp",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-time-topup">
@@ -256,27 +266,37 @@ const TopupCollaborator = ({ type }) => {
       },
     },
     {
-      title: "Ví",
+      title: `${i18n.t("wallet", { lng: lang })}`,
       render: (data) => (
         <a className="text-name-verify">
-          {data?.type_wallet === "wallet" ? "Ví chính" : "Ví thưởng"}
+          {data?.type_wallet === "wallet"
+            ? `${i18n.t("main_wallet", { lng: lang })}`
+            : `${i18n.t("gift_wallet", { lng: lang })}`}
         </a>
       ),
       align: "center",
     },
     {
-      title: "Trạng thái",
+      title: `${i18n.t("status", { lng: lang })}`,
       render: (data) => {
         return (
           <div>
             {data?.status === "pending" ? (
-              <a className="text-pending-topup">Đang xử lý</a>
+              <a className="text-pending-topup">{`${i18n.t("processing", {
+                lng: lang,
+              })}`}</a>
             ) : data?.status === "transfered" ? (
-              <a className="text-transfered">Đã chuyển tiền</a>
+              <a className="text-transfered">{`${i18n.t("money_transferred", {
+                lng: lang,
+              })}`}</a>
             ) : data?.status === "done" ? (
-              <a className="text-done-topup">Hoàn tất</a>
+              <a className="text-done-topup">{`${i18n.t("complete", {
+                lng: lang,
+              })}`}</a>
             ) : (
-              <a className="text-cancel-topup-ctv">Đã huỷ</a>
+              <a className="text-cancel-topup-ctv">{`${i18n.t("cancel", {
+                lng: lang,
+              })}`}</a>
             )}
           </div>
         );
@@ -284,7 +304,7 @@ const TopupCollaborator = ({ type }) => {
       align: "center",
     },
     {
-      title: "Người duyệt",
+      title: `${i18n.t("approved_by", { lng: lang })}`,
       render: (data) => {
         return (
           <a className="text-name-verify">{data?.id_admin_verify?.full_name}</a>
@@ -315,14 +335,19 @@ const TopupCollaborator = ({ type }) => {
                   : false
               }
             >
-              Duyệt lệnh
+              {`${i18n.t("approvals", { lng: lang })}`}
             </button>
             <div className="mt-1 ml-3">
               {(data?.status === "pending" ||
                 data?.status === "transfered") && (
-                <Tooltip placement="bottom" title={"Huỷ giao dịch CTV"}>
+                <Tooltip
+                  placement="bottom"
+                  title={`${i18n.t("cancel_collaborator_transaction", {
+                    lng: lang,
+                  })}`}
+                >
                   <a className="text-cancel-topup" onClick={toggleCancel}>
-                    Huỷ
+                    {`${i18n.t("cancel_modal", { lng: lang })}`}
                   </a>
                 </Tooltip>
               )}
@@ -338,7 +363,9 @@ const TopupCollaborator = ({ type }) => {
                     {checkElement?.includes("edit_cash_book_collaborator") && (
                       <Tooltip
                         placement="bottom"
-                        title={"Chỉnh sửa giao dịch CTV"}
+                        title={`${i18n.t("edit_collaborator_transaction", {
+                          lng: lang,
+                        })}`}
                       >
                         <EditTopup
                           item={itemEdit}
@@ -366,7 +393,12 @@ const TopupCollaborator = ({ type }) => {
               {checkElement?.includes(
                 "delete_transition_cash_book_collaborator"
               ) && (
-                <Tooltip placement="bottom" title={"Xoá giao dịch CTV"}>
+                <Tooltip
+                  placement="bottom"
+                  title={`${i18n.t("delete_collaborator_transaction", {
+                    lng: lang,
+                  })}`}
+                >
                   <button className="btn-delete" onClick={toggle}>
                     <i className="uil uil-trash"></i>
                   </button>
@@ -394,7 +426,9 @@ const TopupCollaborator = ({ type }) => {
         )}
 
         <Input
-          placeholder="Tìm kiếm"
+          placeholder={`${i18n.t("search", {
+            lng: lang,
+          })}`}
           type="text"
           className="input-search-topup"
           prefix={<SearchOutlined />}
@@ -433,7 +467,10 @@ const TopupCollaborator = ({ type }) => {
         />
       </div>
       <div className="div-pagination p-2">
-        <a>Tổng: {totalSearch > 0 ? totalSearch : total}</a>
+        <a>
+          {`${i18n.t("total", { lng: lang })}`}:{" "}
+          {totalSearch > 0 ? totalSearch : total}
+        </a>
         <div>
           <Pagination
             current={currentPage}

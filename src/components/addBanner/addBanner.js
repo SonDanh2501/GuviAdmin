@@ -1,20 +1,19 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postFile } from "../../api/file";
 import { errorNotify } from "../../helper/toast";
 import { getBanners } from "../../redux/actions/banner";
 import { loadingAction } from "../../redux/actions/loading";
-import { getPromotion } from "../../redux/actions/promotion";
-import { getPromotionSelector } from "../../redux/selectors/promotion";
 import CustomButton from "../customButton/customButton";
 
-import { Drawer, Image, Input, Select } from "antd";
+import { Drawer, Input, Select } from "antd";
 import { createBanner } from "../../api/banner";
-import resizeFile from "../../helper/resizer";
-import { getService } from "../../redux/selectors/service";
-import "./addBanner.scss";
-import UploadImage from "../uploadImage";
 import { getPromotionList } from "../../api/promotion";
+import { getService } from "../../redux/selectors/service";
+import UploadImage from "../uploadImage";
+import "./addBanner.scss";
+import { getLanguageState } from "../../redux/selectors/auth";
+import i18n from "../../i18n";
+import InputCustom from "../textInputCustom";
 
 const AddBanner = () => {
   const [title, setTitle] = useState("");
@@ -26,6 +25,7 @@ const AddBanner = () => {
   const [kindService, setKindService] = useState("giup_viec_co_dinh");
   const dispatch = useDispatch();
   const service = useSelector(getService);
+  const lang = useSelector(getLanguageState);
   const [open, setOpen] = useState(false);
   const promotionOption = [];
   const serviceOption = [];
@@ -87,7 +87,7 @@ const AddBanner = () => {
     <>
       {/* Button trigger modal */}
       <CustomButton
-        title="Thêm banner"
+        title={`${i18n.t("create_banner", { lng: lang })}`}
         className="btn-add-banner"
         type="button"
         // onClick={() => setState(!state)}
@@ -95,7 +95,7 @@ const AddBanner = () => {
       />
 
       <Drawer
-        title="Thêm banner"
+        title={`${i18n.t("create_banner", { lng: lang })}`}
         width={420}
         onClose={onClose}
         open={open}
@@ -104,9 +104,9 @@ const AddBanner = () => {
         }}
       >
         <div>
-          <a>Tiêu đề</a>
-          <Input
-            placeholder="Vui lòng nhập tiêu đề"
+          <InputCustom
+            title={`${i18n.t("title", { lng: lang })}`}
+            placeholder={`${i18n.t("placeholder", { lng: lang })}`}
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -114,8 +114,8 @@ const AddBanner = () => {
         </div>
 
         <div className="mt-2">
-          <a>Loại banner</a>
-          <Select
+          <InputCustom
+            title={`${i18n.t("banner_type", { lng: lang })}`}
             style={{ width: "100%" }}
             value={typeLink}
             onChange={(e) => setTypeLink(e)}
@@ -124,13 +124,14 @@ const AddBanner = () => {
               { value: "promotion", label: "Promotion" },
               { value: "service", label: "Service" },
             ]}
+            select={true}
           />
         </div>
         <div className="mt-2">
           {typeLink === "url" ? (
             <div>
-              <a>Link URL</a>
-              <Input
+              <InputCustom
+                title="Link URL"
                 style={{ width: "100%" }}
                 type="text"
                 value={linkID}
@@ -139,18 +140,19 @@ const AddBanner = () => {
             </div>
           ) : typeLink === "promotion" ? (
             <div>
-              <a>Chọn mã khuyến mãi</a>
-              <Select
+              <InputCustom
+                title={`${i18n.t("select_promotion", { lng: lang })}`}
                 style={{ width: "100%" }}
                 value={linkID}
                 onChange={(e) => setLinkId(e)}
                 options={promotionOption}
+                select={true}
               />
             </div>
           ) : (
             <div>
-              <a>Link ID</a>
-              <Select
+              <InputCustom
+                title="Link ID"
                 style={{ width: "100%" }}
                 value={linkID}
                 onChange={(value, label) => {
@@ -158,30 +160,33 @@ const AddBanner = () => {
                   setKindService(label?.kind);
                 }}
                 options={serviceOption}
+                select={true}
               />
             </div>
           )}
         </div>
 
         <div className="mt-2">
-          <a>Vị trí</a>
-          <Input
+          <InputCustom
+            title={`${i18n.t("position", { lng: lang })}`}
             style={{ width: "100%" }}
-            placeholder="0 or 1, 2, 3, ..."
             value={position}
             onChange={(e) => setPosition(e.target.value)}
           />
         </div>
 
         <UploadImage
-          title={"Hình ảnh 360px * 137px, tỉ lệ 2,62"}
+          title={`${i18n.t("image", { lng: lang })} 360px * 137px, ${i18n.t(
+            "ratio",
+            { lng: lang }
+          )}  2,62`}
           image={imgThumbnail}
           setImage={setImgThumbnail}
           classImg={"img-thumbnail-banner"}
         />
 
         <CustomButton
-          title="Thêm"
+          title={`${i18n.t("add", { lng: lang })}`}
           className="btn-add-banner-drawer"
           type="button"
           onClick={addBanner}
