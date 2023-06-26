@@ -487,32 +487,36 @@ const TopupCollaborator = ({ type }) => {
           isOpen={modalConfirm}
           title={
             itemEdit?.type_transfer === "top_up"
-              ? "Duyệt lệnh nạp tiền"
-              : " Duyệt lệnh rút tiền"
+              ? `${i18n.t("approve_deposit_order", { lng: lang })}`
+              : `${i18n.t("approve_withdrawal_order", { lng: lang })}`
           }
           handleOk={() => onConfirm(itemEdit?._id)}
           handleCancel={toggleConfirm}
-          textOk="Duyệt"
+          textOk={`${i18n.t("approvals", { lng: lang })}`}
           body={
             <>
               <div className="body-modal">
                 <a className="text-content">
-                  CTV: {itemEdit?.id_collaborator?.full_name}
+                  {`${i18n.t("collaborator", { lng: lang })}`}:{" "}
+                  {itemEdit?.id_collaborator?.full_name}
                 </a>
                 <a className="text-content">
-                  SĐT: {itemEdit?.id_collaborator?.phone}
+                  {`${i18n.t("phone", { lng: lang })}`}:{" "}
+                  {itemEdit?.id_collaborator?.phone}
                 </a>
                 <a className="text-content">
-                  Số tiền: {formatMoney(itemEdit?.money)}
+                  {`${i18n.t("money", { lng: lang })}`}:{" "}
+                  {formatMoney(itemEdit?.money)}
                 </a>
                 <a className="text-content">
-                  Nội dung: {itemEdit?.transfer_note}
+                  {`${i18n.t("content", { lng: lang })}`}:{" "}
+                  {itemEdit?.transfer_note}
                 </a>
                 <a className="text-content">
-                  Loại ví:{" "}
+                  {`${i18n.t("wallet", { lng: lang })}`}:{" "}
                   {itemEdit?.type_wallet === "wallet"
-                    ? "Ví chính"
-                    : "Ví thưởng"}
+                    ? `${i18n.t("main_wallet", { lng: lang })}`
+                    : `${i18n.t("gift_wallet", { lng: lang })}`}
                 </a>
               </div>
             </>
@@ -522,36 +526,34 @@ const TopupCollaborator = ({ type }) => {
       <div>
         <ModalCustom
           isOpen={modal}
-          title="Xóa giao dịch"
+          title={`${i18n.t("delete_transaction", { lng: lang })}`}
           handleOk={() => onDelete(itemEdit?._id)}
           handleCancel={toggle}
-          textOk="Xoá"
+          textOk={`${i18n.t("delete", { lng: lang })}`}
           body={
-            <a>
-              Bạn có chắc muốn xóa giao dịch của cộng tác viên
+            <>
+              <a>{`${i18n.t("want_delete_transaction", { lng: lang })}`}</a>
               <a className="text-name-modal">
                 {itemEdit?.id_collaborator?.full_name}
               </a>
-              này không?
-            </a>
+            </>
           }
         />
       </div>
       <div>
         <ModalCustom
           isOpen={modalCancel}
-          title="Huỷ giao dịch"
+          title={`${i18n.t("cancel_transaction", { lng: lang })}`}
           handleOk={() => onCancel(itemEdit?._id)}
           handleCancel={toggleCancel}
-          textOk="Có"
+          textOk={`${i18n.t("yes", { lng: lang })}`}
           body={
-            <a>
-              Bạn có chắc muốn huỷ giao dịch của cộng tác viên
+            <>
+              <a>{`${i18n.t("want_cancel_transaction", { lng: lang })}`}</a>
               <a className="text-name-modal">
                 {itemEdit?.id_collaborator?.full_name}
               </a>
-              này không?
-            </a>
+            </>
           }
         />
       </div>

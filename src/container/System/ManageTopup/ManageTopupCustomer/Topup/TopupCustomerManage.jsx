@@ -19,11 +19,16 @@ import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import { getTopupCustomer } from "../../../../../redux/actions/topup";
-import { getElementState, getUser } from "../../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+  getUser,
+} from "../../../../../redux/selectors/auth";
 import { getTopupKH, totalTopupKH } from "../../../../../redux/selectors/topup";
 import "./TopupCustomerManage.scss";
+import i18n from "../../../../../i18n";
 
-export default function TopupCustomer() {
+const TopupCustomer = () => {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState();
   const [valueSearch, setValueSearch] = useState();
@@ -41,10 +46,9 @@ export default function TopupCustomer() {
   const toggleEdit = () => setModalEdit(!modalEdit);
   const toggle = () => setModal(!modal);
   const toggleCancel = () => setModalCancel(!modalCancel);
-  const user = useSelector(getUser);
   const checkElement = useSelector(getElementState);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     // dispatch(loadingAction.loadingRequest(true));
@@ -165,7 +169,7 @@ export default function TopupCustomer() {
 
   const columns = [
     {
-      title: "Mã",
+      title: `${i18n.t("code", { lng: lang })}`,
       render: (data) => (
         <Link to={`/profile-customer/${data?.id_customer?._id}`}>
           <a className="text-id-topup-customer">{data?.id_customer?.id_view}</a>
@@ -173,7 +177,7 @@ export default function TopupCustomer() {
       ),
     },
     {
-      title: "Tên khách hàng",
+      title: `${i18n.t("customer", { lng: lang })}`,
       render: (data) => {
         return (
           <Link
@@ -187,7 +191,7 @@ export default function TopupCustomer() {
       },
     },
     {
-      title: "Số tiền",
+      title: `${i18n.t("money", { lng: lang })}`,
       render: (data) => (
         <a className="text-money-customer-topup">{formatMoney(data?.money)}</a>
       ),
@@ -214,13 +218,13 @@ export default function TopupCustomer() {
     //   },
     // },
     {
-      title: "Nội dung",
+      title: `${i18n.t("content", { lng: lang })}`,
       render: (data) => (
         <a className="text-description-topup">{data?.transfer_note}</a>
       ),
     },
     {
-      title: "Ngày nạp",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => (
         <div className="div-money-customer">
           <a className="text-money-customer-topup">
@@ -233,18 +237,28 @@ export default function TopupCustomer() {
       ),
     },
     {
-      title: "Trạng thái",
+      title: `${i18n.t("status", { lng: lang })}`,
       render: (data) => {
         return (
           <div>
             {data?.status === "pending" ? (
-              <a className="text-pending-topup-customer">Đang xử lý</a>
+              <a className="text-pending-topup-customer">{`${i18n.t(
+                "processing",
+                { lng: lang }
+              )}`}</a>
             ) : data?.status === "transfered" ? (
-              <a className="text-transfered-topup-customer">Đã chuyển tiền</a>
+              <a className="text-transfered-topup-customer">{`${i18n.t(
+                "money_transferred",
+                { lng: lang }
+              )}`}</a>
             ) : data?.status === "done" ? (
-              <a className="text-done-topup-customer">Hoàn tất</a>
+              <a className="text-done-topup-customer">{`${i18n.t("complete", {
+                lng: lang,
+              })}`}</a>
             ) : (
-              <a className="text-cancel-topup-customer">Đã huỷ</a>
+              <a className="text-cancel-topup-customer">{`${i18n.t("cancel", {
+                lng: lang,
+              })}`}</a>
             )}
           </div>
         );
@@ -252,11 +266,13 @@ export default function TopupCustomer() {
       align: "center",
     },
     {
-      title: "Phương thức",
+      title: `${i18n.t("method", { lng: lang })}`,
       render: (data) => {
         return (
           <a className="text-money-customer-topup">
-            {data?.method_transfer === "vnpay" ? "VNPay" : "Chuyển khoản"}
+            {data?.method_transfer === "vnpay"
+              ? "VNPay"
+              : `${i18n.t("transfer", { lng: lang })}`}
           </a>
         );
       },
@@ -274,7 +290,7 @@ export default function TopupCustomer() {
                 onClick={toggleConfirm}
                 disabled={data?.status === "pending" ? false : true}
               >
-                Duyệt lệnh
+                {`${i18n.t("approvals", { lng: lang })}`}
               </button>
             )}
 
@@ -290,14 +306,17 @@ export default function TopupCustomer() {
                   }
                   onClick={toggleCancel}
                 >
-                  Huỷ
+                  {`${i18n.t("cancel_modal", { lng: lang })}`}
                 </a>
               )}
 
               {checkElement?.includes(
                 "delete_transition_cash_book_customer"
               ) && (
-                <Tooltip placement="bottom" title={"Xoá giao dịch KH"}>
+                <Tooltip
+                  placement="bottom"
+                  title={`${i18n.t("delete_transaction", { lng: lang })}`}
+                >
                   <button className="btn-delete" onClick={toggle}>
                     <i className="uil uil-trash"></i>
                   </button>
@@ -320,7 +339,7 @@ export default function TopupCustomer() {
           <WithdrawCustomer />
         )}
         <Input
-          placeholder="Tìm kiếm"
+          placeholder={`${i18n.t("search", { lng: lang })}`}
           type="text"
           className="input-search-topup"
           prefix={<SearchOutlined />}
@@ -360,7 +379,10 @@ export default function TopupCustomer() {
         />
       </div>
       <div className="div-pagination p-2">
-        <a>Tổng: {dataFilter.length > 0 ? totalFilter : totalCustomer}</a>
+        <a>
+          {`${i18n.t("total", { lng: lang })}`}:{" "}
+          {dataFilter.length > 0 ? totalFilter : totalCustomer}
+        </a>
         <div>
           <Pagination
             current={currentPage}
@@ -375,16 +397,28 @@ export default function TopupCustomer() {
       <div>
         <ModalCustom
           isOpen={modalConfirm}
-          title="Duyệt lệnh nạp tiền"
+          title={`${i18n.t("approve_deposit_order", { lng: lang })}`}
           handleOk={() => onConfirm(itemEdit?._id)}
           handleCancel={toggleConfirm}
-          textOk="Duyệt"
+          textOk={`${i18n.t("approvals", { lng: lang })}`}
           body={
             <div className="body-modal">
-              <a>Khách hàng: {itemEdit?.id_customer?.full_name}</a>
-              <a>SĐT: {itemEdit?.id_customer?.phone}</a>
-              <a>Số tiền: {formatMoney(itemEdit?.money)}</a>
-              <a>Nội dung: {itemEdit?.transfer_note}</a>
+              <a>
+                {`${i18n.t("customer", { lng: lang })}`}:{" "}
+                {itemEdit?.id_customer?.full_name}
+              </a>
+              <a>
+                {`${i18n.t("phone", { lng: lang })}`}:{" "}
+                {itemEdit?.id_customer?.phone}
+              </a>
+              <a>
+                {`${i18n.t("money", { lng: lang })}`}:{" "}
+                {formatMoney(itemEdit?.money)}
+              </a>
+              <a>
+                {`${i18n.t("content", { lng: lang })}`}:{" "}
+                {itemEdit?.transfer_note}
+              </a>
             </div>
           }
         />
@@ -392,36 +426,38 @@ export default function TopupCustomer() {
       <div>
         <ModalCustom
           isOpen={modalCancel}
-          title="Huỷ giao dịch"
+          title={`${i18n.t("cancel_transaction", { lng: lang })}`}
           handleOk={() => onCancel(itemEdit?._id)}
           handleCancel={toggleCancel}
-          textOk="Có"
+          textOk={`${i18n.t("yes", { lng: lang })}`}
           body={
-            <a>
-              Bạn có chắc muốn huỷ giao dịch của khách hàng
+            <>
+              <a>
+                {`${i18n.t("want_cancel_transaction_customer", { lng: lang })}`}
+              </a>
               <a className="text-name-modal">
                 {itemEdit?.id_customer?.full_name}
               </a>
-              này không?
-            </a>
+            </>
           }
         />
       </div>
       <div>
         <ModalCustom
           isOpen={modal}
-          title="Xóa giao dịch"
+          title={`${i18n.t("delete_transaction", { lng: lang })}`}
           handleOk={() => onDelete(itemEdit?._id)}
           handleCancel={toggle}
-          textOk="Có"
+          textOk={`${i18n.t("yes", { lng: lang })}`}
           body={
-            <a>
-              Bạn có chắc muốn xóa giao dịch của khách hàng
+            <>
+              <a>
+                {`${i18n.t("want_delete_transaction_customer", { lng: lang })}`}
+              </a>
               <a className="text-name-modal">
                 {itemEdit?.id_customer?.full_name}
               </a>
-              này không?
-            </a>
+            </>
           }
         />
       </div>
@@ -430,4 +466,6 @@ export default function TopupCustomer() {
       </div>
     </React.Fragment>
   );
-}
+};
+
+export default TopupCustomer;

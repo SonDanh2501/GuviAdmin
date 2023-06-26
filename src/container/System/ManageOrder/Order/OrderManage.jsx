@@ -1,13 +1,13 @@
-import React, { memo, useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { SearchOutlined, StarFilled } from "@ant-design/icons";
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import { Dropdown, Input, Pagination, Space, Table } from "antd";
+import { Checkbox, Dropdown, Input, Pagination, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import vi from "moment/locale/vi";
+import React, { memo, useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import {
+  checkOrderApi,
   deleteOrderApi,
   getOrderApi,
   searchOrderApi,
@@ -15,6 +15,7 @@ import {
 import ModalCustom from "../../../../components/modalCustom";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
+import i18n from "../../../../i18n";
 import {
   getElementState,
   getLanguageState,
@@ -23,7 +24,7 @@ import {
 import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
 import EditTimeOrder from "../EditTimeGroupOrder";
 import "./OrderManage.scss";
-import i18n from "../../../../i18n";
+import InputCustom from "../../../../components/textInputCustom";
 const width = window.innerWidth;
 const OrderManage = (props) => {
   const {
@@ -41,17 +42,15 @@ const OrderManage = (props) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [item, setItem] = useState([]);
   const [modal, setModal] = useState(false);
-  const user = useSelector(getUser);
+  const [modalCheck, setModalCheck] = useState(false);
   const [dataSearch, setDataSearch] = useState([]);
   const [totalSearch, setTotalSearch] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const toggle = () => setModal(!modal);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
-
+  const [note, setNote] = useState("");
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work_schedule[0].date)).format(
       "HH:mm"

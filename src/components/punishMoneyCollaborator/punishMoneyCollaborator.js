@@ -1,7 +1,6 @@
-import { Drawer, Select, Input, InputNumber } from "antd";
+import { Drawer, Select, Input, InputNumber, List } from "antd";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Form, Label, List, Modal } from "reactstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { searchCollaborators } from "../../api/collaborator";
 import { getListPunishApi, punishMoneyCollaboratorApi } from "../../api/topup";
 import { loadingAction } from "../../redux/actions/loading";
@@ -11,10 +10,12 @@ import "./index.scss";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { getReasonPunishApi } from "../../api/reasons";
 import TextArea from "antd/es/input/TextArea";
+import { getLanguageState } from "../../redux/selectors/auth";
+import i18n from "../../i18n";
+import InputCustom from "../textInputCustom";
 
 const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
-  const [state, setState] = useState(false);
-  const [money, setMoney] = useState("");
+  const [money, setMoney] = useState(0);
   const [note, setNote] = useState("");
   const [data, setData] = useState([]);
   const [name, setName] = useState("");
@@ -25,7 +26,7 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
   const [id, setId] = useState("");
   const dispatch = useDispatch();
   const reasonOption = [];
-
+  const lang = useSelector(getLanguageState);
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -51,10 +52,6 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
       note: item?.note,
     });
   });
-
-  const valueSearch = (value) => {
-    setName(value);
-  };
 
   const searchCollaborator = useCallback(
     _debounce((value) => {
@@ -127,13 +124,13 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
   return (
     <>
       <CustomButton
-        title="Phạt tiền"
+        title={`${i18n.t("monetary_fine", { lng: lang })}`}
         className="btn-add-topup"
         type="button"
         onClick={showDrawer}
       />
       <Drawer
-        title="Phạt tiền cộng tác viên"
+        title={`${i18n.t("monetary_fine", { lng: lang })}`}
         width={500}
         onClose={onClose}
         open={open}
@@ -143,13 +140,13 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
       >
         <div className="modal-body">
           <div>
-            <a>Cộng tác viên(*)</a>
-            <Input
-              placeholder="Tìm kiếm theo số điện thoại"
+            <InputCustom
+              title={`${i18n.t("collaborator", { lng: lang })}`}
+              placeholder={`${i18n.t("search", { lng: lang })}`}
               value={name}
               onChange={(e) => {
                 searchCollaborator(e.target.value);
-                valueSearch(e.target.value);
+                setName(e.target.value);
               }}
             />
             {errorName && <a className="error">{errorName}</a>}
@@ -177,39 +174,38 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
           </div>
 
           <div className="div-money">
-            <a> Nhập số tiền (*)</a>
-            <InputNumber
-              formatter={(value) =>
-                `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
-              }
+            <InputCustom
+              title={`${i18n.t("money", { lng: lang })}`}
+              value={money}
               min={0}
               onChange={(e) => setMoney(e)}
               style={{ width: "100%" }}
+              inputNumber={true}
             />
           </div>
 
           <div className="div-money">
-            <Label>Chọn lí do phạt (*)</Label>
-            <Select
+            <InputCustom
+              title={`${i18n.t("reason", { lng: lang })}`}
               style={{ width: "100%" }}
               value={idReason}
               onChange={handleChangeReason}
               options={reasonOption}
+              select={true}
             />
           </div>
 
           <div className="mt-2">
-            <a>Nội dung</a>
-            <TextArea
+            <InputCustom
+              title={`${i18n.t("content", { lng: lang })}`}
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              placeholder="Vui lòng nhập nội dung chuyển tiền"
             />
           </div>
 
           <CustomButton
-            title="Phạt tiền"
-            className="float-left btn-add-t"
+            title={`${i18n.t("monetary_fine", { lng: lang })}`}
+            className="float-left btn-add-monetary"
             type="button"
             onClick={punishMoney}
           />

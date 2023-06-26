@@ -26,13 +26,14 @@ import _debounce from "lodash/debounce";
 import "./index.scss";
 import CustomDatePicker from "../../../../../components/customDatePicker";
 import LoadingPagination from "../../../../../components/paginationLoading";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
 const width = window.innerWidth;
 
 const ReportCollaborator = () => {
   const [dataFilter, setDataFilter] = useState([]);
-  const [totalFilter, setTotalFilter] = useState("");
   const [dataSearch, setDataSearch] = useState([]);
-  const [totalSearch, setTotalSearch] = useState("");
   const [valueSearch, setValueSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
@@ -45,6 +46,7 @@ const ReportCollaborator = () => {
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getReportCollaborator(0, 40, startDate, endDate)
@@ -141,7 +143,9 @@ const ReportCollaborator = () => {
         return (
           <div className="div-title-collaborator-id">
             <div className="div-title-report">
-              <a className="text-title-column">Cộng tác viên</a>
+              <a className="text-title-column">{`${i18n.t("collaborator", {
+                lng: lang,
+              })}`}</a>
             </div>
             <div className="div-top"></div>
           </div>
@@ -175,7 +179,9 @@ const ReportCollaborator = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">Số ca</a>
+              <a className="text-title-column">{`${i18n.t("shift", {
+                lng: lang,
+              })}`}</a>
             </div>
             <a className="text-money-title">
               {totalColumn?.total_item > 0 ? totalColumn?.total_item : 0}
@@ -194,7 +200,9 @@ const ReportCollaborator = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">Doanh số</a>
+              <a className="text-title-column">{`${i18n.t("sales", {
+                lng: lang,
+              })}`}</a>
             </div>
             <a className="text-money-title">
               {totalColumn?.total_gross_income > 0
@@ -216,13 +224,20 @@ const ReportCollaborator = () => {
       title: () => {
         const content = (
           <div className="div-content">
-            <p className="text-content">Phí dịch vụ trả Cộng tác viên.</p>
+            <p className="text-content">{`${i18n.t(
+              "service_fee_pay_collaborator",
+              {
+                lng: lang,
+              }
+            )}`}</p>
           </div>
         );
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">Phí dịch vụ</a>
+              <a className="text-title-column">{`${i18n.t("service_fee", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -252,14 +267,16 @@ const ReportCollaborator = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Doanh thu = Doanh số (-) Phí dịch vụ trả CTV
+              {`${i18n.t("revenue_sales", { lng: lang })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column-blue">Doanh thu</a>
+              <a className="text-title-column-blue">{`${i18n.t("revenue", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -286,13 +303,17 @@ const ReportCollaborator = () => {
       title: () => {
         const content = (
           <div className="div-content">
-            <p className="text-content">Tổng số tiền giảm giá</p>
+            <p className="text-content">{`${i18n.t("total_discount", {
+              lng: lang,
+            })}`}</p>
           </div>
         );
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">Giảm giá</a>
+              <a className="text-title-column">{`${i18n.t("discount", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -320,15 +341,16 @@ const ReportCollaborator = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần
-              = Doanh thu (-) Giảm giá.
+              {`${i18n.t("note_net_revenue", { lng: lang })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">Doanh thu thuần</a>
+              <a className="text-title-column">{`${i18n.t("net_revenue", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -355,7 +377,9 @@ const ReportCollaborator = () => {
       title: () => {
         return (
           <div className="div-title-collaborator">
-            <a>Phí áp dụng</a>
+            <a>{`${i18n.t("fees_apply", {
+              lng: lang,
+            })}`}</a>
             <a className="text-money-title">
               {totalColumn?.total_service_fee > 0
                 ? formatMoney(totalColumn?.total_service_fee)
@@ -376,15 +400,18 @@ const ReportCollaborator = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Tổng tiền trên dịch vụ. Tổng hoá đơn = Doanh thu thuần (+) Phí áp
-              dụng.
+              {`${i18n.t("note_total_bill", {
+                lng: lang,
+              })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">Tổng hoá đơn</a>
+              <a className="text-title-column">{`${i18n.t("total_bill", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -412,14 +439,16 @@ const ReportCollaborator = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Lợi nhuận = Doanh thu (+) Phí áp dụng (-) Giảm giá.
+              {`${(i18n.t("note_profit"), { lng: lang })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">Lợi nhuận</a>
+              <a className="text-title-column">{`${i18n.t("profit", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -450,14 +479,22 @@ const ReportCollaborator = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              % lợi nhuận = Tổng lợi nhuận (/) Doanh thu thuần.
+              %{" "}
+              {`${i18n.t("percent_profit", {
+                lng: lang,
+              })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">% lợi nhuận</a>
+              <a className="text-title-column">
+                %{" "}
+                {`${i18n.t("profit", {
+                  lng: lang,
+                })}`}
+              </a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -481,7 +518,7 @@ const ReportCollaborator = () => {
 
   return (
     <div>
-      <h5>Báo cáo cộng tác viên </h5>
+      <h5>{`${i18n.t("collaborator_report", { lng: lang })}`}</h5>
       <div className="div-header-report">
         <div className="div-date">
           <CustomDatePicker
@@ -498,7 +535,7 @@ const ReportCollaborator = () => {
           )}
         </div>
         <Input
-          placeholder="Tìm kiếm"
+          placeholder={`${i18n.t("search", { lng: lang })}`}
           type="text"
           className="input-search-report"
           prefix={<SearchOutlined />}
@@ -523,7 +560,9 @@ const ReportCollaborator = () => {
         />
       </div>
       <div className="mt-2 div-pagination p-2">
-        <a>Tổng: {total}</a>
+        <a>
+          {`${i18n.t("total", { lng: lang })}`}: {total}
+        </a>
         <div>
           <Pagination
             current={currentPage}

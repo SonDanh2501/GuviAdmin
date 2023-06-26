@@ -1,32 +1,41 @@
 import { useNavigate } from "react-router-dom";
 import "./styles.scss";
 import { useSelector } from "react-redux";
-import { getElementState } from "../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../redux/selectors/auth";
+import i18n from "../../../../i18n";
 
 const ManageReportOrder = () => {
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
   return (
     <div className="container-report-order-item">
       {checkElement?.includes("order_report") && (
         <div className="div-item-report">
-          <a className="text-title">Báo cáo chi tiết đơn hàng</a>
+          <a className="text-title">{`${i18n.t("order_detail_report", {
+            lng: lang,
+          })}`}</a>
           <a className="text-details">
-            Báo cáo chi tiết từng ca làm trong khoảng thời gian
+            {`${i18n.t("detailed_report_period", { lng: lang })}`}
           </a>
           <a
             className="text-see-report"
             onClick={() => navigate("/report/manage-report/report-order-work")}
           >
-            Xem báo cáo
+            {`${i18n.t("see_report", { lng: lang })}`}
           </a>
         </div>
       )}
       {checkElement?.includes("order_by_customer_report") && (
         <div className="div-item-report">
-          <a className="text-title">Báo cáo đơn hàng theo khách hàng</a>
+          <a className="text-title">{`${i18n.t("order_report_customer", {
+            lng: lang,
+          })}`}</a>
           <a className="text-details">
-            Báo cáo tổng số đơn hàng theo khách hàng mới cũ
+            {`${i18n.t("order_report_customer_old_new", { lng: lang })}`}
           </a>
           <a
             className="text-see-report"
@@ -34,40 +43,50 @@ const ManageReportOrder = () => {
               navigate("/report/manage-report/report-order-customer")
             }
           >
-            Xem báo cáo
+            {`${i18n.t("see_report", { lng: lang })}`}
           </a>
         </div>
       )}
 
       {checkElement?.includes("order_by_arera_report") && (
         <div className="div-item-report">
-          <a className="text-title">Báo cáo đơn hàng theo khu vực</a>
-          <a className="text-details">Báo cáo tổng số đơn hàng trong khu vực</a>
+          <a className="text-title">{`${i18n.t("order_report_region", {
+            lng: lang,
+          })}`}</a>
+          <a className="text-details">{`${i18n.t("order_report_region_total", {
+            lng: lang,
+          })}`}</a>
           <a
             className="text-see-report"
             onClick={() => navigate("/report/manage-report/report-order-area")}
           >
-            Xem báo cáo
+            {`${i18n.t("see_report", { lng: lang })}`}
           </a>
         </div>
       )}
       {checkElement?.includes("order_by_daily_report") && (
         <div className="div-item-report">
-          <a className="text-title">Báo cáo đơn hàng hoàn thành theo ngày</a>
-          <a className="text-details">Báo cáo tất cả đơn hàng trong một ngày</a>
+          <a className="text-title">{`${i18n.t("completed_order_report_day", {
+            lng: lang,
+          })}`}</a>
+          <a className="text-details">{`${i18n.t("report_all_orders_in_day", {
+            lng: lang,
+          })}`}</a>
           <a
             className="text-see-report"
             onClick={() => navigate("/report/manage-report/report-order-daily")}
           >
-            Xem báo cáo
+            {`${i18n.t("see_report", { lng: lang })}`}
           </a>
         </div>
       )}
       {checkElement?.includes("order_report") && (
         <div className="div-item-report">
-          <a className="text-title">Báo cáo đơn hàng theo ngày tạo</a>
+          <a className="text-title">{`${i18n.t("order_report_creation_date", {
+            lng: lang,
+          })}`}</a>
           <a className="text-details">
-            Báo cáo chi tiết từng ca làm trong khoảng thời gian
+            {`${i18n.t("detailed_report_period", { lng: lang })}`}
           </a>
           <a
             className="text-see-report"
@@ -75,7 +94,7 @@ const ManageReportOrder = () => {
               navigate("/report/manage-report/report-order-create")
             }
           >
-            Xem báo cáo
+            {`${i18n.t("see_report", { lng: lang })}`}
           </a>
         </div>
       )}

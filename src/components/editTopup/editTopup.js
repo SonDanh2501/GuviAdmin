@@ -1,9 +1,8 @@
-import { Drawer, Input, InputNumber } from "antd";
+import { Drawer, Input, InputNumber, List } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { List, Modal } from "reactstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { searchCollaborators } from "../../api/collaborator";
 import {
   getTopupCollaboratorApi,
@@ -14,6 +13,9 @@ import { loadingAction } from "../../redux/actions/loading";
 import { getRevenueCollaborator } from "../../redux/actions/topup";
 import CustomButton from "../customButton/customButton";
 import "./editTopup.scss";
+import { getLanguageState } from "../../redux/selectors/auth";
+import i18n from "../../i18n";
+import InputCustom from "../textInputCustom";
 const { TextArea } = Input;
 
 const EditTopup = ({ iconEdit, item, type, setDataT, setTotal }) => {
@@ -23,6 +25,7 @@ const EditTopup = ({ iconEdit, item, type, setDataT, setTotal }) => {
   const [name, setName] = useState("");
   const [id, setId] = useState("");
   const dispatch = useDispatch();
+  const lang = useSelector(getLanguageState);
 
   const [open, setOpen] = useState(false);
 
@@ -96,16 +99,16 @@ const EditTopup = ({ iconEdit, item, type, setDataT, setTotal }) => {
       </div>
 
       <Drawer
-        title="Chỉnh sửa lệnh"
+        title={`${i18n.t("edit", { lng: lang })}`}
         placement="right"
         onClose={onClose}
         open={open}
       >
         <div className="modal-body">
           <div>
-            <a>Cộng tác viên</a>
-            <Input
-              placeholder="Tìm kiếm theo số điện thoại"
+            <InputCustom
+              title={`${i18n.t("collaborator", { lng: lang })}`}
+              placeholder={`${i18n.t("search", { lng: lang })}`}
               value={name}
               onChange={(e) => {
                 searchCollaborator(e.target.value);
@@ -135,29 +138,27 @@ const EditTopup = ({ iconEdit, item, type, setDataT, setTotal }) => {
           </div>
 
           <div className="div-money">
-            <a>(*) Nhập số tiền</a>
-            <InputNumber
-              formatter={(value) =>
-                `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
-              }
+            <InputCustom
+              title={`${i18n.t("money", { lng: lang })}`}
               min={0}
               value={money}
               onChange={(e) => setMoney(e)}
               style={{ width: "100%" }}
+              inputMoney={true}
             />
           </div>
 
           <div className="mt-2">
-            <a>Nội dung</a>
-            <TextArea
-              placeholder="Vui lòng nhập nội dung chuyển tiền"
+            <InputCustom
+              title={`${i18n.t("content", { lng: lang })}`}
               value={note}
               onChange={(e) => setNote(e.target.value)}
+              textArea={true}
             />
           </div>
 
           <CustomButton
-            title="Sửa"
+            title={`${i18n.t("edit", { lng: lang })}`}
             className="float-right btn-modal-edit-topup-drawer"
             type="button"
             onClick={editMoney}

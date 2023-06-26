@@ -15,11 +15,16 @@ import {
 import AddPoint from "../../../../../components/addPointCustomer/addPoint";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import { loadingAction } from "../../../../../redux/actions/loading";
-import { getElementState, getUser } from "../../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+  getUser,
+} from "../../../../../redux/selectors/auth";
 import "./index.scss";
 import { errorNotify } from "../../../../../helper/toast";
 import ModalCustom from "../../../../../components/modalCustom";
 import { Link } from "react-router-dom";
+import i18n from "../../../../../i18n";
 
 const TopupPoint = () => {
   const [data, setData] = useState([]);
@@ -34,10 +39,10 @@ const TopupPoint = () => {
   const [modal, setModal] = useState(false);
   const [modalConfirm, setModalConfirm] = useState(false);
   const [modalCancel, setModalCancel] = useState(false);
-  const user = useSelector(getUser);
   const dispatch = useDispatch();
   const toggle = () => setModal(!modal);
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
 
   const toggleConfirm = () => setModalConfirm(!modalConfirm);
   const toggleCancel = () => setModalCancel(!modalCancel);
@@ -145,7 +150,7 @@ const TopupPoint = () => {
 
   const columns = [
     {
-      title: "Tên",
+      title: `${i18n.t("customer", { lng: lang })}`,
       render: (data) => {
         return (
           <Link
@@ -159,7 +164,7 @@ const TopupPoint = () => {
       },
     },
     {
-      title: "Số điểm",
+      title: `${i18n.t("score", { lng: lang })}`,
       render: (data) => {
         return <a className="text-point">{data?.value}</a>;
       },
@@ -167,23 +172,25 @@ const TopupPoint = () => {
       sorter: (a, b) => a.value - b.value,
     },
     {
-      title: "Loại điểm",
+      title: `${i18n.t("point_type", { lng: lang })}`,
       render: (data) => {
         return (
           <a className="text-type-point">
-            {data?.type_point === "point" ? "Thưởng" : "Hạng thành viên"}
+            {data?.type_point === "point"
+              ? `${i18n.t("bonus", { lng: lang })}`
+              : `${i18n.t("kind_member", { lng: lang })}`}
           </a>
         );
       },
     },
     {
-      title: "Nội dung",
+      title: `${i18n.t("content", { lng: lang })}`,
       render: (data) => {
         return <a className="text-description-topup-point">{data?.note}</a>;
       },
     },
     {
-      title: "Ngày nạp",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-day-create-point">
@@ -198,16 +205,22 @@ const TopupPoint = () => {
       },
     },
     {
-      title: "Trạng thái",
+      title: `${i18n.t("status", { lng: lang })}`,
       render: (data) => {
         return (
           <div>
             {data?.status === "pending" ? (
-              <a className="text-pending-point">Đang xử lý</a>
+              <a className="text-pending-point">{`${i18n.t("processing", {
+                lng: lang,
+              })}`}</a>
             ) : data?.status === "done" ? (
-              <a className="text-done-point">Hoàn tất</a>
+              <a className="text-done-point">{`${i18n.t("complete", {
+                lng: lang,
+              })}`}</a>
             ) : (
-              <a className="text-cancel-point">Huỷ</a>
+              <a className="text-cancel-point">{`${i18n.t("cancel", {
+                lng: lang,
+              })}`}</a>
             )}
           </div>
         );
@@ -231,7 +244,7 @@ const TopupPoint = () => {
                 }
                 onClick={toggleConfirm}
               >
-                Duyệt lệnh
+                {`${i18n.t("approvals", { lng: lang })}`}
               </button>
             )}
 
@@ -240,7 +253,7 @@ const TopupPoint = () => {
                 <>
                   {data?.status === "pending" && (
                     <a className="text-cancel-point" onClick={toggleCancel}>
-                      Huỷ
+                      {`${i18n.t("cancel_modal", { lng: lang })}`}
                     </a>
                   )}
                 </>
@@ -288,7 +301,7 @@ const TopupPoint = () => {
           <AddPoint setDataL={setData} setTotal={setTotal} start={startPage} />
         )}
         <Input
-          placeholder="Tìm kiếm"
+          placeholder={`${i18n.t("search", { lng: lang })}`}
           type="text"
           className="input-search-topup-point"
           prefix={<SearchOutlined />}
@@ -327,20 +340,27 @@ const TopupPoint = () => {
       <div>
         <ModalCustom
           isOpen={modalConfirm}
-          title="Duyệt lệnh nạp điểm"
+          title={`${i18n.t("approve_points", { lng: lang })}`}
           handleOk={() => onConfirm(itemEdit?._id)}
           handleCancel={toggleConfirm}
-          textOk="Duyệt"
+          textOk={`${i18n.t("approvals", { lng: lang })}`}
           body={
             <div className="body-modal">
-              <a>Khách hàng: {itemEdit?.name_customer}</a>
-              <a>Số điểm: {itemEdit?.value}</a>
-              <a>Nội dung: {itemEdit?.note}</a>
               <a>
-                Loại điểm:{" "}
+                {`${i18n.t("customer", { lng: lang })}`}:{" "}
+                {itemEdit?.name_customer}
+              </a>
+              <a>
+                {`${i18n.t("score", { lng: lang })}`}: {itemEdit?.value}
+              </a>
+              <a>
+                {`${i18n.t("content", { lng: lang })}`}: {itemEdit?.note}
+              </a>
+              <a>
+                {`${i18n.t("point_type", { lng: lang })}`}:{" "}
                 {itemEdit?.type_point === "point"
-                  ? "Điểm thưởng"
-                  : "Điểm thứ hạng"}
+                  ? `${i18n.t("reward_points", { lng: lang })}`
+                  : `${i18n.t("rank_point", { lng: lang })}`}
               </a>
             </div>
           }
@@ -350,32 +370,30 @@ const TopupPoint = () => {
       <div>
         <ModalCustom
           isOpen={modal}
-          title="Xóa lệnh nạp điểm"
+          title={`${i18n.t("delete_points", { lng: lang })}`}
           handleOk={() => onDelete(itemEdit?._id)}
           handleCancel={toggle}
-          textOk="Xoá"
+          textOk={`${i18n.t("delete", { lng: lang })}`}
           body={
-            <a>
-              Bạn có chắc muốn xóa lệnh nạp điểm của khách hàng
+            <>
+              <a>{`${i18n.t("want_delete_points", { lng: lang })}`}</a>
               <a className="text-name-modal">{itemEdit?.name_customer}</a>
-              này không?
-            </a>
+            </>
           }
         />
       </div>
       <div>
         <ModalCustom
           isOpen={modalCancel}
-          title="Huỷ lệnh nạp điểm"
+          title={`${i18n.t("cancel_points", { lng: lang })}`}
           handleOk={() => onCancel(itemEdit?._id)}
           handleCancel={toggleCancel}
-          textOk="Có"
+          textOk={`${i18n.t("yes", { lng: lang })}`}
           body={
-            <a>
-              Bạn có chắc muốn huỷ lệnh nạp điểm của khách hàng
+            <>
+              <a>{`${i18n.t("want_cancel_points", { lng: lang })}`}</a>
               <a className="text-name-modal">{itemEdit?.name_customer}</a>
-              này không?
-            </a>
+            </>
           }
         />
       </div>

@@ -5,11 +5,15 @@ import { Table } from "antd";
 import "./styles.scss";
 import moment from "moment";
 import { formatMoney } from "../../../../../../helper/formatMoney";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../i18n";
 
 const DetailReward = () => {
   const params = useParams();
   const id = params?.id;
   const [data, setData] = useState([]);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getDetailInfoRewardApi(id)
@@ -21,7 +25,7 @@ const DetailReward = () => {
 
   const columns = [
     {
-      title: "Mã đơn",
+      title: `${i18n.t("code_order", { lng: lang })}`,
       render: (data) => (
         <Link to={`/details-order/${data?.id_group_order}`}>
           <a className="text-id-reward">{data?.id_view}</a>
@@ -29,7 +33,7 @@ const DetailReward = () => {
       ),
     },
     {
-      title: "Ngày làm",
+      title: `${i18n.t("date_work", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-time-detail-reward">
@@ -44,27 +48,35 @@ const DetailReward = () => {
       },
     },
     {
-      title: "Tổng tiền",
+      title: `${i18n.t("total_money", { lng: lang })}`,
       render: (data) => <a>{formatMoney(data?.final_fee)}</a>,
     },
     {
-      title: "Giờ làm",
+      title: `${i18n.t("time_work", { lng: lang })}`,
       render: (data) => <a>{data?.total_estimate} giờ</a>,
     },
   ];
 
   return (
     <div>
-      <a className="title-reward">Chi tiết thưởng tiền CTV</a>
+      <a className="title-reward">
+        {`${i18n.t("details_affiliate_bonus", { lng: lang })}`}
+      </a>
       <div className="div-total-detail-reward">
         <a className="text-total">
-          Tên CTV: {data?.id_collaborator?.full_name}
+          {`${i18n.t("collaborator", { lng: lang })}`}:{" "}
+          {data?.id_collaborator?.full_name}
         </a>
         <a className="text-total">
-          Tiền thưởng: {formatMoney(data?.money ? data?.money : 0)}
+          {`${i18n.t("bonus_money", { lng: lang })}`}:{" "}
+          {formatMoney(data?.money ? data?.money : 0)}
         </a>
-        <a className="text-total">Tổng đơn làm: {data?.total_order}</a>
-        <a className="text-total">Tổng giờ làm: {data?.total_job_hour}</a>
+        <a className="text-total">
+          {`${i18n.t("total_order", { lng: lang })}`}: {data?.total_order}
+        </a>
+        <a className="text-total">
+          {`${i18n.t("total_hour", { lng: lang })}`}: {data?.total_job_hour}
+        </a>
       </div>
 
       <div className="mt-3">
