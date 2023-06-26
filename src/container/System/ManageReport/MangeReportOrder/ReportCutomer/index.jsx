@@ -14,6 +14,9 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import "./index.scss";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import CustomDatePicker from "../../../../../components/customDatePicker";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
 const width = window.innerWidth;
 
 const ReportCustomer = () => {
@@ -36,8 +39,7 @@ const ReportCustomer = () => {
     moment().startOf("month").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
-
-  const navigate = useNavigate();
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getReportCustomer(0, 20, startDate, endDate, type)
@@ -132,7 +134,9 @@ const ReportCustomer = () => {
         return (
           <div className="div-title-collaborator-id">
             <div className="div-title-report">
-              <a className="text-title-column">Khách hàng</a>
+              <a className="text-title-column">{`${i18n.t("customer", {
+                lng: lang,
+              })}`}</a>
             </div>
             <div className="div-top"></div>
           </div>
@@ -153,7 +157,9 @@ const ReportCustomer = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">Số ca</a>
+              <a className="text-title-column">{`${i18n.t("shift", {
+                lng: lang,
+              })}`}</a>
             </div>
             <a className="text-money-title">
               {totalColumn?.total_item > 0 ? totalColumn?.total_item : 0}
@@ -171,7 +177,9 @@ const ReportCustomer = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">Doanh số</a>
+              <a className="text-title-column">{`${i18n.t("sales", {
+                lng: lang,
+              })}`}</a>
             </div>
             <a className="text-money-title">
               {totalColumn?.total_gross_income > 0
@@ -192,13 +200,20 @@ const ReportCustomer = () => {
       title: () => {
         const content = (
           <div className="div-content">
-            <p className="text-content">Phí dịch vụ trả Cộng tác viên.</p>
+            <p className="text-content">{`${i18n.t(
+              "service_fee_pay_collaborator",
+              {
+                lng: lang,
+              }
+            )}`}</p>
           </div>
         );
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">Phí dịch vụ</a>
+              <a className="text-title-column">{`${i18n.t("service_fee", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -227,14 +242,16 @@ const ReportCustomer = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Doanh thu = Doanh số (-) Phí dịch vụ trả CTV
+              {`${i18n.t("revenue_sales", { lng: lang })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column-blue">Doanh thu</a>
+              <a className="text-title-column-blue">{`${i18n.t("revenue", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -260,13 +277,17 @@ const ReportCustomer = () => {
       title: () => {
         const content = (
           <div className="div-content">
-            <p className="text-content">Tổng số tiền giảm giá</p>
+            <p className="text-content">{`${i18n.t("total_discount", {
+              lng: lang,
+            })}`}</p>
           </div>
         );
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">Giảm giá</a>
+              <a className="text-title-column">{`${i18n.t("discount", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -293,15 +314,16 @@ const ReportCustomer = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần
-              = Doanh thu (-) Giảm giá.
+              {`${i18n.t("note_net_revenue", { lng: lang })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">Doanh thu thuần</a>
+              <a className="text-title-column">{`${i18n.t("net_revenue", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -327,7 +349,9 @@ const ReportCustomer = () => {
       title: () => {
         return (
           <div className="div-title-collaborator">
-            <a>Phí áp dụng</a>
+            <a>{`${i18n.t("fees_apply", {
+              lng: lang,
+            })}`}</a>
             <a className="text-money-title">
               {totalColumn?.total_service_fee > 0
                 ? formatMoney(totalColumn?.total_service_fee)
@@ -348,15 +372,18 @@ const ReportCustomer = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Tổng tiền trên dịch vụ. Tổng hoá đơn = Doanh số - Giảm giá + Phi
-              áp dụng
+              {`${i18n.t("note_total_bill", {
+                lng: lang,
+              })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">Tổng hoá đơn</a>
+              <a className="text-title-column">{`${i18n.t("total_bill", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -383,14 +410,16 @@ const ReportCustomer = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Lợi nhuận = Doanh thu (+) Phí áp dụng (-) Giảm giá.
+              {`${(i18n.t("note_profit"), { lng: lang })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">Lợi nhuận</a>
+              <a className="text-title-column">{`${i18n.t("profit", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -419,14 +448,22 @@ const ReportCustomer = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              % lợi nhuận = Tổng lợi nhuận (/) Doanh thu thuần.
+              %{" "}
+              {`${i18n.t("percent_profit", {
+                lng: lang,
+              })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">% lợi nhuận</a>
+              <a className="text-title-column">
+                %{" "}
+                {`${i18n.t("profit", {
+                  lng: lang,
+                })}`}
+              </a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -450,7 +487,7 @@ const ReportCustomer = () => {
 
   return (
     <div className="div-container-report-customer">
-      <h3>Báo cáo đơn hàng theo khách hàng</h3>
+      <h3>{`${i18n.t("order_report_customer", { lng: lang })}`}</h3>
       <div className="div-date">
         <CustomDatePicker
           setStartDate={setStartDate}
@@ -472,7 +509,9 @@ const ReportCustomer = () => {
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">Khách hàng mới / Đơn</a>
+              <a className="text-tab-header">{`${i18n.t("customer_order_new", {
+                lng: lang,
+              })}`}</a>
               <a className="text-tab-header">{customerNew}</a>
             </div>
           </div>
@@ -484,7 +523,9 @@ const ReportCustomer = () => {
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">Tổng ca</a>
+              <a className="text-tab-header">{`${i18n.t("total_shift", {
+                lng: lang,
+              })}`}</a>
               <a className="text-tab-header">
                 {totalOrderNew ? totalOrderNew : 0}
               </a>
@@ -492,7 +533,9 @@ const ReportCustomer = () => {
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">Tổng tiền</a>
+              <a className="text-tab-header">{`${i18n.t("total_money", {
+                lng: lang,
+              })}`}</a>
               <a className="text-tab-header">
                 {formatMoney(moneyNew ? moneyNew : 0)}
               </a>
@@ -506,7 +549,9 @@ const ReportCustomer = () => {
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">Khách hàng cũ / Đơn</a>
+              <a className="text-tab-header">{`${i18n.t("customer_order_old", {
+                lng: lang,
+              })}`}</a>
               <a className="text-tab-header">{customerOld}</a>
             </div>
           </div>
@@ -518,7 +563,9 @@ const ReportCustomer = () => {
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">Tổng ca</a>
+              <a className="text-tab-header">{`${i18n.t("total_shift", {
+                lng: lang,
+              })}`}</a>
               <a className="text-tab-header">
                 {totalOrderOld ? totalOrderOld : 0}
               </a>
@@ -526,7 +573,9 @@ const ReportCustomer = () => {
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">Tổng tiền</a>
+              <a className="text-tab-header">{`${i18n.t("total_money", {
+                lng: lang,
+              })}`}</a>
               <a className="text-tab-header">{formatMoney(moneyOld)}</a>
             </div>
           </div>
@@ -542,7 +591,9 @@ const ReportCustomer = () => {
                 className={item?.value === type ? "div-tab-select" : "div-tab"}
                 onClick={() => onChangeTab(item?.value)}
               >
-                <a className="title-tab">{item?.title}</a>
+                <a className="title-tab">{`${i18n.t(item?.title, {
+                  lng: lang,
+                })}`}</a>
               </div>
             );
           })}
@@ -577,7 +628,12 @@ const ReportCustomer = () => {
           />
         </div>
         <div className="mt-2 div-pagination p-2">
-          <a>Tổng: {total}</a>
+          <a>
+            {`${i18n.t("total", {
+              lng: lang,
+            })}`}
+            : {total}
+          </a>
           <div>
             <Pagination
               current={currentPage}
@@ -598,15 +654,15 @@ export default ReportCustomer;
 
 const TAB = [
   {
-    title: "Tất cả",
+    title: "all",
     value: "all",
   },
   {
-    title: "Khách hàng mới",
+    title: "new_customer",
     value: "new",
   },
   {
-    title: "Khách hàng cũ",
+    title: "old_customer",
     value: "old",
   },
 ];

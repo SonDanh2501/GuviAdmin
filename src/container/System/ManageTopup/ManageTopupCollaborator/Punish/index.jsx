@@ -15,8 +15,13 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import PunishMoneyCollaborator from "../../../../../components/punishMoneyCollaborator/punishMoneyCollaborator";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
-import { getElementState, getUser } from "../../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+  getUser,
+} from "../../../../../redux/selectors/auth";
 import "./index.scss";
+import i18n from "../../../../../i18n";
 
 const Punish = () => {
   const [data, setData] = useState([]);
@@ -36,6 +41,7 @@ const Punish = () => {
   const toggle = () => setModal(!modal);
   const toggleEdit = () => setModalEdit(!modalEdit);
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getListPunishApi(0, 20)
@@ -136,7 +142,7 @@ const Punish = () => {
 
   const columns = [
     {
-      title: "Mã",
+      title: `${i18n.t("code_collaborator", { lng: lang })}`,
       render: (data) => (
         <a
           className="text-id"
@@ -151,7 +157,7 @@ const Punish = () => {
       ),
     },
     {
-      title: "Tên cộng tác viên",
+      title: `${i18n.t("collaborator", { lng: lang })}`,
       render: (data) => {
         return (
           <Link
@@ -167,20 +173,20 @@ const Punish = () => {
       },
     },
     {
-      title: "Số tiền",
+      title: `${i18n.t("money", { lng: lang })}`,
       render: (data) => (
         <a className="text-money-topup">{formatMoney(data?.money)}</a>
       ),
       sorter: (a, b) => a.money - b.money,
     },
     {
-      title: "Nội dung",
+      title: `${i18n.t("content", { lng: lang })}`,
       render: (data) => (
         <a className="text-description-topup">{data?.note_admin}</a>
       ),
     },
     {
-      title: "Ngày phạt",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-time-topup">
@@ -195,18 +201,26 @@ const Punish = () => {
       },
     },
     {
-      title: "Trạng thái",
+      title: `${i18n.t("status", { lng: lang })}`,
       render: (data) => {
         return (
           <div>
             {data?.status === "pending" ? (
-              <a className="text-pending-topup">Đang xử lý</a>
+              <a className="text-pending-topup">{`${i18n.t("processing", {
+                lng: lang,
+              })}`}</a>
             ) : data?.status === "transfered" ? (
-              <a className="text-transfered">Đã chuyển tiền</a>
+              <a className="text-transfered">{`${i18n.t("money_transferred", {
+                lng: lang,
+              })}`}</a>
             ) : data?.status === "done" ? (
-              <a className="text-done-topup">Hoàn tất</a>
+              <a className="text-done-topup">{`${i18n.t("complete", {
+                lng: lang,
+              })}`}</a>
             ) : (
-              <a className="text-cancel-topup-ctv">Đã huỷ</a>
+              <a className="text-cancel-topup-ctv">{`${i18n.t("cacnel", {
+                lng: lang,
+              })}`}</a>
             )}
           </div>
         );
@@ -214,7 +228,7 @@ const Punish = () => {
       align: "center",
     },
     {
-      title: "Người duyệt",
+      title: `${i18n.t("approved_by", { lng: lang })}`,
       render: (data) => {
         return (
           <a className="text-name-verify">{data?.id_admin_verify?.full_name}</a>
@@ -239,7 +253,7 @@ const Punish = () => {
                     : false
                 }
               >
-                Duyệt lệnh
+                {`${i18n.t("approved_by", { lng: lang })}`}
               </Button>
             )}
 
@@ -247,9 +261,14 @@ const Punish = () => {
               <div className="mt-1 ml-3">
                 {(data?.status === "pending" ||
                   data?.status === "transfered") && (
-                  <Tooltip placement="bottom" title={"Huỷ lệnh phạt CTV"}>
+                  <Tooltip
+                    placement="bottom"
+                    title={`${i18n.t("canceling_collaborator_fine", {
+                      lng: lang,
+                    })}`}
+                  >
                     <a className="text-cancel-topup" onClick={toggleCancel}>
-                      Huỷ
+                      {`${i18n.t("cancel_modal", { lng: lang })}`}
                     </a>
                   </Tooltip>
                 )}
@@ -263,7 +282,9 @@ const Punish = () => {
                   ) : (
                     <Tooltip
                       placement="bottom"
-                      title={"Chỉnh sửa lệnh phạt CTV"}
+                      title={`${i18n.t("edit_collaborator_fine", {
+                        lng: lang,
+                      })}`}
                     >
                       <EditPunish
                         iconEdit={
@@ -290,7 +311,10 @@ const Punish = () => {
               {checkElement?.includes(
                 "delete_punish_cash_book_collaborator"
               ) && (
-                <Tooltip placement="bottom" title={"Xoá lệnh phạt CTV"}>
+                <Tooltip
+                  placement="bottom"
+                  title={`${i18n.t("remove_collaborator_fine", { lng: lang })}`}
+                >
                   <button className="btn-delete" onClick={toggle}>
                     <i className="uil uil-trash"></i>
                   </button>
@@ -323,7 +347,9 @@ const Punish = () => {
           }}
         />
         <div className="div-pagination p-2">
-          <a>Tổng: {total}</a>
+          <a>
+            {`${i18n.t("total", { lng: lang })}`}: {total}
+          </a>
           <div>
             <Pagination
               current={currentPage}
@@ -338,24 +364,28 @@ const Punish = () => {
         <div>
           <ModalCustom
             isOpen={modalConfirm}
-            title="Duyệt lệnh phạt tiền"
+            title={`${i18n.t("approval_of_fines", { lng: lang })}`}
             handleOk={() => onConfirm(itemEdit?._id)}
             handleCancel={toggleConfirm}
-            textOk="Duyệt"
+            textOk={`${i18n.t("approvals", { lng: lang })}`}
             body={
               <>
                 <div className="body-modal">
                   <a className="text-content">
-                    CTV: {itemEdit?.id_collaborator?.full_name}
+                    {`${i18n.t("collaborator", { lng: lang })}`}:{" "}
+                    {itemEdit?.id_collaborator?.full_name}
                   </a>
                   <a className="text-content">
-                    SĐT: {itemEdit?.id_collaborator?.phone}
+                    {`${i18n.t("phone", { lng: lang })}`}:{" "}
+                    {itemEdit?.id_collaborator?.phone}
                   </a>
                   <a className="text-content">
-                    Số tiền: {formatMoney(itemEdit?.money)}
+                    {`${i18n.t("money", { lng: lang })}`}:{" "}
+                    {formatMoney(itemEdit?.money)}
                   </a>
                   <a className="text-content">
-                    Nội dung: {itemEdit?.note_admin}
+                    {`${i18n.t("content", { lng: lang })}`}:{" "}
+                    {itemEdit?.note_admin}
                   </a>
                 </div>
               </>
@@ -365,18 +395,19 @@ const Punish = () => {
         <div>
           <ModalCustom
             isOpen={modalCancel}
-            title="Huỷ lệnh phạt"
+            title={`${i18n.t("cancellation_of_fines", { lng: lang })}`}
             handleOk={() => onCancel(itemEdit?._id)}
             handleCancel={toggleCancel}
-            textOk="Có"
+            textOk={`${i18n.t("yes", { lng: lang })}`}
             body={
-              <a>
-                Bạn có chắc muốn huỷ lệnh phạt của cộng tác viên
+              <>
+                <a>
+                  {`${i18n.t("want_cancellation_of_fines", { lng: lang })}`}
+                </a>
                 <a className="text-name-modal">
                   {itemEdit?.id_collaborator?.full_name}
                 </a>
-                này không?
-              </a>
+              </>
             }
           />
         </div>
@@ -384,18 +415,17 @@ const Punish = () => {
         <div>
           <ModalCustom
             isOpen={modal}
-            title="Xóa lệnh phạt"
+            title={`${i18n.t("remove_the_fine", { lng: lang })}`}
             handleOk={() => onDelete(itemEdit?._id)}
             handleCancel={toggle}
-            textOk="Xoá"
+            textOk={`${i18n.t("delete", { lng: lang })}`}
             body={
-              <a>
-                Bạn có chắc muốn xóa lệnh phạt của cộng tác viên
+              <>
+                <a>{`${i18n.t("want_remove_the_fine", { lng: lang })}`}</a>
                 <a className="text-name-modal">
                   {itemEdit?.id_collaborator?.full_name}
                 </a>
-                này không?
-              </a>
+              </>
             }
           />
         </div>

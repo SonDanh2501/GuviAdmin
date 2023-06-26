@@ -12,6 +12,10 @@ export const getOrderExpiredApi = (start, length, status) => {
   );
 };
 
+export const checkOrderApi = (id, data) => {
+  return axiosClient.post(`/admin/order_manager/note_admin/${id}`, data);
+};
+
 export const searchOrderExpiredApi = (start, length, status, value) => {
   return axiosClient.get(
     `/admin/group-order-manager/get_list_group_order_expired?start=${start}&length=${length}&status=${status}&search=${value}`

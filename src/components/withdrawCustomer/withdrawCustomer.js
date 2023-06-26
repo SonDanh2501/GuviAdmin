@@ -7,13 +7,15 @@ import { withdrawMoneyCustomerApi } from "../../api/topup";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
 import { getTopupCustomer } from "../../redux/actions/topup";
-import { getElementState } from "../../redux/selectors/auth";
+import { getElementState, getLanguageState } from "../../redux/selectors/auth";
 import CustomButton from "../customButton/customButton";
 import "./withdrawCustomer.scss";
+import i18n from "../../i18n";
+import InputCustom from "../textInputCustom";
 const { TextArea } = Input;
 
 const WithdrawCustomer = () => {
-  const [money, setMoney] = useState("");
+  const [money, setMoney] = useState(0);
   const [note, setNote] = useState("");
   const [data, setData] = useState([]);
   const [name, setName] = useState("");
@@ -22,6 +24,7 @@ const WithdrawCustomer = () => {
   const [id, setId] = useState("");
   const dispatch = useDispatch();
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -29,10 +32,6 @@ const WithdrawCustomer = () => {
   };
   const onClose = ({ data }) => {
     setOpen(false);
-  };
-
-  const valueSearch = (value) => {
-    setName(value);
   };
 
   const searchCollaborator = useCallback(
@@ -95,7 +94,7 @@ const WithdrawCustomer = () => {
     <>
       {/* Button trigger modal */}
       <CustomButton
-        title="Rút tiền"
+        title={`${i18n.t("withdraw_money", { lng: lang })}`}
         className={
           checkElement?.includes("edit_transition_cash_book_customer")
             ? "btn-withdraw-customer"
@@ -106,7 +105,7 @@ const WithdrawCustomer = () => {
       />
 
       <Drawer
-        title="Rút tiền khách hàng"
+        title={`${i18n.t("withdraw_money", { lng: lang })}`}
         width={500}
         onClose={onClose}
         open={open}
@@ -116,13 +115,13 @@ const WithdrawCustomer = () => {
       >
         <div className="modal-body">
           <div>
-            <a className="label-input">(*)Khách hàng</a>
-            <Input
-              placeholder="Tìm kiếm theo số điện thoại"
+            <InputCustom
+              title={`${i18n.t("customer", { lng: lang })}`}
+              placeholder={`${i18n.t("search", { lng: lang })}`}
               value={name}
               onChange={(e) => {
                 searchCollaborator(e.target.value);
-                valueSearch(e.target.value);
+                setName(e.target.value);
               }}
             />
             {errorName && <a className="error">{errorName}</a>}
@@ -149,11 +148,9 @@ const WithdrawCustomer = () => {
           </div>
 
           <div className="mt-2">
-            <a className="label-input">(*) Nhập số tiền</a>
-            <InputNumber
-              formatter={(value) =>
-                `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
-              }
+            <InputCustom
+              title={`${i18n.t("money", { lng: lang })}`}
+              value={money}
               onChange={(e) => setMoney(e)}
               style={{ width: "100%" }}
             />
@@ -161,16 +158,16 @@ const WithdrawCustomer = () => {
 
           <div className="mt-2">
             <a className="label-input">Nhập nội dung</a>
-            <TextArea
-              placeholder="Vui lòng nhập nội dung chuyển tiền"
-              type="textarea"
+
+            <InputCustom
+              title={`${i18n.t("content", { lng: lang })}`}
               min={0}
               value={note}
               onChange={(e) => setNote(e.target.value)}
             />
           </div>
           <CustomButton
-            title="Rút"
+            title={`${i18n.t("withdraw_money", { lng: lang })}`}
             className="btn-add-withdraw-customer"
             type="button"
             onClick={withdrawMoney}

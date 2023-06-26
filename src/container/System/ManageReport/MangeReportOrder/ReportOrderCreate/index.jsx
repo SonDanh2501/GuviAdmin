@@ -7,6 +7,9 @@ import { formatMoney } from "../../../../../helper/formatMoney";
 import CustomDatePicker from "../../../../../components/customDatePicker";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import "./index.scss";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
 
 const width = window.innerWidth;
 
@@ -21,6 +24,7 @@ const ReportOrderCreate = () => {
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getReportOrder(0, 20, startDate, endDate, "date_create")
@@ -38,7 +42,9 @@ const ReportOrderCreate = () => {
         return (
           <div className="div-title-collaborator-id">
             <div className="div-title-report">
-              <a className="text-title-column">Thời gian</a>
+              <a className="text-title-column">{`${i18n.t("time", {
+                lng: lang,
+              })}`}</a>
             </div>
             <div className="div-top"></div>
           </div>
@@ -66,7 +72,9 @@ const ReportOrderCreate = () => {
         return (
           <div className="div-title-collaborator-id">
             <div className="div-title-report">
-              <a className="text-title-column">Mã đơn</a>
+              <a className="text-title-column">{`${i18n.t("code_order", {
+                lng: lang,
+              })}`}</a>
             </div>
             <div className="div-top"></div>
           </div>
@@ -86,7 +94,9 @@ const ReportOrderCreate = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Số ca</a>
+              <a className="text-title-column">{`${i18n.t("shift", {
+                lng: lang,
+              })}`}</a>
             </div>
             <a className="text-money-title">
               {dataTotal?.total_item > 0 ? dataTotal?.total_item : 0}
@@ -105,7 +115,9 @@ const ReportOrderCreate = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Doanh số</a>
+              <a className="text-title-column">{`${i18n.t("sales", {
+                lng: lang,
+              })}`}</a>
             </div>
             <a className="text-money-title">
               {dataTotal?.total_gross_income > 0
@@ -128,13 +140,20 @@ const ReportOrderCreate = () => {
       title: () => {
         const content = (
           <div className="div-content">
-            <p className="text-content">Phí dịch vụ trả Cộng tác viên.</p>
+            <p className="text-content">{`${i18n.t(
+              "service_fee_pay_collaborator",
+              {
+                lng: lang,
+              }
+            )}`}</p>
           </div>
         );
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Phí dịch vụ</a>
+              <a className="text-title-column">{`${i18n.t("service_fee", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -165,14 +184,16 @@ const ReportOrderCreate = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Doanh thu = Doanh số (-) Phí dịch vụ trả CTV
+              {`${i18n.t("revenue_sales", { lng: lang })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column-blue">Doanh thu</a>
+              <a className="text-title-column-blue">{`${i18n.t("revenue", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -200,13 +221,17 @@ const ReportOrderCreate = () => {
       title: () => {
         const content = (
           <div className="div-content">
-            <p className="text-content">Tổng số tiền giảm giá</p>
+            <p className="text-content">{`${i18n.t("total_discount", {
+              lng: lang,
+            })}`}</p>
           </div>
         );
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Giảm giá</a>
+              <a className="text-title-column">{`${i18n.t("discount", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -235,15 +260,16 @@ const ReportOrderCreate = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần
-              = Doanh thu (-) Giảm giá.
+              {`${i18n.t("note_net_revenue", { lng: lang })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Doanh thu thuần</a>
+              <a className="text-title-column">{`${i18n.t("net_revenue", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -272,7 +298,9 @@ const ReportOrderCreate = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Phí áp dụng</a>
+              <a className="text-title-column">{`${i18n.t("fees_apply", {
+                lng: lang,
+              })}`}</a>
             </div>
             <a className="text-money-title">
               {dataTotal?.total_service_fee > 0
@@ -295,15 +323,18 @@ const ReportOrderCreate = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Tổng tiền trên dịch vụ. Tổng hoá đơn = Doanh số - Giảm giá + Phi
-              áp dụng
+              {`${i18n.t("note_total_bill", {
+                lng: lang,
+              })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Tổng hoá đơn</a>
+              <a className="text-title-column">{`${i18n.t("total_bill", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -332,14 +363,16 @@ const ReportOrderCreate = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Lợi nhuận = Doanh thu (+) Phí áp dụng (-) Giảm giá.
+              {`${(i18n.t("note_profit"), { lng: lang })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Lợi nhuận</a>
+              <a className="text-title-column">{`${i18n.t("profit", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -371,14 +404,22 @@ const ReportOrderCreate = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              % lợi nhuận = Tổng lợi nhuận (/) Doanh thu thuần.
+              %{" "}
+              {`${i18n.t("percent_profit", {
+                lng: lang,
+              })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">% lợi nhuận</a>
+              <a className="text-title-column">
+                %{" "}
+                {`${i18n.t("profit", {
+                  lng: lang,
+                })}`}
+              </a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -438,7 +479,9 @@ const ReportOrderCreate = () => {
 
   return (
     <div>
-      <h3>Báo cáo đơn hàng</h3>
+      <h3>{`${i18n.t("order_report", {
+        lng: lang,
+      })}`}</h3>
       <div className="div-header-report">
         <div className="div-date">
           <CustomDatePicker

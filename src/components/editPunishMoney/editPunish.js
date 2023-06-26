@@ -1,14 +1,15 @@
-import { Drawer, Input, InputNumber } from "antd";
+import { Drawer, Input, InputNumber, List } from "antd";
 import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Form, List } from "reactstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { searchCollaborators } from "../../api/collaborator";
 import { editMoneyPunishApi, getListPunishApi } from "../../api/topup";
 import { errorNotify } from "../../helper/toast";
 import CustomButton from "../customButton/customButton";
 import "./editPunish.scss";
-const { TextArea } = Input;
+import { getLanguageState } from "../../redux/selectors/auth";
+import i18n from "../../i18n";
+import InputCustom from "../textInputCustom";
 
 const EditPunish = ({ item, setDataT, setTotal, setIsLoading, iconEdit }) => {
   const [money, setMoney] = useState("");
@@ -16,7 +17,7 @@ const EditPunish = ({ item, setDataT, setTotal, setIsLoading, iconEdit }) => {
   const [data, setData] = useState([]);
   const [name, setName] = useState("");
   const [id, setId] = useState("");
-  const dispatch = useDispatch();
+  const lang = useSelector(getLanguageState);
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -79,72 +80,70 @@ const EditPunish = ({ item, setDataT, setTotal, setIsLoading, iconEdit }) => {
       <a onClick={showDrawer}>{iconEdit}</a>
 
       <Drawer
-        title="Chỉnh sửa lệnh phạt tiền"
+        title={`${i18n.t("edit", { lng: lang })}`}
         placement="right"
         onClose={onClose}
         open={open}
       >
         <div className="modal-body">
-          <Form>
-            <div>
-              <a>Cộng tác viên</a>
-              <Input
-                placeholder="Tìm kiếm theo số điện thoại"
-                value={name}
-                onChange={(e) => {
-                  searchCollaborator(e.target.value);
-                  setName(e.target.value);
-                }}
-              />
-              {data.length > 0 && (
-                <List type={"unstyled"} className="list-item">
-                  {data?.map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        onClick={(e) => {
-                          setId(item?._id);
-                          setName(item?.full_name);
-                          setData([]);
-                        }}
-                      >
-                        <a>
-                          {item?.full_name} - {item?.phone} - {item?.id_view}
-                        </a>
-                      </div>
-                    );
-                  })}
-                </List>
-              )}
-            </div>
-
-            <div className="div-money">
-              <a>(*) Nhập số tiền</a>
-              <InputNumber
-                formatter={(value) =>
-                  `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
-                }
-                min={0}
-                value={money}
-                onChange={(e) => setMoney(e)}
-                style={{ width: "100%" }}
-              />
-            </div>
-            <div className="mt-2">
-              <a>Nội dung</a>
-              <TextArea
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-              />
-            </div>
-
-            <CustomButton
-              title="Sửa"
-              className="float-right btn-modal-edit-topup-drawer"
-              type="button"
-              onClick={editMoney}
+          <div>
+            <InputCustom
+              title={`${i18n.t("collaborator", { lng: lang })}`}
+              placeholder={`${i18n.t("search", { lng: lang })}`}
+              value={name}
+              onChange={(e) => {
+                searchCollaborator(e.target.value);
+                setName(e.target.value);
+              }}
             />
-          </Form>
+            {data.length > 0 && (
+              <List type={"unstyled"} className="list-item">
+                {data?.map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={(e) => {
+                        setId(item?._id);
+                        setName(item?.full_name);
+                        setData([]);
+                      }}
+                    >
+                      <a>
+                        {item?.full_name} - {item?.phone} - {item?.id_view}
+                      </a>
+                    </div>
+                  );
+                })}
+              </List>
+            )}
+          </div>
+
+          <div className="div-money">
+            <InputCustom
+              title={`${i18n.t("money", { lng: lang })}`}
+              min={0}
+              value={money}
+              onChange={(e) => setMoney(e)}
+              style={{ width: "100%" }}
+            />
+          </div>
+          <div className="mt-2">
+            <InputCustom
+              title={`${i18n.t("content", { lng: lang })}`}
+              min={0}
+              value={money}
+              onChange={(e) => setMoney(e)}
+              style={{ width: "100%" }}
+              textArea={true}
+            />
+          </div>
+
+          <CustomButton
+            title={`${i18n.t("edit", { lng: lang })}`}
+            className="float-right btn-modal-edit-topup-drawer"
+            type="button"
+            onClick={editMoney}
+          />
         </div>
       </Drawer>
     </>

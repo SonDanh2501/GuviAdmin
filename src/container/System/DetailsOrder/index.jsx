@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   Col,
   Dropdown,
   FloatButton,
@@ -24,6 +25,7 @@ import {
   changeOrderCancelToDoneApi,
   cancelGroupOrderApi,
   getHistoryOrderApi,
+  checkOrderApi,
 } from "../../../api/order";
 import userIma from "../../../assets/images/user.png";
 import { formatMoney } from "../../../helper/formatMoney";
@@ -44,6 +46,7 @@ import {
   unblockCustomerApi,
   unfavouriteCustomerApi,
 } from "../../../api/customer";
+import InputCustom from "../../../components/textInputCustom";
 const width = window.innerWidth;
 
 const DetailsOrder = () => {
@@ -74,6 +77,8 @@ const DetailsOrder = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [modalFavourite, setModalFavourite] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
+  const [modalCheck, setModalCheck] = useState(false);
+  const [note, setNote] = useState("");
   const dispatch = useDispatch();
   const toggleDelete = () => setModalDelete(!modalDelete);
   const toggleDeleteList = () => setModalDeleteList(!modalDeleteList);
@@ -359,6 +364,25 @@ const DetailsOrder = () => {
       });
   };
 
+  const checkNoteOrder = (_id) => {
+    setIsLoading(true);
+    checkOrderApi(_id, { note_admin: note })
+      .then((res) => {
+        setIsLoading(false);
+        setModalCheck(false);
+        getOrderByGroupOrderApi(id)
+          .then((res) => {
+            setDataGroup(res?.data?.groupOrder);
+            setDataList(res?.data?.listOrder);
+            dispatch(loadingAction.loadingRequest(false));
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  };
+
   const columns = [
     {
       title: "Mã",
@@ -468,6 +492,22 @@ const DetailsOrder = () => {
             : "Đã huỷ"}
         </a>
       ),
+    },
+    {
+      title: "Ghi chú",
+      render: (data) => {
+        return (
+          <div>
+            {data?.note_admin === "" && (
+              <Checkbox
+                checked={data?.note_admin === "" ? false : true}
+                onChange={() => setModalCheck(true)}
+              />
+            )}
+            <a>{data?.note_admin}</a>
+          </div>
+        );
+      },
     },
     {
       key: "action",
@@ -1273,6 +1313,24 @@ const DetailsOrder = () => {
                   onChange={(e) => setNoteReason(e.target.value)}
                 />
               </div>
+            </>
+          }
+        />
+
+        <ModalCustom
+          isOpen={modalCheck}
+          title="Ghi chú"
+          handleOk={() => checkNoteOrder(itemEdit?._id)}
+          handleCancel={() => setModalCheck(false)}
+          textOk="Xong"
+          body={
+            <>
+              <InputCustom
+                title="Ghi chú"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                textArea={true}
+              />
             </>
           }
         />

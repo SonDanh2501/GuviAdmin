@@ -90,7 +90,7 @@ const AddPopup = (props) => {
           );
           setOpen(false);
           successNotify({
-            message: "Nạp tiền cho cộng tác viên thành công",
+            message: `${i18n.t("recharge_success", { lng: lang })}`,
           });
           dispatch(loadingAction.loadingRequest(false));
         })
@@ -160,13 +160,13 @@ const AddPopup = (props) => {
           </div>
 
           <div className="div-money">
-            <a>(*) {`${i18n.t("money", { lng: lang })}`}</a>
-            <InputNumber
-              formatter={(value) =>
-                `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
-              }
+            <InputCustom
+              title={`${i18n.t("money", { lng: lang })}`}
+              min={0}
+              value={money}
               onChange={(e) => setMoney(e)}
               style={{ width: "100%" }}
+              inputMoney={true}
             />
           </div>
 
@@ -180,22 +180,29 @@ const AddPopup = (props) => {
           </div>
 
           <div className="mt-2">
-            <a>Ví</a>
-            <Select
+            <InputCustom
+              title={`${i18n.t("wallet", { lng: lang })}`}
               value={wallet}
               style={{ width: "100%" }}
               onChange={(e) => {
                 setWallet(e);
               }}
               options={[
-                { value: "wallet", label: "Ví chính" },
-                { value: "gift_wallet", label: "Ví thưởng" },
+                {
+                  value: "wallet",
+                  label: `${i18n.t("main_wallet", { lng: lang })}`,
+                },
+                {
+                  value: "gift_wallet",
+                  label: `${i18n.t("gift_wallet", { lng: lang })}`,
+                },
               ]}
+              select={true}
             />
           </div>
 
           <CustomButton
-            title="Nạp tiền"
+            title={`${i18n.t("recharge", { lng: lang })}`}
             className="float-left btn-add-t"
             type="button"
             onClick={addMoney}
