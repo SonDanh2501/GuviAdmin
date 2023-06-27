@@ -27,6 +27,9 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import "./index.scss";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
 dayjs.extend(customParseFormat);
 const width = window.innerWidth;
 
@@ -43,6 +46,7 @@ const ReportUser = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const lang = useSelector(getLanguageState);
 
   const dataChart = [];
 
@@ -140,9 +144,55 @@ const ReportUser = () => {
       });
   };
 
+  const setMonth = (month) => {
+    let thg;
+    switch (month) {
+      case 1:
+        thg = `${i18n.t("January", { lng: lang })}`;
+        break;
+      case 2:
+        thg = `${i18n.t("February", { lng: lang })}`;
+        break;
+      case 3:
+        thg = `${i18n.t("March", { lng: lang })}`;
+        break;
+      case 4:
+        thg = `${i18n.t("April", { lng: lang })}`;
+        break;
+      case 5:
+        thg = `${i18n.t("May", { lng: lang })}`;
+        break;
+      case 6:
+        thg = `${i18n.t("June", { lng: lang })}`;
+        break;
+      case 7:
+        thg = `${i18n.t("July", { lng: lang })}`;
+        break;
+      case 8:
+        thg = `${i18n.t("August", { lng: lang })}`;
+        break;
+      case 9:
+        thg = `${i18n.t("September", { lng: lang })}`;
+        break;
+      case 10:
+        thg = `${i18n.t("October", { lng: lang })}`;
+        break;
+      case 11:
+        thg = `${i18n.t("November", { lng: lang })}`;
+        break;
+      case 12:
+        thg = `${i18n.t("December", { lng: lang })}`;
+        break;
+      default:
+        break;
+    }
+
+    return thg;
+  };
+
   const columns = [
     {
-      title: "THỜI GIAN",
+      title: `${i18n.t("TIME", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-create">
@@ -157,18 +207,18 @@ const ReportUser = () => {
       },
     },
     {
-      title: "SỐ LƯỢT ĐĂNG KÝ",
+      title: `${i18n.t("NUMBER_REGISTER", { lng: lang })}`,
       dataIndex: ["total"],
       align: "center",
     },
     {
-      title: "SỐ LƯỢT CLICK TRANG",
+      title: `${i18n.t("NUMBER_CLICK_PAGE", { lng: lang })}`,
     },
     {
-      title: "SỐ LƯỢT TẢI APPSTORE",
+      title: `${i18n.t("NUMBER_DOWN_APPSTORE", { lng: lang })}`,
     },
     {
-      title: "SỐ LƯỢT TẢI GOOGLE PLAY",
+      title: `${i18n.t("NUMBER_DOWN_CHPLAY", { lng: lang })}`,
     },
     {
       key: "action",
@@ -182,7 +232,9 @@ const ReportUser = () => {
               })
             }
           >
-            <a className="text-details">Chi tiết</a>
+            <a className="text-details">{`${i18n.t("detail", {
+              lng: lang,
+            })}`}</a>
           </div>
         );
       },
@@ -194,19 +246,19 @@ const ReportUser = () => {
 
     return (
       <div className="div-content-tool-chart">
-        <a className="date-text">Tháng {label}</a>
+        <a className="date-text">{setMonth(label)}</a>
         <a className="money-text">
-          Số tổng:{" "}
+          {`${i18n.t("total", { lng: lang })}`}:{" "}
           {payload?.length > 0
             ? payload[0]?.payload?.totalNew + payload[0]?.payload?.totalOld
             : 0}
         </a>
         <a className="money-text-new">
-          Số người đăng kí mới:{" "}
+          {`${i18n.t("customer_new_sub", { lng: lang })}`}:{" "}
           {payload?.length > 0 ? payload[0]?.payload?.totalNew : 0}
         </a>
         <a className="money-text-old">
-          Số người đăng kí cũ:{" "}
+          {`${i18n.t("customer_old_sub", { lng: lang })}`}:{" "}
           {payload?.length > 0 ? payload[0]?.payload?.totalOld : 0}
         </a>
       </div>
@@ -215,14 +267,18 @@ const ReportUser = () => {
 
   return (
     <div className="div-container-report-customer">
-      <a className="text-title">BÁO CÁO SỐ LƯỢNG USER</a>
+      <a className="text-title">{`${i18n.t("report_number_customer", {
+        lng: lang,
+      })}`}</a>
       <div className="header-report-customer">
         <div className="div-tab-header">
           <div className="div-img">
             <img src={collaborator} className="img" />
           </div>
           <div className="div-text-tab">
-            <a className="text-tab-header">Tổng</a>
+            <a className="text-tab-header">{`${i18n.t("total", {
+              lng: lang,
+            })}`}</a>
             <a className="text-tab-header">{total}</a>
           </div>
         </div>
@@ -237,7 +293,9 @@ const ReportUser = () => {
             </a>
           </div>
           <div className="div-text-tab">
-            <a className="text-tab-header">Trong tháng</a>
+            <a className="text-tab-header">{`${i18n.t("in_month", {
+              lng: lang,
+            })}`}</a>
             <a className="text-tab-header">{totalMonth}</a>
           </div>
         </div>
@@ -247,7 +305,9 @@ const ReportUser = () => {
             <a className="text-day">{moment().date()}</a>
           </div>
           <div className="div-text-tab">
-            <a className="text-tab-header">Ngày</a>
+            <a className="text-tab-header">{`${i18n.t("date", {
+              lng: lang,
+            })}`}</a>
             <a className="text-tab-header">{totalDay}</a>
           </div>
         </div>
@@ -255,7 +315,7 @@ const ReportUser = () => {
       <div className="div-chart-user">
         <div className="div-time-area">
           <div>
-            <a className="text-time">Thời gian</a>
+            <a className="text-time">{`${i18n.t("time", { lng: lang })}`}</a>
             <DatePicker
               picker="year"
               onChange={onChange}
@@ -265,7 +325,9 @@ const ReportUser = () => {
           </div>
         </div>
         <div className="mt-3 divl-total">
-          <a className="text-total-user">Tổng user</a>
+          <a className="text-total-user">
+            {`${i18n.t("total", { lng: lang })}`} user
+          </a>
           <div className="div-total">
             <a className="text-number-total">{totalYear}</a>
           </div>
@@ -291,7 +353,7 @@ const ReportUser = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
                 dataKey="month"
-                tickFormatter={(tickItem) => "Tháng " + tickItem}
+                tickFormatter={(tickItem) => setMonth(tickItem)}
               />
               <YAxis />
               <Tooltip content={renderTooltipContent} />
@@ -302,7 +364,7 @@ const ReportUser = () => {
                 fill="#82ca9d"
                 minPointSize={20}
                 barSize={40}
-                name="Khách hàng cũ"
+                name={`${i18n.t("customer_old", { lng: lang })}`}
                 stackId="a"
               />
 
@@ -311,7 +373,7 @@ const ReportUser = () => {
                 fill="#4376CC"
                 minPointSize={20}
                 barSize={40}
-                name="Khách hàng mới"
+                name={`${i18n.t("customer_new", { lng: lang })}`}
                 stackId="a"
                 label={{ position: "top", fill: "black", fontSize: 14 }}
               />
@@ -319,13 +381,15 @@ const ReportUser = () => {
                 type="monotone"
                 dataKey="totalNew"
                 stroke="#ff7300"
-                name="Khách hàng mới"
+                name={`${i18n.t("customer_new", { lng: lang })}`}
               />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
       </div>
-      <a className="text-title">SỐ LƯỢT ĐĂNG KÝ USER THEO THỜI GIAN</a>
+      <a className="text-title">{`${i18n.t("NUMBER_REGISTER_TIME", {
+        lng: lang,
+      })}`}</a>
       <div className="mt-3 div-table">
         <div className="div-header-table">
           <div className="div-date">

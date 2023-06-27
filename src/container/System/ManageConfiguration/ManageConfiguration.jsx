@@ -2,13 +2,17 @@ import { useNavigate } from "react-router-dom";
 
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { getElementState } from "../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../redux/selectors/auth";
 import "./ManageConfiguration.scss";
-import { Button } from "antd";
+import i18n from "../../../i18n";
 
 const ManageConfiguration = () => {
   const navigate = useNavigate();
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -68,7 +72,9 @@ const ManageConfiguration = () => {
               }
               onClick={() => onClick(item)}
             >
-              <a className="text-btn">{item?.title}</a>
+              <a className="text-btn">{`${i18n.t(item?.title, {
+                lng: lang,
+              })}`}</a>
             </div>
           );
         })}
@@ -82,25 +88,25 @@ export default ManageConfiguration;
 const DATA = [
   {
     id: 1,
-    title: "Nguyên nhân huỷ",
+    title: "config_cancel_reason",
     value: "reason_cancel",
     role: "get_reason_cancel_setting",
   },
   {
     id: 2,
-    title: "Nhóm khách hàng",
+    title: "config_group_customer",
     value: "group_customer",
     role: "get_group_customer_setting",
   },
   {
     id: 3,
-    title: "Ứng dụng khách hàng",
+    title: "config_app_customer",
     value: "app_customer",
     role: "get_app_customer_setting",
   },
   {
     id: 4,
-    title: "Ứng dụng CTV",
+    title: "config_app_collaborator",
     value: "app_collaborator",
     role: "get_app_collaborator_setting",
   },
@@ -111,19 +117,19 @@ const DATA = [
   },
   {
     id: 6,
-    title: "Quản lý tài khoản quản trị",
+    title: "config_admin_account",
     value: "create_account",
     role: "get_user_system",
   },
   {
     id: 7,
-    title: "Tạo câu hỏi cho CTV",
+    title: "config_question",
     value: "create_quizz",
     role: "get_exam_test_setting",
   },
   {
     id: 8,
-    title: "Tạo lí do phạt",
+    title: "config_punish_reason",
     value: "reason_punish",
     role: "get_reason_punish_setting",
   },
@@ -134,13 +140,13 @@ const DATA = [
   },
   {
     id: 10,
-    title: "Cấu hình quyền quản trị",
+    title: "config_admin_right",
     value: "setting_role",
     role: "get_role_permission_setting",
   },
   {
     id: 11,
-    title: "Cấu hình điều kiện thưởng CTV",
+    title: "config_bonus_collaborator",
     value: "reward_collaborator",
     role: "get_reward_collaborator_setting",
   },

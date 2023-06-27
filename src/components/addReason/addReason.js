@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Drawer, Input, Select } from "antd";
 import CustomButton from "../customButton/customButton";
@@ -10,17 +10,20 @@ import {
   getListReasonCancel,
 } from "../../api/reasons";
 import { errorNotify } from "../../helper/toast";
+import { getLanguageState } from "../../redux/selectors/auth";
+import i18n from "../../i18n";
+import InputCustom from "../textInputCustom";
 
 const AddReason = (props) => {
   const { setIsLoading, setData, setTotal, startPage } = props;
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
-  const [type, setType] = useState("cash");
   const [descriptionVN, setDescriptionVN] = useState("");
   const [descriptionEN, setDescriptionEN] = useState("");
   const [note, setNote] = useState("");
   const [applyUser, setApplyUser] = useState("customer");
   const [open, setOpen] = useState(false);
+  const lang = useSelector(getLanguageState);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -71,28 +74,31 @@ const AddReason = (props) => {
     <>
       {/* Button trigger modal */}
       <CustomButton
-        title="Thêm lí do "
+        title={`${i18n.t("create_reason", { lng: lang })}`}
         className="btn-modal-add-reason"
         type="button"
         onClick={showDrawer}
       />
       <Drawer
-        title="Tạo lí do huỷ việc"
+        title={`${i18n.t("create_reason", { lng: lang })}`}
         placement="right"
         onClose={onClose}
         width={400}
         open={open}
       >
         <div>
-          <a className="title-reason">Tên lý do huỷ việc</a>
-          <Input
-            placeholder="Vui lòng nhập tên lí do Tiếng Việt"
+          <a className="title-reason">{`${i18n.t("name_reason", {
+            lng: lang,
+          })}`}</a>
+          <InputCustom
+            title={`${i18n.t("vietnamese", { lng: lang })}`}
             type="text"
             value={titleVN}
             onChange={(e) => setTitleVN(e.target.value)}
           />
-          <Input
-            placeholder="Vui lòng nhập tên lí do Tiếng Anh"
+
+          <InputCustom
+            title={`${i18n.t("english", { lng: lang })}`}
             type="text"
             value={titleEN}
             onChange={(e) => setTitleEN(e.target.value)}
@@ -100,15 +106,17 @@ const AddReason = (props) => {
           />
         </div>
         <div className="mt-2">
-          <a className="title-reason">Mô tả</a>
-          <Input
-            placeholder="Vui lòng nhập tên lí do Tiếng Việt"
+          <a className="title-reason">{`${i18n.t("describe", {
+            lng: lang,
+          })}`}</a>
+          <InputCustom
+            title={`${i18n.t("vietnamese", { lng: lang })}`}
             type="text"
             value={descriptionVN}
             onChange={(e) => setDescriptionVN(e.target.value)}
           />
-          <Input
-            placeholder="Vui lòng nhập tên lí do Tiếng Anh"
+          <InputCustom
+            title={`${i18n.t("english", { lng: lang })}`}
             type="text"
             value={descriptionEN}
             onChange={(e) => setDescriptionEN(e.target.value)}
@@ -116,7 +124,7 @@ const AddReason = (props) => {
           />
         </div>
         <div className="mt-2">
-          <a className="title-reason">Áp dụng</a>
+          {/* <a className="title-reason">Áp dụng</a>
           <Select
             value={applyUser}
             style={{ width: "100%" }}
@@ -127,22 +135,40 @@ const AddReason = (props) => {
               { value: "admin", label: "Admin" },
               { value: "system", label: "Hệ thống" },
             ]}
+          /> */}
+          <InputCustom
+            title={`${i18n.t("apply", { lng: lang })}`}
+            value={applyUser}
+            style={{ width: "100%" }}
+            onChange={(e) => setApplyUser(e)}
+            options={[
+              {
+                value: "customer",
+                label: `${i18n.t("customer", { lng: lang })}`,
+              },
+              {
+                value: "collaborator",
+                label: `${i18n.t("collaborator", { lng: lang })}`,
+              },
+              { value: "admin", label: "Admin" },
+              { value: "system", label: `${i18n.t("system", { lng: lang })}` },
+            ]}
+            select={true}
           />
         </div>
 
         <div className="mt-2">
-          <a className="title-reason">Ghi chú</a>
-          <Input
-            placeholder="Vui lòng nhập ghi chú"
-            type="textarea"
+          <InputCustom
+            title={`${i18n.t("note", { lng: lang })}`}
             value={note}
             onChange={(e) => setNote(e.target.value)}
+            textArea={true}
           />
         </div>
 
         <CustomButton
-          title="Tạo"
-          className="float-right btn-modal-add-reason"
+          title={`${i18n.t("create", { lng: lang })}`}
+          className="float-right btn-modal-add-reason-right"
           type="button"
           onClick={addReason}
         />

@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getTotalDetailCustomerDay } from "../../../../../../api/report";
 import "./index.scss";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../i18n";
 
 const DetailRegisterCustomer = () => {
   const { state } = useLocation();
@@ -20,6 +23,7 @@ const DetailRegisterCustomer = () => {
   const [endDate, setEndDate] = useState(
     moment(date).endOf("date").toISOString()
   );
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getTotalDetailCustomerDay(0, 20, startDate, endDate)
@@ -44,7 +48,7 @@ const DetailRegisterCustomer = () => {
 
   const columns = [
     {
-      title: "Ngày tạo",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-create">
@@ -60,7 +64,7 @@ const DetailRegisterCustomer = () => {
       width: "10%",
     },
     {
-      title: "Mã",
+      title: `${i18n.t("code", { lng: lang })}`,
       width: "10%",
       render: (data) => {
         return (
@@ -71,7 +75,7 @@ const DetailRegisterCustomer = () => {
       },
     },
     {
-      title: "Khách hàng",
+      title: `${i18n.t("customer", { lng: lang })}`,
       width: "20%",
       render: (data) => {
         return (
@@ -82,7 +86,7 @@ const DetailRegisterCustomer = () => {
       },
     },
     {
-      title: "Số điện thoại",
+      title: `${i18n.t("phone", { lng: lang })}`,
       render: (data, record, index) => {
         const phone = data?.phone.slice(0, 7);
         return (
@@ -126,10 +130,12 @@ const DetailRegisterCustomer = () => {
         onClick={() => navigate(-1)}
       ></i>
       <h4 className="mt-2">
-        Số lượng khách hàng đăng kí ngày{" "}
+        {`${i18n.t("number_regis_customer_day", { lng: lang })}`}{" "}
         {moment(new Date(date)).format("DD/MM/YYYY")}
       </h4>
-      <h5 className="mb-5">Tổng: {total}</h5>
+      <h5 className="mb-5">
+        {`${i18n.t("total", { lng: lang })}`}: {total}
+      </h5>
       <div className="mt-2">
         <Table
           columns={columns}
@@ -146,7 +152,9 @@ const DetailRegisterCustomer = () => {
       </div>
 
       <div className="mt-2 div-pagination p-2">
-        <a>Tổng: {total}</a>
+        <a>
+          {`${i18n.t("total", { lng: lang })}`}: {total}
+        </a>
         <div>
           <Pagination
             current={currentPage}

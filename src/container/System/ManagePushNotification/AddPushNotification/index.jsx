@@ -11,9 +11,13 @@ import { createPushNotification } from "../../../../api/notification";
 import { getGroupCustomerApi } from "../../../../api/promotion";
 import UploadImage from "../../../../components/uploadImage";
 import { getNotification } from "../../../../redux/actions/notification";
-import { getElementState } from "../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../redux/selectors/auth";
 import InputCustom from "../../../../components/textInputCustom";
 import "./index.scss";
+import i18n from "../../../../i18n";
 
 const AddPushNotification = ({ idOrder }) => {
   const [open, setOpen] = useState(false);
@@ -31,7 +35,7 @@ const AddPushNotification = ({ idOrder }) => {
   const [dataGroupCustomer, setDataGroupCustomer] = useState([]);
   const [imgThumbnail, setImgThumbnail] = useState("");
   const options = [];
-  const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
   const dispatch = useDispatch();
   const showDrawer = () => {
     setOpen(true);
@@ -155,25 +159,23 @@ const AddPushNotification = ({ idOrder }) => {
   return (
     <>
       <div className="btn-add-push-noti" onClick={showDrawer}>
-        <a>Tạo thông báo</a>
+        <a>{`${i18n.t("create_noti", { lng: lang })}`}</a>
       </div>
       <Drawer
-        title="Tạo thông báo"
+        title={`${i18n.t("create_noti", { lng: lang })}`}
         placement="right"
         onClose={onClose}
         width={width > 490 ? 500 : 300}
         open={open}
       >
         <InputCustom
-          title="Tiêu đề"
-          placeholder="Vui lòng nhập tiêu đề"
+          title={`${i18n.t("title", { lng: lang })}`}
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <InputCustom
-          title="Nội dung"
-          placeholder="Vui lòng nhập nội dung"
+          title={`${i18n.t("content", { lng: lang })}`}
           type="textarea"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -185,7 +187,7 @@ const AddPushNotification = ({ idOrder }) => {
             checked={isDateSchedule}
             onChange={(e) => setIsDateSchedule(e.target.checked)}
           >
-            Thời gian thông báo
+            {`${i18n.t("notice_time", { lng: lang })}`}
           </Checkbox>
           {isDateSchedule && (
             <Input
@@ -202,12 +204,12 @@ const AddPushNotification = ({ idOrder }) => {
             checked={isCustomer}
             onChange={(e) => setIsCustomer(e.target.checked)}
           >
-            Khách hàng
+            {`${i18n.t("customer", { lng: lang })}`}
           </Checkbox>
           {isCustomer && (
             <div>
               <InputCustom
-                placeholder="Tìm kiếm theo tên và số điện thoại"
+                placeholder={`${i18n.t("search", { lng: lang })}`}
                 type="text"
                 value={nameCustomer}
                 prefix={<SearchOutlined />}
@@ -263,7 +265,7 @@ const AddPushNotification = ({ idOrder }) => {
             checked={isGroupCustomer}
             onChange={(e) => setIsGroupCustomer(e.target.checked)}
           >
-            Nhóm khách hàng
+            {`${i18n.t("customer_group", { lng: lang })}`}
           </Checkbox>
 
           {isGroupCustomer && (
@@ -281,7 +283,10 @@ const AddPushNotification = ({ idOrder }) => {
         </div>
 
         <UploadImage
-          title={"Hình ảnh 360px * 137px, tỉ lệ 2,62"}
+          title={`${i18n.t("image", { lng: lang })} 360px * 137px, ${i18n.t(
+            "ratio",
+            { lng: lang }
+          )} 2,62`}
           image={imgThumbnail}
           setImage={setImgThumbnail}
           classImg={"img-thumbnail-banner"}
@@ -291,7 +296,7 @@ const AddPushNotification = ({ idOrder }) => {
           className="btn-create-notification"
           onClick={onCreateNotification}
         >
-          Tạo
+          {`${i18n.t("create", { lng: lang })}`}
         </Button>
       </Drawer>
     </>

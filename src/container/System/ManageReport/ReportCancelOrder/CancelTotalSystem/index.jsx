@@ -10,6 +10,9 @@ import {
 
 import "./index.scss";
 import CustomDatePicker from "../../../../../components/customDatePicker";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
 
 const TotalCancelSystem = (props) => {
   const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;
@@ -28,6 +31,7 @@ const TotalCancelSystem = (props) => {
   const [dataTotalPie, setDataTotalPie] = useState([]);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
+  const lang = useSelector(getLanguageState);
 
   const cityData = [];
   useEffect(() => {
@@ -69,41 +73,6 @@ const TotalCancelSystem = (props) => {
     [city, startDate, endDate, codeDistrict]
   );
 
-  const renderLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    value,
-    name,
-  }) => {
-    const RADIAN = Math.PI / 180;
-    // eslint-disable-next-line
-    const radius = 25 + innerRadius + (outerRadius - innerRadius);
-    // eslint-disable-next-line
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    // eslint-disable-next-line
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="#000000"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-      >
-        {name === "system_cancel"
-          ? "Hệ thống"
-          : name === "customer_cancel"
-          ? "Khách hàng"
-          : "Quản trị viên"}{" "}
-        ({value} {"%"})
-      </text>
-    );
-  };
-
   const onChangeDay = () => {
     getReportOverviewCancelReport(
       startPage,
@@ -136,7 +105,7 @@ const TotalCancelSystem = (props) => {
 
   const columns = [
     {
-      title: "Thời gian",
+      title: `${i18n.t("time", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-create-cancel">
@@ -151,41 +120,41 @@ const TotalCancelSystem = (props) => {
       },
     },
     {
-      title: "Người huỷ",
+      title: `${i18n.t("canceler", { lng: lang })}`,
       render: (data) => {
         return (
           <a className="text-user-cancel">
             {data?.id_cancel_user_system
               ? data?.id_cancel_user_system?.id_user_system?.full_name
               : data?.id_cancel_system
-              ? "Hệ thống"
+              ? `${i18n.t("system", { lng: lang })}`
               : data?.name_customer}
           </a>
         );
       },
     },
     {
-      title: "Đơn hàng",
+      title: `${i18n.t("order", { lng: lang })}`,
       render: (data) => {
         return <a className="text-user-cancel">{data?.id_view}</a>;
       },
     },
     {
-      title: "Lí do",
+      title: `${i18n.t("reason", { lng: lang })}`,
       render: (data) => {
         return (
           <a className="text-user-cancel">
             {data?.id_cancel_user_system
               ? ""
               : data?.id_cancel_system
-              ? data?.id_cancel_system?.id_reason_cancel?.title?.vi
-              : data?.id_cancel_customer?.id_reason_cancel?.title?.vi}
+              ? data?.id_cancel_system?.id_reason_cancel?.title?.[lang]
+              : data?.id_cancel_customer?.id_reason_cancel?.title?.[lang]}
           </a>
         );
       },
     },
     {
-      title: "Địa chỉ",
+      title: `${i18n.t("address", { lng: lang })}`,
       render: (data) => {
         return <a className="text-address-cancel">{data?.address}</a>;
       },
@@ -225,7 +194,9 @@ const TotalCancelSystem = (props) => {
         <Table dataSource={data} columns={columns} pagination={false} />
       </div>
       <div className="mt-1 div-pagination p-2">
-        <a>Tổng: {total}</a>
+        <a>
+          {`${i18n.t("address", { lng: lang })}`}: {total}
+        </a>
         <div>
           <Pagination
             current={currentPage}

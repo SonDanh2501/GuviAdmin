@@ -118,10 +118,12 @@ const BannerManage = () => {
 
   const onChange = (page) => {
     setCurrentPage(page);
+    const lengthData = banners.length < 20 ? 20 : banners.length;
+    const lengthSearch = dataFilter.length < 20 ? 20 : dataFilter.length;
     const start =
       dataFilter.length > 0
-        ? page * dataFilter.length - dataFilter.length
-        : page * banners.length - banners.length;
+        ? page * lengthSearch - lengthSearch
+        : page * lengthData - lengthData;
 
     setStartPage(start);
 
@@ -134,7 +136,7 @@ const BannerManage = () => {
           .catch((err) => console.log(err))
       : dispatch(
           getBanners.getBannersRequest({
-            start: start > 0 ? start : 0,
+            start: start,
             length: 20,
           })
         );
