@@ -14,12 +14,15 @@ import {
 import CustomDatePicker from "../../../../../components/customDatePicker";
 import { Table } from "antd";
 import "./styles.scss";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
 
 const ReportCustomerArea = () => {
   const [data, setData] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-
+  const lang = useSelector(getLanguageState);
   useEffect(() => {
     getReportCustomerByCity(
       moment().startOf("month").toISOString(),
@@ -44,22 +47,22 @@ const ReportCustomerArea = () => {
 
   const columns = [
     {
-      title: "Khu vực",
+      title: `${i18n.t("area", { lng: lang })}`,
       render: (data) => <a>{data?.city}</a>,
     },
     {
-      title: "Khách hàng",
+      title: `${i18n.t("customer", { lng: lang })}`,
       render: (data) => <a>{data?.total}</a>,
     },
     {
-      title: "Tỉ lệ",
+      title: `${i18n.t("Ratio", { lng: lang })}`,
       render: (data) => <a>{data?.percent}%</a>,
     },
   ];
 
   return (
     <div>
-      <h3>Khách hàng theo khu vực</h3>
+      <h3>{`${i18n.t("customer_report_region", { lng: lang })}`}</h3>
       <div className="div-date">
         <CustomDatePicker
           setStartDate={setStartDate}
@@ -105,7 +108,7 @@ const ReportCustomerArea = () => {
               barSize={20}
               minPointSize={10}
               label={{ position: "centerTop", fill: "white", fontSize: 10 }}
-              name="Số khách hàng"
+              name={`${i18n.t("customer", { lng: lang })}`}
             />
           </BarChart>
         </ResponsiveContainer>

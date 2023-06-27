@@ -1,47 +1,62 @@
 import { useNavigate } from "react-router-dom";
-import { getElementState } from "../../../../redux/selectors/auth";
-
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../redux/selectors/auth";
 import "./styles.scss";
 import { useSelector } from "react-redux";
+import i18n from "../../../../i18n";
 
 const ManageReportCustomer = () => {
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
   return (
     <div className="container-report-order">
       {checkElement?.includes("count_customer_report") && (
         <div className="div-item-report">
-          <a className="text-title">Báo cáo số lượng khách hàng</a>
+          <a className="text-title">{`${i18n.t("report_number_customer", {
+            lng: lang,
+          })}`}</a>
           <a className="text-details">
-            Báo cáo chi tiết số lượt đăng kí theo khoảng thời gian
+            {`${i18n.t("detail_report_time", {
+              lng: lang,
+            })}`}
           </a>
           <a
             className="text-see-report"
             onClick={() => navigate("/report/manage-report/report-user")}
           >
-            Xem báo cáo
+            {`${i18n.t("see_report", { lng: lang })}`}
           </a>
         </div>
       )}
       {checkElement?.includes("customer_invite_report") && (
         <div className="div-item-report">
-          <a className="text-title">Báo cáo lượt giới thiệu</a>
-          <a className="text-details">Báo cáo lượt giới thiệu trong ngày</a>
+          <a className="text-title">
+            {" "}
+            {`${i18n.t("referral_report", { lng: lang })}`}
+          </a>
+          <a className="text-details">{`${i18n.t("referral_report_day", {
+            lng: lang,
+          })}`}</a>
           <a
             className="text-see-report"
             onClick={() =>
               navigate("/report/manage-report/report-customer-invite")
             }
           >
-            Xem báo cáo
+            {`${i18n.t("see_report", { lng: lang })}`}
           </a>
         </div>
       )}
       {checkElement?.includes("customer_by_area_report") && (
         <div className="div-item-report">
-          <a className="text-title">Báo cáo khách hàng theo khu vực</a>
+          <a className="text-title">{`${i18n.t("customer_report_region", {
+            lng: lang,
+          })}`}</a>
           <a className="text-details">
-            Báo cáo tổng số khách hàng trong khu vực
+            {`${i18n.t("total_customer_report_region", { lng: lang })}`}
           </a>
           <a
             className="text-see-report"
@@ -49,7 +64,7 @@ const ManageReportCustomer = () => {
               navigate("/report/manage-report/report-customer-area")
             }
           >
-            Xem báo cáo
+            {`${i18n.t("see_report", { lng: lang })}`}
           </a>
         </div>
       )}

@@ -9,6 +9,9 @@ import {
 } from "../../../../../api/report";
 import { Pagination, Select, Table } from "antd";
 import CustomDatePicker from "../../../../../components/customDatePicker";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
 
 const CancelOrderCustomer = (props) => {
   const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;
@@ -25,6 +28,7 @@ const CancelOrderCustomer = (props) => {
   const [totalCancerOrder, setTotalCancerOrder] = useState(0);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
+  const lang = useSelector(getLanguageState);
   const cityData = [];
 
   useEffect(() => {
@@ -114,7 +118,7 @@ const CancelOrderCustomer = (props) => {
 
   const columns = [
     {
-      title: "Thời gian",
+      title: `${i18n.t("time", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-create-cancel">
@@ -129,7 +133,7 @@ const CancelOrderCustomer = (props) => {
       },
     },
     {
-      title: "Người huỷ",
+      title: `${i18n.t("canceler", { lng: lang })}`,
       render: (data) => {
         return (
           <a className="text-user-cancel">
@@ -143,27 +147,27 @@ const CancelOrderCustomer = (props) => {
       },
     },
     {
-      title: "Đơn hàng",
+      title: `${i18n.t("order", { lng: lang })}`,
       render: (data) => {
         return <a className="text-user-cancel">{data?.id_view}</a>;
       },
     },
     {
-      title: "Lí do",
+      title: `${i18n.t("reason", { lng: lang })}`,
       render: (data) => {
         return (
           <a className="text-user-cancel">
             {data?.id_cancel_user_system
               ? ""
               : data?.id_cancel_system
-              ? data?.id_cancel_system?.id_reason_cancel?.title?.vi
-              : data?.id_cancel_customer?.id_reason_cancel?.title?.vi}
+              ? data?.id_cancel_system?.id_reason_cancel?.title?.[lang]
+              : data?.id_cancel_customer?.id_reason_cancel?.title?.[lang]}
           </a>
         );
       },
     },
     {
-      title: "Địa chỉ",
+      title: `${i18n.t("address", { lng: lang })}`,
       render: (data) => {
         return <a className="text-address-cancel">{data?.address}</a>;
       },
@@ -196,7 +200,7 @@ const CancelOrderCustomer = (props) => {
         textAnchor={x > cx ? "start" : "end"}
         dominantBaseline="central"
       >
-        {name} ({value} {"%"})
+        {name?.[lang]} ({value} {"%"})
       </text>
     );
   };
@@ -231,12 +235,14 @@ const CancelOrderCustomer = (props) => {
       </div>
       <div className="div-chart-pie-total-cancel-customer">
         <div className="div-total-cancel-order">
-          <a>Tổng: {totalCancerOrder}</a>
+          <a>
+            {`${i18n.t("total", { lng: lang })}`}: {totalCancerOrder}
+          </a>
           {dataTotalPie?.map((item, index) => {
             return (
               <div key={index} className="div-total-customer">
                 <a className="title-total-cancel-customer">
-                  {item?.reason_cancel[0]?.title?.vi}
+                  {item?.reason_cancel[0]?.title?.[lang]}
                 </a>
                 <a className="text-colon">:</a>
                 <a className="text-number">{item?.total}</a>

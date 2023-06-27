@@ -19,7 +19,12 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import onToggle from "../../../../../assets/images/on-button.png";
 import offToggle from "../../../../../assets/images/off-button.png";
-import { getElementState } from "../../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
+import ModalCustom from "../../../../../components/modalCustom";
 const width = window.innerWidth;
 
 const GroupCustomerManage = () => {
@@ -35,6 +40,7 @@ const GroupCustomerManage = () => {
   const toggle = () => setModal(!modal);
   const toggleActive = () => setModalActive(!modalActive);
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -113,15 +119,15 @@ const GroupCustomerManage = () => {
 
   const columns = [
     {
-      title: "Tên nhóm khách hàng",
+      title: `${i18n.t("name", { lng: lang })}`,
       render: (data) => <a className="text-name-group-cutomer">{data?.name}</a>,
     },
     {
-      title: "Chi tiết",
+      title: `${i18n.t("detail", { lng: lang })}`,
       dataIndex: "description",
     },
     {
-      title: "Ngày tạo",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => (
         <a className="text-date-group">
           {moment(data?.date_create).format("DD/MM/YYYY hh:mm")}
@@ -180,14 +186,14 @@ const GroupCustomerManage = () => {
             )
           }
         >
-          Chi tiết
+          {`${i18n.t("detail", { lng: lang })}`}
         </a>
       ),
     },
     {
       key: 2,
       label: checkElement?.includes("delete_group_customer_setting") && (
-        <a onClick={toggle}>Xoá</a>
+        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
       ),
     },
   ];
@@ -195,7 +201,7 @@ const GroupCustomerManage = () => {
   const onChange = (page) => {
     setCurrentPage(page);
     const dataLength =
-      listGroupCustomers?.length < 20 ? 20 : listGroupCustomers.length;
+      listGroupCustomers?.length < 10 ? 10 : listGroupCustomers.length;
     const start = page * dataLength - dataLength;
     startPage(start);
     dispatch(
@@ -214,7 +220,7 @@ const GroupCustomerManage = () => {
             )
           }
         >
-          <a>Thêm nhóm khách hàng</a>
+          <a>{`${i18n.t("add_group_customer", { lng: lang })}`}</a>
         </div>
       )}
       <div className="mt-3 p-3 ">
@@ -241,7 +247,9 @@ const GroupCustomerManage = () => {
         </div>
 
         <div className="div-pagination p-2">
-          <a>Tổng: {totalGroupCustomers}</a>
+          <a>
+            {`${i18n.t("total", { lng: lang })}`}: {totalGroupCustomers}
+          </a>
           <div>
             <Pagination
               current={currentPage}
@@ -254,51 +262,50 @@ const GroupCustomerManage = () => {
       </div>
 
       <div>
-        <Modal isOpen={modal} toggle={toggle}>
-          <ModalHeader toggle={toggle}>Xóa nhóm khách hàng</ModalHeader>
-          <ModalBody>
-            <a>
-              Bạn có chắc muốn xóa nhóm khách hàng{" "}
-              <a className="text-name-modal">{item?.name}</a> này không?
-            </a>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              color="primary"
-              onClick={() => deleteGroupCustomer(item?._id)}
-            >
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggle}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+        <ModalCustom
+          isOpen={modal}
+          title={`${i18n.t("delete_group_customer", {
+            lng: lang,
+          })}`}
+          textOk={`${i18n.t("delete", { lng: lang })}`}
+          handleOk={() => deleteGroupCustomer(item?._id)}
+          handleCancel={toggle}
+          body={
+            <>
+              <a>{`${i18n.t("want_delete_group_customer", { lng: lang })}`}</a>
+              <a className="text-name-modal">{item?.name}</a>
+            </>
+          }
+        />
       </div>
 
       <div>
-        <Modal isOpen={modalActive} toggle={toggleActive}>
-          <ModalHeader toggle={toggleActive}>
-            {item?.is_active === true ? "Khóa nhóm" : "Mở nhóm"}
-          </ModalHeader>
-          <ModalBody>
-            {item?.is_active === true
-              ? "Bạn có muốn khóa nhóm khách hàng này"
-              : "Bạn có muốn kích hoạt nhóm khách hàng này"}
-            <h3>{item?.title}</h3>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              color="primary"
-              onClick={() => activeGroupCustomer(item?._id, item?.is_active)}
-            >
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggleActive}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+        <ModalCustom
+          isOpen={modalActive}
+          title={
+            item?.is_active === true
+              ? `${i18n.t("lock_group_customer", { lng: lang })}`
+              : `${i18n.t("unlock_group_customer", { lng: lang })}`
+          }
+          textOk={
+            item?.is_active === true
+              ? `${i18n.t("lock", { lng: lang })}`
+              : `${i18n.t("unlock", { lng: lang })}`
+          }
+          handleCancel={toggleActive}
+          handleOk={() => activeGroupCustomer(item?._id, item?.is_active)}
+          body={
+            <>
+              <a>
+                {item?.is_active === true
+                  ? `${i18n.t("want_lock_group_customer", { lng: lang })}`
+                  : `${i18n.t("want_unlock_group_customer", { lng: lang })}`}
+              </a>
+
+              <h3>{item?.title}</h3>
+            </>
+          }
+        />
       </div>
 
       {isLoading && <LoadingPagination />}

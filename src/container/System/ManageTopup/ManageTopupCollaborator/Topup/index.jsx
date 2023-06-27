@@ -221,7 +221,7 @@ const TopupCollaborator = ({ type }) => {
       sorter: (a, b) => a.money - b.money,
     },
     {
-      title: `${i18n.t("topup_withdraw", { lng: lang })}`,
+      title: `${i18n.t("withdraw_topup", { lng: lang })}`,
       render: (data) => {
         return (
           <>

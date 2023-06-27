@@ -1,15 +1,12 @@
-.btn-modal {
-  background: linear-gradient(
-    90deg,
-    rgb(255, 255, 250) 34%,
-    rgb(253, 255, 215) 80%
-  );
+.btn-modal-edit-reason {
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
   border: none !important;
   border-radius: 5px;
   height: 35px;
-  -webkit-box-shadow: 1px 3px 1px #b6b5ab;
-  -moz-box-shadow: 1px 3px 1px #b6b5ab;
-  box-shadow: 1px 3px 1px #b6b5ab;
+  background-color: #48cae4;
+  margin-top: 30px;
+  color: #fff;
+  width: 25%;
 }
 
 .img-thumbnail {
