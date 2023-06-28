@@ -178,12 +178,10 @@ const MoreActivity = () => {
                     item?.id_transistion_collaborator?._id,
                     item?.id_transistion_collaborator?.transfer_note
                   )
-                : item?.id_transistion_customer
-                ? predicate.replace(
+                : predicate.replace(
                     item?.id_transistion_customer?._id,
                     item?.id_transistion_customer?.transfer_note
-                  )
-                : "";
+                  );
 
               return (
                 <div className="div-item">

@@ -46,9 +46,9 @@ export const activeGroupCustomerApi = (id, data) => {
 
 // create quizz
 
-export const getListQuestionApi = (start, length, type) => {
+export const getListQuestionApi = (start, length, type, exam) => {
   return axiosClient.get(
-    `/admin/exam_test/get_list?start=${start}&length=${length}&type=${type}`
+    `/admin/exam_test/get_list?start=${start}&length=${length}&type=${type}&type_exam=${exam}`
   );
 };
 

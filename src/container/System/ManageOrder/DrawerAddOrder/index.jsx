@@ -39,8 +39,6 @@ const AddOrder = () => {
   const [dataService, setDataService] = useState([]);
   const lang = useSelector(getLanguageState);
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     getGroupServiceApi(0, 20)
       .then((res) => {

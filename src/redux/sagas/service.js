@@ -12,10 +12,12 @@ import {
 import {
   createGroupServiceAction,
   getGroupServiceAction,
+  getProvinceAction,
   getServiceAction,
   updateGroupServiceAction,
 } from "../actions/service";
 import { loadingAction } from "../actions/loading";
+import { getDistrictApi } from "../../api/file";
 
 //group-service
 
@@ -80,6 +82,18 @@ function* fetchServiceSaga() {
     yield put(getServiceAction.getServiceFailure(err));
   }
 }
+//province
+function* fetchProvinceSaga() {
+  try {
+    const response = yield call(getDistrictApi);
+    yield put(
+      getProvinceAction.getProvinceSuccess(response?.aministrative_division)
+    );
+  } catch (err) {
+    console.error(err);
+    yield put(getProvinceAction.getProvinceFailure(err));
+  }
+}
 
 function* ServiceSaga() {
   yield takeLatest(
@@ -95,6 +109,7 @@ function* ServiceSaga() {
     updateGroupServiceSaga
   );
   yield takeLatest(getServiceAction.getServiceRequest, fetchServiceSaga);
+  yield takeLatest(getProvinceAction.getProvinceRequest, fetchProvinceSaga);
 }
 
 // generator function ES6

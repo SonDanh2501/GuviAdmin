@@ -231,7 +231,11 @@ const Punish = () => {
       title: `${i18n.t("approved_by", { lng: lang })}`,
       render: (data) => {
         return (
-          <a className="text-name-verify">{data?.id_admin_verify?.full_name}</a>
+          <a className="text-name-verify">
+            {data?.is_punish_system
+              ? `${i18n.t("system", { lng: lang })}`
+              : data?.id_admin_verify?.full_name}
+          </a>
         );
       },
       align: "center",
