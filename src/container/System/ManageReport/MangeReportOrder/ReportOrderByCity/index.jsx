@@ -22,6 +22,7 @@ import "./styles.scss";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
+import { getProvince } from "../../../../../redux/selectors/service";
 const width = window.innerWidth;
 
 const ReportOrderCity = () => {
@@ -39,15 +40,10 @@ const ReportOrderCity = () => {
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
   const cityOptions = [];
 
   useEffect(() => {
-    getDistrictApi()
-      .then((res) => {
-        setDataCity(res?.aministrative_division);
-      })
-      .catch((err) => {});
-
     getReportOrderByCity(0, 20, startDate, endDate, codeCity)
       .then((res) => {
         setData(res?.data);
@@ -63,7 +59,7 @@ const ReportOrderCity = () => {
       .catch((err) => {});
   }, []);
 
-  dataCity.map((item) => {
+  province.map((item) => {
     cityOptions?.push({
       value: item?.code,
       label: item?.name,
@@ -71,7 +67,7 @@ const ReportOrderCity = () => {
   });
 
   const onChangeDay = () => {
-    getReportOrderByCity(0, 20, startDate, endDate, codeCity)
+    getReportOrderByCity(startPage, 20, startDate, endDate, codeCity)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -89,21 +85,26 @@ const ReportOrderCity = () => {
   const handleChangeCity = (value, label) => {
     setCodeCity(value);
     setNameCity(label?.label);
-    getReportOrderByCity(0, 20, startDate, endDate, value)
+    getReportOrderByCity(startPage, 20, startDate, endDate, value)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
         setDataTotal(res?.total[0]);
       })
       .catch((err) => {});
+
+    getReportPercentOrderByCity(startDate, endDate, value)
+      .then((res) => {
+        setDataChart(res?.data);
+      })
+      .catch((err) => {});
   };
 
   const onChange = (page) => {
     setCurrentPage(page);
-
-    const start = page * data.length - data.length;
+    const lengthData = data.length < 20 ? 20 : data.length;
+    const start = page * lengthData - lengthData;
     setStartPage(start);
-
     getReportOrderByCity(start, 20, startDate, endDate, codeCity)
       .then((res) => {
         setData(res?.data);

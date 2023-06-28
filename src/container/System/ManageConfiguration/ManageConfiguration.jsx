@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -79,6 +79,8 @@ const ManageConfiguration = () => {
           );
         })}
       </div>
+
+      {/* <Link to={`/services/manage-group-service`}>Dịch vụ</Link> */}
     </div>
   );
 };

@@ -3,16 +3,28 @@ import {
   addQuestionApi,
   getListQuestionApi,
 } from "../../../../../../api/configuration";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { errorNotify } from "../../../../../../helper/toast";
 import "./styles.scss";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../i18n";
+import InputCustom from "../../../../../../components/textInputCustom";
 
-const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab }) => {
+const AddQuizz = ({
+  setIsLoading,
+  setData,
+  setTotal,
+  startPage,
+  tab,
+  type,
+}) => {
   const [dataQuestion, setDataQuestion] = useState([
     {
       title: "",
       description: "",
       question: "",
+      type_exam: type,
       choose: [
         {
           answer: "",
@@ -33,6 +45,16 @@ const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab }) => {
       ],
     },
   ]);
+  const lang = useSelector(getLanguageState);
+
+  useEffect(() => {
+    const arr = [...dataQuestion];
+    dataQuestion[0].type_exam = type;
+    setDataQuestion(arr);
+  }, [type]);
+
+  console.log(dataQuestion);
+
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -60,7 +82,7 @@ const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab }) => {
     setDataQuestion(arr);
   };
 
-  const onChaggeTitleQuestion = useCallback(
+  const onChangeTitleQuestion = useCallback(
     (value, index) => {
       const arr = [...dataQuestion];
       dataQuestion[index].title = value;
@@ -69,7 +91,7 @@ const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab }) => {
     [dataQuestion]
   );
 
-  const onChaggeDescriptionQuestion = useCallback(
+  const onChangeDescriptionQuestion = useCallback(
     (value, index) => {
       const arr = [...dataQuestion];
       dataQuestion[index].description = value;
@@ -78,7 +100,7 @@ const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab }) => {
     [dataQuestion]
   );
 
-  const onChaggeTitleAnswer = useCallback(
+  const onChangeTitleAnswer = useCallback(
     (value, index, id) => {
       const arr = [...dataQuestion];
       dataQuestion[index].choose[id].answer = value;
@@ -87,7 +109,7 @@ const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab }) => {
     [dataQuestion]
   );
 
-  const onChaggeQuestion = useCallback(
+  const onChangeQuestion = useCallback(
     (value, index) => {
       const arr = [...dataQuestion];
       dataQuestion[index].question = value;
@@ -135,7 +157,7 @@ const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab }) => {
             ],
           },
         ]);
-        getListQuestionApi(startPage, 20, tab)
+        getListQuestionApi(startPage, 20, tab, type)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItem);
@@ -157,11 +179,11 @@ const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab }) => {
   return (
     <div>
       <Button className="btn-add-question" onClick={showDrawer}>
-        Thêm câu hỏi
+        {`${i18n.t("add_question", { lng: lang })}`}
       </Button>
 
       <Drawer
-        title="Tạo câu hỏi"
+        title={`${i18n.t("add_question", { lng: lang })}`}
         placement="right"
         onClose={onClose}
         open={open}
@@ -170,31 +192,30 @@ const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab }) => {
           {dataQuestion?.map((item, index) => {
             return (
               <Col>
-                <a style={{ fontSize: 18, fontFamily: "sans-serif" }}>Số câu</a>
-                <Input
+                <InputCustom
+                  title={`${i18n.t("number_sentences", { lng: lang })}`}
                   type="number"
                   min={0}
                   value={item?.question}
-                  onChange={(e) => onChaggeQuestion(e.target.value, index)}
+                  onChange={(e) => onChangeQuestion(e.target.value, index)}
                 />
-                <a style={{ fontSize: 18, fontFamily: "sans-serif" }}>
-                  Câu hỏi
-                </a>
 
-                <Input.TextArea
-                  autoSize
+                <InputCustom
+                  title={`${i18n.t("question", { lng: lang })}`}
                   value={item?.title}
-                  onChange={(e) => onChaggeTitleQuestion(e.target.value, index)}
+                  onChange={(e) => onChangeTitleQuestion(e.target.value, index)}
+                  textArea={true}
                 />
-                <a style={{ fontSize: 18, fontFamily: "sans-serif" }}>Mô tả</a>
 
-                <Input.TextArea
-                  autoSize
+                <InputCustom
+                  title={`${i18n.t("describe", { lng: lang })}`}
                   value={item?.description}
                   onChange={(e) =>
-                    onChaggeDescriptionQuestion(e.target.value, index)
+                    onChangeDescriptionQuestion(e.target.value, index)
                   }
+                  textArea={true}
                 />
+
                 <a
                   style={{
                     fontSize: 18,
@@ -202,7 +223,7 @@ const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab }) => {
                     marginTop: 20,
                   }}
                 >
-                  Câu trả lời
+                  {`${i18n.t("answer", { lng: lang })}`}
                 </a>
 
                 {item?.choose?.map((answer, id) => {
@@ -213,11 +234,15 @@ const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab }) => {
                     >
                       <Col span={18}>
                         <Input.TextArea
-                          placeholder={"Nhập câu trả lời" + " " + (id + 1)}
+                          placeholder={
+                            `${i18n.t("enter_answer", { lng: lang })}` +
+                            " " +
+                            (id + 1)
+                          }
                           autoSize
                           value={answer?.answer}
                           onChange={(e) =>
-                            onChaggeTitleAnswer(e.target.value, index, id)
+                            onChangeTitleAnswer(e.target.value, index, id)
                           }
                         />
                       </Col>
@@ -244,7 +269,7 @@ const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab }) => {
                   style={{ fontSize: 14, marginTop: 20 }}
                   onClick={addAnswer}
                 >
-                  Thêm câu trả lời
+                  {`${i18n.t("add_answer", { lng: lang })}`}
                 </Button>
               </Col>
             );
@@ -255,7 +280,7 @@ const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab }) => {
             style={{ float: "right", marginTop: 20 }}
             onClick={addQuestion}
           >
-            Tạo
+            {`${i18n.t("create", { lng: lang })}`}
           </Button>
         </Form>
       </Drawer>

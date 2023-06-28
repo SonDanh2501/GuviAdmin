@@ -36,6 +36,7 @@ export const INIT_STATE = {
     groupService: [],
     groupServiceTotal: 0,
     services: [],
+    province: [],
   },
   brand: {
     title: "Trang chủ",

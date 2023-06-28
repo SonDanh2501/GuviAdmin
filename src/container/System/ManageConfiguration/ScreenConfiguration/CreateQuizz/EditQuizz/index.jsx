@@ -8,13 +8,26 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { errorNotify } from "../../../../../../helper/toast";
 import "./styles.scss";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../i18n";
+import InputCustom from "../../../../../../components/textInputCustom";
 
-const EditQuizz = ({ id, setIsLoading, setData, setTotal, startPage, tab }) => {
+const EditQuizz = ({
+  id,
+  setIsLoading,
+  setData,
+  setTotal,
+  startPage,
+  tab,
+  type,
+}) => {
   const [dataQuestion, setDataQuestion] = useState([
     {
       title: "",
       description: "",
       question: "",
+      type_exam: "",
       choose: [
         {
           answer: "",
@@ -43,6 +56,7 @@ const EditQuizz = ({ id, setIsLoading, setData, setTotal, startPage, tab }) => {
   const onClose = () => {
     setOpen(false);
   };
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getDetailsQuestionApi(id)
@@ -52,7 +66,7 @@ const EditQuizz = ({ id, setIsLoading, setData, setTotal, startPage, tab }) => {
         dataQuestion[0].description = res?.description;
         dataQuestion[0].question = res?.question;
         dataQuestion[0].choose = res?.choose;
-
+        dataQuestion[0].type_exam = res?.type_exam;
         setDataQuestion(arr);
         setIsLoading(false);
       })
@@ -129,7 +143,7 @@ const EditQuizz = ({ id, setIsLoading, setData, setTotal, startPage, tab }) => {
     editQuestionApi(id, dataQuestion[0])
       .then((res) => {
         setOpen(false);
-        getListQuestionApi(startPage, 20, tab)
+        getListQuestionApi(startPage, 20, tab, type)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItem);
@@ -150,10 +164,10 @@ const EditQuizz = ({ id, setIsLoading, setData, setTotal, startPage, tab }) => {
 
   return (
     <div>
-      <a onClick={showDrawer}>Chỉnh sửa</a>
+      <a onClick={showDrawer}>{`${i18n.t("edit", { lng: lang })}`}</a>
 
       <Drawer
-        title="Chỉnh sửa câu hỏi"
+        title={`${i18n.t("edit", { lng: lang })}`}
         placement="right"
         onClose={onClose}
         open={open}
@@ -162,31 +176,29 @@ const EditQuizz = ({ id, setIsLoading, setData, setTotal, startPage, tab }) => {
           {dataQuestion?.map((item, index) => {
             return (
               <Col>
-                <a style={{ fontSize: 18, fontFamily: "sans-serif" }}>Số câu</a>
-                <Input
+                <InputCustom
+                  title={`${i18n.t("number_sentences", { lng: lang })}`}
                   type="number"
                   min={0}
                   value={item?.question}
                   onChange={(e) => onChaggeQuestion(e.target.value, index)}
                 />
-                <a style={{ fontSize: 18, fontFamily: "sans-serif" }}>
-                  Câu hỏi
-                </a>
-
-                <Input.TextArea
-                  autoSize
+                <InputCustom
+                  title={`${i18n.t("question", { lng: lang })}`}
                   value={item?.title}
                   onChange={(e) => onChaggeTitleQuestion(e.target.value, index)}
+                  textArea={true}
                 />
-                <a style={{ fontSize: 18, fontFamily: "sans-serif" }}>Mô tả</a>
 
-                <Input.TextArea
-                  autoSize
+                <InputCustom
+                  title={`${i18n.t("describe", { lng: lang })}`}
                   value={item?.description}
                   onChange={(e) =>
                     onChaggeDescriptionQuestion(e.target.value, index)
                   }
+                  textArea={true}
                 />
+
                 <a
                   style={{
                     fontSize: 18,
@@ -194,7 +206,7 @@ const EditQuizz = ({ id, setIsLoading, setData, setTotal, startPage, tab }) => {
                     marginTop: 20,
                   }}
                 >
-                  Câu trả lời
+                  {`${i18n.t("answer", { lng: lang })}`}
                 </a>
 
                 {item?.choose?.map((answer, id) => {
@@ -205,7 +217,11 @@ const EditQuizz = ({ id, setIsLoading, setData, setTotal, startPage, tab }) => {
                     >
                       <Col span={18}>
                         <Input.TextArea
-                          placeholder={"Nhập câu trả lời" + " " + (id + 1)}
+                          placeholder={
+                            `${i18n.t("enter_answer", { lng: lang })}` +
+                            " " +
+                            (id + 1)
+                          }
                           autoSize
                           value={answer?.answer}
                           onChange={(e) =>
@@ -236,7 +252,7 @@ const EditQuizz = ({ id, setIsLoading, setData, setTotal, startPage, tab }) => {
                   style={{ fontSize: 14, marginTop: 20 }}
                   onClick={addAnswer}
                 >
-                  Thêm câu trả lời
+                  {`${i18n.t("edit", { lng: lang })}`}
                 </Button>
               </Col>
             );
@@ -247,7 +263,7 @@ const EditQuizz = ({ id, setIsLoading, setData, setTotal, startPage, tab }) => {
             style={{ float: "right", marginTop: 20 }}
             onClick={addQuestion}
           >
-            Chỉnh sửa
+            {`${i18n.t("edit", { lng: lang })}`}
           </Button>
         </Form>
       </Drawer>
