@@ -135,7 +135,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
         },
       })
         .then((res) => {
-          setThumbnail(res);
+          setThumbnail(res[0]);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -169,7 +169,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
         },
       })
         .then((res) => {
-          setThumbnailActive(res);
+          setThumbnailActive(res[0]);
           setIsLoading(false);
         })
         .catch((err) => {

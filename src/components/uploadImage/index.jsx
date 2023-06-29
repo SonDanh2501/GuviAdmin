@@ -7,6 +7,7 @@ import { errorNotify } from "../../helper/toast";
 import { useDispatch } from "react-redux";
 import { loadingAction } from "../../redux/actions/loading";
 import { postFile } from "../../api/file";
+import axios from "axios";
 
 const UploadImage = (props) => {
   const { setUrl, classImg, title, image, setImage } = props;
@@ -32,7 +33,7 @@ const UploadImage = (props) => {
         },
       })
         .then((res) => {
-          setImage(res);
+          setImage(res[0]);
           dispatch(loadingAction.loadingRequest(false));
         })
         .catch((err) => {

@@ -77,7 +77,7 @@ const Document = ({ id }) => {
       },
     })
       .then((res) => {
-        setImgIdentifyFronsite(res);
+        setImgIdentifyFronsite(res[0]);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -106,7 +106,7 @@ const Document = ({ id }) => {
       },
     })
       .then((res) => {
-        setImgIdentifyBacksite(res);
+        setImgIdentifyBacksite(res[0]);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {

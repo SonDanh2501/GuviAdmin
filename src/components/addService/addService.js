@@ -53,7 +53,7 @@ const AddService = (props) => {
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
-        setImgUrl(res);
+        setImgUrl(res[0]);
       })
       .catch((err) => {
         errorNotify({

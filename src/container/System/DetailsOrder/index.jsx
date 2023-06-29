@@ -1,57 +1,56 @@
+import { MoreOutlined } from "@ant-design/icons";
 import {
   Button,
   Checkbox,
-  Col,
   Dropdown,
   FloatButton,
   Image,
   Input,
   Pagination,
   Popconfirm,
-  Row,
   Select,
   Space,
   Table,
   Tabs,
 } from "antd";
 import moment from "moment";
-import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import vi from "moment/locale/vi";
-import {
-  changeStatusOrderApi,
-  getOrderByGroupOrderApi,
-  changeOrderCancelToDoneApi,
-  cancelGroupOrderApi,
-  getHistoryOrderApi,
-  checkOrderApi,
-} from "../../../api/order";
-import userIma from "../../../assets/images/user.png";
-import { formatMoney } from "../../../helper/formatMoney";
-import { errorNotify } from "../../../helper/toast";
-import { loadingAction } from "../../../redux/actions/loading";
-import "./index.scss";
-import { getElementState, getUser } from "../../../redux/selectors/auth";
-import { MoreOutlined } from "@ant-design/icons";
-import EditTimeOrder from "../ManageOrder/EditTimeGroupOrder";
-import EditTimeOrderSchedule from "./EditTimeOrderSchedule";
-import { getListReasonCancel } from "../../../api/reasons";
-import { ModalBody, ModalFooter, ModalHeader, Modal } from "reactstrap";
-import LoadingPagination from "../../../components/paginationLoading";
-import ModalCustom from "../../../components/modalCustom";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
 import {
   blockCustomerApi,
   favouriteCustomerApi,
   unblockCustomerApi,
   unfavouriteCustomerApi,
 } from "../../../api/customer";
+import {
+  cancelGroupOrderApi,
+  changeStatusOrderApi,
+  checkOrderApi,
+  getHistoryOrderApi,
+  getOrderByGroupOrderApi,
+} from "../../../api/order";
+import { getListReasonCancel } from "../../../api/reasons";
+import userIma from "../../../assets/images/user.png";
+import ModalCustom from "../../../components/modalCustom";
+import LoadingPagination from "../../../components/paginationLoading";
 import InputCustom from "../../../components/textInputCustom";
+import { formatMoney } from "../../../helper/formatMoney";
+import { errorNotify } from "../../../helper/toast";
+import { loadingAction } from "../../../redux/actions/loading";
+import {
+  getElementState,
+  getLanguageState,
+  getUser,
+} from "../../../redux/selectors/auth";
+import EditTimeOrder from "../ManageOrder/EditTimeGroupOrder";
+import EditTimeOrderSchedule from "./EditTimeOrderSchedule";
+import "./index.scss";
+import i18n from "../../../i18n";
 const width = window.innerWidth;
 
 const DetailsOrder = () => {
-  // const { state } = useLocation();
-  // const { id } = state || {};
   const params = useParams();
   const id = params?.id;
   const [dataGroup, setDataGroup] = useState({
@@ -83,7 +82,7 @@ const DetailsOrder = () => {
   const toggleDelete = () => setModalDelete(!modalDelete);
   const toggleDeleteList = () => setModalDeleteList(!modalDeleteList);
   const reasonOption = [];
-  const user = useSelector(getUser);
+  const lang = useSelector(getLanguageState);
   const checkElement = useSelector(getElementState);
 
   useEffect(() => {
@@ -97,7 +96,7 @@ const DetailsOrder = () => {
   dataReason?.map((item) => {
     reasonOption.push({
       value: item?._id,
-      label: item?.title?.vi,
+      label: item?.title?.[lang],
     });
   });
 
@@ -150,7 +149,14 @@ const DetailsOrder = () => {
       .add(data?.total_estimate, "hours")
       .format("HH:mm");
 
-    return start + " - " + timeEnd + "   (" + data?.total_estimate + " giờ )";
+    return (
+      start +
+      " - " +
+      timeEnd +
+      "   (" +
+      data?.total_estimate +
+      ` ${i18n.t("hour", { lng: lang })} )`
+    );
   };
 
   const timeWorkList = (data) => {
@@ -385,14 +391,14 @@ const DetailsOrder = () => {
 
   const columns = [
     {
-      title: "Mã",
+      title: `${i18n.t("code", { lng: lang })}`,
       render: (data) => {
         return <a className="text-id">{data?.id_view}</a>;
       },
       width: "10%",
     },
     {
-      title: "Ngày tạo",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-create-details-order">
@@ -407,19 +413,21 @@ const DetailsOrder = () => {
       },
     },
     {
-      title: "Dịch vụ",
+      title: `${i18n.t("service", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-service">
             <a className="text-service">
               {dataGroup?.type === "loop" && dataGroup?.is_auto_order
-                ? "Lặp lại"
+                ? `${i18n.t("repeat", { lng: lang })}`
                 : dataGroup?.service?._id?.kind === "giup_viec_theo_gio"
-                ? "Theo giờ"
+                ? `${i18n.t("cleaning", { lng: lang })}`
                 : dataGroup?.service?._id?.kind === "giup_viec_co_dinh"
-                ? "Cố định"
+                ? `${i18n.t("cleaning_subscription", {
+                    lng: lang,
+                  })}`
                 : dataGroup?.service?._id?.kind === "phuc_vu_nha_hang"
-                ? "Phục vụ "
+                ? `${i18n.t("serve", { lng: lang })}`
                 : ""}
             </a>
             <a className="text-service">{timeWorkList(data)}</a>
@@ -428,7 +436,7 @@ const DetailsOrder = () => {
       },
     },
     {
-      title: "Thời gian",
+      title: `${i18n.t("time", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-worktime-detail-order">
@@ -437,24 +445,22 @@ const DetailsOrder = () => {
               {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
             </a>
             <a className="text-worktime">
-              {moment(new Date(data?.date_work))
-                .locale("vi", vi)
-                .format("dddd")}
+              {moment(new Date(data?.date_work)).locale(lang).format("dddd")}
             </a>
           </div>
         );
       },
     },
     {
-      title: "Địa điểm",
+      title: `${i18n.t("address", { lng: lang })}`,
       render: (data) => <p className="text-address-details">{data?.address}</p>,
     },
     {
-      title: "Cộng tác viên",
+      title: `${i18n.t("collaborator", { lng: lang })}`,
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
-            <a>Đang tìm kiếm</a>
+            <a>{`${i18n.t("searching", { lng: lang })}`}</a>
           ) : (
             <Link to={`/details-collaborator/${data?.id_collaborator}`}>
               <a className="text-collaborator">{data?.name_collaborator}</a>
@@ -466,7 +472,7 @@ const DetailsOrder = () => {
     },
 
     {
-      title: "Trạng thái",
+      title: `${i18n.t("status", { lng: lang })}`,
       render: (data) => (
         <a
           className={
@@ -482,19 +488,19 @@ const DetailsOrder = () => {
           }
         >
           {data?.status === "pending"
-            ? "Đang chờ làm"
+            ? `${i18n.t("pending", { lng: lang })}`
             : data?.status === "confirm"
-            ? "Đã nhận"
+            ? `${i18n.t("confirm", { lng: lang })}`
             : data?.status === "doing"
-            ? "Đang làm"
+            ? `${i18n.t("doing", { lng: lang })}`
             : data?.status === "done"
-            ? "Hoàn thành"
-            : "Đã huỷ"}
+            ? `${i18n.t("complete", { lng: lang })}`
+            : `${i18n.t("cancel", { lng: lang })}`}
         </a>
       ),
     },
     {
-      title: "Ghi chú",
+      title: `${i18n.t("note", { lng: lang })}`,
       render: (data) => {
         return (
           <div>
@@ -522,8 +528,9 @@ const DetailsOrder = () => {
                     <div>
                       {rowIndex === index && (
                         <Popconfirm
-                          title="Bạn có chuyển trạng thái công việc"
-                          // description="Open Popconfirm with async logic"
+                          title={`${i18n.t("change_status_job", {
+                            lng: lang,
+                          })}`}
                           open={openStatus}
                           onConfirm={() => handleChangeStatus(data?._id)}
                           okButtonProps={{
@@ -540,9 +547,9 @@ const DetailsOrder = () => {
                         }
                       >
                         {data?.status === "confirm"
-                          ? "Bắt đầu"
+                          ? `${i18n.t("start", { lng: lang })}`
                           : data?.status === "doing"
-                          ? "Hoàn thành"
+                          ? `${i18n.t("complete", { lng: lang })}`
                           : ""}
                       </Button>
                     </div>
@@ -561,7 +568,7 @@ const DetailsOrder = () => {
                         className="btn-confirm-order mt-1"
                         onClick={toggleDeleteList}
                       >
-                        Huỷ việc
+                        {`${i18n.t("cancellation", { lng: lang })}`}
                       </Button>
                     </div>
                   )}
@@ -598,7 +605,7 @@ const DetailsOrder = () => {
       key: "1",
       label: (
         <Link to={`/details-order/details-order-schedule/${itemEdit?._id}`}>
-          <a>Chi tiết</a>
+          <a>{`${i18n.t("detail", { lng: lang })}`}</a>
         </Link>
       ),
     },
@@ -622,14 +629,21 @@ const DetailsOrder = () => {
     <div>
       <>
         <Tabs defaultActiveKey="1" size="large">
-          <Tabs.TabPane tab="Chi tiết đơn hàng" key="1">
+          <Tabs.TabPane
+            tab={`${i18n.t("order_detail", { lng: lang })}`}
+            key="1"
+          >
             <>
               {hideShow && (
                 <div className="div-container">
-                  <a className="label-detail">Chi tiết công việc</a>
+                  <a className="label-detail">{`${i18n.t("order_detail", {
+                    lng: lang,
+                  })}`}</a>
                   <div className="div-details-kh-ctv">
                     <div className="col-left">
-                      <a className="label-customer">Khách hàng</a>
+                      <a className="label-customer">{`${i18n.t("customer", {
+                        lng: lang,
+                      })}`}</a>
                       <div className="div-body-details">
                         <Image
                           src={
@@ -645,21 +659,23 @@ const DetailsOrder = () => {
                             to={`/profile-customer/${dataGroup?.id_customer?._id}`}
                           >
                             <a className="label-name">
-                              Tên: {dataGroup?.id_customer?.full_name}
+                              {`${i18n.t("name", { lng: lang })}`}:{" "}
+                              {dataGroup?.id_customer?.full_name}
                             </a>
                           </Link>
 
                           <a className="label-name">
-                            SĐT: {dataGroup?.id_customer?.phone}
+                            {`${i18n.t("phone", { lng: lang })}`}:{" "}
+                            {dataGroup?.id_customer?.phone}
                           </a>
                           <a className="label-name">
-                            Tuổi:{" "}
+                            {`${i18n.t("age", { lng: lang })}`}:{" "}
                             {dataGroup?.id_customer?.birthday
                               ? moment().diff(
                                   dataGroup?.id_customer?.birthday,
                                   "years"
                                 )
-                              : "Chưa cập nhật"}
+                              : `${i18n.t("not_update", { lng: lang })}`}
                           </a>
                         </div>
                       </div>
@@ -667,7 +683,10 @@ const DetailsOrder = () => {
                     {dataGroup?.id_collaborator && (
                       <div className="col-right">
                         <div className="div-ctv-favourite">
-                          <a className="label-ctv">Cộng tác viên hiện tại</a>
+                          <a className="label-ctv">{`${i18n.t(
+                            "current_collaborator",
+                            { lng: lang }
+                          )}`}</a>
                           <Button
                             onClick={() => setModalFavourite(true)}
                             className={
@@ -681,8 +700,8 @@ const DetailsOrder = () => {
                             {dataGroup?.id_customer?.id_favourite_collaborator?.includes(
                               dataGroup?.id_collaborator?._id
                             )
-                              ? "Bỏ yêu thích"
-                              : "Yêu thích"}
+                              ? `${i18n.t("unfavourite", { lng: lang })}`
+                              : `${i18n.t("favourite", { lng: lang })}`}
                           </Button>
                           <Button
                             onClick={() => setModalBlock(true)}
@@ -691,8 +710,8 @@ const DetailsOrder = () => {
                             {dataGroup?.id_customer?.id_block_collaborator?.includes(
                               dataGroup?.id_collaborator?._id
                             )
-                              ? "Bỏ chặn"
-                              : "Chặn"}
+                              ? `${i18n.t("unblock", { lng: lang })}`
+                              : `${i18n.t("block", { lng: lang })}`}
                           </Button>
                         </div>
                         <div className="div-body-details">
@@ -706,24 +725,27 @@ const DetailsOrder = () => {
                               to={`/details-collaborator/${dataGroup?.id_collaborator?._id}`}
                             >
                               <a className="label-name">
-                                Tên: {dataGroup?.id_collaborator?.full_name}
+                                {`${i18n.t("name", { lng: lang })}`}:{" "}
+                                {dataGroup?.id_collaborator?.full_name}
                               </a>
                             </Link>
 
                             <a className="label-name">
-                              SĐT: {dataGroup?.id_collaborator?.phone}
+                              {`${i18n.t("phone", { lng: lang })}`}:{" "}
+                              {dataGroup?.id_collaborator?.phone}
                             </a>
                             <a className="label-name">
-                              Tuổi:{" "}
+                              {`${i18n.t("age", { lng: lang })}`}:{" "}
                               {dataGroup?.id_collaborator?.birthday
                                 ? moment().diff(
                                     dataGroup?.id_collaborator?.birthday,
                                     "years"
                                   )
-                                : "Chưa cập nhật"}
+                                : `${i18n.t("not_update", { lng: lang })}`}
                             </a>
                             <a className="label-name">
-                              Số sao: {dataGroup?.id_collaborator?.star}
+                              {`${i18n.t("number_star", { lng: lang })}`}:{" "}
+                              {dataGroup?.id_collaborator?.star}
                               <i class="uil uil-star icon-star"></i>
                             </a>
                           </div>
@@ -733,36 +755,45 @@ const DetailsOrder = () => {
                   </div>
                   <div>
                     <div className="div-details-service">
-                      <a className="label-details">Chi tiết</a>
+                      <a className="label-details">
+                        {" "}
+                        {`${i18n.t("detail", { lng: lang })}`}
+                      </a>
                       <div className="div-details-order">
                         <div className="div-title-details">
-                          <a className="title">Dịch vụ </a>
+                          <a className="title">
+                            {`${i18n.t("service", { lng: lang })}`}
+                          </a>
                         </div>
                         <a className="text-colon">:</a>
                         <a className="text-service-order">
                           {dataGroup?.type === "loop" &&
                           dataGroup?.is_auto_order
-                            ? "Lặp lại hàng tuần"
+                            ? `${i18n.t("repeat", { lng: lang })}`
                             : dataGroup?.service?._id?.kind ===
                               "giup_viec_theo_gio"
-                            ? "Giúp việc theo giờ"
+                            ? `${i18n.t("cleaning", { lng: lang })}`
                             : dataGroup?.service?._id?.kind ===
                               "giup_viec_co_dinh"
-                            ? "Giúp việc cố định"
+                            ? `${i18n.t("cleaning_subscription", {
+                                lng: lang,
+                              })}`
                             : dataGroup?.service?._id?.kind ===
                               "phuc_vu_nha_hang"
-                            ? "Phục vụ nhà hàng"
+                            ? `${i18n.t("serve", { lng: lang })}`
                             : ""}
                         </a>
                       </div>
                       <div className="div-details-order">
                         <div className="div-title-details">
-                          <a className="title">Thời gian</a>
+                          <a className="title">{`${i18n.t("time", {
+                            lng: lang,
+                          })}`}</a>
                         </div>
                         <a className="text-colon">:</a>
                         <div className="div-times">
                           <a className="text-date">
-                            - Ngày làm:{" "}
+                            - {`${i18n.t("date_work", { lng: lang })}`}:{" "}
                             {moment(
                               new Date(dataGroup?.date_work_schedule[0]?.date)
                             ).format("DD/MM/YYYY")}{" "}
@@ -770,12 +801,13 @@ const DetailsOrder = () => {
                             {moment(
                               new Date(dataGroup?.date_work_schedule[0].date)
                             )
-                              .locale("vi", vi)
+                              .locale(lang)
                               .format("dd")}
                             )
                           </a>
                           <a className="text-date">
-                            - Giờ làm: {timeWork(dataGroup)}
+                            - {`${i18n.t("time_work", { lng: lang })}`}:{" "}
+                            {timeWork(dataGroup)}
                           </a>
                         </div>
                         {dataGroup?.status === "pending" &&
@@ -804,7 +836,9 @@ const DetailsOrder = () => {
 
                       <div className="div-details-order">
                         <div className="div-title-details">
-                          <a className="title"> Địa chỉ</a>
+                          <a className="title">{`${i18n.t("address", {
+                            lng: lang,
+                          })}`}</a>
                         </div>
                         <a className="text-colon">:</a>
                         <a className="text-address-details">
@@ -815,7 +849,9 @@ const DetailsOrder = () => {
                       {dataGroup?.note && (
                         <div className="div-details-order">
                           <div className="div-title-details">
-                            <a className="title">Ghi chú</a>
+                            <a className="title">{`${i18n.t("note", {
+                              lng: lang,
+                            })}`}</a>
                           </div>
                           <a className="text-colon">:</a>
                           <a className="text-address-details">
@@ -832,12 +868,15 @@ const DetailsOrder = () => {
                                   return (
                                     <div className="div-details-order">
                                       <div className="div-title-details">
-                                        <a className="title">Kinh doanh</a>
+                                        <a className="title">{`${i18n.t(
+                                          "business",
+                                          { lng: lang }
+                                        )}`}</a>
                                       </div>
                                       <a className="text-colon">:</a>
                                       <div className="div-add">
                                         <a className="text-title-add">
-                                          - {item?.title?.vi}
+                                          - {item?.title?.[lang]}
                                         </a>
                                       </div>
                                     </div>
@@ -856,12 +895,15 @@ const DetailsOrder = () => {
                                   return (
                                     <div className="div-details-order">
                                       <div className="div-title-details">
-                                        <a className="title">Dịch vụ thêm</a>
+                                        <a className="title">{`${i18n.t(
+                                          "extra_service",
+                                          { lng: lang }
+                                        )}`}</a>
                                       </div>
                                       <a className="text-colon">:</a>
                                       <div className="div-add">
                                         <a className="text-title-add">
-                                          - {item?.title?.vi}
+                                          - {item?.title?.[lang]}
                                         </a>
                                       </div>
                                     </div>
@@ -874,26 +916,35 @@ const DetailsOrder = () => {
 
                       <div className="div-details-order">
                         <div className="div-title-details">
-                          <a className="title">Thanh toán</a>
+                          <a className="title">{`${i18n.t("payment", {
+                            lng: lang,
+                          })}`}</a>
                         </div>
                         <a className="text-colon">:</a>
                         <a className="text-address-details">
                           {dataGroup?.payment_method === "cash"
-                            ? "Tiền mặt"
+                            ? `${i18n.t("cash", { lng: lang })}`
                             : "G-pay"}
                         </a>
                       </div>
 
                       <div className="div-details-order-price">
                         <div className="div-title-details">
-                          <a className="title">Tạm tính</a>
+                          <a className="title">
+                            {`${i18n.t("provisional", { lng: lang })}`}
+                          </a>
                         </div>
                         {/* <a className="text-colon">:</a> */}
                         <div className="div-details-price">
                           <div className="div-price">
                             <div className="div-title-colon">
                               <div className="div-title-details">
-                                <a className="title">- Giá tạm tính</a>
+                                <a className="title">
+                                  -{" "}
+                                  {`${i18n.t("provisional_price", {
+                                    lng: lang,
+                                  })}`}
+                                </a>
                               </div>
                               <a className="text-colon">:</a>
                             </div>
@@ -913,7 +964,9 @@ const DetailsOrder = () => {
                           <div className="div-price">
                             <div className="div-title-colon">
                               <div className="div-title-details">
-                                <a className="title">- Phí hệ thống</a>
+                                <a className="title">
+                                  - {`${i18n.t("system_fee", { lng: lang })}`}
+                                </a>
                               </div>
                               <a className="text-colon">:</a>
                             </div>
@@ -935,7 +988,7 @@ const DetailsOrder = () => {
                                           <div className="div-title-colon">
                                             <div className="div-title-details">
                                               <a className="title">
-                                                - {item?.title?.vi}
+                                                - {item?.title?.[lang]}
                                               </a>
                                             </div>
                                             <a className="text-colon">:</a>
@@ -957,7 +1010,9 @@ const DetailsOrder = () => {
                             <div className="div-price">
                               <div className="div-title-colon">
                                 <div className="div-title-details">
-                                  <a className="title">- Tiền tip</a>
+                                  <a className="title">
+                                    - {`${i18n.t("tips", { lng: lang })}`}
+                                  </a>
                                 </div>
                                 <a className="text-colon">:</a>
                               </div>
@@ -972,7 +1027,9 @@ const DetailsOrder = () => {
                             <div className="div-price">
                               <div className="div-title-colon">
                                 <div className="div-title-details">
-                                  <a className="title">- Khuyến mãi</a>
+                                  <a className="title">
+                                    - {`${i18n.t("promotion", { lng: lang })}`}
+                                  </a>
                                 </div>
                                 <a className="text-colon">:</a>
                               </div>
@@ -980,7 +1037,8 @@ const DetailsOrder = () => {
                               {dataGroup?.code_promotion && (
                                 <>
                                   <a className="text-moeny-details">
-                                    + Mã code: {dataGroup?.code_promotion?.code}
+                                    + {`${i18n.t("code", { lng: lang })}`}:{" "}
+                                    {dataGroup?.code_promotion?.code}
                                   </a>
                                   <a className="money-red">
                                     {formatMoney(
@@ -997,13 +1055,16 @@ const DetailsOrder = () => {
                               <div className="div-price">
                                 <div className="div-title-colon">
                                   <div className="div-title-details">
-                                    <a className="title">- Chương trình</a>
+                                    <a className="title">
+                                      -{" "}
+                                      {`${i18n.t("programme", { lng: lang })}`}
+                                    </a>
                                   </div>
                                   <a className="text-colon">:</a>
                                 </div>
                                 <>
                                   <a className="text-name-promotion">
-                                    + {item?._id?.title?.vi}
+                                    + {item?._id?.title?.[lang]}
                                   </a>
                                   <a className="money-event-discount">
                                     {formatMoney(-item?.discount)}
@@ -1016,7 +1077,9 @@ const DetailsOrder = () => {
                           <div className="div-price">
                             <div className="div-title-colon">
                               <div className="div-title-details">
-                                <a className="title-total">- Tổng tiền</a>
+                                <a className="title-total">
+                                  - {`${i18n.t("total_money", { lng: lang })}`}
+                                </a>
                               </div>
                               <a className="text-colon">:</a>
                             </div>
@@ -1039,7 +1102,7 @@ const DetailsOrder = () => {
                               className="btn-cancel"
                               onClick={toggleDelete}
                             >
-                              Huỷ việc
+                              {`${i18n.t("cancellation", { lng: lang })}`}
                             </Button>
                           ) : null}
                         </div>
@@ -1075,12 +1138,20 @@ const DetailsOrder = () => {
               )}
             </>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Hoạt động đơn hàng" key="2">
+          <Tabs.TabPane
+            tab={`${i18n.t("order_activity", { lng: lang })}`}
+            key="2"
+          >
             <div>
               <div className="mt-3">
                 {dataHistory?.map((item, index) => {
                   const money = item?.value?.toString();
-                  const subject = item?.id_admin_action
+                  const subject = item?.id_user_system
+                    ? item?.title_admin.replace(
+                        item?.id_user_system?._id,
+                        item?.id_user_system?.full_name
+                      )
+                    : item?.id_admin_action
                     ? item?.title_admin.replace(
                         item?.id_admin_action?._id,
                         item?.id_admin_action?.full_name
@@ -1095,12 +1166,10 @@ const DetailsOrder = () => {
                         item?.id_collaborator?._id,
                         item?.id_collaborator?.full_name
                       )
-                    : item?.id_promotion
-                    ? item?.title_admin.replace(
+                    : item?.title_admin.replace(
                         item?.id_promotion?._id,
                         item?.id_promotion?.code
-                      )
-                    : "";
+                      );
 
                   const predicate = item?.id_order
                     ? subject.replace(
@@ -1110,18 +1179,18 @@ const DetailsOrder = () => {
                     : item?.id_reason_punish
                     ? subject.replace(
                         item?.id_reason_punish?._id,
-                        item?.id_reason_punish?.title?.vi
+                        item?.id_reason_punish?.title?.[lang]
                       )
                     : item?.id_reward
                     ? subject.replace(
                         item?.id_reward?._id,
-                        item?.id_reward?.title?.vi
+                        item?.id_reward?.title?.[lang]
                       )
                     : item?.id_info_reward_collaborator
                     ? subject.replace(
                         item?.id_info_reward_collaborator?._id,
                         item?.id_info_reward_collaborator
-                          ?.id_reward_collaborator?.title?.vi
+                          ?.id_reward_collaborator?.title?.[lang]
                       )
                     : item?.id_transistion_collaborator
                     ? subject.replace(
@@ -1141,7 +1210,7 @@ const DetailsOrder = () => {
                     : item?.id_promotion
                     ? subject.replace(
                         item?.id_promotion?._id,
-                        item?.id_promotion?.title?.vi
+                        item?.id_promotion?.title?.[lang]
                       )
                     : item?.id_admin_action
                     ? subject.replace(
@@ -1150,22 +1219,15 @@ const DetailsOrder = () => {
                       )
                     : item?.id_address
                     ? subject.replace(item?.id_address, item?.value_string)
-                    : // : item?.id_group_order
-                    // ? subject.replace(
-                    //     item?.id_group_order?._id,
-                    //     item?.id_group_order?.id_view
-                    //   )
-                    item?.id_transistion_customer
-                    ? subject.replace(
+                    : subject.replace(
                         item?.id_transistion_customer?._id,
                         item?.id_transistion_customer?.transfer_note
-                      )
-                    : "";
+                      );
 
                   const object = item?.id_reason_cancel
                     ? predicate.replace(
                         item?.id_reason_cancel?._id,
-                        item?.id_reason_cancel?.title?.vi
+                        item?.id_reason_cancel?.title?.[lang]
                       )
                     : item?.id_collaborator
                     ? predicate.replace(
@@ -1220,7 +1282,9 @@ const DetailsOrder = () => {
               </div>
 
               <div className="mt-2 div-pagination p-2">
-                <a>Tổng: {totalHistory}</a>
+                <a>
+                  {`${i18n.t("total", { lng: lang })}`}: {totalHistory}
+                </a>
                 <div>
                   <Pagination
                     current={currentPage}
@@ -1239,23 +1303,24 @@ const DetailsOrder = () => {
       <div>
         <ModalCustom
           isOpen={modalDelete}
-          title="Huỷ công việc"
+          title={`${i18n.t("cancel_job", { lng: lang })}`}
           handleOk={() => handleCancelGroupOrder(dataGroup?._id)}
-          textOk="Có"
+          textOk={`${i18n.t("yes", { lng: lang })}`}
           handleCancel={toggleDelete}
           body={
             <>
               <a>
-                Bạn có chắc muốn huỷ việc
-                {dataGroup?.id_view} này không?
+                {`${i18n.t("want_cancel_job", { lng: lang })}`}{" "}
+                {dataGroup?.id_view}
               </a>
               <div>
-                <a>Chọn lí do huỷ</a>
-                <Select
+                <InputCustom
+                  title={`${i18n.t("reason_cancellation", { lng: lang })}`}
                   style={{ width: "100%" }}
                   value={idReason}
                   onChange={(e) => setIdReason(e)}
                   options={reasonOption}
+                  select={true}
                 />
               </div>
             </>
@@ -1268,16 +1333,16 @@ const DetailsOrder = () => {
             dataGroup?.id_customer?.id_favourite_collaborator?.includes(
               dataGroup?.id_collaborator?._id
             )
-              ? "Bỏ yêu thích cộng tác viên"
-              : "Thêm công tác viên yêu thích"
+              ? `${i18n.t("cancel_collaborator_favourite", { lng: lang })}`
+              : `${i18n.t("add_collaborator_favourite", { lng: lang })}`
           }
           handleOk={onHandleFavourite}
           textOk={
             dataGroup?.id_customer?.id_favourite_collaborator?.includes(
               dataGroup?.id_collaborator?._id
             )
-              ? "Bỏ"
-              : "Thêm"
+              ? `${i18n.t("cancel_modal", { lng: lang })}`
+              : `${i18n.t("add", { lng: lang })}`
           }
           handleCancel={() => setModalFavourite(false)}
           body={
@@ -1285,8 +1350,16 @@ const DetailsOrder = () => {
               {dataGroup?.id_customer?.id_favourite_collaborator?.includes(
                 dataGroup?.id_collaborator?._id
               )
-                ? `Bạn có chắc muốn bỏ yêu thích cộng tác viên ${dataGroup?.id_collaborator?.full_name} cho khách hàng ${dataGroup?.id_customer?.full_name}`
-                : `Bạn có chắc muốn thêm công tác viên yêu thích ${dataGroup?.id_collaborator?.full_name} cho khách hàng ${dataGroup?.id_customer?.full_name}`}
+                ? `${i18n.t("want_unfavor_collaborator", { lng: lang })}"${
+                    dataGroup?.id_collaborator?.full_name
+                  }" ${i18n.t("for_customers", { lng: lang })} "${
+                    dataGroup?.id_customer?.full_name
+                  }"`
+                : `${i18n.t("want_add_unfavor_collaborator", { lng: lang })} "${
+                    dataGroup?.id_collaborator?.full_name
+                  }" ${i18n.t("for_customers", { lng: lang })} "${
+                    dataGroup?.id_customer?.full_name
+                  }"`}
             </a>
           }
         />
@@ -1324,26 +1397,29 @@ const DetailsOrder = () => {
       <div>
         <ModalCustom
           isOpen={modalDeleteList}
-          title="Huỷ công việc"
+          title={`${i18n.t("cancel_job", { lng: lang })}`}
           handleOk={() => handleCancelOrder(itemEdit?._id)}
-          textOk="Có"
+          textOk={`${i18n.t("yes", { lng: lang })}`}
           handleCancel={toggleDeleteList}
           body={
             <>
-              <a>Bạn có chắc muốn huỷ việc {itemEdit?.id_view} này không?</a>
+              <a>
+                {`${i18n.t("want_cancel_job", { lng: lang })}`}{" "}
+                {itemEdit?.id_view}{" "}
+              </a>
               <div>
-                <a>Chọn lí do huỷ</a>
-                <Select
+                <InputCustom
+                  title={`${i18n.t("reason_cancellation", { lng: lang })}`}
                   style={{ width: "100%" }}
                   value={idReason}
                   onChange={(e) => setIdReason(e)}
                   options={reasonOption}
+                  select={true}
                 />
               </div>
               <div>
-                <a>Nhập lí do khác</a>
-                <Input
-                  placeholder="Vui lòng nhập nếu có lí do khác"
+                <InputCustom
+                  title={`${i18n.t("other_reason", { lng: lang })}`}
                   onChange={(e) => setNoteReason(e.target.value)}
                 />
               </div>

@@ -1,9 +1,9 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import "./index.scss";
 import { useEffect, useState } from "react";
 import { cancelGroupOrderApi, getOrderDetailApi } from "../../../../api/order";
 import { Button, Col, FloatButton, Image, Popconfirm, Row } from "antd";
-import { getUser } from "../../../../redux/selectors/auth";
+import { getLanguageState, getUser } from "../../../../redux/selectors/auth";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { formatMoney } from "../../../../helper/formatMoney";
@@ -11,6 +11,7 @@ import { loadingAction } from "../../../../redux/actions/loading";
 import userIma from "../../../../assets/images/user.png";
 
 import { errorNotify } from "../../../../helper/toast";
+import i18n from "../../../../i18n";
 
 const DetailsOrderSchedule = () => {
   // const { state } = useLocation();
@@ -26,6 +27,7 @@ const DetailsOrderSchedule = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getOrderDetailApi(id)
@@ -61,7 +63,14 @@ const DetailsOrderSchedule = () => {
       .add(data?.total_estimate, "hours")
       .format("HH:mm");
 
-    return start + " - " + timeEnd + "   (" + data?.total_estimate + " giờ )";
+    return (
+      start +
+      " - " +
+      timeEnd +
+      "   (" +
+      data?.total_estimate +
+      ` ${i18n.t("hour", { lng: lang })} )`
+    );
   };
 
   const handleOk = (_id) => {
@@ -90,10 +99,12 @@ const DetailsOrderSchedule = () => {
       ></i>
       {hideShow && (
         <div className="div-container">
-          <a className="label">Chi tiết công việc</a>
+          <a className="label">{`${i18n.t("order_detail", { lng: lang })}`}</a>
           <Row>
             <Col span={14} className="col-left">
-              <a className="label-customer">Khách hàng</a>
+              <a className="label-customer">{`${i18n.t("customer", {
+                lng: lang,
+              })}`}</a>
               <div className="div-body">
                 <Image
                   src={
@@ -106,21 +117,27 @@ const DetailsOrderSchedule = () => {
 
                 <div className="div-info">
                   <a className="label-name">
-                    Tên: {data?.id_customer?.full_name}
+                    {`${i18n.t("name", { lng: lang })}`}:{" "}
+                    {data?.id_customer?.full_name}
                   </a>
-                  <a className="label-name">SĐT: {data?.id_customer?.phone}</a>
                   <a className="label-name">
-                    Tuổi:{" "}
+                    {`${i18n.t("phone", { lng: lang })}`}:{" "}
+                    {data?.id_customer?.phone}
+                  </a>
+                  <a className="label-name">
+                    {`${i18n.t("age", { lng: lang })}`}:{" "}
                     {data?.id_customer?.birthday
                       ? moment().diff(data?.id_customer?.birthday, "years")
-                      : "Chưa cập nhật"}
+                      : `${i18n.t("not_update", { lng: lang })}`}
                   </a>
                 </div>
               </div>
             </Col>
             {data?.id_collaborator && (
               <Col span={10} className="col-right">
-                <a className="label-ctv">Cộng tác viên hiện tại</a>
+                <a className="label-ctv">{`${i18n.t("current_collaborator", {
+                  lng: lang,
+                })}`}</a>
                 <div className="div-body">
                   <Image
                     style={{
@@ -133,34 +150,27 @@ const DetailsOrderSchedule = () => {
                   />
 
                   <div className="div-info">
-                    <a
-                      className="label-name"
-                      onClick={() => {
-                        if (user?.role !== "support_customer") {
-                          navigate(
-                            "/group-order/manage-order/details-collaborator",
-                            {
-                              state: {
-                                id: data?.id_collaborator?._id,
-                              },
-                            }
-                          );
-                        }
-                      }}
+                    <Link
+                      to={`/details-collaborator/${data?.id_collaborator?._id}`}
                     >
-                      Tên: {data?.id_collaborator?.full_name}
+                      <a className="label-name">
+                        {`${i18n.t("name", { lng: lang })}`}:{" "}
+                        {data?.id_collaborator?.full_name}
+                      </a>
+                    </Link>
+
+                    <a className="label-name">
+                      {`${i18n.t("phone", { lng: lang })}`}:{" "}
+                      {data?.id_collaborator?.phone}
                     </a>
                     <a className="label-name">
-                      SĐT: {data?.id_collaborator?.phone}
-                    </a>
-                    <a className="label-name">
-                      Tuổi:{" "}
+                      {`${i18n.t("age", { lng: lang })}`}:{" "}
                       {data?.id_collaborator?.birthday
                         ? moment().diff(
                             data?.id_collaborator?.birthday,
                             "years"
                           )
-                        : "Chưa cập nhật"}
+                        : `${i18n.t("not_update", { lng: lang })}`}
                     </a>
                   </div>
                 </div>
@@ -169,41 +179,53 @@ const DetailsOrderSchedule = () => {
           </Row>
           <div>
             <div className="div-details-service">
-              <a className="label-details">Chi tiết</a>
+              <a className="label-details">
+                {" "}
+                {`${i18n.t("detail", { lng: lang })}`}
+              </a>
               <div className="div-details-order">
                 <div className="div-title-details">
-                  <a className="title">Dịch vụ</a>
+                  <a className="title">
+                    {`${i18n.t("service", { lng: lang })}`}
+                  </a>
                 </div>
                 <a className="text-colon">:</a>
                 <a className="text-service-order">
                   {data?.type === "loop" && data?.is_auto_order
-                    ? "Lặp lại hàng tuần"
+                    ? `${i18n.t("repeat", { lng: lang })}`
                     : data?.service?._id?.kind === "giup_viec_theo_gio"
-                    ? "Giúp việc theo giờ"
+                    ? `${i18n.t("cleaning", { lng: lang })}`
                     : data?.service?._id?.kind === "giup_viec_co_dinh"
-                    ? "Giúp việc cố định"
+                    ? `${i18n.t("cleaning_subscription", {
+                        lng: lang,
+                      })}`
                     : data?.service?._id?.kind === "phuc_vu_nha_hang"
-                    ? "Phục vụ nhà hàng"
+                    ? `${i18n.t("serve", { lng: lang })}`
                     : ""}
                 </a>
               </div>
               <div className="div-details-order">
                 <div className="div-title-details">
-                  <a className="title">Thời gian</a>
+                  <a className="title">{`${i18n.t("time", { lng: lang })}`}</a>
                 </div>
                 <a className="text-colon">:</a>
                 <div className="div-times">
                   <a className="text-date">
-                    - Ngày làm:{" "}
+                    - {`${i18n.t("date_work", { lng: lang })}`}:{" "}
                     {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
                   </a>
-                  <a className="text-date">- Giờ làm: {timeWork(data)}</a>
+                  <a className="text-date">
+                    - {`${i18n.t("time_work", { lng: lang })}`}:{" "}
+                    {timeWork(data)}
+                  </a>
                 </div>
               </div>
 
               <div className="div-details-order">
                 <div className="div-title-details">
-                  <a className="title"> Địa điểm</a>
+                  <a className="title">{`${i18n.t("address", {
+                    lng: lang,
+                  })}`}</a>
                 </div>
                 <a className="text-colon">:</a>
                 <a className="text-address-details">{data?.address}</a>
@@ -212,7 +234,9 @@ const DetailsOrderSchedule = () => {
               {data?.note && (
                 <div className="div-details-order">
                   <div className="div-title-details">
-                    <a className="title">Ghi chú</a>
+                    <a className="title">{`${i18n.t("note", {
+                      lng: lang,
+                    })}`}</a>
                   </div>
                   <a className="text-colon">:</a>
                   <a className="text-address-details">{data?.note}</a>
@@ -227,12 +251,14 @@ const DetailsOrderSchedule = () => {
                           return (
                             <div className="div-details-order">
                               <div className="div-title-details">
-                                <a className="title">Kinh doanh</a>
+                                <a className="title">{`${i18n.t("business", {
+                                  lng: lang,
+                                })}`}</a>
                               </div>
                               <a className="text-colon">:</a>
                               <div className="div-add">
                                 <a className="text-title-add">
-                                  - {item?.title?.vi}
+                                  - {item?.title?.[lang]}
                                 </a>
                               </div>
                             </div>
@@ -251,12 +277,15 @@ const DetailsOrderSchedule = () => {
                           return (
                             <div className="div-details-order">
                               <div className="div-title-details">
-                                <a className="title">Dịch vụ thêm</a>
+                                <a className="title">{`${i18n.t(
+                                  "extra_service",
+                                  { lng: lang }
+                                )}`}</a>
                               </div>
                               <a className="text-colon">:</a>
                               <div className="div-add">
                                 <a className="text-title-add">
-                                  - {item?.title?.vi}
+                                  - {item?.title?.[lang]}
                                 </a>
                               </div>
                             </div>
@@ -269,24 +298,32 @@ const DetailsOrderSchedule = () => {
 
               <div className="div-details-order">
                 <div className="div-title-details">
-                  <a className="title">Thanh toán</a>
+                  <a className="title">{`${i18n.t("payment", {
+                    lng: lang,
+                  })}`}</a>
                 </div>
                 <a className="text-colon">:</a>
                 <a className="text-address-details">
-                  {data?.payment_method === "cash" ? "Tiền mặt" : "G-pay"}
+                  {data?.payment_method === "cash"
+                    ? `${i18n.t("cash", { lng: lang })}`
+                    : "G-pay"}
                 </a>
               </div>
 
               <div className="div-details-order">
                 <div className="div-title-details">
-                  <a className="title">Tạm tính</a>
+                  <a className="title">{`${i18n.t("provisional", {
+                    lng: lang,
+                  })}`}</a>
                 </div>
                 <a className="text-colon">:</a>
                 <div className="div-details-price">
                   <div className="div-price">
                     <div className="div-title-colon">
                       <div className="div-title-details">
-                        <a className="title">- Giá tạm tính</a>
+                        <a className="title">
+                          - {`${i18n.t("provisional_price", { lng: lang })}`}
+                        </a>
                       </div>
                       <a className="text-colon">:</a>
                     </div>
@@ -300,7 +337,9 @@ const DetailsOrderSchedule = () => {
                   <div className="div-price">
                     <div className="div-title-colon">
                       <div className="div-title-details">
-                        <a className="title">- Phí hệ thống</a>
+                        <a className="title">
+                          - {`${i18n.t("system_fee", { lng: lang })}`}
+                        </a>
                       </div>
                       <a className="text-colon">:</a>
                     </div>
@@ -321,7 +360,7 @@ const DetailsOrderSchedule = () => {
                                   <div className="div-title-colon">
                                     <div className="div-title-details">
                                       <a className="title">
-                                        - {item?.title?.vi}
+                                        - {item?.title?.[lang]}
                                       </a>
                                     </div>
                                     <a className="text-colon">:</a>
@@ -339,12 +378,31 @@ const DetailsOrderSchedule = () => {
                       </>
                     );
                   })}
+                  {data?.tip_collaborator !== 0 && (
+                    <div className="div-price">
+                      <div className="div-title-colon">
+                        <div className="div-title-details">
+                          <a className="title">
+                            - {`${i18n.t("tips", { lng: lang })}`}
+                          </a>
+                        </div>
+                        <a className="text-colon">:</a>
+                      </div>
+                      <>
+                        <a className="text-moeny-details">
+                          +{formatMoney(data?.tip_collaborator)}
+                        </a>
+                      </>
+                    </div>
+                  )}
 
                   {data?.code_promotion && (
                     <div className="div-price">
                       <div className="div-title-colon">
                         <div className="div-title-details">
-                          <a className="title">- Khuyến mãi</a>
+                          <a className="title">
+                            - {`${i18n.t("promotion", { lng: lang })}`}
+                          </a>
                         </div>
                         <a className="text-colon">:</a>
                       </div>
@@ -352,7 +410,8 @@ const DetailsOrderSchedule = () => {
                       {data?.code_promotion && (
                         <>
                           <a className="text-moeny-details">
-                            + Mã code: {data?.code_promotion?.code}
+                            + {`${i18n.t("code", { lng: lang })}`}:{" "}
+                            {data?.code_promotion?.code}
                           </a>
                           <a className="money-red">
                             {formatMoney(-data?.code_promotion?.discount)}
@@ -367,12 +426,14 @@ const DetailsOrderSchedule = () => {
                       <div className="div-price">
                         <div className="div-title-colon">
                           <div className="div-title-details">
-                            <a className="title">- Chương trình</a>
+                            <a className="title">
+                              - {`${i18n.t("programme", { lng: lang })}`}
+                            </a>
                           </div>
                           <a className="text-colon">:</a>
                         </div>
                         <>
-                          <a>+ {item?._id?.title?.vi}</a>
+                          <a>+ {item?._id?.title?.[lang]}</a>
                           <a className="money-event-discount">
                             {formatMoney(-item?.discount)}
                           </a>
@@ -384,7 +445,9 @@ const DetailsOrderSchedule = () => {
                   <div className="div-price">
                     <div className="div-title-colon">
                       <div className="div-title-details">
-                        <a className="title-total">- Tổng tiền</a>
+                        <a className="title-total">
+                          - {`${i18n.t("total_money", { lng: lang })}`}
+                        </a>
                       </div>
                       <a className="text-colon">:</a>
                     </div>

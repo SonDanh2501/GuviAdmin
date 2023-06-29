@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, Checkbox, DatePicker, Drawer, Input, List } from "antd";
 import "./index.scss";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadingAction } from "../../../../redux/actions/loading";
 import dayjs from "dayjs";
 import _debounce from "lodash/debounce";
@@ -14,6 +14,8 @@ import {
 } from "../../../../api/order";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import i18n from "../../../../i18n";
 
 const EditTimeOrderSchedule = (props) => {
   const {
@@ -32,6 +34,7 @@ const EditTimeOrderSchedule = (props) => {
   );
   const [wordDate, setWordDate] = useState(dateWork);
   const [isCheckDateWork, setIsCheckDateWork] = useState(true);
+  const lang = useSelector(getLanguageState);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -82,16 +85,16 @@ const EditTimeOrderSchedule = (props) => {
   return (
     <>
       <a className="text-add" onClick={showDrawer}>
-        Chỉnh sửa
+        {`${i18n.t("edit", { lng: lang })}`}
       </a>
       <Drawer
-        title="Chỉnh sửa thời gian làm việc"
+        title={`${i18n.t("edit", { lng: lang })}`}
         placement="right"
         onClose={onClose}
         width={400}
         open={open}
       >
-        <a>Giờ bắt đầu</a>
+        <a>{`${i18n.t("start_time", { lng: lang })}`}</a>
         <DatePicker
           className="select-date"
           format={dateFormat}
@@ -146,12 +149,12 @@ const EditTimeOrderSchedule = (props) => {
             checked={isCheckDateWork}
             onChange={(e) => setIsCheckDateWork(e.target.checked)}
           >
-            Kiểm tra trùng giờ
+            {`${i18n.t("check_same_time", { lng: lang })}`}
           </Checkbox>
         </div>
 
         <Button className="btn-update-time-order" onClick={editOrder}>
-          Cập nhật
+          {`${i18n.t("update", { lng: lang })}`}
         </Button>
       </Drawer>
     </>

@@ -38,31 +38,54 @@
   border-radius: 4px;
   padding: 5px;
   align-items: center;
+  justify-content: space-between;
   background-color: white;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.3));
 
-  .image-ctv {
-    width: 50px;
-    height: 50px;
-    border-radius: 8px;
+  .div-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .image-ctv {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+    }
+
+    .div-name-item {
+      display: flex;
+      flex-direction: column;
+      margin-left: 10px;
+
+      .text-name {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-weight: 400;
+        font-style: normal;
+        color: black;
+        text-decoration: none;
+      }
+
+      .icon-star {
+        color: rgb(255, 196, 59);
+      }
+    }
   }
 
-  .div-name-item {
+  .div-cancel {
     display: flex;
-    flex-direction: column;
-    margin-left: 10px;
+    border-left: 1px solid black;
+    align-items: end;
+    padding: 0px 10px;
+    height: 100%;
 
-    .text-name {
+    .text-cancel {
       font-size: 14px;
       font-family: "Roboto";
-      font-weight: 400;
+      font-weight: 500;
       font-style: normal;
       color: black;
       text-decoration: none;
-    }
-
-    .icon-star {
-      color: rgb(255, 196, 59);
     }
   }
 }

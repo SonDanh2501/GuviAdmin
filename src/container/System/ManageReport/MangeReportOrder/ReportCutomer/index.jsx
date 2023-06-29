@@ -2,7 +2,7 @@ import { Button, DatePicker, Pagination, Popover, Progress, Table } from "antd";
 import moment from "moment";
 import vi from "moment/locale/vi";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getReportConnectionCustomer,
   getReportCustomer,
@@ -145,10 +145,12 @@ const ReportCustomer = () => {
       align: "left",
       render: (data) => {
         return (
-          <div className="div-name-ctv-report">
+          <Link
+            to={`/profile-customer/${data?.id_customer?._id}`}
+            className="div-name-ctv-report"
+          >
             <a className="text-name-report"> {data?.id_customer?.full_name}</a>
-            {/* <a className="text-id">{data?.id_view}</a> */}
-          </div>
+          </Link>
         );
       },
     },

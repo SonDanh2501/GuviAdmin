@@ -62,7 +62,7 @@ const EditNews = ({ data }) => {
         },
       })
         .then((res) => {
-          setImgThumbnail(res);
+          setImgThumbnail(res[0]);
           dispatch(loadingAction.loadingRequest(false));
         })
         .catch((err) => {
