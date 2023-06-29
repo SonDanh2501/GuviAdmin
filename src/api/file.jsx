@@ -1,15 +1,11 @@
 import axiosClient from "../axios";
 
 export const postFile = (data, header) => {
-  return axiosClient.post("/cloudinary/cloudinary/upload", data, header);
+  return axiosClient.post(`/image/upload`, data, header);
 };
 
 export const postMutipleFile = (data, header) => {
-  return axiosClient.post(
-    "/cloudinary/cloudinary/uploadMultiple",
-    data,
-    header
-  );
+  return axiosClient.post(`/image/upload`, data, header);
 };
 
 export const getDistrictApi = () => {

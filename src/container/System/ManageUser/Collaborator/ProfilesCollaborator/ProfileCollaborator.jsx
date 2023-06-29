@@ -81,10 +81,11 @@ const ProfileCollaborator = () => {
       },
     })
       .then((res) => {
-        setImg(res);
+        setImg(res[0]);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
+        setImg("");
         errorNotify({
           message: err,
         });

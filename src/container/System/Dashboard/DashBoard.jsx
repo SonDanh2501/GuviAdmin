@@ -668,15 +668,9 @@ export default function Home() {
                       lng: lang,
                     })}`}</p>
                     <div className="level">
-                      <div
+                      <Link
                         className="level-ctv1"
-                        onClick={() =>
-                          navigate("/details-collaborator", {
-                            state: {
-                              id: topCollaborator[0]?._id?.id_collaborator,
-                            },
-                          })
-                        }
+                        to={`/details-collaborator/${topCollaborator[0]?._id?.id_collaborator}`}
                       >
                         <p className="text-level">
                           {topCollaborator[0]?._id?.full_name}
@@ -684,17 +678,11 @@ export default function Home() {
                         <p className="text-level-number">
                           {formatMoney(topCollaborator[0]?.sumIncome)}
                         </p>
-                      </div>
+                      </Link>
                       {topCollaborator.length > 1 && (
-                        <div
+                        <Link
                           className="level-ctv2"
-                          onClick={() =>
-                            navigate("/details-collaborator", {
-                              state: {
-                                id: topCollaborator[1]?._id?.id_collaborator,
-                              },
-                            })
-                          }
+                          to={`/details-collaborator/${topCollaborator[1]?._id?.id_collaborator}`}
                         >
                           <p className="text-level">
                             {topCollaborator[1]?._id?.name}
@@ -702,18 +690,12 @@ export default function Home() {
                           <p className="text-level-number">
                             {formatMoney(topCollaborator[1]?.sumIncome)}
                           </p>
-                        </div>
+                        </Link>
                       )}
                       {topCollaborator.length > 2 && (
-                        <div
+                        <Link
                           className="level-ctv3"
-                          onClick={() =>
-                            navigate("/details-collaborator", {
-                              state: {
-                                id: topCollaborator[2]?._id?.id_collaborator,
-                              },
-                            })
-                          }
+                          to={`/details-collaborator/${topCollaborator[2]?._id?.id_collaborator}`}
                         >
                           <p className="text-level">
                             {topCollaborator[2]?._id?.name}
@@ -721,18 +703,12 @@ export default function Home() {
                           <p className="text-level-number">
                             {formatMoney(topCollaborator[2]?.sumIncome)}
                           </p>
-                        </div>
+                        </Link>
                       )}
                       {topCollaborator.length > 3 && (
-                        <div
+                        <Link
                           className="level-ctv4"
-                          onClick={() =>
-                            navigate("/details-collaborator", {
-                              state: {
-                                id: topCollaborator[3]?._id?.id_collaborator,
-                              },
-                            })
-                          }
+                          to={`/details-collaborator/${topCollaborator[3]?._id?.id_collaborator}`}
                         >
                           <p className="text-level">
                             {topCollaborator[3]?._id?.name}
@@ -740,18 +716,12 @@ export default function Home() {
                           <p className="text-level-number">
                             {formatMoney(topCollaborator[3]?.sumIncome)}
                           </p>
-                        </div>
+                        </Link>
                       )}
                       {topCollaborator.length > 4 && (
-                        <div
+                        <Link
                           className="level-ctv5"
-                          onClick={() =>
-                            navigate("/details-collaborator", {
-                              state: {
-                                id: topCollaborator[4]?._id?.id_collaborator,
-                              },
-                            })
-                          }
+                          to={`/details-collaborator/${topCollaborator[4]?._id?.id_collaborator}`}
                         >
                           <p className="text-level">
                             {topCollaborator[4]?._id?.name}
@@ -759,7 +729,7 @@ export default function Home() {
                           <p className="text-level-number">
                             {formatMoney(topCollaborator[4]?.sumIncome)}
                           </p>
-                        </div>
+                        </Link>
                       )}
                     </div>
                     <div className="div-seemore">
@@ -897,7 +867,12 @@ export default function Home() {
                     itemLayout="horizontal"
                     dataSource={historyActivity.slice(0, 4)}
                     renderItem={(item, index) => {
-                      const subject = item?.id_admin_action
+                      const subject = item?.id_user_system
+                        ? item?.title_admin.replace(
+                            item?.id_user_system?._id,
+                            item?.id_user_system?.full_name
+                          )
+                        : item?.id_admin_action
                         ? item?.title_admin.replace(
                             item?.id_admin_action?._id,
                             item?.id_admin_action?.full_name
@@ -912,14 +887,17 @@ export default function Home() {
                             item?.id_collaborator?._id,
                             item?.id_collaborator?.full_name
                           )
-                        : item?.id_promotion
-                        ? item?.title_admin.replace(
+                        : item?.title_admin.replace(
                             item?.id_promotion?._id,
                             item?.id_promotion?.code
-                          )
-                        : "";
+                          );
 
-                      const predicate = item?.id_reason_punish
+                      const predicate = item?.id_order
+                        ? subject.replace(
+                            item?.id_order?._id,
+                            item?.id_order?.id_view
+                          )
+                        : item?.id_reason_punish
                         ? subject.replace(
                             item?.id_reason_punish?._id,
                             item?.id_reason_punish?.title?.vi
@@ -962,19 +940,17 @@ export default function Home() {
                           )
                         : item?.id_address
                         ? subject.replace(item?.id_address, item?.value_string)
-                        : item?.id_order
-                        ? subject.replace(
-                            item?.id_order?._id,
-                            item?.id_order?.id_view
-                          )
-                        : item?.id_transistion_customer
-                        ? subject.replace(
+                        : subject.replace(
                             item?.id_transistion_customer?._id,
                             item?.id_transistion_customer?.transfer_note
-                          )
-                        : "";
+                          );
 
-                      const object = item?.id_collaborator
+                      const object = item?.id_reason_cancel
+                        ? predicate.replace(
+                            item?.id_reason_cancel?._id,
+                            item?.id_reason_cancel?.title?.vi
+                          )
+                        : item?.id_collaborator
                         ? predicate.replace(
                             item?.id_collaborator?._id,
                             item?.id_collaborator?.full_name
@@ -994,15 +970,11 @@ export default function Home() {
                             item?.id_transistion_collaborator?._id,
                             item?.id_transistion_collaborator?.transfer_note
                           )
-                        : item?.id_transistion_customer
-                        ? predicate.replace(
+                        : predicate.replace(
                             item?.id_transistion_customer?._id,
                             item?.id_transistion_customer?.transfer_note
-                          )
-                        : predicate.replace(
-                            item?.id_reason_cancel?._id,
-                            item?.id_reason_cancel?.title?.vi
                           );
+
                       return (
                         <div className="div-list" key={index}>
                           <div className="div-line">

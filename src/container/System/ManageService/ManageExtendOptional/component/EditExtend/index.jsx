@@ -158,7 +158,7 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
         },
       })
         .then((res) => {
-          setThumbnail(res);
+          setThumbnail(res[0]);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -192,7 +192,7 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
         },
       })
         .then((res) => {
-          setThumbnailActive(res);
+          setThumbnailActive(res[0]);
           setIsLoading(false);
         })
         .catch((err) => {

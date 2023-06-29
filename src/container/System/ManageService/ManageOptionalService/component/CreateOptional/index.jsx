@@ -93,7 +93,7 @@ const CreateOptional = (props) => {
         },
       })
         .then((res) => {
-          setThumbnail(res);
+          setThumbnail(res[0]);
           setIsLoading(false);
         })
         .catch((err) => {

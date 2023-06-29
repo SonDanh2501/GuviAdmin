@@ -8,6 +8,10 @@ import {
   getReasonPunishApi,
 } from "../../../../../../../api/reasons";
 import { errorNotify } from "../../../../../../../helper/toast";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../../i18n";
+import InputCustom from "../../../../../../../components/textInputCustom";
 
 const EditReasonPubnish = (props) => {
   const { id, setIsLoading, setData, setTotal } = props;
@@ -17,6 +21,7 @@ const EditReasonPubnish = (props) => {
   const [descriptionEN, setDescriptionEN] = useState("");
   const [note, setNote] = useState("");
   const [open, setOpen] = useState(false);
+  const lang = useSelector(getLanguageState);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -67,47 +72,45 @@ const EditReasonPubnish = (props) => {
   }, [id, titleVN, titleEN, descriptionVN, descriptionEN, note]);
   return (
     <div>
-      <a onClick={showDrawer}>Chỉnh sửa</a>
+      <a onClick={showDrawer}>{`${i18n.t("edit", { lng: lang })}`}</a>
       <Drawer title="Tạo lí do" placement="right" onClose={onClose} open={open}>
         <div>
-          <a>Tên lí do</a>
-          <Input
-            placeholder="Nhập tên Tiếng Việt"
-            value={titleVN}
+          <a>{`${i18n.t("name", { lng: lang })}`}</a>
+          <InputCustom
+            title={`${i18n.t("vietnamese", { lng: lang })}`}
             onChange={(e) => setTitleVN(e.target.value)}
+            value={titleVN}
           />
-          <Input
-            placeholder="Nhập tên Tiếng Anh"
-            value={titleEN}
-            style={{ marginTop: 5 }}
+          <InputCustom
+            title={`${i18n.t("english", { lng: lang })}`}
             onChange={(e) => setTitleEN(e.target.value)}
+            value={titleEN}
           />
         </div>
         <div className="mt-2">
-          <a>Tên mô tả</a>
-          <Input
-            value={descriptionVN}
-            placeholder="Nhập tên Tiếng Việt"
+          <a>{`${i18n.t("describe", { lng: lang })}`}</a>
+          <InputCustom
+            title={`${i18n.t("vietnamese", { lng: lang })}`}
             onChange={(e) => setDescriptionVN(e.target.value)}
+            value={descriptionVN}
           />
-          <Input
-            value={descriptionEN}
-            placeholder="Nhập tên Tiếng Anh"
-            style={{ marginTop: 5 }}
+          <InputCustom
+            title={`${i18n.t("english", { lng: lang })}`}
             onChange={(e) => setDescriptionEN(e.target.value)}
+            value={descriptionEN}
           />
         </div>
         <div className="mt-2">
-          <a>Ghi chú</a>
-          <Input
-            value={note}
-            placeholder="Nhập ghi chú"
+          <InputCustom
+            title={`${i18n.t("note", { lng: lang })}`}
             onChange={(e) => setNote(e.target.value)}
+            value={note}
+            testArea={true}
           />
         </div>
 
         <Button className="btn-add-punish-reason" onClick={onEditPunishReason}>
-          Sửa
+          {`${i18n.t("edit", { lng: lang })}`}
         </Button>
       </Drawer>
     </div>

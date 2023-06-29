@@ -59,7 +59,7 @@ const EditGroupService = (props) => {
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
-        setImgUrl(res);
+        setImgUrl(res[0]);
       })
       .catch((err) => {
         dispatch(loadingAction.loadingRequest(false));

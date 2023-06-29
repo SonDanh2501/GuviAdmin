@@ -45,7 +45,7 @@ const AddGroupService = ({ setIsLoading, setData, setTotal }) => {
       },
     })
       .then((res) => {
-        setImgUrl(res);
+        setImgUrl(res[0]);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {

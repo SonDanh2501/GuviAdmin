@@ -67,7 +67,7 @@ const EditService = (props) => {
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
-        setImgThumbnail(res);
+        setImgThumbnail(res[0]);
       })
       .catch((err) => {
         errorNotify({
