@@ -8,7 +8,6 @@ import "./index.scss";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import { searchCustomers } from "../../../../api/customer";
-import { postFile } from "../../../../api/file";
 import {
   editPushNotification,
   getDetailNotification,
@@ -16,10 +15,9 @@ import {
 import { getGroupCustomerApi } from "../../../../api/promotion";
 import InputCustom from "../../../../components/textInputCustom";
 import UploadImage from "../../../../components/uploadImage";
-import resizeFile from "../../../../helper/resizer";
+import i18n from "../../../../i18n";
 import { getNotification } from "../../../../redux/actions/notification";
 import { getLanguageState } from "../../../../redux/selectors/auth";
-import i18n from "../../../../i18n";
 const EditPushNotification = ({ id }) => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");

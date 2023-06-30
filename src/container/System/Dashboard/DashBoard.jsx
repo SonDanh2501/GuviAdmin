@@ -112,7 +112,11 @@ export default function Home() {
     }
     if (checkElement?.includes("history_activity_dashboard")) {
       dispatch(
-        getHistoryActivity.getHistoryActivityRequest({ start: 0, length: 20 })
+        getHistoryActivity.getHistoryActivityRequest({
+          start: 0,
+          length: 20,
+          lang: lang,
+        })
       );
     }
     if (checkElement?.includes("lastest_services_dashboard")) {

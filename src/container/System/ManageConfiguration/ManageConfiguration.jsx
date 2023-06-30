@@ -8,6 +8,7 @@ import {
 } from "../../../redux/selectors/auth";
 import "./ManageConfiguration.scss";
 import i18n from "../../../i18n";
+import Chat from "../Chat";
 
 const ManageConfiguration = () => {
   const navigate = useNavigate();
@@ -80,7 +81,9 @@ const ManageConfiguration = () => {
         })}
       </div>
 
-      {/* <Link to={`/services/manage-group-service`}>Dịch vụ</Link> */}
+      {/* <div>
+        <Chat />
+      </div> */}
     </div>
   );
 };
@@ -137,19 +140,20 @@ const DATA = [
   },
   {
     id: 9,
-    title: "Cấu hình dịch vụ",
-    value: "setting_service",
-  },
-  {
-    id: 10,
     title: "config_admin_right",
     value: "setting_role",
     role: "get_role_permission_setting",
   },
   {
-    id: 11,
+    id: 10,
     title: "config_bonus_collaborator",
     value: "reward_collaborator",
     role: "get_reward_collaborator_setting",
+  },
+  {
+    id: 11,
+    title: "Cấu hình dịch vụ",
+    value: "setting_service",
+    role: "get_group_service_setting",
   },
 ];
