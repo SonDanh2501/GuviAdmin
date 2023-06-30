@@ -128,7 +128,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
       const file = e.target.files[0];
       const image = await resizeFile(file);
       const formData = new FormData();
-      formData.append("file", image);
+      formData.append("multi-files", image);
       postFile(formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -162,7 +162,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
       const file = e.target.files[0];
       const image = await resizeFile(file);
       const formData = new FormData();
-      formData.append("file", image);
+      formData.append("multi-files", image);
       postFile(formData, {
         headers: {
           "Content-Type": "multipart/form-data",

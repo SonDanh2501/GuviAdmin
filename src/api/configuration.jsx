@@ -71,9 +71,9 @@ export const deleteQuestionApi = (id) => {
 export const activeQuestionApi = (id, data) => {
   return axiosClient.post(`/admin/exam_test/acti_question/${id}`, data);
 };
-export const getListTestByCollabotatorApi = (id) => {
+export const getListTestByCollabotatorApi = (id, start, length) => {
   return axiosClient.get(
-    `/admin/info_test_collaborator/get_list_by_collaborator/${id}`
+    `/admin/info_test_collaborator/get_list_by_collaborator/${id}?start=${start}&length=${length}`
   );
 };
 

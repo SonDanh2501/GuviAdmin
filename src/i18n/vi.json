@@ -252,6 +252,7 @@
     "contributor_exam": "Bài kiểm tra Cộng tác viên",
     "wrong_answer": "Đáp án sai màu đỏ",
     "correct_answer": "Đáp án đúng màu xanh",
+    "warning_answer": "Đáp án màu vàng CTV không trả lời câu hỏi",
     "invite_collaborator": "Giới thiệu cộng tác viên",
     "invite_customer": "Giới thiệu khách hàng",
     "account_infomation": "Thông tin tài khoản",

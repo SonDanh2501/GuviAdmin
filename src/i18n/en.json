@@ -252,6 +252,7 @@
     "contributor_exam": "Contributor exam",
     "wrong_answer": "Wrong answer in red",
     "correct_answer": "Correct answer in green",
+    "warning_answer": "The answer is yellow, the collaborator did not answer the question",
     "invite_collaborator": "Invite collaborator",
     "invite_customer": "Invite customer",
     "account_infomation": "Account infomation",
