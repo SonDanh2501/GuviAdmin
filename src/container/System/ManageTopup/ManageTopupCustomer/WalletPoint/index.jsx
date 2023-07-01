@@ -234,7 +234,7 @@ const TopupPoint = () => {
         return (
           <div>
             {checkElement?.includes("verify_point_cash_book_customer") && (
-              <button
+              <Button
                 className="btn-verify-point-customer"
                 disabled={
                   data?.is_verify ||
@@ -245,7 +245,7 @@ const TopupPoint = () => {
                 onClick={toggleConfirm}
               >
                 {`${i18n.t("approvals", { lng: lang })}`}
-              </button>
+              </Button>
             )}
 
             <div>

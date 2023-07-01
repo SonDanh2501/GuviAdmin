@@ -106,6 +106,7 @@ const EditTimeOrderSchedule = (props) => {
           {DATA_TIME_TOTAL.map((item, index) => {
             return (
               <Button
+                style={{ width: "auto" }}
                 className={
                   timeWork === item.time ? "select-time" : "select-time-default"
                 }
@@ -153,7 +154,11 @@ const EditTimeOrderSchedule = (props) => {
           </Checkbox>
         </div>
 
-        <Button className="btn-update-time-order" onClick={editOrder}>
+        <Button
+          style={{ width: "auto" }}
+          className="btn-update-time-order"
+          onClick={editOrder}
+        >
           {`${i18n.t("update", { lng: lang })}`}
         </Button>
       </Drawer>

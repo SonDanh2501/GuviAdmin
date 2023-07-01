@@ -60,6 +60,7 @@ import AddRewardCollaborator from "../container/System/ManageConfiguration/Scree
 import ReportOrderCreate from "../container/System/ManageReport/MangeReportOrder/ReportOrderCreate";
 import EditRewardCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/RewardCollaborator/EditRewardCollaborator";
 import DetailReward from "../container/System/ManageTopup/ManageTopupCollaborator/Reward/DetailReward";
+import ImageManage from "../container/System/ManageConfiguration/ScreenConfiguration/ImageManage";
 
 const Admin = () => {
   return (
@@ -271,6 +272,10 @@ const Admin = () => {
       <Route
         path="/adminManage/manage-configuration/reward_collaborator/edit"
         element={<EditRewardCollaborator />}
+      />
+      <Route
+        path="/adminManage/manage-configuration/image_manage"
+        element={<ImageManage />}
       />
     </Routes>
   );

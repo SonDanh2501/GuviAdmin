@@ -334,6 +334,8 @@
 }
 
 .list-item-add-ctv-order {
+  display: flex;
+  flex-direction: column;
   background-color: rgb(255, 255, 255);
   padding: 5px;
   position: absolute;
@@ -343,43 +345,69 @@
 
   .div-item-add-order {
     display: flex;
-    flex-direction: row;
+    flex-direction: row !important;
     align-items: center;
     margin-top: 5px;
     border: none;
-    background-color: white;
-    width: 100%;
+    background-color: rgb(255, 255, 255);
+    width: 95%;
+    height: 35px;
 
-    .img-collaborator {
-      width: 30px;
-      height: 30px;
-      border-radius: 4px;
-      margin-right: 10px;
+    .div-name {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .img-collaborator {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+
+      .text-name {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
     }
   }
 
   .div-item-add-order-block {
     display: flex;
-    flex-direction: row;
+    flex-direction: row !important;
     align-items: center;
     background-color: #d6d6d6;
     border-radius: 4px;
     border: none;
-    width: 100%;
+    width: 95%;
     margin-top: 10px;
     padding: 5px;
 
-    .img-collaborator {
-      width: 30px;
-      height: 30px;
-      border-radius: 4px;
-      margin-right: 10px;
+    .div-name {
+      display: flex;
+      flex-direction: row;
+      .img-collaborator {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+
+      .text-name {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
     }
   }
 
   .div-item-add-order-favorite {
     display: flex;
-    flex-direction: row;
+    flex-direction: row !important;
     align-items: center;
     justify-content: space-between;
     background-color: #ffffff;
@@ -388,15 +416,27 @@
     border-top: 1px solid red;
     border-left: none;
     border-right: none;
-    width: 100%;
+    width: 95%;
     margin-top: 10px;
     padding: 5px;
 
-    .img-collaborator {
-      width: 30px;
-      height: 30px;
-      border-radius: 4px;
-      margin-right: 10px;
+    .div-name {
+      display: flex;
+      flex-direction: row;
+      .img-collaborator {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+
+      .text-name {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
     }
 
     .icon-heart {

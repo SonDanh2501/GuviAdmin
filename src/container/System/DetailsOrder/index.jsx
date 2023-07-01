@@ -527,21 +527,34 @@ const DetailsOrder = () => {
                   {data?.status === "doing" || data?.status === "confirm" ? (
                     <div>
                       {rowIndex === index && (
-                        <Popconfirm
+                        // <Popconfirm
+                        //   title={`${i18n.t("change_status_job", {
+                        //     lng: lang,
+                        //   })}`}
+                        //   open={openStatus}
+                        //   onConfirm={() => handleChangeStatus(data?._id)}
+                        //   okButtonProps={{
+                        //     loading: confirmLoading,
+                        //   }}
+                        //   onCancel={() => setOpenStatus(false)}
+
+                        // />
+                        <ModalCustom
+                          isOpen={openStatus}
                           title={`${i18n.t("change_status_job", {
                             lng: lang,
                           })}`}
-                          open={openStatus}
-                          onConfirm={() => handleChangeStatus(data?._id)}
-                          okButtonProps={{
-                            loading: confirmLoading,
-                          }}
-                          onCancel={() => setOpenStatus(false)}
+                          handleCancel={() => setOpenStatus(false)}
+                          handleOk={() => handleChangeStatus(data?._id)}
+                          textOk={`${i18n.t("yes", {
+                            lng: lang,
+                          })}`}
                         />
                       )}
 
                       <Button
                         className="btn-confirm-order"
+                        style={{ width: "auto" }}
                         onClick={() =>
                           rowIndex === index ? setOpenStatus(true) : ""
                         }
@@ -565,6 +578,7 @@ const DetailsOrder = () => {
                   data?.status === "cancel" ? null : (
                     <div>
                       <Button
+                        style={{ width: "auto" }}
                         className="btn-confirm-order mt-1"
                         onClick={toggleDeleteList}
                       >

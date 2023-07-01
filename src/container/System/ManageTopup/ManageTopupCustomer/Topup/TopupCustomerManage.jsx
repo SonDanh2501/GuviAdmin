@@ -1,5 +1,5 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Input, Pagination, Table, Tooltip } from "antd";
+import { Button, Input, Pagination, Table, Tooltip } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
@@ -285,13 +285,13 @@ const TopupCustomer = () => {
         return (
           <div>
             {checkElement?.includes("verify_transition_cash_book_customer") && (
-              <button
+              <Button
                 className="btn-verify-topup-customer"
                 onClick={toggleConfirm}
                 disabled={data?.status === "pending" ? false : true}
               >
                 {`${i18n.t("approvals", { lng: lang })}`}
-              </button>
+              </Button>
             )}
 
             <div className="mt-1 ml-3">

@@ -55,7 +55,7 @@ const ReportUser = () => {
 
   useEffect(() => {
     getTotalReportCustomer(
-      moment().startOf("month").toISOString(),
+      moment().startOf("month").add("hour", 7).toISOString(),
       moment().endOf("month").toISOString()
     )
       .then((res) => {
@@ -63,7 +63,7 @@ const ReportUser = () => {
       })
       .catch((err) => {});
     getTotalReportCustomer(
-      moment().startOf("date").toISOString(),
+      moment().startOf("date").add("hour", 7).toISOString(),
       moment().endOf("date").toISOString()
     )
       .then((res) => {

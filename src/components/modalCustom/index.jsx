@@ -1,4 +1,4 @@
-import { Modal } from "antd";
+import { Button, Modal } from "antd";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../redux/selectors/auth";
 import i18n from "../../i18n";
@@ -12,10 +12,22 @@ const ModalCustom = (props) => {
       <Modal
         title={title}
         open={isOpen}
-        okText={textOk}
-        onOk={handleOk}
         onCancel={handleCancel}
-        cancelText={`${i18n.t("cancel_modal", { lng: lang })}`}
+        footer={[
+          <Button
+            style={{ alignItems: "center", width: "auto" }}
+            onClick={handleCancel}
+          >{`${i18n.t("cancel_modal", {
+            lng: lang,
+          })}`}</Button>,
+          <Button
+            type="primary"
+            style={{ alignItems: "center", width: "auto" }}
+            onClick={handleOk}
+          >
+            {textOk}
+          </Button>,
+        ]}
       >
         {body}
       </Modal>

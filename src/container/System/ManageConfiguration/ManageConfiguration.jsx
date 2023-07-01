@@ -54,6 +54,10 @@ const ManageConfiguration = () => {
       case "reward_collaborator":
         navigate("/adminManage/manage-configuration/reward_collaborator");
         break;
+      case "image_manager":
+        navigate("/adminManage/manage-configuration/image_manage");
+        break;
+
       default:
         break;
     }
@@ -80,10 +84,6 @@ const ManageConfiguration = () => {
           );
         })}
       </div>
-
-      {/* <div>
-        <Chat />
-      </div> */}
     </div>
   );
 };
@@ -155,5 +155,11 @@ const DATA = [
     title: "Cấu hình dịch vụ",
     value: "setting_service",
     role: "get_group_service_setting",
+  },
+  {
+    id: 12,
+    title: "Quản lý hình ảnh",
+    value: "image_manager",
+    role: "get_file_manager",
   },
 ];

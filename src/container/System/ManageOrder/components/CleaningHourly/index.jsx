@@ -786,9 +786,9 @@ const CleaningHourly = (props) => {
                       setDataCollaborator([]);
                     }}
                   >
-                    <div>
+                    <div className="div-name">
                       <img src={item?.avatar} className="img-collaborator" />
-                      <a>
+                      <a className="text-name">
                         {item?.full_name} - {item?.phone} - {item?.id_view}
                       </a>
                     </div>
@@ -870,9 +870,12 @@ const CleaningHourly = (props) => {
                 )
               : formatMoney(0)}
           </a>
-          <Button onClick={onCreateOrder}>{`${i18n.t("post", {
-            lng: lang,
-          })}`}</Button>
+          <Button style={{ width: "auto" }} onClick={onCreateOrder}>{`${i18n.t(
+            "post",
+            {
+              lng: lang,
+            }
+          )}`}</Button>
         </div>
         {isLoading && <LoadingPagination />}
       </div>

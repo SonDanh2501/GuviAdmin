@@ -437,13 +437,14 @@
 
   .div-date {
     display: flex;
-    height: 30px;
+    height: 28px;
     width: 28px;
+    border-radius: 28px;
     align-items: center;
     justify-content: center;
-    border-radius: 20px;
-    border: none;
+    background-color: #ffffff;
     margin: 2px 10px 2px 10px;
+    border: none;
 
     .date-not-use {
       font-size: 14px;
@@ -473,9 +474,9 @@
 
   .div-date-selected {
     display: flex;
-    height: 30px;
+    height: 28px;
     width: 28px;
-    border-radius: 20px;
+    border-radius: 28px;
     align-items: center;
     justify-content: center;
     background-color: #cf8bfd;
@@ -525,13 +526,26 @@
     margin-top: 5px;
     border: none;
     background-color: white;
-    width: 100%;
+    width: 95%;
 
-    .img-collaborator {
-      width: 30px;
-      height: 30px;
-      border-radius: 4px;
-      margin-right: 10px;
+    .div-name {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .img-collaborator {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+
+      .text-name {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
     }
   }
 
@@ -542,15 +556,27 @@
     background-color: #d6d6d6;
     border-radius: 4px;
     border: none;
-    width: 100%;
+    width: 95%;
     margin-top: 10px;
     padding: 5px;
 
-    .img-collaborator {
-      width: 30px;
-      height: 30px;
-      border-radius: 4px;
-      margin-right: 10px;
+    .div-name {
+      display: flex;
+      flex-direction: row;
+      .img-collaborator {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+
+      .text-name {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
     }
   }
 
@@ -565,15 +591,27 @@
     border-top: 1px solid red;
     border-left: none;
     border-right: none;
-    width: 100%;
+    width: 95%;
     margin-top: 10px;
     padding: 5px;
 
-    .img-collaborator {
-      width: 30px;
-      height: 30px;
-      border-radius: 4px;
-      margin-right: 10px;
+    .div-name {
+      display: flex;
+      flex-direction: row;
+      .img-collaborator {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+
+      .text-name {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
     }
 
     .icon-heart {

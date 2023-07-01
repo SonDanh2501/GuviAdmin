@@ -47,12 +47,14 @@ const MoreTopCollaborator = () => {
 
   return (
     <>
-      <button onClick={showDrawer} className="btn-see-more">
-        {`${i18n.t("see_more", {
-          lng: lang,
-        })}`}{" "}
+      <div onClick={showDrawer} className="btn-see">
+        <a>
+          {`${i18n.t("see_more", {
+            lng: lang,
+          })}`}
+        </a>{" "}
         <i class="uil uil-angle-right"></i>
-      </button>
+      </div>
 
       <Drawer
         title="Top Cộng tác viên"

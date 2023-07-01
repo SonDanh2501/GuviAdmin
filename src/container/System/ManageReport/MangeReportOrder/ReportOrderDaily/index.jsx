@@ -32,7 +32,7 @@ const ReportOrderDaily = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
   const [startDate, setStartDate] = useState(
-    moment().startOf("month").toISOString()
+    moment().subtract(30, "d").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const navigate = useNavigate();

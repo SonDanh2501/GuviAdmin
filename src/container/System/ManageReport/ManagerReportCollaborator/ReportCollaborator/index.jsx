@@ -41,7 +41,7 @@ const ReportCollaborator = () => {
   const [totalColumn, setTotalColumn] = useState([]);
   const [type, setType] = useState("day");
   const [startDate, setStartDate] = useState(
-    moment().startOf("month").toISOString()
+    moment().subtract(30, "d").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);

@@ -20,21 +20,17 @@ import i18n from "../../../../../i18n";
 
 const ReportCustomerArea = () => {
   const [data, setData] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(
+    moment().subtract(30, "d").startOf("date").toISOString()
+  );
+  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const lang = useSelector(getLanguageState);
   useEffect(() => {
-    getReportCustomerByCity(
-      moment().startOf("month").toISOString(),
-      moment().endOf("date").toISOString()
-    )
+    getReportCustomerByCity(startDate, endDate)
       .then((res) => {
         setData(res?.data);
       })
       .catch((err) => {});
-
-    setStartDate(moment().startOf("month").toISOString());
-    setEndDate(moment().startOf("month").toISOString());
   }, []);
 
   const onChangeDay = () => {
