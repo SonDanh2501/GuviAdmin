@@ -29,7 +29,7 @@ import i18n from "../../../../i18n";
 
 const ReportService = () => {
   const [startDate, setStartDate] = useState(
-    moment().startOf("month").toISOString()
+    moment().subtract(30, "d").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);

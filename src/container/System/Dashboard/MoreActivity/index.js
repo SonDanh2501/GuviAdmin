@@ -55,12 +55,12 @@ const MoreActivity = () => {
 
   return (
     <>
-      <button onClick={showDrawer} className="btn-see-more ">
+      <div onClick={showDrawer} className="btn-see-activity">
         {`${i18n.t("see_more", {
           lng: lang,
         })}`}{" "}
         <i class="uil uil-angle-right"></i>
-      </button>
+      </div>
 
       <Drawer
         title="Chi tiết hoạt động"

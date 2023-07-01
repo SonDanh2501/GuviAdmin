@@ -373,11 +373,23 @@
     background-color: white;
     width: 100%;
 
-    .img-collaborator {
-      width: 30px;
-      height: 30px;
-      border-radius: 4px;
-      margin-right: 10px;
+    .div-name {
+      display: flex;
+      flex-direction: row;
+      .img-collaborator {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+
+      .text-name {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
     }
   }
 
@@ -392,11 +404,23 @@
     margin-top: 10px;
     padding: 5px;
 
-    .img-collaborator {
-      width: 30px;
-      height: 30px;
-      border-radius: 4px;
-      margin-right: 10px;
+    .div-name {
+      display: flex;
+      flex-direction: row;
+      .img-collaborator {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+
+      .text-name {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
     }
   }
 
@@ -415,11 +439,23 @@
     margin-top: 10px;
     padding: 5px;
 
-    .img-collaborator {
-      width: 30px;
-      height: 30px;
-      border-radius: 4px;
-      margin-right: 10px;
+    .div-name {
+      display: flex;
+      flex-direction: row;
+      .img-collaborator {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+
+      .text-name {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
     }
 
     .icon-heart {

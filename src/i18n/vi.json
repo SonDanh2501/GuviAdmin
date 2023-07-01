@@ -566,6 +566,8 @@
     "want_unfavor_collaborator": "Bạn có chắc muốn bỏ yêu thích cộng tác viên",
     "want_add_unfavor_collaborator": "Bạn có chắc muốn thêm công tác viên yêu thích",
     "for_customers": "cho khách hàng",
-    "other_reason": "Lý do khác"
+    "other_reason": "Lý do khác",
+    "image_management": "Quản lý hình ảnh",
+    "delete_image": "Xoá hình ảnh"
 
 }

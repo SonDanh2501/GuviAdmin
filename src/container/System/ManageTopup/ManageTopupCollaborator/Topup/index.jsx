@@ -1,5 +1,5 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Input, Pagination, Table, Tooltip } from "antd";
+import { Button, Input, Pagination, Table, Tooltip } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
@@ -319,7 +319,7 @@ const TopupCollaborator = ({ type }) => {
       render: (data) => {
         return (
           <div>
-            <button
+            <Button
               className={
                 checkElement?.includes(
                   "verify_transition_cash_book_collaborator"
@@ -336,7 +336,7 @@ const TopupCollaborator = ({ type }) => {
               }
             >
               {`${i18n.t("approvals", { lng: lang })}`}
-            </button>
+            </Button>
             <div className="mt-1 ml-3">
               {(data?.status === "pending" ||
                 data?.status === "transfered") && (

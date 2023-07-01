@@ -20,11 +20,16 @@
 }
 
 .btn-confirm-topup-collaborator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   font-family: "Roboto";
   font-size: small;
   border-radius: 5px;
   background-color: aquamarine;
+  width: auto;
+  height: 30px;
 }
 .btn-confirm-topup-collaborator-hide {
   display: none;

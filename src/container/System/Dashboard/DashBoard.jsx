@@ -1,4 +1,13 @@
-import { DatePicker, FloatButton, List, Progress, Select, Table } from "antd";
+import {
+  Col,
+  DatePicker,
+  FloatButton,
+  List,
+  Progress,
+  Row,
+  Select,
+  Table,
+} from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import moment from "moment";
@@ -6,7 +15,6 @@ import "moment/locale/vi";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { Col, Row } from "reactstrap";
 import {
   Area,
   AreaChart,
@@ -24,7 +32,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { getDistrictApi } from "../../../api/file";
 import {
   getReportCancelReport,
   getReportServiceDetails,
@@ -74,9 +81,7 @@ export default function Home() {
   const [codeCity, setCodeCity] = useState();
   const [nameCity, setNameCity] = useState("");
   const [startDate, setStartDate] = useState(
-    moment(moment().startOf("month").toISOString())
-      .add(7, "hours")
-      .toISOString()
+    moment().subtract(30, "d").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(
     moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
@@ -87,7 +92,6 @@ export default function Home() {
   const lastestService = useSelector(getLastestServices);
   const connectionService = useSelector(getServiceConnects);
   const topCollaborator = useSelector(getTopCollaborators);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const yearFormat = "YYYY";
   const dataChartUser = [];
@@ -554,7 +558,7 @@ export default function Home() {
             )}
 
             <Row>
-              <Col lg="7" className="pl-4">
+              <Col span="16" className="pl-4">
                 <p className="label-persen-active">{`${i18n.t(
                   "percentage_of_activity",
                   { lng: lang }
@@ -592,7 +596,7 @@ export default function Home() {
                   </div>
                 </div>
               </Col>
-              <Col lg="5">
+              <Col span="8">
                 {/* <p className="label-persen-active">Active Users</p>
                     <p className="label-active">2154</p>
                     <div>
@@ -780,7 +784,7 @@ export default function Home() {
         )}
         <div>
           <Row>
-            <Col lg="9">
+            <Col span="15">
               {checkElement?.includes("report_detail_service_dashboard") && (
                 <div className="div-chart-pie-total-dash">
                   <a className="title-chart-area">{`${i18n.t(
@@ -861,9 +865,9 @@ export default function Home() {
                 </div>
               )}
             </Col>
-            <Col lg="3">
+            <Col className="ml-5" span="8">
               {checkElement?.includes("history_activity_dashboard") && (
-                <div className="col-activity">
+                <div className="col-activity-dashboard">
                   <p className="label-activity">{`${i18n.t("history_acivity", {
                     lng: lang,
                   })}`}</p>
@@ -1005,7 +1009,7 @@ export default function Home() {
         </div>
         <div>
           <Row>
-            <Col lg="6">
+            <Col span="15">
               {checkElement?.includes("total_customer_monthly_dashboard") && (
                 <div className="div-chart-user">
                   <h4>{`${i18n.t("total_register", {
@@ -1108,7 +1112,7 @@ export default function Home() {
                 </div>
               )}
             </Col>
-            <Col lg="6">
+            <Col className="ml-5" span="8">
               {checkElement?.includes("report_cancel_order_dashboard") && (
                 <div className="div-chart-pie-total-cancel-dash">
                   <a className="title-chart">

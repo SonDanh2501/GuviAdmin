@@ -1,4 +1,7 @@
 .btn-add-topup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 200px;
   height: 40px;
   border: none;
@@ -10,6 +13,9 @@
 }
 
 .btn-add-monetary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 30%;
   height: 40px;
   border: none;

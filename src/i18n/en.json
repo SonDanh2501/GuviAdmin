@@ -566,5 +566,7 @@
     "want_unfavor_collaborator": "Are you sure you want to unfavor the collaborator",
     "want_add_unfavor_collaborator": "Are you sure you want to add your favorite collaborators",
     "for_customers": "for customers",
-    "other_reason": "Other reason"
+    "other_reason": "Other reason",
+    "image_management": "Image management",
+    "delete_image": "Delete images"
 }
