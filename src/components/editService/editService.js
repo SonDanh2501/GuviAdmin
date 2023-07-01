@@ -59,7 +59,7 @@ const EditService = (props) => {
       reader.readAsDataURL(e.target.files[0]);
     }
     const formData = new FormData();
-    formData.append("file", e.target.files[0]);
+    formData.append("multi-files", e.target.files[0]);
     postFile(formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -67,7 +67,7 @@ const EditService = (props) => {
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
-        setImgThumbnail(res);
+        setImgThumbnail(res[0]);
       })
       .catch((err) => {
         errorNotify({

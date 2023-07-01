@@ -64,8 +64,13 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  width: 100%;
+  float: right;
   .btn-download {
     background-color: transparent;
     color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

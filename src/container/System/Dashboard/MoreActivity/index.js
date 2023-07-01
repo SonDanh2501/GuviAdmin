@@ -55,12 +55,12 @@ const MoreActivity = () => {
 
   return (
     <>
-      <button onClick={showDrawer} className="btn-see-more ">
+      <div onClick={showDrawer} className="btn-see-activity">
         {`${i18n.t("see_more", {
           lng: lang,
         })}`}{" "}
         <i class="uil uil-angle-right"></i>
-      </button>
+      </div>
 
       <Drawer
         title="Chi tiết hoạt động"
@@ -77,7 +77,12 @@ const MoreActivity = () => {
             loadMore={loadMore}
             loading={initLoading}
             renderItem={(item, index) => {
-              const subject = item?.id_admin_action
+              const subject = item?.id_user_system
+                ? item?.title_admin.replace(
+                    item?.id_user_system?._id,
+                    item?.id_user_system?.full_name
+                  )
+                : item?.id_admin_action
                 ? item?.title_admin.replace(
                     item?.id_admin_action?._id,
                     item?.id_admin_action?.full_name
@@ -92,12 +97,10 @@ const MoreActivity = () => {
                     item?.id_collaborator?._id,
                     item?.id_collaborator?.full_name
                   )
-                : item?.id_promotion
-                ? item?.title_admin.replace(
+                : item?.title_admin.replace(
                     item?.id_promotion?._id,
                     item?.id_promotion?.code
-                  )
-                : "";
+                  );
 
               const predicate = item?.id_order
                 ? subject.replace(item?.id_order?._id, item?.id_order?.id_view)
@@ -144,17 +147,10 @@ const MoreActivity = () => {
                   )
                 : item?.id_address
                 ? subject.replace(item?.id_address, item?.value_string)
-                : // : item?.id_group_order
-                // ? subject.replace(
-                //     item?.id_group_order?._id,
-                //     item?.id_group_order?.id_view
-                //   )
-                item?.id_transistion_customer
-                ? subject.replace(
+                : subject.replace(
                     item?.id_transistion_customer?._id,
                     item?.id_transistion_customer?.transfer_note
-                  )
-                : "";
+                  );
 
               const object = item?.id_reason_cancel
                 ? predicate.replace(
@@ -178,12 +174,10 @@ const MoreActivity = () => {
                     item?.id_transistion_collaborator?._id,
                     item?.id_transistion_collaborator?.transfer_note
                   )
-                : item?.id_transistion_customer
-                ? predicate.replace(
+                : predicate.replace(
                     item?.id_transistion_customer?._id,
                     item?.id_transistion_customer?.transfer_note
-                  )
-                : "";
+                  );
 
               return (
                 <div className="div-item">

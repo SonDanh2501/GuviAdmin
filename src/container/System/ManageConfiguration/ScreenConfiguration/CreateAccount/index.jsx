@@ -3,7 +3,10 @@ import {
   deleteAccountAdmin,
   getListAccount,
 } from "../../../../../api/createAccount";
-import { getElementState } from "../../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../../redux/selectors/auth";
 import { Pagination, Table, Space, Dropdown, Modal } from "antd";
 import { useSelector } from "react-redux";
 import { MoreOutlined } from "@ant-design/icons";
@@ -15,6 +18,8 @@ import { errorNotify } from "../../../../../helper/toast";
 import offToggle from "../../../../../assets/images/off-button.png";
 import onToggle from "../../../../../assets/images/on-button.png";
 import { activeAccountAdmin } from "../../../../../api/createAccount";
+import i18n from "../../../../../i18n";
+import ModalCustom from "../../../../../components/modalCustom";
 const width = window.innerWidth;
 
 const CreateAccount = () => {
@@ -27,6 +32,7 @@ const CreateAccount = () => {
   const [modalActive, setModalActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getListAccount(0, 20)
@@ -107,15 +113,15 @@ const CreateAccount = () => {
 
   const columns = [
     {
-      title: "Email đăng nhập",
+      title: `${i18n.t("email_login", { lng: lang })}`,
       render: (data) => <a>{data?.email}</a>,
     },
     {
-      title: "Tên hiện thị",
+      title: `${i18n.t("display_name", { lng: lang })}`,
       render: (data) => <a>{data?.full_name}</a>,
     },
     {
-      title: "Quyền",
+      title: `${i18n.t("permissions", { lng: lang })}`,
       render: (data) => <a>{data?.id_role_admin?.name_role}</a>,
     },
     {
@@ -163,7 +169,9 @@ const CreateAccount = () => {
     {
       key: 2,
       label: checkElement?.includes("delete_user_system") && (
-        <a onClick={() => setModalDelete(true)}> Xoá</a>
+        <a onClick={() => setModalDelete(true)}>{`${i18n.t("delete", {
+          lng: lang,
+        })}`}</a>
       ),
     },
   ];
@@ -210,7 +218,9 @@ const CreateAccount = () => {
         />
       </div>
       <div className="div-pagination p-2">
-        <a>Tổng: {total}</a>
+        <a>
+          {`${i18n.t("total", { lng: lang })}`}: {total}
+        </a>
         <div>
           <Pagination
             current={currentPage}
@@ -223,31 +233,46 @@ const CreateAccount = () => {
       </div>
 
       <div>
-        <Modal
-          title="Xoá tài khoản"
-          open={modalDelete}
-          onOk={() => onDelete(itemEdit?._id)}
-          okText="Xoá"
-          onCancel={() => setModalDelete(false)}
-          cancelText="Huỷ"
-        >
-          Bạn có muốn xoá tài khoản {itemEdit?.full_name}
-        </Modal>
+        <ModalCustom
+          isOpen={modalDelete}
+          title={`${i18n.t("delete_account", { lng: lang })}`}
+          handleOk={() => onDelete(itemEdit?._id)}
+          handleCancel={() => setModalDelete(false)}
+          textOk={`${i18n.t("delete", { lng: lang })}`}
+          body={
+            <a>
+              {`${i18n.t("want_delete_account", { lng: lang })}`}{" "}
+              {itemEdit?.full_name}
+            </a>
+          }
+        />
       </div>
 
       <div>
-        <Modal
-          title={itemEdit?.is_active ? "Chặn tài khoản" : "mở tài khoản"}
-          open={modalActive}
-          onOk={() => onActive(itemEdit?._id, itemEdit?.is_active)}
-          okText={itemEdit?.is_active ? "Chặn" : "Mở"}
-          onCancel={() => setModalActive(false)}
-          cancelText="Huỷ"
-        >
-          {itemEdit?.is_active
-            ? "Bạn có muốn chặn tài khoản " + itemEdit?.full_name
-            : "Bạn có muốn mở tài khoản " + itemEdit?.full_name}
-        </Modal>
+        <ModalCustom
+          isOpen={modalActive}
+          title={
+            itemEdit?.is_active
+              ? `${i18n.t("lock_account", { lng: lang })}`
+              : `${i18n.t("unlock_account", { lng: lang })}`
+          }
+          handleOk={() => onActive(itemEdit?._id, itemEdit?.is_active)}
+          handleCancel={() => setModalActive(false)}
+          textOk={
+            itemEdit?.is_active
+              ? `${i18n.t("lock", { lng: lang })}`
+              : `${i18n.t("unlock", { lng: lang })}`
+          }
+          body={
+            <a>
+              {itemEdit?.is_active
+                ? `${i18n.t("want_lock_account", { lng: lang })} ` +
+                  itemEdit?.full_name
+                : `${i18n.t("want_unlock_account", { lng: lang })} ` +
+                  itemEdit?.full_name}
+            </a>
+          }
+        />
       </div>
       {isLoading && <LoadingPagination />}
     </div>

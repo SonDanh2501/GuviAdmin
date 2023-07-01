@@ -7,6 +7,7 @@ import { errorNotify } from "../../helper/toast";
 import { useDispatch } from "react-redux";
 import { loadingAction } from "../../redux/actions/loading";
 import { postFile } from "../../api/file";
+import axios from "axios";
 
 const UploadImage = (props) => {
   const { setUrl, classImg, title, image, setImage } = props;
@@ -25,14 +26,14 @@ const UploadImage = (props) => {
       const file = e.target.files[0];
       const image = await resizeFile(file);
       const formData = new FormData();
-      formData.append("file", image);
+      formData.append("multi-files", image);
       postFile(formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
         .then((res) => {
-          setImage(res);
+          setImage(res[0]);
           dispatch(loadingAction.loadingRequest(false));
         })
         .catch((err) => {

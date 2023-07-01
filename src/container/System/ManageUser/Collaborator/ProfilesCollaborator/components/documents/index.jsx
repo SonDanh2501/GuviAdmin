@@ -70,14 +70,14 @@ const Document = ({ id }) => {
     const formData = new FormData();
     const image = await resizeFile(e.target.files[0]);
 
-    formData.append("file", image);
+    formData.append("multi-files", image);
     postFile(formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     })
       .then((res) => {
-        setImgIdentifyFronsite(res);
+        setImgIdentifyFronsite(res[0]);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -99,14 +99,14 @@ const Document = ({ id }) => {
     const formData = new FormData();
     const image = await resizeFile(e.target.files[0]);
 
-    formData.append("file", image);
+    formData.append("multi-files", image);
     postFile(formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     })
       .then((res) => {
-        setImgIdentifyBacksite(res);
+        setImgIdentifyBacksite(res[0]);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -123,20 +123,15 @@ const Document = ({ id }) => {
     const formData = new FormData();
     for (var i = 0; i < fileLength; i++) {
       const image = await resizeFile(e.target.files[i]);
-      formData.append("images", image);
+      formData.append("multi-files", image);
     }
-    postMutipleFile(formData, {
+    postFile(formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     })
       .then((res) => {
-        if (imgInformation.length > 0) {
-          const newImg = imgInformation.concat(res);
-          setImgInformation(newImg);
-        } else {
-          setImgInformation(res);
-        }
+        setImgInformation(res);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -153,20 +148,21 @@ const Document = ({ id }) => {
     const formData = new FormData();
     for (var i = 0; i < fileLength; i++) {
       const image = await resizeFile(e.target.files[i]);
-      formData.append("images", image);
+      formData.append("multi-files", image);
     }
-    postMutipleFile(formData, {
+    postFile(formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     })
       .then((res) => {
-        if (imgRegistration.length > 0) {
-          const newImg = imgRegistration.concat(res);
-          setImgRegistration(newImg);
-        } else {
-          setImgRegistration(res);
-        }
+        // if (imgRegistration.length > 0) {
+        //   const newImg = imgRegistration.concat(res);
+        //   setImgRegistration(newImg);
+        // } else {
+        //   setImgRegistration(res);
+        // }
+        setImgRegistration(res);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -183,20 +179,21 @@ const Document = ({ id }) => {
     const formData = new FormData();
     for (var i = 0; i < fileLength; i++) {
       const image = await resizeFile(e.target.files[i]);
-      formData.append("images", image);
+      formData.append("multi-files", image);
     }
-    postMutipleFile(formData, {
+    postFile(formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     })
       .then((res) => {
-        if (imgCertification.length > 0) {
-          const newImg = imgCertification.concat(res);
-          setImgCertification(newImg);
-        } else {
-          setImgCertification(res);
-        }
+        // if (imgCertification.length > 0) {
+        //   const newImg = imgCertification.concat(res);
+        //   setImgCertification(newImg);
+        // } else {
+        //   setImgCertification(res);
+        // }
+        setImgCertification(res);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -454,7 +451,7 @@ const Document = ({ id }) => {
           </Row>
           <hr />
           <Row>
-            <Col span="8" className="col-check">
+            <Col span="6" className="col-check">
               <Checkbox
                 checked={information}
                 onChange={(e) => setInformation(e.target.checked)}
@@ -511,7 +508,7 @@ const Document = ({ id }) => {
           </Row>
           <hr />
           <Row>
-            <Col span="8" className="col-check">
+            <Col span="6" className="col-check">
               <Checkbox
                 checked={registration}
                 onChange={(e) => setRegistration(e.target.checked)}
@@ -568,7 +565,7 @@ const Document = ({ id }) => {
           </Row>
           <hr />
           <Row className="mb-5">
-            <Col span="8" className="col-check">
+            <Col span="6" className="col-check">
               <Checkbox
                 checked={certification}
                 onChange={(e) => setCertification(e.target.checked)}

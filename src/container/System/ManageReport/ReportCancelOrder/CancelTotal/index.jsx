@@ -10,12 +10,14 @@ import {
 
 import "./index.scss";
 import CustomDatePicker from "../../../../../components/customDatePicker";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
 
 const TotalCancel = (props) => {
   const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;
-
   const [startDate, setStartDate] = useState(
-    moment().startOf("year").toISOString()
+    moment().subtract(30, "d").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);
@@ -28,8 +30,7 @@ const TotalCancel = (props) => {
   const [dataTotalPie, setDataTotalPie] = useState([]);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
-
-  const districtData = [];
+  const lang = useSelector(getLanguageState);
   const cityData = [];
   useEffect(() => {
     getDistrictApi()
@@ -113,10 +114,10 @@ const TotalCancel = (props) => {
         dominantBaseline="central"
       >
         {name === "system_cancel"
-          ? "Hệ thống"
+          ? `${i18n.t("system", { lng: lang })}`
           : name === "customer_cancel"
-          ? "Khách hàng"
-          : "Quản trị viên"}{" "}
+          ? `${i18n.t("customer", { lng: lang })}`
+          : `${i18n.t("admin", { lng: lang })}`}{" "}
         ({value} {"%"})
       </text>
     );
@@ -160,7 +161,7 @@ const TotalCancel = (props) => {
 
   const columns = [
     {
-      title: "Thời gian",
+      title: `${i18n.t("time", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-create-cancel">
@@ -175,7 +176,7 @@ const TotalCancel = (props) => {
       },
     },
     {
-      title: "Người huỷ",
+      title: `${i18n.t("customer", { lng: lang })}`,
       render: (data) => {
         return (
           <a className="text-user-cancel">
@@ -189,13 +190,13 @@ const TotalCancel = (props) => {
       },
     },
     {
-      title: "Đơn hàng",
+      title: `${i18n.t("code_order", { lng: lang })}`,
       render: (data) => {
         return <a className="text-user-cancel">{data?.id_view}</a>;
       },
     },
     {
-      title: "Lí do",
+      title: `${i18n.t("reason", { lng: lang })}`,
       render: (data) => {
         return (
           <a className="text-user-cancel">
@@ -209,7 +210,7 @@ const TotalCancel = (props) => {
       },
     },
     {
-      title: "Địa chỉ",
+      title: `${i18n.t("address", { lng: lang })}`,
       responsive: ["xl"],
       render: (data) => {
         return <a className="text-address-cancel">{data?.address}</a>;
@@ -250,26 +251,34 @@ const TotalCancel = (props) => {
         <div className="div-pie-chart-cancel">
           <div className="div-total-piechart">
             <div className="item-total">
-              <a className="title-total">Tổng đơn huỷ</a>
+              <a className="title-total">{`${i18n.t("total_cancellations", {
+                lng: lang,
+              })}`}</a>
               <a className="text-colon">:</a>
               <a className="number-total">{dataTotalPie?.total_cancel_order}</a>
             </div>
             <div className="item-total">
-              <a className="title-total">Đơn huỷ khách hàng</a>
+              <a className="title-total">{`${i18n.t("customer_cancellation", {
+                lng: lang,
+              })}`}</a>
               <a className="text-colon">:</a>
               <a className="number-total">
                 {dataTotalPie?.total_cancel_order_by_customer}
               </a>
             </div>
             <div className="item-total">
-              <a className="title-total">Đơn huỷ hệ thống</a>
+              <a className="title-total">{`${i18n.t("system_cancellation", {
+                lng: lang,
+              })}`}</a>
               <a className="text-colon">:</a>
               <a className="number-total">
                 {dataTotalPie?.total_cancel_order_by_system}
               </a>
             </div>
             <div className="item-total">
-              <a className="title-total">Đơn huỷ quản trị viên</a>
+              <a className="title-total">{`${i18n.t("admin_cancellation", {
+                lng: lang,
+              })}`}</a>
               <a className="text-colon">:</a>
               <a className="number-total">
                 {dataTotalPie?.total_cancel_order_by_user_system}

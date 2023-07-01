@@ -11,8 +11,12 @@ import "./styles.scss";
 import ModalCustom from "../../../../../components/modalCustom";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import { errorNotify } from "../../../../../helper/toast";
-import { getElementState } from "../../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../../redux/selectors/auth";
 import { useSelector } from "react-redux";
+import i18n from "../../../../../i18n";
 
 const RewardCollaborator = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,6 +28,7 @@ const RewardCollaborator = () => {
   const [modalActive, setModalActive] = useState(false);
   const [modal, setModal] = useState(false);
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -112,7 +117,7 @@ const RewardCollaborator = () => {
 
   const columns = [
     {
-      title: "Ngày tạo",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-date-create-reward">
@@ -127,28 +132,38 @@ const RewardCollaborator = () => {
       },
     },
     {
-      title: "Tiêu đề",
+      title: `${i18n.t("title", { lng: lang })}`,
       render: (data) => <a className="text-reward">{data?.title?.vi}</a>,
     },
     {
-      title: "Mô tả",
+      title: `${i18n.t("describe", { lng: lang })}`,
       render: (data) => <a className="text-reward">{data?.description?.vi}</a>,
     },
     {
-      title: "Trạng thái",
+      title: `${i18n.t("status", { lng: lang })}`,
       render: (data) => {
         return (
           <div>
             {data?.status === "upcoming" ? (
-              <a className="text-upcoming-reward">Sắp diễn ra</a>
+              <a className="text-upcoming-reward">{`${i18n.t("upcoming", {
+                lng: lang,
+              })}`}</a>
             ) : data?.status === "doing" ? (
-              <a className="text-upcoming-reward">Đang diễn ra</a>
+              <a className="text-upcoming-reward">{`${i18n.t("happenning", {
+                lng: lang,
+              })}`}</a>
             ) : data?.status === "out_of_stock" ? (
-              <a className="text-cance-rewardl">Hết số lượng</a>
+              <a className="text-cance-rewardl">{`${i18n.t("out_stock", {
+                lng: lang,
+              })}`}</a>
             ) : data?.status === "out_of_date" ? (
-              <a className="text-cancel-reward">Hết hạn</a>
+              <a className="text-cancel-reward">{`${i18n.t("out_date", {
+                lng: lang,
+              })}`}</a>
             ) : (
-              <a className="text-cancel-reward">Kết thúc</a>
+              <a className="text-cancel-reward">{`${i18n.t("closed", {
+                lng: lang,
+              })}`}</a>
             )}
           </div>
         );
@@ -202,14 +217,16 @@ const RewardCollaborator = () => {
             )
           }
         >
-          Chỉnh sửa
+          {`${i18n.t("edit", { lng: lang })}`}
         </a>
       ),
     },
     {
       key: "2",
       label: checkElement.includes("delete_reward_collaborator_setting") && (
-        <a onClick={() => setModal(true)}>Xoá</a>
+        <a onClick={() => setModal(true)}>{`${i18n.t("delete", {
+          lng: lang,
+        })}`}</a>
       ),
     },
   ];
@@ -225,7 +242,7 @@ const RewardCollaborator = () => {
             )
           }
         >
-          Thêm thưởng
+          {`${i18n.t("add_reward", { lng: lang })}`}
         </Button>
       )}
 
@@ -244,7 +261,9 @@ const RewardCollaborator = () => {
         />
 
         <div className="div-pagination p-2">
-          <a>Tổng: {total}</a>
+          <a>
+            {`${i18n.t("total", { lng: lang })}`}: {total}
+          </a>
           <div>
             <Pagination
               current={currentPage}
@@ -261,18 +280,22 @@ const RewardCollaborator = () => {
         <ModalCustom
           title={
             itemEdit?.is_active
-              ? "Ẩn điều kiện thưởng"
-              : "Hiện điều kiện thưởng"
+              ? `${i18n.t("lock_bonus", { lng: lang })}`
+              : `${i18n.t("unlock_bonus", { lng: lang })}`
           }
           isOpen={modalActive}
           handleOk={() => onActiveReward(itemEdit?._id, itemEdit?.is_active)}
           handleCancel={() => setModalActive(false)}
-          textOk={itemEdit?.is_active ? "Ẩn" : "Hiện"}
+          textOk={
+            itemEdit?.is_active
+              ? `${i18n.t("lock", { lng: lang })}`
+              : `${i18n.t("lock_bonus", { lng: lang })}`
+          }
           body={
             <a>
               {itemEdit?.is_active
-                ? `Bạn có muốn ẩn điều kiển thưởng "${itemEdit?.title?.vi}" cho CTV?`
-                : `Bạn có muốn hiện điệu kiển thưởng "${itemEdit?.title?.vi}" cho CTV?`}
+                ? `Bạn có muốn ẩn điều kiển thưởng cho CTV? "${itemEdit?.title?.vi}"`
+                : `Bạn có muốn hiện điệu kiển thưởng cho CTV? "${itemEdit?.title?.vi}"`}
             </a>
           }
         />

@@ -1,4 +1,13 @@
-import { DatePicker, FloatButton, List, Progress, Select, Table } from "antd";
+import {
+  Col,
+  DatePicker,
+  FloatButton,
+  List,
+  Progress,
+  Row,
+  Select,
+  Table,
+} from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import moment from "moment";
@@ -6,7 +15,6 @@ import "moment/locale/vi";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { Col, Row } from "reactstrap";
 import {
   Area,
   AreaChart,
@@ -24,7 +32,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { getDistrictApi } from "../../../api/file";
 import {
   getReportCancelReport,
   getReportServiceDetails,
@@ -57,6 +64,7 @@ import "./DashBoard.scss";
 import Header from "./HeaderBoard/Header";
 import MoreActivity from "./MoreActivity";
 import i18n from "../../../i18n";
+import { getProvince } from "../../../redux/selectors/service";
 moment.locale("vi");
 dayjs.extend(customParseFormat);
 
@@ -72,11 +80,8 @@ export default function Home() {
   const [dataTotalChartCancel, setDataTotalChartCancel] = useState([]);
   const [codeCity, setCodeCity] = useState();
   const [nameCity, setNameCity] = useState("");
-  const [dataCity, setDataCity] = useState([]);
   const [startDate, setStartDate] = useState(
-    moment(moment().startOf("month").toISOString())
-      .add(7, "hours")
-      .toISOString()
+    moment().subtract(30, "d").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(
     moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
@@ -87,7 +92,6 @@ export default function Home() {
   const lastestService = useSelector(getLastestServices);
   const connectionService = useSelector(getServiceConnects);
   const topCollaborator = useSelector(getTopCollaborators);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const yearFormat = "YYYY";
   const dataChartUser = [];
@@ -95,6 +99,7 @@ export default function Home() {
   const dataChartDetail = [];
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
 
   useEffect(() => {
     if (checkElement?.includes("total_finance_job_dashboard")) {
@@ -111,7 +116,11 @@ export default function Home() {
     }
     if (checkElement?.includes("history_activity_dashboard")) {
       dispatch(
-        getHistoryActivity.getHistoryActivityRequest({ start: 0, length: 20 })
+        getHistoryActivity.getHistoryActivityRequest({
+          start: 0,
+          length: 20,
+          lang: lang,
+        })
       );
     }
     if (checkElement?.includes("lastest_services_dashboard")) {
@@ -138,39 +147,26 @@ export default function Home() {
     }
 
     dispatch(getActiveUser.getActiveUserRequest());
+    setCodeCity(province[1]?.code);
+    setNameCity(province[1]?.name);
 
-    getDistrictApi()
-      .then((res) => {
-        setDataCity(res?.aministrative_division);
-        setCodeCity(res?.aministrative_division[1]?.code);
-        setNameCity(res?.aministrative_division[1]?.name);
-        if (checkElement?.includes("report_detail_service_dashboard")) {
-          getReportServiceDetails(
-            startDate,
-            endDate,
-            res?.aministrative_division[1]?.code
-          )
-            .then((res) => {
-              setDataChartServiceDetails(res?.detailData);
-            })
-            .catch((err) => {});
-        }
-        if (checkElement?.includes("report_cancel_order_dashboard")) {
-          getReportCancelReport(
-            startDate,
-            endDate,
-            res?.aministrative_division[1].code,
-            -1
-          )
-            .then((res) => {
-              setDataChartCancel(res?.percent);
-              setDataTotalChartCancel(res);
-            })
-            .catch((err) => {});
-        }
-      })
-      .catch((err) => {});
-  }, []);
+    if (checkElement?.includes("report_detail_service_dashboard")) {
+      getReportServiceDetails(startDate, endDate, province[1]?.code)
+        .then((res) => {
+          setDataChartServiceDetails(res?.detailData);
+        })
+        .catch((err) => {});
+    }
+
+    if (checkElement?.includes("report_cancel_order_dashboard")) {
+      getReportCancelReport(startDate, endDate, province[1]?.code, -1)
+        .then((res) => {
+          setDataChartCancel(res?.percent);
+          setDataTotalChartCancel(res);
+        })
+        .catch((err) => {});
+    }
+  }, [province]);
 
   useEffect(() => {
     let sum = 0;
@@ -188,7 +184,7 @@ export default function Home() {
     });
   });
 
-  dataCity?.map((item) => {
+  province?.map((item) => {
     cityData?.push({
       value: item?.code,
       label: item?.name,
@@ -562,7 +558,7 @@ export default function Home() {
             )}
 
             <Row>
-              <Col lg="7" className="pl-4">
+              <Col span="16" className="pl-4">
                 <p className="label-persen-active">{`${i18n.t(
                   "percentage_of_activity",
                   { lng: lang }
@@ -600,7 +596,7 @@ export default function Home() {
                   </div>
                 </div>
               </Col>
-              <Col lg="5">
+              <Col span="8">
                 {/* <p className="label-persen-active">Active Users</p>
                     <p className="label-active">2154</p>
                     <div>
@@ -680,15 +676,9 @@ export default function Home() {
                       lng: lang,
                     })}`}</p>
                     <div className="level">
-                      <div
+                      <Link
                         className="level-ctv1"
-                        onClick={() =>
-                          navigate("/details-collaborator", {
-                            state: {
-                              id: topCollaborator[0]?._id?.id_collaborator,
-                            },
-                          })
-                        }
+                        to={`/details-collaborator/${topCollaborator[0]?._id?.id_collaborator}`}
                       >
                         <p className="text-level">
                           {topCollaborator[0]?._id?.full_name}
@@ -696,17 +686,11 @@ export default function Home() {
                         <p className="text-level-number">
                           {formatMoney(topCollaborator[0]?.sumIncome)}
                         </p>
-                      </div>
+                      </Link>
                       {topCollaborator.length > 1 && (
-                        <div
+                        <Link
                           className="level-ctv2"
-                          onClick={() =>
-                            navigate("/details-collaborator", {
-                              state: {
-                                id: topCollaborator[1]?._id?.id_collaborator,
-                              },
-                            })
-                          }
+                          to={`/details-collaborator/${topCollaborator[1]?._id?.id_collaborator}`}
                         >
                           <p className="text-level">
                             {topCollaborator[1]?._id?.name}
@@ -714,18 +698,12 @@ export default function Home() {
                           <p className="text-level-number">
                             {formatMoney(topCollaborator[1]?.sumIncome)}
                           </p>
-                        </div>
+                        </Link>
                       )}
                       {topCollaborator.length > 2 && (
-                        <div
+                        <Link
                           className="level-ctv3"
-                          onClick={() =>
-                            navigate("/details-collaborator", {
-                              state: {
-                                id: topCollaborator[2]?._id?.id_collaborator,
-                              },
-                            })
-                          }
+                          to={`/details-collaborator/${topCollaborator[2]?._id?.id_collaborator}`}
                         >
                           <p className="text-level">
                             {topCollaborator[2]?._id?.name}
@@ -733,18 +711,12 @@ export default function Home() {
                           <p className="text-level-number">
                             {formatMoney(topCollaborator[2]?.sumIncome)}
                           </p>
-                        </div>
+                        </Link>
                       )}
                       {topCollaborator.length > 3 && (
-                        <div
+                        <Link
                           className="level-ctv4"
-                          onClick={() =>
-                            navigate("/details-collaborator", {
-                              state: {
-                                id: topCollaborator[3]?._id?.id_collaborator,
-                              },
-                            })
-                          }
+                          to={`/details-collaborator/${topCollaborator[3]?._id?.id_collaborator}`}
                         >
                           <p className="text-level">
                             {topCollaborator[3]?._id?.name}
@@ -752,18 +724,12 @@ export default function Home() {
                           <p className="text-level-number">
                             {formatMoney(topCollaborator[3]?.sumIncome)}
                           </p>
-                        </div>
+                        </Link>
                       )}
                       {topCollaborator.length > 4 && (
-                        <div
+                        <Link
                           className="level-ctv5"
-                          onClick={() =>
-                            navigate("/details-collaborator", {
-                              state: {
-                                id: topCollaborator[4]?._id?.id_collaborator,
-                              },
-                            })
-                          }
+                          to={`/details-collaborator/${topCollaborator[4]?._id?.id_collaborator}`}
                         >
                           <p className="text-level">
                             {topCollaborator[4]?._id?.name}
@@ -771,7 +737,7 @@ export default function Home() {
                           <p className="text-level-number">
                             {formatMoney(topCollaborator[4]?.sumIncome)}
                           </p>
-                        </div>
+                        </Link>
                       )}
                     </div>
                     <div className="div-seemore">
@@ -818,7 +784,7 @@ export default function Home() {
         )}
         <div>
           <Row>
-            <Col lg="9">
+            <Col span="15">
               {checkElement?.includes("report_detail_service_dashboard") && (
                 <div className="div-chart-pie-total-dash">
                   <a className="title-chart-area">{`${i18n.t(
@@ -899,9 +865,9 @@ export default function Home() {
                 </div>
               )}
             </Col>
-            <Col lg="3">
+            <Col className="ml-5" span="8">
               {checkElement?.includes("history_activity_dashboard") && (
-                <div className="col-activity">
+                <div className="col-activity-dashboard">
                   <p className="label-activity">{`${i18n.t("history_acivity", {
                     lng: lang,
                   })}`}</p>
@@ -909,7 +875,12 @@ export default function Home() {
                     itemLayout="horizontal"
                     dataSource={historyActivity.slice(0, 4)}
                     renderItem={(item, index) => {
-                      const subject = item?.id_admin_action
+                      const subject = item?.id_user_system
+                        ? item?.title_admin.replace(
+                            item?.id_user_system?._id,
+                            item?.id_user_system?.full_name
+                          )
+                        : item?.id_admin_action
                         ? item?.title_admin.replace(
                             item?.id_admin_action?._id,
                             item?.id_admin_action?.full_name
@@ -924,14 +895,17 @@ export default function Home() {
                             item?.id_collaborator?._id,
                             item?.id_collaborator?.full_name
                           )
-                        : item?.id_promotion
-                        ? item?.title_admin.replace(
+                        : item?.title_admin.replace(
                             item?.id_promotion?._id,
                             item?.id_promotion?.code
-                          )
-                        : "";
+                          );
 
-                      const predicate = item?.id_reason_punish
+                      const predicate = item?.id_order
+                        ? subject.replace(
+                            item?.id_order?._id,
+                            item?.id_order?.id_view
+                          )
+                        : item?.id_reason_punish
                         ? subject.replace(
                             item?.id_reason_punish?._id,
                             item?.id_reason_punish?.title?.vi
@@ -974,19 +948,17 @@ export default function Home() {
                           )
                         : item?.id_address
                         ? subject.replace(item?.id_address, item?.value_string)
-                        : item?.id_order
-                        ? subject.replace(
-                            item?.id_order?._id,
-                            item?.id_order?.id_view
-                          )
-                        : item?.id_transistion_customer
-                        ? subject.replace(
+                        : subject.replace(
                             item?.id_transistion_customer?._id,
                             item?.id_transistion_customer?.transfer_note
-                          )
-                        : "";
+                          );
 
-                      const object = item?.id_collaborator
+                      const object = item?.id_reason_cancel
+                        ? predicate.replace(
+                            item?.id_reason_cancel?._id,
+                            item?.id_reason_cancel?.title?.vi
+                          )
+                        : item?.id_collaborator
                         ? predicate.replace(
                             item?.id_collaborator?._id,
                             item?.id_collaborator?.full_name
@@ -1006,15 +978,11 @@ export default function Home() {
                             item?.id_transistion_collaborator?._id,
                             item?.id_transistion_collaborator?.transfer_note
                           )
-                        : item?.id_transistion_customer
-                        ? predicate.replace(
+                        : predicate.replace(
                             item?.id_transistion_customer?._id,
                             item?.id_transistion_customer?.transfer_note
-                          )
-                        : predicate.replace(
-                            item?.id_reason_cancel?._id,
-                            item?.id_reason_cancel?.title?.vi
                           );
+
                       return (
                         <div className="div-list" key={index}>
                           <div className="div-line">
@@ -1041,7 +1009,7 @@ export default function Home() {
         </div>
         <div>
           <Row>
-            <Col lg="6">
+            <Col span="15">
               {checkElement?.includes("total_customer_monthly_dashboard") && (
                 <div className="div-chart-user">
                   <h4>{`${i18n.t("total_register", {
@@ -1144,7 +1112,7 @@ export default function Home() {
                 </div>
               )}
             </Col>
-            <Col lg="6">
+            <Col className="ml-5" span="8">
               {checkElement?.includes("report_cancel_order_dashboard") && (
                 <div className="div-chart-pie-total-cancel-dash">
                   <a className="title-chart">

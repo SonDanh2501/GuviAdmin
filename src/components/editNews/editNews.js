@@ -55,14 +55,14 @@ const EditNews = ({ data }) => {
       const file = e.target.files[0];
       const image = await resizeFile(file);
       const formData = new FormData();
-      formData.append("file", image);
+      formData.append("multi-files", image);
       postFile(formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
         .then((res) => {
-          setImgThumbnail(res);
+          setImgThumbnail(res[0]);
           dispatch(loadingAction.loadingRequest(false));
         })
         .catch((err) => {

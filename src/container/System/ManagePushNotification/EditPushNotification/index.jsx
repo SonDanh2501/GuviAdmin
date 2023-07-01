@@ -1,6 +1,6 @@
 import { Button, Checkbox, Drawer, Input, List, Select } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { errorNotify } from "../../../../helper/toast";
 import { loadingAction } from "../../../../redux/actions/loading";
 import "./index.scss";
@@ -8,7 +8,6 @@ import "./index.scss";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import { searchCustomers } from "../../../../api/customer";
-import { postFile } from "../../../../api/file";
 import {
   editPushNotification,
   getDetailNotification,
@@ -16,8 +15,9 @@ import {
 import { getGroupCustomerApi } from "../../../../api/promotion";
 import InputCustom from "../../../../components/textInputCustom";
 import UploadImage from "../../../../components/uploadImage";
-import resizeFile from "../../../../helper/resizer";
+import i18n from "../../../../i18n";
 import { getNotification } from "../../../../redux/actions/notification";
+import { getLanguageState } from "../../../../redux/selectors/auth";
 const EditPushNotification = ({ id }) => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
@@ -42,6 +42,7 @@ const EditPushNotification = ({ id }) => {
     setOpen(false);
   };
   const width = window.innerWidth;
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getDetailNotification(id)
@@ -132,40 +133,6 @@ const EditPushNotification = ({ id }) => {
     setGroupCustomer(value);
   };
 
-  const onChangeThumbnail = async (e) => {
-    dispatch(loadingAction.loadingRequest(true));
-    try {
-      if (e.target.files[0]) {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          setImgThumbnail(reader.result);
-        });
-        reader.readAsDataURL(e.target.files[0]);
-      }
-      const file = e.target.files[0];
-      const image = await resizeFile(file);
-      const formData = new FormData();
-      formData.append("file", image);
-      postFile(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-        .then((res) => {
-          setImgThumbnail(res);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const onCreateNotification = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
     editPushNotification(id, {
@@ -211,25 +178,23 @@ const EditPushNotification = ({ id }) => {
   return (
     <>
       <a onClick={showDrawer}>
-        <a>Chỉnh sửa </a>
+        <a>{`${i18n.t("edit", { lng: lang })}`}</a>
       </a>
       <Drawer
-        title="Tạo thông báo"
+        title={`${i18n.t("edit", { lng: lang })}`}
         placement="right"
         onClose={onClose}
         width={width > 490 ? 500 : 320}
         open={open}
       >
         <InputCustom
-          title="Tiêu đề"
-          placeholder="Vui lòng nhập tiêu đề"
+          title={`${i18n.t("title", { lng: lang })}`}
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <InputCustom
-          title="Nội dung"
-          placeholder="Vui lòng nhập nội dung"
+          title={`${i18n.t("content", { lng: lang })}`}
           textArea={true}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -240,7 +205,7 @@ const EditPushNotification = ({ id }) => {
             checked={isDateSchedule}
             onChange={(e) => setIsDateSchedule(e.target.checked)}
           >
-            Thời gian thông báo
+            {`${i18n.t("notice_time", { lng: lang })}`}
           </Checkbox>
           {isDateSchedule && (
             <InputCustom
@@ -256,12 +221,12 @@ const EditPushNotification = ({ id }) => {
             checked={isCustomer}
             onChange={(e) => setIsCustomer(e.target.checked)}
           >
-            Khách hàng
+            {`${i18n.t("customer", { lng: lang })}`}
           </Checkbox>
           {isCustomer && (
             <div>
               <Input
-                placeholder="Tìm kiếm theo tên và số điện thoại"
+                placeholder={`${i18n.t("search", { lng: lang })}`}
                 className="mt-2"
                 value={nameCustomer}
                 onChange={(e) => {
@@ -316,7 +281,7 @@ const EditPushNotification = ({ id }) => {
             checked={isGroupCustomer}
             onChange={(e) => setIsGroupCustomer(e.target.checked)}
           >
-            Nhóm khách hàng
+            {`${i18n.t("customer_group", { lng: lang })}`}
           </Checkbox>
 
           {isGroupCustomer && (
@@ -335,17 +300,20 @@ const EditPushNotification = ({ id }) => {
         </div>
 
         <UploadImage
-          title={"Hình ảnh 360px * 137px, tỉ lệ 2,62"}
+          title={`${i18n.t("image", { lng: lang })} 360px * 137px, ${i18n.t(
+            "ratio",
+            { lng: lang }
+          )} 2,62`}
           image={imgThumbnail}
           setImage={setImgThumbnail}
           classImg={"img-thumbnail-banner"}
         />
 
         <Button
-          className="btn-create-notification"
+          className="btn-edit-notification"
           onClick={onCreateNotification}
         >
-          Sửa
+          {`${i18n.t("edit", { lng: lang })}`}
         </Button>
       </Drawer>
     </>

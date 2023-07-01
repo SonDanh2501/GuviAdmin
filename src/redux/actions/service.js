@@ -28,3 +28,10 @@ export const getServiceAction = createActions({
   getServiceSuccess: (payload) => payload,
   getServiceFailure: (err) => err,
 });
+
+//province
+export const getProvinceAction = createActions({
+  getProvinceRequest: undefined,
+  getProvinceSuccess: (payload) => payload,
+  getProvinceFailure: (err) => err,
+});

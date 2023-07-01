@@ -1,7 +1,7 @@
 import { Button, Drawer, Input, Select } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import "./styles.scss";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   createAccountAdmin,
   getListAccount,
@@ -9,6 +9,9 @@ import {
 } from "../../../../../../api/createAccount";
 import { loadingAction } from "../../../../../../redux/actions/loading";
 import { errorNotify } from "../../../../../../helper/toast";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../i18n";
+import InputCustom from "../../../../../../components/textInputCustom";
 
 const AddAccount = ({ setData, setTotal }) => {
   const [fullName, setFullName] = useState("");
@@ -19,6 +22,7 @@ const AddAccount = ({ setData, setTotal }) => {
   const roleAdmin = [];
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+  const lang = useSelector(getLanguageState);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -71,50 +75,42 @@ const AddAccount = ({ setData, setTotal }) => {
   return (
     <div>
       <Button type="primary" onClick={showDrawer}>
-        Thêm tài khoản
+        {`${i18n.t("add_account", { lng: lang })}`}
       </Button>
       <Drawer
-        title="Tạo tài khoản quản trị"
+        title={`${i18n.t("add_account", { lng: lang })}`}
         placement="right"
         onClose={onClose}
         open={open}
       >
-        <div>
-          <a className="text-label">Tên hiện thị</a>
-          <Input
-            type="text"
-            placeholder="Vui lòng nhập tên hiện thị"
-            onChange={(e) => setFullName(e.target.value)}
-          />
-        </div>
-        <div>
-          <a className="text-label">Email đăng nhập</a>
-          <Input
-            type="text"
-            placeholder="Vui lòng nhập email đăng nhập"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <a className="text-label">Mật khẩu</a>
-          <Input.Password
-            placeholder="Nhập mật khẩu"
-            type="text"
-            // value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div className="mt-3 div-form-role">
-          <a className="text-label">Quyền</a>
-          <Select
+        <InputCustom
+          title={`${i18n.t("display_name", { lng: lang })}`}
+          onChange={(e) => setFullName(e.target.value)}
+        />
+
+        <InputCustom
+          title={`${i18n.t("email_login", { lng: lang })}`}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <InputCustom
+          title={`${i18n.t("password", { lng: lang })}`}
+          onChange={(e) => setPassword(e.target.value)}
+          password={true}
+        />
+
+        <div className=" div-form-role">
+          <InputCustom
+            title={`${i18n.t("permissions", { lng: lang })}`}
             onChange={(e) => setIdRole(e)}
             options={roleAdmin}
             style={{ width: "100%" }}
+            select={true}
           />
         </div>
 
         <button className="btn-create-account" onClick={onCreateAccount}>
-          Tạo tài khoản
+          {`${i18n.t("add_account", { lng: lang })}`}
         </button>
       </Drawer>
     </div>

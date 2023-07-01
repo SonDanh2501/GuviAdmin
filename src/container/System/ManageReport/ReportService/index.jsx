@@ -23,10 +23,13 @@ import {
 import { List, Select } from "antd";
 import CustomDatePicker from "../../../../components/customDatePicker";
 import LoadingPagination from "../../../../components/paginationLoading";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import i18n from "../../../../i18n";
 
 const ReportService = () => {
   const [startDate, setStartDate] = useState(
-    moment().startOf("month").toISOString()
+    moment().subtract(30, "d").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +42,7 @@ const ReportService = () => {
   const [dataChartService, setDataChartService] = useState([]);
   const [totalService, setTotalService] = useState(0);
   const [dataChartServiceDetails, setDataChartServiceDetails] = useState([]);
-
+  const lang = useSelector(getLanguageState);
   const cityData = [];
   const dataChartDetail = [];
 
@@ -82,7 +85,7 @@ const ReportService = () => {
 
   dataChartServiceDetails?.map((item) => {
     dataChartDetail?.push({
-      title: item?.title[0]?.vi,
+      title: item?.title[0]?.[lang],
       percent_2_hour: item?.total_2_hour,
       percent_3_hour: item?.total_3_hour,
       percent_4_hour: item?.total_4_hour,
@@ -181,7 +184,7 @@ const ReportService = () => {
         textAnchor={x > cx ? "start" : "end"}
         dominantBaseline="central"
       >
-        {title?.vi} ({percent} {"%"})
+        {title?.[lang]} ({percent} {"%"})
       </text>
     );
   };
@@ -215,7 +218,7 @@ const ReportService = () => {
       </div>
 
       <div className="mt-3 div-chart-bar-service">
-        <a>Thống kê đơn hàng</a>
+        <a>{`${i18n.t("order_statistics", { lng: lang })}`}</a>
         <ResponsiveContainer width={"100%"} height={350} min-width={350}>
           <BarChart
             width={500}
@@ -238,7 +241,7 @@ const ReportService = () => {
               fill="#8884d8"
               barSize={40}
               minPointSize={10}
-              name="2 Giờ"
+              name={"2 " + `${i18n.t("hour", { lng: lang })}`}
               label={{ position: "top", fill: "black", fontSize: 14 }}
             />
             <Bar
@@ -246,7 +249,7 @@ const ReportService = () => {
               fill="#82ca9d"
               barSize={40}
               minPointSize={10}
-              name="3 Giờ"
+              name={"3 " + `${i18n.t("hour", { lng: lang })}`}
               label={{ position: "top", fill: "black", fontSize: 14 }}
             />
             <Bar
@@ -254,7 +257,7 @@ const ReportService = () => {
               fill="#0088FE"
               barSize={40}
               minPointSize={10}
-              name="4 Giờ"
+              name={"4 " + `${i18n.t("hour", { lng: lang })}`}
               label={{ position: "top", fill: "black", fontSize: 14 }}
             />
           </BarChart>
@@ -262,18 +265,22 @@ const ReportService = () => {
       </div>
 
       <div className="div-chart-pie-total">
-        <a className="title-chart-area"> Thống kê đơn hàng theo dịch vụ</a>
+        <a className="title-chart-area">{`${i18n.t("order_statistics_service", {
+          lng: lang,
+        })}`}</a>
         <div className="div-pie-chart">
           <div className="div-total-piechart">
             <div className="item-total">
-              <a className="title-total">Tổng đơn</a>
+              <a className="title-total">{`${i18n.t("total_order", {
+                lng: lang,
+              })}`}</a>
               <a className="text-colon">:</a>
               <a className="number-total">{totalService}</a>
             </div>
             {dataChartService?.map((item, index) => {
               return (
                 <div className="item-total">
-                  <a className="title-total">{item?.title?.vi}</a>
+                  <a className="title-total">{item?.title?.[lang]}</a>
                   <a className="text-colon">:</a>
                   <a className="number-total">{item?.total}</a>
                 </div>

@@ -13,7 +13,10 @@ import ModalCustom from "../../../components/modalCustom";
 import { errorNotify } from "../../../helper/toast";
 import { loadingAction } from "../../../redux/actions/loading";
 import { getNotification } from "../../../redux/actions/notification";
-import { getElementState } from "../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../redux/selectors/auth";
 import {
   getListNotifications,
   getNotificationTotal,
@@ -21,6 +24,7 @@ import {
 import AddPushNotification from "./AddPushNotification";
 import EditPushNotification from "./EditPushNotification";
 import "./index.scss";
+import i18n from "../../../i18n";
 const width = window.innerWidth;
 
 const ManagePushNotification = () => {
@@ -32,7 +36,7 @@ const ManagePushNotification = () => {
   const [modalVerify, setModalVerify] = useState(false);
   const [modal, setModal] = useState(false);
   const checkElement = useSelector(getElementState);
-
+  const lang = useSelector(getLanguageState);
   const dispatch = useDispatch();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -124,14 +128,14 @@ const ManagePushNotification = () => {
     {
       key: "2",
       label: checkElement?.includes("delete_notification") && (
-        <a onClick={toggle}>Xoá</a>
+        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
       ),
     },
   ];
 
   const columns = [
     {
-      title: "Ngày tạo",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-date-create">
@@ -146,15 +150,15 @@ const ManagePushNotification = () => {
       },
     },
     {
-      title: "Tiêu đề",
+      title: `${i18n.t("title", { lng: lang })}`,
       render: (data) => <a>{data?.title}</a>,
     },
     {
-      title: "Nội dung",
+      title: `${i18n.t("content", { lng: lang })}`,
       render: (data) => <a>{data?.body}</a>,
     },
     {
-      title: "Ngày thông báo",
+      title: `${i18n.t("announcement_date", { lng: lang })}`,
       render: (data) => (
         <a>
           {data?.date_schedule
@@ -199,7 +203,7 @@ const ManagePushNotification = () => {
 
   return (
     <div>
-      <h5>Thông báo</h5>
+      <h5>{`${i18n.t("notification", { lng: lang })}`}</h5>
       <div>
         {checkElement?.includes("create_notification") && (
           <AddPushNotification />
@@ -217,7 +221,9 @@ const ManagePushNotification = () => {
               }
               onClick={() => setStatus(item?.value)}
             >
-              <a className="text-tab">{item?.title}</a>
+              <a className="text-tab">
+                {`${i18n.t(item?.title, { lng: lang })}`}
+              </a>
             </div>
           );
         })}
@@ -244,7 +250,9 @@ const ManagePushNotification = () => {
         />
       </div>
       <div className="div-pagination p-2">
-        <a>Tổng: {totalNotification}</a>
+        <a>
+          {`${i18n.t("total", { lng: lang })}`}: {totalNotification}
+        </a>
         <div>
           <Pagination
             current={currentPage}
@@ -261,17 +269,21 @@ const ManagePushNotification = () => {
           isOpen={modalVerify}
           title={
             !itemEdit?.is_active === true
-              ? "Bật hoạt động cho thông báo"
-              : "Ẩn hoạt động cho thông báo"
+              ? `${i18n.t("unlock_noti", { lng: lang })}`
+              : `${i18n.t("lock_noti", { lng: lang })}`
           }
           handleOk={() => onActive(itemEdit?._id, itemEdit?.is_active)}
           handleCancel={toggleVerify}
-          textOk={!itemEdit?.is_active === true ? "Bật" : "Ẩn"}
+          textOk={
+            !itemEdit?.is_active === true
+              ? `${i18n.t("lock", { lng: lang })}`
+              : `${i18n.t("unlock", { lng: lang })}`
+          }
           body={
             <>
               {!itemEdit?.is_active === true
-                ? "Bạn có muốn Bật hoạt động cho thông báo"
-                : "Bạn có muốn Ẩn hoạt động cho thông báo"}
+                ? `${i18n.t("want_unlock_noti", { lng: lang })}`
+                : `${i18n.t("want_lock_noti", { lng: lang })}`}
               <h6>{itemEdit?.title}</h6>
             </>
           }
@@ -280,15 +292,15 @@ const ManagePushNotification = () => {
       <div>
         <ModalCustom
           isOpen={modal}
-          title="Xóa thông báo"
+          title={`${i18n.t("remove_notification", { lng: lang })}`}
           handleOk={() => onDelete(itemEdit?._id)}
           handleCancel={toggle}
-          textOk="Xoá"
+          textOk={`${i18n.t("delete", { lng: lang })}`}
           body={
-            <a>
-              Bạn có chắc muốn xóa thông báo
-              <a className="text-name-modal">{itemEdit?.title}</a> này không?
-            </a>
+            <>
+              <a>{`${i18n.t("want_remove_notification", { lng: lang })}`}</a>
+              <a className="text-name-modal">{itemEdit?.title}</a>
+            </>
           }
         />
       </div>
@@ -301,12 +313,12 @@ export default ManagePushNotification;
 const DATA = [
   {
     id: 1,
-    title: "Đang chờ",
+    title: "waiting",
     value: "todo",
   },
   {
     id: 2,
-    title: "Đã xong",
+    title: "done",
     value: "done",
   },
 ];

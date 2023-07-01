@@ -516,9 +516,11 @@
     }
   }
 
-  .col-activity {
+  .col-activity-dashboard {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background-color: #fff;
     border-radius: 4px;
 
@@ -1559,9 +1561,10 @@
       }
     }
 
-    .col-activity {
+    .col-activity-dashboard {
       display: flex;
       flex-direction: column;
+      align-items: center;
       background-color: #fff;
       border-radius: 4px;
       margin-top: 20px;

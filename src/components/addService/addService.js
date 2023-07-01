@@ -45,7 +45,7 @@ const AddService = (props) => {
       reader.readAsDataURL(e.target.files[0]);
     }
     const formData = new FormData();
-    formData.append("file", e.target.files[0]);
+    formData.append("multi-files", e.target.files[0]);
     postFile(formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -53,7 +53,7 @@ const AddService = (props) => {
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
-        setImgUrl(res);
+        setImgUrl(res[0]);
       })
       .catch((err) => {
         errorNotify({

@@ -73,7 +73,7 @@ const ProfileCollaborator = () => {
     const file = e.target.files[0];
     const image = await resizeFile(file);
     const formData = new FormData();
-    formData.append("file", image);
+    formData.append("multi-files", image);
     dispatch(loadingAction.loadingRequest(true));
     postFile(formData, {
       headers: {
@@ -81,10 +81,11 @@ const ProfileCollaborator = () => {
       },
     })
       .then((res) => {
-        setImg(res);
+        setImg(res[0]);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
+        setImg("");
         errorNotify({
           message: err,
         });

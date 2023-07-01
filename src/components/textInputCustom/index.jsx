@@ -1,4 +1,4 @@
-import { Input, Select } from "antd";
+import { Input, InputNumber, Select } from "antd";
 
 import "./styles.scss";
 import { useSelector } from "react-redux";
@@ -25,6 +25,7 @@ const InputCustom = (props) => {
     disabled,
     prefix,
     mode,
+    inputMoney,
   } = props;
   const lang = useSelector(getLanguageState);
 
@@ -60,10 +61,24 @@ const InputCustom = (props) => {
           className={className}
           mode={mode}
         />
+      ) : inputMoney ? (
+        <InputNumber
+          formatter={(value) =>
+            `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+          }
+          min={min}
+          value={value}
+          onChange={onChange}
+          style={style}
+        />
       ) : (
         <Input
           value={value}
-          placeholder={`${i18n.t("placeholder", { lng: lang })}`}
+          placeholder={
+            placeholder
+              ? placeholder
+              : `${i18n.t("placeholder", { lng: lang })}`
+          }
           type={type}
           onChange={onChange}
           style={style}

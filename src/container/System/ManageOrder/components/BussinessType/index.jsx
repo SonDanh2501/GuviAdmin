@@ -1,4 +1,4 @@
-import { Button, DatePicker, Input, List, Select } from "antd";
+import { Button, DatePicker, Input, List, Select, Switch } from "antd";
 import _debounce from "lodash/debounce";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -136,10 +136,6 @@ const BussinessType = (props) => {
 
   const timeW = dateWork + "T" + timeWork + ".000Z";
 
-  const timeNow = Number(new Date().toTimeString().slice(0, 2));
-
-  const dayNow = new Date().toISOString().slice(0, 10);
-
   var AES = require("crypto-js/aes");
   const temp = JSON.stringify({
     lat: lat,
@@ -241,7 +237,7 @@ const BussinessType = (props) => {
         note: note,
         is_auto_order: false,
         date_work_schedule: [timeW],
-        extend_optional: mutipleSelected.concat(time),
+        extend_optional: mutipleSelected.concat(time).concat(bussiness),
         payment_method: paymentMethod,
       })
         .then((res) => {
@@ -263,7 +259,7 @@ const BussinessType = (props) => {
         note: note,
         is_auto_order: false,
         date_work_schedule: [timeW],
-        extend_optional: mutipleSelected.concat(time),
+        extend_optional: mutipleSelected.concat(time).concat(bussiness),
         payment_method: paymentMethod,
       })
         .then((res) => {
@@ -302,7 +298,7 @@ const BussinessType = (props) => {
         note: note,
         is_auto_order: false,
         date_work_schedule: [timeW],
-        extend_optional: mutipleSelected.concat(time),
+        extend_optional: mutipleSelected.concat(time).concat(bussiness),
         payment_method: paymentMethod,
       })
         .then((res) => {
@@ -323,7 +319,17 @@ const BussinessType = (props) => {
           });
         });
     }
-  }, [lat, long, timeWork, dateWork, mutipleSelected, time, id, paymentMethod]);
+  }, [
+    lat,
+    long,
+    timeWork,
+    dateWork,
+    mutipleSelected,
+    time,
+    id,
+    paymentMethod,
+    bussiness,
+  ]);
 
   const checkPromotion = useCallback(
     (item) => {
@@ -669,8 +675,8 @@ const BussinessType = (props) => {
           <a className="label">{`${i18n.t("extra_service", {
             lng: lang,
           })}`}</a>
-          <div className="div-service">
-            {addService?.map((item) => {
+          <div className="div-service-serve">
+            {/* {addService?.map((item) => {
               return (
                 <button
                   className={
@@ -706,6 +712,22 @@ const BussinessType = (props) => {
                     {item?.description?.[lang]}
                   </a>
                 </button>
+              );
+            })} */}
+            {addService?.map((item, index) => {
+              return (
+                <div key={index} className="div-switch-add-service">
+                  <a className="title-switch">{item?.title?.[lang]}</a>
+                  <Switch
+                    checked={
+                      mutipleSelected.some((items) => items._id === item?._id)
+                        ? true
+                        : false
+                    }
+                    size="small"
+                    onChange={() => onChooseMultiple(item?._id)}
+                  />
+                </div>
               );
             })}
           </div>
@@ -824,9 +846,9 @@ const BussinessType = (props) => {
                       setDataCollaborator([]);
                     }}
                   >
-                    <div>
+                    <div className="div-name">
                       <img src={item?.avatar} className="img-collaborator" />
-                      <a>
+                      <a className="text-name">
                         {item?.full_name} - {item?.phone} - {item?.id_view}
                       </a>
                     </div>
@@ -898,9 +920,12 @@ const BussinessType = (props) => {
                 )
               : formatMoney(0)}
           </a>
-          <Button onClick={onCreateOrder}>{`${i18n.t("post", {
-            lng: lang,
-          })}`}</Button>
+          <Button style={{ width: "auto" }} onClick={onCreateOrder}>{`${i18n.t(
+            "post",
+            {
+              lng: lang,
+            }
+          )}`}</Button>
         </div>
         {isLoading && <LoadingPagination />}
       </div>

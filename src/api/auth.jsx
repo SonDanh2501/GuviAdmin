@@ -6,3 +6,7 @@ export const loginApi = (payload) => {
 export const getPermission = () => {
   return axiosClient.get(`/admin/auth/get_permission_by_token`);
 };
+
+export const getRoomApi = () => {
+  return axiosClient.get(`/room/get_list`);
+};

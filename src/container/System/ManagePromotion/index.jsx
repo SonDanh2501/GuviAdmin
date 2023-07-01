@@ -21,8 +21,8 @@ const ManagePromotions = () => {
       <Button
         className={
           selected === "code" && brand === "guvi"
-            ? "btn-selected"
-            : "btn-default"
+            ? "btn-selected-promotion"
+            : "btn-default-promotion"
         }
         onClick={() => {
           setSelected("code");
@@ -36,8 +36,8 @@ const ManagePromotions = () => {
       <Button
         className={
           selected === "code" && brand === "orther"
-            ? "btn-selected"
-            : "btn-default"
+            ? "btn-selected-promotion"
+            : "btn-default-promotion"
         }
         onClick={() => {
           setSelected("code");
@@ -49,7 +49,11 @@ const ManagePromotions = () => {
         {`${i18n.t("partner_promotion", { lng: lang })}`}
       </Button>
       <Button
-        className={selected === "event" ? "btn-selected" : "btn-default"}
+        className={
+          selected === "event"
+            ? "btn-selected-promotion"
+            : "btn-default-promotion"
+        }
         onClick={() => {
           setCurrentPage(1);
           setStartPage(0);

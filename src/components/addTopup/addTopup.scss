@@ -1,4 +1,7 @@
 .btn-add-topup-collaborator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 200px;
   height: 40px;
   border: none;
@@ -20,6 +23,9 @@
 }
 
 .btn-add-t {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 20%;
   height: 40px;
   border: none;

@@ -38,14 +38,14 @@ const AddGroupService = ({ setIsLoading, setData, setTotal }) => {
       reader.readAsDataURL(e.target.files[0]);
     }
     const formData = new FormData();
-    formData.append("file", e.target.files[0]);
+    formData.append("multi-files", e.target.files[0]);
     postFile(formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     })
       .then((res) => {
-        setImgUrl(res);
+        setImgUrl(res[0]);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -93,7 +93,7 @@ const AddGroupService = ({ setIsLoading, setData, setTotal }) => {
       {/* Button trigger modal */}
       <CustomButton
         title="Thêm group-service"
-        className="btn-add-service"
+        className="btn-group-service"
         type="button"
         onClick={showDrawer}
       />

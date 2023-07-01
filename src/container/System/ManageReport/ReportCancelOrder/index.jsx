@@ -5,11 +5,15 @@ import CancelOrderCustomer from "./CancelCustomer";
 import TotalCancel from "./CancelTotal";
 import TotalCancelSystem from "./CancelTotalSystem";
 import TotalCancelUserSystem from "./CancelTotalUserSystem";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import i18n from "../../../../i18n";
 
 const ReportCancelOrder = () => {
   const [tab, setTab] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
+  const lang = useSelector(getLanguageState);
 
   const onChangeTab = (tab) => {
     switch (tab) {
@@ -41,7 +45,7 @@ const ReportCancelOrder = () => {
   return (
     <>
       <Tabs onChange={onChangeTab}>
-        <Tabs.TabPane tab="Tổng" key="1">
+        <Tabs.TabPane tab={`${i18n.t("total", { lng: lang })}`} key="1">
           <TotalCancel
             tab={tab}
             currentPage={currentPage}
@@ -50,8 +54,7 @@ const ReportCancelOrder = () => {
             setStartPage={setStartPage}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Khách hàng" key="2">
-          {/* <CancelOrderCustomer /> */}
+        <Tabs.TabPane tab={`${i18n.t("customer", { lng: lang })}`} key="2">
           <CancelOrderCustomer
             tab={tab}
             currentPage={currentPage}
@@ -60,7 +63,7 @@ const ReportCancelOrder = () => {
             setStartPage={setStartPage}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Hệ thống" key="3">
+        <Tabs.TabPane tab={`${i18n.t("system", { lng: lang })}`} key="3">
           <TotalCancelSystem
             tab={tab}
             currentPage={currentPage}
@@ -69,7 +72,7 @@ const ReportCancelOrder = () => {
             setStartPage={setStartPage}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Quản trị viên" key="4">
+        <Tabs.TabPane tab={`${i18n.t("admin", { lng: lang })}`} key="4">
           <TotalCancelUserSystem
             tab={tab}
             currentPage={currentPage}

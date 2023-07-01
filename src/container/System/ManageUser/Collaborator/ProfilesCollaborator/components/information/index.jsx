@@ -89,7 +89,7 @@ const Information = ({ data, image, idCTV, setData }) => {
     });
   }, [data]);
 
-  service.map((item, index) => {
+  service.map((item) => {
     serviceOption.push({
       label: item?.title?.[lang],
       value: item?._id,

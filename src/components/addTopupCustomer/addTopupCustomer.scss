@@ -1,4 +1,7 @@
 .btn-add-topup-customer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 10%;
   height: 40px;
   border: none;
@@ -22,7 +25,10 @@
 }
 
 .btn-add-draw-topup-customer {
-  width: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20%;
   height: 40px;
   border: none;
   border-radius: 5px;

@@ -17,6 +17,10 @@ import {
 import LoadingPagination from "../../../../../../components/paginationLoading";
 import { errorNotify } from "../../../../../../helper/toast";
 import "./index.scss";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../i18n";
+import InputCustom from "../../../../../../components/textInputCustom";
 const { TextArea } = Input;
 
 const EditGroupCustomer = () => {
@@ -50,7 +54,7 @@ const EditGroupCustomer = () => {
     },
   ]);
 
-  const navigate = useNavigate();
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     setIsLoading(true);
@@ -239,26 +243,29 @@ const EditGroupCustomer = () => {
 
   return (
     <>
-      <a className="title-condition">Thêm nhóm khách hàng</a>
+      <a className="title-condition">{`${i18n.t("edit_group_customer", {
+        lng: lang,
+      })}`}</a>
       <div className="div-input-name">
-        <a className="label-input">Nhập tên nhóm</a>
-        <Input
+        <InputCustom
+          title={`${i18n.t("name", { lng: lang })}`}
           className="input-name-group-customer"
           type="text"
           value={nameGroup}
           onChange={(e) => setNameGroup(e.target.value)}
         />
-        <a className="label-input">Mô tả</a>
-
-        <TextArea
-          rows={2}
-          value={description}
+        <InputCustom
+          title={`${i18n.t("describe", { lng: lang })}`}
           className="input-name-group-customer"
+          textArea={true}
+          value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
       </div>
       <div>
-        <a className="title-condition">Điều kiện vào</a>
+        <a className="title-condition">{`${i18n.t("entry_conditions", {
+          lng: lang,
+        })}`}</a>
         {conditionLevel?.map((item, index) => {
           return (
             <div className="condition-level mb-2" key={index}>
@@ -274,7 +281,9 @@ const EditGroupCustomer = () => {
                           : "div-tab"
                       }
                     >
-                      <a className="text-tab">{i?.title}</a>
+                      <a className="text-tab">{`${i18n.t(i?.title, {
+                        lng: lang,
+                      })}`}</a>
                     </div>
                   );
                 })}
@@ -298,7 +307,9 @@ const EditGroupCustomer = () => {
                                     : "div-tab"
                                 }
                               >
-                                <a className="text-tab">{i?.title}</a>
+                                <a className="text-tab">{`${i18n.t(i?.title, {
+                                  lng: lang,
+                                })}`}</a>
                               </div>
                             );
                           })}
@@ -307,7 +318,7 @@ const EditGroupCustomer = () => {
                           className="btn-add-group"
                           onClick={() => addConditionIn(ix)}
                         >
-                          Thêm
+                          {`${i18n.t("add", { lng: lang })}`}
                         </Button>
                       </div>
                       <div className="ml-3">
@@ -318,15 +329,23 @@ const EditGroupCustomer = () => {
                                 {idx !== 0 && (
                                   <div className="condition-btn">
                                     {condition?.type_condition === "and" ? (
-                                      <a className="text-btn">Và</a>
+                                      <a className="text-btn">{`${i18n.t(
+                                        "and",
+                                        { lng: lang }
+                                      )}`}</a>
                                     ) : (
-                                      <a className="text-btn">Hoặc</a>
+                                      <a className="text-btn">{`${i18n.t("or", {
+                                        lng: lang,
+                                      })}`}</a>
                                     )}
                                   </div>
                                 )}
                                 <div className="div-input-condition">
                                   <div className="div-select-kind">
-                                    <a className="label-kind">Loại</a>
+                                    <a className="label-kind">{`${i18n.t(
+                                      "type",
+                                      { lng: lang }
+                                    )}`}</a>
                                     <Select
                                       onChange={(value) =>
                                         onChangeKindIn(value, idx, ix)
@@ -338,7 +357,10 @@ const EditGroupCustomer = () => {
                                   </div>
 
                                   <div className="div-select-kind">
-                                    <a className="label-kind">Phương thức</a>
+                                    <a className="label-kind">{`${i18n.t(
+                                      "method",
+                                      { lng: lang }
+                                    )}`}</a>
                                     <Select
                                       onChange={(value) =>
                                         onChangeOperatorIn(value, idx, ix)
@@ -355,7 +377,10 @@ const EditGroupCustomer = () => {
                                   </div>
 
                                   <div className="div-select-kind">
-                                    <a className="label-kind">Giá trị</a>
+                                    <a className="label-kind">{`${i18n.t(
+                                      "value",
+                                      { lng: lang }
+                                    )}`}</a>
                                     {condition?.condition[idx].kind ===
                                     "gender" ? (
                                       <Select
@@ -435,7 +460,7 @@ const EditGroupCustomer = () => {
                         className="mt-1 mb-2"
                         onClick={() => deleteConditionLevelIn(ix)}
                       >
-                        Xoá
+                        {`${i18n.t("delete", { lng: lang })}`}
                       </Button>
                     )}
                   </>
@@ -444,7 +469,7 @@ const EditGroupCustomer = () => {
 
               <div>
                 <Button className="mt-2" onClick={addConditionLevel}>
-                  Thêm
+                  {`${i18n.t("add", { lng: lang })}`}
                 </Button>
               </div>
             </div>
@@ -453,7 +478,9 @@ const EditGroupCustomer = () => {
       </div>
 
       <div>
-        <a className="title-condition">Điều kiện ra</a>
+        <a className="title-condition">{`${i18n.t("output_conditions", {
+          lng: lang,
+        })}`}</a>
         {conditionLevelOut?.map((item, index) => {
           return (
             <div className="condition-level mb-2" key={index}>
@@ -469,7 +496,9 @@ const EditGroupCustomer = () => {
                           : "div-tab"
                       }
                     >
-                      <a className="text-tab">{i?.title}</a>
+                      <a className="text-tab">{`${i18n.t(i?.title, {
+                        lng: lang,
+                      })}`}</a>
                     </div>
                   );
                 })}
@@ -493,7 +522,9 @@ const EditGroupCustomer = () => {
                                     : "div-tab"
                                 }
                               >
-                                <a className="text-tab">{i?.title}</a>
+                                <a className="text-tab">{`${i18n.t(i?.title, {
+                                  lng: lang,
+                                })}`}</a>
                               </div>
                             );
                           })}
@@ -502,7 +533,7 @@ const EditGroupCustomer = () => {
                           className="btn-add-group"
                           onClick={() => addConditionOut(ix)}
                         >
-                          Thêm
+                          {`${i18n.t("add", { lng: lang })}`}
                         </Button>
                       </div>
                       <div className="ml-3">
@@ -513,15 +544,23 @@ const EditGroupCustomer = () => {
                                 {idx !== 0 && (
                                   <div className="condition-btn">
                                     {condition?.type_condition === "and" ? (
-                                      <a className="text-btn">Và</a>
+                                      <a className="text-btn">{`${i18n.t(
+                                        "and",
+                                        { lng: lang }
+                                      )}`}</a>
                                     ) : (
-                                      <a className="text-btn">Hoặc</a>
+                                      <a className="text-btn">{`${i18n.t("or", {
+                                        lng: lang,
+                                      })}`}</a>
                                     )}
                                   </div>
                                 )}
                                 <div className="div-input-condition">
                                   <div className="div-select-kind">
-                                    <a className="label-kind">Loại</a>
+                                    <a className="label-kind">{`${i18n.t(
+                                      "type",
+                                      { lng: lang }
+                                    )}`}</a>
                                     <Select
                                       onChange={(value) =>
                                         onChangeKindOut(value, idx, ix)
@@ -533,7 +572,10 @@ const EditGroupCustomer = () => {
                                   </div>
 
                                   <div className="div-select-kind">
-                                    <a className="label-kind">Phương thức</a>
+                                    <a className="label-kind">{`${i18n.t(
+                                      "method",
+                                      { lng: lang }
+                                    )}`}</a>
                                     <Select
                                       onChange={(value) =>
                                         onChangeOperatorOut(value, idx, ix)
@@ -550,7 +592,10 @@ const EditGroupCustomer = () => {
                                   </div>
 
                                   <div className="div-select-kind">
-                                    <a className="label-kind">Giá trị</a>
+                                    <a className="label-kind">{`${i18n.t(
+                                      "value",
+                                      { lng: lang }
+                                    )}`}</a>
                                     {condition?.condition[idx].kind ===
                                     "gender" ? (
                                       <Select
@@ -632,7 +677,7 @@ const EditGroupCustomer = () => {
                         className="mt-1 mb-2"
                         onClick={() => deleteConditionLevelOut(ix)}
                       >
-                        Xoá
+                        {`${i18n.t("delete", { lng: lang })}`}
                       </Button>
                     )}
                   </>
@@ -641,7 +686,7 @@ const EditGroupCustomer = () => {
 
               <div>
                 <Button className="mt-2" onClick={addConditionLevelOut}>
-                  Thêm
+                  {`${i18n.t("add", { lng: lang })}`}
                 </Button>
               </div>
             </div>
@@ -653,7 +698,7 @@ const EditGroupCustomer = () => {
         className="btn-create-group-customer"
         onClick={onEditGroupCustomer}
       >
-        Sửa nhóm khách hàng
+        {`${i18n.t("edit_group_customer", { lng: lang })}`}
       </Button>
 
       {isLoading && <LoadingPagination />}
@@ -665,11 +710,11 @@ export default memo(EditGroupCustomer);
 
 const DATA_TAB = [
   {
-    title: "Và",
+    title: "and",
     value: "and",
   },
   {
-    title: "Hoặc",
+    title: "or",
     value: "or",
   },
 ];

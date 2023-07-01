@@ -7,18 +7,21 @@ import { TopupMoneyCustomerApi } from "../../api/topup";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
 import { getTopupCustomer } from "../../redux/actions/topup";
-import { getElementState } from "../../redux/selectors/auth";
+import { getElementState, getLanguageState } from "../../redux/selectors/auth";
 import CustomButton from "../customButton/customButton";
 import "./addTopupCustomer.scss";
+import i18n from "../../i18n";
+import InputCustom from "../textInputCustom";
 const { TextArea } = Input;
 
 const AddTopupCustomer = () => {
-  const [money, setMoney] = useState("");
+  const [money, setMoney] = useState(0);
   const [note, setNote] = useState("");
   const [data, setData] = useState([]);
   const [name, setName] = useState("");
   const [errorName, setErrorName] = useState("");
   const [errorMoney, setErrorMoney] = useState("");
+  const lang = useSelector(getLanguageState);
   const [id, setId] = useState("");
   const dispatch = useDispatch();
   const checkElement = useSelector(getElementState);
@@ -29,10 +32,6 @@ const AddTopupCustomer = () => {
   };
   const onClose = ({ data }) => {
     setOpen(false);
-  };
-
-  const valueSearch = (value) => {
-    setName(value);
   };
 
   const searchCollaborator = useCallback(
@@ -95,7 +94,7 @@ const AddTopupCustomer = () => {
     <>
       {/* Button trigger modal */}
       <CustomButton
-        title="Nạp tiền"
+        title={`${i18n.t("recharge", { lng: lang })}`}
         className={
           checkElement?.includes("create_transition_cash_book_customer")
             ? "btn-add-topup-customer"
@@ -106,7 +105,7 @@ const AddTopupCustomer = () => {
       />
 
       <Drawer
-        title="Nạp tiền khách hàng"
+        title={`${i18n.t("recharge", { lng: lang })}`}
         width={500}
         onClose={onClose}
         open={open}
@@ -116,13 +115,13 @@ const AddTopupCustomer = () => {
       >
         <div className="modal-body">
           <div>
-            <a className="label-topup-customer">(*)Khách hàng</a>
-            <Input
-              placeholder="Tìm kiếm theo số điện thoại"
+            <InputCustom
+              title={`${i18n.t("customer", { lng: lang })}`}
+              placeholder={`${i18n.t("search", { lng: lang })}`}
               value={name}
               onChange={(e) => {
                 searchCollaborator(e.target.value);
-                valueSearch(e.target.value);
+                setName(e.target.value);
               }}
             />
             {errorName && <a className="error">{errorName}</a>}
@@ -150,28 +149,25 @@ const AddTopupCustomer = () => {
           </div>
 
           <div className="mt-2">
-            <a className="label-topup-customer">(*) Nhập số tiền</a>
-            <InputNumber
-              formatter={(value) =>
-                `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
-              }
+            <InputCustom
+              title={`${i18n.t("money", { lng: lang })}`}
+              value={money}
               onChange={(e) => setMoney(e)}
               style={{ width: "100%" }}
             />
           </div>
 
           <div className="mt-2">
-            <a className="label-topup-customer">Nhập nội dung</a>
-            <TextArea
-              placeholder="Vui lòng nhập nội dung chuyển tiền"
-              type="textarea"
+            <InputCustom
+              title={`${i18n.t("content", { lng: lang })}`}
               min={0}
               value={note}
               onChange={(e) => setNote(e.target.value)}
+              textArea={true}
             />
           </div>
           <CustomButton
-            title="Nạp "
+            title={`${i18n.t("recharge", { lng: lang })}`}
             className="float-right btn-add-draw-topup-customer"
             type="button"
             onClick={addMoney}

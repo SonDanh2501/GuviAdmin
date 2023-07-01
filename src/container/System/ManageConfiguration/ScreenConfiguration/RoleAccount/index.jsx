@@ -6,8 +6,12 @@ import { MoreOutlined } from "@ant-design/icons";
 import EditRole from "./EditRole";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import { useSelector } from "react-redux";
-import { getElementState } from "../../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../../redux/selectors/auth";
 import { useNavigate } from "react-router-dom";
+import i18n from "../../../../../i18n";
 
 const RoleAccount = () => {
   const [data, setData] = useState([]);
@@ -15,6 +19,7 @@ const RoleAccount = () => {
   const [itemEdit, setItemEdit] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,7 +45,7 @@ const RoleAccount = () => {
             )
           }
         >
-          Chỉnh sửa
+          {`${i18n.t("edit", { lng: lang })}`}
         </a>
       ),
     },
@@ -48,7 +53,9 @@ const RoleAccount = () => {
 
   const columns = [
     {
-      title: "Tên quyền",
+      title: `${i18n.t("name", { lng: lang })} ${i18n.t("permissions", {
+        lng: lang,
+      })}`,
       render: (data) => <a>{data?.name_role}</a>,
     },
     {
@@ -93,7 +100,9 @@ const RoleAccount = () => {
             )
           }
         >
-          Thêm quyền
+          {`${i18n.t("add", { lng: lang })} ${i18n.t("permissions", {
+            lng: lang,
+          })}`}
         </Button>
       )}
 

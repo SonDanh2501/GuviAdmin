@@ -19,6 +19,10 @@ import {
   YAxis,
 } from "recharts";
 import "./styles.scss";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
+import { getProvince } from "../../../../../redux/selectors/service";
 const width = window.innerWidth;
 
 const ReportOrderCity = () => {
@@ -29,21 +33,17 @@ const ReportOrderCity = () => {
   const [dataTotal, setDataTotal] = useState([]);
   const [dataCity, setDataCity] = useState([]);
   const [codeCity, setCodeCity] = useState(0);
-  const [nameCity, setNameCity] = useState("Tất cả");
+  const [nameCity, setNameCity] = useState("");
   const [dataChart, setDataChart] = useState([]);
   const [startDate, setStartDate] = useState(
-    moment().startOf("month").toISOString()
+    moment().subtract(30, "d").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
+  const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
   const cityOptions = [];
 
   useEffect(() => {
-    getDistrictApi()
-      .then((res) => {
-        setDataCity(res?.aministrative_division);
-      })
-      .catch((err) => {});
-
     getReportOrderByCity(0, 20, startDate, endDate, codeCity)
       .then((res) => {
         setData(res?.data);
@@ -59,7 +59,7 @@ const ReportOrderCity = () => {
       .catch((err) => {});
   }, []);
 
-  dataCity.map((item) => {
+  province.map((item) => {
     cityOptions?.push({
       value: item?.code,
       label: item?.name,
@@ -67,7 +67,7 @@ const ReportOrderCity = () => {
   });
 
   const onChangeDay = () => {
-    getReportOrderByCity(0, 20, startDate, endDate, codeCity)
+    getReportOrderByCity(startPage, 20, startDate, endDate, codeCity)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -85,21 +85,26 @@ const ReportOrderCity = () => {
   const handleChangeCity = (value, label) => {
     setCodeCity(value);
     setNameCity(label?.label);
-    getReportOrderByCity(0, 20, startDate, endDate, value)
+    getReportOrderByCity(startPage, 20, startDate, endDate, value)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
         setDataTotal(res?.total[0]);
       })
       .catch((err) => {});
+
+    getReportPercentOrderByCity(startDate, endDate, value)
+      .then((res) => {
+        setDataChart(res?.data);
+      })
+      .catch((err) => {});
   };
 
   const onChange = (page) => {
     setCurrentPage(page);
-
-    const start = page * data.length - data.length;
+    const lengthData = data.length < 20 ? 20 : data.length;
+    const start = page * lengthData - lengthData;
     setStartPage(start);
-
     getReportOrderByCity(start, 20, startDate, endDate, codeCity)
       .then((res) => {
         setData(res?.data);
@@ -115,7 +120,9 @@ const ReportOrderCity = () => {
         return (
           <div className="div-title-collaborator-id">
             <div className="div-title-report">
-              <a className="text-title-column">Khu vực</a>
+              <a className="text-title-column">{`${i18n.t("area", {
+                lng: lang,
+              })}`}</a>
             </div>
             <div className="div-top"></div>
           </div>
@@ -132,7 +139,9 @@ const ReportOrderCity = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Số ca</a>
+              <a className="text-title-column">{`${i18n.t("shift", {
+                lng: lang,
+              })}`}</a>
             </div>
             <a className="text-money-title">
               {dataTotal?.total_item > 0 ? dataTotal?.total_item : 0}
@@ -150,7 +159,9 @@ const ReportOrderCity = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Doanh số</a>
+              <a className="text-title-column">{`${i18n.t("sales", {
+                lng: lang,
+              })}`}</a>
             </div>
             <a className="text-money-title">
               {dataTotal?.total_gross_income > 0
@@ -173,13 +184,20 @@ const ReportOrderCity = () => {
       title: () => {
         const content = (
           <div className="div-content">
-            <p className="text-content">Phí dịch vụ trả Cộng tác viên.</p>
+            <p className="text-content">{`${i18n.t(
+              "service_fee_pay_collaborator",
+              {
+                lng: lang,
+              }
+            )}`}</p>
           </div>
         );
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Phí dịch vụ</a>
+              <a className="text-title-column">{`${i18n.t("service_fee", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -210,14 +228,16 @@ const ReportOrderCity = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Doanh thu = Doanh số (-) Phí dịch vụ trả CTV
+              {`${i18n.t("revenue_sales", { lng: lang })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column-blue">Doanh thu</a>
+              <a className="text-title-column-blue">{`${i18n.t("revenue", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -245,13 +265,17 @@ const ReportOrderCity = () => {
       title: () => {
         const content = (
           <div className="div-content">
-            <p className="text-content">Tổng số tiền giảm giá</p>
+            <p className="text-content">{`${i18n.t("total_discount", {
+              lng: lang,
+            })}`}</p>
           </div>
         );
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Giảm giá</a>
+              <a className="text-title-column">{`${i18n.t("discount", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -280,15 +304,16 @@ const ReportOrderCity = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần
-              = Doanh thu (-) Giảm giá.
+              {`${i18n.t("note_net_revenue", { lng: lang })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Doanh thu thuần</a>
+              <a className="text-title-column">{`${i18n.t("net_revenue", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -317,7 +342,9 @@ const ReportOrderCity = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Phí áp dụng</a>
+              <a className="text-title-column">{`${i18n.t("fees_apply", {
+                lng: lang,
+              })}`}</a>
             </div>
             <a className="text-money-title">
               {dataTotal?.total_service_fee > 0
@@ -339,15 +366,18 @@ const ReportOrderCity = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Tổng tiền trên dịch vụ. Tổng hoá đơn = Doanh số - Giảm giá + Phi
-              áp dụng
+              {`${i18n.t("note_total_bill", {
+                lng: lang,
+              })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Tổng hoá đơn</a>
+              <a className="text-title-column">{`${i18n.t("total_bill", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -376,14 +406,16 @@ const ReportOrderCity = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              Lợi nhuận = Doanh thu (+) Phí áp dụng (-) Giảm giá.
+              {`${(i18n.t("note_profit"), { lng: lang })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">Lợi nhuận</a>
+              <a className="text-title-column">{`${i18n.t("profit", {
+                lng: lang,
+              })}`}</a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -415,14 +447,22 @@ const ReportOrderCity = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              % lợi nhuận = Tổng lợi nhuận (/) Doanh thu thuần.
+              %{" "}
+              {`${i18n.t("percent_profit", {
+                lng: lang,
+              })}`}
             </p>
           </div>
         );
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">% lợi nhuận</a>
+              <a className="text-title-column">
+                %{" "}
+                {`${i18n.t("profit", {
+                  lng: lang,
+                })}`}
+              </a>
               <Popover content={content} placement="bottom">
                 <Button className="btn-question">
                   <i class="uil uil-question-circle icon-question"></i>
@@ -446,7 +486,7 @@ const ReportOrderCity = () => {
 
   return (
     <div>
-      <h3>Báo cáo đơn hàng theo khu vực</h3>
+      <h3>{`${i18n.t("order_report_region", { lng: lang })}`}</h3>
       <div className="div-date">
         <CustomDatePicker
           setStartDate={setStartDate}
@@ -503,7 +543,7 @@ const ReportOrderCity = () => {
               barSize={20}
               minPointSize={10}
               label={{ position: "centerTop", fill: "white", fontSize: 10 }}
-              name="Số ca làm"
+              name={`${i18n.t("number_shift", { lng: lang })}`}
             />
           </BarChart>
         </ResponsiveContainer>
@@ -524,7 +564,9 @@ const ReportOrderCity = () => {
         />
       </div>
       <div className="mt-2 div-pagination p-2">
-        <a>Tổng: {total}</a>
+        <a>
+          {`${i18n.t("total", { lng: lang })}`}: {total}
+        </a>
         <div>
           <Pagination
             current={currentPage}

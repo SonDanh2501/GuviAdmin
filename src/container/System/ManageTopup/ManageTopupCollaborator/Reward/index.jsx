@@ -14,10 +14,14 @@ import ModalCustom from "../../../../../components/modalCustom";
 import InputCustom from "../../../../../components/textInputCustom";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import { errorNotify } from "../../../../../helper/toast";
-import { getElementState } from "../../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../../redux/selectors/auth";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { MoreOutlined } from "@ant-design/icons";
+import i18n from "../../../../../i18n";
 const RewardCollaborator = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
@@ -30,6 +34,7 @@ const RewardCollaborator = () => {
   const [modalCancel, setModalCancel] = useState(false);
   const [modal, setModal] = useState(false);
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     getListInfoRewardApi(0, 20)
@@ -133,7 +138,7 @@ const RewardCollaborator = () => {
   };
   const columns = [
     {
-      title: "Ngày tạo",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-create-info-reward">
@@ -148,7 +153,7 @@ const RewardCollaborator = () => {
       },
     },
     {
-      title: "Cộng tác viên",
+      title: `${i18n.t("collaborator", { lng: lang })}`,
       render: (data) => {
         return (
           <Link
@@ -162,24 +167,24 @@ const RewardCollaborator = () => {
       },
     },
     {
-      title: "Tổng đơn",
+      title: `${i18n.t("total_order", { lng: lang })}`,
       render: (data) => <a className="text-total">{data?.total_order}</a>,
       align: "center",
     },
     {
-      title: "Tổng giờ làm",
+      title: `${i18n.t("total_hour", { lng: lang })}`,
       render: (data) => <a className="text-total">{data?.total_job_hour}</a>,
       align: "center",
     },
     {
-      title: "Số tiền",
+      title: `${i18n.t("money", { lng: lang })}`,
       render: (data) => (
         <a className="text-total">{formatMoney(data?.money)}</a>
       ),
       align: "right",
     },
     {
-      title: "Trạng thái",
+      title: `${i18n.t("status", { lng: lang })}`,
       render: (data) => (
         <a
           className={
@@ -191,20 +196,20 @@ const RewardCollaborator = () => {
           }
         >
           {data?.status === "pending"
-            ? "Đang chờ"
+            ? `${i18n.t("pending", { lng: lang })}`
             : data?.status === "done"
-            ? "Hoàn tất"
-            : "Đã huỷ"}
+            ? `${i18n.t("complete", { lng: lang })}`
+            : `${i18n.t("cancel", { lng: lang })}`}
         </a>
       ),
       align: "center",
     },
     {
-      title: "Người duyệt",
+      title: `${i18n.t("approved_by", { lng: lang })}`,
       render: (date) => <a>{data?.id_admin_verify?.full_name}</a>,
     },
     {
-      title: "Ghi chú",
+      title: `${i18n.t("note", { lng: lang })}`,
       render: (data) => <a className="text-note">{data?.note_admin}</a>,
     },
     {
@@ -221,7 +226,9 @@ const RewardCollaborator = () => {
                     : "btn-verify-reward"
                 }
               >
-                <a className="text-btn">Duyệt lệnh</a>
+                <a className="text-btn">{`${i18n.t("approvals", {
+                  lng: lang,
+                })}`}</a>
               </div>
             )}
 
@@ -235,7 +242,7 @@ const RewardCollaborator = () => {
                       onClick={() => setModalCancel(true)}
                       className="text-cancel-reward"
                     >
-                      Huỷ
+                      {`${i18n.t("cancel_modal", { lng: lang })}`}
                     </a>
                   )}
                 </>
@@ -282,7 +289,7 @@ const RewardCollaborator = () => {
         <Link
           to={`/topup/manage-topup/details-reward-collaborator/${itemEdit?._id}`}
         >
-          <a>Xem chi tiết</a>
+          <a>{`${i18n.t("see_more", { lng: lang })}`}</a>
         </Link>
       ),
     },
@@ -306,7 +313,9 @@ const RewardCollaborator = () => {
         />
 
         <div className="div-pagination p-2">
-          <a>Tổng: {total}</a>
+          <a>
+            {`${i18n.t("total", { lng: lang })}`}: {total}
+          </a>
           <div>
             <Pagination
               current={currentPage}
@@ -322,19 +331,18 @@ const RewardCollaborator = () => {
       <div>
         <ModalCustom
           isOpen={modalVerify}
-          title="Duyệt lệnh thưởng tiền cho Cộng tác viên"
+          title={`${i18n.t("approve_money_collaborators", { lng: lang })}`}
           handleOk={() => onVerifyReward(itemEdit?._id)}
           handleCancel={() => setModalVerify(false)}
-          textOk="Duyệt"
+          textOk={`${i18n.t("approvals", { lng: lang })}`}
           body={
             <div>
               <a>
-                Bạn có muốn duyệt lệnh thưởng tiền cho CTV{" "}
+                {`${i18n.t("want_approve_money_collaborators", { lng: lang })}`}{" "}
                 {itemEdit?.id_collaborator?.full_name}
               </a>
               <InputCustom
-                title="Ghi chú lệnh duyệt"
-                placeholder="Nhập nội dung ghi chu cho lệnh này"
+                title={`${i18n.t("note", { lng: lang })}`}
                 onChange={(e) => setNote(e.target.value)}
               />
             </div>
@@ -342,19 +350,18 @@ const RewardCollaborator = () => {
         />
         <ModalCustom
           isOpen={modalCancel}
-          title="Huỷ lệnh thưởng tiền cho Cộng tác viên"
+          title={`${i18n.t("canceling_bonus_order", { lng: lang })}`}
           handleOk={() => onCancelReward(itemEdit?._id)}
           handleCancel={() => setModalCancel(false)}
-          textOk="Có"
+          textOk={`${i18n.t("yes", { lng: lang })}`}
           body={
             <div>
               <a>
-                Bạn có muốn huỷ lệnh thưởng tiền cho CTV{" "}
+                {`${i18n.t("want_canceling_bonus_order", { lng: lang })}`}{" "}
                 {itemEdit?.id_collaborator?.full_name}
               </a>
               <InputCustom
-                title="Ghi chú lệnh huỷ"
-                placeholder="Nhập nội dung ghi chú cho lệnh này"
+                title={`${i18n.t("note", { lng: lang })}`}
                 onChange={(e) => setNote(e.target.value)}
               />
             </div>
@@ -363,14 +370,14 @@ const RewardCollaborator = () => {
 
         <ModalCustom
           isOpen={modal}
-          title="Xoá lệnh thưởng tiền cho Cộng tác viên"
+          title={`${i18n.t("remove_bonus_order", { lng: lang })}`}
           handleOk={() => onDeleteReward(itemEdit?._id)}
           handleCancel={() => setModal(false)}
-          textOk="Xoá"
+          textOk={`${i18n.t("delete", { lng: lang })}`}
           body={
             <div>
               <a>
-                Bạn có muốn xoá lệnh thưởng tiền cho CTV{" "}
+                {`${i18n.t("want_remove_bonus_order", { lng: lang })}`}{" "}
                 {itemEdit?.id_collaborator?.full_name}
               </a>
             </div>

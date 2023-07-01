@@ -1,21 +1,23 @@
+import { Dropdown, Space, Table } from "antd";
+import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
-import "./styles.scss";
+import { useSelector } from "react-redux";
 import {
   activeReasonPunish,
   deleteReasonPunish,
   getReasonPunishApi,
 } from "../../../../../api/reasons";
-import { Button, Dropdown, Space, Table } from "antd";
-import moment from "moment";
-import CreateReasonPubnish from "./component/CreateResonPunish";
+import ModalCustom from "../../../../../components/modalCustom";
 import LoadingPagination from "../../../../../components/paginationLoading";
-import EditReasonPubnish from "./component/EditResonPunish";
-import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { errorNotify } from "../../../../../helper/toast";
-import offToggle from "../../../../../assets/images/off-button.png";
-import onToggle from "../../../../../assets/images/on-button.png";
-import { useSelector } from "react-redux";
-import { getElementState } from "../../../../../redux/selectors/auth";
+import i18n from "../../../../../i18n";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../../redux/selectors/auth";
+import CreateReasonPubnish from "./component/CreateResonPunish";
+import EditReasonPubnish from "./component/EditResonPunish";
+import "./styles.scss";
 const width = window.innerWidth;
 
 const ReasonPunish = () => {
@@ -26,6 +28,7 @@ const ReasonPunish = () => {
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
 
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
@@ -102,7 +105,7 @@ const ReasonPunish = () => {
 
   const columns = [
     {
-      title: "Ngày tạo",
+      title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => {
         return (
           <div className="div-date-create-punish">
@@ -117,17 +120,21 @@ const ReasonPunish = () => {
       },
     },
     {
-      title: "Tên lí do",
-      render: (data) => <a>{data?.title?.vi}</a>,
+      title: `${i18n.t("name", { lng: lang })}`,
+      render: (data) => <a>{data?.title?.[lang]}</a>,
     },
     {
-      title: "Mô tả",
-      render: (data) => <a>{data?.description?.vi}</a>,
+      title: `${i18n.t("describe", { lng: lang })}`,
+      render: (data) => <a>{data?.description?.[lang]}</a>,
     },
     {
-      title: "Áp dụng",
+      title: `${i18n.t("apply", { lng: lang })}`,
       render: (data) => (
-        <a>{data?.apply_user === "collaborator" ? "Cộng tác viên" : ""}</a>
+        <a>
+          {data?.apply_user === "collaborator"
+            ? `${i18n.t("collaborator", { lng: lang })}`
+            : ""}
+        </a>
       ),
     },
     // {
@@ -183,13 +190,13 @@ const ReasonPunish = () => {
     {
       key: 2,
       label: checkElement?.includes("delete_reason_punish_setting") && (
-        <a onClick={toggle}>Xoá</a>
+        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
       ),
     },
   ];
   return (
     <>
-      <h3>Lí do phạt</h3>
+      <h3>{`${i18n.t("config_punish_reason", { lng: lang })}`}</h3>
       <div>
         {checkElement?.includes("create_reason_punish_setting") && (
           <CreateReasonPubnish
@@ -222,50 +229,19 @@ const ReasonPunish = () => {
       </div>
 
       <div>
-        <Modal isOpen={modal} toggle={toggle}>
-          <ModalHeader toggle={toggle}>Xóa lí do phạt</ModalHeader>
-          <ModalBody>
-            <a>
-              Bạn có chắc muốn xóa lí do phạt
-              <a className="text-name-modal">{itemEdit?.title?.vi}</a> này
-              không?
-            </a>
-          </ModalBody>
-          <ModalFooter>
-            <Button type="primary" onClick={() => onDelete(itemEdit?._id)}>
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggle}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
-      </div>
-
-      <div>
-        <Modal isOpen={modalBlock} toggle={toggleBlock}>
-          <ModalHeader toggle={toggleBlock}>
-            {" "}
-            {itemEdit?.is_active === true ? "Khóa lí do phạt" : "Mở lí do phạt"}
-          </ModalHeader>
-          <ModalBody>
-            {itemEdit?.is_active === true
-              ? "Bạn có muốn khóa lí do"
-              : "Bạn có muốn kích hoạt lí do"}
-            <h3>{itemEdit?.title?.vi}</h3>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              color="primary"
-              onClick={() => activePunish(itemEdit?._id, itemEdit?.is_active)}
-            >
-              Có
-            </Button>
-            <Button color="#ddd" onClick={toggleBlock}>
-              Không
-            </Button>
-          </ModalFooter>
-        </Modal>
+        <ModalCustom
+          isOpen={modal}
+          title={`${i18n.t("remove_punish", { lng: lang })}`}
+          handleOk={() => onDelete(itemEdit?._id)}
+          handleCancel={toggle}
+          textOk={`${i18n.t("delete", { lng: lang })}`}
+          body={
+            <>
+              <a>{`${i18n.t("want_remove_punish", { lng: lang })}`}</a>
+              <a className="text-name-modal">{itemEdit?.title?.[lang]}</a>
+            </>
+          }
+        />
       </div>
 
       {isLoading && <LoadingPagination />}

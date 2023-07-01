@@ -4,12 +4,12 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import HeaderBar from "../container/Header/Header";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getUser } from "../redux/selectors/auth";
 import "./Dashboard.scss";
 import Admin from "./admin";
 
 import { permissionAction } from "../redux/actions/auth";
 import { useNavigate } from "react-router-dom";
+import { getProvinceAction } from "../redux/actions/service";
 const { Header, Content, Sider } = Layout;
 
 const Dashboard = () => {
@@ -18,6 +18,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   useEffect(() => {
     dispatch(permissionAction.permissionRequest({ navigate: navigate }));
+    dispatch(getProvinceAction.getProvinceRequest());
   }, []);
 
   const width = window.innerWidth;
