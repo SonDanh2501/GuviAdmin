@@ -1185,26 +1185,26 @@ const DetailsOrder = () => {
                         item?.id_promotion?.code
                       );
 
-                  const predicate = item?.id_order
+                  const predicate = item?.id_reason_punish
+                    ? subject.replace(
+                        item?.id_reason_punish?._id,
+                        item?.id_reason_punish?.title?.vi
+                      )
+                    : item?.id_order
                     ? subject.replace(
                         item?.id_order?._id,
                         item?.id_order?.id_view
                       )
-                    : item?.id_reason_punish
-                    ? subject.replace(
-                        item?.id_reason_punish?._id,
-                        item?.id_reason_punish?.title?.[lang]
-                      )
                     : item?.id_reward
                     ? subject.replace(
                         item?.id_reward?._id,
-                        item?.id_reward?.title?.[lang]
+                        item?.id_reward?.title?.vi
                       )
                     : item?.id_info_reward_collaborator
                     ? subject.replace(
                         item?.id_info_reward_collaborator?._id,
                         item?.id_info_reward_collaborator
-                          ?.id_reward_collaborator?.title?.[lang]
+                          ?.id_reward_collaborator?.title?.vi
                       )
                     : item?.id_transistion_collaborator
                     ? subject.replace(
@@ -1224,7 +1224,7 @@ const DetailsOrder = () => {
                     : item?.id_promotion
                     ? subject.replace(
                         item?.id_promotion?._id,
-                        item?.id_promotion?.title?.[lang]
+                        item?.id_promotion?.title?.vi
                       )
                     : item?.id_admin_action
                     ? subject.replace(
@@ -1241,7 +1241,7 @@ const DetailsOrder = () => {
                   const object = item?.id_reason_cancel
                     ? predicate.replace(
                         item?.id_reason_cancel?._id,
-                        item?.id_reason_cancel?.title?.[lang]
+                        item?.id_reason_cancel?.title?.vi
                       )
                     : item?.id_collaborator
                     ? predicate.replace(

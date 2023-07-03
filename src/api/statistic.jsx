@@ -20,9 +20,9 @@ export const getActiveUserApi = () => {
   return axiosClient.get(`/admin/statistic/active_users?lang=vi`);
 };
 
-export const getHistoryActivityApi = (lang, start, length) => {
+export const getHistoryActivityApi = (start, length) => {
   return axiosClient.get(
-    `/admin/statistic/history_activity?lang=${lang}&start=${start}&length=${length}`
+    `/admin/statistic/history_activity?start=${start}&length=${length}`
   );
 };
 

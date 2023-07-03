@@ -150,6 +150,7 @@ const WithdrawCustomer = () => {
               value={money}
               onChange={(e) => setMoney(e)}
               style={{ width: "100%" }}
+              inputMoney={true}
             />
           </div>
 
