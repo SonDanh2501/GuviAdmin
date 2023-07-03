@@ -60,8 +60,12 @@
     }
 
     .div-right-body-modal {
-      .calendar {
+      .calendar-picker {
         border: none;
+        color: black;
+        background-color: rgb(239, 239, 239);
+        border-radius: 8px;
+        margin-top: 10px;
       }
 
       .div-tab-time {
@@ -94,16 +98,22 @@
     justify-content: flex-end;
     margin-top: 10px;
     .btn-cancel-date {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background-color: transparent;
       border: 1px solid #d6d6d6;
-      width: 70px;
+      width: auto;
       height: 30px;
       border-radius: 4px;
     }
 
     .btn-confirm-date {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background-color: rgb(0, 70, 248);
-      width: 70px;
+      width: auto;
       height: 30px;
       color: white;
       margin-left: 10px;
