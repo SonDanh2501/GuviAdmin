@@ -196,7 +196,7 @@ const RewardCollaborator = () => {
           }
         >
           {data?.status === "pending"
-            ? `${i18n.t("pending", { lng: lang })}`
+            ? `${i18n.t("waiting", { lng: lang })}`
             : data?.status === "done"
             ? `${i18n.t("complete", { lng: lang })}`
             : `${i18n.t("cancel", { lng: lang })}`}

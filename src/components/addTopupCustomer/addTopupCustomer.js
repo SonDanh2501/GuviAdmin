@@ -112,6 +112,7 @@ const AddTopupCustomer = () => {
         bodyStyle={{
           paddingBottom: 80,
         }}
+        headerStyle={{ height: 50 }}
       >
         <div className="modal-body">
           <div>

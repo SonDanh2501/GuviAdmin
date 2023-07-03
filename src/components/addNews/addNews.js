@@ -67,6 +67,7 @@ const AddNews = () => {
         placement="right"
         onClose={onClose}
         open={open}
+        headerStyle={{ height: 50 }}
       >
         <InputCustom
           title={`${i18n.t("title", { lng: lang })}`}

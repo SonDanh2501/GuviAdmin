@@ -167,6 +167,7 @@ const AddPushNotification = ({ idOrder }) => {
         onClose={onClose}
         width={width > 490 ? 500 : 300}
         open={open}
+        headerStyle={{ height: 50 }}
       >
         <InputCustom
           title={`${i18n.t("title", { lng: lang })}`}

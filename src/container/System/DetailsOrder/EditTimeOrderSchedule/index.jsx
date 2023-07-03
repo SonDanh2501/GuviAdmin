@@ -93,6 +93,7 @@ const EditTimeOrderSchedule = (props) => {
         onClose={onClose}
         width={400}
         open={open}
+        headerStyle={{ height: 50 }}
       >
         <a>{`${i18n.t("start_time", { lng: lang })}`}</a>
         <DatePicker

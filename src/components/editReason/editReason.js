@@ -85,6 +85,7 @@ const EditReason = (props) => {
         onClose={onClose}
         width={400}
         open={open}
+        headerStyle={{ height: 50 }}
       >
         <div>
           <a className="title-reason">{`${i18n.t("name_reason", {

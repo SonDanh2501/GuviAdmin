@@ -95,11 +95,7 @@ const WithdrawCustomer = () => {
       {/* Button trigger modal */}
       <CustomButton
         title={`${i18n.t("withdraw_money", { lng: lang })}`}
-        className={
-          checkElement?.includes("edit_transition_cash_book_customer")
-            ? "btn-withdraw-customer"
-            : "btn-withdraw-customer-hide"
-        }
+        className={"btn-withdraw-customer"}
         type="button"
         onClick={showDrawer}
       />
@@ -112,6 +108,7 @@ const WithdrawCustomer = () => {
         bodyStyle={{
           paddingBottom: 80,
         }}
+        headerStyle={{ height: 50 }}
       >
         <div className="modal-body">
           <div>
@@ -157,8 +154,6 @@ const WithdrawCustomer = () => {
           </div>
 
           <div className="mt-2">
-            <a className="label-input">Nhập nội dung</a>
-
             <InputCustom
               title={`${i18n.t("content", { lng: lang })}`}
               min={0}

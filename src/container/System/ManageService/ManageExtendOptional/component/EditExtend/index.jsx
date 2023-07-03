@@ -445,6 +445,7 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
         onClose={onClose}
         open={open}
         width={1200}
+        headerStyle={{ height: 50 }}
       >
         <Row>
           <Col span={7}>

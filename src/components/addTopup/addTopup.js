@@ -123,6 +123,7 @@ const AddPopup = (props) => {
         bodyStyle={{
           paddingBottom: 80,
         }}
+        headerStyle={{ height: 50 }}
       >
         <div className="modal-body">
           <div>

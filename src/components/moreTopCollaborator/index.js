@@ -64,6 +64,7 @@ const MoreTopCollaborator = () => {
         bodyStyle={{
           paddingBottom: 80,
         }}
+        headerStyle={{ height: 50 }}
       >
         <div>
           <div className="div-date">

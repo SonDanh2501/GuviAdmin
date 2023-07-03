@@ -116,6 +116,7 @@ const AddPoint = ({ start, setDataL, setTotal }) => {
         bodyStyle={{
           paddingBottom: 80,
         }}
+        headerStyle={{ height: 50 }}
       >
         <div className="modal-body">
           <div>

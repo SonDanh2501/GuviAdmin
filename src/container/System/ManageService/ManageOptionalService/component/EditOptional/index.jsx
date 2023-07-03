@@ -304,6 +304,7 @@ const EditOptional = (props) => {
         onClose={onClose}
         open={open}
         width={1000}
+        headerStyle={{ height: 50 }}
       >
         <Row>
           <Col span={8}>
