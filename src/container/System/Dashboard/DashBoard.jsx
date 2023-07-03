@@ -119,7 +119,6 @@ export default function Home() {
         getHistoryActivity.getHistoryActivityRequest({
           start: 0,
           length: 20,
-          lang: lang,
         })
       );
     }
@@ -900,15 +899,15 @@ export default function Home() {
                             item?.id_promotion?.code
                           );
 
-                      const predicate = item?.id_order
-                        ? subject.replace(
-                            item?.id_order?._id,
-                            item?.id_order?.id_view
-                          )
-                        : item?.id_reason_punish
+                      const predicate = item?.id_reason_punish
                         ? subject.replace(
                             item?.id_reason_punish?._id,
                             item?.id_reason_punish?.title?.vi
+                          )
+                        : item?.id_order
+                        ? subject.replace(
+                            item?.id_order?._id,
+                            item?.id_order?.id_view
                           )
                         : item?.id_reward
                         ? subject.replace(

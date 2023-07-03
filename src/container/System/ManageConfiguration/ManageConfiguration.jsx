@@ -9,6 +9,7 @@ import {
 import "./ManageConfiguration.scss";
 import i18n from "../../../i18n";
 import Chat from "../Chat";
+import SettingQrCode from "./ScreenConfiguration/SettingQrcode";
 
 const ManageConfiguration = () => {
   const navigate = useNavigate();
@@ -84,6 +85,8 @@ const ManageConfiguration = () => {
           );
         })}
       </div>
+
+      {/* <SettingQrCode /> */}
     </div>
   );
 };
