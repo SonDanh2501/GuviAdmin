@@ -24,9 +24,9 @@ export const deleteReason = (id, payload) => {
   );
 };
 
-export const getListReasonCancel = () => {
+export const getListReasonCancel = (lang) => {
   return axiosClient.get(
-    `/admin/reason_cancel_manager/get_list_reason_admin?lang=vi`
+    `/admin/reason_cancel_manager/get_list_reason_admin?lang=${lang}`
   );
 };
 

@@ -568,6 +568,9 @@
     "for_customers": "cho khách hàng",
     "other_reason": "Lý do khác",
     "image_management": "Quản lý hình ảnh",
-    "delete_image": "Xoá hình ảnh"
-
+    "delete_image": "Xoá hình ảnh",
+    "refund_fines": "Hoàn tiền phạt",
+    "refund" : "Hoàn tiền",
+    "want_refund_fines": "Bạn có chắc muốn hoàn lại tiền lệnh phạt tiền CTV?",
+    "update_success_info": "Cập nhật thông tin thành công"
 }

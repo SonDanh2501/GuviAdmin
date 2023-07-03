@@ -4,6 +4,9 @@ import "./styles.scss";
 import axiosClient from "../../../axios";
 import { getRoomApi } from "../../../api/auth";
 
+const BaseUrl = process.env.REACT_APP_BASE_URL;
+const TestUrl = process.env.REACT_APP_TEST_URL;
+
 const Chat = () => {
   const [mess, setMess] = useState([]);
   const [message, setMessage] = useState("");
@@ -15,7 +18,7 @@ const Chat = () => {
 
   useEffect(() => {
     // socketRef.current = socketIOClient.connect(host);
-    var socket = io(host);
+    var socket = io(TestUrl);
     socket.on("msgToClient", (socket) => {
       console.log("jjjj", socket.id);
     });
@@ -29,9 +32,15 @@ const Chat = () => {
     //   scrollToBottom();
     // });
 
-    // return () => {
-    //   socketRef.current.disconnect();
-    // };
+    return () => {
+      socketRef.current.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    getRoomApi()
+      .then((res) => {})
+      .catch((err) => {});
   }, []);
 
   const sendMessage = () => {

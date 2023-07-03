@@ -81,7 +81,7 @@ const AddCollaborator = (props) => {
     })
       .then((res) => {
         setOpen(false);
-        fetchCollaborators(startPage, 20, status)
+        fetchCollaborators(lang, startPage, 20, status)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItems);

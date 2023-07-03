@@ -10,7 +10,7 @@ import {
 } from "../../../../../../../api/collaborator";
 import { postFile, postMutipleFile } from "../../../../../../../api/file";
 import resizeFile from "../../../../../../../helper/resizer";
-import { errorNotify } from "../../../../../../../helper/toast";
+import { errorNotify, successNotify } from "../../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import "./index.scss";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
@@ -221,6 +221,9 @@ const Document = ({ id }) => {
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
+        successNotify({
+          message: `${i18n.t("update_success_info", { lng: lang })}`,
+        });
         getCollaboratorsById(id)
           .then((res) => {
             setDeal(res?.is_document_code);
@@ -526,7 +529,7 @@ const Document = ({ id }) => {
                     id="files"
                     name="files"
                     accept=".jpg, .jpeg, .png"
-                    // multiple
+                    multiple
                     onChange={onChangeRegistration}
                   />
                   <div className="div-thumbnail-infomation">
@@ -583,7 +586,7 @@ const Document = ({ id }) => {
                     id="files"
                     name="files"
                     accept=".jpg, .jpeg, .png"
-                    // multiple
+                    multiple
                     onChange={onChangeCertification}
                   />
                   <div className="div-thumbnail-infomation">

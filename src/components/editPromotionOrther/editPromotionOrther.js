@@ -695,6 +695,7 @@ const EditPromotionOrther = (props) => {
               <Button
                 className="btn-edit-promotion-orther"
                 onClick={onEditPromotion}
+                style={{ width: "auto" }}
               >
                 {`${i18n.t("edit_promotion", { lng: lang })}`}
               </Button>

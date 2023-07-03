@@ -78,6 +78,15 @@
   display: flex;
   flex-direction: column;
 
+  .image_detail {
+    width: "100%";
+    height: 200px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+
   .title-image {
     color: black;
     font-weight: 500;

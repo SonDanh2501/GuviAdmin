@@ -1,4 +1,4 @@
-import { Drawer, Input, Select } from "antd";
+import { Button, Drawer, Input, Select } from "antd";
 import React, { memo, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createNew } from "../../api/news";
@@ -55,12 +55,9 @@ const AddNews = () => {
   return (
     <>
       {/* Button trigger modal */}
-      <CustomButton
-        title={`${i18n.t("create_post", { lng: lang })}`}
-        className="btn-add-new"
-        type="button"
-        onClick={showDrawer}
-      />
+      <Button onClick={showDrawer} className="btn-add-new">
+        {`${i18n.t("create_post", { lng: lang })}`}
+      </Button>
       {/* Modal */}
       <Drawer
         title={`${i18n.t("create_post", { lng: lang })}`}
@@ -118,12 +115,10 @@ const AddNews = () => {
           setImage={setImgThumbnail}
           classImg={"img-thumbnail"}
         />
-        <CustomButton
-          title={`${i18n.t("add", { lng: lang })}`}
-          className="float-right btn-add-new mt-3"
-          type="button"
-          onClick={addNews}
-        />
+
+        <Button className="float-right btn-add-new mt-3" onClick={addNews}>
+          {`${i18n.t("add", { lng: lang })}`}
+        </Button>
       </Drawer>
     </>
   );
