@@ -568,5 +568,9 @@
     "for_customers": "for customers",
     "other_reason": "Other reason",
     "image_management": "Image management",
-    "delete_image": "Delete images"
+    "delete_image": "Delete images",
+    "refund_fines": "Refund of fines",
+    "refund" : "Refund",
+    "want_refund_fines": "Are you sure you want to refund your affiliate fine?",
+    "update_success_info": "Successfully updated information"
 }

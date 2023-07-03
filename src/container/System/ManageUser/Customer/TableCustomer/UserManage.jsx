@@ -64,7 +64,7 @@ const UserManage = (props) => {
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    fetchCustomers(0, 50, status)
+    fetchCustomers(lang, 0, 50, status)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItems);
@@ -79,7 +79,7 @@ const UserManage = (props) => {
       setIsLoading(true);
       deleteCustomer(id, { is_delete: true })
         .then((res) => {
-          fetchCustomers(startPage, 50, status)
+          fetchCustomers(lang, startPage, 50, status)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItems);
@@ -105,7 +105,7 @@ const UserManage = (props) => {
         activeCustomer(id, { is_active: false })
           .then((res) => {
             setModalBlock(false);
-            fetchCustomers(startPage, 50, status)
+            fetchCustomers(lang, startPage, 50, status)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -124,7 +124,7 @@ const UserManage = (props) => {
           .then((res) => {
             setModalBlock(false);
             setIsLoading(false);
-            fetchCustomers(startPage, 50, status)
+            fetchCustomers(lang, startPage, 50, status)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -161,7 +161,7 @@ const UserManage = (props) => {
             setTotalFilter(res.totalItems);
           })
           .catch((err) => {})
-      : fetchCustomers(start, 50, status)
+      : fetchCustomers(lang, start, 50, status)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItems);

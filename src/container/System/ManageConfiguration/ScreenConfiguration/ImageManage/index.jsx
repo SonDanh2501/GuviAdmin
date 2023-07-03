@@ -157,15 +157,7 @@ const ImageManage = () => {
           <div className="div-detail-image">
             <a className="title-image">Tên</a>
             <a>{itemEdit?.title}</a>
-            <Image
-              src={itemEdit?.link_url}
-              style={{
-                width: "100%",
-                height: 200,
-                marginTop: 20,
-                marginBottom: 20,
-              }}
-            />
+            <Image src={itemEdit?.link_url} className="image_detail" />
             <a className="title-image">Ngày tạo</a>
             <a>{moment(itemEdit?.date_create).format("DD/MM/YYYY - hh:MM")}</a>
           </div>

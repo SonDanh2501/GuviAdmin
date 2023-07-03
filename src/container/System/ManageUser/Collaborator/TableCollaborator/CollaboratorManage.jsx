@@ -73,7 +73,7 @@ const CollaboratorManage = (props) => {
   const width = window.innerWidth;
 
   useEffect(() => {
-    fetchCollaborators(0, 20, status)
+    fetchCollaborators(lang, 0, 20, status)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItems);
@@ -97,7 +97,7 @@ const CollaboratorManage = (props) => {
             setTotalFilter(res.totalItems);
           })
           .catch((err) => console.log(err))
-      : fetchCollaborators(start, 20, status)
+      : fetchCollaborators(lang, start, 20, status)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItems);
@@ -130,7 +130,7 @@ const CollaboratorManage = (props) => {
       setIsLoading(true);
       deleteCollaborator(id, { is_delete: true })
         .then((res) => {
-          fetchCollaborators(startPage, 20, status)
+          fetchCollaborators(lang, startPage, 20, status)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItems);
@@ -155,7 +155,7 @@ const CollaboratorManage = (props) => {
       if (is_active === true) {
         activeCollaborator(id, { is_active: false })
           .then((res) => {
-            fetchCollaborators(startPage, 20, status)
+            fetchCollaborators(lang, startPage, 20, status)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -173,7 +173,7 @@ const CollaboratorManage = (props) => {
       } else {
         activeCollaborator(id, { is_active: true })
           .then((res) => {
-            fetchCollaborators(startPage, 20, status)
+            fetchCollaborators(lang, startPage, 20, status)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -199,7 +199,7 @@ const CollaboratorManage = (props) => {
       if (is_lock_time === true) {
         lockTimeCollaborator(id, { is_locked: false })
           .then((res) => {
-            fetchCollaborators(startPage, 20, status)
+            fetchCollaborators(lang, startPage, 20, status)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -220,7 +220,7 @@ const CollaboratorManage = (props) => {
           date_lock: moment(new Date(timeValue)).toISOString(),
         })
           .then((res) => {
-            fetchCollaborators(startPage, 20, status)
+            fetchCollaborators(lang, startPage, 20, status)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -245,7 +245,7 @@ const CollaboratorManage = (props) => {
       if (is_verify === true) {
         verifyCollaborator(id)
           .then((res) => {
-            fetchCollaborators(startPage, 20, status)
+            fetchCollaborators(lang, startPage, 20, status)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -263,7 +263,7 @@ const CollaboratorManage = (props) => {
       } else {
         verifyCollaborator(id)
           .then((res) => {
-            fetchCollaborators(startPage, 20, status)
+            fetchCollaborators(lang, startPage, 20, status)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -289,7 +289,7 @@ const CollaboratorManage = (props) => {
 
       changeContactedCollaborator(id)
         .then((res) => {
-          fetchCollaborators(startPage, 20, status)
+          fetchCollaborators(lang, startPage, 20, status)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItems);

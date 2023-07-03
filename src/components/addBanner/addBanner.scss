@@ -1,4 +1,7 @@
 .btn-add-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 15%;
   height: 48px;
   border: none;
@@ -11,7 +14,6 @@
 
 .btn-add-banner-drawer {
   display: flex;
-  width: 50px;
   height: 30px;
   border: none;
   border-radius: 5px;

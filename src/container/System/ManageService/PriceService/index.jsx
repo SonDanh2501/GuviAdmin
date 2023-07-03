@@ -204,7 +204,7 @@ const PriceService = () => {
                   <a className="text-item">
                     {moment(new Date(item?.time)).format("HH:mm")}
                   </a>
-                  <a className="text-item">{formatMoney(item?.price)}</a>
+                  <a className="text-item">{formatMoney(item?.price?.price)}</a>
                 </div>
               );
             })}

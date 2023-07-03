@@ -117,6 +117,7 @@ export default function Home() {
     if (checkElement?.includes("history_activity_dashboard")) {
       dispatch(
         getHistoryActivity.getHistoryActivityRequest({
+          lang: lang,
           start: 0,
           length: 20,
         })
@@ -899,7 +900,12 @@ export default function Home() {
                             item?.id_promotion?.code
                           );
 
-                      const predicate = item?.id_reason_punish
+                      const predicate = item?.id_punish
+                        ? subject.replace(
+                            item?.id_punish?._id,
+                            item?.id_punish?.note_admin
+                          )
+                        : item?.id_reason_punish
                         ? subject.replace(
                             item?.id_reason_punish?._id,
                             item?.id_reason_punish?.title?.vi
@@ -961,6 +967,11 @@ export default function Home() {
                         ? predicate.replace(
                             item?.id_collaborator?._id,
                             item?.id_collaborator?.full_name
+                          )
+                        : item?.id_customer
+                        ? predicate.replace(
+                            item?.id_customer?._id,
+                            item?.id_customer?.full_name
                           )
                         : item?.id_address
                         ? predicate.replace(
@@ -1049,10 +1060,7 @@ export default function Home() {
                           moment().utc().month() + 1
                         )}
                         margin={{
-                          top: 20,
-                          right: 30,
-                          left: 20,
-                          bottom: 5,
+                          top: 30,
                         }}
                         barSize={50}
                       >

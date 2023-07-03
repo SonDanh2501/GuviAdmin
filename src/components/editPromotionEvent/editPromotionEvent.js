@@ -840,6 +840,7 @@ const EditPromotionEvent = (props) => {
                 className="btn-edit-promotion-orther mt-5"
                 color="warning"
                 onClick={onEditPromotion}
+                style={{ width: "auto" }}
               >
                 {`${i18n.t("edit_promotion", { lng: lang })}`}
               </Button>

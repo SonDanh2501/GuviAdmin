@@ -38,7 +38,7 @@ const TableDeepCleaning = (props) => {
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    getCusomerRequest(status, 0, 20, "")
+    getCusomerRequest(status, 0, 20, "", lang)
       .then((res) => {
         setIsLoading(false);
         setData(res?.data);
@@ -53,7 +53,7 @@ const TableDeepCleaning = (props) => {
       deleteCusomerRequest(id)
         .then((res) => {
           setIsLoading(false);
-          getCusomerRequest(status, startPage, 20, "")
+          getCusomerRequest(status, startPage, 20, "", lang)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);
@@ -68,7 +68,7 @@ const TableDeepCleaning = (props) => {
           setIsLoading(false);
         });
     },
-    [status, startPage]
+    [status, startPage, lang]
   );
 
   const onContacted = useCallback(
@@ -77,7 +77,7 @@ const TableDeepCleaning = (props) => {
       contactedCusomerRequest(id)
         .then((res) => {
           setIsLoading(false);
-          getCusomerRequest(status, startPage, 20, "")
+          getCusomerRequest(status, startPage, 20, "", lang)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);
@@ -93,7 +93,7 @@ const TableDeepCleaning = (props) => {
           setIsLoading(false);
         });
     },
-    [status, startPage]
+    [status, startPage, lang]
   );
 
   const onChangeStatus = useCallback(
@@ -103,7 +103,7 @@ const TableDeepCleaning = (props) => {
         changeStatusCusomerRequest(id, { status: "done" })
           .then((res) => {
             setIsLoading(false);
-            getCusomerRequest(status, startPage, 20, "")
+            getCusomerRequest(status, startPage, 20, "", lang)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
@@ -120,7 +120,7 @@ const TableDeepCleaning = (props) => {
       } else if (statusModal === "cancel") {
         changeStatusCusomerRequest(id, { status: "cancel" })
           .then((res) => {
-            getCusomerRequest(status, startPage, 20, "")
+            getCusomerRequest(status, startPage, 20, "", lang)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
@@ -137,7 +137,7 @@ const TableDeepCleaning = (props) => {
           });
       }
     },
-    [status, statusModal, startPage]
+    [status, statusModal, startPage, lang]
   );
 
   const items = [
@@ -347,7 +347,7 @@ const TableDeepCleaning = (props) => {
     const lenghtData = data.length < 20 ? 20 : data.length;
     const start = page * lenghtData - lenghtData;
     setStartPage(start);
-    getCusomerRequest(status, start, 20, "")
+    getCusomerRequest(status, start, 20, "", lang)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);

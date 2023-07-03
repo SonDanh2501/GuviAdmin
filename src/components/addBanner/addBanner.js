@@ -5,7 +5,7 @@ import { getBanners } from "../../redux/actions/banner";
 import { loadingAction } from "../../redux/actions/loading";
 import CustomButton from "../customButton/customButton";
 
-import { Drawer, Input, Select } from "antd";
+import { Button, Drawer, Input, Select } from "antd";
 import { createBanner } from "../../api/banner";
 import { getPromotionList } from "../../api/promotion";
 import { getService } from "../../redux/selectors/service";
@@ -86,13 +86,14 @@ const AddBanner = () => {
   return (
     <>
       {/* Button trigger modal */}
-      <CustomButton
-        title={`${i18n.t("create_banner", { lng: lang })}`}
+
+      <Button
         className="btn-add-banner"
-        type="button"
-        // onClick={() => setState(!state)}
+        style={{ width: "auto" }}
         onClick={showDrawer}
-      />
+      >
+        {`${i18n.t("create_banner", { lng: lang })}`}
+      </Button>
 
       <Drawer
         title={`${i18n.t("create_banner", { lng: lang })}`}
@@ -186,12 +187,13 @@ const AddBanner = () => {
           classImg={"img-thumbnail-banner"}
         />
 
-        <CustomButton
-          title={`${i18n.t("add", { lng: lang })}`}
+        <Button
           className="btn-add-banner-drawer"
-          type="button"
           onClick={addBanner}
-        />
+          style={{ width: "auto" }}
+        >
+          {`${i18n.t("add", { lng: lang })}`}
+        </Button>
       </Drawer>
     </>
   );

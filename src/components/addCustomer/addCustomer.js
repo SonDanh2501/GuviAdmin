@@ -51,7 +51,7 @@ const AddCustomer = (props) => {
       .then((res) => {
         setOpen(false);
         setIsLoading(false);
-        fetchCustomers(startPage, 50, status)
+        fetchCustomers(lang, startPage, 50, status)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItems);
@@ -76,7 +76,7 @@ const AddCustomer = (props) => {
             ? "btn-add-customer"
             : "btn-add-customer-hide"
         }
-        type="button"
+        style={{ width: "auto" }}
         onClick={showDrawer}
       />
 
@@ -143,6 +143,7 @@ const AddCustomer = (props) => {
                   className="float-right btn-add-cus mt-5"
                   type="button"
                   onClick={handleSubmit}
+                  style={{ width: "auto" }}
                 />
               </Form>
             </Drawer>

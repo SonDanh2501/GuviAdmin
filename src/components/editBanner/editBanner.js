@@ -1,4 +1,4 @@
-import { Drawer, Input, Select } from "antd";
+import { Button, Drawer, Input, Select } from "antd";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateBanner } from "../../api/banner";
@@ -183,13 +183,13 @@ const EditBanner = ({ data }) => {
           setImage={setImgThumbnail}
           classImg={"img-thumbnail-banner"}
         />
-
-        <CustomButton
-          title={`${i18n.t("edit", { lng: lang })}`}
+        <Button
           className="float-right btn-edit-banner"
-          type="button"
+          style={{ width: "auto" }}
           onClick={onEditBanner}
-        />
+        >
+          {`${i18n.t("edit", { lng: lang })}`}
+        </Button>
       </Drawer>
     </>
   );

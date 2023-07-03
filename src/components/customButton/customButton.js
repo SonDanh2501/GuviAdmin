@@ -1,11 +1,12 @@
 import React from "react";
 import "./button.scss";
+import { Button } from "antd";
 
 const CustomButton = (props) => {
   const { color, type, className, onClick, title, style } = props;
   return (
     <>
-      <button
+      <Button
         color={color}
         type={type}
         className={className}
@@ -13,7 +14,7 @@ const CustomButton = (props) => {
         style={style}
       >
         {title}
-      </button>
+      </Button>
     </>
   );
 };
