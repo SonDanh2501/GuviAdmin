@@ -31,6 +31,7 @@ const DetailsExam = ({ id }) => {
         onClose={onClose}
         open={open}
         width={500}
+        headerStyle={{ height: 50 }}
       >
         <div className="div-info-ctv">
           <div>

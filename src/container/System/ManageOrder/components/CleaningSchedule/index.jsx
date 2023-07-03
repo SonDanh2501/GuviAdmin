@@ -901,6 +901,7 @@ const CleaningSchedule = (props) => {
             onClose={onClose}
             width={420}
             open={open}
+            headerStyle={{ height: 50 }}
           >
             <div>
               {months?.map((month, i) => {

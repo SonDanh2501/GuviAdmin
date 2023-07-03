@@ -84,6 +84,7 @@ const EditPunish = ({ item, setDataT, setTotal, setIsLoading, iconEdit }) => {
         placement="right"
         onClose={onClose}
         open={open}
+        headerStyle={{ height: 50 }}
       >
         <div className="modal-body">
           <div>

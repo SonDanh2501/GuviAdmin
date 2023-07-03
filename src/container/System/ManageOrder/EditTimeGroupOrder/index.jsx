@@ -103,6 +103,7 @@ const EditTimeOrder = (props) => {
         onClose={onClose}
         width={400}
         open={open}
+        headerStyle={{ height: 50 }}
       >
         <DatePicker
           className="select-date"

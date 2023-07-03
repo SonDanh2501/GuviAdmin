@@ -102,6 +102,7 @@ const AddBanner = () => {
         bodyStyle={{
           paddingBottom: 80,
         }}
+        headerStyle={{ height: 50 }}
       >
         <div>
           <InputCustom

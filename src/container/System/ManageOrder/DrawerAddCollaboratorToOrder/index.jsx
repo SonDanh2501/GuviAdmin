@@ -154,6 +154,7 @@ const AddCollaboratorOrder = (props) => {
         onClose={onClose}
         width={500}
         open={open}
+        headerStyle={{ height: 50 }}
       >
         <div>
           <div>

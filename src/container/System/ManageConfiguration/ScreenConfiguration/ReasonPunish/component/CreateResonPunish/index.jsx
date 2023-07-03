@@ -66,6 +66,7 @@ const CreateReasonPubnish = (props) => {
         placement="right"
         onClose={onClose}
         open={open}
+        headerStyle={{ height: 50 }}
       >
         <div>
           <a>{`${i18n.t("name", { lng: lang })}`}</a>

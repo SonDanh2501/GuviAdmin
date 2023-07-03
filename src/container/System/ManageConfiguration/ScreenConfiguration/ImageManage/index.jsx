@@ -60,6 +60,7 @@ const ImageManage = () => {
       .then((res) => {
         setIsLoading(false);
         setModal(false);
+        setItemDelete([]);
         getListImageApi(startPage, 50)
           .then((res) => {
             setData(res?.data);
@@ -177,6 +178,7 @@ const ImageManage = () => {
           placement="right"
           onClose={onClose}
           open={open}
+          headerStyle={{ height: 50 }}
         >
           <div className="div-detail-image">
             <a className="title-image">Tên</a>

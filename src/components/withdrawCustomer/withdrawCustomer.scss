@@ -1,16 +1,7 @@
 .btn-withdraw-customer {
-  width: 10%;
-  height: 40px;
-  border: none;
-  border-radius: 5px;
-  background-color: #48cae4;
-  color: white;
-  margin-left: 20px;
-  box-shadow: 2px 3px 2px rgb(216, 216, 216);
-}
-
-.btn-withdraw-customer {
-  display: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 10%;
   height: 40px;
   border: none;
@@ -58,6 +49,9 @@
 }
 
 .btn-add-withdraw-customer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 25%;
   height: 40px;
   border: none;

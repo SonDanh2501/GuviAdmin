@@ -90,6 +90,7 @@ const EditAccount = ({ id, setData, setTotal }) => {
         placement="right"
         onClose={onClose}
         open={open}
+        headerStyle={{ height: 50 }}
       >
         <InputCustom
           title={`${i18n.t("display_name", { lng: lang })}`}
