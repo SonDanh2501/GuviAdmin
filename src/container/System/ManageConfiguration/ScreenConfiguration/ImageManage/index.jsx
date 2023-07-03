@@ -56,7 +56,7 @@ const ImageManage = () => {
 
   const deleteArrImage = () => {
     setIsLoading(true);
-    deleteFileImage({ id_files: itemDelete })
+    deleteFileImage({ id_files: [itemEdit?._id] })
       .then((res) => {
         setIsLoading(false);
         setModal(false);
@@ -76,24 +76,6 @@ const ImageManage = () => {
       });
   };
 
-  const onChooseMultiple = useCallback(
-    (_id) => {
-      if (itemDelete.some((item) => item === _id)) {
-        function filterByID(item) {
-          if (item !== _id) {
-            return true;
-          }
-          return false;
-        }
-
-        setItemDelete((prev) => prev.filter(filterByID));
-      } else {
-        setItemDelete((prev) => [...prev, _id]);
-      }
-    },
-    [itemDelete]
-  );
-
   const items = [
     {
       key: "1",
@@ -108,7 +90,6 @@ const ImageManage = () => {
       label: <a onClick={showDrawer}>{`${i18n.t("detail", { lng: lang })}`}</a>,
     },
   ];
-
   return (
     <div>
       <h5> {`${i18n.t("image_management", { lng: lang })}`}</h5>
@@ -123,26 +104,19 @@ const ImageManage = () => {
       <div className="div-list-image">
         {data?.map((item, index) => {
           return (
-            <div
-              key={index}
-              onClick={() => onChooseMultiple(item?._id)}
-              className={
-                itemDelete.some((items) => items === item?._id)
-                  ? "div-item-list-image-select"
-                  : "div-item-list-image"
-              }
-            >
+            <div key={index} className={"div-item-list-image"}>
               <div className="div-name-image">
                 <a>{item?.title.slice(0, 10)}...</a>
                 <Dropdown
                   menu={{
                     items,
                   }}
+                  trigger={"click"}
                 >
                   <a
                     onClick={(e) => {
-                      e.preventDefault();
                       setItemEdit(item);
+                      e.preventDefault();
                     }}
                   >
                     <Space>

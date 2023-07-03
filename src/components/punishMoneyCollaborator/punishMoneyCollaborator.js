@@ -181,7 +181,7 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
               min={0}
               onChange={(e) => setMoney(e)}
               style={{ width: "100%" }}
-              inputNumber={true}
+              inputMoney={true}
             />
           </div>
 
