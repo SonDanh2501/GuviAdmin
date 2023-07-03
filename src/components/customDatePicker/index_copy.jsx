@@ -1,4 +1,4 @@
-import { DatePicker, Modal } from "antd";
+import { Button, DatePicker, Modal } from "antd";
 import moment from "moment";
 import { useCallback, useState } from "react";
 import Calendar from "react-calendar";
@@ -6,16 +6,24 @@ import "react-calendar/dist/Calendar.css";
 import "dayjs/locale/zh-cn";
 import vi from "antd/locale/vi_VN";
 import "./index.scss";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../redux/selectors/auth";
+import i18n from "../../i18n";
 const { RangePicker } = DatePicker;
 
 const CustomDatePicker = (props) => {
+  const lang = useSelector(getLanguageState);
   const { setStartDate, setEndDate, onClick, onCancel, btnCustomer } = props;
   const [open, setOpen] = useState(false);
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
   const [valueTab, setValueTab] = useState("");
   const [tabTime, setTabTime] = useState("day");
-  const [title, setTitle] = useState("Chọn thời gian");
+  const [title, setTitle] = useState(
+    `${i18n.t("choose_time", {
+      lng: lang,
+    })}`
+  );
 
   const handleOk = () => {
     setOpen(false);
@@ -25,61 +33,35 @@ const CustomDatePicker = (props) => {
   const handleCancel = () => {
     setOpen(false);
     onCancel();
-    setTitle("Chọn thời gian");
+    setTitle(
+      `${i18n.t("choose_time", {
+        lng: lang,
+      })}`
+    );
   };
 
   const onSelectTab = (item) => {
     setValueTab(item?.value);
-    const today = moment(moment().toISOString()).add(7, "hours").toISOString();
-    const startToday = moment(moment().toISOString())
-      .add(7, "hours")
+    const today = moment().endOf("date").toISOString();
+    const startToday = moment().startOf("date").toISOString();
+    const startYesterday = moment()
+      .subtract(1, "d")
       .startOf("date")
       .toISOString();
-
-    const startYesterday = moment(
-      moment().subtract(1, "d").startOf("date").toISOString()
-    )
-      .add(7, "hours")
+    const endYesterday = moment().subtract(1, "d").endOf("date").toISOString();
+    const lastSeven = moment().subtract(7, "d").startOf("date").toISOString();
+    const lastThirty = moment().subtract(30, "d").startOf("date").toISOString();
+    const lastNinety = moment().subtract(90, "d").startOf("date").toISOString();
+    const startThisMonth = moment().startOf("month").toISOString();
+    const endThisMonth = moment().endOf("month").toISOString();
+    const startLastMonth = moment()
+      .subtract(1, "months")
+      .startOf("month")
       .toISOString();
-
-    const endYesterday = moment(
-      moment().subtract(1, "d").endOf("date").toISOString()
-    )
-      .add(7, "hours")
+    const endLastMonth = moment()
+      .subtract(1, "months")
+      .endOf("month")
       .toISOString();
-
-    const lastSeven = moment(
-      moment().subtract(7, "d").startOf("date").toISOString()
-    )
-      .add(7, "hours")
-      .toISOString();
-    const lastThirty = moment(
-      moment().subtract(30, "d").startOf("date").toISOString()
-    )
-      .add(7, "hours")
-      .toISOString();
-    const lastNinety = moment(
-      moment().subtract(90, "d").startOf("date").toISOString()
-    )
-      .add(7, "hours")
-      .toISOString();
-    const startThisMonth = moment(moment().startOf("month").toISOString())
-      .add(7, "hours")
-      .toISOString();
-    const endThisMonth = moment(moment().endOf("month").toISOString())
-      .add(7, "hours")
-      .toISOString();
-    const startLastMonth = moment(
-      moment().subtract(1, "months").startOf("month").toISOString()
-    )
-      .add(7, "hours")
-      .toISOString();
-    const endLastMonth = moment(
-      moment().subtract(1, "months").endOf("month").toISOString()
-    )
-      .add(7, "hours")
-      .toISOString();
-
     const endNextDay = moment().add(3, "days").startOf("date").toISOString();
 
     switch (item?.value) {
@@ -88,60 +70,51 @@ const CustomDatePicker = (props) => {
         setStart(moment().subtract(7, "d"));
         setEndDate(today);
         setEnd(moment());
-        setTitle(item?.title);
         break;
       case "last_thirty":
         setStartDate(lastThirty);
         setStart(moment().subtract(30, "d"));
         setEndDate(today);
         setEnd(moment());
-        setTitle(item?.title);
-
         break;
       case "last_ninety":
         setStartDate(lastNinety);
         setStart(moment().subtract(90, "d"));
         setEndDate(today);
         setEnd(moment());
-        setTitle(item?.title);
+
         break;
       case "this_month":
         setStartDate(startThisMonth);
         setStart(moment().startOf("month"));
         setEndDate(endThisMonth);
         setEnd(moment().endOf("month"));
-        setTitle(item?.title);
         break;
       case "last_month":
         setStartDate(startLastMonth);
         setStart(moment().subtract(1, "months").startOf("month"));
         setEndDate(endLastMonth);
         setEnd(moment().subtract(1, "months").endOf("month"));
-        setTitle(item?.title);
         break;
       case "last_next_day":
         setStartDate(today);
         setStart(today);
         setEndDate(endNextDay);
         setEnd(moment().add(3, "days"));
-        setTitle(item?.title);
         break;
       case "today":
         setStartDate(startToday);
         setStart(moment().startOf("date"));
         setEndDate(today);
         setEnd(moment());
-        setTitle(item?.title);
         break;
       case "yesterday":
         setStartDate(startYesterday);
         setStart(moment().subtract(1, "d").startOf("date"));
         setEndDate(endYesterday);
         setEnd(moment().subtract(1, "d").endOf("date"));
-        setTitle(item?.title);
         break;
       case "setting":
-        setTitle(item?.title);
         setStart("");
         setEnd("");
         break;
@@ -208,9 +181,18 @@ const CustomDatePicker = (props) => {
                         ? "div-btn-date-select"
                         : "div-btn-date"
                     }
-                    onClick={() => onSelectTab(item)}
+                    onClick={() => {
+                      onSelectTab(item);
+                      setTitle(
+                        `${i18n.t(item?.title, {
+                          lng: lang,
+                        })}`
+                      );
+                    }}
                   >
-                    <a className="text-btn-date">{item?.title}</a>
+                    <a className="text-btn-date">{`${i18n.t(item?.title, {
+                      lng: lang,
+                    })}`}</a>
                   </div>
                 );
               })}
@@ -242,7 +224,7 @@ const CustomDatePicker = (props) => {
                       picker={tabTime}
                       className="picker"
                       onChange={(e) => onChangeFilter(e[0]?.$d, e[1]?.$d)}
-                      locale={vi}
+                      locale={lang}
                     />
                   </div>
                 </>
@@ -253,18 +235,23 @@ const CustomDatePicker = (props) => {
                   selectRange={true}
                   view="month"
                   className="calendar"
-                  locale={"vi-VI"}
+                  locale={lang}
+                  tileClassName="class-title-calender"
                 />
               )}
             </div>
           </div>
           <div className="div-btn">
-            <button className="btn-cancel-date" onClick={handleCancel}>
-              Huỷ
-            </button>
-            <button className="btn-confirm-date" onClick={handleOk}>
-              Áp dụng
-            </button>
+            <Button className="btn-cancel-date" onClick={handleCancel}>
+              {`${i18n.t("cancel_modal", {
+                lng: lang,
+              })}`}
+            </Button>
+            <Button className="btn-confirm-date" onClick={handleOk}>
+              {`${i18n.t("apply", {
+                lng: lang,
+              })}`}
+            </Button>
           </div>
         </div>
       )}
@@ -276,39 +263,39 @@ export default CustomDatePicker;
 
 const DATA_TAB = [
   {
-    title: "Hôm nay",
+    title: "today",
     value: "today",
   },
   {
-    title: "Hôm trước",
+    title: "yesterday",
     value: "yesterday",
   },
   {
-    title: "7 ngày trước",
+    title: "seven_ago",
     value: "last_seven",
   },
   {
-    title: "30 ngày trước",
+    title: "thirty_ago",
     value: "last_thirty",
   },
   {
-    title: "90 ngày trước",
+    title: "ninety_ago",
     value: "last_ninety",
   },
   {
-    title: "Tháng này",
+    title: "this_month",
     value: "this_month",
   },
   {
-    title: "Tháng trước",
+    title: "last_month",
     value: "last_month",
   },
   {
-    title: "3 ngày tới",
+    title: "three_next",
     value: "last_next_day",
   },
   {
-    title: "Tuỳ chỉnh",
+    title: "custom",
     value: "setting",
   },
 ];
