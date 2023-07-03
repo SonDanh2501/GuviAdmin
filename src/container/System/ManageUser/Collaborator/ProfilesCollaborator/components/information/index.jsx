@@ -12,7 +12,7 @@ import {
 } from "../../../../../../../api/collaborator";
 import { getDistrictApi } from "../../../../../../../api/file";
 import InputCustom from "../../../../../../../components/textInputCustom";
-import { errorNotify } from "../../../../../../../helper/toast";
+import { errorNotify, successNotify } from "../../../../../../../helper/toast";
 import i18n from "../../../../../../../i18n";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
@@ -180,6 +180,9 @@ const Information = ({ data, image, idCTV, setData }) => {
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
         setServiceApply([]);
+        successNotify({
+          message: `${i18n.t("update_success_info", { lng: lang })}`,
+        });
         getCollaboratorsById(idCTV)
           .then((res) => {
             setData(res);

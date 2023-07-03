@@ -86,7 +86,7 @@ const ManageConfiguration = () => {
         })}
       </div>
 
-      {/* <SettingQrCode /> */}
+      {/* <Chat /> */}
     </div>
   );
 };

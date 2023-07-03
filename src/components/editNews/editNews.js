@@ -1,4 +1,4 @@
-import { Drawer, Input, Select } from "antd";
+import { Button, Drawer, Input, Select } from "antd";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postFile } from "../../api/file";
@@ -166,12 +166,13 @@ const EditNews = ({ data }) => {
           classImg={"img-thumbnail"}
         />
 
-        <CustomButton
-          title={`${i18n.t("edit", { lng: lang })}`}
+        <Button
           className="float-right btn-modal-new"
-          type="button"
+          style={{ width: "auto" }}
           onClick={onEditNews}
-        />
+        >
+          {`${i18n.t("edit", { lng: lang })}`}
+        </Button>
       </Drawer>
     </>
   );

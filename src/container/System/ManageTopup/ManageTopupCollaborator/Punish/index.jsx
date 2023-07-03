@@ -8,6 +8,7 @@ import {
   confirmMoneyPunishApi,
   deleteMoneyPunishApi,
   getListPunishApi,
+  refundMoneyPunishApi,
 } from "../../../../../api/topup";
 import EditPunish from "../../../../../components/editPunishMoney/editPunish";
 import ModalCustom from "../../../../../components/modalCustom";
@@ -31,15 +32,14 @@ const Punish = () => {
   const [modalConfirm, setModalConfirm] = useState(false);
   const [modalCancel, setModalCancel] = useState(false);
   const [modal, setModal] = useState(false);
-  const [modalEdit, setModalEdit] = useState(false);
+  const [modalRefund, setModalRefund] = useState(false);
   const [itemEdit, setItemEdit] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const user = useSelector(getUser);
   const navigate = useNavigate();
   const toggleConfirm = () => setModalConfirm(!modalConfirm);
   const toggleCancel = () => setModalCancel(!modalCancel);
   const toggle = () => setModal(!modal);
-  const toggleEdit = () => setModalEdit(!modalEdit);
+  const toggleRefund = () => setModalRefund(!modalRefund);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
 
@@ -126,6 +126,28 @@ const Punish = () => {
         });
       });
   }, []);
+
+  const onRefund = (id) => {
+    setIsLoading(true);
+    refundMoneyPunishApi(id)
+      .then((res) => {
+        setModalRefund(false);
+        getListPunishApi(startPage, 20)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+            setIsLoading(false);
+            setModal(false);
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        errorNotify({
+          message: err,
+        });
+      });
+  };
 
   const onChange = (page) => {
     setCurrentPage(page);
@@ -218,7 +240,7 @@ const Punish = () => {
                 lng: lang,
               })}`}</a>
             ) : (
-              <a className="text-cancel-topup-ctv">{`${i18n.t("cacnel", {
+              <a className="text-cancel-topup-ctv">{`${i18n.t("cancel", {
                 lng: lang,
               })}`}</a>
             )}
@@ -261,24 +283,35 @@ const Punish = () => {
               </Button>
             )}
 
-            {checkElement?.includes("cancel_punish_cash_book_collaborator") && (
-              <div className="mt-1 ml-3">
-                {(data?.status === "pending" ||
-                  data?.status === "transfered") && (
-                  <Tooltip
-                    placement="bottom"
-                    title={`${i18n.t("canceling_collaborator_fine", {
-                      lng: lang,
-                    })}`}
-                  >
-                    <a className="text-cancel-topup" onClick={toggleCancel}>
-                      {`${i18n.t("cancel_modal", { lng: lang })}`}
-                    </a>
-                  </Tooltip>
-                )}
-              </div>
-            )}
-            <div className="mt-1">
+            <div className="refunds-cancel">
+              {data?.status === "done" && (
+                <div onClick={toggleRefund}>
+                  <a className="text-refunds">{`${i18n.t("refund", {
+                    lng: lang,
+                  })}`}</a>
+                </div>
+              )}
+              {checkElement?.includes(
+                "cancel_punish_cash_book_collaborator"
+              ) && (
+                <div className="mt-1 ml-3">
+                  {(data?.status === "pending" ||
+                    data?.status === "transfered") && (
+                    <Tooltip
+                      placement="bottom"
+                      title={`${i18n.t("canceling_collaborator_fine", {
+                        lng: lang,
+                      })}`}
+                    >
+                      <a className="text-cancel-topup" onClick={toggleCancel}>
+                        {`${i18n.t("cancel_modal", { lng: lang })}`}
+                      </a>
+                    </Tooltip>
+                  )}
+                </div>
+              )}
+            </div>
+            <div>
               {checkElement?.includes("edit_punish_cash_book_collaborator") && (
                 <>
                   {data?.status === "cancel" || data?.status === "done" ? (
@@ -426,6 +459,22 @@ const Punish = () => {
             body={
               <>
                 <a>{`${i18n.t("want_remove_the_fine", { lng: lang })}`}</a>
+                <a className="text-name-modal">
+                  {itemEdit?.id_collaborator?.full_name}
+                </a>
+              </>
+            }
+          />
+
+          <ModalCustom
+            isOpen={modalRefund}
+            title={`${i18n.t("refund_fines", { lng: lang })}`}
+            handleOk={() => onRefund(itemEdit?._id)}
+            handleCancel={toggleRefund}
+            textOk={`${i18n.t("refund", { lng: lang })}`}
+            body={
+              <>
+                <a>{`${i18n.t("want_refund_fines", { lng: lang })}`}</a>
                 <a className="text-name-modal">
                   {itemEdit?.id_collaborator?.full_name}
                 </a>

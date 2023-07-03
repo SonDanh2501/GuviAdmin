@@ -24,6 +24,7 @@ function* getHistoryActivitySaga(action) {
   try {
     const response = yield call(
       getHistoryActivityApi,
+      action.payload.lang,
       action.payload.start,
       action.payload.length
     );

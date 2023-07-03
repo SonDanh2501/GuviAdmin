@@ -33,6 +33,7 @@ const MoreActivity = () => {
   const onLoadMore = () => {
     dispatch(
       getHistoryActivity.getHistoryActivityRequest({
+        lang: lang,
         start: 0,
         length: 20 + historyActivity.length,
       })
@@ -49,7 +50,9 @@ const MoreActivity = () => {
           lineHeight: "32px",
         }}
       >
-        <Button onClick={onLoadMore}>Xem thêm</Button>
+        <Button onClick={onLoadMore} style={{ width: "auto" }}>
+          Xem thêm
+        </Button>
       </div>
     ) : null;
 
@@ -103,7 +106,12 @@ const MoreActivity = () => {
                     item?.id_promotion?.code
                   );
 
-              const predicate = item?.id_reason_punish
+              const predicate = item?.id_punish
+                ? subject.replace(
+                    item?.id_punish?._id,
+                    item?.id_punish?.note_admin
+                  )
+                : item?.id_reason_punish
                 ? subject.replace(
                     item?.id_reason_punish?._id,
                     item?.id_reason_punish?.title?.vi
@@ -163,6 +171,11 @@ const MoreActivity = () => {
                     item?.id_collaborator?._id,
                     item?.id_collaborator?.full_name
                   )
+                : item?.id_customer
+                ? predicate.replace(
+                    item?.id_customer?._id,
+                    item?.id_customer?.full_name
+                  )
                 : item?.id_address
                 ? predicate.replace(item?.id_address, item?.value_string)
                 : item?.id_order
@@ -179,7 +192,6 @@ const MoreActivity = () => {
                     item?.id_transistion_customer?._id,
                     item?.id_transistion_customer?.transfer_note
                   );
-
               return (
                 <div className="div-item">
                   <a>

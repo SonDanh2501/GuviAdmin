@@ -121,6 +121,7 @@ const EditTimeOrder = (props) => {
                 }
                 key={index}
                 onClick={() => setTimeWork(item?.time)}
+                style={{ width: "auto" }}
               >
                 {item.title}
               </Button>
@@ -128,7 +129,11 @@ const EditTimeOrder = (props) => {
           })}
         </div>
 
-        <Button className="btn-update-time-order" onClick={editOrder}>
+        <Button
+          className="btn-update-time-order"
+          onClick={editOrder}
+          style={{ width: "auto" }}
+        >
           {`${i18n.t("update", { lng: lang })}`}
         </Button>
       </Drawer>

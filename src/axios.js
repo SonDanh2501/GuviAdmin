@@ -31,11 +31,11 @@ axiosClient.interceptors.response.use(
     return response.data;
   },
   function (error) {
-    if (error?.response.status === 401 && token) {
-      removeToken();
-      window.location = "/auth/login";
-      store.dispatch(logoutAction.logoutRequest());
-    }
+    // if (error?.response.status === 401 && token) {
+    //   removeToken();
+    //   window.location = "/auth/login";
+    //   store.dispatch(logoutAction.logoutRequest());
+    // }
     return Promise.reject(error?.response.data[0].message);
   }
 );

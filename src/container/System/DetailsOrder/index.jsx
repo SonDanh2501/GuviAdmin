@@ -86,7 +86,7 @@ const DetailsOrder = () => {
   const checkElement = useSelector(getElementState);
 
   useEffect(() => {
-    getListReasonCancel()
+    getListReasonCancel(lang)
       .then((res) => {
         setDataReason(res?.data);
       })
@@ -102,7 +102,7 @@ const DetailsOrder = () => {
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
-    getOrderByGroupOrderApi(id)
+    getOrderByGroupOrderApi(id, lang)
       .then((res) => {
         setHideShow(true);
         setDataGroup(res?.data?.groupOrder);
@@ -116,7 +116,7 @@ const DetailsOrder = () => {
         dispatch(loadingAction.loadingRequest(false));
       });
 
-    getHistoryOrderApi(id, 0, 20)
+    getHistoryOrderApi(id, 0, 20, lang)
       .then((res) => {
         setDataHistory(res?.data);
         setTotalHistory(res?.totalItem);
@@ -1185,7 +1185,12 @@ const DetailsOrder = () => {
                         item?.id_promotion?.code
                       );
 
-                  const predicate = item?.id_reason_punish
+                  const predicate = item?.id_punish
+                    ? subject.replace(
+                        item?.id_punish?._id,
+                        item?.id_punish?.note_admin
+                      )
+                    : item?.id_reason_punish
                     ? subject.replace(
                         item?.id_reason_punish?._id,
                         item?.id_reason_punish?.title?.vi
@@ -1247,6 +1252,11 @@ const DetailsOrder = () => {
                     ? predicate.replace(
                         item?.id_collaborator?._id,
                         item?.id_collaborator?.full_name
+                      )
+                    : item?.id_customer
+                    ? predicate.replace(
+                        item?.id_customer?._id,
+                        item?.id_customer?.full_name
                       )
                     : item?.id_address
                     ? predicate.replace(item?.id_address, item?.value_string)

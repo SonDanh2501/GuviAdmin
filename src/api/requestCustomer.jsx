@@ -1,8 +1,8 @@
 import axiosClient from "../axios";
 
-export const getCusomerRequest = (status, start, length, contacted) => {
+export const getCusomerRequest = (status, start, length, contacted, lang) => {
   return axiosClient.get(
-    `/admin/customer_request_manager/get_list?status=${status}&start=${start}&length=${length}&contacted=${contacted}`
+    `/admin/customer_request_manager/get_list?status=${status}&start=${start}&length=${length}&contacted=${contacted}&lang=${lang}`
   );
 };
 

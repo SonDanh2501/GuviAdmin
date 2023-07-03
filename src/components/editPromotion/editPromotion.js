@@ -952,6 +952,7 @@ const EditPromotion = (props) => {
               <Button
                 className="btn-edit-promrion mt-5"
                 onClick={onEditPromotion}
+                style={{ width: "auto" }}
               >
                 {`${i18n.t("edit_promotion", { lng: lang })}`}
               </Button>

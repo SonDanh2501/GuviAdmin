@@ -26,7 +26,7 @@ import {
   Select,
   Tooltip,
 } from "antd";
-import { errorNotify } from "../../../../../../helper/toast";
+import { errorNotify, successNotify } from "../../../../../../helper/toast";
 import { loadingAction } from "../../../../../../redux/actions/loading";
 import { QRCode } from "react-qrcode-logo";
 import LoadingPagination from "../../../../../../components/paginationLoading";
@@ -103,6 +103,9 @@ const DetailsProfile = ({ id }) => {
       birthday: birthday !== "" ? birth : "",
     })
       .then((res) => {
+        successNotify({
+          message: `${i18n.t("update_success_info", { lng: lang })}`,
+        });
         fetchCustomerById(id)
           .then((res) => {
             setData(res);
