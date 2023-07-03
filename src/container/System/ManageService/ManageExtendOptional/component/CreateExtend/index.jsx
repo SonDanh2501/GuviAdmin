@@ -422,6 +422,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
         onClose={onClose}
         open={open}
         width={1200}
+        headerStyle={{ height: 50 }}
       >
         <Row>
           <Col span={7}>

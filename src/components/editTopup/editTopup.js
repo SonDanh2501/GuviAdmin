@@ -103,6 +103,7 @@ const EditTopup = ({ iconEdit, item, type, setDataT, setTotal }) => {
         placement="right"
         onClose={onClose}
         open={open}
+        headerStyle={{ height: 50 }}
       >
         <div className="modal-body">
           <div>

@@ -186,6 +186,7 @@ const EditPushNotification = ({ id }) => {
         onClose={onClose}
         width={width > 490 ? 500 : 320}
         open={open}
+        headerStyle={{ height: 50 }}
       >
         <InputCustom
           title={`${i18n.t("title", { lng: lang })}`}

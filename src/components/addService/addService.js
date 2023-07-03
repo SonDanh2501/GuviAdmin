@@ -136,6 +136,7 @@ const AddService = (props) => {
         bodyStyle={{
           paddingBottom: 80,
         }}
+        headerStyle={{ height: 50 }}
       >
         <div>
           <a className="title-service">Tiêu đề</a>

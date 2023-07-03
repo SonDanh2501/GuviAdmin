@@ -73,7 +73,13 @@ const EditReasonPubnish = (props) => {
   return (
     <div>
       <a onClick={showDrawer}>{`${i18n.t("edit", { lng: lang })}`}</a>
-      <Drawer title="Tạo lí do" placement="right" onClose={onClose} open={open}>
+      <Drawer
+        title="Tạo lí do"
+        placement="right"
+        onClose={onClose}
+        open={open}
+        headerStyle={{ height: 50 }}
+      >
         <div>
           <a>{`${i18n.t("name", { lng: lang })}`}</a>
           <InputCustom

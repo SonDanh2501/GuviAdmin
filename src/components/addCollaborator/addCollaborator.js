@@ -130,6 +130,7 @@ const AddCollaborator = (props) => {
               bodyStyle={{
                 paddingBottom: 80,
               }}
+              headerStyle={{ height: 50 }}
             >
               <InputCustom
                 title={`${i18n.t("full_name", { lng: lang })}`}

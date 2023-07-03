@@ -100,6 +100,7 @@ const EditBanner = ({ data }) => {
         placement="right"
         onClose={onClose}
         open={open}
+        headerStyle={{ height: 50 }}
       >
         <div>
           <InputCustom

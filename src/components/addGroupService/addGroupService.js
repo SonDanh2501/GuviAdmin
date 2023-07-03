@@ -103,6 +103,7 @@ const AddGroupService = ({ setIsLoading, setData, setTotal }) => {
         placement="right"
         onClose={onClose}
         open={open}
+        headerStyle={{ height: 50 }}
       >
         <div>
           <a className="text-input-group-service">Tiêu đề</a>
