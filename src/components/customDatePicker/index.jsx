@@ -1,14 +1,18 @@
-import { DatePicker, Modal } from "antd";
+import { Button, DatePicker, Modal } from "antd";
 import moment from "moment";
 import { useCallback, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import "dayjs/locale/zh-cn";
-import vi from "antd/locale/vi_VN";
 import "./index.scss";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../redux/selectors/auth";
 import i18n from "../../i18n";
+import {
+  DoubleLeftOutlined,
+  DoubleRightOutlined,
+  LeftOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
 const { RangePicker } = DatePicker;
 
 const CustomDatePicker = (props) => {
@@ -224,7 +228,7 @@ const CustomDatePicker = (props) => {
                       picker={tabTime}
                       className="picker"
                       onChange={(e) => onChangeFilter(e[0]?.$d, e[1]?.$d)}
-                      locale={vi}
+                      locale={lang}
                     />
                   </div>
                 </>
@@ -234,23 +238,29 @@ const CustomDatePicker = (props) => {
                   value={[start, end]}
                   selectRange={true}
                   view="month"
-                  className="calendar"
+                  className="calendar-picker"
                   locale={lang}
+                  next2Label={
+                    <DoubleRightOutlined style={{ color: "black" }} />
+                  }
+                  nextLabel={<RightOutlined style={{ color: "black" }} />}
+                  prev2Label={<DoubleLeftOutlined style={{ color: "black" }} />}
+                  prevLabel={<LeftOutlined style={{ color: "black" }} />}
                 />
               )}
             </div>
           </div>
           <div className="div-btn">
-            <button className="btn-cancel-date" onClick={handleCancel}>
+            <Button className="btn-cancel-date" onClick={handleCancel}>
               {`${i18n.t("cancel_modal", {
                 lng: lang,
               })}`}
-            </button>
-            <button className="btn-confirm-date" onClick={handleOk}>
+            </Button>
+            <Button className="btn-confirm-date" onClick={handleOk}>
               {`${i18n.t("apply", {
                 lng: lang,
               })}`}
-            </button>
+            </Button>
           </div>
         </div>
       )}
