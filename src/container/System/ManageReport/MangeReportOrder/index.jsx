@@ -98,6 +98,23 @@ const ManageReportOrder = () => {
           </a>
         </div>
       )}
+
+      <div className="div-item-report">
+        <a className="text-title">{`${i18n.t("report_order_day_of_week", {
+          lng: lang,
+        })}`}</a>
+        <a className="text-details">
+          {`${i18n.t("report_order_day_of_week", { lng: lang })}`}
+        </a>
+        <a
+          className="text-see-report"
+          onClick={() =>
+            navigate("/report/manage-report/report-order-day-of-week")
+          }
+        >
+          {`${i18n.t("see_report", { lng: lang })}`}
+        </a>
+      </div>
     </div>
   );
 };

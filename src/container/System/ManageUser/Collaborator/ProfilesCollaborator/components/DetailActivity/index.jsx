@@ -1,12 +1,14 @@
 import { Row } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getDetailsHistoryActivityCollaborator } from "../../../../../../../api/collaborator";
 import { formatMoney } from "../../../../../../../helper/formatMoney";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import "./index.scss";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import i18n from "../../../../../../../i18n";
 
 const DetailActivityCollaborator = () => {
   const { state } = useLocation();
@@ -16,6 +18,7 @@ const DetailActivityCollaborator = () => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -50,84 +53,126 @@ const DetailActivityCollaborator = () => {
         style={{ width: 50, height: 50 }}
         onClick={() => navigate(-1)}
       ></i>
-      <h5 className="mt-3">Chi tiết hoạt động</h5>
+      <h5 className="mt-3">{`${i18n.t("detail_activity", { lng: lang })}`}</h5>
       {show && (
         <div>
           <div className="div-title">
-            <a className="text-title">Chi tiết đơn hàng</a>
+            <a className="text-title">{`${i18n.t("order_detail", {
+              lng: lang,
+            })}`}</a>
           </div>
           <div className="div-details-service mt-2">
             <a className="title">
-              Dịch vụ:{" "}
+              {`${i18n.t("service", { lng: lang })}`}:{" "}
               <a className="text-service">
-                {dataGroup?.type === "schedule"
-                  ? "Giúp việc cố định"
-                  : dataGroup?.type === "loop" && !dataGroup?.is_auto_order
-                  ? "Giúp việc theo giờ"
-                  : dataGroup?.type === "loop" && dataGroup?.is_auto_order
-                  ? "Lặp lại hàng tuần"
+                {dataGroup?.type === "loop" && dataGroup?.is_auto_order
+                  ? `${i18n.t("repeat", { lng: lang })}`
+                  : dataGroup?.service?._id?.kind === "giup_viec_theo_gio"
+                  ? `${i18n.t("cleaning", { lng: lang })}`
+                  : dataGroup?.service?._id?.kind === "giup_viec_co_dinh"
+                  ? `${i18n.t("cleaning_subscription", {
+                      lng: lang,
+                    })}`
+                  : dataGroup?.service?._id?.kind === "phuc_vu_nha_hang"
+                  ? `${i18n.t("serve", { lng: lang })}`
                   : ""}
               </a>
             </a>
             <div className="div-datework">
-              <a className="title">Thời gian: </a>
-              <div className="div-times">
+              <a className="title">
+                {`${i18n.t("time", {
+                  lng: lang,
+                })}`}
+                :{" "}
+              </a>
+              <div className="div-times ml-2">
                 <a>
-                  -Ngày làm:{" "}
+                  -
+                  {`${i18n.t("date_work", {
+                    lng: lang,
+                  })}`}
+                  :{" "}
                   {moment(
                     new Date(dataGroup?.date_work_schedule[0]?.date)
                   ).format("DD/MM/YYYY")}
                 </a>
-                <a>-Giờ làm: {timeWork(dataGroup)}</a>
+                <a>
+                  -{`${i18n.t("time_work", { lng: lang })}`}:{" "}
+                  {timeWork(dataGroup)}
+                </a>
               </div>
             </div>
             <a className="title">
-              Địa điểm: <a className="text-service">{dataGroup?.address}</a>
+              {`${i18n.t("address", {
+                lng: lang,
+              })}`}
+              : <a className="text-service">{dataGroup?.address}</a>
             </a>
             {dataGroup?.note && (
               <a className="title">
-                Ghi chú: <a className="text-service">{dataGroup?.note}</a>
+                {`${i18n.t("note", {
+                  lng: lang,
+                })}`}
+                : <a className="text-service">{dataGroup?.note}</a>
               </a>
             )}
-            <div style={{ flexDirection: "row" }}>
-              <a className="title">Dịch vụ thêm: </a>
+            <div className="div-extra-service">
+              <a className="title">
+                {`${i18n.t("extra_service", { lng: lang })}`}:{" "}
+              </a>
               {dataGroup?.service?.optional_service.map((item) => {
                 return (
-                  <a>
+                  <div className="div-item-extra-service ml-2">
                     {item?._id === "632148d02bacd0aa8648657c"
                       ? item?.extend_optional?.map((item) => (
-                          <a>- {item?.title?.vi}</a>
+                          <a>- {item?.title?.[lang]}</a>
                         ))
                       : null}
-                  </a>
+                  </div>
                 );
               })}
             </div>
 
             <a className="title">
-              Thanh toán:{" "}
+              {`${i18n.t("payment", {
+                lng: lang,
+              })}`}
+              :{" "}
               <a className="text-service">
-                {dataGroup?.payment_method === "cash" ? "Tiền mặt" : "G-point"}
+                {dataGroup?.payment_method === "cash"
+                  ? `${i18n.t("cash", { lng: lang })}`
+                  : "G-point"}
               </a>
             </a>
             <div className="div-price">
-              <a className="title">Tạm tính:</a>
+              <a className="title">
+                {`${i18n.t("provisional", { lng: lang })}`}:
+              </a>
               <div className="detail-price">
                 <div className="div-total">
-                  <a>- Tổng tiền:</a>
+                  <a>
+                    -{" "}
+                    {`${i18n.t("provisional_price", {
+                      lng: lang,
+                    })}`}
+                    :
+                  </a>
                   <a>{formatMoney(dataGroup?.initial_fee)}</a>
                 </div>
                 <div className="div-total">
-                  <a>- Phí dịch vụ:</a>
+                  <a>- {`${i18n.t("system_fee", { lng: lang })}`}:</a>
                   {dataGroup?.service_fee?.map((item) => (
                     <a>+{formatMoney(item?.fee)}</a>
                   ))}
                 </div>
                 {dataGroup?.code_promotion && (
                   <div className="div-total-promo">
-                    <a>- Khuyến mãi:</a>
+                    <a>- {`${i18n.t("promotion", { lng: lang })}`}:</a>
                     <div className="div-promo">
-                      <a>+ Mã code: {dataGroup?.code_promotion?.code}</a>
+                      <a>
+                        + {`${i18n.t("code", { lng: lang })}`}:{" "}
+                        {dataGroup?.code_promotion?.code}
+                      </a>
                       <a style={{ color: "red", marginLeft: 5 }}>
                         {formatMoney(-dataGroup?.code_promotion?.discount)}
                       </a>
@@ -136,7 +181,7 @@ const DetailActivityCollaborator = () => {
                 )}
                 {dataGroup?.event_promotion && (
                   <div className="div-event-promo">
-                    <a>- Chương trình:</a>
+                    <a>- {`${i18n.t("programme", { lng: lang })}`}:</a>
                     <div className="div-price-event">
                       {dataGroup?.event_promotion.map((item, key) => {
                         return (
@@ -155,7 +200,7 @@ const DetailActivityCollaborator = () => {
                         ? item?.extend_optional?.map((item) => {
                             return (
                               <div className="div-event-promo">
-                                <a>- {item?.title?.vi}</a>
+                                <a>- {item?.title?.[lang]}</a>
                                 <a> +{formatMoney(item?.price)}</a>
                               </div>
                             );
@@ -165,24 +210,36 @@ const DetailActivityCollaborator = () => {
                   );
                 })}
                 <div className="div-total">
-                  <a className="title">- Giá: </a>
+                  <a className="title">
+                    - {`${i18n.t("total_money", { lng: lang })}`}:{" "}
+                  </a>
                   <a className="title">{formatMoney(dataGroup?.final_fee)}</a>
                 </div>
               </div>
             </div>
 
             <a className="title">
-              Trạng thái:{" "}
+              {`${i18n.t("status", { lng: lang })}`}:{" "}
               {dataGroup?.status === "pending" ? (
-                <a className="text-pending ">Đang chờ làm</a>
+                <a className="text-pending ">{`${i18n.t("pending", {
+                  lng: lang,
+                })}`}</a>
               ) : dataGroup?.status === "confirm" ? (
-                <a className="text-confirm">Đã nhận</a>
+                <a className="text-confirm">{`${i18n.t("confirm", {
+                  lng: lang,
+                })}`}</a>
               ) : dataGroup?.status === "doing" ? (
-                <a className="text-doing">Đang làm</a>
+                <a className="text-doing">{`${i18n.t("doing", {
+                  lng: lang,
+                })}`}</a>
               ) : dataGroup?.status === "done" ? (
-                <a className="text-done">Đã xong</a>
+                <a className="text-done">{`${i18n.t("complete", {
+                  lng: lang,
+                })}`}</a>
               ) : (
-                <a className="text-cancel">Đã huỷ</a>
+                <a className="text-cancel">{`${i18n.t("cancel", {
+                  lng: lang,
+                })}`}</a>
               )}
             </a>
           </div>
@@ -192,65 +249,111 @@ const DetailActivityCollaborator = () => {
       {dataActivity?.length > 0 && (
         <div className="ml-3">
           <div className="div-title">
-            <a className="text-title">Hoạt động với đơn hàng</a>
+            <a className="text-title">{`${i18n.t("work_with_order", {
+              lng: lang,
+            })}`}</a>
           </div>
           <div>
             {dataActivity?.map((item, index) => {
               const money = item?.value?.toString();
-              const subject = item?.id_admin_action
+              const subject = item?.id_user_system
                 ? item?.title_admin.replace(
-                    item?.id_admin_action?._id,
-                    item?.id_admin_action?.full_name
-                  )
-                : item?.id_collaborator
-                ? item?.title_admin.replace(
-                    item?.id_collaborator?._id,
-                    item?.id_collaborator?.full_name
-                  )
-                : item?.id_customer
-                ? item?.title_admin.replace(
-                    item?.id_customer?._id,
-                    item?.id_customer?.full_name
-                  )
-                : "";
-
-              const predicate = item?.id_address
-                ? subject.replace(item?.id_address, item?.value_string)
-                : item?.id_order
-                ? subject.replace(item?.id_order?._id, item?.id_order?.id_view)
-                : item?.id_promotion
-                ? subject.replace(
-                    item?.id_promotion?._id,
-                    item?.id_promotion?.title?.vi
-                  )
-                : item?.id_collaborator
-                ? subject.replace(
-                    item?.id_collaborator?._id,
-                    item?.id_collaborator?.full_name
-                  )
-                : item?.id_customer
-                ? subject.replace(
-                    item?.id_customer?._id,
-                    item?.id_customer?.full_name
+                    item?.id_user_system?._id,
+                    item?.id_user_system?.full_name
                   )
                 : item?.id_admin_action
-                ? subject.replace(
+                ? item?.title_admin.replace(
                     item?.id_admin_action?._id,
                     item?.id_admin_action?.full_name
+                  )
+                : item?.id_customer
+                ? item?.title_admin.replace(
+                    item?.id_customer?._id,
+                    item?.id_customer?.full_name
+                  )
+                : item?.id_collaborator
+                ? item?.title_admin.replace(
+                    item?.id_collaborator?._id,
+                    item?.id_collaborator?.full_name
+                  )
+                : item?.title_admin.replace(
+                    item?.id_promotion?._id,
+                    item?.id_promotion?.code
+                  );
+
+              const predicate = item?.id_punish
+                ? subject.replace(
+                    item?.id_punish?._id,
+                    item?.id_punish?.note_admin
+                  )
+                : item?.id_reason_punish
+                ? subject.replace(
+                    item?.id_reason_punish?._id,
+                    item?.id_reason_punish?.title?.vi
+                  )
+                : item?.id_order
+                ? subject.replace(item?.id_order?._id, item?.id_order?.id_view)
+                : item?.id_reward
+                ? subject.replace(
+                    item?.id_reward?._id,
+                    item?.id_reward?.title?.vi
+                  )
+                : item?.id_info_reward_collaborator
+                ? subject.replace(
+                    item?.id_info_reward_collaborator?._id,
+                    item?.id_info_reward_collaborator?.id_reward_collaborator
+                      ?.title?.vi
                   )
                 : item?.id_transistion_collaborator
                 ? subject.replace(
                     item?.id_transistion_collaborator?._id,
                     item?.id_transistion_collaborator?.transfer_note
                   )
-                : item?.id_transistion_customer
+                : item?.id_collaborator
                 ? subject.replace(
+                    item?.id_collaborator?._id,
+                    item?.id_collaborator?.full_name
+                  )
+                : item?.id_customer
+                ? subject.replace(
+                    item?.id_customer?._id,
+                    item?.id_customer?.full_name
+                  )
+                : item?.id_promotion
+                ? subject.replace(
+                    item?.id_promotion?._id,
+                    item?.id_promotion?.title?.vi
+                  )
+                : item?.id_admin_action
+                ? subject.replace(
+                    item?.id_admin_action?._id,
+                    item?.id_admin_action?.full_name
+                  )
+                : item?.id_address
+                ? subject.replace(item?.id_address, item?.value_string)
+                : subject.replace(
                     item?.id_transistion_customer?._id,
                     item?.id_transistion_customer?.transfer_note
-                  )
-                : "";
+                  );
 
-              const object = item?.id_order
+              const object = item?.id_reason_cancel
+                ? predicate.replace(
+                    item?.id_reason_cancel?._id,
+                    item?.id_reason_cancel?.title?.vi
+                  )
+                : item?.id_collaborator
+                ? predicate.replace(
+                    item?.id_collaborator?._id,
+                    item?.id_collaborator?.full_name
+                  )
+                : item?.id_customer
+                ? predicate.replace(
+                    item?.id_customer?._id,
+                    item?.id_customer?.full_name
+                  )
+                : item?.id_address
+                ? predicate.replace(item?.id_address, item?.value_string)
+                : item?.id_order
                 ? predicate.replace(
                     item?.id_order?._id,
                     item?.id_order?.id_view
@@ -260,14 +363,9 @@ const DetailActivityCollaborator = () => {
                     item?.id_transistion_collaborator?._id,
                     item?.id_transistion_collaborator?.transfer_note
                   )
-                : item?.id_transistion_customer
-                ? predicate.replace(
+                : predicate.replace(
                     item?.id_transistion_customer?._id,
                     item?.id_transistion_customer?.transfer_note
-                  )
-                : predicate.replace(
-                    item?.id_reason_cancel?._id,
-                    item?.id_reason_cancel?.title?.vi
                   );
               return (
                 <div key={index} className="div-item-list">
@@ -287,7 +385,7 @@ const DetailActivityCollaborator = () => {
                         : "+" + formatMoney(item?.value)}
                     </a>
                   </div>
-                  <a className="text-date">
+                  <a>
                     {moment(new Date(item?.date_create)).format(
                       "DD/MM/yyy - HH:mm"
                     )}

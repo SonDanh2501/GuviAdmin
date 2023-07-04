@@ -572,5 +572,16 @@
     "refund_fines": "Hoàn tiền phạt",
     "refund" : "Hoàn tiền",
     "want_refund_fines": "Bạn có chắc muốn hoàn lại tiền lệnh phạt tiền CTV?",
-    "update_success_info": "Cập nhật thông tin thành công"
+    "update_success_info": "Cập nhật thông tin thành công",
+    "report_order_day_of_week": "Báo cáo đơn hàng theo ngày trong tuần",
+    "monday": "Thứ Hai",
+    "tuesday": "Thứ Ba",
+    "wednesday": "Thứ Tư",
+    "thusday": "Thứ Năm",
+    "friday": "Thứ Sáu",
+    "saturday": "Thứ Bảy",
+    "sunday": "Chủ Nhật",
+    "detail_activity": "Chi tiết hoạt động",
+    "work_with_order": "Hoạt động với đơn hàng",
+    "theory_input": "Đầu vào lý thuyết"
 }

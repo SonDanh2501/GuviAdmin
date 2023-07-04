@@ -588,7 +588,7 @@ export default function Home() {
                   <div className="div-on">
                     <div className="line-off" />
                     <div className="total-div-on">
-                      <a className="text-on">Ofline</a>
+                      <a className="text-on">Offline</a>
                       <a className="text-total-on">
                         {activeUser?.OfflineUsers}
                       </a>
@@ -1061,6 +1061,9 @@ export default function Home() {
                         )}
                         margin={{
                           top: 30,
+                          right: 30,
+                          left: 20,
+                          bottom: 5,
                         }}
                         barSize={50}
                       >

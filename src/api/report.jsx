@@ -261,3 +261,9 @@ export const getReportPercentOrderByCity = (start_date, end_date, city) => {
     `/admin/report_mananger/report_percent_order_city?start_date=${start_date}&end_date=${end_date}&city=${city}`
   );
 };
+
+export const getReportOrderDay = (start_date, end_date, type) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_order_day_in_week?start_date=${start_date}&end_date=${end_date}&type=${type}`
+  );
+};

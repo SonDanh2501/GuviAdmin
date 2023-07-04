@@ -65,20 +65,11 @@ const TestExam = (props) => {
             <div key={index}>
               <div className="div-head-test">
                 <a className="title-score">Đúng: {item?.score} câu</a>
-                {/* <div className="div-time-test">
-                <a>
-                  Bắt đầu:{" "}
-                  {moment(new Date(item?.time_start)).format(
-                    "DD/MM/YYYY - HH:mm"
-                  )}
+                <a className="title-score">
+                  {item?.type_exam === "input"
+                    ? "Bài kiểm tra đầu vào"
+                    : "Bài kiểm tra định kì"}
                 </a>
-                <a>
-                  Kết thúc:{" "}
-                  {moment(new Date(item?.time_end)).format(
-                    "DD/MM/YYYY - HH:mm"
-                  )}
-                </a>
-              </div> */}
               </div>
               <div className="mt-3">
                 {item?.answers?.map((iAnswers, idAnswers) => {

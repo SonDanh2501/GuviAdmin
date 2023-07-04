@@ -53,8 +53,6 @@ const AddQuizz = ({
     setDataQuestion(arr);
   }, [type]);
 
-  console.log(dataQuestion);
-
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -137,6 +135,7 @@ const AddQuizz = ({
             title: "",
             description: "",
             question: "",
+            type_exam: type,
             choose: [
               {
                 answer: "",
@@ -174,7 +173,7 @@ const AddQuizz = ({
           message: err,
         });
       });
-  }, [dataQuestion, startPage, tab]);
+  }, [dataQuestion, startPage, tab, type]);
 
   return (
     <div>
@@ -267,7 +266,7 @@ const AddQuizz = ({
                 })}
 
                 <Button
-                  style={{ fontSize: 14, marginTop: 20 }}
+                  style={{ fontSize: 14, marginTop: 20, width: "auto" }}
                   onClick={addAnswer}
                 >
                   {`${i18n.t("add_answer", { lng: lang })}`}
@@ -278,7 +277,7 @@ const AddQuizz = ({
 
           <Button
             type="primary"
-            style={{ float: "right", marginTop: 20 }}
+            style={{ float: "right", marginTop: 20, width: "auto" }}
             onClick={addQuestion}
           >
             {`${i18n.t("create", { lng: lang })}`}

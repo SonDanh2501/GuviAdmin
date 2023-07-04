@@ -572,5 +572,16 @@
     "refund_fines": "Refund of fines",
     "refund" : "Refund",
     "want_refund_fines": "Are you sure you want to refund your affiliate fine?",
-    "update_success_info": "Successfully updated information"
+    "update_success_info": "Successfully updated information",
+    "report_order_day_of_week": "Order report by day of week",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thusday": "Thusday",
+    "friday": "Friday",
+    "saturday": "Saturdaty",
+    "sunday": "Sunday",
+    "detail_activity": "Activity Details",
+    "work_with_order": "Works with orders",
+    "theory_input": "Theory input"
 }

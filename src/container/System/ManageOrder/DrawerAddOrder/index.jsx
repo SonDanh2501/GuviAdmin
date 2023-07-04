@@ -28,6 +28,7 @@ const AddOrder = () => {
   const [nameService, setNameService] = useState("");
   const [addService, setAddService] = useState([]);
   const [dataFilter, setDataFilter] = useState([]);
+  const [extraService, setExtraService] = useState([]);
   const [name, setName] = useState("");
   const [errorNameCustomer, setErrorNameCustomer] = useState("");
   const [id, setId] = useState("");
@@ -96,6 +97,15 @@ const AddOrder = () => {
         ? getExtendOptionalByOptionalServiceApi(item?._id)
             .then((res) => {
               setBussinessType(res?.data);
+              setIsLoading(false);
+            })
+            .catch((err) => {
+              setIsLoading(false);
+            })
+        : item?.type === "option_toggle_switch"
+        ? getExtendOptionalByOptionalServiceApi(item?._id)
+            .then((res) => {
+              setExtraService(res?.data);
               setIsLoading(false);
             })
             .catch((err) => {
@@ -222,7 +232,7 @@ const AddOrder = () => {
         ) : kindService === "phuc_vu_nha_hang" ? (
           <BussinessType
             extendService={extendService}
-            addService={addService}
+            extraService={extraService}
             bussinessType={bussinessType}
             id={id}
             name={name}

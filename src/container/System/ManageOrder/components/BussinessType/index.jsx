@@ -32,10 +32,9 @@ import i18n from "../../../../../i18n";
 const BussinessType = (props) => {
   const {
     extendService,
-    addService,
     bussinessType,
     id,
-    name,
+    extraService,
     setErrorNameCustomer,
     idService,
   } = props;
@@ -676,45 +675,7 @@ const BussinessType = (props) => {
             lng: lang,
           })}`}</a>
           <div className="div-service-serve">
-            {/* {addService?.map((item) => {
-              return (
-                <button
-                  className={
-                    mutipleSelected.some((items) => items._id === item?._id)
-                      ? "select-service"
-                      : "select-service-default"
-                  }
-                  onClick={() => onChooseMultiple(item?._id)}
-                  disabled={
-                    estimate === 4 && item?.estimate === 0
-                      ? false
-                      : estimate !== 4
-                      ? false
-                      : true
-                  }
-                >
-                  <a
-                    className={
-                      mutipleSelected.some((items) => items._id === item?._id)
-                        ? "text-service"
-                        : "text-service-default"
-                    }
-                  >
-                    {item?.title?.[lang]}
-                  </a>
-                  <a
-                    className={
-                      mutipleSelected.some((items) => items._id === item?._id)
-                        ? "text-service"
-                        : "text-service-default"
-                    }
-                  >
-                    {item?.description?.[lang]}
-                  </a>
-                </button>
-              );
-            })} */}
-            {addService?.map((item, index) => {
+            {extraService?.map((item, index) => {
               return (
                 <div key={index} className="div-switch-add-service">
                   <a className="title-switch">{item?.title?.[lang]}</a>
@@ -726,6 +687,7 @@ const BussinessType = (props) => {
                     }
                     size="small"
                     onChange={() => onChooseMultiple(item?._id)}
+                    style={{ width: "auto" }}
                   />
                 </div>
               );
