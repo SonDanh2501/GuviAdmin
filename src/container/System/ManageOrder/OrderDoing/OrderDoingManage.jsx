@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { getOrderApi, searchOrderApi } from "../../../../api/order";
 import InputCustom from "../../../../components/textInputCustom";
-import { formatDayVN } from "../../../../helper/formatDayVN";
+
 import "./OrderDoingManage.scss";
 import { getLanguageState } from "../../../../redux/selectors/auth";
 import i18n from "../../../../i18n";

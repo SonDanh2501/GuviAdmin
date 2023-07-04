@@ -116,7 +116,11 @@ const AddNews = () => {
           classImg={"img-thumbnail"}
         />
 
-        <Button className="float-right btn-add-new mt-3" onClick={addNews}>
+        <Button
+          className="float-right btn-add-new mt-3"
+          onClick={addNews}
+          style={{ width: "auto" }}
+        >
           {`${i18n.t("add", { lng: lang })}`}
         </Button>
       </Drawer>
