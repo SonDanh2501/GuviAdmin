@@ -2,7 +2,7 @@ import { Button, DatePicker, Modal } from "antd";
 import moment from "moment";
 import { useCallback, useState } from "react";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+
 import "./index.scss";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../redux/selectors/auth";
@@ -13,6 +13,7 @@ import {
   LeftOutlined,
   RightOutlined,
 } from "@ant-design/icons";
+import "react-calendar/dist/Calendar.css";
 const { RangePicker } = DatePicker;
 
 const CustomDatePicker = (props) => {
@@ -246,6 +247,7 @@ const CustomDatePicker = (props) => {
                   nextLabel={<RightOutlined style={{ color: "black" }} />}
                   prev2Label={<DoubleLeftOutlined style={{ color: "black" }} />}
                   prevLabel={<LeftOutlined style={{ color: "black" }} />}
+                  tileClassName="classname_title"
                 />
               )}
             </div>
