@@ -61,6 +61,7 @@ import ReportOrderCreate from "../container/System/ManageReport/MangeReportOrder
 import EditRewardCollaborator from "../container/System/ManageConfiguration/ScreenConfiguration/RewardCollaborator/EditRewardCollaborator";
 import DetailReward from "../container/System/ManageTopup/ManageTopupCollaborator/Reward/DetailReward";
 import ImageManage from "../container/System/ManageConfiguration/ScreenConfiguration/ImageManage";
+import ReportOrderDayInWeek from "../container/System/ManageReport/MangeReportOrder/ReportOrderDayOfWeek";
 
 const Admin = () => {
   return (
@@ -166,6 +167,10 @@ const Admin = () => {
       <Route
         path="/report/manage-report/report-order-daily"
         element={<ReportOrderDaily />}
+      />
+      <Route
+        path="/report/manage-report/report-order-day-of-week"
+        element={<ReportOrderDayInWeek />}
       />
       <Route
         path="/report/manage-report/report-order-daily/details"

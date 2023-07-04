@@ -148,6 +148,7 @@ const ManageOptionService = () => {
           data={itemEdit}
           setIsLoading={setIsLoading}
           setData={setData}
+          id={id}
         />
       ),
     },

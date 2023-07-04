@@ -2,7 +2,6 @@ import { Dropdown, Input, Pagination, Space, Table } from "antd";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import moment from "moment";
 import "./index.scss";
-import { formatDayVN } from "../../../../../helper/formatDayVN";
 import { Link, useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import {

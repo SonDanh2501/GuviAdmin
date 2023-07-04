@@ -239,8 +239,12 @@ const Punish = () => {
               <a className="text-done-topup">{`${i18n.t("complete", {
                 lng: lang,
               })}`}</a>
-            ) : (
+            ) : data?.status === "done" ? (
               <a className="text-cancel-topup-ctv">{`${i18n.t("cancel", {
+                lng: lang,
+              })}`}</a>
+            ) : (
+              <a className="text-cancel-topup-ctv">{`${i18n.t("refund", {
                 lng: lang,
               })}`}</a>
             )}

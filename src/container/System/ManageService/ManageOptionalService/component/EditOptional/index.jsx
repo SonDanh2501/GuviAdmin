@@ -27,7 +27,7 @@ import { set } from "lodash";
 dayjs.extend(customParseFormat);
 
 const EditOptional = (props) => {
-  const { setIsLoading, setData, data } = props;
+  const { setIsLoading, setData, data, id } = props;
   const [open, setOpen] = useState(false);
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
@@ -269,7 +269,7 @@ const EditOptional = (props) => {
       .then((res) => {
         setOpen(false);
         setIsLoading(false);
-        getOptionalServiceByServiceApi(data?._id)
+        getOptionalServiceByServiceApi(id)
           .then((res) => {
             setData(res?.data);
           })
@@ -293,6 +293,8 @@ const EditOptional = (props) => {
     priceRushDay,
     isPriceRushHour,
     priceRushHour,
+    type,
+    id,
   ]);
 
   return (
