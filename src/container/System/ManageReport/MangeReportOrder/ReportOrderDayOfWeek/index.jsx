@@ -89,6 +89,7 @@ const ReportOrderDayOfWeek = () => {
             { value: "date_create", label: "Ngày tạo" },
             { value: "date_work", label: "Ngày làm" },
           ]}
+          style={{ marginLeft: 20 }}
         />
       </div>
       <div className="div-chart-day-in-week">

@@ -371,4 +371,5 @@ const DATA = [
 const TAB = [
   { title: "input", value: "input" },
   { title: "periodic", value: "periodic" },
+  { title: "theory_input", value: "theory_input" },
 ];

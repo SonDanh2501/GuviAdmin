@@ -160,7 +160,7 @@ const EditQuizz = ({
           message: err,
         });
       });
-  }, [dataQuestion, startPage, tab, id]);
+  }, [dataQuestion, startPage, tab, id, type]);
 
   return (
     <div>
@@ -250,7 +250,7 @@ const EditQuizz = ({
                 })}
 
                 <Button
-                  style={{ fontSize: 14, marginTop: 20 }}
+                  style={{ fontSize: 14, marginTop: 20, width: "auto" }}
                   onClick={addAnswer}
                 >
                   {`${i18n.t("edit", { lng: lang })}`}
@@ -261,7 +261,7 @@ const EditQuizz = ({
 
           <Button
             type="primary"
-            style={{ float: "right", marginTop: 20 }}
+            style={{ float: "right", marginTop: 20, width: "auto" }}
             onClick={addQuestion}
           >
             {`${i18n.t("edit", { lng: lang })}`}

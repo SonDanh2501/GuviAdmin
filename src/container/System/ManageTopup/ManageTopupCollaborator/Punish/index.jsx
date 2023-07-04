@@ -244,7 +244,7 @@ const Punish = () => {
                 lng: lang,
               })}`}</a>
             ) : (
-              <a className="text-cancel-topup-ctv">{`${i18n.t("refund", {
+              <a className="text-refund-topup">{`${i18n.t("refund", {
                 lng: lang,
               })}`}</a>
             )}
@@ -258,7 +258,9 @@ const Punish = () => {
       render: (data) => {
         return (
           <a className="text-name-verify">
-            {data?.is_punish_system
+            {data?.is_punish_system && data?.id_admin_refund
+              ? data?.id_admin_refund?.full_name
+              : data?.is_punish_system
               ? `${i18n.t("system", { lng: lang })}`
               : data?.id_admin_verify?.full_name}
           </a>
@@ -278,7 +280,9 @@ const Punish = () => {
                 className="btn-confirm"
                 onClick={toggleConfirm}
                 disabled={
-                  data?.status === "cancel" || data?.status === "done"
+                  data?.status === "cancel" ||
+                  data?.status === "done" ||
+                  data?.status === "refund"
                     ? true
                     : false
                 }
@@ -318,7 +322,9 @@ const Punish = () => {
             <div>
               {checkElement?.includes("edit_punish_cash_book_collaborator") && (
                 <>
-                  {data?.status === "cancel" || data?.status === "done" ? (
+                  {data?.status === "cancel" ||
+                  data?.status === "done" ||
+                  data?.status === "refund" ? (
                     <></>
                   ) : (
                     <Tooltip

@@ -91,7 +91,7 @@ export const editMoneyPunishApi = (id, data) => {
 };
 
 export const refundMoneyPunishApi = (id) => {
-  return axiosClient.post(`/admin/punish_manager/refurn_punish/${id}?lang=vi`);
+  return axiosClient.post(`/admin/punish_manager/refund_punish/${id}?lang=vi`);
 };
 
 //reward collaborator
