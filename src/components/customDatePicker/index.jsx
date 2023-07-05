@@ -1,6 +1,6 @@
 import { Button, DatePicker, Modal } from "antd";
 import moment from "moment";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Calendar from "react-calendar";
 
 import "./index.scss";
@@ -29,6 +29,14 @@ const CustomDatePicker = (props) => {
       lng: lang,
     })}`
   );
+
+  useEffect(() => {
+    setTitle(
+      `${i18n.t("choose_time", {
+        lng: lang,
+      })}`
+    );
+  }, [lang]);
 
   const handleOk = () => {
     setOpen(false);

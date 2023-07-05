@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { Button, DatePicker, Drawer, Input, List } from "antd";
+import { Button, Checkbox, DatePicker, Drawer, Input, List } from "antd";
 import "./index.scss";
 import {
   searchCollaborators,
@@ -35,7 +35,7 @@ const AddCollaboratorOrder = (props) => {
   const [dataFilter, setDataFilter] = useState([]);
   const [name, setName] = useState("");
   const [id, setId] = useState("");
-  const dispatch = useDispatch();
+  const [check, setCheck] = useState(true);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const showDrawer = () => {
@@ -76,7 +76,10 @@ const AddCollaboratorOrder = (props) => {
     if (status === "confirm") {
       changeCollaboratorToOrderApi(idOrder)
         .then((res) => {
-          addCollaboratorToOrderApi(idOrder, { id_collaborator: id })
+          addCollaboratorToOrderApi(idOrder, {
+            id_collaborator: id,
+            check_time: check,
+          })
             .then((res) => {
               setOpen(false);
               setIsLoading(false);
@@ -101,7 +104,10 @@ const AddCollaboratorOrder = (props) => {
           setIsLoading(false);
         });
     } else {
-      addCollaboratorToOrderApi(idOrder, { id_collaborator: id })
+      addCollaboratorToOrderApi(idOrder, {
+        id_collaborator: id,
+        check_time: check,
+      })
         .then((res) => {
           setIsLoading(false);
           setOpen(false);
@@ -119,7 +125,7 @@ const AddCollaboratorOrder = (props) => {
           setIsLoading(false);
         });
     }
-  }, [id, idOrder, startPage, type, kind]);
+  }, [id, idOrder, startPage, type, kind, check]);
 
   return (
     <>
@@ -175,10 +181,13 @@ const AddCollaboratorOrder = (props) => {
             />
             {/* {errorName && <a className="error">{errorName}</a>} */}
             {dataFilter.length > 0 && (
-              <List type={"unstyled"} className="list-item">
+              <List
+                type={"unstyled"}
+                className="list-item-add-collaborator-order"
+              >
                 {dataFilter?.map((item, index) => {
                   return (
-                    <button
+                    <Button
                       key={index}
                       disabled={item?.is_block ? true : false}
                       className={
@@ -194,9 +203,9 @@ const AddCollaboratorOrder = (props) => {
                         setDataFilter([]);
                       }}
                     >
-                      <div>
+                      <div className="div-name">
                         <img src={item?.avatar} className="img-collaborator" />
-                        <a>
+                        <a className="text-name">
                           {item?.full_name} - {item?.phone} - {item?.id_view}
                         </a>
                       </div>
@@ -205,12 +214,20 @@ const AddCollaboratorOrder = (props) => {
                       ) : (
                         <></>
                       )}
-                    </button>
+                    </Button>
                   );
                 })}
               </List>
             )}
           </div>
+
+          <Checkbox
+            checked={check}
+            onChange={(e) => setCheck(e.target.checked)}
+            style={{ marginTop: 50 }}
+          >
+            Kiểm tra trùng giờ
+          </Checkbox>
 
           {id && (
             <Button
