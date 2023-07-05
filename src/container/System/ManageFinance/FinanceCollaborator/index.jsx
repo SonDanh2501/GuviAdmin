@@ -11,16 +11,14 @@ import topup from "../../../../assets/images/topup.svg";
 import withdraw from "../../../../assets/images/withdraw.svg";
 import moment from "moment";
 import CustomDatePicker from "../../../../components/customDatePicker";
+import { errorNotify } from "../../../../helper/toast";
+import LoadingPagination from "../../../../components/paginationLoading";
+import { useSelector } from "react-redux";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import i18n from "../../../../i18n";
 const width = window.innerWidth;
 
 const FinanceCollaborator = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [totalRemainder, setTotalRemainder] = useState(0);
-  const [totalGiftRemainder, setTotalGiftRemainder] = useState(0);
-  const [totalTopup, setTotalTopup] = useState(0);
-  const [totalWithdraw, setTotalWithdraw] = useState(0);
   const [totalEndingRemainder, setTotalEndingRemainder] = useState(0);
   const [totalOpeningRemainder, setTotalOpeningRemainder] = useState(0);
   const [totalEndingGiftRemainder, setTotalEndingGiftRemainder] = useState(0);
@@ -31,28 +29,10 @@ const FinanceCollaborator = () => {
     moment().startOf("month").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
+  const [isLoading, setIsLoading] = useState(false);
+  const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    // getBalanceCollaborator()
-    //   .then((res) => {
-    //     setTotalRemainder(res?.total_remainder);
-    //     setTotalGiftRemainder(res?.total_gift_remainder);
-    //     setTotalTopup(res?.total_top_up);
-    //     setTotalWithdraw(res?.total_withdraw);
-    //   })
-    //   .catch((err) => {});
-    // getReportTransitionCollaborator(
-    //   0,
-    //   20,
-    //   moment().startOf("year").toISOString(),
-    //   moment().endOf("date").toISOString()
-    // )
-    //   .then((res) => {
-    //     setData(res?.data);
-    //     setTotal(res?.totalItem);
-    //   })
-    //   .catch((err) => {});
-
     getReportBalanceCollaborator(0, 20, startDate, endDate)
       .then((res) => {
         setTotalOpeningRemainder(res?.total_opening_remainder);
@@ -65,128 +45,11 @@ const FinanceCollaborator = () => {
       .catch((err) => {});
   }, []);
 
-  const columns = [
-    {
-      title: "Ngày tạo",
-      render: (data) => {
-        return (
-          <div className="div-date-finance-collaborator">
-            <a className="text-date-finance">
-              {moment(new Date(data?.date_created)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-date-finance">
-              {moment(new Date(data?.date_created)).format("HH:mm")}
-            </a>
-          </div>
-        );
-      },
-    },
-    {
-      title: "Ngày duyệt",
-      render: (data) => {
-        return (
-          <>
-            {data?.date_verify_created && (
-              <div className="div-date-finance-collaborator">
-                <a className="text-date-finance">
-                  {moment(new Date(data?.date_verify_created)).format(
-                    "DD/MM/YYYY"
-                  )}
-                </a>
-                <a className="text-date-finance">
-                  {moment(new Date(data?.date_verify_created)).format("HH:mm")}
-                </a>
-              </div>
-            )}
-          </>
-        );
-      },
-    },
-    {
-      title: "Tên CTV",
-      render: (data) => {
-        return (
-          <div className="div-date-finance-collaborator">
-            <a className="text-date-finance">
-              {data?.id_collaborator?.full_name}
-            </a>
-            <a className="text-date-finance">
-              {data?.id_collaborator?.id_view}
-            </a>
-          </div>
-        );
-      },
-    },
-    {
-      title: "Số tiền",
-      render: (data) => (
-        <a className="text-money-finance">{formatMoney(data?.money)}</a>
-      ),
-      align: "center",
-      sorter: (a, b) => a.money - b.money,
-    },
-    {
-      title: "Nội dung",
-      render: (data) => (
-        <a className="text-money-finance">{data?.transfer_note}</a>
-      ),
-    },
-    {
-      title: "Loại ví",
-      render: (data) => (
-        <a className="text-wallet-finance">
-          {data?.type_wallet === "wallet" ? "Ví CTV" : "Ví thưởng"}
-        </a>
-      ),
-      align: "center",
-    },
-    {
-      title: "Người duyệt",
-      render: (data) => (
-        <a className="text-wallet-finance">
-          {data?.id_admin_verify ? data?.id_admin_verify?.full_name : ""}
-        </a>
-      ),
-      align: "center",
-    },
-    {
-      title: "Nạp/Rút",
-      render: (data) => {
-        return (
-          <div>
-            {data?.type_transfer === "top_up" ? (
-              <a className="text-topup-finance">Nạp</a>
-            ) : (
-              <a className="text-withdraw-finance">Rút</a>
-            )}
-          </div>
-        );
-      },
-      align: "center",
-    },
-  ];
-
-  const onChange = (page) => {
-    setCurrentPage(page);
-    const dataLength = data?.length < 20 ? 20 : data.length;
-    const start = page * dataLength - dataLength;
-    getReportTransitionCollaborator(start, 20, startDate, endDate)
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  };
-
   const onChangeDay = () => {
-    // getReportTransitionCollaborator(0, 10, startDate, endDate)
-    //   .then((res) => {
-    //     setData(res?.data);
-    //     setTotal(res?.totalItem);
-    //   })
-    //   .catch((err) => {});
+    setIsLoading(true);
     getReportBalanceCollaborator(0, 20, startDate, endDate)
       .then((res) => {
+        setIsLoading(false);
         setTotalOpeningRemainder(res?.total_opening_remainder);
         setTotalEndingRemainder(res?.total_ending_remainder);
         setTotalOpeningGiftRemainder(res?.total_opening_gift_remainder);
@@ -194,74 +57,17 @@ const FinanceCollaborator = () => {
         setTotalOpeningPayPoint(res?.total_opening_pay_point);
         setTotalEndingPayPoint(res?.total_ending_pay_point);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        setIsLoading(false);
+      });
   };
 
   return (
     <>
-      {/* <div className="div-head-finance">
-        <div className="div-total-money">
-          <a className="title-total">Tổng ví CTV</a>
-          <a className="text-money">{formatMoney(totalRemainder)}</a>
-        </div>
-        <div className="div-total-money">
-          <a className="title-total">Tổng ví thưởng</a>
-          <a className="text-money">{formatMoney(totalGiftRemainder)}</a>
-        </div>
-        <div className="div-total-money">
-          <a className="title-total">Tổng nạp</a>
-          <a className="text-money">
-            {formatMoney(totalTopup)} <img src={topup} className="img-icon" />
-          </a>
-        </div>
-        <div className="div-total-money">
-          <a className="title-total">Tổng rút</a>
-          <a className="text-money">
-            {formatMoney(totalWithdraw)}{" "}
-            <img src={withdraw} className="img-icon" />
-          </a>
-        </div>
-      </div>
-
-      <div className="div-body-finance">
-        <a className="title-table">Bảng chi tiết lịch sử giao dịch</a>
-        <div className="div-date">
-          <CustomDatePicker
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
-            onClick={onChangeDay}
-            onCancel={() => {}}
-          />
-          {startDate && (
-            <a className="text-date">
-              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-              {moment(new Date(endDate)).format("DD/MM/YYYY")}
-            </a>
-          )}
-        </div>
-        <div className="mt-3">
-          <Table
-            columns={columns}
-            pagination={false}
-            dataSource={data}
-            scroll={width <= 490 ? { x: 1000 } : null}
-          />
-        </div>
-        <div className="mt-2 div-pagination p-2">
-          <a className="text-total">Tổng: {total}</a>
-          <div>
-            <Pagination
-              current={currentPage}
-              onChange={onChange}
-              total={total}
-              showSizeChanger={false}
-              pageSize={20}
-            />
-          </div>
-        </div>
-      </div> */}
-      <h5>Số dư ví</h5>
-
+      <h5>{`${i18n.t("wallet_balance", { lng: lang })}`}</h5>
       <div className="div-date">
         <CustomDatePicker
           setStartDate={setStartDate}
@@ -276,59 +82,74 @@ const FinanceCollaborator = () => {
           </a>
         )}
       </div>
-
-      <div>
-        <div className="div-opening-all">
-          <div className="div-item_opening">
-            <a className="text-opening">Đầu kì</a>
-            <div className="div_wallet_money">
-              <a className="text_wallet">Ví chính CTV</a>
-              <a className="text_money">{formatMoney(totalOpeningRemainder)}</a>
-            </div>
+      <div className="div-contai-wallet">
+        <a className="text-beginnig">{`${i18n.t("beginning", {
+          lng: lang,
+        })}`}</a>
+        <div className="div-wallet-row">
+          <div className="div-item-wallet">
+            <a className="text-name-wallet">{`${i18n.t(
+              "main_wallet_collaborator",
+              { lng: lang }
+            )}`}</a>
+            <a className="text-money-remainder">
+              {formatMoney(totalOpeningRemainder)}
+            </a>
           </div>
-          <div className="div-item_opening">
-            <a className="text-opening">Đầu kì</a>
-            <div className="div_wallet_money">
-              <a className="text_wallet">Ví thưởng CTV</a>
-              <a className="text_money">
-                {formatMoney(totalOpeningGiftRemainder)}
-              </a>
-            </div>
+          <div className="div-item-wallet">
+            <a className="text-name-wallet">{`${i18n.t(
+              "collaborator_gift_wallet",
+              { lng: lang }
+            )}`}</a>
+            <a className="text-money-gift">
+              {formatMoney(totalOpeningGiftRemainder)}
+            </a>
           </div>
-          <div className="div-item_opening">
-            <a className="text-opening">Đầu kì</a>
-            <div className="div_wallet_money">
-              <a className="text_wallet">Ví khách hàng</a>
-              <a className="text_money">{formatMoney(totalOpeningPayPoint)}</a>
-            </div>
-          </div>
-        </div>
-        <div className="div-opening-all">
-          <div className="div-item_opening">
-            <a className="text-opening">Cuối kì</a>
-            <div className="div_wallet_money">
-              <a className="text_wallet">Ví chính CTV</a>
-              <a className="text_money">{formatMoney(totalEndingRemainder)}</a>
-            </div>
-          </div>
-          <div className="div-item_opening">
-            <a className="text-opening">Cuối kì</a>
-            <div className="div_wallet_money">
-              <a className="text_wallet">Ví thưởng CTV</a>
-              <a className="text_money">
-                {formatMoney(totalEndingGiftRemainder)}
-              </a>
-            </div>
-          </div>
-          <div className="div-item_opening">
-            <a className="text-opening">Cuối kì</a>
-            <div className="div_wallet_money">
-              <a className="text_wallet">Ví khách hàng</a>
-              <a className="text_money">{formatMoney(totalEndingPayPoint)}</a>
-            </div>
+          <div className="div-item-wallet-last">
+            <a className="text-name-wallet">{`${i18n.t("customer_wallet", {
+              lng: lang,
+            })}`}</a>
+            <a className="text-money-paypoint">
+              {formatMoney(totalOpeningPayPoint)}
+            </a>
           </div>
         </div>
       </div>
+      <div className="div-contai-wallet mt-3">
+        <a className="text-beginnig">{`${i18n.t("end_of_term", {
+          lng: lang,
+        })}`}</a>
+        <div className="div-wallet-row">
+          <div className="div-item-wallet">
+            <a className="text-name-wallet">{`${i18n.t(
+              "main_wallet_collaborator",
+              { lng: lang }
+            )}`}</a>
+            <a className="text-money-remainder">
+              {formatMoney(totalEndingRemainder)}
+            </a>
+          </div>
+          <div className="div-item-wallet">
+            <a className="text-name-wallet">{`${i18n.t(
+              "collaborator_gift_wallet",
+              { lng: lang }
+            )}`}</a>
+            <a className="text-money-gift">
+              {formatMoney(totalEndingGiftRemainder)}
+            </a>
+          </div>
+          <div className="div-item-wallet-last">
+            <a className="text-name-wallet">{`${i18n.t("customer_wallet", {
+              lng: lang,
+            })}`}</a>
+            <a className="text-money-paypoint">
+              {formatMoney(totalEndingPayPoint)}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {isLoading && <LoadingPagination />}
     </>
   );
 };

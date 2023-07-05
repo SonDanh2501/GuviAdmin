@@ -446,7 +446,7 @@
     "number_shift": "Số ca làm",
     "report_collaborator_orders": "Báo cáo đơn hàng cộng tác viên",
     "report_detail_collaborator_orders": "Báo cáo chi tiết từng ca làm của cộng tác viên",
-    "report_number_customer": "Báo cáo sô lượng khách hàng",
+    "report_number_customer": "Báo cáo số lượng khách hàng",
     "detail_report_time": "Báo cáo chi tiết số lượt đăng ký theo khoảng thời gian",
     "referral_report": "Báo cáo lượt giới thiệu",
     "referral_report_day": "Báo cáo lượt giới thiệu trong ngày",
@@ -583,5 +583,11 @@
     "sunday": "Chủ Nhật",
     "detail_activity": "Chi tiết hoạt động",
     "work_with_order": "Hoạt động với đơn hàng",
-    "theory_input": "Đầu vào lý thuyết"
+    "theory_input": "Đầu vào lý thuyết",
+    "wallet_balance": "Số dư ví",
+    "beginning": "Đầu kỳ",
+    "main_wallet_collaborator": "Ví chính của CTV",
+    "collaborator_gift_wallet": "Ví quà thưởng CTV",
+    "customer_wallet": "Ví khách hàng",
+    "end_of_term": "Cuối kỳ"
 }
