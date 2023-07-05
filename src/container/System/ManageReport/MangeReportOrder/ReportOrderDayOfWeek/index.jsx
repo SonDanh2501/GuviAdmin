@@ -62,6 +62,30 @@ const ReportOrderDayOfWeek = () => {
     else if (value === 6) return `${i18n.t("saturday", { lng: lang })}`;
   };
 
+  const renderTooltipContent = (o) => {
+    const { payload, label } = o;
+    return (
+      <div className="div-tooltip-content-week">
+        <a>
+          {label === 0
+            ? `${i18n.t("sunday", { lng: lang })}`
+            : label === 1
+            ? `${i18n.t("monday", { lng: lang })}`
+            : label === 2
+            ? `${i18n.t("tuesday", { lng: lang })}`
+            : label === 3
+            ? `${i18n.t("wednesday", { lng: lang })}`
+            : label === 4
+            ? `${i18n.t("thusday", { lng: lang })}`
+            : label === 5
+            ? `${i18n.t("friday", { lng: lang })}`
+            : `${i18n.t("saturday", { lng: lang })}`}
+        </a>
+        <a>Số ca: {payload[0]?.payload?.total_item}</a>
+      </div>
+    );
+  };
+
   return (
     <div>
       <h5>{`${i18n.t("report_order_day_of_week", { lng: lang })}`}</h5>
@@ -114,7 +138,7 @@ const ReportOrderDayOfWeek = () => {
             />
 
             <YAxis />
-            <Tooltip />
+            <Tooltip content={renderTooltipContent} />
             <Legend />
             <Bar
               dataKey="total_item"

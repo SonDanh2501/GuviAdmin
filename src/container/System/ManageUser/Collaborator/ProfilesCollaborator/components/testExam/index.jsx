@@ -11,22 +11,23 @@ const TestExam = (props) => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [tab, setTab] = useState("all");
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    getListTestByCollabotatorApi(id, 0, 1)
+    getListTestByCollabotatorApi(id, 0, 1, tab)
       .then((res) => {
         setCurrentPage(1);
         setData(res.data);
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-  }, []);
+  }, [tab]);
 
   const onChange = (page) => {
     setCurrentPage(page);
     const start = page * data.length - data.length;
-    getListTestByCollabotatorApi(id, start, 1)
+    getListTestByCollabotatorApi(id, start, 1, tab)
       .then((res) => {
         setData(res.data);
         setTotal(res?.totalItem);
@@ -59,6 +60,25 @@ const TestExam = (props) => {
           })}`}
         </a>
       </div>
+      <div className="div-tab-exam">
+        {TAB_EXAM?.map((item, index) => {
+          return (
+            <div
+              key={index}
+              className={
+                item?.value === tab ? "item-tab-exam-select" : "item-tab-exam"
+              }
+              onClick={() => {
+                setTab(item?.value);
+              }}
+            >
+              <a className="text-tab">{`${i18n.t(item?.value, {
+                lng: lang,
+              })}`}</a>
+            </div>
+          );
+        })}
+      </div>
       <div className="div-exam-test">
         {data?.map((item, index) => {
           return (
@@ -68,6 +88,8 @@ const TestExam = (props) => {
                 <a className="title-score">
                   {item?.type_exam === "input"
                     ? "Bài kiểm tra đầu vào"
+                    : item?.type_exam === "theory_input"
+                    ? "Bài kiểm tra đầu vào lý thuyết"
                     : "Bài kiểm tra định kì"}
                 </a>
               </div>
@@ -76,8 +98,7 @@ const TestExam = (props) => {
                   return (
                     <div key={idAnswers} className="div-question-test">
                       <a className="title-question">
-                        Câu {iAnswers?.info_question?.question}:{" "}
-                        {iAnswers?.info_question?.title}
+                        Câu {idAnswers + 1}: {iAnswers?.info_question?.title}
                       </a>
                       {iAnswers?.info_question?.choose?.map(
                         (choose, idChoose) => {
@@ -130,3 +151,22 @@ const TestExam = (props) => {
 };
 
 export default TestExam;
+
+const TAB_EXAM = [
+  {
+    id: 1,
+    value: "all",
+  },
+  {
+    id: 2,
+    value: "input",
+  },
+  {
+    id: 3,
+    value: "periodic",
+  },
+  {
+    id: 4,
+    value: "theory_input",
+  },
+];

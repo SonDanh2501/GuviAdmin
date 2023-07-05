@@ -102,3 +102,34 @@
     }
   }
 }
+
+.div-tab-exam {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+
+  .item-tab-exam {
+    padding: 5px;
+    margin-right: 10px;
+    .text-tab {
+      font-family: "Roboto";
+      font-weight: 500;
+      font-size: 14px;
+      color: rgb(182, 182, 182);
+      text-decoration: none;
+    }
+  }
+  .item-tab-exam-select {
+    padding: 5px;
+    border-bottom: 1px solid blue;
+    margin-right: 10px;
+
+    .text-tab {
+      font-family: "Roboto";
+      font-weight: 500;
+      font-size: 14px;
+      color: black;
+      text-decoration: none;
+    }
+  }
+}

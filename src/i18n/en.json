@@ -583,5 +583,11 @@
     "sunday": "Sunday",
     "detail_activity": "Activity Details",
     "work_with_order": "Works with orders",
-    "theory_input": "Theory input"
+    "theory_input": "Theory input",
+    "wallet_balance": "Wallet balance",
+    "beginning": "Beginning",
+    "main_wallet_collaborator": "Collaborator main wallet",
+    "collaborator_gift_wallet": "Collaborator gift wallet",
+    "customer_wallet": "Customer wallet",
+    "end_of_term": "End of term"
 }
