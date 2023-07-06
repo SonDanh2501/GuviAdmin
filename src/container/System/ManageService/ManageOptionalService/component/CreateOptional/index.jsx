@@ -460,7 +460,10 @@ const CreateOptional = (props) => {
                       </div>
                     );
                   })}
-                  <Button onClick={addPriceHoliday} style={{ marginTop: 5 }}>
+                  <Button
+                    onClick={addPriceHoliday}
+                    style={{ marginTop: 5, width: "auto" }}
+                  >
                     Thêm
                   </Button>
                 </div>
@@ -544,7 +547,11 @@ const CreateOptional = (props) => {
                         />
 
                         <Button
-                          style={{ marginTop: 5, marginBottom: 5 }}
+                          style={{
+                            marginTop: 5,
+                            marginBottom: 5,
+                            width: "auto",
+                          }}
                           onClick={() => onDeletePriceRushDay(index)}
                         >
                           Xoá
@@ -552,7 +559,10 @@ const CreateOptional = (props) => {
                       </div>
                     );
                   })}
-                  <Button onClick={addRushDay} style={{ marginTop: 5 }}>
+                  <Button
+                    onClick={addRushDay}
+                    style={{ marginTop: 5, width: "auto" }}
+                  >
                     Thêm
                   </Button>
                 </div>
@@ -625,7 +635,12 @@ const CreateOptional = (props) => {
                       </div>
                     );
                   })}
-                  <Button onClick={addRushHour}>Thêm</Button>
+                  <Button
+                    onClick={addRushHour}
+                    style={{ width: "auto", marginTop: 5 }}
+                  >
+                    Thêm
+                  </Button>
                 </div>
               )}
             </div>
@@ -635,6 +650,7 @@ const CreateOptional = (props) => {
         <Button
           className="btn-edit-service-option"
           onClick={createOptionalService}
+          style={{ width: "auto" }}
         >
           Thêm mới
         </Button>

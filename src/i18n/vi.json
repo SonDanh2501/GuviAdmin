@@ -452,6 +452,7 @@
     "referral_report_day": "Báo cáo lượt giới thiệu trong ngày",
     "customer_report_region": "Báo cáo khách hàng theo khu vực",
     "total_customer_report_region": "Báo cáo tổng số khách hàng trong khu vực",
+    "report_customer_order_by_area": "Báo cáo khách hàng đặt đơn theo khu vực",
     "TIME": "THỜI GIAN",
     "NUMBER_REGISTER":"SỐ LƯỢT ĐĂNG KÍ",
     "NUMBER_CLICK_PAGE": "SỐ LƯỢT CICK TRANG",

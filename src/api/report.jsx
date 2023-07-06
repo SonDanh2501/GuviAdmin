@@ -47,6 +47,7 @@ export const filterReportCollaboratorDetails = (
   );
 };
 
+//customer
 export const getTotalReportCustomer = (start_date, end_date) => {
   return axiosClient.get(
     `/admin/customer_manager/total_customer?start_date=${start_date}&end_date=${end_date}`
@@ -98,6 +99,14 @@ export const getTopCustomerInvite = (start_date, end_date) => {
     `/admin/report_mananger/top_customer_inviter?lang=vi&start_date=${start_date}&end_date=${end_date}`
   );
 };
+
+export const getReportCustomerOrderByAreaApi = () => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_customer_by_order_from_area?lang=vi`
+  );
+};
+
+//order
 
 export const getReportOrder = (start, length, start_date, end_date, type) => {
   return axiosClient.get(

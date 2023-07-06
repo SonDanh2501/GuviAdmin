@@ -301,7 +301,7 @@ const EditOptional = (props) => {
     <>
       <a onClick={showDrawer}>Chỉnh sửa</a>
       <Drawer
-        title="Tạo mới optional service"
+        title="Chỉnh sửa optional service"
         placement="right"
         onClose={onClose}
         open={open}
@@ -476,7 +476,10 @@ const EditOptional = (props) => {
                       </div>
                     );
                   })}
-                  <Button onClick={addPriceHoliday} style={{ marginTop: 5 }}>
+                  <Button
+                    onClick={addPriceHoliday}
+                    style={{ marginTop: 5, width: "auto" }}
+                  >
                     Thêm
                   </Button>
                 </div>
@@ -560,7 +563,11 @@ const EditOptional = (props) => {
                         />
 
                         <Button
-                          style={{ marginTop: 5, marginBottom: 5 }}
+                          style={{
+                            marginTop: 5,
+                            marginBottom: 5,
+                            width: "auto",
+                          }}
                           onClick={() => onDeletePriceRushDay(index)}
                         >
                           Xoá
@@ -568,7 +575,10 @@ const EditOptional = (props) => {
                       </div>
                     );
                   })}
-                  <Button onClick={addRushDay} style={{ marginTop: 5 }}>
+                  <Button
+                    onClick={addRushDay}
+                    style={{ marginTop: 5, width: "auto" }}
+                  >
                     Thêm
                   </Button>
                 </div>
@@ -641,7 +651,11 @@ const EditOptional = (props) => {
                         />
 
                         <Button
-                          style={{ marginTop: 5, marginBottom: 5 }}
+                          style={{
+                            marginTop: 5,
+                            marginBottom: 5,
+                            width: "auto",
+                          }}
                           onClick={() => onDeletePriceRushHour(index)}
                         >
                           Xoá
@@ -649,7 +663,9 @@ const EditOptional = (props) => {
                       </div>
                     );
                   })}
-                  <Button onClick={addRushHour}>Thêm</Button>
+                  <Button style={{ width: "auto" }} onClick={addRushHour}>
+                    Thêm
+                  </Button>
                 </div>
               )}
             </div>
@@ -659,6 +675,7 @@ const EditOptional = (props) => {
         <Button
           className="btn-edit-service-option"
           onClick={editOptionalService}
+          style={{ width: "auto" }}
         >
           Chỉnh sửa
         </Button>
