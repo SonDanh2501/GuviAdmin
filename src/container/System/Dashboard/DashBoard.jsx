@@ -783,7 +783,14 @@ export default function Home() {
           </div>
         )}
         <div>
-          <Row>
+          <Row
+            gutter={{
+              xs: 8,
+              sm: 16,
+              md: 24,
+              lg: 32,
+            }}
+          >
             <Col span="15">
               {checkElement?.includes("report_detail_service_dashboard") && (
                 <div className="div-chart-pie-total-dash">
@@ -865,7 +872,7 @@ export default function Home() {
                 </div>
               )}
             </Col>
-            <Col className="ml-5" span="8">
+            <Col span="8">
               {checkElement?.includes("history_activity_dashboard") && (
                 <div className="col-activity-dashboard">
                   <p className="label-activity">{`${i18n.t("history_acivity", {
