@@ -1,18 +1,10 @@
 import { CameraOutlined } from "@material-ui/icons";
-import { FloatButton, Image, Tabs } from "antd";
+import { Col, FloatButton, Image, Row, Tabs } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Row,
-  Input,
-} from "reactstrap";
+import { Card, CardBody, CardHeader, Container } from "reactstrap";
 import { getCollaboratorsById } from "../../../../../api/collaborator";
 import { getDistrictApi, postFile } from "../../../../../api/file";
 import user from "../../../../../assets/images/user.png";
@@ -31,6 +23,7 @@ import TestExam from "./components/testExam";
 import InviteCollaborator from "./components/invite";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
+import Overview from "./components/overview";
 // core components
 
 const ProfileCollaborator = () => {
@@ -95,129 +88,119 @@ const ProfileCollaborator = () => {
 
   return (
     <>
-      {/* Page content */}
-      <Container className="mt-3" fluid>
-        <Row>
-          <Col className="order-xl-2 mb-5 mb-xl-0" xl="3">
-            <Card className="card-profile shadow">
-              <CardHeader className="headerCard">
-                <Image
-                  style={{
-                    with: 200,
-                    height: 200,
-                    backgroundColor: "transparent",
-                  }}
-                  src={img ? img : data?.avatar ? data?.avatar : user}
-                  className="rounded-circle"
+      <Row gutter={16}>
+        <Col span={18}>
+          <div className="div-tab-profile-collaborator">
+            <Tabs defaultActiveKey="1">
+              <Tabs.TabPane tab="Tổng quan" key="1">
+                <Overview />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab={`${i18n.t("info", { lng: lang })}`} key="2">
+                <Information
+                  data={data}
+                  image={img}
+                  idCTV={id}
+                  setData={setData}
                 />
-                <label for="choose-image">
-                  <CameraOutlined />{" "}
-                  {`${i18n.t("choose_image", { lng: lang })}`}
-                </label>
-                <input
-                  name="image"
-                  type="file"
-                  placeholder=""
-                  accept={".jpg,.png,.jpeg"}
-                  id="choose-image"
-                  onChange={onChangeThumbnail}
-                />
-              </CardHeader>
-              <CardBody>
-                <div className="text-body">
-                  {data?.password_default && (
-                    <a>
-                      {`${i18n.t("default_password", { lng: lang })}`}:{" "}
-                      {data?.password_default}
-                    </a>
-                  )}
-                  {data?.invite_code && (
-                    <a>
-                      {`${i18n.t("code_invite", { lng: lang })}`}:{" "}
-                      {data?.invite_code}
-                    </a>
-                  )}
-                  <a className="text-name">{data?.full_name}</a>
+              </Tabs.TabPane>
+              <Tabs.TabPane
+                tab={`${i18n.t("document", { lng: lang })}`}
+                key="3"
+              >
+                <Document id={data?._id} />
+              </Tabs.TabPane>
+              <Tabs.TabPane
+                tab={`${i18n.t("activity", { lng: lang })}`}
+                key="4"
+              >
+                <Activity id={id} />
+              </Tabs.TabPane>
+              <Tabs.TabPane
+                tab={`${i18n.t("account_history", { lng: lang })}`}
+                key="5"
+              >
+                <History id={id} />
+              </Tabs.TabPane>
+              <Tabs.TabPane
+                tab={`${i18n.t("topup_withdraw", { lng: lang })}`}
+                key="6"
+              >
+                <WithdrawTopup id={id} />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab={`${i18n.t("review", { lng: lang })}`} key="7">
+                <Review id={id} totalReview={data?.star} />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab={`${i18n.t("test", { lng: lang })}`} key="8">
+                <TestExam id={data?._id} />
+              </Tabs.TabPane>
+              <Tabs.TabPane
+                tab={`${i18n.t("referrals", { lng: lang })}`}
+                key="9"
+              >
+                <InviteCollaborator id={data?._id} />
+              </Tabs.TabPane>
+              <Tabs.TabPane
+                tab={`${i18n.t("bank_account", { lng: lang })}`}
+                key="10"
+              >
+                <BankAccount id={data?._id} />
+              </Tabs.TabPane>
+            </Tabs>
+          </div>
+        </Col>
+        <Col span={6}>
+          <div className="div-card-profile">
+            <div className="headerCard">
+              <Image
+                style={{
+                  width: 100,
+                  height: 100,
+                  backgroundColor: "transparent",
+                  borderRadius: 10,
+                }}
+                src={img ? img : data?.avatar ? data?.avatar : user}
+                // className="rounded-circle"
+              />
+              <label for="choose-image">
+                <CameraOutlined /> {`${i18n.t("choose_image", { lng: lang })}`}
+              </label>
+              <input
+                name="image"
+                type="file"
+                placeholder=""
+                accept={".jpg,.png,.jpeg"}
+                id="choose-image"
+                onChange={onChangeThumbnail}
+              />
+            </div>
+            <div>
+              <div className="text-body">
+                {data?.password_default && (
                   <a>
-                    {!data?.birthday
-                      ? ""
-                      : `${i18n.t("age", { lng: lang })}` +
-                        ": " +
-                        moment().diff(data?.birthday, "years")}
+                    {`${i18n.t("default_password", { lng: lang })}`}:{" "}
+                    {data?.password_default}
                   </a>
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col className="order-xl-1" xl="9">
-            <Card className="bg-white shadow">
-              <CardBody>
-                <Tabs defaultActiveKey="1">
-                  <Tabs.TabPane
-                    tab={`${i18n.t("info", { lng: lang })}`}
-                    key="1"
-                  >
-                    <Information
-                      data={data}
-                      image={img}
-                      idCTV={id}
-                      setData={setData}
-                    />
-                  </Tabs.TabPane>
-                  <Tabs.TabPane
-                    tab={`${i18n.t("document", { lng: lang })}`}
-                    key="2"
-                  >
-                    <Document id={data?._id} />
-                  </Tabs.TabPane>
-                  <Tabs.TabPane
-                    tab={`${i18n.t("activity", { lng: lang })}`}
-                    key="3"
-                  >
-                    <Activity id={id} />
-                  </Tabs.TabPane>
-                  <Tabs.TabPane
-                    tab={`${i18n.t("account_history", { lng: lang })}`}
-                    key="4"
-                  >
-                    <History id={id} />
-                  </Tabs.TabPane>
-                  <Tabs.TabPane
-                    tab={`${i18n.t("topup_withdraw", { lng: lang })}`}
-                    key="5"
-                  >
-                    <WithdrawTopup id={id} />
-                  </Tabs.TabPane>
-                  <Tabs.TabPane
-                    tab={`${i18n.t("review", { lng: lang })}`}
-                    key="6"
-                  >
-                    <Review id={id} totalReview={data?.star} />
-                  </Tabs.TabPane>
-                  <Tabs.TabPane
-                    tab={`${i18n.t("test", { lng: lang })}`}
-                    key="7"
-                  >
-                    <TestExam id={data?._id} />
-                  </Tabs.TabPane>
-                  <Tabs.TabPane
-                    tab={`${i18n.t("referrals", { lng: lang })}`}
-                    key="8"
-                  >
-                    <InviteCollaborator id={data?._id} />
-                  </Tabs.TabPane>
-                  <Tabs.TabPane
-                    tab={`${i18n.t("bank_account", { lng: lang })}`}
-                    key="9"
-                  >
-                    <BankAccount id={data?._id} />
-                  </Tabs.TabPane>
-                </Tabs>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+                )}
+                {data?.invite_code && (
+                  <a>
+                    {`${i18n.t("code_invite", { lng: lang })}`}:{" "}
+                    {data?.invite_code}
+                  </a>
+                )}
+                <a className="text-name">{data?.full_name}</a>
+                <a>
+                  {!data?.birthday
+                    ? ""
+                    : `${i18n.t("age", { lng: lang })}` +
+                      ": " +
+                      moment().diff(data?.birthday, "years")}
+                </a>
+              </div>
+            </div>
+          </div>
+        </Col>
+      </Row>
+
       <FloatButton.BackTop />
     </>
   );

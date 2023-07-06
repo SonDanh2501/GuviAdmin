@@ -749,6 +749,7 @@ export default function Home() {
             )}
           </div>
         </div>
+
         {checkElement?.includes("total_finance_job_dashboard") && (
           <div>
             <p className="label-service">{`${i18n.t("nearest_service", {
