@@ -130,7 +130,7 @@ const GroupCustomerManage = () => {
       title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => (
         <a className="text-date-group">
-          {moment(data?.date_create).format("DD/MM/YYYY hh:mm")}
+          {moment(data?.date_create).format("DD/MM/YYYY HH:mm")}
         </a>
       ),
     },

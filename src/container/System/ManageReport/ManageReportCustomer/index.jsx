@@ -68,6 +68,23 @@ const ManageReportCustomer = () => {
           </a>
         </div>
       )}
+
+      <div className="div-item-report">
+        <a className="text-title">{`${i18n.t("report_customer_order_by_area", {
+          lng: lang,
+        })}`}</a>
+        <a className="text-details">
+          {`${i18n.t("report_customer_order_by_area", { lng: lang })}`}
+        </a>
+        <a
+          className="text-see-report"
+          onClick={() =>
+            navigate("/report/manage-report/report-customer-order-by-area")
+          }
+        >
+          {`${i18n.t("see_report", { lng: lang })}`}
+        </a>
+      </div>
     </div>
   );
 };

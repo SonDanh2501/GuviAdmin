@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../../i18n";
 import { Pagination } from "antd";
+import moment from "moment";
 
 const TestExam = (props) => {
   const { id } = props;
@@ -82,16 +83,29 @@ const TestExam = (props) => {
       <div className="div-exam-test">
         {data?.map((item, index) => {
           return (
-            <div key={index}>
+            <div key={index} className="div-test">
               <div className="div-head-test">
-                <a className="title-score">Đúng: {item?.score} câu</a>
-                <a className="title-score">
-                  {item?.type_exam === "input"
-                    ? "Bài kiểm tra đầu vào"
-                    : item?.type_exam === "theory_input"
-                    ? "Bài kiểm tra đầu vào lý thuyết"
-                    : "Bài kiểm tra định kì"}
-                </a>
+                <div className="div-score">
+                  <a className="title-score">Đúng: {item?.score} câu</a>
+
+                  <a className="title-score">
+                    {item?.type_exam === "input"
+                      ? "Bài kiểm tra đầu vào"
+                      : item?.type_exam === "theory_input"
+                      ? "Bài kiểm tra đầu vào lý thuyết"
+                      : "Bài kiểm tra định kì"}
+                  </a>
+                </div>
+                <div className="div-time-test">
+                  <a className="title-time">
+                    Thời gian bắt đầu:{" "}
+                    {moment(item?.time_start).format("DD/MM/YYYY - HH:mm")}
+                  </a>
+                  <a className="title-time">
+                    Thời gian kết thúc:{" "}
+                    {moment(item?.time_end).format("DD/MM/YYYY - HH:mm")}
+                  </a>
+                </div>
               </div>
               <div className="mt-3">
                 {item?.answers?.map((iAnswers, idAnswers) => {
@@ -163,10 +177,10 @@ const TAB_EXAM = [
   },
   {
     id: 3,
-    value: "periodic",
+    value: "theory_input",
   },
   {
     id: 4,
-    value: "theory_input",
+    value: "periodic",
   },
 ];

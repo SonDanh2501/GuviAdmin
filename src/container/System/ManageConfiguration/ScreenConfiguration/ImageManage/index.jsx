@@ -159,7 +159,7 @@ const ImageManage = () => {
             <a>{itemEdit?.title}</a>
             <Image src={itemEdit?.link_url} className="image_detail" />
             <a className="title-image">Ngày tạo</a>
-            <a>{moment(itemEdit?.date_create).format("DD/MM/YYYY - hh:MM")}</a>
+            <a>{moment(itemEdit?.date_create).format("DD/MM/YYYY - HH:mm")}</a>
           </div>
         </Drawer>
       </div>

@@ -199,7 +199,7 @@ const MoreActivity = () => {
                   </a>
                   <a className="text-time">
                     {moment(new Date(item?.date_create)).format(
-                      "DD/MM/YYYY HH:MM"
+                      "DD/MM/YYYY HH:mm"
                     )}
                   </a>
                 </div>

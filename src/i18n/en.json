@@ -452,6 +452,7 @@
     "referral_report_day": "Referral report of the day",
     "customer_report_region": "Customer reports by region",
     "total_customer_report_region": "Report the total number of customers in the area",
+    "report_customer_order_by_area": "Report customers ordering by region",
     "TIME": "TIME",
     "NUMBER_REGISTER":"NUMBER OF REGISTRATIONS",
     "NUMBER_CLICK_PAGE": "NUMBER OF CLICKING PAGES",

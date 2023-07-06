@@ -1025,7 +1025,14 @@ export default function Home() {
           </Row>
         </div>
         <div>
-          <Row>
+          <Row
+            gutter={{
+              xs: 8,
+              sm: 16,
+              md: 24,
+              lg: 32,
+            }}
+          >
             <Col span="15">
               {checkElement?.includes("total_customer_monthly_dashboard") && (
                 <div className="div-chart-user">
@@ -1053,7 +1060,7 @@ export default function Home() {
                       <a className="text-number-total">{totalYearUser}</a>
                     </div>
                   </div>
-                  <div className="mt-3">
+                  <div className="mt-5">
                     <ResponsiveContainer
                       width={"100%"}
                       height={350}
@@ -1067,7 +1074,7 @@ export default function Home() {
                           moment().utc().month() + 1
                         )}
                         margin={{
-                          top: 30,
+                          top: 10,
                           right: 30,
                           left: 20,
                           bottom: 5,
@@ -1092,7 +1099,7 @@ export default function Home() {
                         <Bar
                           dataKey="totalOld"
                           fill="#82ca9d"
-                          minPointSize={20}
+                          minPointSize={10}
                           barSize={20}
                           name={`${i18n.t("customer_old", {
                             lng: lang,
@@ -1103,16 +1110,17 @@ export default function Home() {
                         <Bar
                           dataKey="totalNew"
                           fill="#4376CC"
-                          minPointSize={20}
+                          minPointSize={10}
                           barSize={20}
                           name={`${i18n.t("customer_new", {
                             lng: lang,
                           })}`}
                           stackId="a"
                           label={{
-                            position: "top",
-                            fill: "black",
-                            fontSize: 14,
+                            position: "insideTop",
+                            fill: "white",
+                            fontSize: 12,
+                            fontFamily: "Roboto",
                           }}
                         />
                         <Line
@@ -1129,7 +1137,7 @@ export default function Home() {
                 </div>
               )}
             </Col>
-            <Col className="ml-5" span="8">
+            <Col span="8">
               {checkElement?.includes("report_cancel_order_dashboard") && (
                 <div className="div-chart-pie-total-cancel-dash">
                   <a className="title-chart">
