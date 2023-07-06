@@ -520,32 +520,6 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                 <Image src={thumbnailActive} className="img-thumbnail" />
               )}
             </div>
-          </Col>
-          <Col span={7} className="ml-2">
-            <div>
-              <Checkbox
-                checked={isPlatformFee}
-                onChange={(e) => setIsPlatformFee(e.target.checked)}
-              >
-                Phí dịch vụ
-              </Checkbox>
-              {isPlatformFee && (
-                <Input
-                  placeholder="Phần trăm"
-                  style={{ marginTop: 1 }}
-                  value={platformFee}
-                  onChange={(e) => setPlatformFee(e.target.value)}
-                />
-              )}
-            </div>
-            <div className="mt-2">
-              <Checkbox
-                checked={showInApp}
-                onChange={(e) => setShowInApp(e.target.checked)}
-              >
-                Hiện thị trên ứng dụng
-              </Checkbox>
-            </div>
             <div className="mt-2">
               <Checkbox
                 checked={isPriceArea}
@@ -605,19 +579,49 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                         />
                         <Button
                           onClick={() => deletePriceArea(index)}
-                          style={{ marginTop: 5 }}
+                          style={{ marginTop: 5, width: "auto" }}
                         >
                           Xoá
                         </Button>
                       </div>
                     );
                   })}
-                  <Button onClick={addPriceArea} style={{ marginTop: 5 }}>
+                  <Button
+                    onClick={addPriceArea}
+                    style={{ marginTop: 5, width: "auto" }}
+                  >
                     Thêm điều kiện
                   </Button>
                 </div>
               )}
             </div>
+          </Col>
+          <Col span={7} className="ml-2">
+            <div>
+              <Checkbox
+                checked={isPlatformFee}
+                onChange={(e) => setIsPlatformFee(e.target.checked)}
+              >
+                Phí dịch vụ
+              </Checkbox>
+              {isPlatformFee && (
+                <Input
+                  placeholder="Phần trăm"
+                  style={{ marginTop: 1 }}
+                  value={platformFee}
+                  onChange={(e) => setPlatformFee(e.target.value)}
+                />
+              )}
+            </div>
+            <div className="mt-2">
+              <Checkbox
+                checked={showInApp}
+                onChange={(e) => setShowInApp(e.target.checked)}
+              >
+                Hiện thị trên ứng dụng
+              </Checkbox>
+            </div>
+
             <div className="mt-2">
               <Checkbox
                 checked={isPriceHoliday}
@@ -690,7 +694,11 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                         />
 
                         <Button
-                          style={{ marginTop: 5, marginBottom: 5 }}
+                          style={{
+                            marginTop: 5,
+                            marginBottom: 5,
+                            width: "auto",
+                          }}
                           onClick={() => onDeletePriceHoliday(index)}
                         >
                           Xoá
@@ -698,7 +706,9 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                       </div>
                     );
                   })}
-                  <Button onClick={addPriceHoliday}>Thêm</Button>
+                  <Button onClick={addPriceHoliday} style={{ width: "auto" }}>
+                    Thêm
+                  </Button>
                 </div>
               )}
             </div>
@@ -780,7 +790,11 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                         />
 
                         <Button
-                          style={{ marginTop: 5, marginBottom: 5 }}
+                          style={{
+                            marginTop: 5,
+                            marginBottom: 5,
+                            width: "auto",
+                          }}
                           onClick={() => onDeletePriceRushDay(index)}
                         >
                           Xoá
@@ -788,7 +802,9 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                       </div>
                     );
                   })}
-                  <Button onClick={addRushDay}>Thêm</Button>
+                  <Button onClick={addRushDay} style={{ width: "auto" }}>
+                    Thêm
+                  </Button>
                 </div>
               )}
             </div>
@@ -852,7 +868,11 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                         />
 
                         <Button
-                          style={{ marginTop: 5, marginBottom: 5 }}
+                          style={{
+                            marginTop: 5,
+                            marginBottom: 5,
+                            width: "auto",
+                          }}
                           onClick={() => onDeletePriceRushHour(index)}
                         >
                           Xoá
@@ -860,7 +880,9 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                       </div>
                     );
                   })}
-                  <Button onClick={addRushHour}>Thêm</Button>
+                  <Button onClick={addRushHour} style={{ width: "auto" }}>
+                    Thêm
+                  </Button>
                 </div>
               )}
             </div>

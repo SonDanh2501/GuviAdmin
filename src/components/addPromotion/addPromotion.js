@@ -116,7 +116,7 @@ const AddPromotion = (props) => {
   const optionsCustomer = [];
   const serviceOption = [];
   const dispatch = useDispatch();
-  const fomart = "HH:mm";
+  const fomart = "hh:MM";
   const dateFormat = "DD-MM-YYYY";
   const service = useSelector(getService);
 
