@@ -98,6 +98,7 @@
       .div-detail-item {
         display: flex;
         flex-direction: column;
+        width: 70%;
 
         .text-item {
           font-family: "Roboto";
@@ -107,14 +108,18 @@
           text-decoration: none;
         }
       }
-
-      .title-status {
-        font-family: "Roboto";
-        font-weight: 400;
-        font-size: 14px;
-        color: #000000;
-        text-decoration: none;
-        margin-right: 5px;
+      .item-detail-right {
+        display: flex;
+        flex-direction: column;
+        width: 20%;
+        .title-status {
+          font-family: "Roboto";
+          font-weight: 400;
+          font-size: 14px;
+          color: #000000;
+          text-decoration: none;
+          margin-right: 5px;
+        }
       }
     }
   }

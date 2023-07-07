@@ -10,6 +10,7 @@ import {
   getLanguageState,
 } from "../../../redux/selectors/auth";
 import i18n from "../../../i18n";
+import PromotionDrag from "../ManagePromotion/PromotionDrag";
 
 const ManageSetting = () => {
   const checkElement = useSelector(getElementState);
@@ -43,6 +44,9 @@ const ManageSetting = () => {
             <NewsManage />
           </Tabs.TabPane>
         )}
+        {/* <Tabs.TabPane tab={"Kéo thả test"} key="4">
+          <PromotionDrag />
+        </Tabs.TabPane> */}
       </Tabs>
     </div>
   );

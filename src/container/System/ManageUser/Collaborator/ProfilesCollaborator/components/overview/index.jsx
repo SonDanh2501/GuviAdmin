@@ -11,9 +11,11 @@ import moment from "moment";
 
 const Overview = ({ id }) => {
   const [total, setTotal] = useState({
-    total_favourite: 10,
-    total_order: 47,
-    total_hour: 1000,
+    total_favourite: 0,
+    total_order: 0,
+    total_hour: 0,
+    remainder: 0,
+    gift_remainder: 0,
   });
   const [data, setData] = useState([]);
   const lang = useSelector(getLanguageState);
@@ -21,11 +23,13 @@ const Overview = ({ id }) => {
   useEffect(() => {
     getOverviewCollaborator(id)
       .then((res) => {
-        setData(res?.arr_order);
+        setData(res?.arr_order?.reverse());
         setTotal({
           total_favourite: res?.total_favourite.length,
           total_hour: res?.total_hour,
           total_order: res?.total_order,
+          remainder: res?.remainder,
+          gift_remainder: res?.gift_remainder,
         });
       })
       .catch((err) => {});
@@ -35,8 +39,12 @@ const Overview = ({ id }) => {
     <>
       <div className="div-overview">
         <div className="div-body-overview">
-          <a className="text-wallet">Ví Chính: {formatMoney(200000)}</a>
-          <a className="text-wallet">Ví Thưởng: {formatMoney(100000)}</a>
+          <a className="text-wallet">
+            Ví Chính: {formatMoney(total?.remainder)}
+          </a>
+          <a className="text-wallet">
+            Ví Thưởng: {formatMoney(total?.gift_remainder)}
+          </a>
           <Row gutter={[16, 16]} style={{ marginTop: 20 }}>
             <Col span={8}>
               <div className="div-item-total">
@@ -93,33 +101,35 @@ const Overview = ({ id }) => {
                     <a className="text-item">
                       Khách hàng: {item?.name_customer}
                     </a>
+                    <a className="text-item">Địa chỉ: {item?.address}</a>
                   </div>
-                  <div>
-                    <a className="title-status">Trạng thái: </a>
-                    <a
-                      className={
-                        item?.status === "pending"
-                          ? "text-pen-order"
+                  <div className="item-detail-right">
+                    <div>
+                      <a className="title-status">Trạng thái: </a>
+                      <a
+                        className={
+                          item?.status === "pending"
+                            ? "text-pen-order"
+                            : item?.status === "confirm"
+                            ? "text-confirm-order"
+                            : item?.status === "doing"
+                            ? "text-doing-order"
+                            : item?.status === "done"
+                            ? "text-done-order"
+                            : "text-cancel-order"
+                        }
+                      >
+                        {item?.status === "pending"
+                          ? `${i18n.t("pending", { lng: lang })}`
                           : item?.status === "confirm"
-                          ? "text-confirm-order"
+                          ? `${i18n.t("confirm", { lng: lang })}`
                           : item?.status === "doing"
-                          ? "text-doing-order"
+                          ? `${i18n.t("doing", { lng: lang })}`
                           : item?.status === "done"
-                          ? "text-done-order"
-                          : "text-cancel-order"
-                      }
-                    >
-                      {" "}
-                      {item?.status === "pending"
-                        ? `${i18n.t("pending", { lng: lang })}`
-                        : item?.status === "confirm"
-                        ? `${i18n.t("confirm", { lng: lang })}`
-                        : item?.status === "doing"
-                        ? `${i18n.t("doing", { lng: lang })}`
-                        : item?.status === "done"
-                        ? `${i18n.t("complete", { lng: lang })}`
-                        : `${i18n.t("cancel", { lng: lang })}`}
-                    </a>
+                          ? `${i18n.t("complete", { lng: lang })}`
+                          : `${i18n.t("cancel", { lng: lang })}`}
+                      </a>
+                    </div>
                   </div>
                 </div>
               );

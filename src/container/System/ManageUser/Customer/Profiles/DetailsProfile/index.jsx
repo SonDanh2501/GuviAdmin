@@ -287,97 +287,103 @@ const DetailsProfile = ({ id }) => {
         </div>
       </div>
 
-      {dataInvite.length > 0 && (
-        <div className="div-container-invite-code">
-          <a className="title-invite">{`${i18n.t("recent_referrals", {
-            lng: lang,
-          })}`}</a>
-          <div className="div-list-invite">
-            {dataInvite.map((item, index) => {
-              return (
-                <div key={index} className="div-item-invite">
-                  <Image src={user} className="img-customer-invite" />
-                  <div className="div-invite-progress">
-                    <div className="div-row-info">
-                      <div>
-                        <div className="div-name-invite">
-                          <a className="title-name">{`${i18n.t("name", {
-                            lng: lang,
-                          })}`}</a>
-                          <a className="title-colon">:</a>
-                          <a className="text-name">{item?.full_name}</a>
+      <div className="div-container-invite-code">
+        <a className="title-invite">{`${i18n.t("recent_referrals", {
+          lng: lang,
+        })}`}</a>
+        {dataInvite.length > 0 ? (
+          <>
+            <div className="div-list-invite">
+              {dataInvite.map((item, index) => {
+                return (
+                  <div key={index} className="div-item-invite">
+                    <Image src={user} className="img-customer-invite" />
+                    <div className="div-invite-progress">
+                      <div className="div-row-info">
+                        <div>
+                          <div className="div-name-invite">
+                            <a className="title-name">{`${i18n.t("name", {
+                              lng: lang,
+                            })}`}</a>
+                            <a className="title-colon">:</a>
+                            <a className="text-name">{item?.full_name}</a>
+                          </div>
+                          <div className="div-name-invite">
+                            <a className="title-name">{`${i18n.t("sdt", {
+                              lng: lang,
+                            })}`}</a>
+                            <a className="title-colon">:</a>
+                            <a className="text-name">{item?.phone}</a>
+                          </div>
+                          <div className="div-name-invite">
+                            <a className="title-name">{`${i18n.t("code", {
+                              lng: lang,
+                            })}`}</a>
+                            <a className="title-colon">:</a>
+                            <a className="text-name">{item?.id_view}</a>
+                          </div>
                         </div>
-                        <div className="div-name-invite">
-                          <a className="title-name">{`${i18n.t("sdt", {
-                            lng: lang,
-                          })}`}</a>
-                          <a className="title-colon">:</a>
-                          <a className="text-name">{item?.phone}</a>
-                        </div>
-                        <div className="div-name-invite">
-                          <a className="title-name">{`${i18n.t("code", {
-                            lng: lang,
-                          })}`}</a>
-                          <a className="title-colon">:</a>
-                          <a className="text-name">{item?.id_view}</a>
-                        </div>
+                        <a className="text-date-create">
+                          {`${i18n.t("date_create", { lng: lang })}`}:{" "}
+                          {moment(item?.date_create).format("DD-MM-YYYY")}
+                        </a>
                       </div>
-                      <a className="text-date-create">
-                        {`${i18n.t("date_create", { lng: lang })}`}:{" "}
-                        {moment(item?.date_create).format("DD-MM-YYYY")}
+
+                      <Progress
+                        percent={
+                          item?.total_order === 0
+                            ? 33
+                            : item?.total_order !== 0 &&
+                              item?.total_done_order === 0
+                            ? 66
+                            : 100
+                        }
+                        strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
+                      />
+                      <a
+                        className={
+                          item?.total_order === 0
+                            ? "text-step"
+                            : item?.total_order !== 0 &&
+                              item?.total_done_order === 0
+                            ? "text-step"
+                            : "text-step-done"
+                        }
+                      >
+                        {item?.total_order === 0
+                          ? `${i18n.t("step_three", { lng: lang })}`
+                          : item?.total_order !== 0 &&
+                            item?.total_done_order === 0
+                          ? `${i18n.t("last_step", { lng: lang })}`
+                          : `${i18n.t("successful_introduction", {
+                              lng: lang,
+                            })}`}
                       </a>
                     </div>
-
-                    <Progress
-                      percent={
-                        item?.total_order === 0
-                          ? 33
-                          : item?.total_order !== 0 &&
-                            item?.total_done_order === 0
-                          ? 66
-                          : 100
-                      }
-                      strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
-                    />
-                    <a
-                      className={
-                        item?.total_order === 0
-                          ? "text-step"
-                          : item?.total_order !== 0 &&
-                            item?.total_done_order === 0
-                          ? "text-step"
-                          : "text-step-done"
-                      }
-                    >
-                      {item?.total_order === 0
-                        ? `${i18n.t("step_three", { lng: lang })}`
-                        : item?.total_order !== 0 &&
-                          item?.total_done_order === 0
-                        ? `${i18n.t("last_step", { lng: lang })}`
-                        : `${i18n.t("successful_introduction", { lng: lang })}`}
-                    </a>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="mt-1 div-pagination p-2">
-            <a>
-              {`${i18n.t("total", { lng: lang })}`}: {totalInvite}
-            </a>
-            <div>
-              <Pagination
-                current={currentPage}
-                onChange={onChange}
-                total={totalInvite}
-                showSizeChanger={false}
-                pageSize={20}
-              />
+                );
+              })}
             </div>
-          </div>
-        </div>
-      )}
+
+            <div className="mt-1 div-pagination p-2">
+              <a>
+                {`${i18n.t("total", { lng: lang })}`}: {totalInvite}
+              </a>
+              <div>
+                <Pagination
+                  current={currentPage}
+                  onChange={onChange}
+                  total={totalInvite}
+                  showSizeChanger={false}
+                  pageSize={20}
+                />
+              </div>
+            </div>
+          </>
+        ) : (
+          <a className="text-no-invite">Chưa có người giới thiệu</a>
+        )}
+      </div>
 
       <FloatButton.BackTop />
       {isLoading && <LoadingPagination />}
