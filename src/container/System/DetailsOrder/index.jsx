@@ -963,7 +963,7 @@ const DetailsOrder = () => {
                               <a className="text-colon">:</a>
                             </div>
                             <a className="text-moeny-details">
-                              {dataGroup?.type === "schedule"
+                              {/* {dataGroup?.type === "schedule"
                                 ? formatMoney(dataGroup?.initial_fee)
                                 : dataGroup?.type === "loop" &&
                                   !dataGroup?.is_auto_order
@@ -971,7 +971,8 @@ const DetailsOrder = () => {
                                 : dataGroup?.type === "loop" &&
                                   dataGroup?.is_auto_order
                                 ? formatMoney(price)
-                                : ""}
+                                : ""} */}
+                              {formatMoney(dataGroup?.initial_fee)}
                             </a>
                           </div>
 

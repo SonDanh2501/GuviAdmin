@@ -6,8 +6,10 @@ import { Col, Row } from "antd";
 import { HeartFilled } from "@ant-design/icons";
 import { formatMoney } from "../../../../../../../helper/formatMoney";
 import { useEffect, useState } from "react";
+import { getOverviewCollaborator } from "../../../../../../../api/collaborator";
+import moment from "moment";
 
-const Overview = () => {
+const Overview = ({ id }) => {
   const [total, setTotal] = useState({
     total_favourite: 10,
     total_order: 47,
@@ -16,7 +18,19 @@ const Overview = () => {
   const [data, setData] = useState([]);
   const lang = useSelector(getLanguageState);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getOverviewCollaborator(id)
+      .then((res) => {
+        setData(res?.arr_order);
+        setTotal({
+          total_favourite: res?.total_favourite.length,
+          total_hour: res?.total_hour,
+          total_order: res?.total_order,
+        });
+      })
+      .catch((err) => {});
+  }, []);
+
   return (
     <>
       <div className="div-overview">
@@ -55,18 +69,57 @@ const Overview = () => {
 
           <div className="mt-4">
             <a className="text-order-near">Đơn gần nhất</a>
-            {[1, 2, 3, 4, 5].map((item, index) => {
+            {data.map((item, index) => {
               return (
                 <div key={index} className="item-list-order">
                   <div className="div-detail-item">
-                    <a className="text-item">Mã: 097907070</a>
-                    <a className="text-item">Dịch vụ: </a>
-                    <a className="text-item">Ngày làm: </a>
-                    <a className="text-item">Khách hàng:</a>
+                    <a className="text-item">Mã: {item?.id_view}</a>
+                    <a className="text-item">
+                      Dịch vụ:{" "}
+                      {item?.type === "loop" && item?.is_auto_order
+                        ? `${i18n.t("repeat", { lng: lang })}`
+                        : item?.service?._id?.kind === "giup_viec_theo_gio"
+                        ? `${i18n.t("cleaning", { lng: lang })}`
+                        : item?.service?._id?.kind === "giup_viec_co_dinh"
+                        ? `${i18n.t("cleaning_subscription", { lng: lang })}`
+                        : item?.service?._id?.kind === "phuc_vu_nha_hang"
+                        ? `${i18n.t("serve", { lng: lang })}`
+                        : ""}
+                    </a>
+                    <a className="text-item">
+                      Ngày làm:{" "}
+                      {moment(item?.date_work).format("DD/MM/YYYY - HH:mm")}{" "}
+                    </a>
+                    <a className="text-item">
+                      Khách hàng: {item?.name_customer}
+                    </a>
                   </div>
                   <div>
                     <a className="title-status">Trạng thái: </a>
-                    <a>Hoàn thành</a>
+                    <a
+                      className={
+                        item?.status === "pending"
+                          ? "text-pen-order"
+                          : item?.status === "confirm"
+                          ? "text-confirm-order"
+                          : item?.status === "doing"
+                          ? "text-doing-order"
+                          : item?.status === "done"
+                          ? "text-done-order"
+                          : "text-cancel-order"
+                      }
+                    >
+                      {" "}
+                      {item?.status === "pending"
+                        ? `${i18n.t("pending", { lng: lang })}`
+                        : item?.status === "confirm"
+                        ? `${i18n.t("confirm", { lng: lang })}`
+                        : item?.status === "doing"
+                        ? `${i18n.t("doing", { lng: lang })}`
+                        : item?.status === "done"
+                        ? `${i18n.t("complete", { lng: lang })}`
+                        : `${i18n.t("cancel", { lng: lang })}`}
+                    </a>
                   </div>
                 </div>
               );

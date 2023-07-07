@@ -93,7 +93,7 @@ const ProfileCollaborator = () => {
           <div className="div-tab-profile-collaborator">
             <Tabs defaultActiveKey="1">
               <Tabs.TabPane tab="Tổng quan" key="1">
-                <Overview />
+                <Overview id={id} />
               </Tabs.TabPane>
               <Tabs.TabPane tab={`${i18n.t("info", { lng: lang })}`} key="2">
                 <Information

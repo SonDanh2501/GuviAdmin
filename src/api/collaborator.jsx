@@ -139,3 +139,9 @@ export const getReviewCollaborator = (id, start, length) => {
     `/admin/collaborator_manager/get_review/${id}?lang=vi&start=${start}&length=${length}`
   );
 };
+
+export const getOverviewCollaborator = (id) => {
+  return axiosClient.get(
+    `/admin/collaborator_manager/dash_board_collaborator/${id}?lang=vi`
+  );
+};
