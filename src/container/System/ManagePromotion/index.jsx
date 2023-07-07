@@ -59,6 +59,7 @@ const ManagePromotions = () => {
           setStartPage(0);
           setSelected("event");
         }}
+        style={{ width: "auto" }}
       >
         {`${i18n.t("promotions", { lng: lang })}`}
       </Button>

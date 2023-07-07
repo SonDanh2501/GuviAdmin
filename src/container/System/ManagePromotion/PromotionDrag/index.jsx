@@ -1,26 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./styles.scss";
+import { useLocation } from "react-router-dom";
+import { fetchPromotion } from "../../../../api/promotion";
+import { Image } from "antd";
 
 const PromotionDrag = () => {
-  const [data, setData] = useState([
-    {
-      title: "🍰 Cake",
-      value: 0,
-    },
-    {
-      title: "🍩 Donut",
-      value: 1,
-    },
-    {
-      title: "🍎 Apple",
-      value: 2,
-    },
-    {
-      title: "🍕 Pizza",
-      value: 3,
-    },
-  ]);
+  const { state } = useLocation();
+  const { type, brand, idService, exchange } = state || {};
+  const [data, setData] = useState([]);
   const [draggedItem, setDraggedItem] = useState();
+
+  useEffect(() => {
+    fetchPromotion(0, 20, type, brand, idService, exchange)
+      .then((res) => {
+        fetchPromotion(0, res?.totalItem, type, brand, idService, exchange)
+          .then((res) => {
+            setData(res?.data);
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {});
+  }, []);
 
   const onDragStart = (e, index) => {
     setDraggedItem(data[index]);
@@ -41,7 +41,7 @@ const PromotionDrag = () => {
 
     for (let i = 0; i < items.length; i++) {
       const arr = [...items];
-      items[i].value = i;
+      items[i].position = i;
       setData(arr);
     }
   };
@@ -50,24 +50,33 @@ const PromotionDrag = () => {
     setDraggedItem(null);
   };
 
+  console.log(data);
+
   return (
     <div>
-      <ul className="ul-list">
+      <div className="div-list-item-image">
         {data?.map((item, index) => {
           return (
-            <li key={index} onDragOver={() => onDragOver(index)}>
+            <div
+              className="item"
+              key={index}
+              onDragOver={() => onDragOver(index)}
+            >
+              <Image
+                src={item?.thumbnail}
+                style={{ width: 50, height: 50, borderRadius: 4 }}
+              />
               <div
-                className="item"
                 draggable
                 onDragStart={(e) => onDragStart(e, index)}
                 onDragEnd={onDragEnd}
               >
-                <a>{item?.title}</a>
+                <a className="text-title">{item?.title?.vi}</a>
               </div>
-            </li>
+            </div>
           );
         })}
-      </ul>
+      </div>
     </div>
   );
 };

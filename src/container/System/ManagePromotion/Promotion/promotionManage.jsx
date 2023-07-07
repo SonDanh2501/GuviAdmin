@@ -1,5 +1,6 @@
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import {
+  Button,
   Dropdown,
   Image,
   Input,
@@ -752,6 +753,24 @@ const PromotionManage = ({
             </>
           )}
         </div>
+        <div className="div-add-edit">
+          <Button
+            onClick={() =>
+              navigate(`/promotion/manage-setting/edit-position-promotion`, {
+                state: {
+                  type: type,
+                  brand: brand,
+                  idService: idService,
+                  exchange: exchange,
+                },
+              })
+            }
+            style={{ width: "auto" }}
+          >
+            Chỉnh sửa vị trí
+          </Button>
+        </div>
+
         <div className="mt-3">
           <Table
             columns={columns}

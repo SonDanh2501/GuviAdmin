@@ -151,16 +151,9 @@ export default function OrderCustomer({ id }) {
               lng: lang,
             })}`}</a>
           ) : (
-            <a
-              onClick={() =>
-                navigate("/group-order/manage-order/details-collaborator", {
-                  state: { id: data?.id_collaborator },
-                })
-              }
-              className="text-collaborator"
-            >
-              {data?.name_collaborator}
-            </a>
+            <Link to={`/details-collaborator/${data?.id_collaborator}`}>
+              <a className="text-collaborator">{data?.name_collaborator}</a>
+            </Link>
           )}
         </>
       ),
