@@ -63,6 +63,7 @@ import DetailReward from "../container/System/ManageTopup/ManageTopupCollaborato
 import ImageManage from "../container/System/ManageConfiguration/ScreenConfiguration/ImageManage";
 import ReportOrderDayInWeek from "../container/System/ManageReport/MangeReportOrder/ReportOrderDayOfWeek";
 import ReportCustomerOrderByArea from "../container/System/ManageReport/ManageReportCustomer/ReportCustomerOrderByArea";
+import PromotionDrag from "../container/System/ManagePromotion/PromotionDrag";
 
 const Admin = () => {
   return (
@@ -92,6 +93,11 @@ const Admin = () => {
       <Route
         path="/promotion/manage-setting/child-promotion"
         element={<ChildPromotion />}
+      />
+
+      <Route
+        path="/promotion/manage-setting/edit-position-promotion"
+        element={<PromotionDrag />}
       />
 
       <Route

@@ -55,6 +55,11 @@ const Information = ({ data, image, idCTV, setData }) => {
     getDistrictApi()
       .then((res) => {
         setDataCity(res?.aministrative_division);
+        res?.aministrative_division?.map((item) => {
+          if (item?.code === data?.city) {
+            setDataDistrict(item?.districts);
+          }
+        });
       })
       .catch((err) => {});
   }, []);
@@ -81,12 +86,6 @@ const Information = ({ data, image, idCTV, setData }) => {
     // setServiceApply(data?.serviceApply);
     setCodeCity(data?.city);
     setCodeDistrict(data?.district);
-
-    dataCity?.map((item) => {
-      if (item?.code === data?.city) {
-        setDataDistrict(item?.districts);
-      }
-    });
   }, [data]);
 
   service.map((item) => {
