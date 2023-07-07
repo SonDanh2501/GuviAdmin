@@ -1,16 +1,21 @@
 import { useCallback, useEffect, useState } from "react";
 
 import "./styles.scss";
-import { deleteFileImage, getListImageApi } from "../../../../../api/file";
+import {
+  deleteFileImage,
+  getListImageApi,
+  postFile,
+} from "../../../../../api/file";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
-import { Drawer, Dropdown, Image, Pagination, Space } from "antd";
+import { Button, Drawer, Dropdown, Image, Pagination, Space } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import { errorNotify } from "../../../../../helper/toast";
 import moment from "moment";
 import ModalCustom from "../../../../../components/modalCustom";
+import resizeFile from "../../../../../helper/resizer";
 
 const ImageManage = () => {
   const [data, setData] = useState([]);
@@ -76,6 +81,45 @@ const ImageManage = () => {
       });
   };
 
+  const onChangeThumbnail = async (e) => {
+    setIsLoading(true);
+    if (e.target.files[0]) {
+      const reader = new FileReader();
+      // reader.addEventListener("load", () => {
+      //   setImg(reader.result);
+      // });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    const file = e.target.files[0];
+    const image = await resizeFile(file);
+    const formData = new FormData();
+    formData.append("multi-files", image);
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        getListImageApi(startPage, 50)
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+          })
+          .catch((err) => {});
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        errorNotify({
+          message: err,
+        });
+      });
+  };
+
+  const copyLink = (text) => {
+    window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+  };
+
   const items = [
     {
       key: "1",
@@ -90,6 +134,7 @@ const ImageManage = () => {
       label: <a onClick={showDrawer}>{`${i18n.t("detail", { lng: lang })}`}</a>,
     },
   ];
+
   return (
     <div>
       <h5> {`${i18n.t("image_management", { lng: lang })}`}</h5>
@@ -99,6 +144,19 @@ const ImageManage = () => {
           <i class="uil uil-trash-alt" onClick={() => setModal(true)}></i>
         </div>
       )}
+
+      <label for="choose-image" className="add-image">
+        Thêm hình mới
+      </label>
+
+      <input
+        name="image"
+        type="file"
+        placeholder=""
+        accept={".jpg,.png,.jpeg"}
+        id="choose-image"
+        onChange={onChangeThumbnail}
+      />
 
       <h6 className="mt-5">File</h6>
       <div className="div-list-image">
@@ -160,6 +218,14 @@ const ImageManage = () => {
             <Image src={itemEdit?.link_url} className="image_detail" />
             <a className="title-image">Ngày tạo</a>
             <a>{moment(itemEdit?.date_create).format("DD/MM/YYYY - HH:mm")}</a>
+            <a className="title-image">Link</a>
+            <a className="title-link">{itemEdit?.link_url}</a>
+            <Button
+              onClick={() => navigator.clipboard.writeText(itemEdit?.link_url)}
+              style={{ width: "auto", marginTop: 20 }}
+            >
+              Copy Link
+            </Button>
           </div>
         </Drawer>
       </div>
