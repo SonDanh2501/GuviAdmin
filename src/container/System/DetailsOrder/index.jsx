@@ -176,7 +176,7 @@ const DetailsOrder = () => {
     })
       .then((res) => {
         setModalDelete(false);
-        getOrderByGroupOrderApi(id)
+        getOrderByGroupOrderApi(id, lang)
           .then((res) => {
             setHideShow(true);
             setDataGroup(res?.data?.groupOrder);
@@ -202,7 +202,8 @@ const DetailsOrder = () => {
     dispatch(loadingAction.loadingRequest(true));
     changeStatusOrderApi(_id, { status: "next" })
       .then((res) => {
-        getOrderByGroupOrderApi(id)
+        setOpenStatus(false);
+        getOrderByGroupOrderApi(id, lang)
           .then((res) => {
             setOpenStatus(false);
             setDataGroup(res?.data?.groupOrder);
@@ -217,7 +218,7 @@ const DetailsOrder = () => {
           });
       })
       .catch((err) => {
-        setModal(!modal);
+        setOpenStatus(false);
         errorNotify({
           message: err,
         });
@@ -234,7 +235,7 @@ const DetailsOrder = () => {
     })
       .then((res) => {
         setModalDeleteList(false);
-        getOrderByGroupOrderApi(id)
+        getOrderByGroupOrderApi(id, lang)
           .then((res) => {
             setDataGroup(res?.data?.groupOrder);
             setDataList(res?.data?.listOrder);
@@ -264,7 +265,7 @@ const DetailsOrder = () => {
         .then((res) => {
           setIsLoading(false);
           setModalFavourite(false);
-          getOrderByGroupOrderApi(id)
+          getOrderByGroupOrderApi(id, lang)
             .then((res) => {
               setDataGroup(res?.data?.groupOrder);
               setDataList(res?.data?.listOrder);
@@ -286,7 +287,7 @@ const DetailsOrder = () => {
         .then((res) => {
           setIsLoading(false);
           setModalFavourite(false);
-          getOrderByGroupOrderApi(id)
+          getOrderByGroupOrderApi(id, lang)
             .then((res) => {
               setDataGroup(res?.data?.groupOrder);
               setDataList(res?.data?.listOrder);
@@ -317,7 +318,7 @@ const DetailsOrder = () => {
         .then((res) => {
           setIsLoading(false);
           setModalBlock(false);
-          getOrderByGroupOrderApi(id)
+          getOrderByGroupOrderApi(id, lang)
             .then((res) => {
               setDataGroup(res?.data?.groupOrder);
               setDataList(res?.data?.listOrder);
@@ -339,7 +340,7 @@ const DetailsOrder = () => {
         .then((res) => {
           setIsLoading(false);
           setModalBlock(false);
-          getOrderByGroupOrderApi(id)
+          getOrderByGroupOrderApi(id, lang)
             .then((res) => {
               setDataGroup(res?.data?.groupOrder);
               setDataList(res?.data?.listOrder);
@@ -376,7 +377,7 @@ const DetailsOrder = () => {
       .then((res) => {
         setIsLoading(false);
         setModalCheck(false);
-        getOrderByGroupOrderApi(id)
+        getOrderByGroupOrderApi(id, lang)
           .then((res) => {
             setDataGroup(res?.data?.groupOrder);
             setDataList(res?.data?.listOrder);
