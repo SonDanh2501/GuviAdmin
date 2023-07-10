@@ -70,6 +70,7 @@ const DetailsOrder = () => {
   const [itemEdit, setItemEdit] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [price, setPrice] = useState(0);
+  const [priceAddService, setPriceAddService] = useState(0);
   const [idReason, setIdReason] = useState("");
   const [dataReason, setDataReason] = useState([]);
   const [noteReason, setNoteReason] = useState("");
@@ -905,26 +906,34 @@ const DetailsOrder = () => {
                       {dataGroup?.service?.optional_service?.map((item) => {
                         return (
                           <>
-                            {item?.type === "multi_select_horizontal_thumbnail"
-                              ? item?.extend_optional?.map((item) => {
-                                  return (
-                                    <div className="div-details-order">
-                                      <div className="div-title-details">
-                                        <a className="title">{`${i18n.t(
-                                          "extra_service",
-                                          { lng: lang }
-                                        )}`}</a>
-                                      </div>
-                                      <a className="text-colon">:</a>
-                                      <div className="div-add">
+                            <div className="div-details-order">
+                              <div className="div-title-details">
+                                {item?.type ===
+                                  "multi_select_horizontal_thumbnail" && (
+                                  <a className="title">{`${i18n.t(
+                                    "extra_service",
+                                    { lng: lang }
+                                  )}`}</a>
+                                )}
+                              </div>
+                              {item?.type ===
+                                "multi_select_horizontal_thumbnail" && (
+                                <a className="text-colon">:</a>
+                              )}
+
+                              <div className="div-add">
+                                {item?.type ===
+                                "multi_select_horizontal_thumbnail"
+                                  ? item?.extend_optional?.map((item) => {
+                                      return (
                                         <a className="text-title-add">
                                           - {item?.title?.[lang]}
                                         </a>
-                                      </div>
-                                    </div>
-                                  );
-                                })
-                              : null}
+                                      );
+                                    })
+                                  : ""}
+                              </div>
+                            </div>
                           </>
                         );
                       })}
@@ -1010,11 +1019,11 @@ const DetailsOrder = () => {
                                             <a className="text-colon">:</a>
                                           </div>
 
-                                          <a className="text-moeny-details">
+                                          {/* <a className="text-moeny-details">
                                             {item?.price !== 0
                                               ? "+" + formatMoney(item?.price)
                                               : ""}
-                                          </a>
+                                          </a> */}
                                         </div>
                                       );
                                     })

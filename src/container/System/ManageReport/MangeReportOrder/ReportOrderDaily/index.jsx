@@ -462,7 +462,7 @@ const ReportOrderDaily = () => {
   ];
 
   return (
-    <div>
+    <div className="div-container-report-daily">
       <h3>{`${i18n.t("completed_order_report_day", { lng: lang })}`}</h3>
       <div className="div-date">
         <CustomDatePicker

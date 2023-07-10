@@ -1,8 +1,17 @@
 import axiosClient from "../axios";
 
-export const getOrderApi = (start, length, status, kind) => {
+export const getOrderApi = (
+  search,
+  start,
+  length,
+  status,
+  service,
+  type,
+  startDate,
+  endDate
+) => {
   return axiosClient.get(
-    `/admin/statistic/job_lists?start=${start}&length=${length}&status=${status}&kind=${kind}`
+    `/admin/statistic/job_lists?search=${search}&start=${start}&length=${length}&status=${status}&id_service=${service}&type_sort=${type}&start_date=${startDate}&endDate=${endDate}`
   );
 };
 
@@ -25,12 +34,6 @@ export const searchOrderExpiredApi = (start, length, status, value) => {
 export const filterOrderApi = (start, length, payload) => {
   return axiosClient.get(
     `/admin/order_manager/get_list?start=${start}&length=${length}&id_service=${payload}`
-  );
-};
-
-export const searchOrderApi = (start, length, status, value, kind) => {
-  return axiosClient.get(
-    `/admin/statistic/job_lists?start=${start}&length=${length}&status=${status}&search=${value}&kind=${kind}`
   );
 };
 

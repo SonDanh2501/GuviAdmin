@@ -50,10 +50,9 @@ const PromotionDrag = () => {
     setDraggedItem(null);
   };
 
-  console.log(data);
-
   return (
     <div>
+      <h5>Thay đổi vị trí mã khuyến mãi</h5>
       <div className="div-list-item-image">
         {data?.map((item, index) => {
           return (
@@ -62,15 +61,13 @@ const PromotionDrag = () => {
               key={index}
               onDragOver={() => onDragOver(index)}
             >
-              <Image
-                src={item?.thumbnail}
-                style={{ width: 50, height: 50, borderRadius: 4 }}
-              />
               <div
+                className="body-item"
                 draggable
                 onDragStart={(e) => onDragStart(e, index)}
                 onDragEnd={onDragEnd}
               >
+                <Image src={item?.thumbnail} className="img-promotion" />
                 <a className="text-title">{item?.title?.vi}</a>
               </div>
             </div>

@@ -478,7 +478,7 @@ const ReportOrder = () => {
   };
 
   return (
-    <div>
+    <div className="div-container-report-order">
       <h3>{`${i18n.t("order_report", { lng: lang })}`}</h3>
       <div className="div-header-report">
         <div className="div-date">
@@ -497,7 +497,7 @@ const ReportOrder = () => {
         </div>
       </div>
 
-      <div className="mt-2">
+      <div>
         <Table
           columns={columns}
           pagination={false}

@@ -753,7 +753,7 @@ const PromotionManage = ({
             </>
           )}
         </div>
-        {/* <div className="div-add-edit">
+        <div className="div-add-edit">
           <Button
             onClick={() =>
               navigate(`/promotion/manage-setting/edit-position-promotion`, {
@@ -765,11 +765,11 @@ const PromotionManage = ({
                 },
               })
             }
-            style={{ width: "auto" }}
+            style={{ width: "auto", marginBottom: 5 }}
           >
             Chỉnh sửa vị trí
           </Button>
-        </div> */}
+        </div>
 
         <div className="mt-3">
           <Table

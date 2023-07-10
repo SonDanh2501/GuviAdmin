@@ -56,6 +56,9 @@ const ProfileCollaborator = () => {
   }, [id]);
 
   const onChangeThumbnail = async (e) => {
+    const extend = e.target.files[0].type.slice(
+      e.target.files[0].type.indexOf("/") + 1
+    );
     if (e.target.files[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -64,7 +67,7 @@ const ProfileCollaborator = () => {
       reader.readAsDataURL(e.target.files[0]);
     }
     const file = e.target.files[0];
-    const image = await resizeFile(file);
+    const image = await resizeFile(file, extend);
     const formData = new FormData();
     formData.append("multi-files", image);
     dispatch(loadingAction.loadingRequest(true));
@@ -93,7 +96,7 @@ const ProfileCollaborator = () => {
           <div className="div-tab-profile-collaborator">
             <Tabs defaultActiveKey="1">
               <Tabs.TabPane tab="Tổng quan" key="1">
-                {/* <Overview id={id} /> */}
+                <Overview id={id} />
               </Tabs.TabPane>
               <Tabs.TabPane tab={`${i18n.t("info", { lng: lang })}`} key="2">
                 <Information

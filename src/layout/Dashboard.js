@@ -36,7 +36,7 @@ const Dashboard = () => {
       {width > 490 ? (
         <>
           <Sider
-            width={hideSidebar ? 230 : 90}
+            width={hideSidebar ? 220 : 90}
             style={{
               background: "white",
               overflow: "auto",
@@ -74,8 +74,8 @@ const Dashboard = () => {
             position: "sticky",
             top: 0,
             zIndex: 1,
-            marginLeft: 20,
-            marginRight: 20,
+            // marginLeft: 20,
+            // marginRight: 20,
             borderRadius: 4,
             backgroundColor: "#7dbcea",
           }}
@@ -87,16 +87,16 @@ const Dashboard = () => {
         </Header>
         <Layout
           style={{
-            padding: "20px 20px",
+            // padding: "20px 20px",
             minHeight: "100%",
+            width: "auto",
           }}
         >
           <Content
             style={{
-              minHeight: 680,
-              background: "white",
+              minHeight: 1000,
+              background: "#F5F5F5",
               borderRadius: 4,
-              padding: width > 490 ? 24 : 10,
             }}
           >
             <Admin />

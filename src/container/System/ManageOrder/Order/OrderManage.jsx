@@ -3,14 +3,13 @@ import { UilEllipsisV } from "@iconscout/react-unicons";
 import { Checkbox, Dropdown, Input, Pagination, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import {
   checkOrderApi,
   deleteOrderApi,
   getOrderApi,
-  searchOrderApi,
 } from "../../../../api/order";
 import ModalCustom from "../../../../components/modalCustom";
 import LoadingPagination from "../../../../components/paginationLoading";
@@ -24,7 +23,6 @@ import {
 import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
 import EditTimeOrder from "../EditTimeGroupOrder";
 import "./OrderManage.scss";
-import InputCustom from "../../../../components/textInputCustom";
 const width = window.innerWidth;
 const OrderManage = (props) => {
   const {
@@ -38,19 +36,17 @@ const OrderManage = (props) => {
     setCurrentPage,
     setStartPage,
     startPage,
+    type,
+    startDate,
+    endDate,
   } = props;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [item, setItem] = useState([]);
   const [modal, setModal] = useState(false);
-  const [modalCheck, setModalCheck] = useState(false);
-  const [dataSearch, setDataSearch] = useState([]);
-  const [totalSearch, setTotalSearch] = useState(0);
-  const [valueSearch, setValueSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const toggle = () => setModal(!modal);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
-  const [note, setNote] = useState("");
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work_schedule[0].date)).format(
       "HH:mm"
@@ -75,7 +71,7 @@ const OrderManage = (props) => {
         //     kind: kind,
         //   })
         // );
-        getOrderApi(startPage, 20, status, kind)
+        getOrderApi(startPage, 20, status, kind, type, startDate, endDate)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItem);
@@ -362,7 +358,7 @@ const OrderManage = (props) => {
             menu={{
               items,
             }}
-            placement="bottom"
+            placement="bottomLeft"
             trigger={["click"]}
           >
             <div>
@@ -377,39 +373,22 @@ const OrderManage = (props) => {
   const onChange = (page) => {
     setCurrentPage(page);
     const dataLength = data.length < 20 ? 20 : data.length;
-    const searchLength = dataSearch?.length < 20 ? 20 : dataSearch.length;
-    const start =
-      dataSearch.length > 0
-        ? page * searchLength - searchLength
-        : page * dataLength - dataLength;
+
+    const start = page * dataLength - dataLength;
 
     setStartPage(start);
 
-    dataSearch.length > 0
-      ? searchOrderApi(0, 20, status, valueSearch, kind).then((res) => {
-          setDataSearch(res?.data);
-          setTotalSearch(res?.totalItem);
-        })
-      : getOrderApi(start, 20, status, kind)
-          .then((res) => {
-            setData(res?.data);
-            setTotal(res?.totalItem);
-          })
-          .catch((err) => {});
+    getOrderApi(start, 20, status, kind, type, startDate, endDate)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
   };
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      searchOrderApi(0, 20, status, value, kind).then((res) => {
-        setDataSearch(res?.data);
-        setTotalSearch(res?.totalItem);
-      });
-    }, 1000),
-    [status, kind]
-  );
   return (
     <React.Fragment>
-      <div>
+      {/* <div>
         <Input
           placeholder={`${i18n.t("search", { lng: lang })}`}
           type="text"
@@ -421,11 +400,11 @@ const OrderManage = (props) => {
             setValueSearch(e.target.value);
           }}
         />
-      </div>
+      </div> */}
       <div className="mt-3">
         <Table
           columns={columns}
-          dataSource={dataSearch?.length > 0 ? dataSearch : data}
+          dataSource={data}
           pagination={false}
           rowKey={(record) => record._id}
           rowSelection={{
@@ -474,14 +453,13 @@ const OrderManage = (props) => {
 
         <div className="mt-2 div-pagination-order p-2">
           <a>
-            {`${i18n.t("total", { lng: lang })}`}:{" "}
-            {totalSearch > 0 ? totalSearch : total}
+            {`${i18n.t("total", { lng: lang })}`}: {total}
           </a>
           <div>
             <Pagination
               current={currentPage}
               onChange={onChange}
-              total={totalSearch > 0 ? totalSearch : total}
+              total={total}
               showSizeChanger={false}
               pageSize={20}
             />

@@ -6,7 +6,7 @@ import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { getOrderApi, searchOrderApi } from "../../../../api/order";
+import { getOrderApi } from "../../../../api/order";
 import InputCustom from "../../../../components/textInputCustom";
 
 import "./OrderDoingManage.scss";
@@ -210,18 +210,18 @@ const OrderDoingManage = () => {
     },
   ];
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      setValueSearch(value);
-      searchOrderApi(0, 10, value, "doing")
-        .then((res) => {
-          setDataSearch(res.data);
-          setTotalSearch(res.totalItem);
-        })
-        .catch((err) => {});
-    }, 1000),
-    []
-  );
+  // const handleSearch = useCallback(
+  //   _debounce((value) => {
+  //     setValueSearch(value);
+  //     searchOrderApi(0, 10, value, "doing")
+  //       .then((res) => {
+  //         setDataSearch(res.data);
+  //         setTotalSearch(res.totalItem);
+  //       })
+  //       .catch((err) => {});
+  //   }, 1000),
+  //   []
+  // );
 
   const onChange = (page) => {
     setCurrentPage(page);
@@ -234,19 +234,12 @@ const OrderDoingManage = () => {
 
     setStartPage(start);
 
-    dataSearch.length > 0
-      ? searchOrderApi(start, 10, valueSearch, "doing")
-          .then((res) => {
-            setDataSearch(res.data);
-            setTotalSearch(res.totalItem);
-          })
-          .catch((err) => {})
-      : getOrderApi(start, 10, "doing", "")
-          .then((res) => {
-            setData(res.data);
-            setTotal(res.totalItem);
-          })
-          .catch((err) => {});
+    getOrderApi(start, 10, "doing", "")
+      .then((res) => {
+        setData(res.data);
+        setTotal(res.totalItem);
+      })
+      .catch((err) => {});
   };
 
   return (
@@ -255,13 +248,13 @@ const OrderDoingManage = () => {
         <div className="div-header">
           <a className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</a>
 
-          <InputCustom
+          {/* <InputCustom
             placeholder={`${i18n.t("search", { lng: lang })}`}
             type="text"
             className="field-search"
             onChange={(e) => handleSearch(e.target.value)}
             prefix={<SearchOutlined />}
-          />
+          /> */}
         </div>
         <div className="shadow mt-5">
           <Table

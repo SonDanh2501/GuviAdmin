@@ -1,90 +1,135 @@
-.div-header {
+.div-container-order {
   display: flex;
-  padding-left: 40px;
-  padding-right: 40px;
-  margin-top: 20px;
-
-  .btn-create-order {
-    width: 193px;
-    height: 40px;
-    border: none;
-    border-radius: 5px;
-    background-color: #48cae4;
-    color: white;
-    margin-left: 20px;
-    box-shadow: 2px 3px 2px rgb(216, 216, 216);
-    margin-top: 5px;
-  }
-
-  .div-add-export {
+  flex-direction: column;
+  width: 100%;
+  .div-header {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
+    justify-content: space-between;
+    width: 100%;
+    .div-add-order {
+      display: flex;
+      flex-direction: row;
+      .btn-create-order {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100px;
+        height: 30px;
+        border: none;
+        border-radius: 5px;
+        background-color: #48cae4;
+        color: white;
+        margin-left: 20px;
+        margin-right: 10px;
+        box-shadow: 2px 3px 2px rgb(216, 216, 216);
+        margin-top: 5px;
+      }
 
-  .title-cv {
-    color: black;
-    font-weight: 400;
-    font-size: 24px;
-    font-family: "Roboto", sans-serif;
-    text-decoration: none;
-    margin-top: 5px;
-  }
+      .div-add-export {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
 
-  .field-search {
-    height: 48px;
-    width: 506px;
-    margin-left: 28px;
-  }
+      .dropdown-export {
+        display: flex;
+        width: 30px;
+        height: 30px;
+        background-color: #e0e0e0;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+        box-shadow: 2px 3px 2px rgb(216, 216, 216);
 
-  .dropdown-export {
-    display: flex;
-    width: 40px;
-    height: 40px;
-    background-color: #e0e0e0;
-    align-items: center;
-    justify-content: center;
-    border-radius: 5px;
-    box-shadow: 2px 3px 2px rgb(216, 216, 216);
+        .icon-menu {
+          color: black;
+        }
+      }
+    }
 
-    .icon-menu {
+    .title-cv {
       color: black;
+      font-weight: 400;
+      font-size: 18px;
+      font-family: "Roboto";
+      text-decoration: none;
+      margin-top: 5px;
+    }
+
+    .field-search {
+      height: 48px;
+      width: 506px;
+      margin-left: 28px;
     }
   }
-}
 
-.div-tab {
-  display: flex;
-  flex-direction: row;
-
-  .div-tab-item {
+  .div-select-status {
     display: flex;
-    flex-direction: column;
-    margin-right: 30px;
-    margin-bottom: 20px;
-    margin-top: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: auto;
+    margin-top: 20px;
+  }
 
-    .text-title-tab {
-      font-family: "Roboto";
-      font-style: normal;
-      font-weight: 400;
-      font-size: 16px;
-      color: #41a2f3;
-      text-decoration: none;
+  .div-body-order {
+    width: 100%;
+    background-color: white;
+    margin-top: 20px;
+    border-radius: 4px;
+    padding: 10px 5px;
+
+    ::-webkit-scrollbar {
+      height: 5px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: blue;
     }
 
-    .text-title-tab-default {
-      font-family: "Roboto";
-      font-style: normal;
-      font-weight: 400;
-      font-size: 16px;
-      color: #000000;
-      text-decoration: none;
+    .div-tab {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      width: 100%;
+
+      .item-tab {
+        padding: 5px;
+        width: auto;
+        margin-right: 5px;
+
+        .text-title {
+          color: rgb(200, 199, 199);
+          font-weight: 400;
+          font-size: 14px;
+          font-family: "Roboto";
+          text-decoration: none;
+        }
+      }
+      .item-tab-select {
+        padding: 5px;
+        width: auto;
+        border-bottom: 1px solid blue;
+        margin-right: 5px;
+
+        .text-title {
+          color: black;
+          font-weight: 400;
+          font-size: 14px;
+          font-family: "Roboto";
+          text-decoration: none;
+        }
+      }
     }
 
-    .tab-line {
-      border: 1px solid #41a2f3;
+    .div-search-filter {
+      display: flex;
+      flex-direction: row;
+      margin-top: 10px;
+
+      .input-search-order {
+        width: 60%;
+      }
     }
   }
 }
