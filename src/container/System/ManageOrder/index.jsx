@@ -39,7 +39,7 @@ const ManageOrder = () => {
   const [startPage, setStartPage] = useState(0);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
-  const [type, setType] = useState("all");
+  const [type, setType] = useState("date_create");
   const [startDate, setStartDate] = useState(
     moment("1-1-2023").startOf("date").toISOString()
   );
@@ -131,6 +131,16 @@ const ManageOrder = () => {
       .catch((err) => {});
   };
 
+  const onChangeService = (e) => {
+    setKind(e);
+    getOrderApi(valueSearch, 0, 20, tab, e, type, startDate, endDate)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+
   const items = [
     {
       label: (
@@ -201,6 +211,12 @@ const ManageOrder = () => {
           })}
         </div>
         <div className="div-search-filter">
+          <Select
+            value={kind}
+            style={{ width: "20%", marginRight: 10 }}
+            options={optionsService}
+            onChange={onChangeService}
+          />
           <Input
             placeholder={`${i18n.t("search", { lng: lang })}`}
             type="text"

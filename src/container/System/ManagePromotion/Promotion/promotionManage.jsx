@@ -753,7 +753,7 @@ const PromotionManage = ({
             </>
           )}
         </div>
-        <div className="div-add-edit">
+        {/* <div className="div-add-edit">
           <Button
             onClick={() =>
               navigate(`/promotion/manage-setting/edit-position-promotion`, {
@@ -769,7 +769,22 @@ const PromotionManage = ({
           >
             Chỉnh sửa vị trí
           </Button>
-        </div>
+        </div> */}
+        <Button
+          onClick={() =>
+            navigate(`/promotion/manage-setting/create-promotion`, {
+              state: {
+                type: type,
+                brand: brand,
+                idService: idService,
+                exchange: exchange,
+              },
+            })
+          }
+          style={{ width: "auto", marginBottom: 5 }}
+        >
+          add
+        </Button>
 
         <div className="mt-3">
           <Table

@@ -23,7 +23,7 @@ import {
 } from "../../api/promotion";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
-import { getService } from "../../redux/selectors/service";
+import { getProvince, getService } from "../../redux/selectors/service";
 import CustomButton from "../customButton/customButton";
 
 import dayjs from "dayjs";
@@ -90,6 +90,9 @@ const AddPromotionEvent = (props) => {
   const [isDateSchedule, setIsDateSchedule] = useState(true);
   const [dateSchedule, setDateSchedule] = useState("");
   const [isApplyTime, setIsApplyTime] = useState(false);
+  const [isApplyArea, setIsApplyArea] = useState(false);
+  const [city, setCity] = useState([]);
+  const [district, setDistrict] = useState([]);
   const [timeApply, setTimeApply] = useState([
     {
       day_local: 0,
@@ -102,10 +105,13 @@ const AddPromotionEvent = (props) => {
   const options = [];
   const optionsCustomer = [];
   const serviceOption = [];
+  const cityOption = [];
+  const districtOption = [];
   const dispatch = useDispatch();
   const fomart = "HH:mm";
   const service = useSelector(getService);
   const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
 
   useEffect(() => {
     getGroupCustomerApi(0, 10)
@@ -116,6 +122,14 @@ const AddPromotionEvent = (props) => {
   useEffect(() => {
     setServiceApply(service[0]?._id);
   }, [service]);
+
+  province?.map((item) => {
+    cityOption?.push({
+      value: item?.code,
+      label: item?.name,
+      district: item?.districts,
+    });
+  });
 
   dataGroupCustomer.map((item, index) => {
     options.push({
@@ -288,6 +302,9 @@ const AddPromotionEvent = (props) => {
       payment_method: paymentMethod,
       is_loop: isApplyTime,
       day_loop: isApplyTime ? timeApply : [],
+      is_apply_area: isApplyArea,
+      city: city,
+      district: district,
     })
       .then((res) => {
         if (isSendNotification) {
@@ -376,6 +393,9 @@ const AddPromotionEvent = (props) => {
     idService,
     exchange,
     startPage,
+    isApplyArea,
+    city,
+    district,
   ]);
 
   return (
@@ -859,6 +879,31 @@ const AddPromotionEvent = (props) => {
                     <div className="btn-add-day" onClick={addTimeApply}>
                       <i class="uil uil-plus"></i>
                     </div>
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <div>
+                  <a className="title-add-promo">14. Áp dụng khu vực</a>
+                  <Checkbox
+                    checked={isApplyArea}
+                    onChange={(e) => setIsApplyArea(e.target.checked)}
+                    style={{ marginLeft: 5 }}
+                  />
+                </div>
+                {isApplyArea && (
+                  <div>
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      style={{ width: "100%" }}
+                      onChange={(e, label) => {
+                        setCity(e);
+                      }}
+                      options={cityOption}
+                      optionLabelProp="label"
+                    />
                   </div>
                 )}
               </div>

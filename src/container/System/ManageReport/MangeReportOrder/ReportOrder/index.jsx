@@ -109,6 +109,7 @@ const ReportOrder = () => {
       },
       align: "center",
       width: "5%",
+      sorter: (a, b) => a.total_item - b.total_item,
     },
     {
       title: () => {

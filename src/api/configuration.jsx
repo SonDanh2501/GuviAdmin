@@ -77,6 +77,12 @@ export const getListTestByCollabotatorApi = (id, start, length, type) => {
   );
 };
 
+export const getListTrainningLessonApi = (start, length, type) => {
+  return axiosClient.get(
+    `/admin/training_lesson_manager/get_list?start=${start}&length=${length}&type_training_lesson=${type}`
+  );
+};
+
 // create account
 
 export const getSettingAccountApi = () => {

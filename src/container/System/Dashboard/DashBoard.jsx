@@ -65,12 +65,12 @@ import Header from "./HeaderBoard/Header";
 import MoreActivity from "./MoreActivity";
 import i18n from "../../../i18n";
 import { getProvince } from "../../../redux/selectors/service";
+import useWindowDimensions from "../../../helper/useWindowDimensions";
 moment.locale("vi");
 dayjs.extend(customParseFormat);
 
-const width = window.innerWidth;
-
 export default function Home() {
+  const { height, width } = useWindowDimensions();
   const [arrResult, setArrResult] = useState([]);
   const [totalMoneyChart, setTotalMoneyChart] = useState(0);
   const [day, setDay] = useState([]);
@@ -268,7 +268,13 @@ export default function Home() {
 
   const columns = [
     {
-      title: `${i18n.t("customer", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-head-column">{`${i18n.t("customer", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <Link to={`/profile-customer/${data?.id_customer?._id}`}>
@@ -278,7 +284,13 @@ export default function Home() {
       },
     },
     {
-      title: `${i18n.t("service", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-head-column">{`${i18n.t("service", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-column-service">
@@ -299,7 +311,13 @@ export default function Home() {
       },
     },
     {
-      title: `${i18n.t("time", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-head-column">{`${i18n.t("time", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-column-date">
@@ -319,13 +337,25 @@ export default function Home() {
       align: "center",
     },
     {
-      title: `${i18n.t("address", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-head-column">{`${i18n.t("address", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return <a className="text-address-dashboard">{data?.address}</a>;
       },
     },
     {
-      title: `${i18n.t("collaborator", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-head-column">{`${i18n.t("collaborator", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div>
@@ -345,7 +375,13 @@ export default function Home() {
       },
     },
     {
-      title: `${i18n.t("progress", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-head-column">{`${i18n.t("progress", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => (
         <a
           className={
@@ -518,7 +554,7 @@ export default function Home() {
               <div>
                 <ResponsiveContainer
                   width={"100%"}
-                  height={350}
+                  height={200}
                   min-width={300}
                 >
                   <AreaChart
@@ -556,196 +592,312 @@ export default function Home() {
                 </ResponsiveContainer>
               </div>
             )}
-
-            <Row>
-              <Col span="16" className="pl-4">
-                <p className="label-persen-active">{`${i18n.t(
-                  "percentage_of_activity",
-                  { lng: lang }
-                )}`}</p>
-                <div className="div-persen">
-                  <p className="label-persen">{activeUser?.donePercent}%</p>
-                  <p className="label-total">{`${i18n.t("total", {
-                    lng: lang,
-                  })}`}</p>
-                </div>
-                <Progress
-                  percent={activeUser?.donePercent}
-                  showInfo={false}
-                  strokeColor={"#48CAE4"}
-                  className="progress-persent"
-                  strokeWidth={15}
-                />
-                <div className="div-container-on">
-                  <div className="div-on">
-                    <div className="line-on" />
-                    <div className="total-div-on">
-                      <a className="text-on">Online</a>
-                      <a className="text-total-on">{activeUser?.ActiveUsers}</a>
-                    </div>
-                  </div>
-
-                  <div className="div-on">
-                    <div className="line-off" />
-                    <div className="total-div-on">
-                      <a className="text-on">Offline</a>
-                      <a className="text-total-on">
-                        {activeUser?.OfflineUsers}
-                      </a>
-                    </div>
+            <div>
+              <p className="label-persen-active">{`${i18n.t(
+                "percentage_of_activity",
+                { lng: lang }
+              )}`}</p>
+              <div className="div-persen">
+                <p className="label-persen">{activeUser?.donePercent}%</p>
+                <p className="label-total">{`${i18n.t("total", {
+                  lng: lang,
+                })}`}</p>
+              </div>
+              <Progress
+                percent={activeUser?.donePercent}
+                showInfo={false}
+                strokeColor={"#48CAE4"}
+                className="progress-persent"
+                strokeWidth={15}
+              />
+              <div className="div-container-on">
+                <div className="div-on">
+                  <div className="line-on" />
+                  <div className="total-div-on">
+                    <a className="text-on">Online</a>
+                    <a className="text-total-on">{activeUser?.ActiveUsers}</a>
                   </div>
                 </div>
-              </Col>
-              <Col span="8">
-                {/* <p className="label-persen-active">Active Users</p>
-                    <p className="label-active">2154</p>
-                    <div>
-                      <Progress
-                        percent={66}
-                        strokeWidth={10}
-                        strokeColor={"#48CAE4"}
-                        className="progress-persent"
-                      />
-                      <a>Hồ Chí Minh</a>
-                    </div> */}
-                {/* <div>
-                      <Progress
-                        percent={73}
-                        strokeWidth={10}
-                        strokeColor={"#48CAE4"}
-                        className="progress-persent"
-                      />
-                      <a>Đà Nẵng</a>
-                    </div>
-                    <div>
-                      <Progress
-                        percent={20}
-                        strokeWidth={10}
-                        strokeColor={"#48CAE4"}
-                        className="progress-persent"
-                      />
-                      <a>Hà Nội</a>
-                    </div> */}
-              </Col>
-            </Row>
-          </div>
-          <div>
-            {checkElement?.includes("connection_service_dashboard") && (
-              <div className="div-connect-service">
-                <div className="div-progress">
-                  <Progress
-                    type="dashboard"
-                    percent={
-                      !connectionService?.donePercent
-                        ? 0
-                        : connectionService?.donePercent
-                    }
-                    gapDegree={5}
-                    strokeColor={"#48CAE4"}
-                    strokeWidth={15}
-                    width={150}
-                  />
-                </div>
-                <div className="div-progress-text">
-                  <p className="title-progress">{`${i18n.t(
-                    "connection_service_rate",
-                    {
-                      lng: lang,
-                    }
-                  )}`}</p>
-                </div>
-                <div className="div-success">
-                  <a className="square" />
-                  <p className="text-success-square">{`${i18n.t("complete", {
-                    lng: lang,
-                  })}`}</p>
-                </div>
-                <div className="div-success">
-                  <a className="unsquare" />
-                  <p className="text-success-square">{`${i18n.t("uncomplete", {
-                    lng: lang,
-                  })}`}</p>
+
+                <div className="div-on">
+                  <div className="line-off" />
+                  <div className="total-div-on">
+                    <a className="text-on">Offline</a>
+                    <a className="text-total-on">{activeUser?.OfflineUsers}</a>
+                  </div>
                 </div>
               </div>
-            )}
-            {checkElement?.includes("top_collaborator_dashboard") && (
-              <>
-                {topCollaborator.length > 0 && (
-                  <div className="div-top-collaborator">
-                    <p className="text-top">{`${i18n.t("top_collaborator", {
+            </div>
+          </div>
+          <div className="div-right-conection-dashboard">
+            <div className="div-right">
+              {checkElement?.includes("connection_service_dashboard") && (
+                <div className="div-connect-service">
+                  <div className="div-progress">
+                    <Progress
+                      type="dashboard"
+                      percent={
+                        !connectionService?.donePercent
+                          ? 0
+                          : connectionService?.donePercent
+                      }
+                      gapDegree={5}
+                      strokeColor={"#48CAE4"}
+                      strokeWidth={15}
+                      width={100}
+                    />
+                  </div>
+                  <div className="div-progress-text">
+                    <p className="title-progress">{`${i18n.t(
+                      "connection_service_rate",
+                      {
+                        lng: lang,
+                      }
+                    )}`}</p>
+                  </div>
+                  <div className="div-success">
+                    <a className="square" />
+                    <p className="text-success-square">{`${i18n.t("complete", {
                       lng: lang,
                     })}`}</p>
-                    <div className="level">
-                      <Link
-                        className="level-ctv1"
-                        to={`/details-collaborator/${topCollaborator[0]?._id?.id_collaborator}`}
-                      >
-                        <p className="text-level">
-                          {topCollaborator[0]?._id?.full_name}
-                        </p>
-                        <p className="text-level-number">
-                          {formatMoney(topCollaborator[0]?.sumIncome)}
-                        </p>
-                      </Link>
-                      {topCollaborator.length > 1 && (
-                        <Link
-                          className="level-ctv2"
-                          to={`/details-collaborator/${topCollaborator[1]?._id?.id_collaborator}`}
-                        >
-                          <p className="text-level">
-                            {topCollaborator[1]?._id?.name}
-                          </p>
-                          <p className="text-level-number">
-                            {formatMoney(topCollaborator[1]?.sumIncome)}
-                          </p>
-                        </Link>
-                      )}
-                      {topCollaborator.length > 2 && (
-                        <Link
-                          className="level-ctv3"
-                          to={`/details-collaborator/${topCollaborator[2]?._id?.id_collaborator}`}
-                        >
-                          <p className="text-level">
-                            {topCollaborator[2]?._id?.name}
-                          </p>
-                          <p className="text-level-number">
-                            {formatMoney(topCollaborator[2]?.sumIncome)}
-                          </p>
-                        </Link>
-                      )}
-                      {topCollaborator.length > 3 && (
-                        <Link
-                          className="level-ctv4"
-                          to={`/details-collaborator/${topCollaborator[3]?._id?.id_collaborator}`}
-                        >
-                          <p className="text-level">
-                            {topCollaborator[3]?._id?.name}
-                          </p>
-                          <p className="text-level-number">
-                            {formatMoney(topCollaborator[3]?.sumIncome)}
-                          </p>
-                        </Link>
-                      )}
-                      {topCollaborator.length > 4 && (
-                        <Link
-                          className="level-ctv5"
-                          to={`/details-collaborator/${topCollaborator[4]?._id?.id_collaborator}`}
-                        >
-                          <p className="text-level">
-                            {topCollaborator[4]?._id?.name}
-                          </p>
-                          <p className="text-level-number">
-                            {formatMoney(topCollaborator[4]?.sumIncome)}
-                          </p>
-                        </Link>
-                      )}
-                    </div>
-                    <div className="div-seemore">
-                      <MoreTopCollaborator />
-                    </div>
                   </div>
-                )}
-              </>
+                  <div className="div-success">
+                    <a className="unsquare" />
+                    <p className="text-success-square">{`${i18n.t(
+                      "uncomplete",
+                      {
+                        lng: lang,
+                      }
+                    )}`}</p>
+                  </div>
+                </div>
+              )}
+              {checkElement?.includes("top_collaborator_dashboard") && (
+                <>
+                  {topCollaborator.length > 0 && (
+                    <div className="div-top-collaborator">
+                      <p className="text-top">{`${i18n.t("top_collaborator", {
+                        lng: lang,
+                      })}`}</p>
+                      <div className="level">
+                        <Link
+                          className="level-ctv1"
+                          to={`/details-collaborator/${topCollaborator[0]?._id?.id_collaborator}`}
+                        >
+                          <p className="text-level">
+                            {topCollaborator[0]?._id?.full_name}
+                          </p>
+                          <p className="text-level-number">
+                            {formatMoney(topCollaborator[0]?.sumIncome)}
+                          </p>
+                        </Link>
+                        {topCollaborator.length > 1 && (
+                          <Link
+                            className="level-ctv2"
+                            to={`/details-collaborator/${topCollaborator[1]?._id?.id_collaborator}`}
+                          >
+                            <p className="text-level">
+                              {topCollaborator[1]?._id?.name}
+                            </p>
+                            <p className="text-level-number">
+                              {formatMoney(topCollaborator[1]?.sumIncome)}
+                            </p>
+                          </Link>
+                        )}
+                        {topCollaborator.length > 2 && (
+                          <Link
+                            className="level-ctv3"
+                            to={`/details-collaborator/${topCollaborator[2]?._id?.id_collaborator}`}
+                          >
+                            <p className="text-level">
+                              {topCollaborator[2]?._id?.name}
+                            </p>
+                            <p className="text-level-number">
+                              {formatMoney(topCollaborator[2]?.sumIncome)}
+                            </p>
+                          </Link>
+                        )}
+                        {topCollaborator.length > 3 && (
+                          <Link
+                            className="level-ctv4"
+                            to={`/details-collaborator/${topCollaborator[3]?._id?.id_collaborator}`}
+                          >
+                            <p className="text-level">
+                              {topCollaborator[3]?._id?.name}
+                            </p>
+                            <p className="text-level-number">
+                              {formatMoney(topCollaborator[3]?.sumIncome)}
+                            </p>
+                          </Link>
+                        )}
+                        {topCollaborator.length > 4 && (
+                          <Link
+                            className="level-ctv5"
+                            to={`/details-collaborator/${topCollaborator[4]?._id?.id_collaborator}`}
+                          >
+                            <p className="text-level">
+                              {topCollaborator[4]?._id?.name}
+                            </p>
+                            <p className="text-level-number">
+                              {formatMoney(topCollaborator[4]?.sumIncome)}
+                            </p>
+                          </Link>
+                        )}
+                      </div>
+                      <div className="div-seemore">
+                        <MoreTopCollaborator />
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+            {checkElement?.includes("history_activity_dashboard") && (
+              <div className="col-activity-dashboard">
+                <p className="label-activity">{`${i18n.t("history_acivity", {
+                  lng: lang,
+                })}`}</p>
+                <List
+                  itemLayout="horizontal"
+                  dataSource={historyActivity.slice(0, 4)}
+                  renderItem={(item, index) => {
+                    const subject = item?.id_user_system
+                      ? item?.title_admin.replace(
+                          item?.id_user_system?._id,
+                          item?.id_user_system?.full_name
+                        )
+                      : item?.id_admin_action
+                      ? item?.title_admin.replace(
+                          item?.id_admin_action?._id,
+                          item?.id_admin_action?.full_name
+                        )
+                      : item?.id_customer
+                      ? item?.title_admin.replace(
+                          item?.id_customer?._id,
+                          item?.id_customer?.full_name
+                        )
+                      : item?.id_collaborator
+                      ? item?.title_admin.replace(
+                          item?.id_collaborator?._id,
+                          item?.id_collaborator?.full_name
+                        )
+                      : item?.title_admin.replace(
+                          item?.id_promotion?._id,
+                          item?.id_promotion?.code
+                        );
+
+                    const predicate = item?.id_punish
+                      ? subject.replace(
+                          item?.id_punish?._id,
+                          item?.id_punish?.note_admin
+                        )
+                      : item?.id_reason_punish
+                      ? subject.replace(
+                          item?.id_reason_punish?._id,
+                          item?.id_reason_punish?.title?.vi
+                        )
+                      : item?.id_order
+                      ? subject.replace(
+                          item?.id_order?._id,
+                          item?.id_order?.id_view
+                        )
+                      : item?.id_reward
+                      ? subject.replace(
+                          item?.id_reward?._id,
+                          item?.id_reward?.title?.vi
+                        )
+                      : item?.id_info_reward_collaborator
+                      ? subject.replace(
+                          item?.id_info_reward_collaborator?._id,
+                          item?.id_info_reward_collaborator
+                            ?.id_reward_collaborator?.title?.vi
+                        )
+                      : item?.id_transistion_collaborator
+                      ? subject.replace(
+                          item?.id_transistion_collaborator?._id,
+                          item?.id_transistion_collaborator?.transfer_note
+                        )
+                      : item?.id_collaborator
+                      ? subject.replace(
+                          item?.id_collaborator?._id,
+                          item?.id_collaborator?.full_name
+                        )
+                      : item?.id_customer
+                      ? subject.replace(
+                          item?.id_customer?._id,
+                          item?.id_customer?.full_name
+                        )
+                      : item?.id_promotion
+                      ? subject.replace(
+                          item?.id_promotion?._id,
+                          item?.id_promotion?.title?.vi
+                        )
+                      : item?.id_admin_action
+                      ? subject.replace(
+                          item?.id_admin_action?._id,
+                          item?.id_admin_action?.full_name
+                        )
+                      : item?.id_address
+                      ? subject.replace(item?.id_address, item?.value_string)
+                      : subject.replace(
+                          item?.id_transistion_customer?._id,
+                          item?.id_transistion_customer?.transfer_note
+                        );
+
+                    const object = item?.id_reason_cancel
+                      ? predicate.replace(
+                          item?.id_reason_cancel?._id,
+                          item?.id_reason_cancel?.title?.vi
+                        )
+                      : item?.id_collaborator
+                      ? predicate.replace(
+                          item?.id_collaborator?._id,
+                          item?.id_collaborator?.full_name
+                        )
+                      : item?.id_customer
+                      ? predicate.replace(
+                          item?.id_customer?._id,
+                          item?.id_customer?.full_name
+                        )
+                      : item?.id_address
+                      ? predicate.replace(item?.id_address, item?.value_string)
+                      : item?.id_order
+                      ? predicate.replace(
+                          item?.id_order?._id,
+                          item?.id_order?.id_view
+                        )
+                      : item?.id_transistion_collaborator
+                      ? predicate.replace(
+                          item?.id_transistion_collaborator?._id,
+                          item?.id_transistion_collaborator?.transfer_note
+                        )
+                      : predicate.replace(
+                          item?.id_transistion_customer?._id,
+                          item?.id_transistion_customer?.transfer_note
+                        );
+
+                    return (
+                      <div className="div-list" key={index}>
+                        <div className="div-line">
+                          <div className="circle" />
+                          <div className="line-vertical" />
+                        </div>
+                        <div className="div-details-activity">
+                          <a className="text-date-activity">
+                            {moment(new Date(item?.date_create)).format(
+                              "DD/MM/YYYY HH:mm"
+                            )}
+                          </a>
+                          <a className="text-content-activity">{object}</a>
+                        </div>
+                      </div>
+                    );
+                  }}
+                />
+                <div className="div-seemore">
+                  <MoreActivity />
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -760,13 +912,13 @@ export default function Home() {
                 columns={columns}
                 dataSource={lastestService}
                 pagination={false}
-                scroll={
-                  width <= 490
-                    ? {
-                        x: 1600,
-                      }
-                    : null
-                }
+                // scroll={
+                //   width <= 1000
+                //     ? {
+                //         x: 1600,
+                //       }
+                //     : null
+                // }
               />
               <div className="div-entries">
                 <Select
@@ -783,456 +935,272 @@ export default function Home() {
             </div>
           </div>
         )}
-        <div>
-          <Row
-            gutter={{
-              xs: 8,
-              sm: 16,
-              md: 24,
-              lg: 32,
-            }}
-          >
-            <Col span="15">
-              {checkElement?.includes("report_detail_service_dashboard") && (
-                <div className="div-chart-pie-total-dash">
-                  <a className="title-chart-area">{`${i18n.t(
-                    "order_statistic",
-                    {
-                      lng: lang,
-                    }
-                  )}`}</a>
-                  <div className="div-pie-chart mt-3">
-                    <div className="div-pie">
-                      <ResponsiveContainer
-                        width={"100%"}
-                        height={350}
-                        min-width={350}
-                      >
-                        <BarChart
-                          width={500}
-                          height={300}
-                          data={dataChartDetail}
-                          margin={{
-                            top: 30,
-                            right: 30,
-                            left: 20,
-                            bottom: 5,
-                          }}
-                        >
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis dataKey="title" />
-                          <YAxis />
-                          <Tooltip />
-                          <Legend />
-                          <Bar
-                            dataKey="percent_2_hour"
-                            fill="#8884d8"
-                            barSize={40}
-                            minPointSize={10}
-                            name={`2 ${i18n.t("hour", {
-                              lng: lang,
-                            })}`}
-                            label={{
-                              position: "top",
-                              fill: "black",
-                              fontSize: 14,
-                            }}
-                          />
-                          <Bar
-                            dataKey="percent_3_hour"
-                            fill="#82ca9d"
-                            barSize={40}
-                            minPointSize={10}
-                            name={`3 ${i18n.t("hour", {
-                              lng: lang,
-                            })}`}
-                            label={{
-                              position: "top",
-                              fill: "black",
-                              fontSize: 14,
-                            }}
-                          />
-                          <Bar
-                            dataKey="percent_4_hour"
-                            fill="#0088FE"
-                            barSize={40}
-                            minPointSize={10}
-                            name={`4 ${i18n.t("hour", {
-                              lng: lang,
-                            })}`}
-                            label={{
-                              position: "top",
-                              fill: "black",
-                              fontSize: 14,
-                            }}
-                          />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
+        <div className="div-total-report-dashboard">
+          {checkElement?.includes("report_detail_service_dashboard") && (
+            <div className="div-chart-pie-total-dash">
+              <a className="title-chart-area">{`${i18n.t("order_statistic", {
+                lng: lang,
+              })}`}</a>
+              <div className="div-pie-chart">
+                <div className="div-pie">
+                  <ResponsiveContainer
+                    width={"100%"}
+                    height={200}
+                    min-width={350}
+                  >
+                    <BarChart
+                      width={500}
+                      height={300}
+                      data={dataChartDetail}
+                      margin={{
+                        top: 30,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="title" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar
+                        dataKey="percent_2_hour"
+                        fill="#8884d8"
+                        barSize={40}
+                        minPointSize={10}
+                        name={`2 ${i18n.t("hour", {
+                          lng: lang,
+                        })}`}
+                        label={{
+                          position: "top",
+                          fill: "black",
+                          fontSize: 14,
+                        }}
+                      />
+                      <Bar
+                        dataKey="percent_3_hour"
+                        fill="#82ca9d"
+                        barSize={40}
+                        minPointSize={10}
+                        name={`3 ${i18n.t("hour", {
+                          lng: lang,
+                        })}`}
+                        label={{
+                          position: "top",
+                          fill: "black",
+                          fontSize: 14,
+                        }}
+                      />
+                      <Bar
+                        dataKey="percent_4_hour"
+                        fill="#0088FE"
+                        barSize={40}
+                        minPointSize={10}
+                        name={`4 ${i18n.t("hour", {
+                          lng: lang,
+                        })}`}
+                        label={{
+                          position: "top",
+                          fill: "black",
+                          fontSize: 14,
+                        }}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
-              )}
-            </Col>
-            <Col span="8">
-              {checkElement?.includes("history_activity_dashboard") && (
-                <div className="col-activity-dashboard">
-                  <p className="label-activity">{`${i18n.t("history_acivity", {
+              </div>
+            </div>
+          )}
+          {checkElement?.includes("total_customer_monthly_dashboard") && (
+            <div className="div-chart-user">
+              <h4>{`${i18n.t("total_register", {
+                lng: lang,
+              })}`}</h4>
+              <div className="div-time-area">
+                <div>
+                  <a className="text-time">{`${i18n.t("time", {
                     lng: lang,
-                  })}`}</p>
-                  <List
-                    itemLayout="horizontal"
-                    dataSource={historyActivity.slice(0, 4)}
-                    renderItem={(item, index) => {
-                      const subject = item?.id_user_system
-                        ? item?.title_admin.replace(
-                            item?.id_user_system?._id,
-                            item?.id_user_system?.full_name
-                          )
-                        : item?.id_admin_action
-                        ? item?.title_admin.replace(
-                            item?.id_admin_action?._id,
-                            item?.id_admin_action?.full_name
-                          )
-                        : item?.id_customer
-                        ? item?.title_admin.replace(
-                            item?.id_customer?._id,
-                            item?.id_customer?.full_name
-                          )
-                        : item?.id_collaborator
-                        ? item?.title_admin.replace(
-                            item?.id_collaborator?._id,
-                            item?.id_collaborator?.full_name
-                          )
-                        : item?.title_admin.replace(
-                            item?.id_promotion?._id,
-                            item?.id_promotion?.code
-                          );
-
-                      const predicate = item?.id_punish
-                        ? subject.replace(
-                            item?.id_punish?._id,
-                            item?.id_punish?.note_admin
-                          )
-                        : item?.id_reason_punish
-                        ? subject.replace(
-                            item?.id_reason_punish?._id,
-                            item?.id_reason_punish?.title?.vi
-                          )
-                        : item?.id_order
-                        ? subject.replace(
-                            item?.id_order?._id,
-                            item?.id_order?.id_view
-                          )
-                        : item?.id_reward
-                        ? subject.replace(
-                            item?.id_reward?._id,
-                            item?.id_reward?.title?.vi
-                          )
-                        : item?.id_info_reward_collaborator
-                        ? subject.replace(
-                            item?.id_info_reward_collaborator?._id,
-                            item?.id_info_reward_collaborator
-                              ?.id_reward_collaborator?.title?.vi
-                          )
-                        : item?.id_transistion_collaborator
-                        ? subject.replace(
-                            item?.id_transistion_collaborator?._id,
-                            item?.id_transistion_collaborator?.transfer_note
-                          )
-                        : item?.id_collaborator
-                        ? subject.replace(
-                            item?.id_collaborator?._id,
-                            item?.id_collaborator?.full_name
-                          )
-                        : item?.id_customer
-                        ? subject.replace(
-                            item?.id_customer?._id,
-                            item?.id_customer?.full_name
-                          )
-                        : item?.id_promotion
-                        ? subject.replace(
-                            item?.id_promotion?._id,
-                            item?.id_promotion?.title?.vi
-                          )
-                        : item?.id_admin_action
-                        ? subject.replace(
-                            item?.id_admin_action?._id,
-                            item?.id_admin_action?.full_name
-                          )
-                        : item?.id_address
-                        ? subject.replace(item?.id_address, item?.value_string)
-                        : subject.replace(
-                            item?.id_transistion_customer?._id,
-                            item?.id_transistion_customer?.transfer_note
-                          );
-
-                      const object = item?.id_reason_cancel
-                        ? predicate.replace(
-                            item?.id_reason_cancel?._id,
-                            item?.id_reason_cancel?.title?.vi
-                          )
-                        : item?.id_collaborator
-                        ? predicate.replace(
-                            item?.id_collaborator?._id,
-                            item?.id_collaborator?.full_name
-                          )
-                        : item?.id_customer
-                        ? predicate.replace(
-                            item?.id_customer?._id,
-                            item?.id_customer?.full_name
-                          )
-                        : item?.id_address
-                        ? predicate.replace(
-                            item?.id_address,
-                            item?.value_string
-                          )
-                        : item?.id_order
-                        ? predicate.replace(
-                            item?.id_order?._id,
-                            item?.id_order?.id_view
-                          )
-                        : item?.id_transistion_collaborator
-                        ? predicate.replace(
-                            item?.id_transistion_collaborator?._id,
-                            item?.id_transistion_collaborator?.transfer_note
-                          )
-                        : predicate.replace(
-                            item?.id_transistion_customer?._id,
-                            item?.id_transistion_customer?.transfer_note
-                          );
-
-                      return (
-                        <div className="div-list" key={index}>
-                          <div className="div-line">
-                            <div className="circle" />
-                            <div className="line-vertical" />
-                          </div>
-                          <div className="div-details-activity">
-                            <a className="text-date-activity">
-                              {moment(new Date(item?.date_create)).format(
-                                "DD/MM/YYYY HH:mm"
-                              )}
-                            </a>
-                            <a className="text-content-activity">{object}</a>
-                          </div>
-                        </div>
-                      );
-                    }}
+                  })}`}</a>
+                  <DatePicker
+                    picker="year"
+                    onChange={onChange}
+                    defaultValue={dayjs("2023", yearFormat)}
+                    format={yearFormat}
                   />
-                  <MoreActivity />
                 </div>
-              )}
-            </Col>
-          </Row>
+              </div>
+              <div className="mt-3 divl-total">
+                <a className="text-total-user">{`${i18n.t("total_user", {
+                  lng: lang,
+                })}`}</a>
+                <div className="div-total">
+                  <a className="text-number-total">{totalYearUser}</a>
+                </div>
+              </div>
+              <div className="mt-1">
+                <ResponsiveContainer
+                  width={"100%"}
+                  height={200}
+                  min-width={350}
+                >
+                  <ComposedChart
+                    width={500}
+                    height={300}
+                    data={dataChartUser.slice(0, moment().utc().month() + 1)}
+                    margin={{
+                      top: 10,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                    barSize={50}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="month"
+                      tickFormatter={(tickItem) =>
+                        `${i18n.t("month", {
+                          lng: lang,
+                        })}` +
+                        " " +
+                        tickItem
+                      }
+                    />
+                    <YAxis />
+                    <Tooltip content={renderTooltipContentUser} />
+                    <Legend />
+
+                    <Bar
+                      dataKey="totalOld"
+                      fill="#82ca9d"
+                      minPointSize={10}
+                      barSize={20}
+                      name={`${i18n.t("customer_old", {
+                        lng: lang,
+                      })}`}
+                      stackId="a"
+                    />
+
+                    <Bar
+                      dataKey="totalNew"
+                      fill="#4376CC"
+                      minPointSize={10}
+                      barSize={20}
+                      name={`${i18n.t("customer_new", {
+                        lng: lang,
+                      })}`}
+                      stackId="a"
+                      label={{
+                        position: "insideTop",
+                        fill: "white",
+                        fontSize: 12,
+                        fontFamily: "Roboto",
+                      }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="totalNew"
+                      stroke="#ff7300"
+                      name={`${i18n.t("customer_new", {
+                        lng: lang,
+                      })}`}
+                    />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
         </div>
         <div>
-          <Row
-            gutter={{
-              xs: 8,
-              sm: 16,
-              md: 24,
-              lg: 32,
-            }}
-          >
-            <Col span="15">
-              {checkElement?.includes("total_customer_monthly_dashboard") && (
-                <div className="div-chart-user">
-                  <h4>{`${i18n.t("total_register", {
-                    lng: lang,
-                  })}`}</h4>
-                  <div className="div-time-area">
-                    <div>
-                      <a className="text-time">{`${i18n.t("time", {
+          {checkElement?.includes("report_cancel_order_dashboard") && (
+            <div className="div-chart-pie-total-cancel-dash">
+              <a className="title-chart">
+                {`${i18n.t("order_statistic_cancel", {
+                  lng: lang,
+                })}`}
+              </a>
+              <div className="div-pie-chart-cancel">
+                <div className="div-total-piechart">
+                  <div className="item-total">
+                    <a className="title-total">
+                      {`${i18n.t("total_order_cancel", {
                         lng: lang,
-                      })}`}</a>
-                      <DatePicker
-                        picker="year"
-                        onChange={onChange}
-                        defaultValue={dayjs("2023", yearFormat)}
-                        format={yearFormat}
-                      />
-                    </div>
+                      })}`}
+                    </a>
+                    <a className="text-colon">:</a>
+                    <a className="number-total">
+                      {dataTotalChartCancel?.total_cancel_order}
+                    </a>
                   </div>
-                  <div className="mt-3 divl-total">
-                    <a className="text-total-user">{`${i18n.t("total_user", {
-                      lng: lang,
-                    })}`}</a>
-                    <div className="div-total">
-                      <a className="text-number-total">{totalYearUser}</a>
-                    </div>
+                  <div className="item-total">
+                    <a className="title-total">{`${i18n.t(
+                      "order_cancel_customer",
+                      {
+                        lng: lang,
+                      }
+                    )}`}</a>
+                    <a className="text-colon">:</a>
+                    <a className="number-total">
+                      {dataTotalChartCancel?.total_cancel_order_by_customer}
+                    </a>
                   </div>
-                  <div className="mt-5">
-                    <ResponsiveContainer
-                      width={"100%"}
-                      height={350}
-                      min-width={350}
-                    >
-                      <ComposedChart
-                        width={500}
-                        height={300}
-                        data={dataChartUser.slice(
-                          0,
-                          moment().utc().month() + 1
-                        )}
+                  <div className="item-total">
+                    <a className="title-total">{`${i18n.t(
+                      "order_cancel_system",
+                      {
+                        lng: lang,
+                      }
+                    )}`}</a>
+                    <a className="text-colon">:</a>
+                    <a className="number-total">
+                      {dataTotalChartCancel?.total_cancel_order_by_system}
+                    </a>
+                  </div>
+                  <div className="item-total">
+                    <a className="title-total">{`${i18n.t(
+                      "order_cancel_admin",
+                      {
+                        lng: lang,
+                      }
+                    )}`}</a>
+                    <a className="text-colon">:</a>
+                    <a className="number-total">
+                      {dataTotalChartCancel?.total_cancel_order_by_user_system}
+                    </a>
+                  </div>
+                </div>
+                <div className="div-pie-cancel">
+                  <ResponsiveContainer height={300} min-width={500}>
+                    <PieChart>
+                      <Pie
+                        data={dataChartCancel}
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                        label={renderLabelCancel}
                         margin={{
-                          top: 10,
-                          right: 30,
-                          left: 20,
+                          top: 20,
+                          right: 50,
+                          left: 50,
                           bottom: 5,
                         }}
-                        barSize={50}
                       >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis
-                          dataKey="month"
-                          tickFormatter={(tickItem) =>
-                            `${i18n.t("month", {
-                              lng: lang,
-                            })}` +
-                            " " +
-                            tickItem
-                          }
-                        />
-                        <YAxis />
-                        <Tooltip content={renderTooltipContentUser} />
-                        <Legend />
-
-                        <Bar
-                          dataKey="totalOld"
-                          fill="#82ca9d"
-                          minPointSize={10}
-                          barSize={20}
-                          name={`${i18n.t("customer_old", {
-                            lng: lang,
-                          })}`}
-                          stackId="a"
-                        />
-
-                        <Bar
-                          dataKey="totalNew"
-                          fill="#4376CC"
-                          minPointSize={10}
-                          barSize={20}
-                          name={`${i18n.t("customer_new", {
-                            lng: lang,
-                          })}`}
-                          stackId="a"
-                          label={{
-                            position: "insideTop",
-                            fill: "white",
-                            fontSize: 12,
-                            fontFamily: "Roboto",
-                          }}
-                        />
-                        <Line
-                          type="monotone"
-                          dataKey="totalNew"
-                          stroke="#ff7300"
-                          name={`${i18n.t("customer_new", {
-                            lng: lang,
-                          })}`}
-                        />
-                      </ComposedChart>
-                    </ResponsiveContainer>
-                  </div>
+                        {dataChartCancel.map((entry, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={COLORS_CANCEL[index % COLORS_CANCEL.length]}
+                          />
+                        ))}
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
                 </div>
-              )}
-            </Col>
-            <Col span="8">
-              {checkElement?.includes("report_cancel_order_dashboard") && (
-                <div className="div-chart-pie-total-cancel-dash">
-                  <a className="title-chart">
-                    {`${i18n.t("order_statistic_cancel", {
-                      lng: lang,
-                    })}`}
-                  </a>
-                  <div className="div-pie-chart-cancel">
-                    <div className="div-total-piechart">
-                      <div className="item-total">
-                        <a className="title-total">
-                          {`${i18n.t("total_order_cancel", {
-                            lng: lang,
-                          })}`}
-                        </a>
-                        <a className="text-colon">:</a>
-                        <a className="number-total">
-                          {dataTotalChartCancel?.total_cancel_order}
-                        </a>
-                      </div>
-                      <div className="item-total">
-                        <a className="title-total">{`${i18n.t(
-                          "order_cancel_customer",
-                          {
-                            lng: lang,
-                          }
-                        )}`}</a>
-                        <a className="text-colon">:</a>
-                        <a className="number-total">
-                          {dataTotalChartCancel?.total_cancel_order_by_customer}
-                        </a>
-                      </div>
-                      <div className="item-total">
-                        <a className="title-total">{`${i18n.t(
-                          "order_cancel_system",
-                          {
-                            lng: lang,
-                          }
-                        )}`}</a>
-                        <a className="text-colon">:</a>
-                        <a className="number-total">
-                          {dataTotalChartCancel?.total_cancel_order_by_system}
-                        </a>
-                      </div>
-                      <div className="item-total">
-                        <a className="title-total">{`${i18n.t(
-                          "order_cancel_admin",
-                          {
-                            lng: lang,
-                          }
-                        )}`}</a>
-                        <a className="text-colon">:</a>
-                        <a className="number-total">
-                          {
-                            dataTotalChartCancel?.total_cancel_order_by_user_system
-                          }
-                        </a>
-                      </div>
-                    </div>
-                    <div className="div-pie-cancel">
-                      <ResponsiveContainer height={300} min-width={500}>
-                        <PieChart>
-                          <Pie
-                            data={dataChartCancel}
-                            cx="50%"
-                            cy="50%"
-                            outerRadius={80}
-                            fill="#8884d8"
-                            dataKey="value"
-                            label={renderLabelCancel}
-                            margin={{
-                              top: 20,
-                              right: 50,
-                              left: 50,
-                              bottom: 5,
-                            }}
-                          >
-                            {dataChartCancel.map((entry, index) => (
-                              <Cell
-                                key={`cell-${index}`}
-                                fill={
-                                  COLORS_CANCEL[index % COLORS_CANCEL.length]
-                                }
-                              />
-                            ))}
-                          </Pie>
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </Col>
-          </Row>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <FloatButton.BackTop />

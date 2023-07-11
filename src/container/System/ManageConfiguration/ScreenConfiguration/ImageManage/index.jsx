@@ -209,21 +209,39 @@ const ImageManage = () => {
         onClose={onClose}
         open={open}
         headerStyle={{ height: 50 }}
-        style={{ flexDirection: "column" }}
       >
-        <a className="title-image">Tên</a>
-        <a>{itemEdit?.title}</a>
-        <Image src={itemEdit?.link_url} className="image_detail" />
-        <a className="title-image">Ngày tạo</a>
-        <a>{moment(itemEdit?.date_create).format("DD/MM/YYYY - HH:mm")}</a>
-        <a className="title-image">Link</a>
-        <a className="title-link">{itemEdit?.link_url}</a>
-        <Button
-          onClick={() => navigator.clipboard.writeText(itemEdit?.link_url)}
-          style={{ width: "auto", marginTop: 20 }}
-        >
-          Copy Link
-        </Button>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <a style={{ fontSize: 14, fontWeight: 600 }}>Tên</a>
+          <a>{itemEdit?.title}</a>
+          <Image
+            src={itemEdit?.link_url}
+            style={{
+              width: "100%",
+              height: 200,
+              objectFit: "cover",
+              borderRadius: 8,
+              marginTop: 10,
+            }}
+          />
+          <a style={{ fontSize: 14, fontWeight: 600 }}>Ngày tạo</a>
+          <a>{moment(itemEdit?.date_create).format("DD/MM/YYYY - HH:mm")}</a>
+          <a style={{ fontSize: 14, fontWeight: 600 }}>Link</a>
+          <a
+            style={{
+              fontSize: 12,
+              width: 400,
+              wordWrap: "break-word",
+            }}
+          >
+            {itemEdit?.link_url}
+          </a>
+          <Button
+            onClick={() => navigator.clipboard.writeText(itemEdit?.link_url)}
+            style={{ width: "auto", marginTop: 20 }}
+          >
+            Copy Link
+          </Button>
+        </div>
       </Drawer>
 
       <div>

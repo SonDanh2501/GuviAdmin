@@ -1,0 +1,20 @@
+.div-container-create {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  width: 100%;
+
+  .div-body {
+    width: 70%;
+    height: 100px;
+    background-color: rgb(86, 176, 255);
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+  }
+
+  .div-detail {
+    width: 30%;
+    height: 100px;
+    background-color: rgb(246, 255, 66);
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+  }
+}

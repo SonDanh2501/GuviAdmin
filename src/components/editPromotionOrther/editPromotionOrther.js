@@ -25,7 +25,7 @@ import {
 } from "../../api/promotion";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
-import { getService } from "../../redux/selectors/service";
+import { getProvince, getService } from "../../redux/selectors/service";
 import CustomTextEditor from "../customTextEdittor";
 import UploadImage from "../uploadImage";
 import "./editPromotionOrther.scss";
@@ -90,20 +90,34 @@ const EditPromotionOrther = (props) => {
   const [paymentMethod, setPaymentMethod] = useState([]);
   const [listCustomers, setListCustomers] = useState([]);
   const [listNameCustomers, setListNameCustomers] = useState([]);
+  const [isApplyArea, setIsApplyArea] = useState(false);
+  const [city, setCity] = useState([]);
+  const [district, setDistrict] = useState([]);
   const [dataL, setDataL] = useState([]);
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const options = [];
   const optionsCustomer = [];
+  const cityOption = [];
+  const districtOption = [];
   const dateFormat = "YYYY-MM-DD";
   const dispatch = useDispatch();
   const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
 
   useEffect(() => {
     getGroupCustomerApi(0, 10)
       .then((res) => setDataGroupCustomer(res.data))
       .catch((err) => console.log(err));
   }, []);
+
+  province?.map((item) => {
+    cityOption?.push({
+      value: item?.code,
+      label: item?.name,
+      district: item?.districts,
+    });
+  });
 
   dataGroupCustomer.map((item, index) => {
     options.push({
@@ -193,6 +207,9 @@ const EditPromotionOrther = (props) => {
         res?.id_customer?.map((item) => {
           listCustomers.push(item?._id);
         });
+        setIsApplyArea(res?.is_apply_area);
+        setCity(res?.city);
+        setDistrict(res?.district);
       })
       .catch((err) => console.log(err));
   }, [data]);
@@ -264,6 +281,9 @@ const EditPromotionOrther = (props) => {
       position: position,
       is_payment_method: isPaymentMethod,
       payment_method: paymentMethod,
+      is_apply_area: isApplyArea,
+      city: city,
+      district: district,
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
@@ -323,6 +343,9 @@ const EditPromotionOrther = (props) => {
     idService,
     exchange,
     startPage,
+    isApplyArea,
+    city,
+    district,
   ]);
 
   return (
@@ -691,6 +714,31 @@ const EditPromotionOrther = (props) => {
                   value={position}
                   onChange={(e) => setPosition(e.target.value)}
                 />
+              </div>
+              <div className="mt-2">
+                <div>
+                  <a className="title-add-promo">15. Áp dụng khu vực</a>
+                  <Checkbox
+                    checked={isApplyArea}
+                    onChange={(e) => setIsApplyArea(e.target.checked)}
+                    style={{ marginLeft: 5 }}
+                  />
+                </div>
+                {isApplyArea && (
+                  <div>
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      value={city}
+                      style={{ width: "100%" }}
+                      onChange={(e, label) => {
+                        setCity(e);
+                      }}
+                      options={cityOption}
+                      optionLabelProp="label"
+                    />
+                  </div>
+                )}
               </div>
               <Button
                 className="btn-edit-promotion-orther"

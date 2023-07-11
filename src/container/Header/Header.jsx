@@ -1,6 +1,7 @@
 import {
   BellOutlined,
   CaretDownOutlined,
+  MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import { Dropdown, List, Select, Space } from "antd";
@@ -41,7 +42,7 @@ const Header = ({ onClick, hide }) => {
   return (
     <div className="div-container-header">
       <div className="menu-icon" onClick={onClick}>
-        {hide ? <i class="uil uil-bars icon-menu"></i> : <MenuUnfoldOutlined />}
+        {hide ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
       </div>
 
       <div className="nav-header">

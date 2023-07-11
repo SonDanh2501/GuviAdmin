@@ -29,7 +29,7 @@ import { errorNotify } from "../../helper/toast";
 import i18n from "../../i18n";
 import { loadingAction } from "../../redux/actions/loading";
 import { getLanguageState } from "../../redux/selectors/auth";
-import { getService } from "../../redux/selectors/service";
+import { getProvince, getService } from "../../redux/selectors/service";
 import CustomButton from "../customButton/customButton";
 import CustomTextEditor from "../customTextEdittor";
 import UploadImage from "../uploadImage";
@@ -111,14 +111,20 @@ const AddPromotion = (props) => {
   const [isParrentPromotion, setIsParrentPromotion] = useState(false);
   const [totalChildPromotion, setTotalChildPromotion] = useState();
   const [isShowInApp, setIsShowInApp] = useState(false);
+  const [isApplyArea, setIsApplyArea] = useState(false);
+  const [city, setCity] = useState([]);
+  const [district, setDistrict] = useState([]);
   const lang = useSelector(getLanguageState);
   const options = [];
   const optionsCustomer = [];
   const serviceOption = [];
+  const cityOption = [];
+  const districtOption = [];
   const dispatch = useDispatch();
   const fomart = "hh:MM";
   const dateFormat = "DD-MM-YYYY";
   const service = useSelector(getService);
+  const province = useSelector(getProvince);
 
   useEffect(() => {
     getGroupCustomerApi(0, 10)
@@ -129,6 +135,14 @@ const AddPromotion = (props) => {
   useEffect(() => {
     setServiceApply(service[0]?._id);
   }, [service]);
+
+  province?.map((item) => {
+    cityOption?.push({
+      value: item?.code,
+      label: item?.name,
+      district: item?.districts,
+    });
+  });
 
   dataGroupCustomer.map((item, index) => {
     options.push({
@@ -302,6 +316,9 @@ const AddPromotion = (props) => {
       is_loop: isApplyTime,
       day_loop: isApplyTime ? timeApply : [],
       is_show_in_app: isShowInApp,
+      is_apply_area: isApplyArea,
+      city: city,
+      district: district,
     })
       .then((res) => {
         if (isSendNotification) {
@@ -412,6 +429,9 @@ const AddPromotion = (props) => {
     exchange,
     startPage,
     isShowInApp,
+    isApplyArea,
+    city,
+    district,
   ]);
 
   return (
@@ -1018,6 +1038,31 @@ const AddPromotion = (props) => {
                   checked={isShowInApp}
                   style={{ marginLeft: 5 }}
                 />
+              </div>
+
+              <div>
+                <div>
+                  <a className="title-add-promo">22. Áp dụng khu vực</a>
+                  <Checkbox
+                    checked={isApplyArea}
+                    onChange={(e) => setIsApplyArea(e.target.checked)}
+                    style={{ marginLeft: 5 }}
+                  />
+                </div>
+                {isApplyArea && (
+                  <div>
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      style={{ width: "100%" }}
+                      onChange={(e, label) => {
+                        setCity(e);
+                      }}
+                      options={cityOption}
+                      optionLabelProp="label"
+                    />
+                  </div>
+                )}
               </div>
 
               <Button

@@ -27,7 +27,7 @@ import {
 } from "../../api/promotion";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
-import { getService } from "../../redux/selectors/service";
+import { getProvince, getService } from "../../redux/selectors/service";
 import CustomTextEditor from "../customTextEdittor";
 import "./editPromotionEvent.scss";
 import { getLanguageState } from "../../redux/selectors/auth";
@@ -94,6 +94,9 @@ const EditPromotionEvent = (props) => {
   const [listCustomers, setListCustomers] = useState([]);
   const [listNameCustomers, setListNameCustomers] = useState([]);
   const [isApplyTime, setIsApplyTime] = useState(false);
+  const [isApplyArea, setIsApplyArea] = useState(false);
+  const [city, setCity] = useState([]);
+  const [district, setDistrict] = useState([]);
   const [timeApply, setTimeApply] = useState([
     {
       day_local: 0,
@@ -105,17 +108,28 @@ const EditPromotionEvent = (props) => {
   const options = [];
   const optionsCustomer = [];
   const serviceOption = [];
+  const cityOption = [];
+  const districtOption = [];
   const fomart = "HH:mm";
   const dateFormat = "YYYY-MM-DD";
   const dispatch = useDispatch();
   const service = useSelector(getService);
   const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
 
   useEffect(() => {
     getGroupCustomerApi(0, 10)
       .then((res) => setDataGroupCustomer(res.data))
       .catch((err) => console.log(err));
   }, []);
+
+  province?.map((item) => {
+    cityOption?.push({
+      value: item?.code,
+      label: item?.name,
+      district: item?.districts,
+    });
+  });
 
   dataGroupCustomer.map((item, index) => {
     options.push({
@@ -225,6 +239,9 @@ const EditPromotionEvent = (props) => {
         });
         setIsApplyTime(res?.is_loop);
         setTimeApply(res?.day_loop);
+        setIsApplyArea(res?.is_apply_area);
+        setCity(res?.city);
+        setDistrict(res?.district);
       })
       .catch((err) => console.log(err));
   }, [data]);
@@ -332,6 +349,9 @@ const EditPromotionEvent = (props) => {
       payment_method: paymentMethod,
       is_loop: isApplyTime,
       day_loop: isApplyTime ? timeApply : [],
+      is_apply_area: isApplyArea,
+      city: city,
+      district: district,
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
@@ -379,6 +399,9 @@ const EditPromotionEvent = (props) => {
     position,
     isApplyTime,
     timeApply,
+    isApplyArea,
+    city,
+    district,
   ]);
 
   return (
@@ -832,6 +855,32 @@ const EditPromotionEvent = (props) => {
                     <div className="btn-add-day" onClick={addTimeApply}>
                       <i class="uil uil-plus"></i>
                     </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-2">
+                <div>
+                  <a className="title-add-promo">13. Áp dụng khu vực</a>
+                  <Checkbox
+                    checked={isApplyArea}
+                    onChange={(e) => setIsApplyArea(e.target.checked)}
+                    style={{ marginLeft: 5 }}
+                  />
+                </div>
+                {isApplyArea && (
+                  <div>
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      value={city}
+                      style={{ width: "100%" }}
+                      onChange={(e, label) => {
+                        setCity(e);
+                      }}
+                      options={cityOption}
+                      optionLabelProp="label"
+                    />
                   </div>
                 )}
               </div>
