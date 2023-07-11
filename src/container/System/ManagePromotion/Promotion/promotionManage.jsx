@@ -770,7 +770,7 @@ const PromotionManage = ({
             Chỉnh sửa vị trí
           </Button>
         </div> */}
-        <Button
+        {/* <Button
           onClick={() =>
             navigate(`/promotion/manage-setting/create-promotion`, {
               state: {
@@ -784,7 +784,7 @@ const PromotionManage = ({
           style={{ width: "auto", marginBottom: 5 }}
         >
           add
-        </Button>
+        </Button> */}
 
         <div className="mt-3">
           <Table
