@@ -502,22 +502,6 @@ const DetailsOrder = () => {
       ),
     },
     {
-      title: `${i18n.t("note", { lng: lang })}`,
-      render: (data) => {
-        return (
-          <div>
-            {data?.note_admin === "" && (
-              <Checkbox
-                checked={data?.note_admin === "" ? false : true}
-                onChange={() => setModalCheck(true)}
-              />
-            )}
-            <a>{data?.note_admin}</a>
-          </div>
-        );
-      },
-    },
-    {
       key: "action",
       align: "center",
       render: (data, record, index) => {
@@ -529,18 +513,6 @@ const DetailsOrder = () => {
                   {data?.status === "doing" || data?.status === "confirm" ? (
                     <div>
                       {rowIndex === index && (
-                        // <Popconfirm
-                        //   title={`${i18n.t("change_status_job", {
-                        //     lng: lang,
-                        //   })}`}
-                        //   open={openStatus}
-                        //   onConfirm={() => handleChangeStatus(data?._id)}
-                        //   okButtonProps={{
-                        //     loading: confirmLoading,
-                        //   }}
-                        //   onCancel={() => setOpenStatus(false)}
-
-                        // />
                         <ModalCustom
                           isOpen={openStatus}
                           title={`${i18n.t("change_status_job", {
@@ -613,6 +585,23 @@ const DetailsOrder = () => {
           </Dropdown>
         </Space>
       ),
+    },
+    {
+      title: `${i18n.t("note", { lng: lang })}`,
+      render: (data) => {
+        return (
+          <div>
+            {data?.note_admin === "" && (
+              <Checkbox
+                checked={data?.note_admin === "" ? false : true}
+                onChange={() => setModalCheck(true)}
+              />
+            )}
+            <a>{data?.note_admin}</a>
+          </div>
+        );
+      },
+      align: "center",
     },
   ];
 

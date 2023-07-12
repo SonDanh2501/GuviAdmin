@@ -52,6 +52,12 @@ export const getListQuestionApi = (start, length, type, exam) => {
   );
 };
 
+export const getExamByLessonApi = (id, start, length) => {
+  return axiosClient.get(
+    `/admin/exam_test/get_exam_by_training_lesson/${id}?start=${start}&length=${length}`
+  );
+};
+
 export const addQuestionApi = (data) => {
   return axiosClient.post(`/admin/exam_test/create_question`, data);
 };
@@ -80,6 +86,33 @@ export const getListTestByCollabotatorApi = (id, start, length, type) => {
 export const getListTrainningLessonApi = (start, length, type) => {
   return axiosClient.get(
     `/admin/training_lesson_manager/get_list?start=${start}&length=${length}&type_training_lesson=${type}`
+  );
+};
+
+export const createLessonApi = (data) => {
+  return axiosClient.post(
+    `/admin/training_lesson_manager/create_trainging_lesson`,
+    data
+  );
+};
+
+export const editLessonApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/training_lesson_manager/edit_trainging_lesson/${id}`,
+    data
+  );
+};
+
+export const deleteLessonApi = (id) => {
+  return axiosClient.post(
+    `/admin/training_lesson_manager/delete_trainging_lesson/${id}`
+  );
+};
+
+export const activeLessonApi = (id, data) => {
+  return axiosClient.post(
+    `/admin/training_lesson_manager/active_trainging_lesson/${id}`,
+    data
   );
 };
 

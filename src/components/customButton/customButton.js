@@ -9,7 +9,7 @@ const CustomButton = (props) => {
       <Button
         color={color}
         type={type}
-        className={className}
+        className={["btn-custom", className]}
         onClick={onClick}
         style={style}
       >

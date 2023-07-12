@@ -10,7 +10,7 @@ const BaseUrl = process.env.REACT_APP_BASE_URL;
 const TestUrl = process.env.REACT_APP_TEST_URL;
 
 const axiosClient = axios.create({
-  baseURL: "https://server-test.guvico.com",
+  baseURL: TestUrl,
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,

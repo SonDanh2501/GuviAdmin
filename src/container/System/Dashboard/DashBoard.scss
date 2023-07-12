@@ -958,7 +958,7 @@
     background-color: white;
     border-radius: 8px;
     padding: 10px;
-    margin-top: 50px;
+    margin-top: 10px;
     width: 50%;
 
     .div-pie-chart-cancel {
@@ -1791,12 +1791,10 @@
 
     .div-chart-user {
       width: 100%;
-      min-height: 419px;
       filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
       background-color: white;
       border-radius: 8px;
       padding: 20px;
-      margin-top: 50px;
       margin-bottom: 30px;
 
       .div-time-area {
@@ -2016,6 +2014,69 @@
               margin-right: 10px;
             }
           }
+        }
+      }
+    }
+
+    .div-chart-pie-total-cancel-dash {
+      display: flex;
+      flex-direction: column;
+      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
+      background-color: white;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 5px;
+      width: 100%;
+
+      .div-pie-chart-cancel {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+
+        .div-total-piechart {
+          display: flex;
+          flex-direction: column;
+          width: 30%;
+          min-height: 100px;
+          border-right: 1px solid #d6d6d6;
+          padding: 5px;
+          justify-content: center;
+
+          .item-total {
+            display: flex;
+            flex-direction: row;
+
+            .title-total {
+              color: black;
+              font-weight: 500;
+              font-size: 12px;
+              font-family: "Roboto", sans-serif;
+              text-decoration: none;
+              width: 200px;
+            }
+
+            .text-colon {
+              font-family: "Roboto";
+              font-style: normal;
+              font-weight: 500;
+              font-size: 12px;
+              color: #000000;
+            }
+
+            .number-total {
+              font-family: "Roboto";
+              font-style: normal;
+              font-weight: 400;
+              font-size: 12px;
+              color: #000000;
+              margin-left: 10px;
+            }
+          }
+        }
+
+        .div-pie-cancel {
+          width: 70%;
+          height: 100%;
         }
       }
     }

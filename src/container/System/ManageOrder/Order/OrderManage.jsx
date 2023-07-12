@@ -48,11 +48,9 @@ const OrderManage = (props) => {
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const timeWork = (data) => {
-    const start = moment(new Date(data.date_work_schedule[0].date)).format(
-      "HH:mm"
-    );
+    const start = moment(new Date(data.date_work)).format("HH:mm");
 
-    const timeEnd = moment(new Date(data.date_work_schedule[0].date))
+    const timeEnd = moment(new Date(data.date_work))
       .add(data?.total_estimate, "hours")
       .format("HH:mm");
 
@@ -111,7 +109,7 @@ const OrderManage = (props) => {
           {
             key: "2",
             label: checkElement?.includes("detail_guvi_job") && (
-              <Link to={`/details-order/${item?._id}`}>
+              <Link to={`/details-order/${item?.id_group_order}`}>
                 <a>{`${i18n.t("see_more", { lng: lang })}`}</a>
               </Link>
             ),
@@ -121,7 +119,7 @@ const OrderManage = (props) => {
             label: checkElement?.includes("edit_guvi_job") ? (
               <EditTimeOrder
                 idOrder={item?._id}
-                dateWork={item?.date_work_schedule[0].date}
+                dateWork={item?.date_work}
                 code={item?.code_promotion ? item?.code_promotion?.code : ""}
                 status={status}
                 kind={kind}
@@ -140,7 +138,7 @@ const OrderManage = (props) => {
           {
             key: "1",
             label: checkElement?.includes("detail_guvi_job") && (
-              <Link to={`/details-order/${item?._id}`}>
+              <Link to={`/details-order/${item?.id_group_order}`}>
                 <a>{`${i18n.t("see_more", { lng: lang })}`}</a>
               </Link>
             ),
@@ -182,7 +180,7 @@ const OrderManage = (props) => {
           <Link
             to={
               checkElement?.includes("detail_guvi_job")
-                ? `/details-order/${data?._id}`
+                ? `/details-order/${data?.id_group_order}`
                 : ""
             }
           >
@@ -252,14 +250,10 @@ const OrderManage = (props) => {
         return (
           <div className="div-worktime-order">
             <a className="text-worktime">
-              {moment(new Date(data?.date_work_schedule[0].date)).format(
-                "DD/MM/YYYY"
-              )}
+              {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
             </a>
             <a className="text-worktime">
-              {moment(new Date(data?.date_work_schedule[0].date))
-                .locale(lang)
-                .format("dddd")}
+              {moment(new Date(data?.date_work)).locale(lang).format("dddd")}
             </a>
           </div>
         );

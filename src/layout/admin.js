@@ -65,6 +65,7 @@ import ReportOrderDayInWeek from "../container/System/ManageReport/MangeReportOr
 import ReportCustomerOrderByArea from "../container/System/ManageReport/ManageReportCustomer/ReportCustomerOrderByArea";
 import PromotionDrag from "../container/System/ManagePromotion/PromotionDrag";
 import CreatePromotion from "../container/System/ManagePromotion/Promotion/component/CreatePromotion";
+import DetailLesson from "../container/System/ManageConfiguration/ScreenConfiguration/CreateQuizz/DetailLesson";
 
 const Admin = () => {
   return (
@@ -264,8 +265,12 @@ const Admin = () => {
         element={<EditGroupCustomer />}
       />
       <Route
-        path="/adminManage/manage-configuration/create_quizz"
+        path="/adminManage/manage-configuration/lesson"
         element={<CreateQuizz />}
+      />
+      <Route
+        path="/adminManage/manage-configuration/lesson/details-lesson/:id"
+        element={<DetailLesson />}
       />
       <Route
         path="/adminManage/manage-configuration/reason_punish"

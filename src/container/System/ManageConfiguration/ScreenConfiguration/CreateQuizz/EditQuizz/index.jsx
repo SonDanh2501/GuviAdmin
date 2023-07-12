@@ -3,6 +3,7 @@ import {
   addQuestionApi,
   editQuestionApi,
   getDetailsQuestionApi,
+  getExamByLessonApi,
   getListQuestionApi,
 } from "../../../../../../api/configuration";
 import { useCallback, useEffect, useState } from "react";
@@ -19,15 +20,14 @@ const EditQuizz = ({
   setData,
   setTotal,
   startPage,
-  tab,
-  type,
+  idLesson,
 }) => {
   const [dataQuestion, setDataQuestion] = useState([
     {
       title: "",
       description: "",
       question: "",
-      type_exam: "",
+      id_training_lesson: "",
       choose: [
         {
           answer: "",
@@ -66,14 +66,14 @@ const EditQuizz = ({
         dataQuestion[0].description = res?.description;
         dataQuestion[0].question = res?.question;
         dataQuestion[0].choose = res?.choose;
-        dataQuestion[0].type_exam = res?.type_exam;
+        dataQuestion[0].id_training_lesson = idLesson;
         setDataQuestion(arr);
         setIsLoading(false);
       })
       .catch((err) => {
         setIsLoading(false);
       });
-  }, [id]);
+  }, [id, idLesson]);
 
   const addAnswer = () => {
     const arr = [...dataQuestion];
@@ -143,15 +143,13 @@ const EditQuizz = ({
     editQuestionApi(id, dataQuestion[0])
       .then((res) => {
         setOpen(false);
-        getListQuestionApi(startPage, 20, tab, type)
+        setIsLoading(false);
+        getExamByLessonApi(idLesson, 0, 20)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItem);
-            setIsLoading(false);
           })
-          .catch((err) => {
-            setIsLoading(false);
-          });
+          .catch((err) => {});
       })
       .catch((err) => {
         setIsLoading(false);
@@ -160,7 +158,7 @@ const EditQuizz = ({
           message: err,
         });
       });
-  }, [dataQuestion, startPage, tab, id, type]);
+  }, [dataQuestion, startPage, id, idLesson]);
 
   return (
     <div>
