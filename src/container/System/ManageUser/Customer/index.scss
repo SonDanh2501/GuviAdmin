@@ -1,8 +1,6 @@
 .div-header-customer {
   display: flex;
   flex-direction: row;
-  padding-left: 40px;
-  padding-right: 40px;
   margin-top: 20px;
   justify-content: space-between;
 
@@ -21,4 +19,34 @@
   width: 99%;
   margin: 10px;
   padding: 10px;
+
+  .div-tab-customer {
+    display: flex;
+    flex-direction: row;
+
+    .div-item-tab {
+      padding: 5px;
+
+      .text-tab {
+        color: rgb(159, 159, 159);
+        font-weight: 400;
+        font-size: 14px;
+        font-family: "Roboto";
+        text-decoration: none;
+      }
+    }
+
+    .div-item-tab-select {
+      padding: 5px;
+      border-bottom: 1px solid blue;
+
+      .text-tab {
+        color: rgb(0, 0, 0);
+        font-weight: 400;
+        font-size: 14px;
+        font-family: "Roboto";
+        text-decoration: none;
+      }
+    }
+  }
 }

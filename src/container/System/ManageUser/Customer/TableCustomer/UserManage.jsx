@@ -40,7 +40,7 @@ import i18n from "../../../../../i18n";
 const width = window.innerWidth;
 
 const UserManage = (props) => {
-  const { status } = props;
+  const { status, idGroup } = props;
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState("");
   const [valueFilter, setValueFilter] = useState("");
@@ -64,7 +64,7 @@ const UserManage = (props) => {
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    fetchCustomers(lang, 0, 50, status)
+    fetchCustomers(lang, 0, 50, status, idGroup)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItems);
@@ -72,14 +72,14 @@ const UserManage = (props) => {
       .catch((err) => {});
     setCurrentPage(1);
     setStartPage(0);
-  }, [status]);
+  }, [status, idGroup]);
 
   const onDelete = useCallback(
     (id) => {
       setIsLoading(true);
       deleteCustomer(id, { is_delete: true })
         .then((res) => {
-          fetchCustomers(lang, startPage, 50, status)
+          fetchCustomers(lang, startPage, 50, status, idGroup)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItems);
@@ -95,7 +95,7 @@ const UserManage = (props) => {
           setIsLoading(false);
         });
     },
-    [status, startPage]
+    [status, startPage, idGroup]
   );
 
   const blockCustomer = useCallback(
@@ -105,7 +105,7 @@ const UserManage = (props) => {
         activeCustomer(id, { is_active: false })
           .then((res) => {
             setModalBlock(false);
-            fetchCustomers(lang, startPage, 50, status)
+            fetchCustomers(lang, startPage, 50, status, idGroup)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -124,7 +124,7 @@ const UserManage = (props) => {
           .then((res) => {
             setModalBlock(false);
             setIsLoading(false);
-            fetchCustomers(lang, startPage, 50, status)
+            fetchCustomers(lang, startPage, 50, status, idGroup)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -139,7 +139,7 @@ const UserManage = (props) => {
           });
       }
     },
-    [startPage, status]
+    [startPage, status, idGroup]
   );
 
   const onChange = (page) => {
@@ -161,7 +161,7 @@ const UserManage = (props) => {
             setTotalFilter(res.totalItems);
           })
           .catch((err) => {})
-      : fetchCustomers(lang, start, 50, status)
+      : fetchCustomers(lang, start, 50, status, idGroup)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItems);
@@ -572,6 +572,7 @@ const UserManage = (props) => {
               setTotal={setTotal}
               startPage={startPage}
               status={status}
+              idGroup={idGroup}
             />
           )}
           <Input

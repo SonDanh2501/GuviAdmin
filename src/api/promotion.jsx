@@ -83,3 +83,14 @@ export const getChildPromotion = (code, status, start, length) => {
     `/admin/promotion_manager/get_child_promotion/${code}?lang=vi&status=${status}&start=${start}&length=${length}`
   );
 };
+
+export const getPromotionByPosition = () => {
+  return axiosClient.get(`/admin/promotion_manager/get_promotion_by_position`);
+};
+
+export const updatePositionPromotion = (data) => {
+  return axiosClient.post(
+    `/admin/promotion_manager/set_position_promotion`,
+    data
+  );
+};

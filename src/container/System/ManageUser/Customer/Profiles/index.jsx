@@ -7,6 +7,7 @@ import FavouriteBlock from "./CollaboratorFavoriteBlock";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
+import UsedPromotion from "./UsedPromotion";
 
 const Profiles = () => {
   // const { state } = useLocation();
@@ -37,6 +38,10 @@ const Profiles = () => {
           >
             <FavouriteBlock id={id} />
           </Tabs.TabPane>
+          {/* <Tabs.TabPane tab={"Khuyến mãi đã sử dụng"} key="5">
+            <UsedPromotion id={id} />
+          </Tabs.TabPane> */}
+          {/* <Tabs.TabPane tab="Đánh giá" key="6"></Tabs.TabPane> */}
         </Tabs>
       </div>
     </div>
