@@ -47,6 +47,9 @@ const EditPromotionOrther = (props) => {
     brand,
     exchange,
     idService,
+    search,
+    status,
+    typeSort,
   } = props;
   const [formDiscount, setFormDiscount] = useState("amount");
   const [discountUnit, setDiscountUnit] = useState("amount");
@@ -288,7 +291,17 @@ const EditPromotionOrther = (props) => {
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
         setState(false);
-        fetchPromotion(startPage, 20, type, brand, idService, exchange)
+        fetchPromotion(
+          search,
+          status,
+          startPage,
+          20,
+          type,
+          brand,
+          idService,
+          exchange,
+          typeSort
+        )
           .then((res) => {
             setDataPromo(res?.data);
             setTotalPromo(res?.totalItem);
@@ -346,6 +359,9 @@ const EditPromotionOrther = (props) => {
     isApplyArea,
     city,
     district,
+    search,
+    status,
+    typeSort,
   ]);
 
   return (

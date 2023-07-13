@@ -48,6 +48,9 @@ const EditPromotionEvent = (props) => {
     exchange,
     idService,
     tab,
+    search,
+    status,
+    typeSort,
   } = props;
   const [formPromorion, setFormPromotion] = useState("Mã khuyến mãi");
   const [typePromotion, setTypePromotion] = useState("code");
@@ -356,7 +359,17 @@ const EditPromotionEvent = (props) => {
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
         setState(false);
-        fetchPromotion(startPage, 20, type, brand, idService, exchange)
+        fetchPromotion(
+          search,
+          status,
+          startPage,
+          20,
+          type,
+          brand,
+          idService,
+          exchange,
+          typeSort
+        )
           .then((res) => {
             setDataPromo(res?.data);
             setTotalPromo(res?.totalItem);
@@ -402,6 +415,9 @@ const EditPromotionEvent = (props) => {
     isApplyArea,
     city,
     district,
+    search,
+    status,
+    typeSort,
   ]);
 
   return (

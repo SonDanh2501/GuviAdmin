@@ -1,3 +1,8 @@
+import {
+  CaretDownOutlined,
+  CaretUpOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import {
   Button,
@@ -11,41 +16,32 @@ import {
   Table,
 } from "antd";
 import _debounce from "lodash/debounce";
+import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   activePromotion,
   deletePromotion,
   fetchPromotion,
-  filterPromotion,
-  searchPromotion,
 } from "../../../../api/promotion.jsx";
+import offToggle from "../../../../assets/images/off-button.png";
+import onToggle from "../../../../assets/images/on-button.png";
 import AddPromotion from "../../../../components/addPromotion/addPromotion.js";
 import AddPromotionEvent from "../../../../components/addPromotionEvent/addPromotionEvent.js";
-import { loadingAction } from "../../../../redux/actions/loading.js";
-import { SearchOutlined } from "@ant-design/icons";
-import moment from "moment";
+import AddPromotionOrther from "../../../../components/addPromotionOrther/addPromotionOrther.js";
 import EditPromotion from "../../../../components/editPromotion/editPromotion.js";
-import {
-  getPromotionSelector,
-  getTotalPromotion,
-} from "../../../../redux/selectors/promotion.js";
-import "./PromotionManage.scss";
-import onToggle from "../../../../assets/images/on-button.png";
-import offToggle from "../../../../assets/images/off-button.png";
+import EditPromotionEvent from "../../../../components/editPromotionEvent/editPromotionEvent.js";
+import EditPromotionOrther from "../../../../components/editPromotionOrther/editPromotionOrther.js";
+import ModalCustom from "../../../../components/modalCustom/index.jsx";
 import LoadingPagination from "../../../../components/paginationLoading/index.jsx";
+import { errorNotify } from "../../../../helper/toast.js";
+import i18n from "../../../../i18n/index.js";
 import {
   getElementState,
   getLanguageState,
-  getUser,
 } from "../../../../redux/selectors/auth.js";
-import EditPromotionEvent from "../../../../components/editPromotionEvent/editPromotionEvent.js";
-import AddPromotionOrther from "../../../../components/addPromotionOrther/addPromotionOrther.js";
-import EditPromotionOrther from "../../../../components/editPromotionOrther/editPromotionOrther.js";
-import { errorNotify } from "../../../../helper/toast.js";
-import { useNavigate } from "react-router-dom";
-import ModalCustom from "../../../../components/modalCustom/index.jsx";
-import i18n from "../../../../i18n/index.js";
+import "./PromotionManage.scss";
 const width = window.innerWidth;
 
 const PromotionManage = ({
@@ -59,23 +55,17 @@ const PromotionManage = ({
   startPage,
   setStartPage,
 }) => {
-  const promotion = useSelector(getPromotionSelector);
   const [isLoading, setIsLoading] = useState(false);
-  const [totalSearch, setTotalSearch] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
-  const [totalFilter, setTotalFilter] = useState(0);
   const [valueFilter, setValueFilter] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  // const total = useSelector(getTotalPromotion);
-  const dispatch = useDispatch();
-  const [dataSearch, setDataSearch] = useState([]);
-  const [dataFilter, setDataFilter] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const [modalEdit, setModalEdit] = useState(false);
   const [modalActive, setModalActive] = useState(false);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [modal, setModal] = useState(false);
+  const [typeSort, setTypeSort] = useState(1);
   const toggle = () => setModal(!modal);
   const toggleActive = () => setModalActive(!modalActive);
   const [api, contextHolder] = notification.useNotification();
@@ -84,197 +74,220 @@ const PromotionManage = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchPromotion(0, 20, type, brand, idService, exchange)
+    fetchPromotion("", "", 0, 20, type, brand, idService, exchange, typeSort)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-    setDataFilter([]);
-    setDataSearch([]);
-    setValueFilter("");
-    setValueSearch("");
-  }, [type, brand, idService, exchange]);
+  }, []);
 
   const onDelete = useCallback(
     (id) => {
-      dispatch(loadingAction.loadingRequest(true));
+      setIsLoading(true);
       deletePromotion(id)
         .then((res) => {
-          // dispatch(
-          //   getPromotion.getPromotionRequest({
-          //     start: startPage,
-          //     length: 20,
-          //     type: type,
-          //     brand: brand,
-          //     id_service: idService,
-          //     exchange: exchange,
-          //   })
-          // );
-          fetchPromotion(startPage, 20, type, brand, idService, exchange)
+          fetchPromotion(
+            valueSearch,
+            valueFilter,
+            0,
+            20,
+            type,
+            brand,
+            idService,
+            exchange,
+            typeSort
+          )
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);
             })
             .catch((err) => {});
           setModal(false);
-          dispatch(loadingAction.loadingRequest(false));
+          setIsLoading(false);
         })
         .catch((err) => {
           errorNotify({
             message: err,
           });
-          dispatch(loadingAction.loadingRequest(false));
+          setIsLoading(false);
         });
     },
-    [type, brand, idService, startPage, exchange]
+    [
+      type,
+      brand,
+      idService,
+      startPage,
+      exchange,
+      valueSearch,
+      valueFilter,
+      typeSort,
+    ]
   );
 
   const onActive = useCallback(
     (id, is_active) => {
-      dispatch(loadingAction.loadingRequest(true));
+      setIsLoading(true);
       if (is_active) {
         activePromotion(id, { is_active: false })
           .then((res) => {
-            fetchPromotion(startPage, 20, type, brand, idService, exchange)
+            fetchPromotion(
+              valueSearch,
+              valueFilter,
+              0,
+              20,
+              type,
+              brand,
+              idService,
+              exchange,
+              typeSort
+            )
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
               })
               .catch((err) => {});
             setModalActive(false);
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
           })
           .catch((err) => {
             errorNotify({
               message: err,
             });
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
           });
       } else {
         activePromotion(id, { is_active: true })
           .then((res) => {
-            fetchPromotion(startPage, 20, type, brand, idService, exchange)
+            fetchPromotion(
+              valueSearch,
+              valueFilter,
+              0,
+              20,
+              type,
+              brand,
+              idService,
+              exchange,
+              typeSort
+            )
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
               })
               .catch((err) => {});
             setModalActive(false);
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
           })
           .catch((err) => {
             errorNotify({
               message: err,
             });
-            dispatch(loadingAction.loadingRequest(false));
+            setIsLoading(false);
           });
       }
     },
-    [type, brand, idService, startPage, exchange]
+    [
+      type,
+      brand,
+      idService,
+      startPage,
+      exchange,
+      valueFilter,
+      valueSearch,
+      typeSort,
+    ]
   );
 
   const onChange = (page) => {
     setCurrentPage(page);
     const lengthData = data.length < 20 ? 20 : data.length;
-    const lengthFilter = dataFilter.length < 20 ? 20 : dataFilter.length;
-    const lengthSearch = dataSearch.length < 20 ? 20 : dataSearch.length;
-    const start =
-      dataSearch.length > 0
-        ? page * lengthSearch - lengthSearch
-        : dataFilter.length > 0
-        ? page * lengthFilter - lengthFilter
-        : page * lengthData - lengthData;
-
+    const start = page * lengthData - lengthData;
     setStartPage(start);
-
-    dataFilter.length > 0
-      ? filterPromotion(
-          valueFilter,
-          start,
-          20,
-          type,
-          brand,
-          idService,
-          exchange
-        )
-          .then((res) => {
-            setDataFilter(res?.data);
-            setTotalFilter(res?.totalItem);
-          })
-          .catch((err) => console.log(err))
-      : dataSearch.length > 0
-      ? searchPromotion(
-          valueSearch,
-          start,
-          20,
-          type,
-          brand,
-          idService,
-          exchange,
-          valueFilter
-        )
-          .then((res) => {
-            setDataSearch(res.data);
-            setTotalSearch(res?.totalItem);
-          })
-          .catch((err) => console.log(err))
-      : fetchPromotion(start, 20, type, brand, idService, exchange)
-          .then((res) => {
-            setData(res?.data);
-            setTotal(res?.totalItem);
-          })
-          .catch((err) => {});
+    fetchPromotion(
+      valueSearch,
+      valueFilter,
+      0,
+      20,
+      type,
+      brand,
+      idService,
+      exchange,
+      typeSort
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
   };
 
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueSearch(value);
-      setDataFilter([]);
-      setTotalFilter(0);
       setIsLoading(true);
-      if (value !== "") {
-        searchPromotion(
-          value,
-          startPage,
-          20,
-          type,
-          brand,
-          idService,
-          exchange,
-          valueFilter
-        )
-          .then((res) => {
-            setIsLoading(false);
-
-            setDataSearch(res?.data);
-            setTotalSearch(res?.totalItem);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-          });
-      } else {
-        setIsLoading(false);
-        setDataSearch([]);
-      }
+      fetchPromotion(
+        value,
+        valueFilter,
+        0,
+        20,
+        type,
+        brand,
+        idService,
+        exchange,
+        typeSort
+      )
+        .then((res) => {
+          setIsLoading(false);
+          setData(res?.data);
+          setTotal(res?.totalItem);
+        })
+        .catch((err) => {});
     }, 1000),
-    [type, brand, idService, startPage, valueFilter]
+    [type, brand, idService, startPage, valueFilter, typeSort]
   );
 
   const handleChange = (value) => {
     setValueFilter(value);
     setIsLoading(true);
-    setDataSearch([]);
-    setTotalSearch(0);
-    filterPromotion(value, startPage, 20, type, brand, idService, exchange)
+    fetchPromotion(
+      valueSearch,
+      value,
+      0,
+      20,
+      type,
+      brand,
+      idService,
+      exchange,
+      typeSort
+    )
       .then((res) => {
         setIsLoading(false);
-        setDataFilter(res?.data);
-        setTotalFilter(res?.totalItem);
+        setData(res?.data);
+        setTotal(res?.totalItem);
       })
-      .catch((err) => {
+      .catch((err) => {});
+  };
+
+  const handleSortPosition = (value) => {
+    setTypeSort(value);
+    setIsLoading(true);
+    fetchPromotion(
+      valueSearch,
+      valueFilter,
+      0,
+      20,
+      type,
+      brand,
+      idService,
+      exchange,
+      value
+    )
+      .then((res) => {
         setIsLoading(false);
-      });
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
   };
 
   const openNotificationWithIcon = () => {
@@ -326,7 +339,13 @@ const PromotionManage = ({
     type === "code"
       ? [
           {
-            title: `${i18n.t("promotion_name", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("promotion_name", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data) => {
               return (
                 <div className="div-img-promotion">
@@ -340,9 +359,14 @@ const PromotionManage = ({
             },
           },
           {
-            title: `${i18n.t("use", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("use", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             align: "center",
-
             render: (data) => {
               return (
                 <a
@@ -361,18 +385,49 @@ const PromotionManage = ({
                 </a>
               );
             },
-            sorter: (a, b) => a.total_used_promotion - b.total_used_promotion,
+            // sorter: (a, b) => a.total_used_promotion - b.total_used_promotion,
           },
           {
-            title: `${i18n.t("position", { lng: lang })}`,
+            title: () => {
+              return (
+                <div className="div-title-column-position">
+                  <a className="text-column">{`${i18n.t("position", {
+                    lng: lang,
+                  })}`}</a>
+                  <div className="div-direction">
+                    <CaretUpOutlined
+                      onClick={() => handleSortPosition(1)}
+                      style={
+                        typeSort === 1
+                          ? { fontSize: 10, color: "blue" }
+                          : { fontSize: 10, color: "gray" }
+                      }
+                    />
+                    <CaretDownOutlined
+                      onClick={() => handleSortPosition(-1)}
+                      style={
+                        typeSort === -1
+                          ? { fontSize: 10, color: "blue" }
+                          : { fontSize: 10, color: "gray" }
+                      }
+                    />
+                  </div>
+                </div>
+              );
+            },
             align: "center",
             render: (data) => (
               <a className="text-title-promotion">{data?.position}</a>
             ),
-            sorter: (a, b) => a.position - b.position,
           },
           {
-            title: `${i18n.t("code", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("code", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             align: "center",
             render: (data) => (
               <a className="text-title-promotion">{data?.code}</a>
@@ -380,7 +435,13 @@ const PromotionManage = ({
           },
 
           {
-            title: `${i18n.t("expiry", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("expiry", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             align: "center",
             render: (data) => {
               const startDate = moment(new Date(data?.limit_start_date)).format(
@@ -399,7 +460,13 @@ const PromotionManage = ({
             },
           },
           {
-            title: `${i18n.t("on_off", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("on_off", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             align: "center",
             render: (data) => {
               var date =
@@ -451,7 +518,13 @@ const PromotionManage = ({
             },
           },
           {
-            title: `${i18n.t("status", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("status", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             align: "center",
             render: (data) => {
               return (
@@ -504,9 +577,13 @@ const PromotionManage = ({
         ]
       : [
           {
-            title: `${i18n.t("promotion_name", {
-              lng: lang,
-            })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("promotion_name", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data) => {
               return (
                 <div className="div-img-promotion">
@@ -524,7 +601,13 @@ const PromotionManage = ({
             },
           },
           {
-            title: `${i18n.t("use", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("use", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             align: "center",
             render: (data) => {
               return (
@@ -546,15 +629,46 @@ const PromotionManage = ({
             sorter: (a, b) => a.total_used_promotion - b.total_used_promotion,
           },
           {
-            title: `${i18n.t("position", { lng: lang })}`,
+            title: () => {
+              return (
+                <div className="div-title-column-position">
+                  <a className="text-column">{`${i18n.t("position", {
+                    lng: lang,
+                  })}`}</a>
+                  <div className="div-direction">
+                    <CaretUpOutlined
+                      onClick={() => handleSortPosition(1)}
+                      style={
+                        typeSort === 1
+                          ? { fontSize: 10, color: "blue" }
+                          : { fontSize: 10, color: "gray" }
+                      }
+                    />
+                    <CaretDownOutlined
+                      onClick={() => handleSortPosition(-1)}
+                      style={
+                        typeSort === -1
+                          ? { fontSize: 10, color: "blue" }
+                          : { fontSize: 10, color: "gray" }
+                      }
+                    />
+                  </div>
+                </div>
+              );
+            },
             align: "center",
             render: (data) => (
               <a className="text-title-promotion">{data?.position}</a>
             ),
-            sorter: (a, b) => a.position - b.position,
           },
           {
-            title: `${i18n.t("expiry", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("expiry", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             align: "center",
             render: (data) => {
               const startDate = moment(new Date(data?.limit_start_date)).format(
@@ -573,7 +687,13 @@ const PromotionManage = ({
             },
           },
           {
-            title: `${i18n.t("on_off", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("on_off", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             align: "center",
             render: (data) => {
               var date =
@@ -625,7 +745,13 @@ const PromotionManage = ({
             },
           },
           {
-            title: `${i18n.t("status", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("status", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             align: "center",
             render: (data) => {
               return (
@@ -727,6 +853,9 @@ const PromotionManage = ({
                   type={type}
                   brand={brand}
                   exchange={exchange}
+                  search={valueSearch}
+                  status={valueFilter}
+                  typeSort={typeSort}
                 />
               ) : type === "code" && brand === "orther" ? (
                 <AddPromotionOrther
@@ -737,6 +866,9 @@ const PromotionManage = ({
                   type={type}
                   brand={brand}
                   exchange={exchange}
+                  search={valueSearch}
+                  status={valueFilter}
+                  typeSort={typeSort}
                 />
               ) : (
                 <AddPromotionEvent
@@ -748,6 +880,9 @@ const PromotionManage = ({
                   type={type}
                   brand={brand}
                   exchange={exchange}
+                  search={valueSearch}
+                  status={valueFilter}
+                  typeSort={typeSort}
                 />
               )}
             </>
@@ -774,13 +909,7 @@ const PromotionManage = ({
         <div className="mt-3">
           <Table
             columns={columns}
-            dataSource={
-              dataSearch.length > 0
-                ? dataSearch
-                : dataFilter.length > 0
-                ? dataFilter
-                : data
-            }
+            dataSource={data}
             pagination={false}
             rowKey={(record) => record._id}
             rowSelection={{
@@ -806,24 +935,13 @@ const PromotionManage = ({
           />
           <div className="div-pagination p-2">
             <a>
-              {`${i18n.t("total", { lng: lang })}`}:{" "}
-              {dataSearch.length > 0
-                ? totalSearch
-                : dataFilter.length > 0
-                ? totalFilter
-                : total}
+              {`${i18n.t("total", { lng: lang })}`}: {total}
             </a>
             <div>
               <Pagination
                 current={currentPage}
                 onChange={onChange}
-                total={
-                  dataSearch.length > 0
-                    ? totalSearch
-                    : dataFilter.length > 0
-                    ? totalFilter
-                    : total
-                }
+                total={total}
                 showSizeChanger={false}
                 pageSize={20}
               />
@@ -845,6 +963,9 @@ const PromotionManage = ({
               exchange={exchange}
               idService={idService}
               tab={tab}
+              search={valueSearch}
+              status={valueFilter}
+              typeSort={typeSort}
             />
           ) : type === "code" && brand === "orther" ? (
             <EditPromotionOrther
@@ -859,6 +980,9 @@ const PromotionManage = ({
               exchange={exchange}
               idService={idService}
               tab={tab}
+              search={valueSearch}
+              status={valueFilter}
+              typeSort={typeSort}
             />
           ) : (
             <EditPromotionEvent
@@ -873,6 +997,9 @@ const PromotionManage = ({
               exchange={exchange}
               idService={idService}
               tab={tab}
+              search={valueSearch}
+              status={valueFilter}
+              typeSort={typeSort}
             />
           )}
         </div>

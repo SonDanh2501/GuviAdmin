@@ -209,7 +209,13 @@ const UserManage = (props) => {
     status === "birthday"
       ? [
           {
-            title: `${i18n.t("code_customer", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("code_customer", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data) => {
               return (
                 <Link
@@ -225,7 +231,13 @@ const UserManage = (props) => {
             },
           },
           {
-            title: `${i18n.t("customer", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("customer", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data) => {
               return (
                 <Link
@@ -255,7 +267,13 @@ const UserManage = (props) => {
             sorter: true,
           },
           {
-            title: `${i18n.t("phone", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("phone", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data, record, index) => {
               const phone = data?.phone.slice(0, 7);
               return (
@@ -289,9 +307,14 @@ const UserManage = (props) => {
               );
             },
           },
-
           {
-            title: `${i18n.t("birthday", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("birthday", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data) => {
               return (
                 <a className="text-birtday-customer">
@@ -301,7 +324,13 @@ const UserManage = (props) => {
             },
           },
           {
-            title: `${i18n.t("kind_member", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("kind_member", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data) => {
               if (data?.rank_point >= 0 && data?.rank_point < 100) {
                 setRank(`${i18n.t("member", { lng: lang })}`);
@@ -316,7 +345,13 @@ const UserManage = (props) => {
             },
           },
           {
-            title: `${i18n.t("total_order", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("total_order", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data) => (
               <a className="text-address-customer">{data?.total_order}</a>
             ),
@@ -325,7 +360,13 @@ const UserManage = (props) => {
             responsive: ["xl"],
           },
           {
-            title: `${i18n.t("nearest_order", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("nearest_order", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data) => {
               return (
                 <>
@@ -348,8 +389,13 @@ const UserManage = (props) => {
             align: "center",
           },
           {
-            title: `${i18n.t("total", { lng: lang })}`,
-            fixed: "right",
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("total", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             width: "10%",
             render: (data) => (
               <a className="text-address-customer">
@@ -383,7 +429,13 @@ const UserManage = (props) => {
         ]
       : [
           {
-            title: `${i18n.t("code_customer", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("code_customer", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data) => {
               return (
                 <Link
@@ -399,7 +451,13 @@ const UserManage = (props) => {
             },
           },
           {
-            title: `${i18n.t("customer", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("customer", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data) => {
               return (
                 <Link
@@ -426,15 +484,21 @@ const UserManage = (props) => {
                 </Link>
               );
             },
-            sorter: (a, b) => a.full_name.localeCompare(b.full_name),
+            // sorter: (a, b) => a.full_name.localeCompare(b.full_name),
           },
           {
-            title: `${i18n.t("phone", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("phone", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data, record, index) => {
               const phone = data?.phone.slice(0, 7);
               return (
                 <div className="hide-phone">
-                  <a className="text-phone-customer">
+                  <a className="text-phone">
                     {rowIndex === index
                       ? hidePhone
                         ? data?.phone
@@ -464,7 +528,13 @@ const UserManage = (props) => {
             },
           },
           {
-            title: `${i18n.t("address", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("address", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data) => {
               const address = data?.default_address?.address.split(",");
               return (
@@ -481,7 +551,13 @@ const UserManage = (props) => {
             responsive: ["xl"],
           },
           {
-            title: `${i18n.t("date_create", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("date_create", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data) => {
               return (
                 <div className="div-create">
@@ -497,7 +573,13 @@ const UserManage = (props) => {
             responsive: ["xl"],
           },
           {
-            title: `${i18n.t("total_order", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("total_order", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data) => (
               <a className="text-address-customer">{data?.total_order}</a>
             ),
@@ -506,7 +588,13 @@ const UserManage = (props) => {
             responsive: ["xl"],
           },
           {
-            title: `${i18n.t("nearest_order", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("nearest_order", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             render: (data) => {
               return (
                 <>
@@ -529,7 +617,13 @@ const UserManage = (props) => {
             align: "center",
           },
           {
-            title: `${i18n.t("total", { lng: lang })}`,
+            title: () => {
+              return (
+                <a className="title-column">{`${i18n.t("total", {
+                  lng: lang,
+                })}`}</a>
+              );
+            },
             width: "10%",
             render: (data) => (
               <a className="text-address-customer">

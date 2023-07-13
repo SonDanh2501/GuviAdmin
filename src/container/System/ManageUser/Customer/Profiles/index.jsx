@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
 import UsedPromotion from "./UsedPromotion";
+import CustomerReview from "./Review";
 
 const Profiles = () => {
   // const { state } = useLocation();
@@ -38,10 +39,12 @@ const Profiles = () => {
           >
             <FavouriteBlock id={id} />
           </Tabs.TabPane>
-          {/* <Tabs.TabPane tab={"Khuyến mãi đã sử dụng"} key="5">
+          <Tabs.TabPane tab={"Khuyến mãi đã sử dụng"} key="5">
             <UsedPromotion id={id} />
-          </Tabs.TabPane> */}
-          {/* <Tabs.TabPane tab="Đánh giá" key="6"></Tabs.TabPane> */}
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Đánh giá" key="6">
+            <CustomerReview id={id} />
+          </Tabs.TabPane>
         </Tabs>
       </div>
     </div>

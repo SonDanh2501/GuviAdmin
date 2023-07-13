@@ -97,3 +97,9 @@ export const unblockCustomerApi = (idUser, idCollaborator) => {
     `/admin/customer_manager/unblock_collaborator/${idUser}?id_collaborator=${idCollaborator}`
   );
 };
+
+export const getReviewByCustomers = (id, start, length) => {
+  return axiosClient.get(
+    `/admin/customer_manager/get_customer_review/${id}?start=${start}&length=${length}`
+  );
+};

@@ -40,6 +40,9 @@ const AddPromotionOther = (props) => {
     brand,
     idService,
     exchange,
+    search,
+    status,
+    typeSort,
   } = props;
   const [state, setState] = useState(false);
   const [formDiscount, setFormDiscount] = useState("amount");
@@ -235,7 +238,17 @@ const AddPromotionOther = (props) => {
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
         setState(false);
-        fetchPromotion(startPage, 20, type, brand, idService, exchange)
+        fetchPromotion(
+          search,
+          status,
+          startPage,
+          20,
+          type,
+          brand,
+          idService,
+          exchange,
+          typeSort
+        )
           .then((res) => {
             setDataPromo(res?.data);
             setTotalPromo(res?.totalItem);
@@ -287,6 +300,9 @@ const AddPromotionOther = (props) => {
     isApplyArea,
     city,
     district,
+    search,
+    status,
+    typeSort,
   ]);
 
   return (

@@ -28,7 +28,7 @@ const OrderDoingManage = () => {
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    getOrderApi(0, 10, "doing", "")
+    getOrderApi("", 0, 20, "doing", "", "", "", "")
       .then((res) => {
         setData(res.data);
         setTotal(res.totalItem);
@@ -210,31 +210,28 @@ const OrderDoingManage = () => {
     },
   ];
 
-  // const handleSearch = useCallback(
-  //   _debounce((value) => {
-  //     setValueSearch(value);
-  //     searchOrderApi(0, 10, value, "doing")
-  //       .then((res) => {
-  //         setDataSearch(res.data);
-  //         setTotalSearch(res.totalItem);
-  //       })
-  //       .catch((err) => {});
-  //   }, 1000),
-  //   []
-  // );
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      setValueSearch(value);
+      getOrderApi(value, 0, 20, "doing", "", "", "", "")
+        .then((res) => {
+          setData(res.data);
+          setTotal(res.totalItem);
+        })
+        .catch((err) => {});
+    }, 1000),
+    []
+  );
 
   const onChange = (page) => {
     setCurrentPage(page);
     const dataLength = data?.length < 20 ? 20 : data.length;
-    const searchLength = dataSearch?.length < 20 ? 20 : dataSearch.length;
-    const start =
-      dataSearch.length > 0
-        ? page * searchLength - searchLength
-        : page * dataLength - dataLength;
+
+    const start = page * dataLength - dataLength;
 
     setStartPage(start);
 
-    getOrderApi(start, 10, "doing", "")
+    getOrderApi(valueSearch, 0, 20, "doing", "", "", "", "")
       .then((res) => {
         setData(res.data);
         setTotal(res.totalItem);
@@ -248,13 +245,13 @@ const OrderDoingManage = () => {
         <div className="div-header">
           <a className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</a>
 
-          {/* <InputCustom
+          <InputCustom
             placeholder={`${i18n.t("search", { lng: lang })}`}
             type="text"
             className="field-search"
             onChange={(e) => handleSearch(e.target.value)}
             prefix={<SearchOutlined />}
-          /> */}
+          />
         </div>
         <div className="shadow mt-5">
           <Table

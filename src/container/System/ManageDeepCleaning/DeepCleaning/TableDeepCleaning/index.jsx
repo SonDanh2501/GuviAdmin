@@ -249,73 +249,73 @@ const TableDeepCleaning = (props) => {
         );
       },
     },
-    {
-      title: `${i18n.t("status", { lng: lang })}`,
-      render: (data) => {
-        return (
-          <div>
-            {data?.status === "pending" ? (
-              <a className="text-pending-request">{`${i18n.t("pending", {
-                lng: lang,
-              })}`}</a>
-            ) : data?.status === "done" ? (
-              <a className="text-done-request">{`${i18n.t("complete", {
-                lng: lang,
-              })}`}</a>
-            ) : (
-              <a className="text-cancel-request">{`${i18n.t("cancel_modal", {
-                lng: lang,
-              })}`}</a>
-            )}
-          </div>
-        );
-      },
-      align: "center",
-    },
-    {
-      key: "action",
-      render: (data) => {
-        return (
-          <>
-            {checkElement?.includes("change_status_request_service") && (
-              <div>
-                {data?.status === "pending" && (
-                  <div className="div-btn-change-status">
-                    <div
-                      className="btn-change-done"
-                      onClick={() => {
-                        toggleStatus();
-                        setStatusModal("done");
-                      }}
-                    >
-                      <a className="text-change-done">{`${i18n.t("complete", {
-                        lng: lang,
-                      })}`}</a>
-                    </div>
-                    <div
-                      className="btn-change-cancel"
-                      onClick={() => {
-                        toggleStatus();
-                        setStatusModal("cancel");
-                      }}
-                    >
-                      <a className="text-change-cancel">{`${i18n.t(
-                        "cancel_modal",
-                        {
-                          lng: lang,
-                        }
-                      )}`}</a>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </>
-        );
-      },
-      align: "center",
-      width: "5%",
-    },
+    // {
+    //   title: `${i18n.t("status", { lng: lang })}`,
+    //   render: (data) => {
+    //     return (
+    //       <div>
+    //         {data?.status === "pending" ? (
+    //           <a className="text-pending-request">{`${i18n.t("pending", {
+    //             lng: lang,
+    //           })}`}</a>
+    //         ) : data?.status === "done" ? (
+    //           <a className="text-done-request">{`${i18n.t("complete", {
+    //             lng: lang,
+    //           })}`}</a>
+    //         ) : (
+    //           <a className="text-cancel-request">{`${i18n.t("cancel_modal", {
+    //             lng: lang,
+    //           })}`}</a>
+    //         )}
+    //       </div>
+    //     );
+    //   },
+    //   align: "center",
+    // },
+    // {
+    //   key: "action",
+    //   render: (data) => {
+    //     return (
+    //       <>
+    //         {checkElement?.includes("change_status_request_service") && (
+    //           <div>
+    //             {data?.status === "pending" && (
+    //               <div className="div-btn-change-status">
+    //                 <div
+    //                   className="btn-change-done"
+    //                   onClick={() => {
+    //                     toggleStatus();
+    //                     setStatusModal("done");
+    //                   }}
+    //                 >
+    //                   <a className="text-change-done">{`${i18n.t("complete", {
+    //                     lng: lang,
+    //                   })}`}</a>
+    //                 </div>
+    //                 <div
+    //                   className="btn-change-cancel"
+    //                   onClick={() => {
+    //                     toggleStatus();
+    //                     setStatusModal("cancel");
+    //                   }}
+    //                 >
+    //                   <a className="text-change-cancel">{`${i18n.t(
+    //                     "cancel_modal",
+    //                     {
+    //                       lng: lang,
+    //                     }
+    //                   )}`}</a>
+    //                 </div>
+    //               </div>
+    //             )}
+    //           </div>
+    //         )}
+    //       </>
+    //     );
+    //   },
+    //   align: "center",
+    //   width: "5%",
+    // },
     {
       key: "action",
       align: "center",

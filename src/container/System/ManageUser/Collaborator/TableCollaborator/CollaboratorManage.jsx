@@ -336,7 +336,13 @@ const CollaboratorManage = (props) => {
 
   const columns = [
     {
-      title: `${i18n.t("code_collaborator", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("code_collaborator", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => (
         <Link
           to={
@@ -350,7 +356,11 @@ const CollaboratorManage = (props) => {
       ),
     },
     {
-      title: `${i18n.t("name", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("name", { lng: lang })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-collaborator">
@@ -367,10 +377,16 @@ const CollaboratorManage = (props) => {
           </div>
         );
       },
-      sorter: (a, b) => a.full_name.localeCompare(b.full_name),
+      // sorter: (a, b) => a.full_name.localeCompare(b.full_name),
     },
     {
-      title: `${i18n.t("date_create", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("date_create", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-create-ctv">
@@ -385,12 +401,20 @@ const CollaboratorManage = (props) => {
       },
     },
     {
-      title: `${i18n.t("sdt", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("sdt", { lng: lang })}`}</a>
+        );
+      },
       render: (data) => <a className="text-phone-ctv">{data?.phone}</a>,
       align: "center",
     },
     {
-      title: `${i18n.t("status", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("status", { lng: lang })}`}</a>
+        );
+      },
       align: "center",
       render: (data) => {
         const now = moment(new Date()).format("DD/MM/YYYY hh:mm:ss");
@@ -428,7 +452,13 @@ const CollaboratorManage = (props) => {
       },
     },
     {
-      title: `${i18n.t("account", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("account", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       align: "center",
       render: (data) => {
         return (

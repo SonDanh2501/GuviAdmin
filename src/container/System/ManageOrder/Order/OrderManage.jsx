@@ -39,6 +39,7 @@ const OrderManage = (props) => {
     type,
     startDate,
     endDate,
+    valueSearch,
   } = props;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [item, setItem] = useState([]);
@@ -61,15 +62,16 @@ const OrderManage = (props) => {
     setIsLoading(true);
     deleteOrderApi(id)
       .then((res) => {
-        // dispatch(
-        //   getOrder.getOrderRequest({
-        //     start: 0,
-        //     length: 20,
-        //     status: status,
-        //     kind: kind,
-        //   })
-        // );
-        getOrderApi(startPage, 20, status, kind, type, startDate, endDate)
+        getOrderApi(
+          valueSearch,
+          startPage,
+          20,
+          status,
+          kind,
+          type,
+          startDate,
+          endDate
+        )
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItem);
@@ -128,6 +130,11 @@ const OrderManage = (props) => {
                 setTotal={setTotal}
                 setIsLoading={setIsLoading}
                 details={false}
+                estimate={item?.total_estimate}
+                valueSearch={valueSearch}
+                type={type}
+                startDate={startDate}
+                endDate={endDate}
               />
             ) : (
               ""
@@ -174,7 +181,13 @@ const OrderManage = (props) => {
 
   const columns = [
     {
-      title: `${i18n.t("code_order", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("code_order", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <Link
@@ -190,7 +203,13 @@ const OrderManage = (props) => {
       },
     },
     {
-      title: `${i18n.t("date_create", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("date_create", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-create-order">
@@ -206,7 +225,13 @@ const OrderManage = (props) => {
       responsive: ["xl"],
     },
     {
-      title: `${i18n.t("customer", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("customer", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <Link
@@ -220,11 +245,17 @@ const OrderManage = (props) => {
           </Link>
         );
       },
-      sorter: (a, b) =>
-        a.id_customer.full_name.localeCompare(b.id_customer.full_name),
+      // sorter: (a, b) =>
+      //   a.id_customer.full_name.localeCompare(b.id_customer.full_name),
     },
     {
-      title: `${i18n.t("service", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("service", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-service-order">
@@ -245,7 +276,13 @@ const OrderManage = (props) => {
       },
     },
     {
-      title: `${i18n.t("date_work", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("date_work", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-worktime-order">
@@ -260,14 +297,26 @@ const OrderManage = (props) => {
       },
     },
     {
-      title: `${i18n.t("address", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("address", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return <a className="text-address-order">{data?.address}</a>;
       },
       responsive: ["xl"],
     },
     {
-      title: `${i18n.t("collaborator", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("collaborator", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
@@ -298,8 +347,13 @@ const OrderManage = (props) => {
     },
 
     {
-      title: `${i18n.t("status", { lng: lang })}`,
-
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("status", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       align: "center",
       render: (data) => (
         <a
@@ -328,7 +382,13 @@ const OrderManage = (props) => {
       ),
     },
     {
-      title: `${i18n.t("pay", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("pay", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       align: "center",
       render: (data) => {
         return (
@@ -382,19 +442,6 @@ const OrderManage = (props) => {
 
   return (
     <React.Fragment>
-      {/* <div>
-        <Input
-          placeholder={`${i18n.t("search", { lng: lang })}`}
-          type="text"
-          className="field-search"
-          value={valueSearch}
-          prefix={<SearchOutlined />}
-          onChange={(e) => {
-            handleSearch(e.target.value);
-            setValueSearch(e.target.value);
-          }}
-        />
-      </div> */}
       <div className="mt-3">
         <Table
           columns={columns}

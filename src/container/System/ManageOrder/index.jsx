@@ -244,6 +244,7 @@ const ManageOrder = () => {
             type={type}
             startDate={startDate}
             endDate={endDate}
+            valueSearch={valueSearch}
           />
         </div>
       </div>
