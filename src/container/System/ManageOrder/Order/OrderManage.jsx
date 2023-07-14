@@ -23,7 +23,8 @@ import {
 import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
 import EditTimeOrder from "../EditTimeGroupOrder";
 import "./OrderManage.scss";
-const width = window.innerWidth;
+import useWindowDimensions from "../../../../helper/useWindowDimensions";
+
 const OrderManage = (props) => {
   const {
     data,
@@ -40,12 +41,14 @@ const OrderManage = (props) => {
     startDate,
     endDate,
     valueSearch,
+    city,
   } = props;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [item, setItem] = useState([]);
   const [modal, setModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const toggle = () => setModal(!modal);
+  const { height, width } = useWindowDimensions();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const timeWork = (data) => {
@@ -70,7 +73,8 @@ const OrderManage = (props) => {
           kind,
           type,
           startDate,
-          endDate
+          endDate,
+          ""
         )
           .then((res) => {
             setData(res?.data);
@@ -432,7 +436,17 @@ const OrderManage = (props) => {
 
     setStartPage(start);
 
-    getOrderApi(start, 20, status, kind, type, startDate, endDate)
+    getOrderApi(
+      valueSearch,
+      start,
+      20,
+      status,
+      kind,
+      type,
+      startDate,
+      endDate,
+      city
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);

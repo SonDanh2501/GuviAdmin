@@ -19,7 +19,6 @@ import {
   deleteCollaborator,
   fetchCollaborators,
   lockTimeCollaborator,
-  searchCollaborators,
   verifyCollaborator,
 } from "../../../../../api/collaborator.jsx";
 import offToggle from "../../../../../assets/images/off-button.png";
@@ -32,24 +31,22 @@ import { loadingAction } from "../../../../../redux/actions/loading.js";
 import "./CollaboratorManage.scss";
 
 import moment from "moment";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AddCollaborator from "../../../../../components/addCollaborator/addCollaborator.js";
 import ModalCustom from "../../../../../components/modalCustom/index.jsx";
 import LoadingPagination from "../../../../../components/paginationLoading/index.jsx";
 import InputCustom from "../../../../../components/textInputCustom/index.jsx";
+import i18n from "../../../../../i18n/index.js";
 import {
   getElementState,
   getLanguageState,
 } from "../../../../../redux/selectors/auth.js";
-import i18n from "../../../../../i18n/index.js";
 
 const CollaboratorManage = (props) => {
   const { status } = props;
-  const [dataFilter, setDataFilter] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
-  const [totalFilter, setTotalFilter] = useState("");
-  const [valueFilter, setValueFilter] = useState("");
+  const [valueSearch, setValueSearch] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const [data, setData] = useState([]);
@@ -73,7 +70,7 @@ const CollaboratorManage = (props) => {
   const width = window.innerWidth;
 
   useEffect(() => {
-    fetchCollaborators(lang, 0, 20, status)
+    fetchCollaborators(lang, 0, 20, status, valueSearch)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItems);
@@ -84,37 +81,22 @@ const CollaboratorManage = (props) => {
   const onChange = (page) => {
     setCurrentPage(page);
     const lenghtData = data.length < 20 ? 20 : data.length;
-    const lenghtFilter = dataFilter.length < 20 ? 20 : dataFilter.length;
-    const start =
-      dataFilter.length > 0
-        ? page * lenghtFilter - lenghtFilter
-        : page * lenghtData - lenghtData;
+    const start = page * lenghtData - lenghtData;
     setStartPage(start);
-    dataFilter.length > 0
-      ? searchCollaborators(start, 20, status, valueFilter)
-          .then((res) => {
-            setDataFilter(res.data);
-            setTotalFilter(res.totalItems);
-          })
-          .catch((err) => console.log(err))
-      : fetchCollaborators(lang, start, 20, status)
-          .then((res) => {
-            setData(res?.data);
-            setTotal(res?.totalItems);
-          })
-          .catch((err) => {});
-  };
-
-  const changeValueSearch = (value) => {
-    setValueFilter(value);
+    fetchCollaborators(lang, start, 20, status, valueSearch)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItems);
+      })
+      .catch((err) => {});
   };
 
   const handleSearch = useCallback(
     _debounce((value) => {
-      searchCollaborators(0, 20, status, value)
+      fetchCollaborators(lang, 0, 20, status, value)
         .then((res) => {
-          setDataFilter(res.data);
-          setTotalFilter(res.totalItems);
+          setData(res.data);
+          setTotal(res.totalItems);
         })
         .catch((err) => {
           errorNotify({
@@ -130,7 +112,7 @@ const CollaboratorManage = (props) => {
       setIsLoading(true);
       deleteCollaborator(id, { is_delete: true })
         .then((res) => {
-          fetchCollaborators(lang, startPage, 20, status)
+          fetchCollaborators(lang, startPage, 20, status, valueSearch)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItems);
@@ -146,7 +128,7 @@ const CollaboratorManage = (props) => {
           });
         });
     },
-    [startPage, status]
+    [startPage, status, valueSearch]
   );
 
   const blockCollaborator = useCallback(
@@ -199,7 +181,7 @@ const CollaboratorManage = (props) => {
       if (is_lock_time === true) {
         lockTimeCollaborator(id, { is_locked: false })
           .then((res) => {
-            fetchCollaborators(lang, startPage, 20, status)
+            fetchCollaborators(lang, startPage, 20, status, valueSearch)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -220,7 +202,7 @@ const CollaboratorManage = (props) => {
           date_lock: moment(new Date(timeValue)).toISOString(),
         })
           .then((res) => {
-            fetchCollaborators(lang, startPage, 20, status)
+            fetchCollaborators(lang, startPage, 20, status, valueSearch)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -237,7 +219,7 @@ const CollaboratorManage = (props) => {
           });
       }
     },
-    [timeValue, dispatch, startPage, status]
+    [timeValue, dispatch, startPage, status, valueSearch]
   );
   const onVerifyCollaborator = useCallback(
     (id, is_verify) => {
@@ -245,7 +227,7 @@ const CollaboratorManage = (props) => {
       if (is_verify === true) {
         verifyCollaborator(id)
           .then((res) => {
-            fetchCollaborators(lang, startPage, 20, status)
+            fetchCollaborators(lang, startPage, 20, status, valueSearch)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -263,7 +245,7 @@ const CollaboratorManage = (props) => {
       } else {
         verifyCollaborator(id)
           .then((res) => {
-            fetchCollaborators(lang, startPage, 20, status)
+            fetchCollaborators(lang, startPage, 20, status, valueSearch)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -280,7 +262,7 @@ const CollaboratorManage = (props) => {
           });
       }
     },
-    [startPage, status]
+    [startPage, status, valueSearch]
   );
 
   const onContected = useCallback(
@@ -289,7 +271,7 @@ const CollaboratorManage = (props) => {
 
       changeContactedCollaborator(id)
         .then((res) => {
-          fetchCollaborators(lang, startPage, 20, status)
+          fetchCollaborators(lang, startPage, 20, status, valueSearch)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItems);
@@ -305,7 +287,7 @@ const CollaboratorManage = (props) => {
           });
         });
     },
-    [startPage, status]
+    [startPage, status, valueSearch]
   );
 
   const items = [
@@ -538,6 +520,7 @@ const CollaboratorManage = (props) => {
               startPage={startPage}
               status={status}
               setIsLoading={setIsLoading}
+              valueSearch={valueSearch}
             />
           )}
 
@@ -546,7 +529,7 @@ const CollaboratorManage = (props) => {
             type="text"
             prefix={<SearchOutlined />}
             onChange={(e) => {
-              changeValueSearch(e.target.value);
+              setValueSearch(e.target.value);
               handleSearch(e.target.value);
             }}
             style={{ width: "70%", marginLeft: 20 }}
@@ -555,7 +538,7 @@ const CollaboratorManage = (props) => {
         <div className="div-table mt-3">
           <Table
             columns={columns}
-            dataSource={dataFilter.length > 0 ? dataFilter : data}
+            dataSource={data}
             pagination={false}
             rowKey={(record) => record._id}
             rowSelection={{
@@ -585,14 +568,13 @@ const CollaboratorManage = (props) => {
           />
           <div className="div-pagination p-2">
             <a>
-              {`${i18n.t("total", { lng: lang })}`}:{" "}
-              {totalFilter > 0 ? totalFilter : total}
+              {`${i18n.t("total", { lng: lang })}`}: {total}
             </a>
             <div>
               <Pagination
                 current={currentPage}
                 onChange={onChange}
-                total={totalFilter > 0 ? totalFilter : total}
+                total={total}
                 showSizeChanger={false}
                 pageSize={20}
               />

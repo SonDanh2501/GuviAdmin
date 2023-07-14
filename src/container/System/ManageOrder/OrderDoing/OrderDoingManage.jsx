@@ -28,7 +28,7 @@ const OrderDoingManage = () => {
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    getOrderApi("", 0, 20, "doing", "", "", "", "")
+    getOrderApi("", 0, 20, "doing", "", "", "", "", "")
       .then((res) => {
         setData(res.data);
         setTotal(res.totalItem);
@@ -213,7 +213,7 @@ const OrderDoingManage = () => {
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueSearch(value);
-      getOrderApi(value, 0, 20, "doing", "", "", "", "")
+      getOrderApi(value, 0, 20, "doing", "", "", "", "", "")
         .then((res) => {
           setData(res.data);
           setTotal(res.totalItem);
@@ -231,7 +231,7 @@ const OrderDoingManage = () => {
 
     setStartPage(start);
 
-    getOrderApi(valueSearch, 0, 20, "doing", "", "", "", "")
+    getOrderApi(valueSearch, 0, 20, "doing", "", "", "", "", "")
       .then((res) => {
         setData(res.data);
         setTotal(res.totalItem);

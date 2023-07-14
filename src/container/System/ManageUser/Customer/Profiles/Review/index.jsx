@@ -4,8 +4,10 @@ import { Rate, Table } from "antd";
 import "./styles.scss";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import useWindowDimensions from "../../../../../../helper/useWindowDimensions";
 
 const CustomerReview = ({ id }) => {
+  const { width } = useWindowDimensions();
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -85,6 +87,7 @@ const CustomerReview = ({ id }) => {
       render: (data) => {
         return <a className="text-review-by-customer">{data?.review}</a>;
       },
+      responsive: ["xl"],
     },
     {
       title: () => {
@@ -95,6 +98,7 @@ const CustomerReview = ({ id }) => {
           <a className="text-review-by-customer">{data?.short_review[0]}</a>
         );
       },
+      responsive: ["xl"],
     },
     {
       title: () => {
@@ -120,6 +124,20 @@ const CustomerReview = ({ id }) => {
             pageSize: 10,
             onChange: onChange,
           }}
+          expandable={
+            width <= 1200
+              ? {
+                  expandedRowRender: (record) => {
+                    return (
+                      <div className="div-plus">
+                        <a>Nội dung: {record?.review}</a>
+                        <a>Đánh giá: {record?.short_review[0]}</a>
+                      </div>
+                    );
+                  },
+                }
+              : ""
+          }
         />
       </div>
     </div>

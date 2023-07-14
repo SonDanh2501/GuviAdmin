@@ -1,45 +1,45 @@
+import { SearchOutlined } from "@ant-design/icons";
 import { UilEllipsisH, UilFileExport } from "@iconscout/react-unicons";
 import {
   Button,
+  DatePicker,
   Dropdown,
   FloatButton,
   Input,
   Select,
   Space,
-  Tabs,
 } from "antd";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import _debounce from "lodash/debounce";
+import moment from "moment";
+import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { DATA, DATA_STATUS } from "../../../api/fakeData";
 import { getOrderApi } from "../../../api/order";
 import { ExportCSV } from "../../../helper/export";
-import { getOrder } from "../../../redux/actions/order";
+import i18n from "../../../i18n";
 import {
   getElementState,
   getLanguageState,
-  getUser,
 } from "../../../redux/selectors/auth";
-import _debounce from "lodash/debounce";
+import { getProvince, getService } from "../../../redux/selectors/service";
 import OrderManage from "./Order/OrderManage";
 import "./index.scss";
-import i18n from "../../../i18n";
-import { getService } from "../../../redux/selectors/service";
-import InputCustom from "../../../components/textInputCustom";
-import CustomDatePicker from "../../../components/customDatePicker";
-import moment from "moment";
-import { SearchOutlined } from "@ant-design/icons";
+import LoadingPagination from "../../../components/paginationLoading";
+const { RangePicker } = DatePicker;
 
 const ManageOrder = () => {
   const [tab, setTab] = useState("all");
   const [kind, setKind] = useState("");
   const [valueSearch, setValueSearch] = useState("");
-  const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [type, setType] = useState("date_create");
+  const [city, setCity] = useState("");
+  const [checkCondition, setCheckCondition] = useState(false);
+  const [condition, setCondition] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [startDate, setStartDate] = useState(
     moment("1-1-2023").startOf("date").toISOString()
   );
@@ -83,19 +83,21 @@ const ManageOrder = () => {
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const service = useSelector(getService);
+  const province = useSelector(getProvince);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   useEffect(() => {
-    getOrderApi(valueSearch, 0, 20, tab, kind, type, startDate, endDate)
+    getOrderApi(valueSearch, 0, 20, tab, kind, type, startDate, endDate, city)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-  }, [tab, kind, type, startDate, endDate]);
+  }, [tab]);
 
+  const cityOptions = [];
   const optionsService = [
     {
       value: "",
@@ -110,35 +112,37 @@ const ManageOrder = () => {
     });
   });
 
+  province?.map((item) => {
+    cityOptions.push({
+      value: item?.code,
+      label: item?.name,
+    });
+  });
+
   const handleSearch = useCallback(
     _debounce((value) => {
-      getOrderApi(value, 0, 20, tab, kind, type, startDate, endDate).then(
-        (res) => {
+      getOrderApi(value, 0, 20, tab, kind, type, startDate, endDate, city)
+        .then((res) => {
           setData(res?.data);
           setTotal(res?.totalItem);
-        }
-      );
+        })
+        .catch((err) => {});
     }, 1000),
-    [tab, kind]
+    [tab, kind, city]
   );
 
-  const onChangeDay = () => {
-    getOrderApi(valueSearch, 0, 20, tab, kind, type, startDate, endDate)
+  const handleFilterByCondition = () => {
+    setIsLoading(true);
+    setCheckCondition(false);
+    getOrderApi(valueSearch, 0, 20, tab, kind, type, startDate, endDate, city)
       .then((res) => {
+        setIsLoading(false);
         setData(res?.data);
         setTotal(res?.totalItem);
       })
-      .catch((err) => {});
-  };
-
-  const onChangeService = (e) => {
-    setKind(e);
-    getOrderApi(valueSearch, 0, 20, tab, e, type, startDate, endDate)
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false);
+      });
   };
 
   const items = [
@@ -199,7 +203,9 @@ const ManageOrder = () => {
                 onClick={() => {
                   setTab(item?.status);
                   setKind("");
-
+                  setCity("");
+                  setType("date_create");
+                  setCheckCondition(false);
                   setCurrentPage(1);
                   setStartPage(0);
                   setKeyActive(item?.key);
@@ -210,19 +216,104 @@ const ManageOrder = () => {
             );
           })}
         </div>
-        <div className="div-search-filter">
-          <Select
-            value={kind}
-            style={{ width: "20%", marginRight: 10 }}
-            options={optionsService}
-            onChange={onChangeService}
-          />
+        <div className="div-search-filter-job">
+          <div className="div-condition">
+            <div
+              className="div-codition-filter-job"
+              onClick={() => setCheckCondition(!checkCondition)}
+            >
+              <i class="uil uil-filter"></i>
+              <a className="text-condition">Điều kiện lọc</a>
+            </div>
+
+            {checkCondition && (
+              <div className="div-condition-body">
+                <a className="text-display-job">
+                  Hiện thị tất cả đơn hàng theo:
+                </a>
+                <Select
+                  onChange={(e) => {
+                    setCondition(e);
+                    if (e === "date_create") {
+                      setType("date_create");
+                      setCity("");
+                      setKind("");
+                    } else if (e === "date_work") {
+                      setType("date_work");
+                      setCity("");
+                      setKind("");
+                    } else if (e === "id_service") {
+                      setCity("");
+                      setStartDate(
+                        moment("1-1-2023").startOf("date").toISOString()
+                      );
+                      setEndDate(
+                        moment().endOf("date").add(7, "hours").toISOString()
+                      );
+                    } else {
+                      setKind("");
+                      setStartDate(
+                        moment("1-1-2023").startOf("date").toISOString()
+                      );
+                      setEndDate(
+                        moment().endOf("date").add(7, "hours").toISOString()
+                      );
+                    }
+                  }}
+                  options={[
+                    { value: "id_service", label: "Dịch vụ" },
+                    { value: "city", label: "Tỉnh/Thành phố" },
+                    { value: "date_create", label: "Ngày tạo" },
+                    { value: "date_work", label: "Ngày làm" },
+                  ]}
+                />
+                <div className="mt-2">
+                  {condition === "id_service" ? (
+                    <Select
+                      style={{ width: "100%", marginRight: 10 }}
+                      options={optionsService}
+                      onChange={(e) => setKind(e)}
+                    />
+                  ) : condition === "city" ? (
+                    <Select
+                      style={{ width: "100%", marginRight: 10 }}
+                      options={cityOptions}
+                      onChange={(e) => setCity(e)}
+                    />
+                  ) : condition === "date_create" ||
+                    condition === "date_work" ? (
+                    <RangePicker
+                      onChange={(date, dateString) => {
+                        setStartDate(moment(dateString[0]).toISOString());
+                        setEndDate(moment(dateString[1]).toISOString());
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <div className="footer-condition-filter">
+                  <Button
+                    type="primary"
+                    style={{
+                      width: "20%",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      display: "flex",
+                    }}
+                    onClick={handleFilterByCondition}
+                  >
+                    Lọc
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
           <Input
             placeholder={`${i18n.t("search", { lng: lang })}`}
-            type="text"
-            className="input-search-order"
             value={valueSearch}
             prefix={<SearchOutlined />}
+            className="input-filter-job"
             onChange={(e) => {
               handleSearch(e.target.value);
               setValueSearch(e.target.value);
@@ -245,92 +336,12 @@ const ManageOrder = () => {
             startDate={startDate}
             endDate={endDate}
             valueSearch={valueSearch}
+            city={city}
           />
         </div>
       </div>
 
-      {/* <div className="div-select-status">
-        <InputCustom
-          title="Trạng thái"
-          style={{ width: 150 }}
-          value={tab}
-          onChange={(e) => {
-            setTab(e);
-            setKind("");
-            setValueTab("");
-            setCurrentPage(1);
-            setStartPage(0);
-          }}
-          select={true}
-          options={[
-            {
-              value: "all",
-              label: `${i18n.t("all", { lng: lang })}`,
-            },
-            {
-              value: "pending",
-              label: `${i18n.t("pending", { lng: lang })}`,
-            },
-            {
-              value: "confirm",
-              label: `${i18n.t("confirm", { lng: lang })}`,
-            },
-            {
-              value: "doing",
-              label: `${i18n.t("doing", { lng: lang })}`,
-            },
-            {
-              value: "cancel",
-              label: `${i18n.t("cancel", { lng: lang })}`,
-            },
-            {
-              value: "done",
-              label: `${i18n.t("complete", { lng: lang })}`,
-            },
-          ]}
-        />
-        <InputCustom
-          title="Dịch vụ"
-          style={{ width: 200 }}
-          value={valueTab}
-          onChange={(e) => {
-            setKind(e);
-            setValueTab(e);
-            setCurrentPage(1);
-            setStartPage(0);
-          }}
-          select={true}
-          options={optionsService}
-        />
-        <InputCustom
-          title="Theo ngày"
-          style={{ width: 100 }}
-          value={type}
-          onChange={(e) => {
-            setType(e);
-          }}
-          select={true}
-          options={[
-            { value: "all", label: "Tất cả" },
-            { value: "date_create", label: "Ngày tạo" },
-          ]}
-        />
-
-        <div className="div-date">
-          <CustomDatePicker
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
-            onClick={onChangeDay}
-            onCancel={() => {}}
-          />
-          {startDate && (
-            <a className="text-date">
-              {moment(startDate).format("DD/MM/YYYY")} -{" "}
-              {moment(endDate).utc().format("DD/MM/YYYY")}
-            </a>
-          )}
-        </div>
-      </div> */}
+      {isLoading && <LoadingPagination />}
 
       <FloatButton.BackTop />
     </div>

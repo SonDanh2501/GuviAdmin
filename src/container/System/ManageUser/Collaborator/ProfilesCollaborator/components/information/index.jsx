@@ -1,4 +1,4 @@
-import { DatePicker, Input, List, Select } from "antd";
+import { DatePicker, List } from "antd";
 import dayjs from "dayjs";
 import _debounce from "lodash/debounce";
 import moment from "moment";
@@ -6,8 +6,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Col, Form, Row } from "reactstrap";
 import {
+  fetchCollaborators,
   getCollaboratorsById,
-  searchCollaborators,
   updateInformationCollaboratorApi,
 } from "../../../../../../../api/collaborator";
 import { getDistrictApi } from "../../../../../../../api/file";
@@ -133,7 +133,7 @@ const Information = ({ data, image, idCTV, setData }) => {
     _debounce((value) => {
       setNameCollaborator(value);
       if (value) {
-        searchCollaborators(0, 100, "", value)
+        fetchCollaborators(lang, 0, 100, "", value)
           .then((res) => {
             if (value === "") {
               setDataCollaborator([]);

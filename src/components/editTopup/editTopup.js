@@ -1,21 +1,21 @@
-import { Drawer, Input, InputNumber, List } from "antd";
+import { Drawer, Input, List } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { searchCollaborators } from "../../api/collaborator";
+import { fetchCollaborators } from "../../api/collaborator";
 import {
   getTopupCollaboratorApi,
   updateMoneyCollaboratorApi,
 } from "../../api/topup";
 import { errorNotify } from "../../helper/toast";
+import i18n from "../../i18n";
 import { loadingAction } from "../../redux/actions/loading";
 import { getRevenueCollaborator } from "../../redux/actions/topup";
-import CustomButton from "../customButton/customButton";
-import "./editTopup.scss";
 import { getLanguageState } from "../../redux/selectors/auth";
-import i18n from "../../i18n";
+import CustomButton from "../customButton/customButton";
 import InputCustom from "../textInputCustom";
+import "./editTopup.scss";
 const { TextArea } = Input;
 
 const EditTopup = ({ iconEdit, item, type, setDataT, setTotal }) => {
@@ -48,7 +48,7 @@ const EditTopup = ({ iconEdit, item, type, setDataT, setTotal }) => {
     _debounce((value) => {
       setName(value);
       if (value) {
-        searchCollaborators(value)
+        fetchCollaborators(lang, 0, 20, "", value)
           .then((res) => setData(res.data))
           .catch((err) => console.log(err));
       } else if (id) {

@@ -8,10 +8,11 @@ export const getOrderApi = (
   service,
   type,
   startDate,
-  endDate
+  endDate,
+  city
 ) => {
   return axiosClient.get(
-    `/admin/statistic/job_lists?search=${search}&start=${start}&length=${length}&status=${status}&id_service=${service}&type_sort=${type}&start_date=${startDate}&end_date=${endDate}`
+    `/admin/statistic/job_lists?search=${search}&start=${start}&length=${length}&status=${status}&id_service=${service}&type_sort=${type}&start_date=${startDate}&end_date=${endDate}&city=${city}`
   );
 };
 

@@ -162,16 +162,6 @@ const DetailsProfile = ({ id }) => {
                 {`${i18n.t("code_invite", { lng: lang })}`}: {data?.invite_code}
               </a>
             </div>
-            {/* <div className="ml-5">
-              <QRCode
-                value={valueQr}
-                ecLevel={"H"}
-                removeQrCodeBehindLogo={true}
-                renderAs={"svg"}
-                id="QRCode-svg"
-                size={150}
-              />
-            </div> */}
           </div>
           <div className="div-rank-pay-member">
             <div className="div-member">

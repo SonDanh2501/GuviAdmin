@@ -97,7 +97,8 @@ const EditTimeOrder = (props) => {
             kind,
             type,
             startDate,
-            endDate
+            endDate,
+            ""
           )
             .then((res) => {
               setData(res?.data);

@@ -59,48 +59,6 @@ const ManageCustomer = () => {
       </div>
 
       <div className="div-container-customer">
-        {/* <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
-        
-          <Tabs.TabPane tab={`${i18n.t("all", { lng: lang })}`} key="1">
-            <UserManage status={status} />
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={`${i18n.t("member_customer", { lng: lang })}`}
-            key="2"
-          >
-            <UserManage status={status} />
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={`${i18n.t("silver_customer", { lng: lang })}`}
-            key="3"
-          >
-            <UserManage status={status} />
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={`${i18n.t("gold_customer", { lng: lang })}`}
-            key="4"
-          >
-            <UserManage status={status} />
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={`${i18n.t("platinum_customer", { lng: lang })}`}
-            key="5"
-          >
-            <UserManage status={status} />
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={`${i18n.t("month_birthday", { lng: lang })}`}
-            key="6"
-          >
-            <UserManage status={status} />
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={`${i18n.t("customer_block", { lng: lang })}`}
-            key="7"
-          >
-            <UserManage status={status} />
-          </Tabs.TabPane>
-        </Tabs> */}
         <div className="div-tab-customer">
           {dataTab?.map((item, index) => {
             return (
