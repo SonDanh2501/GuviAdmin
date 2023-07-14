@@ -14,7 +14,7 @@ import "./addCustomer.scss";
 import i18n from "../../i18n";
 
 const AddCustomer = (props) => {
-  const { setIsLoading, setData, setTotal, startPage, status } = props;
+  const { setIsLoading, setData, setTotal, startPage, status, idGroup } = props;
   const formikRef = useRef();
   const dispatch = useDispatch();
   const checkElement = useSelector(getElementState);
@@ -51,7 +51,7 @@ const AddCustomer = (props) => {
       .then((res) => {
         setOpen(false);
         setIsLoading(false);
-        fetchCustomers(lang, startPage, 50, status)
+        fetchCustomers(lang, startPage, 50, status, idGroup)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItems);

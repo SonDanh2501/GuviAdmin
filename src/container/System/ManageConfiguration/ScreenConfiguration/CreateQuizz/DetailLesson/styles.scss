@@ -1,0 +1,154 @@
+.title-quizz {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  color: #000000;
+  text-decoration: none;
+}
+
+.div-tab-type-exam {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+  margin-top: 20px;
+
+  .div-tab {
+    padding: 5px;
+    margin-right: 10px;
+    border-bottom: 1px solid rgb(255, 255, 255);
+
+    .text-tab {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      color: #c1c1c1;
+      text-decoration: none;
+    }
+  }
+  .div-tab-select {
+    padding: 5px;
+    border-bottom: 1px solid blue;
+    margin-right: 10px;
+
+    .text-tab {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      color: #000000;
+      text-decoration: none;
+    }
+  }
+}
+
+.div-container-question {
+  display: flex;
+  flex-direction: column;
+
+  .btn-add-question {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 35px;
+    float: right;
+  }
+
+  .title-question {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+  }
+
+  .title-answers {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+  }
+
+  .title-question {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+    width: 200px;
+  }
+
+  .div-answer {
+    display: flex;
+    flex-direction: column;
+
+    .title-answer {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      margin-left: 10px;
+      color: #000000;
+      text-decoration: none;
+      width: 60%;
+    }
+
+    .title-answer-correct {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      margin-left: 10px;
+      color: #00b106;
+      text-decoration: none;
+      width: 60%;
+    }
+  }
+
+  .div-tab-exam {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+
+    .div-tab {
+      padding: 5px;
+
+      .text-tab {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        color: #c1c1c1;
+        text-decoration: none;
+      }
+    }
+    .div-tab-select {
+      padding: 5px;
+      border-bottom: 1px solid blue;
+
+      .text-tab {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        color: #000000;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.title-lesson {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  color: #000000;
+  text-decoration: none;
+}

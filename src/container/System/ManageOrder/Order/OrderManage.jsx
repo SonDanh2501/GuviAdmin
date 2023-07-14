@@ -3,14 +3,13 @@ import { UilEllipsisV } from "@iconscout/react-unicons";
 import { Checkbox, Dropdown, Input, Pagination, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import {
   checkOrderApi,
   deleteOrderApi,
   getOrderApi,
-  searchOrderApi,
 } from "../../../../api/order";
 import ModalCustom from "../../../../components/modalCustom";
 import LoadingPagination from "../../../../components/paginationLoading";
@@ -24,8 +23,8 @@ import {
 import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
 import EditTimeOrder from "../EditTimeGroupOrder";
 import "./OrderManage.scss";
-import InputCustom from "../../../../components/textInputCustom";
-const width = window.innerWidth;
+import useWindowDimensions from "../../../../helper/useWindowDimensions";
+
 const OrderManage = (props) => {
   const {
     data,
@@ -38,25 +37,24 @@ const OrderManage = (props) => {
     setCurrentPage,
     setStartPage,
     startPage,
+    type,
+    startDate,
+    endDate,
+    valueSearch,
+    city,
   } = props;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [item, setItem] = useState([]);
   const [modal, setModal] = useState(false);
-  const [modalCheck, setModalCheck] = useState(false);
-  const [dataSearch, setDataSearch] = useState([]);
-  const [totalSearch, setTotalSearch] = useState(0);
-  const [valueSearch, setValueSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const toggle = () => setModal(!modal);
+  const { height, width } = useWindowDimensions();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
-  const [note, setNote] = useState("");
   const timeWork = (data) => {
-    const start = moment(new Date(data.date_work_schedule[0].date)).format(
-      "HH:mm"
-    );
+    const start = moment(new Date(data.date_work)).format("HH:mm");
 
-    const timeEnd = moment(new Date(data.date_work_schedule[0].date))
+    const timeEnd = moment(new Date(data.date_work))
       .add(data?.total_estimate, "hours")
       .format("HH:mm");
 
@@ -67,15 +65,17 @@ const OrderManage = (props) => {
     setIsLoading(true);
     deleteOrderApi(id)
       .then((res) => {
-        // dispatch(
-        //   getOrder.getOrderRequest({
-        //     start: 0,
-        //     length: 20,
-        //     status: status,
-        //     kind: kind,
-        //   })
-        // );
-        getOrderApi(startPage, 20, status, kind)
+        getOrderApi(
+          valueSearch,
+          startPage,
+          20,
+          status,
+          kind,
+          type,
+          startDate,
+          endDate,
+          ""
+        )
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItem);
@@ -115,7 +115,7 @@ const OrderManage = (props) => {
           {
             key: "2",
             label: checkElement?.includes("detail_guvi_job") && (
-              <Link to={`/details-order/${item?._id}`}>
+              <Link to={`/details-order/${item?.id_group_order}`}>
                 <a>{`${i18n.t("see_more", { lng: lang })}`}</a>
               </Link>
             ),
@@ -125,7 +125,7 @@ const OrderManage = (props) => {
             label: checkElement?.includes("edit_guvi_job") ? (
               <EditTimeOrder
                 idOrder={item?._id}
-                dateWork={item?.date_work_schedule[0].date}
+                dateWork={item?.date_work}
                 code={item?.code_promotion ? item?.code_promotion?.code : ""}
                 status={status}
                 kind={kind}
@@ -134,6 +134,11 @@ const OrderManage = (props) => {
                 setTotal={setTotal}
                 setIsLoading={setIsLoading}
                 details={false}
+                estimate={item?.total_estimate}
+                valueSearch={valueSearch}
+                type={type}
+                startDate={startDate}
+                endDate={endDate}
               />
             ) : (
               ""
@@ -144,7 +149,7 @@ const OrderManage = (props) => {
           {
             key: "1",
             label: checkElement?.includes("detail_guvi_job") && (
-              <Link to={`/details-order/${item?._id}`}>
+              <Link to={`/details-order/${item?.id_group_order}`}>
                 <a>{`${i18n.t("see_more", { lng: lang })}`}</a>
               </Link>
             ),
@@ -180,13 +185,19 @@ const OrderManage = (props) => {
 
   const columns = [
     {
-      title: `${i18n.t("code_order", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("code_order", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <Link
             to={
               checkElement?.includes("detail_guvi_job")
-                ? `/details-order/${data?._id}`
+                ? `/details-order/${data?.id_group_order}`
                 : ""
             }
           >
@@ -196,7 +207,13 @@ const OrderManage = (props) => {
       },
     },
     {
-      title: `${i18n.t("date_create", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("date_create", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-create-order">
@@ -212,7 +229,13 @@ const OrderManage = (props) => {
       responsive: ["xl"],
     },
     {
-      title: `${i18n.t("customer", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("customer", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <Link
@@ -226,11 +249,17 @@ const OrderManage = (props) => {
           </Link>
         );
       },
-      sorter: (a, b) =>
-        a.id_customer.full_name.localeCompare(b.id_customer.full_name),
+      // sorter: (a, b) =>
+      //   a.id_customer.full_name.localeCompare(b.id_customer.full_name),
     },
     {
-      title: `${i18n.t("service", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("service", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-service-order">
@@ -251,33 +280,47 @@ const OrderManage = (props) => {
       },
     },
     {
-      title: `${i18n.t("date_work", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("date_work", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-worktime-order">
             <a className="text-worktime">
-              {moment(new Date(data?.date_work_schedule[0].date)).format(
-                "DD/MM/YYYY"
-              )}
+              {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
             </a>
             <a className="text-worktime">
-              {moment(new Date(data?.date_work_schedule[0].date))
-                .locale(lang)
-                .format("dddd")}
+              {moment(new Date(data?.date_work)).locale(lang).format("dddd")}
             </a>
           </div>
         );
       },
     },
     {
-      title: `${i18n.t("address", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("address", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return <a className="text-address-order">{data?.address}</a>;
       },
       responsive: ["xl"],
     },
     {
-      title: `${i18n.t("collaborator", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("collaborator", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
@@ -308,8 +351,13 @@ const OrderManage = (props) => {
     },
 
     {
-      title: `${i18n.t("status", { lng: lang })}`,
-
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("status", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       align: "center",
       render: (data) => (
         <a
@@ -338,7 +386,13 @@ const OrderManage = (props) => {
       ),
     },
     {
-      title: `${i18n.t("pay", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("pay", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       align: "center",
       render: (data) => {
         return (
@@ -362,7 +416,7 @@ const OrderManage = (props) => {
             menu={{
               items,
             }}
-            placement="bottom"
+            placement="bottomLeft"
             trigger={["click"]}
           >
             <div>
@@ -377,55 +431,35 @@ const OrderManage = (props) => {
   const onChange = (page) => {
     setCurrentPage(page);
     const dataLength = data.length < 20 ? 20 : data.length;
-    const searchLength = dataSearch?.length < 20 ? 20 : dataSearch.length;
-    const start =
-      dataSearch.length > 0
-        ? page * searchLength - searchLength
-        : page * dataLength - dataLength;
+
+    const start = page * dataLength - dataLength;
 
     setStartPage(start);
 
-    dataSearch.length > 0
-      ? searchOrderApi(0, 20, status, valueSearch, kind).then((res) => {
-          setDataSearch(res?.data);
-          setTotalSearch(res?.totalItem);
-        })
-      : getOrderApi(start, 20, status, kind)
-          .then((res) => {
-            setData(res?.data);
-            setTotal(res?.totalItem);
-          })
-          .catch((err) => {});
+    getOrderApi(
+      valueSearch,
+      start,
+      20,
+      status,
+      kind,
+      type,
+      startDate,
+      endDate,
+      city
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
   };
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      searchOrderApi(0, 20, status, value, kind).then((res) => {
-        setDataSearch(res?.data);
-        setTotalSearch(res?.totalItem);
-      });
-    }, 1000),
-    [status, kind]
-  );
   return (
     <React.Fragment>
-      <div>
-        <Input
-          placeholder={`${i18n.t("search", { lng: lang })}`}
-          type="text"
-          className="field-search"
-          value={valueSearch}
-          prefix={<SearchOutlined />}
-          onChange={(e) => {
-            handleSearch(e.target.value);
-            setValueSearch(e.target.value);
-          }}
-        />
-      </div>
       <div className="mt-3">
         <Table
           columns={columns}
-          dataSource={dataSearch?.length > 0 ? dataSearch : data}
+          dataSource={data}
           pagination={false}
           rowKey={(record) => record._id}
           rowSelection={{
@@ -474,14 +508,13 @@ const OrderManage = (props) => {
 
         <div className="mt-2 div-pagination-order p-2">
           <a>
-            {`${i18n.t("total", { lng: lang })}`}:{" "}
-            {totalSearch > 0 ? totalSearch : total}
+            {`${i18n.t("total", { lng: lang })}`}: {total}
           </a>
           <div>
             <Pagination
               current={currentPage}
               onChange={onChange}
-              total={totalSearch > 0 ? totalSearch : total}
+              total={total}
               showSizeChanger={false}
               pageSize={20}
             />

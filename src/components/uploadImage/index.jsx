@@ -15,6 +15,10 @@ const UploadImage = (props) => {
 
   const onChangeThumbnail = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
+    const extend = e.target.files[0].type.slice(
+      e.target.files[0].type.indexOf("/") + 1
+    );
+
     try {
       if (e.target.files[0]) {
         const reader = new FileReader();
@@ -24,7 +28,7 @@ const UploadImage = (props) => {
         reader.readAsDataURL(e.target.files[0]);
       }
       const file = e.target.files[0];
-      const image = await resizeFile(file);
+      const image = await resizeFile(file, extend);
       const formData = new FormData();
       formData.append("multi-files", image);
       postFile(formData, {

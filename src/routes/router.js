@@ -43,17 +43,17 @@ const router = [
     tab: [
       {
         path: "/group-order/manage-order/all",
-        name: "Tất cả công việc",
+        name: "Tất cả",
         icon: bag,
       },
       {
         path: "/group-order/manage-order/doing",
-        name: "Dịch vụ chưa hoàn tất",
+        name: "Chưa hoàn tất",
         icon: bag,
       },
       {
         path: "/group-order/manage-order/done",
-        name: " Dịch vụ hết hạn",
+        name: "Hết hạn",
         icon: bag,
       },
     ],

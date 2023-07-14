@@ -31,12 +31,11 @@
   align-items: center;
 }
 
-.text-id {
+.text-id-activity {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
-  line-height: 16px;
   color: black;
 }
 
@@ -85,15 +84,13 @@
 }
 
 .text-address-activity {
+  display: block;
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
   color: black;
-  width: 200px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  width: 150px;
 }
 .text-collaborator {
   font-family: "Roboto";
@@ -177,4 +174,24 @@
 .div-name {
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 1200px) {
+  .text-id-activity {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: black;
+  }
+
+  .text-address-activity {
+    display: block;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: black;
+    width: 100px;
+  }
 }

@@ -15,7 +15,8 @@ import "./addCollaborator.scss";
 import i18n from "../../i18n";
 
 const AddCollaborator = (props) => {
-  const { setData, setTotal, startPage, status, setIsLoading } = props;
+  const { setData, setTotal, startPage, status, setIsLoading, valueSearch } =
+    props;
   const formikRef = useRef();
   const checkElement = useSelector(getElementState);
   const service = useSelector(getService);
@@ -81,7 +82,7 @@ const AddCollaborator = (props) => {
     })
       .then((res) => {
         setOpen(false);
-        fetchCollaborators(lang, startPage, 20, status)
+        fetchCollaborators(lang, startPage, 20, status, valueSearch)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItems);

@@ -5,7 +5,7 @@ import i18n from "../../i18n";
 
 const ModalCustom = (props) => {
   const lang = useSelector(getLanguageState);
-  const { title, isOpen, textOk, handleOk, handleCancel, body } = props;
+  const { title, isOpen, textOk, handleOk, handleCancel, body, width } = props;
 
   return (
     <div>
@@ -13,6 +13,7 @@ const ModalCustom = (props) => {
         title={title}
         open={isOpen}
         onCancel={handleCancel}
+        width={width}
         footer={[
           <Button
             style={{ alignItems: "center", width: "auto" }}

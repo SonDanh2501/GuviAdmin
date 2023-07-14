@@ -420,7 +420,7 @@ const ReportDetailOrderDaily = () => {
   ];
 
   return (
-    <div>
+    <div className="div-detail-report-order-daily">
       <div>
         <Table dataSource={data} columns={columns} pagination={false} />
       </div>

@@ -1,23 +1,27 @@
 import { useEffect, useState } from "react";
 import "./styles.scss";
 import { useLocation } from "react-router-dom";
-import { fetchPromotion } from "../../../../api/promotion";
-import { Image } from "antd";
+import {
+  fetchPromotion,
+  getPromotionByPosition,
+  updatePositionPromotion,
+} from "../../../../api/promotion";
+import { Button, Image } from "antd";
+import { errorNotify } from "../../../../helper/toast";
+import LoadingPagination from "../../../../components/paginationLoading";
 
 const PromotionDrag = () => {
   const { state } = useLocation();
   const { type, brand, idService, exchange } = state || {};
   const [data, setData] = useState([]);
+  const [item, setItem] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [draggedItem, setDraggedItem] = useState();
 
   useEffect(() => {
-    fetchPromotion(0, 20, type, brand, idService, exchange)
+    getPromotionByPosition()
       .then((res) => {
-        fetchPromotion(0, res?.totalItem, type, brand, idService, exchange)
-          .then((res) => {
-            setData(res?.data);
-          })
-          .catch((err) => {});
+        setData(res?.data);
       })
       .catch((err) => {});
   }, []);
@@ -44,16 +48,44 @@ const PromotionDrag = () => {
       items[i].position = i;
       setData(arr);
     }
+
+    for (let i = 0; i < items.length; i++) {
+      item.push({
+        _id: items[i]._id,
+        position: i,
+      });
+    }
   };
 
   const onDragEnd = () => {
     setDraggedItem(null);
   };
 
-  console.log(data);
+  const onUpdatePositon = () => {
+    setIsLoading(true);
+    updatePositionPromotion({
+      arr_promotion: item,
+    })
+      .then((res) => {
+        setIsLoading(false);
+        getPromotionByPosition()
+          .then((res) => {
+            setData(res?.data);
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        errorNotify({
+          message: err,
+        });
+      });
+  };
 
   return (
     <div>
+      <h5>Thay đổi vị trí mã khuyến mãi</h5>
+      <Button onClick={onUpdatePositon}>Cập nhật</Button>
       <div className="div-list-item-image">
         {data?.map((item, index) => {
           return (
@@ -62,21 +94,21 @@ const PromotionDrag = () => {
               key={index}
               onDragOver={() => onDragOver(index)}
             >
-              <Image
-                src={item?.thumbnail}
-                style={{ width: 50, height: 50, borderRadius: 4 }}
-              />
               <div
+                className="body-item"
                 draggable
                 onDragStart={(e) => onDragStart(e, index)}
                 onDragEnd={onDragEnd}
               >
+                <Image src={item?.thumbnail} className="img-promotion" />
                 <a className="text-title">{item?.title?.vi}</a>
               </div>
             </div>
           );
         })}
       </div>
+
+      {isLoading && <LoadingPagination />}
     </div>
   );
 };

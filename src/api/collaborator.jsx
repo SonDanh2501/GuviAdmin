@@ -2,20 +2,14 @@ import axiosClient from "../axios";
 export const createCollaborator = (payload) => {
   return axiosClient.post("/admin/collaborator_manager/create_item", payload);
 };
-export const fetchCollaborators = (lang, start, length, type) => {
+export const fetchCollaborators = (lang, start, length, type, payload) => {
   return axiosClient.get(
-    `/admin/collaborator_manager/get_collaborator_by_type?lang=${lang}&start=${start}&length=${length}&collaborator_type=${type}`
+    `/admin/collaborator_manager/get_collaborator_by_type?lang=${lang}&start=${start}&length=${length}&collaborator_type=${type}&search=${payload}`
   );
 };
 
 export const getCollaboratorsById = (id) => {
   return axiosClient.get(`/admin/collaborator_manager/get_detail/${id}`);
-};
-
-export const searchCollaborators = (start, length, type, payload) => {
-  return axiosClient.get(
-    `/admin/collaborator_manager/get_collaborator_by_type?start=${start}&length=${length}&collaborator_type=${type}&search=${payload}`
-  );
 };
 
 export const searchCollaboratorsCreateOrder = (id, payload) => {
@@ -143,5 +137,20 @@ export const getReviewCollaborator = (id, start, length) => {
 export const getOverviewCollaborator = (id) => {
   return axiosClient.get(
     `/admin/collaborator_manager/dash_board_collaborator/${id}?lang=vi`
+  );
+};
+
+export const getListTrainingLessonByCollaboratorApi = (id, start, length) => {
+  return axiosClient.get(
+    `/admin/training_lesson_manager/get_list_training_lesson_by_collaborator/${id}?lang=vi&start=${start}&length=${length}`
+  );
+};
+
+export const getInfoTestTrainingLessonByCollaboratorApi = (
+  idLesson,
+  idCollaborator
+) => {
+  return axiosClient.get(
+    `/admin/info_test_collaborator/get_list_info_test_by_training_lesson/${idLesson}/${idCollaborator}`
   );
 };

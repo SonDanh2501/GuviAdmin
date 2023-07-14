@@ -485,7 +485,7 @@ const ReportOrderCity = () => {
   ];
 
   return (
-    <div>
+    <div className="div-container-report-area">
       <h3>{`${i18n.t("order_report_region", { lng: lang })}`}</h3>
       <div className="div-date">
         <CustomDatePicker

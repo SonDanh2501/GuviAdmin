@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, DatePicker, Drawer, Input, List } from "antd";
+import { Button, Checkbox, DatePicker, Drawer, Input, List } from "antd";
 import "./index.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { loadingAction } from "../../../../redux/actions/loading";
@@ -9,6 +9,7 @@ import { DATA_TIME_TOTAL } from "../../../../api/fakeData";
 import moment from "moment";
 import {
   editTimeOrderApi,
+  editTimeOrderScheduleApi,
   getOrderApi,
   getOrderByGroupOrderApi,
 } from "../../../../api/order";
@@ -31,6 +32,11 @@ const EditTimeOrder = (props) => {
     setDataGroup,
     setDataList,
     details,
+    estimate,
+    valueSearch,
+    type,
+    startDate,
+    endDate,
   } = props;
   const [open, setOpen] = useState(false);
 
@@ -38,6 +44,8 @@ const EditTimeOrder = (props) => {
     moment(dateWork).utc().format("HH:mm:ss")
   );
   const [wordDate, setWordDate] = useState(dateWork);
+  const [isCheckDateWork, setIsCheckDateWork] = useState(true);
+  const [isChangePrice, setIsChangePrice] = useState(false);
   const lang = useSelector(getLanguageState);
   const showDrawer = () => {
     setOpen(true);
@@ -53,12 +61,17 @@ const EditTimeOrder = (props) => {
   };
 
   const timeW = moment(wordDate).format(dateFormat) + "T" + timeWork + ".000Z";
+  const timeWorkEnd = moment(new Date(timeW))
+    .add(estimate, "hours")
+    .toISOString();
 
   const editOrder = () => {
     setIsLoading(true);
-    editTimeOrderApi(idOrder, {
-      date_work_schedule: timeW,
-      code_promotion: code,
+    editTimeOrderScheduleApi(idOrder, {
+      date_work: timeW,
+      end_date_work: timeWorkEnd,
+      is_check_date_work: isCheckDateWork,
+      is_change_price: isChangePrice,
     })
       .then((res) => {
         setIsLoading(false);
@@ -76,7 +89,17 @@ const EditTimeOrder = (props) => {
               });
             });
         } else {
-          getOrderApi(startPage, 20, status, kind)
+          getOrderApi(
+            valueSearch,
+            startPage,
+            20,
+            status,
+            kind,
+            type,
+            startDate,
+            endDate,
+            ""
+          )
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);
@@ -127,6 +150,22 @@ const EditTimeOrder = (props) => {
               </Button>
             );
           })}
+        </div>
+
+        <div className="div-check">
+          <Checkbox
+            checked={isCheckDateWork}
+            onChange={(e) => setIsCheckDateWork(e.target.checked)}
+          >
+            Thời gian trùng nhau
+          </Checkbox>
+          <Checkbox
+            checked={isChangePrice}
+            onChange={(e) => setIsChangePrice(e.target.checked)}
+            style={{ marginTop: 5, margin: 0, padding: 0 }}
+          >
+            Thay đổi giá đơn hàng
+          </Checkbox>
         </div>
 
         <Button

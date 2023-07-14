@@ -1,8 +1,8 @@
 import axiosClient from "../axios";
 
-export const fetchCustomers = (lang, start, length, type) => {
+export const fetchCustomers = (lang, start, length, type, group) => {
   return axiosClient.get(
-    `/admin/customer_manager/get_customer_by_type?lang=${lang}&start=${start}&length=${length}&customer_type=${type}`
+    `/admin/customer_manager/get_customer_by_type?lang=${lang}&start=${start}&length=${length}&customer_type=${type}&id_group_customer=${group}`
   );
 };
 export const searchCustomers = (start, length, type, payload) => {
@@ -68,6 +68,12 @@ export const getFavoriteAndBlockByCustomers = (id, status, start, length) => {
   );
 };
 
+export const getUsedPromotionByCustomers = (id) => {
+  return axiosClient.get(
+    `/admin/customer_manager/get_used_promotion_by_customer/${id}`
+  );
+};
+
 export const favouriteCustomerApi = (idUser, idCollaborator) => {
   return axiosClient.post(
     `/admin/customer_manager/add_favourite_collaborator/${idUser}?id_collaborator=${idCollaborator}`
@@ -89,5 +95,11 @@ export const blockCustomerApi = (idUser, idCollaborator) => {
 export const unblockCustomerApi = (idUser, idCollaborator) => {
   return axiosClient.post(
     `/admin/customer_manager/unblock_collaborator/${idUser}?id_collaborator=${idCollaborator}`
+  );
+};
+
+export const getReviewByCustomers = (id, start, length) => {
+  return axiosClient.get(
+    `/admin/customer_manager/get_customer_review/${id}?start=${start}&length=${length}`
   );
 };

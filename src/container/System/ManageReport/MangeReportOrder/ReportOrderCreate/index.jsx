@@ -478,7 +478,7 @@ const ReportOrderCreate = () => {
   };
 
   return (
-    <div>
+    <div className="div-report-order-create">
       <h3>{`${i18n.t("order_report", {
         lng: lang,
       })}`}</h3>

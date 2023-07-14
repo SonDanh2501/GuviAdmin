@@ -34,6 +34,7 @@ const EditTimeOrderSchedule = (props) => {
   );
   const [wordDate, setWordDate] = useState(dateWork);
   const [isCheckDateWork, setIsCheckDateWork] = useState(true);
+  const [isChangePrice, setIsChangePrice] = useState(false);
   const lang = useSelector(getLanguageState);
   const showDrawer = () => {
     setOpen(true);
@@ -59,11 +60,12 @@ const EditTimeOrderSchedule = (props) => {
       date_work: timeW,
       end_date_work: timeWorkEnd,
       is_check_date_work: isCheckDateWork,
+      is_change_price: isChangePrice,
     })
       .then((res) => {
         setIsLoading(false);
         setOpen(false);
-        getOrderByGroupOrderApi(id)
+        getOrderByGroupOrderApi(id, lang)
           .then((res) => {
             setDataGroup(res?.data?.groupOrder);
             setDataList(res?.data?.listOrder);
@@ -120,38 +122,21 @@ const EditTimeOrderSchedule = (props) => {
           })}
         </div>
 
-        {/* <a>Giờ kết thúc</a>
-        <DatePicker
-          className="select-date"
-          format={dateFormat}
-          onChange={onChangeEnd}
-          value={dayjs(wordEndDate.slice(0, 11), dateFormat)}
-        /> */}
-
-        {/* <div className="mt-3">
-          {DATA_TIME_TOTAL.map((item, index) => {
-            return (
-              <Button
-                className={
-                  timeEndWork === item.time
-                    ? "select-time"
-                    : "select-time-default"
-                }
-                key={index}
-                onClick={() => setTimeEndWork(item?.time)}
-              >
-                {item.title}
-              </Button>
-            );
-          })}
-        </div> */}
-
         <div className="mt-2">
           <Checkbox
+            style={{ width: "100%" }}
             checked={isCheckDateWork}
             onChange={(e) => setIsCheckDateWork(e.target.checked)}
           >
-            {`${i18n.t("check_same_time", { lng: lang })}`}
+            Thời gian trùng nhau
+          </Checkbox>
+
+          <Checkbox
+            style={{ width: "100%", padding: 0, margin: 0, marginTop: 10 }}
+            checked={isChangePrice}
+            onChange={(e) => setIsChangePrice(e.target.checked)}
+          >
+            Thay đổi giá đơn hàng
           </Checkbox>
         </div>
 

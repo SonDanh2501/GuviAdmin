@@ -183,7 +183,11 @@ const TopupCollaborator = ({ type }) => {
 
   const columns = [
     {
-      title: `${i18n.t("code", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("code", { lng: lang })}`}</a>
+        );
+      },
       render: (data) => (
         <a
           className="text-id"
@@ -198,7 +202,13 @@ const TopupCollaborator = ({ type }) => {
       ),
     },
     {
-      title: `${i18n.t("collaborator", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("collaborator", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <Link
@@ -214,14 +224,24 @@ const TopupCollaborator = ({ type }) => {
       },
     },
     {
-      title: `${i18n.t("money", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("money", { lng: lang })}`}</a>
+        );
+      },
       render: (data) => (
         <a className="text-money-topup">{formatMoney(data?.money)}</a>
       ),
       sorter: (a, b) => a.money - b.money,
     },
     {
-      title: `${i18n.t("withdraw_topup", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("withdraw_topup", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <>
@@ -245,13 +265,25 @@ const TopupCollaborator = ({ type }) => {
       },
     },
     {
-      title: `${i18n.t("content", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("content", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => (
         <a className="text-description-topup">{data?.transfer_note}</a>
       ),
     },
     {
-      title: `${i18n.t("date_create", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("date_create", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-time-topup">
@@ -266,7 +298,11 @@ const TopupCollaborator = ({ type }) => {
       },
     },
     {
-      title: `${i18n.t("wallet", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("wallet", { lng: lang })}`}</a>
+        );
+      },
       render: (data) => (
         <a className="text-name-verify">
           {data?.type_wallet === "wallet"
@@ -277,7 +313,11 @@ const TopupCollaborator = ({ type }) => {
       align: "center",
     },
     {
-      title: `${i18n.t("status", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("status", { lng: lang })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div>
@@ -304,7 +344,13 @@ const TopupCollaborator = ({ type }) => {
       align: "center",
     },
     {
-      title: `${i18n.t("approved_by", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("approved_by", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <a className="text-name-verify">{data?.id_admin_verify?.full_name}</a>

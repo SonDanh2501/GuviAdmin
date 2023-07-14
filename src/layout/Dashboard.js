@@ -1,19 +1,18 @@
-import { Drawer, Layout } from "antd";
+import { Layout } from "antd";
 import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar/Sidebar";
 import HeaderBar from "../container/Header/Header";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { permissionAction } from "../redux/actions/auth";
+import { getProvinceAction } from "../redux/actions/service";
 import "./Dashboard.scss";
 import Admin from "./admin";
-
-import { permissionAction } from "../redux/actions/auth";
-import { useNavigate } from "react-router-dom";
-import { getProvinceAction } from "../redux/actions/service";
 const { Header, Content, Sider } = Layout;
 
 const Dashboard = () => {
-  const [hideSidebar, setHideSidebar] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
@@ -21,87 +20,56 @@ const Dashboard = () => {
     dispatch(getProvinceAction.getProvinceRequest());
   }, []);
 
-  const width = window.innerWidth;
-
   useEffect(() => {
-    if (width > 490) {
-      setHideSidebar(true);
-    } else if (width <= 490) {
-      setHideSidebar(false);
+    if (window.innerWidth > 468) {
+      setCollapsed(true);
+    } else {
+      setCollapsed(false);
     }
-  }, [width]);
+  }, [window]);
 
   return (
     <Layout>
-      {width > 490 ? (
-        <>
-          <Sider
-            width={hideSidebar ? 230 : 90}
-            style={{
-              background: "white",
-              overflow: "auto",
-              height: "100vh",
-              position: "fixed",
-              left: 0,
-              top: 0,
-              bottom: 0,
-            }}
-          >
-            <Sidebar hide={hideSidebar} />
-          </Sider>
-        </>
-      ) : (
-        <Drawer
-          open={hideSidebar}
-          width={300}
-          onClose={() => setHideSidebar(false)}
-          placement="left"
-        >
-          <Sidebar hide={true} />
-        </Drawer>
-      )}
-
-      <Layout
-        className="site-layout"
-        style={
-          width > 490
-            ? { marginLeft: hideSidebar ? 230 : 100 }
-            : { marginLeft: 0 }
-        }
+      <Sider
+        trigger={null}
+        collapsible
+        collapsed={!collapsed}
+        style={{
+          background: "white",
+          overflow: "auto",
+          height: "120vh",
+          left: 0,
+          top: 0,
+          bottom: 0,
+        }}
       >
+        <Sidebar hide={collapsed} />
+      </Sider>
+      <Layout>
         <Header
           style={{
-            position: "sticky",
-            top: 0,
-            zIndex: 1,
-            marginLeft: 20,
-            marginRight: 20,
-            borderRadius: 4,
-            backgroundColor: "#7dbcea",
+            padding: 0,
+            background: "#38BDF8",
+            borderBottomLeftRadius: 8,
+            borderBottomRightRadius: 8,
           }}
         >
           <HeaderBar
-            onClick={() => setHideSidebar(!hideSidebar)}
-            hide={hideSidebar}
+            onClick={() => setCollapsed(!collapsed)}
+            hide={collapsed}
           />
         </Header>
-        <Layout
+        <Content
           style={{
-            padding: "20px 20px",
-            minHeight: "100%",
+            margin: "10px 10px",
+            padding: 10,
+            minHeight: 280,
+            background: "white",
+            borderRadius: 8,
           }}
         >
-          <Content
-            style={{
-              minHeight: 680,
-              background: "white",
-              borderRadius: 4,
-              padding: width > 490 ? 24 : 10,
-            }}
-          >
-            <Admin />
-          </Content>
-        </Layout>
+          <Admin />
+        </Content>
       </Layout>
     </Layout>
   );

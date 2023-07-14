@@ -1,11 +1,14 @@
-$font-01: "Roboto", sans-serif;
+$font-01: "Roboto";
 .container-header-board {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   border-radius: 5px;
   width: 100%;
-  margin-top: 28px;
+  margin-top: 10px;
 
   .card {
-    width: 100%;
+    width: 23%;
     height: 63px;
     border-radius: 15px;
     border: none;
@@ -42,7 +45,7 @@ $font-01: "Roboto", sans-serif;
   }
 }
 
-@media screen and (max-width: 490px) {
+@media (max-width: 900px) {
   .container-header-board {
     border-radius: 5px;
     width: 99%;

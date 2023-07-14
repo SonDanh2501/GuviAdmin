@@ -235,7 +235,13 @@ const ReviewCollaborator = () => {
 
   const columns = [
     {
-      title: `${i18n.t("date_create", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("date_create", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <>
@@ -256,7 +262,13 @@ const ReviewCollaborator = () => {
       },
     },
     {
-      title: `${i18n.t("customer", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("customer", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-customer-review">
@@ -287,7 +299,13 @@ const ReviewCollaborator = () => {
       width: "15%",
     },
     {
-      title: `${i18n.t("collaborator", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("collaborator", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <Link
@@ -303,7 +321,13 @@ const ReviewCollaborator = () => {
       },
     },
     {
-      title: `${i18n.t("star_order", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("star_order", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       width: "15%",
       render: (data) => {
         return (
@@ -325,11 +349,23 @@ const ReviewCollaborator = () => {
       sorter: (a, b) => a.star - b.star,
     },
     {
-      title: `${i18n.t("content", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("content", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => <a className="text-review">{data?.review}</a>,
     },
     {
-      title: `${i18n.t("quick_review", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("quick_review", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div>
@@ -362,8 +398,13 @@ const ReviewCollaborator = () => {
       },
     },
     {
-      title: `${i18n.t("note", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("note", { lng: lang })}`}</a>
+        );
+      },
       render: (data) => <a>{data?.note_admin}</a>,
+      align: "center",
     },
   ];
 

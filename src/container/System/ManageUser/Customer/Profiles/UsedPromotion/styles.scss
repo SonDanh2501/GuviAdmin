@@ -1,0 +1,167 @@
+.div-head-used-prmotion {
+  display: flex;
+  flex-direction: row;
+
+  .div-item-total {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 8px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+    padding: 10px;
+    margin-right: 20px;
+    width: 15%;
+
+    .text-done-total {
+      color: rgb(27, 193, 16);
+      font-weight: 500;
+      font-size: 14px;
+      font-family: "Roboto";
+      text-decoration: none;
+    }
+
+    .text-cancel-total {
+      color: rgb(228, 53, 50);
+      font-weight: 500;
+      font-size: 14px;
+      font-family: "Roboto";
+      text-decoration: none;
+    }
+
+    .text-total {
+      color: #000;
+      font-weight: 400;
+      font-size: 14px;
+      font-family: "Roboto";
+      text-decoration: none;
+    }
+  }
+}
+
+.title-column {
+  color: #000;
+  font-weight: 500;
+  font-size: 14px;
+  font-family: "Roboto";
+  text-decoration: none;
+}
+
+.div-date-used-prmotion {
+  display: flex;
+  flex-direction: column;
+  .text-date {
+    color: #000;
+    font-weight: 400;
+    font-size: 12px;
+    font-family: "Roboto";
+    text-decoration: none;
+  }
+}
+
+.text-name-promotion {
+  color: #000;
+  font-weight: 400;
+  font-size: 12px;
+  font-family: "Roboto";
+  text-decoration: none;
+}
+
+.text-status-done {
+  color: rgb(27, 193, 16);
+  font-weight: 400;
+  font-size: 12px;
+  font-family: "Roboto";
+  text-decoration: none;
+}
+
+.text-status-cancel {
+  color: rgb(228, 53, 50);
+  font-weight: 400;
+  font-size: 12px;
+  font-family: "Roboto";
+  text-decoration: none;
+}
+
+@media (max-width: 1200px) {
+  .div-head-used-prmotion {
+    display: flex;
+    flex-direction: row;
+
+    .div-item-total {
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+      border-radius: 8px;
+      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+      padding: 10px;
+      margin-right: 20px;
+      width: 20%;
+
+      .text-done-total {
+        color: rgb(27, 193, 16);
+        font-weight: 500;
+        font-size: 14px;
+        font-family: "Roboto";
+        text-decoration: none;
+      }
+
+      .text-cancel-total {
+        color: rgb(228, 53, 50);
+        font-weight: 500;
+        font-size: 14px;
+        font-family: "Roboto";
+        text-decoration: none;
+      }
+
+      .text-total {
+        color: #000;
+        font-weight: 400;
+        font-size: 14px;
+        font-family: "Roboto";
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .div-head-used-prmotion {
+    display: flex;
+    flex-direction: row;
+
+    .div-item-total {
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+      border-radius: 8px;
+      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+      padding: 10px;
+      margin-right: 20px;
+      width: 50%;
+
+      .text-done-total {
+        color: rgb(27, 193, 16);
+        font-weight: 500;
+        font-size: 14px;
+        font-family: "Roboto";
+        text-decoration: none;
+      }
+
+      .text-cancel-total {
+        color: rgb(228, 53, 50);
+        font-weight: 500;
+        font-size: 14px;
+        font-family: "Roboto";
+        text-decoration: none;
+      }
+
+      .text-total {
+        color: #000;
+        font-weight: 400;
+        font-size: 14px;
+        font-family: "Roboto";
+        text-decoration: none;
+      }
+    }
+  }
+}

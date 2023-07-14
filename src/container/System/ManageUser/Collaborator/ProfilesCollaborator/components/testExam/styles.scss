@@ -154,3 +154,112 @@
     }
   }
 }
+
+.div-list-lesson-collaborator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .div-item-lesson-collaborator {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    background-color: white;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+
+    .div-title-lesson {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      .text-title {
+        font-family: "Roboto";
+        font-weight: 500;
+        font-size: 14px;
+        color: rgb(0, 0, 0);
+        text-decoration: none;
+      }
+
+      .img {
+        width: 50px;
+        height: 50px;
+      }
+    }
+
+    .text-description {
+      font-family: "Roboto";
+      font-weight: 400;
+      font-size: 12px;
+      color: rgb(141, 138, 138);
+      text-decoration: none;
+    }
+
+    .see-answer {
+      font-family: "Roboto";
+      font-weight: 400;
+      font-size: 12px;
+      color: rgb(0, 0, 0);
+      text-decoration: none;
+      text-align: end;
+    }
+  }
+
+  .div-item-lesson-collaborator-hide {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    background-color: rgb(231, 231, 231);
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+
+    .div-title-lesson {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      .text-title {
+        font-family: "Roboto";
+        font-weight: 500;
+        font-size: 14px;
+        color: rgb(0, 0, 0);
+        text-decoration: none;
+      }
+
+      .img {
+        width: 50px;
+        height: 50px;
+      }
+    }
+
+    .text-description {
+      font-family: "Roboto";
+      font-weight: 400;
+      font-size: 12px;
+      color: rgb(0, 0, 0);
+      text-decoration: none;
+    }
+
+    .see-answer {
+      font-family: "Roboto";
+      font-weight: 400;
+      font-size: 12px;
+      color: rgb(0, 0, 0);
+      text-decoration: none;
+      text-align: end;
+    }
+
+    .div-answer {
+      max-width: 0;
+      overflow: hidden;
+      display: inline-block;
+      transition: max-height 0.3s;
+    }
+  }
+}

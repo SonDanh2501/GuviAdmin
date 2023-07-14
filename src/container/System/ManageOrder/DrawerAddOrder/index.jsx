@@ -164,7 +164,7 @@ const AddOrder = () => {
   );
 
   return (
-    <>
+    <div className="div-container-add-order">
       <h5>{`${i18n.t("create_order", { lng: lang })}`}</h5>
       <div className="mt-3">
         <Select
@@ -245,7 +245,7 @@ const AddOrder = () => {
       </div>
 
       {isLoading && <LoadingPagination />}
-    </>
+    </div>
   );
 };
 export default AddOrder;
