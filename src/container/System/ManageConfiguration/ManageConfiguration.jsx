@@ -41,7 +41,7 @@ const ManageConfiguration = () => {
         navigate("/adminManage/manage-configuration/create-account");
         break;
       case "create_quizz":
-        navigate("/adminManage/manage-configuration/create_quizz");
+        navigate("/adminManage/manage-configuration/lesson");
         break;
       case "reason_punish":
         navigate("/adminManage/manage-configuration/reason_punish");
@@ -86,7 +86,7 @@ const ManageConfiguration = () => {
         })}
       </div>
 
-      {/* <Chat /> */}
+      {/* <SettingQrCode /> */}
     </div>
   );
 };

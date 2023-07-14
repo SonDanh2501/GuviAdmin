@@ -164,10 +164,16 @@ const Punish = () => {
 
   const columns = [
     {
-      title: `${i18n.t("code_collaborator", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("code_collaborator", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => (
         <a
-          className="text-id"
+          className="text-id-ctv"
           onClick={() =>
             navigate("/details-collaborator", {
               state: { id: data?.id_collaborator?._id },
@@ -179,7 +185,13 @@ const Punish = () => {
       ),
     },
     {
-      title: `${i18n.t("collaborator", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("collaborator", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <Link
@@ -195,20 +207,36 @@ const Punish = () => {
       },
     },
     {
-      title: `${i18n.t("money", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("money", { lng: lang })}`}</a>
+        );
+      },
       render: (data) => (
         <a className="text-money-topup">{formatMoney(data?.money)}</a>
       ),
       sorter: (a, b) => a.money - b.money,
     },
     {
-      title: `${i18n.t("content", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("content", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => (
         <a className="text-description-topup">{data?.note_admin}</a>
       ),
     },
     {
-      title: `${i18n.t("date_create", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("date_create", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-time-topup">
@@ -223,7 +251,11 @@ const Punish = () => {
       },
     },
     {
-      title: `${i18n.t("status", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("status", { lng: lang })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div>
@@ -254,7 +286,13 @@ const Punish = () => {
       align: "center",
     },
     {
-      title: `${i18n.t("approved_by", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("approved_by", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <a className="text-name-verify">

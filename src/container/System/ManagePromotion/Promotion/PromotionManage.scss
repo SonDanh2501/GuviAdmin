@@ -67,6 +67,34 @@
   color: #000000;
 }
 
+.div-title-column-position {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  .text-column {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: #000000;
+  }
+
+  .div-direction {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    .icon-direction {
+      width: 10px;
+      height: 10px;
+      padding: 0px;
+    }
+  }
+}
+
 @media screen and (max-width: 490px) {
   .div-header-promotion {
     display: flex;

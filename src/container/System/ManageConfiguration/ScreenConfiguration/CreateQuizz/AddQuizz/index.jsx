@@ -1,6 +1,7 @@
 import { Button, Checkbox, Col, Drawer, Form, Input, Row } from "antd";
 import {
   addQuestionApi,
+  getExamByLessonApi,
   getListQuestionApi,
 } from "../../../../../../api/configuration";
 import { useCallback, useEffect, useState } from "react";
@@ -11,20 +12,13 @@ import { getLanguageState } from "../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../i18n";
 import InputCustom from "../../../../../../components/textInputCustom";
 
-const AddQuizz = ({
-  setIsLoading,
-  setData,
-  setTotal,
-  startPage,
-  tab,
-  type,
-}) => {
+const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab, id }) => {
   const [dataQuestion, setDataQuestion] = useState([
     {
       title: "",
       description: "",
       question: "",
-      type_exam: type,
+      id_training_lesson: id,
       choose: [
         {
           answer: "",
@@ -49,9 +43,9 @@ const AddQuizz = ({
 
   useEffect(() => {
     const arr = [...dataQuestion];
-    dataQuestion[0].type_exam = type;
+    dataQuestion[0].id_training_lesson = id;
     setDataQuestion(arr);
-  }, [type]);
+  }, [id]);
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -130,12 +124,13 @@ const AddQuizz = ({
     addQuestionApi(dataQuestion[0])
       .then((res) => {
         setOpen(false);
+        setIsLoading(false);
         setDataQuestion([
           {
             title: "",
             description: "",
             question: "",
-            type_exam: type,
+            id_training_lesson: id,
             choose: [
               {
                 answer: "",
@@ -156,15 +151,12 @@ const AddQuizz = ({
             ],
           },
         ]);
-        getListQuestionApi(startPage, 20, tab, type)
+        getExamByLessonApi(id, 0, 20)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItem);
-            setIsLoading(false);
           })
-          .catch((err) => {
-            setIsLoading(false);
-          });
+          .catch((err) => {});
       })
       .catch((err) => {
         setIsLoading(false);
@@ -173,7 +165,7 @@ const AddQuizz = ({
           message: err,
         });
       });
-  }, [dataQuestion, startPage, tab, type]);
+  }, [dataQuestion, startPage, tab, id]);
 
   return (
     <div>

@@ -60,6 +60,9 @@ const Document = ({ id }) => {
 
   const onChangeIdentifyBefore = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
+    const extend = e.target.files[0].type.slice(
+      e.target.files[0].type.indexOf("/") + 1
+    );
     if (e.target.files[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -68,7 +71,7 @@ const Document = ({ id }) => {
       reader.readAsDataURL(e.target.files[0]);
     }
     const formData = new FormData();
-    const image = await resizeFile(e.target.files[0]);
+    const image = await resizeFile(e.target.files[0], extend);
 
     formData.append("multi-files", image);
     postFile(formData, {
@@ -89,6 +92,9 @@ const Document = ({ id }) => {
   };
   const onChangeIdentifyAfter = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
+    const extend = e.target.files[0].type.slice(
+      e.target.files[0].type.indexOf("/") + 1
+    );
     if (e.target.files[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -97,7 +103,7 @@ const Document = ({ id }) => {
       reader.readAsDataURL(e.target.files[0]);
     }
     const formData = new FormData();
-    const image = await resizeFile(e.target.files[0]);
+    const image = await resizeFile(e.target.files[0], extend);
 
     formData.append("multi-files", image);
     postFile(formData, {
@@ -122,7 +128,7 @@ const Document = ({ id }) => {
     const fileLength = e.target.files.length;
     const formData = new FormData();
     for (var i = 0; i < fileLength; i++) {
-      const image = await resizeFile(e.target.files[i]);
+      const image = await resizeFile(e.target.files[i], "png");
       formData.append("multi-files", image);
     }
     postFile(formData, {
@@ -147,7 +153,7 @@ const Document = ({ id }) => {
     const fileLength = e.target.files.length;
     const formData = new FormData();
     for (var i = 0; i < fileLength; i++) {
-      const image = await resizeFile(e.target.files[i]);
+      const image = await resizeFile(e.target.files[i], "png");
       formData.append("multi-files", image);
     }
     postFile(formData, {
@@ -178,7 +184,7 @@ const Document = ({ id }) => {
     const fileLength = e.target.files.length;
     const formData = new FormData();
     for (var i = 0; i < fileLength; i++) {
-      const image = await resizeFile(e.target.files[i]);
+      const image = await resizeFile(e.target.files[i], "png");
       formData.append("multi-files", image);
     }
     postFile(formData, {

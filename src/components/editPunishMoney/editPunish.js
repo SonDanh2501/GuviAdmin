@@ -1,15 +1,15 @@
-import { Drawer, Input, InputNumber, List } from "antd";
+import { Drawer, List } from "antd";
 import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { searchCollaborators } from "../../api/collaborator";
+import { useSelector } from "react-redux";
+import { fetchCollaborators } from "../../api/collaborator";
 import { editMoneyPunishApi, getListPunishApi } from "../../api/topup";
 import { errorNotify } from "../../helper/toast";
-import CustomButton from "../customButton/customButton";
-import "./editPunish.scss";
-import { getLanguageState } from "../../redux/selectors/auth";
 import i18n from "../../i18n";
+import { getLanguageState } from "../../redux/selectors/auth";
+import CustomButton from "../customButton/customButton";
 import InputCustom from "../textInputCustom";
+import "./editPunish.scss";
 
 const EditPunish = ({ item, setDataT, setTotal, setIsLoading, iconEdit }) => {
   const [money, setMoney] = useState("");
@@ -38,7 +38,7 @@ const EditPunish = ({ item, setDataT, setTotal, setIsLoading, iconEdit }) => {
     _debounce((value) => {
       setName(value);
       if (value) {
-        searchCollaborators(value)
+        fetchCollaborators(lang, 0, 20, "", value)
           .then((res) => setData(res.data))
           .catch((err) => console.log(err));
       } else if (id) {

@@ -9,9 +9,10 @@ const CustomTextEditor = ({ value, onChangeValue }) => {
       // [{ align: [] }],
       // ["bold", "italic", "underline", "strike"],
       // [{ list: "ordered" }, { list: "bullet" }],
-      // [{ color: [] }, { background: [] }],
+
       [{ header: [1, 2, false] }, { font: [] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ color: [] }, { background: [] }],
       [
         { list: "ordered" },
         { list: "bullet" },

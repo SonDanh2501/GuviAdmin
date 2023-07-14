@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { searchCollaboratorsCreateOrder } from "../../../../../api/collaborator";
-import { DATA_TIME_TOTAL } from "../../../../../api/fakeData";
+import { DATA_TIME_TOTAL, date } from "../../../../../api/fakeData";
 import {
   getPlaceDetailApi,
   googlePlaceAutocomplete,
@@ -70,6 +70,7 @@ const BussinessType = (props) => {
   const [errorCollaborator, setErrorCollaborator] = useState("");
   const [dataAddress, setDataAddress] = useState([]);
   const [estimate, setEstimate] = useState();
+  const [dayLoop, setDayLoop] = useState([]);
   const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -131,6 +132,24 @@ const BussinessType = (props) => {
       }
     },
     [mutipleSelected]
+  );
+
+  const onChooseDayLoop = useCallback(
+    (day) => {
+      if (dayLoop.some((item) => item === day)) {
+        function filterByID(item) {
+          if (item !== day) {
+            return true;
+          }
+          return false;
+        }
+
+        setDayLoop((prev) => prev.filter(filterByID));
+      } else {
+        setDayLoop((prev) => [...prev, day]);
+      }
+    },
+    [dayLoop]
   );
 
   const timeW = dateWork + "T" + timeWork + ".000Z";
@@ -407,6 +426,8 @@ const BussinessType = (props) => {
         code_promotion: codePromotion,
         payment_method: paymentMethod,
         id_collaborator: idCollaborator,
+        day_loop: dayLoop,
+        time_zone: "Asia/Ho_Chi_Minh",
       })
         .then((res) => {
           navigate("/group-order/manage-order");
@@ -454,6 +475,7 @@ const BussinessType = (props) => {
     idCollaborator,
     paymentMethod,
     bussiness,
+    dayLoop,
   ]);
 
   const searchValue = (value) => {
@@ -739,14 +761,35 @@ const BussinessType = (props) => {
           <a className="text-error">{errorTimeWork}</a>
         </div>
 
-        {/* <div className="div-auto-order">
-          <a className="label-hours">Lặp lại hàng tuần</a>
+        <div className="div-auto-order">
+          <a className="label-hours">
+            {`${i18n.t("weeekly_schedule", { lng: lang })}`}
+          </a>
           <Switch
             defaultChecked={isAutoOrder}
             style={{ width: 50, marginRight: 20 }}
             onChange={() => setIsAutoOrder(!isAutoOrder)}
           />
-        </div> */}
+        </div>
+        {isAutoOrder && (
+          <div className="div-loop">
+            {date.map((item, index) => {
+              return (
+                <div
+                  className={
+                    dayLoop.some((items) => items === item?.value)
+                      ? "div-item-loop-day-select"
+                      : "div-item-loop-day"
+                  }
+                  key={index}
+                  onClick={() => onChooseDayLoop(item?.value)}
+                >
+                  {item?.title?.[lang]}
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         <div className="div-payment-method">
           <InputCustom

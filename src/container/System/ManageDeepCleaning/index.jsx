@@ -12,7 +12,7 @@ const DeepCleaningManager = () => {
     window.scrollTo(0, 0);
   }, []);
   return (
-    <div>
+    <div className="div-container-deep">
       <Tabs defaultActiveKey="1" size="large">
         <Tabs.TabPane tab={`${i18n.t("deep_cleaning", { lng: lang })}`} key="1">
           <DeepCleaning />

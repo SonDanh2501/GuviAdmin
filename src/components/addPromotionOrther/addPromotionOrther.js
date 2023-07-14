@@ -21,7 +21,7 @@ import {
 } from "../../api/promotion";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
-import { getService } from "../../redux/selectors/service";
+import { getProvince, getService } from "../../redux/selectors/service";
 import CustomButton from "../customButton/customButton";
 import CustomTextEditor from "../customTextEdittor";
 import UploadImage from "../uploadImage";
@@ -40,6 +40,9 @@ const AddPromotionOther = (props) => {
     brand,
     idService,
     exchange,
+    search,
+    status,
+    typeSort,
   } = props;
   const [state, setState] = useState(false);
   const [formDiscount, setFormDiscount] = useState("amount");
@@ -85,11 +88,16 @@ const AddPromotionOther = (props) => {
   const [name, setName] = useState("");
   const [listCustomers, setListCustomers] = useState([]);
   const [listNameCustomers, setListNameCustomers] = useState([]);
+  const [isApplyArea, setIsApplyArea] = useState(false);
+  const [city, setCity] = useState([]);
+  const [district, setDistrict] = useState([]);
   const options = [];
   const optionsCustomer = [];
+  const cityOption = [];
+  const districtOption = [];
   const dispatch = useDispatch();
   const lang = useSelector(getLanguageState);
-
+  const province = useSelector(getProvince);
   const service = useSelector(getService);
 
   useEffect(() => {
@@ -101,6 +109,14 @@ const AddPromotionOther = (props) => {
   useEffect(() => {
     setServiceApply(service[0]?._id);
   }, [service]);
+
+  province?.map((item) => {
+    cityOption?.push({
+      value: item?.code,
+      label: item?.name,
+      district: item?.districts,
+    });
+  });
 
   dataGroupCustomer.map((item, index) => {
     options.push({
@@ -215,11 +231,24 @@ const AddPromotionOther = (props) => {
       position: position,
       is_payment_method: isPaymentMethod,
       payment_method: paymentMethod,
+      is_apply_area: isApplyArea,
+      city: city,
+      district: district,
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
         setState(false);
-        fetchPromotion(startPage, 20, type, brand, idService, exchange)
+        fetchPromotion(
+          search,
+          status,
+          startPage,
+          20,
+          type,
+          brand,
+          idService,
+          exchange,
+          typeSort
+        )
           .then((res) => {
             setDataPromo(res?.data);
             setTotalPromo(res?.totalItem);
@@ -268,6 +297,12 @@ const AddPromotionOther = (props) => {
     isPaymentMethod,
     paymentMethod,
     listCustomers,
+    isApplyArea,
+    city,
+    district,
+    search,
+    status,
+    typeSort,
   ]);
 
   return (
@@ -621,10 +656,37 @@ const AddPromotionOther = (props) => {
                   onChange={(e) => setPosition(e.target.value)}
                 />
               </div>
+
+              <div className="mt-2">
+                <div>
+                  <a className="title-add-promo">15. Áp dụng khu vực</a>
+                  <Checkbox
+                    checked={isApplyArea}
+                    onChange={(e) => setIsApplyArea(e.target.checked)}
+                    style={{ marginLeft: 5 }}
+                  />
+                </div>
+                {isApplyArea && (
+                  <div>
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      style={{ width: "100%" }}
+                      onChange={(e, label) => {
+                        setCity(e);
+                      }}
+                      options={cityOption}
+                      optionLabelProp="label"
+                    />
+                  </div>
+                )}
+              </div>
+
               <Button
                 className="btn_add_promotion_order"
                 color="warning"
                 onClick={onCreatePromotion}
+                style={{ width: "auto" }}
               >
                 {`${i18n.t("add_promotion", { lng: lang })}`}
               </Button>

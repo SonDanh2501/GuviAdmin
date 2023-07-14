@@ -282,27 +282,27 @@ export const DATA_KIND = [
 export const DATA_OPERTATOR = [
   {
     value: ">",
-    label: ">",
+    label: "Lớn hơn",
   },
   {
     value: "<",
-    label: "<",
+    label: "Nhỏ hơn",
   },
   {
     value: "==",
-    label: "=",
+    label: "Bằng",
   },
   {
     value: "!=",
-    label: "!=",
+    label: "Khác",
   },
   {
     value: ">=",
-    label: ">=",
+    label: "Lớn hơn bằng",
   },
   {
     value: "<=",
-    label: "<=",
+    label: "Nhỏ hơn bằng",
   },
 ];
 

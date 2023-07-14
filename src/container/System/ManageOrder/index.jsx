@@ -1,54 +1,149 @@
+import { SearchOutlined } from "@ant-design/icons";
 import { UilEllipsisH, UilFileExport } from "@iconscout/react-unicons";
-import { Button, Dropdown, FloatButton, Space } from "antd";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  Button,
+  DatePicker,
+  Dropdown,
+  FloatButton,
+  Input,
+  Select,
+  Space,
+} from "antd";
+import _debounce from "lodash/debounce";
+import moment from "moment";
+import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { DATA, DATA_STATUS } from "../../../api/fakeData";
 import { getOrderApi } from "../../../api/order";
 import { ExportCSV } from "../../../helper/export";
-import { getOrder } from "../../../redux/actions/order";
+import i18n from "../../../i18n";
 import {
   getElementState,
   getLanguageState,
-  getUser,
 } from "../../../redux/selectors/auth";
+import { getProvince, getService } from "../../../redux/selectors/service";
 import OrderManage from "./Order/OrderManage";
 import "./index.scss";
-import i18n from "../../../i18n";
+import LoadingPagination from "../../../components/paginationLoading";
+const { RangePicker } = DatePicker;
 
 const ManageOrder = () => {
   const [tab, setTab] = useState("all");
   const [kind, setKind] = useState("");
-  const [valueTab, setValueTab] = useState("tat_ca");
-  const dispatch = useDispatch();
+  const [valueSearch, setValueSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
-  const user = useSelector(getUser);
+  const [type, setType] = useState("date_create");
+  const [city, setCity] = useState("");
+  const [checkCondition, setCheckCondition] = useState(false);
+  const [condition, setCondition] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [startDate, setStartDate] = useState(
+    moment("1-1-2023").startOf("date").toISOString()
+  );
+  const [endDate, setEndDate] = useState(
+    moment().endOf("date").add(7, "hours").toISOString()
+  );
+  const [keyActive, setKeyActive] = useState(0);
+  const [itemTab, setItemTab] = useState([
+    {
+      title: "Tất cả đơn hàng",
+      status: "all",
+      key: 0,
+    },
+    {
+      title: "Đang chờ làm",
+      status: "pending",
+      key: 1,
+    },
+    {
+      title: "Đã nhận",
+      status: "confirm",
+      key: 2,
+    },
+    {
+      title: "Đang làm",
+      status: "doing",
+      key: 3,
+    },
+    {
+      title: "Đã huỷ",
+      status: "cancel",
+      key: 4,
+    },
+    {
+      title: "Hoàn thành",
+      status: "done",
+      key: 5,
+    },
+  ]);
   const navigate = useNavigate();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
+  const service = useSelector(getService);
+  const province = useSelector(getProvince);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   useEffect(() => {
-    dispatch(
-      getOrder.getOrderRequest({
-        start: 0,
-        length: 20,
-        status: tab,
-        kind: kind,
-      })
-    );
-    getOrderApi(0, 20, tab, kind)
+    getOrderApi(valueSearch, 0, 20, tab, kind, type, startDate, endDate, city)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-  }, [dispatch, tab, kind]);
+  }, [tab]);
+
+  const cityOptions = [];
+  const optionsService = [
+    {
+      value: "",
+      label: `${i18n.t("all", { lng: lang })}`,
+    },
+  ];
+
+  service.map((item) => {
+    optionsService.push({
+      value: item?._id,
+      label: item?.title?.[lang],
+    });
+  });
+
+  province?.map((item) => {
+    cityOptions.push({
+      value: item?.code,
+      label: item?.name,
+    });
+  });
+
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      getOrderApi(value, 0, 20, tab, kind, type, startDate, endDate, city)
+        .then((res) => {
+          setData(res?.data);
+          setTotal(res?.totalItem);
+        })
+        .catch((err) => {});
+    }, 1000),
+    [tab, kind, city]
+  );
+
+  const handleFilterByCondition = () => {
+    setIsLoading(true);
+    setCheckCondition(false);
+    getOrderApi(valueSearch, 0, 20, tab, kind, type, startDate, endDate, city)
+      .then((res) => {
+        setIsLoading(false);
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  };
 
   const items = [
     {
@@ -63,96 +158,169 @@ const ManageOrder = () => {
   ];
 
   return (
-    <>
+    <div className="div-container-order">
       <div className="div-header">
         <a className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</a>
-        <div className="div-add-export">
-          <Dropdown
-            menu={{
-              items,
-            }}
-            trigger={["click"]}
-            className="dropdown-export"
-          >
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                <UilEllipsisH className="icon-menu" />
-              </Space>
-            </a>
-          </Dropdown>
+        <div className="div-add-order">
+          <div className="div-add-export">
+            <Dropdown
+              menu={{
+                items,
+              }}
+              trigger={["click"]}
+              className="dropdown-export"
+            >
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  <UilEllipsisH className="icon-menu" />
+                </Space>
+              </a>
+            </Dropdown>
+          </div>
+          {checkElement?.includes("create_guvi_job") ? (
+            <Button
+              className="btn-create-order"
+              onClick={() => navigate("/group-order/manage-order/create-order")}
+            >
+              <i class="uil uil-plus-circle"></i>
+              {`${i18n.t("create_order", { lng: lang })}`}
+            </Button>
+          ) : (
+            <></>
+          )}
         </div>
-        {checkElement?.includes("create_guvi_job") ? (
-          <Button
-            className="btn-create-order"
-            onClick={() => navigate("/group-order/manage-order/create-order")}
-          >
-            {`${i18n.t("create_order", { lng: lang })}`}
-          </Button>
-        ) : (
-          <></>
-        )}
       </div>
 
-      <div className="div-container">
+      <div className="div-body-order">
         <div className="div-tab">
-          {DATA_STATUS.map((item, index) => {
+          {itemTab.map((item, index) => {
             return (
               <div
-                className="div-tab-item"
                 key={index}
+                className={
+                  item?.key === keyActive ? "item-tab-select" : "item-tab"
+                }
                 onClick={() => {
-                  setTab(item?.value);
+                  setTab(item?.status);
                   setKind("");
-                  setValueTab("tat_ca");
+                  setCity("");
+                  setType("date_create");
+                  setCheckCondition(false);
                   setCurrentPage(1);
                   setStartPage(0);
+                  setKeyActive(item?.key);
                 }}
               >
-                <a
-                  className={
-                    tab === item?.value
-                      ? "text-title-tab"
-                      : "text-title-tab-default"
-                  }
-                >
-                  {`${i18n.t(item?.title, { lng: lang })}`}
-                </a>
-                <div className={tab === item?.value ? "tab-line" : ""}></div>
+                <a className="text-title">{item?.title}</a>
               </div>
             );
           })}
         </div>
-        <div>
-          <div className="div-tab">
-            {DATA.map((item, index) => {
-              return (
-                <div
-                  className="div-tab-item"
-                  key={index}
-                  onClick={() => {
-                    setKind(item?.kind);
-                    setValueTab(item?.value);
-                    setCurrentPage(1);
-                    setStartPage(0);
-                  }}
-                >
-                  <a
-                    className={
-                      valueTab === item?.value
-                        ? "text-title-tab"
-                        : "text-title-tab-default"
-                    }
-                  >
-                    {`${i18n.t(item?.title, { lng: lang })}`}
-                  </a>
-                  <div
-                    className={valueTab === item?.value ? "tab-line" : ""}
-                  ></div>
-                </div>
-              );
-            })}
-          </div>
+        <div className="div-search-filter-job">
+          <div className="div-condition">
+            <div
+              className="div-codition-filter-job"
+              onClick={() => setCheckCondition(!checkCondition)}
+            >
+              <i class="uil uil-filter"></i>
+              <a className="text-condition">Điều kiện lọc</a>
+            </div>
 
+            {checkCondition && (
+              <div className="div-condition-body">
+                <a className="text-display-job">
+                  Hiện thị tất cả đơn hàng theo:
+                </a>
+                <Select
+                  onChange={(e) => {
+                    setCondition(e);
+                    if (e === "date_create") {
+                      setType("date_create");
+                      setCity("");
+                      setKind("");
+                    } else if (e === "date_work") {
+                      setType("date_work");
+                      setCity("");
+                      setKind("");
+                    } else if (e === "id_service") {
+                      setCity("");
+                      setStartDate(
+                        moment("1-1-2023").startOf("date").toISOString()
+                      );
+                      setEndDate(
+                        moment().endOf("date").add(7, "hours").toISOString()
+                      );
+                    } else {
+                      setKind("");
+                      setStartDate(
+                        moment("1-1-2023").startOf("date").toISOString()
+                      );
+                      setEndDate(
+                        moment().endOf("date").add(7, "hours").toISOString()
+                      );
+                    }
+                  }}
+                  options={[
+                    { value: "id_service", label: "Dịch vụ" },
+                    { value: "city", label: "Tỉnh/Thành phố" },
+                    { value: "date_create", label: "Ngày tạo" },
+                    { value: "date_work", label: "Ngày làm" },
+                  ]}
+                />
+                <div className="mt-2">
+                  {condition === "id_service" ? (
+                    <Select
+                      style={{ width: "100%", marginRight: 10 }}
+                      options={optionsService}
+                      onChange={(e) => setKind(e)}
+                    />
+                  ) : condition === "city" ? (
+                    <Select
+                      style={{ width: "100%", marginRight: 10 }}
+                      options={cityOptions}
+                      onChange={(e) => setCity(e)}
+                    />
+                  ) : condition === "date_create" ||
+                    condition === "date_work" ? (
+                    <RangePicker
+                      onChange={(date, dateString) => {
+                        setStartDate(moment(dateString[0]).toISOString());
+                        setEndDate(moment(dateString[1]).toISOString());
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <div className="footer-condition-filter">
+                  <Button
+                    type="primary"
+                    style={{
+                      width: "20%",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      display: "flex",
+                    }}
+                    onClick={handleFilterByCondition}
+                  >
+                    Lọc
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+          <Input
+            placeholder={`${i18n.t("search", { lng: lang })}`}
+            value={valueSearch}
+            prefix={<SearchOutlined />}
+            className="input-filter-job"
+            onChange={(e) => {
+              handleSearch(e.target.value);
+              setValueSearch(e.target.value);
+            }}
+          />
+        </div>
+        <div className="mt-3">
           <OrderManage
             data={data}
             total={total}
@@ -164,12 +332,19 @@ const ManageOrder = () => {
             setCurrentPage={setCurrentPage}
             setStartPage={setStartPage}
             startPage={startPage}
+            type={type}
+            startDate={startDate}
+            endDate={endDate}
+            valueSearch={valueSearch}
+            city={city}
           />
         </div>
-
-        <FloatButton.BackTop />
       </div>
-    </>
+
+      {isLoading && <LoadingPagination />}
+
+      <FloatButton.BackTop />
+    </div>
   );
 };
 

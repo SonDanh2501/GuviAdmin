@@ -17,7 +17,7 @@ const ManageFeedback = () => {
     window.scrollTo(0, 0);
   }, []);
   return (
-    <>
+    <div className="div-container-feedback">
       <Tabs>
         {checkElement?.includes("list_review_support_customer") && (
           <Tabs.TabPane
@@ -33,7 +33,7 @@ const ManageFeedback = () => {
           </Tabs.TabPane>
         )}
       </Tabs>
-    </>
+    </div>
   );
 };
 

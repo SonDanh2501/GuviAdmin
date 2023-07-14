@@ -1,95 +1,82 @@
-import { MoreOutlined } from "@ant-design/icons";
-import { Dropdown, Input, Pagination, Space, Table, Tabs } from "antd";
-import { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  activeQuestionApi,
-  deleteQuestionApi,
-  getListQuestionApi,
+  activeLessonApi,
+  deleteLessonApi,
+  getListTrainningLessonApi,
 } from "../../../../../api/configuration";
+import { Dropdown, Select, Space, Table } from "antd";
 import offToggle from "../../../../../assets/images/off-button.png";
 import onToggle from "../../../../../assets/images/on-button.png";
-import ModalCustom from "../../../../../components/modalCustom";
-import LoadingPagination from "../../../../../components/paginationLoading";
-import { errorNotify } from "../../../../../helper/toast";
-import {
-  getElementState,
-  getLanguageState,
-} from "../../../../../redux/selectors/auth";
-import AddQuizz from "./AddQuizz";
-import EditQuizz from "./EditQuizz";
+import { useSelector } from "react-redux";
+import { getElementState } from "../../../../../redux/selectors/auth";
+import AddLesson from "./AddLesson";
 import "./index.scss";
-import i18n from "../../../../../i18n";
-const { TextArea } = Input;
-const width = window.innerWidth;
+import { MoreOutlined } from "@ant-design/icons";
+import ModalCustom from "../../../../../components/modalCustom";
+import { errorNotify } from "../../../../../helper/toast";
+import LoadingPagination from "../../../../../components/paginationLoading";
+import EditLesson from "./EditLesson";
+import { Link } from "react-router-dom";
 
 const CreateQuizz = () => {
   const checkElement = useSelector(getElementState);
-  const lang = useSelector(getLanguageState);
-  const [data, setData] = useState([]);
+  const [type, setType] = useState("");
+  const [data, setData] = useState([1]);
   const [total, setTotal] = useState(0);
+  const [item, setItem] = useState([]);
+  const [modalActive, setModalActive] = useState(false);
+  const [modalDelete, setModalDelete] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
-  const [itemEdit, setItemEdit] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [modal, setModal] = useState(false);
-  const [modalActive, setModalActive] = useState(false);
-  const [tab, setTab] = useState("all");
-  const [type, setType] = useState("input");
-  const toggle = () => setModal(!modal);
-  const toggleActive = () => setModalActive(!modalActive);
 
   useEffect(() => {
-    getListQuestionApi(startPage, 20, tab, type)
+    getListTrainningLessonApi(0, 20, type)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-  }, [tab, type]);
+  }, []);
 
-  const deleteQuestion = useCallback(
+  const deleteLesson = useCallback(
     (id) => {
       setIsLoading(true);
-      deleteQuestionApi(id)
+      deleteLessonApi(id)
         .then((res) => {
-          setModal(false);
-          getListQuestionApi(startPage, 20, tab, type)
+          setModalDelete(false);
+          setIsLoading(false);
+          getListTrainningLessonApi(startPage, 20, "")
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);
-              setIsLoading(false);
             })
-            .catch((err) => {
-              setIsLoading(false);
-            });
+            .catch((err) => {});
         })
-        .catch((err) => {
+        .then((err) => {
           setIsLoading(false);
           errorNotify({
             message: err,
           });
         });
     },
-    [startPage, tab, type]
+    [startPage]
   );
 
-  const activeQuestion = useCallback(
+  const activeLesson = useCallback(
     (id, active) => {
       setIsLoading(true);
       if (active) {
-        activeQuestionApi(id, { is_active: false })
+        activeLessonApi(id, { is_active: false })
           .then((res) => {
+            setIsLoading(false);
             setModalActive(false);
-            getListQuestionApi(startPage, 20, tab, type)
+            getListTrainningLessonApi(startPage, 20, "")
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
-                setIsLoading(false);
               })
-              .catch((err) => {
-                setIsLoading(false);
-              });
+              .catch((err) => {});
           })
           .catch((err) => {
             setIsLoading(false);
@@ -98,18 +85,16 @@ const CreateQuizz = () => {
             });
           });
       } else {
-        activeQuestionApi(id, { is_active: true })
+        activeLessonApi(id, { is_active: true })
           .then((res) => {
+            setIsLoading(false);
             setModalActive(false);
-            getListQuestionApi(startPage, 20, tab, type)
+            getListTrainningLessonApi(startPage, 20, "")
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
-                setIsLoading(false);
               })
-              .catch((err) => {
-                setIsLoading(false);
-              });
+              .catch((err) => {});
           })
           .catch((err) => {
             setIsLoading(false);
@@ -119,42 +104,83 @@ const CreateQuizz = () => {
           });
       }
     },
-    [startPage, tab, type]
+    [startPage]
   );
 
-  const columns = [
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const dataLength = data?.length < 20 ? 20 : data?.length;
+    const start = page * dataLength - dataLength;
+    setStartPage(start);
+    getListTrainningLessonApi(start, 20, "")
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+
+  const onChangeType = (e) => {
+    setType(e);
+    getListTrainningLessonApi(0, 20, e)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+
+  const column = [
     {
-      title: `${i18n.t("number_sentences", { lng: lang })}`,
-      render: (data) => {
-        return <a className="title-question">{data?.question}</a>;
+      title: () => {
+        return <a style={{ fontSize: 12 }}>Tiêu đề</a>;
       },
-      align: "center",
-    },
-    {
-      title: `${i18n.t("question", { lng: lang })}`,
-      render: (data) => {
-        return <a className="title-question">{data?.title}</a>;
-      },
-    },
-    {
-      title: `${i18n.t("answer", { lng: lang })}`,
       render: (data) => {
         return (
-          <div className="div-answer">
-            {data?.choose?.map((item, index) => {
-              return (
-                <a
-                  className={
-                    item?.isCorrect ? "title-answer-correct" : "title-answer"
-                  }
-                >
-                  {item?.answer}
-                </a>
-              );
-            })}
-          </div>
+          <Link
+            to={`/adminManage/manage-configuration/lesson/details-lesson/${data?._id}`}
+          >
+            <a className="title-lesson">{data?.title?.vi}</a>
+          </Link>
         );
       },
+    },
+    {
+      title: () => {
+        return <a style={{ fontSize: 12 }}>Video</a>;
+      },
+      render: (data) => {
+        return <a className="title-lesson">{data?.link_video}</a>;
+      },
+    },
+    {
+      title: () => {
+        return <a style={{ fontSize: 12 }}>Loại</a>;
+      },
+      render: (data) => {
+        return (
+          <a className="title-lesson">
+            {data?.type_training_lesson === "input"
+              ? "Đầu vào"
+              : data?.type_training_lesson === "theory_input"
+              ? "Lý thuyết"
+              : data?.type_training_lesson === "periodic"
+              ? "Định kì"
+              : data?.type_training_lesson === "training"
+              ? "Đào tạo"
+              : "Nâng cao"}
+          </a>
+        );
+      },
+    },
+    {
+      title: () => {
+        return <a style={{ fontSize: 12 }}>Lần nộp bài</a>;
+      },
+      render: (data) => {
+        return <a className="title-lesson">{data?.times_submit}</a>;
+      },
+      align: "center",
     },
     {
       key: "action",
@@ -165,196 +191,137 @@ const CreateQuizz = () => {
               <img
                 className="img-unlock-banner"
                 src={data?.is_active ? onToggle : offToggle}
-                onClick={() => activeQuestion(data?._id, data?.is_active)}
+                onClick={() => setModalActive(true)}
               />
             )}
           </a>
         );
       },
+      align: "center",
     },
     {
       key: "action",
-      render: (data) => (
-        <Space size="middle">
-          <Dropdown
-            menu={{
-              items,
-            }}
-            placement="bottom"
-            trigger={["click"]}
-          >
-            <a>
-              <MoreOutlined className="icon-more" />
-            </a>
-          </Dropdown>
-        </Space>
-      ),
+      render: (data) => {
+        return (
+          <Space size="middle">
+            <Dropdown
+              menu={{
+                items,
+              }}
+              placement="bottomRight"
+              trigger={["click"]}
+            >
+              <a>
+                <MoreOutlined className="icon-more" />
+              </a>
+            </Dropdown>
+          </Space>
+        );
+      },
+      align: "center",
     },
   ];
 
   const items = [
     {
       key: "1",
-      label: checkElement?.includes("edit_exam_test_setting") && (
-        <EditQuizz
-          id={itemEdit?._id}
-          setIsLoading={setIsLoading}
-          setData={setData}
-          setTotal={setTotal}
-          startPage={startPage}
-          tab={tab}
-          type={type}
-        />
+      label: (
+        <Link
+          to={`/adminManage/manage-configuration/lesson/details-lesson/${item?._id}`}
+        >
+          <a>Chi tiết câu hỏi</a>
+        </Link>
       ),
     },
     {
       key: "2",
-      label: checkElement?.includes("delete_exam_test_setting") && (
-        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
+      label: (
+        <EditLesson
+          setData={setData}
+          setTotal={setTotal}
+          setIsLoading={setIsLoading}
+          data={item}
+        />
       ),
+    },
+    {
+      key: "3",
+      label: <a onClick={() => setModalDelete(true)}>Xoá</a>,
     },
   ];
 
-  const onChange = (page) => {
-    setCurrentPage(page);
-    const lenghtData = data?.length < 20 ? 20 : data.length;
-    const start = page * lenghtData - lenghtData;
-    setStartPage(start);
-    getListQuestionApi(start, 20, tab, type)
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  };
-
   return (
-    <>
-      <a className="title-quizz">{`${i18n.t("config_question", {
-        lng: lang,
-      })}`}</a>
-
-      <div className="div-tab-type-exam">
-        {TAB.map((item, index) => {
-          return (
-            <div
-              className={item?.value === type ? "div-tab-select" : "div-tab"}
-              key={index}
-              onClick={() => {
-                setType(item?.value);
-                setTab("all");
-              }}
-            >
-              <a className="text-tab">{`${i18n.t(item?.title, {
-                lng: lang,
-              })}`}</a>
-            </div>
-          );
-        })}
+    <div>
+      <h5>Danh sách bài học</h5>
+      <div className="div-select-add-lesson">
+        <Select
+          onChange={onChangeType}
+          style={{ width: "auto" }}
+          value={type}
+          options={[
+            { value: "", label: "Lọc theo loại bài" },
+            { value: "input", label: "Đầu vào" },
+            { value: "theory_input", label: "Lý thuyết" },
+            { value: "periodic", label: "Định kì" },
+            { value: "training", label: "Đào tạo" },
+            { value: "premium", label: "Nâng cao" },
+          ]}
+        />
+        <AddLesson
+          setData={setData}
+          setTotal={setTotal}
+          setIsLoading={setIsLoading}
+        />
+      </div>
+      <div className="mt-3">
+        <Table
+          dataSource={data}
+          columns={column}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setItem(record);
+              },
+            };
+          }}
+          pagination={{
+            total: total,
+            pageSize: 20,
+            onChange: onChange,
+            current: currentPage,
+          }}
+        />
       </div>
 
-      <div className="div-container-question">
-        {checkElement?.includes("create_exam_test_setting") && (
-          <AddQuizz
-            setIsLoading={setIsLoading}
-            setData={setData}
-            setTotal={setTotal}
-            startPage={startPage}
-            tab={tab}
-            type={type}
-          />
-        )}
+      <ModalCustom
+        title="Xoá bài học"
+        isOpen={modalDelete}
+        handleOk={() => deleteLesson(item?._id)}
+        textOk="Xoá"
+        handleCancel={() => setModalDelete(false)}
+        body={<a>Bạn có muốn xoá bài học {item?.title?.vi}</a>}
+      />
 
-        <div className="mt-3">
-          <div className="div-tab-exam">
-            {DATA.map((item, index) => {
-              return (
-                <div
-                  className={item?.value === tab ? "div-tab-select" : "div-tab"}
-                  key={index}
-                  onClick={() => setTab(item?.value)}
-                >
-                  <a className="text-tab">{`${i18n.t(item?.title, {
-                    lng: lang,
-                  })}`}</a>
-                </div>
-              );
-            })}
-          </div>
-          <Table
-            dataSource={data}
-            columns={columns}
-            pagination={false}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  setItemEdit(record);
-                },
-              };
-            }}
-            scroll={
-              width <= 490
-                ? {
-                    x: 1000,
-                  }
-                : null
-            }
-          />
-
-          <div className="mt-2 div-pagination p-2">
+      <ModalCustom
+        title={item?.is_active ? "Khoá bài học" : "Mở khoá bài học"}
+        isOpen={modalActive}
+        handleOk={() => activeLesson(item?._id, item?.is_active)}
+        textOk={item?.is_active ? "Khoá" : "Mở khoá"}
+        handleCancel={() => setModalActive(false)}
+        body={
+          <div>
             <a>
-              {`${i18n.t("total", { lng: lang })}`}: {total}
+              {item?.is_active
+                ? "Bạn có muốn khoá bài học này không? "
+                : "Bạn có muốn mở khoá bài học này không? "}
             </a>
-            <div>
-              <Pagination
-                current={currentPage}
-                onChange={onChange}
-                total={total}
-                showSizeChanger={false}
-                pageSize={20}
-              />
-            </div>
+            <a>{item?.title?.vi}</a>
           </div>
-        </div>
+        }
+      />
 
-        <div>
-          <ModalCustom
-            isOpen={modal}
-            title={`${i18n.t("delete_question", { lng: lang })}`}
-            handleOk={() => deleteQuestion(itemEdit?._id)}
-            textOk={`${i18n.t("delete", { lng: lang })}`}
-            handleCancel={toggle}
-            body={
-              <>
-                <a>{`${i18n.t("want_delete_question", { lng: lang })}`}</a>
-                <a>{itemEdit?.question}</a>
-              </>
-            }
-          />
-        </div>
-
-        <div>
-          <ModalCustom
-            isOpen={modalActive}
-            title={itemEdit?.is_active ? "Ẩn câu hỏi" : "Hiện thị câu hỏi"}
-            handleOk={() => activeQuestion(itemEdit?._id, itemEdit?.is_active)}
-            textOk={itemEdit?.is_active ? "Ẩn" : "Hiện"}
-            handleCancel={toggleActive}
-            body={
-              <>
-                {itemEdit?.is_active ? (
-                  <a>Bạn có chắc muốn ẩn câu {itemEdit?.question} không?</a>
-                ) : (
-                  <a>Bạn có chắc muốn hiện câu {itemEdit?.question} không?</a>
-                )}
-              </>
-            }
-          />
-        </div>
-
-        {isLoading && <LoadingPagination />}
-      </div>
-    </>
+      {isLoading && <LoadingPagination />}
+    </div>
   );
 };
 
@@ -366,10 +333,4 @@ const DATA = [
     title: "active",
     value: "active",
   },
-];
-
-const TAB = [
-  { title: "input", value: "input" },
-  { title: "periodic", value: "periodic" },
-  { title: "theory_input", value: "theory_input" },
 ];

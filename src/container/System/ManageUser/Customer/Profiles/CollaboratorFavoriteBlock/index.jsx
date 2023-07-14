@@ -16,7 +16,10 @@ import LoadingPagination from "../../../../../../components/paginationLoading";
 import { errorNotify } from "../../../../../../helper/toast";
 import ModalCustom from "../../../../../../components/modalCustom";
 import InputCustom from "../../../../../../components/textInputCustom";
-import { searchCollaborators } from "../../../../../../api/collaborator";
+import {
+  fetchCollaborators,
+  searchCollaborators,
+} from "../../../../../../api/collaborator";
 
 const FavouriteBlock = ({ id }) => {
   const [tab, setTab] = useState("favourite");
@@ -124,7 +127,7 @@ const FavouriteBlock = ({ id }) => {
 
   const handleSearch = useCallback(
     _debounce((value) => {
-      searchCollaborators(0, 20, "all", value)
+      fetchCollaborators(lang, 0, 20, "all", value)
         .then((res) => {
           if (value === "") {
             setDataCollaborator([]);

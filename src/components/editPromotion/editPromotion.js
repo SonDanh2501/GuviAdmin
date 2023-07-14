@@ -27,7 +27,7 @@ import {
 } from "../../api/promotion";
 import { errorNotify } from "../../helper/toast";
 import { loadingAction } from "../../redux/actions/loading";
-import { getService } from "../../redux/selectors/service";
+import { getProvince, getService } from "../../redux/selectors/service";
 import CustomTextEditor from "../customTextEdittor";
 import UploadImage from "../uploadImage";
 import "./editPromotion.scss";
@@ -49,6 +49,9 @@ const EditPromotion = (props) => {
     brand,
     exchange,
     idService,
+    search,
+    status,
+    typeSort,
   } = props;
   const [formDiscount, setFormDiscount] = useState("amount");
   const [discountUnit, setDiscountUnit] = useState("amount");
@@ -98,6 +101,9 @@ const EditPromotion = (props) => {
   const [isParrentPromotion, setIsParrentPromotion] = useState(false);
   const [isApplyTime, setIsApplyTime] = useState(false);
   const [isShowInApp, setIsShowInApp] = useState(false);
+  const [isApplyArea, setIsApplyArea] = useState(false);
+  const [city, setCity] = useState([]);
+  const [district, setDistrict] = useState([]);
   const [timeApply, setTimeApply] = useState([
     {
       day_local: 0,
@@ -109,17 +115,28 @@ const EditPromotion = (props) => {
   const options = [];
   const optionsCustomer = [];
   const serviceOption = [];
+  const cityOption = [];
+  const districtOption = [];
   const fomart = "HH:mm";
   const dateFormat = "YYYY-MM-DD";
   const dispatch = useDispatch();
   const service = useSelector(getService);
   const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
 
   useEffect(() => {
     getGroupCustomerApi(0, 10)
       .then((res) => setDataGroupCustomer(res.data))
       .catch((err) => console.log(err));
   }, []);
+
+  province?.map((item) => {
+    cityOption?.push({
+      value: item?.code,
+      label: item?.name,
+      district: item?.districts,
+    });
+  });
 
   dataGroupCustomer.map((item, index) => {
     options.push({
@@ -231,6 +248,9 @@ const EditPromotion = (props) => {
         setTimeApply(res?.day_loop);
         setIsParrentPromotion(res?.is_parrent_promotion);
         setIsShowInApp(res?.is_show_in_app);
+        setIsApplyArea(res?.is_apply_area);
+        setCity(res?.city);
+        setDistrict(res?.district);
       })
       .catch((err) => console.log(err));
   }, [data]);
@@ -339,11 +359,24 @@ const EditPromotion = (props) => {
       is_loop: isApplyTime,
       day_loop: isApplyTime ? timeApply : [],
       is_show_in_app: isShowInApp,
+      is_apply_area: isApplyArea,
+      city: city,
+      district: district,
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
         setState(false);
-        fetchPromotion(startPage, 20, type, brand, idService, exchange)
+        fetchPromotion(
+          search,
+          status,
+          startPage,
+          20,
+          type,
+          brand,
+          idService,
+          exchange,
+          typeSort
+        )
           .then((res) => {
             setDataPromo(res?.data);
             setTotalPromo(res?.totalItem);
@@ -353,7 +386,17 @@ const EditPromotion = (props) => {
       .catch((err) => {
         if (isParrentPromotion) {
           setState(false);
-          fetchPromotion(startPage, 20, type, brand, idService, exchange)
+          fetchPromotion(
+            search,
+            status,
+            startPage,
+            20,
+            type,
+            brand,
+            idService,
+            exchange,
+            typeSort
+          )
             .then((res) => {
               setDataPromo(res?.data);
               setTotalPromo(res?.totalItem);
@@ -413,6 +456,12 @@ const EditPromotion = (props) => {
     startPage,
     isParrentPromotion,
     isShowInApp,
+    isApplyArea,
+    city,
+    district,
+    search,
+    status,
+    typeSort,
   ]);
 
   return (
@@ -948,6 +997,32 @@ const EditPromotion = (props) => {
                   checked={isShowInApp}
                   style={{ marginLeft: 5 }}
                 />
+              </div>
+
+              <div>
+                <div>
+                  <a className="title-add-promo">18. Áp dụng khu vực</a>
+                  <Checkbox
+                    checked={isApplyArea}
+                    onChange={(e) => setIsApplyArea(e.target.checked)}
+                    style={{ marginLeft: 5 }}
+                  />
+                </div>
+                {isApplyArea && (
+                  <div>
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      value={city}
+                      style={{ width: "100%" }}
+                      onChange={(e, label) => {
+                        setCity(e);
+                      }}
+                      options={cityOption}
+                      optionLabelProp="label"
+                    />
+                  </div>
+                )}
               </div>
               <Button
                 className="btn-edit-promrion mt-5"

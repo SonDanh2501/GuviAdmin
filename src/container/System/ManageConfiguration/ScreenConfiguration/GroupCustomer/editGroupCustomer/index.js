@@ -697,6 +697,7 @@ const EditGroupCustomer = () => {
       <Button
         className="btn-create-group-customer"
         onClick={onEditGroupCustomer}
+        style={{ width: "auto" }}
       >
         {`${i18n.t("edit_group_customer", { lng: lang })}`}
       </Button>

@@ -64,6 +64,8 @@ import ImageManage from "../container/System/ManageConfiguration/ScreenConfigura
 import ReportOrderDayInWeek from "../container/System/ManageReport/MangeReportOrder/ReportOrderDayOfWeek";
 import ReportCustomerOrderByArea from "../container/System/ManageReport/ManageReportCustomer/ReportCustomerOrderByArea";
 import PromotionDrag from "../container/System/ManagePromotion/PromotionDrag";
+import CreatePromotion from "../container/System/ManagePromotion/Promotion/component/CreatePromotion";
+import DetailLesson from "../container/System/ManageConfiguration/ScreenConfiguration/CreateQuizz/DetailLesson";
 
 const Admin = () => {
   return (
@@ -98,6 +100,10 @@ const Admin = () => {
       <Route
         path="/promotion/manage-setting/edit-position-promotion"
         element={<PromotionDrag />}
+      />
+      <Route
+        path="/promotion/manage-setting/create-promotion"
+        element={<CreatePromotion />}
       />
 
       <Route
@@ -259,8 +265,12 @@ const Admin = () => {
         element={<EditGroupCustomer />}
       />
       <Route
-        path="/adminManage/manage-configuration/create_quizz"
+        path="/adminManage/manage-configuration/lesson"
         element={<CreateQuizz />}
+      />
+      <Route
+        path="/adminManage/manage-configuration/lesson/details-lesson/:id"
+        element={<DetailLesson />}
       />
       <Route
         path="/adminManage/manage-configuration/reason_punish"

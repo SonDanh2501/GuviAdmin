@@ -1,18 +1,17 @@
-import { Drawer, Select, Input, InputNumber, List } from "antd";
+import { Drawer, List } from "antd";
+import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { searchCollaborators } from "../../api/collaborator";
-import { getListPunishApi, punishMoneyCollaboratorApi } from "../../api/topup";
-import { loadingAction } from "../../redux/actions/loading";
-import CustomButton from "../customButton/customButton";
-import _debounce from "lodash/debounce";
-import "./index.scss";
-import { errorNotify, successNotify } from "../../helper/toast";
+import { fetchCollaborators } from "../../api/collaborator";
 import { getReasonPunishApi } from "../../api/reasons";
-import TextArea from "antd/es/input/TextArea";
-import { getLanguageState } from "../../redux/selectors/auth";
+import { getListPunishApi, punishMoneyCollaboratorApi } from "../../api/topup";
+import { errorNotify, successNotify } from "../../helper/toast";
 import i18n from "../../i18n";
+import { loadingAction } from "../../redux/actions/loading";
+import { getLanguageState } from "../../redux/selectors/auth";
+import CustomButton from "../customButton/customButton";
 import InputCustom from "../textInputCustom";
+import "./index.scss";
 
 const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
   const [money, setMoney] = useState(0);
@@ -57,7 +56,7 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
     _debounce((value) => {
       setName(value);
       if (value) {
-        searchCollaborators(0, 100, "", value)
+        fetchCollaborators(lang, 0, 100, "", value)
           .then((res) => {
             if (value === "") {
               setData([]);

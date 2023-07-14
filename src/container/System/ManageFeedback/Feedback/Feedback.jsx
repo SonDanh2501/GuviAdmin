@@ -94,15 +94,33 @@ const Feedback = () => {
 
   const columns = [
     {
-      title: `${i18n.t("type_feedback", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("type_feedback", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => <a className="text-type">{data?.type?.name?.[lang]}</a>,
     },
     {
-      title: `${i18n.t("content", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("content", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => <a className="text-content">{data?.body}</a>,
     },
     {
-      title: `${i18n.t("feedback_sender", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("feedback_sender", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <Link to={`/profile-customer/${data?.id_customer}`}>
@@ -112,11 +130,23 @@ const Feedback = () => {
       },
     },
     {
-      title: `${i18n.t("phone_feedback_sender", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("phone_feedback_sender", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => <a className="text-content">{data?.phone}</a>,
     },
     {
-      title: `${i18n.t("date_create", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("date_create", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => (
         <a className="text-content">
           {moment(new Date(data?.date_create)).format("DD/MM/yyy - HH:mm")}

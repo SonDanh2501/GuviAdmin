@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getOrder, searchOrder } from "../../../../../../redux/actions/order";
+import { useSelector } from "react-redux";
 
-import { UilEllipsisV } from "@iconscout/react-unicons";
-import { Dropdown, Empty, Pagination, Skeleton, Space, Table } from "antd";
+import { Pagination, Table } from "antd";
 import moment from "moment";
-import vi from "moment/locale/vi";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import "./index.scss";
+import { Link } from "react-router-dom";
 import { getOrderByCustomers } from "../../../../../../api/customer";
 import { formatMoney } from "../../../../../../helper/formatMoney";
-import { getLanguageState } from "../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../i18n";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import "./index.scss";
+import useWindowDimensions from "../../../../../../helper/useWindowDimensions";
 
 export default function OrderCustomer({ id }) {
   // const { state } = useLocation();
   // const { id } = state || {};
+  const { width } = useWindowDimensions();
   const [dataFilter, setDataFilter] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [item, setItem] = useState([]);
@@ -23,8 +22,6 @@ export default function OrderCustomer({ id }) {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
   const lang = useSelector(getLanguageState);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     getOrderByCustomers(id, 0, 20)
@@ -73,7 +70,13 @@ export default function OrderCustomer({ id }) {
 
   const columns = [
     {
-      title: `${i18n.t("code_order", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("code_order", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <Link to={`/details-order/${data?._id}`}>
@@ -83,7 +86,13 @@ export default function OrderCustomer({ id }) {
       },
     },
     {
-      title: `${i18n.t("date_create", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("date_create", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-create">
@@ -96,9 +105,16 @@ export default function OrderCustomer({ id }) {
           </div>
         );
       },
+      responsive: ["xl"],
     },
     {
-      title: `${i18n.t("service", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("service", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-service">
@@ -119,7 +135,13 @@ export default function OrderCustomer({ id }) {
       },
     },
     {
-      title: `${i18n.t("date_work", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("date_work", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="div-worktime">
@@ -139,15 +161,28 @@ export default function OrderCustomer({ id }) {
       },
     },
     {
-      title: `${i18n.t("address", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("address", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => <p className="text-address">{data?.address}</p>,
+      responsive: ["xl"],
     },
     {
-      title: `${i18n.t("collaborator", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("collaborator", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
-            <a>{`${i18n.t("searching", {
+            <a className="text-searching">{`${i18n.t("searching", {
               lng: lang,
             })}`}</a>
           ) : (
@@ -158,9 +193,14 @@ export default function OrderCustomer({ id }) {
         </>
       ),
     },
-
     {
-      title: `${i18n.t("status", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("status", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => (
         <a
           className={
@@ -188,7 +228,13 @@ export default function OrderCustomer({ id }) {
       ),
     },
     {
-      title: `${i18n.t("total_money", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("total_money", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => (
         <a className="text-money-order-customer">
           {formatMoney(data?.final_fee)}
@@ -233,6 +279,28 @@ export default function OrderCustomer({ id }) {
               },
             };
           }}
+          expandable={
+            width <= 1200
+              ? {
+                  expandedRowRender: (record) => {
+                    return (
+                      <div className="div-plus">
+                        <a>
+                          {`${i18n.t("address", { lng: lang })}`}:{" "}
+                          {record?.address}
+                        </a>
+                        <a>
+                          {`${i18n.t("date_create", { lng: lang })}`}:{" "}
+                          {moment(new Date(record?.date_create)).format(
+                            "DD/MM/YYYY - HH:mm"
+                          )}
+                        </a>
+                      </div>
+                    );
+                  },
+                }
+              : ""
+          }
         />
 
         <div className="mt-2 div-pagination p-2">

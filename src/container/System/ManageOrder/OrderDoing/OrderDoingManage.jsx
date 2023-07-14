@@ -6,7 +6,7 @@ import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { getOrderApi, searchOrderApi } from "../../../../api/order";
+import { getOrderApi } from "../../../../api/order";
 import InputCustom from "../../../../components/textInputCustom";
 
 import "./OrderDoingManage.scss";
@@ -28,7 +28,7 @@ const OrderDoingManage = () => {
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    getOrderApi(0, 10, "doing", "")
+    getOrderApi("", 0, 20, "doing", "", "", "", "", "")
       .then((res) => {
         setData(res.data);
         setTotal(res.totalItem);
@@ -213,10 +213,10 @@ const OrderDoingManage = () => {
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueSearch(value);
-      searchOrderApi(0, 10, value, "doing")
+      getOrderApi(value, 0, 20, "doing", "", "", "", "", "")
         .then((res) => {
-          setDataSearch(res.data);
-          setTotalSearch(res.totalItem);
+          setData(res.data);
+          setTotal(res.totalItem);
         })
         .catch((err) => {});
     }, 1000),
@@ -226,27 +226,17 @@ const OrderDoingManage = () => {
   const onChange = (page) => {
     setCurrentPage(page);
     const dataLength = data?.length < 20 ? 20 : data.length;
-    const searchLength = dataSearch?.length < 20 ? 20 : dataSearch.length;
-    const start =
-      dataSearch.length > 0
-        ? page * searchLength - searchLength
-        : page * dataLength - dataLength;
+
+    const start = page * dataLength - dataLength;
 
     setStartPage(start);
 
-    dataSearch.length > 0
-      ? searchOrderApi(start, 10, valueSearch, "doing")
-          .then((res) => {
-            setDataSearch(res.data);
-            setTotalSearch(res.totalItem);
-          })
-          .catch((err) => {})
-      : getOrderApi(start, 10, "doing", "")
-          .then((res) => {
-            setData(res.data);
-            setTotal(res.totalItem);
-          })
-          .catch((err) => {});
+    getOrderApi(valueSearch, 0, 20, "doing", "", "", "", "", "")
+      .then((res) => {
+        setData(res.data);
+        setTotal(res.totalItem);
+      })
+      .catch((err) => {});
   };
 
   return (

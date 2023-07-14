@@ -510,7 +510,7 @@ const EditRewardCollaborator = () => {
                                             title="So sánh"
                                             select={true}
                                             style={{
-                                              width: 60,
+                                              width: 150,
                                               marginLeft: 5,
                                             }}
                                             options={DATA_OPERTATOR}
@@ -681,7 +681,7 @@ const DATA_KIND = [
     label: "Tổng số ca làm",
   },
   {
-    value: "total_hours",
+    value: "total_hour",
     label: "Tổng số giờ làm",
   },
   {
