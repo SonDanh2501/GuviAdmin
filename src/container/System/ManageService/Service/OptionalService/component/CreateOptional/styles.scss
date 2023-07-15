@@ -1,0 +1,23 @@
+.btn-create-option-serivice {
+  display: flex;
+  float: right;
+  align-items: center;
+  justify-content: center;
+  width: 15%;
+  height: 10%;
+  border: none;
+  border-radius: 5px;
+  background-color: #48cae4;
+  color: white;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  margin-bottom: 20px;
+}
+
+.div-price-holiday {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  border: 1px solid #d6d6d6;
+  border-radius: 4px;
+  margin-top: 5px;
+}

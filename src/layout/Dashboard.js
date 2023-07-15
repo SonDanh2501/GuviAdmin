@@ -29,7 +29,7 @@ const Dashboard = () => {
   }, [window]);
 
   return (
-    <Layout>
+    <Layout style={{ width: "100%" }}>
       <Sider
         trigger={null}
         collapsible
@@ -52,6 +52,8 @@ const Dashboard = () => {
             background: "#38BDF8",
             borderBottomLeftRadius: 8,
             borderBottomRightRadius: 8,
+            marginLeft: 10,
+            marginRight: 10,
           }}
         >
           <HeaderBar
@@ -61,7 +63,7 @@ const Dashboard = () => {
         </Header>
         <Content
           style={{
-            margin: "10px 10px",
+            margin: 10,
             padding: 10,
             minHeight: 280,
             background: "white",

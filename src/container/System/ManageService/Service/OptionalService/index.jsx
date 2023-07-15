@@ -5,19 +5,18 @@ import {
   activeOptionServiceApi,
   deleteOptionServiceApi,
   getOptionalServiceByServiceApi,
-} from "../../../../api/service";
+} from "../../../../../api/service";
 import { Button, Dropdown, Image, Popover, Space, Table } from "antd";
 import { DownOutlined, MoreOutlined } from "@ant-design/icons";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { errorNotify } from "../../../../helper/toast";
-import LoadingPagination from "../../../../components/paginationLoading";
+import { errorNotify } from "../../../../../helper/toast";
+import LoadingPagination from "../../../../../components/paginationLoading";
 import EditOptional from "./component/EditOptional";
 import CreateOptional from "./component/CreateOptional";
-import { formatMoney } from "../../../../helper/formatMoney";
-import onToggle from "../../../../assets/images/on-button.png";
-import offToggle from "../../../../assets/images/off-button.png";
+import onToggle from "../../../../../assets/images/on-button.png";
+import offToggle from "../../../../../assets/images/off-button.png";
 
-const ManageOptionService = () => {
+const OptionalService = () => {
   const { state } = useLocation();
   const { id } = state || {};
   const [data, setData] = useState([]);
@@ -161,24 +160,23 @@ const ManageOptionService = () => {
     {
       title: "Tiêu đề",
       render: (data) => (
-        <Popover
-          content={() => contentOptional(data)}
-          title="Title"
-          trigger="hover"
+        // <Popover
+        // content={() => contentOptional(data)}
+        // title="Title"
+        // trigger="hover"
+        // >
+
+        // </Popover>
+        <a
+          onClick={() =>
+            navigate(
+              `/services/manage-group-service/service/optional-service/edit-price`,
+              { state: { id: data?._id } }
+            )
+          }
         >
-          <a
-            onClick={() => {
-              navigate(
-                "/services/manage-group-service/manage-service/option-service/extend-option",
-                {
-                  state: { id: data?._id },
-                }
-              );
-            }}
-          >
-            {data?.title?.vi}
-          </a>
-        </Popover>
+          {data?.title?.vi}
+        </a>
       ),
       width: "40%",
     },
@@ -186,69 +184,69 @@ const ManageOptionService = () => {
       title: "Mô tả",
       render: (data) => <a>{data?.description?.vi}</a>,
     },
-    {
-      title: "Vị trí",
-      render: (data) => <a>{data?.position}</a>,
-      align: "center",
-    },
-    {
-      title: "Phí dịch vụ",
-      render: (data) => <a>{data?.platform_fee}</a>,
-      align: "center",
-    },
-    {
-      key: "action",
-      render: (data) => {
-        return (
-          <>
-            {data?.is_active ? (
-              <img
-                className="img-unlock-options"
-                src={onToggle}
-                onClick={toggleBlock}
-              />
-            ) : (
-              <img
-                className="img-unlock-options"
-                src={offToggle}
-                onClick={toggleBlock}
-              />
-            )}
-          </>
-        );
-      },
-    },
-    {
-      key: "action",
-      render: (data) => (
-        <Space size="middle">
-          <Dropdown
-            menu={{
-              items,
-            }}
-            placement="bottom"
-            trigger={["click"]}
-          >
-            <a>
-              <MoreOutlined className="icon-more" />
-            </a>
-          </Dropdown>
-        </Space>
-      ),
-    },
+    // {
+    //   title: "Vị trí",
+    //   render: (data) => <a>{data?.position}</a>,
+    //   align: "center",
+    // },
+    // {
+    //   title: "Phí dịch vụ",
+    //   render: (data) => <a>{data?.platform_fee}</a>,
+    //   align: "center",
+    // },
+    // {
+    //   key: "action",
+    //   render: (data) => {
+    //     return (
+    //       <>
+    //         {data?.is_active ? (
+    //           <img
+    //             className="img-unlock-options"
+    //             src={onToggle}
+    //             onClick={toggleBlock}
+    //           />
+    //         ) : (
+    //           <img
+    //             className="img-unlock-options"
+    //             src={offToggle}
+    //             onClick={toggleBlock}
+    //           />
+    //         )}
+    //       </>
+    //     );
+    //   },
+    // },
+    // {
+    //   key: "action",
+    //   render: (data) => (
+    //     <Space size="middle">
+    //       <Dropdown
+    //         menu={{
+    //           items,
+    //         }}
+    //         placement="bottom"
+    //         trigger={["click"]}
+    //       >
+    //         <a>
+    //           <MoreOutlined className="icon-more" />
+    //         </a>
+    //       </Dropdown>
+    //     </Space>
+    //   ),
+    // },
   ];
 
   return (
     <div>
       <h3>Optional Service</h3>
-      <div>
+      {/* <div>
         <CreateOptional
           setIsLoading={setIsLoading}
           setData={setData}
           idService={id}
         />
-      </div>
-      <div>
+      </div> */}
+      <div className="mt-3">
         <Table
           dataSource={data}
           columns={columns}
@@ -315,4 +313,4 @@ const ManageOptionService = () => {
   );
 };
 
-export default ManageOptionService;
+export default OptionalService;

@@ -162,7 +162,7 @@ const AddCollaboratorOrder = (props) => {
         open={open}
         headerStyle={{ height: 50 }}
       >
-        <div>
+        <div className="div-add-collaborator">
           <div>
             <a className="label">{`${i18n.t("collaborator", {
               lng: lang,

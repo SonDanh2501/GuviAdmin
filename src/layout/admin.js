@@ -66,6 +66,8 @@ import ReportCustomerOrderByArea from "../container/System/ManageReport/ManageRe
 import PromotionDrag from "../container/System/ManagePromotion/PromotionDrag";
 import CreatePromotion from "../container/System/ManagePromotion/Promotion/component/CreatePromotion";
 import DetailLesson from "../container/System/ManageConfiguration/ScreenConfiguration/CreateQuizz/DetailLesson";
+import OptionalService from "../container/System/ManageService/Service/OptionalService";
+import EditPrice from "../container/System/ManageService/Service/EditPrice";
 
 const Admin = () => {
   return (
@@ -126,6 +128,14 @@ const Admin = () => {
       <Route
         path="/services/manage-group-service/service"
         element={<Service />}
+      />
+      <Route
+        path="/services/manage-group-service/service/optional-service"
+        element={<OptionalService />}
+      />
+      <Route
+        path="/services/manage-group-service/service/optional-service/edit-price"
+        element={<EditPrice />}
       />
       <Route
         path="/services/manage-group-service/manage-service/option-service"

@@ -912,13 +912,13 @@ export default function Home() {
                 columns={columns}
                 dataSource={lastestService}
                 pagination={false}
-                // scroll={
-                //   width <= 1000
-                //     ? {
-                //         x: 1600,
-                //       }
-                //     : null
-                // }
+                scroll={
+                  width <= 900
+                    ? {
+                        x: 1600,
+                      }
+                    : null
+                }
               />
               <div className="div-entries">
                 <Select
@@ -1017,31 +1017,39 @@ export default function Home() {
               <h4>{`${i18n.t("total_register", {
                 lng: lang,
               })}`}</h4>
-              <div className="div-time-area">
-                <div>
-                  <a className="text-time">{`${i18n.t("time", {
+              <div className="div-total-time-area">
+                <div className="div-time-area">
+                  <div>
+                    <a className="text-time">{`${i18n.t("time", {
+                      lng: lang,
+                    })}`}</a>
+                    <DatePicker
+                      picker="year"
+                      onChange={(date, dateString) => {
+                        getTotalCustomerYear(dateString)
+                          .then((res) => {
+                            setDataUser(res);
+                          })
+                          .catch((err) => {});
+                      }}
+                      defaultValue={dayjs("2023", yearFormat)}
+                      format={yearFormat}
+                    />
+                  </div>
+                </div>
+                <div className="div-total">
+                  <a className="text-total-user">{`${i18n.t("total_user", {
                     lng: lang,
                   })}`}</a>
-                  <DatePicker
-                    picker="year"
-                    onChange={onChange}
-                    defaultValue={dayjs("2023", yearFormat)}
-                    format={yearFormat}
-                  />
+                  <div className="div-total">
+                    <a className="text-number-total">{totalYearUser}</a>
+                  </div>
                 </div>
               </div>
-              <div className="mt-3 divl-total">
-                <a className="text-total-user">{`${i18n.t("total_user", {
-                  lng: lang,
-                })}`}</a>
-                <div className="div-total">
-                  <a className="text-number-total">{totalYearUser}</a>
-                </div>
-              </div>
-              <div className="mt-1">
+              <div className="mt-4">
                 <ResponsiveContainer
                   width={"100%"}
-                  height={200}
+                  height={225}
                   min-width={350}
                 >
                   <ComposedChart
@@ -1092,8 +1100,8 @@ export default function Home() {
                       })}`}
                       stackId="a"
                       label={{
-                        position: "insideTop",
-                        fill: "white",
+                        position: "top",
+                        fill: "black",
                         fontSize: 12,
                         fontFamily: "Roboto",
                       }}
