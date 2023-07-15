@@ -112,6 +112,11 @@ const EditPrice = () => {
     setData(newArr);
   };
 
+  const deletePriceArea = (index) => {
+    data.splice(index, 1);
+    setData([...data]);
+  };
+
   //priceRushDay
 
   const changeDayPriceRushDay = (value, index, indexRush) => {
@@ -132,6 +137,37 @@ const EditPrice = () => {
     setData(newArr);
   };
 
+  const changeStartTimePriceRushDay = (value, index, indexRush) => {
+    const newArr = [...data];
+    data[index].price_option_rush_day[indexRush].start_time = value + ":000Z";
+    setData(newArr);
+  };
+
+  const changeEndTimePriceRushDay = (value, index, indexRush) => {
+    const newArr = [...data];
+    data[index].price_option_rush_day[indexRush].end_time = value + ":000Z";
+    setData(newArr);
+  };
+
+  const addPriceRushDay = (index) => {
+    const arr = [...data];
+    data[index].price_option_rush_day.push({
+      rush_days: [],
+      start_time: "",
+      end_time: "",
+      time_zone_apply: 7,
+      type_increase: "",
+      value: 0,
+    });
+
+    setData(arr);
+  };
+
+  const deletePriceRushDay = (index, indexRush) => {
+    data[index].price_option_rush_day.splice(indexRush, 1);
+    setData([...data]);
+  };
+
   return (
     <div>
       <h6>Chỉnh sửa giá</h6>
@@ -139,8 +175,8 @@ const EditPrice = () => {
       <div>
         {data?.map((item, index) => {
           return (
-            <>
-              <div key={index} className="div-list-edit-price">
+            <div key={index}>
+              <div className="div-list-edit-price">
                 <InputCustom
                   select={true}
                   title="Tỉnh/Thành phố"
@@ -186,7 +222,7 @@ const EditPrice = () => {
                     <h6>Giá ngày cao điểm</h6>
                     {item?.price_option_rush_day?.map((itemRusd, indexRush) => {
                       return (
-                        <div key={indexRush}>
+                        <div key={indexRush} className="div-price">
                           <InputCustom
                             select={true}
                             title="Thứ trong tuần"
@@ -237,9 +273,14 @@ const EditPrice = () => {
                             <a style={{ fontSize: 12 }}>Giờ bắt đầu</a>
                             <TimePicker
                               className="select-date"
-                              defaultOpenValue={dayjs("00:00", hourFormat)}
                               format={hourFormat}
-                              onChange={(time, timeString) => {}}
+                              onChange={(time, timeString) => {
+                                changeStartTimePriceRushDay(
+                                  timeString,
+                                  index,
+                                  indexRush
+                                );
+                              }}
                             />
                           </div>
                           <div
@@ -252,14 +293,41 @@ const EditPrice = () => {
                             <a style={{ fontSize: 12 }}>Giờ kết thúc</a>
                             <TimePicker
                               className="select-date"
-                              defaultOpenValue={dayjs("00:00", hourFormat)}
                               format={hourFormat}
-                              onChange={(time, timeString) => {}}
+                              onChange={(time, timeString) => {
+                                changeEndTimePriceRushDay(
+                                  timeString,
+                                  index,
+                                  indexRush
+                                );
+                              }}
                             />
                           </div>
+                          {indexRush !== 0 && (
+                            <Button
+                              style={{ marginTop: 5 }}
+                              onClick={() =>
+                                deletePriceRushDay(index, indexRush)
+                              }
+                            >
+                              Xoá
+                            </Button>
+                          )}
                         </div>
                       );
                     })}
+                    <Button
+                      style={{
+                        width: "15%",
+                        marginTop: 10,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      onClick={() => addPriceRushDay(index)}
+                    >
+                      Thêm
+                    </Button>
                   </div>
                   <div className="div-price-rush-day">
                     <h6>Giá ngày lễ</h6>
@@ -278,7 +346,15 @@ const EditPrice = () => {
                   </div>
                 </div>
               </div>
-            </>
+              {index !== 0 && (
+                <Button
+                  style={{ width: "auto", marginTop: 5 }}
+                  onClick={() => deletePriceArea(index)}
+                >
+                  Xoá
+                </Button>
+              )}
+            </div>
           );
         })}
         <Button style={{ width: "auto", marginTop: 10 }} onClick={addPriceArea}>
