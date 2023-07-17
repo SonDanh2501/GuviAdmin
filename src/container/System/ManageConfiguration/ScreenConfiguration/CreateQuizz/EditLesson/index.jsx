@@ -11,7 +11,7 @@ import {
 import { errorNotify } from "../../../../../../helper/toast";
 import CustomTextEditor from "../../../../../../components/customTextEdittor";
 
-const EditLesson = ({ setData, setTotal, setIsLoading, data }) => {
+const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
   const [lesson, setLesson] = useState();
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
@@ -64,7 +64,7 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data }) => {
       .then((res) => {
         setOpen(false);
         setIsLoading(false);
-        getListTrainningLessonApi(0, 20, "")
+        getListTrainningLessonApi(0, 20, tab)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItem);
@@ -134,19 +134,21 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data }) => {
           value={link}
           onChange={(e) => setLink(e.target.value)}
         />
-        <InputCustom
-          select={true}
-          title="Loại bài"
-          value={type}
-          onChange={(e) => setType(e)}
-          options={[
-            { value: "input", label: "Đầu vào" },
-            { value: "theory_input", label: "Lý thuyết" },
-            { value: "periodic", label: "Định kì" },
-            { value: "training", label: "Đào tạo" },
-            { value: "premium", label: "Nâng cao" },
-          ]}
-        />
+        {tab === "" && (
+          <InputCustom
+            select={true}
+            title="Loại bài"
+            value={type}
+            onChange={(e) => setType(e)}
+            options={[
+              { value: "input", label: "Đầu vào" },
+              { value: "theory_input", label: "Lý thuyết" },
+              { value: "periodic", label: "Định kì" },
+              { value: "training", label: "Đào tạo" },
+              { value: "premium", label: "Nâng cao" },
+            ]}
+          />
+        )}
         <InputCustom
           title="Số lần nộp bài"
           value={timeSubmit}

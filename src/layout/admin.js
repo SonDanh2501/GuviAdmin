@@ -68,6 +68,7 @@ import CreatePromotion from "../container/System/ManagePromotion/Promotion/compo
 import DetailLesson from "../container/System/ManageConfiguration/ScreenConfiguration/CreateQuizz/DetailLesson";
 import OptionalService from "../container/System/ManageService/Service/OptionalService";
 import EditPrice from "../container/System/ManageService/Service/EditPrice";
+import ExtendOptionalService from "../container/System/ManageService/Service/ExtendOptional";
 
 const Admin = () => {
   return (
@@ -134,7 +135,11 @@ const Admin = () => {
         element={<OptionalService />}
       />
       <Route
-        path="/services/manage-group-service/service/optional-service/edit-price"
+        path="/services/manage-group-service/service/optional-service/extend-optional"
+        element={<ExtendOptionalService />}
+      />
+      <Route
+        path="/services/manage-group-service/service/optional-service/extend-optional/edit-price"
         element={<EditPrice />}
       />
       <Route

@@ -10,7 +10,7 @@ import {
 import { errorNotify } from "../../../../../../helper/toast";
 import CustomTextEditor from "../../../../../../components/customTextEdittor";
 
-const AddLesson = ({ setData, setTotal, setIsLoading }) => {
+const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
   const [lesson, setLesson] = useState();
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
@@ -42,7 +42,7 @@ const AddLesson = ({ setData, setTotal, setIsLoading }) => {
         en: descriptionEN,
       },
       link_video: link,
-      type_training_lesson: type,
+      type_training_lesson: tab === "" ? type : tab,
       is_show_in_app: isShowApp,
       times_submit: timeSubmit,
       theory: theory,
@@ -50,7 +50,7 @@ const AddLesson = ({ setData, setTotal, setIsLoading }) => {
       .then((res) => {
         setOpen(false);
         setIsLoading(false);
-        getListTrainningLessonApi(0, 20, "")
+        getListTrainningLessonApi(0, 20, tab)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItem);
@@ -74,6 +74,7 @@ const AddLesson = ({ setData, setTotal, setIsLoading }) => {
     isShowApp,
     timeSubmit,
     theory,
+    tab,
   ]);
 
   return (
@@ -119,19 +120,21 @@ const AddLesson = ({ setData, setTotal, setIsLoading }) => {
           value={link}
           onChange={(e) => setLink(e.target.value)}
         />
-        <InputCustom
-          select={true}
-          title="Loại bài"
-          value={type}
-          onChange={(e) => setType(e)}
-          options={[
-            { value: "input", label: "Đầu vào" },
-            { value: "theory_input", label: "Lý thuyết" },
-            { value: "periodic", label: "Định kì" },
-            { value: "training", label: "Đào tạo" },
-            { value: "premium", label: "Nâng cao" },
-          ]}
-        />
+        {tab === "" && (
+          <InputCustom
+            select={true}
+            title="Loại bài"
+            value={type}
+            onChange={(e) => setType(e)}
+            options={[
+              { value: "input", label: "Đầu vào" },
+              { value: "theory_input", label: "Lý thuyết" },
+              { value: "periodic", label: "Định kì" },
+              { value: "training", label: "Đào tạo" },
+              { value: "premium", label: "Nâng cao" },
+            ]}
+          />
+        )}
         <InputCustom
           title="Số lần nộp bài"
           value={timeSubmit}

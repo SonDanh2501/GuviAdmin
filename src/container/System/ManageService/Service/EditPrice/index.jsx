@@ -1,16 +1,21 @@
 import { useLocation } from "react-router-dom";
 import "./styles.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputCustom from "../../../../../components/textInputCustom";
 import { useSelector } from "react-redux";
 import { getProvince } from "../../../../../redux/selectors/service";
-import { Button, TimePicker } from "antd";
+import { Button, DatePicker, TimePicker } from "antd";
 import dayjs from "dayjs";
+import moment from "moment";
+import { errorNotify } from "../../../../../helper/toast";
+import { editExtendOptionApi } from "../../../../../api/service";
+import LoadingPagination from "../../../../../components/paginationLoading";
 
 const EditPrice = () => {
   const { state } = useLocation();
-  const { id } = state || {};
+  const { id, data_price } = state || {};
   const [dataDistrict, setDataDistrict] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([
     {
       district: [],
@@ -40,7 +45,25 @@ const EditPrice = () => {
   const cityOptions = [];
   const districtOptions = [];
   const hourFormat = "HH:mm";
+  const dateFormat = "YYYY-MM-DD";
   const province = useSelector(getProvince);
+
+  useEffect(() => {
+    setData(data_price);
+  }, [data_price]);
+
+  data_price?.map((item) => {
+    province?.map((itemProvince) => {
+      if (item?.city === itemProvince?.code) {
+        itemProvince?.districts?.map((district) => {
+          districtOptions?.push({
+            value: district?.code,
+            label: district?.name,
+          });
+        });
+      }
+    });
+  });
 
   province?.map((item) => {
     cityOptions.push({
@@ -108,7 +131,7 @@ const EditPrice = () => {
 
   const changeValuePriceArea = (value, index) => {
     const newArr = [...data];
-    data[index].value = value;
+    data[index].value = Number(value);
     setData(newArr);
   };
 
@@ -133,7 +156,7 @@ const EditPrice = () => {
 
   const changeValurPriceRushDay = (value, index, indexRush) => {
     const newArr = [...data];
-    data[index].price_option_rush_day[indexRush].value = value;
+    data[index].price_option_rush_day[indexRush].value = Number(value);
     setData(newArr);
   };
 
@@ -168,9 +191,68 @@ const EditPrice = () => {
     setData([...data]);
   };
 
+  //priceHoliday
+
+  const addPriceHoliday = (index) => {
+    const arr = [...data];
+    data[index].price_option_holiday.push({
+      time_start: "",
+      time_end: "",
+      type_increase: "",
+      value: 0,
+    });
+    setData(arr);
+  };
+
+  const deletePriceHoliday = (index, indexHoliday) => {
+    data[index].price_option_holiday.splice(indexHoliday, 1);
+    setData([...data]);
+  };
+
+  const changeStartTimePriceHoliday = (value, index, indexHoliday) => {
+    const arr = [...data];
+    data[index].price_option_holiday[indexHoliday].time_start = value;
+    setData(arr);
+  };
+
+  const changeEndTimePriceHoliday = (value, index, indexHoliday) => {
+    const arr = [...data];
+    data[index].price_option_holiday[indexHoliday].time_end = value;
+    setData(arr);
+  };
+
+  const changeTypeIncreasePriceHoliday = (value, index, indexRush) => {
+    const newArr = [...data];
+    data[index].price_option_holiday[indexRush].type_increase = value;
+    setData(newArr);
+  };
+  const changeValuePriceHoliday = (value, index, indexRush) => {
+    const newArr = [...data];
+    data[index].price_option_holiday[indexRush].value = Number(value);
+    setData(newArr);
+  };
+
+  const onEditExtend = () => {
+    setIsLoading(true);
+    editExtendOptionApi(id, {
+      price_option_area: data,
+    })
+      .then((res) => {
+        setIsLoading(false);
+        setData(res?.price_option_area);
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        setIsLoading(false);
+      });
+  };
+
   return (
     <div>
       <h6>Chỉnh sửa giá</h6>
+      <Button onClick={onEditExtend}>Cập nhật</Button>
 
       <div>
         {data?.map((item, index) => {
@@ -181,6 +263,7 @@ const EditPrice = () => {
                   select={true}
                   title="Tỉnh/Thành phố"
                   className="select-province"
+                  value={item?.city}
                   options={cityOptions}
                   onChange={(value, label) => {
                     changeCityPriceArea(value, label?.district, index);
@@ -188,9 +271,17 @@ const EditPrice = () => {
                 />
                 <InputCustom
                   select={true}
+                  value={item?.district}
                   title="Quận/huyện"
                   className="select-province"
-                  options={districtOptions}
+                  options={districtOptions.filter((item, index) => {
+                    return (
+                      index ===
+                      districtOptions.findIndex((obj) => {
+                        return item?.value === obj.value;
+                      })
+                    );
+                  })}
                   mode="multiple"
                   onChange={(e) => changeDistrictPriceArea(e, index)}
                 />
@@ -198,11 +289,13 @@ const EditPrice = () => {
                   title="Giá trị"
                   className="select-province"
                   type="number"
-                  onChange={(e) => changeValuePriceArea(e, index)}
+                  value={item?.value}
+                  onChange={(e) => changeValuePriceArea(e.target.value, index)}
                 />
                 <InputCustom
                   title="Loại"
                   select={true}
+                  value={item?.type_increase}
                   className="select-province"
                   onChange={(e) => changeTypeIncreasePriceArea(e, index)}
                   options={[
@@ -225,6 +318,7 @@ const EditPrice = () => {
                         <div key={indexRush} className="div-price">
                           <InputCustom
                             select={true}
+                            value={itemRusd?.rush_days}
                             title="Thứ trong tuần"
                             mode="multiple"
                             className="select-date"
@@ -236,6 +330,7 @@ const EditPrice = () => {
                           <InputCustom
                             title="Loại"
                             select={true}
+                            value={itemRusd?.type_increase}
                             className="select-date"
                             onChange={(e) =>
                               changeTypeIncreasePriceRushDay(
@@ -259,8 +354,13 @@ const EditPrice = () => {
                             title="Giá trị"
                             type="number"
                             className="select-date"
+                            value={itemRusd?.value}
                             onChange={(e) =>
-                              changeValurPriceRushDay(e, index, indexRush)
+                              changeValurPriceRushDay(
+                                e.target.value,
+                                index,
+                                indexRush
+                              )
                             }
                           />
                           <div
@@ -273,6 +373,10 @@ const EditPrice = () => {
                             <a style={{ fontSize: 12 }}>Giờ bắt đầu</a>
                             <TimePicker
                               className="select-date"
+                              value={dayjs(
+                                itemRusd?.start_time?.slice(0, 5),
+                                hourFormat
+                              )}
                               format={hourFormat}
                               onChange={(time, timeString) => {
                                 changeStartTimePriceRushDay(
@@ -294,6 +398,10 @@ const EditPrice = () => {
                             <TimePicker
                               className="select-date"
                               format={hourFormat}
+                              value={dayjs(
+                                itemRusd?.end_time?.slice(0, 5),
+                                hourFormat
+                              )}
                               onChange={(time, timeString) => {
                                 changeEndTimePriceRushDay(
                                   timeString,
@@ -305,7 +413,7 @@ const EditPrice = () => {
                           </div>
                           {indexRush !== 0 && (
                             <Button
-                              style={{ marginTop: 5 }}
+                              style={{ marginTop: 5, width: "20%" }}
                               onClick={() =>
                                 deletePriceRushDay(index, indexRush)
                               }
@@ -331,18 +439,122 @@ const EditPrice = () => {
                   </div>
                   <div className="div-price-rush-day">
                     <h6>Giá ngày lễ</h6>
-                    {item?.price_option_rush_day?.map((itemRusd, indexRush) => {
-                      return (
-                        <div key={indexRush}>
-                          {/* <InputCustom
-                            title="Thứ trong tuần"
-                            mode="multiple"
-                            className="select-date"
-                            options={dateOptions}
-                          /> */}
-                        </div>
-                      );
-                    })}
+                    {item?.price_option_holiday?.map(
+                      (itemHoliday, indexHoliday) => {
+                        return (
+                          <div key={indexHoliday} className="div-price">
+                            <div
+                              style={{
+                                flexDirection: "column",
+                                display: "flex",
+                                marginTop: 4,
+                              }}
+                            >
+                              <a style={{ fontSize: 12 }}>Ngày bắt đầu</a>
+                              <DatePicker
+                                format={dateFormat}
+                                value={dayjs(
+                                  itemHoliday?.time_start?.slice(0, 11),
+                                  dateFormat
+                                )}
+                                onChange={(date, dateString) =>
+                                  changeStartTimePriceHoliday(
+                                    moment(moment(dateString).toISOString())
+                                      .add(7, "hours")
+                                      .toISOString(),
+                                    index,
+                                    indexHoliday
+                                  )
+                                }
+                              />
+                            </div>
+                            <div
+                              style={{
+                                flexDirection: "column",
+                                display: "flex",
+                                marginTop: 4,
+                              }}
+                            >
+                              <a style={{ fontSize: 12 }}>Ngày kết thúc</a>
+                              <DatePicker
+                                format={dateFormat}
+                                value={dayjs(
+                                  itemHoliday?.time_end?.slice(0, 11),
+                                  dateFormat
+                                )}
+                                onChange={(date, dateString) =>
+                                  changeEndTimePriceHoliday(
+                                    moment(moment(dateString).toISOString())
+                                      .add(7, "hours")
+                                      .toISOString(),
+                                    index,
+                                    indexHoliday
+                                  )
+                                }
+                              />
+                            </div>
+                            <InputCustom
+                              title="Loại"
+                              select={true}
+                              className="select-date"
+                              value={itemHoliday?.type_increase}
+                              onChange={(e) =>
+                                changeTypeIncreasePriceHoliday(
+                                  e,
+                                  index,
+                                  indexHoliday
+                                )
+                              }
+                              options={[
+                                {
+                                  value: "amount_accumulate",
+                                  label: "Tăng theo giá tiền",
+                                },
+                                {
+                                  value: "percent_accumulate",
+                                  label: "Tăng theo phần trăm",
+                                },
+                              ]}
+                            />
+                            <InputCustom
+                              title="Giá trị"
+                              type="number"
+                              className="select-date"
+                              value={itemHoliday?.value}
+                              onChange={(e) =>
+                                changeValuePriceHoliday(
+                                  e.target.value,
+                                  index,
+                                  indexHoliday
+                                )
+                              }
+                            />
+                            {indexHoliday !== 0 && (
+                              <Button
+                                style={{ marginTop: 5, width: "20%" }}
+                                onClick={() =>
+                                  deletePriceHoliday(index, indexHoliday)
+                                }
+                              >
+                                Xoá
+                              </Button>
+                            )}
+                          </div>
+                        );
+                      }
+                    )}
+                    <Button
+                      style={{
+                        width: "15%",
+                        marginTop: 10,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      onClick={() => addPriceHoliday(index)}
+                    >
+                      Thêm
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -361,6 +573,7 @@ const EditPrice = () => {
           Thêm
         </Button>
       </div>
+      {isLoading && <LoadingPagination />}
     </div>
   );
 };

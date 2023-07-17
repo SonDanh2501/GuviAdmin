@@ -41,6 +41,8 @@ import {
   getElementState,
   getLanguageState,
 } from "../../../../../redux/selectors/auth.js";
+import { useCookies } from "../../../../../helper/useCookies.js";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions.js";
 
 const CollaboratorManage = (props) => {
   const { status } = props;
@@ -67,22 +69,32 @@ const CollaboratorManage = (props) => {
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const dispatch = useDispatch();
-  const width = window.innerWidth;
+  const [saveToCookie, readCookie] = useCookies();
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
-    fetchCollaborators(lang, 0, 20, status, valueSearch)
+    fetchCollaborators(
+      lang,
+      Number(readCookie("start_page_ctv")),
+      20,
+      readCookie("tab_collaborator"),
+      valueSearch
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItems);
       })
       .catch((err) => {});
+    setCurrentPage(Number(readCookie("page_ctv")));
   }, [status]);
 
   const onChange = (page) => {
     setCurrentPage(page);
+    saveToCookie("page_ctv", page);
     const lenghtData = data.length < 20 ? 20 : data.length;
     const start = page * lenghtData - lenghtData;
     setStartPage(start);
+    saveToCookie("start_page_ctv", start);
     fetchCollaborators(lang, start, 20, status, valueSearch)
       .then((res) => {
         setData(res?.data);
