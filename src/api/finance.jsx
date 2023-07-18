@@ -33,3 +33,25 @@ export const getReportBalanceCollaborator = (
     `/admin/report_mananger/report_balance?start=${start}&length=${length}&start_date=${startDate}&end_date=${endDate}`
   );
 };
+
+export const getReportDetailBalanceCollaborator = (
+  start,
+  length,
+  startDate,
+  endDate
+) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_detail_balance_collaborator?start=${start}&length=${length}&start_date=${startDate}&end_date=${endDate}`
+  );
+};
+
+export const getReportDetailBalanceCustomer = (
+  start,
+  length,
+  startDate,
+  endDate
+) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_detail_balance_customer?start=${start}&length=${length}&start_date=${startDate}&end_date=${endDate}`
+  );
+};
