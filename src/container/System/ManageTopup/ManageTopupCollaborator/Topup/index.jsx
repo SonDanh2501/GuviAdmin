@@ -27,7 +27,8 @@ import {
 } from "../../../../../redux/selectors/auth";
 import "./index.scss";
 import i18n from "../../../../../i18n";
-const width = window.innerWidth;
+import { useCookies } from "../../../../../helper/useCookies";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const TopupCollaborator = ({ type }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,9 +49,10 @@ const TopupCollaborator = ({ type }) => {
   const toggleEdit = () => setModalEdit(!modalEdit);
   const toggle = () => setModal(!modal);
   const toggleCancel = () => setModalCancel(!modalCancel);
-  const user = useSelector(getUser);
+  const { width } = useWindowDimensions();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
+  const [saveToCookie, readCookie] = useCookies();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -61,6 +63,16 @@ const TopupCollaborator = ({ type }) => {
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
+    setCurrentPage(
+      readCookie("current_page_topup_ctv") == ""
+        ? 1
+        : Number(readCookie("current_page_topup_ctv"))
+    );
+    setStartPage(
+      readCookie("start_page_topup_ctv") === ""
+        ? 0
+        : Number(readCookie("start_page_topup_ctv"))
+    );
   }, [type]);
 
   const onDelete = useCallback(
@@ -159,6 +171,7 @@ const TopupCollaborator = ({ type }) => {
 
   const onChange = (page) => {
     setCurrentPage(page);
+    saveToCookie("current_page_topup_ctv", page);
     const dataLength = data.length < 20 ? 20 : data.length;
     const searchLength = dataSearch.length < 20 ? 20 : dataSearch.length;
     const start =
@@ -166,6 +179,7 @@ const TopupCollaborator = ({ type }) => {
         ? page * searchLength - searchLength
         : page * dataLength - dataLength;
     setStartPage(start);
+    saveToCookie("start_page_topup_ctv", start);
     dataSearch.length > 0
       ? searchTopupCollaboratorApi(valueSearch, start, 20, type)
           .then((res) => {
@@ -200,6 +214,7 @@ const TopupCollaborator = ({ type }) => {
           {data?.id_collaborator?.id_view}
         </a>
       ),
+      responsive: ["xl"],
     },
     {
       title: () => {
@@ -296,6 +311,7 @@ const TopupCollaborator = ({ type }) => {
           </div>
         );
       },
+      responsive: ["xl"],
     },
     {
       title: () => {
@@ -311,6 +327,7 @@ const TopupCollaborator = ({ type }) => {
         </a>
       ),
       align: "center",
+      responsive: ["xl"],
     },
     {
       title: () => {

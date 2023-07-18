@@ -281,6 +281,10 @@ const Sidebar = ({ hide }) => {
           </div>
         </div>
       )}
+
+      <div className="div-version">
+        <a className="text-version">Version 1.0.1</a>
+      </div>
     </>
   );
 };

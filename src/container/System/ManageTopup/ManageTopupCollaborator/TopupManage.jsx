@@ -14,8 +14,7 @@ import {
 } from "../../../../redux/selectors/auth";
 import RewardCollaborator from "./Reward";
 import i18n from "../../../../i18n";
-const { RangePicker } = DatePicker;
-const { Option } = Select;
+import { useCookies } from "../../../../helper/useCookies";
 
 const TopupManage = () => {
   const [type, setType] = useState("all");
@@ -25,6 +24,8 @@ const TopupManage = () => {
   const dispatch = useDispatch();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
+  const [saveToCookie, readCookie] = useCookies();
+  const [activeKey, setActiveKey] = useState("1");
 
   useEffect(() => {
     getRevenueCollaboratorApi(
@@ -37,9 +38,14 @@ const TopupManage = () => {
         setTotalTopup(res?.totalTopUp);
       })
       .catch((err) => {});
+    setActiveKey(
+      readCookie("tab_ctv_topup") === "" ? "1" : readCookie("tab_ctv_topup")
+    );
   }, [dispatch]);
 
   const onChangeTab = (active) => {
+    setActiveKey(active);
+    saveToCookie("tab_ctv_topup", active);
     if (active === "2") {
       setType("top_up");
     } else if (active === "3") {
@@ -72,7 +78,7 @@ const TopupManage = () => {
         </a>
       </div>
       <div>
-        <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
+        <Tabs activeKey={activeKey} size="small" onChange={onChangeTab}>
           <Tabs.TabPane tab={`${i18n.t("all", { lng: lang })}`} key="1">
             <TopupCollaborator type={type} />
           </Tabs.TabPane>

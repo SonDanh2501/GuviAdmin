@@ -120,7 +120,7 @@ const Activity = ({ id }) => {
         return (
           <Link
             to={`/profile-customer/${data?.id_customer?._id}`}
-            className="div-name"
+            className="div-name-activity"
           >
             <a className="text-name-customer">{data?.id_customer?.full_name}</a>
             <a className="text-phone-customer">{data?.id_customer?.phone}</a>

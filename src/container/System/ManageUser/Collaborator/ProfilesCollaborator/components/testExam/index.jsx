@@ -28,7 +28,7 @@ const TestExam = (props) => {
         setDataLesson(res?.data);
       })
       .catch((err) => {});
-  }, []);
+  }, [id]);
 
   const handleSeeInfoLesson = (_id, title) => {
     setTitle(title);

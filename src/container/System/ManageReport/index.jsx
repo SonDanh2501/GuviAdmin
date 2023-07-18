@@ -22,7 +22,9 @@ const ManageReport = () => {
   const lang = useSelector(getLanguageState);
   useEffect(() => {
     window.scrollTo(0, 0);
-    setTab(Number(readCookie("tab_report")));
+    setTab(
+      readCookie("tab_report") === "" ? 1 : Number(readCookie("tab_report"))
+    );
   }, []);
 
   return (

@@ -185,6 +185,15 @@ const CreateQuizz = () => {
       align: "center",
     },
     {
+      title: () => {
+        return <a style={{ fontSize: 12 }}>Bài học</a>;
+      },
+      render: (data) => {
+        return <a className="title-lesson">{data?.lesson}</a>;
+      },
+      align: "center",
+    },
+    {
       key: "action",
       render: (data) => {
         return (

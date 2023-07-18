@@ -4,23 +4,36 @@ import TopupManage from "./ManageTopupCollaborator/TopupManage";
 import TopupCustomerManage from "./ManageTopupCustomer";
 
 import "./styles.scss";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   getElementState,
   getLanguageState,
 } from "../../../redux/selectors/auth";
 import { useSelector } from "react-redux";
 import i18n from "../../../i18n";
+import { useCookies } from "../../../helper/useCookies";
 
 const ManageTopup = () => {
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
+  const [saveToCookie, readCookie] = useCookies();
+  const [activeKey, setActiveKey] = useState("1");
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    setActiveKey(
+      readCookie("tab_topup") === "" ? "1" : readCookie("tab_topup")
+    );
   }, []);
+
+  const onChangeTab = (key) => {
+    setActiveKey(key);
+    saveToCookie("tab_topup", key);
+  };
+
   return (
     <div className="div-container">
-      <Tabs defaultActiveKey="1">
+      <Tabs activeKey={activeKey} onChange={onChangeTab}>
         {checkElement?.includes("get_cash_book_collaborator") && (
           <Tabs.TabPane
             tab={`${i18n.t("collaborator", { lng: lang })}`}

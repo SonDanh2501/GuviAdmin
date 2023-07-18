@@ -48,15 +48,13 @@ const ManageCollaborator = () => {
           <Tabs.TabPane tab={`${i18n.t("active", { lng: lang })}`} key="2">
             <CollaboratorManage status={status} />
           </Tabs.TabPane>
-        
+
           <Tabs.TabPane tab={`${i18n.t("locked", { lng: lang })}`} key="4">
             <CollaboratorManage status={status} />
           </Tabs.TabPane>
-        
+
           <Tabs.TabPane tab={`${i18n.t("unconfirmed", { lng: lang })}`} key="6">
-            <CollaboratorManage
-              status={status}
-            />
+            <CollaboratorManage status={status} />
           </Tabs.TabPane>
         </Tabs> */}
         <div className="div-tab-collaborator">

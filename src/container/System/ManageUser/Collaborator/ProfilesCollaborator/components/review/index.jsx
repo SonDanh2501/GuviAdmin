@@ -36,51 +36,83 @@ const Review = ({ id, totalReview }) => {
 
   const columns = [
     {
-      title: `${i18n.t("date_create", { lng: lang })}`,
-
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("date_create", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div className="time-review">
-            <a>
+            <a className="text-time">
               {moment(new Date(data?.date_create_review)).format("DD/MM/YYYY")}
             </a>
-            <a>{moment(new Date(data?.date_create_review)).format("HH:mm")}</a>
+            <a className="text-time">
+              {moment(new Date(data?.date_create_review)).format("HH:mm")}
+            </a>
           </div>
         );
       },
     },
     {
-      title: `${i18n.t("assessor", { lng: lang })}`,
-
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("assessor", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
-        return <a>{data?.id_customer?.full_name}</a>;
+        return (
+          <a className="name-customer-reivew">{data?.id_customer?.full_name}</a>
+        );
       },
       align: "center",
     },
     {
-      title: `${i18n.t("number_star", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("number_star", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       align: "center",
       render: (data) => {
         return (
-          <a>
+          <a className="name-customer-reivew">
             {data?.star} <i class="uil uil-star icon-star"></i>
           </a>
         );
       },
     },
     {
-      title: `${i18n.t("content", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("content", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
-        return <a>{data?.review}</a>;
+        return <a className="text-quick_review">{data?.review}</a>;
       },
     },
     {
-      title: `${i18n.t("quick_review", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("quick_review", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div>
             {data?.short_review?.map((item) => (
-              <a>{item}</a>
+              <a className="text-quick_review">{item}</a>
             ))}
           </div>
         );

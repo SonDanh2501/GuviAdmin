@@ -43,6 +43,7 @@ import {
 } from "../../../../../redux/selectors/auth.js";
 import { useCookies } from "../../../../../helper/useCookies.js";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions.js";
+import { useWindowScrollPositions } from "../../../../../helper/useWindowPosition.js";
 
 const CollaboratorManage = (props) => {
   const { status } = props;
@@ -71,6 +72,11 @@ const CollaboratorManage = (props) => {
   const dispatch = useDispatch();
   const [saveToCookie, readCookie] = useCookies();
   const { width } = useWindowDimensions();
+  const { scrollX, scrollY } = useWindowScrollPositions();
+
+  useEffect(() => {
+    window.scroll(0, Number(readCookie("table_y_ctv")));
+  }, []);
 
   useEffect(() => {
     fetchCollaborators(
@@ -85,7 +91,9 @@ const CollaboratorManage = (props) => {
         setTotal(res?.totalItems);
       })
       .catch((err) => {});
-    setCurrentPage(Number(readCookie("page_ctv")));
+    setCurrentPage(
+      readCookie("page_ctv") === "" ? 1 : Number(readCookie("page_ctv"))
+    );
   }, [status]);
 
   const onChange = (page) => {
@@ -339,6 +347,11 @@ const CollaboratorManage = (props) => {
       },
       render: (data) => (
         <Link
+          onClick={() => {
+            saveToCookie("table_x_ctv", scrollX);
+            saveToCookie("table_y_ctv", scrollY);
+            saveToCookie("tab-detail-ctv", "1");
+          }}
           to={
             checkElement?.includes("detail_collaborator")
               ? `/details-collaborator/${data?._id}`
@@ -359,6 +372,11 @@ const CollaboratorManage = (props) => {
         return (
           <div className="div-collaborator">
             <Link
+              onClick={() => {
+                saveToCookie("table_x_ctv", scrollX);
+                saveToCookie("table_y_ctv", scrollY);
+                saveToCookie("tab-detail-ctv", "1");
+              }}
               to={
                 checkElement?.includes("detail_collaborator")
                   ? `/details-collaborator/${data?._id}`

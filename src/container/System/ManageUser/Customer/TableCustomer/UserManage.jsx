@@ -37,6 +37,7 @@ import gold from "../../../../../assets/images/iconGold.svg";
 import platinum from "../../../../../assets/images/iconPlatinum.svg";
 import "./UserManage.scss";
 import i18n from "../../../../../i18n";
+import { useCookies } from "../../../../../helper/useCookies";
 const width = window.innerWidth;
 
 const UserManage = (props) => {
@@ -62,9 +63,10 @@ const UserManage = (props) => {
   const navigate = useNavigate();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
+  const [saveToCookie, readCookie] = useCookies();
 
   useEffect(() => {
-    fetchCustomers(lang, 0, 50, status, idGroup)
+    fetchCustomers(lang, 0, 50, status, readCookie("tab-kh"))
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItems);

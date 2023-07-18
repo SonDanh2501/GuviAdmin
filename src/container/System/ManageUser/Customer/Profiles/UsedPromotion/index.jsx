@@ -97,20 +97,25 @@ const UsedPromotion = ({ id }) => {
     <div>
       {total.length > 0 && (
         <div className="div-head-used-prmotion">
-          <div className="div-item-total">
-            <a className="text-done-total">Đơn hoàn thành</a>
-            <a className="text-total">Sử dụng: {total[0].total_used}</a>
-            <a className="text-total">
-              Tổng: {formatMoney(total[0].total_discount)}
-            </a>
-          </div>
-          <div className="div-item-total">
-            <a className="text-cancel-total">Đơn huỷ</a>
-            <a className="text-total">Sử dụng: {total[1].total_used}</a>
-            <a className="text-total">
-              Tổng: {formatMoney(total[1].total_discount)}
-            </a>
-          </div>
+          {total?.map((item, key) => {
+            return (
+              <div className="div-item-total">
+                <a
+                  className={
+                    item?._id === "done"
+                      ? "text-done-total"
+                      : "text-cancel-total"
+                  }
+                >
+                  {item?._id === "done" ? "Đơn hoàn thành" : "Đơn huỷ"}
+                </a>
+                <a className="text-total">Sử dụng: {item?.total_used}</a>
+                <a className="text-total">
+                  Tổng: {formatMoney(item?.total_discount)}
+                </a>
+              </div>
+            );
+          })}
         </div>
       )}
       <div className="mt-5">

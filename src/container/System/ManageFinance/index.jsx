@@ -1,7 +1,11 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getReportBalanceCollaborator } from "../../../api/finance";
+import {
+  getReportBalanceCollaborator,
+  getReportDetailBalanceCollaborator,
+  getReportDetailBalanceCustomer,
+} from "../../../api/finance";
 import CustomDatePicker from "../../../components/customDatePicker";
 import LoadingPagination from "../../../components/paginationLoading";
 import { formatMoney } from "../../../helper/formatMoney";
@@ -9,7 +13,9 @@ import { errorNotify } from "../../../helper/toast";
 import i18n from "../../../i18n";
 import { getLanguageState } from "../../../redux/selectors/auth";
 import "./index.scss";
-const width = window.innerWidth;
+import { Pagination, Table } from "antd";
+import { Link } from "react-router-dom";
+import { useCookies } from "../../../helper/useCookies";
 
 const ManageFinance = () => {
   const [totalEndingRemainder, setTotalEndingRemainder] = useState(0);
@@ -19,10 +25,21 @@ const ManageFinance = () => {
   const [totalEndingPayPoint, setTotalEndingPayPoint] = useState(0);
   const [totalOpeningPayPoint, setTotalOpeningPayPoint] = useState(0);
   const [startDate, setStartDate] = useState(
-    moment().startOf("month").toISOString()
+    moment().startOf("weeks").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);
+  const [tab, setTab] = useState("collaborator");
+  const [ballanceCollaborator, setBallanceCollaborator] = useState([]);
+  const [totalCollaborator, setTotalCollaborator] = useState(0);
+  const [ballanceCustomer, setBallanceCustomer] = useState([]);
+  const [totalCustomer, setTotalCustomer] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPageCustomer, setCurrentPageCustomer] = useState(1);
+  const [startPage, setStartPage] = useState(0);
+  const [startPageCustomer, setStartPageCustomer] = useState(0);
+  const [saveToCookie, readCookie] = useCookies();
+
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
@@ -36,6 +53,25 @@ const ManageFinance = () => {
         setTotalEndingPayPoint(res?.total_ending_pay_point);
       })
       .catch((err) => {});
+    getReportDetailBalanceCollaborator(startPage, 20, startDate, endDate)
+      .then((res) => {
+        setBallanceCollaborator(res?.data);
+        setTotalCollaborator(res?.total);
+      })
+      .catch((err) => {});
+
+    getReportDetailBalanceCustomer(startPageCustomer, 20, startDate, endDate)
+      .then((res) => {
+        setBallanceCustomer(res?.data);
+        setTotalCustomer(res?.total);
+      })
+      .catch((err) => {});
+
+    setTab(
+      readCookie("tab_finance") === ""
+        ? "collaborator"
+        : readCookie("tab_finance")
+    );
   }, []);
 
   const onChangeDay = () => {
@@ -56,7 +92,462 @@ const ManageFinance = () => {
         });
         setIsLoading(false);
       });
+
+    getReportDetailBalanceCollaborator(startPage, 20, startDate, endDate)
+      .then((res) => {
+        setBallanceCollaborator(res?.data);
+        setTotalCollaborator(res?.total);
+      })
+      .catch((err) => {});
+
+    getReportDetailBalanceCustomer(startPageCustomer, 20, startDate, endDate)
+      .then((res) => {
+        setBallanceCustomer(res?.data);
+        setTotalCustomer(res?.total);
+      })
+      .catch((err) => {});
   };
+
+  const onChange = (page) => {
+    tab === "collaborator"
+      ? setCurrentPage(page)
+      : setCurrentPageCustomer(page);
+    setCurrentPage(page);
+    const collaboratorLength =
+      ballanceCollaborator?.length < 20 ? 20 : ballanceCollaborator.length;
+    const customerLength =
+      ballanceCustomer?.length < 20 ? 20 : ballanceCollaborator.length;
+    const startCollaborator = page * collaboratorLength - collaboratorLength;
+    const startCustomer = page * customerLength - customerLength;
+    tab === "collaborator"
+      ? setStartPage(startCollaborator)
+      : setStartPageCustomer(startCustomer);
+    tab === "collaborator"
+      ? getReportDetailBalanceCollaborator(
+          startCollaborator,
+          20,
+          startDate,
+          endDate
+        )
+          .then((res) => {
+            setBallanceCollaborator(res?.data);
+            setTotalCollaborator(res?.total);
+          })
+          .catch((err) => {})
+      : getReportDetailBalanceCustomer(startCustomer, 20, startDate, endDate)
+          .then((res) => {
+            setBallanceCustomer(res?.data);
+            setTotalCustomer(res?.total);
+          })
+          .catch((err) => {});
+  };
+
+  const columns =
+    tab === "collaborator"
+      ? [
+          {
+            title: () => {
+              return <a className="title-column">Thời gian</a>;
+            },
+            render: (data) => {
+              return (
+                <div className="div-date-create">
+                  <a className="text-date">
+                    {moment(data?.date_create).format("DD/MM/YYYY")}
+                  </a>
+                  <a className="text-date">
+                    {moment(data?.date_create).format("HH:mm")}
+                  </a>
+                </div>
+              );
+            },
+          },
+          {
+            title: () => {
+              return <a className="title-column">Cộng tác viên</a>;
+            },
+            render: (data) => {
+              return (
+                <Link
+                  to={`/details-collaborator/${data?.id_collaborator?._id}`}
+                  className="div-name-ctv"
+                >
+                  <a className="text-ctv">{data?.id_collaborator?.full_name}</a>
+                  <a className="text-ctv">{data?.id_collaborator?.phone}</a>
+                </Link>
+              );
+            },
+          },
+          {
+            title: () => {
+              return <a className="title-column">Nội dung</a>;
+            },
+            render: (item) => {
+              const subject = item?.id_user_system
+                ? item?.title_admin.replace(
+                    item?.id_user_system?._id,
+                    item?.id_user_system?.full_name
+                  )
+                : item?.id_admin_action
+                ? item?.title_admin.replace(
+                    item?.id_admin_action?._id,
+                    item?.id_admin_action?.full_name
+                  )
+                : item?.id_customer
+                ? item?.title_admin.replace(
+                    item?.id_customer?._id,
+                    item?.id_customer?.full_name
+                  )
+                : item?.id_collaborator
+                ? item?.title_admin.replace(
+                    item?.id_collaborator?._id,
+                    item?.id_collaborator?.full_name
+                  )
+                : item?.title_admin.replace(
+                    item?.id_promotion?._id,
+                    item?.id_promotion?.code
+                  );
+
+              const predicate = item?.id_punish
+                ? subject.replace(
+                    item?.id_punish?._id,
+                    item?.id_punish?.note_admin
+                  )
+                : item?.id_reason_punish
+                ? subject.replace(
+                    item?.id_reason_punish?._id,
+                    item?.id_reason_punish?.title?.vi
+                  )
+                : item?.id_order
+                ? subject.replace(item?.id_order?._id, item?.id_order?.id_view)
+                : item?.id_reward
+                ? subject.replace(
+                    item?.id_reward?._id,
+                    item?.id_reward?.title?.vi
+                  )
+                : item?.id_info_reward_collaborator
+                ? subject.replace(
+                    item?.id_info_reward_collaborator?._id,
+                    item?.id_info_reward_collaborator?.id_reward_collaborator
+                      ?.title?.vi
+                  )
+                : item?.id_transistion_collaborator
+                ? subject.replace(
+                    item?.id_transistion_collaborator?._id,
+                    item?.id_transistion_collaborator?.transfer_note
+                  )
+                : item?.id_collaborator
+                ? subject.replace(
+                    item?.id_collaborator?._id,
+                    item?.id_collaborator?.full_name
+                  )
+                : item?.id_customer
+                ? subject.replace(
+                    item?.id_customer?._id,
+                    item?.id_customer?.full_name
+                  )
+                : item?.id_promotion
+                ? subject.replace(
+                    item?.id_promotion?._id,
+                    item?.id_promotion?.title?.vi
+                  )
+                : item?.id_admin_action
+                ? subject.replace(
+                    item?.id_admin_action?._id,
+                    item?.id_admin_action?.full_name
+                  )
+                : item?.id_address
+                ? subject.replace(item?.id_address, item?.value_string)
+                : subject.replace(
+                    item?.id_transistion_customer?._id,
+                    item?.id_transistion_customer?.transfer_note
+                  );
+
+              const object = item?.id_reason_cancel
+                ? predicate.replace(
+                    item?.id_reason_cancel?._id,
+                    item?.id_reason_cancel?.title?.vi
+                  )
+                : item?.id_collaborator
+                ? predicate.replace(
+                    item?.id_collaborator?._id,
+                    item?.id_collaborator?.full_name
+                  )
+                : item?.id_customer
+                ? predicate.replace(
+                    item?.id_customer?._id,
+                    item?.id_customer?.full_name
+                  )
+                : item?.id_address
+                ? predicate.replace(item?.id_address, item?.value_string)
+                : item?.id_order
+                ? predicate.replace(
+                    item?.id_order?._id,
+                    item?.id_order?.id_view
+                  )
+                : item?.id_transistion_collaborator
+                ? predicate.replace(
+                    item?.id_transistion_collaborator?._id,
+                    item?.id_transistion_collaborator?.transfer_note
+                  )
+                : predicate.replace(
+                    item?.id_transistion_customer?._id,
+                    item?.id_transistion_customer?.transfer_note
+                  );
+              return <a className="text-content">{object}</a>;
+            },
+          },
+          {
+            title: () => {
+              return <a className="title-column">Ví chính</a>;
+            },
+            render: (data) => {
+              return (
+                <div className="div-current-remainder">
+                  <a className="text-money">
+                    {formatMoney(data?.current_remainder)}
+                  </a>
+                  <a>
+                    {" "}
+                    {data?.status_current_remainder === "down" ? (
+                      <i class="uil uil-arrow-down icon-deduction"></i>
+                    ) : data?.status_current_remainder === "up" ? (
+                      <i class="uil uil-arrow-up icon-plus"></i>
+                    ) : (
+                      <i class="uil uil-minus icon-minus"></i>
+                    )}
+                  </a>
+                </div>
+              );
+            },
+          },
+          {
+            title: () => {
+              return <a className="title-column">Ví thưởng</a>;
+            },
+            render: (data) => {
+              return (
+                <div className="div-current-remainder">
+                  <a className="text-money">
+                    {formatMoney(data?.current_gift_remainder)}
+                  </a>
+                  <a>
+                    {" "}
+                    {data?.status_current_gift_remainder === "down" ? (
+                      <i class="uil uil-arrow-down icon-deduction"></i>
+                    ) : data?.status_current_gift_remainder === "up" ? (
+                      <i class="uil uil-arrow-up icon-plus"></i>
+                    ) : (
+                      <i class="uil uil-minus icon-minus"></i>
+                    )}
+                  </a>
+                </div>
+              );
+            },
+          },
+        ]
+      : [
+          {
+            title: () => {
+              return <a className="title-column">Thời gian</a>;
+            },
+            render: (data) => {
+              return (
+                <div className="div-date-create">
+                  <a className="text-date">
+                    {moment(data?.date_create).format("DD/MM/YYYY")}
+                  </a>
+                  <a className="text-date">
+                    {moment(data?.date_create).format("HH:mm")}
+                  </a>
+                </div>
+              );
+            },
+          },
+          {
+            title: () => {
+              return <a className="title-column">Khách hàng</a>;
+            },
+            render: (data) => {
+              return (
+                <Link
+                  to={`/profile-customer/${data?.id_customer?._id}`}
+                  className="div-name-ctv"
+                >
+                  <a className="text-ctv">{data?.id_customer?.full_name}</a>
+                  <a className="text-ctv">{data?.id_customer?.phone}</a>
+                </Link>
+              );
+            },
+          },
+          {
+            title: () => {
+              return <a className="title-column">Nội dung</a>;
+            },
+            render: (item) => {
+              const subject = item?.id_user_system
+                ? item?.title_admin.replace(
+                    item?.id_user_system?._id,
+                    item?.id_user_system?.full_name
+                  )
+                : item?.id_admin_action
+                ? item?.title_admin.replace(
+                    item?.id_admin_action?._id,
+                    item?.id_admin_action?.full_name
+                  )
+                : item?.id_customer
+                ? item?.title_admin.replace(
+                    item?.id_customer?._id,
+                    item?.id_customer?.full_name
+                  )
+                : item?.id_collaborator
+                ? item?.title_admin.replace(
+                    item?.id_collaborator?._id,
+                    item?.id_collaborator?.full_name
+                  )
+                : item?.title_admin.replace(
+                    item?.id_promotion?._id,
+                    item?.id_promotion?.code
+                  );
+
+              const predicate = item?.id_punish
+                ? subject.replace(
+                    item?.id_punish?._id,
+                    item?.id_punish?.note_admin
+                  )
+                : item?.id_reason_punish
+                ? subject.replace(
+                    item?.id_reason_punish?._id,
+                    item?.id_reason_punish?.title?.vi
+                  )
+                : item?.id_order
+                ? subject.replace(item?.id_order?._id, item?.id_order?.id_view)
+                : item?.id_reward
+                ? subject.replace(
+                    item?.id_reward?._id,
+                    item?.id_reward?.title?.vi
+                  )
+                : item?.id_info_reward_collaborator
+                ? subject.replace(
+                    item?.id_info_reward_collaborator?._id,
+                    item?.id_info_reward_collaborator?.id_reward_collaborator
+                      ?.title?.vi
+                  )
+                : item?.id_transistion_collaborator
+                ? subject.replace(
+                    item?.id_transistion_collaborator?._id,
+                    item?.id_transistion_collaborator?.transfer_note
+                  )
+                : item?.id_collaborator
+                ? subject.replace(
+                    item?.id_collaborator?._id,
+                    item?.id_collaborator?.full_name
+                  )
+                : item?.id_customer
+                ? subject.replace(
+                    item?.id_customer?._id,
+                    item?.id_customer?.full_name
+                  )
+                : item?.id_promotion
+                ? subject.replace(
+                    item?.id_promotion?._id,
+                    item?.id_promotion?.title?.vi
+                  )
+                : item?.id_admin_action
+                ? subject.replace(
+                    item?.id_admin_action?._id,
+                    item?.id_admin_action?.full_name
+                  )
+                : item?.id_address
+                ? subject.replace(item?.id_address, item?.value_string)
+                : subject.replace(
+                    item?.id_transistion_customer?._id,
+                    item?.id_transistion_customer?.transfer_note
+                  );
+
+              const object = item?.id_reason_cancel
+                ? predicate.replace(
+                    item?.id_reason_cancel?._id,
+                    item?.id_reason_cancel?.title?.vi
+                  )
+                : item?.id_collaborator
+                ? predicate.replace(
+                    item?.id_collaborator?._id,
+                    item?.id_collaborator?.full_name
+                  )
+                : item?.id_customer
+                ? predicate.replace(
+                    item?.id_customer?._id,
+                    item?.id_customer?.full_name
+                  )
+                : item?.id_address
+                ? predicate.replace(item?.id_address, item?.value_string)
+                : item?.id_order
+                ? predicate.replace(
+                    item?.id_order?._id,
+                    item?.id_order?.id_view
+                  )
+                : item?.id_transistion_collaborator
+                ? predicate.replace(
+                    item?.id_transistion_collaborator?._id,
+                    item?.id_transistion_collaborator?.transfer_note
+                  )
+                : predicate.replace(
+                    item?.id_transistion_customer?._id,
+                    item?.id_transistion_customer?.transfer_note
+                  );
+              return <a className="text-content">{object}</a>;
+            },
+          },
+          {
+            title: () => {
+              return <a className="title-column">Ví chính</a>;
+            },
+            render: (data) => {
+              return (
+                <div className="div-current-remainder">
+                  <a className="text-money">
+                    {formatMoney(data?.current_remainder)}
+                  </a>
+                  <a>
+                    {" "}
+                    {data?.status_current_remainder === "down" ? (
+                      <i class="uil uil-arrow-down icon-deduction"></i>
+                    ) : data?.status_current_remainder === "up" ? (
+                      <i class="uil uil-arrow-up icon-plus"></i>
+                    ) : (
+                      <i class="uil uil-minus icon-minus"></i>
+                    )}
+                  </a>
+                </div>
+              );
+            },
+          },
+          {
+            title: () => {
+              return <a className="title-column">Ví thưởng</a>;
+            },
+            render: (data) => {
+              return (
+                <div className="div-current-remainder">
+                  <a className="text-money">
+                    {formatMoney(data?.current_gift_remainder)}
+                  </a>
+                  <a>
+                    {" "}
+                    {data?.status_current_gift_remainder === "down" ? (
+                      <i class="uil uil-arrow-down icon-deduction"></i>
+                    ) : data?.status_current_gift_remainder === "up" ? (
+                      <i class="uil uil-arrow-up icon-plus"></i>
+                    ) : (
+                      <i class="uil uil-minus icon-minus"></i>
+                    )}
+                  </a>
+                </div>
+              );
+            },
+          },
+        ];
 
   return (
     <>
@@ -141,6 +632,49 @@ const ManageFinance = () => {
           </div>
         </div>
       </div>
+      <div className="div-tab-finance">
+        {DATA?.map((item, index) => {
+          return (
+            <div
+              key={index}
+              onClick={() => {
+                setTab(item?.value);
+                saveToCookie("tab_finance", item?.value);
+              }}
+              className={
+                tab === item?.value ? "div-item-tab-select" : "div-item-tab"
+              }
+            >
+              <a className="text-tab">{item?.title}</a>
+            </div>
+          );
+        })}
+      </div>
+      <div className="mt-3">
+        <Table
+          dataSource={
+            tab === "collaborator" ? ballanceCollaborator : ballanceCustomer
+          }
+          columns={columns}
+          pagination={false}
+        />
+        <div className="div-pagination p-2">
+          <a>
+            Tổng: {tab === "collaborator" ? totalCollaborator : totalCustomer}
+          </a>
+          <div>
+            <Pagination
+              current={
+                tab === "collaborator" ? currentPage : currentPageCustomer
+              }
+              onChange={onChange}
+              total={tab === "collaborator" ? totalCollaborator : totalCustomer}
+              showSizeChanger={false}
+              pageSize={20}
+            />
+          </div>
+        </div>
+      </div>
 
       {isLoading && <LoadingPagination />}
     </>
@@ -148,3 +682,8 @@ const ManageFinance = () => {
 };
 
 export default ManageFinance;
+
+const DATA = [
+  { value: "collaborator", title: "Cộng tác viên" },
+  { value: "customer", title: "Khách hàng" },
+];

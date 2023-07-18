@@ -9,6 +9,7 @@ import { getLanguageState } from "../../../../redux/selectors/auth";
 import i18n from "../../../../i18n";
 import { getGroupCustomer } from "../../../../redux/selectors/customer";
 import { getGroupCustomerApi } from "../../../../api/promotion";
+import { useCookies } from "../../../../helper/useCookies";
 
 const ManageCustomer = () => {
   const [status, setStatus] = useState("");
@@ -16,8 +17,10 @@ const ManageCustomer = () => {
   const [dataGroup, setDataGroup] = useState([]);
   const [idGroup, setIdGroup] = useState("all");
   const dataTab = [{ value: "all", label: "Tất cả" }];
+  const [saveToCookie, readCookie] = useCookies();
 
   useEffect(() => {
+    setIdGroup(readCookie("tab-kh") === "" ? "all" : readCookie("tab-kh"));
     getGroupCustomerApi(0, 20)
       .then((res) => {
         setDataGroup(res?.data);
@@ -69,7 +72,10 @@ const ManageCustomer = () => {
                     ? "div-item-tab-select"
                     : "div-item-tab"
                 }
-                onClick={() => setIdGroup(item?.value)}
+                onClick={() => {
+                  setIdGroup(item?.value);
+                  saveToCookie("tab-kh", item?.value);
+                }}
               >
                 <a className="text-tab">{item?.label}</a>
               </div>

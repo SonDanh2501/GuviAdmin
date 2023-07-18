@@ -82,3 +82,129 @@
     }
   }
 }
+
+.div-tab-finance {
+  display: flex;
+  flex-direction: row;
+  margin-top: 30px;
+
+  .div-item-tab {
+    padding: 5px;
+    margin-right: 5px;
+
+    .text-tab {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      color: rgb(199, 199, 199);
+      text-decoration: none;
+    }
+  }
+  .div-item-tab-select {
+    padding: 5px;
+    margin-right: 5px;
+    border-bottom: 1px solid blue;
+
+    .text-tab {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      color: #000000;
+      text-decoration: none;
+    }
+  }
+}
+
+.div-current-remainder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .text-money {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+    margin-right: 5px;
+  }
+
+  .icon-deduction {
+    color: #fb422e;
+  }
+
+  .icon-plus {
+    color: #00cf3a;
+  }
+
+  .icon-minus {
+    color: #727272;
+  }
+}
+
+.div-name-ctv {
+  display: flex;
+  flex-direction: column;
+
+  .text-ctv {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000;
+    text-decoration: none;
+  }
+}
+
+.div-date-create {
+  display: flex;
+  flex-direction: column;
+
+  .text-date {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000;
+    text-decoration: none;
+  }
+}
+
+.text-content {
+  display: block;
+  width: 250px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  color: #000000;
+  text-decoration: none;
+}
+
+@media (max-width: 1200px) {
+  .text-content {
+    display: block;
+    width: 200px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000;
+    text-decoration: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .text-content {
+    display: block;
+    width: 150px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000;
+    text-decoration: none;
+  }
+}
