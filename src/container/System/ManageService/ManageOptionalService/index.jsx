@@ -22,7 +22,6 @@ const ManageOptionService = () => {
   const { id } = state || {};
   const [data, setData] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
-  const [itemEditExtend, setItemEditExtend] = useState([]);
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

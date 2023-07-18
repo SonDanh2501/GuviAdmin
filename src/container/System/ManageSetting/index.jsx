@@ -3,7 +3,7 @@ import ManagePromotions from "../ManagePromotion";
 import "./index.scss";
 import BannerManage from "./ManageBanner/BannerManage";
 import NewsManage from "./ManageNews/NewsManage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   getElementState,
@@ -11,17 +11,31 @@ import {
 } from "../../../redux/selectors/auth";
 import i18n from "../../../i18n";
 import PromotionDrag from "../ManagePromotion/PromotionDrag";
+import { useCookies } from "../../../helper/useCookies";
 
 const ManageSetting = () => {
   const checkElement = useSelector(getElementState);
+  const [activeKey, setActiveKey] = useState("1");
+  const [saveToCookie, readCookie] = useCookies();
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setActiveKey(
+      readCookie("tab-promo-setting") === ""
+        ? "1"
+        : readCookie("tab-promo-setting")
+    );
   }, []);
+
+  const onChangeTab = (key) => {
+    setActiveKey(key);
+    saveToCookie("tab-promo-setting", key);
+  };
+
   return (
     <div className="div-container-promotion">
-      <Tabs defaultActiveKey="1">
+      <Tabs activeKey={activeKey} size="small" onChange={onChangeTab}>
         <Tabs.TabPane
           tab={`${i18n.t("promotion_management", { lng: lang })}`}
           key="1"

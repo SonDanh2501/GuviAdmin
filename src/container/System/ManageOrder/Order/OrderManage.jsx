@@ -1,29 +1,25 @@
-import { SearchOutlined, StarFilled } from "@ant-design/icons";
+import { StarFilled } from "@ant-design/icons";
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import { Checkbox, Dropdown, Input, Pagination, Space, Table } from "antd";
-import _debounce from "lodash/debounce";
+import { Dropdown, Pagination, Space, Table } from "antd";
 import moment from "moment";
-import React, { memo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  checkOrderApi,
-  deleteOrderApi,
-  getOrderApi,
-} from "../../../../api/order";
+import React, { memo, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { deleteOrderApi, getOrderApi } from "../../../../api/order";
 import ModalCustom from "../../../../components/modalCustom";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
+import useWindowDimensions from "../../../../helper/useWindowDimensions";
 import i18n from "../../../../i18n";
 import {
   getElementState,
   getLanguageState,
-  getUser,
 } from "../../../../redux/selectors/auth";
 import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
 import EditTimeOrder from "../EditTimeGroupOrder";
 import "./OrderManage.scss";
-import useWindowDimensions from "../../../../helper/useWindowDimensions";
+import { useWindowScrollPositions } from "../../../../helper/useWindowPosition";
+import { useCookies } from "../../../../helper/useCookies";
 
 const OrderManage = (props) => {
   const {
@@ -48,9 +44,11 @@ const OrderManage = (props) => {
   const [modal, setModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const toggle = () => setModal(!modal);
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
+  const { scrollX, scrollY } = useWindowScrollPositions();
+  const [saveToCookie, readCookie] = useCookies();
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work)).format("HH:mm");
 
@@ -195,6 +193,7 @@ const OrderManage = (props) => {
       render: (data) => {
         return (
           <Link
+            onClick={() => saveToCookie("order_scrolly", scrollY)}
             to={
               checkElement?.includes("detail_guvi_job")
                 ? `/details-order/${data?.id_group_order}`
@@ -430,12 +429,11 @@ const OrderManage = (props) => {
 
   const onChange = (page) => {
     setCurrentPage(page);
+    saveToCookie("page_order", page);
     const dataLength = data.length < 20 ? 20 : data.length;
-
     const start = page * dataLength - dataLength;
-
     setStartPage(start);
-
+    saveToCookie("start_order", start);
     getOrderApi(
       valueSearch,
       start,

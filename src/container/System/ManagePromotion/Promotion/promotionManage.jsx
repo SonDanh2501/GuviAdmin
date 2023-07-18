@@ -80,7 +80,7 @@ const PromotionManage = ({
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-  }, []);
+  }, [idService]);
 
   const onDelete = useCallback(
     (id) => {

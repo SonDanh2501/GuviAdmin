@@ -9,18 +9,32 @@ import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
 import UsedPromotion from "./UsedPromotion";
 import CustomerReview from "./Review";
+import { useCookies } from "../../../../../helper/useCookies";
+import { useEffect, useState } from "react";
 
 const Profiles = () => {
   // const { state } = useLocation();
   // const { id } = state || {};
   const params = useParams();
   const id = params?.id;
+  const [saveToCookie, readCookie] = useCookies();
+  const [activeKey, setActiceKey] = useState("1");
   const lang = useSelector(getLanguageState);
 
+  useEffect(() => {
+    setActiceKey(
+      readCookie("tab-detail-kh") === "" ? "1" : readCookie("tab-detail-kh")
+    );
+  }, []);
+
+  const onChangeTab = (key) => {
+    saveToCookie("tab-detail-kh", key);
+    setActiceKey(key);
+  };
   return (
     <div>
       <div className="div-container-customer">
-        <Tabs defaultActiveKey="1" size="large">
+        <Tabs activeKey={activeKey} size="small" onChange={onChangeTab}>
           <Tabs.TabPane tab={`${i18n.t("detail", { lng: lang })}`} key="1">
             <DetailsProfile id={id} />
           </Tabs.TabPane>

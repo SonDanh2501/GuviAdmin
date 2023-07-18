@@ -1,0 +1,42 @@
+.div-list-edit-price {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+
+  .select-province {
+    width: 40%;
+  }
+
+  .div-rush-holiday-day {
+    display: flex;
+    flex-direction: row;
+    width: 60%;
+
+    .div-price-rush-day {
+      display: flex;
+      flex-direction: column;
+      margin-top: 10px;
+      margin-left: 30px;
+      width: 50%;
+
+      .div-price {
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        border-radius: 8px;
+        padding: 10px;
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+        margin-top: 10px;
+
+        .select-date {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

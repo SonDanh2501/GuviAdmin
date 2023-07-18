@@ -24,6 +24,7 @@ import InviteCollaborator from "./components/invite";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
 import Overview from "./components/overview";
+import { useCookies } from "../../../../../helper/useCookies";
 // core components
 
 const ProfileCollaborator = () => {
@@ -39,6 +40,15 @@ const ProfileCollaborator = () => {
   const params = useParams();
   const id = params?.id;
   const lang = useSelector(getLanguageState);
+  const [saveToCookie, readCookie] = useCookies();
+  const [activeKey, setActiveKey] = useState("1");
+
+  useEffect(() => {
+    window.scroll(0, 0);
+    setActiveKey(
+      readCookie("tab-detail-ctv") === "" ? "1" : readCookie("tab-detail-ctv")
+    );
+  }, []);
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -89,10 +99,15 @@ const ProfileCollaborator = () => {
       });
   };
 
+  const onChangeTab = (key) => {
+    saveToCookie("tab-detail-ctv", key);
+    setActiveKey(key);
+  };
+
   return (
     <div className="div-container-profile-ctv">
       <div className="div-tab-profile-collaborator">
-        <Tabs defaultActiveKey="1">
+        <Tabs defaultActiveKey="1" activeKey={activeKey} onChange={onChangeTab}>
           <Tabs.TabPane tab="Tổng quan" key="1">
             <Overview id={id} />
           </Tabs.TabPane>

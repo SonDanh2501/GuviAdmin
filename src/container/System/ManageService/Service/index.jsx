@@ -10,6 +10,7 @@ import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
 import { getElementState } from "../../../../redux/selectors/auth";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Service = () => {
   const [data, setData] = useState([]);
@@ -20,6 +21,7 @@ const Service = () => {
   const [isLoading, setIsLoading] = useState(false);
   const toggleActive = () => setModalActive(!modalActive);
   const checkElement = useSelector(getElementState);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getListService()
@@ -82,7 +84,14 @@ const Service = () => {
       title: "Tên dịch vụ",
       render: (data) => {
         return (
-          <div>
+          <div
+            onClick={() =>
+              navigate(
+                "/services/manage-group-service/service/optional-service",
+                { state: { id: data?._id } }
+              )
+            }
+          >
             <a>{data?.title?.vi}</a>
           </div>
         );
@@ -111,6 +120,7 @@ const Service = () => {
           <div>
             {checkElement?.includes("active_service") && (
               <Switch
+                style={{ width: "auto" }}
                 checkedChildren="Hiện"
                 unCheckedChildren="Ẩn"
                 checked={data?.is_active}

@@ -95,7 +95,7 @@ const router = [
     tab: [
       {
         path: "/services/manage-group-service/service",
-        name: "Tất cả dịch vụ",
+        name: "Tất cả",
         icon: bag,
       },
       // {

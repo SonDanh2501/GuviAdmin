@@ -22,4 +22,36 @@
   min-height: 20%;
   margin: 10px;
   padding: 10px;
+
+  .div-tab-report {
+    display: flex;
+    flex-direction: row;
+
+    .div-item-tab {
+      padding: 5px;
+      margin-right: 5px;
+
+      .text-tab {
+        color: rgb(186, 186, 186);
+        font-weight: 400;
+        font-size: 14px;
+        font-family: "Roboto";
+        text-decoration: none;
+      }
+    }
+
+    .div-item-tab-select {
+      padding: 5px;
+      margin-right: 5px;
+      border-bottom: 1px solid blue;
+
+      .text-tab {
+        color: black;
+        font-weight: 400;
+        font-size: 14px;
+        font-family: "Roboto";
+        text-decoration: none;
+      }
+    }
+  }
 }

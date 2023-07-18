@@ -92,6 +92,8 @@ const DetailsOrder = () => {
         setDataReason(res?.data);
       })
       .catch((err) => {});
+
+    window.scroll(0, 0);
   }, []);
 
   dataReason?.map((item) => {

@@ -652,13 +652,13 @@ const CleaningHourly = (props) => {
                       : "select-service-default"
                   }
                   onClick={() => onChooseMultiple(item?._id)}
-                  disabled={
-                    estimate === 4 && item?.estimate === 0
-                      ? false
-                      : estimate !== 4
-                      ? false
-                      : true
-                  }
+                  // disabled={
+                  //   estimate === 4 && item?.estimate === 0
+                  //     ? false
+                  //     : estimate !== 4
+                  //     ? false
+                  //     : true
+                  // }
                 >
                   <a
                     className={
