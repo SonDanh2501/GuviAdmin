@@ -50,14 +50,14 @@ export const getHistoryOrderApi = (id, start, length, lang) => {
 
 export const addCollaboratorToOrderApi = (id, data) => {
   return axiosClient.post(
-    `/admin/group-order-manager/add_collaborator_to_order/${id}?lang=vi`,
+    `/admin/order_manager/add_collaborator_to_order/${id}?lang=vi`,
     data
   );
 };
 
 export const changeCollaboratorToOrderApi = (id) => {
   return axiosClient.post(
-    `/admin/group-order-manager/change_collaborator/${id}?lang=vi`
+    `/admin/order_manager/change_collaborator/${id}?lang=vi`
   );
 };
 

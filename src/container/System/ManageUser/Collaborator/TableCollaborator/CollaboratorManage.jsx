@@ -41,6 +41,9 @@ import {
   getElementState,
   getLanguageState,
 } from "../../../../../redux/selectors/auth.js";
+import { useCookies } from "../../../../../helper/useCookies.js";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions.js";
+import { useWindowScrollPositions } from "../../../../../helper/useWindowPosition.js";
 
 const CollaboratorManage = (props) => {
   const { status } = props;
@@ -67,22 +70,39 @@ const CollaboratorManage = (props) => {
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const dispatch = useDispatch();
-  const width = window.innerWidth;
+  const [saveToCookie, readCookie] = useCookies();
+  const { width } = useWindowDimensions();
+  const { scrollX, scrollY } = useWindowScrollPositions();
 
   useEffect(() => {
-    fetchCollaborators(lang, 0, 20, status, valueSearch)
+    window.scroll(0, Number(readCookie("table_y_ctv")));
+  }, []);
+
+  useEffect(() => {
+    fetchCollaborators(
+      lang,
+      Number(readCookie("start_page_ctv")),
+      20,
+      readCookie("tab_collaborator"),
+      valueSearch
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItems);
       })
       .catch((err) => {});
+    setCurrentPage(
+      readCookie("page_ctv") === "" ? 1 : Number(readCookie("page_ctv"))
+    );
   }, [status]);
 
   const onChange = (page) => {
     setCurrentPage(page);
+    saveToCookie("page_ctv", page);
     const lenghtData = data.length < 20 ? 20 : data.length;
     const start = page * lenghtData - lenghtData;
     setStartPage(start);
+    saveToCookie("start_page_ctv", start);
     fetchCollaborators(lang, start, 20, status, valueSearch)
       .then((res) => {
         setData(res?.data);
@@ -327,6 +347,11 @@ const CollaboratorManage = (props) => {
       },
       render: (data) => (
         <Link
+          onClick={() => {
+            saveToCookie("table_x_ctv", scrollX);
+            saveToCookie("table_y_ctv", scrollY);
+            saveToCookie("tab-detail-ctv", "1");
+          }}
           to={
             checkElement?.includes("detail_collaborator")
               ? `/details-collaborator/${data?._id}`
@@ -347,6 +372,11 @@ const CollaboratorManage = (props) => {
         return (
           <div className="div-collaborator">
             <Link
+              onClick={() => {
+                saveToCookie("table_x_ctv", scrollX);
+                saveToCookie("table_y_ctv", scrollY);
+                saveToCookie("tab-detail-ctv", "1");
+              }}
               to={
                 checkElement?.includes("detail_collaborator")
                   ? `/details-collaborator/${data?._id}`

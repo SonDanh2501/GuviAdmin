@@ -23,12 +23,18 @@ import {
 } from "../../../../../redux/selectors/auth";
 import "./index.scss";
 import i18n from "../../../../../i18n";
+import { useCookies } from "../../../../../helper/useCookies";
 
 const Punish = () => {
+  const [saveToCookie, readCookie] = useCookies();
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [startPage, setStartPage] = useState(0);
+  const [startPage, setStartPage] = useState(
+    readCookie("punish_start_ctv") === ""
+      ? 0
+      : Number(readCookie("punish_start_ctv"))
+  );
   const [modalConfirm, setModalConfirm] = useState(false);
   const [modalCancel, setModalCancel] = useState(false);
   const [modal, setModal] = useState(false);
@@ -44,12 +50,17 @@ const Punish = () => {
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    getListPunishApi(0, 20)
+    getListPunishApi(startPage, 20)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
+    setCurrentPage(
+      readCookie("punish_current_page_ctv") === ""
+        ? 1
+        : Number(readCookie("punish_current_page_ctv"))
+    );
   }, []);
 
   const onConfirm = useCallback(
@@ -151,9 +162,11 @@ const Punish = () => {
 
   const onChange = (page) => {
     setCurrentPage(page);
+    saveToCookie("punish_current_page_ctv", page);
     const dataLength = data.length < 20 ? 20 : data.length;
     const start = page * dataLength - dataLength;
     setStartPage(start);
+    saveToCookie("punish_start_ctv", start);
     getListPunishApi(start, 20)
       .then((res) => {
         setData(res?.data);

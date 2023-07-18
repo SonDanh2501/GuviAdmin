@@ -28,7 +28,7 @@ const TestExam = (props) => {
         setDataLesson(res?.data);
       })
       .catch((err) => {});
-  }, []);
+  }, [id]);
 
   const handleSeeInfoLesson = (_id, title) => {
     setTitle(title);
@@ -184,8 +184,10 @@ const TestExam = (props) => {
                 {item?.is_pass ? (
                   <img src={qualified} className="img" />
                 ) : !item?.is_pass &&
-                  item?.collaborator_times_submit > item?.times_submit ? (
+                  item?.collaborator_times_submit == item?.times_submit ? (
                   <img src={unqualified} className="img" />
+                ) : !item?.is_pass ? (
+                  <i class="uil uil-padlock"></i>
                 ) : null}
               </div>
               <a className="text-description">{item?.description[lang]}</a>

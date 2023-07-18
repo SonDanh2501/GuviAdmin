@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./index.scss";
 import PromotionManage from "./Promotion/promotionManage";
 import ManagePromotionGuvi from "./PromotionGuvi";
@@ -8,6 +8,7 @@ import ManagePromotionEvent from "./PromotionOrtherEvent";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../redux/selectors/auth";
 import i18n from "../../../i18n";
+import { useCookies } from "../../../helper/useCookies";
 
 const ManagePromotions = () => {
   const [selected, setSelected] = useState("code");
@@ -15,6 +16,16 @@ const ManagePromotions = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
   const lang = useSelector(getLanguageState);
+  const [saveToCookie, readCookie] = useCookies();
+
+  useEffect(() => {
+    setSelected(
+      readCookie("select_promo") === "" ? "code" : readCookie("select_promo")
+    );
+    setBrand(
+      readCookie("brand_promo") === "" ? "guvi" : readCookie("brand_promo")
+    );
+  }, []);
 
   return (
     <div>
@@ -27,6 +38,8 @@ const ManagePromotions = () => {
         onClick={() => {
           setSelected("code");
           setBrand("guvi");
+          saveToCookie("select_promo", "code");
+          saveToCookie("brand_promo", "brand");
           setCurrentPage(1);
           setStartPage(0);
         }}
@@ -42,6 +55,8 @@ const ManagePromotions = () => {
         onClick={() => {
           setSelected("code");
           setBrand("orther");
+          saveToCookie("select_promo", "code");
+          saveToCookie("brand_promo", "orther");
           setCurrentPage(1);
           setStartPage(0);
         }}
@@ -58,6 +73,7 @@ const ManagePromotions = () => {
           setCurrentPage(1);
           setStartPage(0);
           setSelected("event");
+          saveToCookie("select_promo", "event");
         }}
         style={{ width: "auto" }}
       >

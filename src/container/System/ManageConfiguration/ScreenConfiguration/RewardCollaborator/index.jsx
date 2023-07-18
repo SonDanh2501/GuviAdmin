@@ -176,6 +176,7 @@ const RewardCollaborator = () => {
           checkedChildren="On"
           unCheckedChildren="Off"
           checked={data?.is_active}
+          style={{ width: "auto" }}
           onChange={() =>
             checkElement.includes("active_reward_collaborator_setting ") &&
             setModalActive(true)

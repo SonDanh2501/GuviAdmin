@@ -25,6 +25,7 @@ import { getProvince, getService } from "../../../redux/selectors/service";
 import OrderManage from "./Order/OrderManage";
 import "./index.scss";
 import LoadingPagination from "../../../components/paginationLoading";
+import { useCookies } from "../../../helper/useCookies";
 const { RangePicker } = DatePicker;
 
 const ManageOrder = () => {
@@ -79,6 +80,7 @@ const ManageOrder = () => {
       key: 5,
     },
   ]);
+  const [saveToCookie, readCookie] = useCookies();
   const navigate = useNavigate();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -86,8 +88,19 @@ const ManageOrder = () => {
   const province = useSelector(getProvince);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scroll(0, Number(readCookie("order_scrolly")));
+
+    setKeyActive(
+      readCookie("tab-order") === "" ? 0 : Number(readCookie("tab-order"))
+    );
+    setCurrentPage(
+      readCookie("page_order") === "" ? 1 : Number(readCookie("page_order"))
+    );
+    setStartPage(
+      readCookie("start_order") === "" ? 0 : Number(readCookie("start_order"))
+    );
   }, []);
+
   useEffect(() => {
     getOrderApi(valueSearch, 0, 20, tab, kind, type, startDate, endDate, city)
       .then((res) => {
@@ -209,6 +222,10 @@ const ManageOrder = () => {
                   setCurrentPage(1);
                   setStartPage(0);
                   setKeyActive(item?.key);
+                  saveToCookie("tab-order", item?.key);
+                  saveToCookie("order_scrolly", 0);
+                  saveToCookie("start_order", 0);
+                  saveToCookie("page_order", 1);
                 }}
               >
                 <a className="text-title">{item?.title}</a>

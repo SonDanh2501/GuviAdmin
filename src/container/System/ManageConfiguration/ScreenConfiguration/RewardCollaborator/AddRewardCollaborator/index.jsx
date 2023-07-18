@@ -459,7 +459,7 @@ const AddRewardCollaborator = () => {
                                             title="So sánh"
                                             select={true}
                                             style={{
-                                              width: 50,
+                                              width: 150,
                                               marginLeft: 5,
                                             }}
                                             options={DATA_OPERTATOR}
@@ -476,7 +476,7 @@ const AddRewardCollaborator = () => {
                                           <InputCustom
                                             title="Giá trị"
                                             style={{
-                                              width: 100,
+                                              width: 150,
                                               marginLeft: 5,
                                             }}
                                             type="number"

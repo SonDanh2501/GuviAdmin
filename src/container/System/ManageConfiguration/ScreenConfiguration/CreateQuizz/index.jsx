@@ -17,6 +17,7 @@ import { errorNotify } from "../../../../../helper/toast";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import EditLesson from "./EditLesson";
 import { Link } from "react-router-dom";
+import { useCookies } from "../../../../../helper/useCookies";
 
 const CreateQuizz = () => {
   const checkElement = useSelector(getElementState);
@@ -29,6 +30,7 @@ const CreateQuizz = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
+  const [saveToCookie, readCookie] = useCookies();
 
   useEffect(() => {
     getListTrainningLessonApi(0, 20, type)
@@ -37,7 +39,17 @@ const CreateQuizz = () => {
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
+    setType(readCookie("tab_exam"));
   }, []);
+
+  useEffect(() => {
+    getListTrainningLessonApi(0, 20, type)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  }, [type]);
 
   const deleteLesson = useCallback(
     (id) => {
@@ -46,7 +58,7 @@ const CreateQuizz = () => {
         .then((res) => {
           setModalDelete(false);
           setIsLoading(false);
-          getListTrainningLessonApi(startPage, 20, "")
+          getListTrainningLessonApi(startPage, 20, type)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);
@@ -60,7 +72,7 @@ const CreateQuizz = () => {
           });
         });
     },
-    [startPage]
+    [startPage, type]
   );
 
   const activeLesson = useCallback(
@@ -71,7 +83,7 @@ const CreateQuizz = () => {
           .then((res) => {
             setIsLoading(false);
             setModalActive(false);
-            getListTrainningLessonApi(startPage, 20, "")
+            getListTrainningLessonApi(startPage, 20, type)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
@@ -89,7 +101,7 @@ const CreateQuizz = () => {
           .then((res) => {
             setIsLoading(false);
             setModalActive(false);
-            getListTrainningLessonApi(startPage, 20, "")
+            getListTrainningLessonApi(startPage, 20, type)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
@@ -104,7 +116,7 @@ const CreateQuizz = () => {
           });
       }
     },
-    [startPage]
+    [startPage, type]
   );
 
   const onChange = (page) => {
@@ -112,17 +124,7 @@ const CreateQuizz = () => {
     const dataLength = data?.length < 20 ? 20 : data?.length;
     const start = page * dataLength - dataLength;
     setStartPage(start);
-    getListTrainningLessonApi(start, 20, "")
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  };
-
-  const onChangeType = (e) => {
-    setType(e);
-    getListTrainningLessonApi(0, 20, e)
+    getListTrainningLessonApi(start, 20, type)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -179,6 +181,15 @@ const CreateQuizz = () => {
       },
       render: (data) => {
         return <a className="title-lesson">{data?.times_submit}</a>;
+      },
+      align: "center",
+    },
+    {
+      title: () => {
+        return <a style={{ fontSize: 12 }}>Bài học</a>;
+      },
+      render: (data) => {
+        return <a className="title-lesson">{data?.lesson}</a>;
       },
       align: "center",
     },
@@ -241,6 +252,7 @@ const CreateQuizz = () => {
           setTotal={setTotal}
           setIsLoading={setIsLoading}
           data={item}
+          tab={type}
         />
       ),
     },
@@ -253,8 +265,26 @@ const CreateQuizz = () => {
   return (
     <div>
       <h5>Danh sách bài học</h5>
+      <div className="div-tab-lesson">
+        {DATA?.map((item, index) => {
+          return (
+            <div
+              key={index}
+              onClick={() => {
+                saveToCookie("tab_exam", item?.value);
+                setType(item?.value);
+              }}
+              className={
+                type === item?.value ? "div-item-tab-select" : "div-item-tab"
+              }
+            >
+              <a className="text-tab">{item?.label}</a>
+            </div>
+          );
+        })}
+      </div>
       <div className="div-select-add-lesson">
-        <Select
+        {/* <Select
           onChange={onChangeType}
           style={{ width: "auto" }}
           value={type}
@@ -266,11 +296,13 @@ const CreateQuizz = () => {
             { value: "training", label: "Đào tạo" },
             { value: "premium", label: "Nâng cao" },
           ]}
-        />
+        /> */}
+        <a></a>
         <AddLesson
           setData={setData}
           setTotal={setTotal}
           setIsLoading={setIsLoading}
+          tab={type}
         />
       </div>
       <div className="mt-3">
@@ -328,9 +360,9 @@ const CreateQuizz = () => {
 export default CreateQuizz;
 
 const DATA = [
-  { title: "all", value: "all" },
-  {
-    title: "active",
-    value: "active",
-  },
+  { value: "", label: "Tất cả" },
+  { value: "input", label: "Đầu vào" },
+  { value: "periodic", label: "Định kì" },
+  { value: "training", label: "Đào tạo" },
+  { value: "premium", label: "Nâng cao" },
 ];

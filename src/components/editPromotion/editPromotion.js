@@ -52,6 +52,7 @@ const EditPromotion = (props) => {
     search,
     status,
     typeSort,
+    tab,
   } = props;
   const [formDiscount, setFormDiscount] = useState("amount");
   const [discountUnit, setDiscountUnit] = useState("amount");
@@ -650,11 +651,26 @@ const EditPromotion = (props) => {
                   )}
                 </Row>
               </div>
+              {tab === "tat_ca" && (
+                <div className="mt-2">
+                  <a className="title-add-promo">
+                    8. {`${i18n.t("apply_service", { lng: lang })}`}
+                  </a>
+                  <Select
+                    style={{ width: "100%" }}
+                    value={serviceApply}
+                    onChange={(e) => {
+                      setServiceApply(e);
+                    }}
+                    options={serviceOption}
+                  />
+                </div>
+              )}
             </Col>
             <Col md={7} className="ml-3">
               <div className="mt-2">
                 <a className="title-add-promo">
-                  8. {`${i18n.t("applicable_object", { lng: lang })}`}
+                  9. {`${i18n.t("applicable_object", { lng: lang })}`}
                 </a>
                 <div>
                   <Checkbox
@@ -738,7 +754,7 @@ const EditPromotion = (props) => {
               </div>
               <div className="mt-2">
                 <a className="title-add-promo">
-                  9. {`${i18n.t("number_promo", { lng: lang })}`}
+                  10. {`${i18n.t("number_promo", { lng: lang })}`}
                 </a>
                 <div>
                   <Checkbox
@@ -761,7 +777,7 @@ const EditPromotion = (props) => {
               </div>
               <div className="mt-2">
                 <a className="title-add-promo">
-                  10. {`${i18n.t("number_use_promotion", { lng: lang })}`}
+                  11. {`${i18n.t("number_use_promotion", { lng: lang })}`}
                 </a>
                 <div>
                   <Checkbox
@@ -783,7 +799,7 @@ const EditPromotion = (props) => {
               </div>
               <div className="mt-2">
                 <a className="title-add-promo">
-                  11. {`${i18n.t("promotion_time", { lng: lang })}`}
+                  12. {`${i18n.t("promotion_time", { lng: lang })}`}
                 </a>
                 <div>
                   <Checkbox
@@ -840,7 +856,7 @@ const EditPromotion = (props) => {
               </div>
               <div className="mt-2">
                 <a className="title-add-promo">
-                  12. {`${i18n.t("redemption_points", { lng: lang })}`}
+                  13. {`${i18n.t("redemption_points", { lng: lang })}`}
                 </a>
                 <div>
                   <Checkbox
@@ -861,7 +877,7 @@ const EditPromotion = (props) => {
               </div>
               <div className="mt-2">
                 <a className="title-add-promo">
-                  13. {`${i18n.t("payment_method", { lng: lang })}`}
+                  14. {`${i18n.t("payment_method", { lng: lang })}`}
                 </a>
                 <div>
                   <Checkbox
@@ -887,7 +903,7 @@ const EditPromotion = (props) => {
               {isExchangePoint && (
                 <div className="mt-2">
                   <a className="title-add-promo">
-                    14.{" "}
+                    15.{" "}
                     {`${i18n.t("usage_time_after_exchange", { lng: lang })}`}
                   </a>
                   <Input
@@ -902,7 +918,7 @@ const EditPromotion = (props) => {
 
               <div className="mt-2">
                 <a className="title-add-promo">
-                  15. {`${i18n.t("position", { lng: lang })}`}
+                  16. {`${i18n.t("position", { lng: lang })}`}
                 </a>
                 <Input
                   className="input-promo-code"
@@ -915,7 +931,7 @@ const EditPromotion = (props) => {
               <div className="div-loop-time">
                 <div>
                   <a className="title-add-promo">
-                    16.{`${i18n.t("time_apply", { lng: lang })}`}
+                    17.{`${i18n.t("time_apply", { lng: lang })}`}
                   </a>
                   <Checkbox
                     checked={isApplyTime}
@@ -988,7 +1004,7 @@ const EditPromotion = (props) => {
               </div>
               <div className="div-check-show-app">
                 <a className="title-check">
-                  17. {`${i18n.t("show_code_app", { lng: lang })}`}
+                  18. {`${i18n.t("show_code_app", { lng: lang })}`}
                 </a>
                 <Checkbox
                   onChange={(e) => {

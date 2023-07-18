@@ -10,6 +10,7 @@ import i18n from "../../../../../../i18n";
 import { getLanguageState } from "../../../../../../redux/selectors/auth";
 import "./index.scss";
 import useWindowDimensions from "../../../../../../helper/useWindowDimensions";
+import { useCookies } from "../../../../../../helper/useCookies";
 
 export default function OrderCustomer({ id }) {
   // const { state } = useLocation();
@@ -22,6 +23,7 @@ export default function OrderCustomer({ id }) {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
   const lang = useSelector(getLanguageState);
+  const { saveToCookie } = useCookies();
 
   useEffect(() => {
     getOrderByCustomers(id, 0, 20)
@@ -186,7 +188,10 @@ export default function OrderCustomer({ id }) {
               lng: lang,
             })}`}</a>
           ) : (
-            <Link to={`/details-collaborator/${data?.id_collaborator}`}>
+            <Link
+              onClick={() => saveToCookie("tab-detail-ctv", "1")}
+              to={`/details-collaborator/${data?.id_collaborator}`}
+            >
               <a className="text-collaborator">{data?.name_collaborator}</a>
             </Link>
           )}
