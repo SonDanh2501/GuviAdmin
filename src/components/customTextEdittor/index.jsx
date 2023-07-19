@@ -2,7 +2,7 @@ import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./style.scss";
 
-const CustomTextEditor = ({ value, onChangeValue }) => {
+const CustomTextEditor = ({ value, onChangeValue, style }) => {
   var Size = Quill.import("formats/size");
   Size.whitelist = [
     "9px",
@@ -50,7 +50,7 @@ const CustomTextEditor = ({ value, onChangeValue }) => {
       [{ color: [] }, { background: [] }], // dropdown with defaults from theme
       [{ font: [] }],
       [{ align: [] }],
-
+      ["link", "image", "video"],
       ["clean"],
     ],
   };
@@ -60,6 +60,7 @@ const CustomTextEditor = ({ value, onChangeValue }) => {
       value={value}
       onChange={onChangeValue}
       modules={modules}
+      style={style}
     />
   );
 };
