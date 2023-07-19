@@ -174,7 +174,9 @@ const TestExam = (props) => {
             <div
               key={index}
               className={
-                item?.is_pass
+                item?.type_training_lesson === "periodic"
+                  ? "div-item-lesson-collaborator"
+                  : item?.is_pass
                   ? "div-item-lesson-collaborator"
                   : "div-item-lesson-collaborator-hide"
               }
@@ -186,24 +188,25 @@ const TestExam = (props) => {
                 ) : !item?.is_pass &&
                   item?.collaborator_times_submit == item?.times_submit ? (
                   <img src={unqualified} className="img" />
-                ) : !item?.is_pass ? (
+                ) : !item?.is_pass &&
+                  item?.type_training_lesson ===
+                    "periodic" ? null : !item?.is_pass ? (
                   <i class="uil uil-padlock"></i>
                 ) : null}
               </div>
               <a className="text-description">{item?.description[lang]}</a>
 
-              {item?.is_pass && (
-                <a
-                  className="see-answer"
-                  onClick={() =>
-                    item?.is_pass
-                      ? handleSeeInfoLesson(item?._id, item?.title[lang])
-                      : null
-                  }
-                >
-                  Xem câu trả lời <i class="uil uil-angle-right"></i>
-                </a>
-              )}
+              {item?.is_pass ||
+                (item?.type_training_lesson === "periodic" && (
+                  <a
+                    className="see-answer"
+                    onClick={() =>
+                      handleSeeInfoLesson(item?._id, item?.title[lang])
+                    }
+                  >
+                    Xem câu trả lời <i class="uil uil-angle-right"></i>
+                  </a>
+                ))}
             </div>
           );
         })}
