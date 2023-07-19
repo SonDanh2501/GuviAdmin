@@ -162,13 +162,14 @@ const EditPrice = () => {
 
   const changeStartTimePriceRushDay = (value, index, indexRush) => {
     const newArr = [...data];
-    data[index].price_option_rush_day[indexRush].start_time = value + ".000Z";
+    data[index].price_option_rush_day[indexRush].start_time =
+      value + ":00.000Z";
     setData(newArr);
   };
 
   const changeEndTimePriceRushDay = (value, index, indexRush) => {
     const newArr = [...data];
-    data[index].price_option_rush_day[indexRush].end_time = value + ".000Z";
+    data[index].price_option_rush_day[indexRush].end_time = value + ":00.000Z";
     setData(newArr);
   };
 

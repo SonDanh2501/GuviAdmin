@@ -21,6 +21,8 @@ const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
   const [timeSubmit, setTimeSubmit] = useState();
   const [isShowApp, setIsShowApp] = useState(false);
   const [theory, setTheory] = useState("");
+  const [totalCorrect, setTotalCorrect] = useState("");
+  const [totalExam, setTotalExam] = useState("");
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -46,6 +48,8 @@ const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
       is_show_in_app: isShowApp,
       times_submit: timeSubmit,
       theory: theory,
+      total_correct_exam_pass: totalCorrect,
+      total_exam: totalExam,
     })
       .then((res) => {
         setOpen(false);
@@ -75,6 +79,8 @@ const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
     timeSubmit,
     theory,
     tab,
+    totalCorrect,
+    totalExam,
   ]);
 
   return (
@@ -120,6 +126,20 @@ const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
           value={link}
           onChange={(e) => setLink(e.target.value)}
         />
+
+        <InputCustom
+          title="Số đáp án đúng"
+          type="number"
+          value={totalCorrect}
+          onChange={(e) => setTotalCorrect(e.target.value)}
+        />
+        <InputCustom
+          title="Số câu hỏi của bài"
+          type="number"
+          value={totalExam}
+          onChange={(e) => setTotalExam(e.target.value)}
+        />
+
         {tab === "" && (
           <InputCustom
             select={true}
