@@ -292,10 +292,17 @@ const ReportOrderCreate = () => {
               <a className="text-title-column">{`${i18n.t("net_revenue", {
                 lng: lang,
               })}`}</a>
-              <Popover content={content} placement="bottom">
-                <Button className="btn-question">
+              <Popover
+                content={content}
+                placement="bottom"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                  width: 300,
+                }}
+              >
+                <div>
                   <i class="uil uil-question-circle icon-question"></i>
-                </Button>
+                </div>
               </Popover>
             </div>
             <a className="text-money-title">
@@ -357,10 +364,17 @@ const ReportOrderCreate = () => {
               <a className="text-title-column">{`${i18n.t("total_bill", {
                 lng: lang,
               })}`}</a>
-              <Popover content={content} placement="bottom">
-                <Button className="btn-question">
+              <Popover
+                content={content}
+                placement="bottom"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                  width: 300,
+                }}
+              >
+                <div>
                   <i class="uil uil-question-circle icon-question"></i>
-                </Button>
+                </div>
               </Popover>
             </div>
             <a className="text-money-title">
@@ -385,7 +399,7 @@ const ReportOrderCreate = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              {`${(i18n.t("note_profit"), { lng: lang })}`}
+              {`${i18n.t("note_profit", { lng: lang })}`}
             </p>
           </div>
         );
@@ -395,10 +409,17 @@ const ReportOrderCreate = () => {
               <a className="text-title-column">{`${i18n.t("profit", {
                 lng: lang,
               })}`}</a>
-              <Popover content={content} placement="bottom">
-                <Button className="btn-question">
+              <Popover
+                content={content}
+                placement="bottom"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                  width: 300,
+                }}
+              >
+                <div>
                   <i class="uil uil-question-circle icon-question"></i>
-                </Button>
+                </div>
               </Popover>
             </div>
             <a className="text-money-title">
@@ -442,10 +463,17 @@ const ReportOrderCreate = () => {
                   lng: lang,
                 })}`}
               </a>
-              <Popover content={content} placement="bottom">
-                <Button className="btn-question">
+              <Popover
+                content={content}
+                placement="bottom"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                  width: 300,
+                }}
+              >
+                <div>
                   <i class="uil uil-question-circle icon-question"></i>
-                </Button>
+                </div>
               </Popover>
             </div>
             <div className="div-top"></div>
