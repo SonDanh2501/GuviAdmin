@@ -22,6 +22,8 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
   const [timeSubmit, setTimeSubmit] = useState("");
   const [isShowApp, setIsShowApp] = useState(false);
   const [theory, setTheory] = useState("");
+  const [totalCorrect, setTotalCorrect] = useState("");
+  const [totalExam, setTotalExam] = useState("");
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -41,6 +43,8 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
     setIsShowApp(data?.is_show_in_app);
     setTimeSubmit(data?.times_submit);
     setTheory(data?.theory);
+    setTotalCorrect(data?.total_correct_exam_pass);
+    setTotalExam(data?.total_exam);
   }, [data]);
 
   const editLesson = useCallback(() => {
@@ -60,6 +64,8 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
       is_show_in_app: isShowApp,
       times_submit: timeSubmit,
       theory: theory,
+      total_correct_exam_pass: totalCorrect,
+      total_exam: totalExam,
     })
       .then((res) => {
         setOpen(false);
@@ -89,6 +95,8 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
     timeSubmit,
     data,
     theory,
+    totalCorrect,
+    totalExam,
   ]);
 
   return (
@@ -133,6 +141,18 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
           title="Link video"
           value={link}
           onChange={(e) => setLink(e.target.value)}
+        />
+        <InputCustom
+          title="Số đáp án đúng"
+          type="number"
+          value={totalCorrect}
+          onChange={(e) => setTotalCorrect(e.target.value)}
+        />
+        <InputCustom
+          title="Số câu hỏi của bài"
+          type="number"
+          value={totalExam}
+          onChange={(e) => setTotalExam(e.target.value)}
         />
         {tab === "" && (
           <InputCustom

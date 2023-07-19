@@ -109,6 +109,7 @@ const ReportOrderCreate = () => {
       },
       align: "center",
       width: "5%",
+      sorter: (a, b) => a.total_item - b.total_item,
     },
     {
       title: () => {
@@ -154,10 +155,17 @@ const ReportOrderCreate = () => {
               <a className="text-title-column">{`${i18n.t("service_fee", {
                 lng: lang,
               })}`}</a>
-              <Popover content={content} placement="bottom">
-                <Button className="btn-question">
+              <Popover
+                content={content}
+                placement="bottom"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                  width: 200,
+                }}
+              >
+                <div>
                   <i class="uil uil-question-circle icon-question"></i>
-                </Button>
+                </div>
               </Popover>
             </div>
             <a className="text-money-title">
@@ -194,10 +202,17 @@ const ReportOrderCreate = () => {
               <a className="text-title-column-blue">{`${i18n.t("revenue", {
                 lng: lang,
               })}`}</a>
-              <Popover content={content} placement="bottom">
-                <Button className="btn-question">
+              <Popover
+                content={content}
+                placement="bottom"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                  width: 300,
+                }}
+              >
+                <div>
                   <i class="uil uil-question-circle icon-question"></i>
-                </Button>
+                </div>
               </Popover>
             </div>
             <a className="text-money-title-blue">
@@ -232,10 +247,17 @@ const ReportOrderCreate = () => {
               <a className="text-title-column">{`${i18n.t("discount", {
                 lng: lang,
               })}`}</a>
-              <Popover content={content} placement="bottom">
-                <Button className="btn-question">
+              <Popover
+                content={content}
+                placement="bottom"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                  width: 200,
+                }}
+              >
+                <div>
                   <i class="uil uil-question-circle icon-question"></i>
-                </Button>
+                </div>
               </Popover>
             </div>
             <a className="text-money-title">
