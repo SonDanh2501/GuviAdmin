@@ -169,7 +169,11 @@ const TopupCustomer = () => {
 
   const columns = [
     {
-      title: `${i18n.t("code", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("code", { lng: lang })}`}</a>
+        );
+      },
       render: (data) => (
         <Link to={`/profile-customer/${data?.id_customer?._id}`}>
           <a className="text-id-topup-customer">{data?.id_customer?.id_view}</a>
@@ -177,7 +181,13 @@ const TopupCustomer = () => {
       ),
     },
     {
-      title: `${i18n.t("customer", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("customer", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <Link
@@ -191,40 +201,62 @@ const TopupCustomer = () => {
       },
     },
     {
-      title: `${i18n.t("money", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("money", { lng: lang })}`}</a>
+        );
+      },
       render: (data) => (
         <a className="text-money-customer-topup">{formatMoney(data?.money)}</a>
       ),
       sorter: (a, b) => a.money - b.money,
     },
-    // {
-    //   title: "Nạp/rút",
-    //   render: (data) => {
-    //     return (
-    //       <>
-    //         {data?.type_transfer === "top_up" ? (
-    //           <div>
-    //             <i class="uil uil-money-insert icon-topup"></i>
-    //             <a className="text-topup">Nạp</a>
-    //           </div>
-    //         ) : (
-    //           <div>
-    //             <i class="uil uil-money-withdraw icon-withdraw"></i>
-    //             <a className="text-withdraw">Rút</a>
-    //           </div>
-    //         )}
-    //       </>
-    //     );
-    //   },
-    // },
     {
-      title: `${i18n.t("content", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("Nạp/rút", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
+      render: (data) => {
+        return (
+          <>
+            {data?.type_transfer === "top_up" ? (
+              <div>
+                <i class="uil uil-money-insert icon-topup"></i>
+                <a className="text-topup">Nạp</a>
+              </div>
+            ) : (
+              <div>
+                <i class="uil uil-money-withdraw icon-withdraw"></i>
+                <a className="text-withdraw">Rút</a>
+              </div>
+            )}
+          </>
+        );
+      },
+    },
+    {
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("content", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => (
         <a className="text-description-topup">{data?.transfer_note}</a>
       ),
     },
     {
-      title: `${i18n.t("date_create", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("date_create", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => (
         <div className="div-money-customer">
           <a className="text-money-customer-topup">
@@ -237,7 +269,13 @@ const TopupCustomer = () => {
       ),
     },
     {
-      title: `${i18n.t("status", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("status", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <div>
@@ -266,7 +304,13 @@ const TopupCustomer = () => {
       align: "center",
     },
     {
-      title: `${i18n.t("method", { lng: lang })}`,
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("method", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
       render: (data) => {
         return (
           <a className="text-money-customer-topup">

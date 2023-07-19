@@ -904,6 +904,22 @@ const PromotionManage = ({
           >
             Chỉnh sửa vị trí
           </Button>
+
+          <Button
+            onClick={() =>
+              navigate(`/promotion/manage-setting/create-promotion`, {
+                state: {
+                  type: type,
+                  brand: brand,
+                  idService: idService,
+                  exchange: exchange,
+                },
+              })
+            }
+            style={{ width: "auto", marginBottom: 5 }}
+          >
+            add
+          </Button>
         </div>
 
         <div className="mt-3">

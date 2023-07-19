@@ -153,6 +153,7 @@ const ReportOrderCity = () => {
         return <a className="text-money">{data?.total_item}</a>;
       },
       align: "center",
+      sorter: (a, b) => a.total_item - b.total_item,
     },
     {
       title: () => {
@@ -198,10 +199,17 @@ const ReportOrderCity = () => {
               <a className="text-title-column">{`${i18n.t("service_fee", {
                 lng: lang,
               })}`}</a>
-              <Popover content={content} placement="bottom">
-                <Button className="btn-question">
+              <Popover
+                content={content}
+                placement="bottom"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                  width: 200,
+                }}
+              >
+                <div>
                   <i class="uil uil-question-circle icon-question"></i>
-                </Button>
+                </div>
               </Popover>
             </div>
             <a className="text-money-title">
@@ -238,10 +246,17 @@ const ReportOrderCity = () => {
               <a className="text-title-column-blue">{`${i18n.t("revenue", {
                 lng: lang,
               })}`}</a>
-              <Popover content={content} placement="bottom">
-                <Button className="btn-question">
+              <Popover
+                content={content}
+                placement="bottom"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                  width: 300,
+                }}
+              >
+                <div>
                   <i class="uil uil-question-circle icon-question"></i>
-                </Button>
+                </div>
               </Popover>
             </div>
             <a className="text-money-title-blue">
@@ -276,10 +291,17 @@ const ReportOrderCity = () => {
               <a className="text-title-column">{`${i18n.t("discount", {
                 lng: lang,
               })}`}</a>
-              <Popover content={content} placement="bottom">
-                <Button className="btn-question">
+              <Popover
+                content={content}
+                placement="bottom"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                  width: 200,
+                }}
+              >
+                <div>
                   <i class="uil uil-question-circle icon-question"></i>
-                </Button>
+                </div>
               </Popover>
             </div>
             <a className="text-money-title">
@@ -314,10 +336,17 @@ const ReportOrderCity = () => {
               <a className="text-title-column">{`${i18n.t("net_revenue", {
                 lng: lang,
               })}`}</a>
-              <Popover content={content} placement="bottom">
-                <Button className="btn-question">
+              <Popover
+                content={content}
+                placement="bottom"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                  width: 300,
+                }}
+              >
+                <div>
                   <i class="uil uil-question-circle icon-question"></i>
-                </Button>
+                </div>
               </Popover>
             </div>
             <a className="text-money-title">
@@ -378,10 +407,17 @@ const ReportOrderCity = () => {
               <a className="text-title-column">{`${i18n.t("total_bill", {
                 lng: lang,
               })}`}</a>
-              <Popover content={content} placement="bottom">
-                <Button className="btn-question">
+              <Popover
+                content={content}
+                placement="bottom"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                  width: 300,
+                }}
+              >
+                <div>
                   <i class="uil uil-question-circle icon-question"></i>
-                </Button>
+                </div>
               </Popover>
             </div>
             <a className="text-money-title">
@@ -406,7 +442,7 @@ const ReportOrderCity = () => {
         const content = (
           <div className="div-content">
             <p className="text-content">
-              {`${(i18n.t("note_profit"), { lng: lang })}`}
+              {`${i18n.t("note_profit", { lng: lang })}`}
             </p>
           </div>
         );
@@ -416,10 +452,17 @@ const ReportOrderCity = () => {
               <a className="text-title-column">{`${i18n.t("profit", {
                 lng: lang,
               })}`}</a>
-              <Popover content={content} placement="bottom">
-                <Button className="btn-question">
+              <Popover
+                content={content}
+                placement="bottom"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                  width: 300,
+                }}
+              >
+                <div>
                   <i class="uil uil-question-circle icon-question"></i>
-                </Button>
+                </div>
               </Popover>
             </div>
             <a className="text-money-title">
@@ -463,10 +506,17 @@ const ReportOrderCity = () => {
                   lng: lang,
                 })}`}
               </a>
-              <Popover content={content} placement="bottom">
-                <Button className="btn-question">
+              <Popover
+                content={content}
+                placement="bottom"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                  width: 300,
+                }}
+              >
+                <div>
                   <i class="uil uil-question-circle icon-question"></i>
-                </Button>
+                </div>
               </Popover>
             </div>
             <div className="div-top"></div>

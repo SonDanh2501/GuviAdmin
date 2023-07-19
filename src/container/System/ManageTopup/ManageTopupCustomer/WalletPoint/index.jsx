@@ -1,10 +1,11 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Input, Pagination, Table } from "antd";
+import { Button, Input, Pagination, Table } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+
 import _debounce from "lodash/debounce";
+import { Link } from "react-router-dom";
 import {
   cancelPointCustomerApi,
   deletePointCustomerApi,
@@ -13,18 +14,16 @@ import {
   verifyPointCustomerApi,
 } from "../../../../../api/topup";
 import AddPoint from "../../../../../components/addPointCustomer/addPoint";
+import ModalCustom from "../../../../../components/modalCustom";
 import LoadingPagination from "../../../../../components/paginationLoading";
+import { errorNotify } from "../../../../../helper/toast";
+import i18n from "../../../../../i18n";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import {
   getElementState,
   getLanguageState,
-  getUser,
 } from "../../../../../redux/selectors/auth";
 import "./index.scss";
-import { errorNotify } from "../../../../../helper/toast";
-import ModalCustom from "../../../../../components/modalCustom";
-import { Link } from "react-router-dom";
-import i18n from "../../../../../i18n";
 
 const TopupPoint = () => {
   const [data, setData] = useState([]);
