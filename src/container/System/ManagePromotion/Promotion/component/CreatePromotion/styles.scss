@@ -1,101 +1,18 @@
 .div-container-create {
   display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  // justify-content: space-between;
   width: 100%;
 
   .div-body {
-    width: 80%;
-    .div-input-row {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-
-      .div-input {
-        width: 49%;
-        background-color: white;
-        border-radius: 8px;
-        padding: 10px;
-        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
-
-        .title-input {
-          font-family: "Roboto";
-          font-style: normal;
-          font-weight: 500;
-          font-size: 14px;
-          color: #000000;
-          text-decoration: none;
-        }
-
-        .div-tab {
-          display: flex;
-          flex-direction: row;
-
-          .div-item-tab {
-            padding: 5px;
-            margin-left: 5px;
-
-            .text-tab {
-              font-family: "Roboto";
-              font-style: normal;
-              font-weight: 400;
-              font-size: 14px;
-              color: #bfbfbf;
-              text-decoration: none;
-            }
-          }
-
-          .div-item-tab-select {
-            padding: 5px;
-            margin-left: 5px;
-            border-bottom: 1px solid blue;
-
-            .text-tab {
-              font-family: "Roboto";
-              font-style: normal;
-              font-weight: 400;
-              font-size: 14px;
-              color: #000000;
-              text-decoration: none;
-            }
-          }
-        }
-      }
-
-      .div-reduced {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        margin-top: 10px;
-      }
-
-      .list-item-kh {
-        background-color: rgb(255, 255, 255);
-        padding: 5px;
-        position: absolute;
-        width: 350px;
-        border: 1px solid rgb(175, 175, 175);
-        border-radius: 5px;
-        z-index: 99999;
-
-        .div-item {
-          border-bottom: 1px solid #d6d6d6;
-
-          .text-name {
-            font-family: "Roboto";
-            font-weight: 500;
-            font-size: 14px;
-            line-height: 16px;
-            color: #000000;
-            text-decoration: none;
-          }
-        }
-      }
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    width: 60%;
+    padding: 0px 30px;
 
     .div-input {
-      width: 100%;
+      width: 80%;
       height: auto;
       background-color: white;
       border-radius: 8px;
@@ -103,10 +20,62 @@
       margin-top: 10px;
       filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
 
+      .icon-question {
+        color: #29fff1;
+        margin-left: 10px;
+      }
+
+      .div-head-title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .title-input {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 600;
+          font-size: 14px;
+          color: #212121;
+          text-decoration: none;
+        }
+
+        .icon-question {
+          color: #29fff1;
+          margin-left: 10px;
+        }
+      }
+      .div-parrent-promo {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: 10px;
+
+        .div-code-promo {
+          display: flex;
+          flex-direction: column;
+          width: 55%;
+
+          .label-promo {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 600;
+            font-size: 14px;
+            color: #212121;
+            text-decoration: none;
+          }
+        }
+
+        .div-child-promo {
+          display: flex;
+          flex-direction: column;
+          width: 40%;
+        }
+      }
+
       .title-input {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 450;
+        font-weight: 600;
         font-size: 14px;
         color: #212121;
         text-decoration: none;
@@ -115,7 +84,7 @@
         background-color: rgb(255, 255, 255);
         padding: 5px;
         position: relative;
-        width: 350px;
+        width: auto;
         border: 1px solid rgb(175, 175, 175);
         border-radius: 5px;
         z-index: 1000;
@@ -144,6 +113,7 @@
           flex-direction: row;
           justify-content: space-between;
           border-bottom: 1px solid #d6d6d6;
+          padding: 5px;
 
           .text-name-list {
             font-family: "Roboto";
@@ -190,7 +160,6 @@
           margin: 5px 0px 10px;
         }
       }
-
       .text-note {
         font-family: "Roboto";
         font-style: italic;
@@ -201,14 +170,45 @@
         margin: 5px 0px 10px;
       }
 
+      .div-column-limit {
+        display: flex;
+        flex-direction: column;
+        margin-top: 8px;
+
+        .input-price {
+          width: 50%;
+          margin: 5px 20px;
+        }
+      }
+
+      .div-time-select {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 10px;
+
+        .div-time {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
+      }
+
       .input-price {
-        width: 35%;
-        margin: 5px 20px;
+        width: 50%;
+        margin: 10px 20px;
+      }
+
+      .div-voucher {
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+        margin-left: 20px;
       }
     }
 
     .div-background-thumnail {
-      width: 100%;
+      width: 80%;
       height: auto;
       background-color: white;
       border-radius: 8px;
@@ -229,5 +229,128 @@
         flex-direction: row;
       }
     }
+  }
+
+  .div-detail {
+    width: 29%;
+
+    .div-input {
+      width: 100%;
+      background-color: rgb(248, 248, 248);
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+
+      .title-input {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 450;
+        font-size: 14px;
+        color: #212121;
+        text-decoration: none;
+      }
+
+      .div-show-in-app {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: 10px;
+        .switch {
+          width: 20px;
+        }
+        .switch-select {
+          width: 20px;
+          background-color: #00cf3a;
+        }
+
+        .label-display {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          color: #212121;
+          text-decoration: none;
+          margin-left: 10px;
+        }
+      }
+
+      .div-push-noti {
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+        width: 100%;
+        .title-input {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          color: #212121;
+          text-decoration: none;
+        }
+
+        .switch {
+          margin-right: 10px;
+          width: 20px;
+        }
+        .switch-select {
+          margin-right: 10px;
+          width: 20px;
+          background-color: #00cf3a;
+        }
+
+        .div-body-push {
+          display: flex;
+          flex-direction: column;
+          margin: 5px 30px;
+        }
+      }
+
+      .div-exchange-point {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .div-redem-point {
+          display: flex;
+          margin-top: 10px;
+          flex-direction: row;
+
+          .title {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            color: #212121;
+            text-decoration: none;
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.div-content-title {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+
+  .img-short {
+    width: 400px;
+    height: 100px;
+    margin-top: 10px;
+  }
+
+  .img-title {
+    width: 250px;
+    height: 220px;
+    margin-top: 10px;
+  }
+
+  .img-description {
+    width: 200px;
+    height: 420px;
+    margin-top: 10px;
   }
 }
