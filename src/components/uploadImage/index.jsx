@@ -10,7 +10,7 @@ import { postFile } from "../../api/file";
 import axios from "axios";
 
 const UploadImage = (props) => {
-  const { setUrl, classImg, title, image, setImage } = props;
+  const { setUrl, classImg, title, image, setImage, icon } = props;
   const dispatch = useDispatch();
 
   const onChangeThumbnail = async (e) => {
@@ -52,7 +52,13 @@ const UploadImage = (props) => {
 
   return (
     <div className="mt-2 div-upload">
-      <a className="title-upload">{title}</a>
+      {title && (
+        <div className="div-head-title-upload">
+          <a className="title-upload">{title}</a>
+          <div>{icon}</div>
+        </div>
+      )}
+
       <Input
         id="actual-btn"
         type="file"
