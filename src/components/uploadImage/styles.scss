@@ -21,12 +21,24 @@
     border-radius: 8px;
   }
 
-  .title-upload {
-    font-family: "Roboto";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    color: #000000;
+  .div-head-title-upload {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .icon-question {
+      color: #29fff1;
+      margin-bottom: 0px;
+      margin-left: 10px;
+    }
+
+    .title-upload {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      color: #000000;
+    }
   }
 
   .div-image {

@@ -36,9 +36,9 @@ export const DATA_TIME_TOTAL = [
 
 export const DATA_PAYMENT = [
   { label: "Tiền mặt", value: "cash" },
-  { label: "Thẻ visa", value: "visa" },
-  { label: "Ví momo", value: "momo" },
   { label: "G-pay", value: "point" },
+  { label: "Thẻ visa", value: "visa", disabled: true },
+  { label: "Ví momo", value: "momo", disabled: true },
 ];
 
 export const DATA = [
