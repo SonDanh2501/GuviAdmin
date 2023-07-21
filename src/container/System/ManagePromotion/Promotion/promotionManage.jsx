@@ -80,7 +80,7 @@ const PromotionManage = ({
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-  }, [idService]);
+  }, [idService, exchange]);
 
   const onDelete = useCallback(
     (id) => {
@@ -304,12 +304,12 @@ const PromotionManage = ({
       key: "1",
       label: checkElement?.includes("edit_promotion") && (
         <a
-          onClick={() => {
-            setModalEdit(!modalEdit);
-          }}
-        >
-          {`${i18n.t("edit", { lng: lang })}`}
-        </a>
+          onClick={() =>
+            navigate("/promotion/manage-setting/edit-promotion", {
+              state: { id: itemEdit?._id },
+            })
+          }
+        >{`${i18n.t("edit", { lng: lang })}`}</a>
       ),
     },
     {
@@ -843,7 +843,7 @@ const PromotionManage = ({
           />
           {checkElement?.includes("create_promotion") && (
             <>
-              {type === "code" && brand === "guvi" ? (
+              {/* {type === "code" && brand === "guvi" ? (
                 <AddPromotion
                   idService={idService}
                   tab={tab}
@@ -884,7 +884,15 @@ const PromotionManage = ({
                   status={valueFilter}
                   typeSort={typeSort}
                 />
-              )}
+              )} */}
+              <Button
+                onClick={() =>
+                  navigate(`/promotion/manage-setting/create-promotion`)
+                }
+                className="btn-add-promotion-v2"
+              >
+                Thêm khuyến mãi
+              </Button>
             </>
           )}
         </div>
@@ -903,22 +911,6 @@ const PromotionManage = ({
             style={{ width: "auto", marginBottom: 5 }}
           >
             Chỉnh sửa vị trí
-          </Button>
-
-          <Button
-            onClick={() =>
-              navigate(`/promotion/manage-setting/create-promotion`, {
-                state: {
-                  type: type,
-                  brand: brand,
-                  idService: idService,
-                  exchange: exchange,
-                },
-              })
-            }
-            style={{ width: "auto", marginBottom: 5 }}
-          >
-            add
           </Button>
         </div>
 
@@ -965,7 +957,7 @@ const PromotionManage = ({
           </div>
         </div>
 
-        <div>
+        {/* <div>
           {type === "code" && brand === "guvi" ? (
             <EditPromotion
               state={modalEdit}
@@ -1018,7 +1010,7 @@ const PromotionManage = ({
               typeSort={typeSort}
             />
           )}
-        </div>
+        </div> */}
         <div>
           <ModalCustom
             isOpen={modal}

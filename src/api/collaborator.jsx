@@ -140,9 +140,14 @@ export const getOverviewCollaborator = (id) => {
   );
 };
 
-export const getListTrainingLessonByCollaboratorApi = (id, start, length) => {
+export const getListTrainingLessonByCollaboratorApi = (
+  id,
+  start,
+  length,
+  type
+) => {
   return axiosClient.get(
-    `/admin/training_lesson_manager/get_list_training_lesson_by_collaborator/${id}?lang=vi&start=${start}&length=${length}`
+    `/admin/training_lesson_manager/get_list_training_lesson_by_collaborator/${id}?lang=vi&start=${start}&length=${length}&type_exam=${type}`
   );
 };
 
