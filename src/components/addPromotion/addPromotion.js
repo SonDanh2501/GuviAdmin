@@ -124,7 +124,7 @@ const AddPromotion = (props) => {
   const cityOption = [];
   const districtOption = [];
   const dispatch = useDispatch();
-  const fomart = "hh:MM";
+  const fomart = "HH:mm";
   const dateFormat = "DD-MM-YYYY";
   const service = useSelector(getService);
   const province = useSelector(getProvince);
@@ -1036,7 +1036,7 @@ const AddPromotion = (props) => {
                             </div>
                             <a>{`${i18n.t("start_time", { lng: lang })}`}</a>
                             <TimePicker
-                              defaultOpenValue={dayjs("00:00:00", fomart)}
+                              defaultValue={dayjs("00:00", fomart)}
                               format={fomart}
                               onChange={(time, timeString) =>
                                 changeTimeStartApply(timeString, index)
@@ -1045,7 +1045,7 @@ const AddPromotion = (props) => {
                             />
                             <a>{`${i18n.t("end_time", { lng: lang })}`}</a>
                             <TimePicker
-                              defaultOpenValue={dayjs("00:00:00", fomart)}
+                              defaultValue={dayjs("00:00", fomart)}
                               format={fomart}
                               onChange={(time, timeString) =>
                                 changeTimeEndApply(timeString, index)

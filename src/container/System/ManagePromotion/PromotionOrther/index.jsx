@@ -20,6 +20,7 @@ const ManagePromotionOrther = (props) => {
           return (
             <div
               className="tab"
+              key={index}
               onClick={() => {
                 setTab(item?.tab);
               }}
