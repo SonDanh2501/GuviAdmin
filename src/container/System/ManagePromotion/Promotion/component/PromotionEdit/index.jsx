@@ -25,6 +25,8 @@ import {
 import {
   createPromotion,
   getGroupCustomerApi,
+  getPromotionDetails,
+  updatePromotion,
 } from "../../../../../../api/promotion";
 import { searchCustomersApi } from "../../../../../../api/customer";
 import {
@@ -51,10 +53,12 @@ import { createPushNotification } from "../../../../../../api/notification";
 import moment from "moment";
 import { errorNotify } from "../../../../../../helper/toast";
 import LoadingPagination from "../../../../../../components/paginationLoading";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 const { Option } = Select;
 
-const CreatePromotion = () => {
+const EditPromotion = () => {
+  const { state } = useLocation();
+  const { id } = state;
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
   const [shortDescriptionVN, setShortDescriptionVN] = useState("");
@@ -114,13 +118,12 @@ const CreatePromotion = () => {
   const [timeApply, setTimeApply] = useState(DATA_APPLY_TIME);
   const [isDateSchedule, setIsDateSchedule] = useState(false);
   const [dateExchange, setDateExchange] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [ratioTypeDateApply, setRatioTypeDateApply] = useState(1);
   const [typeDateApply, setTypeDateApply] = useState("date_create");
-  const [isLoading, setIsLoading] = useState(false);
   const options = [];
   const serviceOption = [];
   const cityOption = [];
-  const formatDate = "DD-MM-YYYY";
   const service = useSelector(getService);
   const province = useSelector(getProvince);
   const lang = useSelector(getLanguageState);
@@ -128,7 +131,7 @@ const CreatePromotion = () => {
   const selectAfter = (
     <Select
       defaultValue="VND"
-      style={{ width: 60 }}
+      style={{ width: 50 }}
       onChange={(e) => {
         if (e === "VND") {
           setDiscountUnit("amount");
@@ -147,6 +150,67 @@ const CreatePromotion = () => {
       .then((res) => setDataGroupCustomer(res.data))
       .catch((err) => {});
   }, []);
+
+  useEffect(() => {
+    getPromotionDetails(id)
+      .then((res) => {
+        setTitleVN(res?.title?.vi);
+        setTitleEN(res?.title?.en);
+        setShortDescriptionVN(res?.short_description?.vi);
+        setShortDescriptionEN(res?.short_description?.en);
+        setDescriptionVN(res?.description?.vi);
+        setDescriptionEN(res?.description?.en);
+        setImgThumbnail(res?.thumbnail);
+        setImgBackground(res?.image_background);
+        setLimitedDate(res?.is_limit_date);
+        setStartDate(res?.is_limit_date ? res?.limit_start_date : "");
+        setEndDate(res?.is_limit_date ? res?.limit_end_date : "");
+        setLimitedQuantity(res?.is_limit_count);
+        setAmount(res?.limit_count);
+        setIsGroupCustomer(res?.is_id_group_customer);
+        setGroupCustomer(res?.id_group_customer);
+        setIsCustomer(res?.is_id_customer);
+        setListNameCustomers(res?.id_customer);
+        setIsUsePromo(res?.is_limited_use);
+        setUsePromo(res?.limited_use);
+        setDiscountUnit(res?.discount_unit);
+        setMaximumDiscount(res?.discount_max_price);
+        setReducedValue(res?.discount_value);
+        setIsExchangePoint(res?.is_exchange_point);
+        setExchangePoint(res?.exchange_point);
+        setNamebrand(res?.brand);
+        setPromoCode(res?.code);
+        setServiceApply(res?.service_apply[0]);
+        setMinimumOrder(res?.price_min_order);
+        setDateExchange(res?.exp_date_exchange);
+        setIsPaymentMethod(res?.is_payment_method);
+        setPaymentMethod(res?.payment_method);
+        setListCustomers(res?.id_customer);
+        res?.id_customer?.map((item) => {
+          listCustomers.push(item?._id);
+        });
+        setIsApplyTimeUse(res?.is_loop);
+        setTimeApply(
+          res?.day_loop?.length > 0 ? res?.day_loop : DATA_APPLY_TIME
+        );
+        setIsParrentPromotion(res?.is_parrent_promotion);
+        setIsShowInApp(res?.is_show_in_app);
+        setIsApplyArea(res?.is_apply_area);
+        setCity(res?.city);
+        setRatioTypeVoucher(res?.brand === "guvi" ? 1 : 2);
+        setIsCheckVoucher(res?.type_promotion === "code" ? true : false);
+        setIsCheckProgram(res?.type_promotion === "event" ? true : false);
+        setTypeDateApply(res?.type_date_apply);
+        setRatioTypeDateApply(
+          res?.type_date_apply === "date_create"
+            ? 2
+            : res?.type_date_apply === "date_work"
+            ? 3
+            : 1
+        );
+      })
+      .catch((err) => console.log(err));
+  }, [id]);
 
   dataGroupCustomer.map((item) => {
     options.push({
@@ -279,7 +343,7 @@ const CreatePromotion = () => {
 
   const onCreatePromotion = useCallback(() => {
     setIsLoading(true);
-    createPromotion({
+    updatePromotion(id, {
       title: {
         vi: titleVN,
         en: titleEN,
@@ -333,31 +397,7 @@ const CreatePromotion = () => {
       type_date_apply: typeDateApply,
     })
       .then((res) => {
-        if (isSendNotification) {
-          createPushNotification({
-            title: titleNoti,
-            body: descriptionNoti,
-            is_date_schedule: isDateSchedule,
-            date_schedule: moment(dateSchedule).toISOString(),
-            is_id_customer: isCustomer,
-            id_customer: listCustomers,
-            is_id_group_customer: isGroupCustomer,
-            id_group_customer: groupCustomer,
-            image_url: imgBackground,
-          })
-            .then(() => {
-              setIsLoading(false);
-              navigate(-1);
-            })
-            .catch((err) => {
-              setIsLoading(false);
-              errorNotify({
-                message: err,
-              });
-            });
-        } else {
-          navigate(-1);
-        }
+        navigate(-1);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -409,15 +449,15 @@ const CreatePromotion = () => {
     isShowInApp,
     isApplyArea,
     city,
-    typeDateApply,
+    id,
   ]);
 
   return (
     <>
       <div className="div-head-add-promotion">
-        <a>Tạo mới khuyến mãi</a>
+        <a>Chỉnh sửa khuyến mãi</a>
         <Button type="primary" onClick={onCreatePromotion}>
-          Tạo mới
+          Chỉnh sửa
         </Button>
       </div>
       <div className="div-container-create">
@@ -588,7 +628,7 @@ const CreatePromotion = () => {
               </div>
             )}
           </div>
-          {(serviceApply.length > 0 || ratioTypeVoucher === 2) && (
+          {(serviceApply?.length > 0 || ratioTypeVoucher === 2) && (
             <>
               <div className="div-input">
                 <a className="title-input">Thời gian hiệu lực</a>
@@ -635,6 +675,13 @@ const CreatePromotion = () => {
                         />
                       </div>
                     </div>
+                    {/* <Checkbox
+                      checked={isApplyTimeUse}
+                      onChange={(e) => setIsApplyTimeUse(e.target.checked)}
+                      style={{ marginTop: 10 }}
+                    >
+                      Giới hạn ngày và giờ áp dụng trong tuần
+                    </Checkbox> */}
                     <a className="title-input mt-2">
                       Thời gian áp dụng trong tuần
                     </a>
@@ -663,7 +710,6 @@ const CreatePromotion = () => {
                         </Radio>
                       </Space>
                     </Radio.Group>
-
                     {isApplyTimeUse && (
                       <div className="div-list-time-apply">
                         {timeApply?.map((item, index) => {
@@ -980,7 +1026,7 @@ const CreatePromotion = () => {
                         }}
                         style={{ marginTop: 10 }}
                       />
-                      {data.length > 0 && (
+                      {data?.length > 0 && (
                         <List className="list-item-kh">
                           {data?.map((item, index) => {
                             return (
@@ -999,7 +1045,7 @@ const CreatePromotion = () => {
                         </List>
                       )}
 
-                      {listNameCustomers.length > 0 && (
+                      {listNameCustomers?.length > 0 && (
                         <div className="div-list-customer">
                           <List type={"unstyled"}>
                             {listNameCustomers.map((item) => {
@@ -1255,7 +1301,7 @@ const CreatePromotion = () => {
     </>
   );
 };
-export default CreatePromotion;
+export default EditPromotion;
 
 const TAB_DISCOUNT = [
   {

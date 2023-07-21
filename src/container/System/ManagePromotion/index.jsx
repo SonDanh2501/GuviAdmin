@@ -39,7 +39,7 @@ const ManagePromotions = () => {
           setSelected("code");
           setBrand("guvi");
           saveToCookie("select_promo", "code");
-          saveToCookie("brand_promo", "brand");
+          saveToCookie("brand_promo", "guvi");
           setCurrentPage(1);
           setStartPage(0);
         }}

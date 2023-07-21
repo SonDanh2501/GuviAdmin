@@ -9,12 +9,14 @@ import { permissionAction } from "../redux/actions/auth";
 import { getProvinceAction } from "../redux/actions/service";
 import "./Dashboard.scss";
 import Admin from "./admin";
+import useWindowDimensions from "../helper/useWindowDimensions";
 const { Header, Content, Sider } = Layout;
 
 const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { width } = useWindowDimensions;
   useEffect(() => {
     dispatch(permissionAction.permissionRequest({ navigate: navigate }));
     dispatch(getProvinceAction.getProvinceRequest());

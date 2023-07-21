@@ -882,7 +882,7 @@ const AddPromotionEvent = (props) => {
                             </div>
                             <a>{`${i18n.t("start_time", { lng: lang })}`}</a>
                             <TimePicker
-                              defaultOpenValue={dayjs("00:00:00", fomart)}
+                              defaultOpenValue={dayjs("00:00", fomart)}
                               format={fomart}
                               onChange={(time, timeString) =>
                                 changeTimeStartApply(timeString, index)
@@ -890,7 +890,7 @@ const AddPromotionEvent = (props) => {
                             />
                             <a>{`${i18n.t("end_time", { lng: lang })}`}</a>
                             <TimePicker
-                              defaultOpenValue={dayjs("00:00:00", fomart)}
+                              defaultOpenValue={dayjs("00:00", fomart)}
                               format={fomart}
                               onChange={(time, timeString) =>
                                 changeTimeEndApply(timeString, index)

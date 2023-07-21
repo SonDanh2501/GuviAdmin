@@ -69,6 +69,7 @@ import DetailLesson from "../container/System/ManageConfiguration/ScreenConfigur
 import OptionalService from "../container/System/ManageService/Service/OptionalService";
 import EditPrice from "../container/System/ManageService/Service/EditPrice";
 import ExtendOptionalService from "../container/System/ManageService/Service/ExtendOptional";
+import EditPromotion from "../container/System/ManagePromotion/Promotion/component/PromotionEdit";
 
 const Admin = () => {
   return (
@@ -107,6 +108,11 @@ const Admin = () => {
       <Route
         path="/promotion/manage-setting/create-promotion"
         element={<CreatePromotion />}
+      />
+
+      <Route
+        path="/promotion/manage-setting/edit-promotion"
+        element={<EditPromotion />}
       />
 
       <Route
