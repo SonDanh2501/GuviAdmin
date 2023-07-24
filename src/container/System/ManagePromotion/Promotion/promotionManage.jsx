@@ -363,6 +363,7 @@ const PromotionManage = ({
                 </div>
               );
             },
+            width: "30%",
           },
           {
             title: () => {
@@ -396,12 +397,15 @@ const PromotionManage = ({
                     <Progress
                       percent={
                         data?.is_parrent_promotion
-                          ? data?.total_used_promotion /
-                            data?.total_child_promotion
-                          : data?.total_used_promotion / data?.limit_count
+                          ? (data?.total_used_promotion /
+                              data?.total_child_promotion) *
+                            100
+                          : (data?.total_used_promotion / data?.limit_count) *
+                            100
                       }
                       strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
                       showInfo={false}
+                      size="small"
                     />
                   )}
                 </div>
@@ -410,39 +414,39 @@ const PromotionManage = ({
 
             // sorter: (a, b) => a.total_used_promotion - b.total_used_promotion,
           },
-          {
-            title: () => {
-              return (
-                <div className="div-title-column-position">
-                  <a className="text-column">{`${i18n.t("position", {
-                    lng: lang,
-                  })}`}</a>
-                  <div className="div-direction">
-                    <CaretUpOutlined
-                      onClick={() => handleSortPosition(1)}
-                      style={
-                        typeSort === 1
-                          ? { fontSize: 10, color: "blue" }
-                          : { fontSize: 10, color: "gray" }
-                      }
-                    />
-                    <CaretDownOutlined
-                      onClick={() => handleSortPosition(-1)}
-                      style={
-                        typeSort === -1
-                          ? { fontSize: 10, color: "blue" }
-                          : { fontSize: 10, color: "gray" }
-                      }
-                    />
-                  </div>
-                </div>
-              );
-            },
-            align: "center",
-            render: (data) => (
-              <a className="text-title-promotion">{data?.position}</a>
-            ),
-          },
+          // {
+          //   title: () => {
+          //     return (
+          //       <div className="div-title-column-position">
+          //         <a className="text-column">{`${i18n.t("position", {
+          //           lng: lang,
+          //         })}`}</a>
+          //         <div className="div-direction">
+          //           <CaretUpOutlined
+          //             onClick={() => handleSortPosition(1)}
+          //             style={
+          //               typeSort === 1
+          //                 ? { fontSize: 10, color: "blue" }
+          //                 : { fontSize: 10, color: "gray" }
+          //             }
+          //           />
+          //           <CaretDownOutlined
+          //             onClick={() => handleSortPosition(-1)}
+          //             style={
+          //               typeSort === -1
+          //                 ? { fontSize: 10, color: "blue" }
+          //                 : { fontSize: 10, color: "gray" }
+          //             }
+          //           />
+          //         </div>
+          //       </div>
+          //     );
+          //   },
+          //   align: "center",
+          //   render: (data) => (
+          //     <a className="text-title-promotion">{data?.position}</a>
+          //   ),
+          // },
           // {
           //   title: () => {
           //     return (
@@ -491,64 +495,64 @@ const PromotionManage = ({
               );
             },
           },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("on_off", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            align: "center",
-            render: (data) => {
-              var date =
-                data?.limit_end_date &&
-                moment(data?.limit_end_date.slice(0, 10));
-              var now = moment();
-              return (
-                <div>
-                  {contextHolder}
-                  {checkElement?.includes("active_promotion") && (
-                    <>
-                      {data?.is_active ? (
-                        <img
-                          src={onToggle}
-                          className="img-toggle"
-                          onClick={toggleActive}
-                        />
-                      ) : (
-                        <div>
-                          {data?.is_limit_date ? (
-                            date < now ? (
-                              <img
-                                src={offToggle}
-                                className="img-toggle"
-                                onClick={() =>
-                                  openNotificationWithIcon("warning")
-                                }
-                              />
-                            ) : (
-                              <img
-                                src={offToggle}
-                                className="img-toggle"
-                                onClick={toggleActive}
-                              />
-                            )
-                          ) : (
-                            <img
-                              src={offToggle}
-                              className="img-toggle"
-                              onClick={toggleActive}
-                            />
-                          )}
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              );
-            },
-          },
+          // {
+          //   title: () => {
+          //     return (
+          //       <a className="title-column">{`${i18n.t("on_off", {
+          //         lng: lang,
+          //       })}`}</a>
+          //     );
+          //   },
+          //   align: "center",
+          //   render: (data) => {
+          //     var date =
+          //       data?.limit_end_date &&
+          //       moment(data?.limit_end_date.slice(0, 10));
+          //     var now = moment();
+          //     return (
+          //       <div>
+          //         {contextHolder}
+          //         {checkElement?.includes("active_promotion") && (
+          //           <>
+          //             {data?.is_active ? (
+          //               <img
+          //                 src={onToggle}
+          //                 className="img-toggle"
+          //                 onClick={toggleActive}
+          //               />
+          //             ) : (
+          //               <div>
+          //                 {data?.is_limit_date ? (
+          //                   date < now ? (
+          //                     <img
+          //                       src={offToggle}
+          //                       className="img-toggle"
+          //                       onClick={() =>
+          //                         openNotificationWithIcon("warning")
+          //                       }
+          //                     />
+          //                   ) : (
+          //                     <img
+          //                       src={offToggle}
+          //                       className="img-toggle"
+          //                       onClick={toggleActive}
+          //                     />
+          //                   )
+          //                 ) : (
+          //                   <img
+          //                     src={offToggle}
+          //                     className="img-toggle"
+          //                     onClick={toggleActive}
+          //                   />
+          //                 )}
+          //               </div>
+          //             )}
+          //           </>
+          //         )}
+          //       </div>
+          //     );
+          //   },
+          // },
           {
             title: () => {
               return (
@@ -566,7 +570,7 @@ const PromotionManage = ({
                       lng: lang,
                     })}`}</a>
                   ) : data?.status === "doing" ? (
-                    <a className="text-upcoming">{`${i18n.t("happenning", {
+                    <a className="text-doing-status">{`${i18n.t("happenning", {
                       lng: lang,
                     })}`}</a>
                   ) : data?.status === "out_of_stock" ? (
@@ -678,39 +682,39 @@ const PromotionManage = ({
 
             // sorter: (a, b) => a.total_used_promotion - b.total_used_promotion,
           },
-          {
-            title: () => {
-              return (
-                <div className="div-title-column-position">
-                  <a className="text-column">{`${i18n.t("position", {
-                    lng: lang,
-                  })}`}</a>
-                  <div className="div-direction">
-                    <CaretUpOutlined
-                      onClick={() => handleSortPosition(1)}
-                      style={
-                        typeSort === 1
-                          ? { fontSize: 10, color: "blue" }
-                          : { fontSize: 10, color: "gray" }
-                      }
-                    />
-                    <CaretDownOutlined
-                      onClick={() => handleSortPosition(-1)}
-                      style={
-                        typeSort === -1
-                          ? { fontSize: 10, color: "blue" }
-                          : { fontSize: 10, color: "gray" }
-                      }
-                    />
-                  </div>
-                </div>
-              );
-            },
-            align: "center",
-            render: (data) => (
-              <a className="text-title-promotion">{data?.position}</a>
-            ),
-          },
+          // {
+          //   title: () => {
+          //     return (
+          //       <div className="div-title-column-position">
+          //         <a className="text-column">{`${i18n.t("position", {
+          //           lng: lang,
+          //         })}`}</a>
+          //         <div className="div-direction">
+          //           <CaretUpOutlined
+          //             onClick={() => handleSortPosition(1)}
+          //             style={
+          //               typeSort === 1
+          //                 ? { fontSize: 10, color: "blue" }
+          //                 : { fontSize: 10, color: "gray" }
+          //             }
+          //           />
+          //           <CaretDownOutlined
+          //             onClick={() => handleSortPosition(-1)}
+          //             style={
+          //               typeSort === -1
+          //                 ? { fontSize: 10, color: "blue" }
+          //                 : { fontSize: 10, color: "gray" }
+          //             }
+          //           />
+          //         </div>
+          //       </div>
+          //     );
+          //   },
+          //   align: "center",
+          //   render: (data) => (
+          //     <a className="text-title-promotion">{data?.position}</a>
+          //   ),
+          // },
           {
             title: () => {
               return (
@@ -745,64 +749,64 @@ const PromotionManage = ({
               );
             },
           },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("on_off", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            align: "center",
-            render: (data) => {
-              var date =
-                data?.limit_end_date &&
-                moment(data?.limit_end_date.slice(0, 10));
-              var now = moment();
-              return (
-                <div>
-                  {contextHolder}
-                  {checkElement?.includes("active_promotion") && (
-                    <>
-                      {data?.is_active ? (
-                        <img
-                          src={onToggle}
-                          className="img-toggle"
-                          onClick={toggleActive}
-                        />
-                      ) : (
-                        <div>
-                          {data?.is_limit_date ? (
-                            date < now ? (
-                              <img
-                                src={offToggle}
-                                className="img-toggle"
-                                onClick={() =>
-                                  openNotificationWithIcon("warning")
-                                }
-                              />
-                            ) : (
-                              <img
-                                src={offToggle}
-                                className="img-toggle"
-                                onClick={toggleActive}
-                              />
-                            )
-                          ) : (
-                            <img
-                              src={offToggle}
-                              className="img-toggle"
-                              onClick={toggleActive}
-                            />
-                          )}
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              );
-            },
-          },
+          // {
+          //   title: () => {
+          //     return (
+          //       <a className="title-column">{`${i18n.t("on_off", {
+          //         lng: lang,
+          //       })}`}</a>
+          //     );
+          //   },
+          //   align: "center",
+          //   render: (data) => {
+          //     var date =
+          //       data?.limit_end_date &&
+          //       moment(data?.limit_end_date.slice(0, 10));
+          //     var now = moment();
+          //     return (
+          //       <div>
+          //         {contextHolder}
+          //         {checkElement?.includes("active_promotion") && (
+          //           <>
+          //             {data?.is_active ? (
+          //               <img
+          //                 src={onToggle}
+          //                 className="img-toggle"
+          //                 onClick={toggleActive}
+          //               />
+          //             ) : (
+          //               <div>
+          //                 {data?.is_limit_date ? (
+          //                   date < now ? (
+          //                     <img
+          //                       src={offToggle}
+          //                       className="img-toggle"
+          //                       onClick={() =>
+          //                         openNotificationWithIcon("warning")
+          //                       }
+          //                     />
+          //                   ) : (
+          //                     <img
+          //                       src={offToggle}
+          //                       className="img-toggle"
+          //                       onClick={toggleActive}
+          //                     />
+          //                   )
+          //                 ) : (
+          //                   <img
+          //                     src={offToggle}
+          //                     className="img-toggle"
+          //                     onClick={toggleActive}
+          //                   />
+          //                 )}
+          //               </div>
+          //             )}
+          //           </>
+          //         )}
+          //       </div>
+          //     );
+          //   },
+          // },
           {
             title: () => {
               return (

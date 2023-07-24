@@ -111,8 +111,24 @@ const router = [
     name: "promotion",
     icon: ticket,
     component: ManageSetting,
-    layout: "admin",
-    tab: [],
+    layout: "promotion",
+    tab: [
+      {
+        path: "/promotion/manage-setting/promotion",
+        name: "Khuyến mãi",
+        icon: bag,
+      },
+      {
+        path: "/promotion/manage-setting/banner",
+        name: "Banner",
+        icon: bag,
+      },
+      {
+        path: "/promotion/manage-setting/news",
+        name: "Bài viết",
+        icon: bag,
+      },
+    ],
     id_sidebar: "promotion",
   },
   {

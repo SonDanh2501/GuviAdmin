@@ -13,7 +13,22 @@
     width: 15%;
 
     .text-done-total {
-      color: rgb(27, 193, 16);
+      color: #16a249;
+      font-weight: 500;
+      font-size: 14px;
+      font-family: "Roboto";
+      text-decoration: none;
+    }
+
+    .text-pending-total {
+      color: #ece200;
+      font-weight: 500;
+      font-size: 14px;
+      font-family: "Roboto";
+      text-decoration: none;
+    }
+    .text-confirm-total {
+      color: #2962ff;
       font-weight: 500;
       font-size: 14px;
       font-family: "Roboto";
@@ -67,7 +82,23 @@
 }
 
 .text-status-done {
-  color: rgb(27, 193, 16);
+  color: #16a249;
+  font-weight: 400;
+  font-size: 12px;
+  font-family: "Roboto";
+  text-decoration: none;
+}
+
+.text-status-pending {
+  color: #ece200;
+  font-weight: 400;
+  font-size: 12px;
+  font-family: "Roboto";
+  text-decoration: none;
+}
+
+.text-status-confirm {
+  color: #2962ff;
   font-weight: 400;
   font-size: 12px;
   font-family: "Roboto";

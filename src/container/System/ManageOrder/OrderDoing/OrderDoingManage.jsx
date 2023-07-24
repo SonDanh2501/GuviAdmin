@@ -37,11 +37,9 @@ const OrderDoingManage = () => {
   }, []);
 
   const timeWork = (data) => {
-    const start = moment(new Date(data.date_work_schedule[0].date)).format(
-      "HH:mm"
-    );
+    const start = moment(new Date(data?.date_work)).format("HH:mm");
 
-    const timeEnd = moment(new Date(data.date_work_schedule[0].date))
+    const timeEnd = moment(new Date(data?.date_work))
       .add(data?.total_estimate, "hours")
       .format("HH:mm");
 
@@ -127,14 +125,10 @@ const OrderDoingManage = () => {
           <div className="div-worktime-doing">
             <a className="text-worktime">
               {" "}
-              {moment(new Date(data.date_work_schedule[0].date)).format(
-                "DD/MM/YYYY"
-              )}
+              {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
             </a>
             <a className="text-worktime">
-              {moment(new Date(data?.date_work_schedule[0].date))
-                .locale(lang)
-                .format("dddd")}
+              {moment(new Date(data?.date_work)).locale(lang).format("dddd")}
             </a>
           </div>
         );

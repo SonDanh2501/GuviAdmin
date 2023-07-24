@@ -562,7 +562,11 @@ const CollaboratorManage = (props) => {
               setValueSearch(e.target.value);
               handleSearch(e.target.value);
             }}
-            style={{ width: "70%", marginLeft: 20 }}
+            style={{
+              width: "70%",
+              marginLeft: 20,
+              marginTop: width < 490 ? 10 : 0,
+            }}
           />
         </div>
         <div className="div-table mt-3">
@@ -588,13 +592,9 @@ const CollaboratorManage = (props) => {
               emptyText:
                 data.length > 0 ? <Empty /> : <Skeleton active={true} />,
             }}
-            scroll={
-              width <= 490
-                ? {
-                    x: 1600,
-                  }
-                : null
-            }
+            scroll={{
+              x: width < 900 ? 900 : 0,
+            }}
           />
           <div className="div-pagination p-2">
             <a>

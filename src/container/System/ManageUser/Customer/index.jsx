@@ -1,4 +1,4 @@
-import { FloatButton, Tabs } from "antd";
+import { FloatButton, Select, Tabs } from "antd";
 
 import "./index.scss";
 
@@ -10,6 +10,7 @@ import i18n from "../../../../i18n";
 import { getGroupCustomer } from "../../../../redux/selectors/customer";
 import { getGroupCustomerApi } from "../../../../api/promotion";
 import { useCookies } from "../../../../helper/useCookies";
+import useWindowDimensions from "../../../../helper/useWindowDimensions";
 
 const ManageCustomer = () => {
   const [status, setStatus] = useState("");
@@ -18,6 +19,7 @@ const ManageCustomer = () => {
   const [idGroup, setIdGroup] = useState("all");
   const dataTab = [{ value: "all", label: "Tất cả" }];
   const [saveToCookie, readCookie] = useCookies();
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     setIdGroup(readCookie("tab-kh") === "" ? "all" : readCookie("tab-kh"));
@@ -62,26 +64,37 @@ const ManageCustomer = () => {
       </div>
 
       <div className="div-container-customer">
-        <div className="div-tab-customer">
-          {dataTab?.map((item, index) => {
-            return (
-              <div
-                key={index}
-                className={
-                  idGroup === item?.value
-                    ? "div-item-tab-select"
-                    : "div-item-tab"
-                }
-                onClick={() => {
-                  setIdGroup(item?.value);
-                  saveToCookie("tab-kh", item?.value);
-                }}
-              >
-                <a className="text-tab">{item?.label}</a>
-              </div>
-            );
-          })}
-        </div>
+        {width > 900 ? (
+          <div className="div-tab-customer">
+            {dataTab?.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className={
+                    idGroup === item?.value
+                      ? "div-item-tab-select"
+                      : "div-item-tab"
+                  }
+                  onClick={() => {
+                    setIdGroup(item?.value);
+                    saveToCookie("tab-kh", item?.value);
+                  }}
+                >
+                  <a className="text-tab">{item?.label}</a>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <Select
+            options={dataTab}
+            value={idGroup}
+            onChange={(e) => {
+              setIdGroup(e);
+              saveToCookie("tab-kh", e);
+            }}
+          />
+        )}
 
         <div className="mt-3">
           <UserManage status={status} idGroup={idGroup} />

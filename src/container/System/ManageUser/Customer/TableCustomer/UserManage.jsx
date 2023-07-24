@@ -38,7 +38,7 @@ import platinum from "../../../../../assets/images/iconPlatinum.svg";
 import "./UserManage.scss";
 import i18n from "../../../../../i18n";
 import { useCookies } from "../../../../../helper/useCookies";
-const width = window.innerWidth;
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const UserManage = (props) => {
   const { status, idGroup } = props;
@@ -53,7 +53,6 @@ const UserManage = (props) => {
   const [itemEdit, setItemEdit] = useState([]);
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
-  const [conditionFilter, setConditionFilter] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [rank, setRank] = useState("");
   const [data, setData] = useState([]);
@@ -63,6 +62,7 @@ const UserManage = (props) => {
   const navigate = useNavigate();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
+  const { width } = useWindowDimensions();
   const [saveToCookie, readCookie] = useCookies();
 
   useEffect(() => {
@@ -704,13 +704,9 @@ const UserManage = (props) => {
             //   emptyText:
             //     data.length > 0 ? <Empty /> : <Skeleton active={true} />,
             // }}
-            scroll={
-              width <= 490
-                ? {
-                    x: 1600,
-                  }
-                : null
-            }
+            scroll={{
+              x: width <= 490 ? 900 : 0,
+            }}
           />
         </div>
 
