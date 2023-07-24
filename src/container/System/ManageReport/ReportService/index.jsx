@@ -190,7 +190,7 @@ const ReportService = () => {
   };
 
   return (
-    <>
+    <div className="mt-4">
       <div className="div-select-city">
         <Select
           style={{ width: 200, marginRight: 10 }}
@@ -313,7 +313,7 @@ const ReportService = () => {
       </div>
 
       {isLoading && <LoadingPagination />}
-    </>
+    </div>
   );
 };
 

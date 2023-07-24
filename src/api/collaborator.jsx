@@ -147,7 +147,7 @@ export const getListTrainingLessonByCollaboratorApi = (
   type
 ) => {
   return axiosClient.get(
-    `/admin/training_lesson_manager/get_list_training_lesson_by_collaborator/${id}?lang=vi&start=${start}&length=${length}&type_exam=${type}`
+    `/admin/training_lesson_manager/get_list_training_lesson_by_collaborator/${id}?lang=vi&start=${start}&length=${length}&type_training_lesson=${type}`
   );
 };
 
