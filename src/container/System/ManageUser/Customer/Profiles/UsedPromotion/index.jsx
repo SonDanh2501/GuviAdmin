@@ -84,10 +84,20 @@ const UsedPromotion = ({ id }) => {
             className={
               data?.status === "done"
                 ? "text-status-done"
+                : data?.status === "pending"
+                ? "text-status-pending"
+                : data?.status === "confirm"
+                ? "text-status-confirm"
                 : "text-status-cancel"
             }
           >
-            {data?.status === "done" ? "Hoàn thành" : "Đã huỷ"}
+            {data?.status === "done"
+              ? "Hoàn thành"
+              : data?.status === "pending"
+              ? "Đang chờ làm"
+              : data?.status === "confirm"
+              ? "Đã nhận"
+              : "Đã huỷ"}
           </a>
         );
       },
@@ -104,10 +114,20 @@ const UsedPromotion = ({ id }) => {
                   className={
                     item?._id === "done"
                       ? "text-done-total"
+                      : item?._id === "pending"
+                      ? "text-pending-total"
+                      : item?._id === "confirm"
+                      ? "text-confirm-total"
                       : "text-cancel-total"
                   }
                 >
-                  {item?._id === "done" ? "Đơn hoàn thành" : "Đơn huỷ"}
+                  {item?._id === "done"
+                    ? "Đơn hoàn thành"
+                    : item?._id === "pending"
+                    ? "Đơn đang chờ làm"
+                    : item?._id === "confirm"
+                    ? "Đơn đã nhận"
+                    : "Đơn huỷ"}
                 </a>
                 <a className="text-total">Sử dụng: {item?.total_used}</a>
                 <a className="text-total">

@@ -70,6 +70,9 @@ import OptionalService from "../container/System/ManageService/Service/OptionalS
 import EditPrice from "../container/System/ManageService/Service/EditPrice";
 import ExtendOptionalService from "../container/System/ManageService/Service/ExtendOptional";
 import EditPromotion from "../container/System/ManagePromotion/Promotion/component/PromotionEdit";
+import ManagePromotions from "../container/System/ManagePromotion";
+import BannerManage from "../container/System/ManageSetting/ManageBanner/BannerManage";
+import NewsManage from "../container/System/ManageSetting/ManageNews/NewsManage";
 
 const Admin = () => {
   return (
@@ -95,7 +98,19 @@ const Admin = () => {
         path="/system/collaborator-manage/details-collaborator/details-activity"
         element={<DetailActivityCollaborator />}
       />
-      <Route path="/promotion/manage-setting" element={<ManageSetting />} />
+      <Route path="/promotion/manage-setting" element={<ManagePromotions />} />
+      <Route
+        path="/promotion/manage-setting/promotion"
+        element={<ManagePromotions />}
+      />
+
+      <Route
+        path="/promotion/manage-setting/banner"
+        element={<BannerManage />}
+      />
+
+      <Route path="/promotion/manage-setting/news" element={<NewsManage />} />
+
       <Route
         path="/promotion/manage-setting/child-promotion"
         element={<ChildPromotion />}

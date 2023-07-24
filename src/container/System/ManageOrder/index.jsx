@@ -26,6 +26,7 @@ import OrderManage from "./Order/OrderManage";
 import "./index.scss";
 import LoadingPagination from "../../../components/paginationLoading";
 import { useCookies } from "../../../helper/useCookies";
+import useWindowDimensions from "../../../helper/useWindowDimensions";
 const { RangePicker } = DatePicker;
 
 const ManageOrder = () => {
@@ -50,38 +51,39 @@ const ManageOrder = () => {
   const [keyActive, setKeyActive] = useState(0);
   const [itemTab, setItemTab] = useState([
     {
-      title: "Tất cả đơn hàng",
-      status: "all",
+      label: "Tất cả đơn hàng",
+      value: "all",
       key: 0,
     },
     {
-      title: "Đang chờ làm",
-      status: "pending",
+      label: "Đang chờ làm",
+      value: "pending",
       key: 1,
     },
     {
-      title: "Đã nhận",
-      status: "confirm",
+      label: "Đã nhận",
+      value: "confirm",
       key: 2,
     },
     {
-      title: "Đang làm",
-      status: "doing",
+      label: "Đang làm",
+      value: "doing",
       key: 3,
     },
     {
-      title: "Đã huỷ",
-      status: "cancel",
+      label: "Đã huỷ",
+      value: "cancel",
       key: 4,
     },
     {
-      title: "Hoàn thành",
-      status: "done",
+      label: "Hoàn thành",
+      value: "done",
       key: 5,
     },
   ]);
   const [saveToCookie, readCookie] = useCookies();
   const navigate = useNavigate();
+  const { width } = useWindowDimensions();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const service = useSelector(getService);
@@ -205,34 +207,56 @@ const ManageOrder = () => {
       </div>
 
       <div className="div-body-order">
-        <div className="div-tab">
-          {itemTab.map((item, index) => {
-            return (
-              <div
-                key={index}
-                className={
-                  item?.key === keyActive ? "item-tab-select" : "item-tab"
-                }
-                onClick={() => {
-                  setTab(item?.status);
-                  setKind("");
-                  setCity("");
-                  setType("date_create");
-                  setCheckCondition(false);
-                  setCurrentPage(1);
-                  setStartPage(0);
-                  setKeyActive(item?.key);
-                  saveToCookie("tab-order", item?.key);
-                  saveToCookie("order_scrolly", 0);
-                  saveToCookie("start_order", 0);
-                  saveToCookie("page_order", 1);
-                }}
-              >
-                <a className="text-title">{item?.title}</a>
-              </div>
-            );
-          })}
-        </div>
+        {width > 900 ? (
+          <div className="div-tab">
+            {itemTab.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className={
+                    item?.key === keyActive ? "item-tab-select" : "item-tab"
+                  }
+                  onClick={() => {
+                    setTab(item?.value);
+                    setKind("");
+                    setCity("");
+                    setType("date_create");
+                    setCheckCondition(false);
+                    setCurrentPage(1);
+                    setStartPage(0);
+                    setKeyActive(item?.key);
+                    saveToCookie("tab-order", item?.key);
+                    saveToCookie("order_scrolly", 0);
+                    saveToCookie("start_order", 0);
+                    saveToCookie("page_order", 1);
+                  }}
+                >
+                  <a className="text-title">{item?.label}</a>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <Select
+            options={itemTab}
+            value={tab}
+            onChange={(e, item) => {
+              setTab(e);
+              setKind("");
+              setCity("");
+              setType("date_create");
+              setCheckCondition(false);
+              setCurrentPage(1);
+              setStartPage(0);
+              setKeyActive(item?.key);
+              saveToCookie("tab-order", item?.key);
+              saveToCookie("order_scrolly", 0);
+              saveToCookie("start_order", 0);
+              saveToCookie("page_order", 1);
+            }}
+            style={{ width: "100%" }}
+          />
+        )}
         <div className="div-search-filter-job">
           <div className="div-condition">
             <div

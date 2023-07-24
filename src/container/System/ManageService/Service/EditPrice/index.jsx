@@ -25,8 +25,8 @@ const EditPrice = () => {
       price_option_rush_day: [
         {
           rush_days: [],
-          start_time: "",
-          end_time: "",
+          start_time: "00:00",
+          end_time: "00:30",
           time_zone_apply: 7,
           type_increase: "",
           value: 0,
@@ -91,8 +91,8 @@ const EditPrice = () => {
         price_option_rush_day: [
           {
             rush_days: [],
-            start_time: "",
-            end_time: "",
+            start_time: "00:00",
+            end_time: "00:30",
             time_zone_apply: 7,
             type_increase: "",
             value: 0,
@@ -100,8 +100,8 @@ const EditPrice = () => {
         ],
         price_option_holiday: [
           {
-            time_start: "",
-            time_end: "",
+            time_start: moment().toISOString(),
+            time_end: moment().toISOString(),
             type_increase: "",
             value: 0,
           },

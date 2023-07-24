@@ -190,7 +190,7 @@ const TableExpired = ({ status }) => {
               ? "text-doing"
               : data?.status === "done"
               ? "text-done"
-              : "text-cancel"
+              : "text-cancel-expired"
           }
         >
           {data?.status === "pending"

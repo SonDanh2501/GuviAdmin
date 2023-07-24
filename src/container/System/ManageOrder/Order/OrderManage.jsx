@@ -404,6 +404,7 @@ const OrderManage = (props) => {
           </a>
         );
       },
+      responsive: ["xl"],
     },
     {
       key: "action",
@@ -473,13 +474,9 @@ const OrderManage = (props) => {
               },
             };
           }}
-          scroll={
-            width <= 490
-              ? {
-                  x: 1600,
-                }
-              : null
-          }
+          scroll={{
+            x: width <= 900 ? 900 : 0,
+          }}
           expandable={
             width <= 1200
               ? {
@@ -495,6 +492,14 @@ const OrderManage = (props) => {
                           {moment(new Date(record?.date_create)).format(
                             "DD/MM/YYYY - HH:mm"
                           )}
+                        </a>
+                        <a>
+                          Thanh toán:{" "}
+                          {record?.payment_method === "cash"
+                            ? `${i18n.t("cash", { lng: lang })}`
+                            : record?.payment_method === "point"
+                            ? `${i18n.t("wallet_gpay", { lng: lang })}`
+                            : ""}
                         </a>
                       </div>
                     );

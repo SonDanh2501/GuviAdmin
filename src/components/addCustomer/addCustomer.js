@@ -12,13 +12,14 @@ import CustomButton from "../customButton/customButton";
 import InputCustom from "../textInputCustom";
 import "./addCustomer.scss";
 import i18n from "../../i18n";
+import useWindowDimensions from "../../helper/useWindowDimensions";
 
 const AddCustomer = (props) => {
   const { setIsLoading, setData, setTotal, startPage, status, idGroup } = props;
   const formikRef = useRef();
   const dispatch = useDispatch();
   const checkElement = useSelector(getElementState);
-  const width = window.innerWidth;
+  const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
 
   const [open, setOpen] = useState(false);
