@@ -20,10 +20,11 @@ const TestExam = (props) => {
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
   const [modalInfo, setModalInfo] = useState(false);
+  const [tab, setTab] = useState("all");
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    getListTrainingLessonByCollaboratorApi(id, 0, 20, "input")
+    getListTrainingLessonByCollaboratorApi(id, 0, 20, tab)
       .then((res) => {
         setDataLesson(res?.data);
       })
@@ -36,6 +37,15 @@ const TestExam = (props) => {
       .then((res) => {
         setData(res?.data);
         setModalInfo(true);
+      })
+      .catch((err) => {});
+  };
+
+  const onChangeTab = (value) => {
+    setTab(value);
+    getListTrainingLessonByCollaboratorApi(id, 0, 20, value)
+      .then((res) => {
+        setDataLesson(res?.data);
       })
       .catch((err) => {});
   };
@@ -168,7 +178,24 @@ const TestExam = (props) => {
     //   </div>
     // </div>
     <>
-      <div className="div-list-lesson-collaborator">
+      <div className="div-tab-exam">
+        {TAB_EXAM?.map((item, index) => {
+          return (
+            <div
+              key={index}
+              onClick={() => onChangeTab(item?.value)}
+              className={
+                tab === item?.value ? "item-tab-exam-select" : "item-tab-exam"
+              }
+            >
+              <a className="text-tab">{`${i18n.t(item?.value, {
+                lng: lang,
+              })}`}</a>
+            </div>
+          );
+        })}
+      </div>
+      <div className="div-list-lesson-collaborator mt-5">
         {dataLesson?.map((item, index) => {
           return (
             <div
@@ -192,7 +219,9 @@ const TestExam = (props) => {
               </div>
               <a className="text-description">{item?.description[lang]}</a>
 
-              {item?.is_pass && (
+              {(item?.is_pass ||
+                (!item?.is_pass &&
+                  item?.collaborator_times_submit == item?.times_submit)) && (
                 <a
                   className="see-answer"
                   onClick={() =>
@@ -319,14 +348,10 @@ const TAB_EXAM = [
   },
   {
     id: 3,
-    value: "theory_input",
+    value: "training",
   },
   {
     id: 4,
     value: "periodic",
-  },
-  {
-    id: 5,
-    value: "training",
   },
 ];

@@ -43,6 +43,8 @@ import InputCustom from "../../../../../../components/textInputCustom";
 import UploadImage from "../../../../../../components/uploadImage";
 import { errorNotify } from "../../../../../../helper/toast";
 import i18n from "../../../../../../i18n";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import { getLanguageState } from "../../../../../../redux/selectors/auth";
 import {
   getProvince,
@@ -122,6 +124,7 @@ const EditPromotion = () => {
   const options = [];
   const serviceOption = [];
   const cityOption = [];
+  const dateFormat = "YYYY-MM-DD";
   const service = useSelector(getService);
   const province = useSelector(getProvince);
   const lang = useSelector(getLanguageState);
@@ -161,6 +164,7 @@ const EditPromotion = () => {
         setImgThumbnail(res?.thumbnail);
         setImgBackground(res?.image_background);
         setLimitedDate(res?.is_limit_date);
+        setIsApllyTime(res?.is_limit_date ? 2 : 1);
         setStartDate(res?.is_limit_date ? res?.limit_start_date : "");
         setEndDate(res?.is_limit_date ? res?.limit_end_date : "");
         setLimitedQuantity(res?.is_limit_count);
@@ -189,6 +193,13 @@ const EditPromotion = () => {
           listCustomers.push(item?._id);
         });
         setIsApplyTimeUse(res?.is_loop);
+        setRatioTypeDateApply(
+          res?.is_loop
+            ? 1
+            : res?.is_loop && res?.type_date_apply === "date_create"
+            ? 2
+            : 3
+        );
         setTimeApply(
           res?.day_loop?.length > 0 ? res?.day_loop : DATA_APPLY_TIME
         );
@@ -442,7 +453,7 @@ const EditPromotion = () => {
       type_date_apply: typeDateApply,
     })
       .then((res) => {
-        navigate(-1);
+        setIsLoading(false);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -721,6 +732,12 @@ const EditPromotion = () => {
                           }}
                           style={{ width: "90%", marginTop: 3 }}
                           locale={locale}
+                          format={dateFormat}
+                          value={
+                            startDate
+                              ? dayjs(startDate?.slice(0, 11), dateFormat)
+                              : ""
+                          }
                         />
                       </div>
                       <div className="div-time">
@@ -733,6 +750,12 @@ const EditPromotion = () => {
                           }
                           style={{ width: "90%", marginTop: 2 }}
                           locale={locale}
+                          format={dateFormat}
+                          value={
+                            endDate
+                              ? dayjs(endDate?.slice(0, 11), dateFormat)
+                              : ""
+                          }
                         />
                       </div>
                     </div>

@@ -18,11 +18,14 @@ const Sidebar = ({ hide }) => {
   const permission = useSelector(getPermissionState);
   const [collapsed, setCollapsed] = useState(true);
   const [collapsedService, setCollapsedService] = useState(true);
+  const [collapsedPromotion, setCollapsedPromotion] = useState(true);
   const lang = useSelector(getLanguageState);
   const checkPermission = [];
 
   const toggleNavbar = () => setCollapsed(!collapsed);
   const toggleServiceNavbar = () => setCollapsedService(!collapsedService);
+  const togglePromotionNavbar = () =>
+    setCollapsedPromotion(!collapsedPromotion);
 
   permission?.map((item) => {
     checkPermission.push(item?.id_side_bar);
@@ -57,14 +60,16 @@ const Sidebar = ({ hide }) => {
                                 isActive ? "active-link" : "unactive-link"
                               }
                             >
-                              <img src={item?.icon} className="img-icon" />
-                              <a
-                                className={
-                                  isActive ? "active-text" : "unactive-text"
-                                }
-                              >
-                                {`${i18n.t(item?.name, { lng: lang })}`}
-                              </a>
+                              <div>
+                                <img src={item?.icon} className="img-icon" />
+                                <a
+                                  className={
+                                    isActive ? "active-text" : "unactive-text"
+                                  }
+                                >
+                                  {`${i18n.t(item?.name, { lng: lang })}`}
+                                </a>
+                              </div>
                             </div>
                           )}
                         </NavLink>
@@ -85,6 +90,8 @@ const Sidebar = ({ hide }) => {
                               ? toggleNavbar
                               : item?.layout === "group"
                               ? toggleServiceNavbar
+                              : item?.layout === "promotion"
+                              ? togglePromotionNavbar
                               : null
                           }
                         >
@@ -94,14 +101,16 @@ const Sidebar = ({ hide }) => {
                                 isActive ? "active-link" : "unactive-link"
                               }
                             >
-                              <img src={item?.icon} className="img-icon" />
-                              <a
-                                className={
-                                  isActive ? "active-text" : "unactive-text"
-                                }
-                              >
-                                {`${i18n.t(item?.name, { lng: lang })}`}
-                              </a>
+                              <div>
+                                <img src={item?.icon} className="img-icon" />
+                                <a
+                                  className={
+                                    isActive ? "active-text" : "unactive-text"
+                                  }
+                                >
+                                  {`${i18n.t(item?.name, { lng: lang })}`}
+                                </a>
+                              </div>
                               {collapsed ? (
                                 <i class="uil uil-angle-right icon-right"></i>
                               ) : (
@@ -116,6 +125,8 @@ const Sidebar = ({ hide }) => {
                               ? !collapsed
                               : item?.layout === "group"
                               ? !collapsedService
+                              : item?.layout === "promotion"
+                              ? !collapsedPromotion
                               : null
                           }
                         >
@@ -209,6 +220,8 @@ const Sidebar = ({ hide }) => {
                               ? toggleNavbar
                               : item?.layout === "group"
                               ? toggleServiceNavbar
+                              : item?.layout === "promotion"
+                              ? togglePromotionNavbar
                               : null
                           }
                         >
@@ -240,6 +253,8 @@ const Sidebar = ({ hide }) => {
                               ? !collapsed
                               : item?.layout === "group"
                               ? !collapsedService
+                              : item?.layout === "promotion"
+                              ? !collapsedPromotion
                               : null
                           }
                         >

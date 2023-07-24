@@ -255,8 +255,8 @@ const CreatePromotion = () => {
   const addTime = (index) => {
     const arr = [...timeApply];
     timeApply[index].time_loop.push({
-      start_time_local: "",
-      end_time_local: "",
+      start_time_local: "00:00",
+      end_time_local: "00:30",
     });
     setTimeApply(arr);
   };
@@ -416,9 +416,18 @@ const CreatePromotion = () => {
     <>
       <div className="div-head-add-promotion">
         <a>Tạo mới khuyến mãi</a>
-        <Button type="primary" onClick={onCreatePromotion}>
-          Tạo mới
-        </Button>
+        <div>
+          <Button style={{ width: "auto" }} onClick={() => navigate(-1)}>
+            Huỷ
+          </Button>
+          <Button
+            style={{ width: "auto" }}
+            type="primary"
+            onClick={onCreatePromotion}
+          >
+            Tạo mới
+          </Button>
+        </div>
       </div>
       <div className="div-container-create">
         <div className="div-body">
@@ -718,6 +727,7 @@ const CreatePromotion = () => {
                                               <Select
                                                 options={DATA_TIME_APPLY}
                                                 style={{ width: 100 }}
+                                                value={i?.start_time_local}
                                                 size="small"
                                                 onChange={(e) =>
                                                   changeTimeStartApply(
@@ -731,6 +741,7 @@ const CreatePromotion = () => {
 
                                               <Select
                                                 options={DATA_TIME_APPLY}
+                                                value={i?.end_time_local}
                                                 style={{ width: 100 }}
                                                 size="small"
                                                 onChange={(e) =>

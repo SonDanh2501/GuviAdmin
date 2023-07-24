@@ -1,4 +1,4 @@
-import { Layout } from "antd";
+import { Drawer, Layout } from "antd";
 import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar/Sidebar";
 import HeaderBar from "../container/Header/Header";
@@ -16,14 +16,14 @@ const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { width } = useWindowDimensions;
+  const { width } = useWindowDimensions();
   useEffect(() => {
     dispatch(permissionAction.permissionRequest({ navigate: navigate }));
     dispatch(getProvinceAction.getProvinceRequest());
   }, []);
 
   useEffect(() => {
-    if (window.innerWidth > 468) {
+    if (width > 900) {
       setCollapsed(true);
     } else {
       setCollapsed(false);
@@ -32,22 +32,41 @@ const Dashboard = () => {
 
   return (
     <Layout style={{ width: "100%" }}>
-      <Sider
-        trigger={null}
-        collapsible
-        collapsed={!collapsed}
+      {width > 900 ? (
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={!collapsed}
+          style={{
+            background: "white",
+            overflow: "auto",
+            height: "120vh",
+            position: "fixed",
+            left: 0,
+            top: 0,
+            bottom: 0,
+          }}
+        >
+          <Sidebar hide={collapsed} />
+        </Sider>
+      ) : (
+        <Drawer
+          open={collapsed}
+          width={300}
+          onClose={() => setCollapsed(false)}
+          placement="left"
+          headerStyle={{ height: 30, paddingLeft: 0 }}
+        >
+          <Sidebar hide={true} />
+        </Drawer>
+      )}
+      <Layout
+        className="site-layout"
         style={{
-          background: "white",
-          overflow: "auto",
-          height: "120vh",
-          left: 0,
-          top: 0,
-          bottom: 0,
+          marginLeft: width < 900 ? 10 : collapsed ? 200 : 80,
+          height: "auto",
         }}
       >
-        <Sidebar hide={collapsed} />
-      </Sider>
-      <Layout>
         <Header
           style={{
             padding: 0,
@@ -56,6 +75,9 @@ const Dashboard = () => {
             borderBottomRightRadius: 8,
             marginLeft: 10,
             marginRight: 10,
+            position: "sticky",
+            top: 0,
+            zIndex: 1000,
           }}
         >
           <HeaderBar
@@ -70,6 +92,7 @@ const Dashboard = () => {
             minHeight: 280,
             background: "white",
             borderRadius: 8,
+            overflow: "initial",
           }}
         >
           <Admin />

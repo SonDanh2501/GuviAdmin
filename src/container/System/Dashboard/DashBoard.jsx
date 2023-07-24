@@ -912,13 +912,9 @@ export default function Home() {
                 columns={columns}
                 dataSource={lastestService}
                 pagination={false}
-                scroll={
-                  width <= 900
-                    ? {
-                        x: 1600,
-                      }
-                    : null
-                }
+                scroll={{
+                  x: width <= 900 ? 900 : 0,
+                }}
               />
               <div className="div-entries">
                 <Select

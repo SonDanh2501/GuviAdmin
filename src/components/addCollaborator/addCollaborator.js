@@ -13,6 +13,7 @@ import CustomButton from "../customButton/customButton";
 import InputCustom from "../textInputCustom";
 import "./addCollaborator.scss";
 import i18n from "../../i18n";
+import useWindowDimensions from "../../helper/useWindowDimensions";
 
 const AddCollaborator = (props) => {
   const { setData, setTotal, startPage, status, setIsLoading, valueSearch } =
@@ -24,6 +25,7 @@ const AddCollaborator = (props) => {
   const serviceOption = [];
   const cityOption = [];
   const [open, setOpen] = useState(false);
+  const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
   const showDrawer = () => {
     setOpen(true);
@@ -125,7 +127,7 @@ const AddCollaborator = (props) => {
           return (
             <Drawer
               title={`${i18n.t("create_collaborator", { lng: lang })}`}
-              width={500}
+              width={width < 490 ? 390 : 500}
               onClose={onClose}
               open={open}
               bodyStyle={{
