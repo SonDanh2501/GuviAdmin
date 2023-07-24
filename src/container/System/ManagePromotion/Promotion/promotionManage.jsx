@@ -11,6 +11,7 @@ import {
   Input,
   notification,
   Pagination,
+  Progress,
   Select,
   Space,
   Table,
@@ -353,7 +354,12 @@ const PromotionManage = ({
                     src={data?.thumbnail}
                     className="img-customer-promotion"
                   />
-                  <a className="text-title-promotion">{data?.title?.[lang]}</a>
+                  <div className="div-name-promotion">
+                    <a className="text-title-code">{data?.code}</a>
+                    <a className="text-title-promotion">
+                      {data?.title?.[lang]}
+                    </a>
+                  </div>
                 </div>
               );
             },
@@ -369,22 +375,39 @@ const PromotionManage = ({
             align: "center",
             render: (data) => {
               return (
-                <a
-                  className="text-title-promotion"
-                  onClick={() =>
-                    navigate("/promotion/manage-setting/order-promotion", {
-                      state: { id: data?._id },
-                    })
-                  }
-                >
-                  {data?.is_parrent_promotion
-                    ? data?.total_used_promotion +
-                      "/" +
-                      data?.total_child_promotion
-                    : data?.total_used_promotion}
-                </a>
+                <div>
+                  <a
+                    className="text-title-promotion"
+                    onClick={() =>
+                      navigate("/promotion/manage-setting/order-promotion", {
+                        state: { id: data?._id },
+                      })
+                    }
+                  >
+                    {data?.is_parrent_promotion
+                      ? data?.total_used_promotion +
+                        "/" +
+                        data?.total_child_promotion
+                      : data?.limit_count > 0
+                      ? data?.total_used_promotion + "/" + data?.limit_count
+                      : data?.total_used_promotion}
+                  </a>
+                  {(data?.is_parrent_promotion || data?.limit_count > 0) && (
+                    <Progress
+                      percent={
+                        data?.is_parrent_promotion
+                          ? data?.total_used_promotion /
+                            data?.total_child_promotion
+                          : data?.total_used_promotion / data?.limit_count
+                      }
+                      strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
+                      showInfo={false}
+                    />
+                  )}
+                </div>
               );
             },
+
             // sorter: (a, b) => a.total_used_promotion - b.total_used_promotion,
           },
           {
@@ -420,19 +443,19 @@ const PromotionManage = ({
               <a className="text-title-promotion">{data?.position}</a>
             ),
           },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("code", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            align: "center",
-            render: (data) => (
-              <a className="text-title-promotion">{data?.code}</a>
-            ),
-          },
+          // {
+          //   title: () => {
+          //     return (
+          //       <a className="title-column">{`${i18n.t("code", {
+          //         lng: lang,
+          //       })}`}</a>
+          //     );
+          //   },
+          //   align: "center",
+          //   render: (data) => (
+          //     <a className="text-title-promotion">{data?.code}</a>
+          //   ),
+          // },
 
           {
             title: () => {
@@ -451,11 +474,20 @@ const PromotionManage = ({
                 "DD/MM/YYYY"
               );
               return (
-                <a className="text-title-promotion">
-                  {data?.is_limit_date
-                    ? startDate + "-" + endDate
-                    : `${i18n.t("no_expiry", { lng: lang })}`}
-                </a>
+                <>
+                  {data?.is_limit_date ? (
+                    <div className="div-date-promotion">
+                      <a className="text-title-promotion">{startDate}</a>
+
+                      <a className="text-title-promotion">{endDate}</a>
+                    </div>
+                  ) : (
+                    <a className="text-title-promotion">{`${i18n.t(
+                      "no_expiry",
+                      { lng: lang }
+                    )}`}</a>
+                  )}
+                </>
               );
             },
           },
@@ -611,22 +643,40 @@ const PromotionManage = ({
             align: "center",
             render: (data) => {
               return (
-                <a
-                  onClick={() =>
-                    navigate("/promotion/manage-setting/order-promotion", {
-                      state: { id: data?._id },
-                    })
-                  }
-                >
-                  {data?.is_parrent_promotion
-                    ? data?.total_used_promotion +
-                      "/" +
-                      data?.total_child_promotion
-                    : data?.total_used_promotion}
-                </a>
+                <div>
+                  <a
+                    className="text-title-promotion"
+                    onClick={() =>
+                      navigate("/promotion/manage-setting/order-promotion", {
+                        state: { id: data?._id },
+                      })
+                    }
+                  >
+                    {data?.is_parrent_promotion
+                      ? data?.total_used_promotion +
+                        "/" +
+                        data?.total_child_promotion
+                      : data?.limit_count > 0
+                      ? data?.total_used_promotion + "/" + data?.limit_count
+                      : data?.total_used_promotion}
+                  </a>
+                  {(data?.is_parrent_promotion || data?.limit_count > 0) && (
+                    <Progress
+                      percent={
+                        data?.is_parrent_promotion
+                          ? data?.total_used_promotion /
+                            data?.total_child_promotion
+                          : data?.total_used_promotion / data?.limit_count
+                      }
+                      strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
+                      showInfo={false}
+                    />
+                  )}
+                </div>
               );
             },
-            sorter: (a, b) => a.total_used_promotion - b.total_used_promotion,
+
+            // sorter: (a, b) => a.total_used_promotion - b.total_used_promotion,
           },
           {
             title: () => {
@@ -678,11 +728,20 @@ const PromotionManage = ({
                 "DD/MM/YYYY"
               );
               return (
-                <a className="text-time-promotion">
-                  {data?.is_limit_date
-                    ? startDate + "-" + endDate
-                    : `${i18n.t("no_expiry", { lng: lang })}`}
-                </a>
+                <>
+                  {data?.is_limit_date ? (
+                    <div className="div-date-promotion">
+                      <a className="text-title-promotion">{startDate}</a>
+
+                      <a className="text-title-promotion">{endDate}</a>
+                    </div>
+                  ) : (
+                    <a className="text-title-promotion">{`${i18n.t(
+                      "no_expiry",
+                      { lng: lang }
+                    )}`}</a>
+                  )}
+                </>
               );
             },
           },

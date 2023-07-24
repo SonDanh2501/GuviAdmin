@@ -1,12 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
-import InputCustom from "../../../../../../components/textInputCustom";
-import i18n from "../../../../../../i18n";
-import _debounce from "lodash/debounce";
-import "./styles.scss";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../../redux/selectors/auth";
-import CustomTextEditor from "../../../../../../components/customTextEdittor";
-import UploadImage from "../../../../../../components/uploadImage";
+import {
+  CloseOutlined,
+  PlusCircleFilled,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Checkbox,
@@ -20,40 +16,40 @@ import {
   Select,
   Space,
   Switch,
-  TimePicker,
 } from "antd";
+import locale from "antd/es/date-picker/locale/vi_VN";
+import _debounce from "lodash/debounce";
+import "moment/locale/vi";
+import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { searchCustomersApi } from "../../../../../../api/customer";
+import { DATA_PAYMENT, DATA_TIME_APPLY } from "../../../../../../api/fakeData";
 import {
-  createPromotion,
+  activePromotion,
+  deletePromotion,
   getGroupCustomerApi,
   getPromotionDetails,
   updatePromotion,
 } from "../../../../../../api/promotion";
-import { searchCustomersApi } from "../../../../../../api/customer";
+import backgroundImage from "../../../../../../assets/images/backgroundContent.png";
+import descriptionImage from "../../../../../../assets/images/description.png";
+import shortDescriptionImage from "../../../../../../assets/images/shortDescription.png";
+import thumnailImage from "../../../../../../assets/images/thumnailContent.png";
+import titleImage from "../../../../../../assets/images/title.png";
+import CustomTextEditor from "../../../../../../components/customTextEdittor";
+import LoadingPagination from "../../../../../../components/paginationLoading";
+import InputCustom from "../../../../../../components/textInputCustom";
+import UploadImage from "../../../../../../components/uploadImage";
+import { errorNotify } from "../../../../../../helper/toast";
+import i18n from "../../../../../../i18n";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
 import {
   getProvince,
   getService,
 } from "../../../../../../redux/selectors/service";
-import {
-  CloseCircleOutlined,
-  CloseOutlined,
-  MinusOutlined,
-  PlusCircleFilled,
-  QuestionCircleOutlined,
-} from "@ant-design/icons";
-import "moment/locale/vi";
-import locale from "antd/es/date-picker/locale/vi_VN";
-import shortDescriptionImage from "../../../../../../assets/images/shortDescription.png";
-import titleImage from "../../../../../../assets/images/title.png";
-import descriptionImage from "../../../../../../assets/images/description.png";
-import thumnailImage from "../../../../../../assets/images/thumnailContent.png";
-import backgroundImage from "../../../../../../assets/images/backgroundContent.png";
-import { DATA_PAYMENT, DATA_TIME_APPLY } from "../../../../../../api/fakeData";
-import dayjs from "dayjs";
-import { createPushNotification } from "../../../../../../api/notification";
-import moment from "moment";
-import { errorNotify } from "../../../../../../helper/toast";
-import LoadingPagination from "../../../../../../components/paginationLoading";
-import { useLocation, useNavigate } from "react-router-dom";
+import "./styles.scss";
+import ModalCustom from "../../../../../../components/modalCustom";
 const { Option } = Select;
 
 const EditPromotion = () => {
@@ -121,6 +117,8 @@ const EditPromotion = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [ratioTypeDateApply, setRatioTypeDateApply] = useState(1);
   const [typeDateApply, setTypeDateApply] = useState("date_create");
+  const [isActive, setIsActive] = useState(false);
+  const [modalDelete, setModalDelete] = useState(false);
   const options = [];
   const serviceOption = [];
   const cityOption = [];
@@ -182,6 +180,7 @@ const EditPromotion = () => {
         setPromoCode(res?.code);
         setServiceApply(res?.service_apply[0]);
         setMinimumOrder(res?.price_min_order);
+        setCheckMininum(res?.price_min_order > 0 ? 2 : 1);
         setDateExchange(res?.exp_date_exchange);
         setIsPaymentMethod(res?.is_payment_method);
         setPaymentMethod(res?.payment_method);
@@ -194,6 +193,7 @@ const EditPromotion = () => {
           res?.day_loop?.length > 0 ? res?.day_loop : DATA_APPLY_TIME
         );
         setIsParrentPromotion(res?.is_parrent_promotion);
+        setTotalChildPromotion(res?.total_child_promotion);
         setIsShowInApp(res?.is_show_in_app);
         setIsApplyArea(res?.is_apply_area);
         setCity(res?.city);
@@ -201,6 +201,7 @@ const EditPromotion = () => {
         setIsCheckVoucher(res?.type_promotion === "code" ? true : false);
         setIsCheckProgram(res?.type_promotion === "event" ? true : false);
         setTypeDateApply(res?.type_date_apply);
+        setIsActive(res?.is_active);
         setRatioTypeDateApply(
           res?.type_date_apply === "date_create"
             ? 2
@@ -210,7 +211,7 @@ const EditPromotion = () => {
         );
       })
       .catch((err) => console.log(err));
-  }, [id]);
+  }, []);
 
   dataGroupCustomer.map((item) => {
     options.push({
@@ -341,7 +342,51 @@ const EditPromotion = () => {
     setTimeApply(arr);
   };
 
-  const onCreatePromotion = useCallback(() => {
+  const onActive = useCallback((id, is_active) => {
+    setIsLoading(true);
+    if (is_active) {
+      activePromotion(id, { is_active: false })
+        .then((res) => {
+          setIsLoading(false);
+          setIsActive(false);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          setIsLoading(false);
+        });
+    } else {
+      activePromotion(id, { is_active: true })
+        .then((res) => {
+          setIsLoading(false);
+          setIsActive(true);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          setIsLoading(false);
+        });
+    }
+  }, []);
+
+  const onDelete = useCallback((id) => {
+    setIsLoading(true);
+    deletePromotion(id)
+      .then((res) => {
+        navigate(-1);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        setIsLoading(false);
+      });
+  }, []);
+
+  const onEditPromotion = useCallback(() => {
     setIsLoading(true);
     updatePromotion(id, {
       title: {
@@ -456,9 +501,24 @@ const EditPromotion = () => {
     <>
       <div className="div-head-add-promotion">
         <a>Chỉnh sửa khuyến mãi</a>
-        <Button type="primary" onClick={onCreatePromotion}>
-          Chỉnh sửa
-        </Button>
+        <div>
+          <Button
+            className={isActive ? "btn-stop-activation" : "btn-activation"}
+            onClick={() => onActive(id, isActive)}
+            style={{ width: "auto" }}
+          >
+            {isActive ? "Dừng kích hoạt" : "Kích hoạt"}
+          </Button>
+          {!isActive && (
+            <Button
+              type="primary"
+              onClick={onEditPromotion}
+              style={{ width: "auto" }}
+            >
+              Chỉnh sửa
+            </Button>
+          )}
+        </div>
       </div>
       <div className="div-container-create">
         <div className="div-body">
@@ -614,6 +674,7 @@ const EditPromotion = () => {
                   allowClear={true}
                   placeholder="Chọn dịch vụ áp dụng"
                   style={{ marginTop: 10 }}
+                  value={serviceApply}
                 />
               </div>
             )}
@@ -633,7 +694,7 @@ const EditPromotion = () => {
               <div className="div-input">
                 <a className="title-input">Thời gian hiệu lực</a>
                 <Radio.Group
-                  defaultValue={isApllyTime}
+                  value={isApllyTime}
                   style={{ marginTop: 10 }}
                   onChange={(e) => {
                     setIsApllyTime(e.target.value);
@@ -942,7 +1003,7 @@ const EditPromotion = () => {
                   </a>
                   <Radio.Group
                     style={{ marginTop: 10 }}
-                    defaultValue={checkMininum}
+                    value={checkMininum}
                     onChange={(e) => {
                       setCheckMininum(e.target.value);
                       if (e.target.value === 1) {
@@ -980,7 +1041,7 @@ const EditPromotion = () => {
                   {`${i18n.t("Đối tượng khách hàng", { lng: lang })}`}
                 </a>
                 <Radio.Group
-                  defaultValue={isObjectCustomer}
+                  value={isObjectCustomer}
                   onChange={(e) => {
                     setIsObjectCustomer(e.target.value);
                     if (e.target.value === 2) {
@@ -1076,7 +1137,7 @@ const EditPromotion = () => {
                 </a>
                 <Radio.Group
                   style={{ marginTop: 10 }}
-                  defaultValue={ratioApplyArea}
+                  value={ratioApplyArea}
                   onChange={(e) => {
                     setRatioApplyArea(e.target.value);
                     if (e.target.value === 1) {
@@ -1145,7 +1206,7 @@ const EditPromotion = () => {
                 <div className="div-input">
                   <a className="title-input">Điểm G-point quy đổi</a>
                   <Radio.Group
-                    defaultValue={radioExchangePoint}
+                    value={radioExchangePoint}
                     style={{ marginTop: 10 }}
                     onChange={(e) => {
                       setRadioExchangePoint(e.target.value);
@@ -1214,7 +1275,7 @@ const EditPromotion = () => {
               {isSendNotification && (
                 <div className="div-body-push">
                   <Radio.Group
-                    defaultValue={isApplyPushNoti}
+                    value={isApplyPushNoti}
                     style={{ marginTop: 10 }}
                     onChange={(e) => {
                       setIsApplyPushNoti(e.target.value);
@@ -1272,7 +1333,7 @@ const EditPromotion = () => {
                     setIsPaymentMethod(true);
                   }
                 }}
-                defaultValue={radioPaymentMethod}
+                value={radioPaymentMethod}
               >
                 <Space direction="vertical">
                   <Radio value={1}>Tất cả loại thanh toán</Radio>
@@ -1296,6 +1357,29 @@ const EditPromotion = () => {
           </div>
         </div>
       </div>
+      <Button
+        type="primary"
+        danger
+        style={{ width: "auto", marginBottom: 50, marginTop: 20 }}
+        onClick={() => setModalDelete(true)}
+      >
+        Xoá khuyến mãi
+      </Button>
+
+      <ModalCustom
+        title="Xoá khuyến mãi"
+        isOpen={modalDelete}
+        handleOk={() => onDelete(id)}
+        textOk={"Xoá"}
+        handleCancel={() => setModalDelete(false)}
+        body={
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <a>Bạn có chắc muốn xoá mã khuyến mãi này?</a>
+            <a style={{ color: "red" }}>{titleVN}</a>
+          </div>
+        }
+      />
+
       <FloatButton.BackTop />
       {isLoading && <LoadingPagination />}
     </>
