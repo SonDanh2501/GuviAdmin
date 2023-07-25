@@ -89,6 +89,12 @@ export const getListTrainningLessonApi = (start, length, type) => {
   );
 };
 
+export const getDetailsTrainningLessonApi = (id) => {
+  return axiosClient.get(
+    `/admin/training_lesson_manager/get_detail_trainging_lesson/${id}`
+  );
+};
+
 export const createLessonApi = (data) => {
   return axiosClient.post(
     `/admin/training_lesson_manager/create_trainging_lesson`,

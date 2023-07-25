@@ -277,6 +277,10 @@ export const DATA_KIND = [
     value: "last_order_date_create_success",
     label: "Đơn tạo gần nhất",
   },
+  {
+    value: "area",
+    label: "Khu vực",
+  },
 ];
 
 export const DATA_OPERTATOR = [

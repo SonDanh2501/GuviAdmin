@@ -17,7 +17,7 @@ import CustomDatePicker from "../../../../../components/customDatePicker";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
-const width = window.innerWidth;
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const ReportCustomer = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,6 +39,7 @@ const ReportCustomer = () => {
     moment().subtract(30, "d").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
+  const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
@@ -679,13 +680,9 @@ const ReportCustomer = () => {
                 },
               };
             }}
-            scroll={
-              width <= 490
-                ? {
-                    x: 1600,
-                  }
-                : null
-            }
+            scroll={{
+              x: width <= 490 ? 1200 : 0,
+            }}
           />
         </div>
         <div className="mt-2 div-pagination p-2">

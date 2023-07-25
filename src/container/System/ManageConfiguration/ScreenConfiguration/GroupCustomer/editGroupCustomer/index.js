@@ -21,6 +21,7 @@ import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../i18n";
 import InputCustom from "../../../../../../components/textInputCustom";
+import { getProvince } from "../../../../../../redux/selectors/service";
 const { TextArea } = Input;
 
 const EditGroupCustomer = () => {
@@ -53,8 +54,16 @@ const EditGroupCustomer = () => {
       ],
     },
   ]);
-
+  const cityOptions = [];
   const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
+
+  province?.map((item) => {
+    cityOptions?.push({
+      value: item?.code,
+      label: item?.name,
+    });
+  });
 
   useEffect(() => {
     setIsLoading(true);
@@ -371,6 +380,18 @@ const EditGroupCustomer = () => {
                                         condition?.condition[idx].kind ===
                                         "gender"
                                           ? DATA_OPERTATOR_GENDER
+                                          : condition?.condition[idx].kind ===
+                                            "area"
+                                          ? [
+                                              {
+                                                value: "==",
+                                                label: "Bằng",
+                                              },
+                                              {
+                                                value: "!=",
+                                                label: "Khác",
+                                              },
+                                            ]
                                           : DATA_OPERTATOR
                                       }
                                     />
@@ -420,6 +441,16 @@ const EditGroupCustomer = () => {
                                             idx,
                                             ix
                                           )
+                                        }
+                                      />
+                                    ) : condition?.condition[idx].kind ===
+                                      "area" ? (
+                                      <Select
+                                        className="select-kind"
+                                        options={cityOptions}
+                                        value={Number(it?.value)}
+                                        onChange={(value) =>
+                                          onChangeValueIn(value, idx, ix)
                                         }
                                       />
                                     ) : (
@@ -586,6 +617,18 @@ const EditGroupCustomer = () => {
                                         condition?.condition[idx].kind ===
                                         "gender"
                                           ? DATA_OPERTATOR_GENDER
+                                          : condition?.condition[idx].kind ===
+                                            "area"
+                                          ? [
+                                              {
+                                                value: "==",
+                                                label: "Bằng",
+                                              },
+                                              {
+                                                value: "!=",
+                                                label: "Khác",
+                                              },
+                                            ]
                                           : DATA_OPERTATOR
                                       }
                                     />
@@ -635,6 +678,16 @@ const EditGroupCustomer = () => {
                                             idx,
                                             ix
                                           )
+                                        }
+                                      />
+                                    ) : condition?.condition[idx].kind ===
+                                      "area" ? (
+                                      <Select
+                                        className="select-kind"
+                                        options={cityOptions}
+                                        value={Number(it?.value)}
+                                        onChange={(value) =>
+                                          onChangeValueIn(value, idx, ix)
                                         }
                                       />
                                     ) : (

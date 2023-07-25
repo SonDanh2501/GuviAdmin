@@ -28,6 +28,7 @@ import { loadingAction } from "../../../../../redux/actions/loading";
 import "./index.scss";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const BussinessType = (props) => {
   const {
@@ -70,6 +71,7 @@ const BussinessType = (props) => {
   const [errorCollaborator, setErrorCollaborator] = useState("");
   const [dataAddress, setDataAddress] = useState([]);
   const [estimate, setEstimate] = useState();
+  const { width } = useWindowDimensions();
   const [dayLoop, setDayLoop] = useState([]);
   const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
@@ -512,7 +514,7 @@ const BussinessType = (props) => {
           <InputCustom
             title={`${i18n.t("address", { lng: lang })}`}
             placeholder={`${i18n.t("enter_address", { lng: lang })}`}
-            style={{ width: "50%" }}
+            style={{ width: width > 490 ? "50%" : "100%" }}
             value={address}
             type="text"
             onChange={(e) => {
@@ -523,21 +525,22 @@ const BussinessType = (props) => {
         </div>
 
         {places.length > 0 && (
-          <List type={"unstyled"} className="list-item-place">
+          <div className="list-item-place">
             {places?.map((item, index) => {
               return (
-                <option
+                <a
                   key={index}
+                  className="text-option-place"
                   onClick={(e) => {
                     setAddress(item?.description);
                     findPlace(item?.place_id);
                   }}
                 >
                   {item?.description}
-                </option>
+                </a>
               );
             })}
-          </List>
+          </div>
         )}
 
         {dataAddress.length > 0 && (
@@ -752,6 +755,7 @@ const BussinessType = (props) => {
                   //       : false
                   //     : false
                   // }
+                  style={{ width: "auto" }}
                 >
                   {item.title}
                 </Button>
@@ -813,14 +817,14 @@ const BussinessType = (props) => {
           textArea={true}
           placeholder={`${i18n.t("enter_note", { lng: lang })}`}
           onChange={(e) => setNote(e.target.value)}
-          style={{ width: "50%" }}
+          style={{ width: width < 490 ? "100%" : "50%" }}
         />
 
         <div>
           <div>
             <InputCustom
               title={`${i18n.t("collaborator", { lng: lang })}`}
-              style={{ width: "50%" }}
+              style={{ width: width < 490 ? "100%" : "50%" }}
               error={errorCollaborator}
               onChange={(e) => {
                 searchCollaborator(e.target.value);

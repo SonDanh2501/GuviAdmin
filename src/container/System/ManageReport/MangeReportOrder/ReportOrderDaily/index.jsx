@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
-const width = window.innerWidth;
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const ReportOrderDaily = () => {
   const [data, setData] = useState([]);
@@ -35,6 +35,7 @@ const ReportOrderDaily = () => {
     moment().subtract(30, "d").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
+  const { width } = useWindowDimensions();
   const navigate = useNavigate();
   const lang = useSelector(getLanguageState);
 
@@ -536,8 +537,8 @@ const ReportOrderDaily = () => {
             data={dataChart}
             margin={{
               top: 5,
-              right: 30,
-              left: 20,
+              right: 0,
+              left: 0,
               bottom: 5,
             }}
           >
@@ -569,13 +570,9 @@ const ReportOrderDaily = () => {
           dataSource={data.reverse()}
           columns={columns}
           pagination={false}
-          scroll={
-            width <= 490
-              ? {
-                  x: 1600,
-                }
-              : null
-          }
+          scroll={{
+            x: width <= 490 ? 1600 : 0,
+          }}
         />
       </div>
 

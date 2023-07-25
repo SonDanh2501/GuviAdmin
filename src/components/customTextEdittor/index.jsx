@@ -2,7 +2,7 @@ import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./style.scss";
 
-const CustomTextEditor = ({ value, onChangeValue, style }) => {
+const CustomTextEditor = ({ value, onChangeValue, style, ref }) => {
   var Size = Quill.import("formats/size");
   Size.whitelist = [
     "9px",
@@ -54,6 +54,7 @@ const CustomTextEditor = ({ value, onChangeValue, style }) => {
       ["clean"],
     ],
   };
+
   return (
     <ReactQuill
       theme="snow"
@@ -61,6 +62,7 @@ const CustomTextEditor = ({ value, onChangeValue, style }) => {
       onChange={onChangeValue}
       modules={modules}
       style={style}
+      ref={ref}
     />
   );
 };

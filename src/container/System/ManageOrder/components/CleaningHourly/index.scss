@@ -286,9 +286,8 @@
 .div-search-address {
   display: flex;
   flex-direction: column;
-  .input-search {
+  .input-search-address {
     width: 50%;
-    height: 40px;
   }
   .label-customer {
     font-size: 18px;
@@ -311,6 +310,14 @@
 
   .item-option-place {
     border-bottom: 1px silid #000000;
+    font-size: 14px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    color: black;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 5px 0px;
+    width: 100%;
   }
 }
 
@@ -566,6 +573,28 @@
   }
 }
 
+.input-form-note {
+  width: 50%;
+}
+.div-money {
+  display: flex;
+  flex-direction: column;
+  .label-tip {
+    font-size: 12px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    color: #000000;
+  }
+
+  .input-note {
+    width: 50%;
+  }
+}
+.input-search-collaborator {
+  width: 50%;
+}
+
 @media screen and (max-width: 490px) {
   .form-picker {
     display: flex;
@@ -616,5 +645,176 @@
     border: 1px solid rgb(227, 227, 227);
     padding-left: 20px;
     width: 100% !important;
+  }
+
+  .div-search-address {
+    display: flex;
+    flex-direction: column;
+    .input-search-address {
+      width: 100%;
+    }
+    .label-customer {
+      font-size: 18px;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      color: black;
+      margin-bottom: 10px;
+    }
+  }
+
+  .input-form-note {
+    width: 100%;
+  }
+
+  .div-money {
+    display: flex;
+    flex-direction: column;
+    .label-tip {
+      font-size: 12px;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      color: #000000;
+    }
+
+    .input-note {
+      width: 100%;
+    }
+  }
+  .input-search-collaborator {
+    width: 100%;
+  }
+  .list-item-add-ctv-order {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 255, 255);
+    position: absolute;
+    width: 80%;
+    border: 1px solid rgb(175, 175, 175);
+    border-radius: 5px;
+    z-index: 1000;
+
+    .div-item-add-order {
+      display: flex;
+      flex-direction: row !important;
+      align-items: center;
+      margin-top: 5px;
+      border: none;
+      background-color: rgb(255, 255, 255);
+      width: 95%;
+      height: 35px;
+
+      .div-name {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .img-collaborator {
+          width: 30px;
+          height: 30px;
+          border-radius: 4px;
+          margin-right: 10px;
+        }
+
+        .text-name {
+          font-size: 14px;
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          color: black;
+        }
+      }
+    }
+
+    .div-item-add-order-block {
+      display: flex;
+      flex-direction: row !important;
+      align-items: center;
+      background-color: #d6d6d6;
+      border-radius: 4px;
+      border: none;
+      width: 95%;
+      margin-top: 10px;
+
+      .div-name {
+        display: flex;
+        flex-direction: row;
+        .img-collaborator {
+          width: 30px;
+          height: 30px;
+          border-radius: 4px;
+          margin-right: 10px;
+        }
+
+        .text-name {
+          font-size: 14px;
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          color: black;
+        }
+      }
+    }
+
+    .div-item-add-order-favorite {
+      display: flex;
+      flex-direction: row !important;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #ffffff;
+      border-radius: 4px;
+      border-bottom: 1px solid red;
+      border-top: 1px solid red;
+      border-left: none;
+      border-right: none;
+      width: 95%;
+      margin-top: 10px;
+      padding: 5px;
+
+      .div-name {
+        display: flex;
+        flex-direction: row;
+        .img-collaborator {
+          width: 30px;
+          height: 30px;
+          border-radius: 4px;
+          margin-right: 10px;
+        }
+
+        .text-name {
+          font-size: 14px;
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          color: black;
+        }
+      }
+
+      .icon-heart {
+        color: red;
+        margin-left: 50px;
+      }
+    }
+  }
+  .list-item-place {
+    background-color: rgb(255, 255, 255);
+    padding: 5px;
+    position: absolute;
+    width: 100%;
+    border: 1px solid rgb(175, 175, 175);
+    border-radius: 5px;
+    z-index: 1000;
+
+    .item-option-place {
+      border-bottom: 1px silid #000000;
+      font-size: 14px;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      color: black;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 5px 0px;
+      width: 100%;
+    }
   }
 }
