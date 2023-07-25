@@ -176,10 +176,6 @@ const CleaningSchedule = (props) => {
   });
   var accessToken = AES.encrypt(temp, "guvico");
 
-  const valueAddress = (value) => {
-    setAddress(value);
-  };
-
   const handleSearchLocation = useCallback(
     _debounce((value) => {
       setAddress(value);
@@ -570,32 +566,33 @@ const CleaningSchedule = (props) => {
           <InputCustom
             title={`${i18n.t("address", { lng: lang })}`}
             placeholder={`${i18n.t("enter_address", { lng: lang })}`}
-            style={{ width: "50%" }}
+            className="input-search-address"
             value={address}
             type="text"
             onChange={(e) => {
-              valueAddress(e.target.value);
+              setAddress(e.target.value);
               handleSearchLocation(e.target.value);
             }}
           />
         </div>
 
         {places.length > 0 && (
-          <List type={"unstyled"} className="list-item-place">
+          <div className="list-item-place">
             {places?.map((item, index) => {
               return (
-                <option
+                <a
                   key={index}
+                  className="text-option-place"
                   onClick={(e) => {
                     setAddress(item?.description);
                     findPlace(item?.place_id);
                   }}
                 >
                   {item?.description}
-                </option>
+                </a>
               );
             })}
-          </List>
+          </div>
         )}
 
         {dataAddress.length > 0 && (
@@ -712,12 +709,13 @@ const CleaningSchedule = (props) => {
 
         <div className="form-picker-hours">
           <a className="label-hours">
-            {`${i18n.t("date_work", { lng: lang })}`} (*)
+            {`${i18n.t("time_work", { lng: lang })}`} (*)
           </a>
           <div className="div-hours">
             {DATA_TIME.map((item) => {
               return (
                 <Button
+                  style={{ width: "auto" }}
                   className={
                     timeWork === item.time
                       ? "select-time"
@@ -760,6 +758,7 @@ const CleaningSchedule = (props) => {
 
         <Button
           className="btn-see-time-work"
+          style={{ width: "auto" }}
           onClick={showDrawer}
           disabled={lat && long && address && timeWork && time ? false : true}
         >
@@ -771,7 +770,7 @@ const CleaningSchedule = (props) => {
           textArea={true}
           placeholder={`${i18n.t("enter_note", { lng: lang })}`}
           onChange={(e) => setNote(e.target.value)}
-          style={{ width: "50%" }}
+          className="input-note"
         />
 
         <div>

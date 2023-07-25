@@ -38,13 +38,13 @@ const Dashboard = () => {
           collapsible
           collapsed={!collapsed}
           style={{
-            background: "white",
             overflow: "auto",
-            height: "120vh",
+            height: "100vh",
             position: "fixed",
             left: 0,
             top: 0,
             bottom: 0,
+            backgroundColor: "white",
           }}
         >
           <Sidebar hide={collapsed} />

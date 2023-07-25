@@ -390,7 +390,7 @@ const Information = ({ data, image, idCTV, setData }) => {
           <Row className="mt-2">
             <Col lg="6">
               <InputCustom
-                title={`${i18n.t("province_city", { lng: lang })}`}
+                title={`${i18n.t("Tỉnh/Thành phố làm việc", { lng: lang })}`}
                 value={codeCity}
                 select={true}
                 options={cityOption}
@@ -400,7 +400,7 @@ const Information = ({ data, image, idCTV, setData }) => {
             </Col>
             <Col lg="6">
               <InputCustom
-                title={`${i18n.t("county_district", { lng: lang })}`}
+                title={`${i18n.t("Quận/huyện làm việc", { lng: lang })}`}
                 value={codeDistrict}
                 options={districtsOption}
                 style={{ width: "100%" }}

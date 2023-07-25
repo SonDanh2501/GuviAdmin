@@ -267,9 +267,8 @@
 .div-search-address {
   display: flex;
   flex-direction: column;
-  .input-search {
+  .input-search-address {
     width: 50%;
-    height: 40px;
   }
   .label-customer {
     font-size: 18px;
@@ -283,12 +282,23 @@
 }
 
 .list-item-place {
-  background-color: rgb(255, 255, 255);
+  background-color: white;
   padding: 5px;
   position: absolute;
   width: 40%;
   border: 1px solid rgb(175, 175, 175);
   border-radius: 5px;
+
+  .text-option-place {
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    color: black;
+    border-bottom: 1px solid #e0e0e0;
+  }
 }
 
 .div-auto-order {
@@ -313,11 +323,10 @@
 .div-select-date {
   width: 100%;
   .label-date {
-    font-size: 18px;
+    font-size: 12px;
     font-family: "Roboto";
     font-style: normal;
     font-weight: 400;
-    line-height: 16px;
     color: black;
   }
 
@@ -328,7 +337,7 @@
 
     .div-item-date {
       display: flex;
-      width: 50px;
+      width: auto;
       height: 45px;
       border-radius: 4px;
       background-color: aqua;
@@ -339,7 +348,7 @@
 
     .div-item-date-default {
       display: flex;
-      width: 50px;
+      width: auto;
       height: 45px;
       border-radius: 4px;
       align-items: center;
@@ -759,6 +768,9 @@
     }
   }
 }
+.input-note {
+  width: 50%;
+}
 
 @media screen and (max-width: 490px) {
   .btn-add-order {
@@ -1029,28 +1041,37 @@
   .div-search-address {
     display: flex;
     flex-direction: column;
-    .input-search {
-      width: 50%;
-      height: 40px;
+    .input-search-address {
+      width: 100%;
     }
     .label-customer {
       font-size: 18px;
       font-family: "Roboto";
       font-style: normal;
       font-weight: 400;
-      line-height: 16px;
       color: black;
       margin-bottom: 10px;
     }
   }
 
   .list-item-place {
-    background-color: rgb(255, 255, 255);
+    background-color: white;
     padding: 5px;
     position: absolute;
-    width: 40%;
+    width: 80%;
     border: 1px solid rgb(175, 175, 175);
     border-radius: 5px;
+
+    .text-option-place {
+      display: block;
+      width: 100%;
+      font-size: 14px;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      color: black;
+      border-bottom: 1px solid #e0e0e0;
+    }
   }
 
   .div-auto-order {
@@ -1075,11 +1096,10 @@
   .div-select-date {
     width: 100%;
     .label-date {
-      font-size: 18px;
+      font-size: 12px;
       font-family: "Roboto";
       font-style: normal;
       font-weight: 400;
-      line-height: 16px;
       color: black;
     }
 
@@ -1090,24 +1110,26 @@
 
       .div-item-date {
         display: flex;
-        width: 100px !important;
-        height: 30px;
+        width: auto !important;
+        height: auto;
         border-radius: 4px;
         background-color: aqua;
         align-items: center;
         justify-content: center;
         margin-right: 10px;
+        padding: 5px;
       }
 
       .div-item-date-default {
         display: flex;
-        width: 200px !important;
-        height: 30px;
+        width: auto !important;
+        height: auto;
         border-radius: 4px;
         align-items: center;
         justify-content: center;
         margin-right: 10px;
         border: 1px solid #d6d6d6;
+        padding: 5px;
       }
     }
   }
@@ -1482,5 +1504,9 @@
         margin-top: 5px;
       }
     }
+  }
+
+  .input-note {
+    width: 100%;
   }
 }

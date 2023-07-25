@@ -13,6 +13,7 @@ import "./index.scss";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const TotalCancelUserSystem = (props) => {
   const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;
@@ -26,6 +27,7 @@ const TotalCancelUserSystem = (props) => {
   const [codeCity, setCodeCity] = useState(0);
   const [dataCity, setDataCity] = useState([]);
   const [codeDistrict, setCodeDistrict] = useState(-1);
+  const { width } = useWindowDimensions();
   const [dataPie, setDataPie] = useState([]);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
@@ -296,7 +298,12 @@ const TotalCancelUserSystem = (props) => {
       </div>
 
       <div className="mt-5">
-        <Table dataSource={data} columns={columns} pagination={false} />
+        <Table
+          dataSource={data}
+          columns={columns}
+          pagination={false}
+          scroll={{ x: width <= 490 ? 1200 : 0 }}
+        />
       </div>
       <div className="mt-1 div-pagination p-2">
         <a>

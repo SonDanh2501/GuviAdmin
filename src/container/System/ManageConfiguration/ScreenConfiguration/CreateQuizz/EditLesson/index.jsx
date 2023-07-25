@@ -6,6 +6,7 @@ import InputCustom from "../../../../../../components/textInputCustom";
 import {
   createLessonApi,
   editLessonApi,
+  getDetailsTrainningLessonApi,
   getListTrainningLessonApi,
 } from "../../../../../../api/configuration";
 import { errorNotify } from "../../../../../../helper/toast";
@@ -33,19 +34,23 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
   };
 
   useEffect(() => {
-    setLesson(data?.lesson);
-    setTitleVN(data?.title?.vi);
-    setTitleEN(data?.title?.en);
-    setDescriptionVN(data?.description?.vi);
-    setDescriptionEN(data?.description?.en);
-    setLink(data?.link_video);
-    setType(data?.type_training_lesson);
-    setIsShowApp(data?.is_show_in_app);
-    setTimeSubmit(data?.times_submit);
-    setTheory(data?.theory);
-    setTotalCorrect(data?.total_correct_exam_pass);
-    setTotalExam(data?.total_exam);
-  }, [data]);
+    getDetailsTrainningLessonApi(data?._id)
+      .then((res) => {
+        setLesson(res?.lesson);
+        setTitleVN(res?.title?.vi);
+        setTitleEN(res?.title?.en);
+        setDescriptionVN(res?.description?.vi);
+        setDescriptionEN(res?.description?.en);
+        setLink(res?.link_video);
+        setType(res?.type_training_lesson);
+        setIsShowApp(res?.is_show_in_app);
+        setTimeSubmit(res?.times_submit);
+        setTheory(res?.theory);
+        setTotalCorrect(res?.total_correct_exam_pass);
+        setTotalExam(res?.total_exam);
+      })
+      .catch((err) => {});
+  }, []);
 
   const editLesson = useCallback(() => {
     setIsLoading(true);
@@ -177,7 +182,11 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
         />
         <div className="mt-2">
           <a>Lý thuyết</a>
-          <CustomTextEditor value={theory} onChangeValue={setTheory} />
+          <CustomTextEditor
+            // defaultValue={theory}
+            value={theory}
+            onChangeValue={setTheory}
+          />
         </div>
         <Checkbox
           checked={isShowApp}

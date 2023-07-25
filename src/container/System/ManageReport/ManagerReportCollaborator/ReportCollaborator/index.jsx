@@ -29,7 +29,7 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
-const width = window.innerWidth;
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const ReportCollaborator = () => {
   const [dataFilter, setDataFilter] = useState([]);
@@ -43,6 +43,7 @@ const ReportCollaborator = () => {
   const [startDate, setStartDate] = useState(
     moment().subtract(30, "d").startOf("date").toISOString()
   );
+  const { width } = useWindowDimensions();
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -599,13 +600,9 @@ const ReportCollaborator = () => {
           // locale={{
           //   emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
           // }}
-          scroll={
-            width <= 490
-              ? {
-                  x: 1600,
-                }
-              : null
-          }
+          scroll={{
+            x: width <= 490 ? 1600 : 0,
+          }}
         />
       </div>
       <div className="mt-2 div-pagination p-2">

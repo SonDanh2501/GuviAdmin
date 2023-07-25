@@ -3,6 +3,7 @@ import { getListTestByCollabotatorApi } from "../../../../../../../api/configura
 import {
   getInfoTestTrainingLessonByCollaboratorApi,
   getListTrainingLessonByCollaboratorApi,
+  passInfoTestApi,
 } from "../../../../../../../api/collaborator";
 import "./styles.scss";
 import { useSelector } from "react-redux";
@@ -13,6 +14,8 @@ import i18n from "../../../../../../../i18n";
 import { Pagination } from "antd";
 import moment from "moment";
 import ModalCustom from "../../../../../../../components/modalCustom";
+import { errorNotify } from "../../../../../../../helper/toast";
+import LoadingPagination from "../../../../../../../components/paginationLoading";
 
 const TestExam = (props) => {
   const { id } = props;
@@ -21,6 +24,7 @@ const TestExam = (props) => {
   const [title, setTitle] = useState("");
   const [modalInfo, setModalInfo] = useState(false);
   const [tab, setTab] = useState("all");
+  const [isLoading, setIsLoading] = useState(false);
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
@@ -48,6 +52,31 @@ const TestExam = (props) => {
         setDataLesson(res?.data);
       })
       .catch((err) => {});
+  };
+
+  const onPassLesson = (idLesson, type) => {
+    setIsLoading(true);
+    passInfoTestApi({
+      id_collaborator: id,
+      answers: [],
+      id_training_lesson: idLesson,
+      type_exam: type,
+    })
+      .then((res) => {
+        setIsLoading(false);
+        getListTrainingLessonByCollaboratorApi(id, 0, 20, tab)
+          .then((res) => {
+            setDataLesson(res?.data);
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {
+        setIsLoading(false);
+
+        errorNotify({
+          message: err,
+        });
+      });
   };
 
   return (
@@ -231,6 +260,16 @@ const TestExam = (props) => {
                   Xem câu trả lời <i class="uil uil-angle-right"></i>
                 </a>
               )}
+              {!item?.is_pass && (
+                <a
+                  className="see-answer"
+                  onClick={() =>
+                    onPassLesson(item?._id, item?.type_training_lesson)
+                  }
+                >
+                  Pass
+                </a>
+              )}
             </div>
           );
         })}
@@ -331,6 +370,7 @@ const TestExam = (props) => {
           />
         </div>
       </div>
+      {isLoading && <LoadingPagination />}
     </>
   );
 };

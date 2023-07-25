@@ -515,7 +515,7 @@ const CleaningHourly = (props) => {
           <InputCustom
             title={`${i18n.t("address", { lng: lang })}`}
             placeholder={`${i18n.t("enter_address", { lng: lang })}`}
-            style={{ width: "50%" }}
+            className="input-search-address"
             value={address}
             type="text"
             onChange={(e) => {
@@ -526,10 +526,10 @@ const CleaningHourly = (props) => {
         </div>
 
         {places.length > 0 && (
-          <List type={"unstyled"} className="list-item-place">
+          <div className="list-item-place">
             {places?.map((item, index) => {
               return (
-                <option
+                <a
                   key={index}
                   onClick={(e) => {
                     setAddress(item?.description);
@@ -538,10 +538,10 @@ const CleaningHourly = (props) => {
                   className="item-option-place"
                 >
                   {item?.description}
-                </option>
+                </a>
               );
             })}
-          </List>
+          </div>
         )}
 
         {dataAddress.length > 0 && (
@@ -705,6 +705,7 @@ const CleaningHourly = (props) => {
             {DATA_TIME_TOTAL.map((item) => {
               return (
                 <Button
+                  style={{ width: "auto" }}
                   className={
                     timeWork === item.time
                       ? "select-time"
@@ -776,19 +777,21 @@ const CleaningHourly = (props) => {
           title={`${i18n.t("note", { lng: lang })}`}
           placeholder={`${i18n.t("enter_note", { lng: lang })}`}
           onChange={(e) => setNote(e.target.value)}
-          style={{ width: "50%" }}
+          className="input-form-note"
         />
 
         <div className="div-money">
-          <a>(*) {`${i18n.t("tip_collaborator", { lng: lang })}`}</a>
+          <a className="label-tip">
+            (*) {`${i18n.t("tip_collaborator", { lng: lang })}`}
+          </a>
           <InputNumber
             formatter={(value) =>
               `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
             }
             value={tipCollaborator}
-            onChange={(e) => onChangeMoney(e)}
-            style={{ width: "50%" }}
-            min={1000}
+            onChange={(e) => setTipCollaborator(e)}
+            className="input-note"
+            min={0}
             max={50000}
           />
         </div>
@@ -797,7 +800,7 @@ const CleaningHourly = (props) => {
           <div>
             <InputCustom
               title={`${i18n.t("collaborator", { lng: lang })}`}
-              style={{ width: "50%" }}
+              className="input-search-collaborator"
               error={errorCollaborator}
               onChange={(e) => {
                 searchCollaborator(e.target.value);

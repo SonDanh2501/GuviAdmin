@@ -578,11 +578,14 @@ const PromotionManage = ({
                       lng: lang,
                     })}`}</a>
                   ) : data?.status === "out_of_date" ? (
-                    <a className="text-cancel">{`${i18n.t("out_date", {
-                      lng: lang,
-                    })}`}</a>
+                    <a className="text-cancel-promotion">{`${i18n.t(
+                      "out_date",
+                      {
+                        lng: lang,
+                      }
+                    )}`}</a>
                   ) : (
-                    <a className="text-cancel">{`${i18n.t("closed", {
+                    <a className="text-cancel-promotion">{`${i18n.t("closed", {
                       lng: lang,
                     })}`}</a>
                   )}
