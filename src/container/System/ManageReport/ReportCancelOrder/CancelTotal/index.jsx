@@ -13,6 +13,7 @@ import CustomDatePicker from "../../../../../components/customDatePicker";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const TotalCancel = (props) => {
   const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;
@@ -31,6 +32,7 @@ const TotalCancel = (props) => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const lang = useSelector(getLanguageState);
+  const { width } = useWindowDimensions();
   const cityData = [];
   useEffect(() => {
     getDistrictApi()
@@ -311,7 +313,12 @@ const TotalCancel = (props) => {
       </div>
 
       <div className="mt-5">
-        <Table dataSource={data} columns={columns} pagination={false} />
+        <Table
+          dataSource={data}
+          columns={columns}
+          pagination={false}
+          scroll={{ x: width <= 490 ? 1200 : 0 }}
+        />
       </div>
       <div className="mt-1 div-pagination p-2">
         <a>Tổng: {total}</a>

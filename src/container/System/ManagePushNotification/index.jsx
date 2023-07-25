@@ -25,7 +25,7 @@ import AddPushNotification from "./AddPushNotification";
 import EditPushNotification from "./EditPushNotification";
 import "./index.scss";
 import i18n from "../../../i18n";
-const width = window.innerWidth;
+import useWindowDimensions from "../../../helper/useWindowDimensions";
 
 const ManagePushNotification = () => {
   const listNotification = useSelector(getListNotifications);
@@ -37,6 +37,7 @@ const ManagePushNotification = () => {
   const [modal, setModal] = useState(false);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
+  const { width } = useWindowDimensions();
   const dispatch = useDispatch();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -240,13 +241,9 @@ const ManagePushNotification = () => {
             };
           }}
           pagination={false}
-          scroll={
-            width <= 490
-              ? {
-                  x: 1000,
-                }
-              : null
-          }
+          scroll={{
+            x: width <= 490 ? 1000 : 0,
+          }}
         />
       </div>
       <div className="div-pagination p-2">

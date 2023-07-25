@@ -159,3 +159,10 @@ export const getInfoTestTrainingLessonByCollaboratorApi = (
     `/admin/info_test_collaborator/get_list_info_test_by_training_lesson/${idLesson}/${idCollaborator}`
   );
 };
+
+export const passInfoTestApi = (data) => {
+  return axiosClient.post(
+    `/admin/info_test_collaborator/create_info_exam`,
+    data
+  );
+};

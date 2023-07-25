@@ -1,4 +1,4 @@
-import { Tabs } from "antd";
+import { Select, Tabs } from "antd";
 
 import { useEffect, useState } from "react";
 import ManageReportCustomer from "./ManageReportCustomer";
@@ -14,9 +14,11 @@ import {
 import ManageReportCollaborator from "./ManagerReportCollaborator";
 import i18n from "../../../i18n";
 import { useCookies } from "../../../helper/useCookies";
+import useWindowDimensions from "../../../helper/useWindowDimensions";
 
 const ManageReport = () => {
   const checkElement = useSelector(getElementState);
+  const { width } = useWindowDimensions();
   const [tab, setTab] = useState(1);
   const [saveToCookie, readCookie] = useCookies();
   const lang = useSelector(getLanguageState);
@@ -26,6 +28,44 @@ const ManageReport = () => {
       readCookie("tab_report") === "" ? 1 : Number(readCookie("tab_report"))
     );
   }, []);
+
+  const DATA = [
+    {
+      value: 1,
+      label: `${i18n.t("order_report", {
+        lng: lang,
+      })}`,
+      role: "",
+    },
+    {
+      value: 2,
+      label: `${i18n.t("collaborator_report", {
+        lng: lang,
+      })}`,
+      role: "collaborator_report",
+    },
+    {
+      value: 3,
+      label: `${i18n.t("customer_report", {
+        lng: lang,
+      })}`,
+      role: "",
+    },
+    {
+      value: 4,
+      label: `${i18n.t("cancellation_report", {
+        lng: lang,
+      })}`,
+      role: "order_cancel_report",
+    },
+    {
+      value: 5,
+      label: `${i18n.t("service_report", {
+        lng: lang,
+      })}`,
+      role: "order_by_service_report",
+    },
+  ];
 
   return (
     <>
@@ -71,28 +111,40 @@ const ManageReport = () => {
             </Tabs.TabPane>
           )}
         </Tabs> */}
-        <div className="div-tab-report">
-          {DATA?.map((item, index) => {
-            return (
-              <>
-                <div
-                  key={index}
-                  onClick={() => {
-                    setTab(item?.key);
-                    saveToCookie("tab_report", item?.key);
-                  }}
-                  className={
-                    item?.key === tab ? "div-item-tab-select" : "div-item-tab"
-                  }
-                >
-                  <a className="text-tab">{`${i18n.t(item?.tab, {
-                    lng: lang,
-                  })}`}</a>
-                </div>
-              </>
-            );
-          })}
-        </div>
+        {width > 490 ? (
+          <div className="div-tab-report">
+            {DATA?.map((item, index) => {
+              return (
+                <>
+                  <div
+                    key={index}
+                    onClick={() => {
+                      setTab(item?.value);
+                      saveToCookie("tab_report", item?.value);
+                    }}
+                    className={
+                      item?.value === tab
+                        ? "div-item-tab-select"
+                        : "div-item-tab"
+                    }
+                  >
+                    <a className="text-tab">{item?.label}</a>
+                  </div>
+                </>
+              );
+            })}
+          </div>
+        ) : (
+          <Select
+            options={DATA}
+            style={{ width: "100%" }}
+            value={tab}
+            onChange={(e) => {
+              setTab(e);
+              saveToCookie("tab_report", e);
+            }}
+          />
+        )}
         {tab === 1 ? (
           <ManageReportOrder />
         ) : tab === 2 ? (
@@ -110,31 +162,3 @@ const ManageReport = () => {
 };
 
 export default ManageReport;
-
-const DATA = [
-  {
-    key: 1,
-    tab: "order_report",
-    role: "",
-  },
-  {
-    key: 2,
-    tab: "collaborator_report",
-    role: "collaborator_report",
-  },
-  {
-    key: 3,
-    tab: "customer_report",
-    role: "",
-  },
-  {
-    key: 4,
-    tab: "cancellation_report",
-    role: "order_cancel_report",
-  },
-  {
-    key: 5,
-    tab: "service_report",
-    role: "order_by_service_report",
-  },
-];

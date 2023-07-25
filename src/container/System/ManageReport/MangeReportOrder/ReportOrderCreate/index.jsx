@@ -10,8 +10,7 @@ import "./index.scss";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
-
-const width = window.innerWidth;
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const ReportOrderCreate = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,6 +23,7 @@ const ReportOrderCreate = () => {
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);
+  const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
@@ -556,13 +556,9 @@ const ReportOrderCreate = () => {
           // locale={{
           //   emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
           // }}
-          scroll={
-            width <= 490
-              ? {
-                  x: 1600,
-                }
-              : null
-          }
+          scroll={{
+            x: width <= 490 ? 1600 : 0,
+          }}
         />
       </div>
       <div className="mt-2 div-pagination p-2">

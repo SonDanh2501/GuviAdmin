@@ -12,6 +12,7 @@ import CustomDatePicker from "../../../../../components/customDatePicker";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const CancelOrderCustomer = (props) => {
   const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;
@@ -29,6 +30,7 @@ const CancelOrderCustomer = (props) => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
   const lang = useSelector(getLanguageState);
+  const { width } = useWindowDimensions();
   const cityData = [];
 
   useEffect(() => {
@@ -274,7 +276,12 @@ const CancelOrderCustomer = (props) => {
         </div>
       </div>
       <div className="mt-5">
-        <Table pagination={false} columns={columns} dataSource={data} />
+        <Table
+          pagination={false}
+          columns={columns}
+          dataSource={data}
+          scroll={{ x: width <= 490 ? 1200 : 0 }}
+        />
       </div>
       <div className="mt-1 div-pagination p-2">
         <a>Tổng: {total}</a>

@@ -168,7 +168,7 @@ const AddOrder = () => {
       <h5>{`${i18n.t("create_order", { lng: lang })}`}</h5>
       <div className="mt-3">
         <Select
-          style={{ width: 230 }}
+          className="select-service-order-add"
           value={nameService}
           onChange={onChangeServiceApply}
           options={serviceSelect}
@@ -178,7 +178,7 @@ const AddOrder = () => {
         <InputCustom
           title={`${i18n.t("customer", { lng: lang })}`}
           value={name}
-          style={{ width: "50%" }}
+          className="input-search-customer"
           type="text"
           onChange={(e) => {
             valueSearch(e.target.value);

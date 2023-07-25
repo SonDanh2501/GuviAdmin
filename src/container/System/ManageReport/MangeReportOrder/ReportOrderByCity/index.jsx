@@ -23,7 +23,7 @@ import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
 import { getProvince } from "../../../../../redux/selectors/service";
-const width = window.innerWidth;
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const ReportOrderCity = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,6 +39,7 @@ const ReportOrderCity = () => {
     moment().subtract(30, "d").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
+  const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
   const province = useSelector(getProvince);
   const cityOptions = [];
@@ -604,13 +605,9 @@ const ReportOrderCity = () => {
           dataSource={data}
           columns={columns}
           pagination={false}
-          scroll={
-            width <= 490
-              ? {
-                  x: 1600,
-                }
-              : null
-          }
+          scroll={{
+            x: width <= 490 ? 1200 : 0,
+          }}
         />
       </div>
       <div className="mt-2 div-pagination p-2">
