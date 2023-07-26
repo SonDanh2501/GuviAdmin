@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { MoreOutlined } from "@ant-design/icons";
 import i18n from "../../../../../i18n";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 const RewardCollaborator = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
@@ -33,6 +34,7 @@ const RewardCollaborator = () => {
   const [modalVerify, setModalVerify] = useState(false);
   const [modalCancel, setModalCancel] = useState(false);
   const [modal, setModal] = useState(false);
+  const { width } = useWindowDimensions();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
 
@@ -138,7 +140,11 @@ const RewardCollaborator = () => {
   };
   const columns = [
     {
-      title: `${i18n.t("date_create", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">
+          {`${i18n.t("date_create", { lng: lang })}`}
+        </a>
+      ),
       render: (data) => {
         return (
           <div className="div-create-info-reward">
@@ -153,7 +159,11 @@ const RewardCollaborator = () => {
       },
     },
     {
-      title: `${i18n.t("collaborator", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">
+          {`${i18n.t("collaborator", { lng: lang })}`}
+        </a>
+      ),
       render: (data) => {
         return (
           <Link
@@ -167,24 +177,36 @@ const RewardCollaborator = () => {
       },
     },
     {
-      title: `${i18n.t("total_order", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">
+          {`${i18n.t("total_order", { lng: lang })}`}
+        </a>
+      ),
       render: (data) => <a className="text-total">{data?.total_order}</a>,
       align: "center",
     },
     {
-      title: `${i18n.t("total_hour", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">
+          {`${i18n.t("total_hour", { lng: lang })}`}
+        </a>
+      ),
       render: (data) => <a className="text-total">{data?.total_job_hour}</a>,
       align: "center",
     },
     {
-      title: `${i18n.t("money", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("money", { lng: lang })}`}</a>
+      ),
       render: (data) => (
         <a className="text-total">{formatMoney(data?.money)}</a>
       ),
       align: "right",
     },
     {
-      title: `${i18n.t("status", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("status", { lng: lang })}`}</a>
+      ),
       render: (data) => (
         <a
           className={
@@ -205,11 +227,17 @@ const RewardCollaborator = () => {
       align: "center",
     },
     {
-      title: `${i18n.t("approved_by", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">
+          {`${i18n.t("approved_by", { lng: lang })}`}
+        </a>
+      ),
       render: (date) => <a>{data?.id_admin_verify?.full_name}</a>,
     },
     {
-      title: `${i18n.t("note", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("note", { lng: lang })}`}</a>
+      ),
       render: (data) => <a className="text-note">{data?.note_admin}</a>,
     },
     {
@@ -310,6 +338,7 @@ const RewardCollaborator = () => {
               },
             };
           }}
+          scroll={{ x: width < 900 ? 1200 : 0 }}
         />
 
         <div className="div-pagination p-2">

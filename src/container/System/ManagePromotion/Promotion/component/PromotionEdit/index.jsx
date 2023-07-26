@@ -7,6 +7,7 @@ import {
   Button,
   Checkbox,
   DatePicker,
+  Divider,
   FloatButton,
   Input,
   InputNumber,
@@ -16,11 +17,12 @@ import {
   Select,
   Space,
   Switch,
+  Tour,
 } from "antd";
 import locale from "antd/es/date-picker/locale/vi_VN";
 import _debounce from "lodash/debounce";
 import "moment/locale/vi";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { searchCustomersApi } from "../../../../../../api/customer";
@@ -52,11 +54,13 @@ import {
 } from "../../../../../../redux/selectors/service";
 import "./styles.scss";
 import ModalCustom from "../../../../../../components/modalCustom";
+import { useCookies } from "../../../../../../helper/useCookies";
 const { Option } = Select;
 
 const EditPromotion = () => {
   const { state } = useLocation();
   const { id } = state;
+  const [saveToCookie, readCookie] = useCookies();
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
   const [shortDescriptionVN, setShortDescriptionVN] = useState("");
@@ -121,6 +125,8 @@ const EditPromotion = () => {
   const [typeDateApply, setTypeDateApply] = useState("date_create");
   const [isActive, setIsActive] = useState(false);
   const [modalDelete, setModalDelete] = useState(false);
+  const [stepTuor, setStepTuor] = useState(false);
+  const ref1 = useRef(null);
   const options = [];
   const serviceOption = [];
   const cityOption = [];
@@ -129,6 +135,7 @@ const EditPromotion = () => {
   const province = useSelector(getProvince);
   const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
+
   const selectAfter = (
     <Select
       defaultValue="VND"
@@ -206,6 +213,7 @@ const EditPromotion = () => {
         setIsParrentPromotion(res?.is_parrent_promotion);
         setTotalChildPromotion(res?.total_child_promotion);
         setIsShowInApp(res?.is_show_in_app);
+        setRatioApplyArea(res?.is_apply_area ? 2 : 1);
         setIsApplyArea(res?.is_apply_area);
         setCity(res?.city);
         setRatioTypeVoucher(res?.brand === "guvi" ? 1 : 2);
@@ -510,16 +518,29 @@ const EditPromotion = () => {
 
   return (
     <>
+      <Divider />
       <div className="div-head-add-promotion">
         <a>Chỉnh sửa khuyến mãi</a>
         <div>
-          <Button
-            className={isActive ? "btn-stop-activation" : "btn-activation"}
-            onClick={() => onActive(id, isActive)}
-            style={{ width: "auto" }}
-          >
-            {isActive ? "Dừng kích hoạt" : "Kích hoạt"}
-          </Button>
+          {isActive ? (
+            <Button
+              className={"btn-stop-activation"}
+              onClick={() => onActive(id, isActive)}
+              style={{ width: "auto" }}
+              ref={ref1}
+            >
+              Dừng kích hoạt
+            </Button>
+          ) : (
+            <Button
+              className={"btn-activation"}
+              onClick={() => onActive(id, isActive)}
+              style={{ width: "auto" }}
+            >
+              Kích hoạt
+            </Button>
+          )}
+
           {!isActive && (
             <Button
               type="primary"
@@ -1186,6 +1207,7 @@ const EditPromotion = () => {
                     }}
                     options={cityOption}
                     optionLabelProp="label"
+                    value={city}
                   />
                 )}
               </div>
@@ -1402,7 +1424,14 @@ const EditPromotion = () => {
           </div>
         }
       />
-
+      {/* <Tour
+        open={stepTuor}
+        onClose={() => {
+          setStepTuor(false);
+          saveToCookie("tour-edit-promotion", false);
+        }}
+        steps={steps}
+      /> */}
       <FloatButton.BackTop />
       {isLoading && <LoadingPagination />}
     </>

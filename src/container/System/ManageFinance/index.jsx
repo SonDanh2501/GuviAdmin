@@ -16,6 +16,7 @@ import "./index.scss";
 import { Pagination, Table } from "antd";
 import { Link } from "react-router-dom";
 import { useCookies } from "../../../helper/useCookies";
+import useWindowDimensions from "../../../helper/useWindowDimensions";
 
 const ManageFinance = () => {
   const [totalEndingRemainder, setTotalEndingRemainder] = useState(0);
@@ -39,7 +40,7 @@ const ManageFinance = () => {
   const [startPage, setStartPage] = useState(0);
   const [startPageCustomer, setStartPageCustomer] = useState(0);
   const [saveToCookie, readCookie] = useCookies();
-
+  const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
@@ -552,7 +553,7 @@ const ManageFinance = () => {
   return (
     <>
       <h5>{`${i18n.t("wallet_balance", { lng: lang })}`}</h5>
-      <div className="div-date">
+      <div className="div-date-finance">
         <CustomDatePicker
           setStartDate={setStartDate}
           setEndDate={setEndDate}
@@ -657,6 +658,7 @@ const ManageFinance = () => {
           }
           columns={columns}
           pagination={false}
+          scroll={{ x: width < 900 ? 1000 : 0 }}
         />
         <div className="div-pagination p-2">
           <a>

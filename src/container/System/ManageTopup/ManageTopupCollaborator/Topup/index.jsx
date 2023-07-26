@@ -520,13 +520,9 @@ const TopupCollaborator = ({ type }) => {
               },
             };
           }}
-          scroll={
-            width <= 490
-              ? {
-                  x: 1600,
-                }
-              : null
-          }
+          scroll={{
+            x: width <= 900 ? 1200 : 0,
+          }}
         />
       </div>
       <div className="div-pagination p-2">

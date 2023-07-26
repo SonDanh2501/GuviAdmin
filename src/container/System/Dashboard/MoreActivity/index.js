@@ -1,21 +1,20 @@
 import { Drawer, List, DatePicker, Input, Select, Button } from "antd";
 import moment from "moment";
-
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getHistoryActivity } from "../../../../redux/actions/statistic";
 import { getHistoryActivitys } from "../../../../redux/selectors/statistic";
-
+import useWindowDimensions from "../../../../helper/useWindowDimensions";
 import "./index.scss";
 import i18n from "../../../../i18n";
 import { getLanguageState } from "../../../../redux/selectors/auth";
 
 const MoreActivity = () => {
   const dispatch = useDispatch();
-  const [data, setData] = useState([]);
   const [initLoading, setInitLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const historyActivity = useSelector(getHistoryActivitys);
+  const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
 
   const [open, setOpen] = useState(false);
@@ -67,7 +66,7 @@ const MoreActivity = () => {
 
       <Drawer
         title="Chi tiết hoạt động"
-        width={500}
+        width={width > 490 ? 500 : 300}
         onClose={onClose}
         open={open}
         bodyStyle={{
