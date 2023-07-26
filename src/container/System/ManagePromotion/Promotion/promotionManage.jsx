@@ -1,20 +1,16 @@
-import {
-  CaretDownOutlined,
-  CaretUpOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import {
   Button,
   Dropdown,
   Image,
   Input,
-  notification,
   Pagination,
   Progress,
   Select,
   Space,
   Table,
+  notification,
 } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
@@ -26,24 +22,17 @@ import {
   deletePromotion,
   fetchPromotion,
 } from "../../../../api/promotion.jsx";
-import offToggle from "../../../../assets/images/off-button.png";
-import onToggle from "../../../../assets/images/on-button.png";
-import AddPromotion from "../../../../components/addPromotion/addPromotion.js";
-import AddPromotionEvent from "../../../../components/addPromotionEvent/addPromotionEvent.js";
-import AddPromotionOrther from "../../../../components/addPromotionOrther/addPromotionOrther.js";
-import EditPromotion from "../../../../components/editPromotion/editPromotion.js";
-import EditPromotionEvent from "../../../../components/editPromotionEvent/editPromotionEvent.js";
-import EditPromotionOrther from "../../../../components/editPromotionOrther/editPromotionOrther.js";
 import ModalCustom from "../../../../components/modalCustom/index.jsx";
 import LoadingPagination from "../../../../components/paginationLoading/index.jsx";
 import { errorNotify } from "../../../../helper/toast.js";
+import useWindowDimensions from "../../../../helper/useWindowDimensions.js";
 import i18n from "../../../../i18n/index.js";
 import {
   getElementState,
   getLanguageState,
 } from "../../../../redux/selectors/auth.js";
 import "./PromotionManage.scss";
-const width = window.innerWidth;
+import { getProvince } from "../../../../redux/selectors/service.js";
 
 const PromotionManage = ({
   type,
@@ -61,7 +50,6 @@ const PromotionManage = ({
   const [valueFilter, setValueFilter] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
-  const [modalEdit, setModalEdit] = useState(false);
   const [modalActive, setModalActive] = useState(false);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
@@ -70,9 +58,11 @@ const PromotionManage = ({
   const toggle = () => setModal(!modal);
   const toggleActive = () => setModalActive(!modalActive);
   const [api, contextHolder] = notification.useNotification();
+  const { width } = useWindowDimensions();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
+  const province = useSelector(getProvince);
 
   useEffect(() => {
     fetchPromotion("", "", 0, 20, type, brand, idService, exchange, typeSort)
@@ -411,56 +401,7 @@ const PromotionManage = ({
                 </div>
               );
             },
-
-            // sorter: (a, b) => a.total_used_promotion - b.total_used_promotion,
           },
-          // {
-          //   title: () => {
-          //     return (
-          //       <div className="div-title-column-position">
-          //         <a className="text-column">{`${i18n.t("position", {
-          //           lng: lang,
-          //         })}`}</a>
-          //         <div className="div-direction">
-          //           <CaretUpOutlined
-          //             onClick={() => handleSortPosition(1)}
-          //             style={
-          //               typeSort === 1
-          //                 ? { fontSize: 10, color: "blue" }
-          //                 : { fontSize: 10, color: "gray" }
-          //             }
-          //           />
-          //           <CaretDownOutlined
-          //             onClick={() => handleSortPosition(-1)}
-          //             style={
-          //               typeSort === -1
-          //                 ? { fontSize: 10, color: "blue" }
-          //                 : { fontSize: 10, color: "gray" }
-          //             }
-          //           />
-          //         </div>
-          //       </div>
-          //     );
-          //   },
-          //   align: "center",
-          //   render: (data) => (
-          //     <a className="text-title-promotion">{data?.position}</a>
-          //   ),
-          // },
-          // {
-          //   title: () => {
-          //     return (
-          //       <a className="title-column">{`${i18n.t("code", {
-          //         lng: lang,
-          //       })}`}</a>
-          //     );
-          //   },
-          //   align: "center",
-          //   render: (data) => (
-          //     <a className="text-title-promotion">{data?.code}</a>
-          //   ),
-          // },
-
           {
             title: () => {
               return (
@@ -495,64 +436,30 @@ const PromotionManage = ({
               );
             },
           },
-          // {
-          //   title: () => {
-          //     return (
-          //       <a className="title-column">{`${i18n.t("on_off", {
-          //         lng: lang,
-          //       })}`}</a>
-          //     );
-          //   },
-          //   align: "center",
-          //   render: (data) => {
-          //     var date =
-          //       data?.limit_end_date &&
-          //       moment(data?.limit_end_date.slice(0, 10));
-          //     var now = moment();
-          //     return (
-          //       <div>
-          //         {contextHolder}
-          //         {checkElement?.includes("active_promotion") && (
-          //           <>
-          //             {data?.is_active ? (
-          //               <img
-          //                 src={onToggle}
-          //                 className="img-toggle"
-          //                 onClick={toggleActive}
-          //               />
-          //             ) : (
-          //               <div>
-          //                 {data?.is_limit_date ? (
-          //                   date < now ? (
-          //                     <img
-          //                       src={offToggle}
-          //                       className="img-toggle"
-          //                       onClick={() =>
-          //                         openNotificationWithIcon("warning")
-          //                       }
-          //                     />
-          //                   ) : (
-          //                     <img
-          //                       src={offToggle}
-          //                       className="img-toggle"
-          //                       onClick={toggleActive}
-          //                     />
-          //                   )
-          //                 ) : (
-          //                   <img
-          //                     src={offToggle}
-          //                     className="img-toggle"
-          //                     onClick={toggleActive}
-          //                   />
-          //                 )}
-          //               </div>
-          //             )}
-          //           </>
-          //         )}
-          //       </div>
-          //     );
-          //   },
-          // },
+          {
+            title: () => <a className="title-column">Khu vực</a>,
+            render: (data) => {
+              return (
+                <div>
+                  {!data?.is_apply_area ? (
+                    <a className="text-area">Toàn quốc</a>
+                  ) : (
+                    <>
+                      {province?.map((item, index) => {
+                        return (
+                          <a key={index} className="text-area">
+                            {data?.city?.includes(item?.code)
+                              ? item?.name + ", "
+                              : null}
+                          </a>
+                        );
+                      })}
+                    </>
+                  )}
+                </div>
+              );
+            },
+          },
           {
             title: () => {
               return (
@@ -604,7 +511,7 @@ const PromotionManage = ({
                     items,
                   }}
                   trigger={["click"]}
-                  placement="bottom"
+                  placement="bottomRight"
                 >
                   <a style={{ color: "black" }}>
                     <UilEllipsisV />
@@ -858,7 +765,7 @@ const PromotionManage = ({
                     items,
                   }}
                   trigger={["click"]}
-                  placement="bottom"
+                  placement="bottomRight"
                 >
                   <a style={{ color: "black" }}>
                     <UilEllipsisV />
@@ -871,12 +778,12 @@ const PromotionManage = ({
 
   return (
     <React.Fragment>
-      <div className="mt-2 p-3">
-        <div className="div-header-promotion">
+      <div className="mt-2 ">
+        <div className="div-header-promotion mt-4">
           <Select
             defaultValue={`${i18n.t("filter_status", { lng: lang })}`}
             size={"large"}
-            style={{ width: 190 }}
+            className="select-filter-promotion"
             onChange={handleChange}
             value={valueFilter}
             options={[
@@ -904,53 +811,11 @@ const PromotionManage = ({
             placeholder={`${i18n.t("search", { lng: lang })}`}
             type="text"
             prefix={<SearchOutlined />}
-            style={{ width: "60%", height: 38 }}
+            className="input-search-promotion"
             onChange={(e) => handleSearch(e.target.value)}
           />
           {checkElement?.includes("create_promotion") && (
             <>
-              {/* {type === "code" && brand === "guvi" ? (
-                <AddPromotion
-                  idService={idService}
-                  tab={tab}
-                  startPage={startPage}
-                  setDataPromo={setData}
-                  setTotalPromo={setTotal}
-                  type={type}
-                  brand={brand}
-                  exchange={exchange}
-                  search={valueSearch}
-                  status={valueFilter}
-                  typeSort={typeSort}
-                />
-              ) : type === "code" && brand === "orther" ? (
-                <AddPromotionOrther
-                  idService={idService}
-                  startPage={startPage}
-                  setDataPromo={setData}
-                  setTotalPromo={setTotal}
-                  type={type}
-                  brand={brand}
-                  exchange={exchange}
-                  search={valueSearch}
-                  status={valueFilter}
-                  typeSort={typeSort}
-                />
-              ) : (
-                <AddPromotionEvent
-                  idService={idService}
-                  tab={tab}
-                  startPage={startPage}
-                  setDataPromo={setData}
-                  setTotalPromo={setTotal}
-                  type={type}
-                  brand={brand}
-                  exchange={exchange}
-                  search={valueSearch}
-                  status={valueFilter}
-                  typeSort={typeSort}
-                />
-              )} */}
               <Button
                 onClick={() =>
                   navigate(`/promotion/manage-setting/create-promotion`)
@@ -999,13 +864,9 @@ const PromotionManage = ({
                 },
               };
             }}
-            scroll={
-              width <= 490
-                ? {
-                    x: 1600,
-                  }
-                : null
-            }
+            scroll={{
+              x: width <= 900 ? 1000 : 0,
+            }}
           />
           <div className="div-pagination p-2">
             <a>
@@ -1023,60 +884,6 @@ const PromotionManage = ({
           </div>
         </div>
 
-        {/* <div>
-          {type === "code" && brand === "guvi" ? (
-            <EditPromotion
-              state={modalEdit}
-              setState={() => setModalEdit(!modalEdit)}
-              data={itemEdit}
-              startPage={startPage}
-              setDataPromo={setData}
-              setTotalPromo={setTotal}
-              type={type}
-              brand={brand}
-              exchange={exchange}
-              idService={idService}
-              tab={tab}
-              search={valueSearch}
-              status={valueFilter}
-              typeSort={typeSort}
-            />
-          ) : type === "code" && brand === "orther" ? (
-            <EditPromotionOrther
-              state={modalEdit}
-              setState={() => setModalEdit(!modalEdit)}
-              data={itemEdit}
-              startPage={startPage}
-              setDataPromo={setData}
-              setTotalPromo={setTotal}
-              type={type}
-              brand={brand}
-              exchange={exchange}
-              idService={idService}
-              tab={tab}
-              search={valueSearch}
-              status={valueFilter}
-              typeSort={typeSort}
-            />
-          ) : (
-            <EditPromotionEvent
-              state={modalEdit}
-              setState={() => setModalEdit(!modalEdit)}
-              data={itemEdit}
-              startPage={startPage}
-              setDataPromo={setData}
-              setTotalPromo={setTotal}
-              type={type}
-              brand={brand}
-              exchange={exchange}
-              idService={idService}
-              tab={tab}
-              search={valueSearch}
-              status={valueFilter}
-              typeSort={typeSort}
-            />
-          )}
-        </div> */}
         <div>
           <ModalCustom
             isOpen={modal}

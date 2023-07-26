@@ -11,18 +11,20 @@ import { errorNotify } from "../../../../../../helper/toast";
 import CustomTextEditor from "../../../../../../components/customTextEdittor";
 
 const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
-  const [lesson, setLesson] = useState();
-  const [titleVN, setTitleVN] = useState("");
-  const [titleEN, setTitleEN] = useState("");
-  const [descriptionVN, setDescriptionVN] = useState("");
-  const [descriptionEN, setDescriptionEN] = useState("");
-  const [link, setLink] = useState("");
-  const [type, setType] = useState("");
-  const [timeSubmit, setTimeSubmit] = useState();
-  const [isShowApp, setIsShowApp] = useState(false);
-  const [theory, setTheory] = useState("");
-  const [totalCorrect, setTotalCorrect] = useState("");
-  const [totalExam, setTotalExam] = useState("");
+  const [state, setState] = useState({
+    lesson: 0,
+    titleVN: "",
+    titleEN: "",
+    descriptionVN: "",
+    descriptionEN: "",
+    theory: "",
+    link: "",
+    type: "",
+    totalCorrect: 0,
+    totalExam: 0,
+    timeSubmit: 0,
+    isShowApp: false,
+  });
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -34,22 +36,22 @@ const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
   const createLesson = useCallback(() => {
     setIsLoading(true);
     createLessonApi({
-      lesson: lesson,
+      lesson: state?.lesson,
       title: {
-        vi: titleVN,
-        en: titleEN,
+        vi: state?.titleVN,
+        en: state?.titleEN,
       },
       description: {
-        vi: descriptionVN,
-        en: descriptionEN,
+        vi: state?.descriptionVN,
+        en: state?.descriptionEN,
       },
-      link_video: link,
-      type_training_lesson: tab === "" ? type : tab,
-      is_show_in_app: isShowApp,
-      times_submit: timeSubmit,
-      theory: theory,
-      total_correct_exam_pass: totalCorrect,
-      total_exam: totalExam,
+      link_video: state?.link,
+      type_training_lesson: tab === "" ? state?.type : tab,
+      is_show_in_app: state?.isShowApp,
+      times_submit: state?.timeSubmit,
+      theory: state?.theory,
+      total_correct_exam_pass: state?.totalCorrect,
+      total_exam: state?.totalExam,
     })
       .then((res) => {
         setOpen(false);
@@ -67,21 +69,7 @@ const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
           message: err,
         });
       });
-  }, [
-    lesson,
-    titleVN,
-    titleEN,
-    descriptionVN,
-    descriptionEN,
-    link,
-    type,
-    isShowApp,
-    timeSubmit,
-    theory,
-    tab,
-    totalCorrect,
-    totalExam,
-  ]);
+  }, [state, tab]);
 
   return (
     <div>
@@ -98,54 +86,56 @@ const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
         <InputCustom
           title="Thứ tự bài học"
           type="number"
-          value={lesson}
-          onChange={(e) => setLesson(e.target.value)}
+          value={state?.lesson}
+          onChange={(e) => setState({ ...state, lesson: e.target.value })}
         />
         <InputCustom
           title="Tiêu đề Tiếng Việt"
-          value={titleVN}
-          onChange={(e) => setTitleVN(e.target.value)}
+          value={state?.titleVN}
+          onChange={(e) => setState({ ...state, titleVN: e.target.value })}
         />
         <InputCustom
           title="Tiêu đề Tiếng Anh"
-          value={titleEN}
-          onChange={(e) => setTitleEN(e.target.value)}
+          value={state?.titleEN}
+          onChange={(e) => setState({ ...state, titleEN: e.target.value })}
         />
         <InputCustom
           title="Mô tả Tiếng Việt"
-          value={descriptionVN}
-          onChange={(e) => setDescriptionVN(e.target.value)}
+          value={state?.descriptionVN}
+          onChange={(e) =>
+            setState({ ...state, descriptionVN: e.target.value })
+          }
         />
         <InputCustom
           title="Mô tả Tiếng Anh"
-          value={descriptionEN}
-          onChange={(e) => setDescriptionEN(e.target.value)}
+          value={state?.descriptionEN}
+          onChange={(e) =>
+            setState({ ...state, descriptionEN: e.target.value })
+          }
         />
         <InputCustom
           title="Link video"
-          value={link}
-          onChange={(e) => setLink(e.target.value)}
+          value={state?.link}
+          onChange={(e) => setState({ ...state, link: e.target.value })}
         />
-
         <InputCustom
           title="Số đáp án đúng"
           type="number"
-          value={totalCorrect}
-          onChange={(e) => setTotalCorrect(e.target.value)}
+          value={state?.totalCorrect}
+          onChange={(e) => setState({ ...state, totalCorrect: e.target.value })}
         />
         <InputCustom
           title="Số câu hỏi của bài"
           type="number"
-          value={totalExam}
-          onChange={(e) => setTotalExam(e.target.value)}
+          value={state?.totalExam}
+          onChange={(e) => setState({ ...state, totalExam: e.target.value })}
         />
-
         {tab === "" && (
           <InputCustom
             select={true}
             title="Loại bài"
-            value={type}
-            onChange={(e) => setType(e)}
+            value={state?.type}
+            onChange={(e) => setState({ ...state, type: e })}
             options={[
               { value: "input", label: "Đầu vào" },
               { value: "theory_input", label: "Lý thuyết" },
@@ -157,18 +147,21 @@ const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
         )}
         <InputCustom
           title="Số lần nộp bài"
-          value={timeSubmit}
+          value={state?.timeSubmit}
           type="number"
-          onChange={(e) => setTimeSubmit(e.target.value)}
+          onChange={(e) => setState({ ...state, timeSubmit: e.target.value })}
         />
         <div className="mt-2">
           <a>Lý thuyết</a>
-          <CustomTextEditor value={theory} onChangeValue={setTheory} />
+          <CustomTextEditor
+            value={state?.theory}
+            onChangeValue={(e) => setState({ ...state, theory: e })}
+          />
         </div>
         <Checkbox
-          checked={isShowApp}
+          checked={state?.isShowApp}
           style={{ marginTop: 10 }}
-          onChange={(e) => setIsShowApp(e.target.checked)}
+          onChange={(e) => setState({ ...state, isShowApp: e.target.checked })}
         >
           Hiện thị trên ứng dụng
         </Checkbox>

@@ -16,20 +16,24 @@ import { getElementState, getLanguageState } from "../../redux/selectors/auth";
 import CustomButton from "../customButton/customButton";
 import InputCustom from "../textInputCustom";
 import "./addTopup.scss";
+import useWindowDimensions from "../../helper/useWindowDimensions";
 
 const AddPopup = (props) => {
   const { type, setDataT, setTotal } = props;
-  const [money, setMoney] = useState("");
-  const [note, setNote] = useState("");
-  const [data, setData] = useState([]);
   const [name, setName] = useState("");
-  const [errorName, setErrorName] = useState("");
-  const [errorMoney, setErrorMoney] = useState("");
-  const [wallet, setWallet] = useState("");
-  const [id, setId] = useState("");
+  const [state, setState] = useState({
+    money: 0,
+    note: "",
+    data: [],
+    name: "",
+    errorName: "",
+    errorMoney: "",
+    wallet: "",
+    id: "",
+  });
   const dispatch = useDispatch();
   const checkElement = useSelector(getElementState);
-  const width = window.innerWidth;
+  const { width } = useWindowDimensions();
   const [open, setOpen] = useState(false);
   const lang = useSelector(getLanguageState);
   const showDrawer = () => {
@@ -43,36 +47,36 @@ const AddPopup = (props) => {
     _debounce((value) => {
       setName(value);
       if (value) {
-        fetchCollaborators(lang, 0, 100, "", value)
+        fetchCollaborators(lang, 0, 20, "", value)
           .then((res) => {
             if (value === "") {
-              setData([]);
+              setState({ ...state, data: [] });
             } else {
-              setData(res.data);
+              setState({ ...state, data: res?.data });
             }
           })
           .catch((err) => {});
-      } else if (id) {
-        setData([]);
+      } else if (state?.id) {
+        setState({ ...state, data: [] });
       } else {
-        setData([]);
+        setState({ ...state, data: [] });
       }
-      setId("");
+      setState({ ...state, id: "" });
     }, 500),
-    []
+    [state]
   );
 
   const addMoney = useCallback(() => {
-    if (name === "" || money === "") {
+    if (name === "" || state?.money === "") {
       !name
-        ? setErrorName("Vui lòng nhập thông tin")
-        : setErrorMoney("Vui lòng nhập số tiền cần nạp");
+        ? setState({ ...state, errorName: "Vui lòng nhập thông tin" })
+        : setState({ ...state, errorMoney: "Vui lòng nhập số tiền cần nạp" });
     } else {
       dispatch(loadingAction.loadingRequest(true));
-      TopupMoneyCollaboratorApi(id, {
-        money: money,
-        transfer_note: note,
-        type_wallet: wallet,
+      TopupMoneyCollaboratorApi(state?.id, {
+        money: state?.money,
+        transfer_note: state?.note,
+        type_wallet: state?.wallet,
       })
         .then((res) => {
           getTopupCollaboratorApi(0, 20, type)
@@ -100,7 +104,7 @@ const AddPopup = (props) => {
           dispatch(loadingAction.loadingRequest(false));
         });
     }
-  }, [id, money, note, name, wallet, type, setDataT, setTotal]);
+  }, [state, type, setDataT, setTotal, name]);
 
   return (
     <>
@@ -134,22 +138,24 @@ const AddPopup = (props) => {
                 searchCollaborator(e.target.value);
                 setName(e.target.value);
               }}
-              error={errorName}
+              error={state?.errorName}
             />
-            {data.length > 0 && (
+            {state?.data.length > 0 && (
               <List type={"unstyled"} className="list-item">
-                {data?.map((item, index) => {
+                {state?.data?.map((item, index) => {
                   return (
                     <div
                       key={index}
                       onClick={(e) => {
-                        setId(item?._id);
+                        setState({
+                          ...state,
+                          id: item?._id,
+                          data: [],
+                        });
                         setName(item?.full_name);
-                        setData([]);
                       }}
                     >
                       <a>
-                        {" "}
                         {item?.full_name} - {item?.phone} - {item?.id_view}
                       </a>
                     </div>
@@ -163,8 +169,8 @@ const AddPopup = (props) => {
             <InputCustom
               title={`${i18n.t("money", { lng: lang })}`}
               min={0}
-              value={money}
-              onChange={(e) => setMoney(e)}
+              value={state?.money}
+              onChange={(e) => setState({ ...state, money: e })}
               style={{ width: "100%" }}
               inputMoney={true}
             />
@@ -173,8 +179,8 @@ const AddPopup = (props) => {
           <div className="mt-2">
             <InputCustom
               title={`${i18n.t("content", { lng: lang })}`}
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
+              value={state?.note}
+              onChange={(e) => setState({ ...state, note: e.target.value })}
               textArea={true}
             />
           </div>
@@ -182,10 +188,10 @@ const AddPopup = (props) => {
           <div className="mt-2">
             <InputCustom
               title={`${i18n.t("wallet", { lng: lang })}`}
-              value={wallet}
+              value={state?.wallet}
               style={{ width: "100%" }}
               onChange={(e) => {
-                setWallet(e);
+                setState({ ...state, wallet: e });
               }}
               options={[
                 {

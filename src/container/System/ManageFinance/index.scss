@@ -182,6 +182,13 @@
   color: #000000;
   text-decoration: none;
 }
+.div-date-finance {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
 @media (max-width: 1200px) {
   .text-content {
@@ -206,5 +213,88 @@
     font-size: 12px;
     color: #000000;
     text-decoration: none;
+  }
+
+  .div-contai-wallet {
+    width: 100%;
+    height: auto;
+    padding: 5px;
+    background-color: white;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+    border-radius: 8px;
+
+    .text-beginnig {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      color: #000000;
+      text-decoration: none;
+    }
+
+    .div-wallet-row {
+      display: flex;
+      flex-direction: column;
+
+      .div-item-wallet {
+        display: flex;
+        width: 100%;
+        margin: 0;
+        border: none;
+        border-bottom: 1px solid #000000;
+        padding: 5px;
+
+        .text-name-wallet {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          color: #727272;
+          text-decoration: none;
+        }
+
+        .text-money-remainder {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          color: #fb942e;
+          text-decoration: none;
+        }
+
+        .text-money-gift {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          color: #fb422e;
+          text-decoration: none;
+        }
+      }
+      .div-item-wallet-last {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        padding: 5px;
+
+        .text-name-wallet {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          color: #727272;
+          text-decoration: none;
+        }
+
+        .text-money-paypoint {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          color: #d931ff;
+          text-decoration: none;
+        }
+      }
+    }
   }
 }

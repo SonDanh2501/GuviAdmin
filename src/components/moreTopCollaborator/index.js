@@ -9,6 +9,7 @@ import { getTopCollaboratorApi } from "../../api/statistic";
 import "./index.scss";
 import i18n from "../../i18n";
 import { getLanguageState } from "../../redux/selectors/auth";
+import useWindowDimensions from "../../helper/useWindowDimensions";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -19,6 +20,7 @@ const MoreTopCollaborator = () => {
   const [data, setData] = useState([]);
   const lang = useSelector(getLanguageState);
   const [open, setOpen] = useState(false);
+  const { width } = useWindowDimensions();
   const showDrawer = () => {
     setOpen(true);
   };
@@ -58,7 +60,7 @@ const MoreTopCollaborator = () => {
 
       <Drawer
         title="Top Cộng tác viên"
-        width={500}
+        width={width > 490 ? 500 : 350}
         onClose={onClose}
         open={open}
         bodyStyle={{

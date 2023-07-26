@@ -24,6 +24,7 @@ import {
   getLanguageState,
 } from "../../../../../redux/selectors/auth";
 import "./index.scss";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const TopupPoint = () => {
   const [data, setData] = useState([]);
@@ -38,6 +39,7 @@ const TopupPoint = () => {
   const [modal, setModal] = useState(false);
   const [modalConfirm, setModalConfirm] = useState(false);
   const [modalCancel, setModalCancel] = useState(false);
+  const { width } = useWindowDimensions();
   const dispatch = useDispatch();
   const toggle = () => setModal(!modal);
   const checkElement = useSelector(getElementState);
@@ -321,6 +323,7 @@ const TopupPoint = () => {
               },
             };
           }}
+          scroll={{ x: width < 900 ? 1200 : 0 }}
         />
       </div>
       <div className="div-pagination p-2">

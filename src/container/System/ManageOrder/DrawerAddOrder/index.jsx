@@ -187,29 +187,29 @@ const AddOrder = () => {
           placeholder={`${i18n.t("search", { lng: lang })}`}
           error={errorNameCustomer}
         />
+        {dataFilter.length > 0 && (
+          <List type={"unstyled"} className="list-item-customer-add-order">
+            {dataFilter?.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  value={item?._id}
+                  onClick={(e) => {
+                    setId(item?._id);
+                    setName(item?.full_name);
+                    setDataFilter([]);
+                    setErrorNameCustomer("");
+                  }}
+                >
+                  <a>
+                    {item?.full_name} - {item?.phone} - {item?.id_view}
+                  </a>
+                </div>
+              );
+            })}
+          </List>
+        )}
       </div>
-      {dataFilter.length > 0 && (
-        <List type={"unstyled"} className="list-item-customer-add-order">
-          {dataFilter?.map((item, index) => {
-            return (
-              <div
-                key={index}
-                value={item?._id}
-                onClick={(e) => {
-                  setId(item?._id);
-                  setName(item?.full_name);
-                  setDataFilter([]);
-                  setErrorNameCustomer("");
-                }}
-              >
-                <a>
-                  {item?.full_name} - {item?.phone} - {item?.id_view}
-                </a>
-              </div>
-            );
-          })}
-        </List>
-      )}
 
       <div className="mt-3">
         {kindService === "giup_viec_theo_gio" ? (
