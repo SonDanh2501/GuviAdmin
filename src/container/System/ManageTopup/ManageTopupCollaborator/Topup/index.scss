@@ -303,12 +303,13 @@
   }
 }
 
-@media screen and (max-width: 490px) {
+@media screen and (max-width: 900px) {
   .div-header-topup {
     display: flex;
     flex-direction: column;
     margin-top: 20px;
     justify-content: center;
+    margin: 0;
 
     .div-topwith {
       display: flex;

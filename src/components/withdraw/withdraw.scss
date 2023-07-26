@@ -65,6 +65,19 @@
   font-size: 12px;
 }
 
+@media screen and (max-width: 900px) {
+  .btn-add-withdraw-collaborator {
+    width: 50% !important;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    background-color: #48cae4;
+    color: white;
+    box-shadow: 2px 3px 2px rgb(216, 216, 216);
+    margin-bottom: 10px;
+  }
+}
+
 @media screen and (max-width: 490px) {
   .btn-add-withdraw-collaborator {
     width: 100% !important;

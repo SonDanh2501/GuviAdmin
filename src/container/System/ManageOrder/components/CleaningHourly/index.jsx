@@ -529,16 +529,18 @@ const CleaningHourly = (props) => {
           <div className="list-item-place">
             {places?.map((item, index) => {
               return (
-                <a
-                  key={index}
-                  onClick={(e) => {
-                    setAddress(item?.description);
-                    findPlace(item?.place_id);
-                  }}
-                  className="item-option-place"
-                >
-                  {item?.description}
-                </a>
+                <div className="div-item">
+                  <a
+                    key={index}
+                    onClick={(e) => {
+                      setAddress(item?.description);
+                      findPlace(item?.place_id);
+                    }}
+                    className="item-option-place"
+                  >
+                    {item?.description}
+                  </a>
+                </div>
               );
             })}
           </div>

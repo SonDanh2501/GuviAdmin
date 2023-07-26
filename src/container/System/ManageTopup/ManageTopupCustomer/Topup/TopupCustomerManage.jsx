@@ -27,6 +27,7 @@ import {
 import { getTopupKH, totalTopupKH } from "../../../../../redux/selectors/topup";
 import "./TopupCustomerManage.scss";
 import i18n from "../../../../../i18n";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const TopupCustomer = () => {
   const [dataFilter, setDataFilter] = useState([]);
@@ -42,6 +43,7 @@ const TopupCustomer = () => {
   const [modalCancel, setModalCancel] = useState(false);
   const [modalConfirm, setModalConfirm] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
+  const { width } = useWindowDimensions();
   const toggleConfirm = () => setModalConfirm(!modalConfirm);
   const toggleEdit = () => setModalEdit(!modalEdit);
   const toggle = () => setModal(!modal);
@@ -420,6 +422,7 @@ const TopupCustomer = () => {
           //       <Skeleton active={true} />
           //     ),
           // }}
+          scroll={{ x: width < 900 ? 1400 : 0 }}
         />
       </div>
       <div className="div-pagination p-2">

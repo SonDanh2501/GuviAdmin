@@ -14,19 +14,29 @@ import router from "../../routes/router";
 import "./Sidebar.scss";
 
 const Sidebar = ({ hide }) => {
-  const user = useSelector(getUser);
   const permission = useSelector(getPermissionState);
   const [collapsed, setCollapsed] = useState(true);
   const [collapsedService, setCollapsedService] = useState(true);
   const [collapsedPromotion, setCollapsedPromotion] = useState(true);
   const lang = useSelector(getLanguageState);
+
   const checkPermission = [];
 
-  const toggleNavbar = () => setCollapsed(!collapsed);
-  const toggleServiceNavbar = () => setCollapsedService(!collapsedService);
-  const togglePromotionNavbar = () =>
+  const toggleNavbar = () => {
+    setCollapsed(!collapsed);
+    setCollapsedService(true);
+    setCollapsedPromotion(true);
+  };
+  const toggleServiceNavbar = () => {
+    setCollapsedService(!collapsedService);
+    setCollapsed(true);
+    setCollapsedPromotion(true);
+  };
+  const togglePromotionNavbar = () => {
     setCollapsedPromotion(!collapsedPromotion);
-
+    setCollapsed(true);
+    setCollapsedService(true);
+  };
   permission?.map((item) => {
     checkPermission.push(item?.id_side_bar);
   });

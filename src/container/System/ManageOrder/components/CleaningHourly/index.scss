@@ -307,17 +307,17 @@
   border: 1px solid rgb(175, 175, 175);
   border-radius: 5px;
   z-index: 1000;
-
-  .item-option-place {
-    border-bottom: 1px silid #000000;
-    font-size: 14px;
-    font-family: "Roboto";
-    font-style: normal;
-    font-weight: 400;
-    color: black;
-    border-bottom: 1px solid #e0e0e0;
-    padding: 5px 0px;
-    width: 100%;
+  .div-item {
+    border-bottom: 1px solid #d6d6d6;
+    .item-option-place {
+      border-bottom: 1px silid #000000;
+      font-size: 14px;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      color: black;
+      width: 100%;
+    }
   }
 }
 
@@ -805,16 +805,17 @@
     border-radius: 5px;
     z-index: 1000;
 
-    .item-option-place {
-      border-bottom: 1px silid #000000;
-      font-size: 14px;
-      font-family: "Roboto";
-      font-style: normal;
-      font-weight: 400;
-      color: black;
-      border-bottom: 1px solid #e0e0e0;
-      padding: 5px 0px;
-      width: 100%;
+    .div-item {
+      border-bottom: 1px solid #d6d6d6;
+      .item-option-place {
+        border-bottom: 1px silid #000000;
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+        width: 100%;
+      }
     }
   }
 }

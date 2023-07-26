@@ -24,6 +24,7 @@ import {
 import "./index.scss";
 import i18n from "../../../../../i18n";
 import { useCookies } from "../../../../../helper/useCookies";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const Punish = () => {
   const [saveToCookie, readCookie] = useCookies();
@@ -41,6 +42,7 @@ const Punish = () => {
   const [modalRefund, setModalRefund] = useState(false);
   const [itemEdit, setItemEdit] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { width } = useWindowDimensions();
   const navigate = useNavigate();
   const toggleConfirm = () => setModalConfirm(!modalConfirm);
   const toggleCancel = () => setModalCancel(!modalCancel);
@@ -443,6 +445,7 @@ const Punish = () => {
               },
             };
           }}
+          scroll={{ x: width < 900 ? 1000 : 0 }}
         />
         <div className="div-pagination p-2">
           <a>

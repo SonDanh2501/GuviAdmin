@@ -29,10 +29,9 @@ const BannerManage = () => {
   const [dataFilter, setDataFilter] = useState([]);
   const [totalFilter, setTotalFilter] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
-  const [modalEdit, setModalEdit] = React.useState(false);
-  const [modalBlock, setModalBlock] = React.useState(false);
-  const [modal, setModal] = React.useState(false);
-  const [itemEdit, setItemEdit] = React.useState([]);
+  const [modalBlock, setModalBlock] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [itemEdit, setItemEdit] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [startPage, setStartPage] = useState(0);
@@ -268,6 +267,7 @@ const BannerManage = () => {
                 onChange={onChange}
                 total={totalFilter > 0 ? totalFilter : totalBanner}
                 showSizeChanger={false}
+                pageSize={20}
               />
             </div>
           </div>

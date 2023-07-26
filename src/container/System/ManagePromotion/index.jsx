@@ -30,6 +30,7 @@ const ManagePromotions = () => {
   return (
     <div>
       <Button
+        style={{ width: "auto" }}
         className={
           selected === "code" && brand === "guvi"
             ? "btn-selected-promotion"
@@ -47,6 +48,7 @@ const ManagePromotions = () => {
         {`${i18n.t("guvi_promotion", { lng: lang })}`}
       </Button>
       <Button
+        style={{ width: "auto" }}
         className={
           selected === "code" && brand === "orther"
             ? "btn-selected-promotion"
@@ -64,6 +66,7 @@ const ManagePromotions = () => {
         {`${i18n.t("partner_promotion", { lng: lang })}`}
       </Button>
       <Button
+        style={{ width: "auto" }}
         className={
           selected === "event"
             ? "btn-selected-promotion"
@@ -75,7 +78,6 @@ const ManagePromotions = () => {
           setSelected("event");
           saveToCookie("select_promo", "event");
         }}
-        style={{ width: "auto" }}
       >
         {`${i18n.t("promotions", { lng: lang })}`}
       </Button>
