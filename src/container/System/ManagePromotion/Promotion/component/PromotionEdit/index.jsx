@@ -432,7 +432,7 @@ const EditPromotion = () => {
       id_group_customer: groupCustomer,
       is_id_customer: isCustomer,
       id_customer: listCustomers,
-      service_apply: serviceApply.length > 0 ? [serviceApply] : [],
+      service_apply: serviceApply?.length > 0 ? [serviceApply] : [],
       is_limited_use: isUsePromo,
       limited_use: isUsePromo ? usePromo : 0,
       type_discount: ratioTypeVoucher === 2 ? "partner_promotion" : "order",

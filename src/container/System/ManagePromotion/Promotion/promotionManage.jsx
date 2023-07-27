@@ -81,7 +81,7 @@ const PromotionManage = ({
           fetchPromotion(
             valueSearch,
             valueFilter,
-            0,
+            startPage,
             20,
             type,
             brand,
@@ -125,7 +125,7 @@ const PromotionManage = ({
             fetchPromotion(
               valueSearch,
               valueFilter,
-              0,
+              startPage,
               20,
               type,
               brand,
@@ -153,7 +153,7 @@ const PromotionManage = ({
             fetchPromotion(
               valueSearch,
               valueFilter,
-              0,
+              startPage,
               20,
               type,
               brand,
@@ -197,7 +197,7 @@ const PromotionManage = ({
     fetchPromotion(
       valueSearch,
       valueFilter,
-      0,
+      start,
       20,
       type,
       brand,
@@ -219,7 +219,7 @@ const PromotionManage = ({
       fetchPromotion(
         value,
         valueFilter,
-        0,
+        startPage,
         20,
         type,
         brand,
@@ -243,7 +243,7 @@ const PromotionManage = ({
     fetchPromotion(
       valueSearch,
       value,
-      0,
+      startPage,
       20,
       type,
       brand,
