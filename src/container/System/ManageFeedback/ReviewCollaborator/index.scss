@@ -14,12 +14,12 @@
   justify-content: space-between;
 }
 
-.div-date {
+.div-date-review-collaborator {
   display: flex;
   flex-direction: row;
-  width: 40%;
   align-items: center;
-  margin-top: 20px;
+  width: 40%;
+  margin: 20px 0;
 
   .text-date {
     color: #000000;
@@ -169,14 +169,76 @@
   }
 }
 
-@media screen and (width: 490px) {
-  .div-date {
+.div-detail-review-collaborator {
+  display: flex;
+  flex-direction: column;
+
+  .div-text-detail {
     display: flex;
     flex-direction: row;
-    width: 100% !important;
-    align-items: center;
-    margin-top: 20px;
+    .title-detail {
+      width: 80px;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      color: #202223;
+      text-decoration: none;
+    }
 
+    .text-detail-review {
+      display: block;
+      width: 250px;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      color: #202223;
+      text-decoration: none;
+    }
+
+    .div-star-review {
+      display: flex;
+      flex-direction: column;
+
+      .text-order {
+        color: #000000;
+        font-weight: 400;
+        font-family: "Roboto";
+        font-style: normal;
+        font-size: 12px;
+      }
+
+      .div-star {
+        display: flex;
+        flex-direction: row;
+        .icon-star {
+          width: 15px;
+          height: 15px;
+          margin-right: 5px;
+        }
+      }
+
+      .star-review {
+        color: #000000;
+        font-weight: 400;
+        font-family: "Roboto";
+        font-style: normal;
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 490px) {
+  .div-date-review-collaborator {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    .div-picker {
+      width: 50%;
+    }
     .text-date {
       color: #000000;
       font-family: "Roboto";
@@ -184,5 +246,10 @@
       font-size: 12px;
       margin-left: 10px;
     }
+  }
+  .div-head-review {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
   }
 }
