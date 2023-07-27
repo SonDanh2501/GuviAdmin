@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { getOrderApi } from "../../../api/order";
 import { ExportCSV } from "../../../helper/export";
 import i18n from "../../../i18n";
+import dayjs from "dayjs";
 import {
   getElementState,
   getLanguageState,
@@ -88,12 +89,15 @@ const ManageOrder = () => {
   const lang = useSelector(getLanguageState);
   const service = useSelector(getService);
   const province = useSelector(getProvince);
-
+  const dateFormat = "YYYY/MM/DD";
   useEffect(() => {
     window.scroll(0, Number(readCookie("order_scrolly")));
 
     setKeyActive(
       readCookie("tab-order") === "" ? 0 : Number(readCookie("tab-order"))
+    );
+    setTab(
+      readCookie("status-order") !== "" ? readCookie("status-order") : "all"
     );
     setCurrentPage(
       readCookie("page_order") === "" ? 1 : Number(readCookie("page_order"))
@@ -101,16 +105,42 @@ const ManageOrder = () => {
     setStartPage(
       readCookie("start_order") === "" ? 0 : Number(readCookie("start_order"))
     );
+    setKind(readCookie("kind_order") !== "" ? readCookie("kind_order") : "");
+    setCity(readCookie("city_order") !== "" ? readCookie("city_order") : "");
+    setStartDate(
+      readCookie("start_date_order") !== ""
+        ? readCookie("start_date_order")
+        : moment("1-1-2023").startOf("date").toISOString()
+    );
+    setEndDate(
+      readCookie("end_date_order") !== ""
+        ? readCookie("end_date_order")
+        : moment().endOf("date").add(7, "hours").toISOString()
+    );
   }, []);
 
   useEffect(() => {
-    getOrderApi(valueSearch, 0, 20, tab, kind, type, startDate, endDate, city)
+    getOrderApi(
+      valueSearch,
+      0,
+      20,
+      readCookie("status-order") !== "" ? readCookie("status-order") : "all",
+      readCookie("kind_order") !== "" ? readCookie("kind_order") : "",
+      type,
+      readCookie("start_date_order") !== ""
+        ? readCookie("start_date_order")
+        : moment("1-1-2023").startOf("date").toISOString(),
+      readCookie("end_date_order") !== ""
+        ? readCookie("end_date_order")
+        : moment().endOf("date").add(7, "hours").toISOString(),
+      readCookie("city_order") !== "" ? readCookie("city_order") : ""
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-  }, [tab]);
+  }, []);
 
   const cityOptions = [];
   const optionsService = [
@@ -149,7 +179,17 @@ const ManageOrder = () => {
   const handleFilterByCondition = () => {
     setIsLoading(true);
     setCheckCondition(false);
-    getOrderApi(valueSearch, 0, 20, tab, kind, type, startDate, endDate, city)
+    getOrderApi(
+      valueSearch,
+      startPage,
+      20,
+      tab,
+      kind,
+      type,
+      startDate,
+      endDate,
+      city
+    )
       .then((res) => {
         setIsLoading(false);
         setData(res?.data);
@@ -158,6 +198,64 @@ const ManageOrder = () => {
       .catch((err) => {
         setIsLoading(false);
       });
+  };
+  const onChangeTab = (value, item) => {
+    setTab(value);
+    setCheckCondition(false);
+    setCurrentPage(1);
+    setStartPage(0);
+    setKeyActive(item?.key);
+    saveToCookie("tab-order", item?.key);
+    saveToCookie("status-order", item?.value);
+    saveToCookie("order_scrolly", 0);
+    saveToCookie("start_order", 0);
+    saveToCookie("page_order", 1);
+    getOrderApi(
+      valueSearch,
+      startPage,
+      20,
+      value,
+      kind,
+      type,
+      startDate,
+      endDate,
+      city
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+
+  const onClearFilter = () => {
+    setCity("");
+    setKind("");
+    setType("date_create");
+    setStartDate(moment("1-1-2023").startOf("date").toISOString());
+    setEndDate(moment().endOf("date").add(7, "hours").toISOString());
+    saveToCookie("kind_order", "");
+    saveToCookie("city_order", "");
+    saveToCookie("name_filter", "");
+    saveToCookie("type_order", "");
+    saveToCookie("start_date_order", "");
+    saveToCookie("end_date_order", "");
+    getOrderApi(
+      valueSearch,
+      startPage,
+      20,
+      tab,
+      "",
+      type,
+      moment("1-1-2023").startOf("date").toISOString(),
+      moment().endOf("date").add(7, "hours").toISOString(),
+      ""
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
   };
 
   const items = [
@@ -217,18 +315,7 @@ const ManageOrder = () => {
                     item?.key === keyActive ? "item-tab-select" : "item-tab"
                   }
                   onClick={() => {
-                    setTab(item?.value);
-                    setKind("");
-                    setCity("");
-                    setType("date_create");
-                    setCheckCondition(false);
-                    setCurrentPage(1);
-                    setStartPage(0);
-                    setKeyActive(item?.key);
-                    saveToCookie("tab-order", item?.key);
-                    saveToCookie("order_scrolly", 0);
-                    saveToCookie("start_order", 0);
-                    saveToCookie("page_order", 1);
+                    onChangeTab(item?.value, item);
                   }}
                 >
                   <a className="text-title">{item?.label}</a>
@@ -241,18 +328,7 @@ const ManageOrder = () => {
             options={itemTab}
             value={tab}
             onChange={(e, item) => {
-              setTab(e);
-              setKind("");
-              setCity("");
-              setType("date_create");
-              setCheckCondition(false);
-              setCurrentPage(1);
-              setStartPage(0);
-              setKeyActive(item?.key);
-              saveToCookie("tab-order", item?.key);
-              saveToCookie("order_scrolly", 0);
-              saveToCookie("start_order", 0);
-              saveToCookie("page_order", 1);
+              onChangeTab(item?.value, item);
             }}
             style={{ width: "100%" }}
           />
@@ -279,10 +355,16 @@ const ManageOrder = () => {
                       setType("date_create");
                       setCity("");
                       setKind("");
+                      saveToCookie("type_order", "date_create");
+                      // saveToCookie("kind_order", "");
+                      // saveToCookie("city_order", "");
                     } else if (e === "date_work") {
                       setType("date_work");
                       setCity("");
                       setKind("");
+                      saveToCookie("type_order", "date_work");
+                      // saveToCookie("kind_order", "");
+                      // saveToCookie("city_order", "");
                     } else if (e === "id_service") {
                       setCity("");
                       setStartDate(
@@ -291,6 +373,7 @@ const ManageOrder = () => {
                       setEndDate(
                         moment().endOf("date").add(7, "hours").toISOString()
                       );
+                      // saveToCookie("city_order", "");
                     } else {
                       setKind("");
                       setStartDate(
@@ -299,6 +382,7 @@ const ManageOrder = () => {
                       setEndDate(
                         moment().endOf("date").add(7, "hours").toISOString()
                       );
+                      // saveToCookie("kind_order", "");
                     }
                   }}
                   options={[
@@ -313,13 +397,23 @@ const ManageOrder = () => {
                     <Select
                       style={{ width: "100%", marginRight: 10 }}
                       options={optionsService}
-                      onChange={(e) => setKind(e)}
+                      value={kind}
+                      onChange={(e, item) => {
+                        setKind(e);
+                        saveToCookie("kind_order", e);
+                        saveToCookie("name_filter", item?.label);
+                      }}
                     />
                   ) : condition === "city" ? (
                     <Select
                       style={{ width: "100%", marginRight: 10 }}
                       options={cityOptions}
-                      onChange={(e) => setCity(e)}
+                      value={city}
+                      onChange={(e, item) => {
+                        setCity(e);
+                        saveToCookie("city_order", e);
+                        saveToCookie("name_filter", item?.label);
+                      }}
                     />
                   ) : condition === "date_create" ||
                     condition === "date_work" ? (
@@ -327,6 +421,14 @@ const ManageOrder = () => {
                       onChange={(date, dateString) => {
                         setStartDate(moment(dateString[0]).toISOString());
                         setEndDate(moment(dateString[1]).toISOString());
+                        saveToCookie(
+                          "start_date_order",
+                          moment(dateString[0]).toISOString()
+                        );
+                        saveToCookie(
+                          "end_date_order",
+                          moment(dateString[1]).toISOString()
+                        );
                       }}
                     />
                   ) : (
@@ -361,6 +463,42 @@ const ManageOrder = () => {
             }}
           />
         </div>
+        {readCookie("name_filter") !== "" && (
+          <div className="div-name-filter">
+            <a>{readCookie("name_filter")}</a>
+            <i
+              class="uil uil-times-circle icon-close"
+              onClick={onClearFilter}
+            ></i>
+          </div>
+        )}
+
+        {readCookie("start_date_order") !== "" && (
+          <div className="div-date-filter">
+            <div className="div-column-filter">
+              <a>
+                {readCookie("type_order") === "date_work"
+                  ? "Theo ngày làm"
+                  : "Theo ngày tạo"}
+              </a>
+              <a>
+                {moment(readCookie("start_date_order")?.slice(0, 10)).format(
+                  "DD/MM/YYYY"
+                )}
+                -
+                {moment(readCookie("end_date_order")?.slice(0, 10)).format(
+                  "DD/MM/YYYY"
+                )}
+              </a>
+            </div>
+
+            <i
+              class="uil uil-times-circle icon-close"
+              onClick={onClearFilter}
+            ></i>
+          </div>
+        )}
+
         <div className="mt-3">
           <OrderManage
             data={data}

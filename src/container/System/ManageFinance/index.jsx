@@ -659,6 +659,170 @@ const ManageFinance = () => {
           columns={columns}
           pagination={false}
           scroll={{ x: width < 900 ? 1000 : 0 }}
+          expandable={
+            width <= 490
+              ? {
+                  expandedRowRender: (record) => {
+                    const subject = record?.id_user_system
+                      ? record?.title_admin.replace(
+                          record?.id_user_system?._id,
+                          record?.id_user_system?.full_name
+                        )
+                      : record?.id_admin_action
+                      ? record?.title_admin.replace(
+                          record?.id_admin_action?._id,
+                          record?.id_admin_action?.full_name
+                        )
+                      : record?.id_customer
+                      ? record?.title_admin.replace(
+                          record?.id_customer?._id,
+                          record?.id_customer?.full_name
+                        )
+                      : record?.id_collaborator
+                      ? record?.title_admin.replace(
+                          record?.id_collaborator?._id,
+                          record?.id_collaborator?.full_name
+                        )
+                      : record?.title_admin.replace(
+                          record?.id_promotion?._id,
+                          record?.id_promotion?.code
+                        );
+
+                    const predicate = record?.id_punish
+                      ? subject.replace(
+                          record?.id_punish?._id,
+                          record?.id_punish?.note_admin
+                        )
+                      : record?.id_reason_punish
+                      ? subject.replace(
+                          record?.id_reason_punish?._id,
+                          record?.id_reason_punish?.title?.vi
+                        )
+                      : record?.id_order
+                      ? subject.replace(
+                          record?.id_order?._id,
+                          record?.id_order?.id_view
+                        )
+                      : record?.id_reward
+                      ? subject.replace(
+                          record?.id_reward?._id,
+                          record?.id_reward?.title?.vi
+                        )
+                      : record?.id_info_reward_collaborator
+                      ? subject.replace(
+                          record?.id_info_reward_collaborator?._id,
+                          record?.id_info_reward_collaborator
+                            ?.id_reward_collaborator?.title?.vi
+                        )
+                      : record?.id_transistion_collaborator
+                      ? subject.replace(
+                          record?.id_transistion_collaborator?._id,
+                          record?.id_transistion_collaborator?.transfer_note
+                        )
+                      : record?.id_collaborator
+                      ? subject.replace(
+                          record?.id_collaborator?._id,
+                          record?.id_collaborator?.full_name
+                        )
+                      : record?.id_customer
+                      ? subject.replace(
+                          record?.id_customer?._id,
+                          record?.id_customer?.full_name
+                        )
+                      : record?.id_promotion
+                      ? subject.replace(
+                          record?.id_promotion?._id,
+                          record?.id_promotion?.title?.vi
+                        )
+                      : record?.id_admin_action
+                      ? subject.replace(
+                          record?.id_admin_action?._id,
+                          record?.id_admin_action?.full_name
+                        )
+                      : record?.id_address
+                      ? subject.replace(
+                          record?.id_address,
+                          record?.value_string
+                        )
+                      : subject.replace(
+                          record?.id_transistion_customer?._id,
+                          record?.id_transistion_customer?.transfer_note
+                        );
+
+                    const object = record?.id_reason_cancel
+                      ? predicate.replace(
+                          record?.id_reason_cancel?._id,
+                          record?.id_reason_cancel?.title?.vi
+                        )
+                      : record?.id_collaborator
+                      ? predicate.replace(
+                          record?.id_collaborator?._id,
+                          record?.id_collaborator?.full_name
+                        )
+                      : record?.id_customer
+                      ? predicate.replace(
+                          record?.id_customer?._id,
+                          record?.id_customer?.full_name
+                        )
+                      : record?.id_address
+                      ? predicate.replace(
+                          record?.id_address,
+                          record?.value_string
+                        )
+                      : record?.id_order
+                      ? predicate.replace(
+                          record?.id_order?._id,
+                          record?.id_order?.id_view
+                        )
+                      : record?.id_transistion_collaborator
+                      ? predicate.replace(
+                          record?.id_transistion_collaborator?._id,
+                          record?.id_transistion_collaborator?.transfer_note
+                        )
+                      : predicate.replace(
+                          record?.id_transistion_customer?._id,
+                          record?.id_transistion_customer?.transfer_note
+                        );
+                    return (
+                      <div className="detail-finance-table">
+                        <div className="div-text">
+                          <a className="title-detail">Nội dung:</a>
+                          <a className="text-detail-finance">{object} </a>
+                        </div>
+                        <div className="div-text">
+                          <a className="title-detail">Ví chính:</a>
+                          <a className="text-detail-finance">
+                            {formatMoney(record?.current_remainder)}{" "}
+                            {record?.status_current_remainder === "down" ? (
+                              <i class="uil uil-arrow-down icon-deduction"></i>
+                            ) : record?.status_current_remainder === "up" ? (
+                              <i class="uil uil-arrow-up icon-plus"></i>
+                            ) : (
+                              <i class="uil uil-minus icon-minus"></i>
+                            )}
+                          </a>
+                        </div>
+                        <div className="div-text">
+                          <a className="title-detail">Ví thưởng:</a>
+                          <a className="text-detail-finance">
+                            {formatMoney(record?.current_gift_remainder)}{" "}
+                            {record?.status_current_gift_remainder ===
+                            "down" ? (
+                              <i class="uil uil-arrow-down icon-deduction"></i>
+                            ) : record?.status_current_gift_remainder ===
+                              "up" ? (
+                              <i class="uil uil-arrow-up icon-plus"></i>
+                            ) : (
+                              <i class="uil uil-minus icon-minus"></i>
+                            )}
+                          </a>
+                        </div>
+                      </div>
+                    );
+                  },
+                }
+              : ""
+          }
         />
         <div className="div-pagination p-2">
           <a>

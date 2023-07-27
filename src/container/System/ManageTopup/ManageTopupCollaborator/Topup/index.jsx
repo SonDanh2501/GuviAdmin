@@ -214,7 +214,6 @@ const TopupCollaborator = ({ type }) => {
           {data?.id_collaborator?.id_view}
         </a>
       ),
-      responsive: ["xl"],
     },
     {
       title: () => {
@@ -311,7 +310,6 @@ const TopupCollaborator = ({ type }) => {
           </div>
         );
       },
-      responsive: ["xl"],
     },
     {
       title: () => {
@@ -327,7 +325,6 @@ const TopupCollaborator = ({ type }) => {
         </a>
       ),
       align: "center",
-      responsive: ["xl"],
     },
     {
       title: () => {
@@ -523,6 +520,103 @@ const TopupCollaborator = ({ type }) => {
           scroll={{
             x: width <= 900 ? 1200 : 0,
           }}
+          expandable={
+            width <= 900
+              ? {
+                  expandedRowRender: (record) => {
+                    return (
+                      <div className="div-detail-topup">
+                        <div className="div-text-detail">
+                          <a className="title-detail">Số tiền :</a>
+                          <a className="text-detail">
+                            {formatMoney(record?.money)}
+                          </a>
+                        </div>
+                        <div className="div-text-detail">
+                          <a className="title-detail">Nạp/rút :</a>
+                          <>
+                            {record?.type_transfer === "top_up" ? (
+                              <div>
+                                <i class="uil uil-money-insert icon-topup"></i>
+                                <a className="text-topup">{`${i18n.t("topup", {
+                                  lng: lang,
+                                })}`}</a>
+                              </div>
+                            ) : (
+                              <div>
+                                <i class="uil uil-money-withdraw icon-withdraw"></i>
+                                <a className="text-withdraw">
+                                  {`${i18n.t("withdraw", { lng: lang })}`}
+                                </a>
+                              </div>
+                            )}
+                          </>
+                        </div>
+                        <div className="div-text-detail">
+                          <a className="title-detail">Nội dung :</a>
+                          <a className="text-detail">{record?.transfer_note}</a>
+                        </div>
+                        <div className="div-text-detail">
+                          <a className="title-detail">Ví :</a>
+                          <a className="text-detail">
+                            {record?.type_wallet === "wallet"
+                              ? `${i18n.t("main_wallet", { lng: lang })}`
+                              : `${i18n.t("gift_wallet", { lng: lang })}`}
+                          </a>
+                        </div>
+                        <div className="div-text-detail">
+                          <a className="title-detail">Trạng thái :</a>
+                          {record?.status === "pending" ? (
+                            <a className="text-pending-topup">{`${i18n.t(
+                              "processing",
+                              {
+                                lng: lang,
+                              }
+                            )}`}</a>
+                          ) : record?.status === "transfered" ? (
+                            <a className="text-transfered">{`${i18n.t(
+                              "money_transferred",
+                              {
+                                lng: lang,
+                              }
+                            )}`}</a>
+                          ) : record?.status === "done" ? (
+                            <a className="text-done-topup">{`${i18n.t(
+                              "complete",
+                              {
+                                lng: lang,
+                              }
+                            )}`}</a>
+                          ) : (
+                            <a className="text-cancel-topup-ctv">{`${i18n.t(
+                              "cancel",
+                              {
+                                lng: lang,
+                              }
+                            )}`}</a>
+                          )}
+                        </div>
+                        <div className="div-text-detail">
+                          <a className="title-detail">Ngày tạo :</a>
+                          <div className="div-time-topup">
+                            <a className="text-time">
+                              {moment(new Date(record?.date_create)).format(
+                                "DD/MM/yyy"
+                              )}
+                            </a>
+                            <a className="text-time">
+                              {moment(new Date(record?.date_create)).format(
+                                "HH:mm"
+                              )}
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  },
+                }
+              : null
+          }
         />
       </div>
       <div className="div-pagination p-2">

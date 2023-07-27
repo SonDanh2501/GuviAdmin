@@ -179,6 +179,9 @@ const EditPromotion = () => {
         setIsGroupCustomer(res?.is_id_group_customer);
         setGroupCustomer(res?.id_group_customer);
         setIsCustomer(res?.is_id_customer);
+        setIsObjectCustomer(
+          res?.is_id_customer ? 3 : res?.is_id_group_customer ? 2 : 1
+        );
         setListNameCustomers(res?.id_customer);
         setIsUsePromo(res?.is_limited_use);
         setUsePromo(res?.limited_use);
@@ -186,6 +189,7 @@ const EditPromotion = () => {
         setMaximumDiscount(res?.discount_max_price);
         setReducedValue(res?.discount_value);
         setIsExchangePoint(res?.is_exchange_point);
+        setRadioExchangePoint(res?.is_exchange_point ? 2 : 1);
         setExchangePoint(res?.exchange_point);
         setNamebrand(res?.brand);
         setPromoCode(res?.code);
@@ -215,6 +219,7 @@ const EditPromotion = () => {
         setIsShowInApp(res?.is_show_in_app);
         setRatioApplyArea(res?.is_apply_area ? 2 : 1);
         setIsApplyArea(res?.is_apply_area);
+        setRatioApplyArea(res?.is_apply_area ? 2 : 1);
         setCity(res?.city);
         setRatioTypeVoucher(res?.brand === "guvi" ? 1 : 2);
         setIsCheckVoucher(res?.type_promotion === "code" ? true : false);
@@ -518,7 +523,6 @@ const EditPromotion = () => {
 
   return (
     <>
-      <Divider />
       <div className="div-head-add-promotion">
         <a>Chỉnh sửa khuyến mãi</a>
         <div>

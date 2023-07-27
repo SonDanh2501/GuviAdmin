@@ -18,7 +18,7 @@ const { RangePicker } = DatePicker;
 
 const CustomDatePicker = (props) => {
   const lang = useSelector(getLanguageState);
-  const { setStartDate, setEndDate, onClick, onCancel, btnCustomer } = props;
+  const { setStartDate, setEndDate, onClick, onCancel, classNameBtn } = props;
   const [open, setOpen] = useState(false);
   const [start, setStart] = useState();
   const [end, setEnd] = useState();

@@ -33,8 +33,8 @@ import platinum from "../../../../assets/images/iconPlatinum.svg";
 import i18n from "../../../../i18n";
 import InputCustom from "../../../../components/textInputCustom";
 import ModalCustom from "../../../../components/modalCustom";
+import useWindowDimensions from "../../../../helper/useWindowDimensions";
 const { TextArea } = Input;
-const width = window.innerWidth;
 
 const ReviewCollaborator = () => {
   const [data, setData] = useState([]);
@@ -56,7 +56,7 @@ const ReviewCollaborator = () => {
   const [modalCheck, setModalCheck] = useState(false);
   const [itemEdit, setItemEdit] = useState([]);
   const [note, setNote] = useState("");
-  const navigate = useNavigate();
+  const { width } = useWindowDimensions();
   const checkElement = useSelector(getElementState);
   const toggleModalCheck = () => setModalCheck(!modalCheck);
   const lang = useSelector(getLanguageState);
@@ -414,7 +414,7 @@ const ReviewCollaborator = () => {
       <div className="div-head-review">
         <Select
           defaultValue={`${i18n.t("filter_star", { lng: lang })}`}
-          style={{ width: 200 }}
+          style={{ width: width <= 490 ? "100%" : 200 }}
           onChange={handleFilter}
           options={[
             { value: 0, label: `${i18n.t("filter_star", { lng: lang })}` },
@@ -429,24 +429,30 @@ const ReviewCollaborator = () => {
         <Input
           placeholder={`${i18n.t("search", { lng: lang })}`}
           type="text"
-          style={{ width: "60%" }}
+          style={
+            width <= 490 ? { width: "100%", marginTop: 10 } : { width: "60%" }
+          }
           prefix={<SearchOutlined />}
           onChange={(e) => handleSearch(e.target.value)}
         />
       </div>
-      <div className="div-date">
-        <CustomDatePicker
-          setStartDate={setStartDate}
-          setEndDate={setEndDate}
-          onClick={onChangeDay}
-          onCancel={onCancelPicker}
-        />
-        {startDate && (
-          <a className="text-date">
-            {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-            {moment(endDate).utc().format("DD/MM/YYYY")}
-          </a>
-        )}
+      <div className="div-date-review-collaborator">
+        <div className="div-picker">
+          <CustomDatePicker
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            onClick={onChangeDay}
+            onCancel={onCancelPicker}
+          />
+        </div>
+        <div>
+          {startDate && (
+            <a className="text-date">
+              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+              {moment(endDate).utc().format("DD/MM/YYYY")}
+            </a>
+          )}
+        </div>
       </div>
       <div className="div-tab-review">
         {TAB?.map((item, index) => {
@@ -479,12 +485,56 @@ const ReviewCollaborator = () => {
               },
             };
           }}
-          scroll={
-            width <= 490
+          scroll={{
+            x: width <= 490 ? 1200 : 0,
+          }}
+          expandable={
+            width <= 900
               ? {
-                  x: 1600,
+                  expandedRowRender: (record) => {
+                    return (
+                      <div className="div-detail-review-collaborator">
+                        <div className="div-text-detail">
+                          <a className="title-detail">CTV :</a>
+                          <Link
+                            to={`/details-collaborator/${record?.id_collaborator?._id}`}
+                          >
+                            <a className="text-detail-review">
+                              {record?.id_collaborator?.full_name}
+                            </a>
+                          </Link>
+                        </div>
+                        <div className="div-text-detail">
+                          <a className="title-detail">Số sao/đơn :</a>
+                          <Link
+                            to={`/details-order/${record?.id_group_order}`}
+                            className="div-star-review"
+                          >
+                            <a className="text-order">{record?.id_view}</a>
+                            <div className="div-star">
+                              <Rate
+                                value={record?.star}
+                                style={{ width: "100%" }}
+                                disabled={true}
+                              />
+                            </div>
+                          </Link>
+                        </div>
+                        <div className="div-text-detail">
+                          <a className="title-detail">Nội dung :</a>
+                          <a className="text-detail-review">{record?.review}</a>
+                        </div>
+                        <div className="div-text-detail">
+                          <a className="title-detail">Đánh giá :</a>
+                          <a className="text-detail-review">
+                            {record?.short_review[0]}
+                          </a>
+                        </div>
+                      </div>
+                    );
+                  },
                 }
-              : null
+              : ""
           }
         />
       </div>
