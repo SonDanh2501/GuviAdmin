@@ -167,12 +167,39 @@
   }
 }
 
+.div-detail-customer {
+  display: flex;
+  flex-direction: column;
+
+  .div-text-detail {
+    display: flex;
+    flex-direction: row;
+
+    .title-detail {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      color: #19202c;
+      width: 100px;
+    }
+
+    .text-detail {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      color: #19202c;
+      margin-left: 10px;
+    }
+  }
+}
+
 .text-birtday-customer {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
-  line-height: 30px;
   color: #19202c;
 }
 

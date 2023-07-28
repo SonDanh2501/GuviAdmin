@@ -362,280 +362,270 @@ const Document = ({ id }) => {
 
   return (
     <>
-      <Form>
-        <div className="pl-lg-5">
-          <Row>
-            <Col span="8" className="col-check">
-              <Checkbox
-                checked={deal}
-                onChange={(e) => setDeal(e.target.checked)}
-              >
-                {`${i18n.t("cooperation_agreement", { lng: lang })}`}
-              </Checkbox>
-            </Col>
+      <div className="pl-lg-5">
+        <div className="div-check-document">
+          <Checkbox
+            checked={deal}
+            onChange={(e) => setDeal(e.target.checked)}
+            className="check-document"
+          >
+            {`${i18n.t("cooperation_agreement", { lng: lang })}`}
+          </Checkbox>
 
-            <Col span="16">
-              <InputCustom
-                title={`${i18n.t("profile_ID", { lng: lang })}`}
-                value={valueDeal}
-                onChange={(e) => setSetValueDeal(e.target.value)}
-              />
-            </Col>
-          </Row>
-          <hr />
-          <Row>
-            <Col span="8" className="col-check">
-              <Checkbox
-                checked={identify}
-                onChange={(e) => setIdentify(e.target.checked)}
-              >
-                {`${i18n.t("citizen_ID", { lng: lang })}`}
-              </Checkbox>
-            </Col>
-
-            <Col span="16">
-              <div>
-                <a>{`${i18n.t("citizen_ID_front", { lng: lang })}`}</a>
-                <div className="col-img">
-                  <Input
-                    id="exampleThumbnail"
-                    type="file"
-                    className="input-file"
-                    accept={".jpg,.png,.jpeg"}
-                    name="thumbnail"
-                    onChange={onChangeIdentifyBefore}
-                  />
-                  {imgIdentifyFronsite && (
-                    <div className="div-img-thumbnail">
-                      <i
-                        class="uil uil-times-circle"
-                        onClick={() => setImgIdentifyFronsite("")}
-                      />
-                      <Image
-                        width={150}
-                        src={imgIdentifyFronsite}
-                        className={"img-thumbnail"}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div>
-                <a>{`${i18n.t("citizen_ID_back", { lng: lang })}`}</a>
-                <div className="col-img">
-                  <Input
-                    id="exampleThumbnail"
-                    type="file"
-                    className="input-file"
-                    accept={".jpg,.png,.jpeg"}
-                    name="thumbnail"
-                    onChange={onChangeIdentifyAfter}
-                  />
-                  {imgIdentifyBacksite && (
-                    <div className="div-img-thumbnail">
-                      <i
-                        class="uil uil-times-circle"
-                        onClick={() => setImgIdentifyBacksite("")}
-                      />
-                      <Image
-                        width={150}
-                        src={imgIdentifyBacksite}
-                        className={"img-thumbnail"}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </Col>
-            {imgIdentifyFronsite && (
-              <Col span="2" className="div-col-download">
-                <Button
-                  className="btn-download"
-                  onClick={downloadImageIdentify}
-                >
-                  <i class="uil uil-image-download"></i>
-                </Button>
-              </Col>
-            )}
-          </Row>
-          <hr />
-          <Row>
-            <Col span="6" className="col-check">
-              <Checkbox
-                checked={information}
-                onChange={(e) => setInformation(e.target.checked)}
-              >
-                {`${i18n.t("curriculum_vitae", { lng: lang })}`}
-              </Checkbox>
-            </Col>
-
-            <Col span="16">
-              <div className="div-infomation">
-                <a>{`${i18n.t("image", { lng: lang })}`}</a>
-                <div className="col-img">
-                  <input
-                    type="file"
-                    id="files"
-                    name="files"
-                    accept=".jpg, .jpeg, .png"
-                    multiple
-                    onChange={onChangeInformation}
-                  />
-                  <div className="div-thumbnail-infomation">
-                    {imgInformation.length > 0 &&
-                      imgInformation.map((item, index) => {
-                        return (
-                          <div
-                            className="div-item-thumbnail-infomation"
-                            key={index}
-                          >
-                            <i
-                              class="uil uil-times-circle"
-                              onClick={() => removeItemInfomation(item)}
-                            ></i>
-                            <Image
-                              src={item}
-                              className="img-thumbnail-infomation"
-                            />
-                          </div>
-                        );
-                      })}
-                  </div>
-                </div>
-              </div>
-            </Col>
-            {imgInformation.length > 0 && (
-              <Col span="2" className="div-col-download">
-                <Button
-                  className="btn-download"
-                  onClick={downloadImageInformation}
-                >
-                  <i class="uil uil-image-download"></i>
-                </Button>
-              </Col>
-            )}
-          </Row>
-          <hr />
-          <Row>
-            <Col span="6" className="col-check">
-              <Checkbox
-                checked={registration}
-                onChange={(e) => setRegistration(e.target.checked)}
-              >
-                {`${i18n.t("household_book", { lng: lang })}`}
-              </Checkbox>
-            </Col>
-
-            <Col span="16">
-              <div className="div-infomation">
-                <a>{`${i18n.t("image", { lng: lang })}`}</a>
-                <div className="col-img">
-                  <input
-                    type="file"
-                    id="files"
-                    name="files"
-                    accept=".jpg, .jpeg, .png"
-                    multiple
-                    onChange={onChangeRegistration}
-                  />
-                  <div className="div-thumbnail-infomation">
-                    {imgRegistration.length > 0 &&
-                      imgRegistration.map((item, index) => {
-                        return (
-                          <div
-                            className="div-item-thumbnail-infomation"
-                            key={index}
-                          >
-                            <i
-                              class="uil uil-times-circle"
-                              onClick={() => removeItemRegistration(item)}
-                            ></i>
-                            <Image
-                              src={item}
-                              className="img-thumbnail-infomation"
-                            />
-                          </div>
-                        );
-                      })}
-                  </div>
-                </div>
-              </div>
-            </Col>
-            {imgRegistration.length > 0 && (
-              <Col span="2" className="div-col-download">
-                <Button
-                  className="btn-download"
-                  onClick={downloadImageRegistration}
-                >
-                  <i class="uil uil-image-download"></i>
-                </Button>
-              </Col>
-            )}
-          </Row>
-          <hr />
-          <Row className="mb-5">
-            <Col span="6" className="col-check">
-              <Checkbox
-                checked={certification}
-                onChange={(e) => setCertification(e.target.checked)}
-              >
-                {`${i18n.t("certificate_conduct", { lng: lang })}`}
-              </Checkbox>
-            </Col>
-
-            <Col span="16">
-              <div className="div-infomation">
-                <a>{`${i18n.t("image", { lng: lang })}`}</a>
-                <div className="col-img">
-                  <input
-                    type="file"
-                    id="files"
-                    name="files"
-                    accept=".jpg, .jpeg, .png"
-                    multiple
-                    onChange={onChangeCertification}
-                  />
-                  <div className="div-thumbnail-infomation">
-                    <div className="div-thumbnail-infomation">
-                      {imgCertification.length > 0 &&
-                        imgCertification.map((item, index) => {
-                          return (
-                            <div
-                              className="div-item-thumbnail-infomation"
-                              key={index}
-                            >
-                              <i
-                                class="uil uil-times-circle"
-                                onClick={() => removeItemCertification(item)}
-                              ></i>
-                              <Image
-                                src={item}
-                                className="img-thumbnail-infomation"
-                              />
-                            </div>
-                          );
-                        })}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Col>
-            {imgCertification.length > 0 && (
-              <Col span="2" className="div-col-download">
-                <Button
-                  className="btn-download"
-                  onClick={downloadImageCertification}
-                >
-                  <i class="uil uil-image-download"></i>
-                </Button>
-              </Col>
-            )}
-          </Row>
+          <div className="form-input">
+            <InputCustom
+              title={`${i18n.t("profile_ID", { lng: lang })}`}
+              value={valueDeal}
+              onChange={(e) => setSetValueDeal(e.target.value)}
+            />
+          </div>
         </div>
-        <Button className="btn-update" onClick={onUpdateDocument}>
-          {`${i18n.t("update", { lng: lang })}`}
-        </Button>
-      </Form>
+        <hr />
+        <div className="div-check-document">
+          <Checkbox
+            checked={identify}
+            onChange={(e) => setIdentify(e.target.checked)}
+            className="check-document"
+          >
+            {`${i18n.t("citizen_ID", { lng: lang })}`}
+          </Checkbox>
+
+          <div className="form-input">
+            <div>
+              <a>{`${i18n.t("citizen_ID_front", { lng: lang })}`}</a>
+              <div className="col-img">
+                <Input
+                  id="exampleThumbnail"
+                  type="file"
+                  className="input-file"
+                  accept={".jpg,.png,.jpeg"}
+                  name="thumbnail"
+                  onChange={onChangeIdentifyBefore}
+                />
+                {imgIdentifyFronsite && (
+                  <div className="div-img-thumbnail">
+                    <i
+                      class="uil uil-times-circle"
+                      onClick={() => setImgIdentifyFronsite("")}
+                    />
+                    <Image
+                      width={150}
+                      src={imgIdentifyFronsite}
+                      className={"img-thumbnail"}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div>
+              <a>{`${i18n.t("citizen_ID_back", { lng: lang })}`}</a>
+              <div className="col-img">
+                <Input
+                  id="exampleThumbnail"
+                  type="file"
+                  className="input-file"
+                  accept={".jpg,.png,.jpeg"}
+                  name="thumbnail"
+                  onChange={onChangeIdentifyAfter}
+                />
+                {imgIdentifyBacksite && (
+                  <div className="div-img-thumbnail">
+                    <i
+                      class="uil uil-times-circle"
+                      onClick={() => setImgIdentifyBacksite("")}
+                    />
+                    <Image
+                      width={150}
+                      src={imgIdentifyBacksite}
+                      className={"img-thumbnail"}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          {imgIdentifyFronsite && (
+            <div className="div-col-download">
+              <Button className="btn-download" onClick={downloadImageIdentify}>
+                <i class="uil uil-image-download"></i>
+              </Button>
+            </div>
+          )}
+        </div>
+        <hr />
+        <div className="div-check-document">
+          <Checkbox
+            checked={information}
+            onChange={(e) => setInformation(e.target.checked)}
+            className="check-document"
+          >
+            {`${i18n.t("curriculum_vitae", { lng: lang })}`}
+          </Checkbox>
+
+          <div className="form-input">
+            <div className="div-infomation">
+              <a>{`${i18n.t("image", { lng: lang })}`}</a>
+              <div className="col-img">
+                <input
+                  type="file"
+                  id="files"
+                  name="files"
+                  accept=".jpg, .jpeg, .png"
+                  multiple
+                  onChange={onChangeInformation}
+                />
+                <div className="div-thumbnail-infomation">
+                  {imgInformation.length > 0 &&
+                    imgInformation.map((item, index) => {
+                      return (
+                        <div
+                          className="div-item-thumbnail-infomation"
+                          key={index}
+                        >
+                          <i
+                            class="uil uil-times-circle"
+                            onClick={() => removeItemInfomation(item)}
+                          ></i>
+                          <Image
+                            src={item}
+                            className="img-thumbnail-infomation"
+                          />
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            </div>
+          </div>
+          {imgInformation.length > 0 && (
+            <div className="div-col-download">
+              <Button
+                className="btn-download"
+                onClick={downloadImageInformation}
+              >
+                <i class="uil uil-image-download"></i>
+              </Button>
+            </div>
+          )}
+        </div>
+        <hr />
+        <div className="div-check-document">
+          <Checkbox
+            checked={registration}
+            onChange={(e) => setRegistration(e.target.checked)}
+            className="check-document"
+          >
+            {`${i18n.t("household_book", { lng: lang })}`}
+          </Checkbox>
+
+          <div className="form-input">
+            <div className="div-infomation">
+              <a>{`${i18n.t("image", { lng: lang })}`}</a>
+              <div className="col-img">
+                <input
+                  type="file"
+                  id="files"
+                  name="files"
+                  accept=".jpg, .jpeg, .png"
+                  multiple
+                  onChange={onChangeRegistration}
+                />
+                <div className="div-thumbnail-infomation">
+                  {imgRegistration.length > 0 &&
+                    imgRegistration.map((item, index) => {
+                      return (
+                        <div
+                          className="div-item-thumbnail-infomation"
+                          key={index}
+                        >
+                          <i
+                            class="uil uil-times-circle"
+                            onClick={() => removeItemRegistration(item)}
+                          ></i>
+                          <Image
+                            src={item}
+                            className="img-thumbnail-infomation"
+                          />
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            </div>
+          </div>
+          {imgRegistration.length > 0 && (
+            <div span="2" className="div-col-download">
+              <Button
+                className="btn-download"
+                onClick={downloadImageRegistration}
+              >
+                <i class="uil uil-image-download"></i>
+              </Button>
+            </div>
+          )}
+        </div>
+        <hr />
+        <div className="div-check-document">
+          <Checkbox
+            checked={certification}
+            onChange={(e) => setCertification(e.target.checked)}
+            className="check-document"
+          >
+            {`${i18n.t("certificate_conduct", { lng: lang })}`}
+          </Checkbox>
+
+          <div className="form-input">
+            <div className="div-infomation">
+              <a>{`${i18n.t("image", { lng: lang })}`}</a>
+              <div className="col-img">
+                <input
+                  type="file"
+                  id="files"
+                  name="files"
+                  accept=".jpg, .jpeg, .png"
+                  multiple
+                  onChange={onChangeCertification}
+                />
+                <div className="div-thumbnail-infomation">
+                  <div className="div-thumbnail-infomation">
+                    {imgCertification.length > 0 &&
+                      imgCertification.map((item, index) => {
+                        return (
+                          <div
+                            className="div-item-thumbnail-infomation"
+                            key={index}
+                          >
+                            <i
+                              class="uil uil-times-circle"
+                              onClick={() => removeItemCertification(item)}
+                            ></i>
+                            <Image
+                              src={item}
+                              className="img-thumbnail-infomation"
+                            />
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {imgCertification.length > 0 && (
+            <div className="div-col-download">
+              <Button
+                className="btn-download"
+                onClick={downloadImageCertification}
+              >
+                <i class="uil uil-image-download"></i>
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+      <Button className="btn-update" onClick={onUpdateDocument}>
+        {`${i18n.t("update", { lng: lang })}`}
+      </Button>
     </>
   );
 };

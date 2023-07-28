@@ -79,8 +79,8 @@ const ManagePromotionGuvi = (props) => {
       )}
       <div>
         <PromotionManage
-          type={type}
-          brand={brand}
+          type={""}
+          brand={""}
           idService={id}
           exchange={""}
           tab={tab}

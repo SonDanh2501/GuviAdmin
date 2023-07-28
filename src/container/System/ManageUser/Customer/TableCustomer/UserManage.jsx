@@ -707,6 +707,113 @@ const UserManage = (props) => {
             scroll={{
               x: width <= 490 ? 900 : 0,
             }}
+            expandable={
+              width <= 490
+                ? {
+                    expandedRowRender: (record) => {
+                      const address =
+                        record?.default_address?.address.split(",");
+                      return (
+                        <div className="div-detail-customer">
+                          <div className="div-text-detail">
+                            <a className="title-detail">
+                              {`${i18n.t("phone", {
+                                lng: lang,
+                              })}`}
+                              :
+                            </a>
+                            <a className="text-detail">{record?.phone}</a>
+                          </div>
+                          <div className="div-text-detail">
+                            <a className="title-detail">
+                              {`${i18n.t("address", {
+                                lng: lang,
+                              })}`}
+                              :
+                            </a>
+                            <a className="text-detail">
+                              {!record?.default_address
+                                ? `${i18n.t("not_available", { lng: lang })}`
+                                : address[address.length - 2] +
+                                  "," +
+                                  address[address.length - 1]}
+                            </a>
+                          </div>
+                          <div className="div-text-detail">
+                            <a className="title-detail">
+                              {`${i18n.t("date_create", {
+                                lng: lang,
+                              })}`}
+                              :
+                            </a>
+                            <a className="text-detail">
+                              {moment(new Date(record?.date_create)).format(
+                                "DD/MM/YYYY - HH:mm"
+                              )}
+                            </a>
+                          </div>
+                          <div className="div-text-detail">
+                            <a className="title-detail">
+                              {`${i18n.t("nearest_order", {
+                                lng: lang,
+                              })}`}
+                              :
+                            </a>
+
+                            {record?.id_group_order ? (
+                              <Link
+                                to={`/details-order/${record?.id_group_order}`}
+                              >
+                                <a className="text-detail">
+                                  {record?.id_view_group_order}
+                                </a>
+                              </Link>
+                            ) : (
+                              <a className="text-detail">{`${i18n.t(
+                                "not_available",
+                                { lng: lang }
+                              )}`}</a>
+                            )}
+                          </div>
+                          <div className="div-text-detail">
+                            <a className="title-detail">
+                              {`${i18n.t("total_order", {
+                                lng: lang,
+                              })}`}
+                              :
+                            </a>
+                            <a className="text-detail">{record?.total_order}</a>
+                          </div>
+                          <div className="div-text-detail">
+                            <a className="title-detail">
+                              {`${i18n.t("total", {
+                                lng: lang,
+                              })}`}
+                              :
+                            </a>
+                            <a className="text-detail">
+                              {formatMoney(record?.total_price)}
+                            </a>
+                          </div>
+                          <div className="div-text-detail">
+                            <Space size="middle">
+                              <Dropdown
+                                menu={{
+                                  items,
+                                }}
+                                placement="bottom"
+                                trigger={["click"]}
+                              >
+                                <a>Tuỳ chỉnh</a>
+                              </Dropdown>
+                            </Space>
+                          </div>
+                        </div>
+                      );
+                    },
+                  }
+                : null
+            }
           />
         </div>
 

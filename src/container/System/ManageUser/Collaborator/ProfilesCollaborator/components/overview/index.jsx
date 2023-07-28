@@ -8,6 +8,7 @@ import { formatMoney } from "../../../../../../../helper/formatMoney";
 import { useEffect, useState } from "react";
 import { getOverviewCollaborator } from "../../../../../../../api/collaborator";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 const Overview = ({ id }) => {
   const [total, setTotal] = useState({
@@ -25,6 +26,7 @@ const Overview = ({ id }) => {
       .then((res) => {
         setData(res?.arr_order?.reverse());
         setTotal({
+          ...total,
           total_favourite: res?.total_favourite.length,
           total_hour: res?.total_hour,
           total_order: res?.total_order,
@@ -45,35 +47,31 @@ const Overview = ({ id }) => {
           <a className="text-wallet">
             Ví Thưởng: {formatMoney(total?.gift_remainder)}
           </a>
-          <Row gutter={[16, 16]} style={{ marginTop: 20 }}>
-            <Col span={8}>
-              <div className="div-item-total">
-                <a className="number-total">{total.total_order}</a>
-                <a className="detail-total">Số ca làm</a>
+          <div className="div-total">
+            <div className="div-item-total">
+              <a className="number-total">{total.total_order}</a>
+              <a className="detail-total">Số ca làm</a>
+            </div>
+
+            <div className="div-item-total">
+              <a className="number-total">{total.total_hour}</a>
+              <a className="detail-total">Số giờ làm</a>
+            </div>
+
+            <div className="div-item-total-favorite">
+              <div className="div-number">
+                <a className="number-total">{total.total_favourite}</a>
+                <HeartFilled
+                  style={{
+                    color: "red",
+                    marginLeft: 10,
+                    fontSize: 20,
+                  }}
+                />
               </div>
-            </Col>
-            <Col span={8}>
-              <div className="div-item-total">
-                <a className="number-total">{total.total_hour}</a>
-                <a className="detail-total">Số giờ làm</a>
-              </div>
-            </Col>
-            <Col span={8}>
-              <div className="div-item-total-favorite">
-                <div className="div-number">
-                  <a className="number-total">{total.total_favourite}</a>
-                  <HeartFilled
-                    style={{
-                      color: "red",
-                      marginLeft: 10,
-                      fontSize: 20,
-                    }}
-                  />
-                </div>
-                <a className="detail-total">Yêu thích</a>
-              </div>
-            </Col>
-          </Row>
+              <a className="detail-total">Yêu thích</a>
+            </div>
+          </div>
 
           <div className="mt-4">
             <a className="text-order-near">Đơn gần nhất</a>
@@ -81,7 +79,9 @@ const Overview = ({ id }) => {
               return (
                 <div key={index} className="item-list-order">
                   <div className="div-detail-item">
-                    <a className="text-item">Mã: {item?.id_view}</a>
+                    <Link to={`/details-order/${item?.id_group_order}`}>
+                      <a className="text-item">Mã: {item?.id_view}</a>
+                    </Link>
                     <a className="text-item">
                       Dịch vụ:{" "}
                       {item?.type === "loop" && item?.is_auto_order
@@ -98,9 +98,11 @@ const Overview = ({ id }) => {
                       Ngày làm:{" "}
                       {moment(item?.date_work).format("DD/MM/YYYY - HH:mm")}{" "}
                     </a>
-                    <a className="text-item">
-                      Khách hàng: {item?.name_customer}
-                    </a>
+                    <Link to={`/profile-customer/${item?.id_customer?._id}`}>
+                      <a className="text-item">
+                        Khách hàng: {item?.name_customer}
+                      </a>
+                    </Link>
                     <a className="text-item">Địa chỉ: {item?.address}</a>
                   </div>
                   <div className="item-detail-right">

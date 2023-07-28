@@ -483,24 +483,116 @@ const OrderManage = (props) => {
                   expandedRowRender: (record) => {
                     return (
                       <div className="div-plus">
-                        <a>
-                          {`${i18n.t("address", { lng: lang })}`}:{" "}
-                          {record?.address}
-                        </a>
-                        <a>
-                          {`${i18n.t("date_create", { lng: lang })}`}:{" "}
-                          {moment(new Date(record?.date_create)).format(
-                            "DD/MM/YYYY - HH:mm"
-                          )}
-                        </a>
-                        <a>
-                          Thanh toán:{" "}
-                          {record?.payment_method === "cash"
-                            ? `${i18n.t("cash", { lng: lang })}`
-                            : record?.payment_method === "point"
-                            ? `${i18n.t("wallet_gpay", { lng: lang })}`
-                            : ""}
-                        </a>
+                        <div className="div-text-plus">
+                          <a className="title-plus-order">
+                            {`${i18n.t("address", { lng: lang })}`}:
+                          </a>
+                          <a className="text-plus-order">{record?.address}</a>
+                        </div>
+                        <div className="div-text-plus">
+                          <a className="title-plus-order">
+                            {`${i18n.t("date_create", { lng: lang })}`}:
+                          </a>
+                          <a className="text-plus-order">
+                            {" "}
+                            {moment(new Date(record?.date_create)).format(
+                              "DD/MM/YYYY - HH:mm"
+                            )}
+                          </a>
+                        </div>
+                        <div className="div-text-plus">
+                          <a className="title-plus-order">Dịch vụ:</a>
+                          <a className="text-plus-order">
+                            {record?.type === "loop" && record?.is_auto_order
+                              ? `${i18n.t("repeat", { lng: lang })}`
+                              : record?.service?._id?.kind ===
+                                "giup_viec_theo_gio"
+                              ? `${i18n.t("cleaning", { lng: lang })}`
+                              : record?.service?._id?.kind ===
+                                "giup_viec_co_dinh"
+                              ? `${i18n.t("cleaning_subscription", {
+                                  lng: lang,
+                                })}`
+                              : record?.service?._id?.kind ===
+                                "phuc_vu_nha_hang"
+                              ? `${i18n.t("serve", { lng: lang })}`
+                              : ""}{" "}
+                            / {timeWork(record)}
+                          </a>
+                        </div>
+                        <div className="div-text-plus">
+                          <a className="title-plus-order">Ngày làm:</a>
+                          <a className="text-plus-order">
+                            <a className="text-day">
+                              {moment(new Date(record?.date_work))
+                                .locale(lang)
+                                .format("dddd")}
+                            </a>
+                            -{" "}
+                            {moment(new Date(record?.date_work)).format(
+                              "DD/MM/YYYY"
+                            )}
+                          </a>
+                        </div>
+                        <div className="div-text-plus">
+                          <a className="title-plus-order">Thanh toán:</a>
+                          <a className="text-plus-order">
+                            {record?.payment_method === "cash"
+                              ? `${i18n.t("cash", { lng: lang })}`
+                              : record?.payment_method === "point"
+                              ? `${i18n.t("wallet_gpay", { lng: lang })}`
+                              : ""}
+                          </a>
+                        </div>
+                        <div className="div-text-plus">
+                          <a className="title-plus-order">CTV:</a>
+                          <>
+                            {!record?.id_collaborator ? (
+                              <a className="text-plus-order">{`${i18n.t(
+                                "searching",
+                                {
+                                  lng: lang,
+                                }
+                              )}`}</a>
+                            ) : (
+                              <Link
+                                to={`/details-collaborator/${record?.id_collaborator?._id}`}
+                              >
+                                <a className="text-plus-order-ctv">
+                                  {record?.id_collaborator?.full_name}
+                                </a>
+                              </Link>
+                            )}
+                          </>
+                        </div>
+                        <div className="div-text-plus">
+                          <a className="title-plus-order">
+                            {`${i18n.t("status", { lng: lang })}`}:
+                          </a>
+                          <a
+                            className={
+                              record?.status === "pending"
+                                ? "text-pen-order"
+                                : record?.status === "confirm"
+                                ? "text-confirm-order"
+                                : record?.status === "doing"
+                                ? "text-doing-order"
+                                : record?.status === "done"
+                                ? "text-done-order"
+                                : "text-cancel-order"
+                            }
+                          >
+                            {record?.status === "pending"
+                              ? `${i18n.t("pending", { lng: lang })}`
+                              : record?.status === "confirm"
+                              ? `${i18n.t("confirm", { lng: lang })}`
+                              : record?.status === "doing"
+                              ? `${i18n.t("doing", { lng: lang })}`
+                              : record?.status === "done"
+                              ? `${i18n.t("complete", { lng: lang })}`
+                              : `${i18n.t("cancel", { lng: lang })}`}
+                          </a>
+                        </div>
                       </div>
                     );
                   },

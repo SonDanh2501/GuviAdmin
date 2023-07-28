@@ -6,11 +6,13 @@ import "./index.scss";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../../i18n";
+import useWindowDimensions from "../../../../../../../helper/useWindowDimensions";
 
 const Review = ({ id, totalReview }) => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
@@ -129,7 +131,12 @@ const Review = ({ id, totalReview }) => {
       </div>
 
       <div className="mt-3">
-        <Table columns={columns} dataSource={data} pagination={false} />
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+          scroll={{ x: width < 900 ? 1000 : 0 }}
+        />
 
         <div className="div-pagination p-2">
           <a>

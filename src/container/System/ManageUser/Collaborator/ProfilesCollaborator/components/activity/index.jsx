@@ -230,13 +230,9 @@ const Activity = ({ id }) => {
         columns={columns}
         dataSource={data}
         pagination={false}
-        scroll={
-          width <= 490
-            ? {
-                x: 1000,
-              }
-            : ""
-        }
+        scroll={{
+          x: width <= 900 ? 1000 : 0,
+        }}
         expandable={
           width <= 1200
             ? {
