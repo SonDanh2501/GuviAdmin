@@ -59,17 +59,29 @@
   margin-top: 20px;
 }
 
+.image-promotion-order {
+  width: 10px;
+  height: 10px;
+  border: 0.1px solid #000000;
+  border-radius: 4px;
+}
+
 .div-use-promotion {
   display: flex;
   flex-direction: column;
-  align-items: center;
-
+  align-items: end;
   .text-title-use {
     font-family: "Roboto";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
     color: #202223;
+  }
+
+  .progress-bar {
+    margin: 0;
+    width: 80%;
+    background: none;
   }
 }
 
