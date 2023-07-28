@@ -2,6 +2,33 @@
   display: flex;
 }
 
+.div-check-document {
+  display: flex;
+  flex-direction: row;
+
+  .check-document {
+    width: 30%;
+  }
+  .form-input {
+    width: 70%;
+  }
+
+  .div-col-download {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    float: right;
+    .btn-download {
+      background-color: transparent;
+      color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
 .col-img {
   display: flex;
   .input-file {
@@ -60,17 +87,31 @@
   }
 }
 
-.div-col-download {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  width: 100%;
-  float: right;
-  .btn-download {
-    background-color: transparent;
-    color: black;
+@media screen and (max-width: 900px) {
+  .div-check-document {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    .check-document {
+      width: 100%;
+    }
+    .form-input {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .div-col-download {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      width: 100%;
+      float: right;
+      .btn-download {
+        background-color: transparent;
+        color: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
   }
 }

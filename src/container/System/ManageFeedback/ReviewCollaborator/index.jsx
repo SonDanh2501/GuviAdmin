@@ -486,7 +486,7 @@ const ReviewCollaborator = () => {
             };
           }}
           scroll={{
-            x: width <= 490 ? 1200 : 0,
+            x: width <= 900 ? 1200 : 0,
           }}
           expandable={
             width <= 900

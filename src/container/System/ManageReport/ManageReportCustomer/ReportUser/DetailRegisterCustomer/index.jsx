@@ -92,13 +92,14 @@ const DetailRegisterCustomer = () => {
         return (
           <div className="hide-phone">
             <a className="text-phone">
-              {rowIndex === index
+              {/* {rowIndex === index
                 ? hidePhone
                   ? data?.phone
                   : phone + "***"
-                : phone + "***"}
+                : phone + "***"} */}
+              {data?.phone}
             </a>
-            <a
+            {/* <a
               className="btn-eyes"
               onClick={() =>
                 rowIndex === index
@@ -115,7 +116,7 @@ const DetailRegisterCustomer = () => {
               ) : (
                 <i class="uil uil-eye-slash"></i>
               )}
-            </a>
+            </a> */}
           </div>
         );
       },

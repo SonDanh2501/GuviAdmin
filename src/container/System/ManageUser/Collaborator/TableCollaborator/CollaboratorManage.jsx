@@ -76,6 +76,14 @@ const CollaboratorManage = (props) => {
 
   useEffect(() => {
     window.scroll(0, Number(readCookie("table_y_ctv")));
+    setCurrentPage(
+      readCookie("page_ctv") === "" ? 1 : Number(readCookie("page_ctv"))
+    );
+    setStartPage(
+      readCookie("start_page_ctv") === ""
+        ? 0
+        : Number(readCookie("start_page_ctv"))
+    );
   }, []);
 
   useEffect(() => {
@@ -91,9 +99,6 @@ const CollaboratorManage = (props) => {
         setTotal(res?.totalItems);
       })
       .catch((err) => {});
-    setCurrentPage(
-      readCookie("page_ctv") === "" ? 1 : Number(readCookie("page_ctv"))
-    );
   }, [status]);
 
   const onChange = (page) => {

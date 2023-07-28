@@ -115,7 +115,7 @@ const ProfileCollaborator = () => {
             <Information data={data} image={img} idCTV={id} setData={setData} />
           </Tabs.TabPane>
           <Tabs.TabPane tab={`${i18n.t("document", { lng: lang })}`} key="3">
-            <Document id={data?._id} />
+            <Document id={id} />
           </Tabs.TabPane>
           <Tabs.TabPane tab={`${i18n.t("activity", { lng: lang })}`} key="4">
             <Activity id={id} />

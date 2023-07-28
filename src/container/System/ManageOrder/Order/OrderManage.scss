@@ -208,6 +208,47 @@
 .div-plus {
   display: flex;
   flex-direction: column;
+
+  .div-text-plus {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .title-plus-order {
+      width: 70px;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      color: #000000 !important;
+    }
+    .text-plus-order-ctv {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      color: #000000;
+      text-decoration-line: underline;
+    }
+    .text-plus-order {
+      display: block;
+      width: 250px;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      color: #000000 !important;
+
+      .text-day {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        color: #000000 !important;
+        text-transform: capitalize;
+      }
+    }
+  }
 }
 
 .text-pending-search {

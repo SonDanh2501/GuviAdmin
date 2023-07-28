@@ -326,455 +326,224 @@ const PromotionManage = ({
     },
   ];
 
-  const columns =
-    type === "code"
-      ? [
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("promotion_name", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data) => {
-              return (
-                <div className="div-img-promotion">
-                  <Image
-                    src={data?.thumbnail}
-                    className="img-customer-promotion"
-                  />
-                  <div className="div-name-promotion">
-                    <a className="text-title-code">{data?.code}</a>
-                    <a className="text-title-promotion">
-                      {data?.title?.[lang]}
+  const columns = [
+    {
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("promotion_name", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
+      render: (data) => {
+        return (
+          <div className="div-img-promotion">
+            {/* <Image src={data?.thumbnail} className="img-customer-promotion" /> */}
+            <div className="div-name-promotion">
+              <a className="text-title-code">{data?.code}</a>
+              <a className="text-title-promotion">{data?.title?.[lang]}</a>
+            </div>
+          </div>
+        );
+      },
+      width: "25%",
+    },
+    {
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("Hình thức", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
+      render: (data) => {
+        return (
+          <a className="text-promotion">
+            {data?.type_promotion === "code" && data?.type_discount === "order"
+              ? "Mã KM"
+              : data?.type_promotion === "code" &&
+                data?.type_discount === "partner_promotion"
+              ? "Mã KM"
+              : "CTKM"}
+          </a>
+        );
+      },
+      align: "left",
+      width: "8%",
+    },
+    {
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("Từ", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
+      render: (data) => {
+        return (
+          <a className="text-promotion">
+            {data?.type_promotion === "code" && data?.type_discount === "order"
+              ? "GUVI"
+              : data?.type_promotion === "code" &&
+                data?.type_discount === "partner_promotion"
+              ? "Đối tác"
+              : "GUVI"}
+          </a>
+        );
+      },
+      align: "center",
+    },
+    {
+      title: () => <a className="title-column">Khu vực</a>,
+      render: (data) => {
+        return (
+          <div className="div-area-promotion">
+            {!data?.is_apply_area ? (
+              <a className="text-area">Toàn quốc</a>
+            ) : (
+              <>
+                {province?.map((item, index) => {
+                  return (
+                    <a key={index} className="text-area">
+                      {data?.city?.includes(item?.code)
+                        ? item?.name + ", "
+                        : null}
                     </a>
-                  </div>
-                </div>
-              );
-            },
-            width: "30%",
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("use", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            align: "center",
-            render: (data) => {
-              return (
-                <div>
-                  <a
-                    className="text-title-promotion"
-                    onClick={() =>
-                      navigate("/promotion/manage-setting/order-promotion", {
-                        state: { id: data?._id },
-                      })
-                    }
-                  >
-                    {data?.is_parrent_promotion
-                      ? data?.total_used_promotion +
-                        "/" +
-                        data?.total_child_promotion
-                      : data?.limit_count > 0
-                      ? data?.total_used_promotion + "/" + data?.limit_count
-                      : data?.total_used_promotion}
-                  </a>
-                  {(data?.is_parrent_promotion || data?.limit_count > 0) && (
-                    <Progress
-                      percent={
-                        data?.is_parrent_promotion
-                          ? (data?.total_used_promotion /
-                              data?.total_child_promotion) *
-                            100
-                          : (data?.total_used_promotion / data?.limit_count) *
-                            100
-                      }
-                      strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
-                      showInfo={false}
-                      size="small"
-                    />
-                  )}
-                </div>
-              );
-            },
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("expiry", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            align: "center",
-            render: (data) => {
-              const startDate = moment(new Date(data?.limit_start_date)).format(
-                "DD/MM/YYYY"
-              );
-              const endDate = moment(new Date(data?.limit_end_date)).format(
-                "DD/MM/YYYY"
-              );
-              return (
-                <>
-                  {data?.is_limit_date ? (
-                    <div className="div-date-promotion">
-                      <a className="text-title-promotion">{startDate}</a>
+                  );
+                })}
+              </>
+            )}
+          </div>
+        );
+      },
+      width: "10%",
+    },
+    {
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("status", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
+      align: "center",
+      render: (data) => {
+        return (
+          <div
+            className={
+              data?.status === "upcoming"
+                ? "div-text-upcoming"
+                : data?.status === "doing"
+                ? "div-doing-status-promotion"
+                : "div-cancel-promotion"
+            }
+          >
+            {data?.status === "upcoming" ? (
+              <a className="text-upcoming">{`${i18n.t("upcoming", {
+                lng: lang,
+              })}`}</a>
+            ) : data?.status === "doing" ? (
+              <a className="text-doing-status">{`${i18n.t("happenning", {
+                lng: lang,
+              })}`}</a>
+            ) : data?.status === "out_of_stock" ? (
+              <a className="text-cancel-promotion">{`${i18n.t("out_stock", {
+                lng: lang,
+              })}`}</a>
+            ) : data?.status === "out_of_date" ? (
+              <a className="text-cancel-promotion">{`${i18n.t("out_date", {
+                lng: lang,
+              })}`}</a>
+            ) : (
+              <a className="text-cancel-promotion">{`${i18n.t("closed", {
+                lng: lang,
+              })}`}</a>
+            )}
+          </div>
+        );
+      },
+      align: "left",
+      width: "10%",
+    },
+    {
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("use", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
+      align: "center",
+      render: (data) => {
+        return (
+          <div className="div-use-promotion">
+            <a
+              className="text-title-use"
+              onClick={() =>
+                navigate("/promotion/manage-setting/order-promotion", {
+                  state: { id: data?._id },
+                })
+              }
+            >
+              {data?.is_parrent_promotion
+                ? data?.total_used_promotion + "/" + data?.total_child_promotion
+                : data?.limit_count > 0
+                ? data?.total_used_promotion + "/" + data?.limit_count
+                : data?.total_used_promotion}
+            </a>
+            {(data?.is_parrent_promotion || data?.limit_count > 0) && (
+              <Progress
+                percent={
+                  data?.is_parrent_promotion
+                    ? (data?.total_used_promotion /
+                        data?.total_child_promotion) *
+                      100
+                    : (data?.total_used_promotion / data?.limit_count) * 100
+                }
+                strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
+                showInfo={false}
+                size="small"
+                style={{ width: "50%" }}
+              />
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      title: () => {
+        return (
+          <a className="title-column">{`${i18n.t("expiry", {
+            lng: lang,
+          })}`}</a>
+        );
+      },
+      align: "center",
+      render: (data) => {
+        const startDate = moment(new Date(data?.limit_start_date)).format(
+          "DD/MM/YYYY"
+        );
+        const endDate = moment(new Date(data?.limit_end_date)).format(
+          "DD/MM/YYYY"
+        );
+        return (
+          <>
+            {data?.is_limit_date ? (
+              <div className="div-date-promotion">
+                <a className="text-title-promotion">{startDate}</a>
 
-                      <a className="text-title-promotion">{endDate}</a>
-                    </div>
-                  ) : (
-                    <a className="text-title-promotion">{`${i18n.t(
-                      "no_expiry",
-                      { lng: lang }
-                    )}`}</a>
-                  )}
-                </>
-              );
-            },
-          },
-          {
-            title: () => <a className="title-column">Khu vực</a>,
-            render: (data) => {
-              return (
-                <div>
-                  {!data?.is_apply_area ? (
-                    <a className="text-area">Toàn quốc</a>
-                  ) : (
-                    <>
-                      {province?.map((item, index) => {
-                        return (
-                          <a key={index} className="text-area">
-                            {data?.city?.includes(item?.code)
-                              ? item?.name + ", "
-                              : null}
-                          </a>
-                        );
-                      })}
-                    </>
-                  )}
-                </div>
-              );
-            },
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("status", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            align: "center",
-            render: (data) => {
-              return (
-                <div>
-                  {data?.status === "upcoming" ? (
-                    <a className="text-upcoming">{`${i18n.t("upcoming", {
-                      lng: lang,
-                    })}`}</a>
-                  ) : data?.status === "doing" ? (
-                    <a className="text-doing-status">{`${i18n.t("happenning", {
-                      lng: lang,
-                    })}`}</a>
-                  ) : data?.status === "out_of_stock" ? (
-                    <a className="text-cancel">{`${i18n.t("out_stock", {
-                      lng: lang,
-                    })}`}</a>
-                  ) : data?.status === "out_of_date" ? (
-                    <a className="text-cancel-promotion">{`${i18n.t(
-                      "out_date",
-                      {
-                        lng: lang,
-                      }
-                    )}`}</a>
-                  ) : (
-                    <a className="text-cancel-promotion">{`${i18n.t("closed", {
-                      lng: lang,
-                    })}`}</a>
-                  )}
-                </div>
-              );
-            },
-          },
-          {
-            title: "",
-            key: "action",
-            align: "right",
-            render: (record) => (
-              <Space size="middle">
-                <Dropdown
-                  menu={{
-                    items,
-                  }}
-                  trigger={["click"]}
-                  placement="bottomRight"
-                >
-                  <a style={{ color: "black" }}>
-                    <UilEllipsisV />
-                  </a>
-                </Dropdown>
-              </Space>
-            ),
-          },
-        ]
-      : [
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("promotion_name", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data) => {
-              return (
-                <div className="div-img-promotion">
-                  {/* <img
-                    className="img-customer-promotion"
-                    src={data?.thumbnail}
-                  /> */}
-                  <a className="text-title-promotion">
-                    {data.title.vi.length > 25
-                      ? data?.title?.[lang].slice(0, 25) + "..."
-                      : data?.title?.[lang]}
-                  </a>
-                </div>
-              );
-            },
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("use", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            align: "center",
-            render: (data) => {
-              return (
-                <div>
-                  <a
-                    className="text-title-promotion"
-                    onClick={() =>
-                      navigate("/promotion/manage-setting/order-promotion", {
-                        state: { id: data?._id },
-                      })
-                    }
-                  >
-                    {data?.is_parrent_promotion
-                      ? data?.total_used_promotion +
-                        "/" +
-                        data?.total_child_promotion
-                      : data?.limit_count > 0
-                      ? data?.total_used_promotion + "/" + data?.limit_count
-                      : data?.total_used_promotion}
-                  </a>
-                  {(data?.is_parrent_promotion || data?.limit_count > 0) && (
-                    <Progress
-                      percent={
-                        data?.is_parrent_promotion
-                          ? data?.total_used_promotion /
-                            data?.total_child_promotion
-                          : data?.total_used_promotion / data?.limit_count
-                      }
-                      strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
-                      showInfo={false}
-                    />
-                  )}
-                </div>
-              );
-            },
-
-            // sorter: (a, b) => a.total_used_promotion - b.total_used_promotion,
-          },
-          // {
-          //   title: () => {
-          //     return (
-          //       <div className="div-title-column-position">
-          //         <a className="text-column">{`${i18n.t("position", {
-          //           lng: lang,
-          //         })}`}</a>
-          //         <div className="div-direction">
-          //           <CaretUpOutlined
-          //             onClick={() => handleSortPosition(1)}
-          //             style={
-          //               typeSort === 1
-          //                 ? { fontSize: 10, color: "blue" }
-          //                 : { fontSize: 10, color: "gray" }
-          //             }
-          //           />
-          //           <CaretDownOutlined
-          //             onClick={() => handleSortPosition(-1)}
-          //             style={
-          //               typeSort === -1
-          //                 ? { fontSize: 10, color: "blue" }
-          //                 : { fontSize: 10, color: "gray" }
-          //             }
-          //           />
-          //         </div>
-          //       </div>
-          //     );
-          //   },
-          //   align: "center",
-          //   render: (data) => (
-          //     <a className="text-title-promotion">{data?.position}</a>
-          //   ),
-          // },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("expiry", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            align: "center",
-            render: (data) => {
-              const startDate = moment(new Date(data?.limit_start_date)).format(
-                "DD/MM/YYYY"
-              );
-              const endDate = moment(new Date(data?.limit_end_date)).format(
-                "DD/MM/YYYY"
-              );
-              return (
-                <>
-                  {data?.is_limit_date ? (
-                    <div className="div-date-promotion">
-                      <a className="text-title-promotion">{startDate}</a>
-
-                      <a className="text-title-promotion">{endDate}</a>
-                    </div>
-                  ) : (
-                    <a className="text-title-promotion">{`${i18n.t(
-                      "no_expiry",
-                      { lng: lang }
-                    )}`}</a>
-                  )}
-                </>
-              );
-            },
-          },
-          // {
-          //   title: () => {
-          //     return (
-          //       <a className="title-column">{`${i18n.t("on_off", {
-          //         lng: lang,
-          //       })}`}</a>
-          //     );
-          //   },
-          //   align: "center",
-          //   render: (data) => {
-          //     var date =
-          //       data?.limit_end_date &&
-          //       moment(data?.limit_end_date.slice(0, 10));
-          //     var now = moment();
-          //     return (
-          //       <div>
-          //         {contextHolder}
-          //         {checkElement?.includes("active_promotion") && (
-          //           <>
-          //             {data?.is_active ? (
-          //               <img
-          //                 src={onToggle}
-          //                 className="img-toggle"
-          //                 onClick={toggleActive}
-          //               />
-          //             ) : (
-          //               <div>
-          //                 {data?.is_limit_date ? (
-          //                   date < now ? (
-          //                     <img
-          //                       src={offToggle}
-          //                       className="img-toggle"
-          //                       onClick={() =>
-          //                         openNotificationWithIcon("warning")
-          //                       }
-          //                     />
-          //                   ) : (
-          //                     <img
-          //                       src={offToggle}
-          //                       className="img-toggle"
-          //                       onClick={toggleActive}
-          //                     />
-          //                   )
-          //                 ) : (
-          //                   <img
-          //                     src={offToggle}
-          //                     className="img-toggle"
-          //                     onClick={toggleActive}
-          //                   />
-          //                 )}
-          //               </div>
-          //             )}
-          //           </>
-          //         )}
-          //       </div>
-          //     );
-          //   },
-          // },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("status", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            align: "center",
-            render: (data) => {
-              return (
-                <div>
-                  {data?.status === "upcoming" ? (
-                    <a className="text-upcoming">{`${i18n.t("upcoming", {
-                      lng: lang,
-                    })}`}</a>
-                  ) : data?.status === "doing" ? (
-                    <a className="text-upcoming">{`${i18n.t("happenning", {
-                      lng: lang,
-                    })}`}</a>
-                  ) : data?.status === "out_of_stock" ? (
-                    <a className="text-cancel">{`${i18n.t("out_stock", {
-                      lng: lang,
-                    })}`}</a>
-                  ) : data?.status === "out_of_date" ? (
-                    <a className="text-cancel">{`${i18n.t("out_date", {
-                      lng: lang,
-                    })}`}</a>
-                  ) : (
-                    <a className="text-cancel">{`${i18n.t("closed", {
-                      lng: lang,
-                    })}`}</a>
-                  )}
-                </div>
-              );
-            },
-          },
-          {
-            title: "",
-            key: "action",
-            align: "right",
-            render: (record) => (
-              <Space size="middle">
-                <Dropdown
-                  menu={{
-                    items,
-                  }}
-                  trigger={["click"]}
-                  placement="bottomRight"
-                >
-                  <a style={{ color: "black" }}>
-                    <UilEllipsisV />
-                  </a>
-                </Dropdown>
-              </Space>
-            ),
-          },
-        ];
+                <a className="text-title-promotion">{endDate}</a>
+              </div>
+            ) : (
+              <a className="text-title-promotion">{`${i18n.t("no_expiry", {
+                lng: lang,
+              })}`}</a>
+            )}
+          </>
+        );
+      },
+    },
+  ];
 
   return (
     <React.Fragment>
@@ -861,11 +630,14 @@ const PromotionManage = ({
               return {
                 onClick: (event) => {
                   setItemEdit(record);
+                  navigate("/promotion/manage-setting/edit-promotion", {
+                    state: { id: record?._id },
+                  });
                 },
               };
             }}
             scroll={{
-              x: width <= 900 ? 1000 : 0,
+              x: width <= 900 ? 1400 : 0,
             }}
           />
           <div className="div-pagination p-2">
