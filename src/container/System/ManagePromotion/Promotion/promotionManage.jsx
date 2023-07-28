@@ -32,7 +32,12 @@ import {
   getLanguageState,
 } from "../../../../redux/selectors/auth.js";
 import "./PromotionManage.scss";
-import { getProvince } from "../../../../redux/selectors/service.js";
+import {
+  getProvince,
+  getService,
+} from "../../../../redux/selectors/service.js";
+import { formatMoney } from "../../../../helper/formatMoney.js";
+import logo from "../../../../assets/images/logoNew.jpg";
 
 const PromotionManage = ({
   type,
@@ -63,6 +68,7 @@ const PromotionManage = ({
   const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
   const province = useSelector(getProvince);
+  const service = useSelector(getService);
 
   useEffect(() => {
     fetchPromotion("", "", 0, 20, type, brand, idService, exchange, typeSort)
@@ -330,7 +336,7 @@ const PromotionManage = ({
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("promotion_name", {
+          <a className="title-column">{`${i18n.t("Khuyến mãi", {
             lng: lang,
           })}`}</a>
         );
@@ -341,7 +347,22 @@ const PromotionManage = ({
             {/* <Image src={data?.thumbnail} className="img-customer-promotion" /> */}
             <div className="div-name-promotion">
               <a className="text-title-code">{data?.code}</a>
-              <a className="text-title-promotion">{data?.title?.[lang]}</a>
+              <a className="text-title-promotion">
+                {data?.discount_unit === "amount"
+                  ? `Giảm giá ${formatMoney(data?.discount_max_price)} cho`
+                  : `Giảm giá ${data?.discount_value}%, tối đa ${formatMoney(
+                      data?.discount_max_price
+                    )} cho`}{" "}
+                {service?.map((item, index) => {
+                  return (
+                    <a key={index} className="text-title-promotion">
+                      {data?.service_apply?.includes(item?._id)
+                        ? item?.title?.vi
+                        : null}
+                    </a>
+                  );
+                })}
+              </a>
             </div>
           </div>
         );
@@ -374,24 +395,47 @@ const PromotionManage = ({
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("Từ", {
+          <a className="title-column">{`${i18n.t("Đơn vị", {
             lng: lang,
           })}`}</a>
         );
       },
       render: (data) => {
         return (
-          <a className="text-promotion">
-            {data?.type_promotion === "code" && data?.type_discount === "order"
-              ? "GUVI"
-              : data?.type_promotion === "code" &&
-                data?.type_discount === "partner_promotion"
-              ? "Đối tác"
-              : "GUVI"}
-          </a>
+          <>
+            {data?.type_promotion === "code" &&
+            data?.type_discount === "order" ? (
+              <Image
+                src={logo}
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 8,
+                  border: "0.5px solid #d6d6d6",
+                }}
+              />
+            ) : data?.type_promotion === "code" &&
+              data?.type_discount === "partner_promotion" ? (
+              <Image
+                src={data?.thumbnail}
+                style={{ width: 50, height: 50, borderRadius: 8 }}
+              />
+            ) : (
+              <Image
+                src={logo}
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 8,
+                  border: "0.5px solid #d6d6d6",
+                }}
+              />
+            )}
+          </>
         );
       },
       align: "center",
+      width: "8%",
     },
     {
       title: () => <a className="title-column">Khu vực</a>,
@@ -473,7 +517,6 @@ const PromotionManage = ({
           })}`}</a>
         );
       },
-      align: "center",
       render: (data) => {
         return (
           <div className="div-use-promotion">
@@ -503,12 +546,14 @@ const PromotionManage = ({
                 strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
                 showInfo={false}
                 size="small"
-                style={{ width: "50%" }}
+                className="progress-bar"
               />
             )}
           </div>
         );
       },
+      align: "right",
+      width: "8%",
     },
     {
       title: () => {
