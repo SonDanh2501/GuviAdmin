@@ -29,7 +29,7 @@ const ManagePromotions = () => {
 
   return (
     <div>
-      <Button
+      {/* <Button
         style={{ width: "auto" }}
         className={
           selected === "code" && brand === "guvi"
@@ -80,9 +80,9 @@ const ManagePromotions = () => {
         }}
       >
         {`${i18n.t("promotions", { lng: lang })}`}
-      </Button>
+      </Button> */}
 
-      {selected === "code" && brand === "guvi" ? (
+      {/* {selected === "code" && brand === "guvi" ? (
         <ManagePromotionGuvi
           type={selected}
           brand={brand}
@@ -109,7 +109,15 @@ const ManagePromotions = () => {
           startPage={startPage}
           setStartPage={setStartPage}
         />
-      )}
+      )} */}
+      <ManagePromotionGuvi
+        type={selected}
+        brand={brand}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        startPage={startPage}
+        setStartPage={setStartPage}
+      />
     </div>
   );
 };

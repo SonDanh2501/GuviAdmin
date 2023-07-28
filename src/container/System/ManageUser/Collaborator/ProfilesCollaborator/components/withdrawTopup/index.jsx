@@ -15,6 +15,7 @@ import { loadingAction } from "../../../../../../../redux/actions/loading";
 import "./index.scss";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../../i18n";
+import useWindowDimensions from "../../../../../../../helper/useWindowDimensions";
 
 const WithdrawTopup = ({ id }) => {
   const [data, setData] = useState([]);
@@ -24,6 +25,7 @@ const WithdrawTopup = ({ id }) => {
   const [giftRemainder, setGiftRemainder] = useState(0);
   const [topup, setTopup] = useState(0);
   const [withdraw, setWithdraw] = useState(0);
+  const { width } = useWindowDimensions();
   const dispatch = useDispatch();
   const lang = useSelector(getLanguageState);
 
@@ -190,7 +192,12 @@ const WithdrawTopup = ({ id }) => {
         </div>
       </div>
       <div className="mt-5">
-        <Table columns={columns} dataSource={data} pagination={false} />
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+          scroll={{ x: width < 900 ? 1000 : 0 }}
+        />
       </div>
       <div className="div-pagination p-2">
         <a>
