@@ -1,7 +1,14 @@
+.div-view-hide {
+  width: 140vh;
+  height: 220vh;
+  background-color: none;
+  position: absolute;
+  z-index: 1000;
+}
+
 .div-container-create {
   display: flex;
   flex-direction: row;
-  // justify-content: space-between;
   width: 100%;
 
   .div-body {

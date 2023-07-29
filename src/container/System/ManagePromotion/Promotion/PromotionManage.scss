@@ -54,9 +54,12 @@
 .div-add-edit {
   display: flex;
   flex-direction: row;
-  float: right;
-
+  justify-content: space-between;
   margin-top: 20px;
+
+  .select-type-prmotion {
+    width: 20%;
+  }
 }
 
 .image-promotion-order {

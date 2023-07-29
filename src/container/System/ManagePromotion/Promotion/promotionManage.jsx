@@ -1,14 +1,11 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { UilEllipsisV } from "@iconscout/react-unicons";
 import {
   Button,
-  Dropdown,
   Image,
   Input,
   Pagination,
   Progress,
   Select,
-  Space,
   Table,
   notification,
 } from "antd";
@@ -22,8 +19,10 @@ import {
   deletePromotion,
   fetchPromotion,
 } from "../../../../api/promotion.jsx";
+import logo from "../../../../assets/images/logoNew.jpg";
 import ModalCustom from "../../../../components/modalCustom/index.jsx";
 import LoadingPagination from "../../../../components/paginationLoading/index.jsx";
+import { formatMoney } from "../../../../helper/formatMoney.js";
 import { errorNotify } from "../../../../helper/toast.js";
 import useWindowDimensions from "../../../../helper/useWindowDimensions.js";
 import i18n from "../../../../i18n/index.js";
@@ -31,13 +30,11 @@ import {
   getElementState,
   getLanguageState,
 } from "../../../../redux/selectors/auth.js";
-import "./PromotionManage.scss";
 import {
   getProvince,
   getService,
 } from "../../../../redux/selectors/service.js";
-import { formatMoney } from "../../../../helper/formatMoney.js";
-import logo from "../../../../assets/images/logoNew.jpg";
+import "./PromotionManage.scss";
 
 const PromotionManage = ({
   type,
@@ -265,6 +262,25 @@ const PromotionManage = ({
       .catch((err) => {});
   };
 
+  const onChangeTypePromotion = (value, item) => {
+    fetchPromotion(
+      "",
+      "",
+      0,
+      20,
+      item?.selected,
+      item?.brand,
+      idService,
+      exchange,
+      typeSort
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+
   const handleSortPosition = (value) => {
     setTypeSort(value);
     setIsLoading(true);
@@ -347,22 +363,27 @@ const PromotionManage = ({
             {/* <Image src={data?.thumbnail} className="img-customer-promotion" /> */}
             <div className="div-name-promotion">
               <a className="text-title-code">{data?.code}</a>
-              <a className="text-title-promotion">
-                {data?.discount_unit === "amount"
-                  ? `Giảm giá ${formatMoney(data?.discount_max_price)} cho`
-                  : `Giảm giá ${data?.discount_value}%, tối đa ${formatMoney(
-                      data?.discount_max_price
-                    )} cho`}{" "}
-                {service?.map((item, index) => {
-                  return (
-                    <a key={index} className="text-title-promotion">
-                      {data?.service_apply?.includes(item?._id)
-                        ? item?.title?.vi
-                        : null}
-                    </a>
-                  );
-                })}
-              </a>
+              {data?.type_promotion === "code" &&
+              data?.type_discount === "partner_promotion" ? (
+                <></>
+              ) : (
+                <a className="text-title-promotion">
+                  {data?.discount_unit === "amount"
+                    ? `Giảm giá ${formatMoney(data?.discount_max_price)} cho`
+                    : `Giảm giá ${data?.discount_value}%, tối đa ${formatMoney(
+                        data?.discount_max_price
+                      )} cho`}{" "}
+                  {service?.map((item, index) => {
+                    return (
+                      <a key={index} className="text-title-promotion">
+                        {data?.service_apply?.includes(item?._id)
+                          ? item?.title?.vi
+                          : null}
+                      </a>
+                    );
+                  })}
+                </a>
+              )}
             </div>
           </div>
         );
@@ -595,13 +616,13 @@ const PromotionManage = ({
       <div className="mt-2 ">
         <div className="div-header-promotion mt-4">
           <Select
-            defaultValue={`${i18n.t("filter_status", { lng: lang })}`}
+            placeholder="Lọc theo trạng thái"
             size={"large"}
             className="select-filter-promotion"
             onChange={handleChange}
             value={valueFilter}
             options={[
-              { value: "", label: `${i18n.t("filter_status", { lng: lang })}` },
+              { value: "", label: `${i18n.t("all", { lng: lang })}` },
               {
                 value: "upcoming",
                 label: `${i18n.t("upcoming", { lng: lang })}`,
@@ -642,16 +663,15 @@ const PromotionManage = ({
           )}
         </div>
         <div className="div-add-edit">
+          <Select
+            options={TYPE_PRMOTION}
+            className="select-type-prmotion"
+            placeholder="Lọc theo loại khuyến mãi"
+            onChange={(e, item) => onChangeTypePromotion(e, item)}
+          />
           <Button
             onClick={() =>
-              navigate(`/promotion/manage-setting/edit-position-promotion`, {
-                state: {
-                  type: type,
-                  brand: brand,
-                  idService: idService,
-                  exchange: exchange,
-                },
-              })
+              navigate(`/promotion/manage-setting/edit-position-promotion`)
             }
             style={{ width: "auto", marginBottom: 5 }}
           >
@@ -748,3 +768,30 @@ const PromotionManage = ({
 };
 
 export default memo(PromotionManage);
+
+const TYPE_PRMOTION = [
+  {
+    value: "",
+    label: "Tất cả",
+    brand: "",
+    selected: "",
+  },
+  {
+    value: "promotion",
+    label: "Mã KM GUVI",
+    brand: "guvi",
+    selected: "code",
+  },
+  {
+    value: "orther",
+    label: "Mã KM Đối tác",
+    brand: "orther",
+    selected: "code",
+  },
+  {
+    value: "event",
+    label: "CTKM",
+    brand: "",
+    selected: "event",
+  },
+];

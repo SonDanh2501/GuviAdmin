@@ -7,7 +7,6 @@ import {
   Button,
   Checkbox,
   DatePicker,
-  Divider,
   FloatButton,
   Input,
   InputNumber,
@@ -17,9 +16,10 @@ import {
   Select,
   Space,
   Switch,
-  Tour,
+  notification,
 } from "antd";
 import locale from "antd/es/date-picker/locale/vi_VN";
+import dayjs from "dayjs";
 import _debounce from "lodash/debounce";
 import "moment/locale/vi";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -40,92 +40,88 @@ import shortDescriptionImage from "../../../../../../assets/images/shortDescript
 import thumnailImage from "../../../../../../assets/images/thumnailContent.png";
 import titleImage from "../../../../../../assets/images/title.png";
 import CustomTextEditor from "../../../../../../components/customTextEdittor";
+import ModalCustom from "../../../../../../components/modalCustom";
 import LoadingPagination from "../../../../../../components/paginationLoading";
 import InputCustom from "../../../../../../components/textInputCustom";
 import UploadImage from "../../../../../../components/uploadImage";
 import { errorNotify } from "../../../../../../helper/toast";
 import i18n from "../../../../../../i18n";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
 import { getLanguageState } from "../../../../../../redux/selectors/auth";
 import {
   getProvince,
   getService,
 } from "../../../../../../redux/selectors/service";
 import "./styles.scss";
-import ModalCustom from "../../../../../../components/modalCustom";
-import { useCookies } from "../../../../../../helper/useCookies";
 const { Option } = Select;
 
 const EditPromotion = () => {
   const { state } = useLocation();
   const { id } = state;
-  const [saveToCookie, readCookie] = useCookies();
-  const [titleVN, setTitleVN] = useState("");
-  const [titleEN, setTitleEN] = useState("");
-  const [shortDescriptionVN, setShortDescriptionVN] = useState("");
-  const [shortDescriptionEN, setShortDescriptionEN] = useState("");
-  const [descriptionVN, setDescriptionVN] = useState("");
-  const [descriptionEN, setDescriptionEN] = useState("");
-  const [imgThumbnail, setImgThumbnail] = useState("");
-  const [imgBackground, setImgBackground] = useState("");
-  const [promoCode, setPromoCode] = useState("");
-  const [minimumOrder, setMinimumOrder] = useState(0);
-  const [checkMininum, setCheckMininum] = useState(1);
-  const [discountUnit, setDiscountUnit] = useState("amount");
-  const [maximumDiscount, setMaximumDiscount] = useState(0);
-  const [isMaximumDiscount, setIsMaximumDiscount] = useState(true);
-  const [reducedValue, setReducedValue] = useState(0);
-  const [isGroupCustomer, setIsGroupCustomer] = useState(false);
-  const [isObjectCustomer, setIsObjectCustomer] = useState(1);
-  const [groupCustomer, setGroupCustomer] = useState([]);
-  const [dataGroupCustomer, setDataGroupCustomer] = useState([]);
-  const [isCustomer, setIsCustomer] = useState(false);
-  const [name, setName] = useState("");
-  const [data, setData] = useState([]);
-  const [listCustomers, setListCustomers] = useState([]);
-  const [listNameCustomers, setListNameCustomers] = useState([]);
-  const [serviceApply, setServiceApply] = useState([]);
-  const [limitedQuantity, setLimitedQuantity] = useState(true);
-  const [amount, setAmount] = useState(0);
-  const [isUsePromo, setIsUsePromo] = useState(true);
-  const [usePromo, setUsePromo] = useState(0);
-  const [limitedDate, setLimitedDate] = useState(false);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [isCheckEndDate, setIsCheckEndDate] = useState(true);
-  const [isApplyArea, setIsApplyArea] = useState(false);
-  const [ratioApplyArea, setRatioApplyArea] = useState(1);
-  const [city, setCity] = useState([]);
-  const [isApllyTime, setIsApllyTime] = useState(1);
-  const [isShowInApp, setIsShowInApp] = useState(false);
-  const [isSendNotification, setIsSendNotification] = useState(false);
-  const [isApplyPushNoti, setIsApplyPushNoti] = useState(1);
-  const [titleNoti, setTitleNoti] = useState("");
-  const [descriptionNoti, setDescriptionNoti] = useState("");
-  const [dateSchedule, setDateSchedule] = useState("");
-  const [isParrentPromotion, setIsParrentPromotion] = useState(false);
-  const [totalChildPromotion, setTotalChildPromotion] = useState(0);
-  const [isPaymentMethod, setIsPaymentMethod] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState([]);
-  const [radioPaymentMethod, setRadioPaymentMethod] = useState(1);
-  const [isExchangePoint, setIsExchangePoint] = useState(false);
-  const [radioExchangePoint, setRadioExchangePoint] = useState(1);
-  const [exchangePoint, setExchangePoint] = useState(0);
-  const [ratioTypeVoucher, setRatioTypeVoucher] = useState(1);
-  const [isCheckVoucher, setIsCheckVoucher] = useState(true);
-  const [isCheckProgram, setIsCheckProgram] = useState(false);
-  const [namebrand, setNamebrand] = useState("");
-  const [isApplyTimeUse, setIsApplyTimeUse] = useState(false);
+  const [statePromo, setStatePromo] = useState({
+    promoCode: "",
+    isParrentPromotion: false,
+    totalChildPromotion: 0,
+    titleVN: "",
+    titleEN: "",
+    shortDescriptionVN: "",
+    shortDescriptionEN: "",
+    descriptionVN: "",
+    descriptionEN: "",
+    ratioTypeVoucher: 1,
+    isCheckVoucher: true,
+    isCheckProgram: false,
+    serviceApply: [],
+    namebrand: "",
+    isApllyTime: 1,
+    limitedDate: false,
+    startDate: "",
+    endDate: "",
+    ratioTypeDateApply: 1,
+    typeDateApply: "date_create",
+    isApplyTimeUse: false,
+    imgThumbnail: "",
+    imgBackground: "",
+    discountUnit: "amount",
+    maximumDiscount: 0,
+    reducedValue: 0,
+    isMaximumDiscount: true,
+    checkMininum: 1,
+    minimumOrder: 0,
+    isObjectCustomer: 1,
+    isGroupCustomer: false,
+    isCustomer: false,
+    groupCustomer: [],
+    name: "",
+    data: [],
+    listCustomers: [],
+    listNameCustomers: [],
+    dataGroupCustomer: [],
+    ratioApplyArea: 1,
+    isApplyArea: false,
+    city: [],
+    limitedQuantity: true,
+    amount: 0,
+    isUsePromo: true,
+    usePromo: 0,
+    ratioExchangePoint: 1,
+    isExchangePoint: false,
+    exchangePoint: 0,
+    dateExchange: 0,
+    isShowInApp: false,
+    isSendNotification: false,
+    isApplyPushNoti: 1,
+    isDateSchedule: false,
+    ratioPaymentMethod: 1,
+    isPaymentMethod: false,
+    paymentMethod: [],
+    isCheckEndDate: true,
+  });
   const [timeApply, setTimeApply] = useState(DATA_APPLY_TIME);
-  const [isDateSchedule, setIsDateSchedule] = useState(false);
-  const [dateExchange, setDateExchange] = useState(0);
+  const [dataGroupCustomer, setDataGroupCustomer] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [ratioTypeDateApply, setRatioTypeDateApply] = useState(1);
-  const [typeDateApply, setTypeDateApply] = useState("date_create");
   const [isActive, setIsActive] = useState(false);
   const [modalDelete, setModalDelete] = useState(false);
-  const [stepTuor, setStepTuor] = useState(false);
+  const [api, contextHolder] = notification.useNotification();
   const ref1 = useRef(null);
   const options = [];
   const serviceOption = [];
@@ -135,16 +131,15 @@ const EditPromotion = () => {
   const province = useSelector(getProvince);
   const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
-
   const selectAfter = (
     <Select
       defaultValue="VND"
-      style={{ width: 50 }}
+      style={{ width: "auto" }}
       onChange={(e) => {
         if (e === "VND") {
-          setDiscountUnit("amount");
+          setStatePromo({ ...statePromo, discountUnit: "amount" });
         } else {
-          setDiscountUnit("percent");
+          setStatePromo({ ...statePromo, discountUnit: "percent" });
         }
       }}
     >
@@ -155,84 +150,79 @@ const EditPromotion = () => {
 
   useEffect(() => {
     getGroupCustomerApi(0, 10)
-      .then((res) => setDataGroupCustomer(res.data))
+      .then((res) => setDataGroupCustomer(res?.data))
       .catch((err) => {});
   }, []);
 
   useEffect(() => {
     getPromotionDetails(id)
       .then((res) => {
-        setTitleVN(res?.title?.vi);
-        setTitleEN(res?.title?.en);
-        setShortDescriptionVN(res?.short_description?.vi);
-        setShortDescriptionEN(res?.short_description?.en);
-        setDescriptionVN(res?.description?.vi);
-        setDescriptionEN(res?.description?.en);
-        setImgThumbnail(res?.thumbnail);
-        setImgBackground(res?.image_background);
-        setLimitedDate(res?.is_limit_date);
-        setIsApllyTime(res?.is_limit_date ? 2 : 1);
-        setStartDate(res?.is_limit_date ? res?.limit_start_date : "");
-        setEndDate(res?.is_limit_date ? res?.limit_end_date : "");
-        setLimitedQuantity(res?.is_limit_count);
-        setAmount(res?.limit_count);
-        setIsGroupCustomer(res?.is_id_group_customer);
-        setGroupCustomer(res?.id_group_customer);
-        setIsCustomer(res?.is_id_customer);
-        setIsObjectCustomer(
-          res?.is_id_customer ? 3 : res?.is_id_group_customer ? 2 : 1
-        );
-        setListNameCustomers(res?.id_customer);
-        setIsUsePromo(res?.is_limited_use);
-        setUsePromo(res?.limited_use);
-        setDiscountUnit(res?.discount_unit);
-        setMaximumDiscount(res?.discount_max_price);
-        setReducedValue(res?.discount_value);
-        setIsExchangePoint(res?.is_exchange_point);
-        setRadioExchangePoint(res?.is_exchange_point ? 2 : 1);
-        setExchangePoint(res?.exchange_point);
-        setNamebrand(res?.brand);
-        setPromoCode(res?.code);
-        setServiceApply(res?.service_apply[0]);
-        setMinimumOrder(res?.price_min_order);
-        setCheckMininum(res?.price_min_order > 0 ? 2 : 1);
-        setDateExchange(res?.exp_date_exchange);
-        setIsPaymentMethod(res?.is_payment_method);
-        setPaymentMethod(res?.payment_method);
-        setListCustomers(res?.id_customer);
-        res?.id_customer?.map((item) => {
-          listCustomers.push(item?._id);
-        });
-        setIsApplyTimeUse(res?.is_loop);
-        setRatioTypeDateApply(
-          res?.is_loop
+        setStatePromo({
+          ...statePromo,
+          promoCode: res?.code,
+          isParrentPromotion: res?.is_parrent_promotion,
+          totalChildPromotion: res?.total_child_promotion,
+          titleVN: res?.title?.vi,
+          titleEN: res?.title?.en,
+          shortDescriptionVN: res?.short_description?.vi,
+          shortDescriptionEN: res?.short_description?.en,
+          descriptionVN: res?.description?.vi,
+          descriptionEN: res?.description?.en,
+          ratioTypeVoucher: res?.brand === "guvi" ? 1 : 2,
+          isCheckVoucher: res?.type_promotion === "code" ? true : false,
+          isCheckProgram: res?.type_promotion === "event" ? true : false,
+          serviceApply: res?.service_apply[0],
+          namebrand: res?.brand,
+          isApllyTime: res?.is_limit_date ? 2 : 1,
+          limitedDate: res?.is_limit_date,
+          startDate: res?.is_limit_date ? res?.limit_start_date : "",
+          endDate: res?.is_limit_date ? res?.limit_end_date : "",
+          ratioTypeDateApply: res?.is_loop
             ? 1
             : res?.is_loop && res?.type_date_apply === "date_create"
             ? 2
-            : 3
-        );
+            : 3,
+          typeDateApply: res?.type_date_apply,
+          isApplyTimeUse: res?.is_loop,
+          imgThumbnail: res?.thumbnail,
+          imgBackground: res?.image_background,
+          discountUnit: res?.discount_unit,
+          maximumDiscount: res?.discount_max_price,
+          reducedValue: res?.discount_value,
+          checkMininum: res?.price_min_order > 0 ? 2 : 1,
+          minimumOrder: res?.price_min_order,
+          isObjectCustomer: res?.is_id_customer
+            ? 3
+            : res?.is_id_group_customer
+            ? 2
+            : 1,
+          isGroupCustomer: res?.is_id_group_customer,
+          isCustomer: res?.is_id_customer,
+          groupCustomer: res?.id_group_customer,
+          listNameCustomers: res?.id_customer,
+          ratioApplyArea: res?.is_apply_area ? 2 : 1,
+          isApplyArea: res?.is_apply_area,
+          city: res?.city,
+          limitedQuantity: res?.is_limit_count,
+          amount: res?.limit_count,
+          isUsePromo: res?.is_limited_use,
+          ratioExchangePoint: res?.is_exchange_point ? 2 : 1,
+          isExchangePoint: res?.is_exchange_point,
+          exchangePoint: res?.exchange_point,
+          dateExchange: res?.exp_date_exchange,
+          isShowInApp: res?.is_show_in_app,
+          isPaymentMethod: res?.is_payment_method,
+          paymentMethod: res?.payment_method,
+        });
+        res?.id_customer?.map((item) => {
+          statePromo?.listCustomers.push(item?._id);
+        });
+
         setTimeApply(
           res?.day_loop?.length > 0 ? res?.day_loop : DATA_APPLY_TIME
         );
-        setIsParrentPromotion(res?.is_parrent_promotion);
-        setTotalChildPromotion(res?.total_child_promotion);
-        setIsShowInApp(res?.is_show_in_app);
-        setRatioApplyArea(res?.is_apply_area ? 2 : 1);
-        setIsApplyArea(res?.is_apply_area);
-        setRatioApplyArea(res?.is_apply_area ? 2 : 1);
-        setCity(res?.city);
-        setRatioTypeVoucher(res?.brand === "guvi" ? 1 : 2);
-        setIsCheckVoucher(res?.type_promotion === "code" ? true : false);
-        setIsCheckProgram(res?.type_promotion === "event" ? true : false);
-        setTypeDateApply(res?.type_date_apply);
+
         setIsActive(res?.is_active);
-        setRatioTypeDateApply(
-          res?.type_date_apply === "date_create"
-            ? 2
-            : res?.type_date_apply === "date_work"
-            ? 3
-            : 1
-        );
       })
       .catch((err) => console.log(err));
   }, []);
@@ -261,43 +251,50 @@ const EditPromotion = () => {
 
   const searchCustomer = useCallback(
     _debounce((value) => {
-      setName(value);
       if (value) {
         searchCustomersApi(value)
           .then((res) => {
             if (value === "") {
-              setData([]);
+              setStatePromo({ ...statePromo, data: [], name: value });
             } else {
-              setData(res.data);
+              setStatePromo({ ...statePromo, data: res.data, name: value });
             }
           })
           .catch((err) => console.log(err));
       } else {
-        setData([]);
+        setStatePromo({ ...statePromo, data: [], name: value });
       }
     }, 500),
-    []
+    [statePromo]
   );
 
   const onChooseCustomer = (item) => {
-    setName("");
-    setData([]);
-    const newData = listCustomers.concat(item?._id);
-    const newNameData = listNameCustomers.concat({
+    const newData = statePromo?.listCustomers.concat(item?._id);
+    const newNameData = statePromo?.listNameCustomers.concat({
       _id: item?._id,
       full_name: item?.full_name,
       phone: item?.phone,
       id_view: item?.id_view,
     });
-    setListCustomers(newData);
-    setListNameCustomers(newNameData);
+    setStatePromo({
+      ...statePromo,
+      listCustomers: newData,
+      listNameCustomers: newNameData,
+      name: "",
+      data: [],
+    });
   };
 
   const removeItemCustomer = (item) => {
-    const newNameArray = listNameCustomers.filter((i) => i?._id !== item?._id);
-    const newArray = listCustomers.filter((i) => i !== item?._id);
-    setListNameCustomers(newNameArray);
-    setListCustomers(newArray);
+    const newNameArray = statePromo?.listNameCustomers.filter(
+      (i) => i?._id !== item?._id
+    );
+    const newArray = statePromo?.listCustomers.filter((i) => i !== item?._id);
+    setStatePromo({
+      ...statePromo,
+      listCustomers: newArray,
+      listNameCustomers: newNameArray,
+    });
   };
 
   const shortDescriptionPrommo = (
@@ -335,6 +332,14 @@ const EditPromotion = () => {
     </div>
   );
 
+  const openNotificationWithIcon = (type) => {
+    api[type]({
+      message: "Vui lòng dừng kích hoạt",
+      description:
+        "Vui lòng dừng kích hoạt mã khuyến mãi để tiếp tục chỉnh sửa",
+    });
+  };
+
   const changeCheckApply = (value, index) => {
     const arr = [...timeApply];
     timeApply[index].is_check_loop = value;
@@ -344,8 +349,8 @@ const EditPromotion = () => {
   const addTime = (index) => {
     const arr = [...timeApply];
     timeApply[index].time_loop.push({
-      start_time_local: "",
-      end_time_local: "",
+      start_time_local: "00:00",
+      end_time_local: "00:30",
     });
     setTimeApply(arr);
   };
@@ -413,57 +418,62 @@ const EditPromotion = () => {
   const onEditPromotion = useCallback(() => {
     setIsLoading(true);
     updatePromotion(id, {
+      code: statePromo?.promoCode,
+      is_parrent_promotion: statePromo?.isParrentPromotion,
+      total_child_promotion: statePromo?.totalChildPromotion,
       title: {
-        vi: titleVN,
-        en: titleEN,
+        vi: statePromo?.titleVN,
+        en: statePromo?.titleEN,
       },
       short_description: {
-        vi: shortDescriptionVN,
-        en: shortDescriptionEN,
+        vi: statePromo?.shortDescriptionVN,
+        en: statePromo?.shortDescriptionEN,
       },
       description: {
-        vi: descriptionVN,
-        en: descriptionEN,
+        vi: statePromo?.descriptionVN,
+        en: statePromo?.descriptionEN,
       },
-      thumbnail: imgThumbnail,
-      image_background: imgBackground,
-      code: promoCode,
-      is_limit_date: limitedDate,
-      limit_start_date: limitedDate ? new Date(startDate).toISOString() : null,
-      limit_end_date: limitedDate ? new Date(endDate).toISOString() : null,
-      is_limit_count: limitedQuantity,
-      limit_count: limitedQuantity ? amount : 0,
-      is_id_group_customer: isGroupCustomer,
-      id_group_customer: groupCustomer,
-      is_id_customer: isCustomer,
-      id_customer: listCustomers,
-      service_apply: serviceApply?.length > 0 ? [serviceApply] : [],
-      is_limited_use: isUsePromo,
-      limited_use: isUsePromo ? usePromo : 0,
-      type_discount: ratioTypeVoucher === 2 ? "partner_promotion" : "order",
-      type_promotion: isCheckProgram ? "event" : "code",
-      price_min_order: minimumOrder,
-      discount_unit: discountUnit,
-      discount_max_price: maximumDiscount,
-      discount_value: reducedValue,
+      type_discount:
+        statePromo?.ratioTypeVoucher === 2 ? "partner_promotion" : "order",
+      service_apply:
+        statePromo?.serviceApply?.length > 0 ? [statePromo?.serviceApply] : [],
+      brand: statePromo?.namebrand.toUpperCase(),
+      is_limit_date: statePromo?.limitedDate,
+      limit_start_date: statePromo?.limitedDate
+        ? new Date(statePromo?.startDate).toISOString()
+        : null,
+      limit_end_date: statePromo?.limitedDate
+        ? new Date(statePromo?.endDate).toISOString()
+        : null,
+      type_date_apply: statePromo?.typeDateApply,
+      is_loop: statePromo?.isApplyTimeUse,
+      day_loop: statePromo?.isApplyTimeUse ? timeApply : [],
+      thumbnail: statePromo?.imgThumbnail,
+      image_background: statePromo?.imgBackground,
+      discount_unit: statePromo?.discountUnit,
+      discount_max_price: statePromo?.maximumDiscount,
+      discount_value: statePromo?.reducedValue,
+      price_min_order: statePromo?.minimumOrder,
+      is_id_group_customer: statePromo?.isGroupCustomer,
+      id_group_customer: statePromo?.groupCustomer,
+      id_customer: statePromo?.listCustomers,
+      is_apply_area: statePromo?.isApplyArea,
+      city: statePromo?.city,
+      is_limit_count: statePromo?.limitedQuantity,
+      is_limited_use: statePromo?.isUsePromo,
+      limited_use: statePromo?.isUsePromo ? statePromo?.usePromo : 0,
+      is_exchange_point: statePromo?.isExchangePoint,
+      exchange_point: statePromo?.exchangePoint,
+      exp_date_exchange: statePromo?.dateExchange,
+      is_show_in_app: statePromo?.isShowInApp,
+      is_payment_method: statePromo?.isPaymentMethod,
+      payment_method: statePromo?.paymentMethod,
+      limit_count: statePromo?.limitedQuantity ? statePromo?.amount : 0,
+      type_promotion: statePromo?.isCheckProgram ? "event" : "code",
       is_delete: false,
-      is_exchange_point: isExchangePoint,
-      exchange_point: exchangePoint,
-      brand: namebrand.toUpperCase(),
-      exp_date_exchange: dateExchange,
       position: 0,
-      is_payment_method: isPaymentMethod,
-      payment_method: paymentMethod,
-      is_parrent_promotion: isParrentPromotion,
-      total_child_promotion: totalChildPromotion,
-      is_loop: isApplyTimeUse,
-      day_loop: isApplyTimeUse ? timeApply : [],
-      is_show_in_app: isShowInApp,
-      is_apply_area: isApplyArea,
-      city: city,
       district: [],
       timezone: "Asia/Ho_Chi_Minh",
-      type_date_apply: typeDateApply,
     })
       .then((res) => {
         setIsLoading(false);
@@ -474,52 +484,7 @@ const EditPromotion = () => {
           message: err,
         });
       });
-  }, [
-    titleVN,
-    titleEN,
-    shortDescriptionVN,
-    shortDescriptionEN,
-    descriptionVN,
-    descriptionEN,
-    imgThumbnail,
-    imgBackground,
-    limitedDate,
-    startDate,
-    endDate,
-    limitedQuantity,
-    amount,
-    isGroupCustomer,
-    groupCustomer,
-    isCustomer,
-    isUsePromo,
-    usePromo,
-    discountUnit,
-    isExchangePoint,
-    exchangePoint,
-    namebrand,
-    maximumDiscount,
-    reducedValue,
-    serviceApply,
-    promoCode,
-    dateExchange,
-    minimumOrder,
-    isPaymentMethod,
-    paymentMethod,
-    listCustomers,
-    isSendNotification,
-    titleNoti,
-    descriptionNoti,
-    isDateSchedule,
-    dateSchedule,
-    isParrentPromotion,
-    totalChildPromotion,
-    isApplyTimeUse,
-    timeApply,
-    isShowInApp,
-    isApplyArea,
-    city,
-    id,
-  ]);
+  }, [statePromo, timeApply, id]);
 
   return (
     <>
@@ -556,6 +521,13 @@ const EditPromotion = () => {
           )}
         </div>
       </div>
+      {contextHolder}
+      {isActive && (
+        <div
+          className="div-view-hide"
+          onClick={() => openNotificationWithIcon("warning")}
+        />
+      )}
       <div className="div-container-create">
         <div className="div-body">
           <div className="div-input">
@@ -565,24 +537,36 @@ const EditPromotion = () => {
                 <Input
                   placeholder={`${i18n.t("Nhập mã khuyến mãi", { lng: lang })}`}
                   type="text"
-                  value={promoCode.toUpperCase()}
-                  onChange={(e) => setPromoCode(e.target.value)}
+                  value={statePromo?.promoCode.toUpperCase()}
+                  onChange={(e) =>
+                    setStatePromo({ ...statePromo, promoCode: e.target.value })
+                  }
                   style={{ marginTop: 5, width: "100%", height: 30 }}
                 />
               </div>
 
               <div className="div-child-promo">
                 <Checkbox
-                  checked={isParrentPromotion}
-                  onChange={(e) => setIsParrentPromotion(e.target.checked)}
+                  checked={statePromo?.isParrentPromotion}
+                  onChange={(e) =>
+                    setStatePromo({
+                      ...statePromo,
+                      isParrentPromotion: e.target.checked,
+                    })
+                  }
                 >
                   Tạo nhiều mã tự động
                 </Checkbox>
-                {isParrentPromotion && (
+                {statePromo?.isParrentPromotion && (
                   <InputNumber
                     min={0}
-                    value={totalChildPromotion}
-                    onChange={(e) => setTotalChildPromotion(Number.parseInt(e))}
+                    value={statePromo?.totalChildPromotion}
+                    onChange={(e) =>
+                      setStatePromo({
+                        ...statePromo,
+                        totalChildPromotion: Number.parseInt(e),
+                      })
+                    }
                     style={{ width: "100%", marginTop: 2, height: 30 }}
                   />
                 )}
@@ -601,13 +585,17 @@ const EditPromotion = () => {
             </div>
             <InputCustom
               title={`${i18n.t("vietnamese", { lng: lang })}`}
-              value={titleVN}
-              onChange={(e) => setTitleVN(e.target.value)}
+              value={statePromo?.titleVN}
+              onChange={(e) =>
+                setStatePromo({ ...statePromo, titleVN: e.target.value })
+              }
             />
             <InputCustom
               title={`${i18n.t("english", { lng: lang })}`}
-              value={titleEN}
-              onChange={(e) => setTitleEN(e.target.value)}
+              value={statePromo?.titleEN}
+              onChange={(e) =>
+                setStatePromo({ ...statePromo, titleEN: e.target.value })
+              }
             />
           </div>
           <div className="div-input">
@@ -626,14 +614,24 @@ const EditPromotion = () => {
             </div>
             <InputCustom
               title={`${i18n.t("vietnamese", { lng: lang })}`}
-              value={shortDescriptionVN}
-              onChange={(e) => setShortDescriptionVN(e.target.value)}
+              value={statePromo?.shortDescriptionVN}
+              onChange={(e) =>
+                setStatePromo({
+                  ...statePromo,
+                  shortDescriptionVN: e.target.value,
+                })
+              }
               textArea={true}
             />
             <InputCustom
               title={`${i18n.t("english", { lng: lang })}`}
-              value={shortDescriptionEN}
-              onChange={(e) => setShortDescriptionEN(e.target.value)}
+              value={statePromo?.shortDescriptionEN}
+              onChange={(e) =>
+                setStatePromo({
+                  ...statePromo,
+                  shortDescriptionEN: e.target.value,
+                })
+              }
               textArea={true}
             />
           </div>
@@ -653,23 +651,32 @@ const EditPromotion = () => {
             <div>
               <a>{`${i18n.t("vietnamese", { lng: lang })}`}</a>
               <CustomTextEditor
-                value={descriptionVN}
-                onChangeValue={setDescriptionVN}
+                value={statePromo?.descriptionVN}
+                onChangeValue={(e) =>
+                  setStatePromo({ ...statePromo, descriptionVN: e })
+                }
               />
             </div>
             <div className="mt-2">
               <a>{`${i18n.t("english", { lng: lang })}`}</a>
               <CustomTextEditor
-                value={descriptionEN}
-                onChangeValue={setDescriptionEN}
+                value={statePromo?.descriptionEN}
+                onChangeValue={(e) =>
+                  setStatePromo({ ...statePromo, descriptionEN: e })
+                }
               />
             </div>
           </div>
           <div className="div-input">
             <a className="title-input">Loại khuyến mãi</a>
             <Radio.Group
-              value={ratioTypeVoucher}
-              onChange={(e) => setRatioTypeVoucher(e.target.value)}
+              value={statePromo?.ratioTypeVoucher}
+              onChange={(e) =>
+                setStatePromo({
+                  ...statePromo,
+                  ratioTypeVoucher: e.target.value,
+                })
+              }
               style={{
                 marginTop: 10,
               }}
@@ -681,22 +688,28 @@ const EditPromotion = () => {
                 </Radio>
               </Space>
             </Radio.Group>
-            {ratioTypeVoucher === 1 && (
+            {statePromo?.ratioTypeVoucher === 1 && (
               <div className="div-voucher">
                 <Checkbox
-                  checked={isCheckVoucher}
+                  checked={statePromo?.isCheckVoucher}
                   onChange={(e) => {
-                    setIsCheckVoucher(e.target.checked);
-                    setIsCheckProgram(false);
+                    setStatePromo({
+                      ...statePromo,
+                      isCheckVoucher: e.target.checked,
+                      isCheckProgram: false,
+                    });
                   }}
                 >
                   Voucher
                 </Checkbox>
                 <Checkbox
-                  checked={isCheckProgram}
+                  checked={statePromo?.isCheckProgram}
                   onChange={(e) => {
-                    setIsCheckProgram(e.target.checked);
-                    setIsCheckVoucher(false);
+                    setStatePromo({
+                      ...statePromo,
+                      isCheckVoucher: false,
+                      isCheckProgram: e.target.checked,
+                    });
                   }}
                   style={{ margin: 0, marginTop: 10 }}
                 >
@@ -704,40 +717,46 @@ const EditPromotion = () => {
                 </Checkbox>
                 <Select
                   onChange={(e) => {
-                    setServiceApply(e);
+                    setStatePromo({ ...statePromo, serviceApply: e });
                   }}
                   options={serviceOption}
                   allowClear={true}
                   placeholder="Chọn dịch vụ áp dụng"
                   style={{ marginTop: 10 }}
-                  value={serviceApply}
+                  value={statePromo?.serviceApply}
                 />
               </div>
             )}
-            {ratioTypeVoucher === 2 && (
+            {statePromo?.ratioTypeVoucher === 2 && (
               <div className="ml-3">
                 <InputCustom
                   title="Tên đối tác"
-                  value={namebrand}
-                  onChange={(e) => setNamebrand(e.target.value)}
+                  value={statePromo?.namebrand}
+                  onChange={(e) =>
+                    setStatePromo({ ...statePromo, namebrand: e.target.value })
+                  }
                   placeholder="Nhập tên đối tác"
                 />
               </div>
             )}
           </div>
-          {(serviceApply?.length > 0 || ratioTypeVoucher === 2) && (
+          {(statePromo?.serviceApply?.length > 0 ||
+            statePromo?.ratioTypeVoucher === 2) && (
             <>
               <div className="div-input">
                 <a className="title-input">Thời gian hiệu lực</a>
                 <Radio.Group
-                  value={isApllyTime}
+                  value={statePromo?.isApllyTime}
                   style={{ marginTop: 10 }}
                   onChange={(e) => {
-                    setIsApllyTime(e.target.value);
+                    setStatePromo({
+                      ...statePromo,
+                      isApllyTime: e.target.value,
+                    });
                     if (e.target.value === 1) {
-                      setLimitedDate(false);
+                      setStatePromo({ ...statePromo, limitedDate: false });
                     } else {
-                      setLimitedDate(true);
+                      setStatePromo({ ...statePromo, limitedDate: true });
                     }
                   }}
                 >
@@ -746,68 +765,85 @@ const EditPromotion = () => {
                     <Radio value={2}>Thời gian áp dụng</Radio>
                   </Space>
                 </Radio.Group>
-                {isApllyTime === 2 && (
+                {statePromo?.isApllyTime === 2 && (
                   <>
                     <div className="div-time-select">
                       <div className="div-time">
                         <a>{`${i18n.t("start_date", { lng: lang })}`}</a>
                         <DatePicker
                           onChange={(date, dateString) => {
-                            setStartDate(dateString);
+                            setStatePromo({
+                              ...statePromo,
+                              startDate: dateString,
+                            });
                           }}
                           style={{ width: "90%", marginTop: 3 }}
                           locale={locale}
                           format={dateFormat}
                           value={
-                            startDate
-                              ? dayjs(startDate?.slice(0, 11), dateFormat)
+                            statePromo?.startDate
+                              ? dayjs(
+                                  statePromo?.startDate?.slice(0, 11),
+                                  dateFormat
+                                )
                               : ""
                           }
                         />
                       </div>
                       <div className="div-time">
-                        <Checkbox checked={isCheckEndDate} onChange={(e) => {}}>
+                        <Checkbox
+                          checked={statePromo?.isCheckEndDate}
+                          onChange={(e) => {}}
+                        >
                           Có thời gian kết thúc
                         </Checkbox>
                         <DatePicker
                           onChange={(date, dateString) =>
-                            setEndDate(dateString)
+                            setStatePromo({
+                              ...statePromo,
+                              endDate: dateString,
+                            })
                           }
                           style={{ width: "90%", marginTop: 2 }}
                           locale={locale}
                           format={dateFormat}
                           value={
-                            endDate
-                              ? dayjs(endDate?.slice(0, 11), dateFormat)
+                            statePromo?.endDate
+                              ? dayjs(
+                                  statePromo?.endDate?.slice(0, 11),
+                                  dateFormat
+                                )
                               : ""
                           }
                         />
                       </div>
                     </div>
-                    {/* <Checkbox
-                      checked={isApplyTimeUse}
-                      onChange={(e) => setIsApplyTimeUse(e.target.checked)}
-                      style={{ marginTop: 10 }}
-                    >
-                      Giới hạn ngày và giờ áp dụng trong tuần
-                    </Checkbox> */}
                     <a className="title-input mt-2">
                       Thời gian áp dụng trong tuần
                     </a>
 
                     <Radio.Group
-                      value={ratioTypeDateApply}
+                      value={statePromo?.ratioTypeDateApply}
                       style={{ marginTop: 10, width: "100%" }}
                       onChange={(e) => {
-                        setRatioTypeDateApply(e.target.value);
                         if (e.target.value === 1) {
-                          setIsApplyTimeUse(false);
+                          setStatePromo({
+                            ...statePromo,
+                            ratioTypeDateApply: e.target.value,
+                            isApplyTimeUse: false,
+                          });
                         } else if (e.target.value === 2) {
-                          setIsApplyTimeUse(true);
-                          setTypeDateApply("date_create");
+                          setStatePromo({
+                            ...statePromo,
+                            typeDateApply: "date_create",
+                            isApplyTimeUse: true,
+                          });
                         } else {
-                          setIsApplyTimeUse(true);
-                          setTypeDateApply("date_work");
+                          setStatePromo({
+                            ...statePromo,
+                            typeDateApply: "date_work",
+                            isApplyTimeUse: true,
+                          });
                         }
                       }}
                     >
@@ -819,7 +855,7 @@ const EditPromotion = () => {
                         </Radio>
                       </Space>
                     </Radio.Group>
-                    {isApplyTimeUse && (
+                    {statePromo?.isApplyTimeUse && (
                       <div className="div-list-time-apply">
                         {timeApply?.map((item, index) => {
                           return (
@@ -874,6 +910,7 @@ const EditPromotion = () => {
                                                 options={DATA_TIME_APPLY}
                                                 style={{ width: 100 }}
                                                 size="small"
+                                                value={i?.start_time_local}
                                                 onChange={(e) =>
                                                   changeTimeStartApply(
                                                     e,
@@ -888,6 +925,7 @@ const EditPromotion = () => {
                                                 options={DATA_TIME_APPLY}
                                                 style={{ width: 100 }}
                                                 size="small"
+                                                value={i?.end_time_local}
                                                 onChange={(e) =>
                                                   changeTimeEndApply(
                                                     e,
@@ -946,7 +984,7 @@ const EditPromotion = () => {
                   </>
                 )}
               </div>
-              {!isCheckProgram && (
+              {!statePromo?.isCheckProgram && (
                 <div className="div-background-thumnail">
                   <a className="title-input">Hình ảnh khuyến mãi</a>
                   <div>
@@ -961,8 +999,10 @@ const EditPromotion = () => {
                           <QuestionCircleOutlined className="icon-question" />
                         </Popover>
                       }
-                      image={imgThumbnail}
-                      setImage={setImgThumbnail}
+                      image={statePromo?.imgThumbnail}
+                      setImage={(prev) =>
+                        setStatePromo({ ...statePromo, imgThumbnail: prev })
+                      }
                       classImg={"img-thumbnail"}
                     />
 
@@ -977,14 +1017,16 @@ const EditPromotion = () => {
                           <QuestionCircleOutlined className="icon-question" />
                         </Popover>
                       }
-                      image={imgBackground}
-                      setImage={setImgBackground}
+                      image={statePromo?.imgBackground}
+                      setImage={(prev) =>
+                        setStatePromo({ ...statePromo, imgBackground: prev })
+                      }
                       classImg={"img-background"}
                     />
                   </div>
                 </div>
               )}
-              {ratioTypeVoucher === 1 && (
+              {statePromo?.ratioTypeVoucher === 1 && (
                 <div className="div-input">
                   <a className="title-input">
                     {`${i18n.t("Giảm giá đơn hàng", { lng: lang })}`}
@@ -997,30 +1039,36 @@ const EditPromotion = () => {
                           `${value}`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
                         }
                         min={0}
-                        max={discountUnit === "percent" && 100}
+                        max={statePromo?.discountUnit === "percent" && 100}
                         value={
-                          discountUnit === "amount"
-                            ? maximumDiscount
-                            : reducedValue
+                          statePromo?.discountUnit === "amount"
+                            ? statePromo?.maximumDiscount
+                            : statePromo?.reducedValue
                         }
                         onChange={(e) => {
-                          if (discountUnit === "amount") {
-                            setMaximumDiscount(e);
+                          if (statePromo?.discountUnit === "amount") {
+                            setStatePromo({
+                              ...statePromo,
+                              maximumDiscount: e,
+                            });
                           } else {
-                            setReducedValue(e);
+                            setStatePromo({ ...statePromo, reducedValue: e });
                           }
                         }}
                         style={{ width: "100%", marginTop: 5 }}
                         addonAfter={selectAfter}
                       />
                     </div>
-                    {discountUnit === "percent" && (
+                    {statePromo?.discountUnit === "percent" && (
                       <div className="div-body-reduced">
                         {/* <a>{`${i18n.t("discount_max", { lng: lang })}`}</a> */}
                         <Checkbox
-                          checked={isMaximumDiscount}
+                          checked={statePromo?.isMaximumDiscount}
                           onChange={(e) =>
-                            setIsMaximumDiscount(e.target.checked)
+                            setStatePromo({
+                              ...statePromo,
+                              isMaximumDiscount: e.target.checked,
+                            })
                           }
                           disabled
                         >
@@ -1034,8 +1082,10 @@ const EditPromotion = () => {
                             )
                           }
                           min={0}
-                          value={maximumDiscount}
-                          onChange={(e) => setMaximumDiscount(e)}
+                          value={statePromo?.maximumDiscount}
+                          onChange={(e) =>
+                            setStatePromo({ ...statePromo, maximumDiscount: e })
+                          }
                           addonAfter="đ"
                           style={{ width: "100%", marginTop: 4 }}
                         />
@@ -1044,18 +1094,25 @@ const EditPromotion = () => {
                   </div>
                 </div>
               )}
-              {ratioTypeVoucher === 1 && (
+              {statePromo?.ratioTypeVoucher === 1 && (
                 <div className="div-input">
                   <a className="title-input">
                     {`${i18n.t("Điều kiện tối thiểu", { lng: lang })}`}
                   </a>
                   <Radio.Group
                     style={{ marginTop: 10 }}
-                    value={checkMininum}
+                    value={statePromo?.checkMininum}
                     onChange={(e) => {
-                      setCheckMininum(e.target.value);
+                      setStatePromo({
+                        ...statePromo,
+                        checkMininum: e.target.value,
+                      });
                       if (e.target.value === 1) {
-                        setMinimumOrder(0);
+                        setStatePromo({
+                          ...statePromo,
+                          minimumOrder: 0,
+                          checkMininum: e.target.value,
+                        });
                       }
                     }}
                   >
@@ -1064,7 +1121,7 @@ const EditPromotion = () => {
                       <Radio value={2}>Giá trị đơn tối thiểu</Radio>
                     </Space>
                   </Radio.Group>
-                  {checkMininum === 2 && (
+                  {statePromo?.checkMininum === 2 && (
                     <div className="div-minimum-order">
                       <InputNumber
                         formatter={(value) =>
@@ -1074,8 +1131,10 @@ const EditPromotion = () => {
                           )
                         }
                         min={0}
-                        value={minimumOrder}
-                        onChange={(e) => setMinimumOrder(e)}
+                        value={statePromo?.minimumOrder}
+                        onChange={(e) =>
+                          setStatePromo({ ...statePromo, minimumOrder: e })
+                        }
                         className="input-price-minimum"
                       />
                       <a className="text-note">Áp dụng cho tất cả đơn hàng</a>
@@ -1083,19 +1142,29 @@ const EditPromotion = () => {
                   )}
                 </div>
               )}
-
               <div className="div-input">
                 <a className="title-input">
                   {`${i18n.t("Đối tượng khách hàng", { lng: lang })}`}
                 </a>
                 <Radio.Group
-                  value={isObjectCustomer}
+                  value={statePromo?.isObjectCustomer}
                   onChange={(e) => {
-                    setIsObjectCustomer(e.target.value);
+                    setStatePromo({
+                      ...statePromo,
+                      isObjectCustomer: e.target.value,
+                    });
                     if (e.target.value === 2) {
-                      setIsGroupCustomer(true);
+                      setStatePromo({
+                        ...statePromo,
+                        isGroupCustomer: true,
+                        isObjectCustomer: e.target.value,
+                      });
                     } else if (e.target.value === 3) {
-                      setIsCustomer(true);
+                      setStatePromo({
+                        ...statePromo,
+                        isCustomer: true,
+                        isObjectCustomer: e.target.value,
+                      });
                     }
                   }}
                   style={{ marginTop: 10 }}
@@ -1107,7 +1176,7 @@ const EditPromotion = () => {
                   </Space>
                 </Radio.Group>
                 <div>
-                  {isObjectCustomer === 2 && (
+                  {statePromo?.isObjectCustomer === 2 && (
                     <Select
                       mode="multiple"
                       allowClear
@@ -1117,27 +1186,31 @@ const EditPromotion = () => {
                       }}
                       placeholder="Please select"
                       onChange={(value) => {
-                        setGroupCustomer(value);
+                        setStatePromo({ ...statePromo, groupCustomer: value });
                       }}
+                      value={statePromo?.groupCustomer}
                       options={options}
                     />
                   )}
                 </div>
                 <div>
-                  {isObjectCustomer === 3 && (
+                  {statePromo?.isObjectCustomer === 3 && (
                     <div>
                       <Input
                         placeholder={`${i18n.t("search", { lng: lang })}`}
-                        value={name}
+                        value={statePromo?.name}
                         onChange={(e) => {
-                          setName(e.target.value);
+                          setStatePromo({
+                            ...statePromo,
+                            name: e.target.value,
+                          });
                           searchCustomer(e.target.value);
                         }}
                         style={{ marginTop: 10 }}
                       />
-                      {data?.length > 0 && (
+                      {statePromo?.data?.length > 0 && (
                         <List className="list-item-kh">
-                          {data?.map((item, index) => {
+                          {statePromo?.data?.map((item, index) => {
                             return (
                               <div
                                 className="div-item"
@@ -1154,10 +1227,10 @@ const EditPromotion = () => {
                         </List>
                       )}
 
-                      {listNameCustomers?.length > 0 && (
+                      {statePromo?.listNameCustomers?.length > 0 && (
                         <div className="div-list-customer">
                           <List type={"unstyled"}>
-                            {listNameCustomers.map((item) => {
+                            {statePromo?.listNameCustomers.map((item) => {
                               return (
                                 <div className="div-item-customer">
                                   <a className="text-name-list">
@@ -1185,13 +1258,20 @@ const EditPromotion = () => {
                 </a>
                 <Radio.Group
                   style={{ marginTop: 10 }}
-                  value={ratioApplyArea}
+                  value={statePromo?.ratioApplyArea}
                   onChange={(e) => {
-                    setRatioApplyArea(e.target.value);
                     if (e.target.value === 1) {
-                      setIsApplyArea(false);
+                      setStatePromo({
+                        ...statePromo,
+                        isApplyArea: false,
+                        ratioApplyArea: e.target.value,
+                      });
                     } else {
-                      setIsApplyArea(true);
+                      setStatePromo({
+                        ...statePromo,
+                        isApplyArea: true,
+                        ratioApplyArea: e.target.value,
+                      });
                     }
                   }}
                 >
@@ -1201,68 +1281,88 @@ const EditPromotion = () => {
                   </Space>
                 </Radio.Group>
 
-                {ratioApplyArea === 2 && (
+                {statePromo?.ratioApplyArea === 2 && (
                   <Select
                     mode="multiple"
                     allowClear
                     style={{ width: "100%", marginTop: 10 }}
                     onChange={(e) => {
-                      setCity(e);
+                      setStatePromo({ ...statePromo, city: e });
                     }}
                     options={cityOption}
                     optionLabelProp="label"
-                    value={city}
+                    value={statePromo?.city}
                   />
                 )}
               </div>
               <div className="div-input">
                 <a className="title-input">Giới hạn sử dụng</a>
-
                 <div className="div-column-limit">
                   <Checkbox
-                    checked={limitedQuantity}
-                    onChange={(e) => setLimitedQuantity(e.target.checked)}
+                    checked={statePromo?.limitedQuantity}
+                    onChange={(e) =>
+                      setStatePromo({
+                        ...statePromo,
+                        limitedQuantity: e.target.checked,
+                      })
+                    }
                   >
                     Giới hạn tổng số có thể sử dụng khuyến mãi
                   </Checkbox>
-                  {limitedQuantity && (
+                  {statePromo?.limitedQuantity && (
                     <InputNumber
                       min={0}
-                      value={amount}
-                      onChange={(e) => setAmount(e)}
+                      value={statePromo?.amount}
+                      onChange={(e) =>
+                        setStatePromo({ ...statePromo, amount: e })
+                      }
                       className="input-price"
                     />
                   )}
                 </div>
                 <div className="div-column-limit">
                   <Checkbox
-                    checked={isUsePromo}
-                    onChange={(e) => setIsUsePromo(e.target.checked)}
+                    checked={statePromo?.isUsePromo}
+                    onChange={(e) =>
+                      setStatePromo({
+                        ...statePromo,
+                        isUsePromo: e.target.checked,
+                      })
+                    }
                   >
                     Giới hạn số lần sử dụng cho mỗi khách hàng
                   </Checkbox>
-                  {isUsePromo && (
+                  {statePromo?.isUsePromo && (
                     <InputNumber
                       min={0}
-                      value={usePromo}
-                      onChange={(e) => setUsePromo(e)}
+                      value={statePromo?.usePromo}
+                      onChange={(e) =>
+                        setStatePromo({ ...statePromo, usePromo: e })
+                      }
                       className="input-price"
                     />
                   )}
                 </div>
               </div>
-              {!isCheckProgram && (
+              {!statePromo?.isCheckProgram && (
                 <div className="div-input">
                   <a className="title-input">Điểm G-point quy đổi</a>
                   <Radio.Group
-                    value={radioExchangePoint}
+                    value={statePromo?.ratioExchangePoint}
                     style={{ marginTop: 10 }}
                     onChange={(e) => {
-                      setRadioExchangePoint(e.target.value);
                       if (e.target.value === 1) {
-                        setIsExchangePoint(false);
+                        setStatePromo({
+                          ...statePromo,
+                          isExchangePoint: false,
+                          ratioExchangePoint: e.target.value,
+                        });
                       } else {
-                        setIsExchangePoint(true);
+                        setStatePromo({
+                          ...statePromo,
+                          isExchangePoint: true,
+                          ratioExchangePoint: e.target.value,
+                        });
                       }
                     }}
                   >
@@ -1271,12 +1371,14 @@ const EditPromotion = () => {
                       <Radio value={2}>Giá trị đổi khuyến mãi</Radio>
                     </Space>
                   </Radio.Group>
-                  {radioExchangePoint === 2 && (
+                  {statePromo?.ratioExchangePoint === 2 && (
                     <div className="div-exchange">
                       <InputNumber
                         min={0}
-                        defaultValue={exchangePoint}
-                        onChange={(e) => setExchangePoint(e)}
+                        defaultValue={statePromo?.exchangePoint}
+                        onChange={(e) =>
+                          setStatePromo({ ...statePromo, exchangePoint: e })
+                        }
                         style={{ width: "50%", marginTop: 10 }}
                       />
                       <a className="label-exchange">
@@ -1284,8 +1386,10 @@ const EditPromotion = () => {
                       </a>
                       <InputNumber
                         min={0}
-                        defaultValue={dateExchange}
-                        onChange={(e) => setDateExchange(e)}
+                        defaultValue={statePromo?.dateExchange}
+                        onChange={(e) =>
+                          setStatePromo({ ...statePromo, dateExchange: e })
+                        }
                         style={{ width: "50%", marginTop: 10 }}
                       />
                     </div>
@@ -1298,76 +1402,23 @@ const EditPromotion = () => {
         <div className="div-detail">
           <div className="div-input">
             <a className="title-input">Cài đặt</a>
-            {isCheckVoucher && ratioTypeVoucher === 1 && (
-              <div className="div-show-in-app">
-                <Switch
-                  checked={isShowInApp}
-                  onChange={(e, permission) => {
-                    setIsShowInApp(e);
-                  }}
-                  size="small"
-                  className={isShowInApp ? "switch-select" : "switch"}
-                />
-                <a className="label-display">Hiển thị trên App</a>
-              </div>
-            )}
-            <div className="div-push-noti">
-              <div>
-                <Switch
-                  checked={isSendNotification}
-                  onChange={(e) => setIsSendNotification(e)}
-                  size="small"
-                  className={isSendNotification ? "switch-select" : "switch"}
-                />
-                <a className="title-input">Push notification</a>
-              </div>
-              {isSendNotification && (
-                <div className="div-body-push">
-                  <Radio.Group
-                    value={isApplyPushNoti}
-                    style={{ marginTop: 10 }}
-                    onChange={(e) => {
-                      setIsApplyPushNoti(e.target.value);
-                      if (e.target.value) {
-                        setIsDateSchedule(false);
-                      } else {
-                        setIsDateSchedule(true);
-                      }
+            {statePromo?.isCheckVoucher &&
+              statePromo?.ratioTypeVoucher === 1 && (
+                <div className="div-show-in-app">
+                  <Switch
+                    checked={statePromo?.isShowInApp}
+                    onChange={(e, permission) => {
+                      setStatePromo({ ...statePromo, isShowInApp: e });
                     }}
-                  >
-                    <Space direction="vertical">
-                      <Radio value={1}>Đẩy thông báo ngay lập tức</Radio>
-                      <Radio value={2}>Đẩy thông báo theo thời gian</Radio>
-                    </Space>
-                  </Radio.Group>
-
-                  <div>
-                    <InputCustom
-                      title={`${i18n.t("title", { lng: lang })}`}
-                      type="text"
-                      value={titleNoti}
-                      onChange={(e) => setTitleNoti(e.target.value)}
-                      style={{ width: "100%" }}
-                    />
-                    <InputCustom
-                      title={`${i18n.t("describe", { lng: lang })}`}
-                      textArea={true}
-                      value={descriptionNoti}
-                      onChange={(e) => setDescriptionNoti(e.target.value)}
-                      style={{ marginTop: 5, width: "100%" }}
-                    />
-                    {isApplyPushNoti === 2 && (
-                      <Input
-                        type="datetime-local"
-                        value={dateSchedule}
-                        onChange={(e) => setDateSchedule(e.target.value)}
-                        style={{ width: "100%", marginTop: 5 }}
-                      />
-                    )}
-                  </div>
+                    size="small"
+                    className={
+                      statePromo?.isShowInApp ? "switch-select" : "switch"
+                    }
+                  />
+                  <a className="label-display">Hiển thị trên App</a>
                 </div>
               )}
-            </div>
+
             <a className="title-input mt-2">
               Phương thức thanh toán được áp dụng
             </a>
@@ -1375,21 +1426,28 @@ const EditPromotion = () => {
               <Radio.Group
                 style={{ marginTop: 5, marginLeft: 5 }}
                 onChange={(e) => {
-                  setRadioPaymentMethod(e.target.value);
                   if (e.target.value === 1) {
-                    setIsPaymentMethod(false);
+                    setStatePromo({
+                      ...statePromo,
+                      isPaymentMethod: false,
+                      ratioPaymentMethod: e.target.value,
+                    });
                   } else {
-                    setIsPaymentMethod(true);
+                    setStatePromo({
+                      ...statePromo,
+                      isPaymentMethod: true,
+                      ratioPaymentMethod: e.target.value,
+                    });
                   }
                 }}
-                value={radioPaymentMethod}
+                value={statePromo?.ratioPaymentMethod}
               >
                 <Space direction="vertical">
                   <Radio value={1}>Tất cả loại thanh toán</Radio>
                   <Radio value={2}>Tuỳ chọn thanh toán</Radio>
                 </Space>
               </Radio.Group>
-              {radioPaymentMethod === 2 && (
+              {statePromo?.ratioPaymentMethod === 2 && (
                 <Select
                   mode="multiple"
                   allowClear
@@ -1398,7 +1456,9 @@ const EditPromotion = () => {
                     marginTop: 10,
                   }}
                   placeholder="Chọn phương thức"
-                  onChange={(e) => setPaymentMethod(e)}
+                  onChange={(e) =>
+                    setStatePromo({ ...statePromo, paymentMethod: e })
+                  }
                   options={DATA_PAYMENT}
                 />
               )}
@@ -1409,7 +1469,12 @@ const EditPromotion = () => {
       <Button
         type="primary"
         danger
-        style={{ width: "auto", marginBottom: 50, marginTop: 20 }}
+        style={{
+          width: "auto",
+          marginBottom: 50,
+          marginTop: 20,
+          marginLeft: "14%",
+        }}
         onClick={() => setModalDelete(true)}
       >
         Xoá khuyến mãi
@@ -1424,35 +1489,16 @@ const EditPromotion = () => {
         body={
           <div style={{ display: "flex", flexDirection: "column" }}>
             <a>Bạn có chắc muốn xoá mã khuyến mãi này?</a>
-            <a style={{ color: "red" }}>{titleVN}</a>
+            <a style={{ color: "red" }}>{statePromo?.titleVN}</a>
           </div>
         }
       />
-      {/* <Tour
-        open={stepTuor}
-        onClose={() => {
-          setStepTuor(false);
-          saveToCookie("tour-edit-promotion", false);
-        }}
-        steps={steps}
-      /> */}
       <FloatButton.BackTop />
       {isLoading && <LoadingPagination />}
     </>
   );
 };
 export default EditPromotion;
-
-const TAB_DISCOUNT = [
-  {
-    value: "amount",
-    title: "direct_discount",
-  },
-  {
-    value: "percent",
-    title: "percentage_discount",
-  },
-];
 
 const DATA_APPLY_TIME = [
   {
