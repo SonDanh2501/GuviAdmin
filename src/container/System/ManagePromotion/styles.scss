@@ -31,6 +31,14 @@
   }
 }
 
+.sswitch-select-show-app {
+  width: 20px;
+  background-color: #00cf3a !important;
+}
+.switch {
+  width: 20px;
+}
+
 .div-header-promotion {
   display: flex;
   flex-direction: row;
@@ -128,6 +136,15 @@
       font-weight: 400;
       font-size: 14px;
       color: #b4b4b4;
+
+      .text-service {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        color: #b4b4b4;
+        text-decoration-line: underline;
+      }
     }
 
     .text-title-code {
