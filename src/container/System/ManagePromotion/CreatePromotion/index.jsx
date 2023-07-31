@@ -314,10 +314,10 @@ const CreatePromotion = () => {
       brand: statePromo?.namebrand.toUpperCase(),
       is_limit_date: statePromo?.limitedDate,
       limit_start_date: statePromo?.limitedDate
-        ? new Date(statePromo?.startDate).toISOString()
+        ? moment(statePromo?.startDate).toISOString()
         : null,
       limit_end_date: statePromo?.limitedDate
-        ? new Date(statePromo?.endDate).toISOString()
+        ? moment(statePromo?.endDate).toISOString()
         : null,
       type_date_apply: statePromo?.typeDateApply,
       is_loop: statePromo?.isApplyTimeUse,
@@ -499,112 +499,6 @@ const CreatePromotion = () => {
             </a>
           </div>
           <div className="div-input">
-            <div className="div-head-title">
-              <a className="title-input">Tiêu đề </a>
-              <Popover content={titlePrommo} trigger="click" placement="right">
-                <QuestionCircleOutlined className="icon-question" />
-              </Popover>
-            </div>
-            <InputCustom
-              title={`${i18n.t("vietnamese", { lng: lang })}`}
-              value={statePromo?.titleVN}
-              onChange={(e) =>
-                setStatePromo({
-                  ...statePromo,
-                  titleVN: e.target.value,
-                  errorTitle: "",
-                })
-              }
-            />
-            <InputCustom
-              title={`${i18n.t("english", { lng: lang })}`}
-              value={statePromo?.titleEN}
-              onChange={(e) =>
-                setStatePromo({
-                  ...statePromo,
-                  titleEN: e.target.value,
-                  errorTitle: "",
-                })
-              }
-              error={statePromo?.errorTitle}
-            />
-          </div>
-          <div className="div-input">
-            <div className="div-head-title">
-              <a className="title-input">
-                {`${i18n.t("describe", { lng: lang })}`}
-              </a>
-
-              <Popover
-                content={shortDescriptionPrommo}
-                trigger="click"
-                placement="right"
-              >
-                <QuestionCircleOutlined className="icon-question" />
-              </Popover>
-            </div>
-            <InputCustom
-              title={`${i18n.t("vietnamese", { lng: lang })}`}
-              value={statePromo?.shortDescriptionVN}
-              onChange={(e) =>
-                setStatePromo({
-                  ...statePromo,
-                  shortDescriptionVN: e.target.value,
-                  errorShortDescription: "",
-                })
-              }
-              textArea={true}
-            />
-            <InputCustom
-              title={`${i18n.t("english", { lng: lang })}`}
-              value={statePromo?.shortDescriptionEN}
-              onChange={(e) =>
-                setStatePromo({
-                  ...statePromo,
-                  shortDescriptionEN: e.target.value,
-                  errorShortDescription: "",
-                })
-              }
-              textArea={true}
-              error={statePromo?.errorShortDescription}
-            />
-          </div>
-          <div className="div-input">
-            <div className="div-head-title">
-              <a className="title-input">
-                {`${i18n.t("detailed_description", { lng: lang })}`}
-              </a>
-              <Popover
-                content={desciptionPrommo}
-                trigger="click"
-                placement="right"
-              >
-                <QuestionCircleOutlined className="icon-question" />
-              </Popover>
-            </div>
-            <div>
-              <a>{`${i18n.t("vietnamese", { lng: lang })}`}</a>
-              <CustomTextEditor
-                value={statePromo?.descriptionVN}
-                onChangeValue={(prev) =>
-                  setStatePromo({ ...statePromo, descriptionVN: prev })
-                }
-              />
-            </div>
-            <div className="mt-2">
-              <a>{`${i18n.t("english", { lng: lang })}`}</a>
-              <CustomTextEditor
-                value={statePromo?.descriptionEN}
-                onChangeValue={(prev) =>
-                  setStatePromo({
-                    ...statePromo,
-                    descriptionEN: prev,
-                  })
-                }
-              />
-            </div>
-          </div>
-          <div className="div-input">
             <a className="title-input">Loại khuyến mãi</a>
             <Radio.Group
               value={statePromo?.ratioTypeVoucher}
@@ -685,6 +579,117 @@ const CreatePromotion = () => {
               </div>
             )}
           </div>
+          <div className="div-input">
+            <div className="div-head-title">
+              <a className="title-input">Tiêu đề </a>
+              <Popover content={titlePrommo} trigger="click" placement="right">
+                <QuestionCircleOutlined className="icon-question" />
+              </Popover>
+            </div>
+            <InputCustom
+              title={`${i18n.t("vietnamese", { lng: lang })}`}
+              value={statePromo?.titleVN}
+              onChange={(e) =>
+                setStatePromo({
+                  ...statePromo,
+                  titleVN: e.target.value,
+                  errorTitle: "",
+                })
+              }
+            />
+            <InputCustom
+              title={`${i18n.t("english", { lng: lang })}`}
+              value={statePromo?.titleEN}
+              onChange={(e) =>
+                setStatePromo({
+                  ...statePromo,
+                  titleEN: e.target.value,
+                  errorTitle: "",
+                })
+              }
+              error={statePromo?.errorTitle}
+            />
+          </div>
+          {statePromo?.isCheckVoucher && (
+            <div className="div-input">
+              <div className="div-head-title">
+                <a className="title-input">
+                  {`${i18n.t("describe", { lng: lang })}`}
+                </a>
+
+                <Popover
+                  content={shortDescriptionPrommo}
+                  trigger="click"
+                  placement="right"
+                >
+                  <QuestionCircleOutlined className="icon-question" />
+                </Popover>
+              </div>
+              <InputCustom
+                title={`${i18n.t("vietnamese", { lng: lang })}`}
+                value={statePromo?.shortDescriptionVN}
+                onChange={(e) =>
+                  setStatePromo({
+                    ...statePromo,
+                    shortDescriptionVN: e.target.value,
+                    errorShortDescription: "",
+                  })
+                }
+                textArea={true}
+              />
+              <InputCustom
+                title={`${i18n.t("english", { lng: lang })}`}
+                value={statePromo?.shortDescriptionEN}
+                onChange={(e) =>
+                  setStatePromo({
+                    ...statePromo,
+                    shortDescriptionEN: e.target.value,
+                    errorShortDescription: "",
+                  })
+                }
+                textArea={true}
+                error={statePromo?.errorShortDescription}
+              />
+            </div>
+          )}
+          {statePromo?.isCheckVoucher && (
+            <div className="div-input">
+              <div className="div-head-title">
+                <a className="title-input">
+                  {`${i18n.t("detailed_description", { lng: lang })}`}
+                </a>
+                <Popover
+                  content={desciptionPrommo}
+                  trigger="click"
+                  placement="right"
+                >
+                  <QuestionCircleOutlined className="icon-question" />
+                </Popover>
+              </div>
+              <div>
+                <a>{`${i18n.t("vietnamese", { lng: lang })}`}</a>
+                <CustomTextEditor
+                  value={statePromo?.descriptionVN}
+                  onChangeValue={(prev) =>
+                    setStatePromo({ ...statePromo, descriptionVN: prev })
+                  }
+                />
+              </div>
+              <div className="mt-2">
+                <a>{`${i18n.t("english", { lng: lang })}`}</a>
+                <CustomTextEditor
+                  value={statePromo?.descriptionEN}
+                  onChangeValue={(prev) =>
+                    setStatePromo({
+                      ...statePromo,
+                      descriptionEN: prev,
+                    })
+                  }
+                />
+              </div>
+            </div>
+          )}
+
           {(statePromo?.serviceApply.length > 0 ||
             statePromo?.ratioTypeVoucher === 2) && (
             <>

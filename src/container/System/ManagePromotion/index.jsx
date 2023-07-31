@@ -6,6 +6,7 @@ import {
   Pagination,
   Progress,
   Select,
+  Switch,
   Table,
 } from "antd";
 import _debounce from "lodash/debounce";
@@ -442,13 +443,18 @@ const ManagePromotions = () => {
               ) : (
                 <a className="text-title-promotion">
                   {data?.discount_unit === "amount"
-                    ? `Giảm giá ${formatMoney(data?.discount_max_price)} cho`
+                    ? `Giảm giá ${formatMoney(data?.discount_max_price)}`
                     : `Giảm giá ${data?.discount_value}%, tối đa ${formatMoney(
                         data?.discount_max_price
-                      )} cho`}{" "}
+                      )}`}{" "}
+                  {data?.price_min_order > 0
+                    ? ` đơn từ ${formatMoney(
+                        data?.price_min_order
+                      )} cho dịch vụ `
+                    : ""}
                   {service?.map((item, index) => {
                     return (
-                      <a key={index} className="text-title-promotion">
+                      <a key={index} className="text-service">
                         {data?.service_apply?.includes(item?._id)
                           ? item?.title?.vi
                           : null}
@@ -548,6 +554,9 @@ const ManagePromotions = () => {
     //         size="small"
     //         checked={data?.is_show_in_app}
     //         onChange={() => setState({ ...state, modalShowApp: true })}
+    //         className={
+    //           data?.is_show_in_app ? "switch-select-show-app" : "switch"
+    //         }
     //       />
     //     );
     //   },
@@ -959,4 +968,21 @@ const TYPE_PRMOTION = [
     brand: "",
     selected: "event",
   },
+];
+
+const PROMOTION_TAB = [
+  {
+    value: "doing",
+    label: `KM đang kích hoạt`,
+    selected: "",
+    brand: "",
+  },
+  { value: "", label: `Tất cả khuyến mãi`, selected: "", brand: "" },
+  {
+    value: "upcoming",
+    label: `KM chưa kích hoạt`,
+    selected: "",
+    brand: "",
+  },
+  { value: "done", label: `Kết thúc`, selected: "", brand: "" },
 ];
