@@ -52,6 +52,7 @@ import {
 } from "../../../../redux/selectors/auth";
 import { getProvince, getService } from "../../../../redux/selectors/service";
 import "./styles.scss";
+import moment from "moment";
 const { Option } = Select;
 
 const EditPromotion = () => {
@@ -441,10 +442,10 @@ const EditPromotion = () => {
       brand: statePromo?.namebrand.toUpperCase(),
       is_limit_date: statePromo?.limitedDate,
       limit_start_date: statePromo?.limitedDate
-        ? new Date(statePromo?.startDate).toISOString()
+        ? moment(statePromo?.startDate).toISOString()
         : null,
       limit_end_date: statePromo?.limitedDate
-        ? new Date(statePromo?.endDate).toISOString()
+        ? moment(statePromo?.endDate).toISOString()
         : null,
       type_date_apply: statePromo?.typeDateApply,
       is_loop: statePromo?.isApplyTimeUse,
@@ -588,115 +589,6 @@ const EditPromotion = () => {
                 onClick={() => openNotificationWithIcon("warning")}
               />
             )}
-            <div className="div-head-title">
-              <a className="title-input">Tiêu đề </a>
-              <Popover content={titlePrommo} trigger="click" placement="right">
-                <QuestionCircleOutlined className="icon-question" />
-              </Popover>
-            </div>
-            <InputCustom
-              title={`${i18n.t("vietnamese", { lng: lang })}`}
-              value={statePromo?.titleVN}
-              onChange={(e) =>
-                setStatePromo({ ...statePromo, titleVN: e.target.value })
-              }
-            />
-            <InputCustom
-              title={`${i18n.t("english", { lng: lang })}`}
-              value={statePromo?.titleEN}
-              onChange={(e) =>
-                setStatePromo({ ...statePromo, titleEN: e.target.value })
-              }
-            />
-          </div>
-          <div className="div-input">
-            {isActive && (
-              <div
-                className="div-block"
-                onClick={() => openNotificationWithIcon("warning")}
-              />
-            )}
-            <div className="div-head-title">
-              <a className="title-input">
-                {`${i18n.t("describe", { lng: lang })}`}
-              </a>
-
-              <Popover
-                content={shortDescriptionPrommo}
-                trigger="click"
-                placement="right"
-              >
-                <QuestionCircleOutlined className="icon-question" />
-              </Popover>
-            </div>
-            <InputCustom
-              title={`${i18n.t("vietnamese", { lng: lang })}`}
-              value={statePromo?.shortDescriptionVN}
-              onChange={(e) =>
-                setStatePromo({
-                  ...statePromo,
-                  shortDescriptionVN: e.target.value,
-                })
-              }
-              textArea={true}
-            />
-            <InputCustom
-              title={`${i18n.t("english", { lng: lang })}`}
-              value={statePromo?.shortDescriptionEN}
-              onChange={(e) =>
-                setStatePromo({
-                  ...statePromo,
-                  shortDescriptionEN: e.target.value,
-                })
-              }
-              textArea={true}
-            />
-          </div>
-          <div className="div-input">
-            {isActive && (
-              <div
-                className="div-block"
-                onClick={() => openNotificationWithIcon("warning")}
-              />
-            )}
-            <div className="div-head-title">
-              <a className="title-input">
-                {`${i18n.t("detailed_description", { lng: lang })}`}
-              </a>
-              <Popover
-                content={desciptionPrommo}
-                trigger="click"
-                placement="right"
-              >
-                <QuestionCircleOutlined className="icon-question" />
-              </Popover>
-            </div>
-            <div>
-              <a>{`${i18n.t("vietnamese", { lng: lang })}`}</a>
-              <CustomTextEditor
-                value={statePromo?.descriptionVN}
-                onChangeValue={(e) =>
-                  setStatePromo({ ...statePromo, descriptionVN: e })
-                }
-              />
-            </div>
-            <div className="mt-2">
-              <a>{`${i18n.t("english", { lng: lang })}`}</a>
-              <CustomTextEditor
-                value={statePromo?.descriptionEN}
-                onChangeValue={(e) =>
-                  setStatePromo({ ...statePromo, descriptionEN: e })
-                }
-              />
-            </div>
-          </div>
-          <div className="div-input">
-            {isActive && (
-              <div
-                className="div-block"
-                onClick={() => openNotificationWithIcon("warning")}
-              />
-            )}
             <a className="title-input">Loại khuyến mãi</a>
             <Radio.Group
               value={statePromo?.ratioTypeVoucher}
@@ -769,6 +661,120 @@ const EditPromotion = () => {
               </div>
             )}
           </div>
+          <div className="div-input">
+            {isActive && (
+              <div
+                className="div-block"
+                onClick={() => openNotificationWithIcon("warning")}
+              />
+            )}
+            <div className="div-head-title">
+              <a className="title-input">Tiêu đề </a>
+              <Popover content={titlePrommo} trigger="click" placement="right">
+                <QuestionCircleOutlined className="icon-question" />
+              </Popover>
+            </div>
+            <InputCustom
+              title={`${i18n.t("vietnamese", { lng: lang })}`}
+              value={statePromo?.titleVN}
+              onChange={(e) =>
+                setStatePromo({ ...statePromo, titleVN: e.target.value })
+              }
+            />
+            <InputCustom
+              title={`${i18n.t("english", { lng: lang })}`}
+              value={statePromo?.titleEN}
+              onChange={(e) =>
+                setStatePromo({ ...statePromo, titleEN: e.target.value })
+              }
+            />
+          </div>
+          {statePromo?.isCheckVoucher && (
+            <div className="div-input">
+              {isActive && (
+                <div
+                  className="div-block"
+                  onClick={() => openNotificationWithIcon("warning")}
+                />
+              )}
+              <div className="div-head-title">
+                <a className="title-input">
+                  {`${i18n.t("describe", { lng: lang })}`}
+                </a>
+
+                <Popover
+                  content={shortDescriptionPrommo}
+                  trigger="click"
+                  placement="right"
+                >
+                  <QuestionCircleOutlined className="icon-question" />
+                </Popover>
+              </div>
+              <InputCustom
+                title={`${i18n.t("vietnamese", { lng: lang })}`}
+                value={statePromo?.shortDescriptionVN}
+                onChange={(e) =>
+                  setStatePromo({
+                    ...statePromo,
+                    shortDescriptionVN: e.target.value,
+                  })
+                }
+                textArea={true}
+              />
+              <InputCustom
+                title={`${i18n.t("english", { lng: lang })}`}
+                value={statePromo?.shortDescriptionEN}
+                onChange={(e) =>
+                  setStatePromo({
+                    ...statePromo,
+                    shortDescriptionEN: e.target.value,
+                  })
+                }
+                textArea={true}
+              />
+            </div>
+          )}
+          {statePromo?.isCheckVoucher && (
+            <div className="div-input">
+              {isActive && (
+                <div
+                  className="div-block"
+                  onClick={() => openNotificationWithIcon("warning")}
+                />
+              )}
+              <div className="div-head-title">
+                <a className="title-input">
+                  {`${i18n.t("detailed_description", { lng: lang })}`}
+                </a>
+                <Popover
+                  content={desciptionPrommo}
+                  trigger="click"
+                  placement="right"
+                >
+                  <QuestionCircleOutlined className="icon-question" />
+                </Popover>
+              </div>
+              <div>
+                <a>{`${i18n.t("vietnamese", { lng: lang })}`}</a>
+                <CustomTextEditor
+                  value={statePromo?.descriptionVN}
+                  onChangeValue={(e) =>
+                    setStatePromo({ ...statePromo, descriptionVN: e })
+                  }
+                />
+              </div>
+              <div className="mt-2">
+                <a>{`${i18n.t("english", { lng: lang })}`}</a>
+                <CustomTextEditor
+                  value={statePromo?.descriptionEN}
+                  onChangeValue={(e) =>
+                    setStatePromo({ ...statePromo, descriptionEN: e })
+                  }
+                />
+              </div>
+            </div>
+          )}
+
           {(statePromo?.serviceApply?.length > 0 ||
             statePromo?.ratioTypeVoucher === 2) && (
             <>
