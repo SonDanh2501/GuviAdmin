@@ -46,7 +46,10 @@ import InputCustom from "../../../../../../components/textInputCustom";
 import UploadImage from "../../../../../../components/uploadImage";
 import { errorNotify } from "../../../../../../helper/toast";
 import i18n from "../../../../../../i18n";
-import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../../../redux/selectors/auth";
 import {
   getProvince,
   getService,
@@ -130,6 +133,7 @@ const EditPromotion = () => {
   const service = useSelector(getService);
   const province = useSelector(getProvince);
   const lang = useSelector(getLanguageState);
+  const checkElement = useSelector(getElementState);
   const navigate = useNavigate();
   const selectAfter = (
     <Select
@@ -510,7 +514,7 @@ const EditPromotion = () => {
             </Button>
           )}
 
-          {!isActive && (
+          {!isActive && checkElement?.includes("edit_promotion") && (
             <Button
               type="primary"
               onClick={onEditPromotion}
@@ -1466,19 +1470,22 @@ const EditPromotion = () => {
           </div>
         </div>
       </div>
-      <Button
-        type="primary"
-        danger
-        style={{
-          width: "auto",
-          marginBottom: 50,
-          marginTop: 20,
-          marginLeft: "14%",
-        }}
-        onClick={() => setModalDelete(true)}
-      >
-        Xoá khuyến mãi
-      </Button>
+
+      {checkElement?.includes("delete_promotion") && (
+        <Button
+          type="primary"
+          danger
+          style={{
+            width: "auto",
+            marginBottom: 50,
+            marginTop: 20,
+            marginLeft: "14%",
+          }}
+          onClick={() => setModalDelete(true)}
+        >
+          Xoá khuyến mãi
+        </Button>
+      )}
 
       <ModalCustom
         title="Xoá khuyến mãi"

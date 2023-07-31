@@ -1,12 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
-import InputCustom from "../../../../../../components/textInputCustom";
-import i18n from "../../../../../../i18n";
-import _debounce from "lodash/debounce";
-import "./styles.scss";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../../redux/selectors/auth";
-import CustomTextEditor from "../../../../../../components/customTextEdittor";
-import UploadImage from "../../../../../../components/uploadImage";
+import {
+  CloseOutlined,
+  PlusCircleFilled,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Checkbox,
@@ -20,38 +16,38 @@ import {
   Select,
   Space,
   Switch,
-  TimePicker,
 } from "antd";
+import locale from "antd/es/date-picker/locale/vi_VN";
+import _debounce from "lodash/debounce";
+import moment from "moment";
+import "moment/locale/vi";
+import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { searchCustomersApi } from "../../../../../../api/customer";
+import { DATA_PAYMENT, DATA_TIME_APPLY } from "../../../../../../api/fakeData";
+import { createPushNotification } from "../../../../../../api/notification";
 import {
   createPromotion,
   getGroupCustomerApi,
 } from "../../../../../../api/promotion";
-import { searchCustomersApi } from "../../../../../../api/customer";
+import backgroundImage from "../../../../../../assets/images/backgroundContent.png";
+import descriptionImage from "../../../../../../assets/images/description.png";
+import shortDescriptionImage from "../../../../../../assets/images/shortDescription.png";
+import thumnailImage from "../../../../../../assets/images/thumnailContent.png";
+import titleImage from "../../../../../../assets/images/title.png";
+import CustomTextEditor from "../../../../../../components/customTextEdittor";
+import LoadingPagination from "../../../../../../components/paginationLoading";
+import InputCustom from "../../../../../../components/textInputCustom";
+import UploadImage from "../../../../../../components/uploadImage";
+import { errorNotify } from "../../../../../../helper/toast";
+import i18n from "../../../../../../i18n";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
 import {
   getProvince,
   getService,
 } from "../../../../../../redux/selectors/service";
-import {
-  CloseCircleOutlined,
-  CloseOutlined,
-  MinusOutlined,
-  PlusCircleFilled,
-  QuestionCircleOutlined,
-} from "@ant-design/icons";
-import "moment/locale/vi";
-import locale from "antd/es/date-picker/locale/vi_VN";
-import shortDescriptionImage from "../../../../../../assets/images/shortDescription.png";
-import titleImage from "../../../../../../assets/images/title.png";
-import descriptionImage from "../../../../../../assets/images/description.png";
-import thumnailImage from "../../../../../../assets/images/thumnailContent.png";
-import backgroundImage from "../../../../../../assets/images/backgroundContent.png";
-import { DATA_PAYMENT, DATA_TIME_APPLY } from "../../../../../../api/fakeData";
-import dayjs from "dayjs";
-import { createPushNotification } from "../../../../../../api/notification";
-import moment from "moment";
-import { errorNotify } from "../../../../../../helper/toast";
-import LoadingPagination from "../../../../../../components/paginationLoading";
-import { useNavigate } from "react-router-dom";
+import "./styles.scss";
 const { Option } = Select;
 
 const CreatePromotion = () => {
@@ -116,14 +112,19 @@ const CreatePromotion = () => {
     titleNoti: "",
     descriptionNoti: "",
     dateSchedule: "",
+    errorCode: "",
+    errorTitle: "",
+    errorShortDescription: "",
+    errorDescription: "",
+    errorService: "",
+    errorNameBrand: "",
+    errorThumnail: "",
   });
   const [timeApply, setTimeApply] = useState(DATA_APPLY_TIME);
-
   const [isLoading, setIsLoading] = useState(false);
   const options = [];
   const serviceOption = [];
   const cityOption = [];
-  const formatDate = "DD-MM-YYYY";
   const service = useSelector(getService);
   const province = useSelector(getProvince);
   const lang = useSelector(getLanguageState);
@@ -384,6 +385,32 @@ const CreatePromotion = () => {
       });
   }, [statePromo, timeApply]);
 
+  const onCheck = () => {
+    setStatePromo({
+      ...statePromo,
+      errorCode:
+        statePromo?.promoCode == "" ? "Vui lòng nhập mã khuyến mãi" : " ",
+      errorTitle:
+        statePromo?.titleVN || statePromo?.titleEN == ""
+          ? "Vui lòng nhập tiêu đề khuyến mãi"
+          : " ",
+      errorShortDescription:
+        statePromo?.shortDescriptionVN || statePromo?.shortDescriptionEN == ""
+          ? "Vui lòng nhập mô tả khuyến mãi"
+          : " ",
+      errorShortDescription:
+        statePromo?.descriptionVN || statePromo?.descriptionEN == ""
+          ? "Vui lòng nhập chi tiết khuyến mãi"
+          : " ",
+      errorService:
+        statePromo?.serviceApply?.length > 0 ? "" : "Vui lòng chọn dịch vụ",
+      errorNameBrand:
+        statePromo?.namebrand == "" ? "Vui lòng nhập tên đối tác" : "",
+      errorThumnail:
+        statePromo?.imgThumbnail == "" ? "Vui lòng chọn hình khuyến mãi" : "",
+    });
+  };
+
   return (
     <>
       <div className="div-head-add-promotion">
@@ -392,11 +419,7 @@ const CreatePromotion = () => {
           <Button style={{ width: "auto" }} onClick={() => navigate(-1)}>
             Huỷ
           </Button>
-          <Button
-            style={{ width: "auto" }}
-            type="primary"
-            onClick={onCreatePromotion}
-          >
+          <Button style={{ width: "auto" }} type="primary" onClick={onCheck}>
             Tạo mới
           </Button>
         </div>
@@ -412,10 +435,17 @@ const CreatePromotion = () => {
                   type="text"
                   value={statePromo?.promoCode.toUpperCase()}
                   onChange={(e) =>
-                    setStatePromo({ ...statePromo, promoCode: e.target.value })
+                    setStatePromo({
+                      ...statePromo,
+                      promoCode: e.target.value,
+                      errorCode: "",
+                    })
                   }
                   style={{ marginTop: 5, width: "100%", height: 30 }}
                 />
+                <a style={{ fontSize: 12, color: "#fb422e" }}>
+                  {statePromo?.errorCode}
+                </a>
               </div>
 
               <div className="div-child-promo">
@@ -452,11 +482,7 @@ const CreatePromotion = () => {
           <div className="div-input">
             <div className="div-head-title">
               <a className="title-input">Tiêu đề </a>
-              <Popover
-                content={statePromo?.titlePrommo}
-                trigger="click"
-                placement="right"
-              >
+              <Popover content={titlePrommo} trigger="click" placement="right">
                 <QuestionCircleOutlined className="icon-question" />
               </Popover>
             </div>
@@ -464,15 +490,24 @@ const CreatePromotion = () => {
               title={`${i18n.t("vietnamese", { lng: lang })}`}
               value={statePromo?.titleVN}
               onChange={(e) =>
-                setStatePromo({ ...statePromo, titleVN: e.target.value })
+                setStatePromo({
+                  ...statePromo,
+                  titleVN: e.target.value,
+                  errorTitle: "",
+                })
               }
             />
             <InputCustom
               title={`${i18n.t("english", { lng: lang })}`}
               value={statePromo?.titleEN}
               onChange={(e) =>
-                setStatePromo({ ...statePromo, titleEN: e.target.value })
+                setStatePromo({
+                  ...statePromo,
+                  titleEN: e.target.value,
+                  errorTitle: "",
+                })
               }
+              error={statePromo?.errorTitle}
             />
           </div>
           <div className="div-input">
@@ -496,6 +531,7 @@ const CreatePromotion = () => {
                 setStatePromo({
                   ...statePromo,
                   shortDescriptionVN: e.target.value,
+                  errorShortDescription: "",
                 })
               }
               textArea={true}
@@ -507,9 +543,11 @@ const CreatePromotion = () => {
                 setStatePromo({
                   ...statePromo,
                   shortDescriptionEN: e.target.value,
+                  errorShortDescription: "",
                 })
               }
               textArea={true}
+              error={statePromo?.errorShortDescription}
             />
           </div>
           <div className="div-input">
@@ -597,7 +635,11 @@ const CreatePromotion = () => {
                 </Checkbox>
                 <Select
                   onChange={(e) => {
-                    setStatePromo({ ...statePromo, serviceApply: e });
+                    setStatePromo({
+                      ...statePromo,
+                      serviceApply: e,
+                      errorService: "",
+                    });
                   }}
                   options={serviceOption}
                   allowClear={true}
@@ -605,6 +647,9 @@ const CreatePromotion = () => {
                   style={{ marginTop: 10 }}
                   value={statePromo?.serviceApply}
                 />
+                <a style={{ fontSize: 12, color: "#fb422e" }}>
+                  {statePromo?.errorService}
+                </a>
               </div>
             )}
             {statePromo?.ratioTypeVoucher === 2 && (
@@ -616,6 +661,7 @@ const CreatePromotion = () => {
                     setStatePromo({ ...statePromo, namebrand: e.target.value })
                   }
                   placeholder="Nhập tên đối tác"
+                  error={statePromo?.errorNameBrand}
                 />
               </div>
             )}
@@ -870,10 +916,17 @@ const CreatePromotion = () => {
                       }
                       image={statePromo?.imgThumbnail}
                       setImage={(prev) =>
-                        setStatePromo({ ...statePromo, imgThumbnail: prev })
+                        setStatePromo({
+                          ...statePromo,
+                          imgThumbnail: prev,
+                          errorThumnail: "",
+                        })
                       }
                       classImg={"img-thumbnail"}
                     />
+                    <a style={{ fontSize: 12, color: "#fb422e" }}>
+                      {statePromo?.errorThumnail}
+                    </a>
 
                     <UploadImage
                       title={"Ảnh bìa 414px * 200px"}

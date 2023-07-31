@@ -1,16 +1,13 @@
-import { Button, Select } from "antd";
+import { Select } from "antd";
 import { useEffect, useState } from "react";
-import "./index.scss";
-import PromotionManage from "./Promotion/promotionManage";
-import ManagePromotionGuvi from "./PromotionGuvi";
-import ManagePromotionOrther from "./PromotionOrther";
-import ManagePromotionEvent from "./PromotionOrtherEvent";
 import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../redux/selectors/auth";
-import i18n from "../../../i18n";
 import { useCookies } from "../../../helper/useCookies";
-import { getService } from "../../../redux/selectors/service";
 import useWindowDimensions from "../../../helper/useWindowDimensions";
+import i18n from "../../../i18n";
+import { getLanguageState } from "../../../redux/selectors/auth";
+import { getService } from "../../../redux/selectors/service";
+import PromotionManage from "./Promotion/promotionManage";
+import "./index.scss";
 
 const ManagePromotions = () => {
   const [selected, setSelected] = useState("");
@@ -39,71 +36,9 @@ const ManagePromotions = () => {
     });
   });
 
-  useEffect(() => {
-    setSelected(
-      readCookie("select_promo") === "" ? "code" : readCookie("select_promo")
-    );
-    setBrand(
-      readCookie("brand_promo") === "" ? "guvi" : readCookie("brand_promo")
-    );
-  }, []);
-
   return (
     <div>
-      {/* <Button
-        style={{ width: "auto" }}
-        className={
-          selected === "code" && brand === "guvi"
-            ? "btn-selected-promotion"
-            : "btn-default-promotion"
-        }
-        onClick={() => {
-          setSelected("code");
-          setBrand("guvi");
-          saveToCookie("select_promo", "code");
-          saveToCookie("brand_promo", "guvi");
-          setCurrentPage(1);
-          setStartPage(0);
-        }}
-      >
-        {`${i18n.t("guvi_promotion", { lng: lang })}`}
-      </Button>
-      <Button
-        style={{ width: "auto" }}
-        className={
-          selected === "code" && brand === "orther"
-            ? "btn-selected-promotion"
-            : "btn-default-promotion"
-        }
-        onClick={() => {
-          setSelected("code");
-          setBrand("orther");
-          saveToCookie("select_promo", "code");
-          saveToCookie("brand_promo", "orther");
-          setCurrentPage(1);
-          setStartPage(0);
-        }}
-      >
-        {`${i18n.t("partner_promotion", { lng: lang })}`}
-      </Button>
-      <Button
-        style={{ width: "auto" }}
-        className={
-          selected === "event"
-            ? "btn-selected-promotion"
-            : "btn-default-promotion"
-        }
-        onClick={() => {
-          setCurrentPage(1);
-          setStartPage(0);
-          setSelected("event");
-          saveToCookie("select_promo", "event");
-        }}
-      >
-        {`${i18n.t("promotions", { lng: lang })}`}
-      </Button> */}
-
-      {width > 900 ? (
+      {/* {width > 900 ? (
         <div className="div-tab">
           {dataTab?.map((item, index) => {
             return (
@@ -143,7 +78,7 @@ const ManagePromotions = () => {
             setCurrentPage(1);
           }}
         />
-      )}
+      )} */}
       <div>
         <PromotionManage
           type={selected}

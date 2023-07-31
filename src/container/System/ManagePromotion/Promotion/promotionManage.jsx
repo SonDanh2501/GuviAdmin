@@ -6,6 +6,7 @@ import {
   Pagination,
   Progress,
   Select,
+  Switch,
   Table,
   notification,
 } from "antd";
@@ -18,6 +19,7 @@ import {
   activePromotion,
   deletePromotion,
   fetchPromotion,
+  updatePromotion,
 } from "../../../../api/promotion.jsx";
 import logo from "../../../../assets/images/logoNew.jpg";
 import ModalCustom from "../../../../components/modalCustom/index.jsx";
@@ -36,20 +38,9 @@ import {
 } from "../../../../redux/selectors/service.js";
 import "./PromotionManage.scss";
 
-const PromotionManage = ({
-  type,
-  brand,
-  idService,
-  exchange,
-  tab,
-  currentPage,
-  setCurrentPage,
-  startPage,
-  setStartPage,
-}) => {
+const PromotionManage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [valueSearch, setValueSearch] = useState("");
-  const [valueFilter, setValueFilter] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const [modalActive, setModalActive] = useState(false);
@@ -57,9 +48,17 @@ const PromotionManage = ({
   const [total, setTotal] = useState(0);
   const [modal, setModal] = useState(false);
   const [typeSort, setTypeSort] = useState(1);
+  const [state, setState] = useState({
+    currentPage: 1,
+    startPage: 0,
+    type: "",
+    brand: "",
+    idService: "",
+    status: "",
+    modalShowApp: false,
+  });
   const toggle = () => setModal(!modal);
   const toggleActive = () => setModalActive(!modalActive);
-  const [api, contextHolder] = notification.useNotification();
   const { width } = useWindowDimensions();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -67,14 +66,58 @@ const PromotionManage = ({
   const province = useSelector(getProvince);
   const service = useSelector(getService);
 
+  const TAB_PROMOTION = [
+    { value: "", label: `${i18n.t("all", { lng: lang })}` },
+    {
+      value: "upcoming",
+      label: `${i18n.t("upcoming", { lng: lang })}`,
+    },
+    {
+      value: "doing",
+      label: `${i18n.t("happenning", { lng: lang })}`,
+    },
+    {
+      value: "out_of_stock",
+      label: `${i18n.t("out_stock", { lng: lang })}`,
+    },
+    {
+      value: "out_of_date",
+      label: `${i18n.t("out_date", { lng: lang })}`,
+    },
+    { value: "done", label: `${i18n.t("closed", { lng: lang })}` },
+  ];
+  const optionService = [
+    {
+      value: "",
+      label: `${i18n.t("all", { lng: lang })}`,
+    },
+  ];
+
+  service.map((item) => {
+    optionService.push({
+      value: item?._id,
+      label: item?.title?.[lang],
+    });
+  });
+
   useEffect(() => {
-    fetchPromotion("", "", 0, 20, type, brand, idService, exchange, typeSort)
+    fetchPromotion(
+      "",
+      "",
+      0,
+      20,
+      state?.type,
+      state?.brand,
+      state?.idService,
+      "",
+      typeSort
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-  }, [idService, exchange]);
+  }, []);
 
   const onDelete = useCallback(
     (id) => {
@@ -83,13 +126,13 @@ const PromotionManage = ({
         .then((res) => {
           fetchPromotion(
             valueSearch,
-            valueFilter,
-            startPage,
+            state?.status,
+            state?.startPage,
             20,
-            type,
-            brand,
-            idService,
-            exchange,
+            state?.type,
+            state?.brand,
+            state?.idService,
+            "",
             typeSort
           )
             .then((res) => {
@@ -107,16 +150,7 @@ const PromotionManage = ({
           setIsLoading(false);
         });
     },
-    [
-      type,
-      brand,
-      idService,
-      startPage,
-      exchange,
-      valueSearch,
-      valueFilter,
-      typeSort,
-    ]
+    [valueSearch, typeSort, state]
   );
 
   const onActive = useCallback(
@@ -127,13 +161,13 @@ const PromotionManage = ({
           .then((res) => {
             fetchPromotion(
               valueSearch,
-              valueFilter,
-              startPage,
+              state?.status,
+              state?.startPage,
               20,
-              type,
-              brand,
-              idService,
-              exchange,
+              state?.type,
+              state?.brand,
+              state?.idService,
+              "",
               typeSort
             )
               .then((res) => {
@@ -155,13 +189,13 @@ const PromotionManage = ({
           .then((res) => {
             fetchPromotion(
               valueSearch,
-              valueFilter,
-              startPage,
+              state?.status,
+              state?.startPage,
               20,
-              type,
-              brand,
-              idService,
-              exchange,
+              state?.type,
+              state?.brand,
+              state?.idService,
+              "",
               typeSort
             )
               .then((res) => {
@@ -180,32 +214,22 @@ const PromotionManage = ({
           });
       }
     },
-    [
-      type,
-      brand,
-      idService,
-      startPage,
-      exchange,
-      valueFilter,
-      valueSearch,
-      typeSort,
-    ]
+    [valueSearch, typeSort, state]
   );
 
   const onChange = (page) => {
-    setCurrentPage(page);
     const lengthData = data.length < 20 ? 20 : data.length;
     const start = page * lengthData - lengthData;
-    setStartPage(start);
+    setState({ ...state, currentPage: page, startPage: start });
     fetchPromotion(
       valueSearch,
-      valueFilter,
+      state?.status,
       start,
       20,
-      type,
-      brand,
-      idService,
-      exchange,
+      state?.type,
+      state?.brand,
+      state?.idService,
+      "",
       typeSort
     )
       .then((res) => {
@@ -221,13 +245,13 @@ const PromotionManage = ({
       setIsLoading(true);
       fetchPromotion(
         value,
-        valueFilter,
-        startPage,
+        state?.status,
+        state?.startPage,
         20,
-        type,
-        brand,
-        idService,
-        exchange,
+        state?.type,
+        state?.brand,
+        state?.idService,
+        "",
         typeSort
       )
         .then((res) => {
@@ -237,21 +261,43 @@ const PromotionManage = ({
         })
         .catch((err) => {});
     }, 1000),
-    [type, brand, idService, startPage, valueFilter, typeSort]
+    [state, typeSort]
   );
 
-  const handleChange = (value) => {
-    setValueFilter(value);
+  const onChangeTab = (item) => {
     setIsLoading(true);
+    setState({ ...state, status: item?.value });
     fetchPromotion(
       valueSearch,
-      value,
-      startPage,
+      item?.value,
+      state?.startPage,
       20,
-      type,
-      brand,
-      idService,
-      exchange,
+      state?.type,
+      state?.brand,
+      state?.idService,
+      "",
+      typeSort
+    )
+      .then((res) => {
+        setIsLoading(false);
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+
+  const onChangeService = (value) => {
+    setIsLoading(true);
+    setState({ ...state, idService: value });
+    fetchPromotion(
+      valueSearch,
+      state?.status,
+      state?.startPage,
+      20,
+      state?.type,
+      state?.brand,
+      value,
+      "",
       typeSort
     )
       .then((res) => {
@@ -270,8 +316,8 @@ const PromotionManage = ({
       20,
       item?.selected,
       item?.brand,
-      idService,
-      exchange,
+      state?.idService,
+      "",
       typeSort
     )
       .then((res) => {
@@ -281,18 +327,83 @@ const PromotionManage = ({
       .catch((err) => {});
   };
 
+  const onChangeShow = (id, active) => {
+    setIsLoading(true);
+    if (active) {
+      updatePromotion(id, {
+        is_show_in_app: false,
+      })
+        .then((res) => {
+          setIsLoading(false);
+          setState({ ...state, modalShowApp: false });
+          fetchPromotion(
+            valueSearch,
+            state?.status,
+            state?.startPage,
+            20,
+            state?.type,
+            state?.brand,
+            state?.idService,
+            "",
+            typeSort
+          )
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
+        });
+    } else {
+      updatePromotion(id, {
+        is_show_in_app: true,
+      })
+        .then((res) => {
+          setIsLoading(false);
+          setState({ ...state, modalShowApp: false });
+          fetchPromotion(
+            valueSearch,
+            state?.status,
+            state?.startPage,
+            20,
+            state?.type,
+            state?.brand,
+            state?.idService,
+            "",
+            typeSort
+          )
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
+        });
+    }
+  };
+
   const handleSortPosition = (value) => {
     setTypeSort(value);
     setIsLoading(true);
     fetchPromotion(
       valueSearch,
-      valueFilter,
+      state?.status,
       0,
       20,
-      type,
-      brand,
-      idService,
-      exchange,
+      state?.type,
+      state?.brand,
+      state?.idService,
+      "",
       value
     )
       .then((res) => {
@@ -303,50 +414,41 @@ const PromotionManage = ({
       .catch((err) => {});
   };
 
-  const openNotificationWithIcon = () => {
-    api.warning({
-      message: "Mã đã quá hạn!!!",
-      description:
-        "Bật hoạt động cho mã này cần gia hạn thêm ngày cho mã khuyến mãi.",
-      duration: 10,
-    });
-  };
-
-  const items = [
-    {
-      key: "1",
-      label: checkElement?.includes("edit_promotion") && (
-        <a
-          onClick={() =>
-            navigate("/promotion/manage-setting/edit-promotion", {
-              state: { id: itemEdit?._id },
-            })
-          }
-        >{`${i18n.t("edit", { lng: lang })}`}</a>
-      ),
-    },
-    {
-      key: "2",
-      label: checkElement?.includes("delete_promotion") && (
-        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
-      ),
-    },
-    {
-      key: "3",
-      label: itemEdit?.is_parrent_promotion &&
-        checkElement?.includes("detail_promotion") && (
-          <a
-            onClick={() => {
-              navigate("/promotion/manage-setting/child-promotion", {
-                state: { code: itemEdit?.code },
-              });
-            }}
-          >
-            {`${i18n.t("detail", { lng: lang })}`}
-          </a>
-        ),
-    },
-  ];
+  // const items = [
+  //   {
+  //     key: "1",
+  //     label: checkElement?.includes("edit_promotion") && (
+  //       <a
+  //         onClick={() =>
+  //           navigate("/promotion/manage-setting/edit-promotion", {
+  //             state: { id: itemEdit?._id },
+  //           })
+  //         }
+  //       >{`${i18n.t("edit", { lng: lang })}`}</a>
+  //     ),
+  //   },
+  //   {
+  //     key: "2",
+  //     label: checkElement?.includes("delete_promotion") && (
+  //       <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
+  //     ),
+  //   },
+  //   {
+  //     key: "3",
+  //     label: itemEdit?.is_parrent_promotion &&
+  //       checkElement?.includes("detail_promotion") && (
+  //         <a
+  //           onClick={() => {
+  //             navigate("/promotion/manage-setting/child-promotion", {
+  //               state: { code: itemEdit?.code },
+  //             });
+  //           }}
+  //         >
+  //           {`${i18n.t("detail", { lng: lang })}`}
+  //         </a>
+  //       ),
+  //   },
+  // ];
 
   const columns = [
     {
@@ -359,7 +461,14 @@ const PromotionManage = ({
       },
       render: (data) => {
         return (
-          <div className="div-img-promotion">
+          <div
+            className="div-img-promotion"
+            onClick={() =>
+              navigate("/promotion/manage-setting/edit-promotion", {
+                state: { id: data?._id },
+              })
+            }
+          >
             {/* <Image src={data?.thumbnail} className="img-customer-promotion" /> */}
             <div className="div-name-promotion">
               <a className="text-title-code">{data?.code}</a>
@@ -388,7 +497,7 @@ const PromotionManage = ({
           </div>
         );
       },
-      width: "25%",
+      width: "31%",
     },
     {
       title: () => {
@@ -400,7 +509,14 @@ const PromotionManage = ({
       },
       render: (data) => {
         return (
-          <a className="text-promotion">
+          <a
+            className="text-promotion"
+            onClick={() =>
+              navigate("/promotion/manage-setting/edit-promotion", {
+                state: { id: data?._id },
+              })
+            }
+          >
             {data?.type_promotion === "code" && data?.type_discount === "order"
               ? "Mã KM"
               : data?.type_promotion === "code" &&
@@ -416,18 +532,24 @@ const PromotionManage = ({
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("Đơn vị", {
+          <a className="title-column">{`${i18n.t("Hình ảnh", {
             lng: lang,
           })}`}</a>
         );
       },
       render: (data) => {
         return (
-          <>
+          <div
+            onClick={() =>
+              navigate("/promotion/manage-setting/edit-promotion", {
+                state: { id: data?._id },
+              })
+            }
+          >
             {data?.type_promotion === "code" &&
             data?.type_discount === "order" ? (
               <Image
-                src={logo}
+                src={data?.thumbnail}
                 style={{
                   width: 50,
                   height: 50,
@@ -443,7 +565,7 @@ const PromotionManage = ({
               />
             ) : (
               <Image
-                src={logo}
+                src={data?.thumbnail}
                 style={{
                   width: 50,
                   height: 50,
@@ -452,17 +574,38 @@ const PromotionManage = ({
                 }}
               />
             )}
-          </>
+          </div>
         );
       },
       align: "center",
       width: "8%",
     },
+    // {
+    //   title: () => <a className="title-column">Hiện thị</a>,
+    //   render: (data) => {
+    //     return (
+    //       <Switch
+    //         size="small"
+    //         checked={data?.is_show_in_app}
+    //         onChange={() => setState({ ...state, modalShowApp: true })}
+    //       />
+    //     );
+    //   },
+    //   align: "center",
+    //   width: "6%",
+    // },
     {
       title: () => <a className="title-column">Khu vực</a>,
       render: (data) => {
         return (
-          <div className="div-area-promotion">
+          <div
+            className="div-area-promotion"
+            onClick={() =>
+              navigate("/promotion/manage-setting/edit-promotion", {
+                state: { id: data?._id },
+              })
+            }
+          >
             {!data?.is_apply_area ? (
               <a className="text-area">Toàn quốc</a>
             ) : (
@@ -502,6 +645,11 @@ const PromotionManage = ({
                 ? "div-doing-status-promotion"
                 : "div-cancel-promotion"
             }
+            onClick={() =>
+              navigate("/promotion/manage-setting/edit-promotion", {
+                state: { id: data?._id },
+              })
+            }
           >
             {data?.status === "upcoming" ? (
               <a className="text-upcoming">{`${i18n.t("upcoming", {
@@ -540,7 +688,14 @@ const PromotionManage = ({
       },
       render: (data) => {
         return (
-          <div className="div-use-promotion">
+          <div
+            className="div-use-promotion"
+            onClick={() =>
+              navigate("/promotion/manage-setting/edit-promotion", {
+                state: { id: data?._id },
+              })
+            }
+          >
             <a
               className="text-title-use"
               onClick={() =>
@@ -592,55 +747,79 @@ const PromotionManage = ({
         const endDate = moment(new Date(data?.limit_end_date)).format(
           "DD/MM/YYYY"
         );
+        const start = moment(new Date(data?.date_create)).format("DD/MM/YYYY");
         return (
-          <>
+          <div
+            onClick={() =>
+              navigate("/promotion/manage-setting/edit-promotion", {
+                state: { id: data?._id },
+              })
+            }
+          >
             {data?.is_limit_date ? (
               <div className="div-date-promotion">
-                <a className="text-title-promotion">{startDate}</a>
-
-                <a className="text-title-promotion">{endDate}</a>
+                <a className="text-title-promotion"> {startDate}</a>
+                <a className="text-line"> - </a>
+                <a className="text-title-promotion"> {endDate}</a>
               </div>
             ) : (
-              <a className="text-title-promotion">{`${i18n.t("no_expiry", {
-                lng: lang,
-              })}`}</a>
+              <div className="div-date-promotion">
+                <a className="text-title-promotion">{start}</a>
+                <a className="text-line"> - </a>
+                <a className="text-title-promotion">{`${i18n.t("no_expiry", {
+                  lng: lang,
+                })}`}</a>
+              </div>
             )}
-          </>
+          </div>
         );
       },
+      align: "center",
+      width: "25%",
     },
   ];
 
   return (
     <React.Fragment>
       <div className="mt-2 ">
+        {width > 490 ? (
+          <div className="div-tab-promotion">
+            {TAB_PROMOTION?.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className={
+                    item?.value === state?.status
+                      ? "div-tab-item-select"
+                      : "div-tab-item"
+                  }
+                  onClick={() => onChangeTab(item)}
+                >
+                  <a className="text-tab">{item?.label}</a>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <Select
+            options={TAB_PROMOTION}
+            style={{ width: "100%" }}
+            defaultValue={TAB_PROMOTION[0]?.value}
+            onChange={(value, item) => onChangeTab(item)}
+          />
+        )}
         <div className="div-header-promotion mt-4">
           <Select
-            placeholder="Lọc theo trạng thái"
-            size={"large"}
-            className="select-filter-promotion"
-            onChange={handleChange}
-            value={valueFilter}
-            options={[
-              { value: "", label: `${i18n.t("all", { lng: lang })}` },
-              {
-                value: "upcoming",
-                label: `${i18n.t("upcoming", { lng: lang })}`,
-              },
-              {
-                value: "doing",
-                label: `${i18n.t("happenning", { lng: lang })}`,
-              },
-              {
-                value: "out_of_stock",
-                label: `${i18n.t("out_stock", { lng: lang })}`,
-              },
-              {
-                value: "out_of_date",
-                label: `${i18n.t("out_date", { lng: lang })}`,
-              },
-              { value: "done", label: `${i18n.t("closed", { lng: lang })}` },
-            ]}
+            options={optionService}
+            className="select-type-service"
+            defaultValue={optionService[0]?.value}
+            onChange={onChangeService}
+          />
+          <Select
+            options={TYPE_PRMOTION}
+            className="select-type-prmotion"
+            defaultValue={TYPE_PRMOTION[0]?.value}
+            onChange={(e, item) => onChangeTypePromotion(e, item)}
           />
           <Input
             placeholder={`${i18n.t("search", { lng: lang })}`}
@@ -661,19 +840,11 @@ const PromotionManage = ({
               </Button>
             </>
           )}
-        </div>
-        <div className="div-add-edit">
-          <Select
-            options={TYPE_PRMOTION}
-            className="select-type-prmotion"
-            placeholder="Lọc theo loại khuyến mãi"
-            onChange={(e, item) => onChangeTypePromotion(e, item)}
-          />
           <Button
             onClick={() =>
               navigate(`/promotion/manage-setting/edit-position-promotion`)
             }
-            style={{ width: "auto", marginBottom: 5 }}
+            className="btn-edit-position"
           >
             Chỉnh sửa vị trí
           </Button>
@@ -695,9 +866,6 @@ const PromotionManage = ({
               return {
                 onClick: (event) => {
                   setItemEdit(record);
-                  navigate("/promotion/manage-setting/edit-promotion", {
-                    state: { id: record?._id },
-                  });
                 },
               };
             }}
@@ -711,7 +879,7 @@ const PromotionManage = ({
             </a>
             <div>
               <Pagination
-                current={currentPage}
+                current={state?.currentPage}
                 onChange={onChange}
                 total={total}
                 showSizeChanger={false}
@@ -757,6 +925,23 @@ const PromotionManage = ({
                   ? `${i18n.t("want_lock_promotion", { lng: lang })}`
                   : `${i18n.t("want_unlock_promotion", { lng: lang })}`}
                 <a className="text-name-modal">{itemEdit?.title?.[lang]}</a>
+              </a>
+            }
+          />
+          <ModalCustom
+            isOpen={state?.modalShowApp}
+            title={"Trạng thái hiện thị"}
+            handleOk={() =>
+              onChangeShow(itemEdit?._id, itemEdit?.is_show_in_app)
+            }
+            handleCancel={() => setState({ ...state, modalShowApp: false })}
+            textOk={itemEdit?.is_show_in_app ? `Ẩn` : `Hiện`}
+            body={
+              <a>
+                {itemEdit?.is_show_in_app
+                  ? `Bạn có muốn ẩn khuyến mãi trên app`
+                  : `Bạn có muốn hiện thị khuyến mãi trên app`}
+                <a className="text-name-modal">{itemEdit?.code}</a>
               </a>
             }
           />

@@ -1,0 +1,76 @@
+.btn-add-topup-customer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10%;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background-color: #48cae4;
+  color: white;
+  margin-left: 20px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+}
+
+.btn-add-topup-customer-hide {
+  display: none;
+  width: 10%;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background-color: #48cae4;
+  color: white;
+  margin-left: 20px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+}
+
+.btn-add-draw-topup-customer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20%;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background-color: #48cae4;
+  color: white;
+  margin-left: 20px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  margin-top: 20px;
+}
+
+.img-thumbnail {
+  width: 100px !important;
+  height: 100px !important;
+}
+
+.input-money {
+  margin-top: 10px;
+}
+
+.select-code-phone {
+  width: 300px !important;
+  height: 40px !important;
+}
+
+.list-item {
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  position: absolute;
+  width: 400px;
+  border: 1px solid rgb(175, 175, 175);
+  border-radius: 5px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+.label-topup-customer {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000000;
+}

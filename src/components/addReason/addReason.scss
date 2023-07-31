@@ -1,0 +1,49 @@
+.btn-modal-add-reason {
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  border: none !important;
+  border-radius: 5px;
+  height: 35px;
+  background-color: #48cae4;
+  color: #fff;
+}
+
+.btn-modal-add-reason-right {
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  border: none !important;
+  border-radius: 5px;
+  height: 35px;
+  background-color: #48cae4;
+  margin-top: 30px;
+  color: #fff;
+}
+
+.img-thumbnail {
+  width: 100px !important;
+  height: 100px !important;
+}
+
+.input-group {
+  margin-bottom: 10px;
+}
+
+.select-code-phone {
+  width: 300px !important;
+  height: 40px !important;
+}
+
+.div-ticket {
+  width: 100%;
+
+  .btn-delete-punish {
+    float: right;
+    margin-top: 5px;
+  }
+}
+
+.title-reason {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 14px;
+  color: #000000;
+  text-decoration: none;
+}

@@ -1,0 +1,50 @@
+.btn-see {
+  border: none;
+  background-color: transparent;
+}
+
+.div-item-more-collaborator {
+  padding: 10px;
+  border-bottom: 1px solid rgb(221, 221, 221);
+  display: flex;
+  justify-content: space-between;
+
+  .div-name-more {
+    display: flex;
+    flex-direction: row;
+    .text-number {
+      color: rgb(0, 0, 0);
+      font-size: 16px;
+      font-family: "Roboto", sans-serif;
+      text-decoration: none;
+    }
+
+    .text-name {
+      color: black;
+      font-size: 16px;
+      font-weight: 500;
+      font-family: "Roboto", sans-serif;
+      text-decoration: none;
+      margin-left: 5px;
+    }
+  }
+
+  .text-money-more {
+    color: black;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: "Roboto", sans-serif;
+    text-decoration: none;
+  }
+}
+
+.div-date {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  margin-bottom: 30px;
+
+  .picker {
+    width: 300px;
+  }
+}

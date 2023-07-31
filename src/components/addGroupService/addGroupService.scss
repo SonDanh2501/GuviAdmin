@@ -1,0 +1,49 @@
+.btn-add-group-service {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background-color: #48cae4 !important;
+  color: white;
+  margin-left: 20px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+}
+
+.btn-group-service {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15%;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background-color: #48cae4 !important;
+  color: white;
+  margin-left: 20px;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+}
+
+.img-thumbnail {
+  width: 1000px;
+  height: 100px;
+}
+
+.input-group {
+  margin-bottom: 10px;
+}
+
+.select-code-phone {
+  width: 300px !important;
+  height: 40px !important;
+}
+
+.text-input-group-service {
+  color: black;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+  text-decoration: none;
+}
