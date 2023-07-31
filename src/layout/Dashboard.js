@@ -46,6 +46,7 @@ const Dashboard = () => {
             bottom: 0,
             backgroundColor: "white",
           }}
+          width={230}
         >
           <Sidebar hide={collapsed} />
         </Sider>
@@ -63,7 +64,7 @@ const Dashboard = () => {
       <Layout
         className="site-layout"
         style={{
-          marginLeft: width < 900 ? 10 : collapsed ? 200 : 80,
+          marginLeft: width < 900 ? 10 : collapsed ? 230 : 80,
           height: "auto",
         }}
       >
