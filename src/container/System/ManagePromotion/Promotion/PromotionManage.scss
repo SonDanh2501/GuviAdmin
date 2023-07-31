@@ -1,29 +1,66 @@
+.div-tab-promotion {
+  display: flex;
+  flex-direction: row;
+
+  .div-tab-item-select {
+    padding: 5px;
+    border-bottom: 1px solid #2962ff;
+    margin-right: 5px;
+
+    .text-tab {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      color: #202223;
+      text-decoration: none;
+    }
+  }
+
+  .div-tab-item {
+    padding: 5px;
+    margin-right: 5px;
+    .text-tab {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      color: #c8c8c8;
+      text-decoration: none;
+    }
+  }
+}
+
 .div-header-promotion {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 
-  .select-filter-promotion {
-    width: 20%;
-    border-radius: 4px;
+  .select-type-service {
+    width: 15%;
   }
-
+  .select-type-prmotion {
+    width: 15%;
+  }
   .input-search-promotion {
-    width: 60%;
-    height: 38px;
+    width: 40%;
     border-radius: 5px;
     border: 1px solid rgb(182, 182, 182) !important;
   }
 
   .btn-add-promotion-v2 {
     width: auto;
-    height: 38px;
     border: none;
     border-radius: 5px;
     background-color: #48cae4;
     color: white;
     box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  }
+
+  .btn-edit-position {
+    width: auto;
   }
 }
 
@@ -49,14 +86,6 @@
   font-weight: 400;
   font-size: 14px;
   color: #202223;
-}
-
-.div-add-edit {
-  display: flex;
-  flex-direction: row;
-  float: right;
-
-  margin-top: 20px;
 }
 
 .image-promotion-order {
@@ -120,13 +149,24 @@
 
 .div-date-promotion {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  .text-line {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000;
+    margin: 0 5px;
+  }
 
   .text-title-promotion {
     font-family: "Roboto";
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 12px;
     color: #000000;
   }
 }
@@ -237,29 +277,35 @@
   .div-header-promotion {
     display: flex;
     flex-direction: column !important;
+    align-items: start !important;
+    width: 100%;
 
-    .select-filter-promotion {
-      width: 100%;
+    .select-type-service {
+      width: 50%;
     }
-
-    .input-search-promotion {
-      width: 100%;
-      height: 30px;
-      border-radius: 5px;
-      border: 1px solid rgb(182, 182, 182) !important;
-      align-items: center;
+    .select-type-prmotion {
+      width: 50%;
       margin-top: 10px;
     }
-
+    .input-search-promotion {
+      width: 50%;
+      border-radius: 5px;
+      border: 1px solid rgb(182, 182, 182) !important;
+      margin-top: 10px;
+    }
     .btn-add-promotion-v2 {
-      width: auto;
-      height: 38px;
+      width: 50%;
       border: none;
       border-radius: 5px;
       background-color: #48cae4;
       color: white;
       box-shadow: 2px 3px 2px rgb(216, 216, 216);
-      margin-top: 10px;
+      margin: 10px 0;
+    }
+
+    .btn-edit-position {
+      width: 50%;
+      margin: 10px 0;
     }
   }
 }
@@ -268,29 +314,35 @@
   .div-header-promotion {
     display: flex;
     flex-direction: column !important;
+    align-items: start !important;
+    width: 100%;
 
-    .select-filter-promotion {
+    .select-type-service {
       width: 100%;
     }
-
-    .input-search-promotion {
+    .select-type-prmotion {
       width: 100%;
-      height: 30px;
-      border-radius: 5px;
-      border: 1px solid rgb(182, 182, 182) !important;
-      align-items: center;
       margin-top: 10px;
     }
-
+    .input-search-promotion {
+      width: 100%;
+      border-radius: 5px;
+      border: 1px solid rgb(182, 182, 182) !important;
+      margin-top: 10px;
+    }
     .btn-add-promotion-v2 {
       width: 100%;
-      height: 38px;
       border: none;
       border-radius: 5px;
       background-color: #48cae4;
       color: white;
       box-shadow: 2px 3px 2px rgb(216, 216, 216);
-      margin-top: 10px;
+      margin: 10px 0;
+    }
+
+    .btn-edit-position {
+      width: 100%;
+      margin: 10px 0;
     }
   }
 }

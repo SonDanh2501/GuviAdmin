@@ -60,8 +60,6 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
       .catch((err) => {});
   }, []);
 
-  console.log(state?.theory);
-
   const editLesson = useCallback(() => {
     setIsLoading(true);
     editLessonApi(data?._id, {
