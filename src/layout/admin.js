@@ -64,15 +64,15 @@ import ImageManage from "../container/System/ManageConfiguration/ScreenConfigura
 import ReportOrderDayInWeek from "../container/System/ManageReport/MangeReportOrder/ReportOrderDayOfWeek";
 import ReportCustomerOrderByArea from "../container/System/ManageReport/ManageReportCustomer/ReportCustomerOrderByArea";
 import PromotionDrag from "../container/System/ManagePromotion/PromotionDrag";
-import CreatePromotion from "../container/System/ManagePromotion/Promotion/component/CreatePromotion";
+import CreatePromotion from "../container/System/ManagePromotion/CreatePromotion";
 import DetailLesson from "../container/System/ManageConfiguration/ScreenConfiguration/CreateQuizz/DetailLesson";
 import OptionalService from "../container/System/ManageService/Service/OptionalService";
 import EditPrice from "../container/System/ManageService/Service/EditPrice";
 import ExtendOptionalService from "../container/System/ManageService/Service/ExtendOptional";
-import EditPromotion from "../container/System/ManagePromotion/Promotion/component/PromotionEdit";
 import ManagePromotions from "../container/System/ManagePromotion";
 import BannerManage from "../container/System/ManageSetting/ManageBanner/BannerManage";
 import NewsManage from "../container/System/ManageSetting/ManageNews/NewsManage";
+import EditPromotion from "../container/System/ManagePromotion/PromotionEdit";
 
 const Admin = () => {
   return (

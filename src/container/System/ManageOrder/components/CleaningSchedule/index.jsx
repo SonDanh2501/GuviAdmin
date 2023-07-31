@@ -595,39 +595,48 @@ const CleaningSchedule = (props) => {
           </div>
         )}
 
-        {dataAddress.length > 0 && (
-          <div className="mt-2">
-            <a className="title-list-address">{`${i18n.t("address_default", {
-              lng: lang,
-            })}`}</a>
-            <List type={"unstyled"} className="list-item-address-customer">
-              {dataAddress?.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    className={
-                      address === item?.address
-                        ? "div-item-address-selected"
-                        : "div-item-address"
-                    }
-                    onClick={() => {
-                      setAddress(item?.address);
-                      setLat(item?.lat);
-                      setLong(item?.lng);
-                    }}
-                  >
-                    <i class="uil uil-map-marker"></i>
-                    <div className="div-name-address">
-                      <a className="title-address">
-                        {item?.address.slice(0, item?.address.indexOf(","))}
-                      </a>
-                      <a className="title-details-address">{item?.address}</a>
-                    </div>
-                  </div>
-                );
-              })}
-            </List>
-          </div>
+        {address === "" && (
+          <>
+            {dataAddress.length > 0 && (
+              <div className="mt-2">
+                <a className="title-list-address">{`${i18n.t(
+                  "address_default",
+                  {
+                    lng: lang,
+                  }
+                )}`}</a>
+                <List type={"unstyled"} className="list-item-address-customer">
+                  {dataAddress?.map((item, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className={
+                          address === item?.address
+                            ? "div-item-address-selected"
+                            : "div-item-address"
+                        }
+                        onClick={() => {
+                          setAddress(item?.address);
+                          setLat(item?.lat);
+                          setLong(item?.lng);
+                        }}
+                      >
+                        <i class="uil uil-map-marker"></i>
+                        <div className="div-name-address">
+                          <a className="title-address">
+                            {item?.address.slice(0, item?.address.indexOf(","))}
+                          </a>
+                          <a className="title-details-address">
+                            {item?.address}
+                          </a>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </List>
+              </div>
+            )}
+          </>
         )}
 
         <a className="text-error">{errorAddress}</a>
