@@ -569,7 +569,7 @@ const CreatePromotion = () => {
               <div className="ml-3">
                 <InputCustom
                   title="Tên đối tác"
-                  value={statePromo?.namebrand}
+                  value={statePromo?.namebrand?.toUpperCase()}
                   onChange={(e) =>
                     setStatePromo({ ...statePromo, namebrand: e.target.value })
                   }
