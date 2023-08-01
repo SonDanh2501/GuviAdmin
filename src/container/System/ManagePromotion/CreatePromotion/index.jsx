@@ -36,7 +36,7 @@ import descriptionImage from "../../../../assets/images/description.png";
 import shortDescriptionImage from "../../../../assets/images/shortDescription.png";
 import thumnailImage from "../../../../assets/images/thumnailContent.png";
 import titleImage from "../../../../assets/images/title.png";
-import CustomTextEditor from "../../../../components/customTextEdittor";
+import TextEditor from "../../../../components/TextEditor";
 import LoadingPagination from "../../../../components/paginationLoading";
 import InputCustom from "../../../../components/textInputCustom";
 import UploadImage from "../../../../components/uploadImage";
@@ -668,23 +668,22 @@ const CreatePromotion = () => {
               </div>
               <div>
                 <a>{`${i18n.t("vietnamese", { lng: lang })}`}</a>
-                <CustomTextEditor
+                <TextEditor
                   value={statePromo?.descriptionVN}
-                  onChangeValue={(prev) =>
-                    setStatePromo({ ...statePromo, descriptionVN: prev })
+                  onChange={(e) =>
+                    setStatePromo({ ...statePromo, descriptionVN: e })
                   }
+                  height={300}
                 />
               </div>
               <div className="mt-2">
                 <a>{`${i18n.t("english", { lng: lang })}`}</a>
-                <CustomTextEditor
+                <TextEditor
                   value={statePromo?.descriptionEN}
-                  onChangeValue={(prev) =>
-                    setStatePromo({
-                      ...statePromo,
-                      descriptionEN: prev,
-                    })
+                  onChange={(e) =>
+                    setStatePromo({ ...statePromo, descriptionEN: e })
                   }
+                  height={300}
                 />
               </div>
             </div>

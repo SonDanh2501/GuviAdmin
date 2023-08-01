@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 
-import { useEffect } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   getElementState,
@@ -10,6 +10,7 @@ import "./ManageConfiguration.scss";
 import i18n from "../../../i18n";
 import Chat from "../Chat";
 import SettingQrCode from "./ScreenConfiguration/SettingQrcode";
+import TextEditor from "../../../components/TextEditor";
 
 const ManageConfiguration = () => {
   const navigate = useNavigate();

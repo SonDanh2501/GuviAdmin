@@ -43,7 +43,7 @@ const ManagePromotions = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [modal, setModal] = useState(false);
-  const [typeSort, setTypeSort] = useState(1);
+  const [typeSort, setTypeSort] = useState(-1);
   const [saveToCookie, readCookie] = useCookies();
   const [state, setState] = useState({
     currentPage: 1,
@@ -53,6 +53,8 @@ const ManagePromotions = () => {
     idService: "",
     status: "doing",
     modalShowApp: false,
+    value: "",
+    kind: "",
   });
   const toggle = () => setModal(!modal);
   const toggleActive = () => setModalActive(!modalActive);
@@ -98,14 +100,45 @@ const ManagePromotions = () => {
   });
 
   useEffect(() => {
+    setState({
+      ...state,
+      status:
+        readCookie("tab_status_promotion") === ""
+          ? "doing"
+          : readCookie("tab_status_promotion"),
+      idService:
+        readCookie("service_prmotion") === ""
+          ? ""
+          : readCookie("service_prmotion"),
+      type:
+        readCookie("selected_promotion") === " "
+          ? ""
+          : readCookie("selected_promotion"),
+      brand:
+        readCookie("brand_promotion") === ""
+          ? ""
+          : readCookie("brand_promotion"),
+      value:
+        readCookie("value_promotion") === ""
+          ? ""
+          : readCookie("value_promotion"),
+      kind:
+        readCookie("kind_promotion") === "" ? "" : readCookie("kind_promotion"),
+    });
     fetchPromotion(
       "",
-      state.status,
+      readCookie("tab_status_promotion") === ""
+        ? "doing"
+        : readCookie("tab_status_promotion"),
       0,
       20,
-      state?.type,
-      state?.brand,
-      state?.idService,
+      readCookie("selected_promotion") === " "
+        ? ""
+        : readCookie("selected_promotion"),
+      readCookie("brand_promotion") === "" ? "" : readCookie("brand_promotion"),
+      readCookie("service_prmotion") === ""
+        ? ""
+        : readCookie("service_prmotion"),
       "",
       typeSort
     )
@@ -263,14 +296,28 @@ const ManagePromotions = () => {
 
   const onChangeTab = (item) => {
     setIsLoading(true);
-    setState({ ...state, status: item?.value, startPage: 0, currentPage: 1 });
+    saveToCookie("tab_status_promotion", item?.status);
+    saveToCookie("selected_promotion", item?.selected);
+    saveToCookie("brand_promotion", item?.brand);
+    saveToCookie("value_promotion", item?.value);
+    saveToCookie("kind_promotion", item?.kind);
+    setState({
+      ...state,
+      status: item?.status,
+      startPage: 0,
+      currentPage: 1,
+      type: item?.selected,
+      brand: item?.brand,
+      value: item?.value,
+      kind: item?.kind,
+    });
     fetchPromotion(
       valueSearch,
-      item?.value,
+      item?.status,
       state?.startPage,
       20,
-      state?.type,
-      state?.brand,
+      item?.selected,
+      item?.brand,
       state?.idService,
       "",
       typeSort
@@ -285,6 +332,7 @@ const ManagePromotions = () => {
 
   const onChangeService = (value) => {
     setIsLoading(true);
+    saveToCookie("service_prmotion", value);
     setState({ ...state, idService: value });
     fetchPromotion(
       valueSearch,
@@ -306,9 +354,16 @@ const ManagePromotions = () => {
   };
 
   const onChangeTypePromotion = (value, item) => {
+    saveToCookie("selected_promotion", item?.selected);
+    saveToCookie("brand_promotion", item?.brand);
+    setState({
+      ...state,
+      type: item?.selected,
+      brand: item?.brand,
+    });
     fetchPromotion(
-      "",
-      "",
+      valueSearch,
+      state?.status,
       0,
       20,
       item?.selected,
@@ -773,14 +828,14 @@ const ManagePromotions = () => {
   return (
     <React.Fragment>
       <div className="mt-2 ">
-        {width > 490 ? (
+        {width > 900 ? (
           <div className="div-tab-promotion">
-            {TAB_PROMOTION?.map((item, index) => {
+            {PROMOTION_TAB?.map((item, index) => {
               return (
                 <div
                   key={index}
                   className={
-                    item?.value === state?.status
+                    item?.value === state?.value
                       ? "div-tab-item-select"
                       : "div-tab-item"
                   }
@@ -793,9 +848,9 @@ const ManagePromotions = () => {
           </div>
         ) : (
           <Select
-            options={TAB_PROMOTION}
+            options={PROMOTION_TAB}
             style={{ width: "100%" }}
-            defaultValue={TAB_PROMOTION[0]?.value}
+            value={state?.value}
             onChange={(value, item) => onChangeTab(item)}
           />
         )}
@@ -803,13 +858,13 @@ const ManagePromotions = () => {
           <Select
             options={optionService}
             className="select-type-service"
-            defaultValue={optionService[0]?.value}
+            value={state?.idService}
             onChange={onChangeService}
           />
           <Select
             options={TYPE_PRMOTION}
             className="select-type-prmotion"
-            defaultValue={TYPE_PRMOTION[0]?.value}
+            value={state?.kind}
             onChange={(e, item) => onChangeTypePromotion(e, item)}
           />
           <Input
@@ -974,17 +1029,66 @@ const TYPE_PRMOTION = [
 
 const PROMOTION_TAB = [
   {
-    value: "doing",
-    label: `KM đang kích hoạt`,
+    value: "",
+    status: "",
+    label: `Tất cả khuyến mãi`,
     selected: "",
     brand: "",
   },
-  { value: "", label: `Tất cả khuyến mãi`, selected: "", brand: "" },
   {
-    value: "upcoming",
+    value: "kmkh",
+    status: "doing",
+    label: `KM đang kích hoạt`,
+    selected: "code",
+    brand: "guvi",
+    kind: "promotion",
+  },
+  {
+    value: "kmckh",
+    status: "upcoming",
     label: `KM chưa kích hoạt`,
+    selected: "code",
+    brand: "guvi",
+    kind: "promotion",
+  },
+  {
+    value: "kmdtkh",
+    status: "doing",
+    label: `KM Đối tác đang kích hoạt`,
+    selected: "code",
+    brand: "orther",
+    kind: "orther",
+  },
+  {
+    value: "kmdtckh",
+    status: "upcoming",
+    label: `KM Đối tác chưa kích hoạt`,
+    selected: "code",
+    brand: "orther",
+    kind: "orther",
+  },
+  {
+    value: "ctkmkh",
+    status: "doing",
+    label: `CTKM đang kích hoạt`,
+    selected: "event",
+    brand: "",
+    kind: "event",
+  },
+  {
+    value: "ctkmckh",
+    status: "upcoming",
+    label: `CTKM chưa kích hoạt`,
+    selected: "event",
+    brand: "",
+    kind: "event",
+  },
+  {
+    value: "kt",
+    status: "done",
+    label: `Kết thúc`,
     selected: "",
     brand: "",
+    kind: "",
   },
-  { value: "done", label: `Kết thúc`, selected: "", brand: "" },
 ];

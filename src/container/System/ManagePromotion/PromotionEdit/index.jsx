@@ -39,7 +39,6 @@ import descriptionImage from "../../../../assets/images/description.png";
 import shortDescriptionImage from "../../../../assets/images/shortDescription.png";
 import thumnailImage from "../../../../assets/images/thumnailContent.png";
 import titleImage from "../../../../assets/images/title.png";
-import CustomTextEditor from "../../../../components/customTextEdittor";
 import ModalCustom from "../../../../components/modalCustom";
 import LoadingPagination from "../../../../components/paginationLoading";
 import InputCustom from "../../../../components/textInputCustom";
@@ -53,6 +52,7 @@ import {
 import { getProvince, getService } from "../../../../redux/selectors/service";
 import "./styles.scss";
 import moment from "moment";
+import TextEditor from "../../../../components/TextEditor";
 const { Option } = Select;
 
 const EditPromotion = () => {
@@ -135,6 +135,7 @@ const EditPromotion = () => {
   const navigate = useNavigate();
   const selectAfter = (
     <Select
+      disabled={isActive ? true : false}
       defaultValue="VND"
       style={{ width: "auto" }}
       onChange={(e) => {
@@ -334,14 +335,6 @@ const EditPromotion = () => {
     </div>
   );
 
-  const openNotificationWithIcon = (type) => {
-    api[type]({
-      message: "Vui lòng dừng kích hoạt",
-      description:
-        "Vui lòng dừng kích hoạt mã khuyến mãi để tiếp tục chỉnh sửa",
-    });
-  };
-
   const changeCheckApply = (value, index) => {
     const arr = [...timeApply];
     timeApply[index].is_check_loop = value;
@@ -416,6 +409,14 @@ const EditPromotion = () => {
         setIsLoading(false);
       });
   }, []);
+
+  const openNotificationWithIcon = (type) => {
+    api[type]({
+      message: "Vui lòng dừng kích hoạt",
+      description:
+        "Vui lòng dừng kích hoạt mã khuyến mãi để tiếp tục chỉnh sửa",
+    });
+  };
 
   const onEditPromotion = useCallback(() => {
     setIsLoading(true);
@@ -534,15 +535,23 @@ const EditPromotion = () => {
             <div className="div-parrent-promo">
               <div className="div-code-promo">
                 <a className="label-promo">Mã khuyến mãi</a>
-                <Input
-                  placeholder={`${i18n.t("Nhập mã khuyến mãi", { lng: lang })}`}
-                  type="text"
-                  value={statePromo?.promoCode.toUpperCase()}
-                  onChange={(e) =>
-                    setStatePromo({ ...statePromo, promoCode: e.target.value })
-                  }
-                  style={{ marginTop: 5, width: "100%", height: 30 }}
-                />
+                <div>
+                  <Input
+                    placeholder={`${i18n.t("Nhập mã khuyến mãi", {
+                      lng: lang,
+                    })}`}
+                    type="text"
+                    value={statePromo?.promoCode.toUpperCase()}
+                    onChange={(e) =>
+                      setStatePromo({
+                        ...statePromo,
+                        promoCode: e.target.value,
+                      })
+                    }
+                    style={{ marginTop: 5, width: "100%", height: 30 }}
+                    disabled={isActive ? true : false}
+                  />
+                </div>
               </div>
 
               <div className="div-child-promo">
@@ -554,6 +563,7 @@ const EditPromotion = () => {
                       isParrentPromotion: e.target.checked,
                     })
                   }
+                  disabled={isActive ? true : false}
                 >
                   Tạo nhiều mã tự động
                 </Checkbox>
@@ -568,6 +578,7 @@ const EditPromotion = () => {
                       })
                     }
                     style={{ width: "100%", marginTop: 2, height: 30 }}
+                    disabled={isActive ? true : false}
                   />
                 )}
               </div>
@@ -589,6 +600,7 @@ const EditPromotion = () => {
               style={{
                 marginTop: 10,
               }}
+              disabled={isActive ? true : false}
             >
               <Space>
                 <Radio value={1}>GUVI</Radio>
@@ -608,6 +620,7 @@ const EditPromotion = () => {
                       isCheckProgram: false,
                     });
                   }}
+                  disabled={isActive ? true : false}
                 >
                   Voucher
                 </Checkbox>
@@ -621,6 +634,7 @@ const EditPromotion = () => {
                     });
                   }}
                   style={{ margin: 0, marginTop: 10 }}
+                  disabled={isActive ? true : false}
                 >
                   Chương trình khuyến mãi
                 </Checkbox>
@@ -633,6 +647,7 @@ const EditPromotion = () => {
                   placeholder="Chọn dịch vụ áp dụng"
                   style={{ marginTop: 10 }}
                   value={statePromo?.serviceApply}
+                  disabled={isActive ? true : false}
                 />
               </div>
             )}
@@ -662,6 +677,7 @@ const EditPromotion = () => {
               onChange={(e) =>
                 setStatePromo({ ...statePromo, titleVN: e.target.value })
               }
+              disabled={isActive ? true : false}
             />
             <InputCustom
               title={`${i18n.t("english", { lng: lang })}`}
@@ -669,6 +685,7 @@ const EditPromotion = () => {
               onChange={(e) =>
                 setStatePromo({ ...statePromo, titleEN: e.target.value })
               }
+              disabled={isActive ? true : false}
             />
           </div>
           {statePromo?.isCheckVoucher && (
@@ -696,6 +713,7 @@ const EditPromotion = () => {
                   })
                 }
                 textArea={true}
+                disabled={isActive ? true : false}
               />
               <InputCustom
                 title={`${i18n.t("english", { lng: lang })}`}
@@ -707,6 +725,7 @@ const EditPromotion = () => {
                   })
                 }
                 textArea={true}
+                disabled={isActive ? true : false}
               />
             </div>
           )}
@@ -726,20 +745,24 @@ const EditPromotion = () => {
               </div>
               <div>
                 <a>{`${i18n.t("vietnamese", { lng: lang })}`}</a>
-                <CustomTextEditor
+                <TextEditor
                   value={statePromo?.descriptionVN}
-                  onChangeValue={(e) =>
+                  onChange={(e) =>
                     setStatePromo({ ...statePromo, descriptionVN: e })
                   }
+                  height={300}
+                  disabled={isActive ? true : false}
                 />
               </div>
               <div className="mt-2">
                 <a>{`${i18n.t("english", { lng: lang })}`}</a>
-                <CustomTextEditor
+                <TextEditor
                   value={statePromo?.descriptionEN}
-                  onChangeValue={(e) =>
+                  onChange={(e) =>
                     setStatePromo({ ...statePromo, descriptionEN: e })
                   }
+                  height={300}
+                  disabled={isActive ? true : false}
                 />
               </div>
             </div>
@@ -759,11 +782,20 @@ const EditPromotion = () => {
                       isApllyTime: e.target.value,
                     });
                     if (e.target.value === 1) {
-                      setStatePromo({ ...statePromo, limitedDate: false });
+                      setStatePromo({
+                        ...statePromo,
+                        limitedDate: false,
+                        isApllyTime: e.target.value,
+                      });
                     } else {
-                      setStatePromo({ ...statePromo, limitedDate: true });
+                      setStatePromo({
+                        ...statePromo,
+                        limitedDate: true,
+                        isApllyTime: e.target.value,
+                      });
                     }
                   }}
+                  disabled={isActive ? true : false}
                 >
                   <Space direction="vertical">
                     <Radio value={1}>Không giới hạn</Radio>
@@ -793,6 +825,7 @@ const EditPromotion = () => {
                                 )
                               : ""
                           }
+                          disabled={isActive ? true : false}
                         />
                       </div>
                       <div className="div-time">
@@ -820,6 +853,7 @@ const EditPromotion = () => {
                                 )
                               : ""
                           }
+                          disabled={isActive ? true : false}
                         />
                       </div>
                     </div>
@@ -842,15 +876,18 @@ const EditPromotion = () => {
                             ...statePromo,
                             typeDateApply: "date_create",
                             isApplyTimeUse: true,
+                            ratioTypeDateApply: e.target.value,
                           });
                         } else {
                           setStatePromo({
                             ...statePromo,
                             typeDateApply: "date_work",
                             isApplyTimeUse: true,
+                            ratioTypeDateApply: e.target.value,
                           });
                         }
                       }}
+                      disabled={isActive ? true : false}
                     >
                       <Space direction="vertical">
                         <Radio value={1}>Tất cả các ngày</Radio>
@@ -872,6 +909,7 @@ const EditPromotion = () => {
                                     changeCheckApply(e.target.checked, index)
                                   }
                                   className="checkbox-date"
+                                  disabled={isActive ? true : false}
                                 >
                                   {item?.day_local === 1
                                     ? "Thứ Hai"
@@ -923,6 +961,9 @@ const EditPromotion = () => {
                                                     indexTime
                                                   )
                                                 }
+                                                disabled={
+                                                  isActive ? true : false
+                                                }
                                               />
                                               <a className="minus">-</a>
 
@@ -938,11 +979,17 @@ const EditPromotion = () => {
                                                     indexTime
                                                   )
                                                 }
+                                                disabled={
+                                                  isActive ? true : false
+                                                }
                                               />
                                               <CloseOutlined
                                                 className="icon-remove"
                                                 onClick={() =>
                                                   deleteTime(index, indexTime)
+                                                }
+                                                disabled={
+                                                  isActive ? true : false
                                                 }
                                               />
                                             </div>
@@ -970,14 +1017,16 @@ const EditPromotion = () => {
                                     <PlusCircleFilled
                                       className="icon-add-time"
                                       onClick={() => addTime(index)}
+                                      disabled={isActive ? true : false}
                                     />
                                   ) : (
-                                    <a
+                                    <Button
                                       className="choose-time"
                                       onClick={() => addTime(index)}
+                                      disabled={isActive ? true : false}
                                     >
                                       Chọn giờ
-                                    </a>
+                                    </Button>
                                   )}
                                 </>
                               )}
@@ -1009,6 +1058,7 @@ const EditPromotion = () => {
                         setStatePromo({ ...statePromo, imgThumbnail: prev })
                       }
                       classImg={"img-thumbnail"}
+                      disabled={isActive ? true : false}
                     />
 
                     <UploadImage
@@ -1027,6 +1077,7 @@ const EditPromotion = () => {
                         setStatePromo({ ...statePromo, imgBackground: prev })
                       }
                       classImg={"img-background"}
+                      disabled={isActive ? true : false}
                     />
                   </div>
                 </div>
@@ -1062,6 +1113,7 @@ const EditPromotion = () => {
                         }}
                         style={{ width: "100%", marginTop: 5 }}
                         addonAfter={selectAfter}
+                        disabled={isActive ? true : false}
                       />
                     </div>
                     {statePromo?.discountUnit === "percent" && (
@@ -1093,6 +1145,7 @@ const EditPromotion = () => {
                           }
                           addonAfter="đ"
                           style={{ width: "100%", marginTop: 4 }}
+                          disabled={isActive ? true : false}
                         />
                       </div>
                     )}
@@ -1127,6 +1180,7 @@ const EditPromotion = () => {
                         });
                       }
                     }}
+                    disabled={isActive ? true : false}
                   >
                     <Space direction="vertical">
                       <Radio value={1}>Không yêu cầu</Radio>
@@ -1146,6 +1200,7 @@ const EditPromotion = () => {
                         }
                         addonAfter="đ"
                         style={{ width: "100%", marginTop: 4 }}
+                        disabled={isActive ? true : false}
                       />
                       <a className="text-note">Áp dụng cho tất cả đơn hàng</a>
                     </div>
@@ -1178,6 +1233,7 @@ const EditPromotion = () => {
                     }
                   }}
                   style={{ marginTop: 10 }}
+                  disabled={isActive ? true : false}
                 >
                   <Space direction="vertical">
                     <Radio value={1}>Không giới hạn khách hàng</Radio>
@@ -1200,6 +1256,7 @@ const EditPromotion = () => {
                       }}
                       value={statePromo?.groupCustomer}
                       options={options}
+                      disabled={isActive ? true : false}
                     />
                   )}
                 </div>
@@ -1217,6 +1274,7 @@ const EditPromotion = () => {
                           searchCustomer(e.target.value);
                         }}
                         style={{ marginTop: 10 }}
+                        disabled={isActive ? true : false}
                       />
                       {statePromo?.data?.length > 0 && (
                         <List className="list-item-kh">
@@ -1251,6 +1309,7 @@ const EditPromotion = () => {
                                     className="icon-delete"
                                     size={70}
                                     onClick={() => removeItemCustomer(item)}
+                                    disabled={isActive ? true : false}
                                   />
                                 </div>
                               );
@@ -1284,6 +1343,7 @@ const EditPromotion = () => {
                       });
                     }
                   }}
+                  disabled={isActive ? true : false}
                 >
                   <Space direction="vertical">
                     <Radio value={1}>Toàn quốc</Radio>
@@ -1302,6 +1362,7 @@ const EditPromotion = () => {
                     options={cityOption}
                     optionLabelProp="label"
                     value={statePromo?.city}
+                    disabled={isActive ? true : false}
                   />
                 )}
               </div>
@@ -1316,6 +1377,7 @@ const EditPromotion = () => {
                         limitedQuantity: e.target.checked,
                       })
                     }
+                    disabled={isActive ? true : false}
                   >
                     Giới hạn tổng số có thể sử dụng khuyến mãi
                   </Checkbox>
@@ -1327,6 +1389,7 @@ const EditPromotion = () => {
                         setStatePromo({ ...statePromo, amount: e })
                       }
                       className="input-price"
+                      disabled={isActive ? true : false}
                     />
                   )}
                 </div>
@@ -1339,6 +1402,7 @@ const EditPromotion = () => {
                         isUsePromo: e.target.checked,
                       })
                     }
+                    disabled={isActive ? true : false}
                   >
                     Giới hạn số lần sử dụng cho mỗi khách hàng
                   </Checkbox>
@@ -1350,6 +1414,7 @@ const EditPromotion = () => {
                         setStatePromo({ ...statePromo, usePromo: e })
                       }
                       className="input-price"
+                      disabled={isActive ? true : false}
                     />
                   )}
                 </div>
@@ -1375,6 +1440,7 @@ const EditPromotion = () => {
                         });
                       }
                     }}
+                    disabled={isActive ? true : false}
                   >
                     <Space direction="vertical">
                       <Radio value={1}>Không yêu cầu</Radio>
@@ -1390,6 +1456,7 @@ const EditPromotion = () => {
                           setStatePromo({ ...statePromo, exchangePoint: e })
                         }
                         style={{ width: "50%", marginTop: 10 }}
+                        disabled={isActive ? true : false}
                       />
                       <a className="label-exchange">
                         Thời gian sử dụng sau khi đổi
@@ -1401,6 +1468,7 @@ const EditPromotion = () => {
                           setStatePromo({ ...statePromo, dateExchange: e })
                         }
                         style={{ width: "50%", marginTop: 10 }}
+                        disabled={isActive ? true : false}
                       />
                     </div>
                   )}
@@ -1424,6 +1492,7 @@ const EditPromotion = () => {
                     className={
                       statePromo?.isShowInApp ? "switch-select" : "switch"
                     }
+                    disabled={isActive ? true : false}
                   />
                   <a className="label-display">Hiển thị trên App</a>
                 </div>
@@ -1451,6 +1520,7 @@ const EditPromotion = () => {
                   }
                 }}
                 value={statePromo?.ratioPaymentMethod}
+                disabled={isActive ? true : false}
               >
                 <Space direction="vertical">
                   <Radio value={1}>Tất cả loại thanh toán</Radio>
@@ -1470,6 +1540,7 @@ const EditPromotion = () => {
                     setStatePromo({ ...statePromo, paymentMethod: e })
                   }
                   options={DATA_PAYMENT}
+                  disabled={isActive ? true : false}
                 />
               )}
             </div>
