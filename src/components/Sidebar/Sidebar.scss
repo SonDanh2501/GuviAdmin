@@ -160,6 +160,7 @@ $font-01: "Roboto", sans-serif;
         display: flex;
         text-decoration: none;
         background-color: antiquewhite;
+        align-items: center;
 
         .active-text-nav {
           font-family: "Roboto";
@@ -175,6 +176,7 @@ $font-01: "Roboto", sans-serif;
         background-color: "transparent" !important;
         padding: 5px 8px 5px 20px;
         display: flex;
+        align-items: center;
 
         .unactive-text-nav {
           font-family: "Roboto";

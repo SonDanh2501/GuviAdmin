@@ -51,7 +51,7 @@ const ManagePromotions = () => {
     type: "",
     brand: "",
     idService: "",
-    status: "doing",
+    status: "",
     modalShowApp: false,
     value: "",
     kind: "",
@@ -104,7 +104,7 @@ const ManagePromotions = () => {
       ...state,
       status:
         readCookie("tab_status_promotion") === ""
-          ? "doing"
+          ? ""
           : readCookie("tab_status_promotion"),
       idService:
         readCookie("service_prmotion") === ""
@@ -128,7 +128,7 @@ const ManagePromotions = () => {
     fetchPromotion(
       "",
       readCookie("tab_status_promotion") === ""
-        ? "doing"
+        ? ""
         : readCookie("tab_status_promotion"),
       0,
       20,
@@ -314,7 +314,7 @@ const ManagePromotions = () => {
     fetchPromotion(
       valueSearch,
       item?.status,
-      state?.startPage,
+      0,
       20,
       item?.selected,
       item?.brand,
@@ -356,10 +356,13 @@ const ManagePromotions = () => {
   const onChangeTypePromotion = (value, item) => {
     saveToCookie("selected_promotion", item?.selected);
     saveToCookie("brand_promotion", item?.brand);
+    saveToCookie("kind_promotion", value);
+
     setState({
       ...state,
       type: item?.selected,
       brand: item?.brand,
+      kind: value,
     });
     fetchPromotion(
       valueSearch,
@@ -500,10 +503,12 @@ const ManagePromotions = () => {
               ) : (
                 <a className="text-title-promotion">
                   {data?.discount_unit === "amount"
-                    ? `Giảm giá ${formatMoney(data?.discount_max_price)}`
+                    ? `Giảm giá ${formatMoney(
+                        data?.discount_max_price
+                      )} cho dịch vụ`
                     : `Giảm giá ${data?.discount_value}%, tối đa ${formatMoney(
                         data?.discount_max_price
-                      )}`}{" "}
+                      )} cho dịch vụ`}{" "}
                   {data?.price_min_order > 0
                     ? ` đơn từ ${formatMoney(
                         data?.price_min_order
@@ -1034,6 +1039,7 @@ const PROMOTION_TAB = [
     label: `Tất cả khuyến mãi`,
     selected: "",
     brand: "",
+    kind: "",
   },
   {
     value: "kmkh",
