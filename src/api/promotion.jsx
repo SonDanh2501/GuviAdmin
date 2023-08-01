@@ -12,7 +12,7 @@ export const fetchPromotion = (
   sort
 ) => {
   return axiosClient.get(
-    `/admin/promotion_manager/get_list?search=${search}&status=${status}&start=${start}&length=${length}&typeSort=${type}&brand=${brand}&id_service=${id_service}&exchange=${exchange}&fieldSort=position&valueSort=${sort}`
+    `/admin/promotion_manager/get_list?search=${search}&status=${status}&start=${start}&length=${length}&typeSort=${type}&brand=${brand}&id_service=${id_service}&exchange=${exchange}&fieldSort=date_create&valueSort=${sort}`
   );
 };
 

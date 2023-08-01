@@ -40,6 +40,7 @@ const InputCustom = (props) => {
           onChange={onChange}
           style={style}
           className={className}
+          disabled={disabled}
         />
       ) : password ? (
         <Input.Password

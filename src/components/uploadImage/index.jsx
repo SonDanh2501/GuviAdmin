@@ -10,7 +10,7 @@ import { postFile } from "../../api/file";
 import axios from "axios";
 
 const UploadImage = (props) => {
-  const { setUrl, classImg, title, image, setImage, icon } = props;
+  const { setUrl, classImg, title, image, setImage, icon, disabled } = props;
   const dispatch = useDispatch();
 
   const onChangeThumbnail = async (e) => {
@@ -65,6 +65,7 @@ const UploadImage = (props) => {
         accept={".jpg,.png,.jpeg"}
         className="input-image"
         onChange={onChangeThumbnail}
+        disabled={disabled}
       />
       {image && (
         <div className="div-image">
@@ -72,6 +73,7 @@ const UploadImage = (props) => {
           <CloseCircleOutlined
             className="icon_delete_image"
             onClick={() => setImage("")}
+            disabled={disabled}
           />
         </div>
       )}
