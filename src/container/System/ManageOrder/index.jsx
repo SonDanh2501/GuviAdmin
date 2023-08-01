@@ -44,7 +44,7 @@ const ManageOrder = () => {
   const [condition, setCondition] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [startDate, setStartDate] = useState(
-    moment("1-1-2023").startOf("date").toISOString()
+    new Date("2022-12-31").toISOString()
   );
   const [endDate, setEndDate] = useState(
     moment().endOf("date").add(7, "hours").toISOString()
@@ -110,7 +110,7 @@ const ManageOrder = () => {
     setStartDate(
       readCookie("start_date_order") !== ""
         ? readCookie("start_date_order")
-        : moment("1-1-2023").startOf("date").toISOString()
+        : new Date("2022-12-31").toISOString()
     );
     setEndDate(
       readCookie("end_date_order") !== ""
@@ -118,7 +118,6 @@ const ManageOrder = () => {
         : moment().endOf("date").add(7, "hours").toISOString()
     );
   }, []);
-
   useEffect(() => {
     getOrderApi(
       valueSearch,
@@ -129,7 +128,7 @@ const ManageOrder = () => {
       type,
       readCookie("start_date_order") !== ""
         ? readCookie("start_date_order")
-        : moment("1-1-2023").startOf("date").toISOString(),
+        : new Date("2022-12-31").toISOString(),
       readCookie("end_date_order") !== ""
         ? readCookie("end_date_order")
         : moment().endOf("date").add(7, "hours").toISOString(),
@@ -232,8 +231,8 @@ const ManageOrder = () => {
     setCity("");
     setKind("");
     setType("date_create");
-    setStartDate(moment("1-1-2023").startOf("date").toISOString());
-    setEndDate(moment().endOf("date").add(7, "hours").toISOString());
+    setStartDate("");
+    setEndDate(new Date("2022-12-31").toISOString());
     saveToCookie("kind_order", "");
     saveToCookie("city_order", "");
     saveToCookie("name_filter", "");
@@ -247,7 +246,7 @@ const ManageOrder = () => {
       tab,
       "",
       type,
-      moment("1-1-2023").startOf("date").toISOString(),
+      new Date("2022-12-31").toISOString(),
       moment().endOf("date").add(7, "hours").toISOString(),
       ""
     )

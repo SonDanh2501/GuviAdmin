@@ -322,6 +322,11 @@
             color: #2962ff;
           }
           .choose-time {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            height: 20px;
             font-family: "Roboto";
             font-style: normal;
             font-weight: 200;

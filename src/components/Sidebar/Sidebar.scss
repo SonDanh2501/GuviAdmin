@@ -56,14 +56,15 @@ $font-01: "Roboto", sans-serif;
         width: "10%";
         height: 60px;
         background-color: #e6e8f4;
-        padding: 20px 30px;
+        padding: 5px 8px 5px 12px;
         display: flex;
         text-decoration: none;
         justify-content: space-between;
+        align-items: center;
 
         .img-icon {
-          width: 15px;
-          height: 15px;
+          width: 20px;
+          height: 20px;
           margin-right: 10px;
         }
 
@@ -79,15 +80,15 @@ $font-01: "Roboto", sans-serif;
         width: "10%";
         height: 60px;
         background-color: "transparent" !important;
-        padding: 20px 30px;
+        padding: 5px 8px 5px 12px;
         display: flex;
         border-bottom: 1px solid #e6e8f4;
         align-items: center;
         justify-content: space-between;
 
         .img-icon {
-          width: 15px;
-          height: 15px;
+          width: 20px;
+          height: 20px;
           margin-right: 10px;
         }
 
@@ -105,14 +106,15 @@ $font-01: "Roboto", sans-serif;
         width: "10%";
         height: 60px;
         background-color: #e6e8f4;
-        padding: 20px 30px;
+        padding: 5px 8px 5px 12px;
         display: flex;
         text-decoration: none;
         justify-content: space-between;
+        align-items: center;
 
         .img-icon {
-          width: 15px;
-          height: 15px;
+          width: 20px;
+          height: 20px;
           margin-right: 10px;
         }
 
@@ -128,15 +130,15 @@ $font-01: "Roboto", sans-serif;
         width: "10%";
         height: 60px;
         background-color: "transparent" !important;
-        padding: 20px 30px;
+        padding: 5px 8px 5px 12px;
         display: flex;
         border-bottom: 1px solid #e6e8f4;
         align-items: center;
         justify-content: space-between;
 
         .img-icon {
-          width: 15px;
-          height: 15px;
+          width: 20px;
+          height: 20px;
           margin-right: 10px;
         }
 
@@ -154,7 +156,7 @@ $font-01: "Roboto", sans-serif;
       .active-link-nav {
         width: "10%";
         height: 60px;
-        padding: 20px 60px 20px 40px;
+        padding: 5px 8px 5px 20px;
         display: flex;
         text-decoration: none;
         background-color: antiquewhite;
@@ -171,7 +173,7 @@ $font-01: "Roboto", sans-serif;
         width: "10%";
         height: 60px;
         background-color: "transparent" !important;
-        padding: 20px 60px 20px 40px;
+        padding: 5px 8px 5px 20px;
         display: flex;
 
         .unactive-text-nav {
@@ -191,7 +193,7 @@ $font-01: "Roboto", sans-serif;
       .active-link-configuration {
         height: 60px;
         background-color: #e6e8f4;
-        padding: 20px 30px;
+        padding: 5px 8px 5px 12px;
         display: flex;
         text-decoration: none;
 
@@ -212,7 +214,7 @@ $font-01: "Roboto", sans-serif;
       .unactive-link-configuration {
         height: 60px;
         background-color: "transparent" !important;
-        padding: 20px 30px;
+        padding: 5px 8px 5px 12px;
         display: flex;
 
         .img-icon {

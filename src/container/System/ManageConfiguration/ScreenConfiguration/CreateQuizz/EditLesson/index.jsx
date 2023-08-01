@@ -1,18 +1,15 @@
-import { Button, Checkbox, Drawer } from "antd";
-import CustomButton from "../../../../../../components/customButton/customButton";
-import { useCallback, useEffect, useState } from "react";
-import "./styles.scss";
-import InputCustom from "../../../../../../components/textInputCustom";
+import { Checkbox, Drawer } from "antd";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  createLessonApi,
   editLessonApi,
   getDetailsTrainningLessonApi,
   getListTrainningLessonApi,
 } from "../../../../../../api/configuration";
+import TextEditor from "../../../../../../components/TextEditor";
+import CustomButton from "../../../../../../components/customButton/customButton";
+import InputCustom from "../../../../../../components/textInputCustom";
 import { errorNotify } from "../../../../../../helper/toast";
-import CustomTextEditor from "../../../../../../components/customTextEdittor";
-import { useRef } from "react";
-import { Quill } from "react-quill";
+import "./styles.scss";
 
 const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
   const [state, setState] = useState({
@@ -180,9 +177,9 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
         />
         <div className="mt-2">
           <a>Lý thuyết</a>
-          <CustomTextEditor
+          <TextEditor
             value={state?.theory}
-            onChangeValue={(e) => setState({ ...state, theory: e })}
+            onChange={(e) => setState({ ...state, theory: e })}
           />
         </div>
         <Checkbox

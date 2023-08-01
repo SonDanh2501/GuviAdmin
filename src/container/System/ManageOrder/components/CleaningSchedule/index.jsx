@@ -310,6 +310,7 @@ const CleaningSchedule = (props) => {
     chooseMonth,
     estimateMonth,
     date_work_schedule,
+    selectedDate,
   ]);
 
   useEffect(() => {
@@ -387,6 +388,31 @@ const CleaningSchedule = (props) => {
           });
         });
     }
+    if (codePromotion) {
+      checkCodePromotionOrderApi(id, {
+        id_customer: id,
+        token: accessToken.toString(),
+        type: "schedule",
+        type_address_work: "house",
+        note_address: "",
+        note: note,
+        is_auto_order: false,
+        date_work_schedule: date_work_schedule,
+        extend_optional: [time],
+        code_promotion: codePromotion,
+        payment_method: "point",
+      })
+        .then((res) => {
+          setIsLoading(false);
+          setDiscount(res?.discount);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          setIsLoading(false);
+        });
+    }
   }, [
     lat,
     long,
@@ -397,6 +423,7 @@ const CleaningSchedule = (props) => {
     chooseMonth,
     estimateMonth,
     note,
+    codePromotion,
   ]);
 
   const checkPromotion = useCallback(

@@ -8,7 +8,7 @@ import {
   getListTrainningLessonApi,
 } from "../../../../../../api/configuration";
 import { errorNotify } from "../../../../../../helper/toast";
-import CustomTextEditor from "../../../../../../components/customTextEdittor";
+import TextEditor from "../../../../../../components/TextEditor";
 
 const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
   const [state, setState] = useState({
@@ -153,9 +153,9 @@ const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
         />
         <div className="mt-2">
           <a>Lý thuyết</a>
-          <CustomTextEditor
+          <TextEditor
             value={state?.theory}
-            onChangeValue={(e) => setState({ ...state, theory: e })}
+            onChange={(e) => setState({ ...state, theory: e })}
           />
         </div>
         <Checkbox
