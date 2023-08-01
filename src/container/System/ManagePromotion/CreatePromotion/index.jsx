@@ -1063,7 +1063,17 @@ const CreatePromotion = () => {
                         checkMininum: e.target.value,
                       });
                       if (e.target.value === 1) {
-                        setStatePromo({ ...statePromo, minimumOrder: 0 });
+                        setStatePromo({
+                          ...statePromo,
+                          minimumOrder: 0,
+                          checkMininum: e.target.value,
+                        });
+                      } else {
+                        setStatePromo({
+                          ...statePromo,
+                          minimumOrder: 0,
+                          checkMininum: e.target.value,
+                        });
                       }
                     }}
                   >
