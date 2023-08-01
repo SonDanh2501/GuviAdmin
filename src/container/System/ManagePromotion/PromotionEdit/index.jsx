@@ -531,12 +531,6 @@ const EditPromotion = () => {
       <div className="div-container-create">
         <div className="div-body">
           <div className="div-input">
-            {isActive && (
-              <div
-                className="div-block"
-                onClick={() => openNotificationWithIcon("warning")}
-              />
-            )}
             <div className="div-parrent-promo">
               <div className="div-code-promo">
                 <a className="label-promo">Mã khuyến mãi</a>
@@ -583,12 +577,6 @@ const EditPromotion = () => {
             </a>
           </div>
           <div className="div-input">
-            {isActive && (
-              <div
-                className="div-block"
-                onClick={() => openNotificationWithIcon("warning")}
-              />
-            )}
             <a className="title-input">Loại khuyến mãi</a>
             <Radio.Group
               value={statePromo?.ratioTypeVoucher}
@@ -662,12 +650,6 @@ const EditPromotion = () => {
             )}
           </div>
           <div className="div-input">
-            {isActive && (
-              <div
-                className="div-block"
-                onClick={() => openNotificationWithIcon("warning")}
-              />
-            )}
             <div className="div-head-title">
               <a className="title-input">Tiêu đề </a>
               <Popover content={titlePrommo} trigger="click" placement="right">
@@ -691,12 +673,6 @@ const EditPromotion = () => {
           </div>
           {statePromo?.isCheckVoucher && (
             <div className="div-input">
-              {isActive && (
-                <div
-                  className="div-block"
-                  onClick={() => openNotificationWithIcon("warning")}
-                />
-              )}
               <div className="div-head-title">
                 <a className="title-input">
                   {`${i18n.t("describe", { lng: lang })}`}
@@ -736,12 +712,6 @@ const EditPromotion = () => {
           )}
           {statePromo?.isCheckVoucher && (
             <div className="div-input">
-              {isActive && (
-                <div
-                  className="div-block"
-                  onClick={() => openNotificationWithIcon("warning")}
-                />
-              )}
               <div className="div-head-title">
                 <a className="title-input">
                   {`${i18n.t("detailed_description", { lng: lang })}`}
@@ -779,12 +749,6 @@ const EditPromotion = () => {
             statePromo?.ratioTypeVoucher === 2) && (
             <>
               <div className="div-input">
-                {isActive && (
-                  <div
-                    className="div-block"
-                    onClick={() => openNotificationWithIcon("warning")}
-                  />
-                )}
                 <a className="title-input">Thời gian hiệu lực</a>
                 <Radio.Group
                   value={statePromo?.isApllyTime}
@@ -1027,12 +991,6 @@ const EditPromotion = () => {
               </div>
               {!statePromo?.isCheckProgram && (
                 <div className="div-background-thumnail">
-                  {isActive && (
-                    <div
-                      className="div-block"
-                      onClick={() => openNotificationWithIcon("warning")}
-                    />
-                  )}
                   <a className="title-input">Hình ảnh khuyến mãi</a>
                   <div>
                     <UploadImage
@@ -1075,12 +1033,6 @@ const EditPromotion = () => {
               )}
               {statePromo?.ratioTypeVoucher === 1 && (
                 <div className="div-input">
-                  {isActive && (
-                    <div
-                      className="div-block"
-                      onClick={() => openNotificationWithIcon("warning")}
-                    />
-                  )}
                   <a className="title-input">
                     {`${i18n.t("Giảm giá đơn hàng", { lng: lang })}`}
                   </a>
@@ -1149,12 +1101,6 @@ const EditPromotion = () => {
               )}
               {statePromo?.ratioTypeVoucher === 1 && (
                 <div className="div-input">
-                  {isActive && (
-                    <div
-                      className="div-block"
-                      onClick={() => openNotificationWithIcon("warning")}
-                    />
-                  )}
                   <a className="title-input">
                     {`${i18n.t("Điều kiện tối thiểu", { lng: lang })}`}
                   </a>
@@ -1162,6 +1108,7 @@ const EditPromotion = () => {
                     style={{ marginTop: 10 }}
                     value={statePromo?.checkMininum}
                     onChange={(e) => {
+                      console.log(e.target.value);
                       setStatePromo({
                         ...statePromo,
                         checkMininum: e.target.value,
@@ -1171,6 +1118,12 @@ const EditPromotion = () => {
                           ...statePromo,
                           minimumOrder: 0,
                           checkMininum: e.target.value,
+                        });
+                      } else {
+                        setStatePromo({
+                          ...statePromo,
+                          checkMininum: e.target.value,
+                          minimumOrder: 0,
                         });
                       }
                     }}
@@ -1184,17 +1137,15 @@ const EditPromotion = () => {
                     <div className="div-minimum-order">
                       <InputNumber
                         formatter={(value) =>
-                          `${value} ₫`.replace(
-                            /(\d)(?=(\d\d\d)+(?!\d))/g,
-                            "$1,"
-                          )
+                          `${value}`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
                         }
                         min={0}
                         value={statePromo?.minimumOrder}
                         onChange={(e) =>
                           setStatePromo({ ...statePromo, minimumOrder: e })
                         }
-                        className="input-price-minimum"
+                        addonAfter="đ"
+                        style={{ width: "100%", marginTop: 4 }}
                       />
                       <a className="text-note">Áp dụng cho tất cả đơn hàng</a>
                     </div>
@@ -1202,12 +1153,6 @@ const EditPromotion = () => {
                 </div>
               )}
               <div className="div-input">
-                {isActive && (
-                  <div
-                    className="div-block"
-                    onClick={() => openNotificationWithIcon("warning")}
-                  />
-                )}
                 <a className="title-input">
                   {`${i18n.t("Đối tượng khách hàng", { lng: lang })}`}
                 </a>
@@ -1318,12 +1263,6 @@ const EditPromotion = () => {
                 </div>
               </div>
               <div className="div-input">
-                {isActive && (
-                  <div
-                    className="div-block"
-                    onClick={() => openNotificationWithIcon("warning")}
-                  />
-                )}
                 <a className="title-input">
                   {`${i18n.t("Khu vực áp dụng", { lng: lang })}`}
                 </a>
@@ -1367,12 +1306,6 @@ const EditPromotion = () => {
                 )}
               </div>
               <div className="div-input">
-                {isActive && (
-                  <div
-                    className="div-block"
-                    onClick={() => openNotificationWithIcon("warning")}
-                  />
-                )}
                 <a className="title-input">Giới hạn sử dụng</a>
                 <div className="div-column-limit">
                   <Checkbox
@@ -1423,12 +1356,6 @@ const EditPromotion = () => {
               </div>
               {!statePromo?.isCheckProgram && (
                 <div className="div-input">
-                  {isActive && (
-                    <div
-                      className="div-block"
-                      onClick={() => openNotificationWithIcon("warning")}
-                    />
-                  )}
                   <a className="title-input">Điểm G-point quy đổi</a>
                   <Radio.Group
                     value={statePromo?.ratioExchangePoint}
@@ -1484,12 +1411,6 @@ const EditPromotion = () => {
         </div>
         <div className="div-detail">
           <div className="div-input">
-            {isActive && (
-              <div
-                className="div-block"
-                onClick={() => openNotificationWithIcon("warning")}
-              />
-            )}
             <a className="title-input">Cài đặt</a>
             {statePromo?.isCheckVoucher &&
               statePromo?.ratioTypeVoucher === 1 && (
