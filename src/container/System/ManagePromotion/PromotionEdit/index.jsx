@@ -1162,15 +1162,17 @@ const EditPromotion = () => {
                     style={{ marginTop: 10 }}
                     value={statePromo?.checkMininum}
                     onChange={(e) => {
-                      setStatePromo({
-                        ...statePromo,
-                        checkMininum: e.target.value,
-                      });
                       if (e.target.value === 1) {
                         setStatePromo({
                           ...statePromo,
                           minimumOrder: 0,
                           checkMininum: e.target.value,
+                        });
+                      } else {
+                        setStatePromo({
+                          ...statePromo,
+                          checkMininum: e.target.value,
+                          minimumOrder: 0,
                         });
                       }
                     }}
@@ -1184,17 +1186,15 @@ const EditPromotion = () => {
                     <div className="div-minimum-order">
                       <InputNumber
                         formatter={(value) =>
-                          `${value} ₫`.replace(
-                            /(\d)(?=(\d\d\d)+(?!\d))/g,
-                            "$1,"
-                          )
+                          `${value}`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
                         }
                         min={0}
                         value={statePromo?.minimumOrder}
                         onChange={(e) =>
                           setStatePromo({ ...statePromo, minimumOrder: e })
                         }
-                        className="input-price-minimum"
+                        addonAfter="đ"
+                        style={{ width: "100%", marginTop: 4 }}
                       />
                       <a className="text-note">Áp dụng cho tất cả đơn hàng</a>
                     </div>

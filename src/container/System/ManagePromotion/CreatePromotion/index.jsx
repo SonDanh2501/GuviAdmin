@@ -1086,7 +1086,7 @@ const CreatePromotion = () => {
                         onChange={(e) =>
                           setStatePromo({
                             ...statePromo,
-                            minimumOrder: e.target.value,
+                            minimumOrder: e,
                           })
                         }
                         className="input-price-minimum"

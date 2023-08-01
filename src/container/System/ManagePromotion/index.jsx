@@ -32,6 +32,7 @@ import {
 } from "../../../redux/selectors/auth.js";
 import { getProvince, getService } from "../../../redux/selectors/service.js";
 import "./styles.scss";
+import { useCookies } from "../../../helper/useCookies.js";
 
 const ManagePromotions = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -43,13 +44,14 @@ const ManagePromotions = () => {
   const [total, setTotal] = useState(0);
   const [modal, setModal] = useState(false);
   const [typeSort, setTypeSort] = useState(1);
+  const [saveToCookie, readCookie] = useCookies();
   const [state, setState] = useState({
     currentPage: 1,
     startPage: 0,
     type: "",
     brand: "",
     idService: "",
-    status: "",
+    status: "doing",
     modalShowApp: false,
   });
   const toggle = () => setModal(!modal);
@@ -62,14 +64,14 @@ const ManagePromotions = () => {
   const service = useSelector(getService);
 
   const TAB_PROMOTION = [
+    {
+      value: "doing",
+      label: `${i18n.t("Đang kích hoạt", { lng: lang })}`,
+    },
     { value: "", label: `${i18n.t("all", { lng: lang })}` },
     {
       value: "upcoming",
       label: `${i18n.t("Chưa kích hoạt", { lng: lang })}`,
-    },
-    {
-      value: "doing",
-      label: `${i18n.t("Đang kích hoạt", { lng: lang })}`,
     },
     {
       value: "out_of_stock",
@@ -98,7 +100,7 @@ const ManagePromotions = () => {
   useEffect(() => {
     fetchPromotion(
       "",
-      "",
+      state.status,
       0,
       20,
       state?.type,
@@ -261,7 +263,7 @@ const ManagePromotions = () => {
 
   const onChangeTab = (item) => {
     setIsLoading(true);
-    setState({ ...state, status: item?.value });
+    setState({ ...state, status: item?.value, startPage: 0, currentPage: 1 });
     fetchPromotion(
       valueSearch,
       item?.value,
