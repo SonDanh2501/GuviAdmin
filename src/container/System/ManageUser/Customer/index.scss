@@ -23,15 +23,13 @@
   padding: 10px;
 
   /* width */
-  ::-webkit-scrollbar {
-    height: 5px;
-  }
 
   .div-tab-customer {
     display: flex;
     flex-direction: row;
-    // overflow-x: scroll;
-    // width: 100%;
+    overflow: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
 
     .div-item-tab {
       padding: 5px;
@@ -57,5 +55,8 @@
         text-decoration: none;
       }
     }
+  }
+  .div-tab-customer::-webkit-scrollbar {
+    height: 2px;
   }
 }

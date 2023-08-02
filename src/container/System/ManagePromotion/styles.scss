@@ -1,74 +1,85 @@
-.div-tab-promotion {
-  display: flex;
-  flex-direction: row;
+.div-container-promotion {
+  max-width: 100vw;
 
-  .div-tab-item-select {
-    padding: 5px;
-    border-bottom: 1px solid #2962ff;
-    margin-right: 5px;
+  .div-tab-promotion {
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
 
-    .text-tab {
-      font-family: "Roboto";
-      font-style: normal;
-      font-weight: 400;
-      font-size: 14px;
-      color: #202223;
-      text-decoration: none;
+    .div-tab-item-select {
+      padding: 5px;
+      border-bottom: 1px solid #2962ff;
+      margin-right: 5px;
+
+      .text-tab {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        color: #202223;
+        text-decoration: none;
+      }
+    }
+
+    .div-tab-item {
+      padding: 5px;
+      margin-right: 5px;
+      .text-tab {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        color: #c8c8c8;
+        text-decoration: none;
+      }
     }
   }
 
-  .div-tab-item {
-    padding: 5px;
-    margin-right: 5px;
-    .text-tab {
-      font-family: "Roboto";
-      font-style: normal;
-      font-weight: 400;
-      font-size: 14px;
-      color: #c8c8c8;
-      text-decoration: none;
+  .div-tab-promotion::-webkit-scrollbar {
+    height: 2px;
+  }
+
+  .switch-select-show-app {
+    width: 20px;
+    background-color: #00cf3a !important;
+  }
+  .switch {
+    width: 20px;
+  }
+
+  .div-header-promotion {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    .select-type-service {
+      width: 15%;
     }
-  }
-}
+    .select-type-prmotion {
+      width: 15%;
+    }
+    .input-search-promotion {
+      width: 40%;
+      border-radius: 5px;
+      border: 1px solid rgb(182, 182, 182) !important;
+    }
 
-.sswitch-select-show-app {
-  width: 20px;
-  background-color: #00cf3a !important;
-}
-.switch {
-  width: 20px;
-}
+    .btn-add-promotion-v2 {
+      width: auto;
+      border: none;
+      border-radius: 5px;
+      background-color: #48cae4;
+      color: white;
+      box-shadow: 2px 3px 2px rgb(216, 216, 216);
+    }
 
-.div-header-promotion {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-
-  .select-type-service {
-    width: 15%;
-  }
-  .select-type-prmotion {
-    width: 15%;
-  }
-  .input-search-promotion {
-    width: 40%;
-    border-radius: 5px;
-    border: 1px solid rgb(182, 182, 182) !important;
-  }
-
-  .btn-add-promotion-v2 {
-    width: auto;
-    border: none;
-    border-radius: 5px;
-    background-color: #48cae4;
-    color: white;
-    box-shadow: 2px 3px 2px rgb(216, 216, 216);
-  }
-
-  .btn-edit-position {
-    width: auto;
+    .btn-edit-position {
+      width: auto;
+    }
   }
 }
 
@@ -126,9 +137,27 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+
   .div-name-promotion {
     display: flex;
     flex-direction: column;
+
+    .text-name-brand {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      color: #202223;
+
+      .text-brand {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        color: #202223;
+        text-transform: uppercase;
+      }
+    }
 
     .text-title-promotion {
       font-family: "Roboto";
@@ -320,14 +349,14 @@
     width: 100%;
 
     .select-type-service {
-      width: 50%;
+      width: 50% !important;
     }
-    .select-type-prmotion {
+    .select-type-promotion {
       width: 50%;
       margin-top: 10px;
     }
     .input-search-promotion {
-      width: 50%;
+      width: 50% !important;
       border-radius: 5px;
       border: 1px solid rgb(182, 182, 182) !important;
       margin-top: 10px;
@@ -357,11 +386,11 @@
     width: 100%;
 
     .select-type-service {
-      width: 100%;
+      width: 100% !important;
     }
-    .select-type-prmotion {
-      width: 100%;
-      margin-top: 10px;
+    .select-type-promotion {
+      width: 100% !important;
+      margin-top: 10px !important;
     }
     .input-search-promotion {
       width: 100%;

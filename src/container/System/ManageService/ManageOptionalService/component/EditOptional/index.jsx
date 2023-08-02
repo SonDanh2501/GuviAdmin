@@ -196,14 +196,13 @@ const EditOptional = (props) => {
     setPriceRushHour([
       ...priceRushHour,
       {
-        time_end: "",
-        time_start: "",
+        time_end: "00:00",
+        time_start: "00:00",
         type_increase: "",
         value: "",
       },
     ]);
   };
-
   const onChangeRushHourTimeStart = (value, index) => {
     const newArr = [...priceRushHour];
     priceRushHour[index].time_start = value + ":00.000Z";
@@ -246,8 +245,6 @@ const EditOptional = (props) => {
     setIsPriceRushHour(data?.price_option_rush_hour.length > 0 ? true : false);
     setPriceRushHour(data?.price_option_rush_hour);
   }, [data]);
-
-  console.log(data);
 
   const editOptionalService = useCallback(() => {
     setIsLoading(true);
@@ -423,6 +420,7 @@ const EditOptional = (props) => {
                               index
                             )
                           }
+                          allowClear={false}
                         />
                         <a>Thời gian kết thúc</a>
                         <DatePicker
@@ -439,6 +437,7 @@ const EditOptional = (props) => {
                               index
                             )
                           }
+                          allowClear={false}
                         />
                         <a>Hình thức tăng giá</a>
                         <Select
@@ -604,7 +603,6 @@ const EditOptional = (props) => {
                         <a>Giờ bắt đầu</a>
                         <TimePicker
                           style={{ width: "100%", marginTop: 5 }}
-                          defaultOpenValue={dayjs("00:00", hourFormat)}
                           value={dayjs(
                             item?.time_start.slice(0, 5),
                             hourFormat
@@ -617,7 +615,6 @@ const EditOptional = (props) => {
                         <a>Giờ kết thúc</a>
                         <TimePicker
                           style={{ width: "100%", marginTop: 5 }}
-                          defaultOpenValue={dayjs("00:00", hourFormat)}
                           value={dayjs(
                             item?.time_start.slice(0, 5),
                             hourFormat

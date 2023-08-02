@@ -147,7 +147,7 @@ const router = [
     component: ManageFinance,
     layout: "admin",
     tab: [],
-    id_sidebar: "cash_book",
+    id_sidebar: "finance",
   },
   {
     path: "/topup/manage-topup",

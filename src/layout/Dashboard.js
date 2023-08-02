@@ -66,6 +66,7 @@ const Dashboard = () => {
         style={{
           marginLeft: width < 900 ? 10 : collapsed ? 230 : 80,
           height: "auto",
+          width: "100%",
         }}
       >
         <Header

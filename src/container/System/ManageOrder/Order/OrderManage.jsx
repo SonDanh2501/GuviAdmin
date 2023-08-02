@@ -248,6 +248,7 @@ const OrderManage = (props) => {
           </Link>
         );
       },
+
       // sorter: (a, b) =>
       //   a.id_customer.full_name.localeCompare(b.id_customer.full_name),
     },
@@ -408,7 +409,6 @@ const OrderManage = (props) => {
     },
     {
       key: "action",
-      width: "5%",
       align: "center",
       render: (data) => (
         <Space size="middle">

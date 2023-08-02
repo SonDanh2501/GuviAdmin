@@ -11,6 +11,7 @@ import { getGroupCustomer } from "../../../../redux/selectors/customer";
 import { getGroupCustomerApi } from "../../../../api/promotion";
 import { useCookies } from "../../../../helper/useCookies";
 import useWindowDimensions from "../../../../helper/useWindowDimensions";
+import { useHorizontalScroll } from "../../../../helper/useSideScroll";
 
 const ManageCustomer = () => {
   const [status, setStatus] = useState("");
@@ -20,6 +21,7 @@ const ManageCustomer = () => {
   const dataTab = [{ value: "all", label: "Tất cả" }];
   const [saveToCookie, readCookie] = useCookies();
   const { width } = useWindowDimensions();
+  const scrollRef = useHorizontalScroll();
 
   useEffect(() => {
     setIdGroup(readCookie("tab-kh") === "" ? "all" : readCookie("tab-kh"));
@@ -65,7 +67,7 @@ const ManageCustomer = () => {
 
       <div className="div-container-customer">
         {width > 900 ? (
-          <div className="div-tab-customer">
+          <div className="div-tab-customer" ref={scrollRef}>
             {dataTab?.map((item, index) => {
               return (
                 <div
