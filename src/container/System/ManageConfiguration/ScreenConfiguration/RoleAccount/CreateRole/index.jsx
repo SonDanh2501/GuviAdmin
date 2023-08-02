@@ -1,4 +1,4 @@
-import { Button, Checkbox, Drawer, Input, Modal } from "antd";
+import { Button, Checkbox, Drawer, Input, Modal, Select } from "antd";
 import "./index.scss";
 import { memo, useCallback, useEffect, useState } from "react";
 import {
@@ -9,14 +9,29 @@ import { errorNotify } from "../../../../../../helper/toast";
 import LoadingPagination from "../../../../../../components/paginationLoading";
 import { getListRoleAdmin } from "../../../../../../api/createAccount";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getProvince } from "../../../../../../redux/selectors/service";
 
 const CreateRole = (props) => {
   const { setDataList, setTotal } = props;
+  const [state, setState] = useState({
+    address: [],
+    isAreaManager: false,
+  });
   const [data, setData] = useState([]);
   const [keyApi, setKeyApi] = useState([]);
   const [nameRole, setNameRole] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const cityOptions = [];
+  const province = useSelector(getProvince);
+
+  province?.map((item) => {
+    cityOptions?.push({
+      value: item?.code,
+      label: item?.name,
+    });
+  });
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -89,14 +104,14 @@ const CreateRole = (props) => {
     }
   };
 
-  console.log(data);
-
   const onCreate = useCallback(() => {
     setIsLoading(true);
     createRoleApi({
       type_role: "",
       name_role: nameRole,
       id_key_api: keyApi,
+      is_area_manager: state.isAreaManager,
+      area_manager_level_1: state.isAreaManager ? state.address : [],
     })
       .then((res) => {
         setIsLoading(false);
@@ -109,7 +124,7 @@ const CreateRole = (props) => {
         });
         setIsLoading(false);
       });
-  }, [nameRole, keyApi]);
+  }, [nameRole, keyApi, state]);
 
   return (
     <div>
@@ -130,6 +145,26 @@ const CreateRole = (props) => {
           style={{ width: "50%", marginTop: 2 }}
           onChange={(e) => setNameRole(e.target.value)}
         />
+      </div>
+      <div className="div-input mt-2">
+        <Checkbox
+          checked={state?.isAreaManager}
+          onChange={(e) =>
+            setState({ ...state, isAreaManager: e.target.checked })
+          }
+        >
+          Địa điểm
+        </Checkbox>
+        {state.isAreaManager && (
+          <Select
+            options={cityOptions}
+            style={{ width: "50%", marginTop: 2 }}
+            onChange={(e) => {
+              setState({ ...state, address: e });
+            }}
+            mode="multiple"
+          />
+        )}
       </div>
       <div className="div-title-role">
         {data?.map((item, index) => {

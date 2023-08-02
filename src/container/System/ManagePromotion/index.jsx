@@ -8,6 +8,7 @@ import {
   Select,
   Switch,
   Table,
+  Tabs,
 } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
@@ -33,6 +34,7 @@ import {
 import { getProvince, getService } from "../../../redux/selectors/service.js";
 import "./styles.scss";
 import { useCookies } from "../../../helper/useCookies.js";
+import { useHorizontalScroll } from "../../../helper/useSideScroll.js";
 
 const ManagePromotions = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -58,6 +60,7 @@ const ManagePromotions = () => {
   });
   const toggle = () => setModal(!modal);
   const toggleActive = () => setModalActive(!modalActive);
+  const scrollRef = useHorizontalScroll();
   const { width } = useWindowDimensions();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -492,7 +495,9 @@ const ManagePromotions = () => {
             <div className="div-name-promotion">
               {data?.type_promotion === "code" &&
               data?.type_discount === "partner_promotion" ? (
-                <a>Ưu đãi từ "{data?.brand}"</a>
+                <a className="text-name-brand">
+                  Ưu đãi từ "<a className="text-brand">{data?.brand}</a>"
+                </a>
               ) : (
                 <a className="text-title-code">{data?.code}</a>
               )}
@@ -600,6 +605,7 @@ const ManagePromotions = () => {
                   borderRadius: 8,
                   border: "0.5px solid #d6d6d6",
                 }}
+                preview={false}
               />
             ) : null}
           </div>
@@ -831,175 +837,171 @@ const ManagePromotions = () => {
   ];
 
   return (
-    <React.Fragment>
-      <div className="mt-2 ">
-        {width > 900 ? (
-          <div className="div-tab-promotion">
-            {PROMOTION_TAB?.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className={
-                    item?.value === state?.value
-                      ? "div-tab-item-select"
-                      : "div-tab-item"
-                  }
-                  onClick={() => onChangeTab(item)}
-                >
-                  <a className="text-tab">{item?.label}</a>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <Select
-            options={PROMOTION_TAB}
-            style={{ width: "100%" }}
-            value={state?.value}
-            onChange={(value, item) => onChangeTab(item)}
-          />
-        )}
-        <div className="div-header-promotion mt-4">
-          <Select
-            options={optionService}
-            className="select-type-service"
-            value={state?.idService}
-            onChange={onChangeService}
-          />
-          <Select
-            options={TYPE_PRMOTION}
-            className="select-type-prmotion"
-            value={state?.kind}
-            onChange={(e, item) => onChangeTypePromotion(e, item)}
-          />
-          <Input
-            placeholder={`${i18n.t("search", { lng: lang })}`}
-            type="text"
-            prefix={<SearchOutlined />}
-            className="input-search-promotion"
-            onChange={(e) => handleSearch(e.target.value)}
-          />
-          {checkElement?.includes("create_promotion") && (
-            <>
-              <Button
-                onClick={() =>
-                  navigate(`/promotion/manage-setting/create-promotion`)
+    <div className="div-container-promotion">
+      {width > 900 ? (
+        <div className="div-tab-promotion" ref={scrollRef}>
+          {PROMOTION_TAB?.map((item, index) => {
+            return (
+              <div
+                key={index}
+                className={
+                  item?.value === state?.value
+                    ? "div-tab-item-select"
+                    : "div-tab-item"
                 }
-                className="btn-add-promotion-v2"
+                onClick={() => onChangeTab(item)}
               >
-                Thêm khuyến mãi
-              </Button>
-            </>
-          )}
-          <Button
-            onClick={() =>
-              navigate(`/promotion/manage-setting/edit-position-promotion`)
-            }
-            className="btn-edit-position"
-          >
-            Chỉnh sửa vị trí
-          </Button>
+                <a className="text-tab">{item?.label}</a>
+              </div>
+            );
+          })}
         </div>
+      ) : (
+        <Select
+          options={PROMOTION_TAB}
+          style={{ width: "100%" }}
+          value={state?.value}
+          onChange={(value, item) => onChangeTab(item)}
+        />
+      )}
+      <div className="div-header-promotion mt-4">
+        <Select
+          options={optionService}
+          className="select-type-service"
+          value={state?.idService}
+          onChange={onChangeService}
+        />
+        <Select
+          options={TYPE_PRMOTION}
+          className="select-type-promotion"
+          value={state?.kind}
+          onChange={(e, item) => onChangeTypePromotion(e, item)}
+        />
+        <Input
+          placeholder={`${i18n.t("search", { lng: lang })}`}
+          type="text"
+          prefix={<SearchOutlined />}
+          className="input-search-promotion"
+          onChange={(e) => handleSearch(e.target.value)}
+        />
+        {checkElement?.includes("create_promotion") && (
+          <>
+            <Button
+              onClick={() =>
+                navigate(`/promotion/manage-setting/create-promotion`)
+              }
+              className="btn-add-promotion-v2"
+            >
+              Thêm khuyến mãi
+            </Button>
+          </>
+        )}
+        <Button
+          onClick={() =>
+            navigate(`/promotion/manage-setting/edit-position-promotion`)
+          }
+          className="btn-edit-position"
+        >
+          Chỉnh sửa vị trí
+        </Button>
+      </div>
 
-        <div className="mt-3">
-          <Table
-            columns={columns}
-            dataSource={data}
-            pagination={false}
-            rowKey={(record) => record._id}
-            rowSelection={{
-              selectedRowKeys,
-              onChange: (selectedRowKeys, selectedRows) => {
-                setSelectedRowKeys(selectedRowKeys);
+      <div className="mt-3">
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+          rowKey={(record) => record._id}
+          rowSelection={{
+            selectedRowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
+              setSelectedRowKeys(selectedRowKeys);
+            },
+          }}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setItemEdit(record);
               },
-            }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  setItemEdit(record);
-                },
-              };
-            }}
-            scroll={{
-              x: width <= 900 ? 1400 : 0,
-            }}
-          />
-          <div className="div-pagination p-2">
-            <a>
-              {`${i18n.t("total", { lng: lang })}`}: {total}
-            </a>
-            <div>
-              <Pagination
-                current={state?.currentPage}
-                onChange={onChange}
-                total={total}
-                showSizeChanger={false}
-                pageSize={20}
-              />
-            </div>
+            };
+          }}
+          scroll={{
+            x: width <= 900 ? 1400 : 0,
+          }}
+        />
+        <div className="div-pagination p-2">
+          <a>
+            {`${i18n.t("total", { lng: lang })}`}: {total}
+          </a>
+          <div>
+            <Pagination
+              current={state?.currentPage}
+              onChange={onChange}
+              total={total}
+              showSizeChanger={false}
+              pageSize={20}
+            />
           </div>
         </div>
-
-        <div>
-          <ModalCustom
-            isOpen={modal}
-            title={`${i18n.t("delete_promotion", { lng: lang })}`}
-            handleOk={() => onDelete(itemEdit?._id)}
-            handleCancel={toggle}
-            textOk={`${i18n.t("delete", { lng: lang })}`}
-            body={
-              <>
-                <a>{`${i18n.t("want_delete_promotion", { lng: lang })}`}</a>
-                <a className="text-name-modal">{itemEdit?.title?.[lang]}</a>
-              </>
-            }
-          />
-        </div>
-        <div>
-          <ModalCustom
-            isOpen={modalActive}
-            title={
-              itemEdit?.is_active
-                ? `${i18n.t("lock_promotion", { lng: lang })}`
-                : `${i18n.t("unlock_promotion", { lng: lang })}`
-            }
-            handleOk={() => onActive(itemEdit?._id, itemEdit?.is_active)}
-            handleCancel={toggleActive}
-            textOk={
-              itemEdit?.is_active
-                ? `${i18n.t("lock", { lng: lang })}`
-                : `${i18n.t("unlock", { lng: lang })}`
-            }
-            body={
-              <a>
-                {itemEdit?.is_active
-                  ? `${i18n.t("want_lock_promotion", { lng: lang })}`
-                  : `${i18n.t("want_unlock_promotion", { lng: lang })}`}
-                <a className="text-name-modal">{itemEdit?.title?.[lang]}</a>
-              </a>
-            }
-          />
-          <ModalCustom
-            isOpen={state?.modalShowApp}
-            title={"Trạng thái hiện thị"}
-            handleOk={() =>
-              onChangeShow(itemEdit?._id, itemEdit?.is_show_in_app)
-            }
-            handleCancel={() => setState({ ...state, modalShowApp: false })}
-            textOk={itemEdit?.is_show_in_app ? `Ẩn` : `Hiện`}
-            body={
-              <a>
-                {itemEdit?.is_show_in_app
-                  ? `Bạn có muốn ẩn khuyến mãi trên app`
-                  : `Bạn có muốn hiện thị khuyến mãi trên app`}
-                <a className="text-name-modal">{itemEdit?.code}</a>
-              </a>
-            }
-          />
-        </div>
-        {isLoading && <LoadingPagination />}
       </div>
-    </React.Fragment>
+
+      <div>
+        <ModalCustom
+          isOpen={modal}
+          title={`${i18n.t("delete_promotion", { lng: lang })}`}
+          handleOk={() => onDelete(itemEdit?._id)}
+          handleCancel={toggle}
+          textOk={`${i18n.t("delete", { lng: lang })}`}
+          body={
+            <>
+              <a>{`${i18n.t("want_delete_promotion", { lng: lang })}`}</a>
+              <a className="text-name-modal">{itemEdit?.title?.[lang]}</a>
+            </>
+          }
+        />
+      </div>
+      <div>
+        <ModalCustom
+          isOpen={modalActive}
+          title={
+            itemEdit?.is_active
+              ? `${i18n.t("lock_promotion", { lng: lang })}`
+              : `${i18n.t("unlock_promotion", { lng: lang })}`
+          }
+          handleOk={() => onActive(itemEdit?._id, itemEdit?.is_active)}
+          handleCancel={toggleActive}
+          textOk={
+            itemEdit?.is_active
+              ? `${i18n.t("lock", { lng: lang })}`
+              : `${i18n.t("unlock", { lng: lang })}`
+          }
+          body={
+            <a>
+              {itemEdit?.is_active
+                ? `${i18n.t("want_lock_promotion", { lng: lang })}`
+                : `${i18n.t("want_unlock_promotion", { lng: lang })}`}
+              <a className="text-name-modal">{itemEdit?.title?.[lang]}</a>
+            </a>
+          }
+        />
+        <ModalCustom
+          isOpen={state?.modalShowApp}
+          title={"Trạng thái hiện thị"}
+          handleOk={() => onChangeShow(itemEdit?._id, itemEdit?.is_show_in_app)}
+          handleCancel={() => setState({ ...state, modalShowApp: false })}
+          textOk={itemEdit?.is_show_in_app ? `Ẩn` : `Hiện`}
+          body={
+            <a>
+              {itemEdit?.is_show_in_app
+                ? `Bạn có muốn ẩn khuyến mãi trên app`
+                : `Bạn có muốn hiện thị khuyến mãi trên app`}
+              <a className="text-name-modal">{itemEdit?.code}</a>
+            </a>
+          }
+        />
+      </div>
+      {isLoading && <LoadingPagination />}
+    </div>
   );
 };
 
@@ -1034,6 +1036,7 @@ const TYPE_PRMOTION = [
 
 const PROMOTION_TAB = [
   {
+    key: "1",
     value: "",
     status: "",
     label: `Tất cả khuyến mãi`,
@@ -1042,6 +1045,7 @@ const PROMOTION_TAB = [
     kind: "",
   },
   {
+    key: "2",
     value: "kmkh",
     status: "doing",
     label: `KM đang kích hoạt`,
@@ -1050,6 +1054,7 @@ const PROMOTION_TAB = [
     kind: "promotion",
   },
   {
+    key: "3",
     value: "kmckh",
     status: "upcoming",
     label: `KM chưa kích hoạt`,
@@ -1058,6 +1063,7 @@ const PROMOTION_TAB = [
     kind: "promotion",
   },
   {
+    key: "4",
     value: "kmdtkh",
     status: "doing",
     label: `KM Đối tác đang kích hoạt`,
@@ -1066,6 +1072,7 @@ const PROMOTION_TAB = [
     kind: "orther",
   },
   {
+    key: "5",
     value: "kmdtckh",
     status: "upcoming",
     label: `KM Đối tác chưa kích hoạt`,
@@ -1074,6 +1081,7 @@ const PROMOTION_TAB = [
     kind: "orther",
   },
   {
+    key: "6",
     value: "ctkmkh",
     status: "doing",
     label: `CTKM đang kích hoạt`,
@@ -1082,6 +1090,7 @@ const PROMOTION_TAB = [
     kind: "event",
   },
   {
+    key: "7",
     value: "ctkmckh",
     status: "upcoming",
     label: `CTKM chưa kích hoạt`,
@@ -1090,6 +1099,7 @@ const PROMOTION_TAB = [
     kind: "event",
   },
   {
+    key: "8",
     value: "kt",
     status: "done",
     label: `Kết thúc`,

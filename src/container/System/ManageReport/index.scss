@@ -26,6 +26,9 @@
   .div-tab-report {
     display: flex;
     flex-direction: row;
+    overflow: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
 
     .div-item-tab {
       padding: 5px;
@@ -53,5 +56,9 @@
         text-decoration: none;
       }
     }
+  }
+
+  .div-tab-report::-webkit-scrollbar {
+    height: 2px;
   }
 }

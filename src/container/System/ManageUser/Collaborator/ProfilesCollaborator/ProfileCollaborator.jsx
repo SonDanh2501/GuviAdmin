@@ -162,19 +162,23 @@ const ProfileCollaborator = () => {
             src={img ? img : data?.avatar ? data?.avatar : user}
             // className="rounded-circle"
           />
-          <label for="choose-image">
-            <CameraOutlined /> {`${i18n.t("choose_image", { lng: lang })}`}
-          </label>
-          <input
-            name="image"
-            type="file"
-            placeholder=""
-            accept={".jpg,.png,.jpeg"}
-            id="choose-image"
-            onChange={onChangeThumbnail}
-          />
+          {activeKey === "2" && (
+            <>
+              <label for="choose-image">
+                <CameraOutlined /> {`${i18n.t("choose_image", { lng: lang })}`}
+              </label>
+              <input
+                name="image"
+                type="file"
+                placeholder=""
+                accept={".jpg,.png,.jpeg"}
+                id="choose-image"
+                onChange={onChangeThumbnail}
+              />
+            </>
+          )}
         </div>
-        <div>
+        <div className="mt-2">
           <div className="text-body">
             {data?.password_default && (
               <a>
