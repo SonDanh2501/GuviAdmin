@@ -19,6 +19,7 @@ import "./index.scss";
 import { getLanguageState } from "../../../../redux/selectors/auth";
 import i18n from "../../../../i18n";
 import InputCustom from "../../../../components/textInputCustom";
+import DeepCleaning from "../components/DeepCleaning";
 
 const AddOrder = () => {
   const [optionalService, setOptionalService] = useState([]);
@@ -239,6 +240,8 @@ const AddOrder = () => {
             setErrorNameCustomer={setErrorNameCustomer}
             idService={serviceApply}
           />
+        ) : kindService === "tong_ve_sinh" ? (
+          <DeepCleaning />
         ) : (
           <></>
         )}

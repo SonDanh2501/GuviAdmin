@@ -136,7 +136,7 @@ const EditPromotion = () => {
   const selectAfter = (
     <Select
       disabled={isActive ? true : false}
-      defaultValue="VND"
+      value={statePromo?.discountUnit === "amount" ? "VND" : "%"}
       style={{ width: "auto" }}
       onChange={(e) => {
         if (e === "VND") {
@@ -209,6 +209,7 @@ const EditPromotion = () => {
           limitedQuantity: res?.is_limit_count,
           amount: res?.limit_count,
           isUsePromo: res?.is_limited_use,
+          usePromo: res?.limited_use,
           ratioExchangePoint: res?.is_exchange_point ? 2 : 1,
           isExchangePoint: res?.is_exchange_point,
           exchangePoint: res?.exchange_point,
@@ -458,16 +459,23 @@ const EditPromotion = () => {
       discount_value: statePromo?.reducedValue,
       price_min_order: statePromo?.minimumOrder,
       is_id_group_customer: statePromo?.isGroupCustomer,
-      id_group_customer: statePromo?.groupCustomer,
-      id_customer: statePromo?.listCustomers,
+      id_group_customer: statePromo?.isGroupCustomer
+        ? statePromo?.groupCustomer
+        : [],
+      is_id_customer: statePromo?.isCustomer,
+      id_customer: statePromo?.isCustomer ? statePromo?.listCustomers : [],
       is_apply_area: statePromo?.isApplyArea,
-      city: statePromo?.city,
+      city: statePromo?.isApplyArea ? statePromo?.city : [],
       is_limit_count: statePromo?.limitedQuantity,
       is_limited_use: statePromo?.isUsePromo,
       limited_use: statePromo?.isUsePromo ? statePromo?.usePromo : 0,
       is_exchange_point: statePromo?.isExchangePoint,
-      exchange_point: statePromo?.exchangePoint,
-      exp_date_exchange: statePromo?.dateExchange,
+      exchange_point: statePromo?.isExchangePoint
+        ? statePromo?.exchangePoint
+        : 0,
+      exp_date_exchange: statePromo?.isExchangePoint
+        ? statePromo?.dateExchange
+        : 0,
       is_show_in_app: statePromo?.isShowInApp,
       is_payment_method: statePromo?.isPaymentMethod,
       payment_method: statePromo?.paymentMethod,
@@ -1214,21 +1222,26 @@ const EditPromotion = () => {
                 <Radio.Group
                   value={statePromo?.isObjectCustomer}
                   onChange={(e) => {
-                    setStatePromo({
-                      ...statePromo,
-                      isObjectCustomer: e.target.value,
-                    });
                     if (e.target.value === 2) {
                       setStatePromo({
                         ...statePromo,
                         isGroupCustomer: true,
+                        isCustomer: false,
                         isObjectCustomer: e.target.value,
                       });
                     } else if (e.target.value === 3) {
                       setStatePromo({
                         ...statePromo,
                         isCustomer: true,
+                        isGroupCustomer: false,
                         isObjectCustomer: e.target.value,
+                      });
+                    } else {
+                      setStatePromo({
+                        ...statePromo,
+                        isObjectCustomer: e.target.value,
+                        isCustomer: false,
+                        isGroupCustomer: false,
                       });
                     }
                   }}

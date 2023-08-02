@@ -44,6 +44,7 @@ import {
 import { useCookies } from "../../../../../helper/useCookies.js";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions.js";
 import { useWindowScrollPositions } from "../../../../../helper/useWindowPosition.js";
+import { getProvince } from "../../../../../redux/selectors/service.js";
 
 const CollaboratorManage = (props) => {
   const { status } = props;
@@ -69,6 +70,7 @@ const CollaboratorManage = (props) => {
   const toggleLockTime = () => setModalLockTime(!modalLockTime);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
   const dispatch = useDispatch();
   const [saveToCookie, readCookie] = useCookies();
   const { width } = useWindowDimensions();
@@ -425,6 +427,24 @@ const CollaboratorManage = (props) => {
       },
       render: (data) => <a className="text-phone-ctv">{data?.phone}</a>,
       align: "center",
+    },
+    {
+      title: () => {
+        return <a className="title-column">Khu vực</a>;
+      },
+      render: (data) => {
+        return (
+          <div>
+            {province?.map((item, key) => {
+              return (
+                <div key={key}>
+                  {item?.code === data?.city ? <a>{item?.name}</a> : ""}
+                </div>
+              );
+            })}
+          </div>
+        );
+      },
     },
     {
       title: () => {

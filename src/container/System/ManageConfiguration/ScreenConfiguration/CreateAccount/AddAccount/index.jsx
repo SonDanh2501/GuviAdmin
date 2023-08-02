@@ -12,6 +12,7 @@ import { errorNotify } from "../../../../../../helper/toast";
 import { getLanguageState } from "../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../i18n";
 import InputCustom from "../../../../../../components/textInputCustom";
+import { getProvince } from "../../../../../../redux/selectors/service";
 
 const AddAccount = ({ setData, setTotal }) => {
   const [fullName, setFullName] = useState("");

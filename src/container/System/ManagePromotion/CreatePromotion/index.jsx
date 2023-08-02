@@ -1117,12 +1117,14 @@ const CreatePromotion = () => {
                       setStatePromo({
                         ...statePromo,
                         isGroupCustomer: true,
+                        isCustomer: false,
                         isObjectCustomer: e.target.value,
                       });
                     } else if (e.target.value === 3) {
                       setStatePromo({
                         ...statePromo,
                         isCustomer: true,
+                        isGroupCustomer: false,
                         isObjectCustomer: e.target.value,
                       });
                     } else {

@@ -155,25 +155,6 @@ const CleaningHourly = (props) => {
   });
   var accessToken = AES.encrypt(temp, "guvico");
 
-  const onChangeMoney = (value) => {
-    const money = value.toString();
-    if (money.length == 4) {
-      if (money.slice(1, 4) === "000") {
-        setTipCollaborator(value);
-      } else {
-        const tip = parseInt(money.slice(0, 1) + "000");
-        setTipCollaborator(tip);
-      }
-    } else if (money.length == 5) {
-      if (money.slice(2, 4) === "000") {
-        setTipCollaborator(value);
-      } else {
-        const tip = parseInt(money.slice(0, 2) + "000");
-        setTipCollaborator(tip);
-      }
-    }
-  };
-
   const handleSearchLocation = useCallback(
     _debounce((value) => {
       setAddress(value);
@@ -623,12 +604,15 @@ const CleaningHourly = (props) => {
                         : "text-service-default"
                     }
                   >
-                    {item?.estimate === 0.5
+                    {/* {item?.estimate === 0.5
                       ? item?.description?.vi
                       : item?.description?.vi.slice(
                           0,
                           item?.description?.[lang].indexOf("2")
-                        )}
+                        )} */}
+                    {item?.description?.[lang]?.slice(
+                      item?.description?.[lang].indexOf(" ")
+                    )}
                   </a>
                   <a
                     className={
@@ -639,6 +623,7 @@ const CleaningHourly = (props) => {
                   >
                     {item?.estimate !== 0.5 &&
                       item?.description?.[lang].slice(
+                        0,
                         item?.description?.[lang].indexOf(" ")
                       )}
                   </a>

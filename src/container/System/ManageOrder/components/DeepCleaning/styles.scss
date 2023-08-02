@@ -1,0 +1,17 @@
+.div-search-address {
+  display: flex;
+  flex-direction: column;
+
+  .input-search-address {
+    width: 50%;
+  }
+
+  .label-input {
+    font-size: 12px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    color: black;
+    margin-bottom: 2px;
+  }
+}

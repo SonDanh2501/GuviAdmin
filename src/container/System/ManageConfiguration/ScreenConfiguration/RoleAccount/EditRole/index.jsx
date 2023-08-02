@@ -1,4 +1,4 @@
-import { Button, Checkbox, Input } from "antd";
+import { Button, Checkbox, Input, Select } from "antd";
 import { memo, useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -8,15 +8,30 @@ import {
 import LoadingPagination from "../../../../../../components/paginationLoading";
 import { errorNotify } from "../../../../../../helper/toast";
 import "./index.scss";
+import { getProvince } from "../../../../../../redux/selectors/service";
+import { useSelector } from "react-redux";
 
 const EditRole = (props) => {
   const { state } = useLocation();
   const { item } = state || {};
+  const [stateRole, setStateRole] = useState({
+    address: [],
+    isAreaManager: false,
+  });
   const [data, setData] = useState([]);
   const [keyApi, setKeyApi] = useState([]);
   const [nameRole, setNameRole] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const naivigate = useNavigate();
+  const cityOptions = [];
+  const province = useSelector(getProvince);
+
+  province?.map((item) => {
+    cityOptions?.push({
+      value: item?.code,
+      label: item?.name,
+    });
+  });
 
   useEffect(() => {
     getSettingAccountApi()
@@ -70,6 +85,8 @@ const EditRole = (props) => {
     editRoleApi(item?._id, {
       name_role: nameRole,
       id_key_api: keyApi,
+      is_area_manager: stateRole.isAreaManager,
+      area_manager_level_1: stateRole.isAreaManager ? stateRole.address : [],
     })
       .then((res) => {
         setIsLoading(false);
@@ -82,7 +99,7 @@ const EditRole = (props) => {
         });
         setIsLoading(false);
       });
-  }, [nameRole, keyApi, data]);
+  }, [nameRole, keyApi, data, stateRole]);
 
   return (
     <div>
@@ -102,6 +119,26 @@ const EditRole = (props) => {
           value={nameRole}
           onChange={(e) => setNameRole(e.target.value)}
         />
+      </div>
+      <div className="div-input mt-2">
+        <Checkbox
+          checked={stateRole?.isAreaManager}
+          onChange={(e) =>
+            setStateRole({ ...stateRole, isAreaManager: e.target.checked })
+          }
+        >
+          Địa điểm
+        </Checkbox>
+        {stateRole.isAreaManager && (
+          <Select
+            options={cityOptions}
+            style={{ width: "50%", marginTop: 2 }}
+            onChange={(e) => {
+              setStateRole({ ...stateRole, address: e });
+            }}
+            mode="multiple"
+          />
+        )}
       </div>
       <div className="div-title-role">
         {data?.map((item, index) => {

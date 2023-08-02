@@ -15,12 +15,14 @@ import ManageReportCollaborator from "./ManagerReportCollaborator";
 import i18n from "../../../i18n";
 import { useCookies } from "../../../helper/useCookies";
 import useWindowDimensions from "../../../helper/useWindowDimensions";
+import { useHorizontalScroll } from "../../../helper/useSideScroll";
 
 const ManageReport = () => {
   const checkElement = useSelector(getElementState);
   const { width } = useWindowDimensions();
   const [tab, setTab] = useState(1);
   const [saveToCookie, readCookie] = useCookies();
+  const scrollRef = useHorizontalScroll();
   const lang = useSelector(getLanguageState);
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -73,64 +75,22 @@ const ManageReport = () => {
         <a className="title-header">{`${i18n.t("report", { lng: lang })}`}</a>
       </div>
       <div className="div-container-report">
-        {/* <Tabs defaultActiveKey="1">
-          <Tabs.TabPane
-            tab={`${i18n.t("order_report", { lng: lang })}`}
-            key="1"
-          >
-            <ManageReportOrder />
-          </Tabs.TabPane>
-          {checkElement?.includes("collaborator_report") && (
-            <Tabs.TabPane
-              tab={`${i18n.t("collaborator_report", { lng: lang })}`}
-              key="2"
-            >
-              <ManageReportCollaborator />
-            </Tabs.TabPane>
-          )}
-          <Tabs.TabPane
-            tab={`${i18n.t("customer_report", { lng: lang })}`}
-            key="3"
-          >
-            <ManageReportCustomer />
-          </Tabs.TabPane>
-          {checkElement?.includes("order_cancel_report") && (
-            <Tabs.TabPane
-              tab={`${i18n.t("cancellation_report", { lng: lang })}`}
-              key="4"
-            >
-              <ReportCancelOrder />
-            </Tabs.TabPane>
-          )}
-          {checkElement?.includes("order_by_service_report") && (
-            <Tabs.TabPane
-              tab={`${i18n.t("service_report", { lng: lang })}`}
-              key="5"
-            >
-              <ReportService />
-            </Tabs.TabPane>
-          )}
-        </Tabs> */}
         {width > 490 ? (
-          <div className="div-tab-report">
+          <div className="div-tab-report" ref={scrollRef}>
             {DATA?.map((item, index) => {
               return (
-                <>
-                  <div
-                    key={index}
-                    onClick={() => {
-                      setTab(item?.value);
-                      saveToCookie("tab_report", item?.value);
-                    }}
-                    className={
-                      item?.value === tab
-                        ? "div-item-tab-select"
-                        : "div-item-tab"
-                    }
-                  >
-                    <a className="text-tab">{item?.label}</a>
-                  </div>
-                </>
+                <div
+                  key={index}
+                  onClick={() => {
+                    setTab(item?.value);
+                    saveToCookie("tab_report", item?.value);
+                  }}
+                  className={
+                    item?.value === tab ? "div-item-tab-select" : "div-item-tab"
+                  }
+                >
+                  <a className="text-tab">{item?.label}</a>
+                </div>
               );
             })}
           </div>

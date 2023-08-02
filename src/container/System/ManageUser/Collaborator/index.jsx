@@ -3,49 +3,39 @@ import { useEffect, useState } from "react";
 import CollaboratorManage from "./TableCollaborator/CollaboratorManage";
 import "./index.scss";
 import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../redux/selectors/auth";
+import { getLanguageState, getUser } from "../../../../redux/selectors/auth";
 import i18n from "../../../../i18n";
 import { useCookies } from "../../../../helper/useCookies";
 import useWindowDimensions from "../../../../helper/useWindowDimensions";
 
 const ManageCollaborator = () => {
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("online");
   const [saveToCookie, readCookie] = useCookies();
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    setStatus(readCookie("tab_collaborator"));
+    setStatus(
+      readCookie("tab_collaborator") === ""
+        ? "online"
+        : readCookie("tab_collaborator")
+    );
   }, []);
 
-  const onChangeTab = (active) => {
-    if (active === "2") {
-      setStatus("online");
-    } else if (active === "3") {
-      setStatus("offline");
-    } else if (active === "4") {
-      setStatus("locked");
-    } else if (active === "5") {
-      setStatus("verify");
-    } else if (active === "6") {
-      setStatus("not_verify");
-    } else {
-      setStatus("");
-    }
-  };
   const DATA = [
-    {
-      label: `${i18n.t("all", {
-        lng: lang,
-      })}`,
-      value: "",
-    },
     {
       label: `${i18n.t("active", {
         lng: lang,
       })}`,
       value: "online",
     },
+    {
+      label: `${i18n.t("all", {
+        lng: lang,
+      })}`,
+      value: "",
+    },
+
     {
       label: `${i18n.t("locked", {
         lng: lang,
@@ -69,22 +59,6 @@ const ManageCollaborator = () => {
       </div>
 
       <div className="div-container-collaborator">
-        {/* <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
-          <Tabs.TabPane tab={`${i18n.t("all", { lng: lang })}`} key="1">
-            <CollaboratorManage status={status} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={`${i18n.t("active", { lng: lang })}`} key="2">
-            <CollaboratorManage status={status} />
-          </Tabs.TabPane>
-
-          <Tabs.TabPane tab={`${i18n.t("locked", { lng: lang })}`} key="4">
-            <CollaboratorManage status={status} />
-          </Tabs.TabPane>
-
-          <Tabs.TabPane tab={`${i18n.t("unconfirmed", { lng: lang })}`} key="6">
-            <CollaboratorManage status={status} />
-          </Tabs.TabPane>
-        </Tabs> */}
         {width > 490 ? (
           <div className="div-tab-collaborator">
             {DATA?.map((item, index) => {
