@@ -19,7 +19,8 @@
     font-size: 12px;
     color: black;
     text-decoration: none;
-    align-self: center;
+    text-align: center;
+    width: 80px;
   }
 }
 
@@ -58,9 +59,9 @@
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
-  color: black;
+  color: #202223;
   display: block;
-  width: 100%;
+  width: 200px;
   text-decoration: none;
 }
 .text-collaborator {
@@ -68,7 +69,6 @@
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
-  line-height: 16px;
   text-decoration-line: underline;
   color: #023e8a;
 }
@@ -196,12 +196,16 @@
   }
 }
 
-.text-payment-method {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  color: #000000 !important;
+.div-payment {
+  display: flex;
+  flex-direction: column;
+  .text-payment-method {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000 !important;
+  }
 }
 
 .div-plus {

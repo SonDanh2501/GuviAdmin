@@ -1590,7 +1590,14 @@ const EditPromotion = () => {
           </div>
         }
       />
-      <FloatButton.BackTop />
+      <FloatButton.BackTop
+        description="Lưu"
+        shape="circle"
+        style={{
+          width: 50,
+          height: 50,
+        }}
+      />
       {isLoading && <LoadingPagination />}
     </>
   );

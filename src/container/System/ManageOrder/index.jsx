@@ -46,9 +46,7 @@ const ManageOrder = () => {
   const [startDate, setStartDate] = useState(
     new Date("2022-12-31").toISOString()
   );
-  const [endDate, setEndDate] = useState(
-    moment().endOf("date").add(7, "hours").toISOString()
-  );
+  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [keyActive, setKeyActive] = useState(0);
   const [itemTab, setItemTab] = useState([
     {
@@ -115,7 +113,7 @@ const ManageOrder = () => {
     setEndDate(
       readCookie("end_date_order") !== ""
         ? readCookie("end_date_order")
-        : moment().endOf("date").add(7, "hours").toISOString()
+        : moment().endOf("date").toISOString()
     );
   }, []);
   useEffect(() => {
@@ -131,7 +129,7 @@ const ManageOrder = () => {
         : new Date("2022-12-31").toISOString(),
       readCookie("end_date_order") !== ""
         ? readCookie("end_date_order")
-        : moment().endOf("date").add(7, "hours").toISOString(),
+        : moment().endOf("date").toISOString(),
       readCookie("city_order") !== "" ? readCookie("city_order") : ""
     )
       .then((res) => {
@@ -247,7 +245,7 @@ const ManageOrder = () => {
       "",
       type,
       new Date("2022-12-31").toISOString(),
-      moment().endOf("date").add(7, "hours").toISOString(),
+      moment().endOf("date").toISOString(),
       ""
     )
       .then((res) => {
@@ -481,13 +479,13 @@ const ManageOrder = () => {
                   : "Theo ngày tạo"}
               </a>
               <a>
-                {moment(readCookie("start_date_order")?.slice(0, 10)).format(
-                  "DD/MM/YYYY"
-                )}
+                {moment(readCookie("start_date_order"))
+                  .add(7, "hours")
+                  .format("DD/MM/YYYY")}
                 -
-                {moment(readCookie("end_date_order")?.slice(0, 10)).format(
-                  "DD/MM/YYYY"
-                )}
+                {moment(readCookie("end_date_order"))
+                  .add(7, "hours")
+                  .format("DD/MM/YYYY")}
               </a>
             </div>
 

@@ -1,4 +1,4 @@
-import { Button, Checkbox, Input, Select } from "antd";
+import { Button, Checkbox, Input, Radio, Select, Space } from "antd";
 import { memo, useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -17,6 +17,7 @@ const EditRole = (props) => {
   const [stateRole, setStateRole] = useState({
     address: [],
     isAreaManager: false,
+    ratioCheckArea: 1,
   });
   const [data, setData] = useState([]);
   const [keyApi, setKeyApi] = useState([]);
@@ -42,6 +43,11 @@ const EditRole = (props) => {
 
     setNameRole(item?.name_role);
     setKeyApi(item?.id_key_api);
+    setStateRole({
+      ...stateRole,
+      ratioCheckArea: item?.is_area_manager ? 2 : 1,
+      address: item?.area_manager_level_1,
+    });
   }, []);
 
   const onChangeRole = (check, item, role) => {
@@ -85,8 +91,9 @@ const EditRole = (props) => {
     editRoleApi(item?._id, {
       name_role: nameRole,
       id_key_api: keyApi,
-      is_area_manager: stateRole.isAreaManager,
-      area_manager_level_1: stateRole.isAreaManager ? stateRole.address : [],
+      is_area_manager: stateRole.ratioCheckArea === 2 ? true : false,
+      area_manager_level_1:
+        stateRole.ratioCheckArea === 2 ? stateRole.address : [],
     })
       .then((res) => {
         setIsLoading(false);
@@ -121,15 +128,19 @@ const EditRole = (props) => {
         />
       </div>
       <div className="div-input mt-2">
-        <Checkbox
-          checked={stateRole?.isAreaManager}
+        <Radio.Group
           onChange={(e) =>
-            setStateRole({ ...stateRole, isAreaManager: e.target.checked })
+            setStateRole({ ...stateRole, ratioCheckArea: e.target.value })
           }
+          value={stateRole?.ratioCheckArea}
         >
-          Địa điểm
-        </Checkbox>
-        {stateRole.isAreaManager && (
+          <Space direction="vertical">
+            <Radio value={1}>Toàn quốc</Radio>
+            <Radio value={2}>Theo khu vực</Radio>
+          </Space>
+        </Radio.Group>
+
+        {stateRole.ratioCheckArea === 2 && (
           <Select
             options={cityOptions}
             style={{ width: "50%", marginTop: 2 }}
@@ -137,6 +148,7 @@ const EditRole = (props) => {
               setStateRole({ ...stateRole, address: e });
             }}
             mode="multiple"
+            value={stateRole?.address}
           />
         )}
       </div>

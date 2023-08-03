@@ -837,7 +837,7 @@ const ManagePromotions = () => {
   ];
 
   return (
-    <div className="div-container-promotion">
+    <div>
       {width > 900 ? (
         <div className="div-tab-promotion" ref={scrollRef}>
           {PROMOTION_TAB?.map((item, index) => {
@@ -876,6 +876,7 @@ const ManagePromotions = () => {
           className="select-type-promotion"
           value={state?.kind}
           onChange={(e, item) => onChangeTypePromotion(e, item)}
+          disabled={state.value === "" || state.value === "kt" ? false : true}
         />
         <Input
           placeholder={`${i18n.t("search", { lng: lang })}`}

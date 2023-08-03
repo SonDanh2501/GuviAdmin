@@ -67,7 +67,11 @@ const TableExpired = ({ status }) => {
 
   const columns = [
     {
-      title: `${i18n.t("code_order", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("code_order", {
+          lng: lang,
+        })}`}</a>
+      ),
       render: (data) => {
         return (
           <Link to={`/details-order/${data?._id}`}>
@@ -77,7 +81,11 @@ const TableExpired = ({ status }) => {
       },
     },
     {
-      title: `${i18n.t("date_create", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("date_create", {
+          lng: lang,
+        })}`}</a>
+      ),
       render: (data) => {
         return (
           <div className="div-create-expire">
@@ -92,7 +100,11 @@ const TableExpired = ({ status }) => {
       },
     },
     {
-      title: `${i18n.t("customer", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("customer", {
+          lng: lang,
+        })}`}</a>
+      ),
       render: (data) => {
         return (
           <Link
@@ -110,7 +122,11 @@ const TableExpired = ({ status }) => {
         a.id_customer.full_name.localeCompare(b.id_customer.full_name),
     },
     {
-      title: `${i18n.t("service", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("service", {
+          lng: lang,
+        })}`}</a>
+      ),
       render: (data) => {
         return (
           <div className="div-service-expired">
@@ -131,7 +147,11 @@ const TableExpired = ({ status }) => {
       },
     },
     {
-      title: `${i18n.t("date_work", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("date_work", {
+          lng: lang,
+        })}`}</a>
+      ),
       render: (data) => {
         return (
           <div className="div-worktime-expire">
@@ -151,7 +171,11 @@ const TableExpired = ({ status }) => {
       },
     },
     {
-      title: `${i18n.t("address", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("address", {
+          lng: lang,
+        })}`}</a>
+      ),
       render: (data) => <p className="text-address-expired">{data?.address}</p>,
     },
     // {
@@ -178,7 +202,11 @@ const TableExpired = ({ status }) => {
     // },
 
     {
-      title: `${i18n.t("status", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("status", {
+          lng: lang,
+        })}`}</a>
+      ),
       render: (data) => (
         <a
           className={

@@ -241,7 +241,12 @@ const AddOrder = () => {
             idService={serviceApply}
           />
         ) : kindService === "tong_ve_sinh" ? (
-          <DeepCleaning />
+          // <DeepCleaning
+          //   id={id}
+          //   idService={serviceApply}
+          //   extendService={extendService}
+          // />
+          <></>
         ) : (
           <></>
         )}
