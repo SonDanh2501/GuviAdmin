@@ -56,7 +56,7 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
     _debounce((value) => {
       setName(value);
       if (value) {
-        fetchCollaborators(lang, 0, 100, "", value)
+        fetchCollaborators(lang, 0, 100, "", value, "")
           .then((res) => {
             if (value === "") {
               setData([]);

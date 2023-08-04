@@ -32,7 +32,7 @@ const ManageTopup = () => {
   };
 
   return (
-    <div className="div-container">
+    <div>
       <Tabs activeKey={activeKey} onChange={onChangeTab}>
         {checkElement?.includes("get_cash_book_collaborator") && (
           <Tabs.TabPane
