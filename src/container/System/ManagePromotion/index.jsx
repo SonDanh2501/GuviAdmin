@@ -421,7 +421,7 @@ const ManagePromotions = () => {
     } else if (
       state.status === "upcoming" &&
       item?.selected === "code" &&
-      item?.brand === "guvi"
+      item?.brand === "orther"
     ) {
       saveToCookie("value_promotion", "kmdtckh");
       setState({
