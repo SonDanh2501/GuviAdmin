@@ -1,4 +1,13 @@
-import { Button, Checkbox, Drawer, Input, Modal, Select } from "antd";
+import {
+  Button,
+  Checkbox,
+  Drawer,
+  Input,
+  Modal,
+  Radio,
+  Select,
+  Space,
+} from "antd";
 import "./index.scss";
 import { memo, useCallback, useEffect, useState } from "react";
 import {
@@ -11,11 +20,13 @@ import { getListRoleAdmin } from "../../../../../../api/createAccount";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getProvince } from "../../../../../../redux/selectors/service";
+import { SearchOutlined } from "@ant-design/icons";
 
 const CreateRole = (props) => {
   const { setDataList, setTotal } = props;
   const [state, setState] = useState({
     address: [],
+    ratioCheckArea: 1,
     isAreaManager: false,
   });
   const [data, setData] = useState([]);
@@ -34,12 +45,6 @@ const CreateRole = (props) => {
   });
 
   const [open, setOpen] = useState(false);
-  const showDrawer = () => {
-    setOpen(true);
-  };
-  const onClose = () => {
-    setOpen(false);
-  };
 
   useEffect(() => {
     getSettingAccountApi()
@@ -48,28 +53,6 @@ const CreateRole = (props) => {
       })
       .catch((err) => {});
   }, []);
-
-  // const onChangeActive = (value, indexRole, indexPer) => {
-  //   const arr = [...role];
-  //   role[indexRole].dropPermission[indexPer].dependency = value;
-
-  //   if (role[indexRole]?.dropPermission[indexPer]?.dependency === true) {
-  //     role[indexRole]?.dropPermission[indexPer]?.activeLocal?.map((item) => {
-  //       role[indexRole]?.dropPermission?.map((itemDrop) => {
-  //         itemDrop["active"] = true;
-  //       });
-  //     });
-  //   } else {
-  //     role[indexRole]?.dropPermission[indexPer]?.activeLocal?.map((item) => {
-  //       role[indexRole]?.dropPermission?.map((itemDrop) => {
-  //         if (itemDrop?.value !== "get") {
-  //           itemDrop["dependency"] = false;
-  //           itemDrop["active"] = false;
-  //         }
-  //       });
-  //     });
-  //   }
-  // };
 
   const onChangeRole = (check, item, role) => {
     if (check) {
@@ -110,8 +93,8 @@ const CreateRole = (props) => {
       type_role: "",
       name_role: nameRole,
       id_key_api: keyApi,
-      is_area_manager: state.isAreaManager,
-      area_manager_level_1: state.isAreaManager ? state.address : [],
+      is_area_manager: state.ratioCheckArea === 2 ? true : false,
+      area_manager_level_1: state.ratioCheckArea === 2 ? state.address : [],
     })
       .then((res) => {
         setIsLoading(false);
@@ -128,16 +111,6 @@ const CreateRole = (props) => {
 
   return (
     <div>
-      {/* <Button type="primary" onClick={showDrawer}>
-        Thêm quyền
-      </Button> */}
-      {/* <Drawer
-        title="Thêm quyền quản trị"
-        placement="right"
-        onClose={onClose}
-        open={open}
-        width={1000}
-      > */}
       <div className="div-input">
         <a>Tên quyền</a>
         <Input
@@ -146,16 +119,20 @@ const CreateRole = (props) => {
           onChange={(e) => setNameRole(e.target.value)}
         />
       </div>
-      <div className="div-input mt-2">
-        <Checkbox
-          checked={state?.isAreaManager}
+      <div className="div-input mt-3">
+        <Radio.Group
           onChange={(e) =>
-            setState({ ...state, isAreaManager: e.target.checked })
+            setState({ ...state, ratioCheckArea: e.target.value })
           }
+          value={state?.ratioCheckArea}
         >
-          Địa điểm
-        </Checkbox>
-        {state.isAreaManager && (
+          <Space direction="vertical">
+            <Radio value={1}>Toàn quốc</Radio>
+            <Radio value={2}>Theo khu vực</Radio>
+          </Space>
+        </Radio.Group>
+
+        {state.ratioCheckArea === 2 && (
           <Select
             options={cityOptions}
             style={{ width: "50%", marginTop: 2 }}
@@ -163,9 +140,11 @@ const CreateRole = (props) => {
               setState({ ...state, address: e });
             }}
             mode="multiple"
+            suffixIcon={<SearchOutlined />}
           />
         )}
       </div>
+
       <div className="div-title-role">
         {data?.map((item, index) => {
           return (

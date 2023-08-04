@@ -313,12 +313,8 @@ const CreatePromotion = () => {
         statePromo?.serviceApply?.length > 0 ? [statePromo?.serviceApply] : [],
       brand: statePromo?.namebrand.toUpperCase(),
       is_limit_date: statePromo?.limitedDate,
-      limit_start_date: statePromo?.limitedDate
-        ? moment(statePromo?.startDate).toISOString()
-        : null,
-      limit_end_date: statePromo?.limitedDate
-        ? moment(statePromo?.endDate).toISOString()
-        : null,
+      limit_start_date: statePromo?.limitedDate ? statePromo?.startDate : null,
+      limit_end_date: statePromo?.limitedDate ? statePromo?.endDate : null,
       type_date_apply: statePromo?.typeDateApply,
       is_loop: statePromo?.isApplyTimeUse,
       day_loop: statePromo?.isApplyTimeUse ? timeApply : [],
@@ -727,7 +723,9 @@ const CreatePromotion = () => {
                           onChange={(date, dateString) => {
                             setStatePromo({
                               ...statePromo,
-                              startDate: dateString,
+                              startDate: moment(date?.$d)
+                                .startOf("date")
+                                .toISOString(),
                             });
                           }}
                           style={{ width: "90%", marginTop: 3 }}
@@ -745,12 +743,14 @@ const CreatePromotion = () => {
                           Có thời gian kết thúc
                         </Checkbox>
                         <DatePicker
-                          onChange={(date, dateString) =>
+                          onChange={(date, dateString) => {
                             setStatePromo({
                               ...statePromo,
-                              endDate: dateString,
-                            })
-                          }
+                              endDate: moment(date?.$d)
+                                .endOf("date")
+                                .toISOString(),
+                            });
+                          }}
                           style={{ width: "90%", marginTop: 2 }}
                           locale={locale}
                         />
@@ -1517,7 +1517,14 @@ const CreatePromotion = () => {
           </div>
         </div>
       </div>
-      <FloatButton.BackTop />
+      <FloatButton.BackTop
+        description="Tạo"
+        shape="circle"
+        style={{
+          width: 50,
+          height: 50,
+        }}
+      />
       {isLoading && <LoadingPagination />}
     </>
   );

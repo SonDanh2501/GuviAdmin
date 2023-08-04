@@ -65,7 +65,11 @@ const OrderDoingManage = () => {
 
   const columns = [
     {
-      title: `${i18n.t("code_order", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("code_order", {
+          lng: lang,
+        })}`}</a>
+      ),
       render: (data) => {
         return (
           <Link to={`/details-order/${data?._id}`}>
@@ -75,7 +79,11 @@ const OrderDoingManage = () => {
       },
     },
     {
-      title: `${i18n.t("date_create", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("date_create", {
+          lng: lang,
+        })}`}</a>
+      ),
       render: (data) => {
         return (
           <div className="div-create-doing">
@@ -90,7 +98,11 @@ const OrderDoingManage = () => {
       },
     },
     {
-      title: `${i18n.t("customer", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("customer", {
+          lng: lang,
+        })}`}</a>
+      ),
       render: (data) => (
         <Link to={`/profile-customer/${data?.id_customer?._id}`}>
           <a className="text-name-doing">{data?.id_customer?.full_name}</a>
@@ -98,7 +110,11 @@ const OrderDoingManage = () => {
       ),
     },
     {
-      title: `${i18n.t("service", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("service", {
+          lng: lang,
+        })}`}</a>
+      ),
       render: (data) => {
         return (
           <div className="div-service">
@@ -119,7 +135,11 @@ const OrderDoingManage = () => {
       },
     },
     {
-      title: `${i18n.t("date_work", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("date_work", {
+          lng: lang,
+        })}`}</a>
+      ),
       render: (data) => {
         return (
           <div className="div-worktime-doing">
@@ -135,11 +155,19 @@ const OrderDoingManage = () => {
       },
     },
     {
-      title: `${i18n.t("address", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("address", {
+          lng: lang,
+        })}`}</a>
+      ),
       render: (data) => <p className="text-address">{data?.address}</p>,
     },
     {
-      title: `${i18n.t("collaborator", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("collaborator", {
+          lng: lang,
+        })}`}</a>
+      ),
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
@@ -158,7 +186,11 @@ const OrderDoingManage = () => {
     },
 
     {
-      title: `${i18n.t("status", { lng: lang })}`,
+      title: () => (
+        <a className="title-column">{`${i18n.t("status", {
+          lng: lang,
+        })}`}</a>
+      ),
       render: (data) => (
         <a
           className={

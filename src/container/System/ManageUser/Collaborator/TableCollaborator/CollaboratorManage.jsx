@@ -6,6 +6,7 @@ import {
   FloatButton,
   Input,
   Pagination,
+  Select,
   Skeleton,
   Space,
   Table,
@@ -56,20 +57,25 @@ const CollaboratorManage = (props) => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [modal, setModal] = useState(false);
-  const [modalBlock, setModalBlock] = useState(false);
   const [modalVerify, setModalVerify] = useState(false);
   const [modalLockTime, setModalLockTime] = useState(false);
   const [modalContected, setModalContected] = useState(false);
   const [checkLock, setCheckLock] = useState(false);
   const [timeValue, setTimeValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [city, setCity] = useState("");
   const toggle = () => setModal(!modal);
   const toggleContected = () => setModalContected(!modalContected);
-  const toggleBlock = () => setModalBlock(!modalBlock);
   const toggleVerify = () => setModalVerify(!modalVerify);
   const toggleLockTime = () => setModalLockTime(!modalLockTime);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
+  const cityOptions = [
+    {
+      value: "",
+      label: "Tất cả",
+    },
+  ];
   const province = useSelector(getProvince);
   const dispatch = useDispatch();
   const [saveToCookie, readCookie] = useCookies();
@@ -78,6 +84,7 @@ const CollaboratorManage = (props) => {
 
   useEffect(() => {
     window.scroll(0, Number(readCookie("table_y_ctv")));
+    saveToCookie("tab_collaborator", "online");
     setCurrentPage(
       readCookie("page_ctv") === "" ? 1 : Number(readCookie("page_ctv"))
     );
@@ -85,6 +92,9 @@ const CollaboratorManage = (props) => {
       readCookie("start_page_ctv") === ""
         ? 0
         : Number(readCookie("start_page_ctv"))
+    );
+    setCity(
+      readCookie("ctv-city") === "" ? "" : Number(readCookie("ctv-city"))
     );
   }, []);
 
@@ -94,7 +104,8 @@ const CollaboratorManage = (props) => {
       Number(readCookie("start_page_ctv")),
       20,
       readCookie("tab_collaborator"),
-      valueSearch
+      valueSearch,
+      readCookie("ctv-city") === "" ? "" : Number(readCookie("ctv-city"))
     )
       .then((res) => {
         setData(res?.data);
@@ -103,6 +114,24 @@ const CollaboratorManage = (props) => {
       .catch((err) => {});
   }, [status]);
 
+  province?.map((item) => {
+    cityOptions?.push({
+      value: item?.code,
+      label: item?.name,
+    });
+  });
+
+  const onFilterCity = (value) => {
+    setCity(value);
+    saveToCookie("ctv-city", value);
+    fetchCollaborators(lang, startPage, 20, status, valueSearch, value)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItems);
+      })
+      .catch((err) => {});
+  };
+
   const onChange = (page) => {
     setCurrentPage(page);
     saveToCookie("page_ctv", page);
@@ -110,7 +139,7 @@ const CollaboratorManage = (props) => {
     const start = page * lenghtData - lenghtData;
     setStartPage(start);
     saveToCookie("start_page_ctv", start);
-    fetchCollaborators(lang, start, 20, status, valueSearch)
+    fetchCollaborators(lang, start, 20, status, valueSearch, city)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItems);
@@ -120,7 +149,7 @@ const CollaboratorManage = (props) => {
 
   const handleSearch = useCallback(
     _debounce((value) => {
-      fetchCollaborators(lang, 0, 20, status, value)
+      fetchCollaborators(lang, 0, 20, status, value, city)
         .then((res) => {
           setData(res.data);
           setTotal(res.totalItems);
@@ -131,7 +160,7 @@ const CollaboratorManage = (props) => {
           });
         });
     }, 1000),
-    [status]
+    [status, city]
   );
 
   const onDelete = useCallback(
@@ -139,7 +168,7 @@ const CollaboratorManage = (props) => {
       setIsLoading(true);
       deleteCollaborator(id, { is_delete: true })
         .then((res) => {
-          fetchCollaborators(lang, startPage, 20, status, valueSearch)
+          fetchCollaborators(lang, startPage, 20, status, valueSearch, city)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItems);
@@ -155,51 +184,7 @@ const CollaboratorManage = (props) => {
           });
         });
     },
-    [startPage, status, valueSearch]
-  );
-
-  const blockCollaborator = useCallback(
-    (id, is_active) => {
-      setIsLoading(true);
-      if (is_active === true) {
-        activeCollaborator(id, { is_active: false })
-          .then((res) => {
-            fetchCollaborators(lang, startPage, 20, status)
-              .then((res) => {
-                setData(res?.data);
-                setTotal(res?.totalItems);
-              })
-              .catch((err) => {});
-            setModalBlock(false);
-            setIsLoading(false);
-          })
-          .catch((err) => {
-            dispatch(loadingAction.loadingRequest(false));
-            errorNotify({
-              message: err,
-            });
-          });
-      } else {
-        activeCollaborator(id, { is_active: true })
-          .then((res) => {
-            fetchCollaborators(lang, startPage, 20, status)
-              .then((res) => {
-                setData(res?.data);
-                setTotal(res?.totalItems);
-              })
-              .catch((err) => {});
-            setModalBlock(false);
-            setIsLoading(false);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-            errorNotify({
-              message: err,
-            });
-          });
-      }
-    },
-    [startPage, status]
+    [startPage, status, valueSearch, city]
   );
 
   const onLockTimeCollaborator = useCallback(
@@ -208,7 +193,7 @@ const CollaboratorManage = (props) => {
       if (is_lock_time === true) {
         lockTimeCollaborator(id, { is_locked: false })
           .then((res) => {
-            fetchCollaborators(lang, startPage, 20, status, valueSearch)
+            fetchCollaborators(lang, startPage, 20, status, valueSearch, city)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -229,7 +214,7 @@ const CollaboratorManage = (props) => {
           date_lock: moment(new Date(timeValue)).toISOString(),
         })
           .then((res) => {
-            fetchCollaborators(lang, startPage, 20, status, valueSearch)
+            fetchCollaborators(lang, startPage, 20, status, valueSearch, city)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -246,7 +231,7 @@ const CollaboratorManage = (props) => {
           });
       }
     },
-    [timeValue, dispatch, startPage, status, valueSearch]
+    [timeValue, dispatch, startPage, status, valueSearch, city]
   );
   const onVerifyCollaborator = useCallback(
     (id, is_verify) => {
@@ -254,7 +239,7 @@ const CollaboratorManage = (props) => {
       if (is_verify === true) {
         verifyCollaborator(id)
           .then((res) => {
-            fetchCollaborators(lang, startPage, 20, status, valueSearch)
+            fetchCollaborators(lang, startPage, 20, status, valueSearch, city)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -272,7 +257,7 @@ const CollaboratorManage = (props) => {
       } else {
         verifyCollaborator(id)
           .then((res) => {
-            fetchCollaborators(lang, startPage, 20, status, valueSearch)
+            fetchCollaborators(lang, startPage, 20, status, valueSearch, city)
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItems);
@@ -289,16 +274,15 @@ const CollaboratorManage = (props) => {
           });
       }
     },
-    [startPage, status, valueSearch]
+    [startPage, status, valueSearch, city]
   );
 
   const onContected = useCallback(
     (id) => {
       setIsLoading(true);
-
       changeContactedCollaborator(id)
         .then((res) => {
-          fetchCollaborators(lang, startPage, 20, status, valueSearch)
+          fetchCollaborators(lang, startPage, 20, status, valueSearch, city)
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItems);
@@ -314,7 +298,7 @@ const CollaboratorManage = (props) => {
           });
         });
     },
-    [startPage, status, valueSearch]
+    [startPage, status, valueSearch, city]
   );
 
   const items = [
@@ -377,23 +361,25 @@ const CollaboratorManage = (props) => {
       },
       render: (data) => {
         return (
-          <div className="div-collaborator">
-            <Link
-              onClick={() => {
-                saveToCookie("table_x_ctv", scrollX);
-                saveToCookie("table_y_ctv", scrollY);
-                saveToCookie("tab-detail-ctv", "1");
-              }}
-              to={
-                checkElement?.includes("detail_collaborator")
-                  ? `/details-collaborator/${data?._id}`
-                  : ""
-              }
-            >
-              <img className="img_collaborator" src={data?.avatar} />
+          <Link
+            onClick={() => {
+              saveToCookie("table_x_ctv", scrollX);
+              saveToCookie("table_y_ctv", scrollY);
+              saveToCookie("tab-detail-ctv", "1");
+            }}
+            to={
+              checkElement?.includes("detail_collaborator")
+                ? `/details-collaborator/${data?._id}`
+                : ""
+            }
+            className="div-collaborator"
+          >
+            <img className="img_collaborator" src={data?.avatar} />
+            <div className="div-name-collaborator">
               <a className="text-name-collaborator">{data?.full_name}</a>
-            </Link>
-          </div>
+              <a className="text-phone-collaborator">{data?.phone}</a>
+            </div>
+          </Link>
         );
       },
       // sorter: (a, b) => a.full_name.localeCompare(b.full_name),
@@ -438,7 +424,16 @@ const CollaboratorManage = (props) => {
             {province?.map((item, key) => {
               return (
                 <div key={key}>
-                  {item?.code === data?.city ? <a>{item?.name}</a> : ""}
+                  {item?.code === data?.city ? (
+                    <a>
+                      {item?.name?.replace(
+                        new RegExp(`${"Thành phố"}|${"Tỉnh"}`),
+                        ""
+                      )}
+                    </a>
+                  ) : (
+                    ""
+                  )}
                 </div>
               );
             })}
@@ -568,17 +563,12 @@ const CollaboratorManage = (props) => {
     <React.Fragment>
       <div className="mt-2">
         <div className="div-header-colla">
-          {checkElement?.includes("create_collaborator") && (
-            <AddCollaborator
-              setData={setData}
-              setTotal={setTotal}
-              startPage={startPage}
-              status={status}
-              setIsLoading={setIsLoading}
-              valueSearch={valueSearch}
-            />
-          )}
-
+          <Select
+            options={cityOptions}
+            style={{ width: "20%" }}
+            value={city}
+            onChange={onFilterCity}
+          />
           <Input
             placeholder={`${i18n.t("search", { lng: lang })}`}
             type="text"
@@ -588,11 +578,23 @@ const CollaboratorManage = (props) => {
               handleSearch(e.target.value);
             }}
             style={{
-              width: "70%",
+              width: "60%",
               marginLeft: 20,
               marginTop: width < 490 ? 10 : 0,
+              height: 32,
             }}
           />
+          {checkElement?.includes("create_collaborator") && (
+            <AddCollaborator
+              setData={setData}
+              setTotal={setTotal}
+              startPage={startPage}
+              status={status}
+              setIsLoading={setIsLoading}
+              valueSearch={valueSearch}
+              city={city}
+            />
+          )}
         </div>
         <div className="div-table mt-3">
           <Table

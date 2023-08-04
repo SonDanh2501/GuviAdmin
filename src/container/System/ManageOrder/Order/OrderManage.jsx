@@ -20,6 +20,7 @@ import EditTimeOrder from "../EditTimeGroupOrder";
 import "./OrderManage.scss";
 import { useWindowScrollPositions } from "../../../../helper/useWindowPosition";
 import { useCookies } from "../../../../helper/useCookies";
+import { formatMoney } from "../../../../helper/formatMoney";
 
 const OrderManage = (props) => {
   const {
@@ -278,6 +279,7 @@ const OrderManage = (props) => {
           </div>
         );
       },
+      align: "center",
     },
     {
       title: () => {
@@ -396,13 +398,18 @@ const OrderManage = (props) => {
       align: "center",
       render: (data) => {
         return (
-          <a className="text-payment-method">
-            {data?.payment_method === "cash"
-              ? `${i18n.t("cash", { lng: lang })}`
-              : data?.payment_method === "point"
-              ? `${i18n.t("wallet_gpay", { lng: lang })}`
-              : ""}
-          </a>
+          <div className="div-payment">
+            <a className="text-payment-method">
+              {data?.payment_method === "cash"
+                ? `${i18n.t("cash", { lng: lang })}`
+                : data?.payment_method === "point"
+                ? `${i18n.t("wallet_gpay", { lng: lang })}`
+                : ""}
+            </a>
+            <a className="text-payment-method">
+              {formatMoney(data?.final_fee)}
+            </a>
+          </div>
         );
       },
       responsive: ["xl"],
