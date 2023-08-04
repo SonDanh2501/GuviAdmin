@@ -360,13 +360,92 @@ const ManagePromotions = () => {
     saveToCookie("selected_promotion", item?.selected);
     saveToCookie("brand_promotion", item?.brand);
     saveToCookie("kind_promotion", value);
-
     setState({
       ...state,
       type: item?.selected,
       brand: item?.brand,
       kind: value,
     });
+    if (
+      state.status === "doing" &&
+      item?.selected === "code" &&
+      item?.brand === "guvi"
+    ) {
+      saveToCookie("value_promotion", "kmkh");
+      setState({
+        ...state,
+        value: "kmkh",
+        type: item?.selected,
+        brand: item?.brand,
+        kind: value,
+      });
+    } else if (
+      state.status === "doing" &&
+      item?.selected === "code" &&
+      item?.brand === "orther"
+    ) {
+      saveToCookie("value_promotion", "kmdtkh");
+      setState({
+        ...state,
+        value: "kmdtkh",
+        type: item?.selected,
+        brand: item?.brand,
+        kind: value,
+      });
+    } else if (
+      state.status === "doing" &&
+      item?.selected === "event" &&
+      item?.brand === ""
+    ) {
+      saveToCookie("value_promotion", "ctkmkh");
+      setState({
+        ...state,
+        value: "ctkmkh",
+        type: item?.selected,
+        brand: item?.brand,
+        kind: value,
+      });
+    } else if (
+      state.status === "upcoming" &&
+      item?.selected === "code" &&
+      item?.brand === "guvi"
+    ) {
+      saveToCookie("value_promotion", "kmckh");
+      setState({
+        ...state,
+        value: "kmckh",
+        type: item?.selected,
+        brand: item?.brand,
+        kind: value,
+      });
+    } else if (
+      state.status === "upcoming" &&
+      item?.selected === "code" &&
+      item?.brand === "guvi"
+    ) {
+      saveToCookie("value_promotion", "kmdtckh");
+      setState({
+        ...state,
+        value: "kmdtckh",
+        type: item?.selected,
+        brand: item?.brand,
+        kind: value,
+      });
+    } else if (
+      state.status === "upcoming" &&
+      item?.selected === "event" &&
+      item?.brand === ""
+    ) {
+      saveToCookie("value_promotion", "ctkmckh");
+      setState({
+        ...state,
+        value: "ctkmckh",
+        type: item?.selected,
+        brand: item?.brand,
+        kind: value,
+      });
+    }
+
     fetchPromotion(
       valueSearch,
       state?.status,
@@ -508,12 +587,12 @@ const ManagePromotions = () => {
               ) : (
                 <a className="text-title-promotion">
                   {data?.discount_unit === "amount"
-                    ? `Giảm giá ${formatMoney(
-                        data?.discount_max_price
-                      )} cho dịch vụ`
+                    ? `Giảm giá ${formatMoney(data?.discount_max_price)} ${
+                        data?.price_min_order > 0 ? "" : "cho dịch vụ"
+                      }`
                     : `Giảm giá ${data?.discount_value}%, tối đa ${formatMoney(
                         data?.discount_max_price
-                      )} cho dịch vụ`}{" "}
+                      )} `}{" "}
                   {data?.price_min_order > 0
                     ? ` đơn từ ${formatMoney(
                         data?.price_min_order
@@ -876,7 +955,6 @@ const ManagePromotions = () => {
           className="select-type-promotion"
           value={state?.kind}
           onChange={(e, item) => onChangeTypePromotion(e, item)}
-          disabled={state.value === "" || state.value === "kt" ? false : true}
         />
         <Input
           placeholder={`${i18n.t("search", { lng: lang })}`}
@@ -1037,7 +1115,6 @@ const TYPE_PRMOTION = [
 
 const PROMOTION_TAB = [
   {
-    key: "1",
     value: "",
     status: "",
     label: `Tất cả khuyến mãi`,
@@ -1046,7 +1123,6 @@ const PROMOTION_TAB = [
     kind: "",
   },
   {
-    key: "2",
     value: "kmkh",
     status: "doing",
     label: `KM đang kích hoạt`,
@@ -1055,7 +1131,6 @@ const PROMOTION_TAB = [
     kind: "promotion",
   },
   {
-    key: "3",
     value: "kmckh",
     status: "upcoming",
     label: `KM chưa kích hoạt`,
@@ -1064,7 +1139,6 @@ const PROMOTION_TAB = [
     kind: "promotion",
   },
   {
-    key: "4",
     value: "kmdtkh",
     status: "doing",
     label: `KM Đối tác đang kích hoạt`,
@@ -1073,7 +1147,6 @@ const PROMOTION_TAB = [
     kind: "orther",
   },
   {
-    key: "5",
     value: "kmdtckh",
     status: "upcoming",
     label: `KM Đối tác chưa kích hoạt`,
@@ -1082,7 +1155,6 @@ const PROMOTION_TAB = [
     kind: "orther",
   },
   {
-    key: "6",
     value: "ctkmkh",
     status: "doing",
     label: `CTKM đang kích hoạt`,
@@ -1091,7 +1163,6 @@ const PROMOTION_TAB = [
     kind: "event",
   },
   {
-    key: "7",
     value: "ctkmckh",
     status: "upcoming",
     label: `CTKM chưa kích hoạt`,
@@ -1100,7 +1171,6 @@ const PROMOTION_TAB = [
     kind: "event",
   },
   {
-    key: "8",
     value: "kt",
     status: "done",
     label: `Kết thúc`,

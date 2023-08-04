@@ -6,10 +6,16 @@ import {
   getPlaceDetailApi,
   googlePlaceAutocomplete,
 } from "../../../../../api/location";
-import { getPromotionByCustomerApi } from "../../../../../api/service";
+import {
+  getCalculateFeeApi,
+  getPromotionByCustomerApi,
+} from "../../../../../api/service";
 import {
   checkCodePromotionOrderApi,
+  checkEventCodePromotionOrderApi,
+  createOrderApi,
   getAddressCustomerApi,
+  getServiceFeeOrderApi,
 } from "../../../../../api/order";
 import i18n from "../../../../../i18n";
 import { useSelector } from "react-redux";
@@ -19,267 +25,236 @@ import InputCustom from "../../../../../components/textInputCustom";
 import { searchCollaboratorsCreateOrder } from "../../../../../api/collaborator";
 import { errorNotify } from "../../../../../helper/toast";
 import { formatMoney } from "../../../../../helper/formatMoney";
+import { useNavigate } from "react-router-dom";
+import LoadingPagination from "../../../../../components/paginationLoading";
 
 const DeepCleaning = (props) => {
-  const { id, idService, extendService } = props;
-  const [state, setState] = useState({
-    address: "",
-    lat: "",
-    long: "",
-    isLoading: false,
-    places: [],
-    promotionCustomer: [],
-    dataAddress: [],
-    time: [],
-    dateWork: "",
-    errorDateWork: "",
-    timeWork: "",
-    errorTimeWork: "",
-    paymentMethod: "cash",
-    note: "",
-    tipCollaborator: 0,
-    dataCollaborator: [],
-    nameCollaborator: "",
-    idCollaborator: "",
-    errorCollaborator: "",
-    codePromotion: "",
-    discount: 0,
-    itemPromotion: [],
-    priceOrder: 0,
-    eventPromotion: [],
-    feeService: 0,
-  });
+  const { id, idService, extendService, setErrorNameCustomer } = props;
+  const [address, setAddress] = useState("");
+  const [lat, setLat] = useState("");
+  const [long, setLong] = useState("");
+  const [errorAddress, setErrorAddress] = useState("");
+  const [note, setNote] = useState("");
+  const [time, setTime] = useState([]);
+  const [errorTime, setErrorTime] = useState("");
+  const [dateWork, setDateWork] = useState("");
+  const [errorDateWork, setErrorDateWork] = useState("");
+  const [timeWork, setTimeWork] = useState("");
+  const [errorTimeWork, setErrorTimeWork] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("cash");
+  const [mutipleSelected, setMutipleSelected] = useState([]);
+  const [promotionCustomer, setPromotionCustomer] = useState([]);
+  const [priceOrder, setPriceOrder] = useState();
+  const [discount, setDiscount] = useState(0);
+  const [codePromotion, setCodePromotion] = useState("");
+  const [eventPromotion, setEventPromotion] = useState([]);
+  const [eventFeePromotion, setEventFeePromotion] = useState(0);
+  const [feeService, setFeeService] = useState(0);
+  const [dataFeeService, setDataFeeService] = useState(0);
+  const [itemPromotion, setItemPromotion] = useState(0);
+  const [isAutoOrder, setIsAutoOrder] = useState(false);
+  const [places, setPlaces] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [dataCollaborator, setDataCollaborator] = useState([]);
+  const [nameCollaborator, setNameCollaborator] = useState("");
+  const [idCollaborator, setIdCollaborator] = useState("");
+  const [errorCollaborator, setErrorCollaborator] = useState("");
+  const [dataAddress, setDataAddress] = useState([]);
+  const [tipCollaborator, setTipCollaborator] = useState(0);
   const lang = useSelector(getLanguageState);
+  const navigate = useNavigate();
   const dateFormat = "YYYY-MM-DD";
 
   useEffect(() => {
     if (id) {
       getAddressCustomerApi(id, 0, 20)
         .then((res) => {
-          setState({ ...state, dataAddress: res?.data });
+          setDataAddress(res?.data);
         })
         .catch((err) => {});
     } else if (id && idService) {
       getPromotionByCustomerApi(id, 0, 20, idService)
-        .then((res) => setState({ ...state, promotionCustomer: res?.data }))
+        .then((res) => setPromotionCustomer(res?.data))
         .catch((err) => {});
     }
   }, [id, idService]);
 
   const handleSearchLocation = useCallback(
     _debounce((value) => {
-      setState({ ...state, isLoading: true, address: value });
+      setIsLoading(true);
+      setAddress(value);
       googlePlaceAutocomplete(value)
         .then((res) => {
           if (res.predictions) {
-            setState({
-              ...state,
-              places: res?.predictions,
-              isLoading: false,
-              address: value,
-            });
+            setPlaces(res?.predictions);
+            setIsLoading(false);
           } else {
-            setState({
-              ...state,
-              places: [],
-              isLoading: false,
-              address: value,
-            });
+            setPlaces(res?.predictions);
+            setIsLoading(false);
           }
         })
         .catch((err) => {
-          setState({ ...state, places: [], isLoading: false, address: value });
+          setPlaces([]);
+          setIsLoading(false);
         });
     }, 1500),
     []
   );
 
   const findPlace = useCallback((id, description) => {
-    setState({ ...state, isLoading: true, places: [], address: description });
+    setIsLoading(description);
+    setIsLoading(true);
+    setPlaces([]);
     getPlaceDetailApi(id)
       .then((res) => {
-        setState({
-          ...state,
-          isLoading: false,
-          lat: res?.result?.geometry?.location?.lat,
-          long: res?.result?.geometry?.location?.lng,
-          address: description,
-        });
+        setLat(res?.result?.geometry?.location?.lat);
+        setLong(res?.result?.geometry?.location?.lng);
+        setIsLoading(false);
       })
       .catch((e) => {
-        setState({ ...state, isLoading: false, address: description });
+        setIsLoading(false);
       });
   }, []);
 
   var AES = require("crypto-js/aes");
   const temp = JSON.stringify({
-    lat: state?.lat,
-    lng: state?.long,
-    address: state?.address,
+    lat: lat,
+    lng: long,
+    address: address,
   });
   var accessToken = AES.encrypt(temp, "guvico");
 
   const onChangeTimeService = (value) => {
-    setState({ ...state, time: { count: value?.count, _id: value?._id } });
+    setTime({ count: value?.count, _id: value?._id });
   };
 
   const onChangeDateWork = (date, dateString) => {
-    setState({ ...state, dateWork: dateString, errorDateWork: "" });
+    setDateWork(dateString);
+    setErrorDateWork("");
   };
 
   const onChangeTime = (value) => {
-    setState({ ...state, timeWork: value, errorTimeWork: "" });
+    setTimeWork(value);
+    setErrorTimeWork("");
   };
-  const timeW = state?.dateWork + "T" + state?.timeWork + ".000Z";
+  const timeW = dateWork + "T" + timeWork + ".000Z";
 
   const searchCollaborator = useCallback(
     _debounce((value) => {
+      setNameCollaborator(value);
       if (value) {
         searchCollaboratorsCreateOrder(id, value)
           .then((res) => {
             if (value === "") {
-              setState({
-                ...state,
-                dataCollaborator: [],
-                nameCollaborator: value,
-              });
+              setDataCollaborator([]);
             } else {
-              setState({
-                ...state,
-                dataCollaborator: res.data,
-                nameCollaborator: value,
-              });
+              setDataCollaborator(res.data);
             }
           })
           .catch((err) => console.log(err));
-      } else if (state.idCollaborator) {
-        setState({ ...state, dataCollaborator: [], nameCollaborator: value });
+      } else if (idCollaborator) {
+        setDataCollaborator([]);
       } else {
-        setState({ ...state, dataCollaborator: [], nameCollaborator: value });
+        setDataCollaborator([]);
       }
-      setState({
-        ...state,
-        dataCollaborator: [],
-        nameCollaborator: value,
-        idCollaborator: "",
-      });
+      setIdCollaborator("");
     }, 500),
     [id]
   );
 
-  // useEffect(() => {
-  //   if (
-  //     lat &&
-  //     long &&
-  //     address &&
-  //     timeWork &&
-  //     dateWork &&
-  //     mutipleSelected &&
-  //     state.time
-  //   ) {
-  //     setIsLoading(true);
-  //     getCalculateFeeApi({
-  //       token: accessToken.toString(),
-  //       type: "loop",
-  //       type_address_work: "house",
-  //       note_address: "",
-  //       note: note,
-  //       is_auto_order: false,
-  //       date_work_schedule: [timeW],
-  //       extend_optional: mutipleSelected.concat(time),
-  //       payment_method: paymentMethod,
-  //     })
-  //       .then((res) => {
-  //         setPriceOrder(res?.initial_fee);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         setIsLoading(false);
-  //         errorNotify({
-  //           message: err,
-  //         });
-  //       });
+  useEffect(() => {
+    if (lat && long && address && timeWork && dateWork && time) {
+      setIsLoading(true);
+      getCalculateFeeApi({
+        token: accessToken.toString(),
+        type: "loop",
+        type_address_work: "house",
+        note_address: "",
+        note: note,
+        is_auto_order: false,
+        date_work_schedule: [timeW],
+        extend_optional: time,
+        payment_method: paymentMethod,
+      })
+        .then((res) => {
+          setPriceOrder(res?.initial_fee);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
+        });
 
-  //     getServiceFeeOrderApi({
-  //       token: accessToken.toString(),
-  //       type: "loop",
-  //       type_address_work: "house",
-  //       note_address: "",
-  //       note: note,
-  //       is_auto_order: false,
-  //       date_work_schedule: [timeW],
-  //       extend_optional: mutipleSelected.concat(time),
-  //       payment_method: paymentMethod,
-  //     })
-  //       .then((res) => {
-  //         const totalEventFee =
-  //           res?.service_fee.length > 0
-  //             ? res?.service_fee.map((el) => el.fee).reduce((a, b) => a + b)
-  //             : 0;
-  //         setFeeService(totalEventFee);
-  //         setDataFeeService(res?.service_fee);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         setIsLoading(false);
-  //         errorNotify({
-  //           message: err,
-  //         });
-  //       });
-  //   }
+      getServiceFeeOrderApi({
+        token: accessToken.toString(),
+        type: "loop",
+        type_address_work: "house",
+        note_address: "",
+        note: note,
+        is_auto_order: false,
+        date_work_schedule: [timeW],
+        extend_optional: time,
+        payment_method: paymentMethod,
+      })
+        .then((res) => {
+          const totalEventFee =
+            res?.service_fee.length > 0
+              ? res?.service_fee.map((el) => el.fee).reduce((a, b) => a + b)
+              : 0;
+          setFeeService(totalEventFee);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
+        });
+    }
 
-  //   if (
-  //     state.lat &&
-  //     state.long &&
-  //     state.address &&
-  //     state.timeWork &&
-  //     state.dateWork &&
-  //     time &&
-  //     id
-  //   ) {
-  //     setIsLoading(true);
-  //     checkEventCodePromotionOrderApi(id, {
-  //       token: accessToken.toString(),
-  //       type: "loop",
-  //       type_address_work: "house",
-  //       note_address: "",
-  //       note: state.note,
-  //       is_auto_order: false,
-  //       date_work_schedule: [timeW],
-  //       extend_optional: state.time,
-  //       payment_method: state.paymentMethod,
-  //     })
-  //       .then((res) => {
-  //         const totalEventFee =
-  //           res?.event_promotion.length > 0
-  //             ? res?.event_promotion
-  //                 .map((el) => el.discount)
-  //                 .reduce((a, b) => a + b)
-  //             : 0;
-  //         setEventFeePromotion(totalEventFee);
-  //         setEventPromotion(res?.event_promotion);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         setIsLoading(false);
-  //         errorNotify({
-  //           message: err,
-  //         });
-  //       });
-  //   }
-  // }, [lat, long, timeWork, dateWork, mutipleSelected, time, id, paymentMethod]);
+    if (lat && long && address && timeWork && dateWork && time && id) {
+      setIsLoading(true);
+      checkEventCodePromotionOrderApi(id, {
+        token: accessToken.toString(),
+        type: "loop",
+        type_address_work: "house",
+        note_address: "",
+        note: note,
+        is_auto_order: false,
+        date_work_schedule: [timeW],
+        extend_optional: time,
+        payment_method: paymentMethod,
+      })
+        .then((res) => {
+          const totalEventFee =
+            res?.event_promotion.length > 0
+              ? res?.event_promotion
+                  .map((el) => el.discount)
+                  .reduce((a, b) => a + b)
+              : 0;
+          setEventFeePromotion(totalEventFee);
+          setEventPromotion(res?.event_promotion);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
+        });
+    }
+  }, [lat, long, timeWork, dateWork, address, time, id, paymentMethod]);
 
   const checkPromotion = useCallback(
     (item) => {
-      setState({ ...state, isLoading: true });
-      if (item?.code === state.codePromotion) {
-        setState({
-          ...state,
-          codePromotion: "",
-          isLoading: false,
-          itemPromotion: [],
-          discount: 0,
-        });
+      setIsLoading(true);
+      if (item?.code === codePromotion) {
+        setCodePromotion("");
+        setItemPromotion([]);
+        setDiscount(0);
+        setIsLoading(false);
       } else {
         checkCodePromotionOrderApi(id, {
           id_customer: id,
@@ -287,32 +262,99 @@ const DeepCleaning = (props) => {
           type: "loop",
           type_address_work: "house",
           note_address: "",
-          note: state.note,
+          note: note,
           is_auto_order: false,
           date_work_schedule: [timeW],
-          extend_optional: state.time,
+          extend_optional: time,
           code_promotion: item?.code,
-          payment_method: state.paymentMethod,
+          payment_method: paymentMethod,
         })
           .then((res) => {
-            setState({
-              ...state,
-              codePromotion: item?.code,
-              isLoading: false,
-              itemPromotion: item,
-              discount: res?.discount,
-            });
+            setCodePromotion(item?.code);
+            setItemPromotion(item);
+            setDiscount(res?.discount);
+            setIsLoading(false);
           })
           .catch((err) => {
             errorNotify({
               message: err,
             });
-            setState({ ...state, codePromotion: "", isLoading: false });
+            setIsLoading(false);
           });
       }
     },
-    [id, state, timeW, accessToken]
+    [id, note, time, paymentMethod, timeW, accessToken]
   );
+
+  const onCreateOrder = useCallback(() => {
+    setIsLoading(true);
+    if (
+      (lat && long && address && timeWork && dateWork && time && id) ||
+      idCollaborator
+    ) {
+      createOrderApi({
+        id_customer: id,
+        token: accessToken.toString(),
+        type: "loop",
+        type_address_work: "house",
+        note_address: "",
+        note: note,
+        is_auto_order: isAutoOrder,
+        date_work_schedule: [timeW],
+        extend_optional: time,
+        code_promotion: codePromotion,
+        payment_method: paymentMethod,
+        id_collaborator: idCollaborator,
+        tip_collaborator: tipCollaborator,
+        time_zone: "Asia/Ho_Chi_Minh",
+      })
+        .then((res) => {
+          navigate("/group-order/manage-order");
+          window.location.reload();
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          setIsLoading(false);
+        });
+    } else if (!id) {
+      setErrorNameCustomer("Vui lòng chọn khách hàng");
+      setIsLoading(false);
+    } else if (!address && !lat && !long) {
+      setErrorAddress("Vui lòng nhập đầy đủ địa chỉ");
+      setIsLoading(false);
+    } else if (time.length === 0) {
+      setErrorTime("Vui lòng chọn dịch vụ");
+      setIsLoading(false);
+    } else if (!dateWork) {
+      setErrorDateWork("Vui lòng chọn ngày làm");
+      setIsLoading(false);
+    } else if (!timeWork) {
+      setErrorTimeWork("Vui lòng chọn giờ làm");
+      setIsLoading(false);
+    } else if (!idCollaborator) {
+      setErrorCollaborator("Vui lòng chọn CTV");
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+    }
+  }, [
+    id,
+    lat,
+    long,
+    address,
+    timeWork,
+    dateWork,
+    mutipleSelected,
+    time,
+    codePromotion,
+    isAutoOrder,
+    note,
+    idCollaborator,
+    paymentMethod,
+    tipCollaborator,
+  ]);
 
   return (
     <div>
@@ -322,16 +364,16 @@ const DeepCleaning = (props) => {
           placeholder="Tìm kiếm địa chỉ"
           className="input-search-address"
           prefix={<i class="uil uil-search"></i>}
-          value={state?.address}
+          value={address}
           onChange={(e) => {
-            setState({ ...state, address: e.target.value });
+            setAddress(e.target.value);
             handleSearchLocation(e.target.value);
           }}
         />
       </div>
-      {state?.places.length > 0 && (
+      {places.length > 0 && (
         <div className="list-item-place">
-          {state?.places?.map((item, index) => {
+          {places?.map((item, index) => {
             return (
               <div className="div-item">
                 <a
@@ -349,30 +391,27 @@ const DeepCleaning = (props) => {
         </div>
       )}
 
-      {state?.address === "" && (
+      {address === "" && (
         <>
-          {state?.dataAddress.length > 0 && (
+          {dataAddress.length > 0 && (
             <div className="mt-2">
               <a className="title-list-address">{`${i18n.t("address_default", {
                 lng: lang,
               })}`}</a>
               <List type={"unstyled"} className="list-item-address-customer">
-                {state?.dataAddress?.map((item, index) => {
+                {dataAddress?.map((item, index) => {
                   return (
                     <div
                       key={index}
                       className={
-                        state?.address === item?.address
+                        address === item?.address
                           ? "div-item-address-selected"
                           : "div-item-address"
                       }
                       onClick={() => {
-                        setState({
-                          ...state,
-                          address: item?.address,
-                          lat: item?.lat,
-                          long: item?.lng,
-                        });
+                        setAddress(item?.address);
+                        setLat(item?.lat);
+                        setLong(item?.lng);
                       }}
                     >
                       <i class="uil uil-map-marker"></i>
@@ -401,15 +440,17 @@ const DeepCleaning = (props) => {
             return (
               <div
                 className={
-                  item?._id === state?.time?._id
+                  item?._id === time?._id
                     ? "select-service"
                     : "select-service-default"
                 }
-                onClick={() => onChangeTimeService(item)}
+                onClick={() => {
+                  onChangeTimeService(item);
+                }}
               >
                 <a
                   className={
-                    item?._id === state?.time?._id
+                    item?._id === time?._id
                       ? "text-service"
                       : "text-service-default"
                   }
@@ -418,7 +459,7 @@ const DeepCleaning = (props) => {
                 </a>
                 <a
                   className={
-                    item?._id === state?.time?._id
+                    item?._id === time?._id
                       ? "text-service"
                       : "text-service-default"
                   }
@@ -430,7 +471,7 @@ const DeepCleaning = (props) => {
                 </a>
                 <a
                   className={
-                    item?._id === state?.time?._id
+                    item?._id === time?._id
                       ? "text-service"
                       : "text-service-default"
                   }
@@ -468,9 +509,7 @@ const DeepCleaning = (props) => {
               <Button
                 style={{ width: "auto" }}
                 className={
-                  state?.timeWork === item.time
-                    ? "select-time"
-                    : "select-time-default"
+                  timeWork === item.time ? "select-time" : "select-time-default"
                 }
                 onClick={() => onChangeTime(item.time)}
               >
@@ -484,8 +523,8 @@ const DeepCleaning = (props) => {
 
       <InputCustom
         title={`${i18n.t("payment_method", { lng: lang })}`}
-        value={state.paymentMethod}
-        onChange={(e) => setState({ ...state, paymentMethod: e })}
+        value={paymentMethod}
+        onChange={(e) => setPaymentMethod(e)}
         options={[
           { value: "cash", label: `${i18n.t("cash", { lng: lang })}` },
           {
@@ -499,7 +538,7 @@ const DeepCleaning = (props) => {
       <InputCustom
         title={`${i18n.t("note", { lng: lang })}`}
         placeholder={`${i18n.t("enter_note", { lng: lang })}`}
-        onChange={(e) => setState({ ...state, note: e.target.value })}
+        onChange={(e) => setNote(e.target.value)}
         className="input-form-note"
         textArea={true}
       />
@@ -511,8 +550,8 @@ const DeepCleaning = (props) => {
           formatter={(value) =>
             `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
           }
-          value={state.tipCollaborator}
-          onChange={(e) => setState({ ...state, tipCollaborator: e })}
+          value={tipCollaborator}
+          onChange={(e) => setTipCollaborator(e)}
           className="input-note"
           min={0}
           max={50000}
@@ -524,19 +563,19 @@ const DeepCleaning = (props) => {
           <InputCustom
             title={`${i18n.t("collaborator", { lng: lang })}`}
             className="input-search-collaborator"
-            error={state.errorCollaborator}
+            error={errorCollaborator}
             onChange={(e) => {
               searchCollaborator(e.target.value);
-              setState({ ...state, nameCollaborator: e.target.value });
+              setNameCollaborator(e.target.value);
             }}
-            value={state.nameCollaborator}
+            value={nameCollaborator}
             placeholder={`${i18n.t("search", { lng: lang })}`}
           />
         </div>
 
-        {state.dataCollaborator.length > 0 && (
+        {dataCollaborator.length > 0 && (
           <List type={"unstyled"} className="list-item-add-ctv-order">
-            {state.dataCollaborator?.map((item, index) => {
+            {dataCollaborator?.map((item, index) => {
               return (
                 <button
                   className={
@@ -549,12 +588,9 @@ const DeepCleaning = (props) => {
                   key={index}
                   disabled={item?.is_block ? true : false}
                   onClick={(e) => {
-                    setState({
-                      ...state,
-                      idCollaborator: item?._id,
-                      nameCollaborator: item?.full_name,
-                      dataCollaborator: [],
-                    });
+                    setIdCollaborator(item?._id);
+                    setNameCollaborator(item?.full_name);
+                    setDataCollaborator([]);
                   }}
                 >
                   <div className="div-name">
@@ -575,12 +611,12 @@ const DeepCleaning = (props) => {
         )}
       </div>
       <div className="div-promotion mt-3">
-        {state?.promotionCustomer.map((item, index) => {
+        {promotionCustomer.map((item, index) => {
           return (
             <div
               key={index}
               className={
-                state.codePromotion === item.code
+                codePromotion === item.code
                   ? "div-item-promotion-selected"
                   : "div-item-promotion"
               }
@@ -594,23 +630,23 @@ const DeepCleaning = (props) => {
           );
         })}
       </div>
-      {state.priceOrder && (
+      {priceOrder && (
         <div className="div-total mt-3">
           <a>
             {`${i18n.t("provisional", { lng: lang })}`}:{" "}
-            {formatMoney(state.priceOrder)}
+            {formatMoney(priceOrder)}
           </a>
           <a>
             {`${i18n.t("platform_fee", { lng: lang })}`}:{" "}
-            {formatMoney(state.feeService)}
+            {formatMoney(feeService)}
           </a>
-          {state.tipCollaborator > 0 && (
+          {tipCollaborator > 0 && (
             <a>
               {`${i18n.t("tips", { lng: lang })}`}:{" "}
-              {formatMoney(state.tipCollaborator)}
+              {formatMoney(tipCollaborator)}
             </a>
           )}
-          {state.eventPromotion.map((item, index) => {
+          {eventPromotion.map((item, index) => {
             return (
               <a style={{ color: "red" }}>
                 {item?.title?.[lang]}: {"-"}
@@ -618,16 +654,36 @@ const DeepCleaning = (props) => {
               </a>
             );
           })}
-          {state.discount > 0 && (
+          {discount > 0 && (
             <div>
-              <a style={{ color: "red" }}>
-                {state.itemPromotion?.title?.[lang]}:{" "}
-              </a>
-              <a style={{ color: "red" }}> {formatMoney(-state.discount)}</a>
+              <a style={{ color: "red" }}>{itemPromotion?.title?.[lang]}: </a>
+              <a style={{ color: "red" }}> {formatMoney(-discount)}</a>
             </div>
           )}
         </div>
       )}
+
+      <div className="div-footer mt-5">
+        <a className="text-price">
+          {`${i18n.t("price", { lng: lang })}`}:{" "}
+          {priceOrder > 0
+            ? formatMoney(
+                priceOrder +
+                  feeService -
+                  discount -
+                  eventFeePromotion +
+                  tipCollaborator
+              )
+            : formatMoney(0)}
+        </a>
+        <Button style={{ width: "auto" }} onClick={onCreateOrder}>{`${i18n.t(
+          "post",
+          {
+            lng: lang,
+          }
+        )}`}</Button>
+      </div>
+      {isLoading && <LoadingPagination />}
     </div>
   );
 };
