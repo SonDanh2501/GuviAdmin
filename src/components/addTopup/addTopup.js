@@ -47,7 +47,7 @@ const AddPopup = (props) => {
     _debounce((value) => {
       setName(value);
       if (value) {
-        fetchCollaborators(lang, 0, 20, "", value)
+        fetchCollaborators(lang, 0, 20, "", value, "")
           .then((res) => {
             if (value === "") {
               setState({ ...state, data: [] });

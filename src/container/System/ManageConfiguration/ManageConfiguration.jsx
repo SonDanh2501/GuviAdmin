@@ -21,6 +21,8 @@ const ManageConfiguration = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  console.log(checkElement?.includes("get_reward_collaborator_setting"));
+
   const onClick = (item) => {
     switch (item?.value) {
       case "reason_cancel":

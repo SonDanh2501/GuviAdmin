@@ -56,7 +56,7 @@ const TopupManage = () => {
   };
 
   return (
-    <React.Fragment>
+    <>
       <div className="div-total">
         <a className="total-revenue">
           {`${i18n.t("total_revenue", { lng: lang })}`}:
@@ -106,7 +106,7 @@ const TopupManage = () => {
           )}
         </Tabs>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 
