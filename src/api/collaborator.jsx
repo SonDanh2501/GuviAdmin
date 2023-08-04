@@ -2,9 +2,16 @@ import axiosClient from "../axios";
 export const createCollaborator = (payload) => {
   return axiosClient.post("/admin/collaborator_manager/create_item", payload);
 };
-export const fetchCollaborators = (lang, start, length, type, payload) => {
+export const fetchCollaborators = (
+  lang,
+  start,
+  length,
+  type,
+  payload,
+  city
+) => {
   return axiosClient.get(
-    `/admin/collaborator_manager/get_collaborator_by_type?lang=${lang}&start=${start}&length=${length}&collaborator_type=${type}&search=${payload}`
+    `/admin/collaborator_manager/get_collaborator_by_type?lang=${lang}&start=${start}&length=${length}&collaborator_type=${type}&search=${payload}&city=${city}`
   );
 };
 
