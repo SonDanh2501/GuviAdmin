@@ -45,7 +45,7 @@ const Withdraw = (props) => {
   const searchCollaborator = useCallback(
     _debounce((value) => {
       setName(value);
-      fetchCollaborators(lang, 0, 20, "", value)
+      fetchCollaborators(lang, 0, 20, "", value, "")
         .then((res) => {
           if (value === "") {
             setState({ ...state, data: [] });

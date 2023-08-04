@@ -4,6 +4,7 @@ import {
   Image,
   Input,
   Pagination,
+  Popover,
   Progress,
   Select,
   Switch,
@@ -444,6 +445,18 @@ const ManagePromotions = () => {
         brand: item?.brand,
         kind: value,
       });
+    } else if (
+      state.status === "upcoming" ||
+      (state.status === "doing" && item?.selected === "" && item?.brand === "")
+    ) {
+      saveToCookie("value_promotion", "");
+      setState({
+        ...state,
+        value: "",
+        type: item?.selected,
+        brand: item?.brand,
+        kind: value,
+      });
     }
 
     fetchPromotion(
@@ -728,9 +741,12 @@ const ManagePromotions = () => {
               <>
                 {province?.map((item, index) => {
                   return (
-                    <a key={index} className="text-area">
+                    <a className="text-area">
                       {data?.city?.includes(item?.code)
-                        ? item?.name + ", "
+                        ? `${item?.name?.replace(
+                            new RegExp(`${"Thành phố"}|${"Tỉnh"}`),
+                            ""
+                          )}` + ", "
                         : null}
                     </a>
                   );

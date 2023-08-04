@@ -796,6 +796,11 @@ export default function Home() {
                           item?.id_reason_punish?._id,
                           item?.id_reason_punish?.title?.vi
                         )
+                      : item?.id_transistion_collaborator
+                      ? subject.replace(
+                          item?.id_transistion_collaborator?._id,
+                          item?.id_transistion_collaborator?.transfer_note
+                        )
                       : item?.id_order
                       ? subject.replace(
                           item?.id_order?._id,
@@ -811,11 +816,6 @@ export default function Home() {
                           item?.id_info_reward_collaborator?._id,
                           item?.id_info_reward_collaborator
                             ?.id_reward_collaborator?.title?.vi
-                        )
-                      : item?.id_transistion_collaborator
-                      ? subject.replace(
-                          item?.id_transistion_collaborator?._id,
-                          item?.id_transistion_collaborator?.transfer_note
                         )
                       : item?.id_collaborator
                       ? subject.replace(
