@@ -24,7 +24,7 @@ const TotalCancel = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [titleCity, setTitleCity] = useState("");
   const [city, setCity] = useState(false);
-  const [codeCity, setCodeCity] = useState(0);
+  const [codeCity, setCodeCity] = useState("");
   const [dataCity, setDataCity] = useState([]);
   const [codeDistrict, setCodeDistrict] = useState(-1);
   const [dataPie, setDataPie] = useState([]);
@@ -33,19 +33,18 @@ const TotalCancel = (props) => {
   const [total, setTotal] = useState(0);
   const lang = useSelector(getLanguageState);
   const { width } = useWindowDimensions();
-  const cityData = [];
+  const cityData = [
+    {
+      value: "",
+      label: "Tất cả",
+    },
+  ];
   useEffect(() => {
     getDistrictApi()
       .then((res) => {
         setDataCity(res?.aministrative_division);
-        setCodeCity(res?.aministrative_division[1].code);
-        setTitleCity(res?.aministrative_division[1].name);
-        getReportCancelReport(
-          startDate,
-          endDate,
-          res?.aministrative_division[1].code,
-          codeDistrict
-        )
+
+        getReportCancelReport(startDate, endDate, codeCity, codeDistrict)
           .then((res) => {
             setDataPie(res?.percent);
             setDataTotalPie(res);
@@ -244,7 +243,12 @@ const TotalCancel = (props) => {
           options={cityData}
           showSearch
           filterOption={(input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+            (option?.label ?? "").includes(input)
+          }
+          filterSort={(optionA, optionB) =>
+            (optionA?.label ?? "")
+              .toLowerCase()
+              .localeCompare((optionB?.label ?? "").toLowerCase())
           }
         />
       </div>

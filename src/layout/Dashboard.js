@@ -91,7 +91,7 @@ const Dashboard = () => {
           style={{
             margin: 10,
             padding: 10,
-            minHeight: 280,
+            minHeight: 900,
             background: "white",
             borderRadius: 8,
             overflow: "initial",

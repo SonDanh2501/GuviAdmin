@@ -155,7 +155,7 @@ $font-01: "Roboto", sans-serif;
     .nav-link-sidebar {
       .active-link-nav {
         width: "10%";
-        height: 60px;
+        height: 45px;
         padding: 5px 8px 5px 20px;
         display: flex;
         text-decoration: none;
@@ -168,11 +168,18 @@ $font-01: "Roboto", sans-serif;
           font-size: 12px;
           color: #000000;
           text-decoration: none;
+          margin-left: 5px;
+        }
+
+        .img-icon {
+          width: 15px;
+          height: 15px;
+          color: #000000;
         }
       }
       .unactive-link-nav {
         width: "10%";
-        height: 60px;
+        height: 45px;
         background-color: "transparent" !important;
         padding: 5px 8px 5px 20px;
         display: flex;
@@ -184,6 +191,12 @@ $font-01: "Roboto", sans-serif;
           font-size: 12px;
           color: #000000;
           text-decoration: none;
+          margin-left: 5px;
+        }
+        .img-icon {
+          width: 15px;
+          height: 15px;
+          color: #000000;
         }
       }
     }

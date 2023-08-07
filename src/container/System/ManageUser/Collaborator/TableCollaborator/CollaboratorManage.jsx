@@ -568,6 +568,15 @@ const CollaboratorManage = (props) => {
             style={{ width: "20%" }}
             value={city}
             onChange={onFilterCity}
+            showSearch
+            filterOption={(input, option) =>
+              (option?.label ?? "").includes(input)
+            }
+            filterSort={(optionA, optionB) =>
+              (optionA?.label ?? "")
+                .toLowerCase()
+                .localeCompare((optionB?.label ?? "").toLowerCase())
+            }
           />
           <Input
             placeholder={`${i18n.t("search", { lng: lang })}`}

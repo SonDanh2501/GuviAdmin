@@ -53,6 +53,7 @@ import { getProvince, getService } from "../../../../redux/selectors/service";
 import "./styles.scss";
 import moment from "moment";
 import TextEditor from "../../../../components/TextEditor";
+import { getGroupPromotion } from "../../../../api/configuration";
 const { Option } = Select;
 
 const EditPromotion = () => {
@@ -117,6 +118,9 @@ const EditPromotion = () => {
     paymentMethod: [],
     isCheckEndDate: true,
   });
+  const [ratioGroupPromotion, setRatioGroupPromotion] = useState(1);
+  const [groupPromotion, setGroupPromotion] = useState([]);
+  const [dataGroupPromotion, setDataGroupPromotion] = useState([]);
   const [timeApply, setTimeApply] = useState(DATA_APPLY_TIME);
   const [dataGroupCustomer, setDataGroupCustomer] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -127,6 +131,7 @@ const EditPromotion = () => {
   const options = [];
   const serviceOption = [];
   const cityOption = [];
+  const groupPromotionOption = [];
   const dateFormat = "YYYY-MM-DD";
   const service = useSelector(getService);
   const province = useSelector(getProvince);
@@ -155,6 +160,12 @@ const EditPromotion = () => {
     getGroupCustomerApi(0, 10)
       .then((res) => setDataGroupCustomer(res?.data))
       .catch((err) => {});
+
+    getGroupPromotion(0, 100, "")
+      .then((res) => {
+        setDataGroupPromotion(res?.data);
+      })
+      .catch((err) => {});
   }, []);
 
   useEffect(() => {
@@ -180,7 +191,7 @@ const EditPromotion = () => {
           limitedDate: res?.is_limit_date,
           startDate: res?.is_limit_date ? res?.limit_start_date : "",
           endDate: res?.is_limit_date ? res?.limit_end_date : "",
-          ratioTypeDateApply: res?.is_loop
+          ratioTypeDateApply: !res?.is_loop
             ? 1
             : res?.is_loop && res?.type_date_apply === "date_create"
             ? 2
@@ -221,7 +232,8 @@ const EditPromotion = () => {
         res?.id_customer?.map((item) => {
           statePromo?.listCustomers.push(item?._id);
         });
-
+        setRatioGroupPromotion(res?.id_group_promotion.length > 0 ? 2 : 1);
+        setGroupPromotion(res?.id_group_promotion);
         setTimeApply(
           res?.day_loop?.length > 0 ? res?.day_loop : DATA_APPLY_TIME
         );
@@ -230,6 +242,13 @@ const EditPromotion = () => {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  dataGroupPromotion?.map((item) => {
+    groupPromotionOption?.push({
+      value: item?._id,
+      label: item?.name[lang],
+    });
+  });
 
   dataGroupCustomer.map((item) => {
     options.push({
@@ -485,6 +504,7 @@ const EditPromotion = () => {
       position: 0,
       district: [],
       timezone: "Asia/Ho_Chi_Minh",
+      id_group_promotion: ratioGroupPromotion === 2 ? groupPromotion : "",
     })
       .then((res) => {
         setIsLoading(false);
@@ -498,7 +518,7 @@ const EditPromotion = () => {
           message: err,
         });
       });
-  }, [statePromo, timeApply, id]);
+  }, [statePromo, timeApply, id, groupPromotion, ratioGroupPromotion]);
 
   return (
     <>
@@ -670,6 +690,31 @@ const EditPromotion = () => {
                   placeholder="Nhập tên đối tác"
                 />
               </div>
+            )}
+          </div>
+          <div className="div-input">
+            <a className="title-input">Nhóm khuyến mãi</a>
+            <Radio.Group
+              value={ratioGroupPromotion}
+              onChange={(e) => setRatioGroupPromotion(e.target.value)}
+              style={{
+                marginTop: 10,
+              }}
+              disabled={isActive ? true : false}
+            >
+              <Space direction="vertical">
+                <Radio value={1}>Không áp dụng</Radio>
+                <Radio value={2}>Khuyến mãi theo nhóm</Radio>
+              </Space>
+            </Radio.Group>
+            {ratioGroupPromotion === 2 && (
+              <Select
+                style={{ marginTop: 10 }}
+                mode="multiple"
+                options={groupPromotionOption}
+                onChange={(e) => setGroupPromotion(e)}
+                value={groupPromotion}
+              />
             )}
           </div>
           <div className="div-input">
@@ -1376,6 +1421,15 @@ const EditPromotion = () => {
                     optionLabelProp="label"
                     value={statePromo?.city}
                     disabled={isActive ? true : false}
+                    showSearch
+                    filterOption={(input, option) =>
+                      (option?.label ?? "").includes(input)
+                    }
+                    filterSort={(optionA, optionB) =>
+                      (optionA?.label ?? "")
+                        .toLowerCase()
+                        .localeCompare((optionB?.label ?? "").toLowerCase())
+                    }
                   />
                 )}
               </div>

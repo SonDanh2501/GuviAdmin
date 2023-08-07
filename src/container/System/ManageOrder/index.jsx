@@ -411,6 +411,15 @@ const ManageOrder = () => {
                         saveToCookie("city_order", e);
                         saveToCookie("name_filter", item?.label);
                       }}
+                      showSearch
+                      filterOption={(input, option) =>
+                        (option?.label ?? "").includes(input)
+                      }
+                      filterSort={(optionA, optionB) =>
+                        (optionA?.label ?? "")
+                          .toLowerCase()
+                          .localeCompare((optionB?.label ?? "").toLowerCase())
+                      }
                     />
                   ) : condition === "date_create" ||
                     condition === "date_work" ? (

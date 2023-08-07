@@ -1,0 +1,27 @@
+.title-page {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  color: #202223;
+  text-decoration: none;
+}
+
+.div-filter-group-promotion {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px 0px;
+  .input-search-group-promotion {
+    width: 60%;
+  }
+}
+
+.text-create-group-promo {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #202223;
+  text-decoration: none;
+}

@@ -27,11 +27,10 @@ import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const ReportOrderCity = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [startPage, setStartPage] = useState(1);
+  const [startPage, setStartPage] = useState(0);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [dataTotal, setDataTotal] = useState([]);
-  const [dataCity, setDataCity] = useState([]);
   const [codeCity, setCodeCity] = useState(0);
   const [nameCity, setNameCity] = useState("");
   const [dataChart, setDataChart] = useState([]);
@@ -42,7 +41,12 @@ const ReportOrderCity = () => {
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
   const province = useSelector(getProvince);
-  const cityOptions = [];
+  const cityOptions = [
+    {
+      value: "",
+      label: "Tất cả",
+    },
+  ];
 
   useEffect(() => {
     getReportOrderByCity(0, 20, startDate, endDate, codeCity)
@@ -131,7 +135,9 @@ const ReportOrderCity = () => {
       },
       render: (data) => (
         <div className="div-date-report-order">
-          <a className="text-date-report-order">{data?.city}</a>
+          <a className="text-date-report-order">
+            {data?.city?.replace(new RegExp(`${"Thành phố"}|${"Tỉnh"}`), "")}
+          </a>
         </div>
       ),
     },
@@ -560,6 +566,15 @@ const ReportOrderCity = () => {
           }}
           onChange={handleChangeCity}
           options={cityOptions}
+          showSearch
+          filterOption={(input, option) =>
+            (option?.label ?? "").includes(input)
+          }
+          filterSort={(optionA, optionB) =>
+            (optionA?.label ?? "")
+              .toLowerCase()
+              .localeCompare((optionB?.label ?? "").toLowerCase())
+          }
         />
       </div>
 

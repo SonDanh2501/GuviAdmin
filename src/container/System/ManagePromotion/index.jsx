@@ -144,7 +144,8 @@ const ManagePromotions = () => {
         ? ""
         : readCookie("service_prmotion"),
       "",
-      typeSort
+      typeSort,
+      ""
     )
       .then((res) => {
         setData(res?.data);
@@ -167,7 +168,8 @@ const ManagePromotions = () => {
             state?.brand,
             state?.idService,
             "",
-            typeSort
+            typeSort,
+            ""
           )
             .then((res) => {
               setData(res?.data);
@@ -202,7 +204,8 @@ const ManagePromotions = () => {
               state?.brand,
               state?.idService,
               "",
-              typeSort
+              typeSort,
+              ""
             )
               .then((res) => {
                 setData(res?.data);
@@ -230,7 +233,8 @@ const ManagePromotions = () => {
               state?.brand,
               state?.idService,
               "",
-              typeSort
+              typeSort,
+              ""
             )
               .then((res) => {
                 setData(res?.data);
@@ -264,7 +268,8 @@ const ManagePromotions = () => {
       state?.brand,
       state?.idService,
       "",
-      typeSort
+      typeSort,
+      ""
     )
       .then((res) => {
         setData(res?.data);
@@ -286,7 +291,8 @@ const ManagePromotions = () => {
         state?.brand,
         state?.idService,
         "",
-        typeSort
+        typeSort,
+        ""
       )
         .then((res) => {
           setIsLoading(false);
@@ -324,7 +330,8 @@ const ManagePromotions = () => {
       item?.brand,
       state?.idService,
       "",
-      typeSort
+      typeSort,
+      ""
     )
       .then((res) => {
         setIsLoading(false);
@@ -347,7 +354,8 @@ const ManagePromotions = () => {
       state?.brand,
       value,
       "",
-      typeSort
+      typeSort,
+      ""
     )
       .then((res) => {
         setIsLoading(false);
@@ -468,7 +476,8 @@ const ManagePromotions = () => {
       item?.brand,
       state?.idService,
       "",
-      typeSort
+      typeSort,
+      ""
     )
       .then((res) => {
         setData(res?.data);
@@ -495,7 +504,8 @@ const ManagePromotions = () => {
             state?.brand,
             state?.idService,
             "",
-            typeSort
+            typeSort,
+            ""
           )
             .then((res) => {
               setData(res?.data);
@@ -525,7 +535,8 @@ const ManagePromotions = () => {
             state?.brand,
             state?.idService,
             "",
-            typeSort
+            typeSort,
+            ""
           )
             .then((res) => {
               setData(res?.data);
@@ -554,7 +565,8 @@ const ManagePromotions = () => {
       state?.brand,
       state?.idService,
       "",
-      value
+      value,
+      ""
     )
       .then((res) => {
         setIsLoading(false);
