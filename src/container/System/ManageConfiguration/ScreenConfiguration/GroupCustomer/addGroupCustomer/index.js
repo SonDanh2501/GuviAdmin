@@ -9,6 +9,7 @@ import {
   DATA_OPERTATOR,
   DATA_OPERTATOR_GENDER,
   MONTH,
+  DATA_IS_ACTIVE
 } from "../../../../../../api/fakeData";
 import LoadingPagination from "../../../../../../components/paginationLoading";
 import { errorNotify } from "../../../../../../helper/toast";
@@ -352,7 +353,12 @@ const AddGroupCustomer = () => {
                                                 label: "Khác",
                                               },
                                             ]
-                                          : DATA_OPERTATOR
+                                            : condition?.condition[idx].kind === "is_active" 
+                                            ? [{
+                                              value: "==",
+                                              label: "Bằng",
+                                            }]
+                                            : DATA_OPERTATOR
                                       }
                                     />
                                   </div>
@@ -405,7 +411,16 @@ const AddGroupCustomer = () => {
                                           onChangeValueIn(value, idx, ix)
                                         }
                                       />
-                                    ) : (
+                                    ) : condition?.condition[idx].kind ===
+                                      "is_active" ? (
+                                        <Select
+                                        className="select-kind"
+                                        options={DATA_IS_ACTIVE}
+                                        onChange={(value) =>
+                                          onChangeValueIn(value, idx, ix)
+                                        }
+                                      />
+                                      ) : (
                                       <Input
                                         className="input-value"
                                         type={"number"}
@@ -579,7 +594,12 @@ const AddGroupCustomer = () => {
                                                 label: "Khác",
                                               },
                                             ]
-                                          : DATA_OPERTATOR
+                                            : condition?.condition[idx].kind === "is_active" 
+                                            ? [{
+                                              value: "==",
+                                              label: "Bằng",
+                                            }]
+                                            : DATA_OPERTATOR
                                       }
                                     />
                                   </div>
@@ -632,6 +652,15 @@ const AddGroupCustomer = () => {
                                           onChangeValueOut(value, idx, ix)
                                         }
                                       />
+                                    ) : condition?.condition[idx].kind ===
+                                    "is_active" ? (
+                                      <Select
+                                      className="select-kind"
+                                      options={DATA_IS_ACTIVE}
+                                      onChange={(value) =>
+                                        onChangeValueIn(value, idx, ix)
+                                      }
+                                    />
                                     ) : (
                                       <Input
                                         className="input-value"

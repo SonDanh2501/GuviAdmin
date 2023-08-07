@@ -281,6 +281,10 @@ export const DATA_KIND = [
     value: "area",
     label: "Khu vực",
   },
+  {
+    value: "is_active",
+    label: "Trạng thái tài khoản",
+  },
 ];
 
 export const DATA_OPERTATOR = [
@@ -437,4 +441,16 @@ export const DATA_TIME_APPLY = [
   { id: 47, label: "23:00", value: "23:00:00" },
   { id: 48, label: "23:30", value: "23:30:00" },
   { id: 49, label: "23:59", value: "23:59:59" },
+];
+
+
+export const DATA_IS_ACTIVE = [
+  {
+    value: true,
+    label: "Đang hoạt động",
+  },
+  {
+    value: false,
+    label: "Đã khoá",
+  },
 ];
