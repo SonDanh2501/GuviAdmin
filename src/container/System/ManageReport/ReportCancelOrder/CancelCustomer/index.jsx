@@ -31,7 +31,12 @@ const CancelOrderCustomer = (props) => {
   const [total, setTotal] = useState();
   const lang = useSelector(getLanguageState);
   const { width } = useWindowDimensions();
-  const cityData = [];
+  const cityData = [
+    {
+      value: "",
+      label: "Tất cả",
+    },
+  ];
 
   useEffect(() => {
     getDistrictApi()

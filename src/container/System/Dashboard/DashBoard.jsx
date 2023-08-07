@@ -643,8 +643,9 @@ export default function Home() {
                       }
                       gapDegree={5}
                       strokeColor={"#48CAE4"}
-                      strokeWidth={15}
+                      strokeWidth={10}
                       width={100}
+                      size="small"
                     />
                   </div>
                   <div className="div-progress-text">
@@ -759,7 +760,7 @@ export default function Home() {
                 })}`}</p>
                 <List
                   itemLayout="horizontal"
-                  dataSource={historyActivity.slice(0, 4)}
+                  dataSource={historyActivity.slice(0, 6)}
                   renderItem={(item, index) => {
                     const subject = item?.id_user_system
                       ? item?.title_admin.replace(

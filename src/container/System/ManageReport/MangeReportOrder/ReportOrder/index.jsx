@@ -549,7 +549,7 @@ const ReportOrder = () => {
         </div>
       </div>
 
-      <div>
+      <div className="div-table-report">
         <Table
           columns={columns}
           pagination={false}

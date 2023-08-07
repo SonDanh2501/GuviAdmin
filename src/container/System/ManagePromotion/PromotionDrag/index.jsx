@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import "./styles.scss";
 import { useLocation } from "react-router-dom";
 import {
-  fetchPromotion,
   getPromotionByPosition,
   updatePositionPromotion,
 } from "../../../../api/promotion";

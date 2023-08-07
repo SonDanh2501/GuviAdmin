@@ -45,6 +45,7 @@ import i18n from "../../../../i18n";
 import { getLanguageState } from "../../../../redux/selectors/auth";
 import { getProvince, getService } from "../../../../redux/selectors/service";
 import "./styles.scss";
+import { getGroupPromotion } from "../../../../api/configuration";
 const { Option } = Select;
 
 const CreatePromotion = () => {
@@ -118,12 +119,16 @@ const CreatePromotion = () => {
     errorThumnail: "",
     errorStartTime: "",
     errorEndTime: "",
+    ratioGroupPromotion: 1,
+    groupPromotion: "",
+    dataGroupPromotion: [],
   });
   const [timeApply, setTimeApply] = useState(DATA_APPLY_TIME);
   const [isLoading, setIsLoading] = useState(false);
   const options = [];
   const serviceOption = [];
   const cityOption = [];
+  const groupPromotionOption = [];
   const service = useSelector(getService);
   const province = useSelector(getProvince);
   const lang = useSelector(getLanguageState);
@@ -151,7 +156,20 @@ const CreatePromotion = () => {
         setStatePromo({ ...statePromo, dataGroupCustomer: res?.data })
       )
       .catch((err) => {});
+
+    getGroupPromotion(0, 100, "")
+      .then((res) => {
+        setStatePromo({ ...statePromo, dataGroupPromotion: res?.data });
+      })
+      .catch((err) => {});
   }, []);
+
+  statePromo?.dataGroupPromotion?.map((item) => {
+    groupPromotionOption?.push({
+      value: item?._id,
+      label: item?.name[lang],
+    });
+  });
 
   statePromo?.dataGroupCustomer.map((item) => {
     options.push({
@@ -344,6 +362,8 @@ const CreatePromotion = () => {
       position: 0,
       district: [],
       timezone: "Asia/Ho_Chi_Minh",
+      id_group_promotion:
+        statePromo.ratioGroupPromotion === 2 ? statePromo.groupPromotion : "",
     })
       .then((res) => {
         if (statePromo?.isSendNotification) {
@@ -573,6 +593,35 @@ const CreatePromotion = () => {
                   error={statePromo?.errorNameBrand}
                 />
               </div>
+            )}
+          </div>
+          <div className="div-input">
+            <a className="title-input">Nhóm khuyến mãi</a>
+            <Radio.Group
+              value={statePromo?.ratioGroupPromotion}
+              onChange={(e) =>
+                setStatePromo({
+                  ...statePromo,
+                  ratioGroupPromotion: e.target.value,
+                })
+              }
+              style={{
+                marginTop: 10,
+              }}
+            >
+              <Space direction="vertical">
+                <Radio value={1}>Không áp dụng</Radio>
+                <Radio value={2}>Khuyến mãi theo nhóm</Radio>
+              </Space>
+            </Radio.Group>
+            {statePromo?.ratioGroupPromotion === 2 && (
+              <Select
+                style={{ marginTop: 10 }}
+                options={groupPromotionOption}
+                onChange={(e) =>
+                  setStatePromo({ ...statePromo, groupPromotion: e })
+                }
+              />
             )}
           </div>
           <div className="div-input">
@@ -1260,6 +1309,15 @@ const CreatePromotion = () => {
                     options={cityOption}
                     optionLabelProp="label"
                     placeholder="Chọn tỉnh thành phố"
+                    showSearch
+                    filterOption={(input, option) =>
+                      (option?.label ?? "").includes(input)
+                    }
+                    filterSort={(optionA, optionB) =>
+                      (optionA?.label ?? "")
+                        .toLowerCase()
+                        .localeCompare((optionB?.label ?? "").toLowerCase())
+                    }
                   />
                 )}
               </div>
