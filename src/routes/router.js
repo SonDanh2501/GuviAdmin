@@ -116,17 +116,17 @@ const router = [
       {
         path: "/promotion/manage-setting/promotion",
         name: "Khuyến mãi",
-        icon: bag,
+        icon: ticket,
       },
       {
         path: "/promotion/manage-setting/banner",
         name: "Banner",
-        icon: bag,
+        icon: ticket,
       },
       {
         path: "/promotion/manage-setting/news",
         name: "Bài viết",
-        icon: bag,
+        icon: ticket,
       },
     ],
     id_sidebar: "promotion",

@@ -184,3 +184,32 @@ export const deleteRewardCollaboratorApi = (id) => {
     `/admin/reward_collaborator_manager/delete_reward/${id}`
   );
 };
+
+//group promotion
+
+export const getGroupPromotion = (start, length, value) => {
+  return axiosClient.get(
+    `/admin/group_promotion_manager/get_list?lang=vi&start=${start}&length=${length}&search=${value}`
+  );
+};
+
+export const createGroupPromotion = (data) => {
+  return axiosClient.post(`/admin/group_promotion_manager/create_item`, data);
+};
+
+export const editGroupPromotion = (id, data) => {
+  return axiosClient.post(
+    `/admin/group_promotion_manager/edit_item/${id}`,
+    data
+  );
+};
+export const deleteGroupPromotion = (id) => {
+  return axiosClient.post(`/admin/group_promotion_manager/delete_item/${id}`);
+};
+
+export const activeGroupPromotion = (id, data) => {
+  return axiosClient.post(
+    `/admin/group_promotion_manager/acti_item/${id}`,
+    data
+  );
+};

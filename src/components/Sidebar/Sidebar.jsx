@@ -152,7 +152,8 @@ const Sidebar = ({ hide }) => {
                                           : "unactive-link-nav"
                                       }
                                     >
-                                      <i class="uil uil-shopping-bag icon"></i>
+                                      {/* <i class="uil uil-shopping-bag icon"></i> */}
+                                      <img src={i?.icon} className="img-icon" />
                                       <a
                                         className={
                                           isActive
