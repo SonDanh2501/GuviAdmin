@@ -73,7 +73,7 @@ import ManagePromotions from "../container/System/ManagePromotion";
 import BannerManage from "../container/System/ManageSetting/ManageBanner/BannerManage";
 import NewsManage from "../container/System/ManageSetting/ManageNews/NewsManage";
 import EditPromotion from "../container/System/ManagePromotion/PromotionEdit";
-import GroupPromotion from "../container/System/ManagePromotion/GroupPromotion";
+import SettingGroupPromotion from "../container/System/ManageConfiguration/ScreenConfiguration/SettingGroupPromotion";
 
 const Admin = () => {
   return (
@@ -105,14 +105,9 @@ const Admin = () => {
         element={<ManagePromotions />}
       />
       <Route
-        path="/promotion/manage-setting/group-promotion"
-        element={<GroupPromotion />}
-      />
-      <Route
         path="/promotion/manage-setting/banner"
         element={<BannerManage />}
       />
-
       <Route path="/promotion/manage-setting/news" element={<NewsManage />} />
 
       <Route
@@ -343,6 +338,10 @@ const Admin = () => {
       <Route
         path="/adminManage/manage-configuration/image_manage"
         element={<ImageManage />}
+      />
+      <Route
+        path="/adminManage/manage-configuration/group_promotion_manage"
+        element={<SettingGroupPromotion />}
       />
     </Routes>
   );

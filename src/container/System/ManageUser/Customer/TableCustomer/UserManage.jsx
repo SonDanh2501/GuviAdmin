@@ -674,7 +674,7 @@ const UserManage = (props) => {
           <Input
             placeholder={`${i18n.t("search", { lng: lang })}`}
             type="text"
-            className="input-search"
+            className="input-search-customer"
             prefix={<SearchOutlined />}
             onChange={(e) => handleSearch(e.target.value)}
           />
