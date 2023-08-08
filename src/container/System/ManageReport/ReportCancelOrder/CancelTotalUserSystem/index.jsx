@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import { getProvince } from "../../../../../redux/selectors/service";
 
 const TotalCancelUserSystem = (props) => {
   const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;
@@ -24,31 +25,24 @@ const TotalCancelUserSystem = (props) => {
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [titleCity, setTitleCity] = useState("");
   const [city, setCity] = useState(false);
-  const [codeCity, setCodeCity] = useState(0);
-  const [dataCity, setDataCity] = useState([]);
+  const [codeCity, setCodeCity] = useState("");
   const [codeDistrict, setCodeDistrict] = useState(-1);
   const { width } = useWindowDimensions();
   const [dataPie, setDataPie] = useState([]);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
-  const cityData = [];
+  const cityData = [
+    {
+      value: "",
+      label: "Tất cả",
+    },
+  ];
   const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
   useEffect(() => {
-    getDistrictApi()
+    getCancelReportUserSystem(startDate, endDate, codeCity)
       .then((res) => {
-        setDataCity(res?.aministrative_division);
-        setCodeCity(res?.aministrative_division[1].code);
-        setTitleCity(res?.aministrative_division[1].name);
-        getCancelReportUserSystem(
-          startDate,
-          endDate,
-          res?.aministrative_division[1].code
-        )
-          .then((res) => {
-            setDataPie(res?.arrPercent);
-            // setDataTotalPie(res);
-          })
-          .catch((err) => {});
+        setDataPie(res?.arrPercent);
       })
       .catch((err) => {});
 
@@ -60,7 +54,7 @@ const TotalCancelUserSystem = (props) => {
       .catch((err) => {});
   }, [tab]);
 
-  dataCity?.map((item) => {
+  province?.map((item) => {
     cityData?.push({
       value: item?.code,
       label: item?.name,

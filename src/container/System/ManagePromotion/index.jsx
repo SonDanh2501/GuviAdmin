@@ -36,6 +36,7 @@ import { getProvince, getService } from "../../../redux/selectors/service.js";
 import "./styles.scss";
 import { useCookies } from "../../../helper/useCookies.js";
 import { useHorizontalScroll } from "../../../helper/useSideScroll.js";
+import { getGroupPromotion } from "../../../api/configuration.jsx";
 
 const ManagePromotions = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +59,9 @@ const ManagePromotions = () => {
     modalShowApp: false,
     value: "",
     kind: "",
+    group: "",
   });
+  const [groupPromotion, setGroupPromotion] = useState([]);
   const toggle = () => setModal(!modal);
   const toggleActive = () => setModalActive(!modalActive);
   const scrollRef = useHorizontalScroll();
@@ -68,26 +71,11 @@ const ManagePromotions = () => {
   const navigate = useNavigate();
   const province = useSelector(getProvince);
   const service = useSelector(getService);
-
-  const TAB_PROMOTION = [
+  const groupPromotionOption = [
     {
-      value: "doing",
-      label: `${i18n.t("Đang kích hoạt", { lng: lang })}`,
+      value: "",
+      label: "Tất cả nhóm KM",
     },
-    { value: "", label: `${i18n.t("all", { lng: lang })}` },
-    {
-      value: "upcoming",
-      label: `${i18n.t("Chưa kích hoạt", { lng: lang })}`,
-    },
-    {
-      value: "out_of_stock",
-      label: `${i18n.t("out_stock", { lng: lang })}`,
-    },
-    {
-      value: "out_of_date",
-      label: `${i18n.t("out_date", { lng: lang })}`,
-    },
-    { value: "done", label: `${i18n.t("closed", { lng: lang })}` },
   ];
   const optionService = [
     {
@@ -145,14 +133,27 @@ const ManagePromotions = () => {
         : readCookie("service_prmotion"),
       "",
       typeSort,
-      ""
+      state.group
     )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
+
+    getGroupPromotion(0, 20, "")
+      .then((res) => {
+        setGroupPromotion(res?.data);
+      })
+      .catch((err) => {});
   }, []);
+
+  groupPromotion?.map((item) => {
+    groupPromotionOption.push({
+      value: item?._id,
+      label: item.name[lang],
+    });
+  });
 
   const onDelete = useCallback(
     (id) => {
@@ -169,7 +170,7 @@ const ManagePromotions = () => {
             state?.idService,
             "",
             typeSort,
-            ""
+            state.group
           )
             .then((res) => {
               setData(res?.data);
@@ -205,7 +206,7 @@ const ManagePromotions = () => {
               state?.idService,
               "",
               typeSort,
-              ""
+              state.group
             )
               .then((res) => {
                 setData(res?.data);
@@ -234,7 +235,7 @@ const ManagePromotions = () => {
               state?.idService,
               "",
               typeSort,
-              ""
+              state.group
             )
               .then((res) => {
                 setData(res?.data);
@@ -269,11 +270,12 @@ const ManagePromotions = () => {
       state?.idService,
       "",
       typeSort,
-      ""
+      state.group
     )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
+        window.scroll(0, 0);
       })
       .catch((err) => {});
   };
@@ -292,7 +294,7 @@ const ManagePromotions = () => {
         state?.idService,
         "",
         typeSort,
-        ""
+        state.group
       )
         .then((res) => {
           setIsLoading(false);
@@ -331,7 +333,7 @@ const ManagePromotions = () => {
       state?.idService,
       "",
       typeSort,
-      ""
+      state.group
     )
       .then((res) => {
         setIsLoading(false);
@@ -355,7 +357,7 @@ const ManagePromotions = () => {
       value,
       "",
       typeSort,
-      ""
+      state.group
     )
       .then((res) => {
         setIsLoading(false);
@@ -477,7 +479,7 @@ const ManagePromotions = () => {
       state?.idService,
       "",
       typeSort,
-      ""
+      state.group
     )
       .then((res) => {
         setData(res?.data);
@@ -505,7 +507,7 @@ const ManagePromotions = () => {
             state?.idService,
             "",
             typeSort,
-            ""
+            state.group
           )
             .then((res) => {
               setData(res?.data);
@@ -536,7 +538,7 @@ const ManagePromotions = () => {
             state?.idService,
             "",
             typeSort,
-            ""
+            state.group
           )
             .then((res) => {
               setData(res?.data);
@@ -553,6 +555,27 @@ const ManagePromotions = () => {
     }
   };
 
+  const onChangeGroupPromotion = (value) => {
+    setState({ ...state, group: value });
+    fetchPromotion(
+      valueSearch,
+      state?.status,
+      state?.startPage,
+      20,
+      state?.type,
+      state?.brand,
+      state?.idService,
+      "",
+      typeSort,
+      value
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+
   const handleSortPosition = (value) => {
     setTypeSort(value);
     setIsLoading(true);
@@ -566,7 +589,7 @@ const ManagePromotions = () => {
       state?.idService,
       "",
       value,
-      ""
+      state.group
     )
       .then((res) => {
         setIsLoading(false);
@@ -983,6 +1006,12 @@ const ManagePromotions = () => {
           className="select-type-promotion"
           value={state?.kind}
           onChange={(e, item) => onChangeTypePromotion(e, item)}
+        />
+        <Select
+          className="select-type-promotion"
+          options={groupPromotionOption}
+          value={state?.group}
+          onChange={(e, item) => onChangeGroupPromotion(e)}
         />
         <Input
           placeholder={`${i18n.t("search", { lng: lang })}`}

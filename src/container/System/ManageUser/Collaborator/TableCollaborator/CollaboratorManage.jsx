@@ -9,6 +9,7 @@ import {
   Select,
   Skeleton,
   Space,
+  Switch,
   Table,
 } from "antd";
 import _debounce from "lodash/debounce";
@@ -84,7 +85,6 @@ const CollaboratorManage = (props) => {
 
   useEffect(() => {
     window.scroll(0, Number(readCookie("table_y_ctv")));
-    saveToCookie("tab_collaborator", "online");
     setCurrentPage(
       readCookie("page_ctv") === "" ? 1 : Number(readCookie("page_ctv"))
     );
@@ -103,7 +103,9 @@ const CollaboratorManage = (props) => {
       lang,
       Number(readCookie("start_page_ctv")),
       20,
-      readCookie("tab_collaborator"),
+      readCookie("tab_collaborator") === "online"
+        ? "online"
+        : readCookie("tab_collaborator"),
       valueSearch,
       readCookie("ctv-city") === "" ? "" : Number(readCookie("ctv-city"))
     )
@@ -143,6 +145,7 @@ const CollaboratorManage = (props) => {
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItems);
+        window.scroll(0, 0);
       })
       .catch((err) => {});
   };
@@ -236,43 +239,23 @@ const CollaboratorManage = (props) => {
   const onVerifyCollaborator = useCallback(
     (id, is_verify) => {
       setIsLoading(true);
-      if (is_verify === true) {
-        verifyCollaborator(id)
-          .then((res) => {
-            fetchCollaborators(lang, startPage, 20, status, valueSearch, city)
-              .then((res) => {
-                setData(res?.data);
-                setTotal(res?.totalItems);
-              })
-              .catch((err) => {});
-            setModalVerify(false);
-            setIsLoading(false);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-            errorNotify({
-              message: err,
-            });
+      verifyCollaborator(id)
+        .then((res) => {
+          fetchCollaborators(lang, startPage, 20, status, valueSearch, city)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItems);
+            })
+            .catch((err) => {});
+          setModalVerify(false);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
           });
-      } else {
-        verifyCollaborator(id)
-          .then((res) => {
-            fetchCollaborators(lang, startPage, 20, status, valueSearch, city)
-              .then((res) => {
-                setData(res?.data);
-                setTotal(res?.totalItems);
-              })
-              .catch((err) => {});
-            setModalVerify(false);
-            setIsLoading(false);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-            errorNotify({
-              message: err,
-            });
-          });
-      }
+        });
     },
     [startPage, status, valueSearch, city]
   );
@@ -533,7 +516,7 @@ const CollaboratorManage = (props) => {
       align: "center",
       render: (data) => (
         <Space size="middle">
-          <img
+          {/* <img
             onClick={!data?.is_verify ? toggleVerify : null}
             src={data?.is_verify ? onToggle : offToggle}
             className={
@@ -541,6 +524,16 @@ const CollaboratorManage = (props) => {
                 ? "img-toggle"
                 : "img-toggle-hide"
             }
+          /> */}
+          <Switch
+            style={{
+              width: 30,
+              backgroundColor: data?.is_verify ? "#00cf3a" : "",
+            }}
+            onClick={toggleVerify}
+            checked={data?.is_verify}
+            disabled={data?.is_verify ? true : false}
+            size="small"
           />
 
           <Dropdown

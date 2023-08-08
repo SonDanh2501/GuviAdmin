@@ -72,11 +72,7 @@ const AddCustomer = (props) => {
       {/* Button trigger modal */}
       <CustomButton
         title={`${i18n.t("create_new_customer", { lng: lang })}`}
-        className={
-          checkElement?.includes("create_customer")
-            ? "btn-add-customer"
-            : "btn-add-customer-hide"
-        }
+        className={"btn-add-customer"}
         style={{ width: "auto" }}
         onClick={showDrawer}
       />

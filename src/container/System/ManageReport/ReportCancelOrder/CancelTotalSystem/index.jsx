@@ -1,32 +1,28 @@
 import { Pagination, Select, Table } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
-import { getDistrictApi } from "../../../../../api/file";
 import {
   getReportCancelReport,
   getReportOverviewCancelReport,
 } from "../../../../../api/report";
 
-import "./index.scss";
-import CustomDatePicker from "../../../../../components/customDatePicker";
 import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../redux/selectors/auth";
-import i18n from "../../../../../i18n";
+import CustomDatePicker from "../../../../../components/customDatePicker";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import { getProvince } from "../../../../../redux/selectors/service";
+import "./index.scss";
 
 const TotalCancelSystem = (props) => {
   const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;
-
   const [startDate, setStartDate] = useState(
     moment().subtract(30, "d").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
-  const [isLoading, setIsLoading] = useState(false);
   const [titleCity, setTitleCity] = useState("");
   const [city, setCity] = useState(false);
-  const [codeCity, setCodeCity] = useState(0);
-  const [dataCity, setDataCity] = useState([]);
+  const [codeCity, setCodeCity] = useState("");
   const [codeDistrict, setCodeDistrict] = useState(-1);
   const [dataPie, setDataPie] = useState([]);
   const [dataTotalPie, setDataTotalPie] = useState([]);
@@ -34,17 +30,16 @@ const TotalCancelSystem = (props) => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
 
-  const cityData = [];
+  const cityData = [
+    {
+      value: "",
+      label: "Tất cả",
+    },
+  ];
+
   useEffect(() => {
-    getDistrictApi()
-      .then((res) => {
-        setDataCity(res?.aministrative_division);
-        setCodeCity(res?.aministrative_division[1].code);
-        setTitleCity(res?.aministrative_division[1].name);
-      })
-      .catch((err) => {});
-
     getReportOverviewCancelReport(0, 20, startDate, endDate, tab, codeCity)
       .then((res) => {
         setData(res?.data);
@@ -53,7 +48,7 @@ const TotalCancelSystem = (props) => {
       .catch((err) => {});
   }, [tab]);
 
-  dataCity?.map((item) => {
+  province?.map((item) => {
     cityData?.push({
       value: item?.code,
       label: item?.name,
@@ -63,8 +58,6 @@ const TotalCancelSystem = (props) => {
   const onChangeCity = useCallback(
     (value, label) => {
       setCodeCity(value);
-      setTitleCity(label?.label);
-      setCity(!city);
       getReportCancelReport(startDate, endDate, value, codeDistrict)
         .then((res) => {
           setDataPie(res?.percent);
@@ -182,7 +175,7 @@ const TotalCancelSystem = (props) => {
       <div className="div-select-city">
         <Select
           style={{ width: 200 }}
-          value={titleCity}
+          value={codeCity}
           onChange={onChangeCity}
           options={cityData}
           showSearch

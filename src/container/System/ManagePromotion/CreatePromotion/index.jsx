@@ -120,7 +120,7 @@ const CreatePromotion = () => {
     errorStartTime: "",
     errorEndTime: "",
     ratioGroupPromotion: 1,
-    groupPromotion: "",
+    groupPromotion: [],
     dataGroupPromotion: [],
   });
   const [timeApply, setTimeApply] = useState(DATA_APPLY_TIME);
@@ -618,6 +618,7 @@ const CreatePromotion = () => {
               <Select
                 style={{ marginTop: 10 }}
                 options={groupPromotionOption}
+                mode="multiple"
                 onChange={(e) =>
                   setStatePromo({ ...statePromo, groupPromotion: e })
                 }
