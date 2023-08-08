@@ -40,6 +40,8 @@ const ManageOrder = () => {
   const [total, setTotal] = useState(0);
   const [type, setType] = useState("date_create");
   const [city, setCity] = useState("");
+  const [dataDistrict, setDataDistrict] = useState([]);
+  const [district, setDistrict] = useState([]);
   const [checkCondition, setCheckCondition] = useState(false);
   const [condition, setCondition] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -130,7 +132,8 @@ const ManageOrder = () => {
       readCookie("end_date_order") !== ""
         ? readCookie("end_date_order")
         : moment().endOf("date").toISOString(),
-      readCookie("city_order") !== "" ? readCookie("city_order") : ""
+      readCookie("city_order") !== "" ? readCookie("city_order") : "",
+      district
     )
       .then((res) => {
         setData(res?.data);
@@ -140,6 +143,7 @@ const ManageOrder = () => {
   }, []);
 
   const cityOptions = [];
+  const districtOption = [];
   const optionsService = [
     {
       value: "",
@@ -156,6 +160,14 @@ const ManageOrder = () => {
 
   province?.map((item) => {
     cityOptions.push({
+      value: item?.code,
+      label: item?.name,
+      district: item?.districts,
+    });
+  });
+
+  dataDistrict?.map((item) => {
+    districtOption.push({
       value: item?.code,
       label: item?.name,
     });
@@ -185,7 +197,8 @@ const ManageOrder = () => {
       type,
       startDate,
       endDate,
-      city
+      city,
+      district
     )
       .then((res) => {
         setIsLoading(false);
@@ -408,6 +421,7 @@ const ManageOrder = () => {
                       value={city}
                       onChange={(e, item) => {
                         setCity(e);
+                        setDataDistrict(item?.district);
                         saveToCookie("city_order", e);
                         saveToCookie("name_filter", item?.label);
                       }}
@@ -439,6 +453,22 @@ const ManageOrder = () => {
                     />
                   ) : (
                     ""
+                  )}
+                  {dataDistrict.length > 0 && (
+                    <Select
+                      placeholde="Chọn quận/huyện"
+                      style={{ width: "100%", marginRight: 10, marginTop: 10 }}
+                      mode="multiple"
+                      options={districtOption}
+                      value={district}
+                      onChange={(e, item) => {
+                        setDistrict(e);
+                      }}
+                      showSearch
+                      filterOption={(input, option) =>
+                        (option?.label ?? "").includes(input)
+                      }
+                    />
                   )}
                 </div>
                 <div className="footer-condition-filter">
