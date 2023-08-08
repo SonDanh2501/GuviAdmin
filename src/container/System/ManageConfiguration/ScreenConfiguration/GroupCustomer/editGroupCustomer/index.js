@@ -13,7 +13,7 @@ import {
   DATA_OPERTATOR,
   DATA_OPERTATOR_GENDER,
   MONTH,
-  DATA_IS_ACTIVE
+  DATA_IS_ACTIVE,
 } from "../../../../../../api/fakeData";
 import LoadingPagination from "../../../../../../components/paginationLoading";
 import { errorNotify } from "../../../../../../helper/toast";
@@ -393,12 +393,15 @@ const EditGroupCustomer = () => {
                                                 label: "Khác",
                                               },
                                             ]
-                                            : condition?.condition[idx].kind === "is_active" 
-                                            ? [{
-                                              value: "==",
-                                              label: "Bằng",
-                                            }]
-                                            : DATA_OPERTATOR
+                                          : condition?.condition[idx].kind ===
+                                            "is_active"
+                                          ? [
+                                              {
+                                                value: "==",
+                                                label: "Bằng",
+                                              },
+                                            ]
+                                          : DATA_OPERTATOR
                                       }
                                     />
                                   </div>
@@ -460,14 +463,19 @@ const EditGroupCustomer = () => {
                                         }
                                       />
                                     ) : condition?.condition[idx].kind ===
-                                    "is_active" ? (
+                                      "is_active" ? (
                                       <Select
-                                      className="select-kind"
-                                      options={DATA_IS_ACTIVE}
-                                      onChange={(value) =>
-                                        onChangeValueIn(Boolean(value), idx, ix)
-                                      }
-                                    />
+                                        className="select-kind"
+                                        options={DATA_IS_ACTIVE}
+                                        value={Boolean(it?.value)}
+                                        onChange={(value) =>
+                                          onChangeValueIn(
+                                            Boolean(value),
+                                            idx,
+                                            ix
+                                          )
+                                        }
+                                      />
                                     ) : (
                                       <Input
                                         className="input-value"
@@ -644,11 +652,14 @@ const EditGroupCustomer = () => {
                                                 label: "Khác",
                                               },
                                             ]
-                                          : condition?.condition[idx].kind === "is_active" 
-                                          ? [{
-                                            value: "==",
-                                            label: "Bằng",
-                                          }]
+                                          : condition?.condition[idx].kind ===
+                                            "is_active"
+                                          ? [
+                                              {
+                                                value: "==",
+                                                label: "Bằng",
+                                              },
+                                            ]
                                           : DATA_OPERTATOR
                                       }
                                     />
@@ -711,14 +722,19 @@ const EditGroupCustomer = () => {
                                         }
                                       />
                                     ) : condition?.condition[idx].kind ===
-                                    "is_active" ? (
+                                      "is_active" ? (
                                       <Select
-                                      className="select-kind"
-                                      options={DATA_IS_ACTIVE}
-                                      onChange={(value) =>
-                                        onChangeValueOut(Boolean(value), idx, ix)
-                                      }
-                                    />
+                                        className="select-kind"
+                                        options={DATA_IS_ACTIVE}
+                                        value={Boolean(it?.value)}
+                                        onChange={(value) =>
+                                          onChangeValueOut(
+                                            Boolean(value),
+                                            idx,
+                                            ix
+                                          )
+                                        }
+                                      />
                                     ) : (
                                       <Input
                                         className="input-value"

@@ -127,7 +127,7 @@ const FavouriteBlock = ({ id }) => {
 
   const handleSearch = useCallback(
     _debounce((value) => {
-      fetchCollaborators(lang, 0, 20, "all", value)
+      fetchCollaborators(lang, 0, 20, "all", value, "")
         .then((res) => {
           if (value === "") {
             setDataCollaborator([]);

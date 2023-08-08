@@ -16,7 +16,7 @@ const ManageCollaborator = () => {
 
   useEffect(() => {
     setStatus(
-      readCookie("tab_collaborator") === ""
+      readCookie("tab_collaborator") === "online"
         ? "online"
         : readCookie("tab_collaborator")
     );
@@ -33,7 +33,7 @@ const ManageCollaborator = () => {
       label: `${i18n.t("all", {
         lng: lang,
       })}`,
-      value: "",
+      value: "all",
     },
 
     {

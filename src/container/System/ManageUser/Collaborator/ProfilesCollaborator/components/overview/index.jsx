@@ -2,13 +2,20 @@ import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../../i18n";
 import "./styles.scss";
-import { Col, Row } from "antd";
+import { Col, Row, Switch } from "antd";
 import { HeartFilled } from "@ant-design/icons";
 import { formatMoney } from "../../../../../../../helper/formatMoney";
-import { useEffect, useState } from "react";
-import { getOverviewCollaborator } from "../../../../../../../api/collaborator";
+import { useCallback, useEffect, useState } from "react";
+import {
+  getCollaboratorsById,
+  getOverviewCollaborator,
+  verifyCollaborator,
+} from "../../../../../../../api/collaborator";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import LoadingPagination from "../../../../../../../components/paginationLoading";
+import ModalCustom from "../../../../../../../components/modalCustom";
+import { errorNotify } from "../../../../../../../helper/toast";
 
 const Overview = ({ id }) => {
   const [total, setTotal] = useState({
@@ -19,6 +26,9 @@ const Overview = ({ id }) => {
     gift_remainder: 0,
   });
   const [data, setData] = useState([]);
+  const [dataDetail, setDataDetail] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalVerify, setModalVerify] = useState(false);
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
@@ -35,18 +45,65 @@ const Overview = ({ id }) => {
         });
       })
       .catch((err) => {});
+
+    getCollaboratorsById(id)
+      .then((res) => {
+        setDataDetail(res);
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+      });
+  }, []);
+
+  const onVerifyCollaborator = useCallback((id, is_verify) => {
+    setIsLoading(true);
+    verifyCollaborator(id)
+      .then((res) => {
+        getCollaboratorsById(id)
+          .then((res) => {
+            setDataDetail(res);
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err,
+            });
+          });
+        setModalVerify(false);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        errorNotify({
+          message: err,
+        });
+      });
   }, []);
 
   return (
     <>
       <div className="div-overview">
         <div className="div-body-overview">
-          <a className="text-wallet">
-            Ví Chính: {formatMoney(total?.remainder)}
-          </a>
-          <a className="text-wallet">
-            Ví Thưởng: {formatMoney(total?.gift_remainder)}
-          </a>
+          <div className="div-head-overview">
+            <div className="div-wallet">
+              <a className="text-wallet">
+                Ví Chính: {formatMoney(total?.remainder)}
+              </a>
+              <a className="text-wallet">
+                Ví Thưởng: {formatMoney(total?.gift_remainder)}
+              </a>
+            </div>
+            <Switch
+              style={{
+                width: 40,
+                backgroundColor: dataDetail?.is_verify ? "#00cf3a" : "",
+              }}
+              onClick={() => setModalVerify(true)}
+              checked={dataDetail?.is_verify}
+              disabled={dataDetail?.is_verify ? true : false}
+            />
+          </div>
           <div className="div-total">
             <div className="div-item-total">
               <a className="number-total">{total.total_order}</a>
@@ -139,6 +196,18 @@ const Overview = ({ id }) => {
           </div>
         </div>
       </div>
+
+      <ModalCustom
+        isOpen={modalVerify}
+        title="Xác thực cộng tác viên"
+        handleOk={() =>
+          onVerifyCollaborator(dataDetail?._id, dataDetail?.is_verify)
+        }
+        textOk="Xác thực"
+        handleCancel={() => setModalVerify(false)}
+        body={<a>Bạn có chắc xác thực cho CTV này? {dataDetail?.full_name}</a>}
+      />
+      {isLoading && <LoadingPagination />}
     </>
   );
 };

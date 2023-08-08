@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import { getProvince } from "../../../../../redux/selectors/service";
 
 const CancelOrderCustomer = (props) => {
   const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;
@@ -21,8 +22,7 @@ const CancelOrderCustomer = (props) => {
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [titleCity, setTitleCity] = useState("");
-  const [codeCity, setCodeCity] = useState(0);
-  const [dataCity, setDataCity] = useState([]);
+  const [codeCity, setCodeCity] = useState("");
   const [codeDistrict, setCodeDistrict] = useState(-1);
   const [dataPie, setDataPie] = useState([]);
   const [dataTotalPie, setDataTotalPie] = useState([]);
@@ -30,6 +30,7 @@ const CancelOrderCustomer = (props) => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
   const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
   const { width } = useWindowDimensions();
   const cityData = [
     {
@@ -39,23 +40,11 @@ const CancelOrderCustomer = (props) => {
   ];
 
   useEffect(() => {
-    getDistrictApi()
+    getCancelReportCustomer(startDate, endDate, codeCity, codeDistrict)
       .then((res) => {
-        setDataCity(res?.aministrative_division);
-        setCodeCity(res?.aministrative_division[1]?.code);
-        setTitleCity(res?.aministrative_division[1]?.name);
-        getCancelReportCustomer(
-          startDate,
-          endDate,
-          res?.aministrative_division[1]?.code,
-          codeDistrict
-        )
-          .then((res) => {
-            setDataPie(res?.arrPercent);
-            setDataTotalPie(res?.total);
-            setTotalCancerOrder(res?.total_cancel_order_by_customer);
-          })
-          .catch((err) => {});
+        setDataPie(res?.arrPercent);
+        setDataTotalPie(res?.total);
+        setTotalCancerOrder(res?.total_cancel_order_by_customer);
       })
       .catch((err) => {});
 
@@ -67,7 +56,7 @@ const CancelOrderCustomer = (props) => {
       .catch((err) => {});
   }, []);
 
-  dataCity?.map((item) => {
+  province?.map((item) => {
     cityData?.push({
       value: item?.code,
       label: item?.name,
@@ -82,6 +71,21 @@ const CancelOrderCustomer = (props) => {
       getCancelReportCustomer(startDate, endDate, value, codeDistrict)
         .then((res) => {
           setDataPie(res?.arrPercent);
+          setDataTotalPie(res?.total == 0 ? [] : res?.total);
+          setTotalCancerOrder(res?.total_cancel_order_by_customer);
+        })
+        .catch((err) => {});
+      getReportOverviewCancelReport(
+        startPage,
+        20,
+        startDate,
+        endDate,
+        tab,
+        value
+      )
+        .then((res) => {
+          setData(res?.data);
+          setTotal(res?.totalItem);
         })
         .catch((err) => {});
     },
@@ -117,7 +121,7 @@ const CancelOrderCustomer = (props) => {
     getCancelReportCustomer(startDate, endDate, codeCity, codeDistrict)
       .then((res) => {
         setDataPie(res?.arrPercent);
-        setDataTotalPie(res?.total);
+        setDataTotalPie(res?.total == 0 ? [] : res?.total);
         setTotalCancerOrder(res?.total_cancel_order_by_customer);
       })
       .catch((err) => {});
