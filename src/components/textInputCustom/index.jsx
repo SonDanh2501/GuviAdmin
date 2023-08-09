@@ -26,6 +26,9 @@ const InputCustom = (props) => {
     prefix,
     mode,
     inputMoney,
+    showSearch,
+    filterOption,
+    filterSort,
   } = props;
   const lang = useSelector(getLanguageState);
 
@@ -61,6 +64,9 @@ const InputCustom = (props) => {
           defaultValue={defaultValue}
           className={className}
           mode={mode}
+          showSearch={showSearch}
+          filterOption={filterOption}
+          filterSort={filterSort}
         />
       ) : inputMoney ? (
         <InputNumber

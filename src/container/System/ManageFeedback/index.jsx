@@ -30,7 +30,7 @@ const ManageFeedback = () => {
 
   return (
     <div className="div-container-feedback">
-      <Tabs activeKey={keyActive} onChange={onChangeTab}>
+      <Tabs activeKey={keyActive} onChange={onChangeTab} size="small">
         {checkElement?.includes("list_review_support_customer") && (
           <Tabs.TabPane
             tab={`${i18n.t("review_collaborator", { lng: lang })}`}

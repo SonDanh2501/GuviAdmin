@@ -93,8 +93,8 @@ const CreateRole = (props) => {
       type_role: "",
       name_role: nameRole,
       id_key_api: keyApi,
-      is_area_manager: state.ratioCheckArea === 2 ? true : false,
-      area_manager_level_1: state.ratioCheckArea === 2 ? state.address : [],
+      // is_area_manager: state.ratioCheckArea === 2 ? true : false,
+      // area_manager_level_1: state.ratioCheckArea === 2 ? state.address : [],
     })
       .then((res) => {
         setIsLoading(false);
@@ -119,7 +119,7 @@ const CreateRole = (props) => {
           onChange={(e) => setNameRole(e.target.value)}
         />
       </div>
-      <div className="div-input mt-3">
+      {/* <div className="div-input mt-3">
         <Radio.Group
           onChange={(e) =>
             setState({ ...state, ratioCheckArea: e.target.value })
@@ -143,7 +143,7 @@ const CreateRole = (props) => {
             suffixIcon={<SearchOutlined />}
           />
         )}
-      </div>
+      </div> */}
 
       <div className="div-title-role">
         {data?.map((item, index) => {

@@ -16,7 +16,7 @@ import BussinessType from "../components/BussinessType";
 import CleaningHourly from "../components/CleaningHourly";
 import CleaningSchedule from "../components/CleaningSchedule";
 import "./index.scss";
-import { getLanguageState } from "../../../../redux/selectors/auth";
+import { getLanguageState, getUser } from "../../../../redux/selectors/auth";
 import i18n from "../../../../i18n";
 import InputCustom from "../../../../components/textInputCustom";
 import DeepCleaning from "../components/DeepCleaning";
@@ -40,36 +40,65 @@ const AddOrder = () => {
   const [dataGroupService, setDataGroupService] = useState([]);
   const [dataService, setDataService] = useState([]);
   const lang = useSelector(getLanguageState);
+  const user = useSelector(getUser);
 
   useEffect(() => {
-    getGroupServiceApi(0, 20)
-      .then((res) => {
-        setDataGroupService(res?.data);
-        setKindService(res?.data[0]?.kind);
-        setNameService(res?.data[0]?.title?.[lang]);
-        getServiceApi(res?.data[0]?._id)
-          .then((res) => {
-            setServiceApply(res?.data[0]?._id);
-            setDataService(res?.data);
-            getOptionalServiceByServiceApi(res?.data[0]?._id)
-              .then((res) => {
-                setOptionalService(res?.data);
-                setIsLoading(false);
-              })
-              .catch((err) => {
-                setIsLoading(false);
-              });
-          })
-          .catch((err) => {});
-      })
-      .catch((err) => {});
-  }, []);
+    // getGroupServiceApi(0, 20)
+    //   .then((res) => {
+    //     setDataGroupService(res?.data);
+    //     setKindService(res?.data[0]?.kind);
+    //     getServiceApi(res?.data[0]?._id)
+    //       .then((res) => {
+    //         setServiceApply(res?.data[0]?._id);
+    //         setDataService(res?.data);
 
-  dataGroupService?.map((item) => {
-    serviceSelect.push({
-      label: item?.title?.[lang],
-      value: item?._id,
-      kind: item?.kind,
+    //       })
+    //       .catch((err) => {});
+    //   })
+    //   .catch((err) => {});
+    if (user?.id_service_manager?.length == 0) {
+      getOptionalServiceByServiceApi(service[0]?._id)
+        .then((res) => {
+          setOptionalService(res?.data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+        });
+      setKindService(service[0]?.kind);
+      setServiceApply(service[0]?._id);
+    } else {
+      getOptionalServiceByServiceApi(user?.id_service_manager[0]?._id)
+        .then((res) => {
+          setOptionalService(res?.data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+        });
+      service?.map((item) => {
+        user?.id_service_manager?.map((i, index) => {
+          if (item?._id === i?._id) {
+            if (index === 0) {
+              setKindService(item?.kind);
+            }
+          }
+        });
+      });
+
+      setServiceApply(user?.id_service_manager[0]?._id);
+    }
+  }, [user]);
+
+  service?.map((item) => {
+    user?.id_service_manager?.map((i) => {
+      if (item?._id === i?._id) {
+        serviceSelect.push({
+          label: item?.title?.[lang],
+          value: item?._id,
+          kind: item?.kind,
+        });
+      }
     });
   });
 
@@ -121,20 +150,29 @@ const AddOrder = () => {
     setAddService([]);
     setKindService(kind?.kind);
     setNameService(kind?.label);
-    getServiceApi(value)
+    setServiceApply(value);
+    getOptionalServiceByServiceApi(value)
       .then((res) => {
-        setDataService(res?.data);
-        setServiceApply(res?.data[0]?._id);
-        getOptionalServiceByServiceApi(res?.data[0]?._id)
-          .then((res) => {
-            setIsLoading(false);
-            setOptionalService(res?.data);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-          });
+        setIsLoading(false);
+        setOptionalService(res?.data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false);
+      });
+    // getServiceApi(value)
+    //   .then((res) => {
+    //     setDataService(res?.data);
+    //     setServiceApply(res?.data[0]?._id);
+    //     getOptionalServiceByServiceApi(res?.data[0]?._id)
+    //       .then((res) => {
+    //         setIsLoading(false);
+    //         setOptionalService(res?.data);
+    //       })
+    //       .catch((err) => {
+    //         setIsLoading(false);
+    //       });
+    //   })
+    //   .catch((err) => {});
   };
 
   const valueSearch = (value) => {
@@ -170,9 +208,9 @@ const AddOrder = () => {
       <div className="mt-3">
         <Select
           className="select-service-order-add"
-          value={nameService}
           onChange={onChangeServiceApply}
           options={serviceSelect}
+          value={serviceApply}
         />
       </div>
       <div className="div-search-customer mt-4">
@@ -252,7 +290,7 @@ const AddOrder = () => {
         )}
       </div>
 
-      {isLoading && <LoadingPagination />}
+      {/* {isLoading && <LoadingPagination />} */}
     </div>
   );
 };

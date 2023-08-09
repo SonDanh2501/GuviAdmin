@@ -16,7 +16,8 @@ const ManageCollaborator = () => {
 
   useEffect(() => {
     setStatus(
-      readCookie("tab_collaborator") === "online"
+      readCookie("tab_collaborator") === "online" ||
+        readCookie("tab_collaborator") === ""
         ? "online"
         : readCookie("tab_collaborator")
     );

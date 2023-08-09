@@ -10,3 +10,7 @@ export const getPermission = () => {
 export const getRoomApi = () => {
   return axiosClient.get(`/room/get_list`);
 };
+
+export const getUserByToken = () => {
+  return axiosClient.get("/admin/auth/get_info_by_token");
+};

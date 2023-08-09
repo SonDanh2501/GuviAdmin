@@ -91,9 +91,9 @@ const EditRole = (props) => {
     editRoleApi(item?._id, {
       name_role: nameRole,
       id_key_api: keyApi,
-      is_area_manager: stateRole.ratioCheckArea === 2 ? true : false,
-      area_manager_level_1:
-        stateRole.ratioCheckArea === 2 ? stateRole.address : [],
+      // is_area_manager: stateRole.ratioCheckArea === 2 ? true : false,
+      // area_manager_level_1:
+      //   stateRole.ratioCheckArea === 2 ? stateRole.address : [],
     })
       .then((res) => {
         setIsLoading(false);
@@ -127,7 +127,7 @@ const EditRole = (props) => {
           onChange={(e) => setNameRole(e.target.value)}
         />
       </div>
-      <div className="div-input mt-2">
+      {/* <div className="div-input mt-2">
         <Radio.Group
           onChange={(e) =>
             setStateRole({ ...stateRole, ratioCheckArea: e.target.value })
@@ -151,7 +151,7 @@ const EditRole = (props) => {
             value={stateRole?.address}
           />
         )}
-      </div>
+      </div> */}
       <div className="div-title-role">
         {data?.map((item, index) => {
           return (

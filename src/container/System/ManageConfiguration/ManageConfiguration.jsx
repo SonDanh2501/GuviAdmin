@@ -1,16 +1,13 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import i18n from "../../../i18n";
 import {
   getElementState,
   getLanguageState,
 } from "../../../redux/selectors/auth";
 import "./ManageConfiguration.scss";
-import i18n from "../../../i18n";
-import Chat from "../Chat";
-import SettingQrCode from "./ScreenConfiguration/SettingQrcode";
-import TextEditor from "../../../components/TextEditor";
 
 const ManageConfiguration = () => {
   const navigate = useNavigate();
@@ -20,8 +17,6 @@ const ManageConfiguration = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  console.log(checkElement?.includes("get_reward_collaborator_setting"));
 
   const onClick = (item) => {
     switch (item?.value) {

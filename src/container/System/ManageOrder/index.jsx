@@ -21,6 +21,7 @@ import dayjs from "dayjs";
 import {
   getElementState,
   getLanguageState,
+  getUser,
 } from "../../../redux/selectors/auth";
 import { getProvince, getService } from "../../../redux/selectors/service";
 import OrderManage from "./Order/OrderManage";
@@ -28,9 +29,16 @@ import "./index.scss";
 import LoadingPagination from "../../../components/paginationLoading";
 import { useCookies } from "../../../helper/useCookies";
 import useWindowDimensions from "../../../helper/useWindowDimensions";
+import { errorNotify } from "../../../helper/toast";
 const { RangePicker } = DatePicker;
 
 const ManageOrder = () => {
+  const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
+  const service = useSelector(getService);
+  const province = useSelector(getProvince);
+  const user = useSelector(getUser);
+  const [name, setName] = useState("");
   const [tab, setTab] = useState("all");
   const [kind, setKind] = useState("");
   const [valueSearch, setValueSearch] = useState("");
@@ -85,10 +93,7 @@ const ManageOrder = () => {
   const [saveToCookie, readCookie] = useCookies();
   const navigate = useNavigate();
   const { width } = useWindowDimensions();
-  const checkElement = useSelector(getElementState);
-  const lang = useSelector(getLanguageState);
-  const service = useSelector(getService);
-  const province = useSelector(getProvince);
+
   const dateFormat = "YYYY/MM/DD";
   useEffect(() => {
     window.scroll(0, Number(readCookie("order_scrolly")));
@@ -117,6 +122,11 @@ const ManageOrder = () => {
         ? readCookie("end_date_order")
         : moment().endOf("date").toISOString()
     );
+    setDistrict(
+      readCookie("district_order") === ""
+        ? []
+        : readCookie("district_order").split(",")
+    );
   }, []);
   useEffect(() => {
     getOrderApi(
@@ -133,44 +143,62 @@ const ManageOrder = () => {
         ? readCookie("end_date_order")
         : moment().endOf("date").toISOString(),
       readCookie("city_order") !== "" ? readCookie("city_order") : "",
-      district
+      readCookie("district_order").split(",")
     )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+      });
   }, []);
 
   const cityOptions = [];
   const districtOption = [];
-  const optionsService = [
-    {
-      value: "",
-      label: `${i18n.t("all", { lng: lang })}`,
-    },
-  ];
+  const optionsService = [];
 
   service.map((item) => {
-    optionsService.push({
-      value: item?._id,
-      label: item?.title?.[lang],
+    user?.id_service_manager?.map((i) => {
+      if (item?._id === i?._id) {
+        optionsService.push({
+          value: item?._id,
+          label: item?.title?.[lang],
+        });
+      }
     });
   });
 
   province?.map((item) => {
-    cityOptions.push({
-      value: item?.code,
-      label: item?.name,
-      district: item?.districts,
-    });
+    if (user?.area_manager_lv_1 === []) {
+      cityOptions.push({
+        value: item?.code,
+        label: item?.name,
+        district: item?.districts,
+      });
+    } else if (user?.area_manager_lv_1?.includes(item?.code)) {
+      cityOptions.push({
+        value: item?.code,
+        label: item?.name,
+        district: item?.districts,
+      });
+    }
   });
 
   dataDistrict?.map((item) => {
-    districtOption.push({
-      value: item?.code,
-      label: item?.name,
-    });
+    if (user?.area_manager_lv_2 === []) {
+      districtOption.push({
+        value: item?.code,
+        label: item?.name,
+      });
+    } else if (user?.area_manager_lv_2?.includes(item?.code)) {
+      districtOption.push({
+        value: item?.code,
+        label: item?.name,
+      });
+    }
   });
 
   const handleSearch = useCallback(
@@ -188,6 +216,19 @@ const ManageOrder = () => {
   const handleFilterByCondition = () => {
     setIsLoading(true);
     setCheckCondition(false);
+    saveToCookie("district_order", district);
+    saveToCookie(
+      "start_date_order",
+      condition === "date_create" || condition === "date_work" ? startDate : ""
+    );
+    saveToCookie(
+      "end_date_order",
+      condition === "date_create" || condition === "date_work" ? endDate : ""
+    );
+    saveToCookie("name_filter", name);
+    saveToCookie("kind_order", kind);
+    saveToCookie("city_order", city);
+
     getOrderApi(
       valueSearch,
       startPage,
@@ -207,6 +248,9 @@ const ManageOrder = () => {
       })
       .catch((err) => {
         setIsLoading(false);
+        errorNotify({
+          message: err,
+        });
       });
   };
   const onChangeTab = (value, item) => {
@@ -229,7 +273,8 @@ const ManageOrder = () => {
       type,
       startDate,
       endDate,
-      city
+      city,
+      district
     )
       .then((res) => {
         setData(res?.data);
@@ -246,6 +291,7 @@ const ManageOrder = () => {
     setEndDate(new Date("2022-12-31").toISOString());
     saveToCookie("kind_order", "");
     saveToCookie("city_order", "");
+    saveToCookie("district_order", "");
     saveToCookie("name_filter", "");
     saveToCookie("type_order", "");
     saveToCookie("start_date_order", "");
@@ -259,6 +305,7 @@ const ManageOrder = () => {
       type,
       new Date("2022-12-31").toISOString(),
       moment().endOf("date").toISOString(),
+      "",
       ""
     )
       .then((res) => {
@@ -410,8 +457,8 @@ const ManageOrder = () => {
                       value={kind}
                       onChange={(e, item) => {
                         setKind(e);
-                        saveToCookie("kind_order", e);
-                        saveToCookie("name_filter", item?.label);
+
+                        setName(item?.label);
                       }}
                     />
                   ) : condition === "city" ? (
@@ -422,8 +469,7 @@ const ManageOrder = () => {
                       onChange={(e, item) => {
                         setCity(e);
                         setDataDistrict(item?.district);
-                        saveToCookie("city_order", e);
-                        saveToCookie("name_filter", item?.label);
+                        setName(item?.label);
                       }}
                       showSearch
                       filterOption={(input, option) =>
@@ -441,14 +487,6 @@ const ManageOrder = () => {
                       onChange={(date, dateString) => {
                         setStartDate(moment(dateString[0]).toISOString());
                         setEndDate(moment(dateString[1]).toISOString());
-                        saveToCookie(
-                          "start_date_order",
-                          moment(dateString[0]).toISOString()
-                        );
-                        saveToCookie(
-                          "end_date_order",
-                          moment(dateString[1]).toISOString()
-                        );
                       }}
                     />
                   ) : (
