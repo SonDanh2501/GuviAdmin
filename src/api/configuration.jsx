@@ -213,3 +213,23 @@ export const activeGroupPromotion = (id, data) => {
     data
   );
 };
+
+// config business
+
+export const getListBusiness = (start, length, value) => {
+  return axiosClient.get(
+    `/admin/business_manager/get_list?lang=vi&start=${start}&length=${length}&search=${value}`
+  );
+};
+
+export const getDetailBusiness = (id) => {
+  return axiosClient.get(`/admin/business_manager/get_detail/${id}`);
+};
+
+export const createBusiness = (data) => {
+  return axiosClient.post(`/admin/business_manager/create_item`, data);
+};
+
+export const editBusiness = (id, data) => {
+  return axiosClient.post(`/admin/business_manager/edit_item/${id}`, data);
+};

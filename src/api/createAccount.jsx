@@ -28,7 +28,7 @@ export const editAccountAdmin = (id, data) => {
 };
 
 export const deleteAccountAdmin = (id) => {
-  return axiosClient.post(`admin/user_system_manager/acti_admin/${id}`);
+  return axiosClient.post(`admin/user_system_manager/delete_admin/${id}`);
 };
 
 export const activeAccountAdmin = (id, data) => {

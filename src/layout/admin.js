@@ -74,6 +74,7 @@ import BannerManage from "../container/System/ManageSetting/ManageBanner/BannerM
 import NewsManage from "../container/System/ManageSetting/ManageNews/NewsManage";
 import EditPromotion from "../container/System/ManagePromotion/PromotionEdit";
 import SettingGroupPromotion from "../container/System/ManageConfiguration/ScreenConfiguration/SettingGroupPromotion";
+import BusinessConfig from "../container/System/ManageConfiguration/ScreenConfiguration/BusinessConfig";
 
 const Admin = () => {
   return (
@@ -342,6 +343,10 @@ const Admin = () => {
       <Route
         path="/adminManage/manage-configuration/group_promotion_manage"
         element={<SettingGroupPromotion />}
+      />
+      <Route
+        path="/adminManage/manage-configuration/business_manage"
+        element={<BusinessConfig />}
       />
     </Routes>
   );

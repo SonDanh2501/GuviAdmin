@@ -73,6 +73,7 @@ const OrderManage = (props) => {
           type,
           startDate,
           endDate,
+          "",
           ""
         )
           .then((res) => {
@@ -451,7 +452,8 @@ const OrderManage = (props) => {
       type,
       startDate,
       endDate,
-      city
+      city,
+      ""
     )
       .then((res) => {
         setData(res?.data);

@@ -27,3 +27,9 @@ export const languageAction = createActions({
   languageSuccess: (payload) => payload,
   languageFailure: (err) => err,
 });
+
+export const getUserAction = createActions({
+  getUserRequest: (payload) => payload,
+  getUserSuccess: (payload) => payload,
+  getUserFailure: (err) => err,
+});

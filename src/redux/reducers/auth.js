@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { INIT_STATE } from "../../utils/contant";
 import {
+  getUserAction,
   languageAction,
   loginAction,
   logoutAction,
@@ -31,6 +32,11 @@ export default function LoginReducers(state = INIT_STATE.auth, action) {
         ...state,
         permission: action.payload.permission,
         checkElement: action.payload.element,
+      };
+    case getType(getUserAction.getUserSuccess):
+      return {
+        ...state,
+        user: action.payload.user,
       };
     case getType(languageAction.languageSuccess):
       return {

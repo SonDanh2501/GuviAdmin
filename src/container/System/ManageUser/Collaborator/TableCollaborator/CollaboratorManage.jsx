@@ -103,7 +103,8 @@ const CollaboratorManage = (props) => {
       lang,
       Number(readCookie("start_page_ctv")),
       20,
-      readCookie("tab_collaborator") === "online"
+      readCookie("tab_collaborator") === "online" ||
+        readCookie("tab_collaborator") === ""
         ? "online"
         : readCookie("tab_collaborator"),
       valueSearch,

@@ -1,14 +1,13 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Collapse, Nav } from "reactstrap";
 import logo from "../../assets/images/LogoS.png";
 import i18n from "../../i18n";
 import {
   getLanguageState,
   getPermissionState,
-  getUser,
 } from "../../redux/selectors/auth";
 import router from "../../routes/router";
 import "./Sidebar.scss";
@@ -41,7 +40,16 @@ const Sidebar = ({ hide }) => {
     checkPermission.push(item?.id_side_bar);
   });
 
-  useEffect(() => {}, [checkPermission]);
+  const deleteAllCookies = () => {
+    const cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = name + "=;expires=Thu, 01 Jan 2033 00:00:00 GMT";
+    }
+  };
 
   return (
     <>
@@ -63,7 +71,10 @@ const Sidebar = ({ hide }) => {
                             : "li-nav-link-none"
                         }
                       >
-                        <NavLink to={item?.path}>
+                        <NavLink
+                          to={item?.path}
+                          onClick={() => deleteAllCookies()}
+                        >
                           {({ isActive }) => (
                             <div
                               className={

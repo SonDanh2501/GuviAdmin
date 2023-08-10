@@ -5,16 +5,12 @@ import {
   Dropdown,
   FloatButton,
   Image,
-  Input,
   Pagination,
-  Popconfirm,
-  Select,
   Space,
   Table,
   Tabs,
 } from "antd";
 import moment from "moment";
-import vi from "moment/locale/vi";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
@@ -38,16 +34,15 @@ import LoadingPagination from "../../../components/paginationLoading";
 import InputCustom from "../../../components/textInputCustom";
 import { formatMoney } from "../../../helper/formatMoney";
 import { errorNotify } from "../../../helper/toast";
+import i18n from "../../../i18n";
 import { loadingAction } from "../../../redux/actions/loading";
 import {
   getElementState,
   getLanguageState,
-  getUser,
 } from "../../../redux/selectors/auth";
 import EditTimeOrder from "../ManageOrder/EditTimeGroupOrder";
 import EditTimeOrderSchedule from "./EditTimeOrderSchedule";
 import "./index.scss";
-import i18n from "../../../i18n";
 const width = window.innerWidth;
 
 const DetailsOrder = () => {

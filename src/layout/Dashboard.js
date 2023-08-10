@@ -5,7 +5,7 @@ import HeaderBar from "../container/Header/Header";
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { permissionAction } from "../redux/actions/auth";
+import { getUserAction, permissionAction } from "../redux/actions/auth";
 import { getProvinceAction } from "../redux/actions/service";
 import "./Dashboard.scss";
 import Admin from "./admin";
@@ -20,6 +20,7 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(permissionAction.permissionRequest({ navigate: navigate }));
     dispatch(getProvinceAction.getProvinceRequest());
+    dispatch(getUserAction.getUserRequest());
   }, []);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ const Dashboard = () => {
   }, [window]);
 
   return (
-    <Layout style={{ width: "100%" }}>
+    <Layout hasSider>
       {width > 900 ? (
         <Sider
           trigger={null}
@@ -46,7 +47,6 @@ const Dashboard = () => {
             bottom: 0,
             backgroundColor: "white",
           }}
-          width={230}
         >
           <Sidebar hide={collapsed} />
         </Sider>
@@ -64,9 +64,9 @@ const Dashboard = () => {
       <Layout
         className="site-layout"
         style={{
-          marginLeft: width < 900 ? 10 : collapsed ? 230 : 80,
+          marginLeft: width < 900 ? 10 : collapsed ? 200 : 80,
           height: "auto",
-          width: "100%",
+          width: "80%",
         }}
       >
         <Header

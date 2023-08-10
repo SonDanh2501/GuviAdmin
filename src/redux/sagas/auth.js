@@ -2,7 +2,7 @@ import jwtDecode from "jwt-decode";
 
 import axios from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
-import { getPermission, loginApi } from "../../api/auth";
+import { getPermission, getUserByToken, loginApi } from "../../api/auth";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { setToken } from "../../helper/tokenHelper";
 import {
@@ -10,14 +10,16 @@ import {
   loginAction,
   logoutAction,
   permissionAction,
+  getUserAction,
 } from "../actions/auth";
 import { loadingAction } from "../actions/loading";
+const BaseUrl = process.env.REACT_APP_BASE_URL;
+const TestUrl = process.env.REACT_APP_TEST_URL;
 
 function* loginSaga(action) {
   try {
     const response = yield call(loginApi, action.payload.data);
     setToken(response?.token);
-    const user = jwtDecode(response?.token);
     axios
       .get(
         "https://guvico-be-develop.up.railway.app/admin/auth/get_permission_by_token",
@@ -36,14 +38,12 @@ function* loginSaga(action) {
           }
         });
       });
-
     successNotify({
       message: "Đăng nhập thành công",
     });
     yield put(
       loginAction.loginSuccess({
         token: response?.token,
-        user: user,
         // permission: permission,
       })
     );
@@ -105,11 +105,27 @@ function* languageSaga(action) {
   }
 }
 
+function* getUserSaga() {
+  try {
+    const response = yield call(getUserByToken);
+    yield put(
+      getUserAction.getUserSuccess({
+        user: response,
+      })
+    );
+    yield put(loadingAction.loadingRequest(false));
+  } catch (err) {
+    yield put(getUserAction.getUserFailure(err));
+    yield put(loadingAction.loadingRequest(false));
+  }
+}
+
 function* AuthSaga() {
   yield takeLatest(loginAction.loginRequest, loginSaga);
   yield takeLatest(logoutAction.logoutRequest, logoutSaga);
   yield takeLatest(permissionAction.permissionRequest, permissionSaga);
   yield takeLatest(languageAction.languageRequest, languageSaga);
+  yield takeLatest(getUserAction.getUserRequest, getUserSaga);
 }
 
 export default AuthSaga;

@@ -16,6 +16,8 @@ const AddGroupPromotion = (props) => {
     open: false,
     thumbnail: "",
     isLoading: false,
+    position: 0,
+    type: "",
   });
   const [title, setTitle] = useState({
     vi: "",
@@ -38,6 +40,8 @@ const AddGroupPromotion = (props) => {
         en: description.en,
       },
       thumbnail: state.thumbnail,
+      position: state.position,
+      type_render_view: state.type,
     })
       .then((res) => {
         setState({ ...state, isLoading: false });
@@ -101,6 +105,20 @@ const AddGroupPromotion = (props) => {
             }
           />
         </div>
+
+        <InputCustom
+          title="Vị trí"
+          onChange={(e) => setState({ ...state, position: e.target.value })}
+          type="number"
+          placholder="Nhập vị trí"
+        />
+
+        <InputCustom
+          title="Loại"
+          onChange={(e) => setState({ ...state, type: e.target.value })}
+          type="number"
+          placholder="Nhập kiểu hiện thị mã KM"
+        />
 
         <UploadImage
           title="Hình ảnh"
