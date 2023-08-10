@@ -1,4 +1,4 @@
-import { Button, Drawer, Input, List } from "antd";
+import { Button, Drawer, Input, List, Popover } from "antd";
 import {
   addDays,
   addMonths,
@@ -40,9 +40,18 @@ import { loadingAction } from "../../../../../redux/actions/loading";
 import "./index.scss";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
+import { toPng } from "html-to-image";
+import moment from "moment";
 
 const CleaningSchedule = (props) => {
-  const { extendService, id, name, setErrorNameCustomer, idService } = props;
+  const {
+    extendService,
+    id,
+    name,
+    setErrorNameCustomer,
+    idService,
+    nameService,
+  } = props;
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState("");
   const [long, setLong] = useState("");
@@ -76,6 +85,7 @@ const CleaningSchedule = (props) => {
   const [idCollaborator, setIdCollaborator] = useState("");
   const [dataAddress, setDataAddress] = useState([]);
   const [open, setOpen] = useState(false);
+  const ref = useRef(null);
   const lang = useSelector(getLanguageState);
   const inputRef = useRef();
   const navigate = useNavigate();
@@ -586,6 +596,25 @@ const CleaningSchedule = (props) => {
     [id]
   );
 
+  const onGetBill = useCallback(() => {
+    if (ref.current === null) {
+      return;
+    }
+
+    toPng(ref.current, { cacheBust: true })
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.download = `${name}-${nameService}-${moment().format(
+          "DD/MM/YYYY"
+        )}.png`;
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [ref, name, nameService]);
+
   return (
     <>
       <div>
@@ -908,6 +937,70 @@ const CleaningSchedule = (props) => {
                 <a style={{ color: "red" }}> {formatMoney(-discount)}</a>
               </div>
             )}
+          </div>
+        )}
+
+        {priceOrder && (
+          <div onClick={onGetBill}>
+            <Popover
+              placement="rightTop"
+              content={
+                <div className="div-bill" ref={ref}>
+                  <div className="div-total">
+                    <a className="text-bill">Thông tin báo giá</a>
+                    <a>Dịch vụ: {nameService}</a>
+                    <a>Địa điểm: {address}</a>
+                    <a>
+                      {`${i18n.t("number_sessions", { lng: lang })}`}:{" "}
+                      {selectDay.length}
+                    </a>
+                    <a>
+                      {`${i18n.t("provisional", { lng: lang })}`}:{" "}
+                      {formatMoney(priceOrder)}
+                    </a>
+                    <a>
+                      {`${i18n.t("platform_fee", { lng: lang })}`}:{" "}
+                      {formatMoney(feeService)}
+                    </a>
+
+                    {eventPromotion.map((item, index) => {
+                      return (
+                        <a style={{ color: "red", marginLeft: 5 }}>
+                          - {item?.title?.[lang]}: {"-"}
+                          {formatMoney(item?.discount)}
+                        </a>
+                      );
+                    })}
+                    {discount > 0 && (
+                      <div>
+                        <a style={{ color: "red", marginLeft: 5 }}>
+                          - {itemPromotion?.title?.[lang]}:{" "}
+                        </a>
+                        <a style={{ color: "red" }}>
+                          {" "}
+                          {formatMoney(-discount)}
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                  <div className="price-total">
+                    <a className="title-price">Tổng tiền thanh toán </a>
+                    <a className="text-money-total">
+                      {formatMoney(
+                        priceOrder + feeService - discount - eventFeePromotion
+                      )}
+                    </a>
+                  </div>
+                </div>
+              }
+              trigger="click"
+            >
+              <Button
+                style={{ height: 20, marginTop: 20, padding: 0, width: 20 }}
+              >
+                <i class="uil uil-receipt"></i>
+              </Button>
+            </Popover>
           </div>
         )}
 

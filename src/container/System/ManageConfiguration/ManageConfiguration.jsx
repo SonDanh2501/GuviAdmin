@@ -1,16 +1,13 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import i18n from "../../../i18n";
 import {
   getElementState,
   getLanguageState,
 } from "../../../redux/selectors/auth";
 import "./ManageConfiguration.scss";
-import i18n from "../../../i18n";
-import Chat from "../Chat";
-import SettingQrCode from "./ScreenConfiguration/SettingQrcode";
-import TextEditor from "../../../components/TextEditor";
 
 const ManageConfiguration = () => {
   const navigate = useNavigate();
@@ -20,8 +17,6 @@ const ManageConfiguration = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  console.log(checkElement?.includes("get_reward_collaborator_setting"));
 
   const onClick = (item) => {
     switch (item?.value) {
@@ -64,7 +59,9 @@ const ManageConfiguration = () => {
       case "group_promotion":
         navigate("/adminManage/manage-configuration/group_promotion_manage");
         break;
-
+      case "business_config":
+        navigate("/adminManage/manage-configuration/business_manage");
+        break;
       default:
         break;
     }
@@ -173,6 +170,12 @@ const DATA = [
   },
   {
     id: 13,
+    title: "Cấu hình đối tác kinh doanh",
+    value: "business_config",
+    role: "get_group_service_setting",
+  },
+  {
+    id: 14,
     title: "Quản lý hình ảnh",
     value: "image_manager",
     role: "get_file_manager",

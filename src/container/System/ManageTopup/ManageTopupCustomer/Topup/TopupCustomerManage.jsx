@@ -4,7 +4,7 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   cancelMoneyCustomerApi,
   deleteMoneyCustomerApi,
@@ -17,17 +17,16 @@ import ModalCustom from "../../../../../components/modalCustom";
 import WithdrawCustomer from "../../../../../components/withdrawCustomer/withdrawCustomer";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import i18n from "../../../../../i18n";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import { getTopupCustomer } from "../../../../../redux/actions/topup";
 import {
   getElementState,
   getLanguageState,
-  getUser,
 } from "../../../../../redux/selectors/auth";
 import { getTopupKH, totalTopupKH } from "../../../../../redux/selectors/topup";
 import "./TopupCustomerManage.scss";
-import i18n from "../../../../../i18n";
-import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const TopupCustomer = () => {
   const [dataFilter, setDataFilter] = useState([]);

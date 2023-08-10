@@ -17,6 +17,8 @@ const EditGroupPromotion = (props) => {
     open: false,
     thumbnail: "",
     isLoading: false,
+    position: 0,
+    type: "",
   });
   const [title, setTitle] = useState({
     vi: "",
@@ -28,7 +30,12 @@ const EditGroupPromotion = (props) => {
   });
 
   useEffect(() => {
-    setState({ ...state, thumbnail: item?.thumbnail });
+    setState({
+      ...state,
+      thumbnail: item?.thumbnail,
+      position: item?.position,
+      type: item?.type_render_view,
+    });
     setTitle({ ...title, vi: item?.name?.vi, en: item?.name?.en });
     setDescription({
       ...description,
@@ -49,6 +56,8 @@ const EditGroupPromotion = (props) => {
         en: description.en,
       },
       thumbnail: state.thumbnail,
+      position: state.position,
+      type_render_view: state.type,
     })
       .then((res) => {
         setState({ ...state, isLoading: false });
@@ -114,6 +123,20 @@ const EditGroupPromotion = (props) => {
             }
           />
         </div>
+
+        <InputCustom
+          title="Vị trí"
+          onChange={(e) => setState({ ...state, position: e.target.value })}
+          type="number"
+          placholder="Nhập vị trí"
+        />
+
+        <InputCustom
+          title="Loại"
+          onChange={(e) => setState({ ...state, type: e.target.value })}
+          type="number"
+          placholder="Nhập kiểu hiện thị mã KM"
+        />
 
         <UploadImage
           title="Hình ảnh"

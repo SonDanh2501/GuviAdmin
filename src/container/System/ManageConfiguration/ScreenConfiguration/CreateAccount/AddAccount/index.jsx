@@ -12,7 +12,10 @@ import { errorNotify } from "../../../../../../helper/toast";
 import { getLanguageState } from "../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../i18n";
 import InputCustom from "../../../../../../components/textInputCustom";
-import { getProvince } from "../../../../../../redux/selectors/service";
+import {
+  getProvince,
+  getService,
+} from "../../../../../../redux/selectors/service";
 
 const AddAccount = ({ setData, setTotal }) => {
   const [fullName, setFullName] = useState("");
@@ -20,10 +23,36 @@ const AddAccount = ({ setData, setTotal }) => {
   const [password, setPassword] = useState("");
   const [idRole, setIdRole] = useState("");
   const [dataRole, setDataRole] = useState([]);
+  const [city, setCity] = useState([]);
+  const [dataDistrict, setDataDistrict] = useState([]);
+  const [idService, setIdService] = useState([]);
+  const [district, setDistrict] = useState([]);
   const roleAdmin = [];
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
+  const service = useSelector(getService);
+
+  const cityOption = [
+    {
+      value: "",
+      label: "Tất cả",
+    },
+  ];
+  const districtOption = [
+    {
+      value: "",
+      label: "Tất cả",
+    },
+  ];
+  const serviceOption = [
+    {
+      value: "",
+      label: "Tất cả",
+    },
+  ];
+
   const showDrawer = () => {
     setOpen(true);
   };
@@ -46,6 +75,30 @@ const AddAccount = ({ setData, setTotal }) => {
     });
   });
 
+  province?.map((item) => {
+    cityOption?.push({
+      value: item?.code,
+      label: item?.name,
+      district: item?.districts,
+    });
+  });
+
+  dataDistrict?.map((item) => {
+    item?.district?.map((i) => {
+      districtOption?.push({
+        value: i?.code,
+        label: i?.name,
+      });
+    });
+  });
+
+  service?.map((item) => {
+    serviceOption?.push({
+      value: item?._id,
+      label: item?.title?.vi,
+    });
+  });
+
   const onCreateAccount = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
     createAccountAdmin({
@@ -54,6 +107,10 @@ const AddAccount = ({ setData, setTotal }) => {
       role: "admin",
       password: password,
       id_role_admin: idRole,
+      area_manager_lv_0: "viet_nam",
+      area_manager_lv_1: city,
+      area_manager_lv_2: district,
+      id_service_manager: idService,
     })
       .then((res) => {
         setOpen(false);
@@ -71,7 +128,7 @@ const AddAccount = ({ setData, setTotal }) => {
         });
         dispatch(loadingAction.loadingRequest(false));
       });
-  }, [fullName, email, password, idRole]);
+  }, [fullName, email, password, idRole, idService, city, district]);
 
   return (
     <div>
@@ -100,6 +157,61 @@ const AddAccount = ({ setData, setTotal }) => {
           onChange={(e) => setPassword(e.target.value)}
           password={true}
         />
+
+        <div className=" div-form-role">
+          <InputCustom
+            title="Tỉnh/thành phố"
+            placeholder="Vui lòng chọn tỉnh/thành phố"
+            onChange={(e, item) => {
+              setCity(e);
+              setDataDistrict(item);
+            }}
+            options={cityOption}
+            style={{ width: "100%" }}
+            select={true}
+            mode="multiple"
+            showSearch
+            filterOption={(input, option) =>
+              (option?.label ?? "").includes(input)
+            }
+          />
+        </div>
+
+        <div className=" div-form-role">
+          <InputCustom
+            title="Quận/huyện"
+            placeholder="Vui lòng chọn quận/huyện"
+            onChange={(e) => {
+              setDistrict(e);
+            }}
+            options={districtOption}
+            style={{ width: "100%" }}
+            select={true}
+            mode="multiple"
+            showSearch
+            filterOption={(input, option) =>
+              (option?.label ?? "").includes(input)
+            }
+          />
+        </div>
+
+        <div className=" div-form-role">
+          <InputCustom
+            title="Loại dịch vụ"
+            placeholder="Vui lòng chọn loại dịch vụ"
+            onChange={(e) => {
+              setIdService(e);
+            }}
+            options={serviceOption}
+            style={{ width: "100%" }}
+            select={true}
+            mode="multiple"
+            showSearch
+            filterOption={(input, option) =>
+              (option?.label ?? "").includes(input)
+            }
+          />
+        </div>
 
         <div className=" div-form-role">
           <InputCustom

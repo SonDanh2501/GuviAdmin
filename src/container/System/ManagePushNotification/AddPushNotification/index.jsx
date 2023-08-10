@@ -290,7 +290,7 @@ const AddPushNotification = ({ idOrder }) => {
           )} 2,62`}
           image={imgThumbnail}
           setImage={setImgThumbnail}
-          classImg={"img-thumbnail-banner"}
+          classImg="img-background-noti"
         />
 
         <Button
