@@ -59,7 +59,9 @@ const ManageConfiguration = () => {
       case "group_promotion":
         navigate("/adminManage/manage-configuration/group_promotion_manage");
         break;
-
+      case "business_config":
+        navigate("/adminManage/manage-configuration/business_manage");
+        break;
       default:
         break;
     }
@@ -168,6 +170,12 @@ const DATA = [
   },
   {
     id: 13,
+    title: "Cấu hình đối tác kinh doanh",
+    value: "business_config",
+    role: "get_group_service_setting",
+  },
+  {
+    id: 14,
     title: "Quản lý hình ảnh",
     value: "image_manager",
     role: "get_file_manager",

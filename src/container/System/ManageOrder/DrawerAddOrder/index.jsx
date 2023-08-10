@@ -56,7 +56,8 @@ const AddOrder = () => {
     //       .catch((err) => {});
     //   })
     //   .catch((err) => {});
-    if (user?.id_service_manager?.length == 0) {
+    setIsLoading(true);
+    if (user?.id_service_manager?.length === 0) {
       getOptionalServiceByServiceApi(service[0]?._id)
         .then((res) => {
           setOptionalService(res?.data);
@@ -67,6 +68,7 @@ const AddOrder = () => {
         });
       setKindService(service[0]?.kind);
       setServiceApply(service[0]?._id);
+      setNameService(service[0]?.title?.[lang]);
     } else {
       getOptionalServiceByServiceApi(user?.id_service_manager[0]?._id)
         .then((res) => {
@@ -76,30 +78,39 @@ const AddOrder = () => {
         .catch((err) => {
           setIsLoading(false);
         });
-      service?.map((item) => {
-        user?.id_service_manager?.map((i, index) => {
-          if (item?._id === i?._id) {
-            if (index === 0) {
-              setKindService(item?.kind);
-            }
-          }
-        });
-      });
-
+      // service?.map((item) => {
+      //   user?.id_service_manager?.map((i, index) => {
+      //     if (item?._id === i?._id) {
+      //       if (index === 0) {
+      //         setKindService(item?.kind);
+      //       }
+      //     }
+      //   });
+      // });
       setServiceApply(user?.id_service_manager[0]?._id);
+      setKindService(user?.id_service_manager[0]?.kind);
+      setNameService(user?.id_service_manager[0]?.title?.[lang]);
     }
   }, [user]);
 
   service?.map((item) => {
-    user?.id_service_manager?.map((i) => {
-      if (item?._id === i?._id) {
-        serviceSelect.push({
-          label: item?.title?.[lang],
-          value: item?._id,
-          kind: item?.kind,
-        });
-      }
-    });
+    if (user?.id_service_manager?.length === 0) {
+      serviceSelect.push({
+        label: item?.title?.[lang],
+        value: item?._id,
+        kind: item?.kind,
+      });
+    } else {
+      user?.id_service_manager?.map((i) => {
+        if (item?._id === i?._id) {
+          serviceSelect.push({
+            label: item?.title?.[lang],
+            value: item?._id,
+            kind: item?.kind,
+          });
+        }
+      });
+    }
   });
 
   useEffect(() => {
@@ -259,6 +270,7 @@ const AddOrder = () => {
             name={name}
             setErrorNameCustomer={setErrorNameCustomer}
             idService={serviceApply}
+            nameService={nameService}
           />
         ) : kindService === "giup_viec_co_dinh" ? (
           <CleaningSchedule
@@ -267,6 +279,7 @@ const AddOrder = () => {
             name={name}
             setErrorNameCustomer={setErrorNameCustomer}
             idService={serviceApply}
+            nameService={nameService}
           />
         ) : kindService === "phuc_vu_nha_hang" ? (
           <BussinessType
@@ -277,6 +290,7 @@ const AddOrder = () => {
             name={name}
             setErrorNameCustomer={setErrorNameCustomer}
             idService={serviceApply}
+            nameService={nameService}
           />
         ) : kindService === "tong_ve_sinh" ? (
           <DeepCleaning
@@ -290,7 +304,7 @@ const AddOrder = () => {
         )}
       </div>
 
-      {/* {isLoading && <LoadingPagination />} */}
+      {isLoading && <LoadingPagination />}
     </div>
   );
 };

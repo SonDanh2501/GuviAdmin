@@ -161,18 +161,25 @@ const ManageOrder = () => {
   const optionsService = [];
 
   service.map((item) => {
-    user?.id_service_manager?.map((i) => {
-      if (item?._id === i?._id) {
-        optionsService.push({
-          value: item?._id,
-          label: item?.title?.[lang],
-        });
-      }
-    });
+    if (user?.id_service_manager?.length === 0) {
+      optionsService.push({
+        value: item?._id,
+        label: item?.title?.[lang],
+      });
+    } else {
+      user?.id_service_manager?.map((i) => {
+        if (item?._id === i?._id) {
+          optionsService.push({
+            value: item?._id,
+            label: item?.title?.[lang],
+          });
+        }
+      });
+    }
   });
 
   province?.map((item) => {
-    if (user?.area_manager_lv_1 === []) {
+    if (user?.area_manager_lv_1?.length === 0) {
       cityOptions.push({
         value: item?.code,
         label: item?.name,
@@ -188,7 +195,7 @@ const ManageOrder = () => {
   });
 
   dataDistrict?.map((item) => {
-    if (user?.area_manager_lv_2 === []) {
+    if (user?.area_manager_lv_2?.length === 0) {
       districtOption.push({
         value: item?.code,
         label: item?.name,

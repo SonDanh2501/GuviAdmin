@@ -32,7 +32,7 @@ const Dashboard = () => {
   }, [window]);
 
   return (
-    <Layout style={{ width: "100%" }}>
+    <Layout hasSider>
       {width > 900 ? (
         <Sider
           trigger={null}
@@ -47,7 +47,6 @@ const Dashboard = () => {
             bottom: 0,
             backgroundColor: "white",
           }}
-          width={230}
         >
           <Sidebar hide={collapsed} />
         </Sider>
@@ -65,9 +64,9 @@ const Dashboard = () => {
       <Layout
         className="site-layout"
         style={{
-          marginLeft: width < 900 ? 10 : collapsed ? 230 : 80,
+          marginLeft: width < 900 ? 10 : collapsed ? 200 : 80,
           height: "auto",
-          width: "100%",
+          width: "80%",
         }}
       >
         <Header
