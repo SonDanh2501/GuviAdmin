@@ -76,43 +76,23 @@ const GroupCustomerManage = () => {
   const activeGroupCustomer = useCallback(
     (id, active) => {
       setIsLoading(true);
-      if (active === true) {
-        activeGroupCustomerApi(id, { is_active: false })
-          .then((res) => {
-            dispatch(
-              getGroupCustomers.getGroupCustomersRequest({
-                start: startPage,
-                length: 10,
-              })
-            );
-            setIsLoading(false);
-            setModalActive(false);
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err,
-            });
-            setIsLoading(false);
+      activeGroupCustomerApi(id, { is_active: active ? false : true })
+        .then((res) => {
+          dispatch(
+            getGroupCustomers.getGroupCustomersRequest({
+              start: startPage,
+              length: 10,
+            })
+          );
+          setIsLoading(false);
+          setModalActive(false);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
           });
-      } else {
-        activeGroupCustomerApi(id, { is_active: true })
-          .then((res) => {
-            dispatch(
-              getGroupCustomers.getGroupCustomersRequest({
-                start: startPage,
-                length: 10,
-              })
-            );
-            setIsLoading(false);
-            setModalActive(false);
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err,
-            });
-            setIsLoading(false);
-          });
-      }
+          setIsLoading(false);
+        });
     },
     [startPage]
   );

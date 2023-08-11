@@ -37,11 +37,11 @@ const Login = () => {
       <div className="div-card-login">
         <div className="div-card-left">
           <a className="text-wel-login">Chào mừng đến với GUVI</a>
-          <Image src={login} className="image-login" />
+          <Image src={login} className="image-login" preview={false} />
         </div>
         <div className="line" />
         <div className="div-card-right">
-          <div className="div-head">
+          <div className="div-head-card">
             <img src={logo} className="img-logo" />
             <a className="title-login">Đăng nhập hệ thống Guvi</a>
           </div>

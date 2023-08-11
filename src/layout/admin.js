@@ -75,6 +75,7 @@ import NewsManage from "../container/System/ManageSetting/ManageNews/NewsManage"
 import EditPromotion from "../container/System/ManagePromotion/PromotionEdit";
 import SettingGroupPromotion from "../container/System/ManageConfiguration/ScreenConfiguration/SettingGroupPromotion";
 import BusinessConfig from "../container/System/ManageConfiguration/ScreenConfiguration/BusinessConfig";
+import ReportRatio from "../container/System/ManageReport/ManageReportCustomer/ReportRatio";
 
 const Admin = () => {
   return (
@@ -249,6 +250,10 @@ const Admin = () => {
       <Route
         path="/report/manage-report/report-customer-order-by-area"
         element={<ReportCustomerOrderByArea />}
+      />
+      <Route
+        path="/report/manage-report/report-customer-ratio"
+        element={<ReportRatio />}
       />
 
       <Route

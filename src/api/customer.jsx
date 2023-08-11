@@ -103,3 +103,7 @@ export const getReviewByCustomers = (id, start, length) => {
     `/admin/customer_manager/get_customer_review/${id}?start=${start}&length=${length}`
   );
 };
+
+export const setIsStaffCustomerApi = (id, data) => {
+  return axiosClient.post(`/admin/customer_manager/set_is_staff/${id}`, data);
+};

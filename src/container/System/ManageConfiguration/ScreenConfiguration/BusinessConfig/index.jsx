@@ -1,16 +1,26 @@
 import { Dropdown, Space, Switch, Table } from "antd";
 import "./styles.scss";
-import { useEffect, useState } from "react";
-import { getListBusiness } from "../../../../../api/configuration";
+import { useCallback, useEffect, useState } from "react";
+import {
+  activeBusiness,
+  deleteBusiness,
+  getListBusiness,
+} from "../../../../../api/configuration";
 import moment from "moment";
 import CreateBusiness from "./CreateBusiness";
 import EditBusiness from "./EditBusiness";
+import ModalCustom from "../../../../../components/modalCustom";
+import { errorNotify } from "../../../../../helper/toast";
+import LoadingPagination from "../../../../../components/paginationLoading";
 
 const BusinessConfig = () => {
   const [state, setState] = useState({
     data: "",
     itemEdit: "",
+    isLoading: false,
   });
+  const [modalActive, setModalActive] = useState(false);
+  const [modalDelete, setModalDelete] = useState(false);
 
   useEffect(() => {
     getListBusiness(0, 20, "")
@@ -18,6 +28,47 @@ const BusinessConfig = () => {
         setState({ ...state, data: res?.data });
       })
       .catch((err) => {});
+  }, []);
+
+  const onActive = useCallback(
+    (id, active) => {
+      setState({ ...state, isLoading: true });
+      activeBusiness(id, { is_active: active ? false : true })
+        .then((res) => {
+          getListBusiness(0, 20, "")
+            .then((res) => {
+              setState({ ...state, data: res?.data, isLoading: false });
+              setModalActive(false);
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          setState({ ...state, isLoading: false });
+          errorNotify({
+            message: err,
+          });
+        });
+    },
+    [state]
+  );
+
+  const onDelete = useCallback((id) => {
+    setState({ ...state, isLoading: true });
+    deleteBusiness(id)
+      .then((res) => {
+        getListBusiness(0, 20, "")
+          .then((res) => {
+            setState({ ...state, data: res?.data, isLoading: false });
+            modalDelete(false);
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {
+        setState({ ...state, isLoading: false });
+        errorNotify({
+          message: err,
+        });
+      });
   }, []);
 
   const columns = [
@@ -42,6 +93,7 @@ const BusinessConfig = () => {
           checked={data?.is_active}
           style={{ backgroundColor: data?.is_active ? "#00cf3a" : "" }}
           size="small"
+          onClick={() => setModalActive(true)}
         />
       ),
     },
@@ -79,6 +131,7 @@ const BusinessConfig = () => {
     },
     {
       key: "2",
+      label: <a onClick={() => setModalDelete(true)}>Xoá</a>,
     },
   ];
 
@@ -102,6 +155,36 @@ const BusinessConfig = () => {
           }}
         />
       </div>
+
+      <ModalCustom
+        isOpen={modalActive}
+        title={state.itemEdit?.is_active ? "Khoá đối tác" : "Mở khoá đối tác"}
+        handleOk={() =>
+          onActive(state.itemEdit?._id, state.itemEdit?.is_active)
+        }
+        textOk={state.itemEdit?.is_active ? "Khoá" : "Mở khoá"}
+        handleCancel={() => setModalActive(false)}
+        body={
+          <a>
+            {state.itemEdit?.is_active
+              ? `Bạn có chắc muốn khoá đối tác này?  ${state.itemEdit?.full_name}`
+              : `Bạn có chắc muốn mở khoá đối tác này?  ${state.itemEdit?.full_name}`}
+          </a>
+        }
+      />
+
+      <ModalCustom
+        isOpen={modalDelete}
+        title={"Xoá đối tác"}
+        handleOk={() => onDelete(state.itemEdit?._id)}
+        textOk="Xoá"
+        handleCancel={() => setModalDelete(false)}
+        body={
+          <a>Bạn có chắc muốn xoá đối tác này? {state.itemEdit?.full_name}</a>
+        }
+      />
+
+      {state?.isLoading && <LoadingPagination />}
     </div>
   );
 };
