@@ -320,7 +320,7 @@ const Sidebar = ({ hide }) => {
       )}
 
       <div className="div-version">
-        <a className="text-version">Version 1.0.1</a>
+        <a className="text-version">{hide ? "Version 1.0.1" : "v1.0.1"}</a>
       </div>
     </>
   );

@@ -285,6 +285,10 @@ export const DATA_KIND = [
     value: "is_active",
     label: "Trạng thái tài khoản",
   },
+  {
+    value: "is_staff",
+    label: "Nhân viên công ty",
+  },
 ];
 
 export const DATA_OPERTATOR = [
@@ -443,7 +447,6 @@ export const DATA_TIME_APPLY = [
   { id: 49, label: "23:59", value: "23:59:59" },
 ];
 
-
 export const DATA_IS_ACTIVE = [
   {
     value: true,
@@ -452,5 +455,16 @@ export const DATA_IS_ACTIVE = [
   {
     value: false,
     label: "Đã khoá",
+  },
+];
+
+export const DATA_IS_STAFF = [
+  {
+    value: true,
+    label: "Có",
+  },
+  {
+    value: false,
+    label: "Không",
   },
 ];

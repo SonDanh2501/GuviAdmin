@@ -276,3 +276,9 @@ export const getReportOrderDay = (start_date, end_date, type) => {
     `/admin/report_mananger/report_order_day_in_week?start_date=${start_date}&end_date=${end_date}&type=${type}`
   );
 };
+
+export const getReportCustomerRatio = (start_date, end_date) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_customer_rate?start_date=${start_date}&end_date=${end_date}`
+  );
+};

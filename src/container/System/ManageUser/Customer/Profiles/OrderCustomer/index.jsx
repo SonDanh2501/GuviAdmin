@@ -306,6 +306,7 @@ export default function OrderCustomer({ id }) {
                 }
               : ""
           }
+          scroll={{ x: width < 900 ? 900 : 0 }}
         />
 
         <div className="mt-2 div-pagination p-2">

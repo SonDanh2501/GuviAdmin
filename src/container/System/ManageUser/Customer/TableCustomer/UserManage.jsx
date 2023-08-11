@@ -101,45 +101,25 @@ const UserManage = (props) => {
   );
 
   const blockCustomer = useCallback(
-    (id, is_active) => {
+    (id, active) => {
       setIsLoading(true);
-      if (is_active === true) {
-        activeCustomer(id, { is_active: false })
-          .then((res) => {
-            setModalBlock(false);
-            fetchCustomers(lang, startPage, 50, status, idGroup)
-              .then((res) => {
-                setData(res?.data);
-                setTotal(res?.totalItems);
-              })
-              .catch((err) => {});
-            setIsLoading(false);
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err,
-            });
-            setIsLoading(false);
+      activeCustomer(id, { is_active: active ? false : true })
+        .then((res) => {
+          setModalBlock(false);
+          fetchCustomers(lang, startPage, 50, status, idGroup)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItems);
+            })
+            .catch((err) => {});
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
           });
-      } else {
-        activeCustomer(id, { is_active: true })
-          .then((res) => {
-            setModalBlock(false);
-            setIsLoading(false);
-            fetchCustomers(lang, startPage, 50, status, idGroup)
-              .then((res) => {
-                setData(res?.data);
-                setTotal(res?.totalItems);
-              })
-              .catch((err) => {});
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err,
-            });
-            setIsLoading(false);
-          });
-      }
+          setIsLoading(false);
+        });
     },
     [startPage, status, idGroup]
   );
@@ -148,7 +128,6 @@ const UserManage = (props) => {
     setCurrentPage(page);
     const dataLength = data.length < 50 ? 50 : data.length;
     const filterLength = dataFilter.length < 50 ? 50 : dataFilter.length;
-
     const start =
       dataFilter.length > 0
         ? page * filterLength - filterLength
@@ -161,12 +140,14 @@ const UserManage = (props) => {
           .then((res) => {
             setDataFilter(res.data);
             setTotalFilter(res.totalItems);
+            window.scroll(0, 0);
           })
           .catch((err) => {})
       : fetchCustomers(lang, start, 50, status, idGroup)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItems);
+            window.scroll(0, 0);
           })
           .catch((err) => {});
   };

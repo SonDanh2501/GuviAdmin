@@ -6,7 +6,7 @@ import {
   getGroupPromotion,
 } from "../../../../../api/configuration";
 import _debounce from "lodash/debounce";
-import { Dropdown, Input, Space, Switch, Table } from "antd";
+import { Dropdown, Image, Input, Space, Switch, Table } from "antd";
 import i18n from "../../../../../i18n";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
@@ -43,25 +43,20 @@ const SettingGroupPromotion = () => {
       .catch((err) => {});
   }, []);
 
-  const getList = () => {
-    getGroupPromotion(state.startPage, 20, state.valueSearch)
-      .then((res) => {
-        setState({
-          ...state,
-          data: res?.data,
-          totalData: res?.totalItem,
-          isLoading: false,
-        });
-      })
-      .catch((err) => {});
-  };
-
   const onDeleteGroupPromotion = (id) => {
     setState({ ...state, isLoading: true });
     deleteGroupPromotion(id)
       .then((res) => {
         setModalDelete(false);
-        getList();
+        getGroupPromotion(0, 20, "")
+          .then((res) => {
+            setState({
+              ...state,
+              data: res?.data,
+              totalData: res?.totalItem,
+            });
+          })
+          .catch((err) => {});
       })
       .catch((err) => {
         setState({ ...state, isLoading: false });
@@ -73,31 +68,26 @@ const SettingGroupPromotion = () => {
 
   const onEditGroupPromotion = (id, active) => {
     setState({ ...state, isLoading: true });
-    if (active) {
-      activeGroupPromotion(id, { is_active: false })
-        .then(() => {
-          setModalEdit(false);
-          getList();
-        })
-        .catch((err) => {
-          setState({ ...state, isLoading: false });
-          errorNotify({
-            message: err,
-          });
+
+    activeGroupPromotion(id, { is_active: active ? false : true })
+      .then(() => {
+        setModalEdit(false);
+        getGroupPromotion(0, 20, "")
+          .then((res) => {
+            setState({
+              ...state,
+              data: res?.data,
+              totalData: res?.totalItem,
+            });
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {
+        setState({ ...state, isLoading: false });
+        errorNotify({
+          message: err,
         });
-    } else {
-      activeGroupPromotion(id, { is_active: true })
-        .then(() => {
-          setModalEdit(false);
-          getList();
-        })
-        .catch((err) => {
-          setState({ ...state, isLoading: false });
-          errorNotify({
-            message: err,
-          });
-        });
-    }
+      });
   };
 
   const handleSearch = useCallback(
@@ -126,6 +116,15 @@ const SettingGroupPromotion = () => {
         <a className="text-create-group-promo">
           {moment(data?.date_create).format("DD/MM/YYYY - HH:mm")}
         </a>
+      ),
+    },
+    {
+      title: () => <a className="title-column">Ảnh</a>,
+      render: (data) => (
+        <Image
+          src={data?.thumbnail}
+          style={{ width: 50, height: 50, borderRadius: 4 }}
+        />
       ),
     },
     {

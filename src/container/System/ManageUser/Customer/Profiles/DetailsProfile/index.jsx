@@ -1,21 +1,7 @@
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
 
-import { formatMoney } from "../../../../../../helper/formatMoney";
-import user from "../../../../../../assets/images/user.png";
-import iconMember from "../../../../../../assets/images/iconMember.svg";
-import iconSilver from "../../../../../../assets/images/iconSilver.svg";
-import iconGold from "../../../../../../assets/images/iconGold.svg";
-import iconPlatinum from "../../../../../../assets/images/iconPlatinum.svg";
-import "./index.scss";
-import {
-  fetchCustomerById,
-  getInviteCustomerById,
-  updateCustomer,
-  updatePointCustomer,
-} from "../../../../../../api/customer";
 import {
   Button,
   FloatButton,
@@ -24,14 +10,27 @@ import {
   Pagination,
   Progress,
   Select,
-  Tooltip,
+  Switch,
 } from "antd";
-import { errorNotify, successNotify } from "../../../../../../helper/toast";
-import { loadingAction } from "../../../../../../redux/actions/loading";
-import { QRCode } from "react-qrcode-logo";
+import {
+  fetchCustomerById,
+  getInviteCustomerById,
+  setIsStaffCustomerApi,
+  updateCustomer,
+} from "../../../../../../api/customer";
+import iconGold from "../../../../../../assets/images/iconGold.svg";
+import iconMember from "../../../../../../assets/images/iconMember.svg";
+import iconPlatinum from "../../../../../../assets/images/iconPlatinum.svg";
+import iconSilver from "../../../../../../assets/images/iconSilver.svg";
+import user from "../../../../../../assets/images/user.png";
 import LoadingPagination from "../../../../../../components/paginationLoading";
-import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import { formatMoney } from "../../../../../../helper/formatMoney";
+import { errorNotify, successNotify } from "../../../../../../helper/toast";
 import i18n from "../../../../../../i18n";
+import { loadingAction } from "../../../../../../redux/actions/loading";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import "./index.scss";
+import ModalCustom from "../../../../../../components/modalCustom";
 // core components
 
 const DetailsProfile = ({ id }) => {
@@ -49,6 +48,7 @@ const DetailsProfile = ({ id }) => {
   const [dataInvite, setDataInvite] = useState([]);
   const [totalInvite, setTotalInvite] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isStaff, setIsStaff] = useState(false);
   const dispatch = useDispatch();
   const lang = useSelector(getLanguageState);
 
@@ -61,6 +61,7 @@ const DetailsProfile = ({ id }) => {
         setMail(res?.email);
         setBirthday(res?.birthday ? res?.birthday?.slice(0, 10) : "");
         setGender(res?.gender);
+        setIsStaff(res?.is_staff);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => dispatch(loadingAction.loadingRequest(false)));
@@ -113,6 +114,7 @@ const DetailsProfile = ({ id }) => {
             setMail(res?.email);
             setBirthday(res?.birthday ? res?.birthday?.slice(0, 10) : "");
             setGender(res?.gender);
+            setIsStaff(res?.is_staff);
             dispatch(loadingAction.loadingRequest(false));
           })
           .catch((err) => {
@@ -124,6 +126,30 @@ const DetailsProfile = ({ id }) => {
       })
       .catch((err) => {});
   };
+
+  const onIsStaff = useCallback(() => {
+    setIsLoading(true);
+    setIsStaffCustomerApi(id, { is_staff: isStaff ? false : true })
+      .then((res) => {
+        fetchCustomerById(id)
+          .then((res) => {
+            setData(res);
+            setName(res?.full_name);
+            setMail(res?.email);
+            setBirthday(res?.birthday ? res?.birthday?.slice(0, 10) : "");
+            setGender(res?.gender);
+            setIsStaff(res?.is_staff);
+            setIsLoading(false);
+          })
+          .catch((err) => setIsLoading(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
+        });
+        setIsLoading(false);
+      });
+  }, [isStaff, id]);
 
   const age = moment().diff(data?.birthday, "years");
 
@@ -267,6 +293,17 @@ const DetailsProfile = ({ id }) => {
                   value={mail}
                   onChange={(e) => setMail(e.target.value)}
                   style={{ width: "100%" }}
+                />
+              </div>
+              <div className="mt-3 div-name">
+                <a>Nhân viên</a>
+                <Switch
+                  style={{
+                    width: 50,
+                    backgroundColor: isStaff ? "#00cf3a" : "",
+                  }}
+                  checked={isStaff}
+                  onClick={onIsStaff}
                 />
               </div>
             </div>
