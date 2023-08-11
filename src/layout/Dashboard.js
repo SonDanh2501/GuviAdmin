@@ -101,7 +101,7 @@ const Dashboard = () => {
     //     </Content>
     //   </Layout>
     // </Layout>
-    <Layout>
+    <Layout style={{ overflowX: "hidden" }}>
       <Header
         style={{
           padding: 0,
@@ -110,7 +110,6 @@ const Dashboard = () => {
           borderBottomRightRadius: 8,
           top: 0,
           zIndex: 1,
-          borderWidth: 1,
         }}
       >
         <HeaderBar onClick={() => setCollapsed(!collapsed)} hide={collapsed} />

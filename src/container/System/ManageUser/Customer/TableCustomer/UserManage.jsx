@@ -414,7 +414,7 @@ const UserManage = (props) => {
           {
             title: () => {
               return (
-                <a className="title-column">{`${i18n.t("code_customer", {
+                <a className="title-column">{`${i18n.t("code", {
                   lng: lang,
                 })}`}</a>
               );

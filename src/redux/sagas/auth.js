@@ -22,7 +22,7 @@ function* loginSaga(action) {
     setToken(response?.token);
     axios
       .get(
-        "https://guvico-be-develop.up.railway.app/admin/auth/get_permission_by_token",
+        `https://guvico-be-develop.up.railway.app/admin/auth/get_permission_by_token`,
         {
           headers: {
             Authorization: `Bearer ${response?.token}`,
