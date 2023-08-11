@@ -76,9 +76,11 @@ const EditAccount = ({ id, setData, setTotal }) => {
         setFullName(res?.full_name);
         setEmail(res?.email);
         setIdRole(res?.id_role_admin?._id);
-        setIdService(res?.id_service_manager);
         setCity(res?.area_manager_lv_1);
         setDistrict(res?.area_manager_lv_2);
+        res?.id_service_manager?.map((item) => {
+          idService.push(item?._id);
+        });
       })
       .catch((err) => {});
   }, [id]);
@@ -133,6 +135,10 @@ const EditAccount = ({ id, setData, setTotal }) => {
       full_name: fullName,
       id_role_admin: idRole,
       is_permission: true,
+      area_manager_lv_0: "viet_nam",
+      area_manager_lv_1: city,
+      area_manager_lv_2: district,
+      id_service_manager: idService,
     })
       .then((res) => {
         setOpen(false);
@@ -150,7 +156,7 @@ const EditAccount = ({ id, setData, setTotal }) => {
         });
         dispatch(loadingAction.loadingRequest(false));
       });
-  }, [fullName, email, password, idRole]);
+  }, [fullName, email, password, idRole, city, district, idService]);
 
   return (
     <div>
