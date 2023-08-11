@@ -138,6 +138,9 @@ const CustomerReview = ({ id }) => {
                 }
               : ""
           }
+          scroll={{
+            x: width < 900 ? 900 : 0,
+          }}
         />
       </div>
     </div>

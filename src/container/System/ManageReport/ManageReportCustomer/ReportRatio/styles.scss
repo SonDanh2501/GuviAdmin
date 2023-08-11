@@ -1,0 +1,30 @@
+.title-ratio-customer {
+  color: #000000;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.div-chart-ratio-customer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+  .cart-ratio-customer {
+    width: 30%;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .div-chart-ratio-customer {
+    display: flex;
+    flex-direction: column;
+
+    .cart-ratio-customer {
+      width: auto;
+      margin-top: 10px;
+    }
+  }
+}

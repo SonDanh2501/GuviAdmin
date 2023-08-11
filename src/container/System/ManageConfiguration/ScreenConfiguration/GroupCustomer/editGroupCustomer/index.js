@@ -14,6 +14,7 @@ import {
   DATA_OPERTATOR_GENDER,
   MONTH,
   DATA_IS_ACTIVE,
+  DATA_IS_STAFF,
 } from "../../../../../../api/fakeData";
 import LoadingPagination from "../../../../../../components/paginationLoading";
 import { errorNotify } from "../../../../../../helper/toast";
@@ -363,6 +364,10 @@ const EditGroupCustomer = () => {
                                       value={it?.kind}
                                       className="select-kind"
                                       options={DATA_KIND}
+                                      showSearch
+                                      filterOption={(input, option) =>
+                                        (option?.label ?? "").includes(input)
+                                      }
                                     />
                                   </div>
 
@@ -394,7 +399,9 @@ const EditGroupCustomer = () => {
                                               },
                                             ]
                                           : condition?.condition[idx].kind ===
-                                            "is_active"
+                                              "is_active" ||
+                                            condition?.condition[idx].kind ===
+                                              "is_staff"
                                           ? [
                                               {
                                                 value: "==",
@@ -467,7 +474,31 @@ const EditGroupCustomer = () => {
                                       <Select
                                         className="select-kind"
                                         options={DATA_IS_ACTIVE}
-                                        value={Boolean(it?.value)}
+                                        value={
+                                          it?.value === "false" ||
+                                          it?.value === false
+                                            ? false
+                                            : true
+                                        }
+                                        onChange={(value) =>
+                                          onChangeValueIn(
+                                            Boolean(value),
+                                            idx,
+                                            ix
+                                          )
+                                        }
+                                      />
+                                    ) : condition?.condition[idx].kind ===
+                                      "is_staff" ? (
+                                      <Select
+                                        className="select-kind"
+                                        options={DATA_IS_STAFF}
+                                        value={
+                                          it?.value === "false" ||
+                                          it?.value === false
+                                            ? false
+                                            : true
+                                        }
                                         onChange={(value) =>
                                           onChangeValueIn(
                                             Boolean(value),
@@ -653,7 +684,9 @@ const EditGroupCustomer = () => {
                                               },
                                             ]
                                           : condition?.condition[idx].kind ===
-                                            "is_active"
+                                              "is_active" ||
+                                            condition?.condition[idx].kind ===
+                                              "is_staff"
                                           ? [
                                               {
                                                 value: "==",
@@ -726,7 +759,31 @@ const EditGroupCustomer = () => {
                                       <Select
                                         className="select-kind"
                                         options={DATA_IS_ACTIVE}
-                                        value={Boolean(it?.value)}
+                                        value={
+                                          it?.value === "false" ||
+                                          it?.value === false
+                                            ? false
+                                            : true
+                                        }
+                                        onChange={(value) =>
+                                          onChangeValueOut(
+                                            Boolean(value),
+                                            idx,
+                                            ix
+                                          )
+                                        }
+                                      />
+                                    ) : condition?.condition[idx].kind ===
+                                      "is_staff" ? (
+                                      <Select
+                                        className="select-kind"
+                                        options={DATA_IS_STAFF}
+                                        value={
+                                          it?.value === "false" ||
+                                          it?.value === false
+                                            ? false
+                                            : true
+                                        }
                                         onChange={(value) =>
                                           onChangeValueOut(
                                             Boolean(value),

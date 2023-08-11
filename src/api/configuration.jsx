@@ -233,3 +233,11 @@ export const createBusiness = (data) => {
 export const editBusiness = (id, data) => {
   return axiosClient.post(`/admin/business_manager/edit_item/${id}`, data);
 };
+
+export const activeBusiness = (id, data) => {
+  return axiosClient.post(`/admin/business_manager/acti_item/${id}`, data);
+};
+
+export const deleteBusiness = (id) => {
+  return axiosClient.post(`/admin/business_manager/delete_item/${id}`);
+};

@@ -78,17 +78,17 @@ const AddOrder = () => {
         .catch((err) => {
           setIsLoading(false);
         });
-      // service?.map((item) => {
-      //   user?.id_service_manager?.map((i, index) => {
-      //     if (item?._id === i?._id) {
-      //       if (index === 0) {
-      //         setKindService(item?.kind);
-      //       }
-      //     }
-      //   });
-      // });
+      service?.map((item) => {
+        user?.id_service_manager?.map((i, index) => {
+          if (item?._id === i?._id) {
+            if (index === 0) {
+              setKindService(item?.kind);
+            }
+          }
+        });
+      });
       setServiceApply(user?.id_service_manager[0]?._id);
-      setKindService(user?.id_service_manager[0]?.kind);
+      // setKindService(user?.id_service_manager[0]?.kind);
       setNameService(user?.id_service_manager[0]?.title?.[lang]);
     }
   }, [user]);

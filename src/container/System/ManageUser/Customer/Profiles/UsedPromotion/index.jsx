@@ -5,11 +5,13 @@ import { formatMoney } from "../../../../../../helper/formatMoney";
 import { Table } from "antd";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import useWindowDimensions from "../../../../../../helper/useWindowDimensions";
 
 const UsedPromotion = ({ id }) => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [totalItem, setTotalItem] = useState([]);
+  const { width } = useWindowDimensions();
   useEffect(() => {
     getUsedPromotionByCustomers(id)
       .then((res) => {
@@ -139,7 +141,12 @@ const UsedPromotion = ({ id }) => {
         </div>
       )}
       <div className="mt-5">
-        <Table dataSource={data} columns={columns} />
+        <Table
+          dataSource={data}
+          columns={columns}
+          scroll={{ x: width < 900 ? 900 : 0 }}
+          pagination={false}
+        />
       </div>
     </div>
   );
