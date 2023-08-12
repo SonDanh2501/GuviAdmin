@@ -42,6 +42,7 @@ import i18n from "../../../../../i18n/index.js";
 import {
   getElementState,
   getLanguageState,
+  getUser,
 } from "../../../../../redux/selectors/auth.js";
 import { useCookies } from "../../../../../helper/useCookies.js";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions.js";
@@ -71,12 +72,16 @@ const CollaboratorManage = (props) => {
   const toggleLockTime = () => setModalLockTime(!modalLockTime);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
-  const cityOptions = [
-    {
-      value: "",
-      label: "Tất cả",
-    },
-  ];
+  const user = useSelector(getUser);
+  const cityOptions =
+    user?.area_manager_lv_1?.length === 0
+      ? [
+          {
+            value: "",
+            label: "Tất cả",
+          },
+        ]
+      : [];
   const province = useSelector(getProvince);
   const dispatch = useDispatch();
   const [saveToCookie, readCookie] = useCookies();
@@ -94,7 +99,11 @@ const CollaboratorManage = (props) => {
         : Number(readCookie("start_page_ctv"))
     );
     setCity(
-      readCookie("ctv-city") === "" ? "" : Number(readCookie("ctv-city"))
+      user?.area_manager_lv_1?.length === 0
+        ? readCookie("ctv-city") === ""
+          ? ""
+          : Number(readCookie("ctv-city"))
+        : user?.area_manager_lv_1[0]
     );
   }, []);
 
@@ -118,10 +127,17 @@ const CollaboratorManage = (props) => {
   }, [status]);
 
   province?.map((item) => {
-    cityOptions?.push({
-      value: item?.code,
-      label: item?.name,
-    });
+    if (user?.area_manager_lv_1?.length === 0) {
+      cityOptions.push({
+        value: item?.code,
+        label: item?.name,
+      });
+    } else if (user?.area_manager_lv_1?.includes(item?.code)) {
+      cityOptions.push({
+        value: item?.code,
+        label: item?.name,
+      });
+    }
   });
 
   const onFilterCity = (value) => {
@@ -517,25 +533,18 @@ const CollaboratorManage = (props) => {
       align: "center",
       render: (data) => (
         <Space size="middle">
-          {/* <img
-            onClick={!data?.is_verify ? toggleVerify : null}
-            src={data?.is_verify ? onToggle : offToggle}
-            className={
-              checkElement?.includes("verify_collaborator")
-                ? "img-toggle"
-                : "img-toggle-hide"
-            }
-          /> */}
-          <Switch
-            style={{
-              width: 30,
-              backgroundColor: data?.is_verify ? "#00cf3a" : "",
-            }}
-            onClick={toggleVerify}
-            checked={data?.is_verify}
-            disabled={data?.is_verify ? true : false}
-            size="small"
-          />
+          {checkElement?.includes("verify_collaborator") && (
+            <Switch
+              style={{
+                width: 30,
+                backgroundColor: data?.is_verify ? "#00cf3a" : "",
+              }}
+              onClick={toggleVerify}
+              checked={data?.is_verify}
+              disabled={data?.is_verify ? true : false}
+              size="small"
+            />
+          )}
 
           <Dropdown
             menu={{

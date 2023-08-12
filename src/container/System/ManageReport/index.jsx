@@ -31,13 +31,15 @@ const ManageReport = () => {
     );
   }, []);
 
+  console.log(checkElement?.includes("order_report"));
+
   const DATA = [
     {
       value: 1,
       label: `${i18n.t("order_report", {
         lng: lang,
       })}`,
-      role: "",
+      role: "order_report",
     },
     {
       value: 2,
@@ -51,7 +53,7 @@ const ManageReport = () => {
       label: `${i18n.t("customer_report", {
         lng: lang,
       })}`,
-      role: "",
+      role: "count_customer_report",
     },
     {
       value: 4,
@@ -87,6 +89,11 @@ const ManageReport = () => {
                   }}
                   className={
                     item?.value === tab ? "div-item-tab-select" : "div-item-tab"
+                  }
+                  style={
+                    checkElement?.includes(item?.role)
+                      ? {}
+                      : { display: "none" }
                   }
                 >
                   <a className="text-tab">{item?.label}</a>

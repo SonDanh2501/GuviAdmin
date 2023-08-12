@@ -161,10 +161,12 @@ export const getReportReviewCollaborator = (
   end_date,
   star,
   search,
-  type
+  type,
+  city,
+  district
 ) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_review?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&star=${star}&search=${search}&type=${type}`
+    `/admin/report_mananger/report_review?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&star=${star}&search=${search}&type=${type}&city=${city}&district=${district}`
   );
 };
 

@@ -157,7 +157,7 @@ const WithdrawTopup = ({ id }) => {
 
   return (
     <>
-      <div className="div-head">
+      <div className="div-head-customer">
         <div className="div-monney">
           <div>
             <a className="text-title-monney">

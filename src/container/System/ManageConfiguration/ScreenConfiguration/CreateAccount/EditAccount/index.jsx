@@ -78,9 +78,10 @@ const EditAccount = ({ id, setData, setTotal }) => {
         setIdRole(res?.id_role_admin?._id);
         setCity(res?.area_manager_lv_1);
         setDistrict(res?.area_manager_lv_2);
-        res?.id_service_manager?.map((item) => {
-          idService.push(item?._id);
-        });
+        setIdService(res?.id_service_manager);
+        // res?.id_service_manager?.map((item) => {
+        //   idService.push(item?._id);
+        // });
       })
       .catch((err) => {});
   }, [id]);

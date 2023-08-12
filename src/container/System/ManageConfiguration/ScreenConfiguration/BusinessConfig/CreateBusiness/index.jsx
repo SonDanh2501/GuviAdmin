@@ -64,6 +64,7 @@ const CreateBusiness = (props) => {
         <UploadImage
           title="Ảnh"
           classImg="image-avatar-business"
+          classUpload="upload-image-avatar-business"
           image={state.avatar}
           setImage={(e) => setState({ ...state, avatar: e })}
         />
