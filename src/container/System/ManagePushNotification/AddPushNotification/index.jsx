@@ -284,13 +284,14 @@ const AddPushNotification = ({ idOrder }) => {
         </div>
 
         <UploadImage
-          title={`${i18n.t("image", { lng: lang })} 360px * 137px, ${i18n.t(
+          title={`${i18n.t("image", { lng: lang })} 200px * 200px, ${i18n.t(
             "ratio",
             { lng: lang }
           )} 2,62`}
           image={imgThumbnail}
           setImage={setImgThumbnail}
           classImg="img-background-noti"
+          classUpload="upload-img-background-noti"
         />
 
         <Button

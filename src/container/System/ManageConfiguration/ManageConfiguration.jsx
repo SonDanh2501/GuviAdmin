@@ -8,12 +8,12 @@ import {
   getLanguageState,
 } from "../../../redux/selectors/auth";
 import "./ManageConfiguration.scss";
+import { Upload } from "antd";
 
 const ManageConfiguration = () => {
   const navigate = useNavigate();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -166,13 +166,13 @@ const DATA = [
     id: 12,
     title: "Cấu hình nhóm khuyến mãi",
     value: "group_promotion",
-    role: "get_group_service_setting",
+    role: "get_group_promotion_setting",
   },
   {
     id: 13,
     title: "Cấu hình đối tác kinh doanh",
     value: "business_config",
-    role: "get_group_service_setting",
+    role: "get_business_setting",
   },
   {
     id: 14,

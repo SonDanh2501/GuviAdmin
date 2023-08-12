@@ -1001,7 +1001,8 @@ const CreatePromotion = () => {
                           errorThumnail: "",
                         })
                       }
-                      classImg={"img-thumbnail"}
+                      classImg="img-thumbnail-promotion"
+                      classUpload="upload-thumbnail-promotion"
                     />
                     <a style={{ fontSize: 12, color: "#fb422e" }}>
                       {statePromo?.errorThumnail}
@@ -1022,7 +1023,8 @@ const CreatePromotion = () => {
                       setImage={(prev) =>
                         setStatePromo({ ...statePromo, imgBackground: prev })
                       }
-                      classImg={"img-background"}
+                      classImg="img-background-promotion"
+                      classUpload="upload-background-promotion"
                     />
                   </div>
                 </div>

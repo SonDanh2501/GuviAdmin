@@ -113,7 +113,8 @@ const AddNews = () => {
           })} 1:1`}
           image={imgThumbnail}
           setImage={setImgThumbnail}
-          classImg={"img-thumbnail"}
+          classImg="img-thumbnail-news"
+          classUpload="upload-thumbnail-news"
         />
 
         <Button

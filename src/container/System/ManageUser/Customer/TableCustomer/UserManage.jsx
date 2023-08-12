@@ -172,7 +172,7 @@ const UserManage = (props) => {
   const items = [
     {
       key: "1",
-      label: (
+      label: checkElement?.includes("active_customer") && (
         <a onClick={toggleBlock}>
           {itemEdit?.is_active === true
             ? `${i18n.t("lock", { lng: lang })}`
@@ -620,21 +620,23 @@ const UserManage = (props) => {
             key: "action",
             align: "center",
             width: "5%",
-            render: (data) => (
-              <Space size="middle">
-                <Dropdown
-                  menu={{
-                    items,
-                  }}
-                  placement="bottom"
-                  trigger={["click"]}
-                >
-                  <a>
-                    <MoreOutlined className="icon-more" />
-                  </a>
-                </Dropdown>
-              </Space>
-            ),
+            render: (data) =>
+              checkElement?.includes("delete_customer") &&
+              checkElement?.includes("active_customer") && (
+                <Space size="middle">
+                  <Dropdown
+                    menu={{
+                      items,
+                    }}
+                    placement="bottom"
+                    trigger={["click"]}
+                  >
+                    <a>
+                      <MoreOutlined className="icon-more" />
+                    </a>
+                  </Dropdown>
+                </Space>
+              ),
           },
         ];
 
