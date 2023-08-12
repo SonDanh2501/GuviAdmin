@@ -6,6 +6,7 @@ import { Collapse, Nav } from "reactstrap";
 import logo from "../../assets/images/LogoS.png";
 import i18n from "../../i18n";
 import {
+  getElementState,
   getLanguageState,
   getPermissionState,
 } from "../../redux/selectors/auth";
@@ -18,6 +19,7 @@ const Sidebar = ({ hide }) => {
   const [collapsedService, setCollapsedService] = useState(true);
   const [collapsedPromotion, setCollapsedPromotion] = useState(true);
   const lang = useSelector(getLanguageState);
+  const checkElement = useSelector(getElementState);
 
   const checkPermission = [];
 
@@ -40,17 +42,16 @@ const Sidebar = ({ hide }) => {
     checkPermission.push(item?.id_side_bar);
   });
 
-  const deleteAllCookies = () => {
-    const cookies = document.cookie.split(";");
+  const clearAllCookies = () => {
+    const cookies = document.cookie.split("; ");
 
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i];
       const eqPos = cookie.indexOf("=");
       const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-      document.cookie = name + "=;expires=Thu, 01 Jan 2033 00:00:00 GMT";
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
     }
   };
-
   return (
     <>
       {hide ? (
@@ -70,11 +71,9 @@ const Sidebar = ({ hide }) => {
                             ? "li-nav-link"
                             : "li-nav-link-none"
                         }
+                        onClick={clearAllCookies}
                       >
-                        <NavLink
-                          to={item?.path}
-                          onClick={() => deleteAllCookies()}
-                        >
+                        <NavLink to={item?.path}>
                           {({ isActive }) => (
                             <div
                               className={
@@ -133,9 +132,9 @@ const Sidebar = ({ hide }) => {
                                 </a>
                               </div>
                               {collapsed ? (
-                                <i class="uil uil-angle-right icon-right"></i>
+                                <i className="uil uil-angle-right icon-right"></i>
                               ) : (
-                                <i class="uil uil-angle-down icon-right"></i>
+                                <i className="uil uil-angle-down icon-right"></i>
                               )}
                             </div>
                           )}
@@ -161,6 +160,11 @@ const Sidebar = ({ hide }) => {
                                         isActive
                                           ? "active-link-nav"
                                           : "unactive-link-nav"
+                                      }
+                                      style={
+                                        checkElement?.includes(i?.role)
+                                          ? {}
+                                          : { display: "none" }
                                       }
                                     >
                                       {/* <i class="uil uil-shopping-bag icon"></i> */}
@@ -262,9 +266,9 @@ const Sidebar = ({ hide }) => {
                             {item?.name}
                           </a> */}
                               {collapsed ? (
-                                <i class="uil uil-angle-right icon-right"></i>
+                                <i className="uil uil-angle-right icon-right"></i>
                               ) : (
-                                <i class="uil uil-angle-down icon-right"></i>
+                                <i className="uil uil-angle-down icon-right"></i>
                               )}
                             </div>
                           )}
@@ -292,7 +296,7 @@ const Sidebar = ({ hide }) => {
                                           : "unactive-link-nav"
                                       }
                                     >
-                                      <i class="uil uil-shopping-bag icon"></i>
+                                      <i className="uil uil-shopping-bag icon"></i>
                                       {/* <a
                                     className={
                                       isActive

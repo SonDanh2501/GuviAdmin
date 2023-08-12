@@ -72,9 +72,9 @@ const Sidebar = ({ onClick }) => {
                       GUVIJOBS
                     </a>
                     {collapsed ? (
-                      <i class="uil uil-angle-right icon-right"></i>
+                      <i className="uil uil-angle-right icon-right"></i>
                     ) : (
-                      <i class="uil uil-angle-down icon-right"></i>
+                      <i className="uil uil-angle-down icon-right"></i>
                     )}
                   </div>
                 )}
@@ -90,7 +90,7 @@ const Sidebar = ({ onClick }) => {
                             isActive ? "active-link-nav" : "unactive-link-nav"
                           }
                         >
-                          <i class="uil uil-shopping-bag icon"></i>
+                          <i className="uil uil-shopping-bag icon"></i>
                           <a
                             className={
                               isActive ? "active-text-nav" : "unactive-text-nav"
@@ -130,7 +130,7 @@ const Sidebar = ({ onClick }) => {
                             isActive ? "active-link-nav" : "unactive-link-nav"
                           }
                         >
-                          <i class="uil uil-shopping-bag icon"></i>
+                          <i className="uil uil-shopping-bag icon"></i>
                           <a
                             className={
                               isActive ? "active-text-nav" : "unactive-text-nav"
@@ -342,9 +342,9 @@ const Sidebar = ({ onClick }) => {
                       GUVIJOBS
                     </a>
                     {collapsed ? (
-                      <i class="uil uil-angle-right icon-right"></i>
+                      <i className="uil uil-angle-right icon-right"></i>
                     ) : (
-                      <i class="uil uil-angle-down icon-right"></i>
+                      <i className="uil uil-angle-down icon-right"></i>
                     )}
                   </div>
                 )}
@@ -380,7 +380,7 @@ const Sidebar = ({ onClick }) => {
                             isActive ? "active-link-nav" : "unactive-link-nav"
                           }
                         >
-                          <i class="uil uil-shopping-bag icon"></i>
+                          <i className="uil uil-shopping-bag icon"></i>
                           <a
                             className={
                               isActive ? "active-text-nav" : "unactive-text-nav"
@@ -400,7 +400,7 @@ const Sidebar = ({ onClick }) => {
                             isActive ? "active-link-nav" : "unactive-link-nav"
                           }
                         >
-                          <i class="uil uil-shopping-bag icon"></i>
+                          <i className="uil uil-shopping-bag icon"></i>
                           <a
                             className={
                               isActive ? "active-text-nav" : "unactive-text-nav"
@@ -490,9 +490,9 @@ const Sidebar = ({ onClick }) => {
                       GUVIJOBS
                     </a>
                     {collapsed ? (
-                      <i class="uil uil-angle-right icon-right"></i>
+                      <i className="uil uil-angle-right icon-right"></i>
                     ) : (
-                      <i class="uil uil-angle-down icon-right"></i>
+                      <i className="uil uil-angle-down icon-right"></i>
                     )}
                   </div>
                 )}
@@ -508,7 +508,7 @@ const Sidebar = ({ onClick }) => {
                             isActive ? "active-link-nav" : "unactive-link-nav"
                           }
                         >
-                          <i class="uil uil-shopping-bag icon"></i>
+                          <i className="uil uil-shopping-bag icon"></i>
                           <a
                             className={
                               isActive ? "active-text-nav" : "unactive-text-nav"
@@ -548,7 +548,7 @@ const Sidebar = ({ onClick }) => {
                             isActive ? "active-link-nav" : "unactive-link-nav"
                           }
                         >
-                          <i class="uil uil-shopping-bag icon"></i>
+                          <i className="uil uil-shopping-bag icon"></i>
                           <a
                             className={
                               isActive ? "active-text-nav" : "unactive-text-nav"
@@ -641,9 +641,9 @@ const Sidebar = ({ onClick }) => {
                       GUVIJOBS
                     </a>
                     {collapsed ? (
-                      <i class="uil uil-angle-right icon-right"></i>
+                      <i className="uil uil-angle-right icon-right"></i>
                     ) : (
-                      <i class="uil uil-angle-down icon-right"></i>
+                      <i className="uil uil-angle-down icon-right"></i>
                     )}
                   </div>
                 )}
@@ -659,7 +659,7 @@ const Sidebar = ({ onClick }) => {
                             isActive ? "active-link-nav" : "unactive-link-nav"
                           }
                         >
-                          <i class="uil uil-shopping-bag icon"></i>
+                          <i className="uil uil-shopping-bag icon"></i>
                           <a
                             className={
                               isActive ? "active-text-nav" : "unactive-text-nav"
@@ -679,7 +679,7 @@ const Sidebar = ({ onClick }) => {
                             isActive ? "active-link-nav" : "unactive-link-nav"
                           }
                         >
-                          <i class="uil uil-shopping-bag icon"></i>
+                          <i className="uil uil-shopping-bag icon"></i>
                           <a
                             className={
                               isActive ? "active-text-nav" : "unactive-text-nav"

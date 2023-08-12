@@ -1,5 +1,10 @@
-import { CloseCircleOutlined, UploadOutlined } from "@ant-design/icons";
-import { Input } from "antd";
+import {
+  CloseCircleOutlined,
+  LoadingOutlined,
+  PlusOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
+import { Input, Upload } from "antd";
 import "./styles.scss";
 import { useState } from "react";
 import resizeFile from "../../helper/resizer";
@@ -10,24 +15,48 @@ import { postFile } from "../../api/file";
 import axios from "axios";
 
 const UploadImage = (props) => {
-  const { setUrl, classImg, title, image, setImage, icon, disabled } = props;
+  const {
+    setUrl,
+    classImg,
+    title,
+    image,
+    setImage,
+    icon,
+    disabled,
+    classUpload,
+  } = props;
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const uploadButton = (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
 
-  const onChangeThumbnail = async (e) => {
-    dispatch(loadingAction.loadingRequest(true));
-    const extend = e.target.files[0].type.slice(
-      e.target.files[0].type.indexOf("/") + 1
+  const handleChange = async (info) => {
+    if (info.file.status === "uploading") {
+      setLoading(true);
+      return;
+    }
+    const extend = info.fileList[0].type.slice(
+      info.fileList[0].type.indexOf("/") + 1
     );
-
     try {
-      if (e.target.files[0]) {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          setImage(reader.result);
-        });
-        reader.readAsDataURL(e.target.files[0]);
-      }
-      const file = e.target.files[0];
+      const file = info.fileList[0].originFileObj;
       const image = await resizeFile(file, extend);
       const formData = new FormData();
       formData.append("multi-files", image);
@@ -38,16 +67,16 @@ const UploadImage = (props) => {
       })
         .then((res) => {
           setImage(res[0]);
-          dispatch(loadingAction.loadingRequest(false));
+          setLoading(false);
         })
         .catch((err) => {
           setImage("");
           errorNotify({
             message: err,
           });
-          dispatch(loadingAction.loadingRequest(false));
+          setLoading(false);
         });
-    } catch (err) {}
+    } catch (error) {}
   };
 
   return (
@@ -58,25 +87,14 @@ const UploadImage = (props) => {
           <div>{icon}</div>
         </div>
       )}
-
-      <Input
-        id="actual-btn"
-        type="file"
-        accept={".jpg,.png,.jpeg"}
-        className="input-image"
-        onChange={onChangeThumbnail}
+      <Upload
+        className={classUpload}
+        onChange={handleChange}
+        showUploadList={false}
         disabled={disabled}
-      />
-      {image && (
-        <div className="div-image">
-          <img src={image} className={classImg} />
-          <CloseCircleOutlined
-            className="icon_delete_image"
-            onClick={() => setImage("")}
-            disabled={disabled}
-          />
-        </div>
-      )}
+      >
+        {image ? <img src={image} className={classImg} /> : uploadButton}
+      </Upload>
     </div>
   );
 };

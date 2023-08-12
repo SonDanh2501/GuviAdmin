@@ -24,6 +24,7 @@ import { errorNotify } from "../../../../helper/toast";
 import {
   getElementState,
   getLanguageState,
+  getUser,
 } from "../../../../redux/selectors/auth";
 import { useSelector } from "react-redux";
 import member from "../../../../assets/images/iconMember.svg";
@@ -34,6 +35,7 @@ import i18n from "../../../../i18n";
 import InputCustom from "../../../../components/textInputCustom";
 import ModalCustom from "../../../../components/modalCustom";
 import useWindowDimensions from "../../../../helper/useWindowDimensions";
+import { getProvince } from "../../../../redux/selectors/service";
 const { TextArea } = Input;
 
 const ReviewCollaborator = () => {
@@ -56,10 +58,17 @@ const ReviewCollaborator = () => {
   const [modalCheck, setModalCheck] = useState(false);
   const [itemEdit, setItemEdit] = useState([]);
   const [note, setNote] = useState("");
+  const [city, setCity] = useState("");
+  const [dataDistrict, setDataDistrict] = useState([]);
+  const [district, setDistrict] = useState([]);
   const { width } = useWindowDimensions();
   const checkElement = useSelector(getElementState);
   const toggleModalCheck = () => setModalCheck(!modalCheck);
   const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
+  const user = useSelector(getUser);
+  const cityOptions = [];
+  const districtOptions = [];
 
   useEffect(() => {
     getReportReviewCollaborator(
@@ -69,7 +78,9 @@ const ReviewCollaborator = () => {
       endDate,
       star,
       valueSearch,
-      tab
+      tab,
+      city,
+      district
     )
       .then((res) => {
         setData(res?.data);
@@ -77,6 +88,77 @@ const ReviewCollaborator = () => {
       })
       .catch((err) => {});
   }, []);
+
+  province?.map((item) => {
+    if (user?.area_manager_lv_1?.length === 0) {
+      cityOptions.push({
+        value: item?.code,
+        label: item?.name,
+        district: item?.districts,
+      });
+    } else if (user?.area_manager_lv_1?.includes(item?.code)) {
+      cityOptions.push({
+        value: item?.code,
+        label: item?.name,
+        district: item?.districts,
+      });
+    }
+  });
+
+  dataDistrict?.map((item) => {
+    if (user?.area_manager_lv_2?.length === 0) {
+      districtOptions.push({
+        value: item?.code,
+        label: item?.name,
+      });
+    } else if (user?.area_manager_lv_2?.includes(item?.code)) {
+      districtOptions.push({
+        value: item?.code,
+        label: item?.name,
+      });
+    }
+  });
+
+  const onChangeCity = (value, item) => {
+    setCity(value);
+    setDataDistrict(item?.district);
+    getReportReviewCollaborator(
+      0,
+      20,
+      startDate,
+      endDate,
+      star,
+      valueSearch,
+      tab,
+      value,
+      district
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+
+  const onChangeDistrict = (value) => {
+    setDistrict(value);
+    getReportReviewCollaborator(
+      0,
+      20,
+      startDate,
+      endDate,
+      star,
+      valueSearch,
+      tab,
+      city,
+      value
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
 
   const handleFilter = useCallback(
     (star) => {
@@ -104,7 +186,16 @@ const ReviewCollaborator = () => {
       setStartPage(0);
       setValueSearch(value);
       setIsLoading(true);
-      getReportReviewCollaborator(0, 20, startDate, endDate, star, value)
+      getReportReviewCollaborator(
+        0,
+        20,
+        startDate,
+        endDate,
+        star,
+        value,
+        city,
+        district
+      )
         .then((res) => {
           setData(res?.data);
           setTotal(res?.totalItem);
@@ -128,7 +219,9 @@ const ReviewCollaborator = () => {
       endDate,
       star,
       valueSearch,
-      tab
+      tab,
+      city,
+      district
     )
       .then((res) => {
         setIsLoading(false);
@@ -164,7 +257,9 @@ const ReviewCollaborator = () => {
       endDate,
       star,
       valueSearch,
-      tab
+      tab,
+      city,
+      district
     )
       .then((res) => {
         setIsLoading(false);
@@ -188,7 +283,9 @@ const ReviewCollaborator = () => {
         endDate,
         star,
         valueSearch,
-        value
+        value,
+        city,
+        district
       )
         .then((res) => {
           setData(res?.data);
@@ -196,7 +293,7 @@ const ReviewCollaborator = () => {
         })
         .catch((err) => {});
     },
-    [startDate, endDate, star, valueSearch, tab, startPage]
+    [startDate, endDate, star, valueSearch, tab, startPage, city, district]
   );
 
   const onCheckReview = useCallback(
@@ -215,7 +312,9 @@ const ReviewCollaborator = () => {
             endDate,
             star,
             valueSearch,
-            tab
+            tab,
+            city,
+            district
           )
             .then((res) => {
               setData(res?.data);
@@ -230,7 +329,17 @@ const ReviewCollaborator = () => {
           });
         });
     },
-    [note, startDate, endDate, star, valueSearch, tab, startPage]
+    [
+      note,
+      startDate,
+      endDate,
+      star,
+      valueSearch,
+      tab,
+      startPage,
+      city,
+      district,
+    ]
   );
 
   const columns = [
@@ -413,11 +522,11 @@ const ReviewCollaborator = () => {
       {/* <a className="title-review">Đánh giá cộng tác viên</a> */}
       <div className="div-head-review">
         <Select
-          defaultValue={`${i18n.t("filter_star", { lng: lang })}`}
-          style={{ width: width <= 490 ? "100%" : 200 }}
+          value={star}
+          style={{ width: width <= 490 ? "100%" : "18%" }}
           onChange={handleFilter}
           options={[
-            { value: 0, label: `${i18n.t("filter_star", { lng: lang })}` },
+            { value: 0, label: `${i18n.t("Tất cả", { lng: lang })}` },
             { value: 1, label: `1 ${i18n.t("star", { lng: lang })}` },
             { value: 2, label: `2 ${i18n.t("star", { lng: lang })}` },
             { value: 3, label: `3 ${i18n.t("star", { lng: lang })}` },
@@ -425,12 +534,36 @@ const ReviewCollaborator = () => {
             { value: 5, label: `5 ${i18n.t("star", { lng: lang })}` },
           ]}
         />
+        <Select
+          value={city}
+          style={{ width: width <= 490 ? "100%" : "18%" }}
+          options={cityOptions}
+          onChange={(e, item) => onChangeCity(e, item)}
+          showSearch
+          filterOption={(input, option) =>
+            (option?.label ?? "").includes(input)
+          }
+          placeholder="Chọn Tỉnh/thành phố"
+        />
+        <Select
+          value={district}
+          style={{ width: width <= 490 ? "100%" : "18%" }}
+          options={districtOptions}
+          onChange={(e, item) => onChangeDistrict(e)}
+          placeholder="Chọn quận/huyện"
+          disabled={districtOptions.length > 0 ? false : true}
+          showSearch
+          filterOption={(input, option) =>
+            (option?.label ?? "").includes(input)
+          }
+          mode="multiple"
+        />
 
         <Input
           placeholder={`${i18n.t("search", { lng: lang })}`}
           type="text"
           style={
-            width <= 490 ? { width: "100%", marginTop: 10 } : { width: "60%" }
+            width <= 490 ? { width: "100%", marginTop: 10 } : { width: "40%" }
           }
           prefix={<SearchOutlined />}
           onChange={(e) => handleSearch(e.target.value)}

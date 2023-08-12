@@ -122,7 +122,10 @@ const AddGroupPromotion = (props) => {
 
         <UploadImage
           title="Hình ảnh"
+          image={state.thumbnail}
           setImage={(e) => setState({ ...state, thumbnail: e })}
+          classImg="img-group-promotion"
+          classUpload="upload-img-group-promotion"
         />
 
         <Button

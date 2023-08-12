@@ -184,7 +184,8 @@ const AddBanner = () => {
           )}  2,62`}
           image={imgThumbnail}
           setImage={setImgThumbnail}
-          classImg={"img-thumbnail-banner"}
+          classImg="img-thumbnail-banner"
+          classUpload="upload-thumbnail-banner"
         />
 
         <Button

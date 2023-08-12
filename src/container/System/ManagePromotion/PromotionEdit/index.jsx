@@ -1110,7 +1110,8 @@ const EditPromotion = () => {
                       setImage={(prev) =>
                         setStatePromo({ ...statePromo, imgThumbnail: prev })
                       }
-                      classImg={"img-thumbnail"}
+                      classImg="img-thumbnail-promotion"
+                      classUpload="upload-thumbnail-promotion"
                       disabled={isActive ? true : false}
                     />
 
@@ -1129,7 +1130,8 @@ const EditPromotion = () => {
                       setImage={(prev) =>
                         setStatePromo({ ...statePromo, imgBackground: prev })
                       }
-                      classImg={"img-background"}
+                      classImg="img-background-promotion"
+                      classUpload="upload-background-promotion"
                       disabled={isActive ? true : false}
                     />
                   </div>

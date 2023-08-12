@@ -133,7 +133,7 @@ const Information = ({ data, image, idCTV, setData }) => {
     _debounce((value) => {
       setNameCollaborator(value);
       if (value) {
-        fetchCollaborators(lang, 0, 100, "", value)
+        fetchCollaborators(lang, 0, 100, "", value, "")
           .then((res) => {
             if (value === "") {
               setDataCollaborator([]);
