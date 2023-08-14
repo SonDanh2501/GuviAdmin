@@ -9,6 +9,7 @@ import {
 } from "../../../redux/selectors/auth";
 import "./ManageConfiguration.scss";
 import { Upload } from "antd";
+import SettingQrCode from "./ScreenConfiguration/SettingQrcode";
 
 const ManageConfiguration = () => {
   const navigate = useNavigate();
