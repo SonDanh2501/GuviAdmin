@@ -96,7 +96,7 @@ const ManagePromotions = () => {
       ...state,
       status:
         readCookie("tab_status_promotion") === ""
-          ? ""
+          ? "doing"
           : readCookie("tab_status_promotion"),
       idService:
         readCookie("service_prmotion") === ""
@@ -104,30 +104,34 @@ const ManagePromotions = () => {
           : readCookie("service_prmotion"),
       type:
         readCookie("selected_promotion") === " "
-          ? ""
+          ? "code"
           : readCookie("selected_promotion"),
       brand:
         readCookie("brand_promotion") === ""
-          ? ""
+          ? "guvi"
           : readCookie("brand_promotion"),
       value:
         readCookie("value_promotion") === ""
-          ? ""
+          ? "kmkh"
           : readCookie("value_promotion"),
       kind:
-        readCookie("kind_promotion") === "" ? "" : readCookie("kind_promotion"),
+        readCookie("kind_promotion") === ""
+          ? "promotion"
+          : readCookie("kind_promotion"),
     });
     fetchPromotion(
       "",
       readCookie("tab_status_promotion") === ""
-        ? ""
+        ? "doing"
         : readCookie("tab_status_promotion"),
       0,
       20,
       readCookie("selected_promotion") === " "
-        ? ""
+        ? "code"
         : readCookie("selected_promotion"),
-      readCookie("brand_promotion") === "" ? "" : readCookie("brand_promotion"),
+      readCookie("brand_promotion") === ""
+        ? "guvi"
+        : readCookie("brand_promotion"),
       readCookie("service_prmotion") === ""
         ? ""
         : readCookie("service_prmotion"),

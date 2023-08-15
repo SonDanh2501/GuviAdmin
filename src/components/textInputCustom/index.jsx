@@ -67,6 +67,7 @@ const InputCustom = (props) => {
           showSearch={showSearch}
           filterOption={filterOption}
           filterSort={filterSort}
+          disabled={disabled}
         />
       ) : inputMoney ? (
         <InputNumber

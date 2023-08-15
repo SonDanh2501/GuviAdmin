@@ -7,13 +7,14 @@ import { createCollaborator, fetchCollaborators } from "../../api/collaborator";
 import { getDistrictApi } from "../../api/file";
 import { errorNotify } from "../../helper/toast";
 import { getElementState, getLanguageState } from "../../redux/selectors/auth";
-import { getService } from "../../redux/selectors/service";
+import { getProvince, getService } from "../../redux/selectors/service";
 import { validateAddCollaboratorSchema } from "../../utils/schema";
 import CustomButton from "../customButton/customButton";
 import InputCustom from "../textInputCustom";
 import "./addCollaborator.scss";
 import i18n from "../../i18n";
 import useWindowDimensions from "../../helper/useWindowDimensions";
+import { getListBusiness } from "../../api/configuration";
 
 const AddCollaborator = (props) => {
   const {
@@ -28,12 +29,14 @@ const AddCollaborator = (props) => {
   const formikRef = useRef();
   const checkElement = useSelector(getElementState);
   const service = useSelector(getService);
-  const [dataCity, setDataCity] = useState([]);
+  const [dataBusiness, setDataBusiness] = useState([]);
   const serviceOption = [];
   const cityOption = [];
+  const businessOption = [];
   const [open, setOpen] = useState(false);
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -42,14 +45,14 @@ const AddCollaborator = (props) => {
   };
 
   useEffect(() => {
-    getDistrictApi()
+    getListBusiness(0, 100, "")
       .then((res) => {
-        setDataCity(res?.aministrative_division);
+        setDataBusiness(res?.data);
       })
       .catch((err) => {});
   }, []);
 
-  dataCity?.map((item) => {
+  province?.map((item) => {
     cityOption.push({
       value: item?.code,
       label: item?.name,
@@ -63,6 +66,13 @@ const AddCollaborator = (props) => {
     });
   });
 
+  dataBusiness?.map((item) => {
+    businessOption?.push({
+      value: item?._id,
+      label: item?.full_name,
+    });
+  });
+
   const initialValues = {
     code_phone_area: "",
     phone: "",
@@ -73,6 +83,7 @@ const AddCollaborator = (props) => {
     type: "",
     service_apply: [],
     city: "",
+    idBusiness: "",
   };
 
   const addCustomer = useCallback(() => {
@@ -88,6 +99,7 @@ const AddCollaborator = (props) => {
       id_inviter: formikRef?.current?.values?.code,
       type: formikRef?.current?.values?.type,
       service_apply: formikRef?.current?.values?.service_apply,
+      id_business: formikRef?.current?.values?.idBusiness,
     })
       .then((res) => {
         setOpen(false);
@@ -105,7 +117,7 @@ const AddCollaborator = (props) => {
           message: err,
         });
       });
-  }, [formikRef, startPage, status, city]);
+  }, [formikRef, startPage, status]);
 
   return (
     <>
@@ -184,6 +196,15 @@ const AddCollaborator = (props) => {
                   allowClear
                   onChange={(e) => setFieldValue("service_apply", e)}
                   options={serviceOption}
+                />
+              </div>
+              <div className="mb-2">
+                <a>{`${i18n.t("Đối tác", { lng: lang })}`}</a>
+                <Select
+                  style={{ width: "100%" }}
+                  allowClear
+                  onChange={(e) => setFieldValue("idBusiness", e)}
+                  options={businessOption}
                 />
               </div>
               <div className="mb-2">
