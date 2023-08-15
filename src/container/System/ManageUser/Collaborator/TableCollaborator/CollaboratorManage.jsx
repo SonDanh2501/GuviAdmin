@@ -627,10 +627,10 @@ const CollaboratorManage = (props) => {
                 },
               };
             }}
-            locale={{
-              emptyText:
-                data.length > 0 ? <Empty /> : <Skeleton active={true} />,
-            }}
+            // locale={{
+            //   emptyText:
+            //     data.length > 0 ? <Empty /> : <Skeleton active={true} />,
+            // }}
             scroll={{
               x: width < 900 ? 900 : 0,
             }}

@@ -16,8 +16,12 @@ import { errorNotify, successNotify } from "../../../../../../../helper/toast";
 import i18n from "../../../../../../../i18n";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
-import { getService } from "../../../../../../../redux/selectors/service";
+import {
+  getProvince,
+  getService,
+} from "../../../../../../../redux/selectors/service";
 import "./index.scss";
+import { getListBusiness } from "../../../../../../../api/configuration";
 
 const Information = ({ data, image, idCTV, setData }) => {
   const [name, setName] = useState("");
@@ -39,27 +43,30 @@ const Information = ({ data, image, idCTV, setData }) => {
   const [dataCollaborator, setDataCollaborator] = useState([]);
   const [nameCollaborator, setNameCollaborator] = useState("");
   const [idCollaborator, setIdCollaborator] = useState("");
-  const [dataCity, setDataCity] = useState([]);
+  const [dataBusiness, setDataBusiness] = useState([]);
+  const [idBusiness, setIdBusiness] = useState("");
   const [codeCity, setCodeCity] = useState();
   const [dataDistrict, setDataDistrict] = useState([]);
   const [codeDistrict, setCodeDistrict] = useState([]);
   const dispatch = useDispatch();
   const service = useSelector(getService);
+  const province = useSelector(getProvince);
   const serviceOption = [];
   const cityOption = [];
   const districtsOption = [];
+  const businessOption = [];
   const dateFormat = "YYYY-MM-DD";
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    getDistrictApi()
+    province?.map((item) => {
+      if (item?.code === data?.city) {
+        setDataDistrict(item?.districts);
+      }
+    });
+    getListBusiness(0, 100, "")
       .then((res) => {
-        setDataCity(res?.aministrative_division);
-        res?.aministrative_division?.map((item) => {
-          if (item?.code === data?.city) {
-            setDataDistrict(item?.districts);
-          }
-        });
+        setDataBusiness(res?.data);
       })
       .catch((err) => {});
   }, []);
@@ -86,6 +93,7 @@ const Information = ({ data, image, idCTV, setData }) => {
     // setServiceApply(data?.serviceApply);
     setCodeCity(data?.city);
     setCodeDistrict(data?.district);
+    setIdBusiness(data?.id_business);
   }, [data]);
 
   service.map((item) => {
@@ -95,7 +103,7 @@ const Information = ({ data, image, idCTV, setData }) => {
     });
   });
 
-  dataCity?.map((item) => {
+  province?.map((item) => {
     cityOption.push({
       label: item?.name,
       value: item?.code,
@@ -107,6 +115,13 @@ const Information = ({ data, image, idCTV, setData }) => {
     districtsOption.push({
       label: item?.name,
       value: item?.code,
+    });
+  });
+
+  dataBusiness?.map((item) => {
+    businessOption.push({
+      value: item?._id,
+      label: item?.full_name,
     });
   });
 
@@ -289,22 +304,13 @@ const Information = ({ data, image, idCTV, setData }) => {
               />
             </Col>
             <Col lg="6">
-              {/* <div>
-                <a>Đối tượng CTV</a>
-                <Input
-                  placeholder="Nhập đối tượng"
-                  type="text"
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  disabled={true}
-                />
-                <InputCustom 
-                 type="text"
-                 value={type}
-                 onChange={(e) => setType(e.target.value)}
-                 disabled={true}
-                />
-              </div> */}
+              <InputCustom
+                title={`${i18n.t("Đối tác", { lng: lang })}`}
+                value={idBusiness}
+                options={businessOption}
+                select={true}
+                disabled={true}
+              />
             </Col>
           </Row>
           <Row className="mt-2">

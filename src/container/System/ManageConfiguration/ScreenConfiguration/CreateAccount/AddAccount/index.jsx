@@ -1,4 +1,4 @@
-import { Button, Drawer, Input, Select } from "antd";
+import { Button, Drawer, Input, Radio, Select, Space } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import "./styles.scss";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +23,7 @@ const AddAccount = ({ setData, setTotal }) => {
   const [password, setPassword] = useState("");
   const [idRole, setIdRole] = useState("");
   const [dataRole, setDataRole] = useState([]);
+  const [ratioProvince, setRatioProvince] = useState(1);
   const [city, setCity] = useState([]);
   const [dataDistrict, setDataDistrict] = useState([]);
   const [idService, setIdService] = useState([]);
@@ -34,12 +35,7 @@ const AddAccount = ({ setData, setTotal }) => {
   const province = useSelector(getProvince);
   const service = useSelector(getService);
 
-  const cityOption = [
-    {
-      value: "",
-      label: "Tất cả",
-    },
-  ];
+  const cityOption = [];
   const districtOption = [
     {
       value: "",
@@ -84,11 +80,9 @@ const AddAccount = ({ setData, setTotal }) => {
   });
 
   dataDistrict?.map((item) => {
-    item?.district?.map((i) => {
-      districtOption?.push({
-        value: i?.code,
-        label: i?.name,
-      });
+    districtOption?.push({
+      value: item?.code,
+      label: item?.name,
     });
   });
 
@@ -108,9 +102,10 @@ const AddAccount = ({ setData, setTotal }) => {
       password: password,
       id_role_admin: idRole,
       area_manager_lv_0: "viet_nam",
-      area_manager_lv_1: city,
-      area_manager_lv_2: district,
-      id_service_manager: idService,
+      area_manager_lv_1:
+        ratioProvince === 2 ? (city.length > 0 ? city : []) : [],
+      area_manager_lv_2: district.length > 0 ? district : [],
+      id_service_manager: idService.length > 0 ? idService : [],
     })
       .then((res) => {
         setOpen(false);
@@ -158,41 +153,53 @@ const AddAccount = ({ setData, setTotal }) => {
           password={true}
         />
 
-        <div className=" div-form-role">
-          <InputCustom
-            title="Tỉnh/thành phố"
-            placeholder="Vui lòng chọn tỉnh/thành phố"
-            onChange={(e, item) => {
-              setCity(e);
-              setDataDistrict(item);
-            }}
-            options={cityOption}
-            style={{ width: "100%" }}
-            select={true}
-            mode="multiple"
-            showSearch
-            filterOption={(input, option) =>
-              (option?.label ?? "").includes(input)
-            }
-          />
-        </div>
+        <div style={{ display: "flex", flexDirection: "column", marginTop: 5 }}>
+          <a>Theo khu vực</a>
+          <Radio.Group
+            value={ratioProvince}
+            onChange={(e) => setRatioProvince(e.target.value)}
+          >
+            <Space direction="vertical">
+              <Radio value={1}>Tất cả</Radio>
+              <Radio value={2}>Theo Tỉnh/Thành Phố</Radio>
+            </Space>
+          </Radio.Group>
+          {ratioProvince === 2 && (
+            <div className=" div-form-role">
+              <InputCustom
+                placeholder="Vui lòng chọn tỉnh/thành phố"
+                onChange={(e, item) => {
+                  setCity(e);
+                  setDataDistrict(item?.district);
+                }}
+                options={cityOption}
+                style={{ width: "100%" }}
+                select={true}
+                showSearch
+                filterOption={(input, option) =>
+                  (option?.label ?? "").includes(input)
+                }
+              />
 
-        <div className=" div-form-role">
-          <InputCustom
-            title="Quận/huyện"
-            placeholder="Vui lòng chọn quận/huyện"
-            onChange={(e) => {
-              setDistrict(e);
-            }}
-            options={districtOption}
-            style={{ width: "100%" }}
-            select={true}
-            mode="multiple"
-            showSearch
-            filterOption={(input, option) =>
-              (option?.label ?? "").includes(input)
-            }
-          />
+              {dataDistrict.length > 0 && (
+                <InputCustom
+                  title="Quận/huyện"
+                  placeholder="Vui lòng chọn quận/huyện"
+                  onChange={(e) => {
+                    setDistrict(e);
+                  }}
+                  options={districtOption}
+                  style={{ width: "100%" }}
+                  select={true}
+                  mode="multiple"
+                  showSearch
+                  filterOption={(input, option) =>
+                    (option?.label ?? "").includes(input)
+                  }
+                />
+              )}
+            </div>
+          )}
         </div>
 
         <div className=" div-form-role">

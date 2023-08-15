@@ -11,6 +11,9 @@ const ManageReportOrder = () => {
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
+
+  console.log(checkElement?.includes("order_report_day_in_week"));
+
   return (
     <div className="container-report-order-item">
       {checkElement?.includes("order_report") && (
@@ -98,23 +101,24 @@ const ManageReportOrder = () => {
           </a>
         </div>
       )}
-
-      <div className="div-item-report">
-        <a className="text-title">{`${i18n.t("report_order_day_of_week", {
-          lng: lang,
-        })}`}</a>
-        <a className="text-details">
-          {`${i18n.t("report_order_day_of_week", { lng: lang })}`}
-        </a>
-        <a
-          className="text-see-report"
-          onClick={() =>
-            navigate("/report/manage-report/report-order-day-of-week")
-          }
-        >
-          {`${i18n.t("see_report", { lng: lang })}`}
-        </a>
-      </div>
+      {checkElement?.includes("order_report_day_in_week") && (
+        <div className="div-item-report">
+          <a className="text-title">{`${i18n.t("report_order_day_of_week", {
+            lng: lang,
+          })}`}</a>
+          <a className="text-details">
+            {`${i18n.t("report_order_day_of_week", { lng: lang })}`}
+          </a>
+          <a
+            className="text-see-report"
+            onClick={() =>
+              navigate("/report/manage-report/report-order-day-of-week")
+            }
+          >
+            {`${i18n.t("see_report", { lng: lang })}`}
+          </a>
+        </div>
+      )}
     </div>
   );
 };

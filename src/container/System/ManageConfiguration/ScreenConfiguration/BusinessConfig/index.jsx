@@ -56,10 +56,10 @@ const BusinessConfig = () => {
     setState({ ...state, isLoading: true });
     deleteBusiness(id)
       .then((res) => {
+        setModalDelete(false);
         getListBusiness(0, 20, "")
           .then((res) => {
             setState({ ...state, data: res?.data, isLoading: false });
-            modalDelete(false);
           })
           .catch((err) => {});
       })
