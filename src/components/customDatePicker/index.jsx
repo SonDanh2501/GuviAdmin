@@ -18,25 +18,21 @@ const { RangePicker } = DatePicker;
 
 const CustomDatePicker = (props) => {
   const lang = useSelector(getLanguageState);
-  const { setStartDate, setEndDate, onClick, onCancel, classNameBtn } = props;
+  const {
+    setStartDate,
+    setEndDate,
+    onClick,
+    onCancel,
+    classNameBtn,
+    setSameStart,
+    setSameEnd,
+  } = props;
   const [open, setOpen] = useState(false);
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
   const [valueTab, setValueTab] = useState("");
   const [tabTime, setTabTime] = useState("day");
-  const [title, setTitle] = useState(
-    `${i18n.t("choose_time", {
-      lng: lang,
-    })}`
-  );
-
-  useEffect(() => {
-    setTitle(
-      `${i18n.t("choose_time", {
-        lng: lang,
-      })}`
-    );
-  }, [lang]);
+  const [title, setTitle] = useState();
 
   const handleOk = () => {
     setOpen(false);
@@ -46,11 +42,7 @@ const CustomDatePicker = (props) => {
   const handleCancel = () => {
     setOpen(false);
     onCancel();
-    setTitle(
-      `${i18n.t("choose_time", {
-        lng: lang,
-      })}`
-    );
+    setTitle();
   };
 
   const onSelectTab = (item) => {
@@ -58,13 +50,22 @@ const CustomDatePicker = (props) => {
     const today = moment().endOf("date").toISOString();
     const startToday = moment().startOf("date").toISOString();
     const startYesterday = moment()
-      .subtract(1, "d")
+      .subtract(1, "day")
       .startOf("date")
       .toISOString();
-    const endYesterday = moment().subtract(1, "d").endOf("date").toISOString();
-    const lastSeven = moment().subtract(7, "d").startOf("date").toISOString();
-    const lastThirty = moment().subtract(30, "d").startOf("date").toISOString();
-    const lastNinety = moment().subtract(90, "d").startOf("date").toISOString();
+    const endYesterday = moment()
+      .subtract(1, "day")
+      .endOf("date")
+      .toISOString();
+    const lastSeven = moment().subtract(6, "day").startOf("date").toISOString();
+    const lastThirty = moment()
+      .subtract(29, "day")
+      .startOf("date")
+      .toISOString();
+    const lastNinety = moment()
+      .subtract(89, "day")
+      .startOf("date")
+      .toISOString();
     const startThisMonth = moment().startOf("month").toISOString();
     const endThisMonth = moment().endOf("month").toISOString();
     const startLastMonth = moment()
@@ -75,57 +76,88 @@ const CustomDatePicker = (props) => {
       .subtract(1, "months")
       .endOf("month")
       .toISOString();
-    const endNextDay = moment().add(3, "days").startOf("date").toISOString();
+    const endNextDay = moment().add(3, "day").startOf("date").toISOString();
 
     switch (item?.value) {
       case "last_seven":
         setStartDate(lastSeven);
-        setStart(moment().subtract(7, "d"));
+        setStart(moment().subtract(6, "day"));
         setEndDate(today);
         setEnd(moment());
+        setSameStart(moment(lastSeven).subtract(6, "day").toISOString());
+        setSameEnd(moment(today).subtract(6, "day").toISOString());
         break;
       case "last_thirty":
         setStartDate(lastThirty);
-        setStart(moment().subtract(30, "d"));
+        setStart(moment().subtract(29, "day"));
         setEndDate(today);
         setEnd(moment());
+        setSameStart(moment(lastThirty).subtract(29, "day").toISOString());
+        setSameEnd(moment(today).subtract(29, "day").toISOString());
         break;
       case "last_ninety":
         setStartDate(lastNinety);
-        setStart(moment().subtract(90, "d"));
+        setStart(moment().subtract(89, "day"));
         setEndDate(today);
         setEnd(moment());
-
+        setSameStart(moment(lastNinety).subtract(89, "day").toISOString());
+        setSameEnd(moment(today).subtract(89, "day").toISOString());
         break;
       case "this_month":
         setStartDate(startThisMonth);
         setStart(moment().startOf("month"));
         setEndDate(endThisMonth);
         setEnd(moment().endOf("month"));
+        setSameStart(
+          moment().subtract(1, "months").startOf("month").toISOString()
+        );
+        setSameEnd(moment().subtract(1, "months").endOf("month").toISOString());
         break;
       case "last_month":
         setStartDate(startLastMonth);
         setStart(moment().subtract(1, "months").startOf("month"));
         setEndDate(endLastMonth);
         setEnd(moment().subtract(1, "months").endOf("month"));
+        setSameStart(
+          moment(startLastMonth)
+            .subtract(1, "months")
+            .startOf("month")
+            .toISOString()
+        );
+        setSameEnd(
+          moment(endLastMonth)
+            .subtract(1, "months")
+            .endOf("month")
+            .toISOString()
+        );
         break;
       case "last_next_day":
         setStartDate(today);
         setStart(today);
         setEndDate(endNextDay);
-        setEnd(moment().add(3, "days"));
+        setEnd(moment().add(3, "day"));
         break;
       case "today":
         setStartDate(startToday);
         setStart(moment().startOf("date"));
         setEndDate(today);
         setEnd(moment());
+        setSameStart(
+          moment(startToday).subtract(1, "day").startOf("day").toISOString()
+        );
+        setSameEnd(moment(today).subtract(1, "day").endOf("day").toISOString());
         break;
       case "yesterday":
         setStartDate(startYesterday);
-        setStart(moment().subtract(1, "d").startOf("date"));
+        setStart(moment().subtract(1, "day").startOf("date"));
         setEndDate(endYesterday);
-        setEnd(moment().subtract(1, "d").endOf("date"));
+        setEnd(moment().subtract(1, "day").endOf("date"));
+        setSameStart(
+          moment(startYesterday).subtract(1, "day").startOf("day").toISOString()
+        );
+        setSameEnd(
+          moment(endYesterday).subtract(1, "day").endOf("day").toISOString()
+        );
         break;
       case "setting":
         setStart("");
@@ -177,7 +209,7 @@ const CustomDatePicker = (props) => {
       <div>
         {/* <a className="title-time">Thời gian</a> */}
         <div className="btn-date-picker" onClick={() => setOpen(!open)}>
-          <a>{title}</a>
+          <a>Thời gian: {title}</a>
         </div>
       </div>
 
@@ -308,10 +340,6 @@ const DATA_TAB = [
   {
     title: "last_month",
     value: "last_month",
-  },
-  {
-    title: "three_next",
-    value: "last_next_day",
   },
   {
     title: "custom",

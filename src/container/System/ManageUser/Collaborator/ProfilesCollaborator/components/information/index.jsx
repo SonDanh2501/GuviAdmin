@@ -21,7 +21,10 @@ import {
   getService,
 } from "../../../../../../../redux/selectors/service";
 import "./index.scss";
-import { getListBusiness } from "../../../../../../../api/configuration";
+import {
+  getDetailBusiness,
+  getListBusiness,
+} from "../../../../../../../api/configuration";
 
 const Information = ({ data, image, idCTV, setData }) => {
   const [name, setName] = useState("");
@@ -45,7 +48,8 @@ const Information = ({ data, image, idCTV, setData }) => {
   const [idCollaborator, setIdCollaborator] = useState("");
   const [dataBusiness, setDataBusiness] = useState([]);
   const [idBusiness, setIdBusiness] = useState("");
-  const [codeCity, setCodeCity] = useState();
+  const [detailsBusiness, setDetailsBusiness] = useState([]);
+  const [codeCity, setCodeCity] = useState([]);
   const [dataDistrict, setDataDistrict] = useState([]);
   const [codeDistrict, setCodeDistrict] = useState([]);
   const dispatch = useDispatch();
@@ -69,9 +73,6 @@ const Information = ({ data, image, idCTV, setData }) => {
         setDataBusiness(res?.data);
       })
       .catch((err) => {});
-  }, []);
-
-  useEffect(() => {
     setName(data?.full_name);
     setGender(data?.gender);
     setBirthday(data?.birthday);
@@ -90,11 +91,29 @@ const Information = ({ data, image, idCTV, setData }) => {
     data?.service_apply?.map((item) => {
       serviceApply.push(item?._id);
     });
-    // setServiceApply(data?.serviceApply);
+    setIdBusiness(data?.id_business);
     setCodeCity(data?.city);
     setCodeDistrict(data?.district);
-    setIdBusiness(data?.id_business);
   }, [data]);
+
+  useEffect(() => {
+    if (idBusiness) {
+      getDetailBusiness(idBusiness)
+        .then((res) => {
+          setDetailsBusiness(res);
+          setCodeCity(res?.area_manager_lv_1);
+          setCodeDistrict(res?.area_manager_lv_2);
+          province?.map((item) => {
+            res?.area_manager_lv_1?.map((i) => {
+              if (item?.code === i) {
+                setDataDistrict(item?.districts);
+              }
+            });
+          });
+        })
+        .catch((err) => {});
+    }
+  }, [idBusiness]);
 
   service.map((item) => {
     serviceOption.push({
@@ -189,7 +208,8 @@ const Information = ({ data, image, idCTV, setData }) => {
       type: type,
       service_apply: serviceApply,
       district: codeDistrict,
-      city: codeCity,
+      city: codeCity.length > 0 ? codeCity[0] : -1,
+      id_business: idBusiness,
     })
       .then((res) => {
         dispatch(loadingAction.loadingRequest(false));
@@ -231,6 +251,7 @@ const Information = ({ data, image, idCTV, setData }) => {
     serviceApply,
     codeDistrict,
     codeCity,
+    idBusiness,
   ]);
 
   return (
@@ -309,7 +330,7 @@ const Information = ({ data, image, idCTV, setData }) => {
                 value={idBusiness}
                 options={businessOption}
                 select={true}
-                disabled={true}
+                onChange={(e) => setIdBusiness(e)}
               />
             </Col>
           </Row>

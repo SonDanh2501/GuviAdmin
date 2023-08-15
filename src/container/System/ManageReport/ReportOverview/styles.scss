@@ -1,0 +1,132 @@
+.div-date-report-overview {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 20px;
+
+  .div-same {
+    border: 1px solid #d6d6d6;
+    padding: 5px;
+    border-radius: 6px;
+    width: auto;
+    padding: 5px 10px;
+    margin-left: 5px;
+  }
+}
+
+.div-chart-firt-overview {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  .div-chart-gross-income {
+    width: 49%;
+    height: auto;
+    background-color: white;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.3));
+    border-radius: 8px;
+    padding: 10px;
+
+    .title-gross {
+      text-decoration: underline dotted;
+      color: #000000;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      text-decoration-line: underline;
+      text-decoration-color: #d6d6d6;
+    }
+
+    .div-total-gross {
+      display: flex;
+      align-items: center;
+      width: 40%;
+      height: 30px;
+      border: 1px solid #d6d6d6;
+      border-radius: 4px;
+      margin: 5px 0;
+      padding-left: 10px;
+
+      .text-total-gross {
+        color: #000000;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.div-content-chart-net-income {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  border-radius: 4px;
+  background-color: white;
+  border: 1px solid #000000;
+  width: 150px;
+
+  .text-content {
+    color: #2962ff;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+  }
+
+  .text-content-same {
+    color: #82ca9d;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .div-chart-firt-overview {
+    display: flex;
+    flex-direction: column;
+
+    .div-chart-gross-income {
+      width: 100%;
+      height: auto;
+      background-color: white;
+      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.3));
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 20px;
+
+      .title-gross {
+        text-decoration: underline dotted;
+        color: #000000;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        text-decoration-line: underline;
+        text-decoration-color: #d6d6d6;
+      }
+
+      .div-total-gross {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20%;
+        height: 30px;
+        border: 1px solid #d6d6d6;
+        border-radius: 4px;
+        margin: 5px 0;
+
+        .text-total-gross {
+          color: #000000;
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}

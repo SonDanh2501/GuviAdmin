@@ -521,6 +521,8 @@ export default function Home() {
                   setEndDate={setEndDate}
                   onClick={onChange}
                   onCancel={() => {}}
+                  setSameStart={() => {}}
+                  setSameEnd={() => {}}
                 />
                 {startDate && (
                   <a className="text-date">
