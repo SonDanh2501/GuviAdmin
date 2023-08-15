@@ -12,8 +12,6 @@ const ManageReportOrder = () => {
   const lang = useSelector(getLanguageState);
   const navigate = useNavigate();
 
-  console.log(checkElement?.includes("order_report_day_in_week"));
-
   return (
     <div className="container-report-order-item">
       {checkElement?.includes("order_report") && (
