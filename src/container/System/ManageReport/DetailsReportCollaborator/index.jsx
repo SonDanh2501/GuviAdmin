@@ -364,6 +364,8 @@ const DetailReportManager = () => {
           setEndDate={setEndDate}
           onClick={onChangeFilter}
           onCancel={() => {}}
+          setSameStart={() => {}}
+          setSameEnd={() => {}}
         />
         {startDate && (
           <a className="text-date">

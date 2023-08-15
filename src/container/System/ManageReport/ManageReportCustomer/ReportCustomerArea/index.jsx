@@ -65,6 +65,8 @@ const ReportCustomerArea = () => {
           setEndDate={setEndDate}
           onClick={onChangeDay}
           onCancel={() => {}}
+          setSameStart={() => {}}
+          setSameEnd={() => {}}
         />
         {startDate && (
           <a className="text-date">

@@ -441,7 +441,7 @@ const EditPromotion = () => {
   const onEditPromotion = useCallback(() => {
     setIsLoading(true);
     updatePromotion(id, {
-      code: statePromo?.promoCode,
+      code: statePromo?.promoCode.toUpperCase(),
       is_parrent_promotion: statePromo?.isParrentPromotion,
       total_child_promotion: statePromo?.totalChildPromotion,
       title: {

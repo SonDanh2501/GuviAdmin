@@ -63,7 +63,7 @@ const CreateBusiness = (props) => {
       avatar: state.avatar,
       tax_code: state.tax,
       area_manager_lv_0: "viet_nam",
-      area_manager_lv_1: [state.city],
+      area_manager_lv_1: state.city === "" ? [] : [state.city],
       area_manager_lv_2: state?.district.length > 0 ? state.district : [],
       id_service_manager: state.idService.length > 0 ? state.idService : [],
     })
