@@ -123,6 +123,9 @@ const CreatePromotion = () => {
     groupPromotion: [],
     dataGroupPromotion: [],
   });
+  const [title, setTitle] = useState({
+    vi: "",
+  });
   const [timeApply, setTimeApply] = useState(DATA_APPLY_TIME);
   const [isLoading, setIsLoading] = useState(false);
   const options = [];
@@ -310,7 +313,7 @@ const CreatePromotion = () => {
   const onCreatePromotion = useCallback(() => {
     setIsLoading(true);
     createPromotion({
-      code: statePromo?.promoCode,
+      code: statePromo?.promoCode.toUpperCase(),
       is_parrent_promotion: statePromo?.isParrentPromotion,
       total_child_promotion: statePromo?.totalChildPromotion,
       title: {
@@ -363,7 +366,7 @@ const CreatePromotion = () => {
       district: [],
       timezone: "Asia/Ho_Chi_Minh",
       id_group_promotion:
-        statePromo.ratioGroupPromotion === 2 ? statePromo.groupPromotion : "",
+        statePromo.ratioGroupPromotion === 2 ? statePromo.groupPromotion : [],
     })
       .then((res) => {
         if (statePromo?.isSendNotification) {
@@ -632,6 +635,33 @@ const CreatePromotion = () => {
                 <QuestionCircleOutlined className="icon-question" />
               </Popover>
             </div>
+            {/* {Object.entries(title).map(([key, value]) => {
+              return (
+                <div key={key}>
+                  <InputCustom
+                    value={value}
+                    onChange={(e) =>
+                      setStatePromo({
+                        ...statePromo,
+                        titleVN: e.target.value,
+                        errorTitle: "",
+                      })
+                    }
+                  />
+                </div>
+              );
+            })}
+            <Select
+              size="small"
+              style={{ width: "20%", marginTop: 10 }}
+              options={[
+                { value: "en", label: "Tiếng Anh" },
+                { value: "jp", label: "Tiếng Nhật" },
+              ]}
+              onChange={(e) => {
+                Object.assign(title, { e: "" });
+              }}
+            /> */}
             <InputCustom
               title={`${i18n.t("vietnamese", { lng: lang })}`}
               value={statePromo?.titleVN}

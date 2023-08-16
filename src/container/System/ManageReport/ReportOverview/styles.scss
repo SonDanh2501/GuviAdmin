@@ -22,25 +22,22 @@
     width: 49%;
     height: auto;
     background-color: white;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
     border-radius: 8px;
     padding: 10px;
 
     .title-gross {
-      text-decoration: underline dotted;
       color: #000000;
       font-family: "Roboto";
       font-style: normal;
       font-weight: 500;
       font-size: 16px;
-      text-decoration-line: underline;
-      text-decoration-color: #d6d6d6;
     }
 
     .div-total-gross {
       display: flex;
       align-items: center;
-      width: 40%;
+      width: 50%;
       height: 30px;
       border: 1px solid #d6d6d6;
       border-radius: 4px;
@@ -53,6 +50,129 @@
         font-style: normal;
         font-weight: 500;
         font-size: 14px;
+      }
+
+      .text-number-persent-up {
+        display: flex;
+        align-items: center;
+        color: #16a249;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        margin-left: 15px;
+      }
+      .text-number-persent-down {
+        display: flex;
+        align-items: center;
+        color: #dc2828;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        margin-left: 15px;
+      }
+
+      .text-same {
+        color: #787878;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        margin-left: 5px;
+      }
+    }
+  }
+  .div-chart-gross-income-area {
+    width: 49%;
+    height: auto;
+    background-color: white;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+    border-radius: 8px;
+    padding: 10px;
+
+    .div-head-chart {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      .title-gross {
+        color: #000000;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+      }
+      .div-see-all {
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
+        padding: 2px 5px;
+
+        .text-all {
+          color: #000000;
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .div-list-chart {
+      display: flex;
+      flex-direction: column;
+      margin-top: 10px;
+
+      .div-item-chart {
+        display: flex;
+        flex-direction: row;
+        padding: 10px 5px;
+        border-bottom: 1px solid #cccccc;
+        justify-content: space-between;
+
+        .div-name-area {
+          display: flex;
+          flex-direction: column;
+          .name-area {
+            color: #212121;
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 500;
+            font-size: 14px;
+          }
+        }
+        .div-number-area {
+          display: flex;
+          flex-direction: column;
+          align-items: end;
+          .money-area {
+            color: #212121;
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 500;
+            font-size: 14px;
+          }
+
+          .text-number-persent-up {
+            display: flex;
+            align-items: center;
+            color: #16a249;
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 12px;
+            margin-left: 15px;
+          }
+          .text-number-persent-down {
+            display: flex;
+            align-items: center;
+            color: #dc2828;
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 12px;
+            margin-left: 15px;
+          }
+        }
       }
     }
   }
@@ -88,15 +208,14 @@
   .div-chart-firt-overview {
     display: flex;
     flex-direction: column;
-
     .div-chart-gross-income {
       width: 100%;
       height: auto;
       background-color: white;
-      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.3));
+      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
       border-radius: 8px;
       padding: 10px;
-      margin-bottom: 20px;
+      margin-top: 20px;
 
       .title-gross {
         text-decoration: underline dotted;
@@ -112,12 +231,12 @@
       .div-total-gross {
         display: flex;
         align-items: center;
-        justify-content: center;
-        width: 20%;
+        width: 50%;
         height: 30px;
         border: 1px solid #d6d6d6;
         border-radius: 4px;
         margin: 5px 0;
+        padding-left: 10px;
 
         .text-total-gross {
           color: #000000;
@@ -125,6 +244,113 @@
           font-style: normal;
           font-weight: 500;
           font-size: 14px;
+        }
+
+        .text-number-persent-up {
+          display: flex;
+          align-items: center;
+          color: #16a249;
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 12px;
+          margin-left: 15px;
+        }
+        .text-number-persent-down {
+          display: flex;
+          align-items: center;
+          color: #dc2828;
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 12px;
+          margin-left: 15px;
+        }
+
+        .text-same {
+          color: #787878;
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 12px;
+          margin-left: 5px;
+        }
+      }
+    }
+    .div-chart-gross-income-area {
+      width: 100%;
+      height: auto;
+      background-color: white;
+      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 20px;
+      .title-gross {
+        text-decoration: underline dotted;
+        color: #000000;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        text-decoration-line: underline;
+        text-decoration-color: #d6d6d6;
+      }
+      .div-list-chart {
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+
+        .div-item-chart {
+          display: flex;
+          flex-direction: row;
+          padding: 10px 5px;
+          border-bottom: 1px solid #cccccc;
+          justify-content: space-between;
+
+          .div-name-area {
+            display: flex;
+            flex-direction: column;
+            .name-area {
+              color: #212121;
+              font-family: "Roboto";
+              font-style: normal;
+              font-weight: 500;
+              font-size: 14px;
+            }
+          }
+          .div-number-area {
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            .money-area {
+              color: #212121;
+              font-family: "Roboto";
+              font-style: normal;
+              font-weight: 500;
+              font-size: 14px;
+            }
+
+            .text-number-persent-up {
+              display: flex;
+              align-items: center;
+              color: #16a249;
+              font-family: "Roboto";
+              font-style: normal;
+              font-weight: 400;
+              font-size: 12px;
+              margin-left: 15px;
+            }
+            .text-number-persent-down {
+              display: flex;
+              align-items: center;
+              color: #dc2828;
+              font-family: "Roboto";
+              font-style: normal;
+              font-weight: 400;
+              font-size: 12px;
+              margin-left: 15px;
+            }
+          }
         }
       }
     }
