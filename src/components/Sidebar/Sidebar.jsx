@@ -162,7 +162,8 @@ const Sidebar = ({ hide }) => {
                                           : "unactive-link-nav"
                                       }
                                       style={
-                                        checkElement?.includes(i?.role)
+                                        checkElement?.includes(i?.role) ||
+                                        i?.role == "all"
                                           ? {}
                                           : { display: "none" }
                                       }

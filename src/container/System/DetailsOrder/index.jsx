@@ -784,6 +784,9 @@ const DetailsOrder = () => {
                             : dataGroup?.service?._id?.kind ===
                               "phuc_vu_nha_hang"
                             ? `${i18n.t("serve", { lng: lang })}`
+                            : dataGroup?.service?._id?.kind ===
+                              "ve_sinh_may_lanh"
+                            ? `${i18n.t("Máy lạnh", { lng: lang })}`
                             : ""}
                         </a>
                       </div>

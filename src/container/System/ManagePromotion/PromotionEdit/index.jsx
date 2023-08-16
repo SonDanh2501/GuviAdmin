@@ -504,7 +504,7 @@ const EditPromotion = () => {
       position: 0,
       district: [],
       timezone: "Asia/Ho_Chi_Minh",
-      id_group_promotion: ratioGroupPromotion === 2 ? groupPromotion : "",
+      id_group_promotion: ratioGroupPromotion === 2 ? groupPromotion : [],
     })
       .then((res) => {
         setIsLoading(false);
