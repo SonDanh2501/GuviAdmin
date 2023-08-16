@@ -16,6 +16,7 @@ import i18n from "../../../i18n";
 import { useCookies } from "../../../helper/useCookies";
 import useWindowDimensions from "../../../helper/useWindowDimensions";
 import { useHorizontalScroll } from "../../../helper/useSideScroll";
+import ReportOverview from "./ReportOverview";
 
 const ManageReport = () => {
   const checkElement = useSelector(getElementState);
@@ -31,39 +32,44 @@ const ManageReport = () => {
     );
   }, []);
 
-  console.log(checkElement?.includes("order_report"));
-
   const DATA = [
     {
       value: 1,
-      label: `${i18n.t("order_report", {
+      label: `${i18n.t("overview", {
         lng: lang,
       })}`,
       role: "order_report",
     },
     {
       value: 2,
+      label: `${i18n.t("order_report", {
+        lng: lang,
+      })}`,
+      role: "order_report",
+    },
+    {
+      value: 3,
       label: `${i18n.t("collaborator_report", {
         lng: lang,
       })}`,
       role: "collaborator_report",
     },
     {
-      value: 3,
+      value: 4,
       label: `${i18n.t("customer_report", {
         lng: lang,
       })}`,
       role: "count_customer_report",
     },
     {
-      value: 4,
+      value: 5,
       label: `${i18n.t("cancellation_report", {
         lng: lang,
       })}`,
       role: "order_cancel_report",
     },
     {
-      value: 5,
+      value: 6,
       label: `${i18n.t("service_report", {
         lng: lang,
       })}`,
@@ -112,17 +118,19 @@ const ManageReport = () => {
             }}
           />
         )}
-        {tab === 1 ? (
+        {tab === 2 ? (
           <ManageReportOrder />
-        ) : tab === 2 ? (
-          <ManageReportCollaborator />
         ) : tab === 3 ? (
-          <ManageReportCustomer />
+          <ManageReportCollaborator />
         ) : tab === 4 ? (
-          <ReportCancelOrder />
+          <ManageReportCustomer />
         ) : tab === 5 ? (
+          <ReportCancelOrder />
+        ) : tab === 6 ? (
           <ReportService />
-        ) : null}
+        ) : (
+          <ReportOverview />
+        )}
       </div>
     </>
   );

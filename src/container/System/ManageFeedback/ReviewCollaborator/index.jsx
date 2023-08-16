@@ -576,6 +576,8 @@ const ReviewCollaborator = () => {
             setEndDate={setEndDate}
             onClick={onChangeDay}
             onCancel={onCancelPicker}
+            setSameStart={() => {}}
+            setSameEnd={() => {}}
           />
         </div>
         <div>

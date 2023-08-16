@@ -239,17 +239,19 @@ const OrderManage = (props) => {
       },
       render: (data) => {
         return (
-          <Link
-            to={`/profile-customer/${data?.id_customer?._id}`}
-            className="div-name-order-cutomer"
-          >
-            <a className="text-name-customer">{data?.id_customer?.full_name}</a>
-            <a className="text-phone-order-customer">
-              {data?.id_customer?.phone}
-            </a>
+          <Link to={`/profile-customer/${data?.id_customer?._id}`}>
+            <div className="div-name-order-cutomer">
+              <a className="text-name-customer">
+                {data?.id_customer?.full_name}
+              </a>
+              <a className="text-phone-order-customer">
+                {data?.id_customer?.phone}
+              </a>
+            </div>
           </Link>
         );
       },
+      align: "left",
 
       // sorter: (a, b) =>
       //   a.id_customer.full_name.localeCompare(b.id_customer.full_name),
@@ -274,6 +276,8 @@ const OrderManage = (props) => {
                 ? `${i18n.t("cleaning_subscription", { lng: lang })}`
                 : data?.service?._id?.kind === "phuc_vu_nha_hang"
                 ? `${i18n.t("serve", { lng: lang })}`
+                : data?.service?._id?.kind === "ve_sinh_may_lanh"
+                ? `${i18n.t("Máy lạnh", { lng: lang })}`
                 : ""}
             </a>
             <a className="text-service">{timeWork(data)}</a>

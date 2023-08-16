@@ -441,7 +441,7 @@ const EditPromotion = () => {
   const onEditPromotion = useCallback(() => {
     setIsLoading(true);
     updatePromotion(id, {
-      code: statePromo?.promoCode,
+      code: statePromo?.promoCode.toUpperCase(),
       is_parrent_promotion: statePromo?.isParrentPromotion,
       total_child_promotion: statePromo?.totalChildPromotion,
       title: {
@@ -504,7 +504,7 @@ const EditPromotion = () => {
       position: 0,
       district: [],
       timezone: "Asia/Ho_Chi_Minh",
-      id_group_promotion: ratioGroupPromotion === 2 ? groupPromotion : "",
+      id_group_promotion: ratioGroupPromotion === 2 ? groupPromotion : [],
     })
       .then((res) => {
         setIsLoading(false);

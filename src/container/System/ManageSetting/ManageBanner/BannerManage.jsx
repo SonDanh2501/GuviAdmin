@@ -230,7 +230,6 @@ const BannerManage = () => {
           <Input
             placeholder={`${i18n.t("search", { lng: lang })}`}
             type="text"
-            className="field-search"
             prefix={<SearchOutlined />}
             onChange={(e) => handleSearch(e.target.value)}
           />

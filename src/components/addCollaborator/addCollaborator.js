@@ -14,7 +14,8 @@ import InputCustom from "../textInputCustom";
 import "./addCollaborator.scss";
 import i18n from "../../i18n";
 import useWindowDimensions from "../../helper/useWindowDimensions";
-import { getListBusiness } from "../../api/configuration";
+import { getDetailBusiness, getListBusiness } from "../../api/configuration";
+import { set } from "lodash";
 
 const AddCollaborator = (props) => {
   const {
@@ -30,6 +31,8 @@ const AddCollaborator = (props) => {
   const checkElement = useSelector(getElementState);
   const service = useSelector(getService);
   const [dataBusiness, setDataBusiness] = useState([]);
+  const [codeCity, setCodeCity] = useState([]);
+  const [idBusiness, setIdBusiness] = useState("");
   const serviceOption = [];
   const cityOption = [];
   const businessOption = [];
@@ -82,8 +85,16 @@ const AddCollaborator = (props) => {
     code: "",
     type: "",
     service_apply: [],
-    city: "",
     idBusiness: "",
+  };
+
+  const onChangeBusiness = (e) => {
+    setIdBusiness(e);
+    getDetailBusiness(e)
+      .then((res) => {
+        setCodeCity(res?.area_manager_lv_1);
+      })
+      .catch((err) => {});
   };
 
   const addCustomer = useCallback(() => {
@@ -95,11 +106,11 @@ const AddCollaborator = (props) => {
       email: formikRef?.current?.values?.email,
       full_name: formikRef?.current?.values?.name,
       identity_number: formikRef?.current?.values?.identify,
-      city: formikRef?.current?.values?.city,
+      city: codeCity.length > 0 ? codeCity[0] : -1,
       id_inviter: formikRef?.current?.values?.code,
       type: formikRef?.current?.values?.type,
       service_apply: formikRef?.current?.values?.service_apply,
-      id_business: formikRef?.current?.values?.idBusiness,
+      id_business: idBusiness,
     })
       .then((res) => {
         setOpen(false);
@@ -117,7 +128,7 @@ const AddCollaborator = (props) => {
           message: err,
         });
       });
-  }, [formikRef, startPage, status]);
+  }, [formikRef, startPage, status, codeCity, idBusiness]);
 
   return (
     <>
@@ -203,7 +214,7 @@ const AddCollaborator = (props) => {
                 <Select
                   style={{ width: "100%" }}
                   allowClear
-                  onChange={(e) => setFieldValue("idBusiness", e)}
+                  onChange={onChangeBusiness}
                   options={businessOption}
                 />
               </div>
@@ -212,8 +223,9 @@ const AddCollaborator = (props) => {
                 <Select
                   style={{ width: "100%" }}
                   allowClear
-                  onChange={(e) => setFieldValue("city", e)}
+                  onChange={(e) => setCodeCity(e)}
                   options={cityOption}
+                  value={codeCity}
                 />
               </div>
               <InputCustom
