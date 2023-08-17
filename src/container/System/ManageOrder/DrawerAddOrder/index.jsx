@@ -20,9 +20,11 @@ import { getLanguageState, getUser } from "../../../../redux/selectors/auth";
 import i18n from "../../../../i18n";
 import InputCustom from "../../../../components/textInputCustom";
 import DeepCleaning from "../components/DeepCleaning";
+import CleaningAC from "../components/CleaningAC";
 
 const AddOrder = () => {
   const [optionalService, setOptionalService] = useState([]);
+  const [idOptional, setIdOptional] = useState("");
   const [extendService, setExtendService] = useState([]);
   const [bussinessType, setBussinessType] = useState([]);
   const [kindService, setKindService] = useState("");
@@ -37,30 +39,17 @@ const AddOrder = () => {
   const [serviceApply, setServiceApply] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const serviceSelect = [];
-  const [dataGroupService, setDataGroupService] = useState([]);
-  const [dataService, setDataService] = useState([]);
+  const optionalSelect = [];
   const lang = useSelector(getLanguageState);
   const user = useSelector(getUser);
 
   useEffect(() => {
-    // getGroupServiceApi(0, 20)
-    //   .then((res) => {
-    //     setDataGroupService(res?.data);
-    //     setKindService(res?.data[0]?.kind);
-    //     getServiceApi(res?.data[0]?._id)
-    //       .then((res) => {
-    //         setServiceApply(res?.data[0]?._id);
-    //         setDataService(res?.data);
-
-    //       })
-    //       .catch((err) => {});
-    //   })
-    //   .catch((err) => {});
     setIsLoading(true);
     if (user?.id_service_manager?.length === 0) {
       getOptionalServiceByServiceApi(service[0]?._id)
         .then((res) => {
           setOptionalService(res?.data);
+          setIdOptional(res?.data[0]?._id);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -74,6 +63,7 @@ const AddOrder = () => {
         .then((res) => {
           setOptionalService(res?.data);
           setIsLoading(false);
+          setIdOptional(res?.data[0]?._id);
         })
         .catch((err) => {
           setIsLoading(false);
@@ -111,6 +101,13 @@ const AddOrder = () => {
         }
       });
     }
+  });
+
+  optionalService?.map((item) => {
+    optionalSelect.push({
+      value: item?._id,
+      label: item?.title[lang],
+    });
   });
 
   useEffect(() => {
@@ -152,6 +149,15 @@ const AddOrder = () => {
             .catch((err) => {
               setIsLoading(false);
             })
+        : item?.type === "multi_select_count_ac"
+        ? getExtendOptionalByOptionalServiceApi(item?._id)
+            .then((res) => {
+              setExtendService(res?.data);
+              setIsLoading(false);
+            })
+            .catch((err) => {
+              setIsLoading(false);
+            })
         : null
     );
   }, [optionalService]);
@@ -166,28 +172,23 @@ const AddOrder = () => {
       .then((res) => {
         setIsLoading(false);
         setOptionalService(res?.data);
+        setIdOptional(res?.data[0]?._id);
       })
       .catch((err) => {
         setIsLoading(false);
       });
-    // getServiceApi(value)
-    //   .then((res) => {
-    //     setDataService(res?.data);
-    //     setServiceApply(res?.data[0]?._id);
-    //     getOptionalServiceByServiceApi(res?.data[0]?._id)
-    //       .then((res) => {
-    //         setIsLoading(false);
-    //         setOptionalService(res?.data);
-    //       })
-    //       .catch((err) => {
-    //         setIsLoading(false);
-    //       });
-    //   })
-    //   .catch((err) => {});
   };
 
-  const valueSearch = (value) => {
-    setName(value);
+  const onChangeOptionalService = (value) => {
+    setIdOptional(value);
+    getExtendOptionalByOptionalServiceApi(value)
+      .then((res) => {
+        setExtendService(res?.data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
   };
 
   const handleSearch = useCallback(
@@ -231,7 +232,7 @@ const AddOrder = () => {
           className="input-search-customer"
           type="text"
           onChange={(e) => {
-            valueSearch(e.target.value);
+            setName(e.target.value);
             handleSearch(e.target.value);
           }}
           placeholder={`${i18n.t("search", { lng: lang })}`}
@@ -260,6 +261,18 @@ const AddOrder = () => {
           </List>
         )}
       </div>
+
+      {kindService === "ve_sinh_may_lanh" && (
+        <div className="div-choose-type-ac">
+          <a className="label-time">Loại máy lạnh</a>
+          <Select
+            options={optionalSelect}
+            style={{ width: "50%" }}
+            value={idOptional}
+            onChange={onChangeOptionalService}
+          />
+        </div>
+      )}
 
       <div className="mt-3">
         {kindService === "giup_viec_theo_gio" ? (
@@ -297,6 +310,14 @@ const AddOrder = () => {
             id={id}
             idService={serviceApply}
             extendService={extendService}
+            setErrorNameCustomer={setErrorNameCustomer}
+          />
+        ) : kindService === "ve_sinh_may_lanh" ? (
+          <CleaningAC
+            id={id}
+            idService={serviceApply}
+            extendService={extendService}
+            optionalService={optionalService}
             setErrorNameCustomer={setErrorNameCustomer}
           />
         ) : (

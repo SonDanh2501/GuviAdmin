@@ -19,14 +19,14 @@ import {
   getService,
 } from "../../../../../../redux/selectors/service";
 
-const EditAccount = ({ id, setData, setTotal }) => {
+const EditAccount = ({ id, setData, setTotal, startPage }) => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [idRole, setIdRole] = useState("");
   const [dataRole, setDataRole] = useState([]);
   const [ratioProvince, setRatioProvince] = useState(1);
-  const [city, setCity] = useState([]);
+  const [city, setCity] = useState();
   const [dataDistrict, setDataDistrict] = useState([]);
   const [idService, setIdService] = useState([]);
   const [district, setDistrict] = useState([]);
@@ -75,10 +75,10 @@ const EditAccount = ({ id, setData, setTotal }) => {
         setRatioProvince(res?.area_manager_lv_1.length > 0 ? 2 : 1);
         setCity(res?.area_manager_lv_1);
         setDistrict(res?.area_manager_lv_2);
-        setIdService(res?.id_service_manager);
-        // res?.id_service_manager?.map((item) => {
-        //   idService.push(item?._id);
-        // });
+        // setIdService(res?.id_service_manager);
+        res?.id_service_manager?.map((item) => {
+          idService.push(item?._id);
+        });
       })
       .catch((err) => {});
   }, [id]);
@@ -127,6 +127,11 @@ const EditAccount = ({ id, setData, setTotal }) => {
     });
   });
 
+  const onChangeCity = (value, item) => {
+    setCity(value);
+    setDataDistrict(item?.district);
+  };
+
   const onEditAccount = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
     editAccountAdmin(id, {
@@ -134,15 +139,15 @@ const EditAccount = ({ id, setData, setTotal }) => {
       id_role_admin: idRole,
       is_permission: true,
       area_manager_lv_0: "viet_nam",
-      area_manager_lv_1:
-        ratioProvince === 2 ? (city.length > 0 ? city : []) : [],
-      area_manager_lv_2: district.length > 0 ? district : [],
+      area_manager_lv_1: ratioProvince === 2 ? (!city ? [] : city) : [],
+      area_manager_lv_2:
+        ratioProvince === 2 ? (district.length > 0 ? district : []) : [],
       id_service_manager: idService.length > 0 ? idService : [],
     })
       .then((res) => {
         setOpen(false);
         dispatch(loadingAction.loadingRequest(false));
-        getListAccount(0, 20)
+        getListAccount(startPage, 20)
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItem);
@@ -155,7 +160,17 @@ const EditAccount = ({ id, setData, setTotal }) => {
         });
         dispatch(loadingAction.loadingRequest(false));
       });
-  }, [fullName, email, password, idRole, city, district, idService]);
+  }, [
+    fullName,
+    email,
+    password,
+    idRole,
+    city,
+    district,
+    idService,
+    startPage,
+    ratioProvince,
+  ]);
 
   return (
     <div>
@@ -194,15 +209,13 @@ const EditAccount = ({ id, setData, setTotal }) => {
             <div className=" div-form-role">
               <InputCustom
                 placeholder="Vui lòng chọn tỉnh/thành phố"
-                onChange={(e, item) => {
-                  setCity(e);
-                  setDataDistrict(item?.district);
-                }}
+                onChange={(e, item) => onChangeCity(e, item)}
                 options={cityOption}
                 style={{ width: "100%" }}
                 select={true}
                 showSearch
                 value={city}
+                mode="multiple"
                 filterOption={(input, option) =>
                   (option?.label ?? "").includes(input)
                 }
