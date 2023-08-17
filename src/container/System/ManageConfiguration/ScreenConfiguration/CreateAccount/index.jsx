@@ -163,7 +163,12 @@ const CreateAccount = () => {
     {
       key: 1,
       label: checkElement?.includes("edit_user_system") && (
-        <EditAccount id={itemEdit?._id} setData={setData} setTotal={setTotal} />
+        <EditAccount
+          id={itemEdit?._id}
+          setData={setData}
+          setTotal={setTotal}
+          startPage={startPage}
+        />
       ),
     },
     {

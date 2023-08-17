@@ -26,13 +26,27 @@ const CustomDatePicker = (props) => {
     classNameBtn,
     setSameStart,
     setSameEnd,
+    defaults,
   } = props;
   const [open, setOpen] = useState(false);
-  const [start, setStart] = useState();
-  const [end, setEnd] = useState();
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
   const [valueTab, setValueTab] = useState("");
   const [tabTime, setTabTime] = useState("day");
   const [title, setTitle] = useState();
+
+  useEffect(() => {
+    setStart(defaults ? moment().subtract(7, "day") : "");
+    setEnd(defaults ? moment() : "");
+    setTitle(
+      defaults
+        ? `${i18n.t("seven_ago", {
+            lng: lang,
+          })}`
+        : ""
+    );
+    setValueTab(defaults ? "last_seven" : "");
+  }, []);
 
   const handleOk = () => {
     setOpen(false);

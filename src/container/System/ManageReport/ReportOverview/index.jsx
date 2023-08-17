@@ -26,14 +26,14 @@ import { useNavigate } from "react-router-dom";
 
 const ReportOverview = () => {
   const [startDate, setStartDate] = useState(
-    moment().startOf("day").toISOString()
+    moment().subtract(7, "day").toISOString()
   );
-  const [endDate, setEndDate] = useState(moment().endOf("day").toISOString());
+  const [endDate, setEndDate] = useState(moment().toISOString());
   const [sameStartDate, setSameStartDate] = useState(
-    moment().subtract(1, "day").startOf("day").toISOString()
+    moment(startDate).subtract(7, "day").toISOString()
   );
   const [sameEndDate, setSameEndDate] = useState(
-    moment().subtract(1, "day").endOf("day").toISOString()
+    moment(endDate).subtract(7, "day").toISOString()
   );
   const [data, setData] = useState([]);
   const [dataSame, setDataSame] = useState([]);
@@ -220,6 +220,7 @@ const ReportOverview = () => {
           setSameEnd={setSameEndDate}
           onClick={onChangeDay}
           onCancel={() => {}}
+          defaults={true}
         />
         <div className="div-same">
           <a>
@@ -278,7 +279,7 @@ const ReportOverview = () => {
               <YAxis
                 dataKey="gross_income"
                 tickFormatter={(tickItem) => number_processing(tickItem)}
-                // domain={[0, 1000000]}
+                // domain={[0, 10000000]}
                 // allowDataOverflow={true}
               />
               <Tooltip content={renderTooltipContent} />
@@ -344,8 +345,8 @@ const ReportOverview = () => {
               <YAxis
                 dataKey="total"
                 tickFormatter={(tickItem) => number_processing(tickItem)}
-                domain={[0, 50]}
-                allowDataOverflow={true}
+                // domain={[0, 50]}
+                // allowDataOverflow={true}
               />
               <Tooltip />
               <Legend />
@@ -412,10 +413,10 @@ const ReportOverview = () => {
                 tick={{ fontSize: 10 }}
               />
               <YAxis
-                dataKey="gross_income"
+                dataKey="net_income"
                 tickFormatter={(tickItem) => number_processing(tickItem)}
-                domain={[0, 1000000]}
-                allowDataOverflow={true}
+                // domain={[0, 5000000]}
+                // allowDataOverflow={true}
               />
               <Tooltip content={renderTooltipContentNetIncome} />
               <Legend />
