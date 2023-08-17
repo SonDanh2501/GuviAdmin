@@ -43,6 +43,24 @@
           margin-left: 10px;
         }
       }
+
+      .div-list-input-title {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .div-item-list-input {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          width: 100%;
+
+          .input-language {
+            width: 500px;
+          }
+        }
+      }
+
       .div-parrent-promo {
         display: flex;
         flex-direction: row;

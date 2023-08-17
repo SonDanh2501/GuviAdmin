@@ -34,6 +34,22 @@
         padding: 0;
         margin: 0;
       }
+      .div-list-input-title {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .div-item-list-input {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          width: 100%;
+
+          .input-language {
+            width: 500px;
+          }
+        }
+      }
 
       .icon-question {
         color: #29fff1;

@@ -94,7 +94,7 @@ const ManageReport = () => {
                     saveToCookie("tab_report", item?.value);
                   }}
                   className={
-                    item?.value === tab ? "div-item-tab-select" : "div-item-tab"
+                    item?.value == tab ? "div-item-tab-select" : "div-item-tab"
                   }
                   style={
                     checkElement?.includes(item?.role)

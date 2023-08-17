@@ -295,3 +295,18 @@
     }
   }
 }
+
+.div-choose-type-ac {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+
+  .label-time {
+    font-size: 14px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    color: black;
+    margin-bottom: 10px;
+  }
+}

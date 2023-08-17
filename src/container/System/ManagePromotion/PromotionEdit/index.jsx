@@ -118,6 +118,15 @@ const EditPromotion = () => {
     paymentMethod: [],
     isCheckEndDate: true,
   });
+  const [title, setTitle] = useState({
+    vi: "",
+  });
+  const [shortDescription, setShortDescription] = useState({
+    vi: "",
+  });
+  const [description, setDescription] = useState({
+    vi: "",
+  });
   const [ratioGroupPromotion, setRatioGroupPromotion] = useState(1);
   const [groupPromotion, setGroupPromotion] = useState([]);
   const [dataGroupPromotion, setDataGroupPromotion] = useState([]);
@@ -239,6 +248,12 @@ const EditPromotion = () => {
         );
 
         setIsActive(res?.is_active);
+        delete res?.title["_id"];
+        setTitle(res?.title);
+        delete res?.short_description["_id"];
+        setShortDescription(res?.short_description);
+        delete res?.description["_id"];
+        setDescription(res?.description);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -444,18 +459,21 @@ const EditPromotion = () => {
       code: statePromo?.promoCode.toUpperCase(),
       is_parrent_promotion: statePromo?.isParrentPromotion,
       total_child_promotion: statePromo?.totalChildPromotion,
-      title: {
-        vi: statePromo?.titleVN,
-        en: statePromo?.titleEN,
-      },
-      short_description: {
-        vi: statePromo?.shortDescriptionVN,
-        en: statePromo?.shortDescriptionEN,
-      },
-      description: {
-        vi: statePromo?.descriptionVN,
-        en: statePromo?.descriptionEN,
-      },
+      // title: {
+      //   vi: statePromo?.titleVN,
+      //   en: statePromo?.titleEN,
+      // },
+      title: title,
+      // short_description: {
+      //   vi: statePromo?.shortDescriptionVN,
+      //   en: statePromo?.shortDescriptionEN,
+      // },
+      short_description: shortDescription,
+      // description: {
+      //   vi: statePromo?.descriptionVN,
+      //   en: statePromo?.descriptionEN,
+      // },
+      description: description,
       type_discount:
         statePromo?.ratioTypeVoucher === 2 ? "partner_promotion" : "order",
       service_apply:
@@ -518,7 +536,16 @@ const EditPromotion = () => {
           message: err,
         });
       });
-  }, [statePromo, timeApply, id, groupPromotion, ratioGroupPromotion]);
+  }, [
+    statePromo,
+    timeApply,
+    id,
+    groupPromotion,
+    ratioGroupPromotion,
+    title,
+    shortDescription,
+    description,
+  ]);
 
   return (
     <>
@@ -548,7 +575,7 @@ const EditPromotion = () => {
             <Button
               type="primary"
               onClick={onEditPromotion}
-              style={{ width: "auto" }}
+              style={{ width: "auto", marginLeft: 10 }}
             >
               Chỉnh sửa
             </Button>
@@ -724,21 +751,49 @@ const EditPromotion = () => {
                 <QuestionCircleOutlined className="icon-question" />
               </Popover>
             </div>
-            <InputCustom
-              title={`${i18n.t("vietnamese", { lng: lang })}`}
-              value={statePromo?.titleVN}
-              onChange={(e) =>
-                setStatePromo({ ...statePromo, titleVN: e.target.value })
-              }
-              disabled={isActive ? true : false}
-            />
-            <InputCustom
-              title={`${i18n.t("english", { lng: lang })}`}
-              value={statePromo?.titleEN}
-              onChange={(e) =>
-                setStatePromo({ ...statePromo, titleEN: e.target.value })
-              }
-              disabled={isActive ? true : false}
+            <div className="div-list-input-title">
+              {Object.entries(title).map(([key, value]) => {
+                return (
+                  <div key={key} className="div-item-list-input">
+                    <InputCustom
+                      title={`Tiếng ${
+                        key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
+                      }`}
+                      placeholder={`Nhập nội dung tiêu đề Tiếng ${
+                        key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
+                      }`}
+                      value={value}
+                      onChange={(e) =>
+                        setTitle({ ...title, [key]: e.target.value })
+                      }
+                      className="input-language"
+                      disabled={isActive ? true : false}
+                    />
+                    {key !== "vi" && (
+                      <i
+                        className="uil uil-times-circle"
+                        onClick={() => {
+                          delete title[key];
+                          setTitle({ ...title });
+                        }}
+                      ></i>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <Select
+              size="small"
+              style={{ width: "30%", marginTop: 10 }}
+              placeholder="Thêm ngôn ngữ"
+              options={language_muti}
+              onChange={(e) => {
+                const language = (title[e] = "");
+                setTitle({ ...title, language });
+                delete title[language];
+                setTitle({ ...title });
+              }}
             />
           </div>
           {statePromo?.isCheckVoucher && (
@@ -756,29 +811,49 @@ const EditPromotion = () => {
                   <QuestionCircleOutlined className="icon-question" />
                 </Popover>
               </div>
-              <InputCustom
-                title={`${i18n.t("vietnamese", { lng: lang })}`}
-                value={statePromo?.shortDescriptionVN}
-                onChange={(e) =>
-                  setStatePromo({
-                    ...statePromo,
-                    shortDescriptionVN: e.target.value,
-                  })
-                }
-                textArea={true}
-                disabled={isActive ? true : false}
-              />
-              <InputCustom
-                title={`${i18n.t("english", { lng: lang })}`}
-                value={statePromo?.shortDescriptionEN}
-                onChange={(e) =>
-                  setStatePromo({
-                    ...statePromo,
-                    shortDescriptionEN: e.target.value,
-                  })
-                }
-                textArea={true}
-                disabled={isActive ? true : false}
+              <div className="div-list-input-title">
+                {Object.entries(shortDescription).map(([key, value]) => {
+                  return (
+                    <div key={key} className="div-item-list-input">
+                      <InputCustom
+                        placeholder={`Nhập nội dung mô tả ngắn Tiếng ${
+                          key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
+                        }`}
+                        value={value}
+                        onChange={(e) =>
+                          setShortDescription({
+                            ...shortDescription,
+                            [key]: e.target.value,
+                          })
+                        }
+                        className="input-language"
+                        textArea={true}
+                        disabled={isActive ? true : false}
+                      />
+                      {key !== "vi" && (
+                        <i
+                          className="uil uil-times-circle"
+                          onClick={() => {
+                            delete shortDescription[key];
+                            setShortDescription({ ...shortDescription });
+                          }}
+                        ></i>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              <Select
+                size="small"
+                style={{ width: "30%", marginTop: 10 }}
+                options={language_muti}
+                placeholder="Thêm ngôn ngữ"
+                onChange={(e) => {
+                  const language = (shortDescription[e] = "");
+                  setShortDescription({ ...shortDescription, language });
+                  delete shortDescription[language];
+                  setShortDescription({ ...shortDescription });
+                }}
               />
             </div>
           )}
@@ -796,28 +871,51 @@ const EditPromotion = () => {
                   <QuestionCircleOutlined className="icon-question" />
                 </Popover>
               </div>
-              <div>
-                <a>{`${i18n.t("vietnamese", { lng: lang })}`}</a>
-                <TextEditor
-                  value={statePromo?.descriptionVN}
-                  onChange={(e) =>
-                    setStatePromo({ ...statePromo, descriptionVN: e })
-                  }
-                  height={300}
-                  disabled={isActive ? true : false}
-                />
+              <div className="div-list-input-title">
+                {Object.entries(description).map(([key, value]) => {
+                  return (
+                    <div key={key} className="div-item-list-input">
+                      <div>
+                        <a>{`Tiếng ${
+                          key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
+                        }`}</a>
+                        <TextEditor
+                          onChange={(e) =>
+                            setDescription({
+                              ...description,
+                              [key]: e,
+                            })
+                          }
+                          height={250}
+                          value={value}
+                          disabled={isActive ? true : false}
+                        />
+                      </div>
+                      {key !== "vi" && (
+                        <i
+                          className="uil uil-times-circle"
+                          onClick={() => {
+                            delete description[key];
+                            setDescription({ ...description });
+                          }}
+                        ></i>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-              <div className="mt-2">
-                <a>{`${i18n.t("english", { lng: lang })}`}</a>
-                <TextEditor
-                  value={statePromo?.descriptionEN}
-                  onChange={(e) =>
-                    setStatePromo({ ...statePromo, descriptionEN: e })
-                  }
-                  height={300}
-                  disabled={isActive ? true : false}
-                />
-              </div>
+              <Select
+                size="small"
+                style={{ width: "30%", marginTop: 10 }}
+                options={language_muti}
+                placeholder="Thêm ngôn ngữ"
+                onChange={(e) => {
+                  const language = (description[e] = "");
+                  setDescription({ ...description, language });
+                  delete description[language];
+                  setDescription({ ...description });
+                }}
+              />
             </div>
           )}
 
@@ -1704,4 +1802,9 @@ const DATA_APPLY_TIME = [
     timezone: "Asia/Ho_Chi_Minh",
     is_check_loop: false,
   },
+];
+
+const language_muti = [
+  { value: "en", label: "Tiếng Anh" },
+  { value: "jp", label: "Tiếng Nhật" },
 ];

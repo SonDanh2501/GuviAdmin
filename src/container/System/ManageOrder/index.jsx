@@ -127,8 +127,16 @@ const ManageOrder = () => {
         ? []
         : readCookie("district_order").split(",")
     );
-  }, []);
-  useEffect(() => {
+    if (user?.area_manager_lv_1?.length === 0) {
+      setCity(readCookie("city_order") !== "" ? readCookie("city_order") : []);
+    } else {
+      setCity(
+        readCookie("city_order") === ""
+          ? user?.area_manager_lv_1
+          : readCookie("city_order")
+      );
+    }
+
     getOrderApi(
       valueSearch,
       0,
@@ -142,7 +150,14 @@ const ManageOrder = () => {
       readCookie("end_date_order") !== ""
         ? readCookie("end_date_order")
         : moment().endOf("date").toISOString(),
-      readCookie("city_order") !== "" ? readCookie("city_order") : "",
+      // readCookie("city_order") !== "" ? readCookie("city_order") : ["1"],
+      user?.area_manager_lv_1?.length === 0
+        ? readCookie("city_order") !== ""
+          ? readCookie("city_order")
+          : []
+        : readCookie("city_order") === ""
+        ? user?.area_manager_lv_1
+        : readCookie("city_order"),
       readCookie("district_order").split(",")
     )
       .then((res) => {

@@ -44,6 +44,7 @@ const ManageFinance = () => {
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
+    setIsLoading(true);
     getReportBalanceCollaborator(0, 20, startDate, endDate)
       .then((res) => {
         setTotalOpeningRemainder(res?.total_opening_remainder);
@@ -52,12 +53,14 @@ const ManageFinance = () => {
         setTotalEndingGiftRemainder(res?.total_ending_gift_remainder);
         setTotalOpeningPayPoint(res?.total_opening_pay_point);
         setTotalEndingPayPoint(res?.total_ending_pay_point);
+        setIsLoading(false);
       })
       .catch((err) => {});
     getReportDetailBalanceCollaborator(startPage, 20, startDate, endDate)
       .then((res) => {
         setBallanceCollaborator(res?.data);
         setTotalCollaborator(res?.total);
+        setIsLoading(false);
       })
       .catch((err) => {});
 
@@ -65,6 +68,7 @@ const ManageFinance = () => {
       .then((res) => {
         setBallanceCustomer(res?.data);
         setTotalCustomer(res?.total);
+        setIsLoading(false);
       })
       .catch((err) => {});
 

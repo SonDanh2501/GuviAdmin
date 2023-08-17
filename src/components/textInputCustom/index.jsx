@@ -38,7 +38,11 @@ const InputCustom = (props) => {
       {textArea ? (
         <TextArea
           value={value}
-          placeholder={`${i18n.t("placeholder", { lng: lang })}`}
+          placeholder={
+            placeholder
+              ? placeholder
+              : `${i18n.t("placeholder", { lng: lang })}`
+          }
           type={type}
           onChange={onChange}
           style={style}
