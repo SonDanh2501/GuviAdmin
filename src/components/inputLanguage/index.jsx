@@ -3,7 +3,7 @@ import InputCustom from "../textInputCustom";
 import "./styles.scss";
 
 const InputLanguage = (props) => {
-  const { state, setState, textArea, className } = props;
+  const { state, setState, textArea, className, disabled } = props;
 
   return (
     <div>
@@ -21,6 +21,7 @@ const InputLanguage = (props) => {
               value={value}
               onChange={(e) => setState({ ...state, [key]: e.target.value })}
               className={className}
+              disabled={disabled}
             />
             {key !== "vi" && (
               <i

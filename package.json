@@ -22,7 +22,7 @@
     "file-saver": "~2.0.5",
     "filereader": "~0.10.3",
     "formik": "~2.2.9",
-    "html-to-image": "^1.11.11",
+    "html-to-image": "~1.11.11",
     "i18next": "^23.1.0",
     "jszip": "^3.10.1",
     "jszip-utils": "^0.1.0",
@@ -84,6 +84,7 @@
     "node": "16.x"
   },
   "devDependencies": {
+    "@babel/plugin-transform-private-property-in-object": "^7.22.5",
     "tailwindcss": "^3.3.1"
   }
 }

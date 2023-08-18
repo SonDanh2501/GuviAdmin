@@ -49,7 +49,7 @@ const Information = ({ data, image, idCTV, setData }) => {
   const [dataBusiness, setDataBusiness] = useState([]);
   const [idBusiness, setIdBusiness] = useState("");
   const [detailsBusiness, setDetailsBusiness] = useState([]);
-  const [codeCity, setCodeCity] = useState([]);
+  const [codeCity, setCodeCity] = useState("");
   const [dataDistrict, setDataDistrict] = useState([]);
   const [codeDistrict, setCodeDistrict] = useState([]);
   const dispatch = useDispatch();
@@ -208,7 +208,7 @@ const Information = ({ data, image, idCTV, setData }) => {
       type: type,
       service_apply: serviceApply,
       district: codeDistrict,
-      city: codeCity.length > 0 ? codeCity[0] : -1,
+      city: !codeCity ? -1 : codeCity,
       id_business: idBusiness,
     })
       .then((res) => {
