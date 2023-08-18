@@ -1,25 +1,24 @@
 import React, { memo, useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-import { Drawer, Input, Select } from "antd";
-import CustomButton from "../customButton/customButton";
-import "./addReason.scss";
-import {
-  createReason,
-  fetchReasons,
-  getListReasonCancel,
-} from "../../api/reasons";
+import { Drawer } from "antd";
+import { createReason, fetchReasons } from "../../api/reasons";
 import { errorNotify } from "../../helper/toast";
-import { getLanguageState } from "../../redux/selectors/auth";
 import i18n from "../../i18n";
+import { getLanguageState } from "../../redux/selectors/auth";
+import CustomButton from "../customButton/customButton";
+import InputLanguage from "../inputLanguage";
 import InputCustom from "../textInputCustom";
+import "./addReason.scss";
 
 const AddReason = (props) => {
   const { setIsLoading, setData, setTotal, startPage } = props;
-  const [titleVN, setTitleVN] = useState("");
-  const [titleEN, setTitleEN] = useState("");
-  const [descriptionVN, setDescriptionVN] = useState("");
-  const [descriptionEN, setDescriptionEN] = useState("");
+  const [title, setTitle] = useState({
+    vi: "",
+  });
+  const [description, setDescription] = useState({
+    vi: "",
+  });
   const [note, setNote] = useState("");
   const [applyUser, setApplyUser] = useState("customer");
   const [open, setOpen] = useState(false);
@@ -34,14 +33,8 @@ const AddReason = (props) => {
   const addReason = useCallback(() => {
     setIsLoading(true);
     createReason({
-      title: {
-        vi: titleVN,
-        en: titleEN,
-      },
-      description: {
-        vi: descriptionVN,
-        en: descriptionEN,
-      },
+      title: title,
+      description: description,
       apply_user: applyUser,
       note: note,
     })
@@ -60,16 +53,7 @@ const AddReason = (props) => {
           message: err,
         });
       });
-  }, [
-    titleVN,
-    titleEN,
-    descriptionVN,
-    descriptionEN,
-    applyUser,
-    note,
-    startPage,
-  ]);
-
+  }, [title, description, applyUser, note, startPage]);
   return (
     <>
       {/* Button trigger modal */}
@@ -91,52 +75,23 @@ const AddReason = (props) => {
           <a className="title-reason">{`${i18n.t("name_reason", {
             lng: lang,
           })}`}</a>
-          <InputCustom
-            title={`${i18n.t("vietnamese", { lng: lang })}`}
-            type="text"
-            value={titleVN}
-            onChange={(e) => setTitleVN(e.target.value)}
-          />
-
-          <InputCustom
-            title={`${i18n.t("english", { lng: lang })}`}
-            type="text"
-            value={titleEN}
-            onChange={(e) => setTitleEN(e.target.value)}
-            style={{ marginTop: 5 }}
+          <InputLanguage
+            state={title}
+            setState={setTitle}
+            className="input-language"
           />
         </div>
         <div className="mt-2">
           <a className="title-reason">{`${i18n.t("describe", {
             lng: lang,
           })}`}</a>
-          <InputCustom
-            title={`${i18n.t("vietnamese", { lng: lang })}`}
-            type="text"
-            value={descriptionVN}
-            onChange={(e) => setDescriptionVN(e.target.value)}
-          />
-          <InputCustom
-            title={`${i18n.t("english", { lng: lang })}`}
-            type="text"
-            value={descriptionEN}
-            onChange={(e) => setDescriptionEN(e.target.value)}
-            style={{ marginTop: 5 }}
+          <InputLanguage
+            state={description}
+            setState={setDescription}
+            className="input-language"
           />
         </div>
         <div className="mt-2">
-          {/* <a className="title-reason">Áp dụng</a>
-          <Select
-            value={applyUser}
-            style={{ width: "100%" }}
-            onChange={(e) => setApplyUser(e)}
-            options={[
-              { value: "customer", label: "Khách hàng" },
-              { value: "collaborator", label: "Cộng tác viên" },
-              { value: "admin", label: "Admin" },
-              { value: "system", label: "Hệ thống" },
-            ]}
-          /> */}
           <InputCustom
             title={`${i18n.t("apply", { lng: lang })}`}
             value={applyUser}

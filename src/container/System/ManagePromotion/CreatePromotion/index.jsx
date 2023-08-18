@@ -322,20 +322,8 @@ const CreatePromotion = () => {
       code: statePromo?.promoCode.toUpperCase(),
       is_parrent_promotion: statePromo?.isParrentPromotion,
       total_child_promotion: statePromo?.totalChildPromotion,
-      // title: {
-      //   vi: statePromo?.titleVN,
-      //   en: statePromo?.titleEN,
-      // },
       title: title,
-      // short_description: {
-      //   vi: statePromo?.shortDescriptionVN,
-      //   en: statePromo?.shortDescriptionEN,
-      // },
       short_description: shortDescription,
-      // description: {
-      //   vi: statePromo?.descriptionVN,
-      //   en: statePromo?.descriptionEN,
-      // },
       description: description,
       type_discount:
         statePromo?.ratioTypeVoucher === 2 ? "partner_promotion" : "order",
