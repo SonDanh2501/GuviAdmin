@@ -46,6 +46,7 @@ import { getLanguageState } from "../../../../redux/selectors/auth";
 import { getProvince, getService } from "../../../../redux/selectors/service";
 import "./styles.scss";
 import { getGroupPromotion } from "../../../../api/configuration";
+import InputLanguage from "../../../../components/inputLanguage";
 const { Option } = Select;
 
 const CreatePromotion = () => {
@@ -632,45 +633,10 @@ const CreatePromotion = () => {
                 <QuestionCircleOutlined className="icon-question" />
               </Popover>
             </div>
-            <div className="div-list-input-title">
-              {Object.entries(title).map(([key, value]) => {
-                return (
-                  <div key={key} className="div-item-list-input">
-                    <InputCustom
-                      placeholder={`Nhập nội dung tiêu đề Tiếng ${
-                        key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
-                      }`}
-                      value={value}
-                      onChange={(e) =>
-                        setTitle({ ...title, [key]: e.target.value })
-                      }
-                      className="input-language"
-                    />
-                    {key !== "vi" && (
-                      <i
-                        className="uil uil-times-circle"
-                        onClick={() => {
-                          delete title[key];
-                          setTitle({ ...title });
-                        }}
-                      ></i>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            <Select
-              size="small"
-              style={{ width: "30%", marginTop: 10 }}
-              placeholder="Thêm ngôn ngữ"
-              options={language_muti}
-              onChange={(e) => {
-                const language = (title[e] = "");
-                setTitle({ ...title, language });
-                delete title[language];
-                setTitle({ ...title });
-              }}
+            <InputLanguage
+              state={title}
+              setState={setTitle}
+              className="input-language"
             />
           </div>
           {statePromo?.isCheckVoucher && (
@@ -688,74 +654,12 @@ const CreatePromotion = () => {
                   <QuestionCircleOutlined className="icon-question" />
                 </Popover>
               </div>
-              <div className="div-list-input-title">
-                {Object.entries(shortDescription).map(([key, value]) => {
-                  return (
-                    <div key={key} className="div-item-list-input">
-                      <InputCustom
-                        placeholder={`Nhập nội dung mô tả ngắn Tiếng ${
-                          key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
-                        }`}
-                        value={value}
-                        onChange={(e) =>
-                          setShortDescription({
-                            ...shortDescription,
-                            [key]: e.target.value,
-                          })
-                        }
-                        className="input-language"
-                        textArea={true}
-                      />
-                      {key !== "vi" && (
-                        <i
-                          className="uil uil-times-circle"
-                          onClick={() => {
-                            delete shortDescription[key];
-                            setShortDescription({ ...shortDescription });
-                          }}
-                        ></i>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-              <Select
-                size="small"
-                style={{ width: "30%", marginTop: 10 }}
-                options={language_muti}
-                placeholder="Thêm ngôn ngữ"
-                onChange={(e) => {
-                  const language = (shortDescription[e] = "");
-                  setShortDescription({ ...shortDescription, language });
-                  delete shortDescription[language];
-                  setShortDescription({ ...shortDescription });
-                }}
-              />
-              {/* <InputCustom
-                title={`${i18n.t("vietnamese", { lng: lang })}`}
-                value={statePromo?.shortDescriptionVN}
-                onChange={(e) =>
-                  setStatePromo({
-                    ...statePromo,
-                    shortDescriptionVN: e.target.value,
-                    errorShortDescription: "",
-                  })
-                }
+              <InputLanguage
+                state={shortDescription}
+                setState={setShortDescription}
+                className="input-language"
                 textArea={true}
               />
-              <InputCustom
-                title={`${i18n.t("english", { lng: lang })}`}
-                value={statePromo?.shortDescriptionEN}
-                onChange={(e) =>
-                  setStatePromo({
-                    ...statePromo,
-                    shortDescriptionEN: e.target.value,
-                    errorShortDescription: "",
-                  })
-                }
-                textArea={true}
-                error={statePromo?.errorShortDescription}
-              /> */}
             </div>
           )}
           {statePromo?.isCheckVoucher && (

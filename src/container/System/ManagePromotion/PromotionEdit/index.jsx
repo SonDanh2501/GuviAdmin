@@ -54,6 +54,7 @@ import "./styles.scss";
 import moment from "moment";
 import TextEditor from "../../../../components/TextEditor";
 import { getGroupPromotion } from "../../../../api/configuration";
+import InputLanguage from "../../../../components/inputLanguage";
 const { Option } = Select;
 
 const EditPromotion = () => {
@@ -751,49 +752,11 @@ const EditPromotion = () => {
                 <QuestionCircleOutlined className="icon-question" />
               </Popover>
             </div>
-            <div className="div-list-input-title">
-              {Object.entries(title).map(([key, value]) => {
-                return (
-                  <div key={key} className="div-item-list-input">
-                    <InputCustom
-                      title={`Tiếng ${
-                        key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
-                      }`}
-                      placeholder={`Nhập nội dung tiêu đề Tiếng ${
-                        key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
-                      }`}
-                      value={value}
-                      onChange={(e) =>
-                        setTitle({ ...title, [key]: e.target.value })
-                      }
-                      className="input-language"
-                      disabled={isActive ? true : false}
-                    />
-                    {key !== "vi" && (
-                      <i
-                        className="uil uil-times-circle"
-                        onClick={() => {
-                          delete title[key];
-                          setTitle({ ...title });
-                        }}
-                      ></i>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            <Select
-              size="small"
-              style={{ width: "30%", marginTop: 10 }}
-              placeholder="Thêm ngôn ngữ"
-              options={language_muti}
-              onChange={(e) => {
-                const language = (title[e] = "");
-                setTitle({ ...title, language });
-                delete title[language];
-                setTitle({ ...title });
-              }}
+            <InputLanguage
+              state={title}
+              setState={setTitle}
+              className="input-language"
+              disabled={isActive ? true : false}
             />
           </div>
           {statePromo?.isCheckVoucher && (
@@ -811,49 +774,12 @@ const EditPromotion = () => {
                   <QuestionCircleOutlined className="icon-question" />
                 </Popover>
               </div>
-              <div className="div-list-input-title">
-                {Object.entries(shortDescription).map(([key, value]) => {
-                  return (
-                    <div key={key} className="div-item-list-input">
-                      <InputCustom
-                        placeholder={`Nhập nội dung mô tả ngắn Tiếng ${
-                          key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
-                        }`}
-                        value={value}
-                        onChange={(e) =>
-                          setShortDescription({
-                            ...shortDescription,
-                            [key]: e.target.value,
-                          })
-                        }
-                        className="input-language"
-                        textArea={true}
-                        disabled={isActive ? true : false}
-                      />
-                      {key !== "vi" && (
-                        <i
-                          className="uil uil-times-circle"
-                          onClick={() => {
-                            delete shortDescription[key];
-                            setShortDescription({ ...shortDescription });
-                          }}
-                        ></i>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-              <Select
-                size="small"
-                style={{ width: "30%", marginTop: 10 }}
-                options={language_muti}
-                placeholder="Thêm ngôn ngữ"
-                onChange={(e) => {
-                  const language = (shortDescription[e] = "");
-                  setShortDescription({ ...shortDescription, language });
-                  delete shortDescription[language];
-                  setShortDescription({ ...shortDescription });
-                }}
+              <InputLanguage
+                state={title}
+                setState={setTitle}
+                className="input-language"
+                textArea={true}
+                disabled={isActive ? true : false}
               />
             </div>
           )}

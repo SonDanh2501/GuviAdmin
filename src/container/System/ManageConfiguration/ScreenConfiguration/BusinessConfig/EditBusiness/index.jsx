@@ -24,7 +24,7 @@ const EditBusiness = (props) => {
     tax: "",
     avatar: "",
     id,
-    city: [],
+    city: "",
     district: [],
     idService: [],
   });
@@ -60,7 +60,7 @@ const EditBusiness = (props) => {
   });
 
   province?.map((item) => {
-    state?.city?.map((i) => {
+    [state.city]?.map((i) => {
       if (i === item?.code) {
         item?.districts?.map((district) => {
           districtOption.push({
@@ -94,7 +94,7 @@ const EditBusiness = (props) => {
       avatar: state.avatar,
       tax_code: state.tax,
       area_manager_lv_0: "viet_nam",
-      area_manager_lv_1: state?.city.length > 0 ? state.city : [],
+      area_manager_lv_1: state?.city === "" ? [] : [state.city],
       area_manager_lv_2: state?.district.length > 0 ? state.district : [],
       id_service_manager: state.idService.length > 0 ? state.idService : [],
     })
