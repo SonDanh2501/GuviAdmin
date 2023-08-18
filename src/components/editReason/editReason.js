@@ -8,13 +8,16 @@ import { errorNotify } from "../../helper/toast";
 import { getLanguageState } from "../../redux/selectors/auth";
 import i18n from "../../i18n";
 import InputCustom from "../textInputCustom";
+import InputLanguage from "../inputLanguage";
 
 const EditReason = (props) => {
   const { data, setIsLoading, setData, setTotal, startPage } = props;
-  const [titleVN, setTitleVN] = useState("");
-  const [titleEN, setTitleEN] = useState("");
-  const [descriptionVN, setDescriptionVN] = useState("");
-  const [descriptionEN, setDescriptionEN] = useState("");
+  const [title, setTitle] = useState({
+    vi: "",
+  });
+  const [description, setDescription] = useState({
+    vi: "",
+  });
   const [note, setNote] = useState("");
   const [applyUser, setApplyUser] = useState("");
   const lang = useSelector(getLanguageState);
@@ -27,10 +30,10 @@ const EditReason = (props) => {
   };
 
   useEffect(() => {
-    setTitleVN(data?.title?.vi);
-    setTitleEN(data?.title?.en);
-    setDescriptionVN(data?.description?.vi);
-    setDescriptionEN(data?.description?.en);
+    delete data?.title["_id"];
+    setTitle(data?.title);
+    delete data?.description["_id"];
+    setDescription(data?.description);
     setApplyUser(data?.apply_user);
     setNote(data?.note);
   }, [data]);
@@ -38,14 +41,8 @@ const EditReason = (props) => {
   const editReason = useCallback(() => {
     setIsLoading(true);
     updateReason(data?._id, {
-      title: {
-        vi: titleVN,
-        en: titleEN,
-      },
-      description: {
-        vi: descriptionVN,
-        en: descriptionEN,
-      },
+      title: title,
+      description: description,
       apply_user: applyUser,
       note: note,
     })
@@ -65,16 +62,7 @@ const EditReason = (props) => {
           message: err,
         });
       });
-  }, [
-    titleVN,
-    titleEN,
-    descriptionVN,
-    descriptionEN,
-    applyUser,
-    note,
-    data,
-    startPage,
-  ]);
+  }, [applyUser, note, data, startPage]);
 
   return (
     <>
@@ -91,37 +79,20 @@ const EditReason = (props) => {
           <a className="title-reason">{`${i18n.t("name_reason", {
             lng: lang,
           })}`}</a>
-          <InputCustom
-            title={`${i18n.t("vietnamese", { lng: lang })}`}
-            type="text"
-            value={titleVN}
-            onChange={(e) => setTitleVN(e.target.value)}
-          />
-
-          <InputCustom
-            title={`${i18n.t("english", { lng: lang })}`}
-            type="text"
-            value={titleEN}
-            onChange={(e) => setTitleEN(e.target.value)}
-            style={{ marginTop: 5 }}
+          <InputLanguage
+            state={title}
+            setState={setTitle}
+            className="input-language"
           />
         </div>
         <div className="mt-2">
           <a className="title-reason">{`${i18n.t("describe", {
             lng: lang,
           })}`}</a>
-          <InputCustom
-            title={`${i18n.t("vietnamese", { lng: lang })}`}
-            type="text"
-            value={descriptionVN}
-            onChange={(e) => setDescriptionVN(e.target.value)}
-          />
-          <InputCustom
-            title={`${i18n.t("english", { lng: lang })}`}
-            type="text"
-            value={descriptionEN}
-            onChange={(e) => setDescriptionEN(e.target.value)}
-            style={{ marginTop: 5 }}
+          <InputLanguage
+            state={description}
+            setState={setDescription}
+            className="input-language"
           />
         </div>
         <div className="mt-2">

@@ -49,3 +49,13 @@
   border-radius: 8px;
   border: 1px solid #ccc;
 }
+
+.div-item-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .input-lang {
+    width: 320px;
+  }
+}

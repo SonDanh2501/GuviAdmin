@@ -10,13 +10,16 @@ import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../../i18n";
 import InputCustom from "../../../../../../../components/textInputCustom";
+import InputLanguage from "../../../../../../../components/inputLanguage";
 
 const CreateReasonPubnish = (props) => {
   const { setIsLoading, setData, setTotal } = props;
-  const [titleVN, setTitleVN] = useState("");
-  const [titleEN, setTitleEN] = useState("");
-  const [descriptionVN, setDescriptionVN] = useState("");
-  const [descriptionEN, setDescriptionEN] = useState("");
+  const [title, setTitle] = useState({
+    vi: "",
+  });
+  const [description, setDescription] = useState({
+    vi: "",
+  });
   const [note, setNote] = useState("");
   const [open, setOpen] = useState(false);
   const lang = useSelector(getLanguageState);
@@ -30,14 +33,8 @@ const CreateReasonPubnish = (props) => {
   const onCreatePunishReason = useCallback(() => {
     setIsLoading(true);
     createReasonPunish({
-      title: {
-        vi: titleVN,
-        en: titleEN,
-      },
-      description: {
-        vi: descriptionVN,
-        en: descriptionEN,
-      },
+      title: title,
+      description: description,
       note: note,
       apply_user: "collaborator",
     })
@@ -55,7 +52,7 @@ const CreateReasonPubnish = (props) => {
           message: err,
         });
       });
-  }, [titleVN, titleEN, descriptionVN, descriptionEN, note]);
+  }, [title, description, note]);
   return (
     <div>
       <Button type="primary" onClick={showDrawer} className="btn-create-punish">
@@ -70,24 +67,18 @@ const CreateReasonPubnish = (props) => {
       >
         <div>
           <a>{`${i18n.t("name", { lng: lang })}`}</a>
-          <InputCustom
-            title={`${i18n.t("vietnamese", { lng: lang })}`}
-            onChange={(e) => setTitleVN(e.target.value)}
-          />
-          <InputCustom
-            title={`${i18n.t("english", { lng: lang })}`}
-            onChange={(e) => setTitleEN(e.target.value)}
+          <InputLanguage
+            state={title}
+            setState={setTitle}
+            className="input-language"
           />
         </div>
         <div className="mt-2">
           <a>{`${i18n.t("describe", { lng: lang })}`}</a>
-          <InputCustom
-            title={`${i18n.t("vietnamese", { lng: lang })}`}
-            onChange={(e) => setDescriptionVN(e.target.value)}
-          />
-          <InputCustom
-            title={`${i18n.t("english", { lng: lang })}`}
-            onChange={(e) => setDescriptionEN(e.target.value)}
+          <InputLanguage
+            state={description}
+            setState={setDescription}
+            className="input-language"
           />
         </div>
         <div className="mt-2">

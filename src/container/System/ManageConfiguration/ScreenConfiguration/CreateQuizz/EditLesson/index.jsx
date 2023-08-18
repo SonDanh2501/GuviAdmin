@@ -1,4 +1,4 @@
-import { Checkbox, Drawer } from "antd";
+import { Checkbox, Drawer, Select } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   editLessonApi,
@@ -27,7 +27,13 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
     isShowApp: false,
   });
   const [open, setOpen] = useState(false);
-  const reactQuillRef = useRef();
+  const [title, setTitle] = useState({
+    vi: "",
+  });
+  const [description, setDescription] = useState({
+    vi: "",
+  });
+
   const showDrawer = () => {
     setOpen(true);
   };
@@ -53,6 +59,10 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
           totalExam: res?.total_exam,
           isShowApp: res?.is_show_in_app,
         });
+        delete res?.title["_id"];
+        setTitle(res?.title);
+        delete res?.description["_id"];
+        setDescription(res?.description);
       })
       .catch((err) => {});
   }, []);
@@ -61,14 +71,8 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
     setIsLoading(true);
     editLessonApi(data?._id, {
       lesson: state?.lesson,
-      title: {
-        vi: state?.titleVN,
-        en: state?.titleEN,
-      },
-      description: {
-        vi: state?.descriptionVN,
-        en: state?.descriptionEN,
-      },
+      title: title,
+      description: description,
       link_video: state?.link,
       type_training_lesson: state?.type,
       is_show_in_app: state?.isShowApp,
@@ -93,7 +97,7 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
           message: err,
         });
       });
-  }, [data, state]);
+  }, [data, state, title, description]);
 
   return (
     <div>
@@ -113,30 +117,86 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
           value={state?.lesson}
           onChange={(e) => setState({ ...state, lesson: e.target.value })}
         />
-        <InputCustom
-          title="Tiêu đề Tiếng Việt"
-          value={state?.titleVN}
-          onChange={(e) => setState({ ...state, titleVN: e.target.value })}
-        />
-        <InputCustom
-          title="Tiêu đề Tiếng Anh"
-          value={state?.titleEN}
-          onChange={(e) => setState({ ...state, titleEN: e.target.value })}
-        />
-        <InputCustom
-          title="Mô tả Tiếng Việt"
-          value={state?.descriptionVN}
-          onChange={(e) =>
-            setState({ ...state, descriptionVN: e.target.value })
-          }
-        />
-        <InputCustom
-          title="Mô tả Tiếng Anh"
-          value={state?.descriptionEN}
-          onChange={(e) =>
-            setState({ ...state, descriptionEN: e.target.value })
-          }
-        />
+        <div className="div-input-title-quizz">
+          <a className="title-input">Tiêu đề</a>
+          {Object.entries(title).map(([key, value]) => {
+            return (
+              <div className="div-item-title-list">
+                <InputCustom
+                  placeholder={`Nhập nội dung tiêu đề Tiếng ${
+                    key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
+                  }`}
+                  onChange={(e) =>
+                    setTitle({ ...title, [key]: e.target.value })
+                  }
+                  className="input-language"
+                  value={value}
+                />
+                {key !== "vi" && (
+                  <i
+                    className="uil uil-times-circle"
+                    onClick={() => {
+                      delete title[key];
+                      setTitle({ ...title });
+                    }}
+                  ></i>
+                )}
+              </div>
+            );
+          })}
+          <Select
+            size="small"
+            style={{ width: "40%", marginTop: 10 }}
+            placeholder="Thêm ngôn ngữ"
+            options={language_muti}
+            onChange={(e) => {
+              const language = (title[e] = "");
+              setTitle({ ...title, language });
+              delete title[language];
+              setTitle({ ...title });
+            }}
+          />
+        </div>
+        <div className="div-input-title-quizz">
+          <a className="title-input">Mô tả</a>
+          {Object.entries(description).map(([key, value]) => {
+            return (
+              <div className="div-item-title-list">
+                <InputCustom
+                  placeholder={`Nhập nội dung mô tả Tiếng ${
+                    key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
+                  }`}
+                  onChange={(e) =>
+                    setDescription({ ...description, [key]: e.target.value })
+                  }
+                  className="input-language"
+                  value={value}
+                />
+                {key !== "vi" && (
+                  <i
+                    className="uil uil-times-circle"
+                    onClick={() => {
+                      delete description[key];
+                      setDescription({ ...description });
+                    }}
+                  ></i>
+                )}
+              </div>
+            );
+          })}
+          <Select
+            size="small"
+            style={{ width: "40%", marginTop: 10 }}
+            placeholder="Thêm ngôn ngữ"
+            options={language_muti}
+            onChange={(e) => {
+              const language = (description[e] = "");
+              setDescription({ ...description, language });
+              delete description[language];
+              setDescription({ ...description });
+            }}
+          />
+        </div>
         <InputCustom
           title="Link video"
           value={state?.link}
@@ -201,3 +261,8 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
 };
 
 export default EditLesson;
+
+const language_muti = [
+  { value: "en", label: "Tiếng Anh" },
+  { value: "jp", label: "Tiếng Nhật" },
+];

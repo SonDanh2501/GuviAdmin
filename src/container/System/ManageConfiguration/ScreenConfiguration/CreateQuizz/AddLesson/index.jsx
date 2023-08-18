@@ -1,4 +1,4 @@
-import { Button, Checkbox, Drawer } from "antd";
+import { Button, Checkbox, Drawer, Select } from "antd";
 import CustomButton from "../../../../../../components/customButton/customButton";
 import { useCallback, useState } from "react";
 import "./styles.scss";
@@ -26,6 +26,12 @@ const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
     isShowApp: false,
   });
   const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState({
+    vi: "",
+  });
+  const [description, setDescription] = useState({
+    vi: "",
+  });
   const showDrawer = () => {
     setOpen(true);
   };
@@ -37,14 +43,8 @@ const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
     setIsLoading(true);
     createLessonApi({
       lesson: state?.lesson,
-      title: {
-        vi: state?.titleVN,
-        en: state?.titleEN,
-      },
-      description: {
-        vi: state?.descriptionVN,
-        en: state?.descriptionEN,
-      },
+      title: title,
+      description: description,
       link_video: state?.link,
       type_training_lesson: tab === "" ? state?.type : tab,
       is_show_in_app: state?.isShowApp,
@@ -69,7 +69,7 @@ const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
           message: err,
         });
       });
-  }, [state, tab]);
+  }, [state, tab, title, description]);
 
   return (
     <div>
@@ -89,30 +89,84 @@ const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
           value={state?.lesson}
           onChange={(e) => setState({ ...state, lesson: e.target.value })}
         />
-        <InputCustom
-          title="Tiêu đề Tiếng Việt"
-          value={state?.titleVN}
-          onChange={(e) => setState({ ...state, titleVN: e.target.value })}
-        />
-        <InputCustom
-          title="Tiêu đề Tiếng Anh"
-          value={state?.titleEN}
-          onChange={(e) => setState({ ...state, titleEN: e.target.value })}
-        />
-        <InputCustom
-          title="Mô tả Tiếng Việt"
-          value={state?.descriptionVN}
-          onChange={(e) =>
-            setState({ ...state, descriptionVN: e.target.value })
-          }
-        />
-        <InputCustom
-          title="Mô tả Tiếng Anh"
-          value={state?.descriptionEN}
-          onChange={(e) =>
-            setState({ ...state, descriptionEN: e.target.value })
-          }
-        />
+        <div className="div-input-title-quizz">
+          <a className="title-input">Tiêu đề</a>
+          {Object.entries(title).map(([key, value]) => {
+            return (
+              <div className="div-item-title-list">
+                <InputCustom
+                  placeholder={`Nhập nội dung tiêu đề Tiếng ${
+                    key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
+                  }`}
+                  onChange={(e) =>
+                    setTitle({ ...title, [key]: e.target.value })
+                  }
+                  className="input-language"
+                />
+                {key !== "vi" && (
+                  <i
+                    className="uil uil-times-circle"
+                    onClick={() => {
+                      delete title[key];
+                      setTitle({ ...title });
+                    }}
+                  ></i>
+                )}
+              </div>
+            );
+          })}
+          <Select
+            size="small"
+            style={{ width: "40%", marginTop: 10 }}
+            placeholder="Thêm ngôn ngữ"
+            options={language_muti}
+            onChange={(e) => {
+              const language = (title[e] = "");
+              setTitle({ ...title, language });
+              delete title[language];
+              setTitle({ ...title });
+            }}
+          />
+        </div>
+        <div className="div-input-title-quizz">
+          <a className="title-input">Mô tả</a>
+          {Object.entries(description).map(([key, value]) => {
+            return (
+              <div className="div-item-title-list">
+                <InputCustom
+                  placeholder={`Nhập nội dung mô tả Tiếng ${
+                    key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
+                  }`}
+                  onChange={(e) =>
+                    setDescription({ ...description, [key]: e.target.value })
+                  }
+                  className="input-language"
+                />
+                {key !== "vi" && (
+                  <i
+                    className="uil uil-times-circle"
+                    onClick={() => {
+                      delete description[key];
+                      setDescription({ ...description });
+                    }}
+                  ></i>
+                )}
+              </div>
+            );
+          })}
+          <Select
+            size="small"
+            style={{ width: "40%", marginTop: 10 }}
+            placeholder="Thêm ngôn ngữ"
+            options={language_muti}
+            onChange={(e) => {
+              const language = (description[e] = "");
+              setDescription({ ...description, language });
+              delete description[language];
+              setDescription({ ...description });
+            }}
+          />
+        </div>
         <InputCustom
           title="Link video"
           value={state?.link}
@@ -177,3 +231,8 @@ const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
 };
 
 export default AddLesson;
+
+const language_muti = [
+  { value: "en", label: "Tiếng Anh" },
+  { value: "jp", label: "Tiếng Nhật" },
+];

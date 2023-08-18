@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./styles.scss";
-import { Button, Drawer } from "antd";
+import { Button, Drawer, Select } from "antd";
 import InputCustom from "../../../../../../components/textInputCustom";
 import UploadImage from "../../../../../../components/uploadImage";
 import {
@@ -22,11 +22,9 @@ const EditGroupPromotion = (props) => {
   });
   const [title, setTitle] = useState({
     vi: "",
-    en: "",
   });
   const [description, setDescription] = useState({
     vi: "",
-    en: "",
   });
 
   useEffect(() => {
@@ -36,25 +34,17 @@ const EditGroupPromotion = (props) => {
       position: item?.position,
       type: item?.type_render_view,
     });
-    setTitle({ ...title, vi: item?.name?.vi, en: item?.name?.en });
-    setDescription({
-      ...description,
-      vi: item?.description?.vi,
-      en: item?.description?.en,
-    });
+    delete item?.name["_id"];
+    setTitle(item?.name);
+    delete item?.description["_id"];
+    setDescription(item?.description);
   }, [item]);
 
   const onCreate = () => {
     setState({ ...state, isLoading: true });
     editGroupPromotion(item?._id, {
-      name: {
-        vi: title.vi,
-        en: title.en,
-      },
-      description: {
-        vi: description.vi,
-        en: description.en,
-      },
+      name: title,
+      description: description,
       thumbnail: state.thumbnail,
       position: state.position,
       type_render_view: state.type,
@@ -95,32 +85,90 @@ const EditGroupPromotion = (props) => {
       >
         <div className="form-input">
           <a className="label-input">Tiêu đề</a>
-          <InputCustom
-            title="Tiếng Việt"
-            value={title.vi}
-            onChange={(e) => setTitle({ ...title, vi: e.target.value })}
-          />
-          <InputCustom
-            title="Tiếng Anh"
-            value={title.en}
-            onChange={(e) => setTitle({ ...title, en: e.target.value })}
+          {Object.entries(title).map(([key, value]) => {
+            return (
+              <div key={key} className="div-item-input">
+                <InputCustom
+                  title={`Tiếng ${
+                    key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
+                  }`}
+                  className="input-lang"
+                  placeholder={`Nhập nội dung tiêu đề Tiếng ${
+                    key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
+                  }`}
+                  value={value}
+                  onChange={(e) =>
+                    setTitle({ ...title, [key]: e.target.value })
+                  }
+                />
+
+                {key !== "vi" && (
+                  <i
+                    className="uil uil-times-circle"
+                    onClick={() => {
+                      delete title[key];
+                      setTitle({ ...title });
+                    }}
+                  ></i>
+                )}
+              </div>
+            );
+          })}
+          <Select
+            size="small"
+            style={{ width: "45%", marginTop: 10 }}
+            placeholder="Thêm ngôn ngữ"
+            options={language_muti}
+            onChange={(e) => {
+              const language = (title[e] = "");
+              setTitle({ ...title, language });
+              delete title[language];
+              setTitle({ ...title });
+            }}
           />
         </div>
         <div className="form-input">
           <a className="label-input">Mô tả</a>
-          <InputCustom
-            title="Tiếng Việt"
-            value={description.vi}
-            onChange={(e) =>
-              setDescription({ ...description, vi: e.target.value })
-            }
-          />
-          <InputCustom
-            title="Tiếng Anh"
-            value={description.en}
-            onChange={(e) =>
-              setDescription({ ...description, en: e.target.value })
-            }
+          {Object.entries(description).map(([key, value]) => {
+            return (
+              <div key={key} className="div-item-input">
+                <InputCustom
+                  title={`Tiếng ${
+                    key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
+                  }`}
+                  className="input-lang"
+                  placeholder={`Nhập nội dung mô tả Tiếng ${
+                    key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
+                  }`}
+                  value={value}
+                  onChange={(e) =>
+                    setDescription({ ...title, [key]: e.target.value })
+                  }
+                />
+
+                {key !== "vi" && (
+                  <i
+                    className="uil uil-times-circle"
+                    onClick={() => {
+                      delete description[key];
+                      setDescription({ ...description });
+                    }}
+                  ></i>
+                )}
+              </div>
+            );
+          })}
+          <Select
+            size="small"
+            style={{ width: "45%", marginTop: 10 }}
+            placeholder="Thêm ngôn ngữ"
+            options={language_muti}
+            onChange={(e) => {
+              const language = (description[e] = "");
+              setDescription({ ...description, language });
+              delete description[language];
+              setDescription({ ...description });
+            }}
           />
         </div>
 
@@ -160,3 +208,8 @@ const EditGroupPromotion = (props) => {
 };
 
 export default EditGroupPromotion;
+
+const language_muti = [
+  { value: "en", label: "Tiếng Anh" },
+  { value: "jp", label: "Tiếng Nhật" },
+];

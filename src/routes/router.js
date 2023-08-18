@@ -94,13 +94,13 @@ const router = [
     name: "service",
     icon: service,
     component: EditPriceService,
-    layout: "group",
+    layout: "admin",
     tab: [
-      {
-        path: "/services/manage-group-service/service",
-        name: "Tất cả",
-        icon: bag,
-      },
+      // {
+      //   path: "/services/manage-group-service/service",
+      //   name: "Tất cả",
+      //   icon: bag,
+      // },
       // {
       //   path: "/services/manage-group-service/group-service",
       //   name: "Nhóm dịch vụ",
