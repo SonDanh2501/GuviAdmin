@@ -1,2 +1,24 @@
+.div-input-title-quizz {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
 
+  .title-input {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000;
+    text-decoration: none;
+  }
 
+  .div-item-title-list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .input-language {
+      width: 320px;
+    }
+  }
+}

@@ -350,10 +350,22 @@ const DetailsProfile = ({ id }) => {
                             <a className="text-name">{item?.id_view}</a>
                           </div>
                         </div>
-                        <a className="text-date-create">
-                          {`${i18n.t("date_create", { lng: lang })}`}:{" "}
-                          {moment(item?.date_create).format("DD-MM-YYYY")}
-                        </a>
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <a className="text-date-create">
+                            {`${i18n.t("date_create", { lng: lang })}`}:{" "}
+                            {moment(item?.date_create).format("DD-MM-YYYY")}
+                          </a>
+                          <a className="text-date-create">
+                            {`${i18n.t("Số đơn", { lng: lang })}`}:{" "}
+                            {item?.total_done_order}
+                          </a>
+                          <a className="text-date-create">
+                            {`${i18n.t("Tổng tiền", { lng: lang })}`}:{" "}
+                            {formatMoney(item?.total_price)}
+                          </a>
+                        </div>
                       </div>
 
                       <Progress
