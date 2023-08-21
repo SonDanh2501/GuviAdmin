@@ -1,5 +1,6 @@
 import {
   Checkbox,
+  Empty,
   Image,
   Input,
   Modal,
@@ -169,7 +170,10 @@ const ReviewCollaborator = () => {
         startDate,
         endDate,
         star,
-        valueSearch
+        valueSearch,
+        tab,
+        city,
+        district
       )
         .then((res) => {
           setData(res?.data);
@@ -177,7 +181,7 @@ const ReviewCollaborator = () => {
         })
         .catch((err) => {});
     },
-    [valueSearch, startDate, endDate, startPage]
+    [valueSearch, startDate, endDate, startPage, tab, city, district]
   );
 
   const handleSearch = useCallback(
@@ -193,6 +197,7 @@ const ReviewCollaborator = () => {
         endDate,
         star,
         value,
+        tab,
         city,
         district
       )
@@ -205,7 +210,7 @@ const ReviewCollaborator = () => {
           setIsLoading(false);
         });
     }, 1000),
-    [startDate, endDate, star]
+    [startDate, endDate, star, district, city, tab]
   );
 
   const onChangeDay = () => {
@@ -622,6 +627,9 @@ const ReviewCollaborator = () => {
           }}
           scroll={{
             x: width <= 900 ? 1200 : 0,
+          }}
+          locale={{
+            emptyText: <Empty description="Không có dữ liệu" />,
           }}
           expandable={
             width <= 900

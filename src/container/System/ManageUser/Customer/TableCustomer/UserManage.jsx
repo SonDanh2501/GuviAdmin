@@ -6,10 +6,8 @@ import {
   Dropdown,
   Empty,
   FloatButton,
-  Image,
   Input,
   Pagination,
-  Skeleton,
   Space,
   Table,
 } from "antd";
@@ -20,25 +18,24 @@ import {
   activeCustomer,
   deleteCustomer,
   fetchCustomers,
-  searchCustomers,
 } from "../../../../../api/customer";
+import gold from "../../../../../assets/images/iconGold.svg";
+import member from "../../../../../assets/images/iconMember.svg";
+import platinum from "../../../../../assets/images/iconPlatinum.svg";
+import silver from "../../../../../assets/images/iconSilver.svg";
 import AddCustomer from "../../../../../components/addCustomer/addCustomer";
 import ModalCustom from "../../../../../components/modalCustom";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
+import { useCookies } from "../../../../../helper/useCookies";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import i18n from "../../../../../i18n";
 import {
   getElementState,
   getLanguageState,
 } from "../../../../../redux/selectors/auth";
-import member from "../../../../../assets/images/iconMember.svg";
-import silver from "../../../../../assets/images/iconSilver.svg";
-import gold from "../../../../../assets/images/iconGold.svg";
-import platinum from "../../../../../assets/images/iconPlatinum.svg";
 import "./UserManage.scss";
-import i18n from "../../../../../i18n";
-import { useCookies } from "../../../../../helper/useCookies";
-import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const UserManage = (props) => {
   const { status, idGroup } = props;
@@ -66,7 +63,7 @@ const UserManage = (props) => {
   const [saveToCookie, readCookie] = useCookies();
 
   useEffect(() => {
-    fetchCustomers(lang, 0, 50, status, readCookie("tab-kh"))
+    fetchCustomers(lang, 0, 50, status, readCookie("tab-kh"), "")
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItems);
@@ -81,7 +78,7 @@ const UserManage = (props) => {
       setIsLoading(true);
       deleteCustomer(id, { is_delete: true })
         .then((res) => {
-          fetchCustomers(lang, startPage, 50, status, idGroup)
+          fetchCustomers(lang, startPage, 50, status, idGroup, "")
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItems);
@@ -106,7 +103,7 @@ const UserManage = (props) => {
       activeCustomer(id, { is_active: active ? false : true })
         .then((res) => {
           setModalBlock(false);
-          fetchCustomers(lang, startPage, 50, status, idGroup)
+          fetchCustomers(lang, startPage, 50, status, idGroup, "")
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItems);
@@ -127,44 +124,30 @@ const UserManage = (props) => {
   const onChange = (page) => {
     setCurrentPage(page);
     const dataLength = data.length < 50 ? 50 : data.length;
-    const filterLength = dataFilter.length < 50 ? 50 : dataFilter.length;
-    const start =
-      dataFilter.length > 0
-        ? page * filterLength - filterLength
-        : page * dataLength - dataLength;
+    const start = page * dataLength - dataLength;
 
     setStartPage(start);
-
-    dataFilter.length > 0
-      ? searchCustomers(start, 50, status, valueFilter)
-          .then((res) => {
-            setDataFilter(res.data);
-            setTotalFilter(res.totalItems);
-            window.scroll(0, 0);
-          })
-          .catch((err) => {})
-      : fetchCustomers(lang, start, 50, status, idGroup)
-          .then((res) => {
-            setData(res?.data);
-            setTotal(res?.totalItems);
-            window.scroll(0, 0);
-          })
-          .catch((err) => {});
+    fetchCustomers(lang, start, 50, status, idGroup, valueFilter)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItems);
+        window.scroll(0, 0);
+      })
+      .catch((err) => {});
   };
 
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueFilter(value);
       setIsLoading(true);
-      searchCustomers(0, 50, status, value)
+      fetchCustomers(lang, startPage, 50, status, idGroup, value)
         .then((res) => {
+          setData(res?.data);
+          setTotal(res?.totalItems);
+          window.scroll(0, 0);
           setIsLoading(false);
-          setDataFilter(res.data);
-          setTotalFilter(res.totalItems);
         })
-        .catch((err) => {
-          setIsLoading(false);
-        });
+        .catch((err) => {});
     }, 1000),
     []
   );
@@ -666,7 +649,7 @@ const UserManage = (props) => {
         <div className="mt-3">
           <Table
             columns={columns}
-            dataSource={dataFilter.length > 0 ? dataFilter : data}
+            dataSource={data}
             pagination={false}
             rowKey={(record) => record._id}
             rowSelection={{
@@ -683,10 +666,9 @@ const UserManage = (props) => {
                 },
               };
             }}
-            // locale={{
-            //   emptyText:
-            //     data.length > 0 ? <Empty /> : <Skeleton active={true} />,
-            // }}
+            locale={{
+              emptyText: <Empty description="Không có dữ liệu" />,
+            }}
             scroll={{
               x: width <= 490 ? 900 : 0,
             }}
@@ -802,14 +784,13 @@ const UserManage = (props) => {
 
         <div className="mt-1 div-pagination p-2">
           <a>
-            {`${i18n.t("total", { lng: lang })}`}:{" "}
-            {dataFilter.length > 0 ? totalFilter : total}
+            {`${i18n.t("total", { lng: lang })}`}: {total}
           </a>
           <div>
             <Pagination
               current={currentPage}
               onChange={onChange}
-              total={dataFilter.length > 0 ? totalFilter : total}
+              total={total}
               showSizeChanger={false}
               pageSize={50}
             />

@@ -1,23 +1,20 @@
-import { Button, Checkbox, Drawer, Input, List, Select } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { errorNotify } from "../../../../helper/toast";
-import { loadingAction } from "../../../../redux/actions/loading";
 import { SearchOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Drawer, Input, List, Select } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import { searchCustomers } from "../../../../api/customer";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { searchCustomersApi } from "../../../../api/customer";
 import { createPushNotification } from "../../../../api/notification";
 import { getGroupCustomerApi } from "../../../../api/promotion";
-import UploadImage from "../../../../components/uploadImage";
-import { getNotification } from "../../../../redux/actions/notification";
-import {
-  getElementState,
-  getLanguageState,
-} from "../../../../redux/selectors/auth";
 import InputCustom from "../../../../components/textInputCustom";
-import "./index.scss";
+import UploadImage from "../../../../components/uploadImage";
+import { errorNotify } from "../../../../helper/toast";
 import i18n from "../../../../i18n";
+import { loadingAction } from "../../../../redux/actions/loading";
+import { getNotification } from "../../../../redux/actions/notification";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import "./index.scss";
 
 const AddPushNotification = ({ idOrder }) => {
   const [open, setOpen] = useState(false);
@@ -87,7 +84,7 @@ const AddPushNotification = ({ idOrder }) => {
     _debounce((value) => {
       setNameCustomer(value);
       if (value) {
-        searchCustomers(0, 20, "", value)
+        searchCustomersApi(value)
           .then((res) => {
             if (value === "") {
               setDataFilter([]);
