@@ -1,17 +1,16 @@
-import { FloatButton, Select, Tabs } from "antd";
+import { FloatButton, Select } from "antd";
 
 import "./index.scss";
 
 import { useEffect, useState } from "react";
-import UserManage from "./TableCustomer/UserManage";
 import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../redux/selectors/auth";
-import i18n from "../../../../i18n";
-import { getGroupCustomer } from "../../../../redux/selectors/customer";
 import { getGroupCustomerApi } from "../../../../api/promotion";
 import { useCookies } from "../../../../helper/useCookies";
-import useWindowDimensions from "../../../../helper/useWindowDimensions";
 import { useHorizontalScroll } from "../../../../helper/useSideScroll";
+import useWindowDimensions from "../../../../helper/useWindowDimensions";
+import i18n from "../../../../i18n";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import UserManage from "./TableCustomer/UserManage";
 
 const ManageCustomer = () => {
   const [status, setStatus] = useState("");
@@ -38,24 +37,6 @@ const ManageCustomer = () => {
       label: item?.name,
     });
   });
-
-  const onChangeTab = (active) => {
-    if (active === "2") {
-      setStatus("member");
-    } else if (active === "3") {
-      setStatus("silver");
-    } else if (active === "4") {
-      setStatus("gold");
-    } else if (active === "5") {
-      setStatus("platinum");
-    } else if (active === "6") {
-      setStatus("birthday");
-    } else if (active === "7") {
-      setStatus("block");
-    } else {
-      setStatus("");
-    }
-  };
 
   return (
     <>

@@ -801,15 +801,25 @@ export default function Home() {
                           item?.id_reason_punish?._id,
                           item?.id_reason_punish?.title?.vi
                         )
-                      : item?.id_transistion_collaborator
-                      ? subject.replace(
-                          item?.id_transistion_collaborator?._id,
-                          item?.id_transistion_collaborator?.transfer_note
-                        )
                       : item?.id_order
                       ? subject.replace(
                           item?.id_order?._id,
                           item?.id_order?.id_view
+                        )
+                      : item?.id_collaborator
+                      ? subject.replace(
+                          item?.id_collaborator?._id,
+                          item?.id_collaborator?.full_name
+                        )
+                      : item?.id_promotion
+                      ? subject.replace(
+                          item?.id_promotion?._id,
+                          item?.id_promotion?.title?.vi
+                        )
+                      : item?.id_transistion_collaborator
+                      ? subject.replace(
+                          item?.id_transistion_collaborator?._id,
+                          item?.id_transistion_collaborator?.transfer_note
                         )
                       : item?.id_reward
                       ? subject.replace(
@@ -822,20 +832,10 @@ export default function Home() {
                           item?.id_info_reward_collaborator
                             ?.id_reward_collaborator?.title?.vi
                         )
-                      : item?.id_collaborator
-                      ? subject.replace(
-                          item?.id_collaborator?._id,
-                          item?.id_collaborator?.full_name
-                        )
                       : item?.id_customer
                       ? subject.replace(
                           item?.id_customer?._id,
                           item?.id_customer?.full_name
-                        )
-                      : item?.id_promotion
-                      ? subject.replace(
-                          item?.id_promotion?._id,
-                          item?.id_promotion?.title?.vi
                         )
                       : item?.id_admin_action
                       ? subject.replace(
@@ -854,15 +854,15 @@ export default function Home() {
                           item?.id_reason_cancel?._id,
                           item?.id_reason_cancel?.title?.vi
                         )
-                      : item?.id_collaborator
-                      ? predicate.replace(
-                          item?.id_collaborator?._id,
-                          item?.id_collaborator?.full_name
-                        )
                       : item?.id_customer
                       ? predicate.replace(
                           item?.id_customer?._id,
                           item?.id_customer?.full_name
+                        )
+                      : item?.id_collaborator
+                      ? predicate.replace(
+                          item?.id_collaborator?._id,
+                          item?.id_collaborator?.full_name
                         )
                       : item?.id_address
                       ? predicate.replace(item?.id_address, item?.value_string)

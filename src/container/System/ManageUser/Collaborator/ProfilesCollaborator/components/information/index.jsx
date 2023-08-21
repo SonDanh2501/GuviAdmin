@@ -101,7 +101,7 @@ const Information = ({ data, image, idCTV, setData }) => {
       getDetailBusiness(idBusiness)
         .then((res) => {
           setDetailsBusiness(res);
-          setCodeCity(res?.area_manager_lv_1);
+          setCodeCity(res?.area_manager_lv_1[0]);
           setCodeDistrict(res?.area_manager_lv_2);
           province?.map((item) => {
             res?.area_manager_lv_1?.map((i) => {
