@@ -225,7 +225,18 @@ const ManageOrder = () => {
 
   const handleSearch = useCallback(
     _debounce((value) => {
-      getOrderApi(value, 0, 20, tab, kind, type, startDate, endDate, city)
+      getOrderApi(
+        value,
+        0,
+        20,
+        tab,
+        kind,
+        type,
+        startDate,
+        endDate,
+        city,
+        district
+      )
         .then((res) => {
           setData(res?.data);
           setTotal(res?.totalItem);

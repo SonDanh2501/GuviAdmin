@@ -1,11 +1,5 @@
-import { useEffect, useState } from "react";
-import CustomDatePicker from "../../../../components/customDatePicker";
 import moment from "moment";
-import {
-  getReportOrder,
-  getReportOrderByCity,
-  getReportOrderDaily,
-} from "../../../../api/report";
+import { useEffect, useState } from "react";
 import {
   CartesianGrid,
   Legend,
@@ -16,13 +10,20 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import {
+  getReportOrderByCity,
+  getReportOrderDaily,
+  getReportServiceByArea,
+} from "../../../../api/report";
+import CustomDatePicker from "../../../../components/customDatePicker";
 
-import "./styles.scss";
-import { number_processing } from "../../../../helper/numberProcessing";
-import { formatMoney } from "../../../../helper/formatMoney";
-import LoadingPagination from "../../../../components/paginationLoading";
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import LoadingPagination from "../../../../components/paginationLoading";
+import { formatMoney } from "../../../../helper/formatMoney";
+import { number_processing } from "../../../../helper/numberProcessing";
+import "./styles.scss";
+import { Image } from "antd";
 
 const ReportOverview = () => {
   const [startDate, setStartDate] = useState(
@@ -86,6 +87,13 @@ const ReportOverview = () => {
         setTotalNetIncomeSameArea(res?.total[0]?.total_net_income);
       })
       .catch((err) => {});
+
+    // getReportServiceByArea(startDate, endDate, "")
+    //   .then((res) => {})
+    //   .catch((err) => {});
+    // getReportServiceByArea(sameStartDate, sameEndDate, "")
+    //   .then((res) => {})
+    //   .catch((err) => {});
   }, []);
 
   const onChangeDay = () => {
@@ -126,6 +134,13 @@ const ReportOverview = () => {
         setTotalNetIncomeSameArea(res?.total[0]?.total_net_income);
       })
       .catch((err) => {});
+
+    // getReportServiceByArea(startDate, endDate, "")
+    //   .then((res) => {})
+    //   .catch((err) => {});
+    // getReportServiceByArea(sameStartDate, sameEndDate, "")
+    //   .then((res) => {})
+    //   .catch((err) => {});
   };
 
   for (let i = 0; i < data.length; i++) {
@@ -151,30 +166,37 @@ const ReportOverview = () => {
     });
   }
   for (let i = 0; i < dataArea.length; i++) {
-    dataAreaSame?.map((item) => {
-      if (dataArea[i]?._id === item?._id) {
-        dataChartAreaOrder.push({
-          city: dataArea[i]?.city,
-          total_item: dataArea[i]?.total_item,
-          gross_income: dataArea[i]?.total_net_income,
-          percent_gross_income:
-            ((dataArea[i]?.total_net_income - item?.total_net_income) /
-              item?.total_net_income) *
-            100,
-        });
-      }
-    });
+    if (dataArea[i]?._id === dataAreaSame[i]?._id) {
+      dataChartAreaOrder.push({
+        city: dataArea[i]?.city,
+        total_item: dataArea[i]?.total_item,
+        gross_income: dataArea[i]?.total_net_income,
+        percent_gross_income:
+          ((dataArea[i]?.total_net_income - dataAreaSame[i]?.total_net_income) /
+            dataAreaSame[i]?.total_net_income) *
+          100,
+      });
+    } else {
+      dataChartAreaOrder.push({
+        city: dataArea[i]?.city,
+        total_item: dataArea[i]?.total_item,
+        gross_income: dataArea[i]?.total_net_income,
+        percent_gross_income: 100,
+      });
+    }
   }
 
   const renderTooltipContent = (o) => {
     const { payload, label } = o;
-
     return (
       <div className="div-content-chart-net-income">
-        <a className="text-content">
-          {payload[0]?.payload?.date}:{" "}
-          {formatMoney(payload[0]?.payload?.gross_income)}
-        </a>
+        {payload[0]?.payload?.date && (
+          <a className="text-content">
+            {payload[0]?.payload?.date}:{" "}
+            {formatMoney(payload[0]?.payload?.gross_income)}
+          </a>
+        )}
+
         {payload[0]?.payload?.date_same && (
           <a className="text-content-same">
             {payload[0]?.payload?.date_same}:{" "}
@@ -189,10 +211,13 @@ const ReportOverview = () => {
 
     return (
       <div className="div-content-chart-net-income">
-        <a className="text-content">
-          {payload[0]?.payload?.date}:{" "}
-          {formatMoney(payload[0]?.payload?.net_income)}
-        </a>
+        {payload[0]?.payload?.date && (
+          <a className="text-content">
+            {payload[0]?.payload?.date}:{" "}
+            {formatMoney(payload[0]?.payload?.net_income)}
+          </a>
+        )}
+
         {payload[0]?.payload?.date_same && (
           <a className="text-content-same">
             {payload[0]?.payload?.date_same}:{" "}
@@ -282,7 +307,13 @@ const ReportOverview = () => {
                 // domain={[0, 10000000]}
                 // allowDataOverflow={true}
               />
-              <Tooltip content={renderTooltipContent} />
+              <Tooltip
+                content={
+                  dataChartGrossIncomeOrder.length > 0
+                    ? renderTooltipContent
+                    : ""
+                }
+              />
               <Legend />
               <Line
                 type="monotone"
@@ -418,7 +449,13 @@ const ReportOverview = () => {
                 // domain={[0, 5000000]}
                 // allowDataOverflow={true}
               />
-              <Tooltip content={renderTooltipContentNetIncome} />
+              <Tooltip
+                content={
+                  dataChartNetIncomeOrder.length > 0
+                    ? renderTooltipContentNetIncome
+                    : ""
+                }
+              />
               <Legend />
               <Line
                 type="monotone"
@@ -490,6 +527,52 @@ const ReportOverview = () => {
           </div>
         </div>
       </div>
+      {/* <div className="div-chart-firt-overview mt-3">
+        <div className="div-chart-gross-income-area">
+          <div className="div-head-chart">
+            <a className="title-gross">Top dịch vụ</a>
+          </div>
+          <div className="div-list-chart">
+            {dataChartAreaOrder.slice(0, 5)?.map((item, index) => {
+              return (
+                <div key={index} className="div-item-chart">
+                  <div className="div-name-service">
+                    <Image preview={false} className="image-service" />
+                    <a>Giúp việc</a>
+                  </div>
+                  <div className="div-number-area">
+                    <a className="money-area">
+                      {formatMoney(item?.gross_income)}
+                    </a>
+
+                    {item?.percent_gross_income < 0 ? (
+                      <a className="text-number-persent-down">
+                        <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
+                        {Math.abs(
+                          isNaN(item?.percent_gross_income)
+                            ? 0
+                            : item?.percent_gross_income
+                        ).toFixed(2)}
+                        %
+                      </a>
+                    ) : (
+                      <a className="text-number-persent-up">
+                        <CaretUpOutlined style={{ marginRight: 5 }} />
+                        {Number(
+                          isNaN(item?.percent_gross_income)
+                            ? 0
+                            : item?.percent_gross_income
+                        ).toFixed(2)}
+                        %
+                      </a>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div> */}
 
       {isLoading && <LoadingPagination />}
     </div>
