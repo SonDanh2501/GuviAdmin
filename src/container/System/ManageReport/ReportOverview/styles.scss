@@ -140,6 +140,27 @@
             font-size: 14px;
           }
         }
+        .div-name-service {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          .image-service {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: contain;
+            margin-right: 10px;
+          }
+
+          .name-service {
+            color: #212121;
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+          }
+        }
         .div-number-area {
           display: flex;
           flex-direction: column;
