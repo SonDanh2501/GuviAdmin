@@ -126,12 +126,15 @@ const CreatePromotion = () => {
   });
   const [title, setTitle] = useState({
     vi: "",
+    en: "",
   });
   const [shortDescription, setShortDescription] = useState({
     vi: "",
+    en: "",
   });
   const [description, setDescription] = useState({
     vi: "",
+    en: "",
   });
   const [timeApply, setTimeApply] = useState(DATA_APPLY_TIME);
   const [isLoading, setIsLoading] = useState(false);

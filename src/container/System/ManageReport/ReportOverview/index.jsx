@@ -18,18 +18,21 @@ import {
 import CustomDatePicker from "../../../../components/customDatePicker";
 
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
+import { Image, Select } from "antd";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { formatMoney } from "../../../../helper/formatMoney";
 import { number_processing } from "../../../../helper/numberProcessing";
+import { getLanguageState } from "../../../../redux/selectors/auth";
 import "./styles.scss";
-import { Image } from "antd";
 
 const ReportOverview = () => {
+  const lang = useSelector(getLanguageState);
   const [startDate, setStartDate] = useState(
-    moment().subtract(7, "day").toISOString()
+    moment().subtract(6, "day").startOf("day").toISOString()
   );
-  const [endDate, setEndDate] = useState(moment().toISOString());
+  const [endDate, setEndDate] = useState(moment().endOf("day").toISOString());
   const [sameStartDate, setSameStartDate] = useState(
     moment(startDate).subtract(7, "day").toISOString()
   );
@@ -40,6 +43,9 @@ const ReportOverview = () => {
   const [dataSame, setDataSame] = useState([]);
   const [dataArea, setDataArea] = useState([]);
   const [dataAreaSame, setDataAreSame] = useState([]);
+  const [dataService, setDataService] = useState([]);
+  const [dataServiceSame, setDataServiceSame] = useState([]);
+  const [typePriceService, setTypePriceService] = useState("income");
   const [totalNetIncomeArea, setTotalNetIncomeArea] = useState(0);
   const [totalNetIncomeSameArea, setTotalNetIncomeSameArea] = useState(0);
   const [totalNetIncome, setTotalNetIncome] = useState(0);
@@ -53,6 +59,7 @@ const ReportOverview = () => {
   const dataChartGrossIncomeOrder = [];
   const dataChartTotalOrder = [];
   const dataChartAreaOrder = [];
+  const dataChartSerive = [];
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -74,26 +81,30 @@ const ReportOverview = () => {
       })
       .catch((err) => {});
 
-    getReportOrderByCity(0, 65, startDate, endDate, 0)
+    getReportOrderByCity(0, 20, startDate, endDate, 0)
       .then((res) => {
         setDataArea(res?.data);
         setTotalNetIncomeArea(res?.total[0]?.total_net_income);
       })
       .catch((err) => {});
 
-    getReportOrderByCity(0, 65, sameStartDate, sameEndDate, 0)
+    getReportOrderByCity(0, 20, sameStartDate, sameEndDate, 0)
       .then((res) => {
         setDataAreSame(res?.data);
         setTotalNetIncomeSameArea(res?.total[0]?.total_net_income);
       })
       .catch((err) => {});
 
-    // getReportServiceByArea(startDate, endDate, "")
-    //   .then((res) => {})
-    //   .catch((err) => {});
-    // getReportServiceByArea(sameStartDate, sameEndDate, "")
-    //   .then((res) => {})
-    //   .catch((err) => {});
+    getReportServiceByArea(startDate, endDate, "")
+      .then((res) => {
+        setDataService(res?.data);
+      })
+      .catch((err) => {});
+    getReportServiceByArea(sameStartDate, sameEndDate, "")
+      .then((res) => {
+        setDataServiceSame(res?.data);
+      })
+      .catch((err) => {});
   }, []);
 
   const onChangeDay = () => {
@@ -121,26 +132,30 @@ const ReportOverview = () => {
       .catch((err) => {
         setIsLoading(false);
       });
-    getReportOrderByCity(0, 65, startDate, endDate, 0)
+    getReportOrderByCity(0, 20, startDate, endDate, 0)
       .then((res) => {
         setDataArea(res?.data);
         setTotalNetIncomeArea(res?.total[0]?.total_net_income);
       })
       .catch((err) => {});
 
-    getReportOrderByCity(0, 65, sameStartDate, sameEndDate, 0)
+    getReportOrderByCity(0, 20, sameStartDate, sameEndDate, 0)
       .then((res) => {
         setDataAreSame(res?.data);
         setTotalNetIncomeSameArea(res?.total[0]?.total_net_income);
       })
       .catch((err) => {});
 
-    // getReportServiceByArea(startDate, endDate, "")
-    //   .then((res) => {})
-    //   .catch((err) => {});
-    // getReportServiceByArea(sameStartDate, sameEndDate, "")
-    //   .then((res) => {})
-    //   .catch((err) => {});
+    getReportServiceByArea(startDate, endDate, "")
+      .then((res) => {
+        setDataService(res?.data);
+      })
+      .catch((err) => {});
+    getReportServiceByArea(sameStartDate, sameEndDate, "")
+      .then((res) => {
+        setDataServiceSame(res?.data);
+      })
+      .catch((err) => {});
   };
 
   for (let i = 0; i < data.length; i++) {
@@ -165,23 +180,86 @@ const ReportOverview = () => {
       total_same: dataSame[i]?.total_item,
     });
   }
-  for (let i = 0; i < dataArea.length; i++) {
-    if (dataArea[i]?._id === dataAreaSame[i]?._id) {
+
+  if (dataArea.length === dataAreaSame.length) {
+    for (const element of dataArea) {
+      for (const element2 of dataAreaSame) {
+        if (element2?._id === element?._id) {
+          dataChartAreaOrder.push({
+            city: element?.city,
+            total_item: element?.total_item,
+            gross_income: element?.total_net_income,
+            percent_gross_income:
+              ((element?.total_net_income - element2?.total_net_income) /
+                element2?.total_net_income) *
+              100,
+          });
+        }
+      }
+    }
+  } else {
+    const objectsAreEqual = (obj1, obj2) => {
+      return obj1?._id === obj2?._id;
+    };
+
+    const filteredArray = dataArea.filter((obj1) => {
+      const objInArray2 = dataAreaSame.some((obj2) =>
+        objectsAreEqual(obj1, obj2)
+      );
+      return !objInArray2;
+    });
+
+    filteredArray?.map((item) => {
       dataChartAreaOrder.push({
-        city: dataArea[i]?.city,
-        total_item: dataArea[i]?.total_item,
-        gross_income: dataArea[i]?.total_net_income,
-        percent_gross_income:
-          ((dataArea[i]?.total_net_income - dataAreaSame[i]?.total_net_income) /
-            dataAreaSame[i]?.total_net_income) *
+        city: item?.city,
+        total_item: item?.total_item,
+        gross_income: item?.total_net_income,
+        percent_gross_income: 100,
+      });
+    });
+
+    for (const element of dataArea) {
+      for (const element2 of dataAreaSame) {
+        if (element2?._id === element?._id) {
+          dataChartAreaOrder.push({
+            city: element?.city,
+            total_item: element?.total_item,
+            gross_income: element?.total_net_income,
+            percent_gross_income:
+              ((element?.total_net_income - element2?.total_net_income) /
+                element2?.total_net_income) *
+              100,
+          });
+        }
+      }
+    }
+  }
+
+  for (let i = 0; i < dataService.length; i++) {
+    if (dataService[i]?._id === dataServiceSame[i]?._id) {
+      dataChartSerive.push({
+        name: dataService[i]?.title,
+        income: dataService[i]?.total_income,
+        percent_income:
+          ((dataService[i]?.total_income - dataServiceSame[i]?.total_income) /
+            dataServiceSame[i]?.total_income) *
           100,
+        net_income: dataService[i]?.total_net_income,
+        percent_net_income:
+          ((dataService[i]?.total_net_income -
+            dataServiceSame[i]?.total_net_income) /
+            dataServiceSame[i]?.total_net_income) *
+          100,
+        thumbnail: dataService[i]?.thumbnail,
       });
     } else {
-      dataChartAreaOrder.push({
-        city: dataArea[i]?.city,
-        total_item: dataArea[i]?.total_item,
-        gross_income: dataArea[i]?.total_net_income,
-        percent_gross_income: 100,
+      dataChartSerive.push({
+        name: dataService[i]?.title,
+        income: dataService[i]?.total_income,
+        percent_income: 100,
+        net_income: dataService[i]?.total_net_income,
+        percent_net_income: 100,
+        thumbnail: dataService[i]?.thumbnail,
       });
     }
   }
@@ -487,7 +565,7 @@ const ReportOverview = () => {
             </div>
           </div>
           <div className="div-list-chart">
-            {dataChartAreaOrder.slice(0, 5)?.map((item, index) => {
+            {dataChartAreaOrder?.slice(0, 5)?.map((item, index) => {
               return (
                 <div key={index} className="div-item-chart">
                   <div className="div-name-area">
@@ -531,40 +609,85 @@ const ReportOverview = () => {
         <div className="div-chart-gross-income-area">
           <div className="div-head-chart">
             <a className="title-gross">Top dịch vụ</a>
+            <div>
+              <Select
+                value={typePriceService}
+                style={{ width: 150 }}
+                bordered={false}
+                onChange={(e) => setTypePriceService(e)}
+                options={[
+                  { value: "income", label: "Doanh thu" },
+                  { value: "net_income", label: "Doanh thu thuần" },
+                ]}
+              />
+            </div>
           </div>
           <div className="div-list-chart">
-            {dataChartAreaOrder.slice(0, 5)?.map((item, index) => {
+            {dataChartSerive.slice(0, 5)?.map((item, index) => {
               return (
                 <div key={index} className="div-item-chart">
                   <div className="div-name-service">
-                    <Image preview={false} className="image-service" />
-                    <a>Giúp việc</a>
+                    <Image
+                      preview={false}
+                      className="image-service"
+                      src={item?.thumbnail}
+                    />
+                    <a className="name-service">{item?.name[lang]}</a>
                   </div>
                   <div className="div-number-area">
                     <a className="money-area">
-                      {formatMoney(item?.gross_income)}
+                      {typePriceService === "income"
+                        ? formatMoney(item?.income)
+                        : formatMoney(item?.net_income)}
                     </a>
-
-                    {item?.percent_gross_income < 0 ? (
-                      <a className="text-number-persent-down">
-                        <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
-                        {Math.abs(
-                          isNaN(item?.percent_gross_income)
-                            ? 0
-                            : item?.percent_gross_income
-                        ).toFixed(2)}
-                        %
-                      </a>
+                    {typePriceService === "income" ? (
+                      <>
+                        {item?.percent_income < 0 ? (
+                          <a className="text-number-persent-down">
+                            <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
+                            {Math.abs(
+                              isNaN(item?.percent_income)
+                                ? 0
+                                : item?.percent_income
+                            ).toFixed(2)}
+                            %
+                          </a>
+                        ) : (
+                          <a className="text-number-persent-up">
+                            <CaretUpOutlined style={{ marginRight: 5 }} />
+                            {Number(
+                              isNaN(item?.percent_income)
+                                ? 0
+                                : item?.percent_income
+                            ).toFixed(2)}
+                            %
+                          </a>
+                        )}
+                      </>
                     ) : (
-                      <a className="text-number-persent-up">
-                        <CaretUpOutlined style={{ marginRight: 5 }} />
-                        {Number(
-                          isNaN(item?.percent_gross_income)
-                            ? 0
-                            : item?.percent_gross_income
-                        ).toFixed(2)}
-                        %
-                      </a>
+                      <>
+                        {item?.percent_net_income < 0 ? (
+                          <a className="text-number-persent-down">
+                            <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
+                            {Math.abs(
+                              isNaN(item?.percent_net_income)
+                                ? 0
+                                : item?.percent_net_income
+                            ).toFixed(2)}
+                            %
+                          </a>
+                        ) : (
+                          <a className="text-number-persent-up">
+                            <CaretUpOutlined style={{ marginRight: 5 }} />
+                            {Number(
+                              isNaN(item?.percent_net_income)
+                                ? 0
+                                : item?.percent_net_income
+                            ).toFixed(2)}
+                            %
+                          </a>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
@@ -580,48 +703,3 @@ const ReportOverview = () => {
 };
 
 export default ReportOverview;
-
-const data_test = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];

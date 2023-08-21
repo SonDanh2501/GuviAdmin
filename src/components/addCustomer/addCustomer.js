@@ -52,7 +52,7 @@ const AddCustomer = (props) => {
       .then((res) => {
         setOpen(false);
         setIsLoading(false);
-        fetchCustomers(lang, startPage, 50, status, idGroup)
+        fetchCustomers(lang, startPage, 50, status, idGroup, "")
           .then((res) => {
             setData(res?.data);
             setTotal(res?.totalItems);

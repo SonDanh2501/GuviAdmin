@@ -7,7 +7,7 @@ import "./index.scss";
 
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import { searchCustomers } from "../../../../api/customer";
+import { searchCustomersApi } from "../../../../api/customer";
 import {
   editPushNotification,
   getDetailNotification,
@@ -113,7 +113,7 @@ const EditPushNotification = ({ id }) => {
     _debounce((value) => {
       setNameCustomer(value);
       if (value) {
-        searchCustomers(0, 20, "", value)
+        searchCustomersApi(value)
           .then((res) => {
             if (value === "") {
               setDataFilter([]);
