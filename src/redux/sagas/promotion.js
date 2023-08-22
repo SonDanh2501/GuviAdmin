@@ -1,9 +1,7 @@
-import { takeLatest, call, put } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   createPromotion,
-  deletePromotion,
   fetchPromotion,
-  getGroupCustomerPromotion,
   updatePromotion,
 } from "../../api/promotion";
 import { errorNotify, successNotify } from "../../helper/toast";
@@ -12,8 +10,6 @@ import { getType } from "../actions/customerAction";
 import { loadingAction } from "../actions/loading";
 import {
   createPromotionAction,
-  createPromotions,
-  deletePromotionAction,
   getPromotion,
   updatePromotionAction,
 } from "../actions/promotion";
@@ -71,16 +67,6 @@ function* updatePromotionSaga(action) {
   }
 }
 
-function* deletePromotionSaga(action) {
-  try {
-    const promo = yield call(deletePromotion, action.payload);
-
-    window.location.reload();
-  } catch (err) {
-    console.error(err);
-  }
-}
-
 function* promotionSaga() {
   yield takeLatest(
     getType(getPromotion.getPromotionRequest),
@@ -93,10 +79,6 @@ function* promotionSaga() {
   yield takeLatest(
     getType(updatePromotionAction.updatePromotionRequest),
     updatePromotionSaga
-  );
-  yield takeLatest(
-    getType(deletePromotionAction.deletePromotionRequest),
-    deletePromotionSaga
   );
 }
 

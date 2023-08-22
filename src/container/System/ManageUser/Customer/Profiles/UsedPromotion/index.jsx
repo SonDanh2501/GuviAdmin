@@ -10,79 +10,77 @@ import useWindowDimensions from "../../../../../../helper/useWindowDimensions";
 const UsedPromotion = ({ id }) => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
-  const [totalItem, setTotalItem] = useState([]);
   const { width } = useWindowDimensions();
   useEffect(() => {
     getUsedPromotionByCustomers(id)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.total);
-        setTotalItem(res?.totalItem);
       })
       .catch((err) => {});
-  }, []);
+  }, [id]);
 
   const columns = [
     {
       title: () => {
-        return <a className="title-column">Ngày sử dụng</a>;
+        return <p className="title-column">Ngày sử dụng</p>;
       },
       render: (data) => {
         return (
           <div className="div-date-used-prmotion">
-            <a className="text-date">
+            <p className="text-date">
               {moment(data?.date_create).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-date">
+            </p>
+            <p className="text-date">
               {moment(data?.date_create).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
     },
     {
       title: () => {
-        return <a className="title-column">Mã khuyến mãi</a>;
+        return <p className="title-column">Mã khuyến mãi</p>;
       },
       render: (data) => {
         return (
-          <a className="text-name-promotion">
+          <p className="text-name-promotion">
             {data?.code_promotion?._id?.title?.vi}
-          </a>
+          </p>
         );
       },
     },
     {
       title: () => {
-        return <a className="title-column">Giá giảm</a>;
+        return <p className="title-column">Giá giảm</p>;
       },
       render: (data) => {
         return (
-          <a className="text-name-promotion">
+          <p className="text-name-promotion">
             {formatMoney(data?.code_promotion?.discount)}
-          </a>
+          </p>
         );
       },
     },
     {
       title: () => {
-        return <a className="title-column">Mã đơn</a>;
+        return <p className="title-column">Mã đơn</p>;
       },
       render: (data) => {
         return (
           <Link to={`/details-order/${data?.id_group_order}`}>
-            <a className="text-name-promotion">{data?.id_view}</a>
+            <p className="text-name-promotion">{data?.id_view}</p>
           </Link>
         );
       },
     },
     {
       title: () => {
-        return <a className="title-column">Trạng thái</a>;
+        return <p className="title-column">Trạng thái</p>;
       },
       render: (data) => {
         return (
-          <a
+          <p
             className={
               data?.status === "done"
                 ? "text-status-done"
@@ -100,7 +98,7 @@ const UsedPromotion = ({ id }) => {
               : data?.status === "confirm"
               ? "Đã nhận"
               : "Đã huỷ"}
-          </a>
+          </p>
         );
       },
     },
@@ -112,7 +110,7 @@ const UsedPromotion = ({ id }) => {
           {total?.map((item, key) => {
             return (
               <div className="div-item-total">
-                <a
+                <p
                   className={
                     item?._id === "done"
                       ? "text-done-total"
@@ -130,11 +128,11 @@ const UsedPromotion = ({ id }) => {
                     : item?._id === "confirm"
                     ? "Đơn đã nhận"
                     : "Đơn huỷ"}
-                </a>
-                <a className="text-total">Sử dụng: {item?.total_used}</a>
-                <a className="text-total">
+                </p>
+                <p className="text-total">Sử dụng: {item?.total_used}</p>
+                <p className="text-total">
                   Tổng: {formatMoney(item?.total_discount)}
-                </a>
+                </p>
               </div>
             );
           })}

@@ -37,7 +37,6 @@
     "react-i18next": "^13.0.0",
     "react-image-file-resizer": "~0.4.8",
     "react-intl-currency-input": "0.2.6",
-    "react-native-mmkv": "~2.5.1",
     "react-qrcode-logo": "^2.8.0",
     "react-redux": "~7.2.3",
     "react-router-dom": "6.4.3",

@@ -1,14 +1,13 @@
-import { Row } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getDetailsHistoryActivityCollaborator } from "../../../../../../../api/collaborator";
 import { formatMoney } from "../../../../../../../helper/formatMoney";
-import { loadingAction } from "../../../../../../../redux/actions/loading";
-import "./index.scss";
-import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../../i18n";
+import { loadingAction } from "../../../../../../../redux/actions/loading";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import "./index.scss";
 
 const DetailActivityCollaborator = () => {
   const { state } = useLocation();
@@ -34,7 +33,7 @@ const DetailActivityCollaborator = () => {
       .catch((err) => {
         dispatch(loadingAction.loadingRequest(false));
       });
-  }, [idOrder, idCollaborator]);
+  }, [idOrder, idCollaborator, dispatch]);
 
   const timeWork = (data) => {
     const start = moment(new Date(data?.date_work_schedule[0]?.date)).format(
@@ -57,14 +56,14 @@ const DetailActivityCollaborator = () => {
       {show && (
         <div>
           <div className="div-title">
-            <a className="text-title">{`${i18n.t("order_detail", {
+            <p className="text-title">{`${i18n.t("order_detail", {
               lng: lang,
-            })}`}</a>
+            })}`}</p>
           </div>
           <div className="div-details-service mt-2">
-            <a className="title">
+            <p className="title">
               {`${i18n.t("service", { lng: lang })}`}:{" "}
-              <a className="text-service">
+              <p className="text-service">
                 {dataGroup?.type === "loop" && dataGroup?.is_auto_order
                   ? `${i18n.t("repeat", { lng: lang })}`
                   : dataGroup?.service?._id?.kind === "giup_viec_theo_gio"
@@ -76,17 +75,17 @@ const DetailActivityCollaborator = () => {
                   : dataGroup?.service?._id?.kind === "phuc_vu_nha_hang"
                   ? `${i18n.t("serve", { lng: lang })}`
                   : ""}
-              </a>
-            </a>
+              </p>
+            </p>
             <div className="div-datework">
-              <a className="title">
+              <p className="title">
                 {`${i18n.t("time", {
                   lng: lang,
                 })}`}
                 :{" "}
-              </a>
+              </p>
               <div className="div-times ml-2">
-                <a>
+                <p className="text-time">
                   -
                   {`${i18n.t("date_work", {
                     lng: lang,
@@ -95,37 +94,44 @@ const DetailActivityCollaborator = () => {
                   {moment(
                     new Date(dataGroup?.date_work_schedule[0]?.date)
                   ).format("DD/MM/YYYY")}
-                </a>
-                <a>
+                </p>
+                <p className="text-time">
                   -{`${i18n.t("time_work", { lng: lang })}`}:{" "}
                   {timeWork(dataGroup)}
-                </a>
+                </p>
               </div>
             </div>
-            <a className="title">
-              {`${i18n.t("address", {
-                lng: lang,
-              })}`}
-              : <a className="text-service">{dataGroup?.address}</a>
-            </a>
-            {dataGroup?.note && (
-              <a className="title">
-                {`${i18n.t("note", {
+
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <p className="title">
+                {`${i18n.t("address", {
                   lng: lang,
                 })}`}
-                : <a className="text-service">{dataGroup?.note}</a>
-              </a>
+                :
+              </p>
+              <p className="text-service">{dataGroup?.address}</p>
+            </div>
+            {dataGroup?.note && (
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                <p className="title">
+                  {`${i18n.t("note", {
+                    lng: lang,
+                  })}`}
+                  : :
+                </p>
+                <p className="text-service">{dataGroup?.note}</p>
+              </div>
             )}
             <div className="div-extra-service">
-              <a className="title">
+              <p className="title">
                 {`${i18n.t("extra_service", { lng: lang })}`}:{" "}
-              </a>
+              </p>
               {dataGroup?.service?.optional_service.map((item) => {
                 return (
                   <div className="div-item-extra-service ml-2">
                     {item?._id === "632148d02bacd0aa8648657c"
                       ? item?.extend_optional?.map((item) => (
-                          <a>- {item?.title?.[lang]}</a>
+                          <p className="text-item">- {item?.title?.[lang]}</p>
                         ))
                       : null}
                   </div>
@@ -133,61 +139,71 @@ const DetailActivityCollaborator = () => {
               })}
             </div>
 
-            <a className="title">
-              {`${i18n.t("payment", {
-                lng: lang,
-              })}`}
-              :{" "}
-              <a className="text-service">
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <p className="title">
+                {`${i18n.t("payment", {
+                  lng: lang,
+                })}`}
+                :{" "}
+              </p>
+              <p className="text-service">
                 {dataGroup?.payment_method === "cash"
                   ? `${i18n.t("cash", { lng: lang })}`
                   : "G-point"}
-              </a>
-            </a>
+              </p>
+            </div>
             <div className="div-price">
-              <a className="title">
+              <p className="title">
                 {`${i18n.t("provisional", { lng: lang })}`}:
-              </a>
+              </p>
               <div className="detail-price">
                 <div className="div-total">
-                  <a>
+                  <p className="text-money">
                     -{" "}
                     {`${i18n.t("provisional_price", {
                       lng: lang,
                     })}`}
                     :
-                  </a>
-                  <a>{formatMoney(dataGroup?.initial_fee)}</a>
+                  </p>
+                  <p className="text-money">
+                    {formatMoney(dataGroup?.initial_fee)}
+                  </p>
                 </div>
                 <div className="div-total">
-                  <a>- {`${i18n.t("system_fee", { lng: lang })}`}:</a>
+                  <p className="text-money">
+                    - {`${i18n.t("system_fee", { lng: lang })}`}:
+                  </p>
                   {dataGroup?.service_fee?.map((item) => (
-                    <a>+{formatMoney(item?.fee)}</a>
+                    <p className="text-money">+{formatMoney(item?.fee)}</p>
                   ))}
                 </div>
                 {dataGroup?.code_promotion && (
                   <div className="div-total-promo">
-                    <a>- {`${i18n.t("promotion", { lng: lang })}`}:</a>
+                    <p style={{ margin: 0 }}>
+                      - {`${i18n.t("promotion", { lng: lang })}`}:
+                    </p>
                     <div className="div-promo">
-                      <a>
+                      <p className="text-money">
                         + {`${i18n.t("code", { lng: lang })}`}:{" "}
                         {dataGroup?.code_promotion?.code}
-                      </a>
-                      <a style={{ color: "red", marginLeft: 5 }}>
+                      </p>
+                      <p style={{ color: "red", marginLeft: 5, margin: 0 }}>
                         {formatMoney(-dataGroup?.code_promotion?.discount)}
-                      </a>
+                      </p>
                     </div>
                   </div>
                 )}
                 {dataGroup?.event_promotion && (
                   <div className="div-event-promo">
-                    <a>- {`${i18n.t("programme", { lng: lang })}`}:</a>
+                    <p className="text-programme">
+                      - {`${i18n.t("programme", { lng: lang })}`}:
+                    </p>
                     <div className="div-price-event">
                       {dataGroup?.event_promotion.map((item, key) => {
                         return (
-                          <a className="text-event-discount">
+                          <p className="text-event-discount">
                             {formatMoney(-item?.discount)}
-                          </a>
+                          </p>
                         );
                       })}
                     </div>
@@ -200,8 +216,13 @@ const DetailActivityCollaborator = () => {
                         ? item?.extend_optional?.map((item) => {
                             return (
                               <div className="div-event-promo">
-                                <a>- {item?.title?.[lang]}</a>
-                                <a> +{formatMoney(item?.price)}</a>
+                                <p style={{ margin: 0 }}>
+                                  - {item?.title?.[lang]}
+                                </p>
+                                <p style={{ margin: 0 }}>
+                                  {" "}
+                                  +{formatMoney(item?.price)}
+                                </p>
                               </div>
                             );
                           })
@@ -210,38 +231,44 @@ const DetailActivityCollaborator = () => {
                   );
                 })}
                 <div className="div-total">
-                  <a className="title">
+                  <p className="title">
                     - {`${i18n.t("total_money", { lng: lang })}`}:{" "}
-                  </a>
-                  <a className="title">{formatMoney(dataGroup?.final_fee)}</a>
+                  </p>
+                  <p className="title">{formatMoney(dataGroup?.final_fee)}</p>
                 </div>
               </div>
             </div>
 
-            <a className="title">
-              {`${i18n.t("status", { lng: lang })}`}:{" "}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <p className="title">{`${i18n.t("status", { lng: lang })}`}: </p>
               {dataGroup?.status === "pending" ? (
-                <a className="text-pending ">{`${i18n.t("pending", {
+                <p className="text-pending ">{`${i18n.t("pending", {
                   lng: lang,
-                })}`}</a>
+                })}`}</p>
               ) : dataGroup?.status === "confirm" ? (
-                <a className="text-confirm">{`${i18n.t("confirm", {
+                <p className="text-confirm">{`${i18n.t("confirm", {
                   lng: lang,
-                })}`}</a>
+                })}`}</p>
               ) : dataGroup?.status === "doing" ? (
-                <a className="text-doing">{`${i18n.t("doing", {
+                <p className="text-doing">{`${i18n.t("doing", {
                   lng: lang,
-                })}`}</a>
+                })}`}</p>
               ) : dataGroup?.status === "done" ? (
-                <a className="text-done">{`${i18n.t("complete", {
+                <p className="text-done">{`${i18n.t("complete", {
                   lng: lang,
-                })}`}</a>
+                })}`}</p>
               ) : (
-                <a className="text-cancel">{`${i18n.t("cancel", {
+                <p className="text-cancel">{`${i18n.t("cancel", {
                   lng: lang,
-                })}`}</a>
+                })}`}</p>
               )}
-            </a>
+            </div>
           </div>
         </div>
       )}
@@ -249,9 +276,9 @@ const DetailActivityCollaborator = () => {
       {dataActivity?.length > 0 && (
         <div className="ml-3">
           <div className="div-title">
-            <a className="text-title">{`${i18n.t("work_with_order", {
+            <p className="text-title">{`${i18n.t("work_with_order", {
               lng: lang,
-            })}`}</a>
+            })}`}</p>
           </div>
           <div>
             {dataActivity?.map((item, index) => {
@@ -370,8 +397,8 @@ const DetailActivityCollaborator = () => {
               return (
                 <div key={index} className="div-item-list">
                   <div className="div-name">
-                    <a className="text-title">{object}</a>
-                    <a
+                    <p className="text-title">{object}</p>
+                    <p
                       className={
                         money.slice(0, 1) === "-"
                           ? "text-money-deduction"
@@ -383,13 +410,13 @@ const DetailActivityCollaborator = () => {
                         : money.slice(0, 1) === "-"
                         ? formatMoney(item?.value)
                         : "+" + formatMoney(item?.value)}
-                    </a>
+                    </p>
                   </div>
-                  <a>
+                  <p style={{ margin: 0 }}>
                     {moment(new Date(item?.date_create)).format(
                       "DD/MM/yyy - HH:mm"
                     )}
-                  </a>
+                  </p>
                 </div>
               );
             })}

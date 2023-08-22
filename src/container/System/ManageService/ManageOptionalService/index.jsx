@@ -1,21 +1,18 @@
+import { MoreOutlined } from "@ant-design/icons";
+import { Button, Dropdown, Image, Popover, Space, Switch, Table } from "antd";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import "./styles.scss";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   activeOptionServiceApi,
   deleteOptionServiceApi,
   getOptionalServiceByServiceApi,
 } from "../../../../api/service";
-import { Button, Dropdown, Image, Popover, Space, Table } from "antd";
-import { DownOutlined, MoreOutlined } from "@ant-design/icons";
-import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { errorNotify } from "../../../../helper/toast";
 import LoadingPagination from "../../../../components/paginationLoading";
-import EditOptional from "./component/EditOptional";
+import { errorNotify } from "../../../../helper/toast";
 import CreateOptional from "./component/CreateOptional";
-import { formatMoney } from "../../../../helper/formatMoney";
-import onToggle from "../../../../assets/images/on-button.png";
-import offToggle from "../../../../assets/images/off-button.png";
+import EditOptional from "./component/EditOptional";
+import "./styles.scss";
 
 const ManageOptionService = () => {
   const { state } = useLocation();
@@ -64,45 +61,25 @@ const ManageOptionService = () => {
   const onActive = useCallback(
     (idActive, active) => {
       setIsLoading(true);
-      if (active === true) {
-        activeOptionServiceApi(idActive, {
-          is_active: false,
+
+      activeOptionServiceApi(idActive, {
+        is_active: active ? false : true,
+      })
+        .then((res) => {
+          setIsLoading(false);
+          setModalBlock(false);
+          getOptionalServiceByServiceApi(id)
+            .then((res) => {
+              setData(res?.data);
+            })
+            .catch((err) => {});
         })
-          .then((res) => {
-            setIsLoading(false);
-            setModalBlock(false);
-            getOptionalServiceByServiceApi(id)
-              .then((res) => {
-                setData(res?.data);
-              })
-              .catch((err) => {});
-          })
-          .then((err) => {
-            setIsLoading(false);
-            errorNotify({
-              message: err,
-            });
+        .then((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
           });
-      } else {
-        activeOptionServiceApi(idActive, {
-          is_active: true,
-        })
-          .then((res) => {
-            setIsLoading(false);
-            setModalBlock(false);
-            getOptionalServiceByServiceApi(id)
-              .then((res) => {
-                setData(res?.data);
-              })
-              .catch((err) => {});
-          })
-          .then((err) => {
-            setIsLoading(false);
-            errorNotify({
-              message: err,
-            });
-          });
-      }
+        });
     },
     [id]
   );
@@ -111,29 +88,33 @@ const ManageOptionService = () => {
     return (
       <div className="div-content-option">
         <div className="div-title-option">
-          <a className="title">Tiêu đề</a>
-          <a className="colon">:</a>
-          <a className="details">{item?.title?.vi}</a>
+          <p className="title">Tiêu đề</p>
+          <p className="colon">:</p>
+          <p className="details">{item?.title?.vi}</p>
         </div>
         <div className="div-title-option">
-          <a className="title">Mô tả</a>
-          <a className="colon">:</a>
-          <a className="details">{item?.description?.vi}</a>
+          <p className="title">Mô tả</p>
+          <p className="colon">:</p>
+          <p className="details">{item?.description?.vi}</p>
         </div>
         <div className="div-title-option">
-          <a className="title">Vị trí</a>
-          <a className="colon">:</a>
-          <a className="details">{item?.position}</a>
+          <p className="title">Vị trí</p>
+          <p className="colon">:</p>
+          <p className="details">{item?.position}</p>
         </div>
         <div className="div-title-option">
-          <a className="title">Phí hệ thống</a>
-          <a className="colon">:</a>
-          <a className="details">{item?.platform_fee}</a>
+          <p className="title">Phí hệ thống</p>
+          <p className="colon">:</p>
+          <p className="details">{item?.platform_fee}</p>
         </div>
         <div className="div-title-option">
-          <a className="title">Hình ảnh</a>
-          <a className="colon">:</a>
-          <Image src={item?.thumbnail} style={{ width: 50, height: 50 }} />
+          <p className="title">Hình ảnh</p>
+          <p className="colon">:</p>
+          <Image
+            src={item?.thumbnail}
+            style={{ width: 50, height: 50 }}
+            preview={false}
+          />
         </div>
       </div>
     );
@@ -153,7 +134,11 @@ const ManageOptionService = () => {
     },
     {
       key: 2,
-      label: <a onClick={toggle}>Xoá</a>,
+      label: (
+        <p style={{ margin: 0 }} onClick={toggle}>
+          Xoá
+        </p>
+      ),
     },
   ];
 
@@ -166,7 +151,8 @@ const ManageOptionService = () => {
           title="Title"
           trigger="hover"
         >
-          <a
+          <p
+            style={{ margin: 0 }}
             onClick={() => {
               navigate(
                 "/services/manage-group-service/manage-service/option-service/extend-option",
@@ -177,23 +163,23 @@ const ManageOptionService = () => {
             }}
           >
             {data?.title?.vi}
-          </a>
+          </p>
         </Popover>
       ),
       width: "40%",
     },
     {
       title: "Mô tả",
-      render: (data) => <a>{data?.description?.vi}</a>,
+      render: (data) => <p style={{ margin: 0 }}>{data?.description?.vi}</p>,
     },
     {
       title: "Vị trí",
-      render: (data) => <a>{data?.position}</a>,
+      render: (data) => <p style={{ margin: 0 }}>{data?.position}</p>,
       align: "center",
     },
     {
       title: "Phí dịch vụ",
-      render: (data) => <a>{data?.platform_fee}</a>,
+      render: (data) => <p style={{ margin: 0 }}>{data?.platform_fee}</p>,
       align: "center",
     },
     {
@@ -201,19 +187,11 @@ const ManageOptionService = () => {
       render: (data) => {
         return (
           <>
-            {data?.is_active ? (
-              <img
-                className="img-unlock-options"
-                src={onToggle}
-                onClick={toggleBlock}
-              />
-            ) : (
-              <img
-                className="img-unlock-options"
-                src={offToggle}
-                onClick={toggleBlock}
-              />
-            )}
+            <Switch
+              checke={data?.is_active}
+              onClick={toggleBlock}
+              size="small"
+            />
           </>
         );
       },
@@ -226,12 +204,10 @@ const ManageOptionService = () => {
             menu={{
               items,
             }}
-            placement="bottom"
+            placement="bottomRight"
             trigger={["click"]}
           >
-            <a>
-              <MoreOutlined className="icon-more" />
-            </a>
+            <MoreOutlined className="icon-more" />
           </Dropdown>
         </Space>
       ),
@@ -266,11 +242,11 @@ const ManageOptionService = () => {
         <Modal isOpen={modal} toggle={toggle}>
           <ModalHeader toggle={toggle}>Xóa option service</ModalHeader>
           <ModalBody>
-            <a>
+            <p>
               Bạn có chắc muốn xóa option service{" "}
-              <a className="text-name-modal">{itemEdit?.title?.vi}</a> này
-              không?
-            </a>
+              <strong className="text-name-modal">{itemEdit?.title?.vi}</strong>{" "}
+              này không?
+            </p>
           </ModalBody>
           <ModalFooter>
             <Button type="primary" onClick={() => onDelete(itemEdit?._id)}>

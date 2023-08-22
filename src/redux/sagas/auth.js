@@ -1,16 +1,14 @@
-import jwtDecode from "jwt-decode";
-
 import axios from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
 import { getPermission, getUserByToken, loginApi } from "../../api/auth";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { setToken } from "../../helper/tokenHelper";
 import {
+  getUserAction,
   languageAction,
   loginAction,
   logoutAction,
   permissionAction,
-  getUserAction,
 } from "../actions/auth";
 import { loadingAction } from "../actions/loading";
 const BaseUrl = process.env.REACT_APP_BASE_URL;
@@ -21,20 +19,17 @@ function* loginSaga(action) {
     const response = yield call(loginApi, action.payload.data);
     setToken(response?.token);
     axios
-      .get(
-        `https://guvico-be-develop.up.railway.app/admin/auth/get_permission_by_token`,
-        {
-          headers: {
-            Authorization: `Bearer ${response?.token}`,
-          },
-        }
-      )
+      .get(`${TestUrl}/admin/auth/get_permission_by_token`, {
+        headers: {
+          Authorization: `Bearer ${response?.token}`,
+        },
+      })
       .then((res) => {
-        res?.data?.map((item) => {
+        res?.data?.forEach((item) => {
           if (item?.id_side_bar === "dashboard") {
-            action.payload.naviga("/");
+            return action.payload.naviga("/");
           } else if (item?.id_side_bar === "guvi_job") {
-            action.payload.naviga("/group-order/manage-order");
+            return action.payload.naviga("/group-order/manage-order");
           }
         });
       });
@@ -73,8 +68,8 @@ function* permissionSaga(action) {
   const checkElement = [];
   try {
     const permission = yield call(getPermission);
-    permission?.map((item) => {
-      item?.id_element?.map((i) => {
+    permission?.forEach((item) => {
+      item?.id_element?.forEach((i) => {
         checkElement?.push(i);
       });
     });

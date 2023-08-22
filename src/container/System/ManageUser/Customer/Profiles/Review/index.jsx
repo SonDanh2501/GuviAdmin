@@ -18,7 +18,7 @@ const CustomerReview = ({ id }) => {
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-  }, []);
+  }, [id]);
 
   const onChange = (page) => {
     setCurrentPage(page);
@@ -35,37 +35,37 @@ const CustomerReview = ({ id }) => {
   const columns = [
     {
       title: () => {
-        return <a className="title-column">Ngày đánh giá</a>;
+        return <p className="title-column">Ngày đánh giá</p>;
       },
       render: (data) => {
         return (
           <div className="div-date-review">
-            <a className="text-date">
+            <p className="text-date">
               {moment(data?.date_create_review).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-date">
+            </p>
+            <p className="text-date">
               {moment(data?.date_create_review).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
     },
     {
       title: () => {
-        return <a className="title-column">Mã đơn</a>;
+        return <p className="title-column">Mã đơn</p>;
       },
       render: (data) => {
         return (
           <div className="div-order-review">
-            <a className="text-id-view">{data?.service?._id?.title?.vi}</a>
-            <a className="text-id-view">{data?.id_view}</a>
+            <p className="text-id-view">{data?.service?._id?.title?.vi}</p>
+            <p className="text-id-view">{data?.id_view}</p>
           </div>
         );
       },
     },
     {
       title: () => {
-        return <a className="title-column">Cộng tác viên</a>;
+        return <p className="title-column">Cộng tác viên</p>;
       },
       render: (data) => {
         return (
@@ -73,36 +73,36 @@ const CustomerReview = ({ id }) => {
             to={`/details-collaborator/${data?.id_collaborator?._id}`}
             className="div-star-collaborator"
           >
-            <a className="text-name">{data?.id_collaborator?.full_name}</a>
+            <p className="text-name">{data?.id_collaborator?.full_name}</p>
 
-            <a className="text-name">{data?.id_collaborator?.phone}</a>
+            <p className="text-name">{data?.id_collaborator?.phone}</p>
           </Link>
         );
       },
     },
     {
       title: () => {
-        return <a className="title-column">Nội dung</a>;
+        return <p className="title-column">Nội dung</p>;
       },
       render: (data) => {
-        return <a className="text-review-by-customer">{data?.review}</a>;
+        return <p className="text-review-by-customer">{data?.review}</p>;
       },
       responsive: ["xl"],
     },
     {
       title: () => {
-        return <a className="title-column">Đánh giá</a>;
+        return <p className="title-column">Đánh giá</p>;
       },
       render: (data) => {
         return (
-          <a className="text-review-by-customer">{data?.short_review[0]}</a>
+          <p className="text-review-by-customer">{data?.short_review[0]}</p>
         );
       },
       responsive: ["xl"],
     },
     {
       title: () => {
-        return <a className="title-column">Số sao</a>;
+        return <p className="title-column">Số sao</p>;
       },
       render: (data) => {
         return (
@@ -130,8 +130,8 @@ const CustomerReview = ({ id }) => {
                   expandedRowRender: (record) => {
                     return (
                       <div className="div-plus">
-                        <a>Nội dung: {record?.review}</a>
-                        <a>Đánh giá: {record?.short_review[0]}</a>
+                        <p>Nội dung: {record?.review}</p>
+                        <p>Đánh giá: {record?.short_review[0]}</p>
                       </div>
                     );
                   },

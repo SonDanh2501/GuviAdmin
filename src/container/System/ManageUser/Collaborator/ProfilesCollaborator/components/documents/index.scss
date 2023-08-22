@@ -11,6 +11,16 @@
   }
   .form-input {
     width: 70%;
+
+    .label-input {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      color: #000000;
+      text-decoration: none;
+      margin: 0;
+    }
   }
 
   .div-col-download {
@@ -65,6 +75,16 @@
   display: flex;
   flex-direction: column;
 
+  .label-input {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+    margin: 0;
+  }
+
   .div-thumbnail-infomation {
     display: flex;
     flex-direction: row;
@@ -97,6 +117,16 @@
     .form-input {
       width: 100%;
       margin-top: 20px;
+
+      .label-input {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        color: #000000;
+        text-decoration: none;
+        margin: 0;
+      }
     }
 
     .div-col-download {

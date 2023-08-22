@@ -24,7 +24,7 @@ const InviteCollaborator = ({ id }) => {
         setTotalCollaborator(res?.total_collaborator);
       })
       .catch((err) => {});
-  }, [tab]);
+  }, [id]);
 
   const columns =
     tab === "collaborator"
@@ -34,27 +34,27 @@ const InviteCollaborator = ({ id }) => {
             render: (data) => {
               return (
                 <div className="div-date-create-invite">
-                  <a className="text-create">
+                  <p className="text-create">
                     {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-                  </a>
-                  <a className="text-create">
+                  </p>
+                  <p className="text-create">
                     {moment(new Date(data?.date_create)).format("HH:mm")}
-                  </a>
+                  </p>
                 </div>
               );
             },
           },
           {
             title: `${i18n.t("code_order", { lng: lang })}`,
-            render: (data) => <a className="text-id-view">{data?.id_view}</a>,
+            render: (data) => <p className="text-id-view">{data?.id_view}</p>,
           },
           {
             title: `${i18n.t("name", { lng: lang })}`,
             render: (data) => {
               return (
                 <div className="div-name-invite-collaborator">
-                  <a className="text-name">{data?.full_name}</a>
-                  <a className="text-name">{data?.phone}</a>
+                  <p className="text-name">{data?.full_name}</p>
+                  <p className="text-name">{data?.phone}</p>
                 </div>
               );
             },
@@ -66,27 +66,27 @@ const InviteCollaborator = ({ id }) => {
             render: (data) => {
               return (
                 <div className="div-date-create-invite">
-                  <a className="text-create">
+                  <p className="text-create">
                     {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-                  </a>
-                  <a className="text-create">
+                  </p>
+                  <p className="text-create">
                     {moment(new Date(data?.date_create)).format("HH:mm")}
-                  </a>
+                  </p>
                 </div>
               );
             },
           },
           {
             title: `${i18n.t("code_order", { lng: lang })}`,
-            render: (data) => <a className="text-id-view">{data?.id_view}</a>,
+            render: (data) => <p className="text-id-view">{data?.id_view}</p>,
           },
           {
             title: `${i18n.t("name", { lng: lang })}`,
             render: (data) => {
               return (
                 <div className="div-name-invite-collaborator">
-                  <a className="text-name">{data?.full_name}</a>
-                  <a className="text-name">{data?.phone}</a>
+                  <p className="text-name">{data?.full_name}</p>
+                  <p className="text-name">{data?.phone}</p>
                 </div>
               );
             },
@@ -131,7 +131,6 @@ const InviteCollaborator = ({ id }) => {
 
   return (
     <div>
-      <a></a>
       <div className="div-tab-invite-collaborator">
         {DATA_TAB?.map((item, index) => {
           return (
@@ -142,9 +141,9 @@ const InviteCollaborator = ({ id }) => {
               }
               onClick={() => setTab(item?.value)}
             >
-              <a className="text-tab">{`${i18n.t(item?.title, {
+              <p className="text-tab">{`${i18n.t(item?.title, {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
           );
         })}
@@ -157,10 +156,10 @@ const InviteCollaborator = ({ id }) => {
         />
       </div>
       <div className="div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}:{" "}
           {tab === "collaborator" ? totalCollaborator : totalCustomer}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}

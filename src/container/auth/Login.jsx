@@ -1,15 +1,14 @@
-import { Button, Image, Input } from "antd";
-import { useCallback, useRef, useState } from "react";
+import { Image, Input } from "antd";
+import { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/images/logo.jpg";
 import login from "../../assets/images/login.png";
+import logo from "../../assets/images/logo.jpg";
 import { loginAction } from "../../redux/actions/auth";
 import { loadingAction } from "../../redux/actions/loading";
 import "./Login.scss";
 
 const Login = () => {
-  const formikRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -36,14 +35,14 @@ const Login = () => {
     <div className="container-login">
       <div className="div-card-login">
         <div className="div-card-left">
-          <a className="text-wel-login">Chào mừng đến với GUVI</a>
+          <p className="text-wel-login">Chào mừng đến với GUVI</p>
           <Image src={login} className="image-login" preview={false} />
         </div>
         <div className="line" />
         <div className="div-card-right">
           <div className="div-head-card">
-            <img src={logo} className="img-logo" />
-            <a className="title-login">Đăng nhập hệ thống Guvi</a>
+            <Image preview={false} src={logo} className="img-logo" />
+            <p className="title-login">Đăng nhập hệ thống Guvi</p>
           </div>
           <form onSubmit={onLogin}>
             <div className="div-body-login">

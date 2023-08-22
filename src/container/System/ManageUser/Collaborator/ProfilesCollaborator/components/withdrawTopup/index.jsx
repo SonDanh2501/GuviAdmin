@@ -1,21 +1,18 @@
-import { List, Pagination, Table } from "antd";
+import { Pagination, Table } from "antd";
 import moment from "moment";
 import { memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getCollaboratorRemainder,
-  getHistoryActivityCollaborator,
   getListTransitionByCollaborator,
-  getTopupWithdrawCollaborator,
   getTransitionDetailsCollaborator,
 } from "../../../../../../../api/collaborator";
 import { formatMoney } from "../../../../../../../helper/formatMoney";
-import { errorNotify } from "../../../../../../../helper/toast";
-import { loadingAction } from "../../../../../../../redux/actions/loading";
-import "./index.scss";
-import { getLanguageState } from "../../../../../../../redux/selectors/auth";
-import i18n from "../../../../../../../i18n";
 import useWindowDimensions from "../../../../../../../helper/useWindowDimensions";
+import i18n from "../../../../../../../i18n";
+import { loadingAction } from "../../../../../../../redux/actions/loading";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import "./index.scss";
 
 const WithdrawTopup = ({ id }) => {
   const [data, setData] = useState([]);
@@ -60,7 +57,7 @@ const WithdrawTopup = ({ id }) => {
       .catch((err) => {
         dispatch(loadingAction.loadingRequest(false));
       });
-  }, [id]);
+  }, [id, dispatch]);
 
   const onChange = (page) => {
     setCurrentPage(page);
@@ -79,14 +76,20 @@ const WithdrawTopup = ({ id }) => {
       title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => (
         <div className="div-time">
-          <a>{moment(new Date(data?.date_created)).format("DD/MM/YYYY")}</a>
-          <a>{moment(new Date(data?.date_created)).format("HH:mm")}</a>
+          <p className="text-time">
+            {moment(new Date(data?.date_created)).format("DD/MM/YYYY")}
+          </p>
+          <p className="text-time">
+            {moment(new Date(data?.date_created)).format("HH:mm")}
+          </p>
         </div>
       ),
     },
     {
       title: `${i18n.t("money", { lng: lang })}`,
-      render: (data) => <a>{formatMoney(data?.money)}</a>,
+      render: (data) => (
+        <p className="text-money-detail-ctv">{formatMoney(data?.money)}</p>
+      ),
     },
     {
       title: `${i18n.t("withdraw_topup", { lng: lang })}`,
@@ -94,18 +97,18 @@ const WithdrawTopup = ({ id }) => {
         return (
           <>
             {data?.type_transfer === "top_up" ? (
-              <div>
+              <div className="div-withdraw-topup">
                 <i class="uil uil-money-insert icon-topup"></i>
-                <a className="text-topup">{`${i18n.t("topup", {
+                <p className="text-topup">{`${i18n.t("topup", {
                   lng: lang,
-                })}`}</a>
+                })}`}</p>
               </div>
             ) : (
-              <div>
+              <div className="div-withdraw-topup">
                 <i class="uil uil-money-withdraw icon-withdraw"></i>
-                <a className="text-withdraw">{`${i18n.t("withdraw", {
+                <p className="text-withdraw">{`${i18n.t("withdraw", {
                   lng: lang,
-                })}`}</a>
+                })}`}</p>
               </div>
             )}
           </>
@@ -120,8 +123,12 @@ const WithdrawTopup = ({ id }) => {
       title: `${i18n.t("recharge_date", { lng: lang })}`,
       render: (data) => (
         <div className="div-time">
-          <a>{moment(new Date(data?.date_created)).format("DD/MM/yyy")}</a>
-          <a>{moment(new Date(data?.date_created)).format("HH:mm")}</a>
+          <p className="text-time">
+            {moment(new Date(data?.date_created)).format("DD/MM/yyy")}
+          </p>
+          <p className="text-time">
+            {moment(new Date(data?.date_created)).format("HH:mm")}
+          </p>
         </div>
       ),
     },
@@ -131,21 +138,21 @@ const WithdrawTopup = ({ id }) => {
         return (
           <div>
             {data?.status === "pending" ? (
-              <a className="text-pending-topup">{`${i18n.t("processing", {
+              <p className="text-pending-topup">{`${i18n.t("processing", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : data?.status === "transfered" ? (
-              <a className="text-transfered">{`${i18n.t("money_transferred", {
+              <p className="text-transfered">{`${i18n.t("money_transferred", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : data?.status === "done" ? (
-              <a className="text-done">{`${i18n.t("complete", {
+              <p className="text-done">{`${i18n.t("complete", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : (
-              <a className="text-cancel">{`${i18n.t("cancel", {
+              <p className="text-cancel">{`${i18n.t("cancel", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             )}
           </div>
         );
@@ -159,35 +166,35 @@ const WithdrawTopup = ({ id }) => {
     <>
       <div className="div-head-customer">
         <div className="div-monney">
-          <div>
-            <a className="text-title-monney">
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <p className="text-title-monney">
               {`${i18n.t("wallet_ctv", { lng: lang })}`}:
-            </a>
-            <a className="text-monney"> {formatMoney(remainder)}</a>
+            </p>
+            <p className="text-monney"> {formatMoney(remainder)}</p>
           </div>
-          <div>
-            <a className="text-title-monney">
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <p className="text-title-monney">
               {`${i18n.t("gift_wallet", { lng: lang })}`}:{" "}
-            </a>
-            <a className="text-monney">{formatMoney(giftRemainder)}</a>
+            </p>
+            <p className="text-monney">{formatMoney(giftRemainder)}</p>
           </div>
         </div>
         <div className="div-monney">
           <div className="total-revenue">
-            <a className="text">{`${i18n.t("total_topup", { lng: lang })}`}:</a>
-            <a className="text-money-revenue">
+            <p className="text">{`${i18n.t("total_topup", { lng: lang })}`}:</p>
+            <p className="text-money-revenue">
               {formatMoney(topup)}
               <i class="uil uil-arrow-up icon-up"></i>
-            </a>
+            </p>
           </div>
           <div className="total-expenditure">
-            <a className="text">
+            <p className="text">
               {`${i18n.t("total_withdraw", { lng: lang })}`}:
-            </a>
-            <a className="text-money-expenditure">
+            </p>
+            <p className="text-money-expenditure">
               {formatMoney(withdraw)}
               <i class="uil uil-arrow-down icon-down"></i>
-            </a>
+            </p>
           </div>
         </div>
       </div>
@@ -200,9 +207,9 @@ const WithdrawTopup = ({ id }) => {
         />
       </div>
       <div className="div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}: {totalData}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}

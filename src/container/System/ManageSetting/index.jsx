@@ -1,17 +1,16 @@
 import { Tabs } from "antd";
-import ManagePromotions from "../ManagePromotion";
-import "./index.scss";
-import BannerManage from "./ManageBanner/BannerManage";
-import NewsManage from "./ManageNews/NewsManage";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useCookies } from "../../../helper/useCookies";
+import i18n from "../../../i18n";
 import {
   getElementState,
   getLanguageState,
 } from "../../../redux/selectors/auth";
-import i18n from "../../../i18n";
-import PromotionDrag from "../ManagePromotion/PromotionDrag";
-import { useCookies } from "../../../helper/useCookies";
+import ManagePromotions from "../ManagePromotion";
+import BannerManage from "./ManageBanner/BannerManage";
+import NewsManage from "./ManageNews/NewsManage";
+import "./index.scss";
 
 const ManageSetting = () => {
   const checkElement = useSelector(getElementState);

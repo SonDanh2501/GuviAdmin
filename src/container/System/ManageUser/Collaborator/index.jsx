@@ -1,12 +1,12 @@
-import { FloatButton, Select, Tabs } from "antd";
+import { FloatButton, Select } from "antd";
 import { useEffect, useState } from "react";
-import CollaboratorManage from "./TableCollaborator/CollaboratorManage";
-import "./index.scss";
 import { useSelector } from "react-redux";
-import { getLanguageState, getUser } from "../../../../redux/selectors/auth";
-import i18n from "../../../../i18n";
 import { useCookies } from "../../../../helper/useCookies";
 import useWindowDimensions from "../../../../helper/useWindowDimensions";
+import i18n from "../../../../i18n";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import CollaboratorManage from "./TableCollaborator/CollaboratorManage";
+import "./index.scss";
 
 const ManageCollaborator = () => {
   const [status, setStatus] = useState("online");
@@ -54,9 +54,9 @@ const ManageCollaborator = () => {
   return (
     <>
       <div className="div-header-collaborator">
-        <a className="title-cv">{`${i18n.t("collaborator_list", {
+        <p className="title-cv">{`${i18n.t("collaborator_list", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       </div>
 
       <div className="div-container-collaborator">
@@ -78,7 +78,7 @@ const ManageCollaborator = () => {
                       : "div-item-tab"
                   }
                 >
-                  <a className="text-tab">{item?.label}</a>
+                  <p className="text-tab">{item?.label}</p>
                 </div>
               );
             })}

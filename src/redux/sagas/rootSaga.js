@@ -1,19 +1,19 @@
-import { take, put, call, fork, cancel, all } from "redux-saga/effects";
-import customerSaga from "./customerSaga";
-import collaboratorSaga from "./collaborator";
-import bannerSaga from "./banner";
-import promotionSaga from "./promotion";
-import newsSaga from "./news";
+import { all, fork } from "redux-saga/effects";
 import authSaga from "./auth";
-import serviceSaga from "./service";
-import ReasonSaga from "./reason";
+import bannerSaga from "./banner";
 import brandSaga from "./brand";
+import collaboratorSaga from "./collaborator";
+import customerSaga from "./customerSaga";
 import feedbackSaga from "./feedback";
 import loadingSaga from "./loading";
-import orderSaga from "./order";
-import topupSaga from "./topup";
-import statisticSaga from "./statistic";
+import newsSaga from "./news";
 import notificationSaga from "./notification";
+import orderSaga from "./order";
+import promotionSaga from "./promotion";
+import ReasonSaga from "./reason";
+import serviceSaga from "./service";
+import statisticSaga from "./statistic";
+import topupSaga from "./topup";
 
 export default function* rootSaga() {
   yield all([

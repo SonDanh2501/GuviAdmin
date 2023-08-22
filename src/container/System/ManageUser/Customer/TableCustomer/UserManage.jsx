@@ -6,6 +6,7 @@ import {
   Dropdown,
   Empty,
   FloatButton,
+  Image,
   Input,
   Pagination,
   Space,
@@ -13,7 +14,7 @@ import {
 } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   activeCustomer,
   deleteCustomer,
@@ -28,7 +29,6 @@ import ModalCustom from "../../../../../components/modalCustom";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
-import { useCookies } from "../../../../../helper/useCookies";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 import i18n from "../../../../../i18n";
 import {
@@ -39,8 +39,6 @@ import "./UserManage.scss";
 
 const UserManage = (props) => {
   const { status, idGroup } = props;
-  const [dataFilter, setDataFilter] = useState([]);
-  const [totalFilter, setTotalFilter] = useState("");
   const [valueFilter, setValueFilter] = useState("");
   const [hidePhone, setHidePhone] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,19 +49,16 @@ const UserManage = (props) => {
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [rank, setRank] = useState("");
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const toggle = () => setModal(!modal);
   const toggleBlock = () => setModalBlock(!modalBlock);
-  const navigate = useNavigate();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const { width } = useWindowDimensions();
-  const [saveToCookie, readCookie] = useCookies();
 
   useEffect(() => {
-    fetchCustomers(lang, 0, 50, status, readCookie("tab-kh"), "")
+    fetchCustomers(lang, 0, 50, status, idGroup, "")
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItems);
@@ -71,7 +66,7 @@ const UserManage = (props) => {
       .catch((err) => {});
     setCurrentPage(1);
     setStartPage(0);
-  }, [status, idGroup]);
+  }, [status, idGroup, lang]);
 
   const onDelete = useCallback(
     (id) => {
@@ -94,7 +89,7 @@ const UserManage = (props) => {
           setIsLoading(false);
         });
     },
-    [status, startPage, idGroup]
+    [status, startPage, idGroup, lang]
   );
 
   const blockCustomer = useCallback(
@@ -118,7 +113,7 @@ const UserManage = (props) => {
           setIsLoading(false);
         });
     },
-    [startPage, status, idGroup]
+    [startPage, status, idGroup, lang]
   );
 
   const onChange = (page) => {
@@ -136,492 +131,264 @@ const UserManage = (props) => {
       .catch((err) => {});
   };
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      setValueFilter(value);
-      setIsLoading(true);
-      fetchCustomers(lang, startPage, 50, status, idGroup, value)
-        .then((res) => {
-          setData(res?.data);
-          setTotal(res?.totalItems);
-          window.scroll(0, 0);
-          setIsLoading(false);
-        })
-        .catch((err) => {});
-    }, 1000),
-    []
-  );
+  const handleSearch = _debounce((value) => {
+    setValueFilter(value);
+    setIsLoading(true);
+    fetchCustomers(lang, startPage, 50, status, idGroup, value)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItems);
+        window.scroll(0, 0);
+        setIsLoading(false);
+      })
+      .catch((err) => {});
+  }, 1000);
 
   const items = [
     {
       key: "1",
       label: checkElement?.includes("active_customer") && (
-        <a onClick={toggleBlock}>
+        <p className="text-select-dropdown" onClick={toggleBlock}>
           {itemEdit?.is_active === true
             ? `${i18n.t("lock", { lng: lang })}`
             : `${i18n.t("unlock", { lng: lang })}`}
-        </a>
+        </p>
       ),
     },
     {
       key: "2",
       label: checkElement?.includes("delete_customer") && (
-        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
+        <p className="text-select-dropdown" onClick={toggle}>{`${i18n.t(
+          "delete",
+          { lng: lang }
+        )}`}</p>
       ),
     },
   ];
 
-  const columns =
-    status === "birthday"
-      ? [
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("code_customer", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data) => {
-              return (
-                <Link
-                  to={
-                    checkElement?.includes("detail_customer")
-                      ? `/profile-customer/${data?._id}`
-                      : ""
-                  }
-                >
-                  <a className="text-id-customer"> {data?.id_view}</a>
-                </Link>
-              );
-            },
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("customer", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data) => {
-              return (
-                <Link
-                  to={
-                    checkElement?.includes("detail_customer")
-                      ? `/profile-customer/${data?._id}`
-                      : ""
-                  }
-                  className="div-name-customer"
-                >
-                  <img
-                    src={
-                      data?.rank_point < 100
-                        ? member
-                        : data?.rank_point >= 100 && data?.rank_point < 300
-                        ? silver
-                        : data?.rank_point >= 300 && data?.rank_point < 1500
-                        ? gold
-                        : platinum
-                    }
-                    style={{ width: 20, height: 20 }}
-                  />
-                  <a className="text-name-customer"> {data?.full_name}</a>
-                </Link>
-              );
-            },
-            sorter: true,
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("phone", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data, record, index) => {
-              const phone = data?.phone.slice(0, 7);
-              return (
-                <div className="hide-phone">
-                  <a className="text-phone-customer">
-                    {rowIndex === index
-                      ? hidePhone
-                        ? data?.phone
-                        : phone + "***"
-                      : phone + "***"}
-                  </a>
-                  <a
-                    className="btn-eyes"
-                    onClick={() =>
-                      rowIndex === index
-                        ? setHidePhone(!hidePhone)
-                        : setHidePhone(!hidePhone)
-                    }
-                  >
-                    {rowIndex === index ? (
-                      hidePhone ? (
-                        <i class="uil uil-eye"></i>
-                      ) : (
-                        <i class="uil uil-eye-slash"></i>
-                      )
-                    ) : (
-                      <i class="uil uil-eye-slash"></i>
-                    )}
-                  </a>
-                </div>
-              );
-            },
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("birthday", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data) => {
-              return (
-                <a className="text-birtday-customer">
-                  {moment(new Date(data?.birthday)).format("DD/MM/YYYY")}
-                </a>
-              );
-            },
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("kind_member", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data) => {
-              if (data?.rank_point >= 0 && data?.rank_point < 100) {
-                setRank(`${i18n.t("member", { lng: lang })}`);
-              } else if (data?.rank_point >= 100 && data?.rank_point < 300) {
-                setRank(`${i18n.t("silver", { lng: lang })}`);
-              } else if (data?.rank_point >= 300 && data?.rank_point < 1500) {
-                setRank(`${i18n.t("gold", { lng: lang })}`);
-              } else {
-                setRank(`${i18n.t("platinum", { lng: lang })}`);
+  const columns = [
+    {
+      title: () => {
+        return (
+          <p className="title-column">{`${i18n.t("code", {
+            lng: lang,
+          })}`}</p>
+        );
+      },
+      render: (data) => {
+        return (
+          <Link
+            to={
+              checkElement?.includes("detail_customer")
+                ? `/profile-customer/${data?._id}`
+                : ""
+            }
+          >
+            <p className="text-id-customer"> {data?.id_view}</p>
+          </Link>
+        );
+      },
+    },
+    {
+      title: () => {
+        return (
+          <p className="title-column">{`${i18n.t("customer", {
+            lng: lang,
+          })}`}</p>
+        );
+      },
+      render: (data) => {
+        return (
+          <Link
+            to={
+              checkElement?.includes("detail_customer")
+                ? `/profile-customer/${data?._id}`
+                : ""
+            }
+            className="div-name-customer"
+          >
+            <Image
+              preview={false}
+              src={
+                data?.rank_point < 100
+                  ? member
+                  : data?.rank_point >= 100 && data?.rank_point < 300
+                  ? silver
+                  : data?.rank_point >= 300 && data?.rank_point < 1500
+                  ? gold
+                  : platinum
               }
-              return <a className="text-address-customer">{rank}</a>;
-            },
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("total_order", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data) => (
-              <a className="text-address-customer">{data?.total_order}</a>
-            ),
+              style={{ width: 20, height: 20 }}
+            />
+            <p className="text-name-customer"> {data?.full_name}</p>
+          </Link>
+        );
+      },
+      // sorter: (p, b) => p.full_name.localeCompare(b.full_name),
+    },
+    {
+      title: () => {
+        return (
+          <p className="title-column">{`${i18n.t("phone", {
+            lng: lang,
+          })}`}</p>
+        );
+      },
+      render: (data, record, index) => {
+        const phone = data?.phone.slice(0, 7);
+        return (
+          <div className="hide-phone">
+            <p className="text-phone">
+              {rowIndex === index
+                ? hidePhone
+                  ? data?.phone
+                  : phone + "***"
+                : phone + "***"}
+            </p>
+            <p
+              className="btn-eyes"
+              onClick={() =>
+                rowIndex === index
+                  ? setHidePhone(!hidePhone)
+                  : setHidePhone(!hidePhone)
+              }
+            >
+              {rowIndex === index ? (
+                hidePhone ? (
+                  <i class="uil uil-eye"></i>
+                ) : (
+                  <i class="uil uil-eye-slash"></i>
+                )
+              ) : (
+                <i class="uil uil-eye-slash"></i>
+              )}
+            </p>
+          </div>
+        );
+      },
+    },
+    {
+      title: () => {
+        return (
+          <p className="title-column">{`${i18n.t("address", {
+            lng: lang,
+          })}`}</p>
+        );
+      },
+      render: (data) => {
+        const address = data?.default_address?.address.split(",");
+        return (
+          <p className="text-address-customer-default">
+            {!data?.default_address
+              ? `${i18n.t("not_available", { lng: lang })}`
+              : address[address.length - 2] + "," + address[address.length - 1]}
+          </p>
+        );
+      },
 
-            align: "center",
-            responsive: ["xl"],
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("nearest_order", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data) => {
-              return (
-                <>
-                  {data?.id_group_order ? (
-                    <Link to={`/details-order/${data?.id_group_order}`}>
-                      <a className="text-id-order">
-                        {data?.id_view_group_order}
-                      </a>
-                    </Link>
-                  ) : (
-                    <a className="text-address-customer">{`${i18n.t(
-                      "not_available",
-                      { lng: lang }
-                    )}`}</a>
-                  )}
-                </>
-              );
-            },
+      responsive: ["xl"],
+    },
+    {
+      title: () => {
+        return (
+          <p className="title-column">{`${i18n.t("date_create", {
+            lng: lang,
+          })}`}</p>
+        );
+      },
+      render: (data) => {
+        return (
+          <div className="div-create">
+            <p className="text-create-customer">
+              {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
+            </p>
+            <p className="text-create-customer">
+              {moment(new Date(data?.date_create)).format("HH:mm")}
+            </p>
+          </div>
+        );
+      },
+      responsive: ["xl"],
+    },
+    {
+      title: () => {
+        return (
+          <p className="title-column">{`${i18n.t("total_order", {
+            lng: lang,
+          })}`}</p>
+        );
+      },
+      render: (data) => (
+        <p className="text-address-customer">{data?.total_order}</p>
+      ),
 
-            align: "center",
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("total", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            width: "10%",
-            render: (data) => (
-              <a className="text-address-customer">
-                {formatMoney(data?.total_price)}
-              </a>
-            ),
-            align: "right",
-            responsive: ["xl"],
-          },
-          {
-            key: "action",
-            fixed: "right",
-            align: "center",
-            width: "5%",
-            render: (data) => (
-              <Space size="middle">
-                <Dropdown
-                  menu={{
-                    items,
-                  }}
-                  placement="bottom"
-                  trigger={["click"]}
-                >
-                  <a>
-                    <MoreOutlined className="icon-more" />
-                  </a>
-                </Dropdown>
-              </Space>
-            ),
-          },
-        ]
-      : [
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("code", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data) => {
-              return (
-                <Link
-                  to={
-                    checkElement?.includes("detail_customer")
-                      ? `/profile-customer/${data?._id}`
-                      : ""
-                  }
-                >
-                  <a className="text-id-customer"> {data?.id_view}</a>
-                </Link>
-              );
-            },
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("customer", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data) => {
-              return (
-                <Link
-                  to={
-                    checkElement?.includes("detail_customer")
-                      ? `/profile-customer/${data?._id}`
-                      : ""
-                  }
-                  className="div-name-customer"
-                >
-                  <img
-                    src={
-                      data?.rank_point < 100
-                        ? member
-                        : data?.rank_point >= 100 && data?.rank_point < 300
-                        ? silver
-                        : data?.rank_point >= 300 && data?.rank_point < 1500
-                        ? gold
-                        : platinum
-                    }
-                    style={{ width: 20, height: 20 }}
-                  />
-                  <a className="text-name-customer"> {data?.full_name}</a>
-                </Link>
-              );
-            },
-            // sorter: (a, b) => a.full_name.localeCompare(b.full_name),
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("phone", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data, record, index) => {
-              const phone = data?.phone.slice(0, 7);
-              return (
-                <div className="hide-phone">
-                  <a className="text-phone">
-                    {rowIndex === index
-                      ? hidePhone
-                        ? data?.phone
-                        : phone + "***"
-                      : phone + "***"}
-                  </a>
-                  <a
-                    className="btn-eyes"
-                    onClick={() =>
-                      rowIndex === index
-                        ? setHidePhone(!hidePhone)
-                        : setHidePhone(!hidePhone)
-                    }
-                  >
-                    {rowIndex === index ? (
-                      hidePhone ? (
-                        <i class="uil uil-eye"></i>
-                      ) : (
-                        <i class="uil uil-eye-slash"></i>
-                      )
-                    ) : (
-                      <i class="uil uil-eye-slash"></i>
-                    )}
-                  </a>
-                </div>
-              );
-            },
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("address", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data) => {
-              const address = data?.default_address?.address.split(",");
-              return (
-                <a className="text-address-customer-default">
-                  {!data?.default_address
-                    ? `${i18n.t("not_available", { lng: lang })}`
-                    : address[address.length - 2] +
-                      "," +
-                      address[address.length - 1]}
-                </a>
-              );
-            },
+      align: "center",
+      responsive: ["xl"],
+    },
+    {
+      title: () => {
+        return (
+          <p className="title-column">{`${i18n.t("nearest_order", {
+            lng: lang,
+          })}`}</p>
+        );
+      },
+      render: (data) => {
+        return (
+          <>
+            {data?.id_group_order ? (
+              <Link to={`/details-order/${data?.id_group_order}`}>
+                <p className="text-id-order">{data?.id_view_group_order}</p>
+              </Link>
+            ) : (
+              <p className="text-address-customer">{`${i18n.t("not_available", {
+                lng: lang,
+              })}`}</p>
+            )}
+          </>
+        );
+      },
 
-            responsive: ["xl"],
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("date_create", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data) => {
-              return (
-                <div className="div-create">
-                  <a className="text-create-customer">
-                    {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-                  </a>
-                  <a className="text-create-customer">
-                    {moment(new Date(data?.date_create)).format("HH:mm")}
-                  </a>
-                </div>
-              );
-            },
-            responsive: ["xl"],
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("total_order", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data) => (
-              <a className="text-address-customer">{data?.total_order}</a>
-            ),
-
-            align: "center",
-            responsive: ["xl"],
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("nearest_order", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            render: (data) => {
-              return (
-                <>
-                  {data?.id_group_order ? (
-                    <Link to={`/details-order/${data?.id_group_order}`}>
-                      <a className="text-id-order">
-                        {data?.id_view_group_order}
-                      </a>
-                    </Link>
-                  ) : (
-                    <a className="text-address-customer">{`${i18n.t(
-                      "not_available",
-                      { lng: lang }
-                    )}`}</a>
-                  )}
-                </>
-              );
-            },
-
-            align: "center",
-          },
-          {
-            title: () => {
-              return (
-                <a className="title-column">{`${i18n.t("total", {
-                  lng: lang,
-                })}`}</a>
-              );
-            },
-            width: "10%",
-            render: (data) => (
-              <a className="text-address-customer">
-                {formatMoney(data?.total_price)}
-              </a>
-            ),
-            align: "right",
-            responsive: ["xl"],
-          },
-          {
-            key: "action",
-            align: "center",
-            width: "5%",
-            render: (data) =>
-              checkElement?.includes("delete_customer") &&
-              checkElement?.includes("active_customer") && (
-                <Space size="middle">
-                  <Dropdown
-                    menu={{
-                      items,
-                    }}
-                    placement="bottom"
-                    trigger={["click"]}
-                  >
-                    <a>
-                      <MoreOutlined className="icon-more" />
-                    </a>
-                  </Dropdown>
-                </Space>
-              ),
-          },
-        ];
+      align: "center",
+    },
+    {
+      title: () => {
+        return (
+          <p className="title-column">{`${i18n.t("total", {
+            lng: lang,
+          })}`}</p>
+        );
+      },
+      width: "10%",
+      render: (data) => (
+        <p className="text-address-customer">
+          {formatMoney(data?.total_price)}
+        </p>
+      ),
+      align: "right",
+      responsive: ["xl"],
+    },
+    {
+      key: "action",
+      align: "center",
+      width: "5%",
+      render: (data) =>
+        checkElement?.includes("delete_customer") &&
+        checkElement?.includes("active_customer") && (
+          <Space size="middle">
+            <Dropdown
+              menu={{
+                items,
+              }}
+              placement="bottom"
+              trigger={["click"]}
+            >
+              <MoreOutlined className="icon-more" />
+            </Dropdown>
+          </Space>
+        ),
+    },
+  ];
 
   return (
     <React.Fragment>
@@ -681,84 +448,84 @@ const UserManage = (props) => {
                       return (
                         <div className="div-detail-customer">
                           <div className="div-text-detail">
-                            <a className="title-detail">
+                            <p className="title-detail">
                               {`${i18n.t("phone", {
                                 lng: lang,
                               })}`}
                               :
-                            </a>
-                            <a className="text-detail">{record?.phone}</a>
+                            </p>
+                            <p className="text-detail">{record?.phone}</p>
                           </div>
                           <div className="div-text-detail">
-                            <a className="title-detail">
+                            <p className="title-detail">
                               {`${i18n.t("address", {
                                 lng: lang,
                               })}`}
                               :
-                            </a>
-                            <a className="text-detail">
+                            </p>
+                            <p className="text-detail">
                               {!record?.default_address
                                 ? `${i18n.t("not_available", { lng: lang })}`
                                 : address[address.length - 2] +
                                   "," +
                                   address[address.length - 1]}
-                            </a>
+                            </p>
                           </div>
                           <div className="div-text-detail">
-                            <a className="title-detail">
+                            <p className="title-detail">
                               {`${i18n.t("date_create", {
                                 lng: lang,
                               })}`}
                               :
-                            </a>
-                            <a className="text-detail">
+                            </p>
+                            <p className="text-detail">
                               {moment(new Date(record?.date_create)).format(
                                 "DD/MM/YYYY - HH:mm"
                               )}
-                            </a>
+                            </p>
                           </div>
                           <div className="div-text-detail">
-                            <a className="title-detail">
+                            <p className="title-detail">
                               {`${i18n.t("nearest_order", {
                                 lng: lang,
                               })}`}
                               :
-                            </a>
+                            </p>
 
                             {record?.id_group_order ? (
                               <Link
                                 to={`/details-order/${record?.id_group_order}`}
                               >
-                                <a className="text-detail">
+                                <p className="text-detail">
                                   {record?.id_view_group_order}
-                                </a>
+                                </p>
                               </Link>
                             ) : (
-                              <a className="text-detail">{`${i18n.t(
+                              <p className="text-detail">{`${i18n.t(
                                 "not_available",
                                 { lng: lang }
-                              )}`}</a>
+                              )}`}</p>
                             )}
                           </div>
                           <div className="div-text-detail">
-                            <a className="title-detail">
+                            <p className="title-detail">
                               {`${i18n.t("total_order", {
                                 lng: lang,
                               })}`}
                               :
-                            </a>
-                            <a className="text-detail">{record?.total_order}</a>
+                            </p>
+                            <p className="text-detail">{record?.total_order}</p>
                           </div>
                           <div className="div-text-detail">
-                            <a className="title-detail">
+                            <p className="title-detail">
                               {`${i18n.t("total", {
                                 lng: lang,
                               })}`}
                               :
-                            </a>
-                            <a className="text-detail">
+                            </p>
+                            <p className="text-detail">
                               {formatMoney(record?.total_price)}
-                            </a>
+                            </p>
                           </div>
                           <div className="div-text-detail">
                             <Space size="middle">
@@ -769,7 +536,7 @@ const UserManage = (props) => {
                                 placement="bottom"
                                 trigger={["click"]}
                               >
-                                <a>Tuỳ chỉnh</a>
+                                <p>Tuỳ chỉnh</p>
                               </Dropdown>
                             </Space>
                           </div>
@@ -783,9 +550,9 @@ const UserManage = (props) => {
         </div>
 
         <div className="mt-1 div-pagination p-2">
-          <a>
+          <p>
             {`${i18n.t("total", { lng: lang })}`}: {total}
-          </a>
+          </p>
           <div>
             <Pagination
               current={currentPage}
@@ -805,8 +572,8 @@ const UserManage = (props) => {
             handleCancel={toggle}
             body={
               <>
-                <a>{`${i18n.t("sure_delete_customer", { lng: lang })}`}</a>
-                <a className="text-name-modal">{itemEdit?.full_name}</a>
+                <p>{`${i18n.t("sure_delete_customer", { lng: lang })}`}</p>
+                <p className="text-name-modal">{itemEdit?.full_name}</p>
               </>
             }
           />

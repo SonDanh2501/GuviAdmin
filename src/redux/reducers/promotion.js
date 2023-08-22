@@ -1,15 +1,6 @@
 import { INIT_STATE } from "../../utils/contant";
-import {
-  getCustomers,
-  getType,
-  createCustomer,
-  updateCustomer,
-} from "../actions/customerAction";
-import {
-  createPromotionAction,
-  createPromotions,
-  getPromotion,
-} from "../actions/promotion";
+import { getType } from "../actions/customerAction";
+import { createPromotionAction, getPromotion } from "../actions/promotion";
 
 export default function PromotionReducers(
   state = INIT_STATE.promotions,

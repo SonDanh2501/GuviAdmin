@@ -1,6 +1,4 @@
 import { takeLatest, call, put } from "redux-saga/effects";
-import * as actions from "../actions/banner";
-import * as api from "../../api/banner";
 import { getType } from "../actions/banner";
 import { loadingAction } from "../actions/loading";
 import {

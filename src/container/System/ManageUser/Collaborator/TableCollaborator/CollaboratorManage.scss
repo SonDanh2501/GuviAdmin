@@ -47,6 +47,16 @@
   font-weight: 400;
   font-size: 14px;
   color: #000000;
+  margin: 0;
+}
+
+.text-dropdown {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #000000;
+  margin: 0;
 }
 
 .text-click-block-hide {
@@ -64,6 +74,7 @@
   font-weight: 400;
   font-size: 14px;
   color: #19202c;
+  margin: 0;
 }
 
 .div-collaborator {
@@ -88,6 +99,7 @@
       font-size: 12px;
       text-decoration-line: underline;
       color: #023e8a !important;
+      margin: 0;
     }
 
     .text-phone-collaborator {
@@ -111,6 +123,7 @@
     font-size: 12px;
     color: #000000;
     text-decoration: none;
+    margin: 0;
   }
 }
 
@@ -121,35 +134,69 @@
   font-size: 12px;
   color: #000000 !important;
   text-decoration: none !important;
+  margin: 0;
 }
 
-.text-online {
-  color: #00cf3a !important;
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 12px;
-  margin-left: 5px;
-  text-decoration: none !important;
-}
-
-.text-offline {
+.text-city-ctv {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
-  color: #979797;
-  margin-left: 5px;
+  color: #000000;
+  text-decoration: none;
+  margin: 0;
 }
 
-.text-pending-cola {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  color: #f7941d !important;
-  margin-left: 5px;
-  text-decoration: none !important;
+.div-status-ctv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  .icon-status {
+    width: 15px;
+    height: 15px;
+    margin-right: 10px;
+  }
+
+  .text-online {
+    color: #00cf3a !important;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    text-decoration: none !important;
+    margin: 0;
+  }
+
+  .text-offline {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: #979797;
+    margin: 0;
+  }
+
+  .text-pending-cola {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: #f7941d !important;
+    text-decoration: none !important;
+    margin: 0;
+  }
+
+  .text-lock-time {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: #f7941d;
+    text-decoration: none !important;
+    margin: 0;
+  }
 }
 
 .icon-verify {
@@ -159,16 +206,6 @@
   font-weight: 600;
   font-size: 12px;
   line-height: 16px;
-  text-decoration: none !important;
-}
-
-.text-lock-time {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  color: #f7941d;
-  margin-left: 5px;
   text-decoration: none !important;
 }
 
@@ -260,8 +297,8 @@
   font-style: normal;
   font-weight: 600;
   font-size: 12px;
-  line-height: 16px;
   text-decoration: none !important;
+  margin: 0;
 }
 
 .text-nonverify {
@@ -269,9 +306,9 @@
   font-style: normal;
   font-weight: 600;
   font-size: 12px;
-  line-height: 16px;
   color: #ff0000;
   text-decoration: none !important;
+  margin: 0;
 }
 
 .div-verify {
@@ -295,6 +332,7 @@
     font-size: 12px;
     color: #ff0000;
     text-decoration: none !important;
+    margin: 0;
   }
 
   .btn-contacted {
@@ -311,7 +349,7 @@
       font-family: "Roboto";
       font-weight: 500;
       font-size: 12px;
-      line-height: 16px;
+      margin: 0;
       color: #000000;
       text-decoration: none;
     }

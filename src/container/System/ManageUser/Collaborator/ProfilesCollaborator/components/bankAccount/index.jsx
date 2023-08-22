@@ -7,10 +7,10 @@ import {
 } from "../../../../../../../api/collaborator";
 import InputCustom from "../../../../../../../components/textInputCustom";
 import { errorNotify } from "../../../../../../../helper/toast";
-import { loadingAction } from "../../../../../../../redux/actions/loading";
-import "./index.scss";
-import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../../i18n";
+import { loadingAction } from "../../../../../../../redux/actions/loading";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import "./index.scss";
 
 const BankAccount = ({ id }) => {
   const [accountNumber, setAccountNumber] = useState("");
@@ -34,7 +34,7 @@ const BankAccount = ({ id }) => {
         });
         dispatch(loadingAction.loadingRequest(false));
       });
-  }, [id]);
+  }, [id, dispatch]);
 
   const updateAccountBank = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -52,13 +52,13 @@ const BankAccount = ({ id }) => {
         });
         dispatch(loadingAction.loadingRequest(false));
       });
-  }, [id, accountNumber, bankName, accountName]);
+  }, [id, accountNumber, bankName, accountName, dispatch]);
 
   return (
     <div>
-      <a className="title-info">{`${i18n.t("account_infomation", {
+      <p className="title-info">{`${i18n.t("account_infomation", {
         lng: lang,
-      })}`}</a>
+      })}`}</p>
       <InputCustom
         title={`${i18n.t("bank_account_number", {
           lng: lang,

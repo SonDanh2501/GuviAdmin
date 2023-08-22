@@ -16,15 +16,14 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import PunishMoneyCollaborator from "../../../../../components/punishMoneyCollaborator/punishMoneyCollaborator";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
+import { useCookies } from "../../../../../helper/useCookies";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import i18n from "../../../../../i18n";
 import {
   getElementState,
   getLanguageState,
-  getUser,
 } from "../../../../../redux/selectors/auth";
 import "./index.scss";
-import i18n from "../../../../../i18n";
-import { useCookies } from "../../../../../helper/useCookies";
-import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const Punish = () => {
   const [saveToCookie, readCookie] = useCookies();
@@ -118,27 +117,30 @@ const Punish = () => {
     [startPage]
   );
 
-  const onDelete = useCallback((id) => {
-    setIsLoading(true);
-    deleteMoneyPunishApi(id)
-      .then((res) => {
-        setModalCancel(false);
-        getListPunishApi(startPage, 20)
-          .then((res) => {
-            setData(res?.data);
-            setTotal(res?.totalItem);
-            setIsLoading(false);
-            setModal(false);
-          })
-          .catch((err) => {});
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        errorNotify({
-          message: err,
+  const onDelete = useCallback(
+    (id) => {
+      setIsLoading(true);
+      deleteMoneyPunishApi(id)
+        .then((res) => {
+          setModalCancel(false);
+          getListPunishApi(startPage, 20)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+              setIsLoading(false);
+              setModal(false);
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
+          });
         });
-      });
-  }, []);
+    },
+    [startPage]
+  );
 
   const onRefund = (id) => {
     setIsLoading(true);
@@ -181,13 +183,13 @@ const Punish = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("code_collaborator", {
+          <p className="title-column">{`${i18n.t("code_collaborator", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => (
-        <a
+        <p
           className="text-id-ctv"
           onClick={() =>
             navigate("/details-collaborator", {
@@ -196,27 +198,27 @@ const Punish = () => {
           }
         >
           {data?.id_collaborator?.id_view}
-        </a>
+        </p>
       ),
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("collaborator", {
+          <p className="title-column">{`${i18n.t("collaborator", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <Link
             to={`/details-collaborator/${data?.id_collaborator?._id}`}
-            className="div-name-topup"
+            className="div-name-punish"
           >
-            <a className="text-name-topup">
+            <p className="text-name-punish">
               {data?.id_collaborator?.full_name}
-            </a>
-            <a className="text-phone-topup">{data?.id_collaborator?.phone}</a>
+            </p>
+            <p className="text-name-punish">{data?.id_collaborator?.phone}</p>
           </Link>
         );
       },
@@ -224,43 +226,43 @@ const Punish = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("money", { lng: lang })}`}</a>
+          <p className="title-column">{`${i18n.t("money", { lng: lang })}`}</p>
         );
       },
       render: (data) => (
-        <a className="text-money-topup">{formatMoney(data?.money)}</a>
+        <p className="text-money-punish">{formatMoney(data?.money)}</p>
       ),
       sorter: (a, b) => a.money - b.money,
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("content", {
+          <p className="title-column">{`${i18n.t("content", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => (
-        <a className="text-description-topup">{data?.note_admin}</a>
+        <p className="text-description-punish">{data?.note_admin}</p>
       ),
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("date_create", {
+          <p className="title-column">{`${i18n.t("date_create", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
-          <div className="div-time-topup">
-            <a className="text-time">
+          <div className="div-time-punish">
+            <p className="text-time">
               {moment(new Date(data?.date_create)).format("DD/MM/yyy")}
-            </a>
-            <a className="text-time">
+            </p>
+            <p className="text-time">
               {moment(new Date(data?.date_create)).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -268,32 +270,35 @@ const Punish = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("status", { lng: lang })}`}</a>
+          <p className="title-column">{`${i18n.t("status", { lng: lang })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div>
             {data?.status === "pending" ? (
-              <a className="text-pending-topup">{`${i18n.t("processing", {
+              <p className="text-pending-punish">{`${i18n.t("processing", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : data?.status === "transfered" ? (
-              <a className="text-transfered">{`${i18n.t("money_transferred", {
-                lng: lang,
-              })}`}</a>
+              <p className="text-transfered-punish">{`${i18n.t(
+                "money_transferred",
+                {
+                  lng: lang,
+                }
+              )}`}</p>
             ) : data?.status === "done" ? (
-              <a className="text-done-topup">{`${i18n.t("complete", {
+              <p className="text-done-punish">{`${i18n.t("complete", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : data?.status === "done" ? (
-              <a className="text-cancel-topup-ctv">{`${i18n.t("cancel", {
+              <p className="text-cancel-punish-ctv">{`${i18n.t("cancel", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : (
-              <a className="text-refund-topup">{`${i18n.t("refund", {
+              <p className="text-refund-topup">{`${i18n.t("refund", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             )}
           </div>
         );
@@ -303,20 +308,20 @@ const Punish = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("approved_by", {
+          <p className="title-column">{`${i18n.t("approved_by", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
-          <a className="text-name-verify">
+          <p className="text-name-verify">
             {data?.is_punish_system && data?.id_admin_refund
               ? data?.id_admin_refund?.full_name
               : data?.is_punish_system
               ? `${i18n.t("system", { lng: lang })}`
               : data?.id_admin_verify?.full_name}
-          </a>
+          </p>
         );
       },
       align: "center",
@@ -347,9 +352,9 @@ const Punish = () => {
             <div className="refunds-cancel">
               {data?.status === "done" && (
                 <div onClick={toggleRefund}>
-                  <a className="text-refunds">{`${i18n.t("refund", {
+                  <p className="text-refunds">{`${i18n.t("refund", {
                     lng: lang,
-                  })}`}</a>
+                  })}`}</p>
                 </div>
               )}
               {checkElement?.includes(
@@ -364,9 +369,9 @@ const Punish = () => {
                         lng: lang,
                       })}`}
                     >
-                      <a className="text-cancel-topup" onClick={toggleCancel}>
+                      <p className="text-cancel-topup" onClick={toggleCancel}>
                         {`${i18n.t("cancel_modal", { lng: lang })}`}
-                      </a>
+                      </p>
                     </Tooltip>
                   )}
                 </div>
@@ -448,9 +453,9 @@ const Punish = () => {
           scroll={{ x: width < 900 ? 1000 : 0 }}
         />
         <div className="div-pagination p-2">
-          <a>
+          <p>
             {`${i18n.t("total", { lng: lang })}`}: {total}
-          </a>
+          </p>
           <div>
             <Pagination
               current={currentPage}
@@ -472,22 +477,22 @@ const Punish = () => {
             body={
               <>
                 <div className="body-modal">
-                  <a className="text-content">
+                  <p className="text-content">
                     {`${i18n.t("collaborator", { lng: lang })}`}:{" "}
                     {itemEdit?.id_collaborator?.full_name}
-                  </a>
-                  <a className="text-content">
+                  </p>
+                  <p className="text-content">
                     {`${i18n.t("phone", { lng: lang })}`}:{" "}
                     {itemEdit?.id_collaborator?.phone}
-                  </a>
-                  <a className="text-content">
+                  </p>
+                  <p className="text-content">
                     {`${i18n.t("money", { lng: lang })}`}:{" "}
                     {formatMoney(itemEdit?.money)}
-                  </a>
-                  <a className="text-content">
+                  </p>
+                  <p className="text-content">
                     {`${i18n.t("content", { lng: lang })}`}:{" "}
                     {itemEdit?.note_admin}
-                  </a>
+                  </p>
                 </div>
               </>
             }
@@ -502,12 +507,12 @@ const Punish = () => {
             textOk={`${i18n.t("yes", { lng: lang })}`}
             body={
               <>
-                <a>
+                <p>
                   {`${i18n.t("want_cancellation_of_fines", { lng: lang })}`}
-                </a>
-                <a className="text-name-modal">
+                </p>
+                <p className="text-name-modal">
                   {itemEdit?.id_collaborator?.full_name}
-                </a>
+                </p>
               </>
             }
           />
@@ -522,10 +527,10 @@ const Punish = () => {
             textOk={`${i18n.t("delete", { lng: lang })}`}
             body={
               <>
-                <a>{`${i18n.t("want_remove_the_fine", { lng: lang })}`}</a>
-                <a className="text-name-modal">
+                <p>{`${i18n.t("want_remove_the_fine", { lng: lang })}`}</p>
+                <p className="text-name-modal">
                   {itemEdit?.id_collaborator?.full_name}
-                </a>
+                </p>
               </>
             }
           />
@@ -538,10 +543,10 @@ const Punish = () => {
             textOk={`${i18n.t("refund", { lng: lang })}`}
             body={
               <>
-                <a>{`${i18n.t("want_refund_fines", { lng: lang })}`}</a>
-                <a className="text-name-modal">
+                <p>{`${i18n.t("want_refund_fines", { lng: lang })}`}</p>
+                <p className="text-name-modal">
                   {itemEdit?.id_collaborator?.full_name}
-                </a>
+                </p>
               </>
             }
           />

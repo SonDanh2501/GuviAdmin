@@ -21,7 +21,7 @@ const Dashboard = () => {
     dispatch(permissionAction.permissionRequest({ navigate: navigate }));
     dispatch(getProvinceAction.getProvinceRequest());
     dispatch(getUserAction.getUserRequest());
-  }, []);
+  }, [dispatch, navigate]);
 
   useEffect(() => {
     if (width > 900) {
@@ -29,7 +29,7 @@ const Dashboard = () => {
     } else {
       setCollapsed(false);
     }
-  }, [window]);
+  }, [width]);
 
   return (
     // <Layout hasSider>

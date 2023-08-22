@@ -1,4 +1,4 @@
-import { takeLatest, call, put } from "redux-saga/effects";
+import { put, takeLatest } from "redux-saga/effects";
 import { getType } from "../actions/banner";
 import { getBrand } from "../actions/brand";
 

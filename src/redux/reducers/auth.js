@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { INIT_STATE } from "../../utils/contant";
 import {
   getUserAction,
@@ -8,7 +7,6 @@ import {
   permissionAction,
 } from "../actions/auth";
 import { getType } from "../actions/banner";
-import { getPermission } from "../../api/auth";
 
 export default function LoginReducers(state = INIT_STATE.auth, action) {
   switch (action.type) {

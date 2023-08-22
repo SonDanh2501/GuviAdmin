@@ -1,35 +1,31 @@
 import { CameraOutlined } from "@material-ui/icons";
-import { Col, FloatButton, Image, Row, Tabs } from "antd";
+import { FloatButton, Image, Tabs } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
-import { Card, CardBody, CardHeader, Container } from "reactstrap";
+import { useParams } from "react-router-dom";
 import { getCollaboratorsById } from "../../../../../api/collaborator";
-import { getDistrictApi, postFile } from "../../../../../api/file";
+import { postFile } from "../../../../../api/file";
 import user from "../../../../../assets/images/user.png";
 import resizeFile from "../../../../../helper/resizer";
 import { errorNotify } from "../../../../../helper/toast";
+import { useCookies } from "../../../../../helper/useCookies";
+import i18n from "../../../../../i18n";
 import { loadingAction } from "../../../../../redux/actions/loading";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import "./ProfileCollaborator.scss";
 import Activity from "./components/activity";
 import BankAccount from "./components/bankAccount";
 import Document from "./components/documents";
 import History from "./components/history";
 import Information from "./components/information";
-import Review from "./components/review";
-import WithdrawTopup from "./components/withdrawTopup";
-import "./ProfileCollaborator.scss";
-import TestExam from "./components/testExam";
 import InviteCollaborator from "./components/invite";
-import { getLanguageState } from "../../../../../redux/selectors/auth";
-import i18n from "../../../../../i18n";
 import Overview from "./components/overview";
-import { useCookies } from "../../../../../helper/useCookies";
-// core components
+import Review from "./components/review";
+import TestExam from "./components/testExam";
+import WithdrawTopup from "./components/withdrawTopup";
 
 const ProfileCollaborator = () => {
-  // const { state } = useLocation();
-  // const { id } = state || {};
   const [data, setData] = useState({
     avatar: "",
     birthday: "2000-06-07T00:00:00.000Z",
@@ -63,7 +59,7 @@ const ProfileCollaborator = () => {
         });
         dispatch(loadingAction.loadingRequest(false));
       });
-  }, [id]);
+  }, [id, dispatch]);
 
   const onChangeThumbnail = async (e) => {
     const extend = e.target.files[0].type.slice(
@@ -181,24 +177,24 @@ const ProfileCollaborator = () => {
         <div className="mt-2">
           <div className="text-body">
             {data?.password_default && (
-              <a>
+              <p style={{ margin: 0 }}>
                 {`${i18n.t("default_password", { lng: lang })}`}:{" "}
                 {data?.password_default}
-              </a>
+              </p>
             )}
             {data?.invite_code && (
-              <a>
+              <p style={{ margin: 0 }}>
                 {`${i18n.t("code_invite", { lng: lang })}`}: {data?.invite_code}
-              </a>
+              </p>
             )}
-            <a className="text-name">{data?.full_name}</a>
-            <a>
+            <p className="text-name">{data?.full_name}</p>
+            <p style={{ margin: 0 }}>
               {!data?.birthday
                 ? ""
                 : `${i18n.t("age", { lng: lang })}` +
                   ": " +
                   moment().diff(data?.birthday, "years")}
-            </a>
+            </p>
           </div>
         </div>
       </div>
