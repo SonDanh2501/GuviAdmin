@@ -43,31 +43,33 @@ const ReportInviteDetails = () => {
       render: (data) => {
         return (
           <div className="div-create-invite-detail">
-            <a className="text-invite">
+            <p className="text-invite">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-invite">
+            </p>
+            <p className="text-invite">
               {moment(new Date(data?.date_create)).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
     },
     {
       title: `${i18n.t("code", { lng: lang })}`,
-      render: (data) => <a>{data?.id_view}</a>,
+      render: (data) => <p className="text-name-invite">{data?.id_view}</p>,
     },
     {
       title: `${i18n.t("customer", { lng: lang })}`,
-      render: (data) => <a>{data?.full_name}</a>,
+      render: (data) => <p className="text-name-invite">{data?.full_name}</p>,
     },
     {
       title: `${i18n.t("phone", { lng: lang })}`,
-      render: (data) => <a>{data?.phone}</a>,
+      render: (data) => <p className="text-name-invite">{data?.phone}</p>,
     },
     {
       title: `${i18n.t("total_order", { lng: lang })}`,
-      render: (data) => <a>{data?.total_done_order}</a>,
+      render: (data) => (
+        <p className="text-name-invite">{data?.total_done_order}</p>
+      ),
       align: "center",
     },
     {
@@ -88,14 +90,14 @@ const ReportInviteDetails = () => {
   ];
   return (
     <div>
-      <a className="title">{`${i18n.t("detail", { lng: lang })}`}</a>
+      <p className="title">{`${i18n.t("detail", { lng: lang })}`}</p>
       <div className="mt-5">
         <Table columns={columns} dataSource={data} pagination={false} />
       </div>
       <div className="mt-1 div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}: {total}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}

@@ -4,32 +4,28 @@ import {
   Dropdown,
   Empty,
   FloatButton,
+  Image,
   Input,
   Pagination,
   Select,
-  Skeleton,
   Space,
   Switch,
   Table,
 } from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
-  activeCollaborator,
   changeContactedCollaborator,
   deleteCollaborator,
   fetchCollaborators,
   lockTimeCollaborator,
   verifyCollaborator,
 } from "../../../../../api/collaborator.jsx";
-import offToggle from "../../../../../assets/images/off-button.png";
 import offline from "../../../../../assets/images/offline.svg";
-import onToggle from "../../../../../assets/images/on-button.png";
 import online from "../../../../../assets/images/online.svg";
 import pending from "../../../../../assets/images/pending.svg";
 import { errorNotify } from "../../../../../helper/toast";
-import { loadingAction } from "../../../../../redux/actions/loading.js";
 import "./CollaboratorManage.scss";
 
 import moment from "moment";
@@ -38,15 +34,15 @@ import AddCollaborator from "../../../../../components/addCollaborator/addCollab
 import ModalCustom from "../../../../../components/modalCustom/index.jsx";
 import LoadingPagination from "../../../../../components/paginationLoading/index.jsx";
 import InputCustom from "../../../../../components/textInputCustom/index.jsx";
+import { useCookies } from "../../../../../helper/useCookies.js";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions.js";
+import { useWindowScrollPositions } from "../../../../../helper/useWindowPosition.js";
 import i18n from "../../../../../i18n/index.js";
 import {
   getElementState,
   getLanguageState,
   getUser,
 } from "../../../../../redux/selectors/auth.js";
-import { useCookies } from "../../../../../helper/useCookies.js";
-import useWindowDimensions from "../../../../../helper/useWindowDimensions.js";
-import { useWindowScrollPositions } from "../../../../../helper/useWindowPosition.js";
 import { getProvince } from "../../../../../redux/selectors/service.js";
 
 const CollaboratorManage = (props) => {
@@ -83,60 +79,57 @@ const CollaboratorManage = (props) => {
         ]
       : [];
   const province = useSelector(getProvince);
-  const dispatch = useDispatch();
   const [saveToCookie, readCookie] = useCookies();
   const { width } = useWindowDimensions();
   const { scrollX, scrollY } = useWindowScrollPositions();
+  const pageStartCookie = readCookie("start_page_ctv");
+  const pageCookie = readCookie("page_ctv");
+  const cityCookie = readCookie("ctv-city");
+  const tabCookie = readCookie("tab_collaborator");
+  const yCookie = readCookie("table_y_ctv");
 
   useEffect(() => {
-    window.scroll(0, Number(readCookie("table_y_ctv")));
-    setCurrentPage(
-      readCookie("page_ctv") === "" ? 1 : Number(readCookie("page_ctv"))
-    );
-    setStartPage(
-      readCookie("start_page_ctv") === ""
-        ? 0
-        : Number(readCookie("start_page_ctv"))
-    );
+    window.scroll(0, Number(yCookie));
+    setCurrentPage(pageCookie === "" ? 1 : Number(pageCookie));
+    setStartPage(pageStartCookie === "" ? 0 : Number(pageStartCookie));
     setCity(
       user?.area_manager_lv_1?.length === 0
-        ? readCookie("ctv-city") === ""
+        ? cityCookie === ""
           ? ""
-          : Number(readCookie("ctv-city"))
+          : Number(cityCookie)
         : user?.area_manager_lv_1[0]
     );
-  }, []);
+  }, [pageStartCookie, pageCookie, cityCookie, yCookie, user]);
 
   useEffect(() => {
     fetchCollaborators(
       lang,
-      Number(readCookie("start_page_ctv")),
+      Number(pageStartCookie),
       20,
-      readCookie("tab_collaborator") === "online" ||
-        readCookie("tab_collaborator") === ""
-        ? "online"
-        : readCookie("tab_collaborator"),
-      valueSearch,
-      readCookie("ctv-city") === "" ? "" : Number(readCookie("ctv-city"))
+      tabCookie === "online" || tabCookie === "" ? "online" : tabCookie,
+      "",
+      cityCookie === "" ? "" : Number(cityCookie)
     )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItems);
       })
       .catch((err) => {});
-  }, [status]);
+  }, [status, lang, tabCookie, cityCookie, pageStartCookie]);
 
-  province?.map((item) => {
+  province?.forEach((item) => {
     if (user?.area_manager_lv_1?.length === 0) {
       cityOptions.push({
         value: item?.code,
         label: item?.name,
       });
+      return;
     } else if (user?.area_manager_lv_1?.includes(item?.code)) {
       cityOptions.push({
         value: item?.code,
         label: item?.name,
       });
+      return;
     }
   });
 
@@ -167,21 +160,18 @@ const CollaboratorManage = (props) => {
       .catch((err) => {});
   };
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      fetchCollaborators(lang, 0, 20, status, value, city)
-        .then((res) => {
-          setData(res.data);
-          setTotal(res.totalItems);
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
+  const handleSearch = _debounce((value) => {
+    fetchCollaborators(lang, 0, 20, status, value, city)
+      .then((res) => {
+        setData(res.data);
+        setTotal(res.totalItems);
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
         });
-    }, 1000),
-    [status, city]
-  );
+      });
+  }, 1000);
 
   const onDelete = useCallback(
     (id) => {
@@ -204,7 +194,7 @@ const CollaboratorManage = (props) => {
           });
         });
     },
-    [startPage, status, valueSearch, city]
+    [startPage, status, valueSearch, city, lang]
   );
 
   const onLockTimeCollaborator = useCallback(
@@ -251,7 +241,7 @@ const CollaboratorManage = (props) => {
           });
       }
     },
-    [timeValue, dispatch, startPage, status, valueSearch, city]
+    [timeValue, startPage, status, valueSearch, city, lang]
   );
   const onVerifyCollaborator = useCallback(
     (id, is_verify) => {
@@ -274,7 +264,7 @@ const CollaboratorManage = (props) => {
           });
         });
     },
-    [startPage, status, valueSearch, city]
+    [startPage, status, valueSearch, city, lang]
   );
 
   const onContected = useCallback(
@@ -298,14 +288,14 @@ const CollaboratorManage = (props) => {
           });
         });
     },
-    [startPage, status, valueSearch, city]
+    [startPage, status, valueSearch, city, lang]
   );
 
   const items = [
     {
       key: "1",
       label: (
-        <a
+        <p
           className={
             checkElement?.includes("lock_unlock_collaborator")
               ? "text-click-block"
@@ -316,13 +306,15 @@ const CollaboratorManage = (props) => {
           {itemEdit?.is_locked
             ? `${i18n.t("unlock", { lng: lang })}`
             : `${i18n.t("lock", { lng: lang })}`}
-        </a>
+        </p>
       ),
     },
     {
       key: "2",
       label: checkElement?.includes("delete_collaborator") && (
-        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
+        <p className="text-dropdown" onClick={toggle}>{`${i18n.t("delete", {
+          lng: lang,
+        })}`}</p>
       ),
     },
   ];
@@ -331,9 +323,9 @@ const CollaboratorManage = (props) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("code_collaborator", {
+          <p className="title-column">{`${i18n.t("code_collaborator", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => (
@@ -349,14 +341,14 @@ const CollaboratorManage = (props) => {
               : ""
           }
         >
-          <a className="text-id-collaborator">{data?.id_view}</a>
+          <p className="text-id-collaborator">{data?.id_view}</p>
         </Link>
       ),
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("name", { lng: lang })}`}</a>
+          <p className="title-column">{`${i18n.t("name", { lng: lang })}`}</p>
         );
       },
       render: (data) => {
@@ -374,10 +366,14 @@ const CollaboratorManage = (props) => {
             }
             className="div-collaborator"
           >
-            <img className="img_collaborator" src={data?.avatar} />
+            <Image
+              preview={false}
+              className="img_collaborator"
+              src={data?.avatar}
+            />
             <div className="div-name-collaborator">
-              <a className="text-name-collaborator">{data?.full_name}</a>
-              <a className="text-phone-collaborator">{data?.phone}</a>
+              <p className="text-name-collaborator">{data?.full_name}</p>
+              <p className="text-phone-collaborator">{data?.phone}</p>
             </div>
           </Link>
         );
@@ -387,20 +383,20 @@ const CollaboratorManage = (props) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("date_create", {
+          <p className="title-column">{`${i18n.t("date_create", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div className="div-create-ctv">
-            <a className="text-create-ctv">
+            <p className="text-create-ctv">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-create-ctv">
+            </p>
+            <p className="text-create-ctv">
               {moment(new Date(data?.date_create)).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -408,15 +404,15 @@ const CollaboratorManage = (props) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("sdt", { lng: lang })}`}</a>
+          <p className="title-column">{`${i18n.t("sdt", { lng: lang })}`}</p>
         );
       },
-      render: (data) => <a className="text-phone-ctv">{data?.phone}</a>,
+      render: (data) => <p className="text-phone-ctv">{data?.phone}</p>,
       align: "center",
     },
     {
       title: () => {
-        return <a className="title-column">Khu vực</a>;
+        return <p className="title-column">Khu vực</p>;
       },
       render: (data) => {
         return (
@@ -425,12 +421,12 @@ const CollaboratorManage = (props) => {
               return (
                 <div key={key}>
                   {item?.code === data?.city ? (
-                    <a>
+                    <p className="text-city-ctv">
                       {item?.name?.replace(
                         new RegExp(`${"Thành phố"}|${"Tỉnh"}`),
                         ""
                       )}
-                    </a>
+                    </p>
                   ) : (
                     ""
                   )}
@@ -444,39 +440,42 @@ const CollaboratorManage = (props) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("status", { lng: lang })}`}</a>
+          <p className="title-column">{`${i18n.t("status", { lng: lang })}`}</p>
         );
       },
       align: "center",
       render: (data) => {
-        const now = moment(new Date()).format("DD/MM/YYYY hh:mm:ss");
         const then = data?.date_lock
           ? moment(new Date(data?.date_lock)).format("DD/MM/YYYY hh:mm:ss")
           : "";
         return (
           <div>
             {!data?.is_verify ? (
-              <div>
-                <img src={pending} />
-                <a className="text-pending-cola">Pending</a>
+              <div className="div-status-ctv">
+                <Image preview={false} src={pending} className="icon-status" />
+                <p className="text-pending-cola">Pending</p>
               </div>
             ) : data?.is_locked ? (
               <div>
-                <div>
-                  <img src={pending} />
-                  <a className="text-lock-time">Block</a>
+                <div className="div-status-ctv">
+                  <Image
+                    preview={false}
+                    src={pending}
+                    className="icon-status"
+                  />
+                  <p className="text-lock-time">Block</p>
                 </div>
-                {then !== "" && <a className="text-lock-time">{then}</a>}
+                {then !== "" && <p className="text-lock-time">{then}</p>}
               </div>
             ) : data?.is_active ? (
-              <div>
-                <img src={online} />
-                <a className="text-online">Online</a>
+              <div className="div-status-ctv">
+                <Image preview={false} src={online} className="icon-status" />
+                <p className="text-online">Online</p>
               </div>
             ) : (
-              <div>
-                <img src={offline} />
-                <a className="text-offline">Offline</a>
+              <div className="div-status-ctv">
+                <Image preview={false} src={offline} className="icon-status" />
+                <p className="text-offline">Offline</p>
               </div>
             )}
           </div>
@@ -486,9 +485,9 @@ const CollaboratorManage = (props) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("account", {
+          <p className="title-column">{`${i18n.t("account", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       align: "center",
@@ -496,17 +495,17 @@ const CollaboratorManage = (props) => {
         return (
           <div className="div-verify">
             {!data?.is_verify && data?.is_contacted ? (
-              <a className="text-nonverify">{`${i18n.t("contacted", {
+              <p className="text-nonverify">{`${i18n.t("contacted", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : data?.is_verify ? (
-              <a className="text-verify">{`${i18n.t("verified", {
+              <p className="text-verify">{`${i18n.t("verified", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : (
-              <a className="text-nonverify">{`${i18n.t("unconfirmed", {
+              <p className="text-nonverify">{`${i18n.t("unconfirmed", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             )}
             {!data?.is_contacted && !data?.is_verify && (
               <div
@@ -518,9 +517,9 @@ const CollaboratorManage = (props) => {
                 onClick={toggleContected}
               >
                 {checkElement?.includes("contacted_collaborator") && (
-                  <a className="text-contacted">{`${i18n.t("contact", {
+                  <p className="text-contacted">{`${i18n.t("contact", {
                     lng: lang,
-                  })}`}</a>
+                  })}`}</p>
                 )}
               </div>
             )}
@@ -553,9 +552,9 @@ const CollaboratorManage = (props) => {
             placement="bottom"
             trigger={["click"]}
           >
-            <a>
+            <div>
               <i class="uil uil-ellipsis-v"></i>
-            </a>
+            </div>
           </Dropdown>
         </Space>
       ),
@@ -635,9 +634,9 @@ const CollaboratorManage = (props) => {
             }}
           />
           <div className="div-pagination p-2">
-            <a>
+            <p>
               {`${i18n.t("total", { lng: lang })}`}: {total}
-            </a>
+            </p>
             <div>
               <Pagination
                 current={currentPage}
@@ -706,7 +705,7 @@ const CollaboratorManage = (props) => {
             handleCancel={toggleVerify}
             body={
               <>
-                <a>{`${i18n.t("want_verify_account", { lng: lang })}`}</a>
+                <p>{`${i18n.t("want_verify_account", { lng: lang })}`}</p>
                 <h5>{itemEdit?.full_name}</h5>
               </>
             }
@@ -721,11 +720,13 @@ const CollaboratorManage = (props) => {
             textOk="Xoá"
             handleCancel={toggle}
             body={
-              <a>
+              <p>
                 Bạn có chắc muốn xóa cộng tác viên
-                <a className="text-name-modal">{itemEdit?.full_name}</a> này
-                không?
-              </a>
+                <strong className="text-name-modal">
+                  {itemEdit?.full_name}
+                </strong>{" "}
+                này không?
+              </p>
             }
           />
         </div>
@@ -738,8 +739,8 @@ const CollaboratorManage = (props) => {
             handleCancel={toggleContected}
             body={
               <>
-                <a>{`${i18n.t("want_contact_collaborator", { lng: lang })}`}</a>
-                <a className="text-name-modal">{itemEdit?.full_name}</a>
+                <p>{`${i18n.t("want_contact_collaborator", { lng: lang })}`}</p>
+                <p className="text-name-modal">{itemEdit?.full_name}</p>
               </>
             }
           />

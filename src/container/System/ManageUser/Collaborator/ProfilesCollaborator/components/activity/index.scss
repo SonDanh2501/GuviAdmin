@@ -37,6 +37,7 @@
   font-weight: 500;
   font-size: 12px;
   color: black;
+  margin: 0;
 }
 
 .div-service-activity {
@@ -48,7 +49,7 @@
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
-    line-height: 16px;
+    margin: 0;
     color: black;
     text-decoration: none;
   }
@@ -63,8 +64,8 @@
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
-    line-height: 16px;
-    color: #6e6893;
+    margin: 0;
+    color: #202223;
   }
 }
 
@@ -80,6 +81,7 @@
     text-decoration: none;
     color: rgb(0, 0, 0);
     text-transform: capitalize;
+    margin: 0;
   }
 }
 
@@ -107,7 +109,7 @@
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
-  line-height: 16px;
+  margin: 0;
   color: #000000;
 }
 
@@ -123,11 +125,11 @@
 .text-pending-activity {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 14px;
-  line-height: 16px;
   color: #ece200 !important;
   text-decoration: none;
+  margin: 0;
 }
 
 .text-confirm-activity {
@@ -137,6 +139,7 @@
   font-size: 12px;
   color: #023e8a;
   text-decoration: none;
+  margin: 0;
 }
 
 .text-doing-activity {
@@ -146,6 +149,7 @@
   font-size: 12px;
   color: #023e8a;
   text-decoration: none;
+  margin: 0;
 }
 
 .text-cancel-activity {
@@ -155,6 +159,7 @@
   font-size: 12px;
   color: #ff0000;
   text-decoration: none;
+  margin: 0;
 }
 .text-done-activity {
   font-family: "Roboto";
@@ -163,6 +168,7 @@
   font-size: 12px;
   color: #00cf3a;
   text-decoration: none;
+  margin: 0;
 }
 
 .filter-input {
@@ -182,6 +188,7 @@
     font-size: 12px !important;
     color: #000000;
     text-decoration: none;
+    margin: 0;
   }
 }
 
@@ -192,6 +199,7 @@
     font-weight: 500;
     font-size: 12px;
     color: black;
+    margin: 0;
   }
 
   .text-address-activity {

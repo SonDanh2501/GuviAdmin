@@ -6,11 +6,9 @@ import {
   deleteServiceApi,
   getServiceApi,
 } from "../../../../api/service";
-import { Dropdown, Space, Table } from "antd";
+import { Dropdown, Image, Space, Switch, Table } from "antd";
 import { useSelector } from "react-redux";
 import { getUser } from "../../../../redux/selectors/auth";
-import onToggle from "../../../../assets/images/on-button.png";
-import offToggle from "../../../../assets/images/off-button.png";
 import { MoreOutlined } from "@ant-design/icons";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import AddService from "../../../../components/addService/addService";
@@ -21,16 +19,10 @@ import LoadingPagination from "../../../../components/paginationLoading";
 const ServiceManage = () => {
   const { state } = useLocation();
   const { id } = state || {};
-  const [dataFilter, setDataFilter] = useState([]);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const [modal, setModal] = useState(false);
-  const [modalCreate, setModalCreate] = useState(false);
-  const [modalEdit, setModalEdit] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
   const [data, setData] = useState([]);
-  const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const user = useSelector(getUser);
@@ -43,7 +35,6 @@ const ServiceManage = () => {
       getServiceApi(id)
         .then((res) => {
           setData(res?.data);
-          setTotal(res?.totalItem);
         })
         .catch((err) => {});
     }
@@ -59,7 +50,6 @@ const ServiceManage = () => {
           getServiceApi(id)
             .then((res) => {
               setData(res?.data);
-              setTotal(res?.totalItem);
             })
             .catch((err) => {});
         })
@@ -76,43 +66,22 @@ const ServiceManage = () => {
   const blockService = useCallback(
     (_id, is_active) => {
       setIsLoading(true);
-      if (is_active === true) {
-        activeServiceApi(_id, { is_active: false })
-          .then((res) => {
-            setModalBlock(false);
-            setIsLoading(false);
-            getServiceApi(id)
-              .then((res) => {
-                setData(res?.data);
-                setTotal(res?.totalItem);
-              })
-              .catch((err) => {});
-          })
-          .catch((err) => {
-            setIsLoading(false);
-            errorNotify({
-              message: err,
-            });
+      activeServiceApi(_id, { is_active: is_active ? false : true })
+        .then((res) => {
+          setModalBlock(false);
+          setIsLoading(false);
+          getServiceApi(id)
+            .then((res) => {
+              setData(res?.data);
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
           });
-      } else {
-        activeServiceApi(_id, { is_active: true })
-          .then((res) => {
-            setModalBlock(false);
-            setIsLoading(false);
-            getServiceApi(id)
-              .then((res) => {
-                setData(res?.data);
-                setTotal(res?.totalItem);
-              })
-              .catch((err) => {});
-          })
-          .catch((err) => {
-            setIsLoading(false);
-            errorNotify({
-              message: err,
-            });
-          });
-      }
+        });
     },
     [id]
   );
@@ -124,7 +93,6 @@ const ServiceManage = () => {
         <EditService
           data={itemEdit}
           setData={setData}
-          setTotal={setTotal}
           id={id}
           setIsLoading={setIsLoading}
         />
@@ -132,7 +100,11 @@ const ServiceManage = () => {
     },
     {
       key: "2",
-      label: user.role === "admin" && <a onClick={toggle}>Xoá</a>,
+      label: user.role === "admin" && (
+        <p style={{ margin: 0 }} onClick={toggle}>
+          Xoá
+        </p>
+      ),
     },
   ];
 
@@ -152,7 +124,11 @@ const ServiceManage = () => {
               );
             }}
           >
-            <img className="img-customer-service" src={data?.thumbnail} />
+            <Image
+              preview={false}
+              style={{ width: 50, height: 50 }}
+              src={data?.thumbnail}
+            />
           </div>
         );
       },
@@ -160,7 +136,7 @@ const ServiceManage = () => {
     {
       title: "Tiêu đề",
       render: (data) => {
-        return <a className="text-title">{data?.title.vi}</a>;
+        return <p className="text-title">{data?.title.vi}</p>;
       },
       width: "35%",
     },
@@ -170,17 +146,11 @@ const ServiceManage = () => {
       render: (data) => {
         return (
           <div>
-            {user.role === "admin" && data?.is_active ? (
-              <img
-                className="img-lock-group-service"
-                src={onToggle}
+            {user.role === "admin" && data?.is_active && (
+              <Switch
+                checked={data?.is_active}
                 onClick={toggleBlock}
-              />
-            ) : (
-              <img
-                className="img-lock-group-service"
-                src={offToggle}
-                onClick={toggleBlock}
+                size="small"
               />
             )}
           </div>
@@ -198,12 +168,10 @@ const ServiceManage = () => {
             menu={{
               items,
             }}
-            placement="bottom"
+            placement="bottomRight"
             trigger={["click"]}
           >
-            <a>
-              <MoreOutlined className="icon-more" />
-            </a>
+            <MoreOutlined className="icon-more" />
           </Dropdown>
         </Space>
       ),
@@ -213,12 +181,7 @@ const ServiceManage = () => {
   return (
     <div>
       <div>
-        <AddService
-          id={id}
-          setData={setData}
-          setTotal={setTotal}
-          setIsLoading={setIsLoading}
-        />
+        <AddService id={id} setData={setData} setIsLoading={setIsLoading} />
       </div>
       <div className="mt-3">
         <Table

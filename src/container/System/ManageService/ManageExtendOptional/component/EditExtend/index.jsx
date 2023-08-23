@@ -1,31 +1,31 @@
 import {
   Button,
-  Drawer,
-  Col,
-  Row,
-  Input,
-  Image,
   Checkbox,
-  Select,
+  Col,
   DatePicker,
+  Drawer,
+  Image,
+  Input,
+  Row,
   TimePicker,
 } from "antd";
-import { useCallback, useEffect, useState } from "react";
-import "./styles.scss";
-import resizeFile from "../../../../../../helper/resizer";
-import { getDistrictApi, postFile } from "../../../../../../api/file";
-import { errorNotify } from "../../../../../../helper/toast";
-import LoadingPagination from "../../../../../../components/paginationLoading";
-import moment from "moment";
 import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
+import moment from "moment";
+import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { postFile } from "../../../../../../api/file";
 import {
-  createExtendOptionApi,
   editExtendOptionApi,
   getExtendByOptionalApi,
 } from "../../../../../../api/service";
+import LoadingPagination from "../../../../../../components/paginationLoading";
+import InputCustom from "../../../../../../components/textInputCustom";
+import resizeFile from "../../../../../../helper/resizer";
+import { errorNotify } from "../../../../../../helper/toast";
+import { getProvince } from "../../../../../../redux/selectors/service";
+import "./styles.scss";
 
-const EditExtend = ({ idOption, setData, setTotal, data }) => {
+const EditExtend = ({ idOption, setData, data }) => {
   const [open, setOpen] = useState(false);
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
@@ -40,13 +40,10 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showInApp, setShowInApp] = useState(false);
   const [isPriceArea, setIsPriceArea] = useState(false);
-  const [codeCity, setCodeCity] = useState();
-  const [nameCity, setNameCity] = useState("");
-  const [dataCity, setDataCity] = useState([]);
   const [dataDistrict, setDataDistrict] = useState([]);
-  const [codeDistrict, setCodeDistrict] = useState();
   const districtData = [];
   const cityData = [];
+  const province = useSelector(getProvince);
   const [priceArea, setPriceArea] = useState([
     {
       district: [],
@@ -93,15 +90,6 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
   };
 
   useEffect(() => {
-    getDistrictApi()
-      .then((res) => {
-        setDataCity(res?.aministrative_division);
-        setDataDistrict(res?.aministrative_division[1].districts);
-      })
-      .catch((err) => {});
-  }, []);
-
-  useEffect(() => {
     setTitleVN(data?.title?.vi);
     setTitleEN(data?.title?.en);
     setDescriptionVN(data?.description?.vi);
@@ -123,8 +111,8 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
     setPlatformFee(data?.platform_fee);
   }, [data]);
 
-  dataCity?.map((item) => {
-    cityData?.push({
+  province?.map((item) => {
+    return cityData?.push({
       value: item?.code,
       label: item?.name,
       district: item?.districts,
@@ -132,7 +120,7 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
   });
 
   dataDistrict?.map((item) => {
-    districtData?.push({
+    return districtData?.push({
       value: item?.code,
       label: item?.name,
     });
@@ -355,8 +343,8 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
     setPriceRushHour([
       ...priceRushHour,
       {
-        time_end: "",
-        time_start: "",
+        time_end: "00:00",
+        time_start: "00:00",
         type_increase: "",
         value: "",
       },
@@ -429,7 +417,6 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
         getExtendByOptionalApi(idOption)
           .then((res) => {
             setData(res?.data);
-            setTotal(res?.totalItem);
           })
           .catch((err) => {});
       })
@@ -443,7 +430,9 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
 
   return (
     <div>
-      <a onClick={showDrawer}>Chỉnh sửa</a>
+      <p style={{ margin: 0 }} onClick={showDrawer}>
+        Chỉnh sửa
+      </p>
 
       <Drawer
         title="Chỉnh sửa extend option"
@@ -456,13 +445,13 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
         <Row>
           <Col span={7}>
             <div>
-              <a className="title-input-extend">Tiêu đề</a>
-              <Input
+              <InputCustom
+                title="Tiêu đề"
                 placeholder="Nhập tiêu đề Tiếng Việt"
                 value={titleVN}
                 onChange={(e) => setTitleVN(e.target.value)}
               />
-              <Input
+              <InputCustom
                 placeholder="Nhập tiêu đề Tiếng Anh"
                 style={{ marginTop: 5 }}
                 value={titleEN}
@@ -470,38 +459,35 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
               />
             </div>
             <div className="mt-2">
-              <a className="title-input-extend">Mô tả</a>
-              <Input
+              <InputCustom
+                title="Mô tả"
                 placeholder="Nhập mô tả Tiếng Việt"
                 value={descriptionVN}
                 onChange={(e) => setDescriptionVN(e.target.value)}
               />
-              <Input
+              <InputCustom
                 placeholder="Nhập mô tả Tiếng Anh"
                 style={{ marginTop: 5 }}
                 value={descriptionEN}
                 onChange={(e) => setDescriptionEN(e.target.value)}
               />
             </div>
-            <div>
-              <a className="title-input-extend">Vị trí</a>
-              <Input
-                placeholder="Nhập vị trí"
-                value={position}
-                onChange={(e) => setPosition(e.target.value)}
-              />
-            </div>
-            <div>
-              <a className="title-input-extend">Giá</a>
-              <Input
-                placeholder="Nhập giá"
-                type="number"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              />
-            </div>
+            <InputCustom
+              title="Vị trí"
+              placeholder="Nhập vị trí"
+              value={position}
+              onChange={(e) => setPosition(e.target.value)}
+            />
+            <InputCustom
+              title="Giá"
+              placeholder="Nhập giá"
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
+
             <div className="mt-2">
-              <a className="title-input-extend">Thumnail</a>
+              <p className="title-input-extend">Thumnail</p>
               <Input
                 id="exampleImage"
                 name="image"
@@ -513,7 +499,7 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
               {thumbnail && <Image src={thumbnail} className="img-thumbnail" />}
             </div>
             <div className="mt-2">
-              <a className="title-input-extend">Thumnail Active</a>
+              <p className="title-input-extend">Thumnail Active</p>
               <Input
                 id="exampleImage"
                 name="image"
@@ -538,8 +524,9 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                   {priceArea?.map((item, index) => {
                     return (
                       <div className="div-item-price-area" key={index}>
-                        <a>Tỉnh/thành:</a>
-                        <Select
+                        <InputCustom
+                          title="Tỉnh/thành"
+                          select={true}
                           style={{ width: "100%", marginTop: 2 }}
                           value={item?.city}
                           options={cityData}
@@ -547,8 +534,9 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                             onChangeCity(value, label, index)
                           }
                         />
-                        <a>Huyện/quận:</a>
-                        <Select
+                        <InputCustom
+                          title="Huyện/quận"
+                          select={true}
                           mode="multiple"
                           style={{ width: "100%", marginTop: 2 }}
                           value={item?.district}
@@ -557,8 +545,8 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                             onChangeDistrict(value, label, index)
                           }
                         />
-                        <a>Giá trị</a>
-                        <Input
+                        <InputCustom
+                          title="Giá trị"
                           placeholder="Nhập giá trị"
                           type="number"
                           value={item?.value}
@@ -566,8 +554,9 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                             onChangeValueArea(e.target.value, index)
                           }
                         />
-                        <a>Loại</a>
-                        <Select
+                        <InputCustom
+                          title="Loại"
+                          select={true}
                           style={{ width: "100%", marginTop: 2 }}
                           value={item?.type_increase}
                           onChange={(e) => onChangeTypeIncreaseArea(e, index)}
@@ -640,7 +629,7 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                   {priceHoliday?.map((item, index) => {
                     return (
                       <div key={index} className="mt-2 div-item-holiday">
-                        <a>Thời gian bắt đầu</a>
+                        <p className="m-0">Thời gian bắt đầu</p>
                         <DatePicker
                           style={{ width: "100%" }}
                           format={dateFormat}
@@ -656,8 +645,9 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                               index
                             )
                           }
+                          allowClear={false}
                         />
-                        <a>Thời gian kết đầu</a>
+                        <p className="m-0">Thời gian kết đầu</p>
                         <DatePicker
                           style={{ width: "100%", marginTop: 5 }}
                           value={dayjs(
@@ -672,9 +662,11 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                               index
                             )
                           }
+                          allowClear={false}
                         />
-                        <a>Hình thức tăng giá</a>
-                        <Select
+                        <InputCustom
+                          title="Hình thức tăng giá"
+                          select={true}
                           style={{ width: "100%", marginTop: 5 }}
                           value={item?.type_increase}
                           onChange={(e) => onChangePriceType(e, index)}
@@ -689,9 +681,8 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                             },
                           ]}
                         />
-                        <a>Giá trị</a>
-                        <Input
-                          style={{ marginTop: 5 }}
+                        <InputCustom
+                          title="Giá trị"
                           value={item?.value}
                           type="number"
                           onChange={(e) =>
@@ -732,8 +723,9 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                   {priceRushDay?.map((item, index) => {
                     return (
                       <div key={index} className="mt-2 div-item-holiday">
-                        <a>Thứ trong tuần</a>
-                        <Select
+                        <InputCustom
+                          title="Thứ trong tuần"
+                          select={true}
                           mode="multiple"
                           style={{ width: "100%", marginTop: 5 }}
                           value={item?.rush_day}
@@ -769,8 +761,9 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                             },
                           ]}
                         />
-                        <a>Hình thức tăng giá</a>
-                        <Select
+                        <InputCustom
+                          title="Hình thức tăng giá"
+                          select={true}
                           style={{ width: "100%", marginTop: 5 }}
                           value={item?.type_increase}
                           onChange={(e) => onChangePriceRushDayType(e, index)}
@@ -785,8 +778,8 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                             },
                           ]}
                         />
-                        <a>Giá trị</a>
-                        <Input
+                        <InputCustom
+                          title="Giá trị"
                           style={{ marginTop: 5 }}
                           value={item?.value}
                           type="number"
@@ -826,7 +819,7 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                   {priceRushHour?.map((item, index) => {
                     return (
                       <div key={index} className="mt-2 div-item-holiday">
-                        <a>Giờ bắt đầu</a>
+                        <p className="m-0">Giờ bắt đầu</p>
                         <TimePicker
                           style={{ width: "100%", marginTop: 5 }}
                           value={dayjs(
@@ -838,7 +831,7 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                             onChangeRushHourTimeStart(timeString, index)
                           }
                         />
-                        <a>Giờ kết thúc</a>
+                        <p className="m-0">Giờ kết thúc</p>
                         <TimePicker
                           style={{ width: "100%", marginTop: 5 }}
                           value={dayjs(item?.time_end.slice(0, 5), hourFormat)}
@@ -847,8 +840,9 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                             onChangeRushHourTimeEnd(timeString, index)
                           }
                         />
-                        <a>Hình thức tăng giá</a>
-                        <Select
+                        <InputCustom
+                          title="Hình thức tăng giá"
+                          select={true}
                           style={{ width: "100%", marginTop: 5 }}
                           value={item?.type_increase}
                           onChange={(e) => onChangeRushHourType(e, index)}
@@ -863,8 +857,8 @@ const EditExtend = ({ idOption, setData, setTotal, data }) => {
                             },
                           ]}
                         />
-                        <a>Giá trị</a>
-                        <Input
+                        <InputCustom
+                          title="Giá trị"
                           style={{ marginTop: 5 }}
                           value={item?.value}
                           type="number"

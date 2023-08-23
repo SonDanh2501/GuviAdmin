@@ -1,7 +1,7 @@
 import { MoreOutlined } from "@ant-design/icons";
-import { Dropdown, Empty, Skeleton, Space, Table } from "antd";
+import { Dropdown, Empty, Image, Skeleton, Space, Switch, Table } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
@@ -9,27 +9,19 @@ import {
   deleteGroupServiceApi,
   getGroupServiceApi,
 } from "../../../../api/service";
-import offToggle from "../../../../assets/images/off-button.png";
-import onToggle from "../../../../assets/images/on-button.png";
 import AddGroupService from "../../../../components/addGroupService/addGroupService";
 import EditGroupService from "../../../../components/editGroupService/editGroupService";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
 import { getUser } from "../../../../redux/selectors/auth";
-import "./GroupServiceManage.scss";
+import "./styles.scss";
 
-export default function GroupServiceManage() {
-  const dispatch = useDispatch();
-  const [dataFilter, setDataFilter] = useState([]);
+const GroupServiceManage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const [modal, setModal] = useState(false);
-  const [modalCreate, setModalCreate] = useState(false);
-  const [modalEdit, setModalEdit] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
   const [data, setData] = useState([]);
-  const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const user = useSelector(getUser);
@@ -39,7 +31,6 @@ export default function GroupServiceManage() {
     getGroupServiceApi(0, 20)
       .then((res) => {
         setData(res?.data);
-        setTotal(res?.totalItem);
       })
       .catch((err) => {});
   }, []);
@@ -56,7 +47,6 @@ export default function GroupServiceManage() {
         getGroupServiceApi(0, 20)
           .then((res) => {
             setData(res?.data);
-            setTotal(res?.totalItem);
           })
           .catch((err) => {});
       })
@@ -70,39 +60,20 @@ export default function GroupServiceManage() {
   }, []);
 
   const blockGroupService = useCallback((id, is_active) => {
-    if (is_active === true) {
-      activeGroupServiceApi(id, { is_active: false })
-        .then((res) => {
-          setModalBlock(false);
-          getGroupServiceApi(0, 20)
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
+    activeGroupServiceApi(id, { is_active: is_active ? false : true })
+      .then((res) => {
+        setModalBlock(false);
+        getGroupServiceApi(0, 20)
+          .then((res) => {
+            setData(res?.data);
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
         });
-    } else {
-      activeGroupServiceApi(id, { is_active: true })
-        .then((res) => {
-          setModalBlock(false);
-          getGroupServiceApi(0, 20)
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-        });
-    }
+      });
   }, []);
 
   const items = [
@@ -112,7 +83,6 @@ export default function GroupServiceManage() {
         <EditGroupService
           data={itemEdit}
           setData={setData}
-          setTotal={setTotal}
           setIsLoading={setIsLoading}
         />
       ),
@@ -133,7 +103,11 @@ export default function GroupServiceManage() {
     // },
     {
       key: "2",
-      label: user.role === "admin" && <a onClick={toggle}>Xoá</a>,
+      label: user.role === "admin" && (
+        <p style={{ margin: 0 }} onClick={toggle}>
+          Xoá
+        </p>
+      ),
     },
   ];
 
@@ -152,7 +126,11 @@ export default function GroupServiceManage() {
               }
             }}
           >
-            <img className="img-customer-service" src={data?.thumbnail} />
+            <Image
+              style={{ width: 50, height: 50, borderRadius: 4 }}
+              src={data?.thumbnail}
+              preview={false}
+            />
           </div>
         );
       },
@@ -160,13 +138,13 @@ export default function GroupServiceManage() {
     {
       title: "Tiêu đề",
       render: (data) => {
-        return <a className="text-title">{data?.title.vi}</a>;
+        return <p className="text-title">{data?.title.vi}</p>;
       },
       width: "35%",
     },
     {
       title: "Loại dịch vụ",
-      render: (data) => <a className="text-service">{data?.type}</a>,
+      render: (data) => <p className="text-service">{data?.type}</p>,
       width: "30%",
     },
     {
@@ -174,17 +152,11 @@ export default function GroupServiceManage() {
       render: (data) => {
         return (
           <div>
-            {user.role === "admin" && data?.is_active ? (
-              <img
-                className="img-lock-group-service"
-                src={onToggle}
+            {user.role === "admin" && (
+              <Switch
+                checked={data?.is_active}
                 onClick={toggleBlock}
-              />
-            ) : (
-              <img
-                className="img-lock-group-service"
-                src={offToggle}
-                onClick={toggleBlock}
+                size="small"
               />
             )}
           </div>
@@ -201,12 +173,10 @@ export default function GroupServiceManage() {
             menu={{
               items,
             }}
-            placement="bottom"
+            placement="bottomRight"
             trigger={["click"]}
           >
-            <a>
-              <MoreOutlined className="icon-more" />
-            </a>
+            <MoreOutlined className="icon-more" />
           </Dropdown>
         </Space>
       ),
@@ -216,12 +186,8 @@ export default function GroupServiceManage() {
   return (
     <React.Fragment>
       <div className="div-head-service">
-        <a className="label-service"> Tất cả dịch vụ</a>
-        <AddGroupService
-          setIsLoading={setIsLoading}
-          setData={setData}
-          setTotal={setTotal}
-        />
+        <p className="label-service"> Tất cả dịch vụ</p>
+        <AddGroupService setIsLoading={setIsLoading} setData={setData} />
       </div>
       <div className="mt-3">
         <Table
@@ -298,4 +264,6 @@ export default function GroupServiceManage() {
       {isLoading && <LoadingPagination />}
     </React.Fragment>
   );
-}
+};
+
+export default GroupServiceManage;

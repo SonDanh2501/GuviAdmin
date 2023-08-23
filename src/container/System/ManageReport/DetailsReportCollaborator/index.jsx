@@ -1,32 +1,24 @@
-import { Button, DatePicker, Image, Pagination, Popover, Table } from "antd";
+import { Button, Image, Pagination, Popover, Table } from "antd";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getCollaboratorsById } from "../../../../api/collaborator";
-import {
-  filterReportCollaboratorDetails,
-  getReportCollaborator,
-  getReportCollaboratorDetails,
-} from "../../../../api/report";
+import { getReportCollaboratorDetails } from "../../../../api/report";
+import CustomDatePicker from "../../../../components/customDatePicker";
 import { formatMoney } from "../../../../helper/formatMoney";
 import { loadingAction } from "../../../../redux/actions/loading";
 import "./index.scss";
-import CustomDatePicker from "../../../../components/customDatePicker";
-const { RangePicker } = DatePicker;
 
 const DetailReportManager = () => {
   const { state } = useLocation();
   const { id, dateStart, dateEnd } = state || {};
-  const [dataFilter, setDataFilter] = useState([]);
-  const [totalFilter, setTotalFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [dataCollaborator, setDataCollaborator] = useState();
   const [total, setTotal] = useState([]);
-  const [type, setType] = useState("day");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(dateStart);
+  const [endDate, setEndDate] = useState(dateEnd);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -50,27 +42,20 @@ const DetailReportManager = () => {
       .catch((err) => {
         dispatch(loadingAction.loadingRequest(false));
       });
-    setStartDate(dateStart);
-    setEndDate(dateEnd);
-  }, [id]);
+  }, [id, dateStart, dateEnd, dispatch]);
 
   const columns = [
-    {
-      title: "STT",
-      render: (data, record, index) => <a className="text-stt">{index + 1}</a>,
-      align: "center",
-    },
     {
       title: "Ngày",
       render: (data) => {
         return (
           <div className="div-time-report">
-            <a className="text-view-order">
+            <p className="text-view-order">
               {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}{" "}
-            </a>
-            <a className="text-view-order">
+            </p>
+            <p className="text-view-order">
               {moment(new Date(data?.date_work)).format("HH:mm")}{" "}
-            </a>
+            </p>
           </div>
         );
       },
@@ -80,7 +65,7 @@ const DetailReportManager = () => {
       render: (data) => {
         return (
           <div className="div-time-report">
-            <a className="text-view-order">{data?.id_view_order} </a>
+            <p className="text-view-order">{data?.id_view_order} </p>
           </div>
         );
       },
@@ -90,7 +75,7 @@ const DetailReportManager = () => {
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_gross_income)}</a>
+          <p className="text-money">{formatMoney(data?.total_gross_income)}</p>
         );
       },
     },
@@ -103,7 +88,7 @@ const DetailReportManager = () => {
         );
         return (
           <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Phí dịch vụ</a>
+            <p style={{ textAlign: "center", margin: 0 }}>Phí dịch vụ</p>
             <Popover content={content} placement="bottom">
               <Button className="btn-question">
                 <i class="uil uil-question-circle icon-question"></i>
@@ -115,9 +100,9 @@ const DetailReportManager = () => {
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">
+          <p className="text-money">
             {formatMoney(data?.total_collabotator_fee)}
-          </a>
+          </p>
         );
       },
     },
@@ -132,7 +117,7 @@ const DetailReportManager = () => {
         );
         return (
           <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Doanh thu</a>
+            <p style={{ textAlign: "center", margin: 0 }}>Doanh thu</p>
             <Popover content={content} placement="bottom">
               <Button className="btn-question">
                 <i class="uil uil-question-circle icon-question"></i>
@@ -144,7 +129,7 @@ const DetailReportManager = () => {
 
       align: "center",
       render: (data) => {
-        return <a className="text-money">{formatMoney(data?.total_income)}</a>;
+        return <p className="text-money">{formatMoney(data?.total_income)}</p>;
       },
     },
     {
@@ -156,7 +141,7 @@ const DetailReportManager = () => {
         );
         return (
           <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Giảm giá</a>
+            <p style={{ textAlign: "center" }}>Giảm giá</p>
             <Popover content={content} placement="bottom">
               <Button className="btn-question">
                 <i class="uil uil-question-circle icon-question"></i>
@@ -168,7 +153,7 @@ const DetailReportManager = () => {
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_discount)}</a>
+          <p className="text-money">{formatMoney(data?.total_discount)}</p>
         );
       },
     },
@@ -184,7 +169,7 @@ const DetailReportManager = () => {
         );
         return (
           <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Doanh thu thuần</a>
+            <p style={{ textAlign: "center", margin: 0 }}>Doanh thu thuần</p>
             <Popover content={content} placement="bottom">
               <Button className="btn-question">
                 <i class="uil uil-question-circle icon-question"></i>
@@ -196,7 +181,7 @@ const DetailReportManager = () => {
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_net_income)}</a>
+          <p className="text-money">{formatMoney(data?.total_net_income)}</p>
         );
       },
     },
@@ -205,7 +190,7 @@ const DetailReportManager = () => {
 
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_serviceFee)}</a>
+          <p className="text-money">{formatMoney(data?.total_serviceFee)}</p>
         );
       },
       align: "center",
@@ -222,7 +207,7 @@ const DetailReportManager = () => {
         );
         return (
           <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Tổng hoá đơn</a>
+            <p style={{ textAlign: "center", margin: 0 }}>Tổng hoá đơn</p>
             <Popover content={content} placement="bottom">
               <Button className="btn-question">
                 <i class="uil uil-question-circle icon-question"></i>
@@ -234,7 +219,7 @@ const DetailReportManager = () => {
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_order_fee)}</a>
+          <p className="text-money">{formatMoney(data?.total_order_fee)}</p>
         );
       },
     },
@@ -249,7 +234,7 @@ const DetailReportManager = () => {
         );
         return (
           <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>Lợi nhuận</a>
+            <p style={{ textAlign: "center", margin: 0 }}>Lợi nhuận</p>
             <Popover content={content} placement="bottom">
               <Button className="btn-question">
                 <i class="uil uil-question-circle icon-question"></i>
@@ -261,9 +246,9 @@ const DetailReportManager = () => {
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">
+          <p className="text-money">
             {formatMoney(data?.total_net_income_business)}
-          </a>
+          </p>
         );
       },
     },
@@ -278,7 +263,7 @@ const DetailReportManager = () => {
         );
         return (
           <div className="div-title-column">
-            <a style={{ textAlign: "center" }}>% lợi nhuận</a>
+            <p style={{ textAlign: "center", margin: 0 }}>% lợi nhuận</p>
             <Popover content={content} placement="bottom">
               <Button className="btn-question">
                 <i class="uil uil-question-circle icon-question"></i>
@@ -288,45 +273,34 @@ const DetailReportManager = () => {
         );
       },
       align: "center",
-      render: (data) => <a className="text-money">{data?.percent_income}%</a>,
+      render: (data) => <p className="text-money">{data?.percent_income}%</p>,
     },
   ];
 
   const onChange = (page) => {
     setCurrentPage(page);
     const dataLength = data.length < 20 ? 20 : data.length;
-    const filterLength = dataFilter.length < 20 ? 20 : dataFilter.length;
-    const start =
-      dataFilter.length > 0
-        ? page * filterLength - filterLength
-        : page * dataLength - dataLength;
+    const start = page * dataLength - dataLength;
 
-    dataFilter.length > 0
-      ? filterReportCollaboratorDetails(id, start, 20, startDate, endDate)
-          .then((res) => {
-            setDataFilter(res?.data);
-            setTotalFilter(res?.totalItem);
-          })
-          .catch((err) => console.log(err))
-      : getReportCollaboratorDetails(
-          id,
-          start > 0 ? start : 0,
-          20,
-          startDate,
-          endDate
-        )
-          .then((res) => {
-            setData(res?.data);
-            setTotal(res?.totalItem);
-          })
-          .catch((err) => console.log(err));
+    getReportCollaboratorDetails(
+      id,
+      start > 0 ? start : 0,
+      20,
+      startDate,
+      endDate
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => console.log(err));
   };
 
   const onChangeFilter = useCallback(() => {
-    filterReportCollaboratorDetails(id, 0, 20, startDate, endDate)
+    getReportCollaboratorDetails(id, 0, 20, startDate, endDate)
       .then((res) => {
-        setDataFilter(res?.data);
-        setTotalFilter(res?.totalItem);
+        setData(res?.data);
+        setTotal(res?.totalItem);
       })
       .catch((err) => console.log(err));
   }, [id, startDate, endDate]);
@@ -344,17 +318,17 @@ const DetailReportManager = () => {
           style={{ width: 100, height: 100, borderRadius: 4 }}
         />
         <div className="div-info-name">
-          <div>
-            <a className="text-title-ctv">Tên:</a>{" "}
-            <a className="text-name-ctv">{dataCollaborator?.full_name}</a>
+          <div className="div-row-name">
+            <p className="text-title-ctv">Tên:</p>{" "}
+            <p className="text-name-ctv">{dataCollaborator?.full_name}</p>
           </div>
-          <div>
-            <a className="text-title-ctv">Mã:</a>{" "}
-            <a className="text-name-ctv">{dataCollaborator?.id_view}</a>
+          <div className="div-row-name">
+            <p className="text-title-ctv">Mã:</p>{" "}
+            <p className="text-name-ctv">{dataCollaborator?.id_view}</p>
           </div>
-          <div>
-            <a className="text-title-ctv">Sđt:</a>{" "}
-            <a className="text-name-ctv">{dataCollaborator?.phone}</a>
+          <div className="div-row-name">
+            <p className="text-title-ctv">Sđt:</p>{" "}
+            <p className="text-name-ctv">{dataCollaborator?.phone}</p>
           </div>
         </div>
       </div>
@@ -368,25 +342,21 @@ const DetailReportManager = () => {
           setSameEnd={() => {}}
         />
         {startDate && (
-          <a className="text-date">
+          <p className="text-date m-0 ml-2">
             {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
             {moment(endDate).utc().format("DD/MM/YYYY")}
-          </a>
+          </p>
         )}
       </div>
       <div className="mt-3">
-        <Table
-          columns={columns}
-          pagination={false}
-          dataSource={dataFilter.length > 0 ? dataFilter : data}
-        />
+        <Table columns={columns} pagination={false} dataSource={data} />
       </div>
       <div className="mt-2 div-pagination p-2">
-        <a>Tổng: {totalFilter > 0 ? totalFilter : total}</a>
+        <p>Tổng: {total}</p>
         <Pagination
           current={currentPage}
           onChange={onChange}
-          total={totalFilter > 0 ? totalFilter : total}
+          total={total}
           showSizeChanger={false}
           pageSize={20}
         />

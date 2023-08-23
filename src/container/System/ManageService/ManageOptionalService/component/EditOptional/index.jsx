@@ -10,20 +10,18 @@ import {
   Select,
   TimePicker,
 } from "antd";
-import { memo, useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import moment from "moment";
-import "./styles.scss";
-import { errorNotify } from "../../../../../../helper/toast";
+import { memo, useCallback, useEffect, useState } from "react";
+import { postFile } from "../../../../../../api/file";
 import {
-  createOptionServiceApi,
   editOptionServiceApi,
   getOptionalServiceByServiceApi,
 } from "../../../../../../api/service";
 import resizeFile from "../../../../../../helper/resizer";
-import { postFile } from "../../../../../../api/file";
-import { set } from "lodash";
+import { errorNotify } from "../../../../../../helper/toast";
+import "./styles.scss";
 dayjs.extend(customParseFormat);
 
 const EditOptional = (props) => {
@@ -285,6 +283,7 @@ const EditOptional = (props) => {
     data,
     titleVN,
     titleEN,
+    platformFee,
     descriptionVN,
     descriptionEN,
     priceHoliday,
@@ -295,11 +294,18 @@ const EditOptional = (props) => {
     priceRushHour,
     type,
     id,
+    position,
+    screen,
+    thumbnail,
+    setData,
+    setIsLoading,
   ]);
 
   return (
     <>
-      <a onClick={showDrawer}>Chỉnh sửa</a>
+      <p style={{ margin: 0 }} onClick={showDrawer}>
+        Chỉnh sửa
+      </p>
       <Drawer
         title="Chỉnh sửa optional service"
         placement="right"
@@ -311,7 +317,7 @@ const EditOptional = (props) => {
         <Row>
           <Col span={8}>
             <div>
-              <a>Tiêu đề</a>
+              <p style={{ margin: 0 }}>Tiêu đề</p>
               <Input
                 placeholder="Nhập tiêu đề Tiếng Việt"
                 value={titleVN}
@@ -325,7 +331,7 @@ const EditOptional = (props) => {
               />
             </div>
             <div className="mt-2">
-              <a>Mô tả</a>
+              <p style={{ margin: 0 }}>Mô tả</p>
               <Input
                 placeholder="Nhập mô tả Tiếng Việt"
                 value={descriptionVN}
@@ -339,7 +345,7 @@ const EditOptional = (props) => {
               />
             </div>
             <div className="mt-2">
-              <a>Type</a>
+              <p style={{ margin: 0 }}>Type</p>
               <Input
                 style={{ marginTop: 2 }}
                 placeholder="Nhập type vd: select_horizontal_no_thumbnail"
@@ -350,7 +356,7 @@ const EditOptional = (props) => {
               />
             </div>
             <div className="mt-2">
-              <a>Phí dịch vụ</a>
+              <p style={{ margin: 0 }}>Phí dịch vụ</p>
               <Input
                 placeholder="Nhập phí dịch vụ"
                 type="number"
@@ -360,7 +366,7 @@ const EditOptional = (props) => {
               />
             </div>
             <div className="mt-2">
-              <a>Vị trí</a>
+              <p style={{ margin: 0 }}>Vị trí</p>
               <Input
                 style={{ marginTop: 2 }}
                 placeholder="Nhập vị trí"
@@ -371,7 +377,7 @@ const EditOptional = (props) => {
               />
             </div>
             <div className="mt-2">
-              <a>Số trang</a>
+              <p style={{ margin: 0 }}>Số trang</p>
 
               <Input
                 placeholder="Vui lòng nhập nội dung"
@@ -381,7 +387,9 @@ const EditOptional = (props) => {
               />
             </div>
             <div className="mt-2">
-              <a className="title-input-extend">Thumnail</a>
+              <p style={{ margin: 0 }} className="title-input-extend">
+                Thumnail
+              </p>
               <Input
                 id="exampleImage"
                 name="image"
@@ -404,7 +412,7 @@ const EditOptional = (props) => {
                   {priceHoliday?.map((item, index) => {
                     return (
                       <div key={index} className="div-price-holiday">
-                        <a>Thời gian bắt đầu</a>
+                        <p style={{ margin: 0 }}>Thời gian bắt đầu</p>
                         <DatePicker
                           style={{ width: "100%" }}
                           format={dateFormat}
@@ -422,7 +430,7 @@ const EditOptional = (props) => {
                           }
                           allowClear={false}
                         />
-                        <a>Thời gian kết thúc</a>
+                        <p style={{ margin: 0 }}>Thời gian kết thúc</p>
                         <DatePicker
                           style={{ width: "100%", marginTop: 5 }}
                           value={dayjs(
@@ -439,7 +447,7 @@ const EditOptional = (props) => {
                           }
                           allowClear={false}
                         />
-                        <a>Hình thức tăng giá</a>
+                        <p style={{ margin: 0 }}>Hình thức tăng giá</p>
                         <Select
                           style={{ width: "100%", marginTop: 5 }}
                           value={item?.type_increase}
@@ -455,7 +463,7 @@ const EditOptional = (props) => {
                             },
                           ]}
                         />
-                        <a>Giá trị</a>
+                        <p style={{ margin: 0 }}>Giá trị</p>
                         <Input
                           style={{ marginTop: 5 }}
                           value={item?.value}
@@ -501,7 +509,7 @@ const EditOptional = (props) => {
                   {priceRushDay?.map((item, index) => {
                     return (
                       <div key={index} className="mt-2 div-item-holiday">
-                        <a>Thứ trong tuần</a>
+                        <p style={{ margin: 0 }}>Thứ trong tuần</p>
                         <Select
                           mode="multiple"
                           style={{ width: "100%", marginTop: 5 }}
@@ -538,7 +546,7 @@ const EditOptional = (props) => {
                             },
                           ]}
                         />
-                        <a>Hình thức tăng giá</a>
+                        <p style={{ margin: 0 }}>Hình thức tăng giá</p>
                         <Select
                           style={{ width: "100%", marginTop: 5 }}
                           value={item?.type_increase}
@@ -554,7 +562,7 @@ const EditOptional = (props) => {
                             },
                           ]}
                         />
-                        <a>Giá trị</a>
+                        <p style={{ margin: 0 }}>Giá trị</p>
                         <Input
                           style={{ marginTop: 5 }}
                           value={item?.value}
@@ -600,7 +608,7 @@ const EditOptional = (props) => {
                   {priceRushHour?.map((item, index) => {
                     return (
                       <div key={index} className="mt-2 div-item-holiday">
-                        <a>Giờ bắt đầu</a>
+                        <p style={{ margin: 0 }}>Giờ bắt đầu</p>
                         <TimePicker
                           style={{ width: "100%", marginTop: 5 }}
                           value={dayjs(
@@ -612,7 +620,7 @@ const EditOptional = (props) => {
                             onChangeRushHourTimeStart(timeString, index)
                           }
                         />
-                        <a>Giờ kết thúc</a>
+                        <p style={{ margin: 0 }}>Giờ kết thúc</p>
                         <TimePicker
                           style={{ width: "100%", marginTop: 5 }}
                           value={dayjs(
@@ -624,7 +632,7 @@ const EditOptional = (props) => {
                             onChangeRushHourTimeEnd(timeString, index)
                           }
                         />
-                        <a>Hình thức tăng giá</a>
+                        <p style={{ margin: 0 }}>Hình thức tăng giá</p>
                         <Select
                           style={{ width: "100%", marginTop: 5 }}
                           value={item?.type_increase}
@@ -640,7 +648,7 @@ const EditOptional = (props) => {
                             },
                           ]}
                         />
-                        <a>Giá trị</a>
+                        <p style={{ margin: 0 }}>Giá trị</p>
                         <Input
                           style={{ marginTop: 5 }}
                           value={item?.value}

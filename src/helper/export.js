@@ -1,5 +1,4 @@
 import React from "react";
-
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 
@@ -16,5 +15,9 @@ export const ExportCSV = ({ csvData, fileName }) => {
     FileSaver.saveAs(data, fileName + fileExtension);
   };
 
-  return <a onClick={(e) => exportToCSV(csvData, fileName)}>Xuất dữ liệu</a>;
+  return (
+    <p style={{ margin: 0 }} onClick={(e) => exportToCSV(csvData, fileName)}>
+      Xuất dữ liệu
+    </p>
+  );
 };

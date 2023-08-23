@@ -1,19 +1,18 @@
-import React, { useCallback, useEffect, useState } from "react";
-import "./cancelCustomerOrder.scss";
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
-import { getDistrictApi } from "../../../../../api/file";
+import { Pagination, Select, Table } from "antd";
 import moment from "moment";
+import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import {
   getCancelReportCustomer,
   getReportOverviewCancelReport,
 } from "../../../../../api/report";
-import { Pagination, Select, Table } from "antd";
 import CustomDatePicker from "../../../../../components/customDatePicker";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../redux/selectors/auth";
-import i18n from "../../../../../i18n";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
 import { getProvince } from "../../../../../redux/selectors/service";
+import "./cancelCustomerOrder.scss";
 
 const CancelOrderCustomer = (props) => {
   const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;
@@ -21,9 +20,7 @@ const CancelOrderCustomer = (props) => {
     moment().subtract(30, "d").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
-  const [titleCity, setTitleCity] = useState("");
   const [codeCity, setCodeCity] = useState("");
-  const [codeDistrict, setCodeDistrict] = useState(-1);
   const [dataPie, setDataPie] = useState([]);
   const [dataTotalPie, setDataTotalPie] = useState([]);
   const [totalCancerOrder, setTotalCancerOrder] = useState(0);
@@ -40,7 +37,12 @@ const CancelOrderCustomer = (props) => {
   ];
 
   useEffect(() => {
-    getCancelReportCustomer(startDate, endDate, codeCity, codeDistrict)
+    getCancelReportCustomer(
+      moment().subtract(30, "d").startOf("date").toISOString(),
+      moment().endOf("date").toISOString(),
+      "",
+      ""
+    )
       .then((res) => {
         setDataPie(res?.arrPercent);
         setDataTotalPie(res?.total);
@@ -48,16 +50,23 @@ const CancelOrderCustomer = (props) => {
       })
       .catch((err) => {});
 
-    getReportOverviewCancelReport(0, 20, startDate, endDate, tab, codeCity)
+    getReportOverviewCancelReport(
+      0,
+      20,
+      moment().subtract(30, "d").startOf("date").toISOString(),
+      moment().endOf("date").toISOString(),
+      tab,
+      ""
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-  }, []);
+  }, [tab]);
 
   province?.map((item) => {
-    cityData?.push({
+    return cityData?.push({
       value: item?.code,
       label: item?.name,
       district: item?.districts,
@@ -67,11 +76,10 @@ const CancelOrderCustomer = (props) => {
   const onChangeCity = useCallback(
     (value, label) => {
       setCodeCity(value);
-      setTitleCity(label?.label);
-      getCancelReportCustomer(startDate, endDate, value, codeDistrict)
+      getCancelReportCustomer(startDate, endDate, value, "")
         .then((res) => {
           setDataPie(res?.arrPercent);
-          setDataTotalPie(res?.total == 0 ? [] : res?.total);
+          setDataTotalPie(res?.total === 0 ? [] : res?.total);
           setTotalCancerOrder(res?.total_cancel_order_by_customer);
         })
         .catch((err) => {});
@@ -89,7 +97,7 @@ const CancelOrderCustomer = (props) => {
         })
         .catch((err) => {});
     },
-    [startDate, endDate, codeDistrict]
+    [startDate, endDate, tab, startPage]
   );
 
   const onChange = (page) => {
@@ -118,10 +126,10 @@ const CancelOrderCustomer = (props) => {
       setTotal(res?.totalItem);
     });
 
-    getCancelReportCustomer(startDate, endDate, codeCity, codeDistrict)
+    getCancelReportCustomer(startDate, endDate, codeCity, "")
       .then((res) => {
         setDataPie(res?.arrPercent);
-        setDataTotalPie(res?.total == 0 ? [] : res?.total);
+        setDataTotalPie(res?.total === 0 ? [] : res?.total);
         setTotalCancerOrder(res?.total_cancel_order_by_customer);
       })
       .catch((err) => {});
@@ -133,12 +141,12 @@ const CancelOrderCustomer = (props) => {
       render: (data) => {
         return (
           <div className="div-create-cancel">
-            <a className="text-create-cancel">
+            <p className="text-create-cancel">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-create-cancel">
+            </p>
+            <p className="text-create-cancel">
               {moment(new Date(data?.date_create)).format("HH/mm")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -147,40 +155,40 @@ const CancelOrderCustomer = (props) => {
       title: `${i18n.t("canceler", { lng: lang })}`,
       render: (data) => {
         return (
-          <a className="text-user-cancel">
+          <p className="text-user-cancel">
             {data?.id_cancel_user_system
               ? data?.id_cancel_user_system?.id_user_system?.full_name
               : data?.id_cancel_system
               ? "Hệ thống"
               : data?.name_customer}
-          </a>
+          </p>
         );
       },
     },
     {
       title: `${i18n.t("order", { lng: lang })}`,
       render: (data) => {
-        return <a className="text-user-cancel">{data?.id_view}</a>;
+        return <p className="text-user-cancel">{data?.id_view}</p>;
       },
     },
     {
       title: `${i18n.t("reason", { lng: lang })}`,
       render: (data) => {
         return (
-          <a className="text-user-cancel">
+          <p className="text-user-cancel">
             {data?.id_cancel_user_system
               ? ""
               : data?.id_cancel_system
               ? data?.id_cancel_system?.id_reason_cancel?.title?.[lang]
               : data?.id_cancel_customer?.id_reason_cancel?.title?.[lang]}
-          </a>
+          </p>
         );
       },
     },
     {
       title: `${i18n.t("address", { lng: lang })}`,
       render: (data) => {
-        return <a className="text-address-cancel">{data?.address}</a>;
+        return <p className="text-address-cancel">{data?.address}</p>;
       },
     },
   ];
@@ -228,16 +236,16 @@ const CancelOrderCustomer = (props) => {
           setSameEnd={() => {}}
         />
         {startDate && (
-          <a className="text-date">
+          <p className="text-date m-0">
             {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
             {moment(endDate).utc().format("DD/MM/YYYY")}
-          </a>
+          </p>
         )}
       </div>
       <div className="div-select-city">
         <Select
           style={{ width: 200 }}
-          value={titleCity}
+          value={codeCity}
           onChange={onChangeCity}
           options={cityData}
           showSearch
@@ -248,17 +256,17 @@ const CancelOrderCustomer = (props) => {
       </div>
       <div className="div-chart-pie-total-cancel-customer">
         <div className="div-total-cancel-order">
-          <a>
+          <p className="m-0">
             {`${i18n.t("total", { lng: lang })}`}: {totalCancerOrder}
-          </a>
+          </p>
           {dataTotalPie?.map((item, index) => {
             return (
               <div key={index} className="div-total-customer">
-                <a className="title-total-cancel-customer">
+                <p className="title-total-cancel-customer">
                   {item?.reason_cancel[0]?.title?.[lang]}
-                </a>
-                <a className="text-colon">:</a>
-                <a className="text-number">{item?.total}</a>
+                </p>
+                <p className="text-colon">:</p>
+                <p className="text-number">{item?.total}</p>
               </div>
             );
           })}
@@ -295,7 +303,7 @@ const CancelOrderCustomer = (props) => {
         />
       </div>
       <div className="mt-1 div-pagination p-2">
-        <a>Tổng: {total}</a>
+        <p>Tổng: {total}</p>
         <div>
           <Pagination
             current={currentPage}

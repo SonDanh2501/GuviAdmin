@@ -40,20 +40,20 @@ const Review = ({ id, totalReview }) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("date_create", {
+          <p className="title-column">{`${i18n.t("date_create", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div className="time-review">
-            <a className="text-time">
+            <p className="text-time">
               {moment(new Date(data?.date_create_review)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-time">
+            </p>
+            <p className="text-time">
               {moment(new Date(data?.date_create_review)).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -61,14 +61,14 @@ const Review = ({ id, totalReview }) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("assessor", {
+          <p className="title-column">{`${i18n.t("assessor", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
-          <a className="name-customer-reivew">{data?.id_customer?.full_name}</a>
+          <p className="name-customer-reivew">{data?.id_customer?.full_name}</p>
         );
       },
       align: "center",
@@ -76,45 +76,45 @@ const Review = ({ id, totalReview }) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("number_star", {
+          <p className="title-column">{`${i18n.t("number_star", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="name-customer-reivew">
+          <p className="name-customer-reivew">
             {data?.star} <i class="uil uil-star icon-star"></i>
-          </a>
+          </p>
         );
       },
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("content", {
+          <p className="title-column">{`${i18n.t("content", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
-        return <a className="text-quick_review">{data?.review}</a>;
+        return <p className="text-quick_review">{data?.review}</p>;
       },
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("quick_review", {
+          <p className="title-column">{`${i18n.t("quick_review", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div>
             {data?.short_review?.map((item) => (
-              <a className="text-quick_review">{item}</a>
+              <p className="text-quick_review">{item}</p>
             ))}
           </div>
         );
@@ -124,10 +124,10 @@ const Review = ({ id, totalReview }) => {
   return (
     <div>
       <div>
-        <a className="text-total-star">
+        <p className="text-total-star">
           {`${i18n.t("total_review", { lng: lang })}`}: {totalReview}
           <i class="uil uil-star icon-star"></i>
-        </a>
+        </p>
       </div>
 
       <div className="mt-3">
@@ -139,9 +139,9 @@ const Review = ({ id, totalReview }) => {
         />
 
         <div className="div-pagination p-2">
-          <a>
+          <p>
             {`${i18n.t("total", { lng: lang })}`}: {total}
-          </a>
+          </p>
           <div>
             <Pagination
               current={currentPage}

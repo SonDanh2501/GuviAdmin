@@ -52,6 +52,7 @@
     width: 100%;
     color: rgb(0, 0, 0) !important;
     margin-top: 5px;
+    margin: 0;
   }
 }
 
@@ -90,6 +91,7 @@
   font-style: normal;
   font-weight: 700;
   font-size: 12px;
+  margin: 0;
 }
 
 .text-done-topup {
@@ -99,6 +101,7 @@
   font-size: 12px;
   color: #00cf3a;
   text-decoration: none;
+  margin: 0;
 }
 
 .text-cancel-topup-ctv {
@@ -108,6 +111,7 @@
   font-size: 12px;
   color: #ff0000 !important;
   text-decoration: none;
+  margin: 0;
 }
 
 .text-pending-topup {
@@ -117,6 +121,7 @@
   font-size: 12px !important;
   color: #ecd503 !important;
   text-decoration: none;
+  margin: 0;
 }
 
 .text-transfered {
@@ -126,6 +131,7 @@
   font-size: 12px !important;
   color: #19129a !important;
   text-decoration: none;
+  margin: 0;
 }
 
 .div-name-topup {
@@ -139,6 +145,7 @@
     font-size: 12px;
     color: #000000;
     text-decoration: none;
+    margin: 0;
   }
 
   .text-phone-topup {
@@ -234,6 +241,7 @@
   font-size: 12px;
   color: #000000;
   text-decoration: none;
+  margin: 0;
 }
 
 .text-id {
@@ -243,6 +251,7 @@
   font-size: 14px;
   color: #000000;
   text-decoration: none;
+  margin: 0;
 }
 
 .text-description-topup {
@@ -254,6 +263,7 @@
   text-decoration: none;
   display: block;
   width: 250px;
+  margin: 0;
 }
 
 .text-money-topup {
@@ -263,6 +273,7 @@
   font-size: 12px;
   color: #000000;
   text-decoration: none;
+  margin: 0;
 }
 
 .div-time-topup {
@@ -276,6 +287,7 @@
     font-size: 12px;
     color: #000000;
     text-decoration: none;
+    margin: 0;
   }
 }
 
@@ -294,6 +306,41 @@
   display: flex;
   flex-direction: column;
 
+  .div-money-withdraw-topup {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    .icon-topup {
+      color: #00cf3a !important;
+      margin-bottom: 5px;
+    }
+    .icon-withdraw {
+      color: #ff0000 !important;
+      margin-bottom: 5px;
+    }
+    .text-topup {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 12px;
+      color: #00cf3a !important;
+      text-decoration: none;
+      margin: 0;
+    }
+
+    .text-withdraw {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 12px;
+      color: #ff0000 !important;
+      text-decoration: none;
+      margin: 0;
+    }
+  }
+
   .div-text-detail {
     display: flex;
     flex-direction: row;
@@ -306,6 +353,7 @@
       font-size: 12px;
       color: #202223;
       text-decoration: none;
+      margin: 0;
     }
 
     .text-detail {
@@ -317,7 +365,43 @@
       font-size: 12px;
       color: #202223;
       text-decoration: none;
+      margin: 0;
     }
+  }
+}
+
+.div-money-withdraw-topup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  .icon-topup {
+    color: #00cf3a !important;
+    margin-bottom: 5px;
+  }
+  .icon-withdraw {
+    color: #ff0000 !important;
+    margin-bottom: 5px;
+  }
+  .text-topup {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+    color: #00cf3a !important;
+    text-decoration: none;
+    margin: 0;
+  }
+
+  .text-withdraw {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+    color: #ff0000 !important;
+    text-decoration: none;
+    margin: 0;
   }
 }
 
@@ -331,6 +415,7 @@
     text-decoration: none;
     display: block;
     width: 150px !important;
+    margin: 0;
   }
 }
 

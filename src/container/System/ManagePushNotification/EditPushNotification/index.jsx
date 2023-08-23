@@ -60,10 +60,10 @@ const EditPushNotification = ({ id }) => {
         setDateSchedule(date);
         setListNameCustomers(res?.id_customer);
         res?.id_customer?.map((item) => {
-          listCustomers.push(item?._id);
+          return listCustomers.push(item?._id);
         });
         res?.id_group_customer?.map((item) => {
-          groupCustomer.push(item?._id);
+          return groupCustomer.push(item?._id);
         });
       })
       .catch((err) => {
@@ -78,7 +78,7 @@ const EditPushNotification = ({ id }) => {
   }, []);
 
   dataGroupCustomer.map((item, index) => {
-    options.push({
+    return options.push({
       label: item?.name,
       value: item?._id,
     });
@@ -109,25 +109,22 @@ const EditPushNotification = ({ id }) => {
     setListCustomers(newArray);
   };
 
-  const searchCustomer = useCallback(
-    _debounce((value) => {
-      setNameCustomer(value);
-      if (value) {
-        searchCustomersApi(value)
-          .then((res) => {
-            if (value === "") {
-              setDataFilter([]);
-            } else {
-              setDataFilter(res.data);
-            }
-          })
-          .catch((err) => console.log(err));
-      } else {
-        setDataFilter([]);
-      }
-    }, 500),
-    []
-  );
+  const searchCustomer = _debounce((value) => {
+    setNameCustomer(value);
+    if (value) {
+      searchCustomersApi(value)
+        .then((res) => {
+          if (value === "") {
+            setDataFilter([]);
+          } else {
+            setDataFilter(res.data);
+          }
+        })
+        .catch((err) => console.log(err));
+    } else {
+      setDataFilter([]);
+    }
+  }, 500);
 
   const handleChange = (value) => {
     setGroupCustomer(value);
@@ -173,13 +170,15 @@ const EditPushNotification = ({ id }) => {
     groupCustomer,
     imgThumbnail,
     id,
+    dispatch,
+    isGroupCustomer,
   ]);
 
   return (
     <>
-      <a onClick={showDrawer}>
-        <a>{`${i18n.t("edit", { lng: lang })}`}</a>
-      </a>
+      <p className="m-0" onClick={showDrawer}>
+        {`${i18n.t("edit", { lng: lang })}`}
+      </p>
       <Drawer
         title={`${i18n.t("edit", { lng: lang })}`}
         placement="right"
@@ -244,9 +243,9 @@ const EditPushNotification = ({ id }) => {
                         key={index}
                         onClick={() => onChooseCustomer(item)}
                       >
-                        <a className="text-name">
+                        <p className="text-name">
                           {item?.full_name} - {item?.phone} - {item?.id_view}
-                        </a>
+                        </p>
                       </div>
                     );
                   })}
@@ -259,10 +258,10 @@ const EditPushNotification = ({ id }) => {
                     {listNameCustomers.map((item) => {
                       return (
                         <div className="div-item-customer">
-                          <a className="text-name-list">
+                          <p className="text-name-list">
                             - {item?.full_name} . {item?.phone} .{" "}
                             {item?.id_view}
-                          </a>
+                          </p>
                           <i
                             class="uil uil-times-circle"
                             onClick={() => removeItemCustomer(item)}

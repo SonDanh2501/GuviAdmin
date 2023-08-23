@@ -28,9 +28,23 @@ const ReportOrderDayOfWeek = () => {
   const [endDate, setEndDate] = useState(moment().endOf("day").toISOString());
   const [isLoading, setIsLoading] = useState(false);
   const lang = useSelector(getLanguageState);
-  const dataChart = [];
-
   useEffect(() => {
+    setIsLoading(true);
+    getReportOrderDay(
+      moment().subtract(7, "d").startOf("date").toISOString(),
+      moment().endOf("day").toISOString(),
+      "date_create"
+    )
+      .then((res) => {
+        setIsLoading(false);
+        setData(res);
+      })
+      .catch((err) => {});
+  }, []);
+
+  data.push(data.shift());
+
+  const onChangeDay = () => {
     setIsLoading(true);
     getReportOrderDay(startDate, endDate, type)
       .then((res) => {
@@ -38,12 +52,10 @@ const ReportOrderDayOfWeek = () => {
         setData(res);
       })
       .catch((err) => {});
-  }, [type]);
+  };
 
-  data.push(data.shift());
-
-  const onChangeDay = () => {
-    setIsLoading(true);
+  const onChangeType = (type) => {
+    setType(type);
     getReportOrderDay(startDate, endDate, type)
       .then((res) => {
         setIsLoading(false);
@@ -66,7 +78,7 @@ const ReportOrderDayOfWeek = () => {
     const { payload, label } = o;
     return (
       <div className="div-tooltip-content-week">
-        <a>
+        <p className="m-0">
           {label === 0
             ? `${i18n.t("sunday", { lng: lang })}`
             : label === 1
@@ -80,8 +92,8 @@ const ReportOrderDayOfWeek = () => {
             : label === 5
             ? `${i18n.t("friday", { lng: lang })}`
             : `${i18n.t("saturday", { lng: lang })}`}
-        </a>
-        <a>Số ca: {payload[0]?.payload?.total_item}</a>
+        </p>
+        <p className="m-0">Số ca: {payload[0]?.payload?.total_item}</p>
       </div>
     );
   };
@@ -100,17 +112,19 @@ const ReportOrderDayOfWeek = () => {
             setSameEnd={() => {}}
           />
           {startDate && (
-            <a className="text-date">
-              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-              {moment(endDate).utc().format("DD/MM/YYYY")}
-            </a>
+            <div className="ml-2">
+              <p className="text-date m-0">
+                {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+                {moment(endDate).utc().format("DD/MM/YYYY")}
+              </p>
+            </div>
           )}
         </div>
 
         <InputCustom
           select={true}
           value={type}
-          onChange={(e) => setType(e)}
+          onChange={(e) => onChangeType(e)}
           options={[
             { value: "date_create", label: "Ngày tạo" },
             { value: "date_work", label: "Ngày làm" },

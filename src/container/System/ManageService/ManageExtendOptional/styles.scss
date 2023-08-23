@@ -1,0 +1,47 @@
+.div-content-option {
+  display: flex;
+  flex-direction: column;
+
+  .div-title-option {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .title {
+      color: black;
+      font-weight: 500;
+      font-size: 14px;
+      font-family: "Roboto", sans-serif;
+      text-decoration: none;
+      width: 80px;
+      margin: 0;
+    }
+
+    .colon {
+      color: black;
+      font-weight: 400;
+      font-size: 14px;
+      font-family: "Roboto", sans-serif;
+      text-decoration: none;
+      margin: 0 5px 0 0;
+    }
+
+    .details {
+      color: black;
+      font-weight: 400;
+      font-size: 14px;
+      font-family: "Roboto", sans-serif;
+      text-decoration: none;
+      margin: 0;
+    }
+  }
+}
+
+.text-name-extend {
+  color: black;
+  font-weight: 400;
+  font-size: 14px;
+  font-family: "Roboto";
+  text-decoration: none;
+  margin: 0;
+}

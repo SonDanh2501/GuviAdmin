@@ -80,7 +80,7 @@ const TopupCustomer = () => {
           dispatch(loadingAction.loadingRequest(false));
         });
     },
-    [startPage]
+    [startPage, dispatch]
   );
 
   const onConfirm = useCallback(
@@ -103,7 +103,7 @@ const TopupCustomer = () => {
           dispatch(loadingAction.loadingRequest(false));
         });
     },
-    [startPage]
+    [startPage, dispatch]
   );
 
   const onCancel = useCallback(
@@ -126,22 +126,18 @@ const TopupCustomer = () => {
           dispatch(loadingAction.loadingRequest(false));
         });
     },
-    [startPage]
+    [startPage, dispatch]
   );
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      setValueSearch(value);
-      searchTopupCustomerApi(value, startPage, 20)
-        .then((res) => {
-          setDataFilter(res.data);
-          setTotalFilter(res.totalItem);
-        })
-        .catch((err) => console.log(err));
-    }, 1000),
-    [startPage]
-  );
-
+  const handleSearch = _debounce((value) => {
+    setValueSearch(value);
+    searchTopupCustomerApi(value, startPage, 20)
+      .then((res) => {
+        setDataFilter(res.data);
+        setTotalFilter(res.totalItem);
+      })
+      .catch((err) => console.log(err));
+  }, 1000);
   const onChange = (page) => {
     setCurrentPage(page);
     const dataLength = listCustomer.length < 20 ? 20 : listCustomer.length;
@@ -172,21 +168,21 @@ const TopupCustomer = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("code", { lng: lang })}`}</a>
+          <p className="title-column">{`${i18n.t("code", { lng: lang })}`}</p>
         );
       },
       render: (data) => (
         <Link to={`/profile-customer/${data?.id_customer?._id}`}>
-          <a className="text-id-topup-customer">{data?.id_customer?.id_view}</a>
+          <p className="text-id-topup-customer">{data?.id_customer?.id_view}</p>
         </Link>
       ),
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("customer", {
+          <p className="title-column">{`${i18n.t("customer", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
@@ -195,8 +191,8 @@ const TopupCustomer = () => {
             to={`/profile-customer/${data?.id_customer?._id}`}
             className="div-name-topup"
           >
-            <a className="text-name">{data?.id_customer?.full_name}</a>
-            <a className="text-phone">{data?.id_customer?.phone}</a>
+            <p className="text-name">{data?.id_customer?.full_name}</p>
+            <p className="text-phone">{data?.id_customer?.phone}</p>
           </Link>
         );
       },
@@ -204,34 +200,34 @@ const TopupCustomer = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("money", { lng: lang })}`}</a>
+          <p className="title-column">{`${i18n.t("money", { lng: lang })}`}</p>
         );
       },
       render: (data) => (
-        <a className="text-money-customer-topup">{formatMoney(data?.money)}</a>
+        <p className="text-money-customer-topup">{formatMoney(data?.money)}</p>
       ),
       sorter: (a, b) => a.money - b.money,
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("Nạp/rút", {
+          <p className="title-column">{`${i18n.t("Nạp/rút", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <>
             {data?.type_transfer === "top_up" ? (
-              <div>
+              <div className="div-money-withdraw-topup">
                 <i class="uil uil-money-insert icon-topup"></i>
-                <a className="text-topup">Nạp</a>
+                <p className="text-topup">Nạp</p>
               </div>
             ) : (
-              <div>
+              <div className="div-money-withdraw-topup">
                 <i class="uil uil-money-withdraw icon-withdraw"></i>
-                <a className="text-withdraw">Rút</a>
+                <p className="text-withdraw">Rút</p>
               </div>
             )}
           </>
@@ -241,63 +237,63 @@ const TopupCustomer = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("content", {
+          <p className="title-column">{`${i18n.t("content", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => (
-        <a className="text-description-topup">{data?.transfer_note}</a>
+        <p className="text-description-topup">{data?.transfer_note}</p>
       ),
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("date_create", {
+          <p className="title-column">{`${i18n.t("date_create", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => (
         <div className="div-money-customer">
-          <a className="text-money-customer-topup">
+          <p className="text-money-customer-topup">
             {moment(new Date(data?.date_create)).format("DD/MM/yyy")}
-          </a>
-          <a className="text-money-customer-topup" v>
+          </p>
+          <p className="text-money-customer-topup" v>
             {moment(new Date(data?.date_create)).format("HH:mm")}
-          </a>
+          </p>
         </div>
       ),
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("status", {
+          <p className="title-column">{`${i18n.t("status", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div>
             {data?.status === "pending" ? (
-              <a className="text-pending-topup-customer">{`${i18n.t(
+              <p className="text-pending-topup-customer">{`${i18n.t(
                 "processing",
                 { lng: lang }
-              )}`}</a>
+              )}`}</p>
             ) : data?.status === "transfered" ? (
-              <a className="text-transfered-topup-customer">{`${i18n.t(
+              <p className="text-transfered-topup-customer">{`${i18n.t(
                 "money_transferred",
                 { lng: lang }
-              )}`}</a>
+              )}`}</p>
             ) : data?.status === "done" ? (
-              <a className="text-done-topup-customer">{`${i18n.t("complete", {
+              <p className="text-done-topup-customer">{`${i18n.t("complete", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : (
-              <a className="text-cancel-topup-customer">{`${i18n.t("cancel", {
+              <p className="text-cancel-topup-customer">{`${i18n.t("cancel", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             )}
           </div>
         );
@@ -307,18 +303,18 @@ const TopupCustomer = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("method", {
+          <p className="title-column">{`${i18n.t("method", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
-          <a className="text-money-customer-topup">
+          <p className="text-money-customer-topup">
             {data?.method_transfer === "vnpay"
               ? "VNPay"
               : `${i18n.t("transfer", { lng: lang })}`}
-          </a>
+          </p>
         );
       },
     },
@@ -341,7 +337,7 @@ const TopupCustomer = () => {
 
             <div className="mt-1 ml-3">
               {data?.status === "pending" && (
-                <a
+                <p
                   className={
                     checkElement?.includes(
                       "cancel_transition_cash_book_customer"
@@ -352,7 +348,7 @@ const TopupCustomer = () => {
                   onClick={toggleCancel}
                 >
                   {`${i18n.t("cancel_modal", { lng: lang })}`}
-                </a>
+                </p>
               )}
 
               {checkElement?.includes(
@@ -413,22 +409,14 @@ const TopupCustomer = () => {
               },
             };
           }}
-          // locale={{
-          //   emptyText:
-          //     listCustomer.length > 0 ? (
-          //       <Empty />
-          //     ) : (
-          //       <Skeleton active={true} />
-          //     ),
-          // }}
           scroll={{ x: width < 900 ? 1400 : 0 }}
         />
       </div>
       <div className="div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}:{" "}
           {dataFilter.length > 0 ? totalFilter : totalCustomer}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}
@@ -449,22 +437,22 @@ const TopupCustomer = () => {
           textOk={`${i18n.t("approvals", { lng: lang })}`}
           body={
             <div className="body-modal">
-              <a>
+              <p>
                 {`${i18n.t("customer", { lng: lang })}`}:{" "}
                 {itemEdit?.id_customer?.full_name}
-              </a>
-              <a>
+              </p>
+              <p>
                 {`${i18n.t("phone", { lng: lang })}`}:{" "}
                 {itemEdit?.id_customer?.phone}
-              </a>
-              <a>
+              </p>
+              <p>
                 {`${i18n.t("money", { lng: lang })}`}:{" "}
                 {formatMoney(itemEdit?.money)}
-              </a>
-              <a>
+              </p>
+              <p>
                 {`${i18n.t("content", { lng: lang })}`}:{" "}
                 {itemEdit?.transfer_note}
-              </a>
+              </p>
             </div>
           }
         />
@@ -478,12 +466,12 @@ const TopupCustomer = () => {
           textOk={`${i18n.t("yes", { lng: lang })}`}
           body={
             <>
-              <a>
+              <p>
                 {`${i18n.t("want_cancel_transaction_customer", { lng: lang })}`}
-              </a>
-              <a className="text-name-modal">
+              </p>
+              <p className="text-name-modal">
                 {itemEdit?.id_customer?.full_name}
-              </a>
+              </p>
             </>
           }
         />
@@ -497,12 +485,12 @@ const TopupCustomer = () => {
           textOk={`${i18n.t("yes", { lng: lang })}`}
           body={
             <>
-              <a>
+              <p>
                 {`${i18n.t("want_delete_transaction_customer", { lng: lang })}`}
-              </a>
-              <a className="text-name-modal">
+              </p>
+              <p className="text-name-modal">
                 {itemEdit?.id_customer?.full_name}
-              </a>
+              </p>
             </>
           }
         />

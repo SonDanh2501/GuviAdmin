@@ -8,7 +8,7 @@ import { loadingAction } from "../../redux/actions/loading";
 import CustomButton from "../customButton/customButton";
 import "./addGroupService.scss";
 
-const AddGroupService = ({ setIsLoading, setData, setTotal }) => {
+const AddGroupService = ({ setIsLoading, setData }) => {
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
   const [imgThumbnail, setImgThumbnail] = useState("");
@@ -76,7 +76,6 @@ const AddGroupService = ({ setIsLoading, setData, setTotal }) => {
         getGroupServiceApi(0, 20)
           .then((res) => {
             setData(res?.data);
-            setTotal(res?.totalItem);
           })
           .catch((err) => {});
       })

@@ -1,8 +1,6 @@
-import { takeLatest, call, put } from "redux-saga/effects";
-
-import { loadingAction } from "../actions/loading";
-import { errorNotify } from "../../helper/toast";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { getListNotification } from "../../api/notification";
+import { loadingAction } from "../actions/loading";
 import { getNotification, getType } from "../actions/notification";
 
 function* fetchNotificationSaga(action) {

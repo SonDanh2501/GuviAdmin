@@ -1,45 +1,25 @@
-import { SearchOutlined } from "@ant-design/icons";
-import {
-  Button,
-  DatePicker,
-  Dropdown,
-  Empty,
-  Input,
-  Pagination,
-  Popover,
-  Select,
-  Skeleton,
-  Space,
-  Spin,
-  Table,
-} from "antd";
+import { Pagination, Popover, Table } from "antd";
 import moment from "moment";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   filterReportCollaborator,
   getReportCollaborator,
-  searchReportCollaborator,
 } from "../../../../../api/report";
-import { formatMoney } from "../../../../../helper/formatMoney";
-import _debounce from "lodash/debounce";
-import "./index.scss";
 import CustomDatePicker from "../../../../../components/customDatePicker";
 import LoadingPagination from "../../../../../components/paginationLoading";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../redux/selectors/auth";
-import i18n from "../../../../../i18n";
+import { formatMoney } from "../../../../../helper/formatMoney";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import "./index.scss";
 
 const ReportCollaborator = () => {
-  const [dataFilter, setDataFilter] = useState([]);
-  const [dataSearch, setDataSearch] = useState([]);
-  const [valueSearch, setValueSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [totalColumn, setTotalColumn] = useState([]);
-  const [type, setType] = useState("day");
   const [startDate, setStartDate] = useState(
     moment().subtract(30, "d").startOf("date").toISOString()
   );
@@ -50,7 +30,12 @@ const ReportCollaborator = () => {
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    getReportCollaborator(0, 40, startDate, endDate)
+    getReportCollaborator(
+      0,
+      40,
+      moment().subtract(30, "d").startOf("date").toISOString(),
+      moment().endOf("date").toISOString()
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -63,47 +48,17 @@ const ReportCollaborator = () => {
     setIsLoading(true);
     setCurrentPage(page);
     const lengthData = data.length < 40 ? 40 : data.length;
-    const lengthFilter = dataFilter.length < 40 ? 40 : dataFilter.length;
-    const lengthSearch = dataSearch.length < 40 ? 40 : dataSearch.length;
-    const start =
-      dataFilter.length > 0
-        ? page * lengthFilter - lengthFilter
-        : dataSearch.length > 0
-        ? page * lengthSearch - lengthSearch
-        : page * lengthData - lengthData;
-
-    dataFilter.length > 0
-      ? filterReportCollaborator(start, 40, startDate, endDate)
-          .then((res) => {
-            setIsLoading(false);
-            setData(res?.data);
-            setTotal(res?.totalItem);
-            setTotalColumn(res?.total[0]);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-          })
-      : dataSearch.length > 0
-      ? searchReportCollaborator(0, 40, valueSearch)
-          .then((res) => {
-            setIsLoading(false);
-            setData(res?.data);
-            setTotal(res?.totalItem);
-            setTotalColumn(res?.total[0]);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-          })
-      : getReportCollaborator(start, 40, startDate, endDate)
-          .then((res) => {
-            setIsLoading(false);
-            setData(res?.data);
-            setTotal(res?.totalItem);
-            setTotalColumn(res?.total[0]);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-          });
+    const start = page * lengthData - lengthData;
+    getReportCollaborator(start, 40, startDate, endDate)
+      .then((res) => {
+        setIsLoading(false);
+        setData(res?.data);
+        setTotal(res?.totalItem);
+        setTotalColumn(res?.total[0]);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
   };
 
   const onChangeDay = () => {
@@ -120,33 +75,15 @@ const ReportCollaborator = () => {
       });
   };
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      setIsLoading(true);
-      setValueSearch(value);
-      searchReportCollaborator(0, 40, value)
-        .then((res) => {
-          setData(res?.data);
-          setTotal(res?.totalItem);
-          setTotalColumn(res?.total[0]);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          setIsLoading(false);
-        });
-    }, 1000),
-    []
-  );
-
   const columns = [
     {
       title: () => {
         return (
           <div className="div-title-collaborator-id">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("collaborator", {
+              <p className="text-title-column">{`${i18n.t("collaborator", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
             <div className="div-top"></div>
           </div>
@@ -167,9 +104,9 @@ const ReportCollaborator = () => {
               })
             }
           >
-            <a className="text-name-report">
+            <p className="text-name-report">
               {data?.id_collaborator?.full_name}
-            </a>
+            </p>
             {/* <a className="text-id">{data?.id_view}</a> */}
           </div>
         );
@@ -180,18 +117,18 @@ const ReportCollaborator = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("shift", {
+              <p className="text-title-column">{`${i18n.t("shift", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {totalColumn?.total_item > 0 ? totalColumn?.total_item : 0}
-            </a>
+            </p>
           </div>
         );
       },
       render: (data) => {
-        return <a className="text-money">{data?.total_item}</a>;
+        return <p className="text-money">{data?.total_item}</p>;
       },
       align: "center",
       sorter: (a, b) => a.total_item - b.total_item,
@@ -201,22 +138,22 @@ const ReportCollaborator = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("sales", {
+              <p className="text-title-column">{`${i18n.t("sales", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {totalColumn?.total_gross_income > 0
                 ? formatMoney(totalColumn?.total_gross_income)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_gross_income)}</a>
+          <p className="text-money">{formatMoney(data?.total_gross_income)}</p>
         );
       },
       sorter: (a, b) => a.total_gross_income - b.total_gross_income,
@@ -236,9 +173,9 @@ const ReportCollaborator = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("service_fee", {
+              <p className="text-title-column">{`${i18n.t("service_fee", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -252,20 +189,20 @@ const ReportCollaborator = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {totalColumn?.total_collabotator_fee > 0
                 ? formatMoney(totalColumn?.total_collabotator_fee)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">
+          <p className="text-money">
             {formatMoney(data?.total_collabotator_fee)}
-          </a>
+          </p>
         );
       },
       sorter: (a, b) => a.total_collabotator_fee - b.total_collabotator_fee,
@@ -282,9 +219,9 @@ const ReportCollaborator = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column-blue">{`${i18n.t("revenue", {
+              <p className="text-title-column-blue">{`${i18n.t("revenue", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -298,18 +235,18 @@ const ReportCollaborator = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title-blue">
+            <p className="text-money-title-blue">
               {totalColumn?.total_income > 0
                 ? formatMoney(totalColumn?.total_income)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money-blue">{formatMoney(data?.total_income)}</a>
+          <p className="text-money-blue">{formatMoney(data?.total_income)}</p>
         );
       },
       sorter: (a, b) => a.total_income - b.total_income,
@@ -326,9 +263,9 @@ const ReportCollaborator = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("discount", {
+              <p className="text-title-column">{`${i18n.t("discount", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -342,18 +279,18 @@ const ReportCollaborator = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {totalColumn?.total_discount > 0
                 ? formatMoney(totalColumn?.total_discount)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_discount)}</a>
+          <p className="text-money">{formatMoney(data?.total_discount)}</p>
         );
       },
       sorter: (a, b) => a.total_discount - b.total_discount,
@@ -370,9 +307,9 @@ const ReportCollaborator = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("net_revenue", {
+              <p className="text-title-column">{`${i18n.t("net_revenue", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -386,18 +323,18 @@ const ReportCollaborator = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {totalColumn?.total_net_income > 0
                 ? formatMoney(totalColumn?.total_net_income)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_net_income)}</a>
+          <p className="text-money">{formatMoney(data?.total_net_income)}</p>
         );
       },
       sorter: (a, b) => a.total_net_income - b.total_net_income,
@@ -406,20 +343,20 @@ const ReportCollaborator = () => {
       title: () => {
         return (
           <div className="div-title-collaborator">
-            <a>{`${i18n.t("fees_apply", {
+            <p className="m-0">{`${i18n.t("fees_apply", {
               lng: lang,
-            })}`}</a>
-            <a className="text-money-title">
+            })}`}</p>
+            <p className="text-money-title">
               {totalColumn?.total_service_fee > 0
                 ? formatMoney(totalColumn?.total_service_fee)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_service_fee)}</a>
+          <p className="text-money">{formatMoney(data?.total_service_fee)}</p>
         );
       },
       align: "center",
@@ -438,9 +375,9 @@ const ReportCollaborator = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("total_bill", {
+              <p className="text-title-column">{`${i18n.t("total_bill", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -454,18 +391,18 @@ const ReportCollaborator = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {totalColumn?.total_order_fee > 0
                 ? formatMoney(totalColumn?.total_order_fee)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_order_fee)}</a>
+          <p className="text-money">{formatMoney(data?.total_order_fee)}</p>
         );
       },
       sorter: (a, b) => a.total_order_fee - b.total_order_fee,
@@ -482,9 +419,9 @@ const ReportCollaborator = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("profit", {
+              <p className="text-title-column">{`${i18n.t("profit", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -498,20 +435,20 @@ const ReportCollaborator = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {totalColumn?.total_net_income_business > 0
                 ? formatMoney(totalColumn?.total_net_income_business)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">
+          <p className="text-money">
             {formatMoney(data?.total_net_income_business)}
-          </a>
+          </p>
         );
       },
       sorter: (a, b) =>
@@ -532,12 +469,12 @@ const ReportCollaborator = () => {
         return (
           <div className="div-title-collaborator">
             <div className="div-title-report">
-              <a className="text-title-column">
+              <p className="text-title-column">
                 %{" "}
                 {`${i18n.t("profit", {
                   lng: lang,
                 })}`}
-              </a>
+              </p>
               <Popover
                 content={content}
                 placement="bottomLeft"
@@ -558,9 +495,9 @@ const ReportCollaborator = () => {
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">
+          <p className="text-money">
             {data?.percent_income ? data?.percent_income + "%" : ""}
-          </a>
+          </p>
         );
       },
     },
@@ -580,19 +517,14 @@ const ReportCollaborator = () => {
             setSameEnd={() => {}}
           />
           {startDate && (
-            <a className="text-date">
-              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-              {moment(endDate).utc().format("DD/MM/YYYY")}
-            </a>
+            <div className="ml-2">
+              <p className="text-date m-0">
+                {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+                {moment(endDate).utc().format("DD/MM/YYYY")}
+              </p>
+            </div>
           )}
         </div>
-        <Input
-          placeholder={`${i18n.t("search", { lng: lang })}`}
-          type="text"
-          className="input-search-report"
-          prefix={<SearchOutlined />}
-          onChange={(e) => handleSearch(e.target.value)}
-        />
       </div>
       <div className="mt-3">
         <Table
@@ -608,9 +540,9 @@ const ReportCollaborator = () => {
         />
       </div>
       <div className="mt-2 div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}: {total}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}

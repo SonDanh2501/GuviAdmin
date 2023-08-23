@@ -1,20 +1,18 @@
 import { Tabs } from "antd";
-import { useLocation, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { useCookies } from "../../../../../helper/useCookies";
+import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import FavouriteBlock from "./CollaboratorFavoriteBlock";
 import DetailsProfile from "./DetailsProfile";
 import HistoryTransition from "./History";
 import OrderCustomer from "./OrderCustomer";
-import FavouriteBlock from "./CollaboratorFavoriteBlock";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../redux/selectors/auth";
-import i18n from "../../../../../i18n";
-import UsedPromotion from "./UsedPromotion";
 import CustomerReview from "./Review";
-import { useCookies } from "../../../../../helper/useCookies";
-import { useEffect, useState } from "react";
+import UsedPromotion from "./UsedPromotion";
 
 const Profiles = () => {
-  // const { state } = useLocation();
-  // const { id } = state || {};
   const params = useParams();
   const id = params?.id;
   const [saveToCookie, readCookie] = useCookies();
@@ -25,7 +23,7 @@ const Profiles = () => {
     setActiceKey(
       readCookie("tab-detail-kh") === "" ? "1" : readCookie("tab-detail-kh")
     );
-  }, []);
+  }, [readCookie]);
 
   const onChangeTab = (key) => {
     saveToCookie("tab-detail-kh", key);

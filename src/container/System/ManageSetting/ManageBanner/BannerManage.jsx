@@ -1,6 +1,6 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import { Dropdown, Image, Input, Pagination, Space, Table } from "antd";
+import { Dropdown, Image, Input, Pagination, Space, Switch, Table } from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,8 +9,7 @@ import {
   deleteBanner,
   searchBanners,
 } from "../../../../api/banner";
-import offToggle from "../../../../assets/images/off-button.png";
-import onToggle from "../../../../assets/images/on-button.png";
+
 import AddBanner from "../../../../components/addBanner/addBanner";
 import EditBanner from "../../../../components/editBanner/editBanner";
 import ModalCustom from "../../../../components/modalCustom";
@@ -64,56 +63,37 @@ const BannerManage = () => {
           dispatch(loadingAction.loadingRequest(false));
         });
     },
-    [startPage]
+    [startPage, dispatch]
   );
 
   const blockBanner = useCallback(
     (id, is_active) => {
       dispatch(loadingAction.loadingRequest(true));
-      if (is_active === true) {
-        activeBanner(id, { is_active: false })
-          .then((res) => {
-            dispatch(
-              getBanners.getBannersRequest({ start: startPage, length: 20 })
-            );
-            setModalBlock(false);
-            dispatch(loadingAction.loadingRequest(false));
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err,
-            });
-            dispatch(loadingAction.loadingRequest(false));
+
+      activeBanner(id, { is_active: is_active ? false : true })
+        .then((res) => {
+          dispatch(
+            getBanners.getBannersRequest({ start: startPage, length: 20 })
+          );
+          setModalBlock(false);
+          dispatch(loadingAction.loadingRequest(false));
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
           });
-      } else {
-        activeBanner(id, { is_active: true })
-          .then((res) => {
-            dispatch(
-              getBanners.getBannersRequest({ start: startPage, length: 20 })
-            );
-            setModalBlock(false);
-            dispatch(loadingAction.loadingRequest(false));
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err,
-            });
-            dispatch(loadingAction.loadingRequest(false));
-          });
-      }
+          dispatch(loadingAction.loadingRequest(false));
+        });
     },
-    [startPage, getBanners, loadingAction]
+    [startPage, dispatch]
   );
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      setValueSearch(value);
-      searchBanners(value)
-        .then((res) => setDataFilter(res.data))
-        .catch((err) => console.log(err));
-    }, 1000),
-    []
-  );
+  const handleSearch = _debounce((value) => {
+    setValueSearch(value);
+    searchBanners(value)
+      .then((res) => setDataFilter(res.data))
+      .catch((err) => console.log(err));
+  }, 1000);
 
   const onChange = (page) => {
     setCurrentPage(page);
@@ -151,7 +131,9 @@ const BannerManage = () => {
     {
       key: "2",
       label: checkElement?.includes("delete_banner") && (
-        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
+        <p style={{ margin: 0 }} onClick={toggle}>{`${i18n.t("delete", {
+          lng: lang,
+        })}`}</p>
       ),
     },
   ];
@@ -159,28 +141,28 @@ const BannerManage = () => {
   const columns = [
     {
       title: `${i18n.t("name", { lng: lang })}`,
-      render: (data) => <a className="text-title-banner">{data?.title}</a>,
+      render: (data) => <p className="text-title-banner">{data?.title}</p>,
       width: "30%",
     },
     {
       title: "Type link",
-      render: (data) => <a className="text-title-banner">{data?.type_link}</a>,
+      render: (data) => <p className="text-title-banner">{data?.type_link}</p>,
       align: "center",
     },
     {
       title: `${i18n.t("position", { lng: lang })}`,
-      render: (data) => <a className="text-title-banner">{data?.position}</a>,
+      render: (data) => <p className="text-title-banner">{data?.position}</p>,
       align: "center",
     },
     {
       title: "Link ID",
       render: (data) => {
         return (
-          <a className="text-link">
+          <p className="text-link">
             {data?.link_id.length > 30
               ? data?.link_id.slice(0, 30) + "..."
               : data?.link_id}
-          </a>
+          </p>
         );
       },
     },
@@ -201,22 +183,20 @@ const BannerManage = () => {
       render: (data) => (
         <Space size="middle">
           {checkElement?.includes("active_banner") && (
-            <img
-              className="img-unlock-banner"
-              src={data?.is_active ? onToggle : offToggle}
+            <Switch
+              checked={data?.is_active}
               onClick={toggleBlock}
+              style={{ backgroundColor: data?.is_active ? "#00cf3a" : "" }}
             />
           )}
           <Dropdown
             menu={{
               items,
             }}
-            placement="bottom"
+            placement="bottomRight"
             trigger={["click"]}
           >
-            <a className="icon-menu">
-              <UilEllipsisV />
-            </a>
+            <UilEllipsisV />
           </Dropdown>
         </Space>
       ),
@@ -256,10 +236,10 @@ const BannerManage = () => {
             }}
           />
           <div className="mt-2 div-pagination p-2">
-            <a>
+            <p>
               {`${i18n.t("total", { lng: lang })}`}:{" "}
               {totalFilter > 0 ? totalFilter : totalBanner}
-            </a>
+            </p>
             <div>
               <Pagination
                 current={currentPage}
@@ -281,8 +261,8 @@ const BannerManage = () => {
             textOk={`${i18n.t("delete", { lng: lang })}`}
             body={
               <>
-                <a>{`${i18n.t("want_delete_banner", { lng: lang })}`}</a>
-                <a className="text-name-modal">{itemEdit?.title}</a>
+                <p>{`${i18n.t("want_delete_banner", { lng: lang })}`}</p>
+                <p className="text-name-modal">{itemEdit?.title}</p>
               </>
             }
           />

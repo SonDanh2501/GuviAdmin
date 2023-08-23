@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, Form, Image, Input, Row } from "antd";
+import { Button, Checkbox, Image, Input } from "antd";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
 import JSZipUtils from "jszip-utils";
@@ -8,14 +8,14 @@ import {
   getCollaboratorsById,
   updateDocumentCollaboratorApi,
 } from "../../../../../../../api/collaborator";
-import { postFile, postMutipleFile } from "../../../../../../../api/file";
+import { postFile } from "../../../../../../../api/file";
+import InputCustom from "../../../../../../../components/textInputCustom";
 import resizeFile from "../../../../../../../helper/resizer";
 import { errorNotify, successNotify } from "../../../../../../../helper/toast";
-import { loadingAction } from "../../../../../../../redux/actions/loading";
-import "./index.scss";
-import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../../i18n";
-import InputCustom from "../../../../../../../components/textInputCustom";
+import { loadingAction } from "../../../../../../../redux/actions/loading";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import "./index.scss";
 
 const Document = ({ id }) => {
   const [deal, setDeal] = useState(false);
@@ -56,7 +56,7 @@ const Document = ({ id }) => {
         });
         dispatch(loadingAction.loadingRequest(false));
       });
-  }, [id]);
+  }, [id, dispatch, lang]);
 
   const onChangeIdentifyBefore = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -265,6 +265,8 @@ const Document = ({ id }) => {
     imgRegistration,
     certification,
     imgCertification,
+    dispatch,
+    lang,
   ]);
 
   const removeItemInfomation = (item) => {
@@ -303,7 +305,7 @@ const Document = ({ id }) => {
         }
         zip.file(filename, data, { binary: true });
         count++;
-        if (count == imgInformation.length) {
+        if (count === imgInformation.length) {
           zip.generateAsync({ type: "blob" }).then(function (content) {
             saveAs(content, zipFilename);
           });
@@ -327,7 +329,7 @@ const Document = ({ id }) => {
         }
         zip.file(filename, data, { binary: true });
         count++;
-        if (count == imgRegistration.length) {
+        if (count === imgRegistration.length) {
           zip.generateAsync({ type: "blob" }).then(function (content) {
             saveAs(content, zipFilename);
           });
@@ -351,7 +353,7 @@ const Document = ({ id }) => {
         }
         zip.file(filename, data, { binary: true });
         count++;
-        if (count == imgCertification.length) {
+        if (count === imgCertification.length) {
           zip.generateAsync({ type: "blob" }).then(function (content) {
             saveAs(content, zipFilename);
           });
@@ -392,7 +394,9 @@ const Document = ({ id }) => {
 
           <div className="form-input">
             <div>
-              <a>{`${i18n.t("citizen_ID_front", { lng: lang })}`}</a>
+              <p className="label-input">{`${i18n.t("citizen_ID_front", {
+                lng: lang,
+              })}`}</p>
               <div className="col-img">
                 <Input
                   id="exampleThumbnail"
@@ -418,7 +422,9 @@ const Document = ({ id }) => {
               </div>
             </div>
             <div>
-              <a>{`${i18n.t("citizen_ID_back", { lng: lang })}`}</a>
+              <p className="label-input">{`${i18n.t("citizen_ID_back", {
+                lng: lang,
+              })}`}</p>
               <div className="col-img">
                 <Input
                   id="exampleThumbnail"
@@ -464,7 +470,9 @@ const Document = ({ id }) => {
 
           <div className="form-input">
             <div className="div-infomation">
-              <a>{`${i18n.t("image", { lng: lang })}`}</a>
+              <p className="label-input">{`${i18n.t("image", {
+                lng: lang,
+              })}`}</p>
               <div className="col-img">
                 <input
                   type="file"
@@ -520,7 +528,9 @@ const Document = ({ id }) => {
 
           <div className="form-input">
             <div className="div-infomation">
-              <a>{`${i18n.t("image", { lng: lang })}`}</a>
+              <p className="label-input">{`${i18n.t("image", {
+                lng: lang,
+              })}`}</p>
               <div className="col-img">
                 <input
                   type="file"
@@ -576,7 +586,9 @@ const Document = ({ id }) => {
 
           <div className="form-input">
             <div className="div-infomation">
-              <a>{`${i18n.t("image", { lng: lang })}`}</a>
+              <p className="label-input">{`${i18n.t("image", {
+                lng: lang,
+              })}`}</p>
               <div className="col-img">
                 <input
                   type="file"

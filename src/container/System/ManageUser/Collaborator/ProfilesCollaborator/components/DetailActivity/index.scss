@@ -59,7 +59,6 @@
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
-  line-height: 30px;
   color: #19202c;
   align-items: center;
   margin-bottom: 10px;
@@ -84,6 +83,16 @@
       .div-total {
         flex-direction: row;
         justify-content: space-between;
+
+        .text-money {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          color: #19202c;
+          align-items: center;
+          margin: 0;
+        }
       }
       .div-total-promo {
         flex-direction: row;
@@ -93,6 +102,16 @@
           margin-left: 30px;
           flex-direction: row;
           justify-content: space-between;
+
+          .text-money {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            color: #19202c;
+            align-items: center;
+            margin: 0;
+          }
         }
       }
 
@@ -104,33 +123,41 @@
         .div-price-event {
           display: flex;
           flex-direction: column;
+          .text-programme {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            color: #19202c;
+            align-items: center;
+            margin: 0;
+          }
           .text-event-discount {
             color: #ff0000;
-            margin-left: 10px;
+            margin: 0 0 0 10px;
           }
         }
       }
     }
   }
 
+  .text-service {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    margin: 0 0 0 5px;
+    color: #19202c;
+    align-items: center;
+  }
   .title {
     font-family: "Roboto";
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
-    line-height: 30px;
     color: #19202c;
     align-items: center;
-
-    .text-service {
-      font-family: "Roboto";
-      font-style: normal;
-      font-weight: 300;
-      font-size: 16px;
-      line-height: 30px;
-      color: #19202c;
-      align-items: center;
-    }
+    margin: 0;
 
     .text-add-service {
       display: flex;
@@ -155,15 +182,26 @@
       font-style: normal;
       font-weight: 600;
       font-size: 16px;
-      line-height: 30px;
       color: #19202c;
       align-items: center;
+      margin: 0;
     }
 
     .div-times {
       display: flex;
       flex-direction: column;
       margin-top: 5px;
+      justify-content: center;
+
+      .text-time {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        color: #19202c;
+        align-items: center;
+        margin: 0;
+      }
     }
   }
 
@@ -172,8 +210,8 @@
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
-    line-height: 16px;
     color: #ece200 !important;
+    margin: 0;
   }
 
   .text-confirm {
@@ -181,8 +219,8 @@
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
-    line-height: 16px;
-    color: #023e8a;
+    color: #023e8a !important;
+    margin: 0;
   }
 
   .text-doing {
@@ -190,8 +228,8 @@
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
-    line-height: 16px;
-    color: #023e8a;
+    color: #023e8a !important;
+    margin: 0;
   }
 
   .text-done {
@@ -199,17 +237,17 @@
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
-    line-height: 16px;
-    color: #00cf3a;
+    color: #00cf3a !important;
+    margin: 0;
   }
 
   .text-cancel {
     font-family: "Roboto";
     font-style: normal;
     font-weight: 400;
-    font-size: 18px;
-    line-height: 16px;
+    font-size: 18px !important;
     color: #ff0000;
+    margin: 0;
   }
 }
 
@@ -280,6 +318,16 @@
   .div-item-extra-service {
     display: flex;
     flex-direction: column;
+
+    .text-item {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 300;
+      font-size: 14px;
+      color: #19202c;
+      align-items: center;
+      margin: 0;
+    }
   }
 }
 
@@ -301,6 +349,7 @@
       font-size: 18px;
       color: black;
       text-decoration: none;
+      margin: 0;
     }
 
     .text-money-plus {
@@ -309,6 +358,7 @@
       font-size: 16px;
       color: #00cf3a;
       text-decoration: none;
+      margin: 0;
     }
 
     .text-money-deduction {
@@ -317,6 +367,7 @@
       font-size: 16px;
       color: #ff0000;
       text-decoration: none;
+      margin: 0;
     }
   }
 
@@ -326,6 +377,7 @@
     font-size: 14px;
     color: black;
     text-decoration: none;
+    margin: 0;
   }
 }
 
@@ -341,6 +393,7 @@
     font-size: 18px;
     color: black;
     text-decoration: none;
+    margin: 0;
   }
 }
 
@@ -357,6 +410,7 @@
       font-size: 18px;
       color: black;
       text-decoration: none;
+      margin: 0;
     }
   }
   .div-details-service {
@@ -378,6 +432,15 @@
         .div-total {
           flex-direction: row;
           justify-content: space-between;
+          .text-money {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            color: #19202c;
+            align-items: center;
+            margin: 0;
+          }
         }
         .div-total-promo {
           flex-direction: row;
@@ -398,9 +461,19 @@
           .div-price-event {
             display: flex;
             flex-direction: column;
+            .text-programme {
+              font-family: "Roboto";
+              font-style: normal;
+              font-weight: 400;
+              font-size: 14px;
+              color: #19202c;
+              align-items: center;
+              margin: 0;
+            }
             .text-event-discount {
               color: #ff0000;
               margin-left: 10px;
+              margin: 0;
             }
           }
         }
@@ -412,19 +485,9 @@
       font-style: normal;
       font-weight: 600;
       font-size: 16px;
-      line-height: 30px;
+      margin: 0;
       color: #19202c;
       align-items: center;
-
-      .text-service {
-        font-family: "Roboto";
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 30px;
-        color: #19202c;
-        align-items: center;
-      }
 
       .text-add-service {
         display: flex;
@@ -433,12 +496,21 @@
         font-style: normal;
         font-weight: 300;
         font-size: 16px;
-        line-height: 30px;
         color: #19202c;
         align-items: center;
         margin-left: 10%;
         margin-top: -10px;
       }
+    }
+
+    .text-service {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 300;
+      font-size: 16px;
+      margin: 0;
+      color: #19202c;
+      align-items: center;
     }
 
     .div-datework {
@@ -571,6 +643,7 @@
       font-size: 18px;
       color: black;
       text-decoration: none;
+      margin: 0;
     }
   }
   .div-item-list {

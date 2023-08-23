@@ -10,7 +10,7 @@ import CustomButton from "../customButton/customButton";
 import "./addService.scss";
 
 const AddService = (props) => {
-  const { id, setData, setTotal, setIsLoading } = props;
+  const { id, setData, setIsLoading } = props;
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
   const [imgThumbnail, setImgThumbnail] = useState("");
@@ -93,7 +93,6 @@ const AddService = (props) => {
         getServiceApi(id)
           .then((res) => {
             setData(res?.data);
-            setTotal(res?.totalItem);
           })
           .catch((err) => {});
       })

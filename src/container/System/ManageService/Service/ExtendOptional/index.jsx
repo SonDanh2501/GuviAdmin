@@ -2,16 +2,12 @@ import { Table } from "antd";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getExtendByOptionalApi } from "../../../../../api/service";
-import LoadingPagination from "../../../../../components/paginationLoading";
 import { formatMoney } from "../../../../../helper/formatMoney";
 
 const ExtendOptionalService = () => {
   const { state } = useLocation();
   const { id } = state || {};
   const [data, setData] = useState([]);
-  const [total, setTotal] = useState([]);
-  const [itemEdit, setItemEdit] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,7 +15,6 @@ const ExtendOptionalService = () => {
       getExtendByOptionalApi(id)
         .then((res) => {
           setData(res?.data);
-          setTotal(res?.totalItem);
         })
         .catch((err) => {});
     }
@@ -29,7 +24,8 @@ const ExtendOptionalService = () => {
     {
       title: "Title",
       render: (data) => (
-        <a
+        <p
+          style={{ margin: 0 }}
           onClick={() =>
             navigate(
               `/services/manage-group-service/service/optional-service/extend-optional/edit-price`,
@@ -38,20 +34,20 @@ const ExtendOptionalService = () => {
           }
         >
           {data?.title?.vi}
-        </a>
+        </p>
       ),
     },
     {
       title: "Mô tả",
-      render: (data) => <a>{data?.description?.vi}</a>,
+      render: (data) => <p style={{ margin: 0 }}>{data?.description?.vi}</p>,
     },
     {
       title: "Giá",
-      render: (data) => <a>{formatMoney(data?.price)}</a>,
+      render: (data) => <p style={{ margin: 0 }}>{formatMoney(data?.price)}</p>,
     },
     {
       title: "Phí dịch vụ",
-      render: (data) => <a>{data?.platform_fee}</a>,
+      render: (data) => <p style={{ margin: 0 }}>{data?.platform_fee}</p>,
       align: "center",
     },
   ];
@@ -59,21 +55,8 @@ const ExtendOptionalService = () => {
     <div>
       <h3>Extend Optional</h3>
       <div className="mt-3">
-        <Table
-          dataSource={data}
-          pagination={false}
-          columns={columns}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                setItemEdit(record);
-              },
-            };
-          }}
-        />
+        <Table dataSource={data} pagination={false} columns={columns} />
       </div>
-
-      {isLoading && <LoadingPagination />}
     </div>
   );
 };

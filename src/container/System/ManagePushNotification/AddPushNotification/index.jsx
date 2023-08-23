@@ -49,7 +49,7 @@ const AddPushNotification = ({ idOrder }) => {
   }, []);
 
   dataGroupCustomer.map((item, index) => {
-    options.push({
+    return options.push({
       label: item?.name,
       value: item?._id,
     });
@@ -80,25 +80,22 @@ const AddPushNotification = ({ idOrder }) => {
     setListCustomers(newArray);
   };
 
-  const searchCustomer = useCallback(
-    _debounce((value) => {
-      setNameCustomer(value);
-      if (value) {
-        searchCustomersApi(value)
-          .then((res) => {
-            if (value === "") {
-              setDataFilter([]);
-            } else {
-              setDataFilter(res.data);
-            }
-          })
-          .catch((err) => console.log(err));
-      } else {
-        setDataFilter([]);
-      }
-    }, 500),
-    []
-  );
+  const searchCustomer = _debounce((value) => {
+    setNameCustomer(value);
+    if (value) {
+      searchCustomersApi(value)
+        .then((res) => {
+          if (value === "") {
+            setDataFilter([]);
+          } else {
+            setDataFilter(res.data);
+          }
+        })
+        .catch((err) => console.log(err));
+    } else {
+      setDataFilter([]);
+    }
+  }, 500);
 
   const handleChange = (value) => {
     setGroupCustomer(value);
@@ -151,12 +148,14 @@ const AddPushNotification = ({ idOrder }) => {
     listCustomers,
     groupCustomer,
     imgThumbnail,
+    dispatch,
+    isGroupCustomer,
   ]);
 
   return (
     <>
       <div className="btn-add-push-noti" onClick={showDrawer}>
-        <a>{`${i18n.t("create_noti", { lng: lang })}`}</a>
+        <p className="m-0">{`${i18n.t("create_noti", { lng: lang })}`}</p>
       </div>
       <Drawer
         title={`${i18n.t("create_noti", { lng: lang })}`}
@@ -225,9 +224,9 @@ const AddPushNotification = ({ idOrder }) => {
                         key={index}
                         onClick={() => onChooseCustomer(item)}
                       >
-                        <a className="text-name">
+                        <p className="text-name">
                           {item?.full_name} - {item?.phone} - {item?.id_view}
-                        </a>
+                        </p>
                       </div>
                     );
                   })}
@@ -240,10 +239,10 @@ const AddPushNotification = ({ idOrder }) => {
                     {listNameCustomers.map((item) => {
                       return (
                         <div className="div-item-customer">
-                          <a className="text-name-list">
+                          <p className="text-name-list">
                             - {item?.full_name} . {item?.phone} .{" "}
                             {item?.id_view}
-                          </a>
+                          </p>
                           <i
                             class="uil uil-times-circle"
                             onClick={() => removeItemCustomer(item)}

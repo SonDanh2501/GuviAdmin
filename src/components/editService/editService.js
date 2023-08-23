@@ -10,7 +10,7 @@ import CustomButton from "../customButton/customButton";
 import "./editService.scss";
 
 const EditService = (props) => {
-  const { id, setData, setTotal, data, setIsLoading } = props;
+  const { id, setData, data, setIsLoading } = props;
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
   const [imgThumbnail, setImgThumbnail] = useState("");
@@ -107,7 +107,6 @@ const EditService = (props) => {
         getServiceApi(id)
           .then((res) => {
             setData(res?.data);
-            setTotal(res?.totalItem);
           })
           .catch((err) => {});
       })
