@@ -12,33 +12,35 @@ const DetailRegisterCustomer = () => {
   const { state } = useLocation();
   const { date } = state || {};
   const navigate = useNavigate();
-  const [rowIndex, setRowIndex] = useState();
-  const [hidePhone, setHidePhone] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
-  const [startDate, setStartDate] = useState(
-    moment(date).startOf("date").toISOString()
-  );
-  const [endDate, setEndDate] = useState(
-    moment(date).endOf("date").toISOString()
-  );
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    getTotalDetailCustomerDay(0, 20, startDate, endDate)
+    getTotalDetailCustomerDay(
+      0,
+      20,
+      moment(date).startOf("date").toISOString(),
+      moment(date).endOf("date").toISOString()
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-  }, []);
+  }, [date]);
 
   const onChange = (page) => {
     setCurrentPage(page);
     const dataLength = data.length < 20 ? 20 : data.length;
     const start = page * dataLength - dataLength;
-    getTotalDetailCustomerDay(start, 20, startDate, endDate)
+    getTotalDetailCustomerDay(
+      start,
+      20,
+      moment(date).startOf("date").toISOString(),
+      moment(date).endOf("date").toISOString()
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -52,12 +54,12 @@ const DetailRegisterCustomer = () => {
       render: (data) => {
         return (
           <div className="div-create">
-            <a className="text-create">
+            <p className="text-create m-0">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-create">
+            </p>
+            <p className="text-create m-0">
               {moment(new Date(data?.date_create)).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -69,7 +71,7 @@ const DetailRegisterCustomer = () => {
       render: (data) => {
         return (
           <Link to={`/profile-customer/${data?._id}`}>
-            <a className="text-id"> {data?.id_view}</a>
+            <p className="text-id m-0"> {data?.id_view}</p>
           </Link>
         );
       },
@@ -80,7 +82,7 @@ const DetailRegisterCustomer = () => {
       render: (data) => {
         return (
           <Link to={`/profile-customer/${data?._id}`}>
-            <a className="text-name-report-customer"> {data?.full_name}</a>
+            <p className="text-name-report-customer"> {data?.full_name}</p>
           </Link>
         );
       },
@@ -88,35 +90,9 @@ const DetailRegisterCustomer = () => {
     {
       title: `${i18n.t("phone", { lng: lang })}`,
       render: (data, record, index) => {
-        const phone = data?.phone.slice(0, 7);
         return (
           <div className="hide-phone">
-            <a className="text-phone">
-              {/* {rowIndex === index
-                ? hidePhone
-                  ? data?.phone
-                  : phone + "***"
-                : phone + "***"} */}
-              {data?.phone}
-            </a>
-            {/* <a
-              className="btn-eyes"
-              onClick={() =>
-                rowIndex === index
-                  ? setHidePhone(!hidePhone)
-                  : setHidePhone(!hidePhone)
-              }
-            >
-              {rowIndex === index ? (
-                hidePhone ? (
-                  <i class="uil uil-eye"></i>
-                ) : (
-                  <i class="uil uil-eye-slash"></i>
-                )
-              ) : (
-                <i class="uil uil-eye-slash"></i>
-              )}
-            </a> */}
+            <p className="text-phone m-0">{data?.phone}</p>
           </div>
         );
       },
@@ -138,24 +114,13 @@ const DetailRegisterCustomer = () => {
         {`${i18n.t("total", { lng: lang })}`}: {total}
       </h5>
       <div className="mt-2">
-        <Table
-          columns={columns}
-          dataSource={data}
-          pagination={false}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                setRowIndex(rowIndex);
-              },
-            };
-          }}
-        />
+        <Table columns={columns} dataSource={data} pagination={false} />
       </div>
 
       <div className="mt-2 div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}: {total}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}

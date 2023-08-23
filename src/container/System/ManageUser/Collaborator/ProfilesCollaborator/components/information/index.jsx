@@ -10,7 +10,10 @@ import {
   getCollaboratorsById,
   updateInformationCollaboratorApi,
 } from "../../../../../../../api/collaborator";
-import { getDistrictApi } from "../../../../../../../api/file";
+import {
+  getDetailBusiness,
+  getListBusiness,
+} from "../../../../../../../api/configuration";
 import InputCustom from "../../../../../../../components/textInputCustom";
 import { errorNotify, successNotify } from "../../../../../../../helper/toast";
 import i18n from "../../../../../../../i18n";
@@ -21,10 +24,6 @@ import {
   getService,
 } from "../../../../../../../redux/selectors/service";
 import "./index.scss";
-import {
-  getDetailBusiness,
-  getListBusiness,
-} from "../../../../../../../api/configuration";
 
 const Information = ({ data, image, idCTV, setData }) => {
   const [name, setName] = useState("");
@@ -48,7 +47,6 @@ const Information = ({ data, image, idCTV, setData }) => {
   const [idCollaborator, setIdCollaborator] = useState("");
   const [dataBusiness, setDataBusiness] = useState([]);
   const [idBusiness, setIdBusiness] = useState("");
-  const [detailsBusiness, setDetailsBusiness] = useState([]);
   const [codeCity, setCodeCity] = useState("");
   const [dataDistrict, setDataDistrict] = useState([]);
   const [codeDistrict, setCodeDistrict] = useState([]);
@@ -63,9 +61,10 @@ const Information = ({ data, image, idCTV, setData }) => {
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    province?.map((item) => {
+    province.forEach((item) => {
       if (item?.code === data?.city) {
         setDataDistrict(item?.districts);
+        return;
       }
     });
     getListBusiness(0, 100, "")
@@ -89,7 +88,7 @@ const Information = ({ data, image, idCTV, setData }) => {
     setCodeInvite(data?.invite_code);
     setType(data?.type);
     data?.service_apply?.map((item) => {
-      serviceApply.push(item?._id);
+      return serviceApply.push(item?._id);
     });
     setIdBusiness(data?.id_business);
     setCodeCity(data?.city);
@@ -100,13 +99,13 @@ const Information = ({ data, image, idCTV, setData }) => {
     if (idBusiness) {
       getDetailBusiness(idBusiness)
         .then((res) => {
-          setDetailsBusiness(res);
           setCodeCity(res?.area_manager_lv_1[0]);
           setCodeDistrict(res?.area_manager_lv_2);
-          province?.map((item) => {
-            res?.area_manager_lv_1?.map((i) => {
+          province?.forEach((item) => {
+            res?.area_manager_lv_1?.forEach((i) => {
               if (item?.code === i) {
                 setDataDistrict(item?.districts);
+                return;
               }
             });
           });
@@ -116,14 +115,14 @@ const Information = ({ data, image, idCTV, setData }) => {
   }, [idBusiness]);
 
   service.map((item) => {
-    serviceOption.push({
+    return serviceOption.push({
       label: item?.title?.[lang],
       value: item?._id,
     });
   });
 
   province?.map((item) => {
-    cityOption.push({
+    return cityOption.push({
       label: item?.name,
       value: item?.code,
       district: item?.districts,
@@ -131,14 +130,14 @@ const Information = ({ data, image, idCTV, setData }) => {
   });
 
   dataDistrict?.map((item) => {
-    districtsOption.push({
+    return districtsOption.push({
       label: item?.name,
       value: item?.code,
     });
   });
 
   dataBusiness?.map((item) => {
-    businessOption.push({
+    return businessOption.push({
       value: item?._id,
       label: item?.full_name,
     });
@@ -163,28 +162,25 @@ const Information = ({ data, image, idCTV, setData }) => {
     setNameCollaborator(value);
   };
 
-  const searchCollaborator = useCallback(
-    _debounce((value) => {
-      setNameCollaborator(value);
-      if (value) {
-        fetchCollaborators(lang, 0, 100, "", value, "")
-          .then((res) => {
-            if (value === "") {
-              setDataCollaborator([]);
-            } else {
-              setDataCollaborator(res.data);
-            }
-          })
-          .catch((err) => console.log(err));
-      } else if (idCollaborator) {
-        setDataCollaborator([]);
-      } else {
-        setDataCollaborator([]);
-      }
-      setIdCollaborator("");
-    }, 500),
-    []
-  );
+  const searchCollaborator = _debounce((value) => {
+    setNameCollaborator(value);
+    if (value) {
+      fetchCollaborators(lang, 0, 100, "", value, "")
+        .then((res) => {
+          if (value === "") {
+            setDataCollaborator([]);
+          } else {
+            setDataCollaborator(res.data);
+          }
+        })
+        .catch((err) => console.log(err));
+    } else if (idCollaborator) {
+      setDataCollaborator([]);
+    } else {
+      setDataCollaborator([]);
+    }
+    setIdCollaborator("");
+  }, 500);
 
   const updateInformation = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -252,6 +248,8 @@ const Information = ({ data, image, idCTV, setData }) => {
     codeDistrict,
     codeCity,
     idBusiness,
+    dispatch,
+    lang,
   ]);
 
   return (
@@ -295,7 +293,9 @@ const Information = ({ data, image, idCTV, setData }) => {
           <Row className="mt-2">
             <Col lg="6">
               <div>
-                <a>{`${i18n.t("birthday", { lng: lang })}`}</a>
+                <p className="label-birthday-info">{`${i18n.t("birthday", {
+                  lng: lang,
+                })}`}</p>
                 <DatePicker
                   onChange={(date, dateString) => setBirthday(dateString)}
                   style={{ width: "100%" }}
@@ -462,7 +462,9 @@ const Information = ({ data, image, idCTV, setData }) => {
             </Col>
             <Col lg="6">
               <div>
-                <a>{`${i18n.t("issue_date", { lng: lang })}`}</a>
+                <p className="label-birthday-info">{`${i18n.t("issue_date", {
+                  lng: lang,
+                })}`}</p>
                 <DatePicker
                   onChange={(date, dateString) => setIssuedDay(dateString)}
                   style={{ width: "100%" }}
@@ -503,10 +505,10 @@ const Information = ({ data, image, idCTV, setData }) => {
                             setDataCollaborator([]);
                           }}
                         >
-                          <a>
+                          <p className="text-name">
                             {item?.full_name} - {item?.phone} - {item?.id_view}{" "}
                             - {item?.invite_code}
-                          </a>
+                          </p>
                         </div>
                       );
                     })}

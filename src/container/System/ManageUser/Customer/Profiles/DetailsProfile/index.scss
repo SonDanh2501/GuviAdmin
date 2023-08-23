@@ -38,6 +38,7 @@
           font-size: 24px;
           color: black;
           text-decoration: none;
+          margin: 0;
         }
 
         .text-invite {
@@ -46,6 +47,7 @@
           font-size: 12px !important;
           color: black;
           text-decoration: none;
+          margin: 0;
         }
       }
     }
@@ -80,6 +82,7 @@
             font-size: 14px !important;
             color: black;
             text-decoration: none;
+            margin: 0;
           }
 
           .icon-rank {
@@ -94,6 +97,7 @@
           font-size: 16px;
           color: black;
           text-decoration: none;
+          margin: 0;
         }
       }
     }
@@ -156,18 +160,17 @@
         flex-direction: column;
         width: 60%;
 
-        .input {
-          width: 80%;
-        }
-        .div-select {
+        .div-staff {
           display: flex;
           flex-direction: column;
 
-          .input-select-gender {
-            width: 80%;
-            height: 40px;
-            border-radius: 4px;
-            border: 1px solid #ededed;
+          .label-staff {
+            font-family: "Roboto";
+            font-weight: 400;
+            font-size: 12px;
+            color: black;
+            text-decoration: none;
+            margin: 0;
           }
         }
       }
@@ -190,6 +193,7 @@
     font-size: 16px;
     color: black;
     text-decoration: none;
+    margin: 0;
   }
 
   .text-no-invite {
@@ -243,6 +247,7 @@
             font-size: 12px;
             color: black;
             text-decoration: none;
+            margin: 0;
           }
 
           .div-name-invite {
@@ -256,6 +261,7 @@
               color: black;
               text-decoration: none;
               width: 40px;
+              margin: 0;
             }
             .title-colon {
               font-family: "Roboto";
@@ -264,6 +270,7 @@
               color: black;
               text-decoration: none;
               margin-right: 5px;
+              margin: 0;
             }
 
             .text-name {
@@ -272,6 +279,7 @@
               font-size: 12px;
               color: black;
               text-decoration: none;
+              margin: 0;
             }
           }
         }
@@ -282,6 +290,7 @@
           font-size: 12px;
           color: black;
           text-decoration: none;
+          margin: 0;
         }
 
         .text-step-done {
@@ -290,6 +299,7 @@
           font-size: 12px;
           color: #87d068;
           text-decoration: none;
+          margin: 0;
         }
       }
     }
@@ -333,6 +343,7 @@
             font-size: 24px;
             color: black;
             text-decoration: none;
+            margin: 0;
           }
 
           .text-invite {
@@ -341,6 +352,7 @@
             font-size: 12px !important;
             color: black;
             text-decoration: none;
+            margin: 0;
           }
         }
       }
@@ -367,6 +379,7 @@
             font-size: 12px !important;
             color: black;
             text-decoration: none;
+            margin: 0;
           }
 
           .text-title {
@@ -375,6 +388,7 @@
             font-size: 14px;
             color: black;
             text-decoration: none;
+            margin: 0;
           }
         }
       }
@@ -432,18 +446,17 @@
           flex-direction: column;
           width: 60%;
 
-          .input {
-            width: 80%;
-          }
-          .div-select {
+          .div-staff {
             display: flex;
             flex-direction: column;
 
-            .input-select-gender {
-              width: 80%;
-              height: 40px;
-              border-radius: 4px;
-              border: 1px solid #ededed;
+            .label-staff {
+              font-family: "Roboto";
+              font-weight: 400;
+              font-size: 12px;
+              color: black;
+              text-decoration: none;
+              margin: 0;
             }
           }
         }
@@ -463,6 +476,7 @@
       font-size: 16px;
       color: black;
       text-decoration: none;
+      margin: 0;
     }
 
     .div-list-invite {
@@ -506,6 +520,7 @@
               font-size: 12px;
               color: black;
               text-decoration: none;
+              margin: 0;
             }
 
             .div-name-invite {
@@ -519,6 +534,7 @@
                 color: black;
                 text-decoration: none;
                 width: 40px;
+                margin: 0;
               }
               .title-colon {
                 font-family: "Roboto";
@@ -527,6 +543,7 @@
                 color: black;
                 text-decoration: none;
                 margin-right: 5px;
+                margin: 0;
               }
 
               .text-name {
@@ -535,6 +552,7 @@
                 font-size: 12px;
                 color: black;
                 text-decoration: none;
+                margin: 0;
               }
             }
           }
@@ -545,6 +563,7 @@
             font-size: 12px;
             color: black;
             text-decoration: none;
+            margin: 0;
           }
         }
       }
@@ -589,6 +608,7 @@
             font-size: 16px;
             color: black;
             text-decoration: none;
+            margin: 0;
           }
 
           .text-invite {
@@ -597,6 +617,7 @@
             font-size: 12px !important;
             color: black;
             text-decoration: none;
+            margin: 0;
           }
         }
       }
@@ -629,6 +650,7 @@
               font-size: 10px !important;
               color: black;
               text-decoration: none;
+              margin: 0;
             }
 
             .icon-rank {
@@ -643,6 +665,7 @@
             font-size: 10px;
             color: black;
             text-decoration: none;
+            margin: 0;
           }
         }
       }
@@ -700,18 +723,17 @@
           flex-direction: column;
           width: 60%;
 
-          .input {
-            width: 80%;
-          }
-          .div-select {
+          .div-staff {
             display: flex;
             flex-direction: column;
 
-            .input-select-gender {
-              width: 80%;
-              height: 40px;
-              border-radius: 4px;
-              border: 1px solid #ededed;
+            .label-staff {
+              font-family: "Roboto";
+              font-weight: 400;
+              font-size: 12px;
+              color: black;
+              text-decoration: none;
+              margin: 0;
             }
           }
         }
@@ -731,6 +753,7 @@
       font-size: 16px;
       color: black;
       text-decoration: none;
+      margin: 0;
     }
 
     .div-list-invite {
@@ -770,6 +793,7 @@
               font-size: 10px;
               color: black;
               text-decoration: none;
+              margin: 0;
             }
 
             .div-name {
@@ -783,6 +807,7 @@
                 color: black;
                 text-decoration: none;
                 width: 30px;
+                margin: 0;
               }
               .title-colon {
                 font-family: "Roboto";
@@ -791,6 +816,7 @@
                 color: black;
                 text-decoration: none;
                 margin-right: 5px;
+                margin: 0;
               }
 
               .text-name {
@@ -799,6 +825,7 @@
                 font-size: 10px;
                 color: black;
                 text-decoration: none;
+                margin: 0;
               }
             }
           }

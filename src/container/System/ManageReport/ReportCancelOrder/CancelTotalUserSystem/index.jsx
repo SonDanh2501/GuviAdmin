@@ -2,31 +2,29 @@ import { Pagination, Select, Table } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
-import { getDistrictApi } from "../../../../../api/file";
 import {
   getCancelReportUserSystem,
   getReportOverviewCancelReport,
 } from "../../../../../api/report";
 
-import CustomDatePicker from "../../../../../components/customDatePicker";
-import "./index.scss";
 import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../redux/selectors/auth";
-import i18n from "../../../../../i18n";
+import CustomDatePicker from "../../../../../components/customDatePicker";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
 import { getProvince } from "../../../../../redux/selectors/service";
+import "./index.scss";
 
 const TotalCancelUserSystem = (props) => {
   const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;
 
   const [startDate, setStartDate] = useState(
-    moment().subtract(30, "d").startOf("date").toISOString()
+    moment().subtract(30, "days").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [titleCity, setTitleCity] = useState("");
   const [city, setCity] = useState(false);
   const [codeCity, setCodeCity] = useState("");
-  const [codeDistrict, setCodeDistrict] = useState(-1);
   const { width } = useWindowDimensions();
   const [dataPie, setDataPie] = useState([]);
   const [data, setData] = useState([]);
@@ -40,13 +38,24 @@ const TotalCancelUserSystem = (props) => {
   const lang = useSelector(getLanguageState);
   const province = useSelector(getProvince);
   useEffect(() => {
-    getCancelReportUserSystem(startDate, endDate, codeCity)
+    getCancelReportUserSystem(
+      moment().subtract(30, "days").startOf("date").toISOString(),
+      moment().endOf("date").toISOString(),
+      ""
+    )
       .then((res) => {
         setDataPie(res?.arrPercent);
       })
       .catch((err) => {});
 
-    getReportOverviewCancelReport(0, 20, startDate, endDate, tab, codeCity)
+    getReportOverviewCancelReport(
+      0,
+      20,
+      moment().subtract(30, "days").startOf("date").toISOString(),
+      moment().endOf("date").toISOString(),
+      tab,
+      ""
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -55,7 +64,7 @@ const TotalCancelUserSystem = (props) => {
   }, [tab]);
 
   province?.map((item) => {
-    cityData?.push({
+    return cityData?.push({
       value: item?.code,
       label: item?.name,
     });
@@ -80,7 +89,7 @@ const TotalCancelUserSystem = (props) => {
         })
         .catch((err) => {});
     },
-    [city, startDate, endDate, codeDistrict]
+    [city, startDate, endDate, tab]
   );
 
   const renderLabel = ({
@@ -154,13 +163,13 @@ const TotalCancelUserSystem = (props) => {
       title: `${i18n.t("time", { lng: lang })}`,
       render: (data) => {
         return (
-          <div className="div-create-cancel">
-            <a className="text-create-cancel">
+          <div className="div-create-cancel-user-system">
+            <p className="text-create-cancel">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-create-cancel">
+            </p>
+            <p className="text-create-cancel">
               {moment(new Date(data?.date_create)).format("HH/mm")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -169,40 +178,40 @@ const TotalCancelUserSystem = (props) => {
       title: `${i18n.t("canceler", { lng: lang })}`,
       render: (data) => {
         return (
-          <a className="text-user-cancel">
+          <p className="text-user-cancel m-0">
             {data?.id_cancel_user_system
               ? data?.id_cancel_user_system?.id_user_system?.full_name
               : data?.id_cancel_system
               ? `${i18n.t("system", { lng: lang })}`
               : data?.name_customer}
-          </a>
+          </p>
         );
       },
     },
     {
       title: `${i18n.t("order", { lng: lang })}`,
       render: (data) => {
-        return <a className="text-user-cancel">{data?.id_view}</a>;
+        return <p className="text-user-cancel m-0">{data?.id_view}</p>;
       },
     },
     {
       title: `${i18n.t("reason", { lng: lang })}`,
       render: (data) => {
         return (
-          <a className="text-user-cancel">
+          <p className="text-user-cancel m-0">
             {data?.id_cancel_user_system
               ? data?.id_cancel_user_system?.id_reason_cancel?.title?.[lang]
               : data?.id_cancel_system
               ? data?.id_cancel_system?.id_reason_cancel?.title?.[lang]
               : data?.id_cancel_customer?.id_reason_cancel?.title?.[lang]}
-          </a>
+          </p>
         );
       },
     },
     {
       title: `${i18n.t("address", { lng: lang })}`,
       render: (data) => {
-        return <a className="text-address-cancel">{data?.address}</a>;
+        return <p className="text-address-cancel m-0">{data?.address}</p>;
       },
     },
   ];
@@ -219,10 +228,10 @@ const TotalCancelUserSystem = (props) => {
           setSameEnd={() => {}}
         />
         {startDate && (
-          <a className="text-date">
+          <p className="text-date m-0">
             {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
             {moment(endDate).utc().format("DD/MM/YYYY")}
-          </a>
+          </p>
         )}
       </div>
       <div className="div-select-city">
@@ -302,9 +311,9 @@ const TotalCancelUserSystem = (props) => {
         />
       </div>
       <div className="mt-1 div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}: {total}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}

@@ -2,16 +2,7 @@ import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  Button,
-  FloatButton,
-  Image,
-  Input,
-  Pagination,
-  Progress,
-  Select,
-  Switch,
-} from "antd";
+import { Button, FloatButton, Image, Pagination, Progress, Switch } from "antd";
 import {
   fetchCustomerById,
   getInviteCustomerById,
@@ -24,13 +15,13 @@ import iconPlatinum from "../../../../../../assets/images/iconPlatinum.svg";
 import iconSilver from "../../../../../../assets/images/iconSilver.svg";
 import user from "../../../../../../assets/images/user.png";
 import LoadingPagination from "../../../../../../components/paginationLoading";
+import InputCustom from "../../../../../../components/textInputCustom";
 import { formatMoney } from "../../../../../../helper/formatMoney";
 import { errorNotify, successNotify } from "../../../../../../helper/toast";
 import i18n from "../../../../../../i18n";
 import { loadingAction } from "../../../../../../redux/actions/loading";
 import { getLanguageState } from "../../../../../../redux/selectors/auth";
 import "./index.scss";
-import ModalCustom from "../../../../../../components/modalCustom";
 // core components
 
 const DetailsProfile = ({ id }) => {
@@ -41,8 +32,6 @@ const DetailsProfile = ({ id }) => {
   const [rank, setRank] = useState("");
   const [checkRank, setCheckRank] = useState("");
   const [data, setData] = useState([]);
-  const [valueQr, setValueQr] = useState("");
-  const [point, setPoint] = useState();
   const [rankPoint, setRankPoint] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [dataInvite, setDataInvite] = useState([]);
@@ -72,7 +61,7 @@ const DetailsProfile = ({ id }) => {
         setTotalInvite(res?.totalItem);
       })
       .catch((err) => {});
-  }, [id]);
+  }, [id, dispatch]);
 
   useEffect(() => {
     if (data?.rank_point < 100) {
@@ -88,10 +77,8 @@ const DetailsProfile = ({ id }) => {
       setRank(`${i18n.t("platinum", { lng: lang })}`);
       setCheckRank("platinum");
     }
-    setPoint(data?.point);
     setRankPoint(data?.rank_point);
-    setValueQr("https://guvico.github.io/qr-app-test?code=" + data?.phone);
-  }, [data]);
+  }, [data, lang]);
 
   const updateUser = () => {
     dispatch(loadingAction.loadingRequest(true));
@@ -175,34 +162,35 @@ const DetailsProfile = ({ id }) => {
               src={data?.avatar ? data?.avatar : user}
             />
             <div className="div-name">
-              <a className="text-name">{data?.full_name}</a>
-              <a className="text-invite">
+              <p className="text-name">{data?.full_name}</p>
+              <p className="text-invite">
                 {`${i18n.t("code_customer", { lng: lang })}`}: {data?.id_view}
-              </a>
+              </p>
               {data?.birthday && (
-                <a className="text-invite">
+                <p className="text-invite">
                   {`${i18n.t("age", { lng: lang })}`}: {age}
-                </a>
+                </p>
               )}
-              <a className="text-invite">
+              <p className="text-invite">
                 {`${i18n.t("code_invite", { lng: lang })}`}: {data?.invite_code}
-              </a>
+              </p>
             </div>
           </div>
           <div className="div-rank-pay-member">
             <div className="div-member">
-              <a className="text-title">G-pay</a>
+              <p className="text-title">G-pay</p>
               <div className="div-rank-customer">
-                <a className="text-money">{formatMoney(data?.pay_point)}</a>
+                <p className="text-money">{formatMoney(data?.pay_point)}</p>
               </div>
             </div>
             <div className="div-member">
-              <a className="text-title">{`${i18n.t("member", {
+              <p className="text-title">{`${i18n.t("member", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <div className="div-rank-customer">
-                <a className="text-money">{rank}</a>
-                <img
+                <p className="text-money">{rank}</p>
+                <Image
+                  preview={false}
                   className="icon-rank"
                   src={
                     checkRank === "silver"
@@ -214,15 +202,15 @@ const DetailsProfile = ({ id }) => {
                       : iconMember
                   }
                 />
-                <a className="text-money">
+                <p className="text-money">
                   {rankPoint} {`${i18n.t("point", { lng: lang })}`}
-                </a>
+                </p>
               </div>
             </div>
             <div className="div-member">
-              <a className="text-title">Total Price</a>
+              <p className="text-title">Total Price</p>
               <div className="div-rank-customer">
-                <a className="text-money">{formatMoney(data?.total_price)}</a>
+                <p className="text-money">{formatMoney(data?.total_price)}</p>
               </div>
             </div>
           </div>
@@ -231,72 +219,60 @@ const DetailsProfile = ({ id }) => {
           <h3 className="">{`${i18n.t("info", { lng: lang })}`}</h3>
           <div className="div-detail-infomation">
             <div className="div-left">
-              <div className="div-name">
-                <a>{`${i18n.t("full_name", { lng: lang })}`}</a>
-                <Input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  style={{ width: "80%" }}
-                />
-              </div>
-              <div className="div-select">
-                <a>{`${i18n.t("gender", { lng: lang })}`}</a>
-                <Select
-                  value={gender}
-                  onChange={(e) => setGender(e)}
-                  options={[
-                    {
-                      value: "other",
-                      label: `${i18n.t("other", { lng: lang })}`,
-                    },
-                    {
-                      value: "male",
-                      label: `${i18n.t("male", { lng: lang })}`,
-                    },
-                    {
-                      value: "female",
-                      label: `${i18n.t("female", { lng: lang })}`,
-                    },
-                  ]}
-                  style={{ width: "80%" }}
-                />
-              </div>
-              <div className="mt-3">
-                <a>{`${i18n.t("phone", { lng: lang })}`}</a>
-                <Input
-                  type="text"
-                  value={data?.phone}
-                  disabled={true}
-                  style={{ width: "80%" }}
-                />
-              </div>
+              <InputCustom
+                title={`${i18n.t("full_name", { lng: lang })}`}
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                style={{ width: "80%" }}
+              />
+              <InputCustom
+                title={`${i18n.t("gender", { lng: lang })}`}
+                select={true}
+                value={gender}
+                onChange={(e) => setGender(e)}
+                options={[
+                  {
+                    value: "other",
+                    label: `${i18n.t("other", { lng: lang })}`,
+                  },
+                  {
+                    value: "male",
+                    label: `${i18n.t("male", { lng: lang })}`,
+                  },
+                  {
+                    value: "female",
+                    label: `${i18n.t("female", { lng: lang })}`,
+                  },
+                ]}
+                style={{ width: "80%" }}
+              />
+              <InputCustom
+                title={`${i18n.t("phone", { lng: lang })}`}
+                value={data?.phone}
+                disabled={true}
+                style={{ width: "80%" }}
+              />
             </div>
             <div className="div-right">
-              <div>
-                <a>{`${i18n.t("birthday", { lng: lang })}`}</a>
-                <Input
-                  type="date"
-                  value={birthday}
-                  onChange={(e) => {
-                    setBirthday(e.target.value);
-                  }}
-                  style={{ width: "100%" }}
-                />
-              </div>
-
-              <div className="mt-3 div-name">
-                <a>Email</a>
-                <Input
-                  id="input-email"
-                  type="email"
-                  value={mail}
-                  onChange={(e) => setMail(e.target.value)}
-                  style={{ width: "100%" }}
-                />
-              </div>
-              <div className="mt-3 div-name">
-                <a>Nhân viên</a>
+              <InputCustom
+                title={`${i18n.t("birthday", { lng: lang })}`}
+                type="date"
+                value={birthday}
+                onChange={(e) => {
+                  setBirthday(e.target.value);
+                }}
+                style={{ width: "100%" }}
+              />
+              <InputCustom
+                title={`${i18n.t("Email", { lng: lang })}`}
+                type="email"
+                value={mail}
+                onChange={(e) => setMail(e.target.value)}
+                style={{ width: "100%" }}
+              />
+              <div className="mt-3 div-staff">
+                <p className="label-staff">Nhân viên</p>
                 <Switch
                   style={{
                     width: 50,
@@ -315,9 +291,9 @@ const DetailsProfile = ({ id }) => {
       </div>
 
       <div className="div-container-invite-code">
-        <a className="title-invite">{`${i18n.t("recent_referrals", {
+        <p className="title-invite">{`${i18n.t("recent_referrals", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
         {dataInvite.length > 0 ? (
           <>
             <div className="div-list-invite">
@@ -329,42 +305,42 @@ const DetailsProfile = ({ id }) => {
                       <div className="div-row-info">
                         <div>
                           <div className="div-name-invite">
-                            <a className="title-name">{`${i18n.t("name", {
+                            <p className="title-name">{`${i18n.t("name", {
                               lng: lang,
-                            })}`}</a>
-                            <a className="title-colon">:</a>
-                            <a className="text-name">{item?.full_name}</a>
+                            })}`}</p>
+                            <p className="title-colon">:</p>
+                            <p className="text-name">{item?.full_name}</p>
                           </div>
                           <div className="div-name-invite">
-                            <a className="title-name">{`${i18n.t("sdt", {
+                            <p className="title-name">{`${i18n.t("sdt", {
                               lng: lang,
-                            })}`}</a>
-                            <a className="title-colon">:</a>
-                            <a className="text-name">{item?.phone}</a>
+                            })}`}</p>
+                            <p className="title-colon">:</p>
+                            <p className="text-name">{item?.phone}</p>
                           </div>
                           <div className="div-name-invite">
-                            <a className="title-name">{`${i18n.t("code", {
+                            <p className="title-name">{`${i18n.t("code", {
                               lng: lang,
-                            })}`}</a>
-                            <a className="title-colon">:</a>
-                            <a className="text-name">{item?.id_view}</a>
+                            })}`}</p>
+                            <p className="title-colon">:</p>
+                            <p className="text-name">{item?.id_view}</p>
                           </div>
                         </div>
                         <div
                           style={{ display: "flex", flexDirection: "column" }}
                         >
-                          <a className="text-date-create">
+                          <p className="text-date-create">
                             {`${i18n.t("date_create", { lng: lang })}`}:{" "}
                             {moment(item?.date_create).format("DD-MM-YYYY")}
-                          </a>
-                          <a className="text-date-create">
+                          </p>
+                          <p className="text-date-create">
                             {`${i18n.t("Số đơn", { lng: lang })}`}:{" "}
                             {item?.total_done_order}
-                          </a>
-                          <a className="text-date-create">
+                          </p>
+                          <p className="text-date-create">
                             {`${i18n.t("Tổng tiền", { lng: lang })}`}:{" "}
                             {formatMoney(item?.total_price)}
-                          </a>
+                          </p>
                         </div>
                       </div>
 
@@ -379,7 +355,7 @@ const DetailsProfile = ({ id }) => {
                         }
                         strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
                       />
-                      <a
+                      <p
                         className={
                           item?.total_order === 0
                             ? "text-step"
@@ -397,7 +373,7 @@ const DetailsProfile = ({ id }) => {
                           : `${i18n.t("successful_introduction", {
                               lng: lang,
                             })}`}
-                      </a>
+                      </p>
                     </div>
                   </div>
                 );
@@ -405,9 +381,9 @@ const DetailsProfile = ({ id }) => {
             </div>
 
             <div className="mt-1 div-pagination p-2">
-              <a>
+              <p>
                 {`${i18n.t("total", { lng: lang })}`}: {totalInvite}
-              </a>
+              </p>
               <div>
                 <Pagination
                   current={currentPage}
@@ -420,7 +396,7 @@ const DetailsProfile = ({ id }) => {
             </div>
           </>
         ) : (
-          <a className="text-no-invite">Chưa có người giới thiệu</a>
+          <p className="text-no-invite">Chưa có người giới thiệu</p>
         )}
       </div>
 

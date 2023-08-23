@@ -1,10 +1,10 @@
-import { takeLatest, call, put } from "redux-saga/effects";
-import * as actions from "../actions/customerAction";
+import { call, put, takeLatest } from "redux-saga/effects";
 import * as api from "../../api/customer.jsx";
+import { getGroupCustomerApi } from "../../api/promotion";
+import { errorNotify } from "../../helper/toast";
+import * as actions from "../actions/customerAction";
 import { getType } from "../actions/customerAction";
 import { loadingAction } from "../actions/loading";
-import { errorNotify, successNotify } from "../../helper/toast";
-import { getGroupCustomer, getGroupCustomerApi } from "../../api/promotion";
 
 function* fetchCustomersSaga(action) {
   try {

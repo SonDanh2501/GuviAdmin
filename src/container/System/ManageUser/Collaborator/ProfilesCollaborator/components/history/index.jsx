@@ -1,19 +1,17 @@
-import { List, Pagination } from "antd";
+import { Pagination } from "antd";
 import moment from "moment";
 import { memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getCollaboratorRemainder,
-  getHistoryActivityCollaborator,
-  getHistoryCollaborator,
   getHistoryCollaboratorRemainder,
 } from "../../../../../../../api/collaborator";
 import { formatMoney } from "../../../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../../../helper/toast";
-import { loadingAction } from "../../../../../../../redux/actions/loading";
-import "./index.scss";
-import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../../i18n";
+import { loadingAction } from "../../../../../../../redux/actions/loading";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import "./index.scss";
 
 const History = ({ id }) => {
   const [data, setData] = useState([]);
@@ -48,7 +46,7 @@ const History = ({ id }) => {
       .catch((err) => {
         dispatch(loadingAction.loadingRequest(false));
       });
-  }, [id]);
+  }, [id, dispatch]);
 
   const onChange = (page) => {
     setCurrentPage(page);
@@ -65,17 +63,17 @@ const History = ({ id }) => {
   return (
     <>
       <div className="div-monney">
-        <div>
-          <a className="text-title-monney">
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <p className="text-title-monney">
             {`${i18n.t("wallet_ctv", { lng: lang })}`}:
-          </a>
-          <a className="text-monney"> {formatMoney(remainder)}</a>
+          </p>
+          <p className="text-monney"> {formatMoney(remainder)}</p>
         </div>
-        <div>
-          <a className="text-title-monney">
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <p className="text-title-monney">
             {`${i18n.t("gift_wallet", { lng: lang })}`}:{" "}
-          </a>
-          <a className="text-monney">{formatMoney(giftRemainder)}</a>
+          </p>
+          <p className="text-monney">{formatMoney(giftRemainder)}</p>
         </div>
       </div>
       <div className="div-list-collaborator mt-3">
@@ -84,11 +82,13 @@ const History = ({ id }) => {
           return (
             <div className="div-item-list" key={index}>
               <div className="div-column-1">
-                <a className="text-title">
+                <p className="text-title">
                   {item?.title?.[lang]}{" "}
-                  <a>{item?.id_order && item?.id_order?.id_view}</a>
-                </a>
-                <a
+                  <p className="text-title">
+                    {item?.id_order && item?.id_order?.id_view}
+                  </p>
+                </p>
+                <p
                   className={
                     money?.slice(0, 1) === "-"
                       ? "text-money-deduction"
@@ -98,26 +98,26 @@ const History = ({ id }) => {
                   {money?.slice(0, 1) === "-"
                     ? formatMoney(item?.value)
                     : "+" + formatMoney(item?.value)}
-                </a>
+                </p>
               </div>
-              <a className="text-date-history">
+              <p className="text-date-history">
                 {moment(new Date(item?.date_create)).format(
                   "DD/MM/yyy - HH:mm"
                 )}
-              </a>
+              </p>
               <div className="div-surplus">
                 <div className="div-text-title-surplus">
-                  <a className="text-title-surplus">{`${i18n.t("wallet_ctv", {
+                  <p className="text-title-surplus">{`${i18n.t("wallet_ctv", {
                     lng: lang,
-                  })}`}</a>
+                  })}`}</p>
                 </div>
-                <a>:</a>
+                <p style={{ margin: 0 }}>:</p>
                 <div className="div-money">
-                  <a className="text-money">
+                  <p className="text-money">
                     {item?.current_remainder
                       ? formatMoney(item?.current_remainder)
                       : formatMoney(0)}
-                  </a>
+                  </p>
                 </div>
                 <div className="div-icon">
                   {item?.status_current_remainder === "down" ? (
@@ -131,17 +131,17 @@ const History = ({ id }) => {
               </div>
               <div className="div-surplus">
                 <div className="div-text-title-surplus">
-                  <a className="text-title-surplus">{`${i18n.t("gift_wallet", {
+                  <p className="text-title-surplus">{`${i18n.t("gift_wallet", {
                     lng: lang,
-                  })}`}</a>
+                  })}`}</p>
                 </div>
-                <a>:</a>
+                <p style={{ margin: 0 }}>:</p>
                 <div className="div-money">
-                  <a className="text-money">
+                  <p className="text-money">
                     {item?.current_gift_remainder
                       ? formatMoney(item?.current_gift_remainder)
                       : formatMoney(0)}
-                  </a>
+                  </p>
                 </div>
                 <div className="div-icon">
                   {item?.status_current_gift_remainder === "down" ? (
@@ -158,9 +158,9 @@ const History = ({ id }) => {
         })}
       </div>
       <div className="div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}: {totalData}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}

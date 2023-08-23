@@ -10,22 +10,22 @@ const ManageReportCollaborator = () => {
   return (
     <div className="container-report-collaborator">
       <div className="div-item-report">
-        <a className="text-title">{`${i18n.t("report_collaborator_orders", {
+        <p className="text-title">{`${i18n.t("report_collaborator_orders", {
           lng: lang,
-        })}`}</a>
-        <a className="text-details">
+        })}`}</p>
+        <p className="text-details">
           {`${i18n.t("report_detail_collaborator_orders", {
             lng: lang,
           })}`}
-        </a>
-        <a
+        </p>
+        <p
           className="text-see-report"
           onClick={() => navigate("/report/manage-report/report-collaborator")}
         >
           {`${i18n.t("see_report", {
             lng: lang,
           })}`}
-        </a>
+        </p>
       </div>
     </div>
   );

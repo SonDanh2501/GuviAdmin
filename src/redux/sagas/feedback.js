@@ -1,6 +1,4 @@
 import { takeLatest, call, put } from "redux-saga/effects";
-import * as actions from "../actions/reason";
-import * as api from "../../api/reasons";
 import { getType } from "../actions/reason";
 import { getFeedbackApi } from "../../api/feedback";
 import { getFeedback } from "../actions/feedback";

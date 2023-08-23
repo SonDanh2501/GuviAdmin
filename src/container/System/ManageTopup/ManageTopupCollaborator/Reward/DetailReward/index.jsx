@@ -1,13 +1,13 @@
+import { Table } from "antd";
+import moment from "moment";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getDetailInfoRewardApi } from "../../../../../../api/topup";
-import { Table } from "antd";
-import "./styles.scss";
-import moment from "moment";
 import { formatMoney } from "../../../../../../helper/formatMoney";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../i18n";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import "./styles.scss";
 
 const DetailReward = () => {
   const params = useParams();
@@ -21,62 +21,82 @@ const DetailReward = () => {
         setData(res);
       })
       .catch((err) => {});
-  }, []);
+  }, [id]);
 
   const columns = [
     {
-      title: `${i18n.t("code_order", { lng: lang })}`,
+      title: () => (
+        <p className="title-column">{`${i18n.t("code_order", {
+          lng: lang,
+        })}`}</p>
+      ),
       render: (data) => (
         <Link to={`/details-order/${data?.id_group_order}`}>
-          <a className="text-id-reward">{data?.id_view}</a>
+          <p className="text-id-reward">{data?.id_view}</p>
         </Link>
       ),
     },
     {
-      title: `${i18n.t("date_work", { lng: lang })}`,
+      title: () => (
+        <p className="title-column">{`${i18n.t("date_work", {
+          lng: lang,
+        })}`}</p>
+      ),
       render: (data) => {
         return (
           <div className="div-time-detail-reward">
-            <a className="text-time">
+            <p className="text-time">
               {moment(data?.date_work).format("DD-MM-YYYY")}
-            </a>
-            <a className="text-time">
+            </p>
+            <p className="text-time">
               {moment(data?.date_work).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
     },
     {
-      title: `${i18n.t("total_money", { lng: lang })}`,
-      render: (data) => <a>{formatMoney(data?.final_fee)}</a>,
+      title: () => (
+        <p className="title-column">{`${i18n.t("total_money", {
+          lng: lang,
+        })}`}</p>
+      ),
+      render: (data) => (
+        <p className="text-money-reward">{formatMoney(data?.final_fee)}</p>
+      ),
     },
     {
-      title: `${i18n.t("time_work", { lng: lang })}`,
-      render: (data) => <a>{data?.total_estimate} giờ</a>,
+      title: () => (
+        <p className="title-column">{`${i18n.t("time_work", {
+          lng: lang,
+        })}`}</p>
+      ),
+      render: (data) => (
+        <p className="text-money-reward"> {data?.total_estimate} giờ</p>
+      ),
     },
   ];
 
   return (
     <div>
-      <a className="title-reward">
+      <p className="title-reward">
         {`${i18n.t("details_affiliate_bonus", { lng: lang })}`}
-      </a>
+      </p>
       <div className="div-total-detail-reward">
-        <a className="text-total">
+        <p className="text-total">
           {`${i18n.t("collaborator", { lng: lang })}`}:{" "}
           {data?.id_collaborator?.full_name}
-        </a>
-        <a className="text-total">
+        </p>
+        <p className="text-total">
           {`${i18n.t("bonus_money", { lng: lang })}`}:{" "}
           {formatMoney(data?.money ? data?.money : 0)}
-        </a>
-        <a className="text-total">
+        </p>
+        <p className="text-total">
           {`${i18n.t("total_order", { lng: lang })}`}: {data?.total_order}
-        </a>
-        <a className="text-total">
+        </p>
+        <p className="text-total">
           {`${i18n.t("total_hour", { lng: lang })}`}: {data?.total_job_hour}
-        </a>
+        </p>
       </div>
 
       <div className="mt-3">

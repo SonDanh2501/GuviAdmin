@@ -12,13 +12,9 @@ import "./index.scss";
 import useWindowDimensions from "../../../../../../helper/useWindowDimensions";
 import { useCookies } from "../../../../../../helper/useCookies";
 
-export default function OrderCustomer({ id }) {
-  // const { state } = useLocation();
-  // const { id } = state || {};
+const OrderCustomer = ({ id }) => {
   const { width } = useWindowDimensions();
-  const [dataFilter, setDataFilter] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [item, setItem] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
@@ -74,15 +70,15 @@ export default function OrderCustomer({ id }) {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("code_order", {
+          <p className="title-column">{`${i18n.t("code_order", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <Link to={`/details-order/${data?._id}`}>
-            <a className="text-id">{data?.id_view}</a>
+            <p className="text-id">{data?.id_view}</p>
           </Link>
         );
       },
@@ -90,20 +86,20 @@ export default function OrderCustomer({ id }) {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("date_create", {
+          <p className="title-column">{`${i18n.t("date_create", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div className="div-create">
-            <a className="text-create">
+            <p className="text-create">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-create">
+            </p>
+            <p className="text-create">
               {moment(new Date(data?.date_create)).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -112,15 +108,15 @@ export default function OrderCustomer({ id }) {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("service", {
+          <p className="title-column">{`${i18n.t("service", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div className="div-service">
-            <a className="text-service">
+            <p className="text-service">
               {data?.type === "loop" && data?.is_auto_order
                 ? `${i18n.t("repeat", { lng: lang })}`
                 : data?.service?._id?.kind === "giup_viec_theo_gio"
@@ -129,9 +125,11 @@ export default function OrderCustomer({ id }) {
                 ? `${i18n.t("cleaning_subscription", { lng: lang })}`
                 : data?.service?._id?.kind === "phuc_vu_nha_hang"
                 ? `${i18n.t("serve", { lng: lang })}`
+                : data?.service?._id?.kind === "ve_sinh_may_lanh"
+                ? `${i18n.t("Máy lạnh", { lng: lang })}`
                 : ""}
-            </a>
-            <a className="text-service">{timeWork(data)}</a>
+            </p>
+            <p className="text-service">{timeWork(data)}</p>
           </div>
         );
       },
@@ -139,25 +137,25 @@ export default function OrderCustomer({ id }) {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("date_work", {
+          <p className="title-column">{`${i18n.t("date_work", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div className="div-worktime">
-            <a className="text-worktime">
+            <p className="text-worktime">
               {" "}
               {moment(new Date(data?.date_work_schedule[0].date)).format(
                 "DD/MM/YYYY"
               )}
-            </a>
-            <a className="text-worktime">
+            </p>
+            <p className="text-worktime">
               {moment(new Date(data?.date_work_schedule[0].date))
                 .locale(lang)
                 .format("dddd")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -165,9 +163,9 @@ export default function OrderCustomer({ id }) {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("address", {
+          <p className="title-column">{`${i18n.t("address", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => <p className="text-address">{data?.address}</p>,
@@ -176,23 +174,23 @@ export default function OrderCustomer({ id }) {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("collaborator", {
+          <p className="title-column">{`${i18n.t("collaborator", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
-            <a className="text-searching">{`${i18n.t("searching", {
+            <p className="text-searching">{`${i18n.t("searching", {
               lng: lang,
-            })}`}</a>
+            })}`}</p>
           ) : (
             <Link
               onClick={() => saveToCookie("tab-detail-ctv", "1")}
               to={`/details-collaborator/${data?.id_collaborator}`}
             >
-              <a className="text-collaborator">{data?.name_collaborator}</a>
+              <p className="text-collaborator">{data?.name_collaborator}</p>
             </Link>
           )}
         </>
@@ -201,13 +199,13 @@ export default function OrderCustomer({ id }) {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("status", {
+          <p className="title-column">{`${i18n.t("status", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => (
-        <a
+        <p
           className={
             data?.status === "pending"
               ? "text-pending"
@@ -229,21 +227,21 @@ export default function OrderCustomer({ id }) {
             : data?.status === "done"
             ? `${i18n.t("complete", { lng: lang })}`
             : `${i18n.t("cancel", { lng: lang })}`}
-        </a>
+        </p>
       ),
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("total_money", {
+          <p className="title-column">{`${i18n.t("total_money", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => (
-        <a className="text-money-order-customer">
+        <p className="text-money-order-customer">
           {formatMoney(data?.final_fee)}
-        </a>
+        </p>
       ),
     },
   ];
@@ -265,11 +263,8 @@ export default function OrderCustomer({ id }) {
       <div>
         <Table
           columns={columns}
-          dataSource={dataFilter.length > 0 ? dataFilter : data}
+          dataSource={data}
           pagination={false}
-          // locale={{
-          //   emptyText: data.length > 0 ? <Empty /> : <Skeleton active={true} />,
-          // }}
           rowKey={(record) => record._id}
           rowSelection={{
             selectedRowKeys,
@@ -277,29 +272,22 @@ export default function OrderCustomer({ id }) {
               setSelectedRowKeys(selectedRowKeys);
             },
           }}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                setItem(record);
-              },
-            };
-          }}
           expandable={
             width <= 1200
               ? {
                   expandedRowRender: (record) => {
                     return (
                       <div className="div-plus">
-                        <a>
+                        <p>
                           {`${i18n.t("address", { lng: lang })}`}:{" "}
                           {record?.address}
-                        </a>
-                        <a>
+                        </p>
+                        <p>
                           {`${i18n.t("date_create", { lng: lang })}`}:{" "}
                           {moment(new Date(record?.date_create)).format(
                             "DD/MM/YYYY - HH:mm"
                           )}
-                        </a>
+                        </p>
                       </div>
                     );
                   },
@@ -310,7 +298,7 @@ export default function OrderCustomer({ id }) {
         />
 
         <div className="mt-2 div-pagination p-2">
-          <a>Tổng: {total}</a>
+          <p>Tổng: {total}</p>
           <div>
             <Pagination
               current={currentPage}
@@ -324,4 +312,6 @@ export default function OrderCustomer({ id }) {
       </div>
     </React.Fragment>
   );
-}
+};
+
+export default OrderCustomer;

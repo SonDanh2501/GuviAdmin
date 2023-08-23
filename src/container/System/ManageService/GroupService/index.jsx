@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { getGroupServiceApi } from "../../../../api/service";
-import { Dropdown, Space, Table } from "antd";
+import { Dropdown, Image, Space, Table } from "antd";
 import { useNavigate } from "react-router-dom";
 import { MoreOutlined } from "@ant-design/icons";
+import "./styles.scss";
 
 const GroupService = () => {
   const [data, setData] = useState([]);
-  const [total, setTotal] = useState(0);
   const [itemEdit, setItemEdit] = useState([]);
   const navigate = useNavigate();
 
@@ -14,7 +14,6 @@ const GroupService = () => {
     getGroupServiceApi(0, 20)
       .then((res) => {
         setData(res?.data);
-        setTotal(res?.totalItem);
       })
       .catch((err) => {});
   }, []);
@@ -23,7 +22,8 @@ const GroupService = () => {
     {
       key: "1",
       label: (
-        <a
+        <p
+          className="m-0"
           onClick={() => {
             navigate("/services/manage-group-service/manage-price-service", {
               state: { id: itemEdit?._id },
@@ -31,7 +31,7 @@ const GroupService = () => {
           }}
         >
           Xem giá
-        </a>
+        </p>
       ),
     },
   ];
@@ -43,7 +43,10 @@ const GroupService = () => {
       render: (data) => {
         return (
           <div>
-            <img className="img-customer-service" src={data?.thumbnail} />
+            <Image
+              style={{ width: 50, height: 50, borderRadius: 4 }}
+              src={data?.thumbnail}
+            />
           </div>
         );
       },
@@ -51,13 +54,15 @@ const GroupService = () => {
     {
       title: "Tiêu đề",
       render: (data) => {
-        return <a className="text-title">{data?.title.vi}</a>;
+        return <p className="text-title-group-service">{data?.title.vi}</p>;
       },
       width: "35%",
     },
     {
       title: "Loại dịch vụ",
-      render: (data) => <a className="text-service">{data?.type}</a>,
+      render: (data) => (
+        <p className="text-title-group-service">{data?.type}</p>
+      ),
       width: "30%",
     },
     {
@@ -70,12 +75,10 @@ const GroupService = () => {
             menu={{
               items,
             }}
-            placement="bottom"
+            placement="bottomRight"
             trigger={["click"]}
           >
-            <a>
-              <MoreOutlined className="icon-more" />
-            </a>
+            <MoreOutlined className="icon-more" />
           </Dropdown>
         </Space>
       ),

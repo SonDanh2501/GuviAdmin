@@ -21,6 +21,7 @@
     font-size: 12px;
     color: #000000 !important;
     text-decoration: none;
+    margin: 0;
   }
 
   .text-refunds {
@@ -30,6 +31,7 @@
     font-size: 12px;
     color: #000000 !important;
     text-decoration: none;
+    margin: 0;
   }
 }
 
@@ -40,6 +42,7 @@
   font-size: 12px;
   color: #ff73f1;
   text-decoration: none;
+  margin: 0;
 }
 
 .text-id-ctv {
@@ -49,4 +52,95 @@
   font-size: 12px;
   color: #000000;
   text-decoration: none;
+  margin: 0;
+}
+
+.text-money-punish {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  color: #000000;
+  text-decoration: none;
+  margin: 0;
+}
+
+.text-description-punish {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  color: #000000;
+  text-decoration: none;
+  margin: 0;
+}
+
+.div-name-punish {
+  display: flex;
+  flex-direction: column;
+
+  .text-name-punish {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: #000000;
+    text-decoration: none;
+    margin: 0;
+  }
+}
+
+.div-time-punish {
+  display: flex;
+  flex-direction: column;
+
+  .text-time {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000;
+    text-decoration: none;
+    margin: 0;
+  }
+}
+
+.text-done-punish {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  color: #00cf3a;
+  text-decoration: none;
+  margin: 0;
+}
+
+.text-cancel-punish-ctv {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  color: #ff0000 !important;
+  text-decoration: none;
+  margin: 0;
+}
+
+.text-pending-punish {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px !important;
+  color: #ecd503 !important;
+  text-decoration: none;
+  margin: 0;
+}
+
+.text-transfered-punish {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px !important;
+  color: #19129a !important;
+  text-decoration: none;
+  margin: 0;
 }

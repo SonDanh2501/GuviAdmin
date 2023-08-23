@@ -15,91 +15,91 @@ const ManageReportCustomer = () => {
     <div className="container-report-order">
       {checkElement?.includes("count_customer_report") && (
         <div className="div-item-report">
-          <a className="text-title">{`${i18n.t("report_number_customer", {
+          <p className="text-title">{`${i18n.t("report_number_customer", {
             lng: lang,
-          })}`}</a>
-          <a className="text-details">
+          })}`}</p>
+          <p className="text-details">
             {`${i18n.t("detail_report_time", {
               lng: lang,
             })}`}
-          </a>
-          <a
+          </p>
+          <p
             className="text-see-report"
             onClick={() => navigate("/report/manage-report/report-user")}
           >
             {`${i18n.t("see_report", { lng: lang })}`}
-          </a>
+          </p>
         </div>
       )}
       {checkElement?.includes("customer_invite_report") && (
         <div className="div-item-report">
-          <a className="text-title">
+          <p className="text-title">
             {" "}
             {`${i18n.t("referral_report", { lng: lang })}`}
-          </a>
-          <a className="text-details">{`${i18n.t("referral_report_day", {
+          </p>
+          <p className="text-details">{`${i18n.t("referral_report_day", {
             lng: lang,
-          })}`}</a>
-          <a
+          })}`}</p>
+          <p
             className="text-see-report"
             onClick={() =>
               navigate("/report/manage-report/report-customer-invite")
             }
           >
             {`${i18n.t("see_report", { lng: lang })}`}
-          </a>
+          </p>
         </div>
       )}
       {checkElement?.includes("customer_by_area_report") && (
         <div className="div-item-report">
-          <a className="text-title">{`${i18n.t("customer_report_region", {
+          <p className="text-title">{`${i18n.t("customer_report_region", {
             lng: lang,
-          })}`}</a>
-          <a className="text-details">
+          })}`}</p>
+          <p className="text-details">
             {`${i18n.t("total_customer_report_region", { lng: lang })}`}
-          </a>
-          <a
+          </p>
+          <p
             className="text-see-report"
             onClick={() =>
               navigate("/report/manage-report/report-customer-area")
             }
           >
             {`${i18n.t("see_report", { lng: lang })}`}
-          </a>
+          </p>
         </div>
       )}
 
       <div className="div-item-report">
-        <a className="text-title">{`${i18n.t("report_customer_order_by_area", {
+        <p className="text-title">{`${i18n.t("report_customer_order_by_area", {
           lng: lang,
-        })}`}</a>
-        <a className="text-details">
+        })}`}</p>
+        <p className="text-details">
           {`${i18n.t("report_customer_order_by_area", { lng: lang })}`}
-        </a>
-        <a
+        </p>
+        <p
           className="text-see-report"
           onClick={() =>
             navigate("/report/manage-report/report-customer-order-by-area")
           }
         >
           {`${i18n.t("see_report", { lng: lang })}`}
-        </a>
+        </p>
       </div>
       <div className="div-item-report">
-        <a className="text-title">{`${i18n.t("Báo cáo tỉ suất", {
+        <p className="text-title">{`${i18n.t("Báo cáo tỉ suất", {
           lng: lang,
-        })}`}</a>
-        <a className="text-details">
+        })}`}</p>
+        <p className="text-details">
           {`${i18n.t("Báo cáo tỉ suất khách hàng", { lng: lang })}`}
-        </a>
-        <a
+        </p>
+        <p
           className="text-see-report"
           onClick={() =>
             navigate("/report/manage-report/report-customer-ratio")
           }
         >
           {`${i18n.t("see_report", { lng: lang })}`}
-        </a>
+        </p>
       </div>
     </div>
   );

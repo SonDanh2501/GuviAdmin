@@ -13,6 +13,16 @@
   color: black;
 }
 
+.label-birthday-info {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #000000;
+  text-decoration: none;
+  margin: 0;
+}
+
 .select {
   width: 300px !important;
   height: 40px !important;
@@ -28,6 +38,16 @@
   width: 80%;
   border: 1px solid rgb(175, 175, 175);
   border-radius: 5px;
+
+  .text-name {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+    margin: 0;
+  }
 }
 
 .input-seach-collaborator {

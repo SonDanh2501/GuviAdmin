@@ -14,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 
 const Service = () => {
   const [data, setData] = useState([]);
-  const [total, setTotal] = useState(0);
   const [dataGroup, setDataGroup] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const [modalActive, setModalActive] = useState(false);
@@ -27,7 +26,6 @@ const Service = () => {
     getListService()
       .then((res) => {
         setData(res?.data);
-        setTotal(res?.totalItem);
       })
       .catch((err) => {});
 
@@ -40,43 +38,22 @@ const Service = () => {
 
   const handleActive = (_id, active) => {
     setIsLoading(true);
-    if (active) {
-      activeServiceApi(_id, { is_active: false })
-        .then((res) => {
-          setIsLoading(false);
-          setModalActive(false);
-          getListService()
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          errorNotify({
-            message: err,
-          });
+    activeServiceApi(_id, { is_active: active ? false : true })
+      .then((res) => {
+        setIsLoading(false);
+        setModalActive(false);
+        getListService()
+          .then((res) => {
+            setData(res?.data);
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        errorNotify({
+          message: err,
         });
-    } else {
-      activeServiceApi(_id, { is_active: true })
-        .then((res) => {
-          setIsLoading(false);
-          setModalActive(false);
-          getListService()
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          errorNotify({
-            message: err,
-          });
-        });
-    }
+      });
   };
 
   const columns = [
@@ -92,7 +69,7 @@ const Service = () => {
               )
             }
           >
-            <a>{data?.title?.vi}</a>
+            <p style={{ margin: 0 }}>{data?.title?.vi}</p>
           </div>
         );
       },
@@ -104,9 +81,9 @@ const Service = () => {
           <div>
             {dataGroup?.map((item, index) => {
               return (
-                <a>
+                <p style={{ margin: 0 }}>
                   {item?._id === data?.id_group_service ? item?.title?.vi : ""}
-                </a>
+                </p>
               );
             })}
           </div>

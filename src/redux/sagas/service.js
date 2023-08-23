@@ -1,14 +1,12 @@
-import { takeLatest, call, put } from "redux-saga/effects";
-import * as actions from "../actions/banner";
-import * as api from "../../api/banner";
-import { getType } from "../actions/banner";
+import { call, put, takeLatest } from "redux-saga/effects";
+import { getDistrictApi } from "../../api/file";
 import {
   createGroupServiceApi,
   getGroupServiceApi,
   getListService,
-  getServiceApi,
   updateGroupServiceApi,
 } from "../../api/service";
+import { loadingAction } from "../actions/loading";
 import {
   createGroupServiceAction,
   getGroupServiceAction,
@@ -16,8 +14,6 @@ import {
   getServiceAction,
   updateGroupServiceAction,
 } from "../actions/service";
-import { loadingAction } from "../actions/loading";
-import { getDistrictApi } from "../../api/file";
 
 //group-service
 

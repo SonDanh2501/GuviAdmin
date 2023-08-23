@@ -1,21 +1,21 @@
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../../../redux/selectors/auth";
-import i18n from "../../../../../../../i18n";
-import "./styles.scss";
-import { Col, Row, Switch } from "antd";
 import { HeartFilled } from "@ant-design/icons";
-import { formatMoney } from "../../../../../../../helper/formatMoney";
+import { Switch } from "antd";
+import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   getCollaboratorsById,
   getOverviewCollaborator,
   verifyCollaborator,
 } from "../../../../../../../api/collaborator";
-import moment from "moment";
-import { Link } from "react-router-dom";
-import LoadingPagination from "../../../../../../../components/paginationLoading";
 import ModalCustom from "../../../../../../../components/modalCustom";
+import LoadingPagination from "../../../../../../../components/paginationLoading";
+import { formatMoney } from "../../../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../../../helper/toast";
+import i18n from "../../../../../../../i18n";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import "./styles.scss";
 
 const Overview = ({ id }) => {
   const [total, setTotal] = useState({
@@ -55,7 +55,7 @@ const Overview = ({ id }) => {
           message: err,
         });
       });
-  }, []);
+  }, [id]);
 
   const onVerifyCollaborator = useCallback((id, is_verify) => {
     setIsLoading(true);
@@ -87,12 +87,12 @@ const Overview = ({ id }) => {
         <div className="div-body-overview">
           <div className="div-head-overview">
             <div className="div-wallet">
-              <a className="text-wallet">
+              <p className="text-wallet">
                 Ví Chính: {formatMoney(total?.remainder)}
-              </a>
-              <a className="text-wallet">
+              </p>
+              <p className="text-wallet">
                 Ví Thưởng: {formatMoney(total?.gift_remainder)}
-              </a>
+              </p>
             </div>
             <Switch
               style={{
@@ -106,18 +106,18 @@ const Overview = ({ id }) => {
           </div>
           <div className="div-total">
             <div className="div-item-total">
-              <a className="number-total">{total.total_order}</a>
-              <a className="detail-total">Số ca làm</a>
+              <p className="number-total">{total.total_order}</p>
+              <p className="detail-total">Số ca làm</p>
             </div>
 
             <div className="div-item-total">
-              <a className="number-total">{total.total_hour}</a>
-              <a className="detail-total">Số giờ làm</a>
+              <p className="number-total">{total.total_hour}</p>
+              <p className="detail-total">Số giờ làm</p>
             </div>
 
             <div className="div-item-total-favorite">
               <div className="div-number">
-                <a className="number-total">{total.total_favourite}</a>
+                <p className="number-total">{total.total_favourite}</p>
                 <HeartFilled
                   style={{
                     color: "red",
@@ -126,20 +126,20 @@ const Overview = ({ id }) => {
                   }}
                 />
               </div>
-              <a className="detail-total">Yêu thích</a>
+              <p className="detail-total">Yêu thích</p>
             </div>
           </div>
 
           <div className="mt-4">
-            <a className="text-order-near">Đơn gần nhất</a>
+            <p className="text-order-near">Đơn gần nhất</p>
             {data.map((item, index) => {
               return (
                 <div key={index} className="item-list-order">
                   <div className="div-detail-item">
                     <Link to={`/details-order/${item?.id_group_order}`}>
-                      <a className="text-item">Mã: {item?.id_view}</a>
+                      <p className="text-item">Mã: {item?.id_view}</p>
                     </Link>
-                    <a className="text-item">
+                    <p className="text-item">
                       Dịch vụ:{" "}
                       {item?.type === "loop" && item?.is_auto_order
                         ? `${i18n.t("repeat", { lng: lang })}`
@@ -150,22 +150,28 @@ const Overview = ({ id }) => {
                         : item?.service?._id?.kind === "phuc_vu_nha_hang"
                         ? `${i18n.t("serve", { lng: lang })}`
                         : ""}
-                    </a>
-                    <a className="text-item">
+                    </p>
+                    <p className="text-item">
                       Ngày làm:{" "}
                       {moment(item?.date_work).format("DD/MM/YYYY - HH:mm")}{" "}
-                    </a>
+                    </p>
                     <Link to={`/profile-customer/${item?.id_customer?._id}`}>
-                      <a className="text-item">
+                      <p className="text-item">
                         Khách hàng: {item?.name_customer}
-                      </a>
+                      </p>
                     </Link>
-                    <a className="text-item">Địa chỉ: {item?.address}</a>
+                    <p className="text-item">Địa chỉ: {item?.address}</p>
                   </div>
                   <div className="item-detail-right">
-                    <div>
-                      <a className="title-status">Trạng thái: </a>
-                      <a
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <p className="title-status mr-2">Trạng thái: </p>
+                      <p
                         className={
                           item?.status === "pending"
                             ? "text-pen-order"
@@ -187,7 +193,7 @@ const Overview = ({ id }) => {
                           : item?.status === "done"
                           ? `${i18n.t("complete", { lng: lang })}`
                           : `${i18n.t("cancel", { lng: lang })}`}
-                      </a>
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -205,7 +211,7 @@ const Overview = ({ id }) => {
         }
         textOk="Xác thực"
         handleCancel={() => setModalVerify(false)}
-        body={<a>Bạn có chắc xác thực cho CTV này? {dataDetail?.full_name}</a>}
+        body={<p>Bạn có chắc xác thực cho CTV này? {dataDetail?.full_name}</p>}
       />
       {isLoading && <LoadingPagination />}
     </>

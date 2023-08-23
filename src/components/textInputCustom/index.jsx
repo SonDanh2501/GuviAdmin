@@ -34,7 +34,7 @@ const InputCustom = (props) => {
 
   return (
     <div className={"div-input-custom"}>
-      {title && <a className="title-input-custom">{title}</a>}
+      {title && <p className="title-input-custom">{title}</p>}
       {textArea ? (
         <TextArea
           value={value}

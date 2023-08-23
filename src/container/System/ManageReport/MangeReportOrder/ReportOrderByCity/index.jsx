@@ -1,13 +1,7 @@
-import { useEffect, useState } from "react";
-import {
-  getReportOrderByCity,
-  getReportPercentOrderByCity,
-} from "../../../../../api/report";
+import { Pagination, Popover, Select, Table } from "antd";
 import moment from "moment";
-import { Button, Pagination, Popover, Select, Table } from "antd";
-import { formatMoney } from "../../../../../helper/formatMoney";
-import CustomDatePicker from "../../../../../components/customDatePicker";
-import { getDistrictApi } from "../../../../../api/file";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Bar,
   BarChart,
@@ -18,12 +12,17 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import "./styles.scss";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../redux/selectors/auth";
-import i18n from "../../../../../i18n";
-import { getProvince } from "../../../../../redux/selectors/service";
+import {
+  getReportOrderByCity,
+  getReportPercentOrderByCity,
+} from "../../../../../api/report";
+import CustomDatePicker from "../../../../../components/customDatePicker";
+import { formatMoney } from "../../../../../helper/formatMoney";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import { getProvince } from "../../../../../redux/selectors/service";
+import "./styles.scss";
 
 const ReportOrderCity = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,7 +30,7 @@ const ReportOrderCity = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [dataTotal, setDataTotal] = useState([]);
-  const [codeCity, setCodeCity] = useState(0);
+  const [codeCity, setCodeCity] = useState("");
   const [nameCity, setNameCity] = useState("");
   const [dataChart, setDataChart] = useState([]);
   const [startDate, setStartDate] = useState(
@@ -49,7 +48,13 @@ const ReportOrderCity = () => {
   ];
 
   useEffect(() => {
-    getReportOrderByCity(0, 20, startDate, endDate, codeCity)
+    getReportOrderByCity(
+      0,
+      20,
+      moment().subtract(30, "d").startOf("date").toISOString(),
+      moment().endOf("date").toISOString(),
+      ""
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -57,7 +62,11 @@ const ReportOrderCity = () => {
       })
       .catch((err) => {});
 
-    getReportPercentOrderByCity(startDate, endDate, codeCity)
+    getReportPercentOrderByCity(
+      moment().subtract(30, "d").startOf("date").toISOString(),
+      moment().endOf("date").toISOString(),
+      ""
+    )
       .then((res) => {
         setDataChart(res?.data);
       })
@@ -65,7 +74,7 @@ const ReportOrderCity = () => {
   }, []);
 
   province.map((item) => {
-    cityOptions?.push({
+    return cityOptions?.push({
       value: item?.code,
       label: item?.name,
     });
@@ -125,9 +134,9 @@ const ReportOrderCity = () => {
         return (
           <div className="div-title-collaborator-id">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("area", {
+              <p className="text-title-column">{`${i18n.t("area", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
             <div className="div-top"></div>
           </div>
@@ -135,9 +144,9 @@ const ReportOrderCity = () => {
       },
       render: (data) => (
         <div className="div-date-report-order">
-          <a className="text-date-report-order">
+          <p className="text-date-report-order">
             {data?.city?.replace(new RegExp(`${"Thành phố"}|${"Tỉnh"}`), "")}
-          </a>
+          </p>
         </div>
       ),
     },
@@ -146,18 +155,18 @@ const ReportOrderCity = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("shift", {
+              <p className="text-title-column">{`${i18n.t("shift", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {dataTotal?.total_item > 0 ? dataTotal?.total_item : 0}
-            </a>
+            </p>
           </div>
         );
       },
       render: (data) => {
-        return <a className="text-money">{data?.total_item}</a>;
+        return <p className="text-money">{data?.total_item}</p>;
       },
       align: "center",
       sorter: (a, b) => a.total_item - b.total_item,
@@ -167,22 +176,22 @@ const ReportOrderCity = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("sales", {
+              <p className="text-title-column">{`${i18n.t("sales", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {dataTotal?.total_gross_income > 0
                 ? formatMoney(dataTotal?.total_gross_income)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_gross_income)}</a>
+          <p className="text-money">{formatMoney(data?.total_gross_income)}</p>
         );
       },
 
@@ -203,9 +212,9 @@ const ReportOrderCity = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("service_fee", {
+              <p className="text-title-column">{`${i18n.t("service_fee", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -219,20 +228,20 @@ const ReportOrderCity = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {dataTotal?.total_collabotator_fee > 0
                 ? formatMoney(dataTotal?.total_collabotator_fee)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">
+          <p className="text-money">
             {formatMoney(data?.total_collabotator_fee)}
-          </a>
+          </p>
         );
       },
 
@@ -250,9 +259,9 @@ const ReportOrderCity = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column-blue">{`${i18n.t("revenue", {
+              <p className="text-title-column-blue">{`${i18n.t("revenue", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -266,18 +275,18 @@ const ReportOrderCity = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title-blue">
+            <p className="text-money-title-blue">
               {dataTotal?.total_income > 0
                 ? formatMoney(dataTotal?.total_income)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money-blue">{formatMoney(data?.total_income)}</a>
+          <p className="text-money-blue">{formatMoney(data?.total_income)}</p>
         );
       },
 
@@ -295,9 +304,9 @@ const ReportOrderCity = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("discount", {
+              <p className="text-title-column">{`${i18n.t("discount", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -311,18 +320,18 @@ const ReportOrderCity = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {dataTotal?.total_discount > 0
                 ? formatMoney(dataTotal?.total_discount)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_discount)}</a>
+          <p className="text-money">{formatMoney(data?.total_discount)}</p>
         );
       },
 
@@ -340,9 +349,9 @@ const ReportOrderCity = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("net_revenue", {
+              <p className="text-title-column">{`${i18n.t("net_revenue", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -356,18 +365,18 @@ const ReportOrderCity = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {dataTotal?.total_net_income > 0
                 ? formatMoney(dataTotal?.total_net_income)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_net_income)}</a>
+          <p className="text-money">{formatMoney(data?.total_net_income)}</p>
         );
       },
 
@@ -378,21 +387,21 @@ const ReportOrderCity = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("fees_apply", {
+              <p className="text-title-column">{`${i18n.t("fees_apply", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {dataTotal?.total_service_fee > 0
                 ? formatMoney(dataTotal?.total_service_fee)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_service_fee)}</a>
+          <p className="text-money">{formatMoney(data?.total_service_fee)}</p>
         );
       },
       align: "center",
@@ -411,9 +420,9 @@ const ReportOrderCity = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("total_bill", {
+              <p className="text-title-column">{`${i18n.t("total_bill", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -427,18 +436,18 @@ const ReportOrderCity = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {dataTotal?.total_order_fee > 0
                 ? formatMoney(dataTotal?.total_order_fee)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_order_fee)}</a>
+          <p className="text-money">{formatMoney(data?.total_order_fee)}</p>
         );
       },
 
@@ -456,9 +465,9 @@ const ReportOrderCity = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("profit", {
+              <p className="text-title-column">{`${i18n.t("profit", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -472,20 +481,20 @@ const ReportOrderCity = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {dataTotal?.total_net_income_business > 0
                 ? formatMoney(dataTotal?.total_net_income_business)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">
+          <p className="text-money">
             {formatMoney(data?.total_net_income_business)}
-          </a>
+          </p>
         );
       },
 
@@ -507,12 +516,12 @@ const ReportOrderCity = () => {
         return (
           <div className="div-title-order-report">
             <div className="div-title-report">
-              <a className="text-title-column">
+              <p className="text-title-column">
                 %{" "}
                 {`${i18n.t("profit", {
                   lng: lang,
                 })}`}
-              </a>
+              </p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -533,9 +542,9 @@ const ReportOrderCity = () => {
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">
+          <p className="text-money">
             {data?.percent_income ? data?.percent_income + "%" : ""}
-          </a>
+          </p>
         );
       },
     },
@@ -554,10 +563,12 @@ const ReportOrderCity = () => {
           setSameEnd={() => {}}
         />
         {startDate && (
-          <a className="text-date">
-            {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-            {moment(endDate).utc().format("DD/MM/YYYY")}
-          </a>
+          <div className="ml-2">
+            <p className="text-date m-0">
+              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+              {moment(endDate).utc().format("DD/MM/YYYY")}
+            </p>
+          </div>
         )}
       </div>
       <div>
@@ -628,9 +639,9 @@ const ReportOrderCity = () => {
         />
       </div>
       <div className="mt-2 div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}: {total}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}

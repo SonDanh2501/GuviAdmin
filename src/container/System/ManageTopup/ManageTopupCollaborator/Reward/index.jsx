@@ -1,5 +1,9 @@
+import { MoreOutlined } from "@ant-design/icons";
+import { Dropdown, Pagination, Space, Table } from "antd";
+import moment from "moment";
 import { useEffect, useState } from "react";
-import "./styles.scss";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   cancelRewardApi,
   deleteRewardApi,
@@ -7,22 +11,18 @@ import {
   noteRewardApi,
   verifyRewardApi,
 } from "../../../../../api/topup";
-import { Button, Dropdown, Pagination, Space, Table } from "antd";
-import moment from "moment";
-import { formatMoney } from "../../../../../helper/formatMoney";
 import ModalCustom from "../../../../../components/modalCustom";
-import InputCustom from "../../../../../components/textInputCustom";
 import LoadingPagination from "../../../../../components/paginationLoading";
+import InputCustom from "../../../../../components/textInputCustom";
+import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import i18n from "../../../../../i18n";
 import {
   getElementState,
   getLanguageState,
 } from "../../../../../redux/selectors/auth";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { MoreOutlined } from "@ant-design/icons";
-import i18n from "../../../../../i18n";
-import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import "./styles.scss";
 const RewardCollaborator = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
@@ -141,28 +141,28 @@ const RewardCollaborator = () => {
   const columns = [
     {
       title: () => (
-        <a className="title-column">
+        <p className="title-column">
           {`${i18n.t("date_create", { lng: lang })}`}
-        </a>
+        </p>
       ),
       render: (data) => {
         return (
           <div className="div-create-info-reward">
-            <a className="text-date">
+            <p className="text-date">
               {moment(data?.date_create).format("DD-MM-YYYY")}
-            </a>
-            <a className="text-date">
+            </p>
+            <p className="text-date">
               {moment(data?.date_create).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
     },
     {
       title: () => (
-        <a className="title-column">
+        <p className="title-column">
           {`${i18n.t("collaborator", { lng: lang })}`}
-        </a>
+        </p>
       ),
       render: (data) => {
         return (
@@ -170,45 +170,45 @@ const RewardCollaborator = () => {
             to={`/details-collaborator/${data?.id_collaborator?._id}`}
             className="div-name-ctv-reward"
           >
-            <a className="text-name">{data?.id_collaborator?.full_name}</a>
-            <a className="text-name">{data?.id_collaborator?.phone}</a>
+            <p className="text-name">{data?.id_collaborator?.full_name}</p>
+            <p className="text-name">{data?.id_collaborator?.phone}</p>
           </Link>
         );
       },
     },
     {
       title: () => (
-        <a className="title-column">
+        <p className="title-column">
           {`${i18n.t("total_order", { lng: lang })}`}
-        </a>
+        </p>
       ),
-      render: (data) => <a className="text-total">{data?.total_order}</a>,
+      render: (data) => <p className="text-total">{data?.total_order}</p>,
       align: "center",
     },
     {
       title: () => (
-        <a className="title-column">
+        <p className="title-column">
           {`${i18n.t("total_hour", { lng: lang })}`}
-        </a>
+        </p>
       ),
-      render: (data) => <a className="text-total">{data?.total_job_hour}</a>,
+      render: (data) => <p className="text-total">{data?.total_job_hour}</p>,
       align: "center",
     },
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("money", { lng: lang })}`}</a>
+        <p className="title-column">{`${i18n.t("money", { lng: lang })}`}</p>
       ),
       render: (data) => (
-        <a className="text-total">{formatMoney(data?.money)}</a>
+        <p className="text-total">{formatMoney(data?.money)}</p>
       ),
       align: "right",
     },
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("status", { lng: lang })}`}</a>
+        <p className="title-column">{`${i18n.t("status", { lng: lang })}`}</p>
       ),
       render: (data) => (
-        <a
+        <p
           className={
             data?.status === "pending"
               ? "text-pending-reward-info"
@@ -222,23 +222,25 @@ const RewardCollaborator = () => {
             : data?.status === "done"
             ? `${i18n.t("complete", { lng: lang })}`
             : `${i18n.t("cancel", { lng: lang })}`}
-        </a>
+        </p>
       ),
       align: "center",
     },
     {
       title: () => (
-        <a className="title-column">
+        <p className="title-column">
           {`${i18n.t("approved_by", { lng: lang })}`}
-        </a>
+        </p>
       ),
-      render: (date) => <a>{data?.id_admin_verify?.full_name}</a>,
+      render: (date) => (
+        <p style={{ margin: 0 }}>{data?.id_admin_verify?.full_name}</p>
+      ),
     },
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("note", { lng: lang })}`}</a>
+        <p className="title-column">{`${i18n.t("note", { lng: lang })}`}</p>
       ),
-      render: (data) => <a className="text-note">{data?.note_admin}</a>,
+      render: (data) => <p className="text-note">{data?.note_admin}</p>,
     },
     {
       key: "action",
@@ -254,9 +256,9 @@ const RewardCollaborator = () => {
                     : "btn-verify-reward"
                 }
               >
-                <a className="text-btn">{`${i18n.t("approvals", {
+                <p className="text-btn">{`${i18n.t("approvals", {
                   lng: lang,
-                })}`}</a>
+                })}`}</p>
               </div>
             )}
 
@@ -266,12 +268,12 @@ const RewardCollaborator = () => {
               ) && (
                 <>
                   {data?.status === "pending" && (
-                    <a
+                    <p
                       onClick={() => setModalCancel(true)}
                       className="text-cancel-reward"
                     >
                       {`${i18n.t("cancel_modal", { lng: lang })}`}
-                    </a>
+                    </p>
                   )}
                 </>
               )}
@@ -298,12 +300,10 @@ const RewardCollaborator = () => {
             menu={{
               items,
             }}
-            placement="bottom"
+            placement="bottomRight"
             trigger={["click"]}
           >
-            <a>
-              <MoreOutlined className="icon-more" />
-            </a>
+            <MoreOutlined className="icon-more" />
           </Dropdown>
         </Space>
       ),
@@ -317,7 +317,7 @@ const RewardCollaborator = () => {
         <Link
           to={`/topup/manage-topup/details-reward-collaborator/${itemEdit?._id}`}
         >
-          <a>{`${i18n.t("see_more", { lng: lang })}`}</a>
+          <p style={{ margin: 0 }}>{`${i18n.t("see_more", { lng: lang })}`}</p>
         </Link>
       ),
     },
@@ -325,7 +325,6 @@ const RewardCollaborator = () => {
 
   return (
     <div>
-      <a></a>
       <div>
         <Table
           dataSource={data}
@@ -342,9 +341,9 @@ const RewardCollaborator = () => {
         />
 
         <div className="div-pagination p-2">
-          <a>
+          <p>
             {`${i18n.t("total", { lng: lang })}`}: {total}
-          </a>
+          </p>
           <div>
             <Pagination
               current={currentPage}
@@ -366,10 +365,10 @@ const RewardCollaborator = () => {
           textOk={`${i18n.t("approvals", { lng: lang })}`}
           body={
             <div>
-              <a>
+              <p style={{ margin: 0 }}>
                 {`${i18n.t("want_approve_money_collaborators", { lng: lang })}`}{" "}
                 {itemEdit?.id_collaborator?.full_name}
-              </a>
+              </p>
               <InputCustom
                 title={`${i18n.t("note", { lng: lang })}`}
                 onChange={(e) => setNote(e.target.value)}
@@ -385,10 +384,10 @@ const RewardCollaborator = () => {
           textOk={`${i18n.t("yes", { lng: lang })}`}
           body={
             <div>
-              <a>
+              <p style={{ margin: 0 }}>
                 {`${i18n.t("want_canceling_bonus_order", { lng: lang })}`}{" "}
                 {itemEdit?.id_collaborator?.full_name}
-              </a>
+              </p>
               <InputCustom
                 title={`${i18n.t("note", { lng: lang })}`}
                 onChange={(e) => setNote(e.target.value)}
@@ -405,10 +404,10 @@ const RewardCollaborator = () => {
           textOk={`${i18n.t("delete", { lng: lang })}`}
           body={
             <div>
-              <a>
+              <p style={{ margin: 0 }}>
                 {`${i18n.t("want_remove_bonus_order", { lng: lang })}`}{" "}
                 {itemEdit?.id_collaborator?.full_name}
-              </a>
+              </p>
             </div>
           }
         />

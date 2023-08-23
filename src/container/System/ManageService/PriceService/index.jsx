@@ -1,6 +1,6 @@
-import { Pagination, Select, Table } from "antd";
+import { Select, Table } from "antd";
+import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
-import "./index.scss";
 import { useLocation } from "react-router-dom";
 import { getDistrictApi } from "../../../../api/file";
 import {
@@ -8,12 +8,11 @@ import {
   getOptionalServiceByServiceApi,
   getPriceServiceApi,
   getServiceApi,
-  getServiceByIdApi,
 } from "../../../../api/service";
 import CustomDatePicker from "../../../../components/customDatePicker";
-import moment from "moment";
-import { formatMoney } from "../../../../helper/formatMoney";
 import LoadingPagination from "../../../../components/paginationLoading";
+import { formatMoney } from "../../../../helper/formatMoney";
+import "./index.scss";
 
 const PriceService = () => {
   const { state } = useLocation();
@@ -84,8 +83,8 @@ const PriceService = () => {
       codeDistrict,
       moment().toISOString(),
       moment().add(3, "days").toISOString(),
-      tab == "morning" ? 7 : tab == "afternoon" ? 13 : 17,
-      tab == "morning" ? 12 : tab == "afternoon" ? 16 : 20
+      tab === "morning" ? 7 : tab === "afternoon" ? 13 : 17,
+      tab === "morning" ? 12 : tab === "afternoon" ? 16 : 20
     )
       .then((res) => {
         setData(res?.data);
@@ -97,21 +96,21 @@ const PriceService = () => {
   }, [idExtend, codeCity, codeDistrict, tab]);
 
   dataDistrict?.map((item) => {
-    districtData?.push({
+    return districtData?.push({
       value: item?.code,
       label: item?.name,
     });
   });
 
   extend?.map((item) => {
-    extendOption?.push({
+    return extendOption?.push({
       value: item?._id,
       label: item?.title?.vi,
     });
   });
 
   dataCity?.map((item) => {
-    cityData?.push({
+    return cityData?.push({
       value: item?.code,
       label: item?.name,
       district: item?.districts,
@@ -142,8 +141,8 @@ const PriceService = () => {
       codeDistrict,
       startDate,
       endDate,
-      tab == "morning" ? 7 : tab == "afternoon" ? 13 : 17,
-      tab == "morning" ? 12 : tab == "afternoon" ? 16 : 20
+      tab === "morning" ? 7 : tab === "afternoon" ? 13 : 17,
+      tab === "morning" ? 12 : tab === "afternoon" ? 16 : 20
     )
       .then((res) => {
         setData(res?.data);
@@ -166,8 +165,8 @@ const PriceService = () => {
         codeDistrict,
         startDate,
         endDate,
-        value == "morning" ? 7 : value == "afternoon" ? 13 : 17,
-        value == "morning" ? 12 : value == "afternoon" ? 16 : 20
+        value === "morning" ? 7 : value === "afternoon" ? 13 : 17,
+        value === "morning" ? 12 : value === "afternoon" ? 16 : 20
       )
         .then((res) => {
           setData(res?.data);
@@ -186,10 +185,10 @@ const PriceService = () => {
       title: "Ngày",
       render: (data) => {
         return (
-          <a className="text-date-price">
+          <p className="text-date-price">
             {" "}
             {moment(new Date(data?.date)).utc().format("DD/MM/YYYY")}
-          </a>
+          </p>
         );
       },
     },
@@ -201,10 +200,10 @@ const PriceService = () => {
             {data?.arr_time?.map((item, key) => {
               return (
                 <div className="div-item">
-                  <a className="text-item">
+                  <p className="text-item">
                     {moment(new Date(item?.time)).format("HH:mm")}
-                  </a>
-                  <a className="text-item">{formatMoney(item?.price?.price)}</a>
+                  </p>
+                  <p className="text-item">{formatMoney(item?.price?.price)}</p>
                 </div>
               );
             })}
@@ -262,10 +261,10 @@ const PriceService = () => {
           setSameEnd={() => {}}
         />
         {startDate && (
-          <a className="text-date">
+          <p className="text-date">
             {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
             {moment(endDate).utc().format("DD/MM/YYYY")}
-          </a>
+          </p>
         )}
       </div>
       <div className="div-tab-service mt-2">
@@ -277,7 +276,7 @@ const PriceService = () => {
                 item?.value === tab ? "div-item-tab-selected" : "div-item-tab"
               }
             >
-              <a className="text-tab">{item?.title}</a>
+              <p className="text-tab">{item?.title}</p>
             </div>
           );
         })}

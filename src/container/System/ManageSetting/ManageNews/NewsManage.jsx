@@ -1,12 +1,10 @@
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import { SearchOutlined } from "@material-ui/icons";
-import { Dropdown, Image, Input, Pagination, Space, Table } from "antd";
+import { Dropdown, Image, Input, Pagination, Space, Switch, Table } from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { activeNew, deleteNew, searchNew } from "../../../../api/news";
-import offToggle from "../../../../assets/images/off-button.png";
-import onToggle from "../../../../assets/images/on-button.png";
 import AddNews from "../../../../components/addNews/addNews";
 import EditNews from "../../../../components/editNews/editNews";
 import ModalCustom from "../../../../components/modalCustom";
@@ -42,18 +40,15 @@ const NewsManage = () => {
     dispatch(getNews.getNewsRequest({ start: 0, length: 10 }));
   }, [dispatch]);
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      setValueSearch(value);
-      searchNew(0, 10, value)
-        .then((res) => {
-          setDataFilter(res.data);
-          setTotalFilter(res.totalItem);
-        })
-        .catch((err) => console.log(err));
-    }, 1000),
-    []
-  );
+  const handleSearch = _debounce((value) => {
+    setValueSearch(value);
+    searchNew(0, 10, value)
+      .then((res) => {
+        setDataFilter(res.data);
+        setTotalFilter(res.totalItem);
+      })
+      .catch((err) => console.log(err));
+  }, 1000);
 
   const onChange = (page) => {
     setCurrentPage(page);
@@ -76,27 +71,31 @@ const NewsManage = () => {
         );
   };
 
-  const onDelete = useCallback((id) => {
-    dispatch(loadingAction.loadingRequest(true));
-    deleteNew(id)
-      .then((res) => {
-        dispatch(getNews.getNewsRequest({ start: 0, length: 10 }));
-        dispatch(loadingAction.loadingRequest(false));
-        setModal(false);
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
+  const onDelete = useCallback(
+    (id) => {
+      dispatch(loadingAction.loadingRequest(true));
+      deleteNew(id)
+        .then((res) => {
+          dispatch(getNews.getNewsRequest({ start: 0, length: 10 }));
+          dispatch(loadingAction.loadingRequest(false));
+          setModal(false);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          dispatch(loadingAction.loadingRequest(false));
+          setModal(false);
         });
-        dispatch(loadingAction.loadingRequest(false));
-        setModal(false);
-      });
-  }, []);
+    },
+    [dispatch]
+  );
 
-  const blockNew = useCallback((id, is_active) => {
-    dispatch(loadingAction.loadingRequest(true));
-    if (is_active === true) {
-      activeNew(id, { is_active: false })
+  const blockNew = useCallback(
+    (id, is_active) => {
+      dispatch(loadingAction.loadingRequest(true));
+
+      activeNew(id, { is_active: is_active ? false : true })
         .then((res) => {
           dispatch(getNews.getNewsRequest({ start: 0, length: 10 }));
           setModalBlock(false);
@@ -108,22 +107,9 @@ const NewsManage = () => {
           });
           dispatch(loadingAction.loadingRequest(false));
         });
-    } else {
-      activeNew(id, { is_active: true })
-        .then((res) => {
-          dispatch(getNews.getNewsRequest({ start: 0, length: 10 }));
-          setModalBlock(false);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          dispatch(loadingAction.loadingRequest(false));
-          setModalBlock(false);
-        });
-    }
-  }, []);
+    },
+    [dispatch]
+  );
 
   const items = [
     {
@@ -135,43 +121,60 @@ const NewsManage = () => {
     {
       key: "2",
       label: checkElement?.includes("delete_news") && (
-        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
+        <p onClick={toggle} className="text-item-dropdown">{`${i18n.t(
+          "delete",
+          { lng: lang }
+        )}`}</p>
       ),
     },
   ];
 
   const columns = [
     {
-      title: `${i18n.t("title", { lng: lang })}`,
-      render: (data) => <a className="text-title-new">{data?.title}</a>,
+      title: () => (
+        <p className="title-column">{`${i18n.t("title", { lng: lang })}`}</p>
+      ),
+      render: (data) => <p className="text-title-new">{data?.title}</p>,
     },
     {
-      title: `${i18n.t("short_description", { lng: lang })}`,
+      title: () => (
+        <p className="title-column">{`${i18n.t("short_description", {
+          lng: lang,
+        })}`}</p>
+      ),
       render: (data) => (
-        <a className="text-description-new">{data?.short_description}</a>
+        <p className="text-description-new">{data?.short_description}</p>
       ),
     },
     {
-      title: "Link",
+      title: () => (
+        <p className="title-column">{`${i18n.t("Link", { lng: lang })}`}</p>
+      ),
       render: (data) => {
         return (
-          <a className="text-link-new">
+          <p className="text-link-new">
             {data?.url.length > 30 ? data?.url.slice(0, 30) + "..." : data?.url}
-          </a>
+          </p>
         );
       },
     },
     {
-      title: `${i18n.t("type", { lng: lang })}`,
-      render: (data) => <a className="text-new">{data?.type}</a>,
+      title: () => (
+        <p className="title-column">{`${i18n.t("type", { lng: lang })}`}</p>
+      ),
+      render: (data) => <p className="text-new">{data?.type}</p>,
     },
     {
-      title: `${i18n.t("position", { lng: lang })}`,
-      render: (data) => <a className="text-title-new">{data?.position}</a>,
+      title: () => (
+        <p className="title-column">{`${i18n.t("position", { lng: lang })}`}</p>
+      ),
+      render: (data) => <p className="text-title-new">{data?.position}</p>,
       align: "center",
     },
     {
-      title: `${i18n.t("image", { lng: lang })}`,
+      title: () => (
+        <p className="title-column">{`${i18n.t("image", { lng: lang })}`}</p>
+      ),
       render: (data) => {
         return (
           <Image
@@ -187,10 +190,11 @@ const NewsManage = () => {
       render: (data) => (
         <div>
           {checkElement?.includes("active_news") && (
-            <img
-              className="img-unlock-banner"
-              src={data?.is_active ? onToggle : offToggle}
+            <Switch
+              checked={data?.is_active}
               onClick={toggleBlock}
+              size="small"
+              style={{ backgroundColor: data?.is_active ? "#00cf3a" : "" }}
             />
           )}
         </div>
@@ -204,12 +208,10 @@ const NewsManage = () => {
             menu={{
               items,
             }}
-            placement="bottom"
+            placement="bottomRight"
             trigger={["click"]}
           >
-            <a className="icon-menu">
-              <UilEllipsisV />
-            </a>
+            <UilEllipsisV />
           </Dropdown>
         </Space>
       ),
@@ -250,10 +252,10 @@ const NewsManage = () => {
           />
 
           <div className="mt-2 div-pagination p-2">
-            <a>
+            <p>
               {`${i18n.t("total", { lng: lang })}`}:{" "}
               {totalFilter > 0 ? totalFilter : totalNew}
-            </a>
+            </p>
             <div>
               <Pagination
                 current={currentPage}
@@ -300,8 +302,8 @@ const NewsManage = () => {
             textOk={`${i18n.t("delete", { lng: lang })}`}
             body={
               <>
-                <a>{`${i18n.t("want_post_delete", { lng: lang })}`}</a>
-                <a> {itemEdit?.title}</a>
+                <p>{`${i18n.t("want_post_delete", { lng: lang })}`}</p>
+                <p> {itemEdit?.title}</p>
               </>
             }
           />

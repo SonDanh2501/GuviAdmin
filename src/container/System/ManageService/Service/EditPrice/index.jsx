@@ -52,21 +52,22 @@ const EditPrice = () => {
     setData(data_price);
   }, [data_price]);
 
-  data_price?.map((item) => {
-    province?.map((itemProvince) => {
+  data_price?.forEach((item) => {
+    province?.forEach((itemProvince) => {
       if (item?.city === itemProvince?.code) {
-        itemProvince?.districts?.map((district) => {
+        itemProvince?.districts?.forEach((district) => {
           districtOptions?.push({
             value: district?.code,
             label: district?.name,
           });
+          return;
         });
       }
     });
   });
 
   province?.map((item) => {
-    cityOptions.push({
+    return cityOptions.push({
       value: item?.code,
       label: item?.name,
       district: item?.districts,
@@ -74,7 +75,7 @@ const EditPrice = () => {
   });
 
   dataDistrict?.map((item) => {
-    districtOptions?.push({
+    return districtOptions?.push({
       value: item?.code,
       label: item?.name,
     });
@@ -371,7 +372,9 @@ const EditPrice = () => {
                               marginTop: 4,
                             }}
                           >
-                            <a style={{ fontSize: 12 }}>Giờ bắt đầu</a>
+                            <p style={{ fontSize: 12, margin: 0 }}>
+                              Giờ bắt đầu
+                            </p>
                             <TimePicker
                               className="select-date"
                               value={dayjs(
@@ -395,7 +398,9 @@ const EditPrice = () => {
                               marginTop: 4,
                             }}
                           >
-                            <a style={{ fontSize: 12 }}>Giờ kết thúc</a>
+                            <p style={{ fontSize: 12, margin: 0 }}>
+                              Giờ kết thúc
+                            </p>
                             <TimePicker
                               className="select-date"
                               format={hourFormat}
@@ -451,7 +456,9 @@ const EditPrice = () => {
                                 marginTop: 4,
                               }}
                             >
-                              <a style={{ fontSize: 12 }}>Ngày bắt đầu</a>
+                              <p style={{ fontSize: 12, margin: 0 }}>
+                                Ngày bắt đầu
+                              </p>
                               <DatePicker
                                 format={dateFormat}
                                 value={dayjs(
@@ -476,7 +483,9 @@ const EditPrice = () => {
                                 marginTop: 4,
                               }}
                             >
-                              <a style={{ fontSize: 12 }}>Ngày kết thúc</a>
+                              <p style={{ fontSize: 12, margin: 0 }}>
+                                Ngày kết thúc
+                              </p>
                               <DatePicker
                                 format={dateFormat}
                                 value={dayjs(
@@ -574,120 +583,6 @@ const EditPrice = () => {
           Thêm
         </Button>
       </div>
-
-      {/* {data?.map((item, index) => {
-        return (
-          <div key={index}>
-            <div className="div-list-item-price-area">
-              <div className="list-item-price">
-                <InputCustom
-                  select={true}
-                  title="Tỉnh/Thành phố"
-                  className="select-province"
-                  value={item?.city}
-                  options={cityOptions}
-                  onChange={(value, label) => {
-                    changeCityPriceArea(value, label?.district, index);
-                  }}
-                />
-                <InputCustom
-                  select={true}
-                  value={item?.district}
-                  title="Quận/huyện"
-                  className="select-province"
-                  options={districtOptions.filter((item, index) => {
-                    return (
-                      index ===
-                      districtOptions.findIndex((obj) => {
-                        return item?.value === obj.value;
-                      })
-                    );
-                  })}
-                  mode="multiple"
-                  onChange={(e) => changeDistrictPriceArea(e, index)}
-                />
-                <InputCustom
-                  title="Giá trị"
-                  className="select-province"
-                  type="number"
-                  value={item?.value}
-                  onChange={(e) => changeValuePriceArea(e.target.value, index)}
-                />
-                <InputCustom
-                  title="Loại"
-                  select={true}
-                  value={item?.type_increase}
-                  className="select-province"
-                  onChange={(e) => changeTypeIncreasePriceArea(e, index)}
-                  options={[
-                    { value: "amount", label: "Thay đổi giá" },
-                    {
-                      value: "amount_by_root",
-                      label: "Lấy theo giá gốc",
-                    },
-                    {
-                      value: "percent_by_root",
-                      label: "Phần trăm trên giá gốc",
-                    },
-                  ]}
-                />
-              </div>
-              <div>
-                <h6>Giá ngày cao điểm</h6>
-                <div>
-                  {item?.price_option_rush_day?.map((itemRush, indexRush) => {
-                    return (
-                      <div key={indexRush}>
-                        <InputCustom
-                          select={true}
-                          value={itemRusd?.rush_days}
-                          title="Thứ trong tuần"
-                          mode="multiple"
-                          className="select-date"
-                          options={dateOptions}
-                          onChange={(e) =>
-                            changeDayPriceRushDay(e, index, indexRush)
-                          }
-                        />
-                        <InputCustom
-                          title="Loại"
-                          select={true}
-                          value={itemRusd?.type_increase}
-                          className="select-date"
-                          onChange={(e) =>
-                            changeTypeIncreasePriceRushDay(e, index, indexRush)
-                          }
-                          options={[
-                            {
-                              value: "amount_accumulate",
-                              label: "Tăng theo giá tiền",
-                            },
-                            {
-                              value: "percent_accumulate",
-                              label: "Tăng theo phần trăm",
-                            },
-                          ]}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-            {index !== 0 && (
-              <Button
-                onClick={() => deletePriceArea(index)}
-                className="btn-delete-price-area"
-              >
-                Xoá
-              </Button>
-            )}
-          </div>
-        );
-      })}
-      <Button style={{ width: "20%", marginTop: 10 }} onClick={addPriceArea}>
-        Thêm
-      </Button> */}
 
       {isLoading && <LoadingPagination />}
     </div>

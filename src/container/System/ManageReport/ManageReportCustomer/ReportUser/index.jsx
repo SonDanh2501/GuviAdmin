@@ -1,19 +1,20 @@
-import { DatePicker, Select, Table } from "antd";
+import { DatePicker, Image, Table } from "antd";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { useNavigate, useNavigation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
-  BarChart,
+  Bar,
   CartesianGrid,
+  ComposedChart,
+  Legend,
+  Line,
   ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  Bar,
-  Legend,
-  LabelList,
-  Line,
-  ComposedChart,
 } from "recharts";
 import {
   getTotalCustomerDay,
@@ -24,18 +25,14 @@ import caculator from "../../../../../assets/images/caculator.png";
 import collaborator from "../../../../../assets/images/collaborator.png";
 import CustomDatePicker from "../../../../../components/customDatePicker";
 import LoadingPagination from "../../../../../components/paginationLoading";
-import "./index.scss";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import "./index.scss";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 dayjs.extend(customParseFormat);
-const width = window.innerWidth;
 
 const ReportUser = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [rowIndex, setRowIndex] = useState();
   const [totalMonth, setTotalMonth] = useState(0);
   const [totalDay, setTotalDay] = useState(0);
   const [total, setTotal] = useState(0);
@@ -46,6 +43,7 @@ const ReportUser = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
 
   const dataChart = [];
@@ -111,7 +109,7 @@ const ReportUser = () => {
   }, [data]);
 
   data.map((item, index) => {
-    dataChart.push({
+    return dataChart.push({
       totalNew: item?.totalNew,
       totalOld: item?.totalOld,
       total: item?.totalAll,
@@ -196,9 +194,9 @@ const ReportUser = () => {
       render: (data) => {
         return (
           <div className="div-create">
-            <a className="text-create">
+            <p className="text-create m-0">
               {moment(new Date(data?.day)).format("DD/MM/YYYY")}
-            </a>
+            </p>
             {/* <a className="text-create">
               {moment(new Date(data?.day)).format("HH:mm")}
             </a> */}
@@ -232,9 +230,9 @@ const ReportUser = () => {
               })
             }
           >
-            <a className="text-details">{`${i18n.t("detail", {
+            <p className="text-details m-0">{`${i18n.t("detail", {
               lng: lang,
-            })}`}</a>
+            })}`}</p>
           </div>
         );
       },
@@ -246,76 +244,76 @@ const ReportUser = () => {
 
     return (
       <div className="div-content-tool-chart">
-        <a className="date-text">{setMonth(label)}</a>
-        <a className="money-text">
+        <p className="date-text">{setMonth(label)}</p>
+        <p className="money-text">
           {`${i18n.t("total", { lng: lang })}`}:{" "}
           {payload?.length > 0
             ? payload[0]?.payload?.totalNew + payload[0]?.payload?.totalOld
             : 0}
-        </a>
-        <a className="money-text-new">
+        </p>
+        <p className="money-text-new">
           {`${i18n.t("customer_new_sub", { lng: lang })}`}:{" "}
           {payload?.length > 0 ? payload[0]?.payload?.totalNew : 0}
-        </a>
-        <a className="money-text-old">
+        </p>
+        <p className="money-text-old">
           {`${i18n.t("customer_old_sub", { lng: lang })}`}:{" "}
           {payload?.length > 0 ? payload[0]?.payload?.totalOld : 0}
-        </a>
+        </p>
       </div>
     );
   };
 
   return (
     <div className="div-container-report-customer">
-      <a className="text-title">{`${i18n.t("report_number_customer", {
+      <p className="text-title">{`${i18n.t("report_number_customer", {
         lng: lang,
-      })}`}</a>
+      })}`}</p>
       <div className="header-report-customer">
         <div className="div-tab-header">
           <div className="div-img">
-            <img src={collaborator} className="img" />
+            <Image preview={false} src={collaborator} className="img" />
           </div>
           <div className="div-text-tab">
-            <a className="text-tab-header">{`${i18n.t("total", {
+            <p className="text-tab-header">{`${i18n.t("total", {
               lng: lang,
-            })}`}</a>
-            <a className="text-tab-header">{total}</a>
+            })}`}</p>
+            <p className="text-tab-header">{total}</p>
           </div>
         </div>
         <div className="div-tab-header">
           <div className="div-img">
-            <img src={caculator} className="img" />
-            <a className="text-month">
+            <Image preview={false} src={caculator} className="img" />
+            <p className="text-month">
               {moment()
                 .locale("en")
                 .localeData()
                 .monthsShort(moment().locale("en"))}
-            </a>
+            </p>
           </div>
           <div className="div-text-tab">
-            <a className="text-tab-header">{`${i18n.t("in_month", {
+            <p className="text-tab-header">{`${i18n.t("in_month", {
               lng: lang,
-            })}`}</a>
-            <a className="text-tab-header">{totalMonth}</a>
+            })}`}</p>
+            <p className="text-tab-header">{totalMonth}</p>
           </div>
         </div>
         <div className="div-tab-header">
           <div className="div-img">
-            <img src={caculator} className="img" />
-            <a className="text-day">{moment().date()}</a>
+            <Image preview={false} src={caculator} className="img" />
+            <p className="text-day">{moment().date()}</p>
           </div>
           <div className="div-text-tab">
-            <a className="text-tab-header">{`${i18n.t("date", {
+            <p className="text-tab-header">{`${i18n.t("date", {
               lng: lang,
-            })}`}</a>
-            <a className="text-tab-header">{totalDay}</a>
+            })}`}</p>
+            <p className="text-tab-header">{totalDay}</p>
           </div>
         </div>
       </div>
       <div className="div-chart-user">
         <div className="div-time-area">
           <div>
-            <a className="text-time">{`${i18n.t("time", { lng: lang })}`}</a>
+            <p className="text-time">{`${i18n.t("time", { lng: lang })}`}</p>
             <DatePicker
               picker="year"
               onChange={onChange}
@@ -325,11 +323,11 @@ const ReportUser = () => {
           </div>
         </div>
         <div className="mt-3 divl-total">
-          <a className="text-total-user">
+          <p className="text-total-user">
             {`${i18n.t("total", { lng: lang })}`} user
-          </a>
+          </p>
           <div className="div-total">
-            <a className="text-number-total">{totalYear}</a>
+            <p className="text-number-total">{totalYear}</p>
           </div>
         </div>
         <div className="mt-3 ">
@@ -338,7 +336,7 @@ const ReportUser = () => {
               width={500}
               height={300}
               data={
-                year == moment().year()
+                year === moment().year()
                   ? dataChart.slice(0, moment().utc().month() + 1)
                   : dataChart
               }
@@ -387,9 +385,9 @@ const ReportUser = () => {
           </ResponsiveContainer>
         </div>
       </div>
-      <a className="text-title">{`${i18n.t("NUMBER_REGISTER_TIME", {
+      <p className="text-title">{`${i18n.t("NUMBER_REGISTER_TIME", {
         lng: lang,
-      })}`}</a>
+      })}`}</p>
       <div className="mt-3 div-table">
         <div className="div-header-table">
           <div className="div-date">
@@ -402,10 +400,12 @@ const ReportUser = () => {
               setSameEnd={() => {}}
             />
             {startDate && (
-              <a className="text-date">
-                {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-                {moment(new Date(endDate)).format("DD/MM/YYYY")}
-              </a>
+              <div className="ml-2">
+                <p className="text-date m-0">
+                  {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+                  {moment(new Date(endDate)).format("DD/MM/YYYY")}
+                </p>
+              </div>
             )}
           </div>
         </div>
@@ -422,21 +422,9 @@ const ReportUser = () => {
                 setSelectedRowKeys(selectedRowKeys);
               },
             }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  //   setItemEdit(record);
-                  setRowIndex(rowIndex);
-                },
-              };
+            scroll={{
+              x: width <= 490 ? 1600 : 0,
             }}
-            scroll={
-              width <= 490
-                ? {
-                    x: 1600,
-                  }
-                : null
-            }
           />
         </div>
       </div>

@@ -19,16 +19,15 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import Withdraw from "../../../../../components/withdraw/withdraw";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify, successNotify } from "../../../../../helper/toast";
+import { useCookies } from "../../../../../helper/useCookies";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import i18n from "../../../../../i18n";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import {
   getElementState,
   getLanguageState,
-  getUser,
 } from "../../../../../redux/selectors/auth";
 import "./index.scss";
-import i18n from "../../../../../i18n";
-import { useCookies } from "../../../../../helper/useCookies";
-import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const TopupCollaborator = ({ type }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -43,10 +42,8 @@ const TopupCollaborator = ({ type }) => {
   const [itemEdit, setItemEdit] = useState([]);
   const [modal, setModal] = useState(false);
   const [modalConfirm, setModalConfirm] = useState(false);
-  const [modalEdit, setModalEdit] = useState(false);
   const toggleConfirm = () => setModalConfirm(!modalConfirm);
   const [modalCancel, setModalCancel] = useState(false);
-  const toggleEdit = () => setModalEdit(!modalEdit);
   const toggle = () => setModal(!modal);
   const toggleCancel = () => setModalCancel(!modalCancel);
   const { width } = useWindowDimensions();
@@ -55,6 +52,8 @@ const TopupCollaborator = ({ type }) => {
   const [saveToCookie, readCookie] = useCookies();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const currentPageCookie = readCookie("current_page_topup_ctv");
+  const startPageCookie = "start_page_topup_ctv";
 
   useEffect(() => {
     getTopupCollaboratorApi(0, 20, type)
@@ -63,17 +62,9 @@ const TopupCollaborator = ({ type }) => {
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-    setCurrentPage(
-      readCookie("current_page_topup_ctv") == ""
-        ? 1
-        : Number(readCookie("current_page_topup_ctv"))
-    );
-    setStartPage(
-      readCookie("start_page_topup_ctv") === ""
-        ? 0
-        : Number(readCookie("start_page_topup_ctv"))
-    );
-  }, [type]);
+    setCurrentPage(currentPageCookie === "" ? 1 : Number(currentPageCookie));
+    setStartPage(startPageCookie === "" ? 0 : Number(startPageCookie));
+  }, [type, startPageCookie, currentPageCookie]);
 
   const onDelete = useCallback(
     (id) => {
@@ -97,7 +88,7 @@ const TopupCollaborator = ({ type }) => {
           dispatch(loadingAction.loadingRequest(false));
         });
     },
-    [startPage, type]
+    [startPage, type, dispatch]
   );
 
   const onConfirm = useCallback(
@@ -125,7 +116,7 @@ const TopupCollaborator = ({ type }) => {
           dispatch(loadingAction.loadingRequest(false));
         });
     },
-    [startPage, type]
+    [startPage, type, dispatch]
   );
 
   const onCancel = useCallback(
@@ -149,25 +140,22 @@ const TopupCollaborator = ({ type }) => {
           dispatch(loadingAction.loadingRequest(false));
         });
     },
-    [startPage, type]
+    [startPage, type, dispatch]
   );
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      setIsLoading(true);
-      setValueSearch(value);
-      searchTopupCollaboratorApi(value, startPage, 20, type)
-        .then((res) => {
-          setDataSearch(res.data);
-          setTotalSearch(res.totalItem);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          setIsLoading(false);
-        });
-    }, 1000),
-    [startPage, type]
-  );
+  const handleSearch = _debounce((value) => {
+    setIsLoading(true);
+    setValueSearch(value);
+    searchTopupCollaboratorApi(value, startPage, 20, type)
+      .then((res) => {
+        setDataSearch(res.data);
+        setTotalSearch(res.totalItem);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  }, 1000);
 
   const onChange = (page) => {
     setCurrentPage(page);
@@ -199,11 +187,11 @@ const TopupCollaborator = ({ type }) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("code", { lng: lang })}`}</a>
+          <p className="title-column">{`${i18n.t("code", { lng: lang })}`}</p>
         );
       },
       render: (data) => (
-        <a
+        <p
           className="text-id"
           onClick={() =>
             navigate("/details-collaborator", {
@@ -212,15 +200,15 @@ const TopupCollaborator = ({ type }) => {
           }
         >
           {data?.id_collaborator?.id_view}
-        </a>
+        </p>
       ),
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("collaborator", {
+          <p className="title-column">{`${i18n.t("collaborator", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
@@ -229,10 +217,10 @@ const TopupCollaborator = ({ type }) => {
             to={`/details-collaborator/${data?.id_collaborator?._id}`}
             className="div-name-topup"
           >
-            <a className="text-name-topup">
+            <p className="text-name-topup">
               {data?.id_collaborator?.full_name}
-            </a>
-            <a className="text-phone-topup">{data?.id_collaborator?.phone}</a>
+            </p>
+            <p className="text-phone-topup">{data?.id_collaborator?.phone}</p>
           </Link>
         );
       },
@@ -240,38 +228,38 @@ const TopupCollaborator = ({ type }) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("money", { lng: lang })}`}</a>
+          <p className="title-column">{`${i18n.t("money", { lng: lang })}`}</p>
         );
       },
       render: (data) => (
-        <a className="text-money-topup">{formatMoney(data?.money)}</a>
+        <p className="text-money-topup">{formatMoney(data?.money)}</p>
       ),
       sorter: (a, b) => a.money - b.money,
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("withdraw_topup", {
+          <p className="title-column">{`${i18n.t("withdraw_topup", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <>
             {data?.type_transfer === "top_up" ? (
-              <div>
+              <div className="div-money-withdraw-topup">
                 <i class="uil uil-money-insert icon-topup"></i>
-                <a className="text-topup">{`${i18n.t("topup", {
+                <p className="text-topup">{`${i18n.t("topup", {
                   lng: lang,
-                })}`}</a>
+                })}`}</p>
               </div>
             ) : (
-              <div>
+              <div className="div-money-withdraw-topup">
                 <i class="uil uil-money-withdraw icon-withdraw"></i>
-                <a className="text-withdraw">
+                <p className="text-withdraw">
                   {`${i18n.t("withdraw", { lng: lang })}`}
-                </a>
+                </p>
               </div>
             )}
           </>
@@ -281,32 +269,32 @@ const TopupCollaborator = ({ type }) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("content", {
+          <p className="title-column">{`${i18n.t("content", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => (
-        <a className="text-description-topup">{data?.transfer_note}</a>
+        <p className="text-description-topup">{data?.transfer_note}</p>
       ),
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("date_create", {
+          <p className="title-column">{`${i18n.t("date_create", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div className="div-time-topup">
-            <a className="text-time">
+            <p className="text-time">
               {moment(new Date(data?.date_create)).format("DD/MM/yyy")}
-            </a>
-            <a className="text-time">
+            </p>
+            <p className="text-time">
               {moment(new Date(data?.date_create)).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -314,43 +302,43 @@ const TopupCollaborator = ({ type }) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("wallet", { lng: lang })}`}</a>
+          <p className="title-column">{`${i18n.t("wallet", { lng: lang })}`}</p>
         );
       },
       render: (data) => (
-        <a className="text-name-verify">
+        <p className="text-name-verify">
           {data?.type_wallet === "wallet"
             ? `${i18n.t("main_wallet", { lng: lang })}`
             : `${i18n.t("gift_wallet", { lng: lang })}`}
-        </a>
+        </p>
       ),
       align: "center",
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("status", { lng: lang })}`}</a>
+          <p className="title-column">{`${i18n.t("status", { lng: lang })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div>
             {data?.status === "pending" ? (
-              <a className="text-pending-topup">{`${i18n.t("processing", {
+              <p className="text-pending-topup">{`${i18n.t("processing", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : data?.status === "transfered" ? (
-              <a className="text-transfered">{`${i18n.t("money_transferred", {
+              <p className="text-transfered">{`${i18n.t("money_transferred", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : data?.status === "done" ? (
-              <a className="text-done-topup">{`${i18n.t("complete", {
+              <p className="text-done-topup">{`${i18n.t("complete", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : (
-              <a className="text-cancel-topup-ctv">{`${i18n.t("cancel", {
+              <p className="text-cancel-topup-ctv">{`${i18n.t("cancel", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             )}
           </div>
         );
@@ -360,14 +348,14 @@ const TopupCollaborator = ({ type }) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("approved_by", {
+          <p className="title-column">{`${i18n.t("approved_by", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
-          <a className="text-name-verify">{data?.id_admin_verify?.full_name}</a>
+          <p className="text-name-verify">{data?.id_admin_verify?.full_name}</p>
         );
       },
       align: "center",
@@ -406,9 +394,9 @@ const TopupCollaborator = ({ type }) => {
                     lng: lang,
                   })}`}
                 >
-                  <a className="text-cancel-topup" onClick={toggleCancel}>
+                  <p className="text-cancel-topup" onClick={toggleCancel}>
                     {`${i18n.t("cancel_modal", { lng: lang })}`}
-                  </a>
+                  </p>
                 </Tooltip>
               )}
             </div>
@@ -527,88 +515,88 @@ const TopupCollaborator = ({ type }) => {
                     return (
                       <div className="div-detail-topup">
                         <div className="div-text-detail">
-                          <a className="title-detail">Số tiền :</a>
-                          <a className="text-detail">
+                          <p className="title-detail">Số tiền :</p>
+                          <p className="text-detail">
                             {formatMoney(record?.money)}
-                          </a>
+                          </p>
                         </div>
                         <div className="div-text-detail">
-                          <a className="title-detail">Nạp/rút :</a>
+                          <p className="title-detail">Nạp/rút :</p>
                           <>
                             {record?.type_transfer === "top_up" ? (
-                              <div>
+                              <div className="div-money-withdraw-topup">
                                 <i class="uil uil-money-insert icon-topup"></i>
-                                <a className="text-topup">{`${i18n.t("topup", {
+                                <p className="text-topup">{`${i18n.t("topup", {
                                   lng: lang,
-                                })}`}</a>
+                                })}`}</p>
                               </div>
                             ) : (
-                              <div>
+                              <div className="div-money-withdraw-topup">
                                 <i class="uil uil-money-withdraw icon-withdraw"></i>
-                                <a className="text-withdraw">
+                                <p className="text-withdraw">
                                   {`${i18n.t("withdraw", { lng: lang })}`}
-                                </a>
+                                </p>
                               </div>
                             )}
                           </>
                         </div>
                         <div className="div-text-detail">
-                          <a className="title-detail">Nội dung :</a>
-                          <a className="text-detail">{record?.transfer_note}</a>
+                          <p className="title-detail">Nội dung :</p>
+                          <p className="text-detail">{record?.transfer_note}</p>
                         </div>
                         <div className="div-text-detail">
-                          <a className="title-detail">Ví :</a>
-                          <a className="text-detail">
+                          <p className="title-detail">Ví :</p>
+                          <p className="text-detail">
                             {record?.type_wallet === "wallet"
                               ? `${i18n.t("main_wallet", { lng: lang })}`
                               : `${i18n.t("gift_wallet", { lng: lang })}`}
-                          </a>
+                          </p>
                         </div>
                         <div className="div-text-detail">
-                          <a className="title-detail">Trạng thái :</a>
+                          <p className="title-detail">Trạng thái :</p>
                           {record?.status === "pending" ? (
-                            <a className="text-pending-topup">{`${i18n.t(
+                            <p className="text-pending-topup">{`${i18n.t(
                               "processing",
                               {
                                 lng: lang,
                               }
-                            )}`}</a>
+                            )}`}</p>
                           ) : record?.status === "transfered" ? (
-                            <a className="text-transfered">{`${i18n.t(
+                            <p className="text-transfered">{`${i18n.t(
                               "money_transferred",
                               {
                                 lng: lang,
                               }
-                            )}`}</a>
+                            )}`}</p>
                           ) : record?.status === "done" ? (
-                            <a className="text-done-topup">{`${i18n.t(
+                            <p className="text-done-topup">{`${i18n.t(
                               "complete",
                               {
                                 lng: lang,
                               }
-                            )}`}</a>
+                            )}`}</p>
                           ) : (
-                            <a className="text-cancel-topup-ctv">{`${i18n.t(
+                            <p className="text-cancel-topup-ctv">{`${i18n.t(
                               "cancel",
                               {
                                 lng: lang,
                               }
-                            )}`}</a>
+                            )}`}</p>
                           )}
                         </div>
                         <div className="div-text-detail">
-                          <a className="title-detail">Ngày tạo :</a>
+                          <p className="title-detail">Ngày tạo :</p>
                           <div className="div-time-topup">
-                            <a className="text-time">
+                            <p className="text-time">
                               {moment(new Date(record?.date_create)).format(
                                 "DD/MM/yyy"
                               )}
-                            </a>
-                            <a className="text-time">
+                            </p>
+                            <p className="text-time">
                               {moment(new Date(record?.date_create)).format(
                                 "HH:mm"
                               )}
-                            </a>
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -620,10 +608,10 @@ const TopupCollaborator = ({ type }) => {
         />
       </div>
       <div className="div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}:{" "}
           {totalSearch > 0 ? totalSearch : total}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}
@@ -649,28 +637,28 @@ const TopupCollaborator = ({ type }) => {
           body={
             <>
               <div className="body-modal">
-                <a className="text-content">
+                <p className="text-content">
                   {`${i18n.t("collaborator", { lng: lang })}`}:{" "}
                   {itemEdit?.id_collaborator?.full_name}
-                </a>
-                <a className="text-content">
+                </p>
+                <p className="text-content">
                   {`${i18n.t("phone", { lng: lang })}`}:{" "}
                   {itemEdit?.id_collaborator?.phone}
-                </a>
-                <a className="text-content">
+                </p>
+                <p className="text-content">
                   {`${i18n.t("money", { lng: lang })}`}:{" "}
                   {formatMoney(itemEdit?.money)}
-                </a>
-                <a className="text-content">
+                </p>
+                <p className="text-content">
                   {`${i18n.t("content", { lng: lang })}`}:{" "}
                   {itemEdit?.transfer_note}
-                </a>
-                <a className="text-content">
+                </p>
+                <p className="text-content">
                   {`${i18n.t("wallet", { lng: lang })}`}:{" "}
                   {itemEdit?.type_wallet === "wallet"
                     ? `${i18n.t("main_wallet", { lng: lang })}`
                     : `${i18n.t("gift_wallet", { lng: lang })}`}
-                </a>
+                </p>
               </div>
             </>
           }
@@ -685,10 +673,10 @@ const TopupCollaborator = ({ type }) => {
           textOk={`${i18n.t("delete", { lng: lang })}`}
           body={
             <>
-              <a>{`${i18n.t("want_delete_transaction", { lng: lang })}`}</a>
-              <a className="text-name-modal">
+              <p>{`${i18n.t("want_delete_transaction", { lng: lang })}`}</p>
+              <p className="text-name-modal">
                 {itemEdit?.id_collaborator?.full_name}
-              </a>
+              </p>
             </>
           }
         />
@@ -702,10 +690,10 @@ const TopupCollaborator = ({ type }) => {
           textOk={`${i18n.t("yes", { lng: lang })}`}
           body={
             <>
-              <a>{`${i18n.t("want_cancel_transaction", { lng: lang })}`}</a>
-              <a className="text-name-modal">
+              <p>{`${i18n.t("want_cancel_transaction", { lng: lang })}`}</p>
+              <p className="text-name-modal">
                 {itemEdit?.id_collaborator?.full_name}
-              </a>
+              </p>
             </>
           }
         />

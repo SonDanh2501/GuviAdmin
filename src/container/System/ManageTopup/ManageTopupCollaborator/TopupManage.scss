@@ -9,20 +9,20 @@
     font-size: 18px;
     color: #000000;
     text-decoration: none;
-
-    .text-money-revenue {
-      font-family: "Roboto";
-      font-style: normal;
-      font-weight: 400;
-      font-size: 18px;
-      color: #000000;
-      text-decoration: none;
-      margin-left: 10px;
-    }
+    margin: 0;
 
     .icon-up {
       color: #00cf3a;
     }
+  }
+  .text-money-revenue {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    color: #000000;
+    text-decoration: none;
+    margin: 0 0 0 10px;
   }
   .total-expenditure {
     font-family: "Roboto";
@@ -31,6 +31,7 @@
     font-size: 18px;
     color: #000000;
     text-decoration: none;
+    margin: 0;
 
     .text-money-expenditure {
       font-family: "Roboto";
@@ -39,10 +40,19 @@
       font-size: 18px;
       color: #000000;
       text-decoration: none;
-      margin-left: 10px;
+      margin: 0 0 0 10px;
     }
     .icon-down {
       color: #ff0000;
     }
+  }
+  .text-money-expenditure {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    color: #000000;
+    text-decoration: none;
+    margin: 0 0 0 10px;
   }
 }

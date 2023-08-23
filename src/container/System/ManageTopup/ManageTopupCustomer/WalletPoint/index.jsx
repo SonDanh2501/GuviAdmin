@@ -2,7 +2,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { Button, Input, Pagination, Table } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import _debounce from "lodash/debounce";
 import { Link } from "react-router-dom";
@@ -17,14 +17,13 @@ import AddPoint from "../../../../../components/addPointCustomer/addPoint";
 import ModalCustom from "../../../../../components/modalCustom";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import { errorNotify } from "../../../../../helper/toast";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 import i18n from "../../../../../i18n";
-import { loadingAction } from "../../../../../redux/actions/loading";
 import {
   getElementState,
   getLanguageState,
 } from "../../../../../redux/selectors/auth";
 import "./index.scss";
-import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const TopupPoint = () => {
   const [data, setData] = useState([]);
@@ -40,7 +39,6 @@ const TopupPoint = () => {
   const [modalConfirm, setModalConfirm] = useState(false);
   const [modalCancel, setModalCancel] = useState(false);
   const { width } = useWindowDimensions();
-  const dispatch = useDispatch();
   const toggle = () => setModal(!modal);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -59,8 +57,7 @@ const TopupPoint = () => {
 
   const onDelete = useCallback(
     (id) => {
-      dispatch(loadingAction.loadingRequest(true));
-
+      setIsLoading(true);
       deletePointCustomerApi(id)
         .then((res) => {
           getTopupPointCustomerApi(startPage, 20)
@@ -68,13 +65,13 @@ const TopupPoint = () => {
               setData(res?.data);
               setTotal(res?.totalItem);
               setModal(false);
-              dispatch(loadingAction.loadingRequest(false));
+              setIsLoading(false);
             })
             .catch((err) => {
               errorNotify({
                 message: err,
               });
-              dispatch(loadingAction.loadingRequest(false));
+              setIsLoading(false);
             });
         })
         .catch((err) => {});
@@ -84,8 +81,7 @@ const TopupPoint = () => {
 
   const onConfirm = useCallback(
     (id) => {
-      dispatch(loadingAction.loadingRequest(true));
-
+      setIsLoading(true);
       verifyPointCustomerApi(id)
         .then((res) => {
           getTopupPointCustomerApi(startPage, 20)
@@ -93,20 +89,20 @@ const TopupPoint = () => {
               setData(res?.data);
               setTotal(res?.totalItem);
               setModalConfirm(false);
-              dispatch(loadingAction.loadingRequest(false));
+              setIsLoading(false);
             })
             .catch((err) => {
               errorNotify({
                 message: err,
               });
-              dispatch(loadingAction.loadingRequest(false));
+              setIsLoading(false);
             });
         })
         .catch((err) => {
           errorNotify({
             message: err,
           });
-          dispatch(loadingAction.loadingRequest(false));
+          setIsLoading(false);
         });
     },
     [startPage]
@@ -114,7 +110,7 @@ const TopupPoint = () => {
 
   const onCancel = useCallback(
     (id) => {
-      dispatch(loadingAction.loadingRequest(true));
+      setIsLoading(true);
       cancelPointCustomerApi(id)
         .then((res) => {
           getTopupPointCustomerApi(startPage, 20)
@@ -122,32 +118,29 @@ const TopupPoint = () => {
               setData(res?.data);
               setTotal(res?.totalItem);
               setModalCancel(false);
-              dispatch(loadingAction.loadingRequest(false));
+              setIsLoading(true);
             })
-            .catch((err) => dispatch(loadingAction.loadingRequest(false)));
+            .catch((err) => setIsLoading(true));
         })
         .catch((err) => {
           errorNotify({
             message: err,
           });
-          dispatch(loadingAction.loadingRequest(false));
+          setIsLoading(true);
         });
     },
     [startPage]
   );
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      setValueSearch(value);
-      searchTopupPointCustomerApi(startPage, 20, value)
-        .then((res) => {
-          setDataSearch(res?.data);
-          setTotalSearch(res?.totalItem);
-        })
-        .catch((err) => {});
-    }, 1000),
-    [startPage]
-  );
+  const handleSearch = _debounce((value) => {
+    setValueSearch(value);
+    searchTopupPointCustomerApi(startPage, 20, value)
+      .then((res) => {
+        setDataSearch(res?.data);
+        setTotalSearch(res?.totalItem);
+      })
+      .catch((err) => {});
+  }, 1000);
 
   const columns = [
     {
@@ -158,8 +151,8 @@ const TopupPoint = () => {
             to={`/profile-customer/${data?.id_customer?._id}`}
             className="div-name-point"
           >
-            <a className="text-name">{data?.name_customer}</a>
-            <a className="text-phone-point">{data?.phone_customer}</a>
+            <p className="text-name">{data?.name_customer}</p>
+            <p className="text-phone-point">{data?.phone_customer}</p>
           </Link>
         );
       },
@@ -167,7 +160,7 @@ const TopupPoint = () => {
     {
       title: `${i18n.t("score", { lng: lang })}`,
       render: (data) => {
-        return <a className="text-point">{data?.value}</a>;
+        return <p className="text-point">{data?.value}</p>;
       },
       align: "center",
       sorter: (a, b) => a.value - b.value,
@@ -176,18 +169,18 @@ const TopupPoint = () => {
       title: `${i18n.t("point_type", { lng: lang })}`,
       render: (data) => {
         return (
-          <a className="text-type-point">
+          <p className="text-type-point">
             {data?.type_point === "point"
               ? `${i18n.t("bonus", { lng: lang })}`
               : `${i18n.t("kind_member", { lng: lang })}`}
-          </a>
+          </p>
         );
       },
     },
     {
       title: `${i18n.t("content", { lng: lang })}`,
       render: (data) => {
-        return <a className="text-description-topup-point">{data?.note}</a>;
+        return <p className="text-description-topup-point">{data?.note}</p>;
       },
     },
     {
@@ -195,12 +188,12 @@ const TopupPoint = () => {
       render: (data) => {
         return (
           <div className="div-day-create-point">
-            <a className="text-day">
+            <p className="text-day">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-day">
+            </p>
+            <p className="text-day">
               {moment(new Date(data?.date_create)).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -211,17 +204,17 @@ const TopupPoint = () => {
         return (
           <div>
             {data?.status === "pending" ? (
-              <a className="text-pending-point">{`${i18n.t("processing", {
+              <p className="text-pending-point">{`${i18n.t("processing", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : data?.status === "done" ? (
-              <a className="text-done-point">{`${i18n.t("complete", {
+              <p className="text-done-point">{`${i18n.t("complete", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : (
-              <a className="text-cancel-point">{`${i18n.t("cancel", {
+              <p className="text-cancel-point">{`${i18n.t("cancel", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             )}
           </div>
         );
@@ -253,9 +246,9 @@ const TopupPoint = () => {
               {checkElement?.includes("cancel_point_cash_book_customer") && (
                 <>
                   {data?.status === "pending" && (
-                    <a className="text-cancel-point" onClick={toggleCancel}>
+                    <p className="text-cancel-point" onClick={toggleCancel}>
                       {`${i18n.t("cancel_modal", { lng: lang })}`}
-                    </a>
+                    </p>
                   )}
                 </>
               )}
@@ -327,7 +320,7 @@ const TopupPoint = () => {
         />
       </div>
       <div className="div-pagination p-2">
-        <a>Tổng: {totalSearch > 0 ? totalSearch : total}</a>
+        <p>Tổng: {totalSearch > 0 ? totalSearch : total}</p>
         <div>
           <Pagination
             current={currentPage}
@@ -348,22 +341,22 @@ const TopupPoint = () => {
           textOk={`${i18n.t("approvals", { lng: lang })}`}
           body={
             <div className="body-modal">
-              <a>
+              <p style={{ margin: 0 }}>
                 {`${i18n.t("customer", { lng: lang })}`}:{" "}
                 {itemEdit?.name_customer}
-              </a>
-              <a>
+              </p>
+              <p style={{ margin: 0 }}>
                 {`${i18n.t("score", { lng: lang })}`}: {itemEdit?.value}
-              </a>
-              <a>
+              </p>
+              <p style={{ margin: 0 }}>
                 {`${i18n.t("content", { lng: lang })}`}: {itemEdit?.note}
-              </a>
-              <a>
+              </p>
+              <p style={{ margin: 0 }}>
                 {`${i18n.t("point_type", { lng: lang })}`}:{" "}
                 {itemEdit?.type_point === "point"
                   ? `${i18n.t("reward_points", { lng: lang })}`
                   : `${i18n.t("rank_point", { lng: lang })}`}
-              </a>
+              </p>
             </div>
           }
         />
@@ -378,8 +371,10 @@ const TopupPoint = () => {
           textOk={`${i18n.t("delete", { lng: lang })}`}
           body={
             <>
-              <a>{`${i18n.t("want_delete_points", { lng: lang })}`}</a>
-              <a className="text-name-modal">{itemEdit?.name_customer}</a>
+              <p style={{ margin: 0 }}>{`${i18n.t("want_delete_points", {
+                lng: lang,
+              })}`}</p>
+              <p className="text-name-modal">{itemEdit?.name_customer}</p>
             </>
           }
         />
@@ -393,8 +388,8 @@ const TopupPoint = () => {
           textOk={`${i18n.t("yes", { lng: lang })}`}
           body={
             <>
-              <a>{`${i18n.t("want_cancel_points", { lng: lang })}`}</a>
-              <a className="text-name-modal">{itemEdit?.name_customer}</a>
+              <p>{`${i18n.t("want_cancel_points", { lng: lang })}`}</p>
+              <p className="text-name-modal">{itemEdit?.name_customer}</p>
             </>
           }
         />

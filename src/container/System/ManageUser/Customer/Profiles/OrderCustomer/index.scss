@@ -4,6 +4,7 @@
   font-weight: 500;
   font-size: 12px;
   color: black;
+  margin: 0;
 }
 
 .div-service {
@@ -16,6 +17,7 @@
     font-weight: 500;
     font-size: 12px;
     color: black;
+    margin: 0;
   }
 }
 
@@ -28,8 +30,8 @@
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
-    line-height: 16px;
-    color: #6e6893;
+    color: #202223;
+    margin: 0;
   }
 }
 
@@ -44,6 +46,7 @@
     font-size: 12px;
     text-transform: capitalize;
     color: black;
+    margin: 0;
   }
 }
 
@@ -57,6 +60,7 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  margin: 0;
 }
 .text-collaborator {
   font-family: "Roboto";
@@ -65,41 +69,42 @@
   font-size: 12px !important;
   text-decoration-line: underline;
   color: #023e8a;
+  margin: 0;
 }
 
 .text-pending {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 16px;
+  font-weight: 500;
+  font-size: 124px;
   color: #ece200 !important;
+  margin: 0;
 }
 
 .text-confirm {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 16px;
+  font-weight: 500;
+  font-size: 12px;
+  margin: 0;
   color: #023e8a;
 }
 
 .text-doing {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 16px;
+  font-weight: 500;
+  font-size: 12px;
+  margin: 0;
   color: #023e8a;
 }
 
 .text-cancel {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 16px;
+  font-weight: 500;
+  font-size: 12px;
+  margin: 0;
   color: #ff0000;
 }
 .text-done {
@@ -109,6 +114,7 @@
   font-size: 12px !important;
   color: #00cf3a;
   text-decoration: none;
+  margin: 0;
 }
 
 .filter-input {
@@ -124,6 +130,7 @@
   font-size: 12px;
   color: #000000;
   text-decoration: none;
+  margin: 0;
 }
 
 .text-searching {
@@ -132,5 +139,6 @@
   font-weight: 400;
   font-size: 12px;
   color: #000000;
+  margin: 0;
   text-decoration: none;
 }

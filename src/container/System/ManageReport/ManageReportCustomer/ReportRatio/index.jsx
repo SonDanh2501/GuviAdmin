@@ -1,11 +1,10 @@
+import { Card, Statistic } from "antd";
+import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
-import "./styles.scss";
 import { getReportCustomerRatio } from "../../../../../api/report";
 import CustomDatePicker from "../../../../../components/customDatePicker";
-import moment from "moment";
-import { Card, Statistic } from "antd";
-import { ArrowUpOutlined } from "@ant-design/icons";
 import LoadingPagination from "../../../../../components/paginationLoading";
+import "./styles.scss";
 
 const ReportRatio = () => {
   const [state, setState] = useState({
@@ -19,7 +18,11 @@ const ReportRatio = () => {
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    getReportCustomerRatio(startDate, endDate, "")
+    getReportCustomerRatio(
+      moment().subtract(30, "d").startOf("date").toISOString(),
+      moment().endOf("date").toISOString(),
+      ""
+    )
       .then((res) => {
         setState({
           ...state,
@@ -50,7 +53,7 @@ const ReportRatio = () => {
 
   return (
     <>
-      <a className="title-ratio-customer">Báo cáo tỉ suất khách hàng</a>
+      <p className="title-ratio-customer">Báo cáo tỉ suất khách hàng</p>
       <div className="div-date mt-3">
         <CustomDatePicker
           setStartDate={setStartDate}
@@ -61,10 +64,10 @@ const ReportRatio = () => {
           setSameEnd={() => {}}
         />
         {startDate && (
-          <a className="text-date">
+          <p className="text-date m-0 ml-2">
             {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
             {moment(endDate).utc().format("DD/MM/YYYY")}
-          </a>
+          </p>
         )}
       </div>
 

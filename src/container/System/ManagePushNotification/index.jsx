@@ -1,16 +1,15 @@
-import { Dropdown, Pagination, Space, Table } from "antd";
+import { Dropdown, Pagination, Space, Switch, Table } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import {
   activePushNotification,
   deletePushNotification,
 } from "../../../api/notification";
-import offToggle from "../../../assets/images/off-button.png";
-import onToggle from "../../../assets/images/on-button.png";
 import ModalCustom from "../../../components/modalCustom";
 import { errorNotify } from "../../../helper/toast";
+import useWindowDimensions from "../../../helper/useWindowDimensions";
+import i18n from "../../../i18n";
 import { loadingAction } from "../../../redux/actions/loading";
 import { getNotification } from "../../../redux/actions/notification";
 import {
@@ -24,8 +23,6 @@ import {
 import AddPushNotification from "./AddPushNotification";
 import EditPushNotification from "./EditPushNotification";
 import "./index.scss";
-import i18n from "../../../i18n";
-import useWindowDimensions from "../../../helper/useWindowDimensions";
 
 const ManagePushNotification = () => {
   const listNotification = useSelector(getListNotifications);
@@ -51,7 +48,7 @@ const ManagePushNotification = () => {
         length: 20,
       })
     );
-  }, [status]);
+  }, [status, dispatch]);
   const toggle = () => setModal(!modal);
   const toggleVerify = () => setModalVerify(!modalVerify);
 
@@ -96,7 +93,6 @@ const ManagePushNotification = () => {
 
   const onDelete = (id) => {
     dispatch(loadingAction.loadingRequest(true));
-
     deletePushNotification(id)
       .then((res) => {
         dispatch(
@@ -129,7 +125,9 @@ const ManagePushNotification = () => {
     {
       key: "2",
       label: checkElement?.includes("delete_notification") && (
-        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
+        <p className="m-0" onClick={toggle}>{`${i18n.t("delete", {
+          lng: lang,
+        })}`}</p>
       ),
     },
   ];
@@ -140,32 +138,32 @@ const ManagePushNotification = () => {
       render: (data) => {
         return (
           <div className="div-date-create">
-            <a className="text-create">
+            <p className="text-create">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-create">
+            </p>
+            <p className="text-create">
               {moment(new Date(data?.date_create)).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
     },
     {
       title: `${i18n.t("title", { lng: lang })}`,
-      render: (data) => <a>{data?.title}</a>,
+      render: (data) => <p className="text-title-table">{data?.title}</p>,
     },
     {
       title: `${i18n.t("content", { lng: lang })}`,
-      render: (data) => <a>{data?.body}</a>,
+      render: (data) => <p className="text-title-table">{data?.body}</p>,
     },
     {
       title: `${i18n.t("announcement_date", { lng: lang })}`,
       render: (data) => (
-        <a>
+        <p className="text-title-table">
           {data?.date_schedule
             ? moment(new Date(data?.date_schedule)).format("DD/MM/YYYY - HH:mm")
             : ""}
-        </a>
+        </p>
       ),
     },
     {
@@ -177,10 +175,12 @@ const ManagePushNotification = () => {
             <Space size="middle">
               <div>
                 {checkElement?.includes("active_notification") && (
-                  <img
-                    src={data?.is_active ? onToggle : offToggle}
-                    className="img-toggle"
+                  <Switch
+                    checked={data?.is_active}
                     onClick={toggleVerify}
+                    style={{
+                      backgroundColor: data?.is_active ? "#00cf3a" : "",
+                    }}
                   />
                 )}
               </div>
@@ -188,12 +188,12 @@ const ManagePushNotification = () => {
                 menu={{
                   items,
                 }}
-                placement="bottom"
+                placement="bottomRight"
                 trigger={["click"]}
               >
-                <a>
+                <div>
                   <i class="uil uil-ellipsis-v"></i>
-                </a>
+                </div>
               </Dropdown>
             </Space>
           </div>
@@ -222,9 +222,9 @@ const ManagePushNotification = () => {
               }
               onClick={() => setStatus(item?.value)}
             >
-              <a className="text-tab">
+              <p className="text-tab">
                 {`${i18n.t(item?.title, { lng: lang })}`}
-              </a>
+              </p>
             </div>
           );
         })}
@@ -247,9 +247,9 @@ const ManagePushNotification = () => {
         />
       </div>
       <div className="div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}: {totalNotification}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}
@@ -295,8 +295,10 @@ const ManagePushNotification = () => {
           textOk={`${i18n.t("delete", { lng: lang })}`}
           body={
             <>
-              <a>{`${i18n.t("want_remove_notification", { lng: lang })}`}</a>
-              <a className="text-name-modal">{itemEdit?.title}</a>
+              <p className="m-0">{`${i18n.t("want_remove_notification", {
+                lng: lang,
+              })}`}</p>
+              <p className="text-name-modal m-0">{itemEdit?.title}</p>
             </>
           }
         />

@@ -1,21 +1,20 @@
+import moment from "moment";
 import { useEffect, useState } from "react";
-import { getListTestByCollabotatorApi } from "../../../../../../../api/configuration";
+import { useSelector } from "react-redux";
 import {
   getInfoTestTrainingLessonByCollaboratorApi,
   getListTrainingLessonByCollaboratorApi,
   passInfoTestApi,
 } from "../../../../../../../api/collaborator";
-import "./styles.scss";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import qualified from "../../../../../../../assets/images/qualified.png";
 import unqualified from "../../../../../../../assets/images/unqualifed.png";
-import i18n from "../../../../../../../i18n";
-import { Pagination } from "antd";
-import moment from "moment";
 import ModalCustom from "../../../../../../../components/modalCustom";
-import { errorNotify } from "../../../../../../../helper/toast";
 import LoadingPagination from "../../../../../../../components/paginationLoading";
+import { errorNotify } from "../../../../../../../helper/toast";
+import i18n from "../../../../../../../i18n";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import "./styles.scss";
+import { Image } from "antd";
 
 const TestExam = (props) => {
   const { id } = props;
@@ -33,7 +32,7 @@ const TestExam = (props) => {
         setDataLesson(res?.data);
       })
       .catch((err) => {});
-  }, [id]);
+  }, [id, tab]);
 
   const handleSeeInfoLesson = (_id, title) => {
     setTitle(title);
@@ -80,132 +79,6 @@ const TestExam = (props) => {
   };
 
   return (
-    // <div>
-    //   <a className="title-test-exam">{`${i18n.t("contributor_exam", {
-    //     lng: lang,
-    //   })}`}</a>
-    //   <div className="note-answers">
-    //     <a className="text-false">
-    //       *{" "}
-    //       {`${i18n.t("wrong_answer", {
-    //         lng: lang,
-    //       })}`}
-    //     </a>
-    //     <a className="text-true">
-    //       *{" "}
-    //       {`${i18n.t("correct_answer", {
-    //         lng: lang,
-    //       })}`}
-    //     </a>
-    //     <a className="text-warning">
-    //       *{" "}
-    //       {`${i18n.t("warning_answer", {
-    //         lng: lang,
-    //       })}`}
-    //     </a>
-    //   </div>
-    //   <div className="div-tab-exam">
-    //     {TAB_EXAM?.map((item, index) => {
-    //       return (
-    //         <div
-    //           key={index}
-    //           className={
-    //             item?.value === tab ? "item-tab-exam-select" : "item-tab-exam"
-    //           }
-    //           onClick={() => {
-    //             setTab(item?.value);
-    //           }}
-    //         >
-    //           <a className="text-tab">{`${i18n.t(item?.value, {
-    //             lng: lang,
-    //           })}`}</a>
-    //         </div>
-    //       );
-    //     })}
-    //   </div>
-    //   <div className="div-exam-test">
-    //     {data?.map((item, index) => {
-    //       return (
-    //         <div key={index} className="div-test">
-    //           <div className="div-head-test">
-    //             <div className="div-score">
-    //               <a className="title-score">Đúng: {item?.score} câu</a>
-
-    //               <a className="title-score">
-    //                 {item?.type_exam === "input"
-    //                   ? "Bài kiểm tra đầu vào"
-    //                   : item?.type_exam === "theory_input"
-    //                   ? "Bài kiểm tra đầu vào lý thuyết"
-    //                   : item?.type_exam === "training"
-    //                   ? "Bài kiểm tra đào tạo"
-    //                   : "Bài kiểm tra định kì"}
-    //               </a>
-    //             </div>
-    //             <div className="div-time-test">
-    //               <a className="title-time">
-    //                 Thời gian bắt đầu:{" "}
-    //                 {moment(item?.time_start).format("DD/MM/YYYY - HH:mm")}
-    //               </a>
-    //               <a className="title-time">
-    //                 Thời gian kết thúc:{" "}
-    //                 {moment(item?.time_end).format("DD/MM/YYYY - HH:mm")}
-    //               </a>
-    //             </div>
-    //           </div>
-    //           <div className="mt-3">
-    //             {item?.answers?.map((iAnswers, idAnswers) => {
-    //               return (
-    //                 <div key={idAnswers} className="div-question-test">
-    //                   <a className="title-question">
-    //                     Câu {idAnswers + 1}: {iAnswers?.info_question?.title}
-    //                   </a>
-    //                   {iAnswers?.info_question?.choose?.map(
-    //                     (choose, idChoose) => {
-    //                       return (
-    //                         <div key={idChoose} className="ml-3">
-    //                           <a
-    //                             className={
-    //                               !iAnswers?.selected_answer &&
-    //                               iAnswers?.isCorrect === false &&
-    //                               choose?.isCorrect
-    //                                 ? "text-answer-warning"
-    //                                 : choose?.isCorrect
-    //                                 ? "text-answer-true"
-    //                                 : iAnswers?.selected_answer ===
-    //                                     choose?._id && !choose?.isCorrect
-    //                                 ? "text-answer-false"
-    //                                 : "text-answer-default"
-    //                             }
-    //                           >
-    //                             {choose?.answer}
-    //                           </a>
-    //                         </div>
-    //                       );
-    //                     }
-    //                   )}
-    //                 </div>
-    //               );
-    //             })}
-    //           </div>
-    //         </div>
-    //       );
-    //     })}
-    //   </div>
-    //   <div className="div-pagination p-2 mt-3">
-    //     <a>
-    //       {`${i18n.t("total", { lng: lang })}`}: {total}
-    //     </a>
-    //     <div>
-    //       <Pagination
-    //         current={currentPage}
-    //         onChange={onChange}
-    //         total={total}
-    //         showSizeChanger={false}
-    //         pageSize={1}
-    //       />
-    //     </div>
-    //   </div>
-    // </div>
     <>
       <div className="div-tab-exam">
         {TAB_EXAM?.map((item, index) => {
@@ -217,9 +90,9 @@ const TestExam = (props) => {
                 tab === item?.value ? "item-tab-exam-select" : "item-tab-exam"
               }
             >
-              <a className="text-tab">{`${i18n.t(item?.value, {
+              <p className="text-tab">{`${i18n.t(item?.value, {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
           );
         })}
@@ -236,39 +109,39 @@ const TestExam = (props) => {
               }
             >
               <div className="div-title-lesson">
-                <a className="text-title">{item?.title[lang]}</a>
+                <p className="text-title">{item?.title[lang]}</p>
                 {item?.is_pass ? (
-                  <img src={qualified} className="img" />
+                  <Image src={qualified} className="img" preview={false} />
                 ) : !item?.is_pass &&
-                  item?.collaborator_times_submit == item?.times_submit ? (
-                  <img src={unqualified} className="img" />
+                  item?.collaborator_times_submit === item?.times_submit ? (
+                  <Image src={unqualified} className="img" preview={false} />
                 ) : !item?.is_pass ? (
                   <i class="uil uil-padlock"></i>
                 ) : null}
               </div>
-              <a className="text-description">{item?.description[lang]}</a>
+              <p className="text-description">{item?.description[lang]}</p>
 
               {(item?.is_pass ||
                 (!item?.is_pass &&
-                  item?.collaborator_times_submit == item?.times_submit)) && (
-                <a
+                  item?.collaborator_times_submit === item?.times_submit)) && (
+                <p
                   className="see-answer"
                   onClick={() =>
                     handleSeeInfoLesson(item?._id, item?.title[lang])
                   }
                 >
                   Xem câu trả lời <i class="uil uil-angle-right"></i>
-                </a>
+                </p>
               )}
               {!item?.is_pass && (
-                <a
+                <p
                   className="see-answer"
                   onClick={() =>
                     onPassLesson(item?._id, item?.type_training_lesson)
                   }
                 >
                   Pass
-                </a>
+                </p>
               )}
             </div>
           );
@@ -285,61 +158,61 @@ const TestExam = (props) => {
             body={
               <>
                 <div className="note-answers">
-                  <a className="text-false">
+                  <p className="text-false">
                     *{" "}
                     {`${i18n.t("wrong_answer", {
                       lng: lang,
                     })}`}
-                  </a>
-                  <a className="text-true">
+                  </p>
+                  <p className="text-true">
                     *{" "}
                     {`${i18n.t("correct_answer", {
                       lng: lang,
                     })}`}
-                  </a>
-                  <a className="text-warning">
+                  </p>
+                  <p className="text-warning">
                     *{" "}
                     {`${i18n.t("warning_answer", {
                       lng: lang,
                     })}`}
-                  </a>
+                  </p>
                 </div>
                 <div className="div-exam-test">
                   <div className="div-test">
                     <div className="div-head-test">
                       <div className="div-score">
-                        <a className="title-score">
+                        <p className="title-score">
                           Đúng: {data[0]?.score} câu
-                        </a>
+                        </p>
                       </div>
                       <div className="div-time-test">
-                        <a className="title-time">
+                        <p className="title-time">
                           Thời gian bắt đầu:{" "}
                           {moment(data[0]?.time_start).format(
                             "DD/MM/YYYY - HH:mm"
                           )}
-                        </a>
-                        <a className="title-time">
+                        </p>
+                        <p className="title-time">
                           Thời gian kết thúc:{" "}
                           {moment(data[0]?.time_end).format(
                             "DD/MM/YYYY - HH:mm"
                           )}
-                        </a>
+                        </p>
                       </div>
                     </div>
                     <div className="mt-3">
                       {data[0]?.answers?.map((iAnswers, idAnswers) => {
                         return (
                           <div key={idAnswers} className="div-question-test">
-                            <a className="title-question">
+                            <p className="title-question">
                               Câu {idAnswers + 1}:{" "}
                               {iAnswers?.info_question?.title}
-                            </a>
+                            </p>
                             {iAnswers?.info_question?.choose?.map(
                               (choose, idChoose) => {
                                 return (
                                   <div key={idChoose} className="ml-3">
-                                    <a
+                                    <p
                                       className={
                                         !iAnswers?.selected_answer &&
                                         iAnswers?.isCorrect === false &&
@@ -354,7 +227,7 @@ const TestExam = (props) => {
                                       }
                                     >
                                       {choose?.answer}
-                                    </a>
+                                    </p>
                                   </div>
                                 );
                               }

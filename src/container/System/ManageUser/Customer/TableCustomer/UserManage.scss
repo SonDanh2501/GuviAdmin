@@ -2,6 +2,15 @@
   color: #000000;
 }
 
+.text-select-dropdown {
+  margin: 0;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #19202c;
+}
+
 .div-name-customer {
   display: flex;
   flex-direction: row;
@@ -12,7 +21,7 @@
     font-weight: 500;
     font-size: 12px;
     color: #19202c;
-    margin-left: 10px;
+    margin: 0 0 0 10px;
   }
 
   .text-rank {
@@ -43,6 +52,7 @@
   font-weight: 500;
   font-size: 12px;
   color: #f7941d;
+  margin: 0;
 }
 
 .text-address-customer {
@@ -50,10 +60,10 @@
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
-  line-height: 16px;
   color: black;
   text-decoration: none !important;
   display: block;
+  margin: 0;
 }
 
 .text-address-customer-default {
@@ -61,11 +71,11 @@
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
-  line-height: 16px;
   color: black;
   width: 250px !important;
   text-decoration: none !important;
   display: block;
+  margin: 0;
 }
 
 .text-id-customer {
@@ -75,6 +85,7 @@
   font-size: 12px;
   color: rgb(0, 0, 0);
   text-decoration: none !important;
+  margin: 0;
 }
 
 .icon-unlock {
@@ -141,6 +152,7 @@
     font-size: 12px;
     color: #6e6893;
     text-decoration: none;
+    margin: 0;
   }
 }
 
@@ -157,12 +169,14 @@
     font-size: 12px;
     color: #000000;
     text-decoration: none;
+    margin: 0;
   }
 
   .btn-eyes {
     background-color: transparent;
     border: none;
     color: #000000;
+    margin: 0;
   }
 }
 
@@ -181,6 +195,7 @@
       font-size: 14px;
       color: #19202c;
       width: 100px;
+      margin: 0;
     }
 
     .text-detail {
@@ -190,6 +205,7 @@
       font-size: 14px;
       color: #19202c;
       margin-left: 10px;
+      margin: 0;
     }
   }
 }

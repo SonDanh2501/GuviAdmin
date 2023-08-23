@@ -1,20 +1,19 @@
-import { DatePicker, Select, Tabs } from "antd";
+import { Tabs } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { getRevenueCollaboratorApi } from "../../../../api/topup";
 import { formatMoney } from "../../../../helper/formatMoney";
-import Punish from "./Punish";
-import TopupCollaborator from "./Topup";
-import "./TopupManage.scss";
+import { useCookies } from "../../../../helper/useCookies";
+import i18n from "../../../../i18n";
 import {
   getElementState,
   getLanguageState,
 } from "../../../../redux/selectors/auth";
+import Punish from "./Punish";
 import RewardCollaborator from "./Reward";
-import i18n from "../../../../i18n";
-import { useCookies } from "../../../../helper/useCookies";
+import TopupCollaborator from "./Topup";
+import "./TopupManage.scss";
 
 const TopupManage = () => {
   const [type, setType] = useState("all");
@@ -26,6 +25,7 @@ const TopupManage = () => {
   const lang = useSelector(getLanguageState);
   const [saveToCookie, readCookie] = useCookies();
   const [activeKey, setActiveKey] = useState("1");
+  const tabCookie = readCookie("tab_ctv_topup");
 
   useEffect(() => {
     getRevenueCollaboratorApi(
@@ -38,10 +38,8 @@ const TopupManage = () => {
         setTotalTopup(res?.totalTopUp);
       })
       .catch((err) => {});
-    setActiveKey(
-      readCookie("tab_ctv_topup") === "" ? "1" : readCookie("tab_ctv_topup")
-    );
-  }, [dispatch]);
+    setActiveKey(tabCookie === "" ? "1" : tabCookie);
+  }, [dispatch, tabCookie]);
 
   const onChangeTab = (active) => {
     setActiveKey(active);
@@ -58,24 +56,48 @@ const TopupManage = () => {
   return (
     <>
       <div className="div-total">
-        <a className="total-revenue">
-          {`${i18n.t("total_revenue", { lng: lang })}`}:
-          <a className="text-money-revenue">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <p className="total-revenue">
+            {`${i18n.t("total_revenue", { lng: lang })}`}:
+          </p>
+          <p className="text-money-revenue">
             <i class="uil uil-arrow-up icon-up"></i>
             {formatMoney(totalTopup)}
-          </a>
-        </a>
-        <a className="total-expenditure">
-          {`${i18n.t("total_expenditure", { lng: lang })}`}:
-          <a className="text-money-expenditure">
+          </p>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <p className="total-expenditure">
+            {`${i18n.t("total_expenditure", { lng: lang })}`}:
+          </p>
+          <p className="text-money-expenditure">
             <i class="uil uil-arrow-down icon-down"></i>
             {formatMoney(totalWithdraw)}
-          </a>
-        </a>
-        <a className="total-expenditure">
-          {`${i18n.t("total_fines", { lng: lang })}`}:
-          <a className="text-money-expenditure">{formatMoney(totalPunish)}</a>
-        </a>
+          </p>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <p className="total-expenditure">
+            {`${i18n.t("total_fines", { lng: lang })}`}:
+          </p>
+          <p className="text-money-expenditure">{formatMoney(totalPunish)}</p>
+        </div>
       </div>
       <div>
         <Tabs activeKey={activeKey} size="small" onChange={onChangeTab}>

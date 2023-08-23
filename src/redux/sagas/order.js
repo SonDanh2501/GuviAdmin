@@ -3,7 +3,7 @@ import { getOrderApi } from "../../api/order";
 
 import { getType } from "../actions/banner";
 import { loadingAction } from "../actions/loading";
-import { getOrder, searchOrder } from "../actions/order";
+import { getOrder } from "../actions/order";
 
 function* fetchOrderSaga(action) {
   try {

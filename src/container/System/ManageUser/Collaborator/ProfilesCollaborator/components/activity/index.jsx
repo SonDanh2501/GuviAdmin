@@ -1,16 +1,15 @@
-import { List, Pagination, Table } from "antd";
+import { Pagination, Table } from "antd";
 import moment from "moment";
 import { memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { getHistoryActivityCollaborator } from "../../../../../../../api/collaborator";
 import { errorNotify } from "../../../../../../../helper/toast";
-import { loadingAction } from "../../../../../../../redux/actions/loading";
-import vi from "moment/locale/vi";
-import "./index.scss";
-import { getLanguageState } from "../../../../../../../redux/selectors/auth";
-import i18n from "../../../../../../../i18n";
 import useWindowDimensions from "../../../../../../../helper/useWindowDimensions";
+import i18n from "../../../../../../../i18n";
+import { loadingAction } from "../../../../../../../redux/actions/loading";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import "./index.scss";
 
 const Activity = ({ id }) => {
   const [data, setData] = useState([]);
@@ -19,7 +18,7 @@ const Activity = ({ id }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const lang = useSelector(getLanguageState);
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
@@ -35,7 +34,7 @@ const Activity = ({ id }) => {
         });
         dispatch(loadingAction.loadingRequest(false));
       });
-  }, [id]);
+  }, [id, dispatch]);
 
   const onChange = (page) => {
     setCurrentPage(page);
@@ -63,14 +62,14 @@ const Activity = ({ id }) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("code_order", {
+          <p className="title-column">{`${i18n.t("code_order", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
-          <a
+          <p
             className="text-id-activity"
             onClick={() =>
               navigate(
@@ -82,27 +81,27 @@ const Activity = ({ id }) => {
             }
           >
             {data?.id_view}
-          </a>
+          </p>
         );
       },
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("date_create", {
+          <p className="title-column">{`${i18n.t("date_create", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div className="div-create-activity">
-            <a className="text-create">
+            <p className="text-create">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-create">
+            </p>
+            <p className="text-create">
               {moment(new Date(data?.date_create)).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -111,9 +110,9 @@ const Activity = ({ id }) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("customer", {
+          <p className="title-column">{`${i18n.t("customer", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
@@ -122,8 +121,8 @@ const Activity = ({ id }) => {
             to={`/profile-customer/${data?.id_customer?._id}`}
             className="div-name-activity"
           >
-            <a className="text-name-customer">{data?.id_customer?.full_name}</a>
-            <a className="text-phone-customer">{data?.id_customer?.phone}</a>
+            <p className="text-name-customer">{data?.id_customer?.full_name}</p>
+            <p className="text-phone-customer">{data?.id_customer?.phone}</p>
           </Link>
         );
       },
@@ -131,15 +130,15 @@ const Activity = ({ id }) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("service", {
+          <p className="title-column">{`${i18n.t("service", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div className="div-service-activity">
-            <a className="text-service">
+            <p className="text-service">
               {data?.type === "loop" && data?.is_auto_order
                 ? `${i18n.t("repeat", { lng: lang })}`
                 : data?.service?._id?.kind === "giup_viec_theo_gio"
@@ -149,8 +148,8 @@ const Activity = ({ id }) => {
                 : data?.service?._id?.kind === "phuc_vu_nha_hang"
                 ? `${i18n.t("serve", { lng: lang })}`
                 : ""}
-            </a>
-            <a className="text-service">{timeWork(data)}</a>
+            </p>
+            <p className="text-service">{timeWork(data)}</p>
           </div>
         );
       },
@@ -158,21 +157,21 @@ const Activity = ({ id }) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("date_work", {
+          <p className="title-column">{`${i18n.t("date_work", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div className="div-worktime-activity">
-            <a className="text-worktime">
+            <p className="text-worktime">
               {" "}
               {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-worktime">
+            </p>
+            <p className="text-worktime">
               {moment(new Date(data?.date_work)).locale(lang).format("dddd")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -180,9 +179,9 @@ const Activity = ({ id }) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("address", {
+          <p className="title-column">{`${i18n.t("address", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => (
@@ -193,11 +192,11 @@ const Activity = ({ id }) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("status", { lng: lang })}`}</a>
+          <p className="title-column">{`${i18n.t("status", { lng: lang })}`}</p>
         );
       },
       render: (data) => (
-        <a
+        <p
           className={
             data?.status === "pending"
               ? "text-pending-activity"
@@ -219,7 +218,7 @@ const Activity = ({ id }) => {
             : data?.status === "done"
             ? `${i18n.t("complete", { lng: lang })}`
             : `${i18n.t("cancel", { lng: lang })}`}
-        </a>
+        </p>
       ),
     },
   ];
@@ -239,16 +238,16 @@ const Activity = ({ id }) => {
                 expandedRowRender: (record) => {
                   return (
                     <div className="div-plus">
-                      <a>
+                      <p>
                         {`${i18n.t("address", { lng: lang })}`}:{" "}
                         {record?.address}
-                      </a>
-                      <a>
+                      </p>
+                      <p>
                         {`${i18n.t("date_create", { lng: lang })}`}:{" "}
                         {moment(new Date(record?.date_create)).format(
                           "DD/MM/YYYY - HH:mm"
                         )}
-                      </a>
+                      </p>
                     </div>
                   );
                 },
@@ -258,7 +257,7 @@ const Activity = ({ id }) => {
       />
 
       <div className="div-pagination p-2">
-        <a>Tổng: {totalData}</a>
+        <p>Tổng: {totalData}</p>
         <div>
           <Pagination
             current={currentPage}

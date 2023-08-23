@@ -1,21 +1,21 @@
 import { combineReducers } from "redux";
+import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import { PersistConfig, persistReducer } from "redux-persist";
-import customer from "./customer";
-import collaborator from "./collaborator";
-import promotion from "./promotion";
+import Auth from "./auth";
 import banner from "./banner";
-import news from "./news";
-import reasons from "./reason";
-import service from "./service";
 import brand from "./brand";
+import collaborator from "./collaborator";
+import customer from "./customer";
 import feedback from "./feedback";
 import loading from "./loading";
-import order from "./order";
-import topup from "./topup";
+import news from "./news";
 import notification from "./notification";
+import order from "./order";
+import promotion from "./promotion";
+import reasons from "./reason";
+import service from "./service";
 import statistic from "./statistic";
-import Auth from "./auth";
+import topup from "./topup";
 
 const authPersistConfig = {
   key: "auth",

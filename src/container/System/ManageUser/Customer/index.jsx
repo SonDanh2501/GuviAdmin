@@ -13,7 +13,6 @@ import { getLanguageState } from "../../../../redux/selectors/auth";
 import UserManage from "./TableCustomer/UserManage";
 
 const ManageCustomer = () => {
-  const [status, setStatus] = useState("");
   const lang = useSelector(getLanguageState);
   const [dataGroup, setDataGroup] = useState([]);
   const [idGroup, setIdGroup] = useState("all");
@@ -21,18 +20,19 @@ const ManageCustomer = () => {
   const [saveToCookie, readCookie] = useCookies();
   const { width } = useWindowDimensions();
   const scrollRef = useHorizontalScroll();
+  const tab = readCookie("tab-khhang");
 
   useEffect(() => {
-    setIdGroup(readCookie("tab-kh") === "" ? "all" : readCookie("tab-kh"));
+    setIdGroup(tab === "" ? "all" : tab);
     getGroupCustomerApi(0, 20)
       .then((res) => {
         setDataGroup(res?.data);
       })
       .catch((err) => {});
-  }, []);
+  }, [tab]);
 
   dataGroup?.map((item) => {
-    dataTab.push({
+    return dataTab.push({
       value: item?._id,
       label: item?.name,
     });
@@ -41,9 +41,9 @@ const ManageCustomer = () => {
   return (
     <>
       <div className="div-header-customer">
-        <a className="title-cv">{`${i18n.t("list_customer", {
+        <p className="title-cv">{`${i18n.t("list_customer", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       </div>
 
       <div className="div-container-customer">
@@ -60,10 +60,10 @@ const ManageCustomer = () => {
                   }
                   onClick={() => {
                     setIdGroup(item?.value);
-                    saveToCookie("tab-kh", item?.value);
+                    saveToCookie("tab-khhang", item?.value);
                   }}
                 >
-                  <a className="text-tab">{item?.label}</a>
+                  <p className="text-tab">{item?.label}</p>
                 </div>
               );
             })}
@@ -74,13 +74,13 @@ const ManageCustomer = () => {
             value={idGroup}
             onChange={(e) => {
               setIdGroup(e);
-              saveToCookie("tab-kh", e);
+              saveToCookie("tab-khhang", e);
             }}
           />
         )}
 
         <div className="mt-3">
-          <UserManage status={status} idGroup={idGroup} />
+          <UserManage status={""} idGroup={idGroup} />
         </div>
       </div>
       <FloatButton.BackTop />

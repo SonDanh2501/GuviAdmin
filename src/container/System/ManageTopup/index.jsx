@@ -18,13 +18,12 @@ const ManageTopup = () => {
   const lang = useSelector(getLanguageState);
   const [saveToCookie, readCookie] = useCookies();
   const [activeKey, setActiveKey] = useState("1");
+  const tabCookie = readCookie("tab_topup");
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setActiveKey(
-      readCookie("tab_topup") === "" ? "1" : readCookie("tab_topup")
-    );
-  }, []);
+    setActiveKey(tabCookie === "" ? "1" : tabCookie);
+  }, [tabCookie]);
 
   const onChangeTab = (key) => {
     setActiveKey(key);

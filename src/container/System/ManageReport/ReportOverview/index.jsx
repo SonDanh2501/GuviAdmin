@@ -18,7 +18,6 @@ import {
 import CustomDatePicker from "../../../../components/customDatePicker";
 
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
-import { Image, Select } from "antd";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import LoadingPagination from "../../../../components/paginationLoading";
@@ -26,18 +25,21 @@ import { formatMoney } from "../../../../helper/formatMoney";
 import { number_processing } from "../../../../helper/numberProcessing";
 import { getLanguageState } from "../../../../redux/selectors/auth";
 import "./styles.scss";
+import { Image, Select } from "antd";
 
 const ReportOverview = () => {
   const lang = useSelector(getLanguageState);
   const [startDate, setStartDate] = useState(
-    moment().subtract(6, "day").startOf("day").toISOString()
+    moment().subtract(1, "week").toISOString()
   );
-  const [endDate, setEndDate] = useState(moment().endOf("day").toISOString());
+  const [endDate, setEndDate] = useState(
+    moment().subtract(1, "day").toISOString()
+  );
   const [sameStartDate, setSameStartDate] = useState(
-    moment(startDate).subtract(7, "day").toISOString()
+    moment(startDate).subtract(1, "week").toISOString()
   );
   const [sameEndDate, setSameEndDate] = useState(
-    moment(endDate).subtract(7, "day").toISOString()
+    moment(endDate).subtract(1, "week").toISOString()
   );
   const [data, setData] = useState([]);
   const [dataSame, setDataSame] = useState([]);
@@ -46,8 +48,6 @@ const ReportOverview = () => {
   const [dataService, setDataService] = useState([]);
   const [dataServiceSame, setDataServiceSame] = useState([]);
   const [typePriceService, setTypePriceService] = useState("income");
-  const [totalNetIncomeArea, setTotalNetIncomeArea] = useState(0);
-  const [totalNetIncomeSameArea, setTotalNetIncomeSameArea] = useState(0);
   const [totalNetIncome, setTotalNetIncome] = useState(0);
   const [totalNetIncomeSame, setTotalNetIncomeSame] = useState(0);
   const [totalGrossIncome, setTotalGrossIncome] = useState(0);
@@ -63,7 +63,13 @@ const ReportOverview = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getReportOrderDaily(0, 40, startDate, endDate, "date_work")
+    getReportOrderDaily(
+      0,
+      40,
+      moment().subtract(1, "week").toISOString(),
+      moment().subtract(1, "day").toISOString(),
+      "date_work"
+    )
       .then((res) => {
         setData(res?.data);
         setTotalNetIncome(res?.total[0]?.total_net_income);
@@ -72,7 +78,17 @@ const ReportOverview = () => {
       })
       .catch((err) => {});
 
-    getReportOrderDaily(0, 40, sameStartDate, sameEndDate, "date_work")
+    getReportOrderDaily(
+      0,
+      40,
+      moment(moment().subtract(1, "week").toISOString())
+        .subtract(1, "week")
+        .toISOString(),
+      moment(moment().subtract(1, "day").toISOString())
+        .subtract(1, "week")
+        .toISOString(),
+      "date_work"
+    )
       .then((res) => {
         setDataSame(res?.data);
         setTotalNetIncomeSame(res?.total[0]?.total_net_income);
@@ -81,26 +97,52 @@ const ReportOverview = () => {
       })
       .catch((err) => {});
 
-    getReportOrderByCity(0, 20, startDate, endDate, 0)
+    getReportOrderByCity(
+      0,
+      20,
+      moment().subtract(1, "week").toISOString(),
+      moment().subtract(1, "day").toISOString(),
+      0
+    )
       .then((res) => {
         setDataArea(res?.data);
-        setTotalNetIncomeArea(res?.total[0]?.total_net_income);
       })
       .catch((err) => {});
 
-    getReportOrderByCity(0, 20, sameStartDate, sameEndDate, 0)
+    getReportOrderByCity(
+      0,
+      20,
+      moment(moment().subtract(1, "week").toISOString())
+        .subtract(1, "week")
+        .toISOString(),
+      moment(moment().subtract(1, "day").toISOString())
+        .subtract(1, "week")
+        .toISOString(),
+      0
+    )
       .then((res) => {
         setDataAreSame(res?.data);
-        setTotalNetIncomeSameArea(res?.total[0]?.total_net_income);
       })
       .catch((err) => {});
 
-    getReportServiceByArea(startDate, endDate, "")
+    getReportServiceByArea(
+      moment().subtract(1, "week").toISOString(),
+      moment().subtract(1, "day").toISOString(),
+      ""
+    )
       .then((res) => {
         setDataService(res?.data);
       })
       .catch((err) => {});
-    getReportServiceByArea(sameStartDate, sameEndDate, "")
+    getReportServiceByArea(
+      moment(moment().subtract(1, "week").toISOString())
+        .subtract(1, "week")
+        .toISOString(),
+      moment(moment().subtract(1, "day").toISOString())
+        .subtract(1, "week")
+        .toISOString(),
+      ""
+    )
       .then((res) => {
         setDataServiceSame(res?.data);
       })
@@ -135,14 +177,12 @@ const ReportOverview = () => {
     getReportOrderByCity(0, 20, startDate, endDate, 0)
       .then((res) => {
         setDataArea(res?.data);
-        setTotalNetIncomeArea(res?.total[0]?.total_net_income);
       })
       .catch((err) => {});
 
     getReportOrderByCity(0, 20, sameStartDate, sameEndDate, 0)
       .then((res) => {
         setDataAreSame(res?.data);
-        setTotalNetIncomeSameArea(res?.total[0]?.total_net_income);
       })
       .catch((err) => {});
 
@@ -156,6 +196,10 @@ const ReportOverview = () => {
         setDataServiceSame(res?.data);
       })
       .catch((err) => {});
+  };
+
+  const percentSame = (a, b) => {
+    return ((a - b) / b) * 100;
   };
 
   for (let i = 0; i < data.length; i++) {
@@ -189,10 +233,10 @@ const ReportOverview = () => {
             city: element?.city,
             total_item: element?.total_item,
             gross_income: element?.total_net_income,
-            percent_gross_income:
-              ((element?.total_net_income - element2?.total_net_income) /
-                element2?.total_net_income) *
-              100,
+            percent_gross_income: percentSame(
+              element?.total_net_income,
+              element2?.total_net_income
+            ),
           });
         }
       }
@@ -210,7 +254,7 @@ const ReportOverview = () => {
     });
 
     filteredArray?.map((item) => {
-      dataChartAreaOrder.push({
+      return dataChartAreaOrder.push({
         city: item?.city,
         total_item: item?.total_item,
         gross_income: item?.total_net_income,
@@ -225,10 +269,10 @@ const ReportOverview = () => {
             city: element?.city,
             total_item: element?.total_item,
             gross_income: element?.total_net_income,
-            percent_gross_income:
-              ((element?.total_net_income - element2?.total_net_income) /
-                element2?.total_net_income) *
-              100,
+            percent_gross_income: percentSame(
+              element?.total_net_income,
+              element2?.total_net_income
+            ),
           });
         }
       }
@@ -264,47 +308,47 @@ const ReportOverview = () => {
     }
   }
 
-  const renderTooltipContent = (o) => {
-    const { payload, label } = o;
-    return (
-      <div className="div-content-chart-net-income">
-        {payload[0]?.payload?.date && (
-          <a className="text-content">
-            {payload[0]?.payload?.date}:{" "}
-            {formatMoney(payload[0]?.payload?.gross_income)}
-          </a>
-        )}
+  // const renderTooltipContent = (o) => {
+  //   const { payload } = o;
+  //   return (
+  //     <div className="div-content-chart-net-income">
+  //       {payload[0]?.payload?.date && (
+  //         <p className="text-content">
+  //           {payload[0]?.payload?.date}:{" "}
+  //           {formatMoney(payload[0]?.payload?.gross_income)}
+  //         </p>
+  //       )}
 
-        {payload[0]?.payload?.date_same && (
-          <a className="text-content-same">
-            {payload[0]?.payload?.date_same}:{" "}
-            {formatMoney(payload[0]?.payload?.gross_income_same)}
-          </a>
-        )}
-      </div>
-    );
-  };
-  const renderTooltipContentNetIncome = (o) => {
-    const { payload, label } = o;
+  //       {payload[0]?.payload?.date_same && (
+  //         <p className="text-content-same">
+  //           {payload[0]?.payload?.date_same}:{" "}
+  //           {formatMoney(payload[0]?.payload?.gross_income_same)}
+  //         </p>
+  //       )}
+  //     </div>
+  //   );
+  // };
+  // const renderTooltipContentNetIncome = (o) => {
+  //   const { payload } = o;
 
-    return (
-      <div className="div-content-chart-net-income">
-        {payload[0]?.payload?.date && (
-          <a className="text-content">
-            {payload[0]?.payload?.date}:{" "}
-            {formatMoney(payload[0]?.payload?.net_income)}
-          </a>
-        )}
+  //   return (
+  //     <div className="div-content-chart-net-income">
+  //       {payload[0]?.payload?.date && (
+  //         <p className="text-content">
+  //           {payload[0]?.payload?.date}:{" "}
+  //           {formatMoney(payload[0]?.payload?.net_income)}
+  //         </p>
+  //       )}
 
-        {payload[0]?.payload?.date_same && (
-          <a className="text-content-same">
-            {payload[0]?.payload?.date_same}:{" "}
-            {formatMoney(payload[0]?.payload?.net_income_same)}
-          </a>
-        )}
-      </div>
-    );
-  };
+  //       {payload[0]?.payload?.date_same && (
+  //         <p className="text-content-same">
+  //           {payload[0]?.payload?.date_same}:{" "}
+  //           {formatMoney(payload[0]?.payload?.net_income_same)}
+  //         </p>
+  //       )}
+  //     </div>
+  //   );
+  // };
 
   const netIncomePercent =
     ((totalNetIncome - totalNetIncomeSame) / totalNetIncomeSame) * 100;
@@ -326,39 +370,39 @@ const ReportOverview = () => {
           defaults={true}
         />
         <div className="div-same">
-          <a>
+          <p className="m-0">
             Cùng kỳ: {moment(sameStartDate).utc().format("DD/MM/YYYY")}-
             {moment(sameEndDate).format("DD/MM/YYYY")}
-          </a>
+          </p>
         </div>
       </div>
 
       <div className="div-chart-firt-overview">
         <div className="div-chart-gross-income">
-          <a className="title-gross">Doanh số</a>
+          <p className="title-gross">Doanh số</p>
 
           <div className="div-total-gross">
-            <a className="text-total-gross">
+            <p className="text-total-gross">
               {formatMoney(!totalGrossIncome ? 0 : totalGrossIncome)}
-            </a>
+            </p>
             {grossIncomePercent < 0 ? (
-              <a className="text-number-persent-down">
+              <p className="text-number-persent-down">
                 <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
                 {Math.abs(
                   isNaN(grossIncomePercent) ? 0 : grossIncomePercent
                 ).toFixed(2)}
                 %
-              </a>
+              </p>
             ) : (
-              <a className="text-number-persent-up">
+              <p className="text-number-persent-up">
                 <CaretUpOutlined style={{ marginRight: 5 }} />
                 {Number(
                   isNaN(grossIncomePercent) ? 0 : grossIncomePercent
                 ).toFixed(2)}
                 %
-              </a>
+              </p>
             )}
-            <a className="text-same">so với cùng kỳ</a>
+            <p className="text-same">so với cùng kỳ</p>
           </div>
           <ResponsiveContainer height={350} width="100%">
             <LineChart
@@ -386,11 +430,11 @@ const ReportOverview = () => {
                 // allowDataOverflow={true}
               />
               <Tooltip
-                content={
-                  dataChartGrossIncomeOrder.length > 0
-                    ? renderTooltipContent
-                    : ""
-                }
+              // content={
+              //   dataChartGrossIncomeOrder?.length > 0
+              //     ? renderTooltipContent
+              //     : ""
+              // }
               />
               <Legend />
               <Line
@@ -410,27 +454,27 @@ const ReportOverview = () => {
           </ResponsiveContainer>
         </div>
         <div className="div-chart-gross-income">
-          <a className="title-gross">Lượng đơn hàng</a>
+          <p className="title-gross">Lượng đơn hàng</p>
           <div className="div-total-gross">
-            <a className="text-total-gross">{!totalOrder ? 0 : totalOrder}</a>
+            <p className="text-total-gross">{!totalOrder ? 0 : totalOrder}</p>
             {totalOrderPercent < 0 ? (
-              <a className="text-number-persent-down">
+              <p className="text-number-persent-down">
                 <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
                 {Math.abs(
                   isNaN(totalOrderPercent) ? 0 : totalOrderPercent
                 ).toFixed(2)}
                 %
-              </a>
+              </p>
             ) : (
-              <a className="text-number-persent-up">
+              <p className="text-number-persent-up">
                 <CaretUpOutlined style={{ marginRight: 5 }} />
                 {Number(
                   isNaN(totalOrderPercent) ? 0 : totalOrderPercent
                 ).toFixed(2)}
                 %
-              </a>
+              </p>
             )}
-            <a className="text-same">so với cùng kỳ</a>
+            <p className="text-same">so với cùng kỳ</p>
           </div>
           <ResponsiveContainer height={350} width="100%">
             <LineChart
@@ -478,29 +522,29 @@ const ReportOverview = () => {
       </div>
       <div className="div-chart-firt-overview mt-3">
         <div className="div-chart-gross-income">
-          <a className="title-gross">Doanh thu thuần</a>
+          <p className="title-gross">Doanh thu thuần</p>
           <div className="div-total-gross">
-            <a className="text-total-gross">
+            <p className="text-total-gross">
               {formatMoney(!totalNetIncome ? 0 : totalNetIncome)}
-            </a>
+            </p>
             {netIncomePercent < 0 ? (
-              <a className="text-number-persent-down">
+              <p className="text-number-persent-down">
                 <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
                 {Math.abs(
                   isNaN(netIncomePercent) ? 0 : netIncomePercent
                 ).toFixed(2)}
                 %
-              </a>
+              </p>
             ) : (
-              <a className="text-number-persent-up">
+              <p className="text-number-persent-up">
                 <CaretUpOutlined style={{ marginRight: 5 }} />
                 {Number(isNaN(netIncomePercent) ? 0 : netIncomePercent).toFixed(
                   2
                 )}
                 %
-              </a>
+              </p>
             )}
-            <a className="text-same">so với cùng kỳ</a>
+            <p className="text-same">so với cùng kỳ</p>
           </div>
           <ResponsiveContainer height={350} width="100%">
             <LineChart
@@ -528,11 +572,11 @@ const ReportOverview = () => {
                 // allowDataOverflow={true}
               />
               <Tooltip
-                content={
-                  dataChartNetIncomeOrder.length > 0
-                    ? renderTooltipContentNetIncome
-                    : ""
-                }
+              // content={
+              //   dataChartNetIncomeOrder?.length > 0
+              //     ? renderTooltipContentNetIncome
+              //     : ""
+              // }
               />
               <Legend />
               <Line
@@ -553,14 +597,14 @@ const ReportOverview = () => {
         </div>
         <div className="div-chart-gross-income-area">
           <div className="div-head-chart">
-            <a className="title-gross">Doanh thu thuần - Theo khu vực</a>
+            <p className="title-gross">Doanh thu thuần - Theo khu vực</p>
             <div
               className="div-see-all"
               onClick={() =>
                 navigate("/report/manage-report/report-order-area")
               }
             >
-              <a className="text-all">Tất cả</a>
+              <p className="text-all">Tất cả</p>
               <i className="uil uil-create-dashboard ml-2"></i>
             </div>
           </div>
@@ -569,16 +613,16 @@ const ReportOverview = () => {
               return (
                 <div key={index} className="div-item-chart">
                   <div className="div-name-area">
-                    <a className="name-area">{item?.city}</a>
-                    <a>{item?.total_item} đơn</a>
+                    <p className="name-area">{item?.city}</p>
+                    <p className="m-0">{item?.total_item} đơn</p>
                   </div>
                   <div className="div-number-area">
-                    <a className="money-area">
+                    <p className="money-area">
                       {formatMoney(item?.gross_income)}
-                    </a>
+                    </p>
 
                     {item?.percent_gross_income < 0 ? (
-                      <a className="text-number-persent-down">
+                      <p className="text-number-persent-down">
                         <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
                         {Math.abs(
                           isNaN(item?.percent_gross_income)
@@ -586,9 +630,9 @@ const ReportOverview = () => {
                             : item?.percent_gross_income
                         ).toFixed(2)}
                         %
-                      </a>
+                      </p>
                     ) : (
-                      <a className="text-number-persent-up">
+                      <p className="text-number-persent-up">
                         <CaretUpOutlined style={{ marginRight: 5 }} />
                         {Number(
                           isNaN(item?.percent_gross_income)
@@ -596,7 +640,7 @@ const ReportOverview = () => {
                             : item?.percent_gross_income
                         ).toFixed(2)}
                         %
-                      </a>
+                      </p>
                     )}
                   </div>
                 </div>
@@ -605,10 +649,10 @@ const ReportOverview = () => {
           </div>
         </div>
       </div>
-      {/* <div className="div-chart-firt-overview mt-3">
+      <div className="div-chart-firt-overview mt-3">
         <div className="div-chart-gross-income-area">
           <div className="div-head-chart">
-            <a className="title-gross">Top dịch vụ</a>
+            <p className="title-gross">Top dịch vụ</p>
             <div>
               <Select
                 value={typePriceService}
@@ -632,18 +676,18 @@ const ReportOverview = () => {
                       className="image-service"
                       src={item?.thumbnail}
                     />
-                    <a className="name-service">{item?.name[lang]}</a>
+                    <p className="name-service">{item?.name[lang]}</p>
                   </div>
                   <div className="div-number-area">
-                    <a className="money-area">
+                    <p className="money-area">
                       {typePriceService === "income"
                         ? formatMoney(item?.income)
                         : formatMoney(item?.net_income)}
-                    </a>
+                    </p>
                     {typePriceService === "income" ? (
                       <>
                         {item?.percent_income < 0 ? (
-                          <a className="text-number-persent-down">
+                          <p className="text-number-persent-down">
                             <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
                             {Math.abs(
                               isNaN(item?.percent_income)
@@ -651,9 +695,9 @@ const ReportOverview = () => {
                                 : item?.percent_income
                             ).toFixed(2)}
                             %
-                          </a>
+                          </p>
                         ) : (
-                          <a className="text-number-persent-up">
+                          <p className="text-number-persent-up">
                             <CaretUpOutlined style={{ marginRight: 5 }} />
                             {Number(
                               isNaN(item?.percent_income)
@@ -661,13 +705,13 @@ const ReportOverview = () => {
                                 : item?.percent_income
                             ).toFixed(2)}
                             %
-                          </a>
+                          </p>
                         )}
                       </>
                     ) : (
                       <>
                         {item?.percent_net_income < 0 ? (
-                          <a className="text-number-persent-down">
+                          <p className="text-number-persent-down">
                             <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
                             {Math.abs(
                               isNaN(item?.percent_net_income)
@@ -675,9 +719,9 @@ const ReportOverview = () => {
                                 : item?.percent_net_income
                             ).toFixed(2)}
                             %
-                          </a>
+                          </p>
                         ) : (
-                          <a className="text-number-persent-up">
+                          <p className="text-number-persent-up">
                             <CaretUpOutlined style={{ marginRight: 5 }} />
                             {Number(
                               isNaN(item?.percent_net_income)
@@ -685,7 +729,7 @@ const ReportOverview = () => {
                                 : item?.percent_net_income
                             ).toFixed(2)}
                             %
-                          </a>
+                          </p>
                         )}
                       </>
                     )}
@@ -695,7 +739,7 @@ const ReportOverview = () => {
             })}
           </div>
         </div>
-      </div> */}
+      </div>
 
       {isLoading && <LoadingPagination />}
     </div>

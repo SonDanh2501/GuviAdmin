@@ -1,5 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
-import "./index.scss";
+import { Button, Image, List } from "antd";
+import _debounce from "lodash/debounce";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { fetchCollaborators } from "../../../../../../api/collaborator";
 import {
   blockCustomerApi,
   favouriteCustomerApi,
@@ -7,24 +10,17 @@ import {
   unblockCustomerApi,
   unfavouriteCustomerApi,
 } from "../../../../../../api/customer";
-import { Button, Image, List, Table } from "antd";
-import _debounce from "lodash/debounce";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../../redux/selectors/auth";
-import i18n from "../../../../../../i18n";
-import LoadingPagination from "../../../../../../components/paginationLoading";
-import { errorNotify } from "../../../../../../helper/toast";
 import ModalCustom from "../../../../../../components/modalCustom";
+import LoadingPagination from "../../../../../../components/paginationLoading";
 import InputCustom from "../../../../../../components/textInputCustom";
-import {
-  fetchCollaborators,
-  searchCollaborators,
-} from "../../../../../../api/collaborator";
+import { errorNotify } from "../../../../../../helper/toast";
+import i18n from "../../../../../../i18n";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import "./index.scss";
 
 const FavouriteBlock = ({ id }) => {
   const [tab, setTab] = useState("favourite");
   const [data, setData] = useState([]);
-  const [total, setTotal] = useState(0);
   const [dataCollaborator, setDataCollaborator] = useState([]);
   const [value, setValue] = useState("");
   const [modal, setModal] = useState(false);
@@ -36,7 +32,6 @@ const FavouriteBlock = ({ id }) => {
     getFavoriteAndBlockByCustomers(id, tab, 0, 20)
       .then((res) => {
         setData(res?.data);
-        setTotal(res?.totalItem);
       })
       .catch((err) => {});
   }, [tab, id]);
@@ -51,7 +46,6 @@ const FavouriteBlock = ({ id }) => {
           getFavoriteAndBlockByCustomers(id, tab, 0, 20)
             .then((res) => {
               setData(res?.data);
-              setTotal(res?.totalItem);
             })
             .catch((err) => {});
         })
@@ -69,7 +63,6 @@ const FavouriteBlock = ({ id }) => {
           getFavoriteAndBlockByCustomers(id, tab, 0, 20)
             .then((res) => {
               setData(res?.data);
-              setTotal(res?.totalItem);
             })
             .catch((err) => {});
         })
@@ -93,7 +86,6 @@ const FavouriteBlock = ({ id }) => {
           getFavoriteAndBlockByCustomers(id, tab, 0, 20)
             .then((res) => {
               setData(res?.data);
-              setTotal(res?.totalItem);
             })
             .catch((err) => {});
         })
@@ -112,7 +104,6 @@ const FavouriteBlock = ({ id }) => {
           getFavoriteAndBlockByCustomers(id, tab, 0, 20)
             .then((res) => {
               setData(res?.data);
-              setTotal(res?.totalItem);
             })
             .catch((err) => {});
         })
@@ -125,24 +116,21 @@ const FavouriteBlock = ({ id }) => {
     }
   };
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      fetchCollaborators(lang, 0, 10, "all", value, "")
-        .then((res) => {
-          if (value === "") {
-            setDataCollaborator([]);
-          } else {
-            setDataCollaborator(res?.data);
-          }
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
+  const handleSearch = _debounce((value) => {
+    fetchCollaborators(lang, 0, 10, "all", value, "")
+      .then((res) => {
+        if (value === "") {
+          setDataCollaborator([]);
+        } else {
+          setDataCollaborator(res?.data);
+        }
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err,
         });
-    }, 1000),
-    []
-  );
+      });
+  }, 1000);
 
   return (
     <>
@@ -160,9 +148,9 @@ const FavouriteBlock = ({ id }) => {
                 setDataCollaborator([]);
               }}
             >
-              <a className="text-tab">{`${i18n.t(item?.title, {
+              <p className="text-tab">{`${i18n.t(item?.title, {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
           );
         })}
@@ -187,14 +175,20 @@ const FavouriteBlock = ({ id }) => {
             {dataCollaborator?.map((item, index) => {
               return (
                 <div className="item_list" key={index} onClick={(e) => {}}>
-                  <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
                     <Image
                       src={item?.avatar}
                       style={{ width: 30, height: 30, borderRadius: 4 }}
                     />
-                    <a>
+                    <p className="text-item">
                       {item?.full_name} - {item?.phone} - {item?.id_view}
-                    </a>
+                    </p>
                   </div>
                   <Button
                     className="btn-add"
@@ -218,12 +212,12 @@ const FavouriteBlock = ({ id }) => {
                     <Image src={item?.avatar} className="image-ctv" />
 
                     <div className="div-name-item">
-                      <a className="text-name">{item?.full_name}</a>
-                      <a className="text-name">{item?.id_view}</a>
-                      <a className="text-name">
+                      <p className="text-name">{item?.full_name}</p>
+                      <p className="text-name">{item?.id_view}</p>
+                      <p className="text-name">
                         {item?.star}
                         <i class="uil uil-star icon-star"></i>
-                      </a>
+                      </p>
                     </div>
                   </div>
                   <div
@@ -233,16 +227,16 @@ const FavouriteBlock = ({ id }) => {
                       setModal(true);
                     }}
                   >
-                    <a className="text-cancel">{`${i18n.t("cancel_modal", {
+                    <p className="text-cancel">{`${i18n.t("cancel_modal", {
                       lng: lang,
-                    })}`}</a>
+                    })}`}</p>
                   </div>
                 </div>
               );
             })}
           </>
         ) : (
-          <a className="text-no-data">
+          <p className="text-no-data">
             {tab === "favourite"
               ? `${i18n.t("no_favorite", {
                   lng: lang,
@@ -250,7 +244,7 @@ const FavouriteBlock = ({ id }) => {
               : `${i18n.t("no_block", {
                   lng: lang,
                 })}`}
-          </a>
+          </p>
         )}
       </div>
 
@@ -268,14 +262,14 @@ const FavouriteBlock = ({ id }) => {
         handleCancel={() => setModal(false)}
         body={
           <>
-            <a>
+            <p>
               {tab === "favourite"
                 ? `${i18n.t("want_cancel_collaborator_favourite", {
                     lng: lang,
                   })}`
                 : `${i18n.t("want_cancel_collaborator_block", { lng: lang })}`}
-            </a>
-            <a> {item?.full_name}</a>
+            </p>
+            <p> {item?.full_name}</p>
           </>
         }
       />

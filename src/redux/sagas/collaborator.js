@@ -1,10 +1,9 @@
-import { takeLatest, call, put } from "redux-saga/effects";
-import * as actions from "../actions/collaborator";
+import { call, put, takeLatest } from "redux-saga/effects";
 import * as api from "../../api/collaborator.jsx";
-import { getType } from "../actions/collaborator";
-import { Alert } from "reactstrap";
-import { loadingAction } from "../actions/loading";
 import { errorNotify } from "../../helper/toast";
+import * as actions from "../actions/collaborator";
+import { getType } from "../actions/collaborator";
+import { loadingAction } from "../actions/loading";
 
 function* fetchCollaboratorsSaga(action) {
   try {

@@ -5,7 +5,7 @@
   font-size: 20px;
   color: #11263c !important;
   text-decoration: none;
-  margin-top: 20px;
+  margin: 20px 0 0 0;
 
   .icon-star {
     color: rgb(255, 235, 54);
@@ -23,6 +23,7 @@
     font-size: 12px;
     color: #000000 !important;
     text-decoration: none;
+    margin: 0;
   }
 }
 
@@ -37,6 +38,7 @@
   font-size: 12px;
   color: #000000;
   text-decoration: none;
+  margin: 0;
 }
 
 .text-quick_review {
@@ -48,6 +50,7 @@
   color: #000000;
   text-decoration: none;
   width: 200px;
+  margin: 0;
 }
 
 @media (max-width: 1200px) {
@@ -60,5 +63,6 @@
     color: #000000;
     text-decoration: none;
     width: 120px;
+    margin: 0;
   }
 }

@@ -1,13 +1,13 @@
-import { List, Pagination } from "antd";
+import { Pagination } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { getHistoryTransitionByCustomers } from "../../../../../../api/customer";
 import LoadingPagination from "../../../../../../components/paginationLoading";
 import { formatMoney } from "../../../../../../helper/formatMoney";
-import "./index.scss";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../i18n";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import "./index.scss";
 
 const HistoryTransition = ({ id }) => {
   const [data, setData] = useState([]);
@@ -54,8 +54,8 @@ const HistoryTransition = ({ id }) => {
           return (
             <div className="div-item-list" key={index}>
               <div className="div-column-1">
-                <a className="text-title">{item?.title?.[lang]}</a>
-                <a
+                <p className="text-title">{item?.title?.[lang]}</p>
+                <p
                   className={
                     money.slice(0, 1) === "-"
                       ? "text-money-deduction"
@@ -65,21 +65,27 @@ const HistoryTransition = ({ id }) => {
                   {money.slice(0, 1) === "-"
                     ? formatMoney(item?.value)
                     : "+" + formatMoney(item?.value)}
-                </a>
+                </p>
               </div>
-              <a className="text-date-t">
+              <p className="text-date-t">
                 {moment(new Date(item?.date_create)).format(
                   "DD/MM/yyy - HH:mm"
                 )}
-              </a>
-              <div>
-                <a className="text-title-surplus">
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <p className="text-title-surplus">
                   {`${i18n.t("surplus", { lng: lang })}`}:{" "}
                   {item?.current_pay_point
                     ? formatMoney(item?.current_pay_point)
                     : formatMoney(0)}
-                </a>
-                <a className="text-surplus"></a>
+                </p>
+                <p className="text-surplus"></p>
                 {item?.status_current_pay_point === "down" ? (
                   <i class="uil uil-arrow-down icon-deduction"></i>
                 ) : item?.status_current_pay_point === "up" ? (
@@ -95,9 +101,9 @@ const HistoryTransition = ({ id }) => {
 
       {data.length > 0 && (
         <div className="div-pagination-customer-history p-2">
-          <a>
+          <p>
             {`${i18n.t("total", { lng: lang })}`}: {total}
-          </a>
+          </p>
           <div>
             <Pagination
               current={currentPage}

@@ -4,18 +4,16 @@ import {
   Image,
   Input,
   Pagination,
-  Popover,
   Progress,
   Select,
-  Switch,
   Table,
-  Tabs,
 } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getGroupPromotion } from "../../../api/configuration.jsx";
 import {
   activePromotion,
   deletePromotion,
@@ -26,6 +24,8 @@ import ModalCustom from "../../../components/modalCustom/index.jsx";
 import LoadingPagination from "../../../components/paginationLoading/index.jsx";
 import { formatMoney } from "../../../helper/formatMoney.js";
 import { errorNotify } from "../../../helper/toast.js";
+import { useCookies } from "../../../helper/useCookies.js";
+import { useHorizontalScroll } from "../../../helper/useSideScroll.js";
 import useWindowDimensions from "../../../helper/useWindowDimensions.js";
 import i18n from "../../../i18n/index.js";
 import {
@@ -34,9 +34,6 @@ import {
 } from "../../../redux/selectors/auth.js";
 import { getProvince, getService } from "../../../redux/selectors/service.js";
 import "./styles.scss";
-import { useCookies } from "../../../helper/useCookies.js";
-import { useHorizontalScroll } from "../../../helper/useSideScroll.js";
-import { getGroupPromotion } from "../../../api/configuration.jsx";
 
 const ManagePromotions = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -85,7 +82,7 @@ const ManagePromotions = () => {
   ];
 
   service.map((item) => {
-    optionService.push({
+    return optionService.push({
       value: item?._id,
       label: item?.title?.[lang],
     });
@@ -153,7 +150,7 @@ const ManagePromotions = () => {
   }, []);
 
   groupPromotion?.map((item) => {
-    groupPromotionOption.push({
+    return groupPromotionOption.push({
       value: item?._id,
       label: item.name[lang],
     });
@@ -197,65 +194,34 @@ const ManagePromotions = () => {
   const onActive = useCallback(
     (id, is_active) => {
       setIsLoading(true);
-      if (is_active) {
-        activePromotion(id, { is_active: false })
-          .then((res) => {
-            fetchPromotion(
-              valueSearch,
-              state?.status,
-              state?.startPage,
-              20,
-              state?.type,
-              state?.brand,
-              state?.idService,
-              "",
-              typeSort,
-              state.group
-            )
-              .then((res) => {
-                setData(res?.data);
-                setTotal(res?.totalItem);
-              })
-              .catch((err) => {});
-            setModalActive(false);
-            setIsLoading(false);
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err,
-            });
-            setIsLoading(false);
+      activePromotion(id, { is_active: is_active ? false : true })
+        .then((res) => {
+          fetchPromotion(
+            valueSearch,
+            state?.status,
+            state?.startPage,
+            20,
+            state?.type,
+            state?.brand,
+            state?.idService,
+            "",
+            typeSort,
+            state.group
+          )
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+            })
+            .catch((err) => {});
+          setModalActive(false);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
           });
-      } else {
-        activePromotion(id, { is_active: true })
-          .then((res) => {
-            fetchPromotion(
-              valueSearch,
-              state?.status,
-              state?.startPage,
-              20,
-              state?.type,
-              state?.brand,
-              state?.idService,
-              "",
-              typeSort,
-              state.group
-            )
-              .then((res) => {
-                setData(res?.data);
-                setTotal(res?.totalItem);
-              })
-              .catch((err) => {});
-            setModalActive(false);
-            setIsLoading(false);
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err,
-            });
-            setIsLoading(false);
-          });
-      }
+          setIsLoading(false);
+        });
     },
     [valueSearch, typeSort, state]
   );
@@ -284,31 +250,28 @@ const ManagePromotions = () => {
       .catch((err) => {});
   };
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      setValueSearch(value);
-      setIsLoading(true);
-      fetchPromotion(
-        value,
-        state?.status,
-        state?.startPage,
-        20,
-        state?.type,
-        state?.brand,
-        state?.idService,
-        "",
-        typeSort,
-        state.group
-      )
-        .then((res) => {
-          setIsLoading(false);
-          setData(res?.data);
-          setTotal(res?.totalItem);
-        })
-        .catch((err) => {});
-    }, 1000),
-    [state, typeSort]
-  );
+  const handleSearch = _debounce((value) => {
+    setValueSearch(value);
+    setIsLoading(true);
+    fetchPromotion(
+      value,
+      state?.status,
+      state?.startPage,
+      20,
+      state?.type,
+      state?.brand,
+      state?.idService,
+      "",
+      typeSort,
+      state.group
+    )
+      .then((res) => {
+        setIsLoading(false);
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  }, 1000);
 
   const onChangeTab = (item) => {
     setIsLoading(true);
@@ -580,36 +543,36 @@ const ManagePromotions = () => {
       .catch((err) => {});
   };
 
-  const handleSortPosition = (value) => {
-    setTypeSort(value);
-    setIsLoading(true);
-    fetchPromotion(
-      valueSearch,
-      state?.status,
-      0,
-      20,
-      state?.type,
-      state?.brand,
-      state?.idService,
-      "",
-      value,
-      state.group
-    )
-      .then((res) => {
-        setIsLoading(false);
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  };
+  // const handleSortPosition = (value) => {
+  //   setTypeSort(value);
+  //   setIsLoading(true);
+  //   fetchPromotion(
+  //     valueSearch,
+  //     state?.status,
+  //     0,
+  //     20,
+  //     state?.type,
+  //     state?.brand,
+  //     state?.idService,
+  //     "",
+  //     value,
+  //     state.group
+  //   )
+  //     .then((res) => {
+  //       setIsLoading(false);
+  //       setData(res?.data);
+  //       setTotal(res?.totalItem);
+  //     })
+  //     .catch((err) => {});
+  // };
 
   const columns = [
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("Khuyến mãi", {
+          <p className="title-column">{`${i18n.t("Khuyến mãi", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
@@ -626,11 +589,11 @@ const ManagePromotions = () => {
             <div className="div-name-promotion">
               {data?.type_promotion === "code" &&
               data?.type_discount === "partner_promotion" ? (
-                <a className="text-name-brand">
-                  Ưu đãi từ "<a className="text-brand">{data?.brand}</a>"
-                </a>
+                <p className="text-name-brand">
+                  Ưu đãi từ "<p className="text-brand">{data?.brand}</p>"
+                </p>
               ) : (
-                <a className="text-title-code">{data?.code}</a>
+                <p className="text-title-code">{data?.code}</p>
               )}
 
               {data?.type_promotion === "code" &&
@@ -670,14 +633,14 @@ const ManagePromotions = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("Hình thức", {
+          <p className="title-column">{`${i18n.t("Hình thức", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
-          <a
+          <p
             className="text-promotion"
             onClick={() =>
               navigate("/promotion/manage-setting/edit-promotion", {
@@ -691,7 +654,7 @@ const ManagePromotions = () => {
                 data?.type_discount === "partner_promotion"
               ? "Mã KM"
               : "CTKM"}
-          </a>
+          </p>
         );
       },
       align: "left",
