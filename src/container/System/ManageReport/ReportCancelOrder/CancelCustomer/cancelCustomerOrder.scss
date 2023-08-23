@@ -16,6 +16,7 @@
     font-family: "Roboto";
     font-style: normal;
     font-size: 12px;
+    margin: 0;
   }
 }
 
@@ -25,6 +26,7 @@
   font-family: "Roboto";
   font-style: normal;
   font-size: 12px;
+  margin: 0;
 }
 
 .text-address-cancel {
@@ -35,6 +37,7 @@
   font-size: 12px;
   display: block;
   width: 200px;
+  margin: 0;
 }
 .div-select-city {
   display: flex;
@@ -112,6 +115,7 @@
         font-style: normal;
         font-size: 12px;
         width: 100px;
+        margin: 0;
       }
 
       .text-colon {
@@ -120,6 +124,7 @@
         font-family: "Roboto";
         font-style: normal;
         font-size: 12px;
+        margin: 0;
       }
 
       .text-number {
@@ -129,6 +134,7 @@
         font-style: normal;
         font-size: 12px;
         margin-left: 5px;
+        margin: 0;
       }
     }
   }

@@ -7,10 +7,20 @@
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
-    line-height: 16px;
-    color: #6e6893;
+    margin: 0;
+    color: #202223;
     text-decoration: none;
   }
+}
+
+.text-title-table {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  margin: 0;
+  color: #202223;
+  text-decoration: none;
 }
 
 .div-tab {
@@ -25,9 +35,9 @@
       font-style: normal;
       font-weight: 500;
       font-size: 16px;
-      line-height: 16px;
       color: #979797;
       text-decoration: none;
+      margin: 0;
     }
   }
 
@@ -40,9 +50,9 @@
       font-style: normal;
       font-weight: 500;
       font-size: 16px;
-      line-height: 16px;
       color: #000000;
       text-decoration: none;
+      margin: 0;
     }
   }
 }

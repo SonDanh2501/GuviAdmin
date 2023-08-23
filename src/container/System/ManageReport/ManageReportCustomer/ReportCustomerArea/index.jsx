@@ -26,7 +26,10 @@ const ReportCustomerArea = () => {
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const lang = useSelector(getLanguageState);
   useEffect(() => {
-    getReportCustomerByCity(startDate, endDate)
+    getReportCustomerByCity(
+      moment().subtract(30, "d").startOf("date").toISOString(),
+      moment().endOf("date").toISOString()
+    )
       .then((res) => {
         setData(res?.data);
       })
@@ -44,15 +47,15 @@ const ReportCustomerArea = () => {
   const columns = [
     {
       title: `${i18n.t("area", { lng: lang })}`,
-      render: (data) => <a>{data?.city}</a>,
+      render: (data) => <p className="text-table">{data?.city}</p>,
     },
     {
       title: `${i18n.t("customer", { lng: lang })}`,
-      render: (data) => <a>{data?.total}</a>,
+      render: (data) => <p className="text-table">{data?.total}</p>,
     },
     {
       title: `${i18n.t("Ratio", { lng: lang })}`,
-      render: (data) => <a>{data?.percent}%</a>,
+      render: (data) => <p className="text-table">{data?.percent}%</p>,
     },
   ];
 
@@ -69,10 +72,10 @@ const ReportCustomerArea = () => {
           setSameEnd={() => {}}
         />
         {startDate && (
-          <a className="text-date">
+          <p className="text-date m-0 ml-2">
             {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
             {moment(endDate).utc().format("DD/MM/YYYY")}
-          </a>
+          </p>
         )}
       </div>
       <div className="div-chart-customer-area">

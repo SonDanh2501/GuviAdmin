@@ -13,15 +13,11 @@ const ManageCollaborator = () => {
   const [saveToCookie, readCookie] = useCookies();
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
+  const tab = readCookie("tab_collaborator");
 
   useEffect(() => {
-    setStatus(
-      readCookie("tab_collaborator") === "online" ||
-        readCookie("tab_collaborator") === ""
-        ? "online"
-        : readCookie("tab_collaborator")
-    );
-  }, []);
+    setStatus(tab === "online" || tab === "" ? "online" : tab);
+  }, [tab]);
 
   const DATA = [
     {

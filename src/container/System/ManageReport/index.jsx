@@ -1,22 +1,22 @@
-import { Select, Tabs } from "antd";
+import { Select } from "antd";
 
 import { useEffect, useState } from "react";
-import ManageReportCustomer from "./ManageReportCustomer";
-import ManageReportOrder from "./MangeReportOrder";
-import ReportCancelOrder from "./ReportCancelOrder";
-import "./index.scss";
-import ReportService from "./ReportService";
 import { useSelector } from "react-redux";
+import { useCookies } from "../../../helper/useCookies";
+import { useHorizontalScroll } from "../../../helper/useSideScroll";
+import useWindowDimensions from "../../../helper/useWindowDimensions";
+import i18n from "../../../i18n";
 import {
   getElementState,
   getLanguageState,
 } from "../../../redux/selectors/auth";
+import ManageReportCustomer from "./ManageReportCustomer";
 import ManageReportCollaborator from "./ManagerReportCollaborator";
-import i18n from "../../../i18n";
-import { useCookies } from "../../../helper/useCookies";
-import useWindowDimensions from "../../../helper/useWindowDimensions";
-import { useHorizontalScroll } from "../../../helper/useSideScroll";
+import ManageReportOrder from "./MangeReportOrder";
+import ReportCancelOrder from "./ReportCancelOrder";
 import ReportOverview from "./ReportOverview";
+import ReportService from "./ReportService";
+import "./index.scss";
 
 const ManageReport = () => {
   const checkElement = useSelector(getElementState);
@@ -25,12 +25,11 @@ const ManageReport = () => {
   const [saveToCookie, readCookie] = useCookies();
   const scrollRef = useHorizontalScroll();
   const lang = useSelector(getLanguageState);
+  const tabCookie = readCookie("tab_report");
   useEffect(() => {
     window.scrollTo(0, 0);
-    setTab(
-      readCookie("tab_report") === "" ? 1 : Number(readCookie("tab_report"))
-    );
-  }, []);
+    setTab(tabCookie === "" ? 1 : Number(tabCookie));
+  }, [tabCookie]);
 
   const DATA = [
     {
@@ -80,7 +79,7 @@ const ManageReport = () => {
   return (
     <>
       <div className="div-header-report">
-        <a className="title-header">{`${i18n.t("report", { lng: lang })}`}</a>
+        <p className="title-header">{`${i18n.t("report", { lng: lang })}`}</p>
       </div>
       <div className="div-container-report">
         {width > 490 ? (
@@ -94,7 +93,7 @@ const ManageReport = () => {
                     saveToCookie("tab_report", item?.value);
                   }}
                   className={
-                    item?.value == tab ? "div-item-tab-select" : "div-item-tab"
+                    item?.value === tab ? "div-item-tab-select" : "div-item-tab"
                   }
                   style={
                     checkElement?.includes(item?.role)
@@ -102,7 +101,7 @@ const ManageReport = () => {
                       : { display: "none" }
                   }
                 >
-                  <a className="text-tab">{item?.label}</a>
+                  <p className="text-tab">{item?.label}</p>
                 </div>
               );
             })}

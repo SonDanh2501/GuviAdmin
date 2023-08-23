@@ -82,44 +82,40 @@ const CollaboratorManage = (props) => {
   const [saveToCookie, readCookie] = useCookies();
   const { width } = useWindowDimensions();
   const { scrollX, scrollY } = useWindowScrollPositions();
+  const pageStartCookie = readCookie("start_page_ctv");
+  const pageCookie = readCookie("page_ctv");
+  const cityCookie = readCookie("ctv-city");
+  const tabCookie = readCookie("tab_collaborator");
+  const yCookie = readCookie("table_y_ctv");
 
   useEffect(() => {
-    window.scroll(0, Number(readCookie("table_y_ctv")));
-    setCurrentPage(
-      readCookie("page_ctv") === "" ? 1 : Number(readCookie("page_ctv"))
-    );
-    setStartPage(
-      readCookie("start_page_ctv") === ""
-        ? 0
-        : Number(readCookie("start_page_ctv"))
-    );
+    window.scroll(0, Number(yCookie));
+    setCurrentPage(pageCookie === "" ? 1 : Number(pageCookie));
+    setStartPage(pageStartCookie === "" ? 0 : Number(pageStartCookie));
     setCity(
       user?.area_manager_lv_1?.length === 0
-        ? readCookie("ctv-city") === ""
+        ? cityCookie === ""
           ? ""
-          : Number(readCookie("ctv-city"))
+          : Number(cityCookie)
         : user?.area_manager_lv_1[0]
     );
-  }, []);
+  }, [pageStartCookie, pageCookie, cityCookie, yCookie, user]);
 
   useEffect(() => {
     fetchCollaborators(
       lang,
-      Number(readCookie("start_page_ctv")),
+      Number(pageStartCookie),
       20,
-      readCookie("tab_collaborator") === "online" ||
-        readCookie("tab_collaborator") === ""
-        ? "online"
-        : readCookie("tab_collaborator"),
-      valueSearch,
-      readCookie("ctv-city") === "" ? "" : Number(readCookie("ctv-city"))
+      tabCookie === "online" || tabCookie === "" ? "online" : tabCookie,
+      "",
+      cityCookie === "" ? "" : Number(cityCookie)
     )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItems);
       })
       .catch((err) => {});
-  }, [status, lang]);
+  }, [status, lang, tabCookie, cityCookie, pageStartCookie]);
 
   province?.forEach((item) => {
     if (user?.area_manager_lv_1?.length === 0) {

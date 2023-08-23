@@ -6,6 +6,7 @@
     font-size: 22px;
     color: #000000;
     text-decoration: none;
+    margin: 0;
   }
 
   .header-report-customer {
@@ -45,6 +46,7 @@
           color: #000000;
           left: 40px;
           top: 30px;
+          margin: 0;
         }
 
         .text-day {
@@ -70,6 +72,7 @@
           font-size: 16px;
           text-align: center;
           color: #11263c;
+          margin: 0;
         }
       }
     }
@@ -96,7 +99,7 @@
         font-size: 16px;
         line-height: 28px;
         color: #11263c;
-        margin-right: 10px;
+        margin: 0 10px 0 0;
       }
 
       .text-area {
@@ -118,9 +121,8 @@
         font-style: normal;
         font-weight: 700;
         font-size: 16px;
-        line-height: 28px;
         color: #11263c;
-        margin-right: 10px;
+        margin: 0 10px 0 0;
       }
 
       .div-total {
@@ -138,9 +140,8 @@
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
-        line-height: 28px;
         color: #11263c;
-        margin-right: 10px;
+        margin: 0 10px 0 0;
         text-decoration: none;
       }
     }
@@ -178,7 +179,7 @@
         font-size: 16px;
         line-height: 28px;
         color: #11263c;
-        margin-right: 10px;
+        margin: 0 10px 0 0;
       }
     }
   }
@@ -215,6 +216,7 @@
     font-weight: 400;
     font-size: 14px;
     color: black;
+    margin: 0;
   }
   .money-text {
     font-family: "Roboto";
@@ -222,6 +224,7 @@
     font-weight: 400;
     font-size: 14px;
     color: black !important;
+    margin: 0;
   }
 
   .money-text-new {
@@ -230,6 +233,7 @@
     font-weight: 400;
     font-size: 14px;
     color: #4376cc;
+    margin: 0;
   }
 
   .money-text-old {
@@ -238,6 +242,7 @@
     font-weight: 400;
     font-size: 14px;
     color: #82ca9d;
+    margin: 0;
   }
 }
 
@@ -280,6 +285,7 @@
           color: #000000;
           left: 40px;
           top: 30px;
+          margin: 0;
         }
 
         .text-day {
@@ -305,6 +311,7 @@
           font-size: 16px;
           text-align: center;
           color: #11263c;
+          margin: 0;
         }
       }
     }

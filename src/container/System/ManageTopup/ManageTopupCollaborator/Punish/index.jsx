@@ -49,20 +49,19 @@ const Punish = () => {
   const toggleRefund = () => setModalRefund(!modalRefund);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
+  const punishCurrentCookie = readCookie("punish_current_page_ctv");
 
   useEffect(() => {
-    getListPunishApi(startPage, 20)
+    getListPunishApi(0, 20)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
     setCurrentPage(
-      readCookie("punish_current_page_ctv") === ""
-        ? 1
-        : Number(readCookie("punish_current_page_ctv"))
+      punishCurrentCookie === "" ? 1 : Number(punishCurrentCookie)
     );
-  }, []);
+  }, [punishCurrentCookie]);
 
   const onConfirm = useCallback(
     (id) => {

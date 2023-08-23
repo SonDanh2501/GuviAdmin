@@ -52,6 +52,8 @@ const TopupCollaborator = ({ type }) => {
   const [saveToCookie, readCookie] = useCookies();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const currentPageCookie = readCookie("current_page_topup_ctv");
+  const startPageCookie = "start_page_topup_ctv";
 
   useEffect(() => {
     getTopupCollaboratorApi(0, 20, type)
@@ -60,17 +62,9 @@ const TopupCollaborator = ({ type }) => {
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-    setCurrentPage(
-      readCookie("current_page_topup_ctv") === ""
-        ? 1
-        : Number(readCookie("current_page_topup_ctv"))
-    );
-    setStartPage(
-      readCookie("start_page_topup_ctv") === ""
-        ? 0
-        : Number(readCookie("start_page_topup_ctv"))
-    );
-  }, [type]);
+    setCurrentPage(currentPageCookie === "" ? 1 : Number(currentPageCookie));
+    setStartPage(startPageCookie === "" ? 0 : Number(startPageCookie));
+  }, [type, startPageCookie, currentPageCookie]);
 
   const onDelete = useCallback(
     (id) => {

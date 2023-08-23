@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react";
-import "./index.scss";
 import { Tabs } from "antd";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import i18n from "../../../../i18n";
+import { getLanguageState } from "../../../../redux/selectors/auth";
 import CancelOrderCustomer from "./CancelCustomer";
 import TotalCancel from "./CancelTotal";
 import TotalCancelSystem from "./CancelTotalSystem";
 import TotalCancelUserSystem from "./CancelTotalUserSystem";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../redux/selectors/auth";
-import i18n from "../../../../i18n";
+import "./index.scss";
 
 const ReportCancelOrder = () => {
   const [tab, setTab] = useState("");

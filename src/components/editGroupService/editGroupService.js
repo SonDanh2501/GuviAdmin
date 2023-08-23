@@ -10,7 +10,7 @@ import CustomButton from "../customButton/customButton";
 import "./editGroupService.scss";
 
 const EditGroupService = (props) => {
-  const { data, setData, setTotal, setIsLoading } = props;
+  const { data, setData, setIsLoading } = props;
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
   const [imgThumbnail, setImgThumbnail] = useState("");
@@ -89,7 +89,6 @@ const EditGroupService = (props) => {
         getGroupServiceApi(0, 20)
           .then((res) => {
             setData(res?.data);
-            setTotal(res?.totalItem);
           })
           .catch((err) => {});
       })

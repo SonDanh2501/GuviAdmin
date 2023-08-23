@@ -1,30 +1,31 @@
 import {
   Button,
-  Drawer,
-  Col,
-  Row,
-  Input,
-  Image,
   Checkbox,
-  Select,
+  Col,
   DatePicker,
+  Drawer,
+  Image,
+  Input,
+  Row,
+  Select,
   TimePicker,
 } from "antd";
-import { useCallback, useEffect, useState } from "react";
-import "./styles.scss";
-import resizeFile from "../../../../../../helper/resizer";
-import { getDistrictApi, postFile } from "../../../../../../api/file";
-import { errorNotify } from "../../../../../../helper/toast";
-import LoadingPagination from "../../../../../../components/paginationLoading";
-import moment from "moment";
 import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
+import moment from "moment";
+import { useCallback, useState } from "react";
+import { useSelector } from "react-redux";
+import { postFile } from "../../../../../../api/file";
 import {
   createExtendOptionApi,
   getExtendByOptionalApi,
 } from "../../../../../../api/service";
+import LoadingPagination from "../../../../../../components/paginationLoading";
+import resizeFile from "../../../../../../helper/resizer";
+import { errorNotify } from "../../../../../../helper/toast";
+import { getProvince } from "../../../../../../redux/selectors/service";
+import "./styles.scss";
 
-const CreateExtend = ({ idOption, setData, setTotal }) => {
+const CreateExtend = ({ idOption, setData }) => {
   const [open, setOpen] = useState(false);
   const [titleVN, setTitleVN] = useState("");
   const [titleEN, setTitleEN] = useState("");
@@ -40,13 +41,10 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showInApp, setShowInApp] = useState(false);
   const [isPriceArea, setIsPriceArea] = useState(false);
-  const [codeCity, setCodeCity] = useState();
-  const [nameCity, setNameCity] = useState("");
-  const [dataCity, setDataCity] = useState([]);
   const [dataDistrict, setDataDistrict] = useState([]);
-  const [codeDistrict, setCodeDistrict] = useState();
   const districtData = [];
   const cityData = [];
+  const province = useSelector(getProvince);
   const [priceArea, setPriceArea] = useState([
     {
       district: [],
@@ -92,16 +90,8 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
     setOpen(false);
   };
 
-  useEffect(() => {
-    getDistrictApi()
-      .then((res) => {
-        setDataCity(res?.aministrative_division);
-      })
-      .catch((err) => {});
-  }, []);
-
-  dataCity?.map((item) => {
-    cityData?.push({
+  province?.map((item) => {
+    return cityData?.push({
       value: item?.code,
       label: item?.name,
       district: item?.districts,
@@ -109,7 +99,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
   });
 
   dataDistrict?.map((item) => {
-    districtData?.push({
+    return districtData?.push({
       value: item?.code,
       label: item?.name,
     });
@@ -332,8 +322,8 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
     setPriceRushHour([
       ...priceRushHour,
       {
-        time_end: "",
-        time_start: "",
+        time_end: "00:00",
+        time_start: "00:00",
         type_increase: "",
         value: "",
       },
@@ -407,7 +397,6 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
         getExtendByOptionalApi(idOption)
           .then((res) => {
             setData(res?.data);
-            setTotal(res?.totalItem);
           })
           .catch((err) => {});
       })
@@ -433,7 +422,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
         <Row>
           <Col span={7}>
             <div>
-              <a className="title-input-extend">Tiêu đề</a>
+              <p className="title-input-extend">Tiêu đề</p>
               <Input
                 placeholder="Nhập tiêu đề Tiếng Việt"
                 value={titleVN}
@@ -447,7 +436,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
               />
             </div>
             <div className="mt-2">
-              <a className="title-input-extend">Mô tả</a>
+              <p className="title-input-extend">Mô tả</p>
               <Input
                 placeholder="Nhập mô tả Tiếng Việt"
                 value={descriptionVN}
@@ -461,14 +450,14 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
               />
             </div>
             <div>
-              <a className="title-input-extend">Vị trí</a>
+              <p className="title-input-extend">Vị trí</p>
               <Input
                 placeholder="Nhập vị trí"
                 onChange={(e) => setPosition(e.target.value)}
               />
             </div>
             <div>
-              <a className="title-input-extend">Giá</a>
+              <p className="title-input-extend">Giá</p>
               <Input
                 placeholder="Nhập giá"
                 type="number"
@@ -476,7 +465,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
               />
             </div>
             <div className="mt-2">
-              <a className="title-input-extend">Ước lượng thời gian</a>
+              <p className="title-input-extend">Ước lượng thời gian</p>
               <Input
                 placeholder="Nhập giá"
                 type="number"
@@ -484,7 +473,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
               />
             </div>
             <div className="mt-2">
-              <a className="title-input-extend">Thumnail</a>
+              <p className="title-input-extend">Thumnail</p>
               <Input
                 id="exampleImage"
                 name="image"
@@ -496,7 +485,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
               {thumbnail && <Image src={thumbnail} className="img-thumbnail" />}
             </div>
             <div className="mt-2">
-              <a className="title-input-extend">Thumnail Active</a>
+              <p className="title-input-extend">Thumnail Active</p>
               <Input
                 id="exampleImage"
                 name="image"
@@ -521,7 +510,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                   {priceArea?.map((item, index) => {
                     return (
                       <div className="div-item-price-area" key={index}>
-                        <a>Tỉnh/thành:</a>
+                        <p className="m-0">Tỉnh/thành:</p>
                         <Select
                           style={{ width: "100%", marginTop: 2 }}
                           value={item?.city}
@@ -530,7 +519,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                             onChangeCity(value, label, index)
                           }
                         />
-                        <a>Huyện/quận:</a>
+                        <p className="m-0">Huyện/quận:</p>
                         <Select
                           mode="multiple"
                           style={{ width: "100%", marginTop: 2 }}
@@ -539,7 +528,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                             onChangeDistrict(value, label, index)
                           }
                         />
-                        <a>Giá trị</a>
+                        <p className="m-0">Giá trị</p>
                         <Input
                           placeholder="Nhập giá trị"
                           type="number"
@@ -547,7 +536,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                             onChangeValueArea(e.target.value, index)
                           }
                         />
-                        <a>Loại</a>
+                        <p className="m-0">Loại</p>
                         <Select
                           style={{ width: "100%", marginTop: 2 }}
                           onChange={(e) => onChangeTypeIncreaseArea(e, index)}
@@ -619,7 +608,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                   {priceHoliday?.map((item, index) => {
                     return (
                       <div key={index} className="mt-2 div-item-holiday">
-                        <a>Thời gian bắt đầu</a>
+                        <p className="m-0">Thời gian bắt đầu</p>
                         <DatePicker
                           style={{ width: "100%" }}
                           format={dateFormat}
@@ -636,7 +625,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                             )
                           }
                         />
-                        <a>Thời gian kết đầu</a>
+                        <p className="m-0">Thời gian kết đầu</p>
                         <DatePicker
                           style={{ width: "100%", marginTop: 5 }}
                           value={dayjs(
@@ -652,7 +641,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                             )
                           }
                         />
-                        <a>Hình thức tăng giá</a>
+                        <p className="m-0">Hình thức tăng giá</p>
                         <Select
                           style={{ width: "100%", marginTop: 5 }}
                           value={item?.type_increase}
@@ -668,7 +657,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                             },
                           ]}
                         />
-                        <a>Giá trị</a>
+                        <p className="m-0">Giá trị</p>
                         <Input
                           style={{ marginTop: 5 }}
                           value={item?.value}
@@ -711,7 +700,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                   {priceRushDay?.map((item, index) => {
                     return (
                       <div key={index} className="mt-2 div-item-holiday">
-                        <a>Thứ trong tuần</a>
+                        <p className="m-0">Thứ trong tuần</p>
                         <Select
                           mode="multiple"
                           style={{ width: "100%", marginTop: 5 }}
@@ -748,7 +737,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                             },
                           ]}
                         />
-                        <a>Hình thức tăng giá</a>
+                        <p className="m-0">Hình thức tăng giá</p>
                         <Select
                           style={{ width: "100%", marginTop: 5 }}
                           value={item?.type_increase}
@@ -764,7 +753,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                             },
                           ]}
                         />
-                        <a>Giá trị</a>
+                        <p className="m-0">Giá trị</p>
                         <Input
                           style={{ marginTop: 5 }}
                           value={item?.value}
@@ -805,7 +794,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                   {priceRushHour?.map((item, index) => {
                     return (
                       <div key={index} className="mt-2 div-item-holiday">
-                        <a>Giờ bắt đầu</a>
+                        <p className="m-0">Giờ bắt đầu</p>
                         <TimePicker
                           style={{ width: "100%", marginTop: 5 }}
                           defaultOpenValue={dayjs("00:00", hourFormat)}
@@ -814,7 +803,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                             onChangeRushHourTimeStart(timeString, index)
                           }
                         />
-                        <a>Giờ kết thúc</a>
+                        <p className="m-0">Giờ kết thúc</p>
                         <TimePicker
                           style={{ width: "100%", marginTop: 5 }}
                           defaultOpenValue={dayjs("00:00", hourFormat)}
@@ -823,7 +812,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                             onChangeRushHourTimeEnd(timeString, index)
                           }
                         />
-                        <a>Hình thức tăng giá</a>
+                        <p className="m-0">Hình thức tăng giá</p>
                         <Select
                           style={{ width: "100%", marginTop: 5 }}
                           value={item?.type_increase}
@@ -839,7 +828,7 @@ const CreateExtend = ({ idOption, setData, setTotal }) => {
                             },
                           ]}
                         />
-                        <a>Giá trị</a>
+                        <p className="m-0">Giá trị</p>
                         <Input
                           style={{ marginTop: 5 }}
                           value={item?.value}

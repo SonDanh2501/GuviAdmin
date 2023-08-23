@@ -1,5 +1,7 @@
+import { Select } from "antd";
+import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
-import "./styles.scss";
+import { useSelector } from "react-redux";
 import {
   Bar,
   BarChart,
@@ -13,78 +15,67 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { getDistrictApi } from "../../../../api/file";
-import moment from "moment";
 import {
   getReportServiceByArea,
   getReportServiceDetails,
-  getReportTypeService,
 } from "../../../../api/report";
-import { List, Select } from "antd";
 import CustomDatePicker from "../../../../components/customDatePicker";
-import LoadingPagination from "../../../../components/paginationLoading";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../redux/selectors/auth";
 import i18n from "../../../../i18n";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import { getProvince } from "../../../../redux/selectors/service";
+import "./styles.scss";
 
 const ReportService = () => {
   const [startDate, setStartDate] = useState(
     moment().subtract(30, "d").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
-  const [isLoading, setIsLoading] = useState(false);
-  const [city, setCity] = useState(false);
-  const [codeCity, setCodeCity] = useState();
-  const [nameCity, setNameCity] = useState("");
-  const [dataCity, setDataCity] = useState([]);
-  const [codeDistrict, setCodeDistrict] = useState(-1);
-  const [dataChartPie, setDataChartPie] = useState([]);
+  const [codeCity, setCodeCity] = useState("");
   const [dataChartService, setDataChartService] = useState([]);
   const [totalService, setTotalService] = useState(0);
   const [dataChartServiceDetails, setDataChartServiceDetails] = useState([]);
   const lang = useSelector(getLanguageState);
-  const cityData = [];
+  const cityData = [
+    {
+      value: "",
+      label: "Tất cả",
+    },
+  ];
   const dataChartDetail = [];
+  const province = useSelector(getProvince);
 
   useEffect(() => {
-    getDistrictApi()
+    getReportServiceByArea(
+      moment().subtract(30, "d").startOf("date").toISOString(),
+      moment().endOf("date").toISOString(),
+      ""
+    )
       .then((res) => {
-        setDataCity(res?.aministrative_division);
-        setCodeCity(res?.aministrative_division[1]?.code);
-        setNameCity(res?.aministrative_division[1]?.name);
-        getReportServiceByArea(
-          startDate,
-          endDate,
-          res?.aministrative_division[1]?.code
-        )
-          .then((res) => {
-            setDataChartService(res?.data);
-            setTotalService(res?.totalOrder);
-          })
-          .catch((err) => {});
+        setDataChartService(res?.data);
+        setTotalService(res?.totalOrder);
+      })
+      .catch((err) => {});
 
-        getReportServiceDetails(
-          startDate,
-          endDate,
-          res?.aministrative_division[1]?.code
-        )
-          .then((res) => {
-            setDataChartServiceDetails(res?.detailData);
-          })
-          .catch((err) => {});
+    getReportServiceDetails(
+      moment().subtract(30, "d").startOf("date").toISOString(),
+      moment().endOf("date").toISOString(),
+      ""
+    )
+      .then((res) => {
+        setDataChartServiceDetails(res?.detailData);
       })
       .catch((err) => {});
   }, []);
 
-  dataCity?.map((item) => {
-    cityData?.push({
+  province?.map((item) => {
+    return cityData?.push({
       value: item?.code,
       label: item?.name,
     });
   });
 
   dataChartServiceDetails?.map((item) => {
-    dataChartDetail?.push({
+    return dataChartDetail?.push({
       title: item?.title[0]?.[lang],
       percent_2_hour: item?.total_2_hour,
       percent_3_hour: item?.total_3_hour,
@@ -94,9 +85,7 @@ const ReportService = () => {
 
   const onChangeCity = useCallback(
     (value, label) => {
-      setNameCity(label?.label);
       setCodeCity(value);
-
       getReportServiceDetails(startDate, endDate, value)
         .then((res) => {
           setDataChartServiceDetails(res?.detailData);
@@ -110,7 +99,7 @@ const ReportService = () => {
         })
         .catch((err) => {});
     },
-    [city, startDate, endDate, codeDistrict]
+    [startDate, endDate]
   );
 
   const onChangeDay = () => {
@@ -127,38 +116,6 @@ const ReportService = () => {
       })
       .catch((err) => {});
   };
-
-  const renderLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    value,
-    name,
-  }) => {
-    const RADIAN = Math.PI / 180;
-    // eslint-disable-next-line
-    const radius = 25 + innerRadius + (outerRadius - innerRadius);
-    // eslint-disable-next-line
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    // eslint-disable-next-line
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="#000000"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-      >
-        {name === "2_hour" ? "2 Giờ" : name === "3_hour" ? "3 Giờ" : "4 Giờ"} (
-        {value} {"%"})
-      </text>
-    );
-  };
-
   const renderLabelService = ({
     cx,
     cy,
@@ -189,12 +146,14 @@ const ReportService = () => {
     );
   };
 
+  console.log(codeCity);
+
   return (
     <div className="mt-4">
       <div className="div-select-city">
         <Select
           style={{ width: 200, marginRight: 10 }}
-          value={nameCity}
+          value={codeCity}
           onChange={onChangeCity}
           options={cityData}
           showSearch
@@ -212,15 +171,17 @@ const ReportService = () => {
           setSameEnd={() => {}}
         />
         {startDate && (
-          <a className="text-date mt-2">
-            {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-            {moment(endDate).utc().format("DD/MM/YYYY")}
-          </a>
+          <div className="ml-2">
+            <p className="text-date mt-2 m-0">
+              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+              {moment(endDate).utc().format("DD/MM/YYYY")}
+            </p>
+          </div>
         )}
       </div>
 
       <div className="mt-3 div-chart-bar-service">
-        <a>{`${i18n.t("order_statistics", { lng: lang })}`}</a>
+        <p className="m-0">{`${i18n.t("order_statistics", { lng: lang })}`}</p>
         <ResponsiveContainer width={"100%"} height={350} min-width={350}>
           <BarChart
             width={500}
@@ -243,7 +204,7 @@ const ReportService = () => {
               fill="#8884d8"
               barSize={40}
               minPointSize={10}
-              name={"2 " + `${i18n.t("hour", { lng: lang })}`}
+              name={`2 ${i18n.t("hour", { lng: lang })}`}
               label={{ position: "top", fill: "black", fontSize: 14 }}
             />
             <Bar
@@ -251,7 +212,7 @@ const ReportService = () => {
               fill="#82ca9d"
               barSize={40}
               minPointSize={10}
-              name={"3 " + `${i18n.t("hour", { lng: lang })}`}
+              name={`3 ${i18n.t("hour", { lng: lang })}`}
               label={{ position: "top", fill: "black", fontSize: 14 }}
             />
             <Bar
@@ -259,7 +220,7 @@ const ReportService = () => {
               fill="#0088FE"
               barSize={40}
               minPointSize={10}
-              name={"4 " + `${i18n.t("hour", { lng: lang })}`}
+              name={`4 ${i18n.t("hour", { lng: lang })}`}
               label={{ position: "top", fill: "black", fontSize: 14 }}
             />
           </BarChart>
@@ -267,24 +228,27 @@ const ReportService = () => {
       </div>
 
       <div className="div-chart-pie-total">
-        <a className="title-chart-area">{`${i18n.t("order_statistics_service", {
-          lng: lang,
-        })}`}</a>
+        <p className="title-chart-area m-0">{`${i18n.t(
+          "order_statistics_service",
+          {
+            lng: lang,
+          }
+        )}`}</p>
         <div className="div-pie-chart">
           <div className="div-total-piechart">
             <div className="item-total">
-              <a className="title-total">{`${i18n.t("total_order", {
+              <p className="title-total">{`${i18n.t("total_order", {
                 lng: lang,
-              })}`}</a>
-              <a className="text-colon">:</a>
-              <a className="number-total">{totalService}</a>
+              })}`}</p>
+              <p className="text-colon">:</p>
+              <p className="number-total">{totalService}</p>
             </div>
             {dataChartService?.map((item, index) => {
               return (
                 <div className="item-total">
-                  <a className="title-total">{item?.title?.[lang]}</a>
-                  <a className="text-colon">:</a>
-                  <a className="number-total">{item?.total}</a>
+                  <p className="title-total">{item?.title?.[lang]}</p>
+                  <p className="text-colon">:</p>
+                  <p className="number-total">{item?.total}</p>
                 </div>
               );
             })}
@@ -313,8 +277,6 @@ const ReportService = () => {
           </div>
         </div>
       </div>
-
-      {isLoading && <LoadingPagination />}
     </div>
   );
 };

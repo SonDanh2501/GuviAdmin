@@ -775,8 +775,8 @@ const EditPromotion = () => {
                 </Popover>
               </div>
               <InputLanguage
-                state={title}
-                setState={setTitle}
+                state={shortDescription}
+                setState={setShortDescription}
                 className="input-language"
                 textArea={true}
                 disabled={isActive ? true : false}

@@ -14,7 +14,7 @@ import EditGroupService from "../../../../components/editGroupService/editGroupS
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
 import { getUser } from "../../../../redux/selectors/auth";
-import "./GroupServiceManage.scss";
+import "./styles.scss";
 
 const GroupServiceManage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -22,7 +22,6 @@ const GroupServiceManage = () => {
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
   const [data, setData] = useState([]);
-  const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const user = useSelector(getUser);
@@ -84,7 +83,6 @@ const GroupServiceManage = () => {
         <EditGroupService
           data={itemEdit}
           setData={setData}
-          setTotal={setTotal}
           setIsLoading={setIsLoading}
         />
       ),
@@ -129,7 +127,7 @@ const GroupServiceManage = () => {
             }}
           >
             <Image
-              className="img-customer-service"
+              style={{ width: 50, height: 50, borderRadius: 4 }}
               src={data?.thumbnail}
               preview={false}
             />
@@ -189,11 +187,7 @@ const GroupServiceManage = () => {
     <React.Fragment>
       <div className="div-head-service">
         <p className="label-service"> Tất cả dịch vụ</p>
-        <AddGroupService
-          setIsLoading={setIsLoading}
-          setData={setData}
-          setTotal={setTotal}
-        />
+        <AddGroupService setIsLoading={setIsLoading} setData={setData} />
       </div>
       <div className="mt-3">
         <Table

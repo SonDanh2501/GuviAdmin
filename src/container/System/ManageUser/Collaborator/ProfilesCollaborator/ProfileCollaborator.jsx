@@ -38,13 +38,12 @@ const ProfileCollaborator = () => {
   const lang = useSelector(getLanguageState);
   const [saveToCookie, readCookie] = useCookies();
   const [activeKey, setActiveKey] = useState("1");
+  const tabCookie = readCookie("tab-detail-ctv");
 
   useEffect(() => {
     window.scroll(0, 0);
-    setActiveKey(
-      readCookie("tab-detail-ctv") === "" ? "1" : readCookie("tab-detail-ctv")
-    );
-  }, []);
+    setActiveKey(tabCookie === "" ? "1" : tabCookie);
+  }, [tabCookie]);
 
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));

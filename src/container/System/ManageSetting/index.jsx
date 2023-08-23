@@ -17,15 +17,12 @@ const ManageSetting = () => {
   const [activeKey, setActiveKey] = useState("1");
   const [saveToCookie, readCookie] = useCookies();
   const lang = useSelector(getLanguageState);
+  const tabCookie = readCookie("tab-promo-setting");
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setActiveKey(
-      readCookie("tab-promo-setting") === ""
-        ? "1"
-        : readCookie("tab-promo-setting")
-    );
-  }, []);
+    setActiveKey(tabCookie === "" ? "1" : tabCookie);
+  }, [tabCookie]);
 
   const onChangeTab = (key) => {
     setActiveKey(key);

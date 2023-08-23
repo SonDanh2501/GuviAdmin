@@ -35,18 +35,6 @@ export const getReportCollaboratorDetails = (
   );
 };
 
-export const filterReportCollaboratorDetails = (
-  id,
-  start,
-  length,
-  start_date,
-  end_date
-) => {
-  return axiosClient.get(
-    `/admin/report_mananger/report_collaborator/get_detail/${id}?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
-  );
-};
-
 //customer
 export const getTotalReportCustomer = (start_date, end_date) => {
   return axiosClient.get(
@@ -184,7 +172,7 @@ export const getReportServiceByArea = (start_date, end_date, city) => {
 
 export const getReportServiceDetails = (start_date, end_date, city) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_detail_service_by_area?lang=vi&start_date=${start_date}&end_date=${end_date}&city=${city}&district=-1`
+    `/admin/report_mananger/report_detail_service_by_area?lang=vi&start_date=${start_date}&end_date=${end_date}&city=${city}&district=`
   );
 };
 

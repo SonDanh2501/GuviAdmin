@@ -83,6 +83,7 @@
     "node": "16.x"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/plugin-transform-private-property-in-object": "^7.22.5",
     "tailwindcss": "^3.3.1"
   }

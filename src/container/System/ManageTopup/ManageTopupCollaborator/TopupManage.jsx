@@ -25,6 +25,7 @@ const TopupManage = () => {
   const lang = useSelector(getLanguageState);
   const [saveToCookie, readCookie] = useCookies();
   const [activeKey, setActiveKey] = useState("1");
+  const tabCookie = readCookie("tab_ctv_topup");
 
   useEffect(() => {
     getRevenueCollaboratorApi(
@@ -37,10 +38,8 @@ const TopupManage = () => {
         setTotalTopup(res?.totalTopUp);
       })
       .catch((err) => {});
-    setActiveKey(
-      readCookie("tab_ctv_topup") === "" ? "1" : readCookie("tab_ctv_topup")
-    );
-  }, [dispatch]);
+    setActiveKey(tabCookie === "" ? "1" : tabCookie);
+  }, [dispatch, tabCookie]);
 
   const onChangeTab = (active) => {
     setActiveKey(active);

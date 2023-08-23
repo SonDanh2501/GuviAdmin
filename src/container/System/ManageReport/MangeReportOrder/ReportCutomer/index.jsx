@@ -1,29 +1,22 @@
-import { Button, DatePicker, Pagination, Popover, Progress, Table } from "antd";
+import { Image, Pagination, Popover, Table } from "antd";
 import moment from "moment";
-import vi from "moment/locale/vi";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  getReportConnectionCustomer,
-  getReportCustomer,
-  getReportCustomerNewOld,
-} from "../../../../../api/report";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { getReportCustomer } from "../../../../../api/report";
 import add from "../../../../../assets/images/add.png";
 import collaborator from "../../../../../assets/images/collaborator.png";
-import LoadingPagination from "../../../../../components/paginationLoading";
-import "./index.scss";
-import { formatMoney } from "../../../../../helper/formatMoney";
 import CustomDatePicker from "../../../../../components/customDatePicker";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../redux/selectors/auth";
-import i18n from "../../../../../i18n";
+import LoadingPagination from "../../../../../components/paginationLoading";
+import { formatMoney } from "../../../../../helper/formatMoney";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import "./index.scss";
 
 const ReportCustomer = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [startPage, setStartPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [rowIndex, setRowIndex] = useState();
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [totalColumn, setTotalColumn] = useState([]);
@@ -43,7 +36,13 @@ const ReportCustomer = () => {
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    getReportCustomer(0, 20, startDate, endDate, type)
+    getReportCustomer(
+      0,
+      20,
+      moment().subtract(30, "d").startOf("date").toISOString(),
+      moment().endOf("date").toISOString(),
+      "all"
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -51,7 +50,13 @@ const ReportCustomer = () => {
       })
       .catch((err) => {});
 
-    getReportCustomer(0, 20, startDate, endDate, "new")
+    getReportCustomer(
+      0,
+      20,
+      moment().subtract(30, "d").startOf("date").toISOString(),
+      moment().endOf("date").toISOString(),
+      "new"
+    )
       .then((res) => {
         setCustomerNew(res?.totalItem);
         setTotalOrderNew(res?.total[0]?.total_item);
@@ -59,7 +64,13 @@ const ReportCustomer = () => {
       })
       .catch((err) => {});
 
-    getReportCustomer(0, 20, startDate, endDate, "old")
+    getReportCustomer(
+      0,
+      20,
+      moment().subtract(30, "d").startOf("date").toISOString(),
+      moment().endOf("date").toISOString(),
+      "old"
+    )
       .then((res) => {
         setCustomerOld(res?.totalItem);
         setTotalOrderOld(res?.total[0]?.total_item);
@@ -104,7 +115,6 @@ const ReportCustomer = () => {
     setCurrentPage(page);
     const lengthData = data.length < 20 ? 20 : data.length;
     const start = page * lengthData - lengthData;
-    setStartPage(start);
     getReportCustomer(start, 20, startDate, endDate, type)
       .then((res) => {
         setData(res?.data);
@@ -133,11 +143,11 @@ const ReportCustomer = () => {
     {
       title: () => {
         return (
-          <div className="div-title-collaborator-id">
+          <div className="div-title-customer-id">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("customer", {
+              <p className="text-title-column">{`${i18n.t("customer", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
             <div className="div-top"></div>
           </div>
@@ -148,9 +158,9 @@ const ReportCustomer = () => {
         return (
           <Link
             to={`/profile-customer/${data?.id_customer?._id}`}
-            className="div-name-ctv-report"
+            className="div-name-kh-report"
           >
-            <a className="text-name-report"> {data?.id_customer?.full_name}</a>
+            <p className="text-name-report"> {data?.id_customer?.full_name}</p>
           </Link>
         );
       },
@@ -158,20 +168,20 @@ const ReportCustomer = () => {
     {
       title: () => {
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-customer">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("shift", {
+              <p className="text-title-column">{`${i18n.t("shift", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {totalColumn?.total_item > 0 ? totalColumn?.total_item : 0}
-            </a>
+            </p>
           </div>
         );
       },
       render: (data) => {
-        return <a className="text-money">{data?.total_item}</a>;
+        return <p className="text-money">{data?.total_item}</p>;
       },
       align: "center",
       sorter: (a, b) => a.total_item - b.total_item,
@@ -179,24 +189,24 @@ const ReportCustomer = () => {
     {
       title: () => {
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-customer">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("sales", {
+              <p className="text-title-column">{`${i18n.t("sales", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {totalColumn?.total_gross_income > 0
                 ? formatMoney(totalColumn?.total_gross_income)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_gross_income)}</a>
+          <p className="text-money">{formatMoney(data?.total_gross_income)}</p>
         );
       },
       sorter: (a, b) => a.total_gross_income - b.total_gross_income,
@@ -214,11 +224,11 @@ const ReportCustomer = () => {
           </div>
         );
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-customer">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("service_fee", {
+              <p className="text-title-column">{`${i18n.t("service_fee", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -232,20 +242,20 @@ const ReportCustomer = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {totalColumn?.total_collabotator_fee > 0
                 ? formatMoney(totalColumn?.total_collabotator_fee)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">
+          <p className="text-money">
             {formatMoney(data?.total_collabotator_fee)}
-          </a>
+          </p>
         );
       },
       sorter: (a, b) => a.total_collabotator_fee - b.total_collabotator_fee,
@@ -260,11 +270,11 @@ const ReportCustomer = () => {
           </div>
         );
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-customer">
             <div className="div-title-report">
-              <a className="text-title-column-blue">{`${i18n.t("revenue", {
+              <p className="text-title-column-blue">{`${i18n.t("revenue", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -278,18 +288,18 @@ const ReportCustomer = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title-blue">
+            <p className="text-money-title-blue">
               {totalColumn?.total_income > 0
                 ? formatMoney(totalColumn?.total_income)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money-blue">{formatMoney(data?.total_income)}</a>
+          <p className="text-money-blue">{formatMoney(data?.total_income)}</p>
         );
       },
       sorter: (a, b) => a.total_income - b.total_income,
@@ -304,11 +314,11 @@ const ReportCustomer = () => {
           </div>
         );
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-customer">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("discount", {
+              <p className="text-title-column">{`${i18n.t("discount", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -322,18 +332,18 @@ const ReportCustomer = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {totalColumn?.total_discount > 0
                 ? formatMoney(totalColumn?.total_discount)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_discount)}</a>
+          <p className="text-money">{formatMoney(data?.total_discount)}</p>
         );
       },
       sorter: (a, b) => a.total_discount - b.total_discount,
@@ -348,11 +358,11 @@ const ReportCustomer = () => {
           </div>
         );
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-customer">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("net_revenue", {
+              <p className="text-title-column">{`${i18n.t("net_revenue", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -366,18 +376,18 @@ const ReportCustomer = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {totalColumn?.total_net_income > 0
                 ? formatMoney(totalColumn?.total_net_income)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_net_income)}</a>
+          <p className="text-money">{formatMoney(data?.total_net_income)}</p>
         );
       },
       sorter: (a, b) => a.total_net_income - b.total_net_income,
@@ -385,21 +395,21 @@ const ReportCustomer = () => {
     {
       title: () => {
         return (
-          <div className="div-title-collaborator">
-            <a>{`${i18n.t("fees_apply", {
+          <div className="div-title-customer">
+            <p className="text-title-column m-0">{`${i18n.t("fees_apply", {
               lng: lang,
-            })}`}</a>
-            <a className="text-money-title">
+            })}`}</p>
+            <p className="text-money-title">
               {totalColumn?.total_service_fee > 0
                 ? formatMoney(totalColumn?.total_service_fee)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_service_fee)}</a>
+          <p className="text-money">{formatMoney(data?.total_service_fee)}</p>
         );
       },
       align: "center",
@@ -417,11 +427,11 @@ const ReportCustomer = () => {
           </div>
         );
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-customer">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("total_bill", {
+              <p className="text-title-column">{`${i18n.t("total_bill", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -435,18 +445,18 @@ const ReportCustomer = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {totalColumn?.total_order_fee > 0
                 ? formatMoney(totalColumn?.total_order_fee)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">{formatMoney(data?.total_order_fee)}</a>
+          <p className="text-money">{formatMoney(data?.total_order_fee)}</p>
         );
       },
       sorter: (a, b) => a.total_order_fee - b.total_order_fee,
@@ -461,11 +471,11 @@ const ReportCustomer = () => {
           </div>
         );
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-customer">
             <div className="div-title-report">
-              <a className="text-title-column">{`${i18n.t("profit", {
+              <p className="text-title-column">{`${i18n.t("profit", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -479,20 +489,20 @@ const ReportCustomer = () => {
                 </div>
               </Popover>
             </div>
-            <a className="text-money-title">
+            <p className="text-money-title">
               {totalColumn?.total_net_income_business > 0
                 ? formatMoney(totalColumn?.total_net_income_business)
                 : formatMoney(0)}
-            </a>
+            </p>
           </div>
         );
       },
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">
+          <p className="text-money">
             {formatMoney(data?.total_net_income_business)}
-          </a>
+          </p>
         );
       },
       sorter: (a, b) =>
@@ -511,14 +521,14 @@ const ReportCustomer = () => {
           </div>
         );
         return (
-          <div className="div-title-collaborator">
+          <div className="div-title-customer">
             <div className="div-title-report">
-              <a className="text-title-column">
+              <p className="text-title-column">
                 %{" "}
                 {`${i18n.t("profit", {
                   lng: lang,
                 })}`}
-              </a>
+              </p>
               <Popover
                 content={content}
                 placement="bottom"
@@ -539,9 +549,9 @@ const ReportCustomer = () => {
       align: "center",
       render: (data) => {
         return (
-          <a className="text-money">
+          <p className="text-money">
             {data?.percent_income ? data?.percent_income + "%" : ""}
-          </a>
+          </p>
         );
       },
     },
@@ -560,87 +570,89 @@ const ReportCustomer = () => {
           setSameEnd={() => {}}
         />
         {startDate && (
-          <a className="text-date">
-            {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-            {moment(endDate).utc().format("DD/MM/YYYY")}
-          </a>
+          <div className="ml-2">
+            <p className="text-date m-0">
+              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
+              {moment(endDate).utc().format("DD/MM/YYYY")}
+            </p>
+          </div>
         )}
       </div>
       <div className="header-report-customer">
         <div className="div-tab-header-service">
           <div className="div-img">
-            <img src={collaborator} className="img" />
+            <Image preview={false} src={collaborator} className="img" />
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">{`${i18n.t("customer_order_new", {
+              <p className="text-tab-header">{`${i18n.t("customer_order_new", {
                 lng: lang,
-              })}`}</a>
-              <a className="text-tab-header">{customerNew}</a>
+              })}`}</p>
+              <p className="text-tab-header">{customerNew}</p>
             </div>
           </div>
         </div>
 
         <div className="div-tab-header-service">
           <div className="div-img">
-            <img src={add} className="img" />
+            <Image preview={false} src={add} className="img" />
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">{`${i18n.t("total_shift", {
+              <p className="text-tab-header">{`${i18n.t("total_shift", {
                 lng: lang,
-              })}`}</a>
-              <a className="text-tab-header">
+              })}`}</p>
+              <p className="text-tab-header">
                 {totalOrderNew ? totalOrderNew : 0}
-              </a>
+              </p>
             </div>
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">{`${i18n.t("total_money", {
+              <p className="text-tab-header">{`${i18n.t("total_money", {
                 lng: lang,
-              })}`}</a>
-              <a className="text-tab-header">
+              })}`}</p>
+              <p className="text-tab-header">
                 {formatMoney(moneyNew ? moneyNew : 0)}
-              </a>
+              </p>
             </div>
           </div>
         </div>
 
         <div className="div-tab-header-service">
           <div className="div-img">
-            <img src={collaborator} className="img" />
+            <Image preview={false} src={collaborator} className="img" />
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">{`${i18n.t("customer_order_old", {
+              <p className="text-tab-header">{`${i18n.t("customer_order_old", {
                 lng: lang,
-              })}`}</a>
-              <a className="text-tab-header">{customerOld}</a>
+              })}`}</p>
+              <p className="text-tab-header">{customerOld}</p>
             </div>
           </div>
         </div>
 
         <div className="div-tab-header-service">
           <div className="div-img">
-            <img src={add} className="img" />
+            <Image preview={false} src={add} className="img" />
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">{`${i18n.t("total_shift", {
+              <p className="text-tab-header">{`${i18n.t("total_shift", {
                 lng: lang,
-              })}`}</a>
-              <a className="text-tab-header">
+              })}`}</p>
+              <p className="text-tab-header">
                 {totalOrderOld ? totalOrderOld : 0}
-              </a>
+              </p>
             </div>
           </div>
           <div className="div-text-tab">
             <div className="div-t">
-              <a className="text-tab-header">{`${i18n.t("total_money", {
+              <p className="text-tab-header">{`${i18n.t("total_money", {
                 lng: lang,
-              })}`}</a>
-              <a className="text-tab-header">{formatMoney(moneyOld)}</a>
+              })}`}</p>
+              <p className="text-tab-header">{formatMoney(moneyOld)}</p>
             </div>
           </div>
         </div>
@@ -655,9 +667,9 @@ const ReportCustomer = () => {
                 className={item?.value === type ? "div-tab-select" : "div-tab"}
                 onClick={() => onChangeTab(item?.value)}
               >
-                <a className="title-tab">{`${i18n.t(item?.title, {
+                <p className="title-tab">{`${i18n.t(item?.title, {
                   lng: lang,
-                })}`}</a>
+                })}`}</p>
               </div>
             );
           })}
@@ -674,26 +686,18 @@ const ReportCustomer = () => {
                 setSelectedRowKeys(selectedRowKeys);
               },
             }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  //   setItemEdit(record);
-                  setRowIndex(rowIndex);
-                },
-              };
-            }}
             scroll={{
               x: width <= 490 ? 1200 : 0,
             }}
           />
         </div>
         <div className="mt-2 div-pagination p-2">
-          <a>
+          <p>
             {`${i18n.t("total", {
               lng: lang,
             })}`}
             : {total}
-          </a>
+          </p>
           <div>
             <Pagination
               current={currentPage}

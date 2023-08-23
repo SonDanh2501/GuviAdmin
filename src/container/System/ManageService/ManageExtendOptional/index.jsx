@@ -6,21 +6,20 @@ import {
   deleteExtendOptionalApi,
   getExtendByOptionalApi,
 } from "../../../../api/service";
-import { Button, Dropdown, Popover, Space, Table } from "antd";
+import { Button, Dropdown, Popover, Space, Switch, Table } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
-import onToggle from "../../../../assets/images/on-button.png";
-import offToggle from "../../../../assets/images/off-button.png";
+
 import { ModalBody, ModalFooter, ModalHeader, Modal } from "reactstrap";
 import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
 import CreateExtend from "./component/CreateExtend";
 import EditExtend from "./component/EditExtend";
+import "./styles.scss";
 
 const ExtendOptional = () => {
   const { state } = useLocation();
   const { id } = state || {};
   const [data, setData] = useState([]);
-  const [total, setTotal] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
@@ -33,7 +32,6 @@ const ExtendOptional = () => {
       getExtendByOptionalApi(id)
         .then((res) => {
           setData(res?.data);
-          setTotal(res?.totalItem);
         })
         .catch((err) => {});
     }
@@ -65,45 +63,24 @@ const ExtendOptional = () => {
   const onActive = useCallback(
     (idActive, active) => {
       setIsLoading(true);
-      if (active === true) {
-        activeExtendOptionApi(idActive, {
-          is_active: false,
+      activeExtendOptionApi(idActive, {
+        is_active: active ? false : true,
+      })
+        .then((res) => {
+          setIsLoading(false);
+          setModalBlock(false);
+          getExtendByOptionalApi(id)
+            .then((res) => {
+              setData(res?.data);
+            })
+            .catch((err) => {});
         })
-          .then((res) => {
-            setIsLoading(false);
-            setModalBlock(false);
-            getExtendByOptionalApi(id)
-              .then((res) => {
-                setData(res?.data);
-              })
-              .catch((err) => {});
-          })
-          .then((err) => {
-            setIsLoading(false);
-            errorNotify({
-              message: err,
-            });
+        .then((err) => {
+          setIsLoading(false);
+          errorNotify({
+            message: err,
           });
-      } else {
-        activeExtendOptionApi(idActive, {
-          is_active: true,
-        })
-          .then((res) => {
-            setIsLoading(false);
-            setModalBlock(false);
-            getExtendByOptionalApi(id)
-              .then((res) => {
-                setData(res?.data);
-              })
-              .catch((err) => {});
-          })
-          .then((err) => {
-            setIsLoading(false);
-            errorNotify({
-              message: err,
-            });
-          });
-      }
+        });
     },
     [id]
   );
@@ -112,19 +89,19 @@ const ExtendOptional = () => {
     return (
       <div className="div-content-option">
         <div className="div-title-option">
-          <a className="title">Tiêu đề</a>
-          <a className="colon">:</a>
-          <a className="details">{item?.title?.vi}</a>
+          <p className="title">Tiêu đề</p>
+          <p className="colon">:</p>
+          <p className="details">{item?.title?.vi}</p>
         </div>
         <div className="div-title-option">
-          <a className="title">Mô tả</a>
-          <a className="colon">:</a>
-          <a className="details">{item?.description?.vi}</a>
+          <p className="title">Mô tả</p>
+          <p className="colon">:</p>
+          <p className="details">{item?.description?.vi}</p>
         </div>
         <div className="div-title-option">
-          <a className="title">Giá</a>
-          <a className="colon">:</a>
-          <a className="details">{formatMoney(item?.price)}</a>
+          <p className="title">Giá</p>
+          <p className="colon">:</p>
+          <p className="details">{formatMoney(item?.price)}</p>
         </div>
       </div>
     );
@@ -133,18 +110,15 @@ const ExtendOptional = () => {
   const items = [
     {
       key: 1,
-      label: (
-        <EditExtend
-          data={itemEdit}
-          setData={setData}
-          setTotal={setTotal}
-          idOption={id}
-        />
-      ),
+      label: <EditExtend data={itemEdit} setData={setData} idOption={id} />,
     },
     {
       key: 2,
-      label: <a onClick={toggle}>Xoá</a>,
+      label: (
+        <p style={{ margin: 0 }} onClick={toggle}>
+          Xoá
+        </p>
+      ),
     },
   ];
 
@@ -157,21 +131,27 @@ const ExtendOptional = () => {
           title="Thông tin chi tiết Extend"
           trigger="hover"
         >
-          <a>{data?.title?.vi}</a>
+          <p className="text-name-extend">{data?.title?.vi}</p>
         </Popover>
       ),
     },
     {
       title: "Mô tả",
-      render: (data) => <a>{data?.description?.vi}</a>,
+      render: (data) => (
+        <p className="text-name-extend">{data?.description?.vi}</p>
+      ),
     },
     {
       title: "Giá",
-      render: (data) => <a>{formatMoney(data?.price)}</a>,
+      render: (data) => (
+        <p className="text-name-extend">{formatMoney(data?.price)}</p>
+      ),
     },
     {
       title: "Phí dịch vụ",
-      render: (data) => <a>{data?.platform_fee}</a>,
+      render: (data) => (
+        <p className="text-name-extend">{data?.platform_fee}</p>
+      ),
       align: "center",
     },
     {
@@ -179,21 +159,12 @@ const ExtendOptional = () => {
       render: (data) => {
         return (
           <>
-            {data?.is_active ? (
-              <img
-                className="img-unlock-options"
-                src={onToggle}
-                onClick={() => {
-                  toggleBlock();
-                }}
-              />
-            ) : (
-              <img
-                className="img-unlock-options"
-                src={offToggle}
-                onClick={() => toggleBlock()}
-              />
-            )}
+            <Switch
+              checked={data?.is_active}
+              onClick={toggleBlock}
+              size="small"
+              style={{ backgroundColor: data?.is_active ? "#00cf3a" : "" }}
+            />
           </>
         );
       },
@@ -207,12 +178,10 @@ const ExtendOptional = () => {
             menu={{
               items,
             }}
-            placement="bottom"
+            placement="bottomRight"
             trigger={["click"]}
           >
-            <a>
-              <MoreOutlined className="icon-more" />
-            </a>
+            <MoreOutlined className="icon-more" />
           </Dropdown>
         </Space>
       ),
@@ -223,7 +192,7 @@ const ExtendOptional = () => {
     <div>
       <h3>Extend Optional</h3>
       <div>
-        <CreateExtend idOption={id} setData={setData} setTotal={setTotal} />
+        <CreateExtend idOption={id} setData={setData} />
       </div>
       <div className="mt-3">
         <Table
@@ -244,11 +213,11 @@ const ExtendOptional = () => {
         <Modal isOpen={modal} toggle={toggle}>
           <ModalHeader toggle={toggle}>Xóa option service</ModalHeader>
           <ModalBody>
-            <a>
+            <p className="text-name-extend">
               Bạn có chắc muốn xóa option service{" "}
-              <a className="text-name-modal">{itemEdit?.title?.vi}</a> này
-              không?
-            </a>
+              <strong className="text-name-modal">{itemEdit?.title?.vi}</strong>{" "}
+              này không?
+            </p>
           </ModalBody>
           <ModalFooter>
             <Button type="primary" onClick={() => onDelete(itemEdit?._id)}>

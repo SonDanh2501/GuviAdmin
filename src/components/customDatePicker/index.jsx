@@ -32,12 +32,12 @@ const CustomDatePicker = (props) => {
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
   const [valueTab, setValueTab] = useState("");
-  const [tabTime, setTabTime] = useState("day");
+  const [tabTime, setTabTime] = useState("days");
   const [title, setTitle] = useState();
 
   useEffect(() => {
-    setStart(defaults ? moment().subtract(7, "day") : "");
-    setEnd(defaults ? moment() : "");
+    setStart(defaults ? moment().subtract(1, "week") : "");
+    setEnd(defaults ? moment().subtract(1, "days") : "");
     setTitle(
       defaults
         ? `${i18n.t("seven_ago", {
@@ -61,61 +61,55 @@ const CustomDatePicker = (props) => {
 
   const onSelectTab = (item) => {
     setValueTab(item?.value);
-    const today = moment().endOf("date").toISOString();
+    const today = moment().subtract(1, "days").toISOString();
     const startToday = moment().startOf("date").toISOString();
     const startYesterday = moment()
-      .subtract(1, "day")
+      .subtract(1, "days")
       .startOf("date")
       .toISOString();
     const endYesterday = moment()
-      .subtract(1, "day")
+      .subtract(1, "days")
       .endOf("date")
       .toISOString();
-    const lastSeven = moment().subtract(6, "day").startOf("date").toISOString();
-    const lastThirty = moment()
-      .subtract(29, "day")
-      .startOf("date")
-      .toISOString();
-    const lastNinety = moment()
-      .subtract(89, "day")
-      .startOf("date")
-      .toISOString();
+    const lastSeven = moment().subtract(1, "week").toISOString();
+    const lastThirty = moment().subtract(30, "days").toISOString();
+    const lastNinety = moment().subtract(90, "days").toISOString();
     const startThisMonth = moment().startOf("month").toISOString();
     const endThisMonth = moment().endOf("month").toISOString();
     const startLastMonth = moment()
       .subtract(1, "months")
-      .startOf("month")
+      .startOf("months")
       .toISOString();
     const endLastMonth = moment()
       .subtract(1, "months")
-      .endOf("month")
+      .endOf("months")
       .toISOString();
-    const endNextDay = moment().add(3, "day").startOf("date").toISOString();
+    const endNextDay = moment().add(3, "days").toISOString();
 
     switch (item?.value) {
       case "last_seven":
         setStartDate(lastSeven);
-        setStart(moment().subtract(7, "day"));
+        setStart(moment().subtract(1, "week"));
         setEndDate(today);
-        setEnd(moment());
-        setSameStart(moment(lastSeven).subtract(7, "day").toISOString());
-        setSameEnd(moment(today).subtract(7, "day").toISOString());
+        setEnd(moment().subtract(1, "days"));
+        setSameStart(moment(lastSeven).subtract(1, "week").toISOString());
+        setSameEnd(moment(today).subtract(1, "week").toISOString());
         break;
       case "last_thirty":
         setStartDate(lastThirty);
-        setStart(moment().subtract(30, "day"));
+        setStart(moment().subtract(30, "days"));
         setEndDate(today);
         setEnd(moment());
-        setSameStart(moment(lastThirty).subtract(30, "day").toISOString());
-        setSameEnd(moment(today).subtract(30, "day").toISOString());
+        setSameStart(moment(lastThirty).subtract(30, "days").toISOString());
+        setSameEnd(moment(today).subtract(30, "days").toISOString());
         break;
       case "last_ninety":
         setStartDate(lastNinety);
-        setStart(moment().subtract(90, "day"));
+        setStart(moment().subtract(90, "days"));
         setEndDate(today);
         setEnd(moment());
-        setSameStart(moment(lastNinety).subtract(90, "day").toISOString());
-        setSameEnd(moment(today).subtract(90, "day").toISOString());
+        setSameStart(moment(lastNinety).subtract(90, "days").toISOString());
+        setSameEnd(moment(today).subtract(90, "days").toISOString());
         break;
       case "this_month":
         setStartDate(startThisMonth);
@@ -123,25 +117,27 @@ const CustomDatePicker = (props) => {
         setEndDate(endThisMonth);
         setEnd(moment().endOf("month"));
         setSameStart(
-          moment().subtract(1, "months").startOf("month").toISOString()
+          moment().subtract(1, "months").startOf("months").toISOString()
         );
-        setSameEnd(moment().subtract(1, "months").endOf("month").toISOString());
+        setSameEnd(
+          moment().subtract(1, "months").endOf("months").toISOString()
+        );
         break;
       case "last_month":
         setStartDate(startLastMonth);
-        setStart(moment().subtract(1, "months").startOf("month"));
+        setStart(moment().subtract(1, "months").startOf("months"));
         setEndDate(endLastMonth);
-        setEnd(moment().subtract(1, "months").endOf("month"));
+        setEnd(moment().subtract(1, "months").endOf("months"));
         setSameStart(
           moment(startLastMonth)
             .subtract(1, "months")
-            .startOf("month")
+            .startOf("months")
             .toISOString()
         );
         setSameEnd(
           moment(endLastMonth)
             .subtract(1, "months")
-            .endOf("month")
+            .endOf("months")
             .toISOString()
         );
         break;

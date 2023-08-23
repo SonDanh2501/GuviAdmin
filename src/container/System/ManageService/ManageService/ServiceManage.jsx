@@ -126,7 +126,7 @@ const ServiceManage = () => {
           >
             <Image
               preview={false}
-              className="img-customer-service"
+              style={{ width: 50, height: 50 }}
               src={data?.thumbnail}
             />
           </div>

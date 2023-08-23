@@ -1,12 +1,12 @@
 import { DatePicker, Input, Pagination, Select, Table } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   Bar,
   BarChart,
   CartesianGrid,
-  ComposedChart,
   Legend,
   ResponsiveContainer,
   Tooltip,
@@ -18,30 +18,22 @@ import {
   getTopCustomerInvite,
   getTopCustomerInviteTime,
 } from "../../../../../api/report";
-import CustomDatePicker from "../../../../../components/customDatePicker";
-import LoadingPage from "../../../../../components/LoadingPage";
-import "./index.scss";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../redux/selectors/auth";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import "./index.scss";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
-const width = window.innerWidth;
 
 const ReportInvite = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [dataTop, setDataTop] = useState([]);
   const [dataTimeInvite, setDataTimeInvite] = useState([]);
-  const [type, setType] = useState("daily");
   const [typeTime, setTypeTime] = useState("day");
   const [currentPage, setCurrentPage] = useState(1);
-  const [startDate, setStartDate] = useState(
-    moment().startOf("month").toISOString()
-  );
-  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
-  const [isLoading, setIsLoading] = useState(false);
   const lang = useSelector(getLanguageState);
+  const { width } = useWindowDimensions();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,7 +41,7 @@ const ReportInvite = () => {
       0,
       20,
       moment(new Date("01-01-2022")).toISOString(),
-      endDate
+      moment().endOf("date").toISOString()
     )
       .then((res) => {
         setData(res?.data);
@@ -57,13 +49,20 @@ const ReportInvite = () => {
       })
       .catch((err) => console.log(err));
 
-    getTopCustomerInvite(startDate, endDate)
+    getTopCustomerInvite(
+      moment(new Date("01-01-2022")).toISOString(),
+      moment().endOf("date").toISOString()
+    )
       .then((res) => {
         setDataTop(res);
       })
       .catch((err) => {});
 
-    getTopCustomerInviteTime(startDate, endDate, "daily")
+    getTopCustomerInviteTime(
+      moment().startOf("month").toISOString(),
+      moment().endOf("date").toISOString(),
+      "daily"
+    )
       .then((res) => {
         setDataTimeInvite(res);
       })
@@ -78,7 +77,7 @@ const ReportInvite = () => {
       start,
       20,
       moment(new Date("01-01-2022")).toISOString(),
-      endDate
+      moment().endOf("date").toISOString()
     )
       .then((res) => {
         setData(res?.data);
@@ -90,19 +89,19 @@ const ReportInvite = () => {
   const columns = [
     {
       title: `${i18n.t("code", { lng: lang })}`,
-      render: (data) => <a>{data?.id_view}</a>,
+      render: (data) => <p className="text-name-invite">{data?.id_view}</p>,
     },
     {
       title: `${i18n.t("customer", { lng: lang })}`,
-      render: (data) => <a>{data?.full_name}</a>,
+      render: (data) => <p className="text-name-invite">{data?.full_name}</p>,
     },
     {
       title: `${i18n.t("phone", { lng: lang })}`,
-      render: (data) => <a>{data?.phone}</a>,
+      render: (data) => <p className="text-name-invite">{data?.phone}</p>,
     },
     {
       title: `${i18n.t("referrals", { lng: lang })}`,
-      render: (data) => <a>{data?.totalInvite}</a>,
+      render: (data) => <p className="text-name-invite">{data?.totalInvite}</p>,
       align: "center",
       sorter: (a, b) => a.totalInvite - b.totalInvite,
     },
@@ -119,9 +118,9 @@ const ReportInvite = () => {
                 })
               }
             >
-              <a className="text-btn-detail">{`${i18n.t("detail", {
+              <p className="text-btn-detail">{`${i18n.t("detail", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
           </>
         );
@@ -162,29 +161,20 @@ const ReportInvite = () => {
       .catch((err) => {});
   };
 
-  const onChangeDay = () => {
-    getReportCustomerInviteDay(0, 20, startDate, endDate)
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => console.log(err));
-  };
-
   const renderTooltipContent = (o) => {
     const { payload, label } = o;
 
     return (
       <div className="div-content-tool-chart">
-        <a className="date-text">
+        <p className="date-text">
           {`${i18n.t("date", { lng: lang })}`}:{" "}
           {moment(new Date(label)).format("DD/MM/YYYY")}
-        </a>
+        </p>
 
-        <a className="money-text">
+        <p className="money-text">
           {`${i18n.t("referrals", { lng: lang })}`}:{" "}
           {payload?.length > 0 ? payload[0]?.payload?.total : 0}
-        </a>
+        </p>
       </div>
     );
   };
@@ -237,7 +227,7 @@ const ReportInvite = () => {
 
   return (
     <div>
-      <a className="title"> {`${i18n.t("total_referrals", { lng: lang })}`}</a>
+      <p className="title"> {`${i18n.t("total_referrals", { lng: lang })}`}</p>
 
       <div className="mt-3 div-date-invite">
         <Input.Group compact>
@@ -316,104 +306,83 @@ const ReportInvite = () => {
           </ResponsiveContainer>
         </div>
         <div className="div-chart-right">
-          <a className="title-top">{`${i18n.t("top_recommenders", {
+          <p className="title-top">{`${i18n.t("top_recommenders", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
           <div className="div-right">
             {dataTop.length > 4 && (
               <div className="div-item-top">
-                <a>{dataTop[4].total_inviter}</a>
+                <p>{dataTop[4].total_inviter}</p>
                 <div className={"column-top-5"} />
-                <a className="text-name-column">
+                <p className="text-name-column">
                   {dataTop[4]?.customer
                     ? dataTop[4]?.customer
                     : dataTop[4]?.collaborator}
-                </a>
+                </p>
               </div>
             )}
             {dataTop.length > 3 && (
               <div className="div-item-top">
-                <a>{dataTop[3].total_inviter}</a>
+                <p>{dataTop[3].total_inviter}</p>
                 <div className={"column-top-4"} />
-                <a className="text-name-column">
+                <p className="text-name-column">
                   {dataTop[3]?.customer
                     ? dataTop[3]?.customer
                     : dataTop[3]?.collaborator}
-                </a>
+                </p>
               </div>
             )}
             {dataTop.length > 2 && (
               <div className="div-item-top">
-                <a>{dataTop[2].total_inviter}</a>
+                <p>{dataTop[2].total_inviter}</p>
                 <div className={"column-top-3"} />
-                <a className="text-name-column">
+                <p className="text-name-column">
                   {dataTop[2]?.customer
                     ? dataTop[2]?.customer
                     : dataTop[2]?.collaborator}
-                </a>
+                </p>
               </div>
             )}
             {dataTop.length > 1 && (
               <div className="div-item-top">
-                <a>{dataTop[1].total_inviter}</a>
+                <p>{dataTop[1].total_inviter}</p>
                 <div className={"column-top-2"} />
-                <a className="text-name-column">
+                <p className="text-name-column">
                   {dataTop[1]?.customer
                     ? dataTop[1]?.customer
                     : dataTop[1]?.collaborator}
-                </a>
+                </p>
               </div>
             )}
             {dataTop.length > 0 && (
               <div className="div-item-top">
-                <a>{dataTop[0].total_inviter}</a>
+                <p>{dataTop[0].total_inviter}</p>
                 <div className={"column-top-1"} />
-                <a className="text-name-column">
+                <p className="text-name-column">
                   {dataTop[0]?.customer
                     ? dataTop[0]?.customer
                     : dataTop[0]?.collaborator}
-                </a>
+                </p>
               </div>
             )}
           </div>
         </div>
       </div>
-      <a className="title">{`${i18n.t("statistical_tables", {
+      <p className="title">{`${i18n.t("statistical_tables", {
         lng: lang,
-      })}`}</a>
-      {/* <div className="mt-3">
-        <div className="div-date">
-          <CustomDatePicker
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
-            onClick={onChangeDay}
-          />
-          {startDate && (
-            <a className="text-date">
-              {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-              {moment(endDate).utc().format("DD/MM/YYYY")}
-            </a>
-          )}
-        </div>
-      </div> */}
+      })}`}</p>
       <div className="mt-2">
         <Table
           columns={columns}
           dataSource={data}
           pagination={false}
-          scroll={
-            width <= 490
-              ? {
-                  x: 1600,
-                }
-              : null
-          }
+          scroll={{ x: width <= 490 ? 1600 : 0 }}
         />
       </div>
       <div className="mt-1 div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}: {total}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}
@@ -424,7 +393,6 @@ const ReportInvite = () => {
           />
         </div>
       </div>
-      {isLoading && <LoadingPage />}
     </div>
   );
 };

@@ -20,17 +20,16 @@ const ManageCustomer = () => {
   const [saveToCookie, readCookie] = useCookies();
   const { width } = useWindowDimensions();
   const scrollRef = useHorizontalScroll();
+  const tab = readCookie("tab-khhang");
 
   useEffect(() => {
-    setIdGroup(
-      readCookie("tab-khhang") === "" ? "all" : readCookie("tab-khhang")
-    );
+    setIdGroup(tab === "" ? "all" : tab);
     getGroupCustomerApi(0, 20)
       .then((res) => {
         setDataGroup(res?.data);
       })
       .catch((err) => {});
-  }, []);
+  }, [tab]);
 
   dataGroup?.map((item) => {
     return dataTab.push({

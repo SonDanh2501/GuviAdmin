@@ -1,11 +1,7 @@
 import { Pagination, Select, Table } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
-import {
-  getReportCancelReport,
-  getReportOverviewCancelReport,
-} from "../../../../../api/report";
-
+import { getReportOverviewCancelReport } from "../../../../../api/report";
 import { useSelector } from "react-redux";
 import CustomDatePicker from "../../../../../components/customDatePicker";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions";
@@ -17,15 +13,10 @@ import "./index.scss";
 const TotalCancelSystem = (props) => {
   const { tab, currentPage, setCurrentPage, startPage, setStartPage } = props;
   const [startDate, setStartDate] = useState(
-    moment().subtract(30, "d").startOf("date").toISOString()
+    moment().subtract(30, "days").startOf("date").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
-  const [titleCity, setTitleCity] = useState("");
-  const [city, setCity] = useState(false);
   const [codeCity, setCodeCity] = useState("");
-  const [codeDistrict, setCodeDistrict] = useState(-1);
-  const [dataPie, setDataPie] = useState([]);
-  const [dataTotalPie, setDataTotalPie] = useState([]);
   const { width } = useWindowDimensions();
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
@@ -40,7 +31,14 @@ const TotalCancelSystem = (props) => {
   ];
 
   useEffect(() => {
-    getReportOverviewCancelReport(0, 20, startDate, endDate, tab, codeCity)
+    getReportOverviewCancelReport(
+      0,
+      20,
+      moment().subtract(30, "days").startOf("date").toISOString(),
+      moment().endOf("date").toISOString(),
+      tab,
+      ""
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -49,7 +47,7 @@ const TotalCancelSystem = (props) => {
   }, [tab]);
 
   province?.map((item) => {
-    cityData?.push({
+    return cityData?.push({
       value: item?.code,
       label: item?.name,
     });
@@ -58,14 +56,14 @@ const TotalCancelSystem = (props) => {
   const onChangeCity = useCallback(
     (value, label) => {
       setCodeCity(value);
-      getReportCancelReport(startDate, endDate, value, codeDistrict)
+      getReportOverviewCancelReport(0, 20, startDate, endDate, tab, value)
         .then((res) => {
-          setDataPie(res?.percent);
-          setDataTotalPie(res);
+          setData(res?.data);
+          setTotal(res?.totalItem);
         })
         .catch((err) => {});
     },
-    [city, startDate, endDate, codeDistrict]
+    [startDate, endDate, tab]
   );
 
   const onChangeDay = () => {
@@ -104,12 +102,12 @@ const TotalCancelSystem = (props) => {
       render: (data) => {
         return (
           <div className="div-create-cancel">
-            <a className="text-create-cancel">
+            <p className="text-create-cancel m-0">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-create-cancel">
+            </p>
+            <p className="text-create-cancel m-0">
               {moment(new Date(data?.date_create)).format("HH/mm")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -118,40 +116,40 @@ const TotalCancelSystem = (props) => {
       title: `${i18n.t("canceler", { lng: lang })}`,
       render: (data) => {
         return (
-          <a className="text-user-cancel">
+          <p className="text-user-cancel m-0">
             {data?.id_cancel_user_system
               ? data?.id_cancel_user_system?.id_user_system?.full_name
               : data?.id_cancel_system
               ? `${i18n.t("system", { lng: lang })}`
               : data?.name_customer}
-          </a>
+          </p>
         );
       },
     },
     {
       title: `${i18n.t("order", { lng: lang })}`,
       render: (data) => {
-        return <a className="text-user-cancel">{data?.id_view}</a>;
+        return <p className="text-user-cancel m-0">{data?.id_view}</p>;
       },
     },
     {
       title: `${i18n.t("reason", { lng: lang })}`,
       render: (data) => {
         return (
-          <a className="text-user-cancel">
+          <p className="text-user-cancel m-0">
             {data?.id_cancel_user_system
               ? ""
               : data?.id_cancel_system
               ? data?.id_cancel_system?.id_reason_cancel?.title?.[lang]
               : data?.id_cancel_customer?.id_reason_cancel?.title?.[lang]}
-          </a>
+          </p>
         );
       },
     },
     {
       title: `${i18n.t("address", { lng: lang })}`,
       render: (data) => {
-        return <a className="text-address-cancel">{data?.address}</a>;
+        return <p className="text-address-cancel m-0">{data?.address}</p>;
       },
     },
   ];
@@ -168,10 +166,10 @@ const TotalCancelSystem = (props) => {
           setSameEnd={() => {}}
         />
         {startDate && (
-          <a className="text-date">
+          <p className="text-date m-0">
             {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
             {moment(endDate).utc().format("DD/MM/YYYY")}
-          </a>
+          </p>
         )}
       </div>
       <div className="div-select-city">
@@ -196,9 +194,9 @@ const TotalCancelSystem = (props) => {
         />
       </div>
       <div className="mt-1 div-pagination p-2">
-        <a>
-          {`${i18n.t("address", { lng: lang })}`}: {total}
-        </a>
+        <p>
+          {`${i18n.t("total", { lng: lang })}`}: {total}
+        </p>
         <div>
           <Pagination
             current={currentPage}
@@ -214,5 +212,3 @@ const TotalCancelSystem = (props) => {
 };
 
 export default TotalCancelSystem;
-
-const COLORS = ["#FCD34D", "#FBBF24", "#F59E0B", "#ff8000", "#ff1919"];
