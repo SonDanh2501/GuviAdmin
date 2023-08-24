@@ -44,7 +44,7 @@ const ManagePromotions = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [modal, setModal] = useState(false);
-  const [typeSort, setTypeSort] = useState(-1);
+  const typeSort = -1;
   const [saveToCookie, readCookie] = useCookies();
   const [state, setState] = useState({
     currentPage: 1,
@@ -88,50 +88,31 @@ const ManagePromotions = () => {
     });
   });
 
+  const tabCookie = readCookie("tab_status_promotion");
+  const serviceCookie = readCookie("service_prmotion");
+  const selectCookie = readCookie("selected_promotion");
+  const brandCookie = readCookie("brand_promotion");
+  const valueCookie = readCookie("value_promotion");
+  const kindCookie = readCookie("kind_promotion");
+
   useEffect(() => {
     setState({
       ...state,
-      status:
-        readCookie("tab_status_promotion") === ""
-          ? "doing"
-          : readCookie("tab_status_promotion"),
-      idService:
-        readCookie("service_prmotion") === ""
-          ? ""
-          : readCookie("service_prmotion"),
-      type:
-        readCookie("selected_promotion") === " "
-          ? "code"
-          : readCookie("selected_promotion"),
-      brand:
-        readCookie("brand_promotion") === ""
-          ? "guvi"
-          : readCookie("brand_promotion"),
-      value:
-        readCookie("value_promotion") === ""
-          ? "kmkh"
-          : readCookie("value_promotion"),
-      kind:
-        readCookie("kind_promotion") === ""
-          ? "promotion"
-          : readCookie("kind_promotion"),
+      status: tabCookie === "" ? "doing" : tabCookie,
+      idService: serviceCookie === "" ? "" : serviceCookie,
+      type: selectCookie === " " ? "code" : selectCookie,
+      brand: brandCookie === "" ? "guvi" : brandCookie,
+      value: valueCookie === "" ? "kmkh" : valueCookie,
+      kind: kindCookie === "" ? "promotion" : kindCookie,
     });
     fetchPromotion(
       "",
-      readCookie("tab_status_promotion") === ""
-        ? "doing"
-        : readCookie("tab_status_promotion"),
+      tabCookie === "" ? "doing" : tabCookie,
       0,
       20,
-      readCookie("selected_promotion") === " "
-        ? "code"
-        : readCookie("selected_promotion"),
-      readCookie("brand_promotion") === ""
-        ? "guvi"
-        : readCookie("brand_promotion"),
-      readCookie("service_prmotion") === ""
-        ? ""
-        : readCookie("service_prmotion"),
+      selectCookie === " " ? "code" : selectCookie,
+      brandCookie === "" ? "guvi" : brandCookie,
+      serviceCookie === "" ? "" : serviceCookie,
       "",
       typeSort,
       state.group
@@ -147,7 +128,15 @@ const ManagePromotions = () => {
         setGroupPromotion(res?.data);
       })
       .catch((err) => {});
-  }, []);
+  }, [
+    serviceCookie,
+    brandCookie,
+    selectCookie,
+    tabCookie,
+    kindCookie,
+    valueCookie,
+    typeSort,
+  ]);
 
   groupPromotion?.map((item) => {
     return groupPromotionOption.push({
@@ -589,9 +578,10 @@ const ManagePromotions = () => {
             <div className="div-name-promotion">
               {data?.type_promotion === "code" &&
               data?.type_discount === "partner_promotion" ? (
-                <p className="text-name-brand">
-                  Ưu đãi từ "<p className="text-brand">{data?.brand}</p>"
-                </p>
+                <div className="div-name-brand">
+                  <p className="text-name-brand">Ưu đãi từ</p>
+                  <p className="text-brand">"{data?.brand}"</p>
+                </div>
               ) : (
                 <p className="text-title-code">{data?.code}</p>
               )}
@@ -600,29 +590,32 @@ const ManagePromotions = () => {
               data?.type_discount === "partner_promotion" ? (
                 <></>
               ) : (
-                <a className="text-title-promotion">
-                  {data?.discount_unit === "amount"
-                    ? `Giảm giá ${formatMoney(data?.discount_max_price)} ${
-                        data?.price_min_order > 0 ? "" : "cho dịch vụ"
-                      }`
-                    : `Giảm giá ${data?.discount_value}%, tối đa ${formatMoney(
-                        data?.discount_max_price
-                      )} `}{" "}
-                  {data?.price_min_order > 0
-                    ? ` đơn từ ${formatMoney(
-                        data?.price_min_order
-                      )} cho dịch vụ `
-                    : ""}
+                <div className="div-content-promotion">
+                  <p className="text-title-promotion">
+                    {data?.discount_unit === "amount"
+                      ? `Giảm giá ${formatMoney(
+                          data?.discount_max_price
+                        )} cho dịch vụ`
+                      : `Giảm giá ${
+                          data?.discount_value
+                        }%, tối đa ${formatMoney(data?.discount_max_price)} ${
+                          data?.price_min_order > 0
+                            ? ` đơn từ ${formatMoney(
+                                data?.price_min_order
+                              )} cho dịch vụ `
+                            : "cho dịch vụ"
+                        } `}
+                  </p>
                   {service?.map((item, index) => {
                     return (
-                      <a key={index} className="text-service">
+                      <p key={index} className="text-service">
                         {data?.service_apply?.includes(item?._id)
                           ? item?.title?.vi
                           : null}
-                      </a>
+                      </p>
                     );
                   })}
-                </a>
+                </div>
               )}
             </div>
           </div>
@@ -663,9 +656,9 @@ const ManagePromotions = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("Hình ảnh", {
+          <p className="title-column">{`${i18n.t("Hình ảnh", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
@@ -738,19 +731,19 @@ const ManagePromotions = () => {
             }
           >
             {!data?.is_apply_area ? (
-              <a className="text-area">Toàn quốc</a>
+              <p className="text-area">Toàn quốc</p>
             ) : (
               <>
                 {province?.map((item, index) => {
                   return (
-                    <a className="text-area">
+                    <p className="text-area">
                       {data?.city?.includes(item?.code)
                         ? `${item?.name?.replace(
                             new RegExp(`${"Thành phố"}|${"Tỉnh"}`),
                             ""
                           )}` + ", "
                         : null}
-                    </a>
+                    </p>
                   );
                 })}
               </>
@@ -763,9 +756,9 @@ const ManagePromotions = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("status", {
+          <p className="title-column">{`${i18n.t("status", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       align: "center",
@@ -788,38 +781,37 @@ const ManagePromotions = () => {
             }
           >
             {data?.status === "upcoming" ? (
-              <a className="text-upcoming">{`${i18n.t("upcoming", {
+              <p className="text-upcoming">{`${i18n.t("upcoming", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : data?.status === "doing" ? (
-              <a className="text-doing-status">{`${i18n.t("happenning", {
+              <p className="text-doing-status">{`${i18n.t("happenning", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : data?.status === "out_of_stock" ? (
-              <a className="text-cancel-promotion">{`${i18n.t("out_stock", {
+              <p className="text-cancel-promotion">{`${i18n.t("out_stock", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : data?.status === "out_of_date" ? (
-              <a className="text-cancel-promotion">{`${i18n.t("out_date", {
+              <p className="text-cancel-promotion">{`${i18n.t("out_date", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : (
-              <a className="text-cancel-promotion">{`${i18n.t("closed", {
+              <p className="text-cancel-promotion">{`${i18n.t("closed", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             )}
           </div>
         );
       },
-      align: "left",
       width: "10%",
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("use", {
+          <p className="title-column">{`${i18n.t("use", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
@@ -832,7 +824,7 @@ const ManagePromotions = () => {
               })
             }
           >
-            <a
+            <p
               className="text-title-use"
               onClick={() =>
                 navigate("/promotion/manage-setting/order-promotion", {
@@ -845,7 +837,7 @@ const ManagePromotions = () => {
                 : data?.limit_count > 0
                 ? data?.total_used_promotion + "/" + data?.limit_count
                 : data?.total_used_promotion}
-            </a>
+            </p>
             {(data?.is_parrent_promotion || data?.limit_count > 0) && (
               <Progress
                 percent={
@@ -870,9 +862,9 @@ const ManagePromotions = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("Bắt đầu", {
+          <p className="title-column">{`${i18n.t("Bắt đầu", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       align: "center",
@@ -891,25 +883,24 @@ const ManagePromotions = () => {
           >
             {data?.is_limit_date ? (
               <div className="div-date-promotion">
-                <a className="text-title-promotion"> {startDate}</a>
+                <p className="text-title-promotion"> {startDate}</p>
               </div>
             ) : (
               <div className="div-date-promotion">
-                <a className="text-title-promotion">{start}</a>
+                <p className="text-title-promotion">{start}</p>
               </div>
             )}
           </div>
         );
       },
-      align: "center",
       width: "10%",
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("Kết thúc", {
+          <p className="title-column">{`${i18n.t("Kết thúc", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
@@ -919,11 +910,11 @@ const ManagePromotions = () => {
         return (
           <div className="div-date-promotion">
             {data?.is_limit_date ? (
-              <a className="text-title-promotion"> {endDate}</a>
+              <p className="text-title-promotion"> {endDate}</p>
             ) : (
-              <a className="text-title-promotion">{`${i18n.t("no_expiry", {
+              <p className="text-title-promotion">{`${i18n.t("no_expiry", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             )}
           </div>
         );
@@ -948,7 +939,7 @@ const ManagePromotions = () => {
                 }
                 onClick={() => onChangeTab(item)}
               >
-                <a className="text-tab">{item?.label}</a>
+                <p className="text-tab">{item?.label}</p>
               </div>
             );
           })}
@@ -1033,9 +1024,9 @@ const ManagePromotions = () => {
           }}
         />
         <div className="div-pagination p-2">
-          <a>
+          <p>
             {`${i18n.t("total", { lng: lang })}`}: {total}
-          </a>
+          </p>
           <div>
             <Pagination
               current={state?.currentPage}
@@ -1057,8 +1048,10 @@ const ManagePromotions = () => {
           textOk={`${i18n.t("delete", { lng: lang })}`}
           body={
             <>
-              <a>{`${i18n.t("want_delete_promotion", { lng: lang })}`}</a>
-              <a className="text-name-modal">{itemEdit?.title?.[lang]}</a>
+              <p className="m-0">{`${i18n.t("want_delete_promotion", {
+                lng: lang,
+              })}`}</p>
+              <p className="text-name-modal">{itemEdit?.title?.[lang]}</p>
             </>
           }
         />
@@ -1079,12 +1072,14 @@ const ManagePromotions = () => {
               : `${i18n.t("unlock", { lng: lang })}`
           }
           body={
-            <a>
-              {itemEdit?.is_active
-                ? `${i18n.t("want_lock_promotion", { lng: lang })}`
-                : `${i18n.t("want_unlock_promotion", { lng: lang })}`}
-              <a className="text-name-modal">{itemEdit?.title?.[lang]}</a>
-            </a>
+            <>
+              <p>
+                {itemEdit?.is_active
+                  ? `${i18n.t("want_lock_promotion", { lng: lang })}`
+                  : `${i18n.t("want_unlock_promotion", { lng: lang })}`}
+              </p>
+              <p className="text-name-modal">{itemEdit?.title?.[lang]}</p>
+            </>
           }
         />
         <ModalCustom
@@ -1094,12 +1089,14 @@ const ManagePromotions = () => {
           handleCancel={() => setState({ ...state, modalShowApp: false })}
           textOk={itemEdit?.is_show_in_app ? `Ẩn` : `Hiện`}
           body={
-            <a>
-              {itemEdit?.is_show_in_app
-                ? `Bạn có muốn ẩn khuyến mãi trên app`
-                : `Bạn có muốn hiện thị khuyến mãi trên app`}
-              <a className="text-name-modal">{itemEdit?.code}</a>
-            </a>
+            <>
+              <p className="m-0">
+                {itemEdit?.is_show_in_app
+                  ? `Bạn có muốn ẩn khuyến mãi trên app`
+                  : `Bạn có muốn hiện thị khuyến mãi trên app`}
+              </p>
+              <p className="text-name-modal">{itemEdit?.code}</p>
+            </>
           }
         />
       </div>
