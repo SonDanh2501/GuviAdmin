@@ -8,6 +8,7 @@ import {
   Checkbox,
   DatePicker,
   FloatButton,
+  Image,
   Input,
   InputNumber,
   List,
@@ -178,21 +179,21 @@ const CreatePromotion = () => {
   }, []);
 
   statePromo?.dataGroupPromotion?.map((item) => {
-    groupPromotionOption?.push({
+    return groupPromotionOption?.push({
       value: item?._id,
       label: item?.name[lang],
     });
   });
 
   statePromo?.dataGroupCustomer.map((item) => {
-    options.push({
+    return options.push({
       label: item?.name,
       value: item?._id,
     });
   });
 
   province?.map((item) => {
-    cityOption?.push({
+    return cityOption?.push({
       value: item?.code,
       label: item?.name,
       district: item?.districts,
@@ -200,30 +201,27 @@ const CreatePromotion = () => {
   });
 
   service.map((item) => {
-    serviceOption.push({
+    return serviceOption.push({
       label: item?.title?.[lang],
       value: item?._id,
     });
   });
 
-  const searchCustomer = useCallback(
-    _debounce((value) => {
-      if (value) {
-        searchCustomersApi(value)
-          .then((res) => {
-            if (value === "") {
-              setStatePromo({ ...statePromo, name: value, data: [] });
-            } else {
-              setStatePromo({ ...statePromo, name: value, data: res.data });
-            }
-          })
-          .catch((err) => console.log(err));
-      } else {
-        setStatePromo({ ...statePromo, name: value, data: [] });
-      }
-    }, 500),
-    [statePromo]
-  );
+  const searchCustomer = _debounce((value) => {
+    if (value) {
+      searchCustomersApi(value)
+        .then((res) => {
+          if (value === "") {
+            setStatePromo({ ...statePromo, name: value, data: [] });
+          } else {
+            setStatePromo({ ...statePromo, name: value, data: res.data });
+          }
+        })
+        .catch((err) => console.log(err));
+    } else {
+      setStatePromo({ ...statePromo, name: value, data: [] });
+    }
+  }, 500);
 
   const onChooseCustomer = (item) => {
     const newData = statePromo?.listCustomers.concat(item?._id);
@@ -256,36 +254,48 @@ const CreatePromotion = () => {
 
   const shortDescriptionPrommo = (
     <div className="div-content-title">
-      <a>Mã khuyến mãi ở trang thanh toán</a>
-      <img src={shortDescriptionImage} className="img-short" />
+      <p className="m-0">Mã khuyến mãi ở trang thanh toán</p>
+      <Image
+        preview={false}
+        src={shortDescriptionImage}
+        className="img-short"
+      />
     </div>
   );
 
   const titlePrommo = (
     <div className="div-content-title">
-      <a>Mã khuyến mãi ở trang chủ</a>
-      <img src={titleImage} className="img-title" />
+      <p className="m-0">Mã khuyến mãi ở trang chủ</p>
+      <Image preview={false} src={titleImage} className="img-title" />
     </div>
   );
 
   const desciptionPrommo = (
     <div className="div-content-title">
-      <a>Chi tiết mã khuyến mãi</a>
-      <img src={descriptionImage} className="img-description" />
+      <p className="m-0">Chi tiết mã khuyến mãi</p>
+      <Image
+        preview={false}
+        src={descriptionImage}
+        className="img-description"
+      />
     </div>
   );
 
   const thumnailPrommo = (
     <div className="div-content-title">
-      <a>Chi tiết mã khuyến mãi</a>
-      <img src={thumnailImage} className="img-description" />
+      <p className="m-0">Chi tiết mã khuyến mãi</p>
+      <Image preview={false} src={thumnailImage} className="img-description" />
     </div>
   );
 
   const backgroundPrommo = (
     <div className="div-content-title">
-      <a>Chi tiết mã khuyến mãi</a>
-      <img src={backgroundImage} className="img-description" />
+      <p className="m-0">Chi tiết mã khuyến mãi</p>
+      <Image
+        preview={false}
+        src={backgroundImage}
+        className="img-description"
+      />
     </div>
   );
 
@@ -402,7 +412,7 @@ const CreatePromotion = () => {
           message: err,
         });
       });
-  }, [statePromo, timeApply, title, shortDescription, description]);
+  }, [statePromo, timeApply, title, shortDescription, description, navigate]);
 
   // const onCheck = () => {
   //   setStatePromo({
@@ -449,7 +459,7 @@ const CreatePromotion = () => {
   return (
     <>
       <div className="div-head-add-promotion">
-        <a>Tạo mới khuyến mãi</a>
+        <p className="m-0">Tạo mới khuyến mãi</p>
         <div>
           <Button style={{ width: "auto" }} onClick={() => navigate(-1)}>
             Huỷ
@@ -468,7 +478,7 @@ const CreatePromotion = () => {
           <div className="div-input">
             <div className="div-parrent-promo">
               <div className="div-code-promo">
-                <a className="label-promo">Mã khuyến mãi</a>
+                <p className="label-promo">Mã khuyến mãi</p>
                 <Input
                   placeholder={`${i18n.t("Nhập mã khuyến mãi", { lng: lang })}`}
                   type="text"
@@ -482,9 +492,9 @@ const CreatePromotion = () => {
                   }
                   style={{ marginTop: 5, width: "100%", height: 30 }}
                 />
-                <a style={{ fontSize: 12, color: "#fb422e" }}>
+                <p style={{ fontSize: 12, color: "#fb422e", margin: 0 }}>
                   {statePromo?.errorCode}
-                </a>
+                </p>
               </div>
 
               <div className="div-child-promo">
@@ -514,12 +524,12 @@ const CreatePromotion = () => {
                 )}
               </div>
             </div>
-            <a className="text-note">
+            <p className="text-note">
               Khách hàng sẽ nhập hoặc chọn mã này lúc thanh toán
-            </a>
+            </p>
           </div>
           <div className="div-input">
-            <a className="title-input">Loại khuyến mãi</a>
+            <p className="title-input">Loại khuyến mãi</p>
             <Radio.Group
               value={statePromo?.ratioTypeVoucher}
               onChange={(e) =>
@@ -580,9 +590,9 @@ const CreatePromotion = () => {
                   style={{ marginTop: 10 }}
                   value={statePromo?.serviceApply}
                 />
-                <a style={{ fontSize: 12, color: "#fb422e" }}>
+                <p style={{ fontSize: 12, color: "#fb422e", margin: 0 }}>
                   {statePromo?.errorService}
-                </a>
+                </p>
               </div>
             )}
             {statePromo?.ratioTypeVoucher === 2 && (
@@ -600,7 +610,7 @@ const CreatePromotion = () => {
             )}
           </div>
           <div className="div-input">
-            <a className="title-input">Nhóm khuyến mãi</a>
+            <p className="title-input">Nhóm khuyến mãi</p>
             <Radio.Group
               value={statePromo?.ratioGroupPromotion}
               onChange={(e) =>
@@ -631,7 +641,7 @@ const CreatePromotion = () => {
           </div>
           <div className="div-input">
             <div className="div-head-title">
-              <a className="title-input">Tiêu đề </a>
+              <p className="title-input">Tiêu đề </p>
               <Popover content={titlePrommo} trigger="click" placement="right">
                 <QuestionCircleOutlined className="icon-question" />
               </Popover>
@@ -645,9 +655,9 @@ const CreatePromotion = () => {
           {statePromo?.isCheckVoucher && (
             <div className="div-input">
               <div className="div-head-title">
-                <a className="title-input">
+                <p className="title-input">
                   {`${i18n.t("describe", { lng: lang })}`}
-                </a>
+                </p>
 
                 <Popover
                   content={shortDescriptionPrommo}
@@ -668,9 +678,9 @@ const CreatePromotion = () => {
           {statePromo?.isCheckVoucher && (
             <div className="div-input">
               <div className="div-head-title">
-                <a className="title-input">
+                <p className="title-input">
                   {`${i18n.t("detailed_description", { lng: lang })}`}
-                </a>
+                </p>
                 <Popover
                   content={desciptionPrommo}
                   trigger="click"
@@ -684,9 +694,9 @@ const CreatePromotion = () => {
                   return (
                     <div key={key} className="div-item-list-input">
                       <div>
-                        <a>{`Tiếng ${
+                        <p className="m-0">{`Tiếng ${
                           key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
-                        }`}</a>
+                        }`}</p>
                         <TextEditor
                           onChange={(e) =>
                             setDescription({
@@ -749,7 +759,7 @@ const CreatePromotion = () => {
             statePromo?.ratioTypeVoucher === 2) && (
             <>
               <div className="div-input">
-                <a className="title-input">Thời gian hiệu lực</a>
+                <p className="title-input">Thời gian hiệu lực</p>
                 <Radio.Group
                   defaultValue={statePromo?.isApllyTime}
                   style={{ marginTop: 10 }}
@@ -778,7 +788,9 @@ const CreatePromotion = () => {
                   <>
                     <div className="div-time-select">
                       <div className="div-time">
-                        <a>{`${i18n.t("start_date", { lng: lang })}`}</a>
+                        <p className="m-0">{`${i18n.t("start_date", {
+                          lng: lang,
+                        })}`}</p>
                         <DatePicker
                           onChange={(date, dateString) => {
                             setStatePromo({
@@ -791,9 +803,11 @@ const CreatePromotion = () => {
                           style={{ width: "90%", marginTop: 3 }}
                           locale={locale}
                         />
-                        <a style={{ fontSize: 12, color: "#fb422e" }}>
+                        <p
+                          style={{ fontSize: 12, color: "#fb422e", margin: 0 }}
+                        >
                           {statePromo?.errorStartTime}
-                        </a>
+                        </p>
                       </div>
                       <div className="div-time">
                         <Checkbox
@@ -814,14 +828,16 @@ const CreatePromotion = () => {
                           style={{ width: "90%", marginTop: 2 }}
                           locale={locale}
                         />
-                        <a style={{ fontSize: 12, color: "#fb422e" }}>
+                        <p
+                          style={{ fontSize: 12, color: "#fb422e", margin: 0 }}
+                        >
                           {statePromo?.errorEndTime}
-                        </a>
+                        </p>
                       </div>
                     </div>
-                    <a className="title-input mt-2">
+                    <p className="title-input mt-2">
                       Thời gian áp dụng trong tuần
-                    </a>
+                    </p>
 
                     <Radio.Group
                       value={statePromo?.ratioTypeDateApply}
@@ -889,7 +905,7 @@ const CreatePromotion = () => {
                                 {(!item?.is_check_loop ||
                                   (item?.time_loop?.length === 0 &&
                                     item.is_check_loop)) && (
-                                  <a
+                                  <p
                                     className={
                                       item?.is_check_loop
                                         ? "text-all"
@@ -897,7 +913,7 @@ const CreatePromotion = () => {
                                     }
                                   >
                                     Cả ngày
-                                  </a>
+                                  </p>
                                 )}
 
                                 {item?.is_check_loop && (
@@ -923,7 +939,7 @@ const CreatePromotion = () => {
                                                   )
                                                 }
                                               />
-                                              <a className="minus">-</a>
+                                              <p className="minus m-0">-</p>
 
                                               <Select
                                                 options={DATA_TIME_APPLY}
@@ -945,7 +961,7 @@ const CreatePromotion = () => {
                                                 }
                                               />
                                             </div>
-                                            <a className="text-from-time">
+                                            <p className="text-from-time">
                                               (
                                               {`từ ${i?.start_time_local.slice(
                                                 0,
@@ -955,7 +971,7 @@ const CreatePromotion = () => {
                                                 5
                                               )}`}
                                               )
-                                            </a>
+                                            </p>
                                           </div>
                                         </div>
                                       );
@@ -971,12 +987,12 @@ const CreatePromotion = () => {
                                       onClick={() => addTime(index)}
                                     />
                                   ) : (
-                                    <a
+                                    <p
                                       className="choose-time"
                                       onClick={() => addTime(index)}
                                     >
                                       Chọn giờ
-                                    </a>
+                                    </p>
                                   )}
                                 </>
                               )}
@@ -990,7 +1006,7 @@ const CreatePromotion = () => {
               </div>
               {!statePromo?.isCheckProgram && (
                 <div className="div-background-thumnail">
-                  <a className="title-input">Hình ảnh khuyến mãi</a>
+                  <p className="title-input">Hình ảnh khuyến mãi</p>
                   <div>
                     <UploadImage
                       title={"Ảnh khuyến mãi 160px * 170px"}
@@ -1014,9 +1030,9 @@ const CreatePromotion = () => {
                       classImg="img-thumbnail-promotion"
                       classUpload="upload-thumbnail-promotion"
                     />
-                    <a style={{ fontSize: 12, color: "#fb422e" }}>
+                    <p style={{ fontSize: 12, color: "#fb422e", margin: 0 }}>
                       {statePromo?.errorThumnail}
-                    </a>
+                    </p>
 
                     <UploadImage
                       title={"Ảnh bìa 414px * 200px"}
@@ -1041,12 +1057,14 @@ const CreatePromotion = () => {
               )}
               {statePromo?.ratioTypeVoucher === 1 && (
                 <div className="div-input">
-                  <a className="title-input">
+                  <p className="title-input">
                     {`${i18n.t("Giảm giá đơn hàng", { lng: lang })}`}
-                  </a>
+                  </p>
                   <div className="div-reduced-order">
                     <div className="div-body-reduced">
-                      <a>{`${i18n.t("Mức giảm", { lng: lang })}`}</a>
+                      <p className="m-0">{`${i18n.t("Mức giảm", {
+                        lng: lang,
+                      })}`}</p>
                       <InputNumber
                         formatter={(value) =>
                           `${value}`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
@@ -1071,9 +1089,9 @@ const CreatePromotion = () => {
                         style={{ width: "100%", marginTop: 5 }}
                         addonAfter={selectAfter}
                       />
-                      <a style={{ fontSize: 12, color: "#fb422e" }}>
+                      <p style={{ fontSize: 12, color: "#fb422e", margin: 0 }}>
                         {statePromo?.errorAmount}
-                      </a>
+                      </p>
                     </div>
                     {statePromo?.discountUnit === "percent" && (
                       <div className="div-body-reduced">
@@ -1112,9 +1130,9 @@ const CreatePromotion = () => {
               )}
               {statePromo?.ratioTypeVoucher === 1 && (
                 <div className="div-input">
-                  <a className="title-input">
+                  <p className="title-input">
                     {`${i18n.t("Điều kiện tối thiểu", { lng: lang })}`}
-                  </a>
+                  </p>
                   <Radio.Group
                     style={{ marginTop: 10 }}
                     defaultValue={statePromo?.checkMininum}
@@ -1162,16 +1180,16 @@ const CreatePromotion = () => {
                         }
                         className="input-price-minimum"
                       />
-                      <a className="text-note">Áp dụng cho tất cả đơn hàng</a>
+                      <p className="text-note">Áp dụng cho tất cả đơn hàng</p>
                     </div>
                   )}
                 </div>
               )}
 
               <div className="div-input">
-                <a className="title-input">
+                <p className="title-input">
                   {`${i18n.t("Đối tượng khách hàng", { lng: lang })}`}
-                </a>
+                </p>
                 <Radio.Group
                   defaultValue={statePromo?.isObjectCustomer}
                   onChange={(e) => {
@@ -1247,10 +1265,10 @@ const CreatePromotion = () => {
                                 key={index}
                                 onClick={() => onChooseCustomer(item)}
                               >
-                                <a className="text-name">
+                                <p className="text-name">
                                   {item?.full_name} - {item?.phone} -{" "}
                                   {item?.id_view}
-                                </a>
+                                </p>
                               </div>
                             );
                           })}
@@ -1263,10 +1281,10 @@ const CreatePromotion = () => {
                             {statePromo?.listNameCustomers.map((item) => {
                               return (
                                 <div className="div-item-customer">
-                                  <a className="text-name-list">
+                                  <p className="text-name-list">
                                     - {item?.full_name} . {item?.phone} .{" "}
                                     {item?.id_view}
-                                  </a>
+                                  </p>
                                   <CloseOutlined
                                     className="icon-delete"
                                     size={70}
@@ -1283,9 +1301,9 @@ const CreatePromotion = () => {
                 </div>
               </div>
               <div className="div-input">
-                <a className="title-input">
+                <p className="title-input">
                   {`${i18n.t("Khu vực áp dụng", { lng: lang })}`}
-                </a>
+                </p>
                 <Radio.Group
                   style={{ marginTop: 10 }}
                   defaultValue={statePromo?.ratioApplyArea}
@@ -1335,7 +1353,7 @@ const CreatePromotion = () => {
                 )}
               </div>
               <div className="div-input">
-                <a className="title-input">Giới hạn sử dụng</a>
+                <p className="title-input">Giới hạn sử dụng</p>
 
                 <div className="div-column-limit">
                   <Checkbox
@@ -1386,7 +1404,7 @@ const CreatePromotion = () => {
               </div>
               {!statePromo?.isCheckProgram && (
                 <div className="div-input">
-                  <a className="title-input">Điểm G-point quy đổi</a>
+                  <p className="title-input">Điểm G-point quy đổi</p>
                   <Radio.Group
                     defaultValue={statePromo?.ratioExchangePoint}
                     style={{ marginTop: 10 }}
@@ -1421,9 +1439,9 @@ const CreatePromotion = () => {
                         }
                         style={{ width: "50%", marginTop: 10 }}
                       />
-                      <a className="label-exchange">
+                      <p className="label-exchange">
                         Thời gian sử dụng sau khi đổi
-                      </a>
+                      </p>
                       <InputNumber
                         min={0}
                         defaultValue={statePromo?.dateExchange}
@@ -1441,7 +1459,7 @@ const CreatePromotion = () => {
         </div>
         <div className="div-detail">
           <div className="div-input">
-            <a className="title-input">Cài đặt</a>
+            <p className="title-input">Cài đặt</p>
             {((statePromo?.isCheckVoucher &&
               statePromo?.ratioTypeVoucher === 1) ||
               statePromo?.ratioTypeVoucher === 2) && (
@@ -1456,7 +1474,7 @@ const CreatePromotion = () => {
                     statePromo?.isShowInApp ? "switch-select" : "switch"
                   }
                 />
-                <a className="label-display">Hiển thị trên App</a>
+                <p className="label-display">Hiển thị trên App</p>
               </div>
             )}
             <div className="div-push-noti">
@@ -1471,7 +1489,7 @@ const CreatePromotion = () => {
                     statePromo?.isSendNotification ? "switch-select" : "switch"
                   }
                 />
-                <a className="title-input">Push notification</a>
+                <p className="title-input">Push notification</p>
               </div>
               {statePromo?.isSendNotification && (
                 <div className="div-body-push">
@@ -1542,9 +1560,9 @@ const CreatePromotion = () => {
                 </div>
               )}
             </div>
-            <a className="title-input mt-2">
+            <p className="title-input mt-2">
               Phương thức thanh toán được áp dụng
-            </a>
+            </p>
             <div className="div-exchange-point">
               <Radio.Group
                 style={{ marginTop: 5, marginLeft: 5 }}
@@ -1602,18 +1620,6 @@ const CreatePromotion = () => {
   );
 };
 export default CreatePromotion;
-
-const TAB_DISCOUNT = [
-  {
-    value: "amount",
-    title: "direct_discount",
-  },
-  {
-    value: "percent",
-    title: "percentage_discount",
-  },
-];
-
 const DATA_APPLY_TIME = [
   {
     day_local: 1,

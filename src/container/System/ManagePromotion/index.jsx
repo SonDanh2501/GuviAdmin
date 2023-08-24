@@ -719,7 +719,7 @@ const ManagePromotions = () => {
     //   width: "6%",
     // },
     {
-      title: () => <a className="title-column">Khu vực</a>,
+      title: () => <p className="title-column">Khu vực</p>,
       render: (data) => {
         return (
           <div
