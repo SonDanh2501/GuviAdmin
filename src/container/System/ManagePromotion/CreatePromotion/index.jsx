@@ -1442,22 +1442,23 @@ const CreatePromotion = () => {
         <div className="div-detail">
           <div className="div-input">
             <a className="title-input">Cài đặt</a>
-            {statePromo?.isCheckVoucher &&
-              statePromo?.ratioTypeVoucher === 1 && (
-                <div className="div-show-in-app">
-                  <Switch
-                    checked={statePromo?.isShowInApp}
-                    onChange={(e, permission) => {
-                      setStatePromo({ ...statePromo, isShowInApp: e });
-                    }}
-                    size="small"
-                    className={
-                      statePromo?.isShowInApp ? "switch-select" : "switch"
-                    }
-                  />
-                  <a className="label-display">Hiển thị trên App</a>
-                </div>
-              )}
+            {((statePromo?.isCheckVoucher &&
+              statePromo?.ratioTypeVoucher === 1) ||
+              statePromo?.ratioTypeVoucher === 2) && (
+              <div className="div-show-in-app">
+                <Switch
+                  checked={statePromo?.isShowInApp}
+                  onChange={(e, permission) => {
+                    setStatePromo({ ...statePromo, isShowInApp: e });
+                  }}
+                  size="small"
+                  className={
+                    statePromo?.isShowInApp ? "switch-select" : "switch"
+                  }
+                />
+                <a className="label-display">Hiển thị trên App</a>
+              </div>
+            )}
             <div className="div-push-noti">
               <div>
                 <Switch
