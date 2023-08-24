@@ -8,6 +8,7 @@ import {
   Checkbox,
   DatePicker,
   FloatButton,
+  Image,
   Input,
   InputNumber,
   List,
@@ -16,15 +17,16 @@ import {
   Select,
   Space,
   Switch,
-  notification,
 } from "antd";
 import locale from "antd/es/date-picker/locale/vi_VN";
 import dayjs from "dayjs";
 import _debounce from "lodash/debounce";
+import moment from "moment";
 import "moment/locale/vi";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { getGroupPromotion } from "../../../../api/configuration";
 import { searchCustomersApi } from "../../../../api/customer";
 import { DATA_PAYMENT, DATA_TIME_APPLY } from "../../../../api/fakeData";
 import {
@@ -39,6 +41,8 @@ import descriptionImage from "../../../../assets/images/description.png";
 import shortDescriptionImage from "../../../../assets/images/shortDescription.png";
 import thumnailImage from "../../../../assets/images/thumnailContent.png";
 import titleImage from "../../../../assets/images/title.png";
+import TextEditor from "../../../../components/TextEditor";
+import InputLanguage from "../../../../components/inputLanguage";
 import ModalCustom from "../../../../components/modalCustom";
 import LoadingPagination from "../../../../components/paginationLoading";
 import InputCustom from "../../../../components/textInputCustom";
@@ -51,10 +55,6 @@ import {
 } from "../../../../redux/selectors/auth";
 import { getProvince, getService } from "../../../../redux/selectors/service";
 import "./styles.scss";
-import moment from "moment";
-import TextEditor from "../../../../components/TextEditor";
-import { getGroupPromotion } from "../../../../api/configuration";
-import InputLanguage from "../../../../components/inputLanguage";
 const { Option } = Select;
 
 const EditPromotion = () => {
@@ -136,7 +136,6 @@ const EditPromotion = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [modalDelete, setModalDelete] = useState(false);
-  const [api, contextHolder] = notification.useNotification();
   const ref1 = useRef(null);
   const options = [];
   const serviceOption = [];
@@ -240,7 +239,7 @@ const EditPromotion = () => {
           paymentMethod: res?.payment_method,
         });
         res?.id_customer?.map((item) => {
-          statePromo?.listCustomers.push(item?._id);
+          return statePromo?.listCustomers.push(item?._id);
         });
         setRatioGroupPromotion(res?.id_group_promotion.length > 0 ? 2 : 1);
         setGroupPromotion(res?.id_group_promotion);
@@ -257,24 +256,24 @@ const EditPromotion = () => {
         setDescription(res?.description);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [id]);
 
   dataGroupPromotion?.map((item) => {
-    groupPromotionOption?.push({
+    return groupPromotionOption?.push({
       value: item?._id,
       label: item?.name[lang],
     });
   });
 
   dataGroupCustomer.map((item) => {
-    options.push({
+    return options.push({
       label: item?.name,
       value: item?._id,
     });
   });
 
   province?.map((item) => {
-    cityOption?.push({
+    return cityOption?.push({
       value: item?.code,
       label: item?.name,
       district: item?.districts,
@@ -282,30 +281,27 @@ const EditPromotion = () => {
   });
 
   service.map((item) => {
-    serviceOption.push({
+    return serviceOption.push({
       label: item?.title?.[lang],
       value: item?._id,
     });
   });
 
-  const searchCustomer = useCallback(
-    _debounce((value) => {
-      if (value) {
-        searchCustomersApi(value)
-          .then((res) => {
-            if (value === "") {
-              setStatePromo({ ...statePromo, data: [], name: value });
-            } else {
-              setStatePromo({ ...statePromo, data: res.data, name: value });
-            }
-          })
-          .catch((err) => console.log(err));
-      } else {
-        setStatePromo({ ...statePromo, data: [], name: value });
-      }
-    }, 500),
-    [statePromo]
-  );
+  const searchCustomer = _debounce((value) => {
+    if (value) {
+      searchCustomersApi(value)
+        .then((res) => {
+          if (value === "") {
+            setStatePromo({ ...statePromo, data: [], name: value });
+          } else {
+            setStatePromo({ ...statePromo, data: res.data, name: value });
+          }
+        })
+        .catch((err) => console.log(err));
+    } else {
+      setStatePromo({ ...statePromo, data: [], name: value });
+    }
+  }, 500);
 
   const onChooseCustomer = (item) => {
     const newData = statePromo?.listCustomers.concat(item?._id);
@@ -338,36 +334,48 @@ const EditPromotion = () => {
 
   const shortDescriptionPrommo = (
     <div className="div-content-title">
-      <a>Mã khuyến mãi ở trang thanh toán</a>
-      <img src={shortDescriptionImage} className="img-short" />
+      <p className="m-0">Mã khuyến mãi ở trang thanh toán</p>
+      <Image
+        preview={false}
+        src={shortDescriptionImage}
+        className="img-short"
+      />
     </div>
   );
 
   const titlePrommo = (
     <div className="div-content-title">
-      <a>Mã khuyến mãi ở trang chủ</a>
-      <img src={titleImage} className="img-title" />
+      <p className="m-0">Mã khuyến mãi ở trang chủ</p>
+      <Image preview={false} src={titleImage} className="img-title" />
     </div>
   );
 
   const desciptionPrommo = (
     <div className="div-content-title">
-      <a>Chi tiết mã khuyến mãi</a>
-      <img src={descriptionImage} className="img-description" />
+      <p className="m-0">Chi tiết mã khuyến mãi</p>
+      <Image
+        preview={false}
+        src={descriptionImage}
+        className="img-description"
+      />
     </div>
   );
 
   const thumnailPrommo = (
     <div className="div-content-title">
-      <a>Chi tiết mã khuyến mãi</a>
-      <img src={thumnailImage} className="img-description" />
+      <p className="m-0">Chi tiết mã khuyến mãi</p>
+      <Image preview={false} src={thumnailImage} className="img-description" />
     </div>
   );
 
   const backgroundPrommo = (
     <div className="div-content-title">
-      <a>Chi tiết mã khuyến mãi</a>
-      <img src={backgroundImage} className="img-description" />
+      <p className="m-0">Chi tiết mã khuyến mãi</p>
+      <Image
+        preview={false}
+        src={backgroundImage}
+        className="img-description"
+      />
     </div>
   );
 
@@ -404,39 +412,10 @@ const EditPromotion = () => {
 
   const onActive = useCallback((id, is_active) => {
     setIsLoading(true);
-    if (is_active) {
-      activePromotion(id, { is_active: false })
-        .then((res) => {
-          setIsLoading(false);
-          setIsActive(false);
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          setIsLoading(false);
-        });
-    } else {
-      activePromotion(id, { is_active: true })
-        .then((res) => {
-          setIsLoading(false);
-          setIsActive(true);
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          setIsLoading(false);
-        });
-    }
-  }, []);
-
-  const onDelete = useCallback((id) => {
-    setIsLoading(true);
-    deletePromotion(id)
+    activePromotion(id, { is_active: is_active ? false : true })
       .then((res) => {
-        navigate(-1);
         setIsLoading(false);
+        setIsActive(false);
       })
       .catch((err) => {
         errorNotify({
@@ -446,13 +425,23 @@ const EditPromotion = () => {
       });
   }, []);
 
-  const openNotificationWithIcon = (type) => {
-    api[type]({
-      message: "Vui lòng dừng kích hoạt",
-      description:
-        "Vui lòng dừng kích hoạt mã khuyến mãi để tiếp tục chỉnh sửa",
-    });
-  };
+  const onDelete = useCallback(
+    (id) => {
+      setIsLoading(true);
+      deletePromotion(id)
+        .then((res) => {
+          navigate(-1);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          setIsLoading(false);
+        });
+    },
+    [navigate]
+  );
 
   const onEditPromotion = useCallback(() => {
     setIsLoading(true);
@@ -460,20 +449,8 @@ const EditPromotion = () => {
       code: statePromo?.promoCode.toUpperCase(),
       is_parrent_promotion: statePromo?.isParrentPromotion,
       total_child_promotion: statePromo?.totalChildPromotion,
-      // title: {
-      //   vi: statePromo?.titleVN,
-      //   en: statePromo?.titleEN,
-      // },
       title: title,
-      // short_description: {
-      //   vi: statePromo?.shortDescriptionVN,
-      //   en: statePromo?.shortDescriptionEN,
-      // },
       short_description: shortDescription,
-      // description: {
-      //   vi: statePromo?.descriptionVN,
-      //   en: statePromo?.descriptionEN,
-      // },
       description: description,
       type_discount:
         statePromo?.ratioTypeVoucher === 2 ? "partner_promotion" : "order",
@@ -551,7 +528,7 @@ const EditPromotion = () => {
   return (
     <>
       <div className="div-head-add-promotion">
-        <a>Chỉnh sửa khuyến mãi</a>
+        <p className="m-0">Chỉnh sửa khuyến mãi</p>
         <div>
           {isActive ? (
             <Button
@@ -583,14 +560,12 @@ const EditPromotion = () => {
           )}
         </div>
       </div>
-      {contextHolder}
-
       <div className="div-container-create">
         <div className="div-body">
           <div className="div-input">
             <div className="div-parrent-promo">
               <div className="div-code-promo">
-                <a className="label-promo">Mã khuyến mãi</a>
+                <p className="label-promo">Mã khuyến mãi</p>
                 <div>
                   <Input
                     placeholder={`${i18n.t("Nhập mã khuyến mãi", {
@@ -639,12 +614,12 @@ const EditPromotion = () => {
                 )}
               </div>
             </div>
-            <a className="text-note">
+            <p className="text-note">
               Khách hàng sẽ nhập hoặc chọn mã này lúc thanh toán
-            </a>
+            </p>
           </div>
           <div className="div-input">
-            <a className="title-input">Loại khuyến mãi</a>
+            <p className="title-input">Loại khuyến mãi</p>
             <Radio.Group
               value={statePromo?.ratioTypeVoucher}
               onChange={(e) =>
@@ -721,7 +696,7 @@ const EditPromotion = () => {
             )}
           </div>
           <div className="div-input">
-            <a className="title-input">Nhóm khuyến mãi</a>
+            <p className="title-input">Nhóm khuyến mãi</p>
             <Radio.Group
               value={ratioGroupPromotion}
               onChange={(e) => setRatioGroupPromotion(e.target.value)}
@@ -747,7 +722,7 @@ const EditPromotion = () => {
           </div>
           <div className="div-input">
             <div className="div-head-title">
-              <a className="title-input">Tiêu đề </a>
+              <p className="title-input">Tiêu đề </p>
               <Popover content={titlePrommo} trigger="click" placement="right">
                 <QuestionCircleOutlined className="icon-question" />
               </Popover>
@@ -762,9 +737,9 @@ const EditPromotion = () => {
           {statePromo?.isCheckVoucher && (
             <div className="div-input">
               <div className="div-head-title">
-                <a className="title-input">
+                <p className="title-input">
                   {`${i18n.t("describe", { lng: lang })}`}
-                </a>
+                </p>
 
                 <Popover
                   content={shortDescriptionPrommo}
@@ -786,9 +761,9 @@ const EditPromotion = () => {
           {statePromo?.isCheckVoucher && (
             <div className="div-input">
               <div className="div-head-title">
-                <a className="title-input">
+                <p className="title-input">
                   {`${i18n.t("detailed_description", { lng: lang })}`}
-                </a>
+                </p>
                 <Popover
                   content={desciptionPrommo}
                   trigger="click"
@@ -802,9 +777,9 @@ const EditPromotion = () => {
                   return (
                     <div key={key} className="div-item-list-input">
                       <div>
-                        <a>{`Tiếng ${
+                        <p className="m-0">{`Tiếng ${
                           key === "vi" ? "Việt" : key === "en" ? "Anh" : "Nhật"
-                        }`}</a>
+                        }`}</p>
                         <TextEditor
                           onChange={(e) =>
                             setDescription({
@@ -849,7 +824,7 @@ const EditPromotion = () => {
             statePromo?.ratioTypeVoucher === 2) && (
             <>
               <div className="div-input">
-                <a className="title-input">Thời gian hiệu lực</a>
+                <p className="title-input">Thời gian hiệu lực</p>
                 <Radio.Group
                   value={statePromo?.isApllyTime}
                   style={{ marginTop: 10 }}
@@ -883,7 +858,7 @@ const EditPromotion = () => {
                   <>
                     <div className="div-time-select">
                       <div className="div-time">
-                        <a>{`${i18n.t("start_date", { lng: lang })}`}</a>
+                        <p>{`${i18n.t("start_date", { lng: lang })}`}</p>
                         <DatePicker
                           onChange={(date, dateString) => {
                             setStatePromo({
@@ -934,9 +909,9 @@ const EditPromotion = () => {
                         />
                       </div>
                     </div>
-                    <a className="title-input mt-2">
+                    <p className="title-input mt-2">
                       Thời gian áp dụng trong tuần
-                    </a>
+                    </p>
 
                     <Radio.Group
                       value={statePromo?.ratioTypeDateApply}
@@ -1005,7 +980,7 @@ const EditPromotion = () => {
                                 {(!item?.is_check_loop ||
                                   (item?.time_loop?.length === 0 &&
                                     item.is_check_loop)) && (
-                                  <a
+                                  <p
                                     className={
                                       item?.is_check_loop
                                         ? "text-all"
@@ -1013,7 +988,7 @@ const EditPromotion = () => {
                                     }
                                   >
                                     Cả ngày
-                                  </a>
+                                  </p>
                                 )}
 
                                 {item?.is_check_loop && (
@@ -1042,7 +1017,7 @@ const EditPromotion = () => {
                                                   isActive ? true : false
                                                 }
                                               />
-                                              <a className="minus">-</a>
+                                              <p className="minus">-</p>
 
                                               <Select
                                                 options={DATA_TIME_APPLY}
@@ -1070,7 +1045,7 @@ const EditPromotion = () => {
                                                 }
                                               />
                                             </div>
-                                            <a className="text-from-time">
+                                            <p className="text-from-time">
                                               (
                                               {`từ ${i?.start_time_local.slice(
                                                 0,
@@ -1080,7 +1055,7 @@ const EditPromotion = () => {
                                                 5
                                               )}`}
                                               )
-                                            </a>
+                                            </p>
                                           </div>
                                         </div>
                                       );
@@ -1117,7 +1092,7 @@ const EditPromotion = () => {
               </div>
               {!statePromo?.isCheckProgram && (
                 <div className="div-background-thumnail">
-                  <a className="title-input">Hình ảnh khuyến mãi</a>
+                  <p className="title-input">Hình ảnh khuyến mãi</p>
                   <div>
                     <UploadImage
                       title={"Ảnh khuyến mãi 160px * 170px"}
@@ -1163,12 +1138,14 @@ const EditPromotion = () => {
               )}
               {statePromo?.ratioTypeVoucher === 1 && (
                 <div className="div-input">
-                  <a className="title-input">
+                  <p className="title-input">
                     {`${i18n.t("Giảm giá đơn hàng", { lng: lang })}`}
-                  </a>
+                  </p>
                   <div className="div-reduced-order">
                     <div className="div-body-reduced">
-                      <a>{`${i18n.t("Mức giảm", { lng: lang })}`}</a>
+                      <p className="m-0">{`${i18n.t("Mức giảm", {
+                        lng: lang,
+                      })}`}</p>
                       <InputNumber
                         formatter={(value) =>
                           `${value}`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
@@ -1233,9 +1210,9 @@ const EditPromotion = () => {
               )}
               {statePromo?.ratioTypeVoucher === 1 && (
                 <div className="div-input">
-                  <a className="title-input">
+                  <p className="title-input">
                     {`${i18n.t("Điều kiện tối thiểu", { lng: lang })}`}
-                  </a>
+                  </p>
                   <Radio.Group
                     style={{ marginTop: 10 }}
                     value={statePromo?.checkMininum}
@@ -1281,15 +1258,15 @@ const EditPromotion = () => {
                         style={{ width: "100%", marginTop: 4 }}
                         disabled={isActive ? true : false}
                       />
-                      <a className="text-note">Áp dụng cho tất cả đơn hàng</a>
+                      <p className="text-note">Áp dụng cho tất cả đơn hàng</p>
                     </div>
                   )}
                 </div>
               )}
               <div className="div-input">
-                <a className="title-input">
+                <p className="title-input">
                   {`${i18n.t("Đối tượng khách hàng", { lng: lang })}`}
-                </a>
+                </p>
                 <Radio.Group
                   value={statePromo?.isObjectCustomer}
                   onChange={(e) => {
@@ -1369,10 +1346,10 @@ const EditPromotion = () => {
                                 key={index}
                                 onClick={() => onChooseCustomer(item)}
                               >
-                                <a className="text-name">
+                                <p className="text-name">
                                   {item?.full_name} - {item?.phone} -{" "}
                                   {item?.id_view}
-                                </a>
+                                </p>
                               </div>
                             );
                           })}
@@ -1385,10 +1362,10 @@ const EditPromotion = () => {
                             {statePromo?.listNameCustomers.map((item) => {
                               return (
                                 <div className="div-item-customer">
-                                  <a className="text-name-list">
+                                  <p className="text-name-list">
                                     - {item?.full_name} . {item?.phone} .{" "}
                                     {item?.id_view}
-                                  </a>
+                                  </p>
                                   <CloseOutlined
                                     className="icon-delete"
                                     size={70}
@@ -1406,9 +1383,9 @@ const EditPromotion = () => {
                 </div>
               </div>
               <div className="div-input">
-                <a className="title-input">
+                <p className="title-input">
                   {`${i18n.t("Khu vực áp dụng", { lng: lang })}`}
-                </a>
+                </p>
                 <Radio.Group
                   style={{ marginTop: 10 }}
                   value={statePromo?.ratioApplyArea}
@@ -1460,7 +1437,7 @@ const EditPromotion = () => {
                 )}
               </div>
               <div className="div-input">
-                <a className="title-input">Giới hạn sử dụng</a>
+                <p className="title-input">Giới hạn sử dụng</p>
                 <div className="div-column-limit">
                   <Checkbox
                     checked={statePromo?.limitedQuantity}
@@ -1514,7 +1491,7 @@ const EditPromotion = () => {
               </div>
               {!statePromo?.isCheckProgram && (
                 <div className="div-input">
-                  <a className="title-input">Điểm G-point quy đổi</a>
+                  <p className="title-input">Điểm G-point quy đổi</p>
                   <Radio.Group
                     value={statePromo?.ratioExchangePoint}
                     style={{ marginTop: 10 }}
@@ -1551,9 +1528,9 @@ const EditPromotion = () => {
                         style={{ width: "50%", marginTop: 10 }}
                         disabled={isActive ? true : false}
                       />
-                      <a className="label-exchange">
+                      <p className="label-exchange">
                         Thời gian sử dụng sau khi đổi
-                      </a>
+                      </p>
                       <InputNumber
                         min={0}
                         defaultValue={statePromo?.dateExchange}
@@ -1572,7 +1549,7 @@ const EditPromotion = () => {
         </div>
         <div className="div-detail">
           <div className="div-input">
-            <a className="title-input">Cài đặt</a>
+            <p className="title-input">Cài đặt</p>
             {((statePromo?.isCheckVoucher &&
               statePromo?.ratioTypeVoucher === 1) ||
               statePromo?.ratioTypeVoucher === 2) && (
@@ -1588,13 +1565,13 @@ const EditPromotion = () => {
                   }
                   disabled={isActive ? true : false}
                 />
-                <a className="label-display">Hiển thị trên App</a>
+                <p className="label-display">Hiển thị trên App</p>
               </div>
             )}
 
-            <a className="title-input mt-2">
+            <p className="title-input mt-2">
               Phương thức thanh toán được áp dụng
-            </a>
+            </p>
             <div className="div-exchange-point">
               <Radio.Group
                 style={{ marginTop: 5, marginLeft: 5 }}
@@ -1666,8 +1643,8 @@ const EditPromotion = () => {
         handleCancel={() => setModalDelete(false)}
         body={
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <a>Bạn có chắc muốn xoá mã khuyến mãi này?</a>
-            <a style={{ color: "red" }}>{statePromo?.titleVN}</a>
+            <p className="m-0">Bạn có chắc muốn xoá mã khuyến mãi này?</p>
+            <p style={{ color: "red", margin: 0 }}>{statePromo?.titleVN}</p>
           </div>
         }
       />

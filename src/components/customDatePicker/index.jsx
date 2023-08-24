@@ -75,7 +75,7 @@ const CustomDatePicker = (props) => {
     const lastThirty = moment().subtract(30, "days").toISOString();
     const lastNinety = moment().subtract(90, "days").toISOString();
     const startThisMonth = moment().startOf("month").toISOString();
-    const endThisMonth = moment().endOf("month").toISOString();
+    const endThisMonth = moment().endOf("days").toISOString();
     const startLastMonth = moment()
       .subtract(1, "months")
       .startOf("months")
@@ -115,12 +115,20 @@ const CustomDatePicker = (props) => {
         setStartDate(startThisMonth);
         setStart(moment().startOf("month"));
         setEndDate(endThisMonth);
-        setEnd(moment().endOf("month"));
+        setEnd(moment().endOf("days"));
+        const samDiff = moment(endThisMonth).diff(
+          moment(startThisMonth),
+          "day"
+        );
+        const sameStart = moment()
+          .subtract(1, "months")
+          .startOf("months")
+          .toISOString();
         setSameStart(
           moment().subtract(1, "months").startOf("months").toISOString()
         );
         setSameEnd(
-          moment().subtract(1, "months").endOf("months").toISOString()
+          moment(sameStart).add(samDiff, "days").endOf("days").toISOString()
         );
         break;
       case "last_month":
@@ -227,9 +235,7 @@ const CustomDatePicker = (props) => {
     setSameStart(
       moment(dayStart).subtract(sam, "day").startOf("day").toISOString()
     );
-    setSameEnd(
-      moment(dayEnd).subtract(sam, "day").startOf("day").toISOString()
-    );
+    setSameEnd(moment(dayEnd).subtract(sam, "day").endOf("day").toISOString());
   }, []);
 
   return (

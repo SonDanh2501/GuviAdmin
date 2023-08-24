@@ -232,8 +232,8 @@ const ReportOverview = () => {
           dataChartAreaOrder.push({
             city: element?.city,
             total_item: element?.total_item,
-            gross_income: element?.total_net_income,
-            percent_gross_income: percentSame(
+            net_income: element?.total_net_income,
+            percent_net_income: percentSame(
               element?.total_net_income,
               element2?.total_net_income
             ),
@@ -257,8 +257,8 @@ const ReportOverview = () => {
       return dataChartAreaOrder.push({
         city: item?.city,
         total_item: item?.total_item,
-        gross_income: item?.total_net_income,
-        percent_gross_income: 100,
+        net_income: item?.total_net_income,
+        percent_net_income: 100,
       });
     });
 
@@ -268,8 +268,8 @@ const ReportOverview = () => {
           dataChartAreaOrder.push({
             city: element?.city,
             total_item: element?.total_item,
-            gross_income: element?.total_net_income,
-            percent_gross_income: percentSame(
+            net_income: element?.total_net_income,
+            percent_net_income: percentSame(
               element?.total_net_income,
               element2?.total_net_income
             ),
@@ -618,16 +618,16 @@ const ReportOverview = () => {
                   </div>
                   <div className="div-number-area">
                     <p className="money-area">
-                      {formatMoney(item?.gross_income)}
+                      {formatMoney(item?.net_income)}
                     </p>
 
-                    {item?.percent_gross_income < 0 ? (
+                    {item?.percent_net_income < 0 ? (
                       <p className="text-number-persent-down">
                         <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
                         {Math.abs(
-                          isNaN(item?.percent_gross_income)
+                          isNaN(item?.percent_net_income)
                             ? 0
-                            : item?.percent_gross_income
+                            : item?.percent_net_income
                         ).toFixed(2)}
                         %
                       </p>
@@ -635,9 +635,9 @@ const ReportOverview = () => {
                       <p className="text-number-persent-up">
                         <CaretUpOutlined style={{ marginRight: 5 }} />
                         {Number(
-                          isNaN(item?.percent_gross_income)
+                          isNaN(item?.percent_net_income)
                             ? 0
-                            : item?.percent_gross_income
+                            : item?.percent_net_income
                         ).toFixed(2)}
                         %
                       </p>

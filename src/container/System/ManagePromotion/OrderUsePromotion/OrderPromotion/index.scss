@@ -3,7 +3,7 @@
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
-  line-height: 16px;
+  margin: 0;
   color: black;
 }
 
@@ -16,8 +16,8 @@
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
-    line-height: 16px;
     color: black;
+    margin: 0;
   }
 }
 
@@ -30,8 +30,8 @@
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
-    line-height: 16px;
-    color: #6e6893;
+    color: #202223;
+    margin: 00;
   }
 }
 
@@ -44,9 +44,9 @@
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
-    line-height: 16px;
     text-transform: capitalize;
     color: black;
+    margin: 0;
   }
 }
 
@@ -55,21 +55,21 @@
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
-  line-height: 16px;
   color: black;
   width: 200px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  margin: 0;
 }
 .text-collaborator {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
-  line-height: 16px;
   text-decoration-line: underline;
   color: #023e8a;
+  margin: 0;
 }
 
 .text-pending-order {
@@ -77,8 +77,8 @@
   font-style: normal;
   font-weight: 700;
   font-size: 14px;
-  line-height: 16px;
   color: #ece200 !important;
+  margin: 0;
 }
 
 .text-confirm {
@@ -86,8 +86,8 @@
   font-style: normal;
   font-weight: 700;
   font-size: 14px;
-  line-height: 16px;
   color: #023e8a;
+  margin: 0;
 }
 
 .text-doing {
@@ -95,8 +95,8 @@
   font-style: normal;
   font-weight: 700;
   font-size: 14px;
-  line-height: 16px;
   color: #023e8a;
+  margin: 0;
 }
 
 .text-cancel {
@@ -112,9 +112,9 @@
   font-style: normal;
   font-weight: 700;
   font-size: 14px;
-  line-height: 16px;
   color: #00cf3a;
   text-decoration: none;
+  margin: 0;
 }
 
 .filter-input {
@@ -126,4 +126,14 @@
 .div-name {
   display: flex;
   flex-direction: column;
+
+  .text-name {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #202223;
+    text-decoration: none;
+    margin: 0;
+  }
 }
