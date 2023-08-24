@@ -15,9 +15,12 @@ import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getOrderApi } from "../../../api/order";
+import LoadingPagination from "../../../components/paginationLoading";
 import { ExportCSV } from "../../../helper/export";
+import { errorNotify } from "../../../helper/toast";
+import { useCookies } from "../../../helper/useCookies";
+import useWindowDimensions from "../../../helper/useWindowDimensions";
 import i18n from "../../../i18n";
-import dayjs from "dayjs";
 import {
   getElementState,
   getLanguageState,
@@ -26,10 +29,6 @@ import {
 import { getProvince, getService } from "../../../redux/selectors/service";
 import OrderManage from "./Order/OrderManage";
 import "./index.scss";
-import LoadingPagination from "../../../components/paginationLoading";
-import { useCookies } from "../../../helper/useCookies";
-import useWindowDimensions from "../../../helper/useWindowDimensions";
-import { errorNotify } from "../../../helper/toast";
 const { RangePicker } = DatePicker;
 
 const ManageOrder = () => {
@@ -58,7 +57,7 @@ const ManageOrder = () => {
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [keyActive, setKeyActive] = useState(0);
-  const [itemTab, setItemTab] = useState([
+  const itemTab = [
     {
       label: "Tất cả đơn hàng",
       value: "all",
@@ -89,18 +88,14 @@ const ManageOrder = () => {
       value: "done",
       key: 5,
     },
-  ]);
+  ];
   const [saveToCookie, readCookie] = useCookies();
   const navigate = useNavigate();
   const { width } = useWindowDimensions();
-
-  const dateFormat = "YYYY/MM/DD";
+  const tabCookie = readCookie("tab-order");
   useEffect(() => {
     window.scroll(0, Number(readCookie("order_scrolly")));
-
-    setKeyActive(
-      readCookie("tab-order") === "" ? 0 : Number(readCookie("tab-order"))
-    );
+    setKeyActive(tabCookie === "" ? 0 : Number(tabCookie));
     setTab(
       readCookie("status-order") !== "" ? readCookie("status-order") : "all"
     );
@@ -138,7 +133,7 @@ const ManageOrder = () => {
     }
 
     getOrderApi(
-      valueSearch,
+      "",
       0,
       20,
       readCookie("status-order") !== "" ? readCookie("status-order") : "all",
@@ -150,7 +145,6 @@ const ManageOrder = () => {
       readCookie("end_date_order") !== ""
         ? readCookie("end_date_order")
         : moment().endOf("date").toISOString(),
-      // readCookie("city_order") !== "" ? readCookie("city_order") : ["1"],
       user?.area_manager_lv_1?.length === 0
         ? readCookie("city_order") !== ""
           ? readCookie("city_order")
@@ -175,51 +169,57 @@ const ManageOrder = () => {
   const districtOption = [];
   const optionsService = [];
 
-  service.map((item) => {
+  service.forEach((item) => {
     if (user?.id_service_manager?.length === 0) {
       optionsService.push({
         value: item?._id,
         label: item?.title?.[lang],
       });
+      return;
     } else {
-      user?.id_service_manager?.map((i) => {
+      user?.id_service_manager?.forEach((i) => {
         if (item?._id === i?._id) {
           optionsService.push({
             value: item?._id,
             label: item?.title?.[lang],
           });
+          return;
         }
       });
     }
   });
 
-  province?.map((item) => {
+  province?.forEach((item) => {
     if (user?.area_manager_lv_1?.length === 0) {
       cityOptions.push({
         value: item?.code,
         label: item?.name,
         district: item?.districts,
       });
+      return;
     } else if (user?.area_manager_lv_1?.includes(item?.code)) {
       cityOptions.push({
         value: item?.code,
         label: item?.name,
         district: item?.districts,
       });
+      return;
     }
   });
 
-  dataDistrict?.map((item) => {
+  dataDistrict?.forEach((item) => {
     if (user?.area_manager_lv_2?.length === 0) {
       districtOption.push({
         value: item?.code,
         label: item?.name,
       });
+      return;
     } else if (user?.area_manager_lv_2?.includes(item?.code)) {
       districtOption.push({
         value: item?.code,
         label: item?.name,
       });
+      return;
     }
   });
 

@@ -1,17 +1,14 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Pagination, Table } from "antd";
+import { Table } from "antd";
 import moment from "moment";
 import vi from "moment/locale/vi";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./index.scss";
 
-export default function OrderPromotion(props) {
-  const { data, total } = props;
+const OrderPromotion = (props) => {
+  const { data } = props;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [item, setItem] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
 
   const timeWork = (data) => {
@@ -30,7 +27,7 @@ export default function OrderPromotion(props) {
       title: "Mã",
       render: (data) => {
         return (
-          <a
+          <p
             className="text-id"
             onClick={() =>
               navigate("/details-order", {
@@ -39,7 +36,7 @@ export default function OrderPromotion(props) {
             }
           >
             {data?.id_view}
-          </a>
+          </p>
         );
       },
     },
@@ -48,19 +45,18 @@ export default function OrderPromotion(props) {
       render: (data) => {
         return (
           <div className="div-create">
-            <a className="text-create">
+            <p className="text-create">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-create">
+            </p>
+            <p className="text-create">
               {moment(new Date(data?.date_create)).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
     },
     {
       title: "Tên khách hàng",
-      // dataIndex: ["id_customer", "full_name"],
       render: (data) => {
         return (
           <div
@@ -71,8 +67,8 @@ export default function OrderPromotion(props) {
             }
             className="div-name"
           >
-            <a>{data?.id_customer?.full_name}</a>
-            <a>{data?.id_customer?.phone}</a>
+            <p className="text-name">{data?.id_customer?.full_name}</p>
+            <p className="text-name">{data?.id_customer?.phone}</p>
           </div>
         );
       },
@@ -82,7 +78,7 @@ export default function OrderPromotion(props) {
       render: (data) => {
         return (
           <div className="div-service">
-            <a className="text-service">
+            <p className="text-service">
               {data?.type === "schedule"
                 ? "Giúp việc cố định"
                 : data?.type === "loop" && !data?.is_auto_order
@@ -90,8 +86,8 @@ export default function OrderPromotion(props) {
                 : data?.type === "loop" && data?.is_auto_order
                 ? "Lặp lại hàng tuần"
                 : ""}
-            </a>
-            <a className="text-service">{timeWork(data)}</a>
+            </p>
+            <p className="text-service">{timeWork(data)}</p>
           </div>
         );
       },
@@ -101,17 +97,17 @@ export default function OrderPromotion(props) {
       render: (data) => {
         return (
           <div className="div-worktime">
-            <a className="text-worktime">
+            <p className="text-worktime">
               {" "}
               {moment(new Date(data?.date_work_schedule[0].date)).format(
                 "DD/MM/YYYY"
               )}
-            </a>
-            <a className="text-worktime">
+            </p>
+            <p className="text-worktime">
               {moment(new Date(data?.date_work_schedule[0].date))
                 .locale("vi", vi)
                 .format("dddd")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -125,7 +121,7 @@ export default function OrderPromotion(props) {
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
-            <a>Đang tìm kiếm</a>
+            <p className="m-0">Đang tìm kiếm</p>
           ) : (
             <div
               onClick={() =>
@@ -135,10 +131,10 @@ export default function OrderPromotion(props) {
               }
               className="div-name"
             >
-              <a className="text-collaborator">
+              <p className="text-collaborator">
                 {data?.id_collaborator?.full_name}
-              </a>
-              <a>{data?.id_collaborator?.phone}</a>
+              </p>
+              <p className="m-0">{data?.id_collaborator?.phone}</p>
             </div>
           )}
         </>
@@ -148,7 +144,7 @@ export default function OrderPromotion(props) {
     {
       title: "Trạng thái",
       render: (data) => (
-        <a
+        <p
           className={
             data?.status === "pending"
               ? "text-pending-order"
@@ -170,12 +166,10 @@ export default function OrderPromotion(props) {
             : data?.status === "done"
             ? "Hoàn thành"
             : "Đã huỷ"}
-        </a>
+        </p>
       ),
     },
   ];
-
-  const onChange = (page) => {};
 
   return (
     <React.Fragment>
@@ -191,16 +185,9 @@ export default function OrderPromotion(props) {
               setSelectedRowKeys(selectedRowKeys);
             },
           }}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                setItem(record);
-              },
-            };
-          }}
         />
 
-        <div className="mt-2 div-pagination p-2">
+        {/* <div className="mt-2 div-pagination p-2">
           <a>Tổng: {total}</a>
           <div>
             <Pagination
@@ -211,8 +198,10 @@ export default function OrderPromotion(props) {
               pageSize={20}
             />
           </div>
-        </div>
+        </div> */}
       </div>
     </React.Fragment>
   );
-}
+};
+
+export default OrderPromotion;

@@ -70,7 +70,7 @@ const ChildPromotion = () => {
         return (
           <div className="div-img-promotion">
             <Image src={data?.thumbnail} className="img-customer-promotion" />
-            <a className="text-title-promotion">{data.title.vi}</a>
+            <p className="text-title-promotion">{data.title.vi}</p>
           </div>
         );
       },
@@ -81,7 +81,7 @@ const ChildPromotion = () => {
 
       render: (data) => {
         return (
-          <a
+          <p
             className="text-title-promotion"
             onClick={() =>
               navigate("/promotion/manage-setting/order-promotion", {
@@ -90,7 +90,7 @@ const ChildPromotion = () => {
             }
           >
             {data?.total_used_promotion}
-          </a>
+          </p>
         );
       },
     },
@@ -98,14 +98,14 @@ const ChildPromotion = () => {
       title: "Vị trí",
       align: "center",
       render: (data) => (
-        <a className="text-title-promotion">{data?.position}</a>
+        <p className="text-title-promotion">{data?.position}</p>
       ),
     },
     {
       title: "Mã code",
 
       align: "center",
-      render: (data) => <a className="text-title-promotion">{data?.code}</a>,
+      render: (data) => <p className="text-title-promotion">{data?.code}</p>,
     },
 
     {
@@ -120,9 +120,9 @@ const ChildPromotion = () => {
           "DD/MM/YYYY"
         );
         return (
-          <a className="text-title-promotion">
+          <p className="text-title-promotion">
             {data?.is_limit_date ? startDate + "-" + endDate : "Không có hạn"}
-          </a>
+          </p>
         );
       },
     },
@@ -133,15 +133,15 @@ const ChildPromotion = () => {
         return (
           <div>
             {data?.status === "upcoming" ? (
-              <a className="text-upcoming">Sắp diễn ra</a>
+              <p className="text-upcoming">Sắp diễn ra</p>
             ) : data?.status === "doing" ? (
-              <a className="text-upcoming">Đang diễn ra</a>
+              <p className="text-upcoming">Đang diễn ra</p>
             ) : data?.status === "out_of_stock" ? (
-              <a className="text-cancel">Hết số lượng</a>
+              <p className="text-cancel">Hết số lượng</p>
             ) : data?.status === "out_of_date" ? (
-              <a className="text-cancel">Hết hạn</a>
+              <p className="text-cancel">Hết hạn</p>
             ) : (
-              <a className="text-cancel">Kết thúc</a>
+              <p className="text-cancel">Kết thúc</p>
             )}
           </div>
         );
@@ -191,7 +191,7 @@ const ChildPromotion = () => {
                 setCurrentPage(1);
               }}
             >
-              <a className="title-child-promotion">{item?.title}</a>
+              <p className="title-child-promotion">{item?.title}</p>
             </div>
           );
         })}
@@ -200,7 +200,7 @@ const ChildPromotion = () => {
         <Table columns={columns} pagination={false} dataSource={data} />
       </div>
       <div className="div-pagination p-2">
-        <a>Tổng: {total}</a>
+        <p>Tổng: {total}</p>
         <div>
           <Pagination
             current={currentPage}

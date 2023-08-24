@@ -48,7 +48,7 @@ const OrderUsePromotion = () => {
 
   return (
     <div className="div-container">
-      <a className="text-title-order-promotion">Đơn hàng sử dụng khuyến mãi</a>
+      <p className="text-title-order-promotion">Đơn hàng sử dụng khuyến mãi</p>
 
       <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
         <Tabs.TabPane tab="Tất cả" key="1">

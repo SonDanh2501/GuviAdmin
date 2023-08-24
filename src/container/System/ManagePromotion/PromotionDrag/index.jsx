@@ -1,21 +1,18 @@
+import { Button, Image } from "antd";
 import { useEffect, useState } from "react";
-import "./styles.scss";
-import { useLocation } from "react-router-dom";
 import {
   getPromotionByPosition,
   updatePositionPromotion,
 } from "../../../../api/promotion";
-import { Button, Image } from "antd";
-import { errorNotify } from "../../../../helper/toast";
 import LoadingPagination from "../../../../components/paginationLoading";
+import { errorNotify } from "../../../../helper/toast";
+import "./styles.scss";
 
 const PromotionDrag = () => {
-  const { state } = useLocation();
-  const { type, brand, idService, exchange } = state || {};
   const [data, setData] = useState([]);
-  const [item, setItem] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [draggedItem, setDraggedItem] = useState();
+  const item = [];
 
   useEffect(() => {
     getPromotionByPosition()
@@ -100,7 +97,7 @@ const PromotionDrag = () => {
                 onDragEnd={onDragEnd}
               >
                 <Image src={item?.thumbnail} className="img-promotion" />
-                <a className="text-title">{item?.title?.vi}</a>
+                <p className="text-title">{item?.title?.vi}</p>
               </div>
             </div>
           );
