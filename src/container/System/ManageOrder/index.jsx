@@ -11,7 +11,7 @@ import {
 } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getOrderApi } from "../../../api/order";
@@ -223,28 +223,25 @@ const ManageOrder = () => {
     }
   });
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      getOrderApi(
-        value,
-        0,
-        20,
-        tab,
-        kind,
-        type,
-        startDate,
-        endDate,
-        city,
-        district
-      )
-        .then((res) => {
-          setData(res?.data);
-          setTotal(res?.totalItem);
-        })
-        .catch((err) => {});
-    }, 1000),
-    [tab, kind, city]
-  );
+  const handleSearch = _debounce((value) => {
+    getOrderApi(
+      value,
+      0,
+      20,
+      tab,
+      kind,
+      type,
+      startDate,
+      endDate,
+      city,
+      district
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  }, 1000);
 
   const handleFilterByCondition = () => {
     setIsLoading(true);
@@ -363,7 +360,7 @@ const ManageOrder = () => {
   return (
     <div className="div-container-order">
       <div className="div-header">
-        <a className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</a>
+        <p className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</p>
         <div className="div-add-order">
           <div className="div-add-export">
             <Dropdown
@@ -373,11 +370,11 @@ const ManageOrder = () => {
               trigger={["click"]}
               className="dropdown-export"
             >
-              <a onClick={(e) => e.preventDefault()}>
+              <p className="m-0" onClick={(e) => e.preventDefault()}>
                 <Space>
                   <UilEllipsisH className="icon-menu" />
                 </Space>
-              </a>
+              </p>
             </Dropdown>
           </div>
           {checkElement?.includes("create_guvi_job") ? (
@@ -408,7 +405,7 @@ const ManageOrder = () => {
                     onChangeTab(item?.value, item);
                   }}
                 >
-                  <a className="text-title">{item?.label}</a>
+                  <p className="text-title">{item?.label}</p>
                 </div>
               );
             })}
@@ -430,14 +427,14 @@ const ManageOrder = () => {
               onClick={() => setCheckCondition(!checkCondition)}
             >
               <i class="uil uil-filter"></i>
-              <a className="text-condition">Điều kiện lọc</a>
+              <p className="text-condition">Điều kiện lọc</p>
             </div>
 
             {checkCondition && (
               <div className="div-condition-body">
-                <a className="text-display-job">
+                <p className="text-display-job">
                   Hiện thị tất cả đơn hàng theo:
-                </a>
+                </p>
                 <Select
                   onChange={(e) => {
                     setCondition(e);
@@ -572,7 +569,7 @@ const ManageOrder = () => {
         </div>
         {readCookie("name_filter") !== "" && (
           <div className="div-name-filter">
-            <a>{readCookie("name_filter")}</a>
+            <p className="m-0">{readCookie("name_filter")}</p>
             <i
               class="uil uil-times-circle icon-close"
               onClick={onClearFilter}
@@ -583,12 +580,12 @@ const ManageOrder = () => {
         {readCookie("start_date_order") !== "" && (
           <div className="div-date-filter">
             <div className="div-column-filter">
-              <a>
+              <p className="m-0">
                 {readCookie("type_order") === "date_work"
                   ? "Theo ngày làm"
                   : "Theo ngày tạo"}
-              </a>
-              <a>
+              </p>
+              <p className="m-0">
                 {moment(readCookie("start_date_order"))
                   .add(7, "hours")
                   .format("DD/MM/YYYY")}
@@ -596,7 +593,7 @@ const ManageOrder = () => {
                 {moment(readCookie("end_date_order"))
                   .add(7, "hours")
                   .format("DD/MM/YYYY")}
-              </a>
+              </p>
             </div>
 
             <i

@@ -33,16 +33,11 @@ const DeepCleaning = (props) => {
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState("");
   const [long, setLong] = useState("");
-  const [errorAddress, setErrorAddress] = useState("");
   const [note, setNote] = useState("");
   const [time, setTime] = useState([]);
-  const [errorTime, setErrorTime] = useState("");
   const [dateWork, setDateWork] = useState("");
-  const [errorDateWork, setErrorDateWork] = useState("");
   const [timeWork, setTimeWork] = useState("");
-  const [errorTimeWork, setErrorTimeWork] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("cash");
-  const [mutipleSelected, setMutipleSelected] = useState([]);
   const [promotionCustomer, setPromotionCustomer] = useState([]);
   const [priceOrder, setPriceOrder] = useState();
   const [discount, setDiscount] = useState(0);
@@ -50,9 +45,7 @@ const DeepCleaning = (props) => {
   const [eventPromotion, setEventPromotion] = useState([]);
   const [eventFeePromotion, setEventFeePromotion] = useState(0);
   const [feeService, setFeeService] = useState(0);
-  const [dataFeeService, setDataFeeService] = useState(0);
   const [itemPromotion, setItemPromotion] = useState(0);
-  const [isAutoOrder, setIsAutoOrder] = useState(false);
   const [places, setPlaces] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [dataCollaborator, setDataCollaborator] = useState([]);
@@ -79,27 +72,24 @@ const DeepCleaning = (props) => {
     }
   }, [id, idService]);
 
-  const handleSearchLocation = useCallback(
-    _debounce((value) => {
-      setIsLoading(true);
-      setAddress(value);
-      googlePlaceAutocomplete(value)
-        .then((res) => {
-          if (res.predictions) {
-            setPlaces(res?.predictions);
-            setIsLoading(false);
-          } else {
-            setPlaces(res?.predictions);
-            setIsLoading(false);
-          }
-        })
-        .catch((err) => {
-          setPlaces([]);
+  const handleSearchLocation = _debounce((value) => {
+    setIsLoading(true);
+    setAddress(value);
+    googlePlaceAutocomplete(value)
+      .then((res) => {
+        if (res.predictions) {
+          setPlaces(res?.predictions);
           setIsLoading(false);
-        });
-    }, 1500),
-    []
-  );
+        } else {
+          setPlaces(res?.predictions);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        setPlaces([]);
+        setIsLoading(false);
+      });
+  }, 1500);
 
   const findPlace = useCallback((id, description) => {
     setIsLoading(description);
@@ -130,37 +120,32 @@ const DeepCleaning = (props) => {
 
   const onChangeDateWork = (date, dateString) => {
     setDateWork(dateString);
-    setErrorDateWork("");
   };
 
   const onChangeTime = (value) => {
     setTimeWork(value);
-    setErrorTimeWork("");
   };
   const timeW = dateWork + "T" + timeWork + ".000Z";
 
-  const searchCollaborator = useCallback(
-    _debounce((value) => {
-      setNameCollaborator(value);
-      if (value) {
-        searchCollaboratorsCreateOrder(id, value)
-          .then((res) => {
-            if (value === "") {
-              setDataCollaborator([]);
-            } else {
-              setDataCollaborator(res.data);
-            }
-          })
-          .catch((err) => console.log(err));
-      } else if (idCollaborator) {
-        setDataCollaborator([]);
-      } else {
-        setDataCollaborator([]);
-      }
-      setIdCollaborator("");
-    }, 500),
-    [id]
-  );
+  const searchCollaborator = _debounce((value) => {
+    setNameCollaborator(value);
+    if (value) {
+      searchCollaboratorsCreateOrder(id, value)
+        .then((res) => {
+          if (value === "") {
+            setDataCollaborator([]);
+          } else {
+            setDataCollaborator(res.data);
+          }
+        })
+        .catch((err) => console.log(err));
+    } else if (idCollaborator) {
+      setDataCollaborator([]);
+    } else {
+      setDataCollaborator([]);
+    }
+    setIdCollaborator("");
+  }, 500);
 
   useEffect(() => {
     if (lat && long && address && timeWork && dateWork && time) {
@@ -299,7 +284,7 @@ const DeepCleaning = (props) => {
         type_address_work: "house",
         note_address: "",
         note: note,
-        is_auto_order: isAutoOrder,
+        is_auto_order: "false",
         date_work_schedule: [timeW],
         extend_optional: time,
         code_promotion: codePromotion,
@@ -321,18 +306,6 @@ const DeepCleaning = (props) => {
     } else if (!id) {
       setErrorNameCustomer("Vui lòng chọn khách hàng");
       setIsLoading(false);
-    } else if (!address && !lat && !long) {
-      setErrorAddress("Vui lòng nhập đầy đủ địa chỉ");
-      setIsLoading(false);
-    } else if (time.length === 0) {
-      setErrorTime("Vui lòng chọn dịch vụ");
-      setIsLoading(false);
-    } else if (!dateWork) {
-      setErrorDateWork("Vui lòng chọn ngày làm");
-      setIsLoading(false);
-    } else if (!timeWork) {
-      setErrorTimeWork("Vui lòng chọn giờ làm");
-      setIsLoading(false);
     } else if (!idCollaborator) {
       setErrorCollaborator("Vui lòng chọn CTV");
       setIsLoading(false);
@@ -346,10 +319,8 @@ const DeepCleaning = (props) => {
     address,
     timeWork,
     dateWork,
-    mutipleSelected,
     time,
     codePromotion,
-    isAutoOrder,
     note,
     idCollaborator,
     paymentMethod,
@@ -359,7 +330,7 @@ const DeepCleaning = (props) => {
   return (
     <div>
       <div className="div-search-address">
-        <a className="label-input">Địa điểm</a>
+        <p className="label-input">Địa điểm</p>
         <Input
           placeholder="Tìm kiếm địa chỉ"
           className="input-search-address"
@@ -376,7 +347,7 @@ const DeepCleaning = (props) => {
           {places?.map((item, index) => {
             return (
               <div className="div-item">
-                <a
+                <p
                   key={index}
                   onClick={(e) => {
                     findPlace(item?.place_id, item?.description);
@@ -384,7 +355,7 @@ const DeepCleaning = (props) => {
                   className="item-option-place"
                 >
                   {item?.description}
-                </a>
+                </p>
               </div>
             );
           })}
@@ -395,9 +366,12 @@ const DeepCleaning = (props) => {
         <>
           {dataAddress.length > 0 && (
             <div className="mt-2">
-              <a className="title-list-address">{`${i18n.t("address_default", {
-                lng: lang,
-              })}`}</a>
+              <p className="title-list-address m-0">{`${i18n.t(
+                "address_default",
+                {
+                  lng: lang,
+                }
+              )}`}</p>
               <List type={"unstyled"} className="list-item-address-customer">
                 {dataAddress?.map((item, index) => {
                   return (
@@ -416,10 +390,10 @@ const DeepCleaning = (props) => {
                     >
                       <i class="uil uil-map-marker"></i>
                       <div className="div-name-address">
-                        <a className="title-address">
+                        <p className="title-address">
                           {item?.address.slice(0, item?.address.indexOf(","))}
-                        </a>
-                        <a className="title-details-address">{item?.address}</a>
+                        </p>
+                        <p className="title-details-address">{item?.address}</p>
                       </div>
                     </div>
                   );
@@ -431,18 +405,15 @@ const DeepCleaning = (props) => {
       )}
 
       <div className="div-add-service mt-3">
-        <a className="label-time">
-          {`${i18n.t("times", { lng: lang })}`}{" "}
-          <a style={{ color: "red", fontSize: 12 }}>(*)</a>
-        </a>
+        <p className="label-time m-0">{`${i18n.t("times", { lng: lang })}`} </p>
         <div className="div-service">
           {extendService.map((item) => {
             return (
               <div
                 className={
                   item?._id === time?._id
-                    ? "select-service"
-                    : "select-service-default"
+                    ? "select-service m-0"
+                    : "select-service-default m-0"
                 }
                 onClick={() => {
                   onChangeTimeService(item);
@@ -451,8 +422,8 @@ const DeepCleaning = (props) => {
                 <a
                   className={
                     item?._id === time?._id
-                      ? "text-service"
-                      : "text-service-default"
+                      ? "text-service m-0"
+                      : "text-service-default m-0"
                   }
                 >
                   {item?.title?.[lang]}
@@ -460,8 +431,8 @@ const DeepCleaning = (props) => {
                 <a
                   className={
                     item?._id === time?._id
-                      ? "text-service"
-                      : "text-service-default"
+                      ? "text-service m-0"
+                      : "text-service-default m-0"
                   }
                 >
                   {item?.estimate !== 0.5 &&
@@ -472,8 +443,8 @@ const DeepCleaning = (props) => {
                 <a
                   className={
                     item?._id === time?._id
-                      ? "text-service"
-                      : "text-service-default"
+                      ? "text-service m-0"
+                      : "text-service-default m-0"
                   }
                 >
                   {item?.description?.[lang]?.slice(
