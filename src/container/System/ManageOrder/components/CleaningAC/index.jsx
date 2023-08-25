@@ -1,15 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
-import "./styles.scss";
-import { Button, DatePicker, Input, InputNumber, List, Select } from "antd";
+import { Button, DatePicker, Image, Input, InputNumber, List } from "antd";
 import _debounce from "lodash/debounce";
+import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { searchCollaboratorsCreateOrder } from "../../../../../api/collaborator";
+import { DATA_TIME_TOTAL } from "../../../../../api/fakeData";
 import {
   getPlaceDetailApi,
   googlePlaceAutocomplete,
 } from "../../../../../api/location";
-import {
-  getCalculateFeeApi,
-  getPromotionByCustomerApi,
-} from "../../../../../api/service";
 import {
   checkCodePromotionOrderApi,
   checkEventCodePromotionOrderApi,
@@ -17,34 +16,28 @@ import {
   getAddressCustomerApi,
   getServiceFeeOrderApi,
 } from "../../../../../api/order";
-import i18n from "../../../../../i18n";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../redux/selectors/auth";
-import { DATA_TIME_TOTAL } from "../../../../../api/fakeData";
-import InputCustom from "../../../../../components/textInputCustom";
-import { searchCollaboratorsCreateOrder } from "../../../../../api/collaborator";
-import { errorNotify } from "../../../../../helper/toast";
-import { formatMoney } from "../../../../../helper/formatMoney";
-import { useNavigate } from "react-router-dom";
+import {
+  getCalculateFeeApi,
+  getPromotionByCustomerApi,
+} from "../../../../../api/service";
 import LoadingPagination from "../../../../../components/paginationLoading";
-import { MinusSquareOutlined, PlusSquareOutlined } from "@ant-design/icons";
+import InputCustom from "../../../../../components/textInputCustom";
+import { formatMoney } from "../../../../../helper/formatMoney";
+import { errorNotify } from "../../../../../helper/toast";
+import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import "./styles.scss";
 
 const CleaningAC = (props) => {
   const { id, idService, extendService, setErrorNameCustomer } = props;
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState("");
   const [long, setLong] = useState("");
-  const [errorAddress, setErrorAddress] = useState("");
   const [note, setNote] = useState("");
-  const [time, setTime] = useState([]);
   const [selectService, setSelectService] = useState([]);
-  const [errorTime, setErrorTime] = useState("");
   const [dateWork, setDateWork] = useState("");
-  const [errorDateWork, setErrorDateWork] = useState("");
   const [timeWork, setTimeWork] = useState("");
-  const [errorTimeWork, setErrorTimeWork] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("cash");
-  const [mutipleSelected, setMutipleSelected] = useState([]);
   const [promotionCustomer, setPromotionCustomer] = useState([]);
   const [priceOrder, setPriceOrder] = useState();
   const [discount, setDiscount] = useState(0);
@@ -52,9 +45,7 @@ const CleaningAC = (props) => {
   const [eventPromotion, setEventPromotion] = useState([]);
   const [eventFeePromotion, setEventFeePromotion] = useState(0);
   const [feeService, setFeeService] = useState(0);
-  const [dataFeeService, setDataFeeService] = useState(0);
   const [itemPromotion, setItemPromotion] = useState(0);
-  const [isAutoOrder, setIsAutoOrder] = useState(false);
   const [places, setPlaces] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [dataCollaborator, setDataCollaborator] = useState([]);
@@ -81,27 +72,24 @@ const CleaningAC = (props) => {
     }
   }, [id, idService]);
 
-  const handleSearchLocation = useCallback(
-    _debounce((value) => {
-      setIsLoading(true);
-      setAddress(value);
-      googlePlaceAutocomplete(value)
-        .then((res) => {
-          if (res.predictions) {
-            setPlaces(res?.predictions);
-            setIsLoading(false);
-          } else {
-            setPlaces(res?.predictions);
-            setIsLoading(false);
-          }
-        })
-        .catch((err) => {
-          setPlaces([]);
+  const handleSearchLocation = _debounce((value) => {
+    setIsLoading(true);
+    setAddress(value);
+    googlePlaceAutocomplete(value)
+      .then((res) => {
+        if (res.predictions) {
+          setPlaces(res?.predictions);
           setIsLoading(false);
-        });
-    }, 1500),
-    []
-  );
+        } else {
+          setPlaces(res?.predictions);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        setPlaces([]);
+        setIsLoading(false);
+      });
+  }, 1500);
 
   const findPlace = useCallback((id, description) => {
     setIsLoading(description);
@@ -168,37 +156,32 @@ const CleaningAC = (props) => {
 
   const onChangeDateWork = (date, dateString) => {
     setDateWork(dateString);
-    setErrorDateWork("");
   };
 
   const onChangeTime = (value) => {
     setTimeWork(value);
-    setErrorTimeWork("");
   };
   const timeW = dateWork + "T" + timeWork + ".000Z";
 
-  const searchCollaborator = useCallback(
-    _debounce((value) => {
-      setNameCollaborator(value);
-      if (value) {
-        searchCollaboratorsCreateOrder(id, value)
-          .then((res) => {
-            if (value === "") {
-              setDataCollaborator([]);
-            } else {
-              setDataCollaborator(res.data);
-            }
-          })
-          .catch((err) => console.log(err));
-      } else if (idCollaborator) {
-        setDataCollaborator([]);
-      } else {
-        setDataCollaborator([]);
-      }
-      setIdCollaborator("");
-    }, 500),
-    [id]
-  );
+  const searchCollaborator = _debounce((value) => {
+    setNameCollaborator(value);
+    if (value) {
+      searchCollaboratorsCreateOrder(id, value)
+        .then((res) => {
+          if (value === "") {
+            setDataCollaborator([]);
+          } else {
+            setDataCollaborator(res.data);
+          }
+        })
+        .catch((err) => console.log(err));
+    } else if (idCollaborator) {
+      setDataCollaborator([]);
+    } else {
+      setDataCollaborator([]);
+    }
+    setIdCollaborator("");
+  }, 500);
 
   useEffect(() => {
     if (lat && long && address && timeWork && dateWork && selectService) {
@@ -330,7 +313,7 @@ const CleaningAC = (props) => {
           });
       }
     },
-    [id, note, selectService, paymentMethod, timeW, accessToken]
+    [id, note, selectService, paymentMethod, timeW, accessToken, codePromotion]
   );
 
   const onCreateOrder = useCallback(() => {
@@ -346,7 +329,7 @@ const CleaningAC = (props) => {
         type_address_work: "house",
         note_address: "",
         note: note,
-        is_auto_order: isAutoOrder,
+        is_auto_order: "false",
         date_work_schedule: [timeW],
         extend_optional: selectService,
         code_promotion: codePromotion,
@@ -368,18 +351,6 @@ const CleaningAC = (props) => {
     } else if (!id) {
       setErrorNameCustomer("Vui lòng chọn khách hàng");
       setIsLoading(false);
-    } else if (!address && !lat && !long) {
-      setErrorAddress("Vui lòng nhập đầy đủ địa chỉ");
-      setIsLoading(false);
-    } else if (time.length === 0) {
-      setErrorTime("Vui lòng chọn dịch vụ");
-      setIsLoading(false);
-    } else if (!dateWork) {
-      setErrorDateWork("Vui lòng chọn ngày làm");
-      setIsLoading(false);
-    } else if (!timeWork) {
-      setErrorTimeWork("Vui lòng chọn giờ làm");
-      setIsLoading(false);
     } else if (!idCollaborator) {
       setErrorCollaborator("Vui lòng chọn CTV");
       setIsLoading(false);
@@ -393,20 +364,22 @@ const CleaningAC = (props) => {
     address,
     timeWork,
     dateWork,
-    mutipleSelected,
     selectService,
     codePromotion,
-    isAutoOrder,
     note,
     idCollaborator,
     paymentMethod,
     tipCollaborator,
+    timeW,
+    accessToken,
+    navigate,
+    setErrorNameCustomer,
   ]);
 
   return (
     <div>
       <div className="div-search-address">
-        <a className="label-input">Địa điểm</a>
+        <p className="label-input">Địa điểm</p>
         <Input
           placeholder="Tìm kiếm địa chỉ"
           className="input-search-address"
@@ -423,15 +396,16 @@ const CleaningAC = (props) => {
           {places?.map((item, index) => {
             return (
               <div className="div-item">
-                <a
+                <p
                   key={index}
                   onClick={(e) => {
+                    setAddress(item?.description);
                     findPlace(item?.place_id, item?.description);
                   }}
                   className="item-option-place"
                 >
                   {item?.description}
-                </a>
+                </p>
               </div>
             );
           })}
@@ -442,9 +416,12 @@ const CleaningAC = (props) => {
         <>
           {dataAddress.length > 0 && (
             <div className="mt-2">
-              <a className="title-list-address">{`${i18n.t("address_default", {
-                lng: lang,
-              })}`}</a>
+              <p className="title-list-address m-0">{`${i18n.t(
+                "address_default",
+                {
+                  lng: lang,
+                }
+              )}`}</p>
               <List type={"unstyled"} className="list-item-address-customer">
                 {dataAddress?.map((item, index) => {
                   return (
@@ -463,10 +440,10 @@ const CleaningAC = (props) => {
                     >
                       <i class="uil uil-map-marker"></i>
                       <div className="div-name-address">
-                        <a className="title-address">
+                        <p className="title-address">
                           {item?.address.slice(0, item?.address.indexOf(","))}
-                        </a>
-                        <a className="title-details-address">{item?.address}</a>
+                        </p>
+                        <p className="title-details-address">{item?.address}</p>
                       </div>
                     </div>
                   );
@@ -478,10 +455,9 @@ const CleaningAC = (props) => {
       )}
 
       <div className="div-add-service-ac mt-3">
-        <a className="label-time">
-          {`${i18n.t("Loại dịch vụ", { lng: lang })}`}{" "}
-          <a style={{ color: "red", fontSize: 12 }}>(*)</a>
-        </a>
+        <p className="label-time">
+          {`${i18n.t("Loại dịch vụ", { lng: lang })}`}
+        </p>
         <div className="div-service-ac">
           {extendService.map((item, index) => {
             const selectServiceFilter = selectService.filter(
@@ -490,7 +466,7 @@ const CleaningAC = (props) => {
 
             return (
               <div className="div-item-service-ac" key={index}>
-                <a className="text-title-ac">{item?.title[lang]}</a>
+                <p className="text-title-ac">{item?.title[lang]}</p>
                 <div className="div-count-service-ac">
                   <i
                     className="uil uil-minus-square-full"
@@ -498,11 +474,11 @@ const CleaningAC = (props) => {
                     onClick={() => handleMinusCountService(item)}
                   ></i>
 
-                  <a>
+                  <p className="m-0">
                     {selectServiceFilter[0]?.count
                       ? selectServiceFilter[0]?.count
                       : 0}
-                  </a>
+                  </p>
                   <div
                     onClick={() => handleAddCountService(item)}
                     className={
@@ -524,10 +500,7 @@ const CleaningAC = (props) => {
       </div>
 
       <div className="form-picker mt-2">
-        <a className="label">
-          {`${i18n.t("date_work", { lng: lang })}`}{" "}
-          <a style={{ color: "red", fontSize: 14 }}>(*)</a>
-        </a>
+        <p className="label m-0">{`${i18n.t("date_work", { lng: lang })}`} </p>
         <DatePicker
           format={dateFormat}
           onChange={onChangeDateWork}
@@ -536,9 +509,9 @@ const CleaningAC = (props) => {
       </div>
 
       <div className="form-picker-hours">
-        <a className="label-hours">
+        <p className="label-hours">
           {`${i18n.t("time_work", { lng: lang })}`} (*)
-        </a>
+        </p>
         <div className="div-hours">
           {DATA_TIME_TOTAL.map((item) => {
             return (
@@ -579,9 +552,9 @@ const CleaningAC = (props) => {
         textArea={true}
       />
       <div className="div-money">
-        <a className="label-tip">
+        <p className="label-tip">
           (*) {`${i18n.t("tip_collaborator", { lng: lang })}`}
-        </a>
+        </p>
         <InputNumber
           formatter={(value) =>
             `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
@@ -630,13 +603,17 @@ const CleaningAC = (props) => {
                   }}
                 >
                   <div className="div-name">
-                    <img src={item?.avatar} className="img-collaborator" />
-                    <a className="text-name">
+                    <Image
+                      preview={false}
+                      src={item?.avatar}
+                      className="img-collaborator"
+                    />
+                    <p className="text-name m-0">
                       {item?.full_name} - {item?.phone} - {item?.id_view}
-                    </a>
+                    </p>
                   </div>
                   {item?.is_favorite ? (
-                    <i class="uil uil-heart icon-heart"></i>
+                    <i className="uil uil-heart icon-heart"></i>
                   ) : (
                     <></>
                   )}
@@ -660,47 +637,52 @@ const CleaningAC = (props) => {
                 checkPromotion(item);
               }}
             >
-              <a className="text-code-promotion">{item?.code}</a>
-              <a className="text-title-promotion">{item?.title?.[lang]}</a>
+              <p className="text-code-promotion">{item?.code}</p>
+              <p className="text-title-promotion">{item?.title?.[lang]}</p>
             </div>
           );
         })}
       </div>
       {priceOrder && (
         <div className="div-total mt-3">
-          <a>
+          <p className="m-0">
             {`${i18n.t("provisional", { lng: lang })}`}:{" "}
             {formatMoney(priceOrder)}
-          </a>
-          <a>
+          </p>
+          <p className="m-0">
             {`${i18n.t("platform_fee", { lng: lang })}`}:{" "}
             {formatMoney(feeService)}
-          </a>
+          </p>
           {tipCollaborator > 0 && (
-            <a>
+            <p className="m-0">
               {`${i18n.t("tips", { lng: lang })}`}:{" "}
               {formatMoney(tipCollaborator)}
-            </a>
+            </p>
           )}
           {eventPromotion.map((item, index) => {
             return (
-              <a style={{ color: "red" }}>
+              <p style={{ color: "red", margin: 0 }}>
                 {item?.title?.[lang]}: {"-"}
                 {formatMoney(item?.discount)}
-              </a>
+              </p>
             );
           })}
           {discount > 0 && (
             <div>
-              <a style={{ color: "red" }}>{itemPromotion?.title?.[lang]}: </a>
-              <a style={{ color: "red" }}> {formatMoney(-discount)}</a>
+              <p style={{ color: "red", margin: 0 }}>
+                {itemPromotion?.title?.[lang]}:{" "}
+              </p>
+              <p style={{ color: "red", margin: 0 }}>
+                {" "}
+                {formatMoney(-discount)}
+              </p>
             </div>
           )}
         </div>
       )}
 
       <div className="div-footer mt-5">
-        <a className="text-price">
+        <p className="text-price">
           {`${i18n.t("price", { lng: lang })}`}:{" "}
           {priceOrder > 0
             ? formatMoney(
@@ -711,7 +693,7 @@ const CleaningAC = (props) => {
                   tipCollaborator
               )
             : formatMoney(0)}
-        </a>
+        </p>
         <Button style={{ width: "auto" }} onClick={onCreateOrder}>{`${i18n.t(
           "post",
           {

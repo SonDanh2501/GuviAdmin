@@ -1,68 +1,100 @@
-.div-list-edit-price {
+.div-list-price {
   display: flex;
   flex-direction: column;
-  background-color: white;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  margin-top: 10px;
 
-  .select-province {
-    width: 40%;
-  }
-
-  .div-rush-holiday-day {
+  .div-list-item {
     display: flex;
-    flex-direction: row;
-    width: 60%;
-
-    .div-price-rush-day {
+    flex-direction: column;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+    border-radius: 8px;
+    background-color: #ffffff;
+    .div-item-city-price {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      width: 100%;
       margin-top: 10px;
-      margin-left: 30px;
-      width: 50%;
 
-      .div-price {
+      .div-input {
         display: flex;
         flex-direction: column;
-        background-color: white;
-        border-radius: 8px;
-        padding: 10px;
-        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
-        margin-top: 10px;
-
-        .select-date {
-          width: 100%;
+        width: 20%;
+        margin: 10px 10px 0 0;
+        .label-input {
+          color: black;
+          font-weight: 400;
+          font-size: 12px;
+          font-family: "Roboto";
+          text-decoration: none;
+          margin: 0;
         }
       }
     }
+
+    .div-district {
+      background-color: #ffffff;
+      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+      padding: 5px;
+      margin-top: 10px;
+      border-radius: 4px;
+
+      .div-list-district-price {
+        display: flex;
+        flex-direction: column;
+
+        .div-item-district {
+          display: flex;
+          flex-direction: row;
+          background-color: #f4f4f4;
+          padding: 5px;
+          margin-top: 10px;
+          border-radius: 4px;
+
+          .div-input {
+            display: flex;
+            flex-direction: column;
+            width: 25%;
+            margin: 10px 10px 0 0;
+            .label-input {
+              color: black;
+              font-weight: 400;
+              font-size: 12px;
+              font-family: "Roboto";
+              text-decoration: none;
+              margin: 0;
+            }
+          }
+        }
+      }
+      .btn-add-district-price-service {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        color: black;
+        font-weight: 400;
+        font-size: 12px;
+        font-family: "Roboto";
+        text-decoration: none;
+      }
+    }
+  }
+  .btn-delete-area-price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    width: 40px;
   }
 }
 
-// .div-list-item-price-area {
-//   display: flex;
-//   flex-direction: column;
-//   background-color: white;
-//   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
-//   padding: 10px;
-//   margin-top: 20px;
-//   border-radius: 8px;
-
-//   .list-item-price {
-//     display: flex;
-//     flex-direction: row;
-//     justify-content: space-between;
-//     .select-province {
-//       width: 250px;
-//     }
-//   }
-// }
-
-// .btn-delete-price-area {
-//   width: auto;
-//   margin-top: 10px;
-//   border: 1px solid #fb422e;
-//   color: #fb422e;
-// }
+.btn-add-price-service {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  color: black;
+  font-weight: 400;
+  font-size: 12px;
+  font-family: "Roboto";
+  text-decoration: none;
+}

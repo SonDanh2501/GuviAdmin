@@ -20,9 +20,9 @@ const OrderExpired = () => {
                 tab === item.value ? "div-item-tab-select" : "div-item-tab"
               }
             >
-              <a className="text-tab">{`${i18n.t(item?.title, {
+              <p className="text-tab m-0">{`${i18n.t(item?.title, {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
           );
         })}

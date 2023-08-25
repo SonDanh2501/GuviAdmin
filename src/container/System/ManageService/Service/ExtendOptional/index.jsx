@@ -29,7 +29,7 @@ const ExtendOptionalService = () => {
           onClick={() =>
             navigate(
               `/services/manage-group-service/service/optional-service/extend-optional/edit-price`,
-              { state: { id: data?._id, data_price: data?.price_option_area } }
+              { state: { id: data?._id, data_price: data?.area_fee } }
             )
           }
         >

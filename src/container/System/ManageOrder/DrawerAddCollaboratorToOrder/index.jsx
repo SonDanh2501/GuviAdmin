@@ -83,7 +83,7 @@ const AddCollaboratorOrder = (props) => {
             .then((res) => {
               setOpen(false);
               setIsLoading(false);
-              getOrderApi("", startPage, 20, type, kind, "", "", "", "")
+              getOrderApi("", startPage, 20, type, kind, "", "", "", "", "")
                 .then((res) => {
                   setData(res?.data);
                   setTotal(res?.totalItem);
@@ -111,7 +111,7 @@ const AddCollaboratorOrder = (props) => {
         .then((res) => {
           setIsLoading(false);
           setOpen(false);
-          getOrderApi("", startPage, 20, type, kind, "", "", "", "")
+          getOrderApi("", startPage, 20, type, kind, "", "", "", "", "")
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);

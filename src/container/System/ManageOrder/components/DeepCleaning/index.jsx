@@ -419,7 +419,7 @@ const DeepCleaning = (props) => {
                   onChangeTimeService(item);
                 }}
               >
-                <a
+                <p
                   className={
                     item?._id === time?._id
                       ? "text-service m-0"
@@ -427,8 +427,8 @@ const DeepCleaning = (props) => {
                   }
                 >
                   {item?.title?.[lang]}
-                </a>
-                <a
+                </p>
+                <p
                   className={
                     item?._id === time?._id
                       ? "text-service m-0"
@@ -439,8 +439,8 @@ const DeepCleaning = (props) => {
                     item?.description?.[lang].slice(
                       item?.description?.[lang].indexOf("/") + 1
                     )}
-                </a>
-                <a
+                </p>
+                <p
                   className={
                     item?._id === time?._id
                       ? "text-service m-0"
@@ -451,7 +451,7 @@ const DeepCleaning = (props) => {
                     0,
                     item?.description?.[lang]?.indexOf("/")
                   )}
-                </a>
+                </p>
               </div>
             );
           })}
@@ -459,10 +459,7 @@ const DeepCleaning = (props) => {
       </div>
 
       <div className="form-picker mt-2">
-        <a className="label">
-          {`${i18n.t("date_work", { lng: lang })}`}{" "}
-          <a style={{ color: "red", fontSize: 14 }}>(*)</a>
-        </a>
+        <p className="label m-0">{`${i18n.t("date_work", { lng: lang })}`} </p>
         <DatePicker
           format={dateFormat}
           onChange={onChangeDateWork}
@@ -471,9 +468,9 @@ const DeepCleaning = (props) => {
       </div>
 
       <div className="form-picker-hours">
-        <a className="label-hours">
+        <p className="label-hours">
           {`${i18n.t("time_work", { lng: lang })}`} (*)
-        </a>
+        </p>
         <div className="div-hours">
           {DATA_TIME_TOTAL.map((item) => {
             return (
@@ -514,9 +511,9 @@ const DeepCleaning = (props) => {
         textArea={true}
       />
       <div className="div-money">
-        <a className="label-tip">
+        <p className="label-tip m-0">
           (*) {`${i18n.t("tip_collaborator", { lng: lang })}`}
-        </a>
+        </p>
         <InputNumber
           formatter={(value) =>
             `${value}  đ`.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
@@ -566,9 +563,9 @@ const DeepCleaning = (props) => {
                 >
                   <div className="div-name">
                     <img src={item?.avatar} className="img-collaborator" />
-                    <a className="text-name">
+                    <p className="text-name m-0">
                       {item?.full_name} - {item?.phone} - {item?.id_view}
-                    </a>
+                    </p>
                   </div>
                   {item?.is_favorite ? (
                     <i class="uil uil-heart icon-heart"></i>
@@ -595,47 +592,52 @@ const DeepCleaning = (props) => {
                 checkPromotion(item);
               }}
             >
-              <a className="text-code-promotion">{item?.code}</a>
-              <a className="text-title-promotion">{item?.title?.[lang]}</a>
+              <p className="text-code-promotion m-0">{item?.code}</p>
+              <p className="text-title-promotion m-0">{item?.title?.[lang]}</p>
             </div>
           );
         })}
       </div>
       {priceOrder && (
         <div className="div-total mt-3">
-          <a>
+          <p className="m-0">
             {`${i18n.t("provisional", { lng: lang })}`}:{" "}
             {formatMoney(priceOrder)}
-          </a>
-          <a>
+          </p>
+          <p className="m-0">
             {`${i18n.t("platform_fee", { lng: lang })}`}:{" "}
             {formatMoney(feeService)}
-          </a>
+          </p>
           {tipCollaborator > 0 && (
-            <a>
+            <p className="m-0">
               {`${i18n.t("tips", { lng: lang })}`}:{" "}
               {formatMoney(tipCollaborator)}
-            </a>
+            </p>
           )}
           {eventPromotion.map((item, index) => {
             return (
-              <a style={{ color: "red" }}>
+              <p style={{ color: "red", margin: 0 }}>
                 {item?.title?.[lang]}: {"-"}
                 {formatMoney(item?.discount)}
-              </a>
+              </p>
             );
           })}
           {discount > 0 && (
             <div>
-              <a style={{ color: "red" }}>{itemPromotion?.title?.[lang]}: </a>
-              <a style={{ color: "red" }}> {formatMoney(-discount)}</a>
+              <p style={{ color: "red", margin: 0 }}>
+                {itemPromotion?.title?.[lang]}:{" "}
+              </p>
+              <p style={{ color: "red", margin: 0 }}>
+                {" "}
+                {formatMoney(-discount)}
+              </p>
             </div>
           )}
         </div>
       )}
 
       <div className="div-footer mt-5">
-        <a className="text-price">
+        <p className="text-price m-0">
           {`${i18n.t("price", { lng: lang })}`}:{" "}
           {priceOrder > 0
             ? formatMoney(
@@ -646,7 +648,7 @@ const DeepCleaning = (props) => {
                   tipCollaborator
               )
             : formatMoney(0)}
-        </a>
+        </p>
         <Button style={{ width: "auto" }} onClick={onCreateOrder}>{`${i18n.t(
           "post",
           {
