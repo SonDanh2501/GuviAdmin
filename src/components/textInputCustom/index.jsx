@@ -33,7 +33,7 @@ const InputCustom = (props) => {
   const lang = useSelector(getLanguageState);
 
   return (
-    <div className={"div-input-custom"}>
+    <div className="div-input-custom">
       {title && <p className="title-input-custom">{title}</p>}
       {textArea ? (
         <TextArea

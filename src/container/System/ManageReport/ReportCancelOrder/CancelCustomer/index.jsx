@@ -266,7 +266,7 @@ const CancelOrderCustomer = (props) => {
                   {item?.reason_cancel[0]?.title?.[lang]}
                 </p>
                 <p className="text-colon">:</p>
-                <p className="text-number">{item?.total}</p>
+                <p className="text-number ml-2">{item?.total}</p>
               </div>
             );
           })}

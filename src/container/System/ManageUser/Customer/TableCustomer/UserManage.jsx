@@ -131,18 +131,21 @@ const UserManage = (props) => {
       .catch((err) => {});
   };
 
-  const handleSearch = _debounce((value) => {
-    setValueFilter(value);
-    setIsLoading(true);
-    fetchCustomers(lang, startPage, 50, status, idGroup, value)
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItems);
-        window.scroll(0, 0);
-        setIsLoading(false);
-      })
-      .catch((err) => {});
-  }, 1000);
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      setValueFilter(value);
+      setIsLoading(true);
+      fetchCustomers(lang, startPage, 50, status, idGroup, value)
+        .then((res) => {
+          setData(res?.data);
+          setTotal(res?.totalItems);
+          window.scroll(0, 0);
+          setIsLoading(false);
+        })
+        .catch((err) => {});
+    }, 1000),
+    [lang, startPage, status, idGroup]
+  );
 
   const items = [
     {

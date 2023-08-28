@@ -16,7 +16,7 @@ const TextEditor = ({ value, onChange, height, disabled }) => {
   return (
     <>
       <Editor
-        apiKey="9mg1ru5n8187ozgs4retsbua5cmsueonulkbd871k46md1r6"
+        apiKey="6mu1mwz1zbe4ggfxkdyes9fsswtosxuef0ws7r59gnk9n4y3"
         onEditorChange={onChange}
         value={value}
         disabled={disabled}

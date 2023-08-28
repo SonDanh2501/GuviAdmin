@@ -160,18 +160,21 @@ const CollaboratorManage = (props) => {
       .catch((err) => {});
   };
 
-  const handleSearch = _debounce((value) => {
-    fetchCollaborators(lang, 0, 20, status, value, city)
-      .then((res) => {
-        setData(res.data);
-        setTotal(res.totalItems);
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      fetchCollaborators(lang, 0, 20, status, value, city)
+        .then((res) => {
+          setData(res.data);
+          setTotal(res.totalItems);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
         });
-      });
-  }, 1000);
+    }, 1000),
+    [lang, status, city]
+  );
 
   const onDelete = useCallback(
     (id) => {
@@ -364,7 +367,7 @@ const CollaboratorManage = (props) => {
                 ? `/details-collaborator/${data?._id}`
                 : ""
             }
-            className="div-collaborator"
+            className="div-collaborator-table"
           >
             <Image
               preview={false}

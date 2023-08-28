@@ -151,7 +151,7 @@ export default function Home() {
     setNameCity(province[1]?.name);
 
     if (checkElement?.includes("report_detail_service_dashboard")) {
-      getReportServiceDetails(startDate, endDate, province[1]?.code)
+      getReportServiceDetails(startDate, endDate, "")
         .then((res) => {
           setDataChartServiceDetails(res?.detailData);
         })
@@ -159,14 +159,14 @@ export default function Home() {
     }
 
     if (checkElement?.includes("report_cancel_order_dashboard")) {
-      getReportCancelReport(startDate, endDate, province[1]?.code, -1)
+      getReportCancelReport(startDate, endDate, "", "")
         .then((res) => {
           setDataChartCancel(res?.percent);
           setDataTotalChartCancel(res);
         })
         .catch((err) => {});
     }
-  }, [province]);
+  }, []);
 
   useEffect(() => {
     let sum = 0;
@@ -176,7 +176,7 @@ export default function Home() {
   }, [dataUser]);
 
   dataUser.map((item, index) => {
-    dataChartUser.push({
+    return dataChartUser.push({
       totalNew: item?.totalNew,
       totalOld: item?.totalOld,
       total: item?.totalAll,
@@ -185,7 +185,7 @@ export default function Home() {
   });
 
   province?.map((item) => {
-    cityData?.push({
+    return cityData?.push({
       value: item?.code,
       label: item?.name,
       districts: item?.districts,
@@ -193,7 +193,7 @@ export default function Home() {
   });
 
   dataChartServiceDetails?.map((item) => {
-    dataChartDetail?.push({
+    return dataChartDetail?.push({
       title: item?.title[0]?.[lang],
       percent_2_hour: item?.total_2_hour,
       percent_3_hour: item?.total_3_hour,
@@ -540,7 +540,7 @@ export default function Home() {
                 </a>
               )}
             </div>
-            <div className="div-select-city mb-3">
+            {/* <div className="div-select-city mb-3">
               <Select
                 style={{ width: 200 }}
                 value={nameCity}
@@ -553,7 +553,7 @@ export default function Home() {
                     .includes(input.toLowerCase())
                 }
               />
-            </div>
+            </div> */}
             {checkElement?.includes("total_finance_job_dashboard") && (
               <div>
                 <ResponsiveContainer
