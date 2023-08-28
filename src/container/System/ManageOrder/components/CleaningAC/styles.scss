@@ -12,7 +12,7 @@
     font-style: normal;
     font-weight: 400;
     color: black;
-    margin-bottom: 2px;
+    margin: 0 0 2px 0;
   }
 }
 
@@ -34,6 +34,7 @@
       font-weight: 400;
       color: black;
       width: 100%;
+      margin: 0;
     }
   }
 }
@@ -134,6 +135,7 @@
     color: black;
     margin-bottom: 10px;
     margin-top: 15px;
+    margin: 15px 0 10px 0;
   }
 
   .div-hours {
@@ -181,6 +183,7 @@
     font-style: normal;
     font-weight: 400;
     color: #000000;
+    margin: 0;
   }
 
   .input-note {
@@ -325,6 +328,7 @@
       font-weight: 500;
       text-transform: uppercase;
       color: #000000;
+      margin: 0;
     }
     .text-title-promotion {
       text-overflow: ellipsis;
@@ -356,6 +360,7 @@
       font-weight: 500;
       color: black;
       text-transform: uppercase;
+      margin: 0;
     }
 
     .text-title-promotion {
@@ -381,9 +386,9 @@
     font-family: "Roboto";
     font-style: normal;
     font-weight: 500;
-    line-height: 16px;
     color: black;
     text-align: center;
+    margin: 0;
   }
 }
 
@@ -398,7 +403,7 @@
     font-style: normal;
     font-weight: 400;
     color: black;
-    margin-bottom: 10px;
+    margin: 0 0 10px 0;
   }
 
   .div-service-ac {
@@ -422,6 +427,7 @@
         font-style: normal;
         font-weight: 400;
         color: black;
+        margin: 0;
       }
 
       .div-count-service-ac {

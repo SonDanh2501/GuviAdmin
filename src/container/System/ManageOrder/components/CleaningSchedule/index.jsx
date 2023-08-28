@@ -1,4 +1,4 @@
-import { Button, Drawer, Input, List, Popover } from "antd";
+import { Button, Drawer, Image, List, Popover } from "antd";
 import {
   addDays,
   addMonths,
@@ -6,7 +6,9 @@ import {
   eachMonthOfInterval,
   endOfMonth,
 } from "date-fns";
+import { toPng } from "html-to-image";
 import _debounce from "lodash/debounce";
+import moment from "moment";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -36,12 +38,10 @@ import LoadingPagination from "../../../../../components/paginationLoading";
 import InputCustom from "../../../../../components/textInputCustom";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
-import { loadingAction } from "../../../../../redux/actions/loading";
-import "./index.scss";
-import { getLanguageState } from "../../../../../redux/selectors/auth";
 import i18n from "../../../../../i18n";
-import { toPng } from "html-to-image";
-import moment from "moment";
+import { loadingAction } from "../../../../../redux/actions/loading";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import "./index.scss";
 
 const CleaningSchedule = (props) => {
   const {
@@ -70,9 +70,7 @@ const CleaningSchedule = (props) => {
   const [eventPromotion, setEventPromotion] = useState([]);
   const [eventFeePromotion, setEventFeePromotion] = useState(0);
   const [feeService, setFeeService] = useState(0);
-  const [dataFeeService, setDataFeeService] = useState(0);
   const [itemPromotion, setItemPromotion] = useState(0);
-  const [isAutoOrder, setIsAutoOrder] = useState(false);
   const [places, setPlaces] = useState([]);
   const [chooseMonth, setChooseMonth] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -81,7 +79,6 @@ const CleaningSchedule = (props) => {
   const [selectDay, setSelectDay] = useState([]);
   const [dataCollaborator, setDataCollaborator] = useState([]);
   const [nameCollaborator, setNameCollaborator] = useState("");
-  const [errorCollaborator, setErrorCollaborator] = useState("");
   const [idCollaborator, setIdCollaborator] = useState("");
   const [dataAddress, setDataAddress] = useState([]);
   const [open, setOpen] = useState(false);
@@ -124,13 +121,14 @@ const CleaningSchedule = (props) => {
   });
 
   useEffect(() => {
-    months.map((month) => {
-      month.map((day) => {
+    months.forEach((month) => {
+      month.forEach((day) => {
         selectedDate.includes(day.toString().slice(0, 3)) &&
           day > addDays(new Date(), -1) &&
           day < addDays(addDays(new Date(), 7), 30 * estimateMonth) &&
           !selectDay.includes(day.toString()) &&
           selectDay.push(day.toString());
+        return;
       });
     });
     const timeout = setTimeout(() => {
@@ -154,9 +152,10 @@ const CleaningSchedule = (props) => {
 
   const optionSelectedDate = useCallback(
     (date) => {
-      months.map((month) => {
-        month.map((day) => {
+      months.forEach((month) => {
+        month.forEach((day) => {
           setSelectDay((prev) => prev.filter((p) => p !== day.toString()));
+          return;
         });
       });
       if (selectedDate.includes(date?.value)) {
@@ -167,7 +166,7 @@ const CleaningSchedule = (props) => {
         setEstimateDateWork(estimateDateWork + date?.estimate);
       }
     },
-    [estimateDateWork, months, selectedDate, chooseMonth, timeWork]
+    [estimateDateWork, months, selectedDate]
   );
 
   const onChooseMonth = (value) => {
@@ -186,69 +185,27 @@ const CleaningSchedule = (props) => {
   });
   var accessToken = AES.encrypt(temp, "guvico");
 
-  const handleSearchLocation = useCallback(
-    _debounce((value) => {
-      setAddress(value);
-      setIsLoading(true);
-      // axios
-      //   .get(
-      //     "https://rsapi.goong.io/Place/AutoComplete?api_key=K6YbCtlzCGyTBd08hwWlzLCuuyTinXVRdMYDb8qJ",
-      //     {
-      //       params: {
-      //         input: value,
-      //       },
-      //     }
-      //   )
-      //   .then((res) => {
-      //     if (res.data.predictions) {
-      //       setPlaces(res.data.predictions);
-      //     } else {
-      //       setPlaces([]);
-      //     }
-
-      //     setIsLoading(false);
-      //   })
-      //   .catch((err) => {
-      //     setIsLoading(false);
-      //     setPlaces([]);
-      //   });
-      googlePlaceAutocomplete(value)
-        .then((res) => {
-          if (res.predictions) {
-            setPlaces(res.predictions);
-          } else {
-            setPlaces([]);
-          }
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          setIsLoading(false);
+  const handleSearchLocation = _debounce((value) => {
+    setAddress(value);
+    setIsLoading(true);
+    googlePlaceAutocomplete(value)
+      .then((res) => {
+        if (res.predictions) {
+          setPlaces(res.predictions);
+        } else {
           setPlaces([]);
-        });
-    }, 1500),
-    []
-  );
+        }
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setPlaces([]);
+      });
+  }, 1500);
 
   const findPlace = useCallback((id) => {
     setIsLoading(true);
     setPlaces([]);
-    // axios
-    //   .get(
-    //     "https://rsapi.goong.io/Place/Detail?api_key=K6YbCtlzCGyTBd08hwWlzLCuuyTinXVRdMYDb8qJ",
-    //     {
-    //       params: {
-    //         place_id: id,
-    //       },
-    //     }
-    //   )
-    //   .then((res) => {
-    //     setIsLoading(false);
-    //     setLat(res?.data?.result?.geometry?.location?.lat);
-    //     setLong(res?.data?.result?.geometry?.location?.lng);
-    //   })
-    //   .catch((e) => {
-    //     setIsLoading(false);
-    //   });
     getPlaceDetailApi(id)
       .then((res) => {
         setIsLoading(false);
@@ -316,11 +273,10 @@ const CleaningSchedule = (props) => {
     timeWork,
     time,
     note,
-    selectDay.toString(),
+    selectDay,
     chooseMonth,
     estimateMonth,
-    date_work_schedule,
-    selectedDate,
+    address,
   ]);
 
   useEffect(() => {
@@ -349,7 +305,6 @@ const CleaningSchedule = (props) => {
               ? res?.service_fee.map((el) => el.fee).reduce((a, b) => a + b)
               : 0;
           setFeeService(totalEventFee);
-          setDataFeeService(res?.service_fee);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -429,11 +384,12 @@ const CleaningSchedule = (props) => {
     timeWork,
     time,
     id,
-    selectDay.toString(),
+    selectDay,
     chooseMonth,
     estimateMonth,
     note,
     codePromotion,
+    address,
   ]);
 
   const checkPromotion = useCallback(
@@ -472,18 +428,7 @@ const CleaningSchedule = (props) => {
           });
       }
     },
-    [
-      id,
-      lat,
-      long,
-      address,
-      timeWork,
-      date_work_schedule,
-      time,
-      chooseMonth,
-      estimateMonth,
-      codePromotion,
-    ]
+    [id, date_work_schedule, time, codePromotion, accessToken, note]
   );
 
   const onCreateOrder = useCallback(() => {
@@ -564,37 +509,36 @@ const CleaningSchedule = (props) => {
     time,
     codePromotion,
     note,
-    chooseMonth,
-    estimateMonth,
     idCollaborator,
+    accessToken,
+    dispatch,
+    navigate,
+    setErrorNameCustomer,
   ]);
 
   const searchValue = (value) => {
     setNameCollaborator(value);
   };
 
-  const searchCollaborator = useCallback(
-    _debounce((value) => {
-      setNameCollaborator(value);
-      if (value) {
-        searchCollaboratorsCreateOrder(id, value)
-          .then((res) => {
-            if (value === "") {
-              setDataCollaborator([]);
-            } else {
-              setDataCollaborator(res.data);
-            }
-          })
-          .catch((err) => console.log(err));
-      } else if (idCollaborator) {
-        setDataCollaborator([]);
-      } else {
-        setDataCollaborator([]);
-      }
-      setIdCollaborator("");
-    }, 1000),
-    [id]
-  );
+  const searchCollaborator = _debounce((value) => {
+    setNameCollaborator(value);
+    if (value) {
+      searchCollaboratorsCreateOrder(id, value)
+        .then((res) => {
+          if (value === "") {
+            setDataCollaborator([]);
+          } else {
+            setDataCollaborator(res.data);
+          }
+        })
+        .catch((err) => console.log(err));
+    } else if (idCollaborator) {
+      setDataCollaborator([]);
+    } else {
+      setDataCollaborator([]);
+    }
+    setIdCollaborator("");
+  }, 1000);
 
   const onGetBill = useCallback(() => {
     if (ref.current === null) {
@@ -633,10 +577,10 @@ const CleaningSchedule = (props) => {
         </div>
 
         {places.length > 0 && (
-          <div className="list-item-place">
+          <div className="list-item-place ">
             {places?.map((item, index) => {
               return (
-                <a
+                <p
                   key={index}
                   className="text-option-place"
                   onClick={(e) => {
@@ -645,7 +589,7 @@ const CleaningSchedule = (props) => {
                   }}
                 >
                   {item?.description}
-                </a>
+                </p>
               );
             })}
           </div>
@@ -655,12 +599,12 @@ const CleaningSchedule = (props) => {
           <>
             {dataAddress.length > 0 && (
               <div className="mt-2">
-                <a className="title-list-address">{`${i18n.t(
+                <p className="title-list-address m-0">{`${i18n.t(
                   "address_default",
                   {
                     lng: lang,
                   }
-                )}`}</a>
+                )}`}</p>
                 <List type={"unstyled"} className="list-item-address-customer">
                   {dataAddress?.map((item, index) => {
                     return (
@@ -679,12 +623,12 @@ const CleaningSchedule = (props) => {
                       >
                         <i class="uil uil-map-marker"></i>
                         <div className="div-name-address">
-                          <a className="title-address">
+                          <p className="title-address">
                             {item?.address.slice(0, item?.address.indexOf(","))}
-                          </a>
-                          <a className="title-details-address">
+                          </p>
+                          <p className="title-details-address">
                             {item?.address}
-                          </a>
+                          </p>
                         </div>
                       </div>
                     );
@@ -695,12 +639,9 @@ const CleaningSchedule = (props) => {
           </>
         )}
 
-        <a className="text-error">{errorAddress}</a>
+        <p className="text-error">{errorAddress}</p>
         <div className="div-add-service mt-3">
-          <a className="label">
-            {`${i18n.t("times", { lng: lang })}`}{" "}
-            <a style={{ color: "red" }}>(*)</a>
-          </a>
+          <p className="label m-0">{`${i18n.t("times", { lng: lang })}`} </p>
           <div className="div-service">
             {extendService.slice(0, 3).map((item) => {
               return (
@@ -712,7 +653,7 @@ const CleaningSchedule = (props) => {
                   }
                   onClick={() => onChangeTimeService(item)}
                 >
-                  <a
+                  <p
                     className={
                       item?._id === time?._id
                         ? "text-service"
@@ -720,8 +661,8 @@ const CleaningSchedule = (props) => {
                     }
                   >
                     {item?.title?.[lang]}
-                  </a>
-                  <a
+                  </p>
+                  <p
                     className={
                       item?._id === time?._id
                         ? "text-service"
@@ -732,8 +673,8 @@ const CleaningSchedule = (props) => {
                       0,
                       item?.description?.[lang].indexOf("2")
                     )}
-                  </a>
-                  <a
+                  </p>
+                  <p
                     className={
                       item?._id === time?._id
                         ? "text-service"
@@ -743,16 +684,16 @@ const CleaningSchedule = (props) => {
                     {item?.description?.[lang].slice(
                       item?.description?.[lang].indexOf(" ")
                     )}
-                  </a>
+                  </p>
                 </div>
               );
             })}
           </div>
-          <a className="text-error">{errorTime}</a>
+          <p className="text-error">{errorTime}</p>
         </div>
 
         <div className="div-select-date mt-2">
-          <a className="label-date">Ngày làm (*)</a>
+          <p className="label-date">Ngày làm (*)</p>
           <div className="div-date">
             {DATA_DATE?.map((item, index) => {
               return (
@@ -765,7 +706,7 @@ const CleaningSchedule = (props) => {
                   }
                   onClick={() => optionSelectedDate(item)}
                 >
-                  <a>{item?.date}</a>
+                  <p className="m-0">{item?.date}</p>
                 </div>
               );
             })}
@@ -773,9 +714,9 @@ const CleaningSchedule = (props) => {
         </div>
 
         <div className="form-picker-hours">
-          <a className="label-hours">
+          <p className="label-hours">
             {`${i18n.t("time_work", { lng: lang })}`} (*)
-          </a>
+          </p>
           <div className="div-hours">
             {DATA_TIME.map((item) => {
               return (
@@ -793,13 +734,13 @@ const CleaningSchedule = (props) => {
               );
             })}
           </div>
-          <a className="text-error">{errorTimeWork}</a>
+          <p className="text-error">{errorTimeWork}</p>
         </div>
 
         <div className="div-select-month">
-          <a className="label-month">
+          <p className="label-month">
             {`${i18n.t("subscription_duration", { lng: lang })}`} (*)
-          </a>
+          </p>
           <div className="div-month">
             {DATA_MONTH?.map((item, index) => {
               return (
@@ -812,9 +753,9 @@ const CleaningSchedule = (props) => {
                   }
                   onClick={() => onChooseMonth(item?.estimate)}
                 >
-                  <a>
+                  <p className="m-0">
                     {item?.title} {`${i18n.t("month", { lng: lang })}`}
-                  </a>
+                  </p>
                 </div>
               );
             })}
@@ -868,14 +809,17 @@ const CleaningSchedule = (props) => {
                       setIdCollaborator(item?._id);
                       setNameCollaborator(item?.full_name);
                       setDataCollaborator([]);
-                      setErrorCollaborator("");
                     }}
                   >
                     <div className="div-name">
-                      <img src={item?.avatar} className="img-collaborator" />
-                      <a className="text-name">
+                      <Image
+                        preview={false}
+                        src={item?.avatar}
+                        className="img-collaborator"
+                      />
+                      <p className="text-name">
                         {item?.full_name} - {item?.phone} - {item?.id_view}
-                      </a>
+                      </p>
                     </div>
                     {item?.is_favorite ? (
                       <i class="uil uil-heart icon-heart"></i>
@@ -903,38 +847,43 @@ const CleaningSchedule = (props) => {
                   checkPromotion(item);
                 }}
               >
-                <a className="text-code-promotion">{item?.code}</a>
-                <a className="text-title-promotion">{item?.title?.[lang]}</a>
+                <p className="text-code-promotion">{item?.code}</p>
+                <p className="text-title-promotion">{item?.title?.[lang]}</p>
               </div>
             );
           })}
         </div>
         {priceOrder && (
           <div className="div-total mt-3">
-            <a>
+            <p className="m-0">
               {`${i18n.t("number_sessions", { lng: lang })}`}:{" "}
               {selectDay.length}
-            </a>
-            <a>
+            </p>
+            <p className="m-0">
               {`${i18n.t("provisional", { lng: lang })}`}:{" "}
               {formatMoney(priceOrder)}
-            </a>
-            <a>
+            </p>
+            <p className="m-0">
               {`${i18n.t("platform_fee", { lng: lang })}`}:{" "}
               {formatMoney(feeService)}
-            </a>
+            </p>
             {eventPromotion.map((item, index) => {
               return (
-                <a style={{ color: "red" }}>
+                <p style={{ color: "red", margin: 0 }}>
                   {item?.title?.[lang]}: {"-"}
                   {formatMoney(item?.discount)}
-                </a>
+                </p>
               );
             })}
             {discount > 0 && (
               <div>
-                <a style={{ color: "red" }}>{itemPromotion?.title?.[lang]}: </a>
-                <a style={{ color: "red" }}> {formatMoney(-discount)}</a>
+                <p style={{ color: "red", margin: 0 }}>
+                  {itemPromotion?.title?.[lang]}:{" "}
+                </p>
+                <p style={{ color: "red", margin: 0 }}>
+                  {" "}
+                  {formatMoney(-discount)}
+                </p>
               </div>
             )}
           </div>
@@ -947,49 +896,49 @@ const CleaningSchedule = (props) => {
               content={
                 <div className="div-bill" ref={ref}>
                   <div className="div-total">
-                    <a className="text-bill">Thông tin báo giá</a>
-                    <a>Dịch vụ: {nameService}</a>
-                    <a>Địa điểm: {address}</a>
-                    <a>
+                    <p className="text-bill m-0">Thông tin báo giá</p>
+                    <p className="m-0">Dịch vụ: {nameService}</p>
+                    <p className="m-0">Địa điểm: {address}</p>
+                    <p className="m-0">
                       {`${i18n.t("number_sessions", { lng: lang })}`}:{" "}
                       {selectDay.length}
-                    </a>
-                    <a>
+                    </p>
+                    <p className="m-0">
                       {`${i18n.t("provisional", { lng: lang })}`}:{" "}
                       {formatMoney(priceOrder)}
-                    </a>
-                    <a>
+                    </p>
+                    <p className="m-0">
                       {`${i18n.t("platform_fee", { lng: lang })}`}:{" "}
                       {formatMoney(feeService)}
-                    </a>
+                    </p>
 
                     {eventPromotion.map((item, index) => {
                       return (
-                        <a style={{ color: "red", marginLeft: 5 }}>
+                        <p style={{ color: "red", marginLeft: 5, margin: 0 }}>
                           - {item?.title?.[lang]}: {"-"}
                           {formatMoney(item?.discount)}
-                        </a>
+                        </p>
                       );
                     })}
                     {discount > 0 && (
                       <div>
-                        <a style={{ color: "red", marginLeft: 5 }}>
+                        <p style={{ color: "red", marginLeft: 5, margin: 0 }}>
                           - {itemPromotion?.title?.[lang]}:{" "}
-                        </a>
-                        <a style={{ color: "red" }}>
+                        </p>
+                        <p style={{ color: "red", margin: 0 }}>
                           {" "}
                           {formatMoney(-discount)}
-                        </a>
+                        </p>
                       </div>
                     )}
                   </div>
                   <div className="price-total">
-                    <a className="title-price">Tổng tiền thanh toán </a>
-                    <a className="text-money-total">
+                    <p className="title-price m-0">Tổng tiền thanh toán </p>
+                    <p className="text-money-total m-0">
                       {formatMoney(
                         priceOrder + feeService - discount - eventFeePromotion
                       )}
-                    </a>
+                    </p>
                   </div>
                 </div>
               }
@@ -998,7 +947,9 @@ const CleaningSchedule = (props) => {
               <Button
                 style={{ height: 20, marginTop: 20, padding: 0, width: 20 }}
               >
-                <i class="uil uil-receipt"></i>
+                <>
+                  <i className="uil uil-receipt"></i>
+                </>
               </Button>
             </Popover>
           </div>
@@ -1057,13 +1008,13 @@ const CleaningSchedule = (props) => {
 
                 return (
                   <div key={i} className="mt-2">
-                    <a className="title-month">
+                    <p className="title-month">
                       {formatMonthVN} , {year[3]}
-                    </a>
+                    </p>
                     <div className="div-flex-date">
                       {date.map((item) => (
                         <div key={item.id} className="div-date">
-                          <a className="text-date">{item.title[lang]}</a>
+                          <p className="text-date m-0">{item.title[lang]}</p>
                         </div>
                       ))}
                     </div>
@@ -1071,27 +1022,27 @@ const CleaningSchedule = (props) => {
                     <div className="div-descrip-time">
                       {theFirstDayInMonth === "Tue"
                         ? Tue.map((item) => (
-                            <a key={item.id} className="div-date" />
+                            <p key={item.id} className="div-date" />
                           ))
                         : theFirstDayInMonth === "Wed"
                         ? Wed.map((item) => (
-                            <a key={item.id} className="div-date" />
+                            <p key={item.id} className="div-date" />
                           ))
                         : theFirstDayInMonth === "Thu"
                         ? Thu.map((item) => (
-                            <a key={item.id} className="div-date" />
+                            <p key={item.id} className="div-date" />
                           ))
                         : theFirstDayInMonth === "Fri"
                         ? Fri.map((item) => (
-                            <a key={item.id} className="div-date" />
+                            <p key={item.id} className="div-date" />
                           ))
                         : theFirstDayInMonth === "Sat"
                         ? Sat.map((item) => (
-                            <a key={item.id} className="div-date" />
+                            <p key={item.id} className="div-date" />
                           ))
                         : theFirstDayInMonth === "Sun"
                         ? Sun.map((item) => (
-                            <a key={item.id} className="div-date" />
+                            <p key={item.id} className="div-date" />
                           ))
                         : null}
 
@@ -1113,7 +1064,7 @@ const CleaningSchedule = (props) => {
                             }
                             onClick={() => onSelectDay(day.toString())}
                           >
-                            <a
+                            <p
                               className={
                                 day < addDays(new Date(), -1)
                                   ? "date-not-use"
@@ -1123,7 +1074,7 @@ const CleaningSchedule = (props) => {
                               }
                             >
                               {words[2]}
-                            </a>
+                            </p>
                           </button>
                         );
                       })}

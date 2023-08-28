@@ -30,16 +30,16 @@ import { Image, Select } from "antd";
 const ReportOverview = () => {
   const lang = useSelector(getLanguageState);
   const [startDate, setStartDate] = useState(
-    moment().subtract(1, "week").toISOString()
+    moment().subtract(30, "days").toISOString()
   );
   const [endDate, setEndDate] = useState(
     moment().subtract(1, "day").toISOString()
   );
   const [sameStartDate, setSameStartDate] = useState(
-    moment(startDate).subtract(1, "week").toISOString()
+    moment(startDate).subtract(30, "days").toISOString()
   );
   const [sameEndDate, setSameEndDate] = useState(
-    moment(endDate).subtract(1, "week").toISOString()
+    moment(endDate).subtract(30, "days").toISOString()
   );
   const [data, setData] = useState([]);
   const [dataSame, setDataSame] = useState([]);
@@ -66,7 +66,7 @@ const ReportOverview = () => {
     getReportOrderDaily(
       0,
       40,
-      moment().subtract(1, "week").toISOString(),
+      moment().subtract(30, "days").toISOString(),
       moment().subtract(1, "day").toISOString(),
       "date_work"
     )
@@ -81,11 +81,11 @@ const ReportOverview = () => {
     getReportOrderDaily(
       0,
       40,
-      moment(moment().subtract(1, "week").toISOString())
-        .subtract(1, "week")
+      moment(moment().subtract(30, "days").toISOString())
+        .subtract(30, "days")
         .toISOString(),
-      moment(moment().subtract(1, "day").toISOString())
-        .subtract(1, "week")
+      moment(moment().subtract(1, "days").toISOString())
+        .subtract(30, "days")
         .toISOString(),
       "date_work"
     )
@@ -100,8 +100,8 @@ const ReportOverview = () => {
     getReportOrderByCity(
       0,
       20,
-      moment().subtract(1, "week").toISOString(),
-      moment().subtract(1, "day").toISOString(),
+      moment().subtract(30, "days").toISOString(),
+      moment().subtract(1, "days").toISOString(),
       0
     )
       .then((res) => {
@@ -112,11 +112,11 @@ const ReportOverview = () => {
     getReportOrderByCity(
       0,
       20,
-      moment(moment().subtract(1, "week").toISOString())
-        .subtract(1, "week")
+      moment(moment().subtract(30, "days").toISOString())
+        .subtract(30, "days")
         .toISOString(),
-      moment(moment().subtract(1, "day").toISOString())
-        .subtract(1, "week")
+      moment(moment().subtract(1, "days").toISOString())
+        .subtract(30, "days")
         .toISOString(),
       0
     )
@@ -126,8 +126,8 @@ const ReportOverview = () => {
       .catch((err) => {});
 
     getReportServiceByArea(
-      moment().subtract(1, "week").toISOString(),
-      moment().subtract(1, "day").toISOString(),
+      moment().subtract(30, "days").toISOString(),
+      moment().subtract(1, "days").toISOString(),
       ""
     )
       .then((res) => {
@@ -135,11 +135,11 @@ const ReportOverview = () => {
       })
       .catch((err) => {});
     getReportServiceByArea(
-      moment(moment().subtract(1, "week").toISOString())
-        .subtract(1, "week")
+      moment(moment().subtract(30, "days").toISOString())
+        .subtract(30, "days")
         .toISOString(),
-      moment(moment().subtract(1, "day").toISOString())
-        .subtract(1, "week")
+      moment(moment().subtract(1, "days").toISOString())
+        .subtract(30, "days")
         .toISOString(),
       ""
     )
@@ -280,75 +280,112 @@ const ReportOverview = () => {
   }
 
   for (let i = 0; i < dataService.length; i++) {
-    if (dataService[i]?._id === dataServiceSame[i]?._id) {
-      dataChartSerive.push({
-        name: dataService[i]?.title,
-        income: dataService[i]?.total_income,
-        percent_income:
-          ((dataService[i]?.total_income - dataServiceSame[i]?.total_income) /
-            dataServiceSame[i]?.total_income) *
-          100,
-        net_income: dataService[i]?.total_net_income,
-        percent_net_income:
-          ((dataService[i]?.total_net_income -
-            dataServiceSame[i]?.total_net_income) /
-            dataServiceSame[i]?.total_net_income) *
-          100,
-        thumbnail: dataService[i]?.thumbnail,
-      });
-    } else {
-      dataChartSerive.push({
-        name: dataService[i]?.title,
-        income: dataService[i]?.total_income,
-        percent_income: 100,
-        net_income: dataService[i]?.total_net_income,
-        percent_net_income: 100,
-        thumbnail: dataService[i]?.thumbnail,
-      });
-    }
+    // if (dataService[i]?._id === dataServiceSame[i]?._id) {
+    //   dataChartSerive.push({
+    //     name: dataService[i]?.title,
+    //     income: dataService[i]?.total_income,
+    //     percent_income:
+    //       ((dataService[i]?.total_income - dataServiceSame[i]?.total_income) /
+    //         dataServiceSame[i]?.total_income) *
+    //       100,
+    //     net_income: dataService[i]?.total_net_income,
+    //     percent_net_income:
+    //       ((dataService[i]?.total_net_income -
+    //         dataServiceSame[i]?.total_net_income) /
+    //         dataServiceSame[i]?.total_net_income) *
+    //       100,
+    //     thumbnail: dataService[i]?.thumbnail,
+    //   });
+    // } else {
+    //   dataChartSerive.push({
+    //     name: dataService[i]?.title,
+    //     income: dataService[i]?.total_income,
+    //     percent_income: 100,
+    //     net_income: dataService[i]?.total_net_income,
+    //     percent_net_income: 100,
+    //     thumbnail: dataService[i]?.thumbnail,
+    //   });
+    // }
+    dataServiceSame?.map((item) => {
+      if (item?._id === dataService[i]?._id) {
+        dataChartSerive.push({
+          name: dataService[i]?.title,
+          income: dataService[i]?.total_income,
+          percent_income:
+            ((dataService[i]?.total_income - item?.total_income) /
+              item?.total_income) *
+            100,
+          net_income: dataService[i]?.total_net_income,
+          percent_net_income:
+            ((dataService[i]?.total_net_income - item?.total_net_income) /
+              item?.total_net_income) *
+            100,
+          thumbnail: dataService[i]?.thumbnail,
+        });
+      }
+    });
   }
 
-  // const renderTooltipContent = (o) => {
-  //   const { payload } = o;
-  //   return (
-  //     <div className="div-content-chart-net-income">
-  //       {payload[0]?.payload?.date && (
-  //         <p className="text-content">
-  //           {payload[0]?.payload?.date}:{" "}
-  //           {formatMoney(payload[0]?.payload?.gross_income)}
-  //         </p>
-  //       )}
+  const renderTooltipContent = (o) => {
+    const { payload } = o;
+    return (
+      <div className="div-content-chart-net-income">
+        {payload[0]?.payload?.date && (
+          <p className="text-content">
+            {payload[0]?.payload?.date}:{" "}
+            {formatMoney(payload[0]?.payload?.gross_income)}
+          </p>
+        )}
 
-  //       {payload[0]?.payload?.date_same && (
-  //         <p className="text-content-same">
-  //           {payload[0]?.payload?.date_same}:{" "}
-  //           {formatMoney(payload[0]?.payload?.gross_income_same)}
-  //         </p>
-  //       )}
-  //     </div>
-  //   );
-  // };
-  // const renderTooltipContentNetIncome = (o) => {
-  //   const { payload } = o;
+        {payload[0]?.payload?.date_same && (
+          <p className="text-content-same">
+            {payload[0]?.payload?.date_same}:{" "}
+            {formatMoney(payload[0]?.payload?.gross_income_same)}
+          </p>
+        )}
+      </div>
+    );
+  };
+  const renderTooltipContentTotal = (o) => {
+    const { payload } = o;
+    return (
+      <div className="div-content-chart-net-income">
+        {payload[0]?.payload?.date && (
+          <p className="text-content">
+            {payload[0]?.payload?.date}: {payload[0]?.payload?.total} đơn
+          </p>
+        )}
 
-  //   return (
-  //     <div className="div-content-chart-net-income">
-  //       {payload[0]?.payload?.date && (
-  //         <p className="text-content">
-  //           {payload[0]?.payload?.date}:{" "}
-  //           {formatMoney(payload[0]?.payload?.net_income)}
-  //         </p>
-  //       )}
+        {payload[0]?.payload?.date_same && (
+          <p className="text-content-same">
+            {payload[0]?.payload?.date_same}: {payload[0]?.payload?.total_same}{" "}
+            đơn
+          </p>
+        )}
+      </div>
+    );
+  };
+  const renderTooltipContentNetIncome = (o) => {
+    const { payload } = o;
 
-  //       {payload[0]?.payload?.date_same && (
-  //         <p className="text-content-same">
-  //           {payload[0]?.payload?.date_same}:{" "}
-  //           {formatMoney(payload[0]?.payload?.net_income_same)}
-  //         </p>
-  //       )}
-  //     </div>
-  //   );
-  // };
+    return (
+      <div className="div-content-chart-net-income">
+        {payload[0]?.payload?.date && (
+          <p className="text-content">
+            {payload[0]?.payload?.date}:{" "}
+            {formatMoney(payload[0]?.payload?.net_income)}
+          </p>
+        )}
+
+        {payload[0]?.payload?.date_same && (
+          <p className="text-content-same">
+            {payload[0]?.payload?.date_same}:{" "}
+            {formatMoney(payload[0]?.payload?.net_income_same)}
+          </p>
+        )}
+      </div>
+    );
+  };
 
   const netIncomePercent =
     ((totalNetIncome - totalNetIncomeSame) / totalNetIncomeSame) * 100;
@@ -424,17 +461,14 @@ const ReportOverview = () => {
                 tick={{ fontSize: 10 }}
               />
               <YAxis
-                dataKey="gross_income"
                 tickFormatter={(tickItem) => number_processing(tickItem)}
-                // domain={[0, 10000000]}
-                // allowDataOverflow={true}
               />
               <Tooltip
-              // content={
-              //   dataChartGrossIncomeOrder?.length > 0
-              //     ? renderTooltipContent
-              //     : ""
-              // }
+                content={
+                  dataChartGrossIncomeOrder?.length > 0
+                    ? renderTooltipContent
+                    : ""
+                }
               />
               <Legend />
               <Line
@@ -496,12 +530,15 @@ const ReportOverview = () => {
                 tick={{ fontSize: 10 }}
               />
               <YAxis
-                dataKey="total"
                 tickFormatter={(tickItem) => number_processing(tickItem)}
-                // domain={[0, 50]}
-                // allowDataOverflow={true}
               />
-              <Tooltip />
+              <Tooltip
+                content={
+                  dataChartTotalOrder?.length > 0
+                    ? renderTooltipContentTotal
+                    : ""
+                }
+              />
               <Legend />
               <Line
                 type="monotone"
@@ -566,17 +603,14 @@ const ReportOverview = () => {
                 tick={{ fontSize: 10 }}
               />
               <YAxis
-                dataKey="net_income"
                 tickFormatter={(tickItem) => number_processing(tickItem)}
-                // domain={[0, 5000000]}
-                // allowDataOverflow={true}
               />
               <Tooltip
-              // content={
-              //   dataChartNetIncomeOrder?.length > 0
-              //     ? renderTooltipContentNetIncome
-              //     : ""
-              // }
+                content={
+                  dataChartNetIncomeOrder?.length > 0
+                    ? renderTooltipContentNetIncome
+                    : ""
+                }
               />
               <Legend />
               <Line

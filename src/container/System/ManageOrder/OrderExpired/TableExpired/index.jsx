@@ -1,26 +1,24 @@
-import { Dropdown, Input, Pagination, Space, Table } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import { UilEllipsisV } from "@iconscout/react-unicons";
+import { Dropdown, Input, Pagination, Space, Table } from "antd";
+import _debounce from "lodash/debounce";
 import moment from "moment";
-import "./index.scss";
-import { Link, useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getOrderExpiredApi,
   searchOrderExpiredApi,
 } from "../../../../../api/order";
-import { useSelector } from "react-redux";
-import { getLanguageState, getUser } from "../../../../../redux/selectors/auth";
-import { SearchOutlined } from "@ant-design/icons";
-import _debounce from "lodash/debounce";
-import { vi } from "date-fns/locale";
 import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import "./index.scss";
 
 const TableExpired = ({ status }) => {
   const [item, setItem] = useState([]);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [startPage, setStartPage] = useState(1);
   const [dataSearch, setDataSearch] = useState([]);
   const [totalSearch, setTotalSearch] = useState(0);
   const [valueSearch, setValueSearch] = useState("");
@@ -260,8 +258,6 @@ const TableExpired = ({ status }) => {
       dataSearch.length > 0
         ? page * searchLength - searchLength
         : page * dataLength - dataLength;
-
-    setStartPage(start);
     dataSearch?.length > 0
       ? searchOrderExpiredApi(start, 20, status, valueSearch).then((res) => {
           setDataSearch(res?.data);
@@ -275,16 +271,12 @@ const TableExpired = ({ status }) => {
           .catch((err) => {});
   };
 
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      searchOrderExpiredApi(0, 20, status, value).then((res) => {
-        setDataSearch(res?.data);
-        setTotalSearch(res?.totalItem);
-      });
-    }, 1000),
-    [status]
-  );
-
+  const handleSearch = _debounce((value) => {
+    searchOrderExpiredApi(0, 20, status, value).then((res) => {
+      setDataSearch(res?.data);
+      setTotalSearch(res?.totalItem);
+    });
+  }, 1000);
   return (
     <div>
       <div>

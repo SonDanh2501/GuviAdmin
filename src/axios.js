@@ -32,7 +32,7 @@ axiosClient.interceptors.response.use(
   },
   function (error) {
     if (error?.response.status === 401 && token) {
-      removeToken();
+      localStorage.removeItem("access_token");
       window.location = "/auth/login";
       store.dispatch(logoutAction.logoutRequest());
     }

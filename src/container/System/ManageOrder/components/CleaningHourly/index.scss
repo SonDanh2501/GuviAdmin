@@ -55,13 +55,14 @@
     font-style: normal;
     font-weight: 400;
     color: black;
-    margin-bottom: 10px;
+    margin: 0 0 10px 0;
   }
 
   .div-service {
     display: flex;
     flex-direction: row;
     margin-bottom: 10px;
+    margin-top: 10px;
 
     .select-service {
       display: flex;
@@ -82,15 +83,7 @@
         font-weight: 500;
         color: rgb(255, 255, 255);
         text-align: center;
-      }
-
-      .text-service-default {
-        font-size: 14px;
-        font-family: "Roboto";
-        font-style: normal;
-        font-weight: 500;
-        color: rgb(159, 159, 159);
-        text-align: center;
+        margin: 0;
       }
     }
 
@@ -108,24 +101,14 @@
       background-color: transparent;
     }
 
-    .text-service {
-      font-size: 14px;
-      font-family: "Roboto";
-      font-style: normal;
-      font-weight: 500;
-      line-height: 16px;
-      color: rgb(255, 255, 255);
-      text-align: center;
-    }
-
     .text-service-default {
       font-size: 14px;
       font-family: "Roboto";
       font-style: normal;
       font-weight: 500;
-      line-height: 16px;
       color: rgb(159, 159, 159);
       text-align: center;
+      margin: 0;
     }
   }
 }
@@ -141,8 +124,7 @@
     font-style: normal;
     font-weight: 400;
     color: black;
-    margin-bottom: 10px;
-    margin-top: 15px;
+    margin: 15px 0 10px 0;
   }
 
   .div-hours {
@@ -207,6 +189,7 @@
       font-weight: 500;
       text-transform: uppercase;
       color: #000000;
+      margin: 0;
     }
     .text-title-promotion {
       text-overflow: ellipsis;
@@ -216,7 +199,7 @@
       font-family: "Roboto";
       font-weight: 200;
       color: black;
-      margin-top: 5px;
+      margin: 5px 0 0 0;
     }
   }
 
@@ -238,6 +221,7 @@
       font-weight: 500;
       color: black;
       text-transform: uppercase;
+      margin: 0;
     }
 
     .text-title-promotion {
@@ -248,7 +232,7 @@
       font-family: "Roboto";
       font-weight: 200;
       color: black;
-      margin-top: 5px;
+      margin: 5px 0 0 0;
     }
   }
 }
@@ -264,9 +248,9 @@
     font-family: "Roboto";
     font-style: normal;
     font-weight: 500;
-    line-height: 16px;
     color: black;
     text-align: center;
+    margin: 0;
   }
 }
 
@@ -291,6 +275,7 @@
       font-weight: 500;
       color: black;
       border-bottom: 10px;
+      margin: 0;
     }
   }
   .price-total {
@@ -305,6 +290,7 @@
       font-style: normal;
       font-weight: 400;
       color: black;
+      margin: 0;
     }
 
     .text-money-total {
@@ -313,6 +299,7 @@
       font-style: normal;
       font-weight: 500;
       color: black;
+      margin: 0;
     }
   }
 }
@@ -323,6 +310,7 @@
   font-style: normal;
   font-weight: 300;
   color: rgb(216, 26, 26);
+  margin: 0;
 }
 
 .div-search-address {
@@ -359,6 +347,7 @@
       font-weight: 400;
       color: black;
       width: 100%;
+      margin: 0;
     }
   }
 }
@@ -375,10 +364,10 @@
     font-family: "Roboto";
     font-style: normal;
     font-weight: 400;
-    line-height: 16px;
     color: black;
     margin-bottom: 10px;
     margin-top: 15px;
+    margin: 15px 0 10px 0;
   }
 }
 
@@ -419,6 +408,7 @@
         font-style: normal;
         font-weight: 400;
         color: black;
+        margin: 0;
       }
     }
   }
@@ -450,6 +440,7 @@
         font-style: normal;
         font-weight: 400;
         color: black;
+        margin: 0;
       }
     }
   }
@@ -485,6 +476,7 @@
         font-style: normal;
         font-weight: 400;
         color: black;
+        margin: 0;
       }
     }
 
@@ -537,6 +529,7 @@
         font-style: normal;
         font-weight: 400;
         color: black;
+        margin: 0;
       }
       .title-details-address {
         font-size: 12px;
@@ -544,6 +537,7 @@
         font-style: normal;
         font-weight: 400;
         color: black;
+        margin: 0;
       }
     }
   }
@@ -574,6 +568,7 @@
         font-style: normal;
         font-weight: 400;
         color: black;
+        margin: 0;
       }
     }
   }
@@ -585,6 +580,7 @@
   font-style: normal;
   font-weight: 500;
   color: #000000;
+  margin: 0;
 }
 
 .div-loop {
@@ -627,6 +623,7 @@
     font-style: normal;
     font-weight: 400;
     color: #000000;
+    margin: 0;
   }
 
   .input-note {
@@ -668,10 +665,10 @@
       font-family: "Roboto";
       font-style: normal;
       font-weight: 400;
-      line-height: 16px;
       color: black;
       margin-bottom: 10px;
       margin-top: 15px;
+      margin: 15px 0 10px 0;
     }
   }
 
@@ -718,6 +715,7 @@
       font-style: normal;
       font-weight: 400;
       color: #000000;
+      margin: 0;
     }
 
     .input-note {
@@ -764,6 +762,7 @@
           font-style: normal;
           font-weight: 400;
           color: black;
+          margin: 0;
         }
       }
     }
@@ -794,6 +793,7 @@
           font-style: normal;
           font-weight: 400;
           color: black;
+          margin: 0;
         }
       }
     }
@@ -829,6 +829,7 @@
           font-style: normal;
           font-weight: 400;
           color: black;
+          margin: 0;
         }
       }
 
@@ -857,6 +858,7 @@
         font-weight: 400;
         color: black;
         width: 100%;
+        margin: 0;
       }
     }
   }
