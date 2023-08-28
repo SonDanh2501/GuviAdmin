@@ -11,14 +11,14 @@ import {
   permissionAction,
 } from "../actions/auth";
 import { loadingAction } from "../actions/loading";
-const BaseUrl = process.env.REACT_APP_BASE_URL;
+const TestUrl = process.env.REACT_APP_TEST_URL;
 
 function* loginSaga(action) {
   try {
     const response = yield call(loginApi, action.payload.data);
     setToken(response?.token);
     axios
-      .get(`${BaseUrl}/admin/auth/get_permission_by_token`, {
+      .get(`${TestUrl}/admin/auth/get_permission_by_token`, {
         headers: {
           Authorization: `Bearer ${response?.token}`,
         },
