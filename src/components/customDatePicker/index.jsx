@@ -36,16 +36,16 @@ const CustomDatePicker = (props) => {
   const [title, setTitle] = useState();
 
   useEffect(() => {
-    setStart(defaults ? moment().subtract(1, "week") : "");
+    setStart(defaults ? moment().subtract(30, "days") : "");
     setEnd(defaults ? moment().subtract(1, "days") : "");
     setTitle(
       defaults
-        ? `${i18n.t("seven_ago", {
+        ? `${i18n.t("thirty_ago", {
             lng: lang,
           })}`
         : ""
     );
-    setValueTab(defaults ? "last_seven" : "");
+    setValueTab(defaults ? "last_thirty" : "");
   }, []);
 
   const handleOk = () => {

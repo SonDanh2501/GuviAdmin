@@ -146,8 +146,6 @@ const ReportService = () => {
     );
   };
 
-  console.log(codeCity);
-
   return (
     <div className="mt-4">
       <div className="div-select-city">
@@ -248,7 +246,7 @@ const ReportService = () => {
                 <div className="item-total">
                   <p className="title-total">{item?.title?.[lang]}</p>
                   <p className="text-colon">:</p>
-                  <p className="number-total">{item?.total}</p>
+                  <p className="number-total">{item?.total_order}</p>
                 </div>
               );
             })}

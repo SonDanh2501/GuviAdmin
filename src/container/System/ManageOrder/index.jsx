@@ -11,7 +11,7 @@ import {
 } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getOrderApi } from "../../../api/order";
@@ -93,66 +93,61 @@ const ManageOrder = () => {
   const navigate = useNavigate();
   const { width } = useWindowDimensions();
   const tabCookie = readCookie("tab-order");
+  const statusCookie = readCookie("status-order");
+  const pageOrder = readCookie("page_order");
+  const startCookie = readCookie("start_order");
+  const kindCookie = readCookie("kind_order");
+  const cityCookie = readCookie("city_order");
+  const districtCookie = readCookie("district_order");
+  const startDateCookie = readCookie("start_date_order");
+  const endDateCookie = readCookie("end_date_order");
+
   useEffect(() => {
     window.scroll(0, Number(readCookie("order_scrolly")));
     setKeyActive(tabCookie === "" ? 0 : Number(tabCookie));
-    setTab(
-      readCookie("status-order") !== "" ? readCookie("status-order") : "all"
-    );
-    setCurrentPage(
-      readCookie("page_order") === "" ? 1 : Number(readCookie("page_order"))
-    );
-    setStartPage(
-      readCookie("start_order") === "" ? 0 : Number(readCookie("start_order"))
-    );
-    setKind(readCookie("kind_order") !== "" ? readCookie("kind_order") : "");
-    setCity(readCookie("city_order") !== "" ? readCookie("city_order") : "");
+    setTab(statusCookie !== "" ? statusCookie : "all");
+    setCurrentPage(pageOrder === "" ? 1 : Number(pageOrder));
+    setStartPage(startCookie === "" ? 0 : Number(startCookie));
+    setKind(kindCookie !== "" ? kindCookie : "");
+    setCity(cityCookie !== "" ? cityCookie : "");
     setStartDate(
-      readCookie("start_date_order") !== ""
-        ? readCookie("start_date_order")
+      startDateCookie !== ""
+        ? startDateCookie
         : new Date("2022-12-31").toISOString()
     );
     setEndDate(
-      readCookie("end_date_order") !== ""
-        ? readCookie("end_date_order")
+      endDateCookie !== ""
+        ? endDateCookie
         : moment().endOf("date").toISOString()
     );
-    setDistrict(
-      readCookie("district_order") === ""
-        ? []
-        : readCookie("district_order").split(",")
-    );
+    setDistrict(districtCookie === "" ? [] : districtCookie.split(","));
     if (user?.area_manager_lv_1?.length === 0) {
-      setCity(readCookie("city_order") !== "" ? readCookie("city_order") : []);
+      setCity(cityCookie !== "" ? cityCookie : []);
     } else {
-      setCity(
-        readCookie("city_order") === ""
-          ? user?.area_manager_lv_1
-          : readCookie("city_order")
-      );
+      setCity(cityCookie === "" ? user?.area_manager_lv_1 : cityCookie);
     }
 
     getOrderApi(
       "",
       0,
       20,
-      readCookie("status-order") !== "" ? readCookie("status-order") : "all",
-      readCookie("kind_order") !== "" ? readCookie("kind_order") : "",
+      statusCookie !== "" ? statusCookie : "all",
+      kindCookie !== "" ? kindCookie : "",
       type,
-      readCookie("start_date_order") !== ""
-        ? readCookie("start_date_order")
+      startDateCookie !== ""
+        ? startDateCookie
         : new Date("2022-12-31").toISOString(),
-      readCookie("end_date_order") !== ""
-        ? readCookie("end_date_order")
+      endDateCookie !== ""
+        ? endDateCookie
         : moment().endOf("date").toISOString(),
       user?.area_manager_lv_1?.length === 0
-        ? readCookie("city_order") !== ""
-          ? readCookie("city_order")
+        ? cityCookie !== ""
+          ? cityCookie
           : []
-        : readCookie("city_order") === ""
+        : cityCookie === ""
         ? user?.area_manager_lv_1
-        : readCookie("city_order"),
-      readCookie("district_order").split(",")
+        : cityCookie,
+      districtCookie.split(",")
     )
       .then((res) => {
         setData(res?.data);
@@ -223,25 +218,28 @@ const ManageOrder = () => {
     }
   });
 
-  const handleSearch = _debounce((value) => {
-    getOrderApi(
-      value,
-      0,
-      20,
-      tab,
-      kind,
-      type,
-      startDate,
-      endDate,
-      city,
-      district
-    )
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  }, 1000);
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      getOrderApi(
+        value,
+        0,
+        20,
+        tab,
+        kind,
+        type,
+        startDate,
+        endDate,
+        city,
+        district
+      )
+        .then((res) => {
+          setData(res?.data);
+          setTotal(res?.totalItem);
+        })
+        .catch((err) => {});
+    }, 1000),
+    [tab, kind, type, startDate, endDate, city, district]
+  );
 
   const handleFilterByCondition = () => {
     setIsLoading(true);
