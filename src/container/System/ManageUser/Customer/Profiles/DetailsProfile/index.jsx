@@ -308,22 +308,22 @@ const DetailsProfile = ({ id }) => {
                             <p className="title-name">{`${i18n.t("name", {
                               lng: lang,
                             })}`}</p>
-                            <p className="title-colon">:</p>
-                            <p className="text-name">{item?.full_name}</p>
+                            <p className="title-colon">: </p>
+                            <p className="text-name ml-2">{item?.full_name}</p>
                           </div>
                           <div className="div-name-invite">
                             <p className="title-name">{`${i18n.t("sdt", {
                               lng: lang,
                             })}`}</p>
-                            <p className="title-colon">:</p>
-                            <p className="text-name">{item?.phone}</p>
+                            <p className="title-colon">: </p>
+                            <p className="text-name ml-2">{item?.phone}</p>
                           </div>
                           <div className="div-name-invite">
                             <p className="title-name">{`${i18n.t("code", {
                               lng: lang,
                             })}`}</p>
-                            <p className="title-colon">:</p>
-                            <p className="text-name">{item?.id_view}</p>
+                            <p className="title-colon">: </p>
+                            <p className="text-name ml-2">{item?.id_view}</p>
                           </div>
                         </div>
                         <div

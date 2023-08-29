@@ -279,25 +279,90 @@ const ReportOverview = () => {
     }
   }
 
-  for (let i = 0; i < dataService.length; i++) {
-    dataServiceSame?.map((item) => {
-      if (item?._id === dataService[i]?._id) {
-        dataChartSerive.push({
-          name: dataService[i]?.title,
-          income: dataService[i]?.total_income,
-          percent_income:
-            ((dataService[i]?.total_income - item?.total_income) /
-              item?.total_income) *
-            100,
-          net_income: dataService[i]?.total_net_income,
-          percent_net_income:
-            ((dataService[i]?.total_net_income - item?.total_net_income) /
-              item?.total_net_income) *
-            100,
-          thumbnail: dataService[i]?.thumbnail,
-        });
+  // for (let i = 0; i < dataService.length; i++) {
+  //   dataServiceSame?.map((item) => {
+  //     if (item?._id === dataService[i]?._id) {
+  //       dataChartSerive.push({
+  //         name: dataService[i]?.title,
+  //         income: dataService[i]?.total_income,
+  //         percent_income:
+  //           ((dataService[i]?.total_income - item?.total_income) /
+  //             item?.total_income) *
+  //           100,
+  //         net_income: dataService[i]?.total_net_income,
+  //         percent_net_income:
+  //           ((dataService[i]?.total_net_income - item?.total_net_income) /
+  //             item?.total_net_income) *
+  //           100,
+  //         thumbnail: dataService[i]?.thumbnail,
+  //       });
+  //     }
+  //   });
+  // }
+
+  if (dataService.length === dataServiceSame.length) {
+    for (const element of dataService) {
+      for (const element2 of dataServiceSame) {
+        if (element2?._id === element?._id) {
+          dataChartSerive.push({
+            name: element?.title,
+            income: element?.total_income,
+            percent_income:
+              ((element?.total_income - element2?.total_income) /
+                element2?.total_income) *
+              100,
+            net_income: element?.total_net_income,
+            percent_net_income:
+              ((element?.total_net_income - element2?.total_net_income) /
+                element2?.total_net_income) *
+              100,
+            thumbnail: element?.thumbnail,
+          });
+        }
       }
+    }
+  } else {
+    const objectsAreEqual = (obj1, obj2) => {
+      return obj1?._id === obj2?._id;
+    };
+
+    const filteredArray = dataService.filter((obj1) => {
+      const objInArray2 = dataServiceSame.filter((obj2) =>
+        objectsAreEqual(obj1, obj2)
+      );
+      return !objInArray2;
     });
+    filteredArray?.map((item) => {
+      return dataChartSerive.push({
+        name: item?.title,
+        income: item?.total_income,
+        percent_income: 100,
+        net_income: item?.total_net_income,
+        percent_net_income: 100,
+        thumbnail: item?.thumbnail,
+      });
+    });
+
+    for (const element of dataService) {
+      for (const element2 of dataServiceSame) {
+        if (element2?._id === element?._id) {
+          dataChartSerive.push({
+            name: element?.title,
+            income: element?.total_income,
+            percent_income:
+              ((element?.total_income - element2?.total_income) /
+                element2?.total_income) *
+              100,
+            net_income: element?.total_net_income,
+            percent_net_income:
+              ((element?.total_net_income - element2?.total_net_income) /
+                element2?.total_net_income) *
+              100,
+            thumbnail: element?.thumbnail,
+          });
+        }
+      }
+    }
   }
 
   const renderTooltipContent = (o) => {
