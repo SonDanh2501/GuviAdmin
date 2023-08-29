@@ -415,364 +415,374 @@ const ReportOverview = () => {
       </div>
 
       <div className="div-chart-firt-overview">
-        <div className="div-chart-gross-income">
-          <p className="title-gross">Doanh số</p>
+        {dataChartGrossIncomeOrder.length > 0 && (
+          <div className="div-chart-gross-income">
+            <p className="title-gross">Doanh số</p>
 
-          <div className="div-total-gross">
-            <p className="text-total-gross">
-              {formatMoney(!totalGrossIncome ? 0 : totalGrossIncome)}
-            </p>
-            {grossIncomePercent < 0 ? (
-              <p className="text-number-persent-down">
-                <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
-                {Math.abs(
-                  isNaN(grossIncomePercent) ? 0 : grossIncomePercent
-                ).toFixed(2)}
-                %
+            <div className="div-total-gross">
+              <p className="text-total-gross">
+                {formatMoney(!totalGrossIncome ? 0 : totalGrossIncome)}
               </p>
-            ) : (
-              <p className="text-number-persent-up">
-                <CaretUpOutlined style={{ marginRight: 5 }} />
-                {Number(
-                  isNaN(grossIncomePercent) ? 0 : grossIncomePercent
-                ).toFixed(2)}
-                %
-              </p>
-            )}
-            <p className="text-same">so với cùng kỳ</p>
+              {grossIncomePercent < 0 ? (
+                <p className="text-number-persent-down">
+                  <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
+                  {Math.abs(
+                    isNaN(grossIncomePercent) ? 0 : grossIncomePercent
+                  ).toFixed(2)}
+                  %
+                </p>
+              ) : (
+                <p className="text-number-persent-up">
+                  <CaretUpOutlined style={{ marginRight: 5 }} />
+                  {Number(
+                    isNaN(grossIncomePercent) ? 0 : grossIncomePercent
+                  ).toFixed(2)}
+                  %
+                </p>
+              )}
+              <p className="text-same">so với cùng kỳ</p>
+            </div>
+            <ResponsiveContainer height={350} width="100%">
+              <LineChart
+                width={500}
+                height={300}
+                data={dataChartGrossIncomeOrder}
+                margin={{
+                  top: 5,
+                  right: 5,
+                  left: 5,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="date"
+                  angle={-20}
+                  textAnchor="end"
+                  tick={{ fontSize: 10 }}
+                />
+                <YAxis
+                  tickFormatter={(tickItem) => number_processing(tickItem)}
+                />
+                <Tooltip
+                  content={
+                    dataChartGrossIncomeOrder?.length > 0
+                      ? renderTooltipContent
+                      : ""
+                  }
+                />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="gross_income"
+                  stroke="#2962ff"
+                  name="Hiện tại"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="gross_income_same"
+                  stroke="#82ca9d"
+                  strokeDasharray="3 4 5 2"
+                  name="Cùng kỳ"
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
-          <ResponsiveContainer height={350} width="100%">
-            <LineChart
-              width={500}
-              height={300}
-              data={dataChartGrossIncomeOrder}
-              margin={{
-                top: 5,
-                right: 5,
-                left: 5,
-                bottom: 5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                dataKey="date"
-                angle={-20}
-                textAnchor="end"
-                tick={{ fontSize: 10 }}
-              />
-              <YAxis
-                tickFormatter={(tickItem) => number_processing(tickItem)}
-              />
-              <Tooltip
-                content={
-                  dataChartGrossIncomeOrder?.length > 0
-                    ? renderTooltipContent
-                    : ""
-                }
-              />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="gross_income"
-                stroke="#2962ff"
-                name="Hiện tại"
-              />
-              <Line
-                type="monotone"
-                dataKey="gross_income_same"
-                stroke="#82ca9d"
-                strokeDasharray="3 4 5 2"
-                name="Cùng kỳ"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="div-chart-gross-income">
-          <p className="title-gross">Lượng đơn hàng</p>
-          <div className="div-total-gross">
-            <p className="text-total-gross">{!totalOrder ? 0 : totalOrder}</p>
-            {totalOrderPercent < 0 ? (
-              <p className="text-number-persent-down">
-                <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
-                {Math.abs(
-                  isNaN(totalOrderPercent) ? 0 : totalOrderPercent
-                ).toFixed(2)}
-                %
-              </p>
-            ) : (
-              <p className="text-number-persent-up">
-                <CaretUpOutlined style={{ marginRight: 5 }} />
-                {Number(
-                  isNaN(totalOrderPercent) ? 0 : totalOrderPercent
-                ).toFixed(2)}
-                %
-              </p>
-            )}
-            <p className="text-same">so với cùng kỳ</p>
+        )}
+        {dataChartTotalOrder.length > 0 && (
+          <div className="div-chart-gross-income">
+            <p className="title-gross">Lượng đơn hàng</p>
+            <div className="div-total-gross">
+              <p className="text-total-gross">{!totalOrder ? 0 : totalOrder}</p>
+              {totalOrderPercent < 0 ? (
+                <p className="text-number-persent-down">
+                  <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
+                  {Math.abs(
+                    isNaN(totalOrderPercent) ? 0 : totalOrderPercent
+                  ).toFixed(2)}
+                  %
+                </p>
+              ) : (
+                <p className="text-number-persent-up">
+                  <CaretUpOutlined style={{ marginRight: 5 }} />
+                  {Number(
+                    isNaN(totalOrderPercent) ? 0 : totalOrderPercent
+                  ).toFixed(2)}
+                  %
+                </p>
+              )}
+              <p className="text-same">so với cùng kỳ</p>
+            </div>
+            <ResponsiveContainer height={350} width="100%">
+              <LineChart
+                width={500}
+                height={300}
+                data={dataChartTotalOrder}
+                margin={{
+                  top: 5,
+                  right: 5,
+                  left: 5,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="date"
+                  angle={-20}
+                  textAnchor="end"
+                  tick={{ fontSize: 10 }}
+                />
+                <YAxis
+                  tickFormatter={(tickItem) => number_processing(tickItem)}
+                />
+                <Tooltip
+                  content={
+                    dataChartTotalOrder?.length > 0
+                      ? renderTooltipContentTotal
+                      : ""
+                  }
+                />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="total"
+                  stroke="#2962ff"
+                  name="Hiện tại"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="total_same"
+                  stroke="#82ca9d"
+                  strokeDasharray="3 4 5 2"
+                  name="Cùng kỳ"
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
-          <ResponsiveContainer height={350} width="100%">
-            <LineChart
-              width={500}
-              height={300}
-              data={dataChartTotalOrder}
-              margin={{
-                top: 5,
-                right: 5,
-                left: 5,
-                bottom: 5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                dataKey="date"
-                angle={-20}
-                textAnchor="end"
-                tick={{ fontSize: 10 }}
-              />
-              <YAxis
-                tickFormatter={(tickItem) => number_processing(tickItem)}
-              />
-              <Tooltip
-                content={
-                  dataChartTotalOrder?.length > 0
-                    ? renderTooltipContentTotal
-                    : ""
-                }
-              />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="total"
-                stroke="#2962ff"
-                name="Hiện tại"
-              />
-              <Line
-                type="monotone"
-                dataKey="total_same"
-                stroke="#82ca9d"
-                strokeDasharray="3 4 5 2"
-                name="Cùng kỳ"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+        )}
       </div>
       <div className="div-chart-firt-overview mt-3">
-        <div className="div-chart-gross-income">
-          <p className="title-gross">Doanh thu thuần</p>
-          <div className="div-total-gross">
-            <p className="text-total-gross">
-              {formatMoney(!totalNetIncome ? 0 : totalNetIncome)}
-            </p>
-            {netIncomePercent < 0 ? (
-              <p className="text-number-persent-down">
-                <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
-                {Math.abs(
-                  isNaN(netIncomePercent) ? 0 : netIncomePercent
-                ).toFixed(2)}
-                %
+        {dataChartNetIncomeOrder.length > 0 && (
+          <div className="div-chart-gross-income">
+            <p className="title-gross">Doanh thu thuần</p>
+            <div className="div-total-gross">
+              <p className="text-total-gross">
+                {formatMoney(!totalNetIncome ? 0 : totalNetIncome)}
               </p>
-            ) : (
-              <p className="text-number-persent-up">
-                <CaretUpOutlined style={{ marginRight: 5 }} />
-                {Number(isNaN(netIncomePercent) ? 0 : netIncomePercent).toFixed(
-                  2
-                )}
-                %
-              </p>
-            )}
-            <p className="text-same">so với cùng kỳ</p>
+              {netIncomePercent < 0 ? (
+                <p className="text-number-persent-down">
+                  <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
+                  {Math.abs(
+                    isNaN(netIncomePercent) ? 0 : netIncomePercent
+                  ).toFixed(2)}
+                  %
+                </p>
+              ) : (
+                <p className="text-number-persent-up">
+                  <CaretUpOutlined style={{ marginRight: 5 }} />
+                  {Number(
+                    isNaN(netIncomePercent) ? 0 : netIncomePercent
+                  ).toFixed(2)}
+                  %
+                </p>
+              )}
+              <p className="text-same">so với cùng kỳ</p>
+            </div>
+            <ResponsiveContainer height={350} width="100%">
+              <LineChart
+                width={500}
+                height={300}
+                data={dataChartNetIncomeOrder}
+                margin={{
+                  top: 5,
+                  right: 5,
+                  left: 5,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="date"
+                  angle={-20}
+                  textAnchor="end"
+                  tick={{ fontSize: 10 }}
+                />
+                <YAxis
+                  tickFormatter={(tickItem) => number_processing(tickItem)}
+                />
+                <Tooltip
+                  content={
+                    dataChartNetIncomeOrder?.length > 0
+                      ? renderTooltipContentNetIncome
+                      : ""
+                  }
+                />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="net_income"
+                  stroke="#2962ff"
+                  name="Hiện tại"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="net_income_same"
+                  stroke="#82ca9d"
+                  strokeDasharray="3 4 5 2"
+                  name="Cùng kỳ"
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
-          <ResponsiveContainer height={350} width="100%">
-            <LineChart
-              width={500}
-              height={300}
-              data={dataChartNetIncomeOrder}
-              margin={{
-                top: 5,
-                right: 5,
-                left: 5,
-                bottom: 5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                dataKey="date"
-                angle={-20}
-                textAnchor="end"
-                tick={{ fontSize: 10 }}
-              />
-              <YAxis
-                tickFormatter={(tickItem) => number_processing(tickItem)}
-              />
-              <Tooltip
-                content={
-                  dataChartNetIncomeOrder?.length > 0
-                    ? renderTooltipContentNetIncome
-                    : ""
+        )}
+        {dataChartAreaOrder.length > 0 && (
+          <div className="div-chart-gross-income-area">
+            <div className="div-head-chart">
+              <p className="title-gross">Doanh thu thuần - Theo khu vực</p>
+              <div
+                className="div-see-all"
+                onClick={() =>
+                  navigate("/report/manage-report/report-order-area")
                 }
-              />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="net_income"
-                stroke="#2962ff"
-                name="Hiện tại"
-              />
-              <Line
-                type="monotone"
-                dataKey="net_income_same"
-                stroke="#82ca9d"
-                strokeDasharray="3 4 5 2"
-                name="Cùng kỳ"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="div-chart-gross-income-area">
-          <div className="div-head-chart">
-            <p className="title-gross">Doanh thu thuần - Theo khu vực</p>
-            <div
-              className="div-see-all"
-              onClick={() =>
-                navigate("/report/manage-report/report-order-area")
-              }
-            >
-              <p className="text-all">Tất cả</p>
-              <i className="uil uil-create-dashboard ml-2"></i>
+              >
+                <p className="text-all">Tất cả</p>
+                <i className="uil uil-create-dashboard ml-2"></i>
+              </div>
+            </div>
+            <div className="div-list-chart">
+              {dataChartAreaOrder?.slice(0, 5)?.map((item, index) => {
+                return (
+                  <div key={index} className="div-item-chart">
+                    <div className="div-name-area">
+                      <p className="name-area">{item?.city}</p>
+                      <p className="m-0">{item?.total_item} đơn</p>
+                    </div>
+                    <div className="div-number-area">
+                      <p className="money-area">
+                        {formatMoney(item?.net_income)}
+                      </p>
+
+                      {item?.percent_net_income < 0 ? (
+                        <p className="text-number-persent-down">
+                          <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
+                          {Math.abs(
+                            isNaN(item?.percent_net_income)
+                              ? 0
+                              : item?.percent_net_income
+                          ).toFixed(2)}
+                          %
+                        </p>
+                      ) : (
+                        <p className="text-number-persent-up">
+                          <CaretUpOutlined style={{ marginRight: 5 }} />
+                          {Number(
+                            isNaN(item?.percent_net_income)
+                              ? 0
+                              : item?.percent_net_income
+                          ).toFixed(2)}
+                          %
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
-          <div className="div-list-chart">
-            {dataChartAreaOrder?.slice(0, 5)?.map((item, index) => {
-              return (
-                <div key={index} className="div-item-chart">
-                  <div className="div-name-area">
-                    <p className="name-area">{item?.city}</p>
-                    <p className="m-0">{item?.total_item} đơn</p>
-                  </div>
-                  <div className="div-number-area">
-                    <p className="money-area">
-                      {formatMoney(item?.net_income)}
-                    </p>
-
-                    {item?.percent_net_income < 0 ? (
-                      <p className="text-number-persent-down">
-                        <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
-                        {Math.abs(
-                          isNaN(item?.percent_net_income)
-                            ? 0
-                            : item?.percent_net_income
-                        ).toFixed(2)}
-                        %
-                      </p>
-                    ) : (
-                      <p className="text-number-persent-up">
-                        <CaretUpOutlined style={{ marginRight: 5 }} />
-                        {Number(
-                          isNaN(item?.percent_net_income)
-                            ? 0
-                            : item?.percent_net_income
-                        ).toFixed(2)}
-                        %
-                      </p>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        )}
       </div>
       <div className="div-chart-firt-overview mt-3">
-        <div className="div-chart-gross-income-area">
-          <div className="div-head-chart">
-            <p className="title-gross">Top dịch vụ</p>
-            <div>
-              <Select
-                value={typePriceService}
-                style={{ width: 150 }}
-                bordered={false}
-                onChange={(e) => setTypePriceService(e)}
-                options={[
-                  { value: "income", label: "Doanh thu" },
-                  { value: "net_income", label: "Doanh thu thuần" },
-                ]}
-              />
+        {dataChartSerive.length > 0 && (
+          <div className="div-chart-gross-income-area">
+            <div className="div-head-chart">
+              <p className="title-gross">Top dịch vụ</p>
+              <div>
+                <Select
+                  value={typePriceService}
+                  style={{ width: 150 }}
+                  bordered={false}
+                  onChange={(e) => setTypePriceService(e)}
+                  options={[
+                    { value: "income", label: "Doanh thu" },
+                    { value: "net_income", label: "Doanh thu thuần" },
+                  ]}
+                />
+              </div>
+            </div>
+            <div className="div-list-chart">
+              {dataChartSerive.slice(0, 5)?.map((item, index) => {
+                return (
+                  <div key={index} className="div-item-chart">
+                    <div className="div-name-service">
+                      <Image
+                        preview={false}
+                        className="image-service"
+                        src={item?.thumbnail}
+                      />
+                      <p className="name-service">{item?.name[lang]}</p>
+                    </div>
+                    <div className="div-number-area">
+                      <p className="money-area">
+                        {typePriceService === "income"
+                          ? formatMoney(item?.income)
+                          : formatMoney(item?.net_income)}
+                      </p>
+                      {typePriceService === "income" ? (
+                        <>
+                          {item?.percent_income < 0 ? (
+                            <p className="text-number-persent-down">
+                              <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
+                              {Math.abs(
+                                isNaN(item?.percent_income)
+                                  ? 0
+                                  : item?.percent_income
+                              ).toFixed(2)}
+                              %
+                            </p>
+                          ) : (
+                            <p className="text-number-persent-up">
+                              <CaretUpOutlined style={{ marginRight: 5 }} />
+                              {Number(
+                                isNaN(item?.percent_income)
+                                  ? 0
+                                  : item?.percent_income
+                              ).toFixed(2)}
+                              %
+                            </p>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          {item?.percent_net_income < 0 ? (
+                            <p className="text-number-persent-down">
+                              <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
+                              {Math.abs(
+                                isNaN(item?.percent_net_income)
+                                  ? 0
+                                  : item?.percent_net_income
+                              ).toFixed(2)}
+                              %
+                            </p>
+                          ) : (
+                            <p className="text-number-persent-up">
+                              <CaretUpOutlined style={{ marginRight: 5 }} />
+                              {Number(
+                                isNaN(item?.percent_net_income)
+                                  ? 0
+                                  : item?.percent_net_income
+                              ).toFixed(2)}
+                              %
+                            </p>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
-          <div className="div-list-chart">
-            {dataChartSerive.slice(0, 5)?.map((item, index) => {
-              return (
-                <div key={index} className="div-item-chart">
-                  <div className="div-name-service">
-                    <Image
-                      preview={false}
-                      className="image-service"
-                      src={item?.thumbnail}
-                    />
-                    <p className="name-service">{item?.name[lang]}</p>
-                  </div>
-                  <div className="div-number-area">
-                    <p className="money-area">
-                      {typePriceService === "income"
-                        ? formatMoney(item?.income)
-                        : formatMoney(item?.net_income)}
-                    </p>
-                    {typePriceService === "income" ? (
-                      <>
-                        {item?.percent_income < 0 ? (
-                          <p className="text-number-persent-down">
-                            <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
-                            {Math.abs(
-                              isNaN(item?.percent_income)
-                                ? 0
-                                : item?.percent_income
-                            ).toFixed(2)}
-                            %
-                          </p>
-                        ) : (
-                          <p className="text-number-persent-up">
-                            <CaretUpOutlined style={{ marginRight: 5 }} />
-                            {Number(
-                              isNaN(item?.percent_income)
-                                ? 0
-                                : item?.percent_income
-                            ).toFixed(2)}
-                            %
-                          </p>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        {item?.percent_net_income < 0 ? (
-                          <p className="text-number-persent-down">
-                            <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
-                            {Math.abs(
-                              isNaN(item?.percent_net_income)
-                                ? 0
-                                : item?.percent_net_income
-                            ).toFixed(2)}
-                            %
-                          </p>
-                        ) : (
-                          <p className="text-number-persent-up">
-                            <CaretUpOutlined style={{ marginRight: 5 }} />
-                            {Number(
-                              isNaN(item?.percent_net_income)
-                                ? 0
-                                : item?.percent_net_income
-                            ).toFixed(2)}
-                            %
-                          </p>
-                        )}
-                      </>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        )}
       </div>
 
       {isLoading && <LoadingPagination />}

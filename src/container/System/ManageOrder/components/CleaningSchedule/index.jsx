@@ -185,23 +185,26 @@ const CleaningSchedule = (props) => {
   });
   var accessToken = AES.encrypt(temp, "guvico");
 
-  const handleSearchLocation = _debounce((value) => {
-    setAddress(value);
-    setIsLoading(true);
-    googlePlaceAutocomplete(value)
-      .then((res) => {
-        if (res.predictions) {
-          setPlaces(res.predictions);
-        } else {
+  const handleSearchLocation = useCallback(
+    _debounce((value) => {
+      setAddress(value);
+      setIsLoading(true);
+      googlePlaceAutocomplete(value)
+        .then((res) => {
+          if (res.predictions) {
+            setPlaces(res.predictions);
+          } else {
+            setPlaces([]);
+          }
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
           setPlaces([]);
-        }
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        setPlaces([]);
-      });
-  }, 1500);
+        });
+    }, 1500),
+    []
+  );
 
   const findPlace = useCallback((id) => {
     setIsLoading(true);
@@ -516,29 +519,28 @@ const CleaningSchedule = (props) => {
     setErrorNameCustomer,
   ]);
 
-  const searchValue = (value) => {
-    setNameCollaborator(value);
-  };
-
-  const searchCollaborator = _debounce((value) => {
-    setNameCollaborator(value);
-    if (value) {
-      searchCollaboratorsCreateOrder(id, value)
-        .then((res) => {
-          if (value === "") {
-            setDataCollaborator([]);
-          } else {
-            setDataCollaborator(res.data);
-          }
-        })
-        .catch((err) => console.log(err));
-    } else if (idCollaborator) {
-      setDataCollaborator([]);
-    } else {
-      setDataCollaborator([]);
-    }
-    setIdCollaborator("");
-  }, 1000);
+  const searchCollaborator = useCallback(
+    _debounce((value) => {
+      setNameCollaborator(value);
+      if (value) {
+        searchCollaboratorsCreateOrder(id, value)
+          .then((res) => {
+            if (value === "") {
+              setDataCollaborator([]);
+            } else {
+              setDataCollaborator(res.data);
+            }
+          })
+          .catch((err) => console.log(err));
+      } else if (idCollaborator) {
+        setDataCollaborator([]);
+      } else {
+        setDataCollaborator([]);
+      }
+      setIdCollaborator("");
+    }, 1000),
+    []
+  );
 
   const onGetBill = useCallback(() => {
     if (ref.current === null) {
@@ -787,7 +789,7 @@ const CleaningSchedule = (props) => {
             className="input-search-collaborator-order"
             onChange={(e) => {
               searchCollaborator(e.target.value);
-              searchValue(e.target.value);
+              setNameCollaborator(e.target.value);
             }}
           />
 
@@ -869,14 +871,14 @@ const CleaningSchedule = (props) => {
             </p>
             {eventPromotion.map((item, index) => {
               return (
-                <p style={{ color: "red", margin: 0 }}>
+                <p style={{ color: "red", margin: 0 }} key={index}>
                   {item?.title?.[lang]}: {"-"}
                   {formatMoney(item?.discount)}
                 </p>
               );
             })}
             {discount > 0 && (
-              <div>
+              <div style={{ display: "flex", flexDirection: "row" }}>
                 <p style={{ color: "red", margin: 0 }}>
                   {itemPromotion?.title?.[lang]}:{" "}
                 </p>
