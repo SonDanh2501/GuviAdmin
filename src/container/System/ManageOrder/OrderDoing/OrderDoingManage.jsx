@@ -4,28 +4,24 @@ import { Dropdown, Pagination, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { getOrderApi } from "../../../../api/order";
 import InputCustom from "../../../../components/textInputCustom";
 
-import "./OrderDoingManage.scss";
-import { getLanguageState } from "../../../../redux/selectors/auth";
 import i18n from "../../../../i18n";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import "./OrderDoingManage.scss";
 
 const OrderDoingManage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [dataSearch, setDataSearch] = useState([]);
-  const [totalSearch, setTotalSearch] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [startPage, setStartPage] = useState(0);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
   const [valueSearch, setValueSearch] = useState("");
   const [item, setItem] = useState([]);
   const lang = useSelector(getLanguageState);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getOrderApi("", 0, 20, "doing", "", "", "", "", "", "")
@@ -50,15 +46,16 @@ const OrderDoingManage = () => {
     {
       key: "1",
       label: (
-        <a
+        <p
           onClick={() =>
             navigate("/details-order", {
               state: { id: item?._id },
             })
           }
+          style={{ margin: 0 }}
         >
           {`${i18n.t("see_more", { lng: lang })}`}
-        </a>
+        </p>
       ),
     },
   ];
@@ -66,59 +63,59 @@ const OrderDoingManage = () => {
   const columns = [
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("code_order", {
+        <p className="title-column">{`${i18n.t("code_order", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
       render: (data) => {
         return (
           <Link to={`/details-order/${data?._id}`}>
-            <a className="text-id-order-doing">{data?.id_view}</a>
+            <p className="text-id-order-doing">{data?.id_view}</p>
           </Link>
         );
       },
     },
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("date_create", {
+        <p className="title-column">{`${i18n.t("date_create", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
       render: (data) => {
         return (
           <div className="div-create-doing">
-            <a className="text-create">
+            <p className="text-create">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-create">
+            </p>
+            <p className="text-create">
               {moment(new Date(data?.date_create)).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
     },
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("customer", {
+        <p className="title-column">{`${i18n.t("customer", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
       render: (data) => (
         <Link to={`/profile-customer/${data?.id_customer?._id}`}>
-          <a className="text-name-doing">{data?.id_customer?.full_name}</a>
+          <p className="text-name-doing">{data?.id_customer?.full_name}</p>
         </Link>
       ),
     },
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("service", {
+        <p className="title-column">{`${i18n.t("service", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
       render: (data) => {
         return (
           <div className="div-service">
-            <a className="text-service">
+            <p className="text-service">
               {data?.type === "loop" && data?.is_auto_order
                 ? `${i18n.t("repeat", { lng: lang })}`
                 : data?.service?._id?.kind === "giup_viec_theo_gio"
@@ -128,57 +125,57 @@ const OrderDoingManage = () => {
                 : data?.service?._id?.kind === "phuc_vu_nha_hang"
                 ? `${i18n.t("serve", { lng: lang })}`
                 : ""}
-            </a>
-            <a className="text-service">{timeWork(data)}</a>
+            </p>
+            <p className="text-service">{timeWork(data)}</p>
           </div>
         );
       },
     },
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("date_work", {
+        <p className="title-column">{`${i18n.t("date_work", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
       render: (data) => {
         return (
           <div className="div-worktime-doing">
-            <a className="text-worktime">
+            <p className="text-worktime">
               {" "}
               {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-worktime">
+            </p>
+            <p className="text-worktime">
               {moment(new Date(data?.date_work)).locale(lang).format("dddd")}
-            </a>
+            </p>
           </div>
         );
       },
     },
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("address", {
+        <p className="title-column">{`${i18n.t("address", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
       render: (data) => <p className="text-address">{data?.address}</p>,
     },
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("collaborator", {
+        <p className="title-column">{`${i18n.t("collaborator", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
-            <a>{`${i18n.t("searching", {
+            <p>{`${i18n.t("searching", {
               lng: lang,
-            })}`}</a>
+            })}`}</p>
           ) : (
             <Link to={`/details-collaborator/${data?.id_collaborator?._id}`}>
-              <a className="text-collaborator">
+              <p className="text-collaborator">
                 {data?.id_collaborator?.full_name}
-              </a>
+              </p>
             </Link>
           )}
         </>
@@ -187,12 +184,12 @@ const OrderDoingManage = () => {
 
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("status", {
+        <p className="title-column">{`${i18n.t("status", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
       render: (data) => (
-        <a
+        <p
           className={
             data?.status === "pending"
               ? "text-pending-doing"
@@ -214,7 +211,7 @@ const OrderDoingManage = () => {
             : data?.status === "done"
             ? `${i18n.t("complete", { lng: lang })}`
             : `${i18n.t("cancel", { lng: lang })}`}
-        </a>
+        </p>
       ),
     },
     {
@@ -252,11 +249,7 @@ const OrderDoingManage = () => {
   const onChange = (page) => {
     setCurrentPage(page);
     const dataLength = data?.length < 20 ? 20 : data.length;
-
     const start = page * dataLength - dataLength;
-
-    setStartPage(start);
-
     getOrderApi(valueSearch, 0, 20, "doing", "", "", "", "", "", "")
       .then((res) => {
         setData(res.data);
@@ -269,7 +262,7 @@ const OrderDoingManage = () => {
     <React.Fragment>
       <div className="mt-5 m-3">
         <div className="div-header">
-          <a className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</a>
+          <p className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</p>
 
           <InputCustom
             placeholder={`${i18n.t("search", { lng: lang })}`}
@@ -282,7 +275,7 @@ const OrderDoingManage = () => {
         <div className="shadow mt-5">
           <Table
             columns={columns}
-            dataSource={dataSearch.length > 0 ? dataSearch : data}
+            dataSource={data}
             pagination={false}
             rowKey={(record) => record._id}
             rowSelection={{
@@ -301,15 +294,14 @@ const OrderDoingManage = () => {
           />
 
           <div className="mt-2 div-pagination p-2">
-            <a>
-              {`${i18n.t("total", { lng: lang })}`}:{" "}
-              {totalSearch > 0 ? totalSearch : total}
-            </a>
+            <p>
+              {`${i18n.t("total", { lng: lang })}`}: {total}
+            </p>
             <div>
               <Pagination
                 current={currentPage}
                 onChange={onChange}
-                total={totalSearch > 0 ? totalSearch : total}
+                total={total}
                 showSizeChanger={false}
                 pageSize={20}
               />

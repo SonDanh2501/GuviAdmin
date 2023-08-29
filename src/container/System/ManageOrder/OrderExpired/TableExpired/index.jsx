@@ -3,7 +3,7 @@ import { UilEllipsisV } from "@iconscout/react-unicons";
 import { Dropdown, Input, Pagination, Space, Table } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -50,15 +50,16 @@ const TableExpired = ({ status }) => {
     {
       key: "1",
       label: (
-        <a
+        <p
           onClick={() =>
             navigate("/details-order", {
               state: { id: item?._id },
             })
           }
+          style={{ margin: 0 }}
         >
           {`${i18n.t("see_more", { lng: lang })}`}
-        </a>
+        </p>
       ),
     },
   ];
@@ -66,42 +67,42 @@ const TableExpired = ({ status }) => {
   const columns = [
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("code_order", {
+        <p className="title-column">{`${i18n.t("code_order", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
       render: (data) => {
         return (
           <Link to={`/details-order/${data?._id}`}>
-            <a className="text-id-expire">{data?.id_view}</a>
+            <p className="text-id-expire">{data?.id_view}</p>
           </Link>
         );
       },
     },
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("date_create", {
+        <p className="title-column">{`${i18n.t("date_create", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
       render: (data) => {
         return (
           <div className="div-create-expire">
-            <a className="text-create">
+            <p className="text-create">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-create">
+            </p>
+            <p className="text-create">
               {moment(new Date(data?.date_create)).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
     },
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("customer", {
+        <p className="title-column">{`${i18n.t("customer", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
       render: (data) => {
         return (
@@ -109,10 +110,10 @@ const TableExpired = ({ status }) => {
             to={`/profile-customer/${data?.id_customer?._id}`}
             className="div-name-order-cutomer"
           >
-            <a className="text-name-customer">{data?.id_customer?.full_name}</a>
-            <a className="text-phone-order-customer">
+            <p className="text-name-customer">{data?.id_customer?.full_name}</p>
+            <p className="text-phone-order-customer">
               {data?.id_customer?.phone}
-            </a>
+            </p>
           </Link>
         );
       },
@@ -121,14 +122,14 @@ const TableExpired = ({ status }) => {
     },
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("service", {
+        <p className="title-column">{`${i18n.t("service", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
       render: (data) => {
         return (
           <div className="div-service-expired">
-            <a className="text-service">
+            <p className="text-service">
               {data?.type === "loop" && data?.is_auto_order
                 ? `${i18n.t("repeat", { lng: lang })}`
                 : data?.service?._id?.kind === "giup_viec_theo_gio"
@@ -138,75 +139,52 @@ const TableExpired = ({ status }) => {
                 : data?.service?._id?.kind === "phuc_vu_nha_hang"
                 ? `${i18n.t("serve", { lng: lang })}`
                 : ""}
-            </a>
-            <a className="text-service">{timeWork(data)}</a>
+            </p>
+            <p className="text-service">{timeWork(data)}</p>
           </div>
         );
       },
     },
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("date_work", {
+        <p className="title-column">{`${i18n.t("date_work", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
       render: (data) => {
         return (
           <div className="div-worktime-expire">
-            <a className="text-worktime">
+            <p className="text-worktime">
               {" "}
               {moment(new Date(data.date_work_schedule[0].date)).format(
                 "DD/MM/YYYY"
               )}
-            </a>
-            <a className="text-worktime">
+            </p>
+            <p className="text-worktime">
               {moment(new Date(data?.date_work_schedule[0].date))
                 .locale(lang)
                 .format("dddd")}
-            </a>
+            </p>
           </div>
         );
       },
     },
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("address", {
+        <p className="title-column">{`${i18n.t("address", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
       render: (data) => <p className="text-address-expired">{data?.address}</p>,
     },
-    // {
-    //   title: "Cộng tác viên",
-    //   render: (data) => (
-    //     <>
-    //       {!data?.id_collaborator ? (
-    //         <a className="text-name-customer ">Đang tìm kiếm</a>
-    //       ) : (
-    //         <Link
-    //           to={`/details-collaborator/${data?.id_collaborator?._id}`}
-    //           className="div-name-order"
-    //         >
-    //           <a className="text-collaborator">
-    //             {data?.id_collaborator?.full_name}
-    //           </a>
-    //           {user?.role !== "support_customer" && (
-    //             <a className="text-phone">{data?.id_collaborator?.phone}</a>
-    //           )}
-    //         </Link>
-    //       )}
-    //     </>
-    //   ),
-    // },
-
     {
       title: () => (
-        <a className="title-column">{`${i18n.t("status", {
+        <p className="title-column">{`${i18n.t("status", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
       render: (data) => (
-        <a
+        <p
           className={
             data?.status === "pending"
               ? "text-pending"
@@ -228,7 +206,7 @@ const TableExpired = ({ status }) => {
             : data?.status === "done"
             ? `${i18n.t("complete", { lng: lang })}`
             : `${i18n.t("cancel", { lng: lang })}`}
-        </a>
+        </p>
       ),
     },
     {
@@ -305,10 +283,10 @@ const TableExpired = ({ status }) => {
         }}
       />
       <div className="mt-2 div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}:{" "}
           {totalSearch > 0 ? totalSearch : total}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}

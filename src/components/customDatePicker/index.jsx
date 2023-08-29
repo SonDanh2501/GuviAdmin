@@ -99,7 +99,7 @@ const CustomDatePicker = (props) => {
         setStartDate(lastThirty);
         setStart(moment().subtract(30, "days"));
         setEndDate(today);
-        setEnd(moment());
+        setEnd(moment().subtract(1, "days"));
         setSameStart(moment(lastThirty).subtract(30, "days").toISOString());
         setSameEnd(moment(today).subtract(30, "days").toISOString());
         break;
@@ -107,7 +107,7 @@ const CustomDatePicker = (props) => {
         setStartDate(lastNinety);
         setStart(moment().subtract(90, "days"));
         setEndDate(today);
-        setEnd(moment());
+        setEnd(moment().subtract(1, "days"));
         setSameStart(moment(lastNinety).subtract(90, "days").toISOString());
         setSameEnd(moment(today).subtract(90, "days").toISOString());
         break;
