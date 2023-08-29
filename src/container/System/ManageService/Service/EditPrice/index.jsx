@@ -21,14 +21,12 @@ import { errorNotify } from "../../../../../helper/toast";
 import { editExtendOptionApi } from "../../../../../api/service";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import { PlusOutlined } from "@ant-design/icons";
-import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const EditPrice = () => {
   const { state } = useLocation();
   const { id, data_price } = state || {};
   const [dataDistrict, setDataDistrict] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { height } = useWindowDimensions();
   const [data, setData] = useState([
     {
       area_lv_1: 0,
@@ -340,8 +338,8 @@ const EditPrice = () => {
   };
   return (
     <div className="div-container-edit-price">
-      <h6>Chỉnh sửa giá</h6>
       <div className="div-head-edit-price">
+        <h6>Chỉnh sửa giá</h6>
         <Button
           type="primary"
           className="btn-edit-price"
@@ -376,7 +374,7 @@ const EditPrice = () => {
                     value={item?.price}
                     inputMoney={true}
                     style={{ width: "auto" }}
-                    onChange={(e) => onChangePrice(e.tartget.value, index)}
+                    onChange={(e) => onChangePrice(e, index)}
                   />
                   <div className="div-input">
                     <p className="label-input">Loại</p>

@@ -98,7 +98,7 @@ const ManagePromotions = () => {
   useEffect(() => {
     setState({
       ...state,
-      status: tabCookie === "" ? "doing" : tabCookie,
+      status: tabCookie == "" ? "doing" : tabCookie,
       idService: serviceCookie === "" ? "" : serviceCookie,
       type: selectCookie === " " ? "code" : selectCookie,
       brand: brandCookie === "" ? "guvi" : brandCookie,
@@ -107,10 +107,10 @@ const ManagePromotions = () => {
     });
     fetchPromotion(
       "",
-      tabCookie === "" ? "doing" : tabCookie,
+      tabCookie == "" ? "doing" : tabCookie,
       0,
       20,
-      selectCookie === " " ? "code" : selectCookie,
+      selectCookie === "" ? "code" : selectCookie,
       brandCookie === "" ? "guvi" : brandCookie,
       serviceCookie === "" ? "" : serviceCookie,
       "",
@@ -446,69 +446,36 @@ const ManagePromotions = () => {
 
   const onChangeShow = (id, active) => {
     setIsLoading(true);
-    if (active) {
-      updatePromotion(id, {
-        is_show_in_app: false,
+    updatePromotion(id, {
+      is_show_in_app: false,
+    })
+      .then((res) => {
+        setIsLoading(false);
+        setState({ ...state, modalShowApp: active ? false : true });
+        fetchPromotion(
+          valueSearch,
+          state?.status,
+          state?.startPage,
+          20,
+          state?.type,
+          state?.brand,
+          state?.idService,
+          "",
+          typeSort,
+          state.group
+        )
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+          })
+          .catch((err) => {});
       })
-        .then((res) => {
-          setIsLoading(false);
-          setState({ ...state, modalShowApp: false });
-          fetchPromotion(
-            valueSearch,
-            state?.status,
-            state?.startPage,
-            20,
-            state?.type,
-            state?.brand,
-            state?.idService,
-            "",
-            typeSort,
-            state.group
-          )
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          errorNotify({
-            message: err,
-          });
+      .catch((err) => {
+        setIsLoading(false);
+        errorNotify({
+          message: err,
         });
-    } else {
-      updatePromotion(id, {
-        is_show_in_app: true,
-      })
-        .then((res) => {
-          setIsLoading(false);
-          setState({ ...state, modalShowApp: false });
-          fetchPromotion(
-            valueSearch,
-            state?.status,
-            state?.startPage,
-            20,
-            state?.type,
-            state?.brand,
-            state?.idService,
-            "",
-            typeSort,
-            state.group
-          )
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          errorNotify({
-            message: err,
-          });
-        });
-    }
+      });
   };
 
   const onChangeGroupPromotion = (value) => {

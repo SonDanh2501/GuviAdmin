@@ -78,7 +78,6 @@ const DetailsOrder = () => {
   const toggleDelete = () => setModalDelete(!modalDelete);
   const toggleDeleteList = () => setModalDeleteList(!modalDeleteList);
   const reasonOption = [];
-  const listHistory = [];
   const lang = useSelector(getLanguageState);
   const checkElement = useSelector(getElementState);
 

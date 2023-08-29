@@ -1478,7 +1478,7 @@ const CreatePromotion = () => {
               </div>
             )}
             <div className="div-push-noti">
-              <div>
+              <div style={{ display: "flex", flexDirection: "row" }}>
                 <Switch
                   checked={statePromo?.isSendNotification}
                   onChange={(e) =>
