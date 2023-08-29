@@ -72,24 +72,27 @@ const CleaningAC = (props) => {
     }
   }, [id, idService]);
 
-  const handleSearchLocation = _debounce((value) => {
-    setIsLoading(true);
-    setAddress(value);
-    googlePlaceAutocomplete(value)
-      .then((res) => {
-        if (res.predictions) {
-          setPlaces(res?.predictions);
+  const handleSearchLocation = useCallback(
+    _debounce((value) => {
+      setIsLoading(true);
+      setAddress(value);
+      googlePlaceAutocomplete(value)
+        .then((res) => {
+          if (res.predictions) {
+            setPlaces(res?.predictions);
+            setIsLoading(false);
+          } else {
+            setPlaces(res?.predictions);
+            setIsLoading(false);
+          }
+        })
+        .catch((err) => {
+          setPlaces([]);
           setIsLoading(false);
-        } else {
-          setPlaces(res?.predictions);
-          setIsLoading(false);
-        }
-      })
-      .catch((err) => {
-        setPlaces([]);
-        setIsLoading(false);
-      });
-  }, 1500);
+        });
+    }, 1500),
+    []
+  );
 
   const findPlace = useCallback((id, description) => {
     setIsLoading(description);
@@ -163,25 +166,28 @@ const CleaningAC = (props) => {
   };
   const timeW = dateWork + "T" + timeWork + ".000Z";
 
-  const searchCollaborator = _debounce((value) => {
-    setNameCollaborator(value);
-    if (value) {
-      searchCollaboratorsCreateOrder(id, value)
-        .then((res) => {
-          if (value === "") {
-            setDataCollaborator([]);
-          } else {
-            setDataCollaborator(res.data);
-          }
-        })
-        .catch((err) => console.log(err));
-    } else if (idCollaborator) {
-      setDataCollaborator([]);
-    } else {
-      setDataCollaborator([]);
-    }
-    setIdCollaborator("");
-  }, 500);
+  const searchCollaborator = useCallback(
+    _debounce((value) => {
+      setNameCollaborator(value);
+      if (value) {
+        searchCollaboratorsCreateOrder(id, value)
+          .then((res) => {
+            if (value === "") {
+              setDataCollaborator([]);
+            } else {
+              setDataCollaborator(res.data);
+            }
+          })
+          .catch((err) => console.log(err));
+      } else if (idCollaborator) {
+        setDataCollaborator([]);
+      } else {
+        setDataCollaborator([]);
+      }
+      setIdCollaborator("");
+    }, 500),
+    []
+  );
 
   useEffect(() => {
     if (lat && long && address && timeWork && dateWork && selectService) {

@@ -437,11 +437,7 @@ const EditPrice = () => {
                               inputMoney={true}
                               style={{ width: "auto" }}
                               onChange={(e) =>
-                                onChangeDistrictPrice(
-                                  e.target.value,
-                                  index,
-                                  indexDistrict
-                                )
+                                onChangeDistrictPrice(e, index, indexDistrict)
                               }
                             />
                             <div className="div-input">

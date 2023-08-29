@@ -164,23 +164,26 @@ const CleaningHourly = (props) => {
   });
   var accessToken = AES.encrypt(temp, "guvico");
 
-  const handleSearchLocation = _debounce((value) => {
-    setAddress(value);
-    setIsLoading(true);
-    googlePlaceAutocomplete(value)
-      .then((res) => {
-        if (res.predictions) {
-          setPlaces(res.predictions);
-        } else {
+  const handleSearchLocation = useCallback(
+    _debounce((value) => {
+      setAddress(value);
+      setIsLoading(true);
+      googlePlaceAutocomplete(value)
+        .then((res) => {
+          if (res.predictions) {
+            setPlaces(res.predictions);
+          } else {
+            setPlaces([]);
+          }
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
           setPlaces([]);
-        }
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        setPlaces([]);
-      });
-  }, 1500);
+        });
+    }, 1500),
+    []
+  );
 
   const findPlace = useCallback((id) => {
     setIsLoading(true);
@@ -427,10 +430,6 @@ const CleaningHourly = (props) => {
     tipCollaborator,
     dayLoop,
   ]);
-
-  const searchValue = (value) => {
-    setNameCollaborator(value);
-  };
 
   const searchCollaborator = useCallback(
     _debounce((value) => {
@@ -781,7 +780,7 @@ const CleaningHourly = (props) => {
               error={errorCollaborator}
               onChange={(e) => {
                 searchCollaborator(e.target.value);
-                searchValue(e.target.value);
+                setNameCollaborator(e.target.value);
               }}
               value={nameCollaborator}
               placeholder={`${i18n.t("search", { lng: lang })}`}
@@ -868,14 +867,14 @@ const CleaningHourly = (props) => {
             )}
             {eventPromotion.map((item, index) => {
               return (
-                <p style={{ color: "red", margin: 0 }}>
+                <p style={{ color: "red", margin: 0 }} key={index}>
                   {item?.title?.[lang]}: {"-"}
                   {formatMoney(item?.discount)}
                 </p>
               );
             })}
             {discount > 0 && (
-              <div>
+              <div style={{ display: "flex", flexDirection: "row" }}>
                 <p style={{ color: "red", margin: 0 }}>
                   {itemPromotion?.title?.[lang]}:{" "}
                 </p>
