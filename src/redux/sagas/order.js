@@ -1,6 +1,5 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { getOrderApi } from "../../api/order";
-
 import { getType } from "../actions/banner";
 import { loadingAction } from "../actions/loading";
 import { getOrder } from "../actions/order";

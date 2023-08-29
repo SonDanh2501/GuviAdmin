@@ -2,14 +2,17 @@ import { StarFilled } from "@ant-design/icons";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import { Dropdown, Pagination, Space, Table } from "antd";
 import moment from "moment";
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { deleteOrderApi, getOrderApi } from "../../../../api/order";
 import ModalCustom from "../../../../components/modalCustom";
 import LoadingPagination from "../../../../components/paginationLoading";
+import { formatMoney } from "../../../../helper/formatMoney";
 import { errorNotify } from "../../../../helper/toast";
+import { useCookies } from "../../../../helper/useCookies";
 import useWindowDimensions from "../../../../helper/useWindowDimensions";
+import { useWindowScrollPositions } from "../../../../helper/useWindowPosition";
 import i18n from "../../../../i18n";
 import {
   getElementState,
@@ -18,9 +21,6 @@ import {
 import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder";
 import EditTimeOrder from "../EditTimeGroupOrder";
 import "./OrderManage.scss";
-import { useWindowScrollPositions } from "../../../../helper/useWindowPosition";
-import { useCookies } from "../../../../helper/useCookies";
-import { formatMoney } from "../../../../helper/formatMoney";
 
 const OrderManage = (props) => {
   const {
@@ -48,8 +48,8 @@ const OrderManage = (props) => {
   const { width } = useWindowDimensions();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
-  const { scrollX, scrollY } = useWindowScrollPositions();
-  const [saveToCookie, readCookie] = useCookies();
+  const { scrollY } = useWindowScrollPositions();
+  const [saveToCookie] = useCookies();
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work)).format("HH:mm");
 
@@ -116,7 +116,9 @@ const OrderManage = (props) => {
             key: "2",
             label: checkElement?.includes("detail_guvi_job") && (
               <Link to={`/details-order/${item?.id_group_order}`}>
-                <a>{`${i18n.t("see_more", { lng: lang })}`}</a>
+                <p style={{ margin: 0 }}>{`${i18n.t("see_more", {
+                  lng: lang,
+                })}`}</p>
               </Link>
             ),
           },
@@ -150,7 +152,7 @@ const OrderManage = (props) => {
             key: "1",
             label: checkElement?.includes("detail_guvi_job") && (
               <Link to={`/details-order/${item?.id_group_order}`}>
-                <a>{`${i18n.t("see_more", { lng: lang })}`}</a>
+                <p className="m-0">{`${i18n.t("see_more", { lng: lang })}`}</p>
               </Link>
             ),
           },
@@ -176,7 +178,9 @@ const OrderManage = (props) => {
             label:
               checkElement?.includes("delete_order_guvi_job") &&
               (item?.status === "cancel" || item?.status === "done" ? (
-                <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
+                <p className="m-0" onClick={toggle}>{`${i18n.t("delete", {
+                  lng: lang,
+                })}`}</p>
               ) : (
                 ""
               )),
@@ -187,9 +191,9 @@ const OrderManage = (props) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("code_order", {
+          <p className="title-column">{`${i18n.t("code_order", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
@@ -202,7 +206,7 @@ const OrderManage = (props) => {
                 : ""
             }
           >
-            <a className="text-id-view-order">{data?.id_view}</a>
+            <p className="text-id-view-order">{data?.id_view}</p>
           </Link>
         );
       },
@@ -210,20 +214,20 @@ const OrderManage = (props) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("date_create", {
+          <p className="title-column">{`${i18n.t("date_create", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div className="div-create-order">
-            <a className="text-create">
+            <p className="text-create">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-create">
+            </p>
+            <p className="text-create">
               {moment(new Date(data?.date_create)).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -232,21 +236,21 @@ const OrderManage = (props) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("customer", {
+          <p className="title-column">{`${i18n.t("customer", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <Link to={`/profile-customer/${data?.id_customer?._id}`}>
             <div className="div-name-order-cutomer">
-              <a className="text-name-customer">
+              <p className="text-name-customer">
                 {data?.id_customer?.full_name}
-              </a>
-              <a className="text-phone-order-customer">
+              </p>
+              <p className="text-phone-order-customer">
                 {data?.id_customer?.phone}
-              </a>
+              </p>
             </div>
           </Link>
         );
@@ -259,15 +263,15 @@ const OrderManage = (props) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("service", {
+          <p className="title-column">{`${i18n.t("service", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div className="div-service-order">
-            <a className="text-service">
+            <p className="text-service">
               {data?.type === "loop" && data?.is_auto_order
                 ? `${i18n.t("repeat", { lng: lang })}`
                 : data?.service?._id?.kind === "giup_viec_theo_gio"
@@ -279,8 +283,8 @@ const OrderManage = (props) => {
                 : data?.service?._id?.kind === "ve_sinh_may_lanh"
                 ? `${i18n.t("Máy lạnh", { lng: lang })}`
                 : ""}
-            </a>
-            <a className="text-service">{timeWork(data)}</a>
+            </p>
+            <p className="text-service">{timeWork(data)}</p>
           </div>
         );
       },
@@ -289,20 +293,20 @@ const OrderManage = (props) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("date_work", {
+          <p className="title-column">{`${i18n.t("date_work", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div className="div-worktime-order">
-            <a className="text-worktime">
+            <p className="text-worktime">
               {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
-            </a>
-            <a className="text-worktime">
+            </p>
+            <p className="text-worktime">
               {moment(new Date(data?.date_work)).locale(lang).format("dddd")}
-            </a>
+            </p>
           </div>
         );
       },
@@ -310,47 +314,47 @@ const OrderManage = (props) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("address", {
+          <p className="title-column">{`${i18n.t("address", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
-        return <a className="text-address-order">{data?.address}</a>;
+        return <p className="text-address-order">{data?.address}</p>;
       },
       responsive: ["xl"],
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("collaborator", {
+          <p className="title-column">{`${i18n.t("collaborator", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => (
         <>
           {!data?.id_collaborator ? (
-            <a className="text-pending-search">{`${i18n.t("searching", {
+            <p className="text-pending-search">{`${i18n.t("searching", {
               lng: lang,
-            })}`}</a>
+            })}`}</p>
           ) : (
             <Link
               to={`/details-collaborator/${data?.id_collaborator?._id}`}
               className="div-name-order"
             >
               <div className="div-name-star">
-                <a className="text-collaborator">
+                <p className="text-collaborator">
                   {data?.id_collaborator?.full_name}
-                </a>
+                </p>
                 {data?.id_collaborator?.star && (
                   <div className="div-star">
-                    <a className="text-star">{data?.id_collaborator?.star}</a>
+                    <p className="text-star">{data?.id_collaborator?.star}</p>
                     <StarFilled className="icon-star" />
                   </div>
                 )}
               </div>
-              <a className="text-phone">{data?.id_collaborator?.phone}</a>
+              <p className="text-phone">{data?.id_collaborator?.phone}</p>
             </Link>
           )}
         </>
@@ -360,14 +364,14 @@ const OrderManage = (props) => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("status", {
+          <p className="title-column">{`${i18n.t("status", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       align: "center",
       render: (data) => (
-        <a
+        <p
           className={
             data?.status === "pending"
               ? "text-pen-order"
@@ -389,31 +393,31 @@ const OrderManage = (props) => {
             : data?.status === "done"
             ? `${i18n.t("complete", { lng: lang })}`
             : `${i18n.t("cancel", { lng: lang })}`}
-        </a>
+        </p>
       ),
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("pay", {
+          <p className="title-column">{`${i18n.t("pay", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       align: "center",
       render: (data) => {
         return (
           <div className="div-payment">
-            <a className="text-payment-method">
+            <p className="text-payment-method">
               {data?.payment_method === "cash"
                 ? `${i18n.t("cash", { lng: lang })}`
                 : data?.payment_method === "point"
                 ? `${i18n.t("wallet_gpay", { lng: lang })}`
                 : ""}
-            </a>
-            <a className="text-payment-method">
+            </p>
+            <p className="text-payment-method">
               {formatMoney(data?.final_fee)}
-            </a>
+            </p>
           </div>
         );
       },
@@ -497,25 +501,25 @@ const OrderManage = (props) => {
                     return (
                       <div className="div-plus">
                         <div className="div-text-plus">
-                          <a className="title-plus-order">
+                          <p className="title-plus-order">
                             {`${i18n.t("address", { lng: lang })}`}:
-                          </a>
-                          <a className="text-plus-order">{record?.address}</a>
+                          </p>
+                          <p className="text-plus-order">{record?.address}</p>
                         </div>
                         <div className="div-text-plus">
-                          <a className="title-plus-order">
+                          <p className="title-plus-order">
                             {`${i18n.t("date_create", { lng: lang })}`}:
-                          </a>
-                          <a className="text-plus-order">
+                          </p>
+                          <p className="text-plus-order">
                             {" "}
                             {moment(new Date(record?.date_create)).format(
                               "DD/MM/YYYY - HH:mm"
                             )}
-                          </a>
+                          </p>
                         </div>
                         <div className="div-text-plus">
-                          <a className="title-plus-order">Dịch vụ:</a>
-                          <a className="text-plus-order">
+                          <p className="title-plus-order">Dịch vụ:</p>
+                          <p className="text-plus-order">
                             {record?.type === "loop" && record?.is_auto_order
                               ? `${i18n.t("repeat", { lng: lang })}`
                               : record?.service?._id?.kind ===
@@ -531,58 +535,58 @@ const OrderManage = (props) => {
                               ? `${i18n.t("serve", { lng: lang })}`
                               : ""}{" "}
                             / {timeWork(record)}
-                          </a>
+                          </p>
                         </div>
                         <div className="div-text-plus">
-                          <a className="title-plus-order">Ngày làm:</a>
-                          <a className="text-plus-order">
-                            <a className="text-day">
+                          <p className="title-plus-order">Ngày làm:</p>
+                          <p className="text-plus-order">
+                            <p className="text-day">
                               {moment(new Date(record?.date_work))
                                 .locale(lang)
                                 .format("dddd")}
-                            </a>
+                            </p>
                             -{" "}
                             {moment(new Date(record?.date_work)).format(
                               "DD/MM/YYYY"
                             )}
-                          </a>
+                          </p>
                         </div>
                         <div className="div-text-plus">
-                          <a className="title-plus-order">Thanh toán:</a>
-                          <a className="text-plus-order">
+                          <p className="title-plus-order">Thanh toán:</p>
+                          <p className="text-plus-order">
                             {record?.payment_method === "cash"
                               ? `${i18n.t("cash", { lng: lang })}`
                               : record?.payment_method === "point"
                               ? `${i18n.t("wallet_gpay", { lng: lang })}`
                               : ""}
-                          </a>
+                          </p>
                         </div>
                         <div className="div-text-plus">
-                          <a className="title-plus-order">CTV:</a>
+                          <p className="title-plus-order">CTV:</p>
                           <>
                             {!record?.id_collaborator ? (
-                              <a className="text-plus-order">{`${i18n.t(
+                              <p className="text-plus-order">{`${i18n.t(
                                 "searching",
                                 {
                                   lng: lang,
                                 }
-                              )}`}</a>
+                              )}`}</p>
                             ) : (
                               <Link
                                 to={`/details-collaborator/${record?.id_collaborator?._id}`}
                               >
-                                <a className="text-plus-order-ctv">
+                                <p className="text-plus-order-ctv">
                                   {record?.id_collaborator?.full_name}
-                                </a>
+                                </p>
                               </Link>
                             )}
                           </>
                         </div>
                         <div className="div-text-plus">
-                          <a className="title-plus-order">
+                          <p className="title-plus-order">
                             {`${i18n.t("status", { lng: lang })}`}:
-                          </a>
-                          <a
+                          </p>
+                          <p
                             className={
                               record?.status === "pending"
                                 ? "text-pen-order"
@@ -604,7 +608,7 @@ const OrderManage = (props) => {
                               : record?.status === "done"
                               ? `${i18n.t("complete", { lng: lang })}`
                               : `${i18n.t("cancel", { lng: lang })}`}
-                          </a>
+                          </p>
                         </div>
                       </div>
                     );

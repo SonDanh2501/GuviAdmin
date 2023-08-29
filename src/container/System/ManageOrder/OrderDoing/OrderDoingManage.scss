@@ -22,6 +22,7 @@
     font-weight: 400;
     font-size: 14px;
     color: #000000;
+    margin: 0;
   }
 }
 .text-name-doing {
@@ -30,6 +31,7 @@
   font-weight: 400;
   font-size: 14px;
   color: #000000;
+  margin: 0;
 }
 
 .div-worktime-doing {
@@ -42,6 +44,7 @@
     font-weight: 500;
     font-size: 14px;
     color: #023e8a;
+    margin: 0;
   }
 }
 
@@ -50,21 +53,21 @@
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
-  line-height: 16px;
   color: black;
   width: 200px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  margin: 0;
 }
 .text-collaborator {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
-  line-height: 16px;
   text-decoration-line: underline;
   color: #023e8a;
+  margin: 0;
 }
 
 .text-pending-doing {
@@ -73,6 +76,7 @@
   font-weight: 400;
   font-size: 14px;
   color: #ece200 !important;
+  margin: 0;
 }
 
 .text-confirm-doing {
@@ -81,6 +85,7 @@
   font-weight: 400;
   font-size: 14px;
   color: #023e8a;
+  margin: 0;
 }
 
 .text-doing-doing {
@@ -89,6 +94,7 @@
   font-weight: 400;
   font-size: 14px;
   color: #023e8a;
+  margin: 0;
 }
 
 .text-cancel-doing {
@@ -97,6 +103,7 @@
   font-weight: 400;
   font-size: 14px;
   color: #ff0000;
+  margin: 0;
 }
 .text-done-doing {
   font-family: "Roboto";
@@ -105,6 +112,7 @@
   font-size: 14px;
   color: #00cf3a;
   text-decoration: none;
+  margin: 0;
 }
 
 .filter-input {
@@ -123,7 +131,7 @@
     font-size: 24px;
     font-family: "Roboto", sans-serif;
     text-decoration: none;
-    margin-top: 5px;
+    margin: 5px 0 0 0;
   }
 
   .field-search {
@@ -155,4 +163,5 @@
   font-weight: 500;
   font-size: 13px !important;
   color: #023e8a;
+  margin: 0;
 }

@@ -4,6 +4,7 @@
   font-weight: 500;
   font-size: 13px !important;
   color: #023e8a;
+  margin: 0;
 }
 .div-service-expired {
   display: flex;
@@ -15,6 +16,7 @@
     font-weight: 500;
     font-size: 12px;
     color: black;
+    margin: 0;
   }
 }
 
@@ -28,6 +30,7 @@
     font-weight: 400;
     font-size: 14px;
     color: #000000;
+    margin: 0;
   }
 }
 
@@ -42,6 +45,7 @@
     font-size: 12px;
     color: #023e8a;
     text-transform: capitalize;
+    margin: 0;
   }
 }
 
@@ -68,8 +72,8 @@
   font-style: normal;
   font-weight: 700;
   font-size: 14px;
-  line-height: 16px;
   color: #ece200 !important;
+  margin: 0;
 }
 
 .text-confirm {
@@ -78,6 +82,7 @@
   font-weight: 500;
   font-size: 14px;
   color: #023e8a;
+  margin: 0;
 }
 
 .text-doing {
@@ -86,6 +91,7 @@
   font-weight: 500;
   font-size: 14px;
   color: #023e8a;
+  margin: 0;
 }
 
 .text-cancel-expired {
@@ -94,6 +100,7 @@
   font-weight: 500;
   font-size: 14px;
   color: #ff0000a6;
+  margin: 0;
 }
 .text-done {
   font-family: "Roboto";
@@ -102,6 +109,7 @@
   font-size: 14px;
   color: #00cf3a;
   text-decoration: none;
+  margin: 0;
 }
 
 .filter-input {
@@ -120,7 +128,7 @@
     font-size: 24px;
     font-family: "Roboto", sans-serif;
     text-decoration: none;
-    margin-top: 5px;
+    margin: 5px 0 0 0;
   }
 
   .field-search {
@@ -155,6 +163,7 @@
     font-weight: 500;
     font-size: 12px;
     color: #000000;
+    margin: 0;
   }
   .text-phone-order-customer {
     font-family: "Roboto";
@@ -162,6 +171,7 @@
     font-weight: 400;
     font-size: 12px;
     color: #000000;
+    margin: 0;
   }
 }
 

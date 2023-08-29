@@ -33,7 +33,7 @@ const ReportOverview = () => {
     moment().subtract(30, "days").toISOString()
   );
   const [endDate, setEndDate] = useState(
-    moment().subtract(1, "day").toISOString()
+    moment().subtract(1, "days").toISOString()
   );
   const [sameStartDate, setSameStartDate] = useState(
     moment(startDate).subtract(30, "days").toISOString()
@@ -280,32 +280,6 @@ const ReportOverview = () => {
   }
 
   for (let i = 0; i < dataService.length; i++) {
-    // if (dataService[i]?._id === dataServiceSame[i]?._id) {
-    //   dataChartSerive.push({
-    //     name: dataService[i]?.title,
-    //     income: dataService[i]?.total_income,
-    //     percent_income:
-    //       ((dataService[i]?.total_income - dataServiceSame[i]?.total_income) /
-    //         dataServiceSame[i]?.total_income) *
-    //       100,
-    //     net_income: dataService[i]?.total_net_income,
-    //     percent_net_income:
-    //       ((dataService[i]?.total_net_income -
-    //         dataServiceSame[i]?.total_net_income) /
-    //         dataServiceSame[i]?.total_net_income) *
-    //       100,
-    //     thumbnail: dataService[i]?.thumbnail,
-    //   });
-    // } else {
-    //   dataChartSerive.push({
-    //     name: dataService[i]?.title,
-    //     income: dataService[i]?.total_income,
-    //     percent_income: 100,
-    //     net_income: dataService[i]?.total_net_income,
-    //     percent_net_income: 100,
-    //     thumbnail: dataService[i]?.thumbnail,
-    //   });
-    // }
     dataServiceSame?.map((item) => {
       if (item?._id === dataService[i]?._id) {
         dataChartSerive.push({
@@ -396,7 +370,7 @@ const ReportOverview = () => {
 
   return (
     <div className="mt-2">
-      <div className="div-date-report-overview ">
+      <div className="div-date-report-overview">
         <CustomDatePicker
           setStartDate={setStartDate}
           setEndDate={setEndDate}
@@ -407,8 +381,14 @@ const ReportOverview = () => {
           defaults={true}
         />
         <div className="div-same">
-          <p className="m-0">
-            Cùng kỳ: {moment(sameStartDate).utc().format("DD/MM/YYYY")}-
+          <p className="m-0 text-date-same">
+            Kỳ này: {moment(startDate).utc().format("DD/MM/YYYY")}-
+            {moment(endDate).format("DD/MM/YYYY")}
+          </p>
+        </div>
+        <div className="div-same">
+          <p className="m-0 text-date-same">
+            Kỳ trước: {moment(sameStartDate).utc().format("DD/MM/YYYY")}-
             {moment(sameEndDate).format("DD/MM/YYYY")}
           </p>
         </div>
