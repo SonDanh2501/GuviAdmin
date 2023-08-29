@@ -34,7 +34,7 @@ const DeepCleaning = () => {
   };
   return (
     <div>
-      <Tabs defaultActiveKey="1" size="large" onChange={onChangeTab}>
+      <Tabs defaultActiveKey="1" size="small" onChange={onChangeTab}>
         <Tabs.TabPane tab={`${i18n.t("all", { lng: lang })}`} key="1">
           <TableDeepCleaning
             status={status}

@@ -11,6 +11,15 @@
     width: auto;
     padding: 5px 10px;
     margin: 0 0 0 5px;
+
+    .text-date-same {
+      color: #000000;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      margin: 0;
+    }
   }
 }
 
@@ -395,6 +404,30 @@
 }
 
 @media screen and (max-width: 490px) {
+  .div-date-report-overview {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 20px;
+
+    .div-same {
+      border: 1px solid #d6d6d6;
+      padding: 5px;
+      border-radius: 6px;
+      width: auto;
+      padding: 5px 10px;
+      margin: 5px 0 0 0;
+
+      .text-date-same {
+        color: #000000;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        margin: 0;
+      }
+    }
+  }
   .div-chart-firt-overview {
     display: flex;
     flex-direction: column;

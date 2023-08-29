@@ -13,7 +13,7 @@ const DeepCleaningManager = () => {
   }, []);
   return (
     <div className="div-container-deep">
-      <Tabs defaultActiveKey="1" size="large">
+      <Tabs defaultActiveKey="1" size="small">
         <Tabs.TabPane tab={`${i18n.t("deep_cleaning", { lng: lang })}`} key="1">
           <DeepCleaning />
         </Tabs.TabPane>

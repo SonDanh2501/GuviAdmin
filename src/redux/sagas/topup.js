@@ -1,11 +1,11 @@
-import { takeLatest, call, put } from "redux-saga/effects";
-import { getType } from "../actions/banner";
-import { loadingAction } from "../actions/loading";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   getRevenueCollaboratorApi,
   getTopupCollaboratorApi,
   getTopupCustomerApi,
 } from "../../api/topup";
+import { getType } from "../actions/banner";
+import { loadingAction } from "../actions/loading";
 import {
   getRevenueCollaborator,
   getTopupCollaborator,

@@ -153,64 +153,74 @@ const TableDeepCleaning = (props) => {
 
   const columns = [
     {
-      title: `${i18n.t("date", { lng: lang })}`,
+      title: () => (
+        <p className="title-column">{`${i18n.t("date", { lng: lang })}`}</p>
+      ),
       render: (data) => {
         return (
           <div className="div-time-create">
-            <a className="text-date-create">
+            <p className="text-date-create">
               {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}{" "}
-            </a>
-            <a className="text-date-create">
+            </p>
+            <p className="text-date-create">
               {moment(new Date(data?.date_create)).format("HH:mm")}{" "}
-            </a>
+            </p>
           </div>
         );
       },
     },
     {
-      title: `${i18n.t("customer", { lng: lang })}`,
+      title: () => (
+        <p className="title-column">{`${i18n.t("customer", { lng: lang })}`}</p>
+      ),
       render: (data) => {
         return (
           <div className="div-customer">
-            <a className="text-name">{data?.name_customer}</a>
-            <a className="text-phone">{data?.phone_customer}</a>
+            <p className="text-name">{data?.name_customer}</p>
+            <p className="text-phone">{data?.phone_customer}</p>
           </div>
         );
       },
       sorter: (a, b) => a?.name_customer.localeCompare(b?.name_customer),
     },
     {
-      title: `${i18n.t("content", { lng: lang })}`,
-      render: (data) => <a className="text-description">{data?.description}</a>,
+      title: () => (
+        <p className="title-column">{`${i18n.t("content", { lng: lang })}`}</p>
+      ),
+      render: (data) => <p className="text-description">{data?.description}</p>,
     },
     {
-      title: `${i18n.t("address", { lng: lang })}`,
+      title: () => (
+        <p className="title-column">{`${i18n.t("address", { lng: lang })}`}</p>
+      ),
       render: (data) => (
-        <a className="text-address-cleaning">{data?.address}</a>
+        <p className="text-address-cleaning">{data?.address}</p>
       ),
     },
     {
-      title: `${i18n.t("contact", { lng: lang })}`,
+      title: () => (
+        <p className="title-column">{`${i18n.t("contact", { lng: lang })}`}</p>
+      ),
       render: (data) => {
         return (
           <div>
             {data?.is_contacted ? (
-              <a className="text-contacted">
+              <p className="text-contacted">
                 {`${i18n.t("contacted", { lng: lang })}`}
-              </a>
+              </p>
             ) : (
               <div className="div-uncontacted">
-                <a className="text-uncontacted">{`${i18n.t("not_contacted", {
+                <p className="text-uncontacted">{`${i18n.t("not_contacted", {
                   lng: lang,
-                })}`}</a>
+                })}`}</p>
                 {checkElement?.includes("contact_request_service") && (
                   <div
                     className={"btn-contacted-deep"}
                     onClick={toggleContacted}
                   >
-                    <a className="text-btn-contacted">{`${i18n.t("contact", {
+                    <p className="text-btn-contacted">{`${i18n.t("contact", {
                       lng: lang,
-                    })}`}</a>
+                    })}`}</p>
                   </div>
                 )}
               </div>
@@ -231,16 +241,16 @@ const TableDeepCleaning = (props) => {
           <div className="div-time-create">
             {data?.date_admin_contact_create ? (
               <>
-                <a className="text-date-create">
+                <p className="text-date-create">
                   {moment(new Date(data?.date_admin_contact_create)).format(
                     "DD/MM/YYYY"
                   )}
-                </a>
-                <a className="text-date-create">
+                </p>
+                <p className="text-date-create">
                   {moment(new Date(data?.date_admin_contact_create)).format(
                     "HH:mm"
                   )}
-                </a>
+                </p>
               </>
             ) : (
               <></>
@@ -249,73 +259,6 @@ const TableDeepCleaning = (props) => {
         );
       },
     },
-    // {
-    //   title: `${i18n.t("status", { lng: lang })}`,
-    //   render: (data) => {
-    //     return (
-    //       <div>
-    //         {data?.status === "pending" ? (
-    //           <a className="text-pending-request">{`${i18n.t("pending", {
-    //             lng: lang,
-    //           })}`}</a>
-    //         ) : data?.status === "done" ? (
-    //           <a className="text-done-request">{`${i18n.t("complete", {
-    //             lng: lang,
-    //           })}`}</a>
-    //         ) : (
-    //           <a className="text-cancel-request">{`${i18n.t("cancel_modal", {
-    //             lng: lang,
-    //           })}`}</a>
-    //         )}
-    //       </div>
-    //     );
-    //   },
-    //   align: "center",
-    // },
-    // {
-    //   key: "action",
-    //   render: (data) => {
-    //     return (
-    //       <>
-    //         {checkElement?.includes("change_status_request_service") && (
-    //           <div>
-    //             {data?.status === "pending" && (
-    //               <div className="div-btn-change-status">
-    //                 <div
-    //                   className="btn-change-done"
-    //                   onClick={() => {
-    //                     toggleStatus();
-    //                     setStatusModal("done");
-    //                   }}
-    //                 >
-    //                   <a className="text-change-done">{`${i18n.t("complete", {
-    //                     lng: lang,
-    //                   })}`}</a>
-    //                 </div>
-    //                 <div
-    //                   className="btn-change-cancel"
-    //                   onClick={() => {
-    //                     toggleStatus();
-    //                     setStatusModal("cancel");
-    //                   }}
-    //                 >
-    //                   <a className="text-change-cancel">{`${i18n.t(
-    //                     "cancel_modal",
-    //                     {
-    //                       lng: lang,
-    //                     }
-    //                   )}`}</a>
-    //                 </div>
-    //               </div>
-    //             )}
-    //           </div>
-    //         )}
-    //       </>
-    //     );
-    //   },
-    //   align: "center",
-    //   width: "5%",
-    // },
     {
       key: "action",
       align: "center",
@@ -331,9 +274,7 @@ const TableDeepCleaning = (props) => {
                 placement="bottom"
                 trigger={["click"]}
               >
-                <a>
-                  <MoreOutlined className="icon-more" />
-                </a>
+                <MoreOutlined className="icon-more" />
               </Dropdown>
             </Space>
           </>
@@ -379,9 +320,9 @@ const TableDeepCleaning = (props) => {
         />
       </div>
       <div className="mt-1 div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}: {total}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}
@@ -402,10 +343,10 @@ const TableDeepCleaning = (props) => {
           title={`${i18n.t("delete_request", { lng: lang })}`}
           body={
             <div>
-              <a className="text-body-modal">
+              <p className="text-body-modal">
                 {`${i18n.t("what_remove_request", { lng: lang })}`}
-              </a>
-              <a className="text-name-modal">{itemEdit?.name_customer}</a>
+              </p>
+              <p className="text-name-modal">{itemEdit?.name_customer}</p>
             </div>
           }
         />
@@ -420,10 +361,10 @@ const TableDeepCleaning = (props) => {
           title={`${i18n.t("contact_customers", { lng: lang })}`}
           body={
             <div>
-              <a className="text-body-modal">
+              <p className="text-body-modal">
                 {`${i18n.t("sure_contact_customers", { lng: lang })}`}
-              </a>
-              <a className="text-name-modal">{itemEdit?.name_customer}</a>
+              </p>
+              <p className="text-name-modal">{itemEdit?.name_customer}</p>
             </div>
           }
         />
@@ -438,10 +379,10 @@ const TableDeepCleaning = (props) => {
           handleCancel={toggleStatus}
           body={
             <div>
-              <a className="text-body-modal">
+              <p className="text-body-modal">
                 {`${i18n.t("sure_change_status", { lng: lang })}`}
-              </a>
-              <a className="text-name-modal">{itemEdit?.name_customer}</a>
+              </p>
+              <p className="text-name-modal">{itemEdit?.name_customer}</p>
             </div>
           }
         />
