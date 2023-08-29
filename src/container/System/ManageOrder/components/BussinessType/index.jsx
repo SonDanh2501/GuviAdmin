@@ -165,23 +165,26 @@ const BussinessType = (props) => {
   });
   var accessToken = AES.encrypt(temp, "guvico");
 
-  const handleSearchLocation = _debounce((value) => {
-    setAddress(value);
-    setIsLoading(true);
-    googlePlaceAutocomplete(value)
-      .then((res) => {
-        if (res.predictions) {
-          setPlaces(res.predictions);
-        } else {
+  const handleSearchLocation = useCallback(
+    _debounce((value) => {
+      setAddress(value);
+      setIsLoading(true);
+      googlePlaceAutocomplete(value)
+        .then((res) => {
+          if (res.predictions) {
+            setPlaces(res.predictions);
+          } else {
+            setPlaces([]);
+          }
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
           setPlaces([]);
-        }
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        setPlaces([]);
-      });
-  }, 1500);
+        });
+    }, 1500),
+    []
+  );
 
   const findPlace = useCallback((id) => {
     setIsLoading(true);
@@ -436,29 +439,28 @@ const BussinessType = (props) => {
     dayLoop,
   ]);
 
-  const searchValue = (value) => {
-    setNameCollaborator(value);
-  };
-
-  const searchCollaborator = _debounce((value) => {
-    setNameCollaborator(value);
-    if (value) {
-      searchCollaboratorsCreateOrder(id, value)
-        .then((res) => {
-          if (value === "") {
-            setDataCollaborator([]);
-          } else {
-            setDataCollaborator(res.data);
-          }
-        })
-        .catch((err) => console.log(err));
-    } else if (idCollaborator) {
-      setDataCollaborator([]);
-    } else {
-      setDataCollaborator([]);
-    }
-    setIdCollaborator("");
-  }, 500);
+  const searchCollaborator = useCallback(
+    _debounce((value) => {
+      setNameCollaborator(value);
+      if (value) {
+        searchCollaboratorsCreateOrder(id, value)
+          .then((res) => {
+            if (value === "") {
+              setDataCollaborator([]);
+            } else {
+              setDataCollaborator(res.data);
+            }
+          })
+          .catch((err) => console.log(err));
+      } else if (idCollaborator) {
+        setDataCollaborator([]);
+      } else {
+        setDataCollaborator([]);
+      }
+      setIdCollaborator("");
+    }, 500),
+    []
+  );
 
   const onGetBill = useCallback(() => {
     if (ref.current === null) {
@@ -801,7 +803,7 @@ const BussinessType = (props) => {
               error={errorCollaborator}
               onChange={(e) => {
                 searchCollaborator(e.target.value);
-                searchValue(e.target.value);
+                setNameCollaborator(e.target.value);
               }}
               value={nameCollaborator}
               placeholder={`${i18n.t("search", { lng: lang })}`}
