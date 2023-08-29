@@ -269,9 +269,9 @@ const CustomDatePicker = (props) => {
                       );
                     }}
                   >
-                    <a className="text-btn-date">{`${i18n.t(item?.title, {
+                    <p className="text-btn-date">{`${i18n.t(item?.title, {
                       lng: lang,
-                    })}`}</a>
+                    })}`}</p>
                   </div>
                 );
               })}
