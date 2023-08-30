@@ -144,9 +144,9 @@ const TableDeepCleaning = (props) => {
     {
       key: "1",
       label: checkElement?.includes("delete_request_service") && (
-        <a className={"text-delete-deep"} onClick={toggle}>
+        <p className="text-delete-deep m-0" onClick={toggle}>
           {`${i18n.t("delete", { lng: lang })}`}
-        </a>
+        </p>
       ),
     },
   ];

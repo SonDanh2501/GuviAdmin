@@ -607,7 +607,7 @@ const DetailsOrder = () => {
       key: "1",
       label: (
         <Link to={`/details-order/details-order-schedule/${itemEdit?._id}`}>
-          <a>{`${i18n.t("detail", { lng: lang })}`}</a>
+          <p className="m-0">{`${i18n.t("detail", { lng: lang })}`}</p>
         </Link>
       ),
     },
@@ -761,33 +761,48 @@ const DetailsOrder = () => {
                         {" "}
                         {`${i18n.t("detail", { lng: lang })}`}
                       </a>
-                      <div className="div-details-order">
-                        <div className="div-title-details">
-                          <a className="title">
-                            {`${i18n.t("service", { lng: lang })}`}
-                          </a>
+
+                      <div className="div-detail-order-service">
+                        <p className="title-service">
+                          {`${i18n.t("service", { lng: lang })}`}
+                        </p>
+                        <p className="text-colon">:</p>
+                        <div className="div-detail-service">
+                          <p className="text-service">
+                            {dataGroup?.type === "loop" &&
+                            dataGroup?.is_auto_order
+                              ? `${i18n.t("repeat", { lng: lang })}`
+                              : dataGroup?.service?._id?.kind ===
+                                "giup_viec_theo_gio"
+                              ? `${i18n.t("cleaning", { lng: lang })}`
+                              : dataGroup?.service?._id?.kind ===
+                                "giup_viec_co_dinh"
+                              ? `${i18n.t("cleaning_subscription", {
+                                  lng: lang,
+                                })}`
+                              : dataGroup?.service?._id?.kind ===
+                                "phuc_vu_nha_hang"
+                              ? `${i18n.t("serve", { lng: lang })}`
+                              : dataGroup?.service?._id?.kind ===
+                                "ve_sinh_may_lanh"
+                              ? `${i18n.t("Máy lạnh", { lng: lang })}`
+                              : ""}
+                          </p>
+                          <div className="detail-service-ac">
+                            {dataGroup?.service?.optional_service[0]?.extend_optional?.map(
+                              (item, index) => {
+                                return (
+                                  <div key={index} className="div-item-ac">
+                                    <p className="text-type-ac">
+                                      {item?.title[lang]}
+                                    </p>
+                                    <p className="count-ac">x{item?.count}</p>
+                                  </div>
+                                );
+                              }
+                            )}
+                          </div>
                         </div>
-                        <a className="text-colon">:</a>
-                        <a className="text-service-order">
-                          {dataGroup?.type === "loop" &&
-                          dataGroup?.is_auto_order
-                            ? `${i18n.t("repeat", { lng: lang })}`
-                            : dataGroup?.service?._id?.kind ===
-                              "giup_viec_theo_gio"
-                            ? `${i18n.t("cleaning", { lng: lang })}`
-                            : dataGroup?.service?._id?.kind ===
-                              "giup_viec_co_dinh"
-                            ? `${i18n.t("cleaning_subscription", {
-                                lng: lang,
-                              })}`
-                            : dataGroup?.service?._id?.kind ===
-                              "phuc_vu_nha_hang"
-                            ? `${i18n.t("serve", { lng: lang })}`
-                            : dataGroup?.service?._id?.kind ===
-                              "ve_sinh_may_lanh"
-                            ? `${i18n.t("Máy lạnh", { lng: lang })}`
-                            : ""}
-                        </a>
                       </div>
                       <div className="div-details-order">
                         <div className="div-title-details">

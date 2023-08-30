@@ -111,15 +111,15 @@ const SettingGroupPromotion = () => {
 
   const columns = [
     {
-      title: () => <a className="title-column">Ngày tạo</a>,
+      title: () => <p className="title-column">Ngày tạo</p>,
       render: (data) => (
-        <a className="text-create-group-promo">
+        <p className="text-create-group-promo">
           {moment(data?.date_create).format("DD/MM/YYYY - HH:mm")}
-        </a>
+        </p>
       ),
     },
     {
-      title: () => <a className="title-column">Ảnh</a>,
+      title: () => <p className="title-column">Ảnh</p>,
       render: (data) => (
         <Image
           src={data?.thumbnail}
@@ -128,15 +128,15 @@ const SettingGroupPromotion = () => {
       ),
     },
     {
-      title: () => <a className="title-column">Tiêu đề</a>,
+      title: () => <p className="title-column">Tiêu đề</p>,
       render: (data) => (
-        <a className="text-create-group-promo">{data?.name?.[lang]}</a>
+        <p className="text-create-group-promo">{data?.name?.[lang]}</p>
       ),
     },
     {
-      title: () => <a className="title-column">Mô tả</a>,
+      title: () => <p className="title-column">Mô tả</p>,
       render: (data) => (
-        <a className="text-create-group-promo">{data?.description?.[lang]}</a>
+        <p className="text-create-group-promo">{data?.description?.[lang]}</p>
       ),
     },
     {
@@ -163,9 +163,9 @@ const SettingGroupPromotion = () => {
             placement="bottom"
             trigger={["click"]}
           >
-            <a>
-              <i class="uil uil-ellipsis-v" style={{ color: "#000" }}></i>
-            </a>
+            <>
+              <i className="uil uil-ellipsis-v" style={{ color: "#000" }}></i>
+            </>
           </Dropdown>
         </Space>
       ),
@@ -186,20 +186,21 @@ const SettingGroupPromotion = () => {
     {
       key: "2",
       label: (
-        <a
+        <p
+          className="m-0"
           onClick={() => {
             setModalDelete(true);
           }}
         >
           Xoá
-        </a>
+        </p>
       ),
     },
   ];
 
   return (
     <>
-      <a className="title-page">Cấu hình nhóm khuyến mãi</a>
+      <p className="title-page">Cấu hình nhóm khuyến mãi</p>
       <div className="div-filter-group-promotion">
         <Input
           placeholder={`${i18n.t("search", { lng: lang })}`}
@@ -237,9 +238,9 @@ const SettingGroupPromotion = () => {
         handleOk={() => onDeleteGroupPromotion(state.itemEdit?._id)}
         handleCancel={() => setModalDelete(false)}
         body={
-          <a>
+          <p>
             Bạn có chắc muốn xoá nhóm khuyến mãi? {state.itemEdit?.name?.[lang]}
-          </a>
+          </p>
         }
       />
 
@@ -252,11 +253,11 @@ const SettingGroupPromotion = () => {
         }
         handleCancel={() => setModalEdit(false)}
         body={
-          <a>
+          <p className="m-0">
             {modalEdit
               ? `Bạn có chắc muốn ẩn nhóm khuyến mãi? ${state.itemEdit?.name?.[lang]}`
               : `Bạn có chắc muốn hiện thị nhóm khuyến mãi? ${state.itemEdit?.name?.[lang]}`}
-          </a>
+          </p>
         }
       />
 

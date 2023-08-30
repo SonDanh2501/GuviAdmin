@@ -259,6 +259,72 @@
       }
     }
 
+    .div-detail-order-service {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .title-service {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        color: #000000;
+        margin: 0;
+        width: 100px;
+      }
+      .text-colon {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        color: #000000;
+        margin: 0 5px 0 0;
+      }
+
+      .div-detail-service {
+        display: flex;
+        flex-direction: column;
+
+        .text-service {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          color: #000000;
+          margin: 0;
+        }
+
+        .detail-service-ac {
+          display: flex;
+          flex-direction: column;
+          width: 250px;
+          .div-item-ac {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            .text-type-ac {
+              font-family: "Roboto";
+              font-style: normal;
+              font-weight: 400;
+              font-size: 14px;
+              color: #000000;
+              margin: 0;
+            }
+
+            .count-ac {
+              font-family: "Roboto";
+              font-style: normal;
+              font-weight: 400;
+              font-size: 14px;
+              color: #ffb411;
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+
     .div-details-order-price {
       display: flex;
       flex-direction: row;

@@ -1,12 +1,4 @@
-import {
-  Button,
-  Checkbox,
-  Col,
-  DatePicker,
-  InputNumber,
-  Radio,
-  Row,
-} from "antd";
+import { Button, Checkbox, Col, DatePicker, Radio, Row } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import moment from "moment";
@@ -14,7 +6,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  createRewardCollaboratorApi,
   editRewardCollaboratorApi,
   getDetailRewardCollaborator,
 } from "../../../../../../api/configuration";
@@ -106,14 +97,14 @@ const EditRewardCollaborator = () => {
   }, [id]);
 
   dataCity?.map((item) => {
-    cityOptions.push({
+    return cityOptions.push({
       value: item?.code,
       label: item?.name,
     });
   });
 
   service?.map((item) => {
-    serviceOptions.push({
+    return serviceOptions.push({
       value: item?._id,
       label: item?.title?.vi,
     });
@@ -287,11 +278,12 @@ const EditRewardCollaborator = () => {
     isServiceApply,
     serviceApply,
     id,
+    navigate,
   ]);
 
   return (
     <div>
-      <a className="title-add">Thêm mới điều kiện thưởng CTV</a>
+      <p className="title-add">Thêm mới điều kiện thưởng CTV</p>
       <div className="mt-3">
         <Row>
           <Col span={8}>
@@ -319,7 +311,7 @@ const EditRewardCollaborator = () => {
               </Checkbox>
               {isLimitDate && (
                 <>
-                  <a className="label-input-date">Ngày bắt đầu</a>
+                  <p className="label-input-date">Ngày bắt đầu</p>
                   <DatePicker
                     style={{ width: "90%" }}
                     onChange={(date, dateString) =>
@@ -333,7 +325,7 @@ const EditRewardCollaborator = () => {
                     }
                     allowClear={false}
                   />
-                  <a className="label-input-date">Ngày kết thúc</a>
+                  <p className="label-input-date">Ngày kết thúc</p>
                   <DatePicker
                     style={{ width: "90%" }}
                     onChange={(date, dateString) =>
@@ -433,40 +425,33 @@ const EditRewardCollaborator = () => {
                   <>
                     {indexOne !== 0 && (
                       <div className="div-or-and-one">
-                        <a className="text-and-or">
+                        <p className="text-and-or">
                           {item?.type_condition === "and" ? "And" : "Or"}
-                        </a>
+                        </p>
                       </div>
                     )}
                     <div className="div-condition-level-one" key={indexOne}>
-                      <div className="div-money">
-                        <a className="label-money">Nhập số tiền</a>
-                        <InputNumber
-                          formatter={(value) =>
-                            `${value}  đ`.replace(
-                              /(\d)(?=(\d\d\d)+(?!\d))/g,
-                              "$1,"
-                            )
-                          }
-                          min={0}
-                          value={conditionOne?.money}
-                          onChange={(e) =>
-                            onChangeMoneyConditionLevelOne(e, indexOne)
-                          }
-                          style={{ width: "20%" }}
-                        />
-                      </div>
+                      <InputCustom
+                        title="Nhập số tiền"
+                        min={0}
+                        value={conditionOne?.money}
+                        onChange={(e) =>
+                          onChangeMoneyConditionLevelOne(e, indexOne)
+                        }
+                        style={{ width: "20%" }}
+                        inputMoney={true}
+                      />
                       {conditionOne?.condition_level_2?.map(
                         (conditionTwo, indexTwo) => {
                           return (
                             <>
                               {indexTwo !== 0 && (
                                 <div className="div-or-and-two">
-                                  <a className="text-and-or">
+                                  <p className="text-and-or">
                                     {conditionOne?.type_condition === "and"
                                       ? "And"
                                       : "Or"}
-                                  </a>
+                                  </p>
                                 </div>
                               )}
                               <div
@@ -479,12 +464,12 @@ const EditRewardCollaborator = () => {
                                       <>
                                         {indexCon !== 0 && (
                                           <div className="div-or-and-con">
-                                            <a className="text-and-or">
+                                            <p className="text-and-or">
                                               {conditionTwo?.type_condition ===
                                               "and"
                                                 ? "And"
                                                 : "Or"}
-                                            </a>
+                                            </p>
                                           </div>
                                         )}
                                         <div
@@ -553,7 +538,7 @@ const EditRewardCollaborator = () => {
                                               }
                                               className="delete-codition"
                                             >
-                                              <i class="uil uil-trash"></i>
+                                              <i className="uil uil-trash"></i>
                                             </div>
                                           )}
                                         </div>
@@ -568,7 +553,7 @@ const EditRewardCollaborator = () => {
                                     }
                                     className="btn-add-condition"
                                   >
-                                    <i class="uil uil-plus"></i>
+                                    <i className="uil uil-plus"></i>
                                   </Button>
                                   <Radio.Group
                                     value={conditionTwo?.type_condition}
@@ -597,7 +582,7 @@ const EditRewardCollaborator = () => {
                                   }
                                   className="btn-delete-codition-level-two"
                                 >
-                                  <i class="uil uil-trash"></i>
+                                  <i className="uil uil-trash"></i>
                                 </Button>
                               )}
                             </>
@@ -609,7 +594,7 @@ const EditRewardCollaborator = () => {
                           className="btn-add-codition-level-two"
                           onClick={() => onAddConditionLevelTwo(indexOne)}
                         >
-                          <a className="text-add">Thêm</a>
+                          <p className="text-add">Thêm</p>
                         </Button>
                         <Radio.Group
                           value={conditionOne?.type_condition}
@@ -632,7 +617,7 @@ const EditRewardCollaborator = () => {
                         className="btn-delete-condition-level-one"
                         onClick={() => onDeleteConditionLevelOne(indexOne)}
                       >
-                        <a className="text-btn ">Xoá</a>
+                        <p className="text-btn">Xoá</p>
                       </Button>
                     )}
                   </>
@@ -644,7 +629,7 @@ const EditRewardCollaborator = () => {
                   onClick={onAddConditionLevelOne}
                   className="btn-add-condition-level-one"
                 >
-                  <a className="text-add">Thêm</a>
+                  <p className="text-add">Thêm</p>
                 </Button>
                 <Radio.Group
                   value={item?.type_condition}

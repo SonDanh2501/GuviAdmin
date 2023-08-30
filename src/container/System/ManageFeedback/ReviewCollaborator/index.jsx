@@ -1,43 +1,41 @@
+import { SearchOutlined } from "@ant-design/icons";
 import {
   Checkbox,
   Empty,
   Image,
   Input,
-  Modal,
   Pagination,
   Rate,
   Select,
   Table,
 } from "antd";
-import "./index.scss";
+import _debounce from "lodash/debounce";
+import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   checkReviewCollaborator,
   getReportReviewCollaborator,
 } from "../../../../api/report";
-import moment from "moment";
+import gold from "../../../../assets/images/iconGold.svg";
+import member from "../../../../assets/images/iconMember.svg";
+import platinum from "../../../../assets/images/iconPlatinum.svg";
+import silver from "../../../../assets/images/iconSilver.svg";
 import CustomDatePicker from "../../../../components/customDatePicker";
-import _debounce from "lodash/debounce";
-import { SearchOutlined } from "@ant-design/icons";
+import ModalCustom from "../../../../components/modalCustom";
 import LoadingPagination from "../../../../components/paginationLoading";
-import { Link, useNavigate } from "react-router-dom";
+import InputCustom from "../../../../components/textInputCustom";
 import { errorNotify } from "../../../../helper/toast";
+import useWindowDimensions from "../../../../helper/useWindowDimensions";
+import i18n from "../../../../i18n";
 import {
   getElementState,
   getLanguageState,
   getUser,
 } from "../../../../redux/selectors/auth";
-import { useSelector } from "react-redux";
-import member from "../../../../assets/images/iconMember.svg";
-import silver from "../../../../assets/images/iconSilver.svg";
-import gold from "../../../../assets/images/iconGold.svg";
-import platinum from "../../../../assets/images/iconPlatinum.svg";
-import i18n from "../../../../i18n";
-import InputCustom from "../../../../components/textInputCustom";
-import ModalCustom from "../../../../components/modalCustom";
-import useWindowDimensions from "../../../../helper/useWindowDimensions";
 import { getProvince } from "../../../../redux/selectors/service";
-const { TextArea } = Input;
+import "./index.scss";
 
 const ReviewCollaborator = () => {
   const [data, setData] = useState([]);
@@ -90,13 +88,14 @@ const ReviewCollaborator = () => {
       .catch((err) => {});
   }, []);
 
-  province?.map((item) => {
+  province?.forEach((item) => {
     if (user?.area_manager_lv_1?.length === 0) {
       cityOptions.push({
         value: item?.code,
         label: item?.name,
         district: item?.districts,
       });
+      return;
     } else if (user?.area_manager_lv_1?.includes(item?.code)) {
       cityOptions.push({
         value: item?.code,
@@ -106,12 +105,13 @@ const ReviewCollaborator = () => {
     }
   });
 
-  dataDistrict?.map((item) => {
+  dataDistrict?.forEach((item) => {
     if (user?.area_manager_lv_2?.length === 0) {
       districtOptions.push({
         value: item?.code,
         label: item?.name,
       });
+      return;
     } else if (user?.area_manager_lv_2?.includes(item?.code)) {
       districtOptions.push({
         value: item?.code,
@@ -298,7 +298,7 @@ const ReviewCollaborator = () => {
         })
         .catch((err) => {});
     },
-    [startDate, endDate, star, valueSearch, tab, startPage, city, district]
+    [startDate, endDate, star, valueSearch, startPage, city, district]
   );
 
   const onCheckReview = useCallback(
@@ -351,9 +351,9 @@ const ReviewCollaborator = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("date_create", {
+          <p className="title-column">{`${i18n.t("date_create", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
@@ -361,14 +361,14 @@ const ReviewCollaborator = () => {
           <>
             {data?.date_create_review && (
               <div className="div-create-review">
-                <a className="text-date-review">
+                <p className="text-date-review">
                   {moment(new Date(data?.date_create_review)).format(
                     "DD/MM/YYYY"
                   )}
-                </a>
-                <a className="text-date-review">
+                </p>
+                <p className="text-date-review">
                   {moment(new Date(data?.date_create_review)).format("HH:mm")}
-                </a>
+                </p>
               </div>
             )}
           </>
@@ -378,15 +378,16 @@ const ReviewCollaborator = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("customer", {
+          <p className="title-column">{`${i18n.t("customer", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div className="div-customer-review">
-            <img
+            <Image
+              preview={false}
               src={
                 data?.id_customer?.rank_point < 100
                   ? member
@@ -404,8 +405,8 @@ const ReviewCollaborator = () => {
               to={`/profile-customer/${data?.id_customer?._id}`}
               className="div-name-info"
             >
-              <a className="text-name-review">{data?.id_customer?.full_name}</a>
-              <a className="text-name-review">{data?.id_customer?.phone}</a>
+              <p className="text-name-review">{data?.id_customer?.full_name}</p>
+              <p className="text-name-review">{data?.id_customer?.phone}</p>
             </Link>
           </div>
         );
@@ -415,9 +416,9 @@ const ReviewCollaborator = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("collaborator", {
+          <p className="title-column">{`${i18n.t("collaborator", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
@@ -426,10 +427,10 @@ const ReviewCollaborator = () => {
             to={`/details-collaborator/${data?.id_collaborator?._id}`}
             className="div-collaborator-review"
           >
-            <a className="text-name-review">
+            <p className="text-name-review">
               {data?.id_collaborator?.full_name}
-            </a>
-            <a className="text-name-review">{data?.id_collaborator?.phone}</a>
+            </p>
+            <p className="text-name-review">{data?.id_collaborator?.phone}</p>
           </Link>
         );
       },
@@ -437,9 +438,9 @@ const ReviewCollaborator = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("star_order", {
+          <p className="title-column">{`${i18n.t("star_order", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       width: "15%",
@@ -449,7 +450,7 @@ const ReviewCollaborator = () => {
             to={`/details-order/${data?.id_group_order}`}
             className="div-star-review"
           >
-            <a className="text-order">{data?.id_view}</a>
+            <p className="text-order">{data?.id_view}</p>
             <div className="div-star">
               <Rate
                 value={data?.star}
@@ -465,25 +466,25 @@ const ReviewCollaborator = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("content", {
+          <p className="title-column">{`${i18n.t("content", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
-      render: (data) => <a className="text-review">{data?.review}</a>,
+      render: (data) => <p className="text-review">{data?.review}</p>,
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("quick_review", {
+          <p className="title-column">{`${i18n.t("quick_review", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <div>
-            <a className="text-short-review">{data?.short_review[0]}</a>
+            <p className="text-short-review">{data?.short_review[0]}</p>
           </div>
         );
       },
@@ -514,10 +515,10 @@ const ReviewCollaborator = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("note", { lng: lang })}`}</a>
+          <p className="title-column">{`${i18n.t("note", { lng: lang })}`}</p>
         );
       },
-      render: (data) => <a>{data?.note_admin}</a>,
+      render: (data) => <p className="m-0">{data?.note_admin}</p>,
       align: "center",
     },
   ];
@@ -587,10 +588,10 @@ const ReviewCollaborator = () => {
         </div>
         <div>
           {startDate && (
-            <a className="text-date">
+            <p className="text-date m-0 ml-2">
               {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
               {moment(endDate).utc().format("DD/MM/YYYY")}
-            </a>
+            </p>
           )}
         </div>
       </div>
@@ -605,9 +606,9 @@ const ReviewCollaborator = () => {
               }
               onClick={() => onChangeTab(item?.value)}
             >
-              <a className="text-tab">{`${i18n.t(item?.title, {
+              <p className="text-tab">{`${i18n.t(item?.title, {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             </div>
           );
         })}
@@ -638,22 +639,22 @@ const ReviewCollaborator = () => {
                     return (
                       <div className="div-detail-review-collaborator">
                         <div className="div-text-detail">
-                          <a className="title-detail">CTV :</a>
+                          <p className="title-detail">CTV :</p>
                           <Link
                             to={`/details-collaborator/${record?.id_collaborator?._id}`}
                           >
-                            <a className="text-detail-review">
+                            <p className="text-detail-review">
                               {record?.id_collaborator?.full_name}
-                            </a>
+                            </p>
                           </Link>
                         </div>
                         <div className="div-text-detail">
-                          <a className="title-detail">Số sao/đơn :</a>
+                          <p className="title-detail">Số sao/đơn :</p>
                           <Link
                             to={`/details-order/${record?.id_group_order}`}
                             className="div-star-review"
                           >
-                            <a className="text-order">{record?.id_view}</a>
+                            <p className="text-order">{record?.id_view}</p>
                             <div className="div-star">
                               <Rate
                                 value={record?.star}
@@ -664,14 +665,14 @@ const ReviewCollaborator = () => {
                           </Link>
                         </div>
                         <div className="div-text-detail">
-                          <a className="title-detail">Nội dung :</a>
-                          <a className="text-detail-review">{record?.review}</a>
+                          <p className="title-detail">Nội dung :</p>
+                          <p className="text-detail-review">{record?.review}</p>
                         </div>
                         <div className="div-text-detail">
-                          <a className="title-detail">Đánh giá :</a>
-                          <a className="text-detail-review">
+                          <p className="title-detail">Đánh giá :</p>
+                          <p className="text-detail-review">
                             {record?.short_review[0]}
-                          </a>
+                          </p>
                         </div>
                       </div>
                     );
@@ -682,9 +683,9 @@ const ReviewCollaborator = () => {
         />
       </div>
       <div className="mt-1 div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}: {total}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}
