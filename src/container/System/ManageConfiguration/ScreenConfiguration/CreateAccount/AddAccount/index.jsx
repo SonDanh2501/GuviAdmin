@@ -36,12 +36,7 @@ const AddAccount = ({ setData, setTotal }) => {
   const service = useSelector(getService);
 
   const cityOption = [];
-  const districtOption = [
-    {
-      value: "",
-      label: "Tất cả",
-    },
-  ];
+  const districtOption = [];
   const serviceOption = [
     {
       value: "",

@@ -38,12 +38,7 @@ const EditAccount = ({ id, setData, setTotal, startPage }) => {
   const service = useSelector(getService);
 
   const cityOption = [];
-  const districtOption = [
-    {
-      value: "",
-      label: "Tất cả",
-    },
-  ];
+  const districtOption = [];
   const serviceOption = [
     {
       value: "",

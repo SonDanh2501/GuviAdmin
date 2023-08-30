@@ -1,24 +1,21 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
-import { Button, Checkbox, DatePicker, Drawer, Input, List } from "antd";
-import "./index.scss";
-import {
-  searchCollaborators,
-  searchCollaboratorsCreateOrder,
-} from "../../../../api/collaborator";
-import { errorNotify } from "../../../../helper/toast";
+import { Button, Checkbox, Drawer, Image, List } from "antd";
+import _debounce from "lodash/debounce";
+import React, { memo, useCallback, useState } from "react";
+import { useSelector } from "react-redux";
+import { searchCollaboratorsCreateOrder } from "../../../../api/collaborator";
 import {
   addCollaboratorToOrderApi,
   changeCollaboratorToOrderApi,
   getOrderApi,
 } from "../../../../api/order";
-import { useDispatch, useSelector } from "react-redux";
-import { loadingAction } from "../../../../redux/actions/loading";
-import _debounce from "lodash/debounce";
+import InputCustom from "../../../../components/textInputCustom";
+import { errorNotify } from "../../../../helper/toast";
+import i18n from "../../../../i18n";
 import {
   getElementState,
   getLanguageState,
 } from "../../../../redux/selectors/auth";
-import i18n from "../../../../i18n";
+import "./index.scss";
 const AddCollaboratorOrder = (props) => {
   const {
     idOrder,
@@ -68,34 +65,25 @@ const AddCollaboratorOrder = (props) => {
 
       setId("");
     }, 500),
-    []
+    [idCustomer]
   );
 
   const addCollaboratorToOrder = useCallback(() => {
     setIsLoading(true);
     if (status === "confirm") {
-      changeCollaboratorToOrderApi(idOrder)
+      changeCollaboratorToOrderApi(idOrder, {
+        id_collaborator: id,
+        check_time: check,
+      })
         .then((res) => {
-          addCollaboratorToOrderApi(idOrder, {
-            id_collaborator: id,
-            check_time: check,
-          })
+          setIsLoading(false);
+          setOpen(false);
+          getOrderApi("", startPage, 20, type, kind, "", "", "", "", "")
             .then((res) => {
-              setOpen(false);
-              setIsLoading(false);
-              getOrderApi("", startPage, 20, type, kind, "", "", "", "", "")
-                .then((res) => {
-                  setData(res?.data);
-                  setTotal(res?.totalItem);
-                })
-                .catch((err) => {});
+              setData(res?.data);
+              setTotal(res?.totalItem);
             })
-            .catch((err) => {
-              errorNotify({
-                message: err,
-              });
-              setIsLoading(false);
-            });
+            .catch((err) => {});
         })
         .catch((err) => {
           errorNotify({
@@ -129,11 +117,11 @@ const AddCollaboratorOrder = (props) => {
 
   return (
     <>
-      <a
+      <p
         className={
           checkElement?.includes("add_collaborator_guvi_job") ||
           checkElement?.includes("add_collaborator_guvi_job")
-            ? "text-add-ctv-order"
+            ? "text-add-ctv-order m-0"
             : "text-add-ctv-order-hide"
         }
         onClick={showDrawer}
@@ -145,7 +133,7 @@ const AddCollaboratorOrder = (props) => {
           : `${i18n.t("add_ctv", {
               lng: lang,
             })}`}
-      </a>
+      </p>
       <Drawer
         title={
           status === "confirm"
@@ -164,10 +152,10 @@ const AddCollaboratorOrder = (props) => {
       >
         <div className="div-add-collaborator">
           <div>
-            <a className="label">{`${i18n.t("collaborator", {
-              lng: lang,
-            })}`}</a>
-            <Input
+            <InputCustom
+              title={`${i18n.t("collaborator", {
+                lng: lang,
+              })}`}
               placeholder={`${i18n.t("search", {
                 lng: lang,
               })}`}
@@ -179,7 +167,6 @@ const AddCollaboratorOrder = (props) => {
               }}
               className="input"
             />
-            {/* {errorName && <a className="error">{errorName}</a>} */}
             {dataFilter.length > 0 && (
               <List
                 type={"unstyled"}
@@ -204,10 +191,14 @@ const AddCollaboratorOrder = (props) => {
                       }}
                     >
                       <div className="div-name">
-                        <img src={item?.avatar} className="img-collaborator" />
-                        <a className="text-name">
+                        <Image
+                          preview={false}
+                          src={item?.avatar}
+                          className="img-collaborator"
+                        />
+                        <p className="text-name m-0">
                           {item?.full_name} - {item?.phone} - {item?.id_view}
-                        </a>
+                        </p>
                       </div>
                       {item?.is_favorite ? (
                         <i class="uil uil-heart icon-heart"></i>

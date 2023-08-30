@@ -958,14 +958,14 @@ const CleaningSchedule = (props) => {
         )}
 
         <div className="div-footer mt-5">
-          <a className="text-price">
+          <p className="text-price">
             {`${i18n.t("price", { lng: lang })}`}:{" "}
             {priceOrder > 0
               ? formatMoney(
                   priceOrder + feeService - discount - eventFeePromotion
                 )
               : formatMoney(0)}
-          </a>
+          </p>
           <Button style={{ width: "auto" }} onClick={onCreateOrder}>{`${i18n.t(
             "post",
             {

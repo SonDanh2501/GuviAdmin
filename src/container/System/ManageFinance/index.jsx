@@ -152,24 +152,24 @@ const ManageFinance = () => {
       ? [
           {
             title: () => {
-              return <a className="title-column">Thời gian</a>;
+              return <p className="title-column">Thời gian</p>;
             },
             render: (data) => {
               return (
                 <div className="div-date-create">
-                  <a className="text-date">
+                  <p className="text-date">
                     {moment(data?.date_create).format("DD/MM/YYYY")}
-                  </a>
-                  <a className="text-date">
+                  </p>
+                  <p className="text-date">
                     {moment(data?.date_create).format("HH:mm")}
-                  </a>
+                  </p>
                 </div>
               );
             },
           },
           {
             title: () => {
-              return <a className="title-column">Cộng tác viên</a>;
+              return <p className="title-column">Cộng tác viên</p>;
             },
             render: (data) => {
               return (
@@ -177,15 +177,15 @@ const ManageFinance = () => {
                   to={`/details-collaborator/${data?.id_collaborator?._id}`}
                   className="div-name-ctv"
                 >
-                  <a className="text-ctv">{data?.id_collaborator?.full_name}</a>
-                  <a className="text-ctv">{data?.id_collaborator?.phone}</a>
+                  <p className="text-ctv">{data?.id_collaborator?.full_name}</p>
+                  <p className="text-ctv">{data?.id_collaborator?.phone}</p>
                 </Link>
               );
             },
           },
           {
             title: () => {
-              return <a className="title-column">Nội dung</a>;
+              return <p className="title-column">Nội dung</p>;
             },
             render: (item) => {
               const subject = item?.id_user_system
@@ -299,53 +299,53 @@ const ManageFinance = () => {
                     item?.id_transistion_customer?._id,
                     item?.id_transistion_customer?.transfer_note
                   );
-              return <a className="text-content">{object}</a>;
+              return <p className="text-content">{object}</p>;
             },
           },
           {
             title: () => {
-              return <a className="title-column">Ví chính</a>;
+              return <p className="title-column">Ví chính</p>;
             },
             render: (data) => {
               return (
                 <div className="div-current-remainder">
-                  <a className="text-money">
+                  <p className="text-money">
                     {formatMoney(data?.current_remainder)}
-                  </a>
-                  <a>
+                  </p>
+                  <p>
                     {" "}
                     {data?.status_current_remainder === "down" ? (
-                      <i class="uil uil-arrow-down icon-deduction"></i>
+                      <i className="uil uil-arrow-down icon-deduction"></i>
                     ) : data?.status_current_remainder === "up" ? (
-                      <i class="uil uil-arrow-up icon-plus"></i>
+                      <i className="uil uil-arrow-up icon-plus"></i>
                     ) : (
-                      <i class="uil uil-minus icon-minus"></i>
+                      <i className="uil uil-minus icon-minus"></i>
                     )}
-                  </a>
+                  </p>
                 </div>
               );
             },
           },
           {
             title: () => {
-              return <a className="title-column">Ví thưởng</a>;
+              return <p className="title-column">Ví thưởng</p>;
             },
             render: (data) => {
               return (
                 <div className="div-current-remainder">
-                  <a className="text-money">
+                  <p className="text-money">
                     {formatMoney(data?.current_gift_remainder)}
-                  </a>
-                  <a>
+                  </p>
+                  <p>
                     {" "}
                     {data?.status_current_gift_remainder === "down" ? (
-                      <i class="uil uil-arrow-down icon-deduction"></i>
+                      <i className="uil uil-arrow-down icon-deduction"></i>
                     ) : data?.status_current_gift_remainder === "up" ? (
-                      <i class="uil uil-arrow-up icon-plus"></i>
+                      <i className="uil uil-arrow-up icon-plus"></i>
                     ) : (
-                      <i class="uil uil-minus icon-minus"></i>
+                      <i className="uil uil-minus icon-minus"></i>
                     )}
-                  </a>
+                  </p>
                 </div>
               );
             },

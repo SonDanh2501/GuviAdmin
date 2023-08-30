@@ -250,7 +250,7 @@ const OrderDoingManage = () => {
     setCurrentPage(page);
     const dataLength = data?.length < 20 ? 20 : data.length;
     const start = page * dataLength - dataLength;
-    getOrderApi(valueSearch, 0, 20, "doing", "", "", "", "", "", "")
+    getOrderApi(valueSearch, start, 20, "doing", "", "", "", "", "", "")
       .then((res) => {
         setData(res.data);
         setTotal(res.totalItem);

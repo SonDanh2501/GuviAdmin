@@ -1,26 +1,24 @@
-import { Input, List, Select } from "antd";
+import { List, Select } from "antd";
 import _debounce from "lodash/debounce";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { searchCustomersApi } from "../../../../api/customer";
 import {
   getExtendOptionalByOptionalServiceApi,
-  getGroupServiceApi,
   getOptionalServiceByServiceApi,
-  getServiceApi,
 } from "../../../../api/service";
 import LoadingPagination from "../../../../components/paginationLoading";
+import InputCustom from "../../../../components/textInputCustom";
 import { errorNotify } from "../../../../helper/toast";
+import i18n from "../../../../i18n";
+import { getLanguageState, getUser } from "../../../../redux/selectors/auth";
 import { getService } from "../../../../redux/selectors/service";
 import BussinessType from "../components/BussinessType";
+import CleaningAC from "../components/CleaningAC";
 import CleaningHourly from "../components/CleaningHourly";
 import CleaningSchedule from "../components/CleaningSchedule";
-import "./index.scss";
-import { getLanguageState, getUser } from "../../../../redux/selectors/auth";
-import i18n from "../../../../i18n";
-import InputCustom from "../../../../components/textInputCustom";
 import DeepCleaning from "../components/DeepCleaning";
-import CleaningAC from "../components/CleaningAC";
+import "./index.scss";
 
 const AddOrder = () => {
   const [optionalService, setOptionalService] = useState([]);
@@ -68,14 +66,15 @@ const AddOrder = () => {
         .catch((err) => {
           setIsLoading(false);
         });
-      service?.map((item) => {
-        user?.id_service_manager?.map((i, index) => {
+      service?.forEach((item) => {
+        user?.id_service_manager?.forEach((i, index) => {
           if (item?._id === i?._id) {
             if (index === 0) {
               setKindService(item?.kind);
             }
           }
         });
+        return;
       });
       setServiceApply(user?.id_service_manager[0]?._id);
       // setKindService(user?.id_service_manager[0]?.kind);
@@ -83,15 +82,16 @@ const AddOrder = () => {
     }
   }, [user]);
 
-  service?.map((item) => {
+  service?.forEach((item) => {
     if (user?.id_service_manager?.length === 0) {
       serviceSelect.push({
         label: item?.title?.[lang],
         value: item?._id,
         kind: item?.kind,
       });
+      return;
     } else {
-      user?.id_service_manager?.map((i) => {
+      user?.id_service_manager?.forEach((i) => {
         if (item?._id === i?._id) {
           serviceSelect.push({
             label: item?.title?.[lang],
@@ -99,12 +99,13 @@ const AddOrder = () => {
             kind: item?.kind,
           });
         }
+        return;
       });
     }
   });
 
   optionalService?.map((item) => {
-    optionalSelect.push({
+    return optionalSelect.push({
       value: item?._id,
       label: item?.title[lang],
     });
@@ -252,9 +253,9 @@ const AddOrder = () => {
                     setErrorNameCustomer("");
                   }}
                 >
-                  <a>
+                  <p className="m-0">
                     {item?.full_name} - {item?.phone} - {item?.id_view}
-                  </a>
+                  </p>
                 </div>
               );
             })}
@@ -263,15 +264,14 @@ const AddOrder = () => {
       </div>
 
       {kindService === "ve_sinh_may_lanh" && (
-        <div className="div-choose-type-ac">
-          <a className="label-time">Loại máy lạnh</a>
-          <Select
-            options={optionalSelect}
-            style={{ width: "50%" }}
-            value={idOptional}
-            onChange={onChangeOptionalService}
-          />
-        </div>
+        <InputCustom
+          title="Loại máy lạnh"
+          select={true}
+          options={optionalSelect}
+          style={{ width: "50%" }}
+          value={idOptional}
+          onChange={onChangeOptionalService}
+        />
       )}
 
       <div className="mt-3">
