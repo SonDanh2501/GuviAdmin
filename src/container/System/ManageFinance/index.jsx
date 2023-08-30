@@ -312,16 +312,14 @@ const ManageFinance = () => {
                   <p className="text-money">
                     {formatMoney(data?.current_remainder)}
                   </p>
-                  <p>
-                    {" "}
-                    {data?.status_current_remainder === "down" ? (
-                      <i className="uil uil-arrow-down icon-deduction"></i>
-                    ) : data?.status_current_remainder === "up" ? (
-                      <i className="uil uil-arrow-up icon-plus"></i>
-                    ) : (
-                      <i className="uil uil-minus icon-minus"></i>
-                    )}
-                  </p>
+
+                  {data?.status_current_remainder === "down" ? (
+                    <i className="uil uil-arrow-down icon-deduction"></i>
+                  ) : data?.status_current_remainder === "up" ? (
+                    <i className="uil uil-arrow-up icon-plus"></i>
+                  ) : (
+                    <i className="uil uil-minus icon-minus"></i>
+                  )}
                 </div>
               );
             },
@@ -336,16 +334,14 @@ const ManageFinance = () => {
                   <p className="text-money">
                     {formatMoney(data?.current_gift_remainder)}
                   </p>
-                  <p>
-                    {" "}
-                    {data?.status_current_gift_remainder === "down" ? (
-                      <i className="uil uil-arrow-down icon-deduction"></i>
-                    ) : data?.status_current_gift_remainder === "up" ? (
-                      <i className="uil uil-arrow-up icon-plus"></i>
-                    ) : (
-                      <i className="uil uil-minus icon-minus"></i>
-                    )}
-                  </p>
+
+                  {data?.status_current_gift_remainder === "down" ? (
+                    <i className="uil uil-arrow-down icon-deduction"></i>
+                  ) : data?.status_current_gift_remainder === "up" ? (
+                    <i className="uil uil-arrow-up icon-plus"></i>
+                  ) : (
+                    <i className="uil uil-minus icon-minus"></i>
+                  )}
                 </div>
               );
             },
@@ -354,24 +350,24 @@ const ManageFinance = () => {
       : [
           {
             title: () => {
-              return <a className="title-column">Thời gian</a>;
+              return <p className="title-column">Thời gian</p>;
             },
             render: (data) => {
               return (
                 <div className="div-date-create">
-                  <a className="text-date">
+                  <p className="text-date">
                     {moment(data?.date_create).format("DD/MM/YYYY")}
-                  </a>
-                  <a className="text-date">
+                  </p>
+                  <p className="text-date">
                     {moment(data?.date_create).format("HH:mm")}
-                  </a>
+                  </p>
                 </div>
               );
             },
           },
           {
             title: () => {
-              return <a className="title-column">Khách hàng</a>;
+              return <p className="title-column">Khách hàng</p>;
             },
             render: (data) => {
               return (
@@ -379,15 +375,15 @@ const ManageFinance = () => {
                   to={`/profile-customer/${data?.id_customer?._id}`}
                   className="div-name-ctv"
                 >
-                  <a className="text-ctv">{data?.id_customer?.full_name}</a>
-                  <a className="text-ctv">{data?.id_customer?.phone}</a>
+                  <p className="text-ctv">{data?.id_customer?.full_name}</p>
+                  <p className="text-ctv">{data?.id_customer?.phone}</p>
                 </Link>
               );
             },
           },
           {
             title: () => {
-              return <a className="title-column">Nội dung</a>;
+              return <p className="title-column">Nội dung</p>;
             },
             render: (item) => {
               const subject = item?.id_user_system
@@ -501,53 +497,50 @@ const ManageFinance = () => {
                     item?.id_transistion_customer?._id,
                     item?.id_transistion_customer?.transfer_note
                   );
-              return <a className="text-content">{object}</a>;
+              return <p className="text-content">{object}</p>;
             },
           },
           {
             title: () => {
-              return <a className="title-column">Ví chính</a>;
+              return <p className="title-column">Ví chính</p>;
             },
             render: (data) => {
               return (
                 <div className="div-current-remainder">
-                  <a className="text-money">
+                  <p className="text-money">
                     {formatMoney(data?.current_remainder)}
-                  </a>
-                  <a>
-                    {" "}
+                  </p>
+                  <p>
                     {data?.status_current_remainder === "down" ? (
-                      <i class="uil uil-arrow-down icon-deduction"></i>
+                      <i className="uil uil-arrow-down icon-deduction"></i>
                     ) : data?.status_current_remainder === "up" ? (
-                      <i class="uil uil-arrow-up icon-plus"></i>
+                      <i className="uil uil-arrow-up icon-plus"></i>
                     ) : (
-                      <i class="uil uil-minus icon-minus"></i>
+                      <i className="uil uil-minus icon-minus"></i>
                     )}
-                  </a>
+                  </p>
                 </div>
               );
             },
           },
           {
             title: () => {
-              return <a className="title-column">Ví thưởng</a>;
+              return <p className="title-column">Ví thưởng</p>;
             },
             render: (data) => {
               return (
                 <div className="div-current-remainder">
-                  <a className="text-money">
+                  <p className="text-money">
                     {formatMoney(data?.current_gift_remainder)}
-                  </a>
-                  <a>
-                    {" "}
-                    {data?.status_current_gift_remainder === "down" ? (
-                      <i class="uil uil-arrow-down icon-deduction"></i>
-                    ) : data?.status_current_gift_remainder === "up" ? (
-                      <i class="uil uil-arrow-up icon-plus"></i>
-                    ) : (
-                      <i class="uil uil-minus icon-minus"></i>
-                    )}
-                  </a>
+                  </p>
+
+                  {data?.status_current_gift_remainder === "down" ? (
+                    <i className="uil uil-arrow-down icon-deduction"></i>
+                  ) : data?.status_current_gift_remainder === "up" ? (
+                    <i className="uil uil-arrow-up icon-plus"></i>
+                  ) : (
+                    <i className="uil uil-minus icon-minus"></i>
+                  )}
                 </div>
               );
             },
@@ -567,75 +560,75 @@ const ManageFinance = () => {
           setSameEnd={() => {}}
         />
         {startDate && (
-          <a className="text-date">
+          <p className="text-date m-0 ml-2">
             {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
             {moment(new Date(endDate)).format("DD/MM/YYYY")}
-          </a>
+          </p>
         )}
       </div>
       <div className="div-contai-wallet">
-        <a className="text-beginnig">{`${i18n.t("beginning", {
+        <p className="text-beginnig">{`${i18n.t("beginning", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
         <div className="div-wallet-row">
           <div className="div-item-wallet">
-            <a className="text-name-wallet">{`${i18n.t(
+            <p className="text-name-wallet">{`${i18n.t(
               "main_wallet_collaborator",
               { lng: lang }
-            )}`}</a>
-            <a className="text-money-remainder">
+            )}`}</p>
+            <p className="text-money-remainder">
               {formatMoney(totalOpeningRemainder)}
-            </a>
+            </p>
           </div>
           <div className="div-item-wallet">
-            <a className="text-name-wallet">{`${i18n.t(
+            <p className="text-name-wallet">{`${i18n.t(
               "collaborator_gift_wallet",
               { lng: lang }
-            )}`}</a>
-            <a className="text-money-gift">
+            )}`}</p>
+            <p className="text-money-gift">
               {formatMoney(totalOpeningGiftRemainder)}
-            </a>
+            </p>
           </div>
           <div className="div-item-wallet-last">
-            <a className="text-name-wallet">{`${i18n.t("customer_wallet", {
+            <p className="text-name-wallet">{`${i18n.t("customer_wallet", {
               lng: lang,
-            })}`}</a>
-            <a className="text-money-paypoint">
+            })}`}</p>
+            <p className="text-money-paypoint">
               {formatMoney(totalOpeningPayPoint)}
-            </a>
+            </p>
           </div>
         </div>
       </div>
       <div className="div-contai-wallet mt-3">
-        <a className="text-beginnig">{`${i18n.t("end_of_term", {
+        <p className="text-beginnig">{`${i18n.t("end_of_term", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
         <div className="div-wallet-row">
           <div className="div-item-wallet">
-            <a className="text-name-wallet">{`${i18n.t(
+            <p className="text-name-wallet">{`${i18n.t(
               "main_wallet_collaborator",
               { lng: lang }
-            )}`}</a>
-            <a className="text-money-remainder">
+            )}`}</p>
+            <p className="text-money-remainder">
               {formatMoney(totalEndingRemainder)}
-            </a>
+            </p>
           </div>
           <div className="div-item-wallet">
-            <a className="text-name-wallet">{`${i18n.t(
+            <p className="text-name-wallet">{`${i18n.t(
               "collaborator_gift_wallet",
               { lng: lang }
-            )}`}</a>
-            <a className="text-money-gift">
+            )}`}</p>
+            <p className="text-money-gift">
               {formatMoney(totalEndingGiftRemainder)}
-            </a>
+            </p>
           </div>
           <div className="div-item-wallet-last">
-            <a className="text-name-wallet">{`${i18n.t("customer_wallet", {
+            <p className="text-name-wallet">{`${i18n.t("customer_wallet", {
               lng: lang,
-            })}`}</a>
-            <a className="text-money-paypoint">
+            })}`}</p>
+            <p className="text-money-paypoint">
               {formatMoney(totalEndingPayPoint)}
-            </a>
+            </p>
           </div>
         </div>
       </div>
@@ -652,7 +645,7 @@ const ManageFinance = () => {
                 tab === item?.value ? "div-item-tab-select" : "div-item-tab"
               }
             >
-              <a className="text-tab">{item?.title}</a>
+              <p className="text-tab">{item?.title}</p>
             </div>
           );
         })}
@@ -792,36 +785,36 @@ const ManageFinance = () => {
                     return (
                       <div className="detail-finance-table">
                         <div className="div-text">
-                          <a className="title-detail">Nội dung:</a>
-                          <a className="text-detail-finance">{object} </a>
+                          <p className="title-detail">Nội dung:</p>
+                          <p className="text-detail-finance">{object} </p>
                         </div>
                         <div className="div-text">
-                          <a className="title-detail">Ví chính:</a>
-                          <a className="text-detail-finance">
+                          <p className="title-detail">Ví chính:</p>
+                          <p className="text-detail-finance">
                             {formatMoney(record?.current_remainder)}{" "}
                             {record?.status_current_remainder === "down" ? (
-                              <i class="uil uil-arrow-down icon-deduction"></i>
+                              <i className="uil uil-arrow-down icon-deduction"></i>
                             ) : record?.status_current_remainder === "up" ? (
-                              <i class="uil uil-arrow-up icon-plus"></i>
+                              <i className="uil uil-arrow-up icon-plus"></i>
                             ) : (
-                              <i class="uil uil-minus icon-minus"></i>
+                              <i className="uil uil-minus icon-minus"></i>
                             )}
-                          </a>
+                          </p>
                         </div>
                         <div className="div-text">
-                          <a className="title-detail">Ví thưởng:</a>
-                          <a className="text-detail-finance">
+                          <p className="title-detail">Ví thưởng:</p>
+                          <p className="text-detail-finance">
                             {formatMoney(record?.current_gift_remainder)}{" "}
                             {record?.status_current_gift_remainder ===
                             "down" ? (
-                              <i class="uil uil-arrow-down icon-deduction"></i>
+                              <i className="uil uil-arrow-down icon-deduction"></i>
                             ) : record?.status_current_gift_remainder ===
                               "up" ? (
-                              <i class="uil uil-arrow-up icon-plus"></i>
+                              <i className="uil uil-arrow-up icon-plus"></i>
                             ) : (
-                              <i class="uil uil-minus icon-minus"></i>
+                              <i className="uil uil-minus icon-minus"></i>
                             )}
-                          </a>
+                          </p>
                         </div>
                       </div>
                     );
@@ -831,9 +824,9 @@ const ManageFinance = () => {
           }
         />
         <div className="div-pagination p-2">
-          <a>
+          <p>
             Tổng: {tab === "collaborator" ? totalCollaborator : totalCustomer}
-          </a>
+          </p>
           <div>
             <Pagination
               current={

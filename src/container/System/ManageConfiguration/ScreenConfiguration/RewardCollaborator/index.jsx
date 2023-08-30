@@ -121,23 +121,23 @@ const RewardCollaborator = () => {
       render: (data) => {
         return (
           <div className="div-date-create-reward">
-            <a className="text-date">
+            <p className="text-date">
               {moment(data?.date_create).format("DD-MM-YYYY")}
-            </a>
-            <a className="text-date">
+            </p>
+            <p className="text-date">
               {moment(data?.date_create).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
     },
     {
       title: `${i18n.t("title", { lng: lang })}`,
-      render: (data) => <a className="text-reward">{data?.title?.vi}</a>,
+      render: (data) => <p className="text-reward">{data?.title?.vi}</p>,
     },
     {
       title: `${i18n.t("describe", { lng: lang })}`,
-      render: (data) => <a className="text-reward">{data?.description?.vi}</a>,
+      render: (data) => <p className="text-reward">{data?.description?.vi}</p>,
     },
     {
       title: `${i18n.t("status", { lng: lang })}`,
@@ -145,25 +145,25 @@ const RewardCollaborator = () => {
         return (
           <div>
             {data?.status === "upcoming" ? (
-              <a className="text-upcoming-reward">{`${i18n.t("upcoming", {
+              <p className="text-upcoming-reward">{`${i18n.t("upcoming", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : data?.status === "doing" ? (
-              <a className="text-upcoming-reward">{`${i18n.t("happenning", {
+              <p className="text-upcoming-reward">{`${i18n.t("happenning", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : data?.status === "out_of_stock" ? (
-              <a className="text-cance-rewardl">{`${i18n.t("out_stock", {
+              <p className="text-cance-rewardl">{`${i18n.t("out_stock", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : data?.status === "out_of_date" ? (
-              <a className="text-cancel-reward">{`${i18n.t("out_date", {
+              <p className="text-cancel-reward">{`${i18n.t("out_date", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             ) : (
-              <a className="text-cancel-reward">{`${i18n.t("closed", {
+              <p className="text-cancel-reward">{`${i18n.t("closed", {
                 lng: lang,
-              })}`}</a>
+              })}`}</p>
             )}
           </div>
         );
@@ -195,9 +195,9 @@ const RewardCollaborator = () => {
             trigger={["click"]}
             placement="bottom"
           >
-            <a style={{ color: "black" }}>
+            <>
               <i class="uil uil-ellipsis-v"></i>
-            </a>
+            </>
           </Dropdown>
         </Space>
       ),
@@ -208,7 +208,8 @@ const RewardCollaborator = () => {
     {
       key: "1",
       label: checkElement.includes("edit_reward_collaborator_setting") && (
-        <a
+        <p
+          className="m-0"
           onClick={() =>
             navigate(
               "/adminManage/manage-configuration/reward_collaborator/edit",
@@ -219,15 +220,15 @@ const RewardCollaborator = () => {
           }
         >
           {`${i18n.t("edit", { lng: lang })}`}
-        </a>
+        </p>
       ),
     },
     {
       key: "2",
       label: checkElement.includes("delete_reward_collaborator_setting") && (
-        <a onClick={() => setModal(true)}>{`${i18n.t("delete", {
+        <p className="m-0" onClick={() => setModal(true)}>{`${i18n.t("delete", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
     },
   ];
@@ -262,9 +263,9 @@ const RewardCollaborator = () => {
         />
 
         <div className="div-pagination p-2">
-          <a>
+          <p>
             {`${i18n.t("total", { lng: lang })}`}: {total}
-          </a>
+          </p>
           <div>
             <Pagination
               current={currentPage}
@@ -293,11 +294,11 @@ const RewardCollaborator = () => {
               : `${i18n.t("lock_bonus", { lng: lang })}`
           }
           body={
-            <a>
+            <p>
               {itemEdit?.is_active
                 ? `Bạn có muốn ẩn điều kiển thưởng cho CTV? "${itemEdit?.title?.vi}"`
                 : `Bạn có muốn hiện điệu kiển thưởng cho CTV? "${itemEdit?.title?.vi}"`}
-            </a>
+            </p>
           }
         />
       </div>
@@ -309,7 +310,7 @@ const RewardCollaborator = () => {
           handleOk={() => onDeleteReward(itemEdit?._id)}
           handleCancel={() => setModal(false)}
           textOk="Xoá"
-          body={<a>Bạn có muốn xoá điều kiển thưởng "{itemEdit?.title?.vi}"</a>}
+          body={<p>Bạn có muốn xoá điều kiển thưởng "{itemEdit?.title?.vi}"</p>}
         />
       </div>
 

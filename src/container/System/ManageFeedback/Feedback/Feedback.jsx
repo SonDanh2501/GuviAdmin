@@ -4,36 +4,24 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  Button,
-  Card,
-  CardHeader,
-  Col,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Row,
-} from "reactstrap";
+import { Link } from "react-router-dom";
 
+import { deleteFeedbackApi, searchFeedbackApi } from "../../../../api/feedback";
+import ModalCustom from "../../../../components/modalCustom";
+import { errorNotify } from "../../../../helper/toast";
+import i18n from "../../../../i18n";
+import { getFeedback } from "../../../../redux/actions/feedback";
+import { loadingAction } from "../../../../redux/actions/loading";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../redux/selectors/auth";
 import {
   getFeedbacks,
   getFeedbackTotal,
 } from "../../../../redux/selectors/feedback";
 import "./Feedback.scss";
-import { getFeedback } from "../../../../redux/actions/feedback";
-import {
-  getElementState,
-  getLanguageState,
-  getUser,
-} from "../../../../redux/selectors/auth";
-import { loadingAction } from "../../../../redux/actions/loading";
-import { deleteFeedbackApi, searchFeedbackApi } from "../../../../api/feedback";
-import { errorNotify } from "../../../../helper/toast";
-import ModalCustom from "../../../../components/modalCustom";
-import i18n from "../../../../i18n";
-const width = window.innerWidth;
+import useWindowDimensions from "../../../../helper/useWindowDimensions";
 
 const Feedback = () => {
   const [dataFilter, setDataFilter] = useState([]);
@@ -47,6 +35,7 @@ const Feedback = () => {
   const lang = useSelector(getLanguageState);
   const toggle = () => setModal(!modal);
   const checkElement = useSelector(getElementState);
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     dispatch(getFeedback.getFeedbackRequest({ start: 0, length: 20 }));
@@ -96,35 +85,35 @@ const Feedback = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("type_feedback", {
+          <p className="title-column">{`${i18n.t("type_feedback", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
-      render: (data) => <a className="text-type">{data?.type?.name?.[lang]}</a>,
+      render: (data) => <p className="text-type">{data?.type?.name?.[lang]}</p>,
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("content", {
+          <p className="title-column">{`${i18n.t("content", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
-      render: (data) => <a className="text-content">{data?.body}</a>,
+      render: (data) => <p className="text-content">{data?.body}</p>,
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("feedback_sender", {
+          <p className="title-column">{`${i18n.t("feedback_sender", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => {
         return (
           <Link to={`/profile-customer/${data?.id_customer}`}>
-            <a className="text-type">{data?.full_name}</a>
+            <p className="text-type">{data?.full_name}</p>
           </Link>
         );
       },
@@ -132,25 +121,25 @@ const Feedback = () => {
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("phone_feedback_sender", {
+          <p className="title-column">{`${i18n.t("phone_feedback_sender", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
-      render: (data) => <a className="text-content">{data?.phone}</a>,
+      render: (data) => <p className="text-content">{data?.phone}</p>,
     },
     {
       title: () => {
         return (
-          <a className="title-column">{`${i18n.t("date_create", {
+          <p className="title-column">{`${i18n.t("date_create", {
             lng: lang,
-          })}`}</a>
+          })}`}</p>
         );
       },
       render: (data) => (
-        <a className="text-content">
+        <p className="text-content">
           {moment(new Date(data?.date_create)).format("DD/MM/yyy - HH:mm")}
-        </a>
+        </p>
       ),
     },
     {
@@ -194,20 +183,16 @@ const Feedback = () => {
                 },
               };
             }}
-            scroll={
-              width <= 490
-                ? {
-                    x: 1600,
-                  }
-                : null
-            }
+            scroll={{
+              x: width <= 490 ? 1400 : 0,
+            }}
           />
         </div>
         <div className="div-pagination p-2">
-          <a>
+          <p>
             {`${i18n.t("total", { lng: lang })}`}:{" "}
             {dataFilter.length > 0 ? totalFilter : feedbackTotal}
-          </a>
+          </p>
           <div>
             <Pagination
               current={currentPage}
@@ -228,8 +213,10 @@ const Feedback = () => {
             textOk={`${i18n.t("delete", { lng: lang })}`}
             body={
               <>
-                <a>{`${i18n.t("want_delete_feedback", { lng: lang })}`}</a>
-                <a className="text-name-modal">{itemEdit?.full_name}</a>
+                <p className="m-0">{`${i18n.t("want_delete_feedback", {
+                  lng: lang,
+                })}`}</p>
+                <p className="text-name-modal m-0">{itemEdit?.full_name}</p>
               </>
             }
           />

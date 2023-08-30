@@ -30,13 +30,13 @@ import { Image, Select } from "antd";
 const ReportOverview = () => {
   const lang = useSelector(getLanguageState);
   const [startDate, setStartDate] = useState(
-    moment().subtract(30, "days").toISOString()
+    moment().subtract(30, "days").startOf("days").toISOString()
   );
   const [endDate, setEndDate] = useState(
-    moment().subtract(1, "days").toISOString()
+    moment().subtract(1, "days").endOf("days").startOf("days").toISOString()
   );
   const [sameStartDate, setSameStartDate] = useState(
-    moment(startDate).subtract(30, "days").toISOString()
+    moment(startDate).subtract(30, "days").endOf("days").toISOString()
   );
   const [sameEndDate, setSameEndDate] = useState(
     moment(endDate).subtract(30, "days").toISOString()
@@ -66,8 +66,8 @@ const ReportOverview = () => {
     getReportOrderDaily(
       0,
       40,
-      moment().subtract(30, "days").toISOString(),
-      moment().subtract(1, "day").toISOString(),
+      moment().subtract(30, "days").startOf("days").toISOString(),
+      moment().subtract(1, "day").endOf("days").toISOString(),
       "date_work"
     )
       .then((res) => {
@@ -81,10 +81,10 @@ const ReportOverview = () => {
     getReportOrderDaily(
       0,
       40,
-      moment(moment().subtract(30, "days").toISOString())
+      moment(moment().subtract(30, "days").startOf("days").toISOString())
         .subtract(30, "days")
         .toISOString(),
-      moment(moment().subtract(1, "days").toISOString())
+      moment(moment().subtract(1, "days").endOf("days").toISOString())
         .subtract(30, "days")
         .toISOString(),
       "date_work"
@@ -100,8 +100,8 @@ const ReportOverview = () => {
     getReportOrderByCity(
       0,
       20,
-      moment().subtract(30, "days").toISOString(),
-      moment().subtract(1, "days").toISOString(),
+      moment().subtract(30, "days").startOf("days").toISOString(),
+      moment().subtract(1, "days").endOf("days").toISOString(),
       0
     )
       .then((res) => {
@@ -112,10 +112,10 @@ const ReportOverview = () => {
     getReportOrderByCity(
       0,
       20,
-      moment(moment().subtract(30, "days").toISOString())
+      moment(moment().subtract(30, "days").startOf("days").toISOString())
         .subtract(30, "days")
         .toISOString(),
-      moment(moment().subtract(1, "days").toISOString())
+      moment(moment().subtract(1, "days").endOf("days").toISOString())
         .subtract(30, "days")
         .toISOString(),
       0
@@ -278,27 +278,6 @@ const ReportOverview = () => {
       }
     }
   }
-
-  // for (let i = 0; i < dataService.length; i++) {
-  //   dataServiceSame?.map((item) => {
-  //     if (item?._id === dataService[i]?._id) {
-  //       dataChartSerive.push({
-  //         name: dataService[i]?.title,
-  //         income: dataService[i]?.total_income,
-  //         percent_income:
-  //           ((dataService[i]?.total_income - item?.total_income) /
-  //             item?.total_income) *
-  //           100,
-  //         net_income: dataService[i]?.total_net_income,
-  //         percent_net_income:
-  //           ((dataService[i]?.total_net_income - item?.total_net_income) /
-  //             item?.total_net_income) *
-  //           100,
-  //         thumbnail: dataService[i]?.thumbnail,
-  //       });
-  //     }
-  //   });
-  // }
 
   if (dataService.length === dataServiceSame.length) {
     for (const element of dataService) {

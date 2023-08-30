@@ -539,7 +539,7 @@ const CleaningSchedule = (props) => {
       }
       setIdCollaborator("");
     }, 1000),
-    []
+    [id]
   );
 
   const onGetBill = useCallback(() => {
