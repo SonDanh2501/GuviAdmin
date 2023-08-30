@@ -1,26 +1,25 @@
-import { useLocation } from "react-router-dom";
-import "./styles.scss";
-import { useEffect, useState } from "react";
-import InputCustom from "../../../../../components/textInputCustom";
-import { useSelector } from "react-redux";
-import { getProvince } from "../../../../../redux/selectors/service";
+import { PlusOutlined } from "@ant-design/icons";
 import {
   Button,
   Checkbox,
   DatePicker,
   FloatButton,
   Input,
-  InputNumber,
   Select,
   Switch,
   TimePicker,
 } from "antd";
 import dayjs from "dayjs";
 import moment from "moment";
-import { errorNotify } from "../../../../../helper/toast";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { editExtendOptionApi } from "../../../../../api/service";
 import LoadingPagination from "../../../../../components/paginationLoading";
-import { PlusOutlined } from "@ant-design/icons";
+import InputCustom from "../../../../../components/textInputCustom";
+import { errorNotify } from "../../../../../helper/toast";
+import { getProvince } from "../../../../../redux/selectors/service";
+import "./styles.scss";
 
 const EditPrice = () => {
   const { state } = useLocation();
@@ -91,6 +90,7 @@ const EditPrice = () => {
     return cityOption.push({
       value: item?.code,
       label: item?.name,
+      district: item?.districts,
     });
   });
 
@@ -125,7 +125,6 @@ const EditPrice = () => {
             price: 0,
             price_type_increase: "",
             time_zone_apply: 0,
-            price_type_increase: "",
             rush_days: [],
           },
         ],
@@ -147,10 +146,11 @@ const EditPrice = () => {
     setData([...data]);
   };
 
-  const onChangeCity = (value, index) => {
+  const onChangeCity = (value, index, item) => {
     const arr = [...data];
     data[index].area_lv_1 = value;
     setData(arr);
+    setDataDistrict(item?.districts);
   };
 
   const onChangeFee = (value, index) => {
@@ -361,7 +361,7 @@ const EditPrice = () => {
                       options={cityOption}
                       style={{ width: "100%" }}
                       value={item?.area_lv_1}
-                      onChange={(e) => onChangeCity(e, index)}
+                      onChange={(e, label) => onChangeCity(e, index, label)}
                     />
                   </div>
                   <InputCustom

@@ -619,9 +619,9 @@ const OrderManage = (props) => {
         />
 
         <div className="mt-2 div-pagination-order p-2">
-          <a>
+          <p>
             {`${i18n.t("total", { lng: lang })}`}: {total}
-          </a>
+          </p>
           <div>
             <Pagination
               current={currentPage}
@@ -642,8 +642,8 @@ const OrderManage = (props) => {
             textOk={`${i18n.t("delete", { lng: lang })}`}
             body={
               <>
-                <a>{`${i18n.t("confirm_delete", { lng: lang })}`}</a>
-                <a className="text-name-modal">{item?.id_view}</a>
+                <p>{`${i18n.t("confirm_delete", { lng: lang })}`}</p>
+                <p className="text-name-modal">{item?.id_view}</p>
               </>
             }
           />

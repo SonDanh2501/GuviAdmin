@@ -60,16 +60,14 @@ const EditBusiness = (props) => {
   });
 
   province?.map((item) => {
-    [state.city]?.map((i) => {
-      if (i === item?.code) {
-        item?.districts?.map((district) => {
-          districtOption.push({
-            value: district?.code,
-            label: district?.name,
-          });
+    if (state?.city == item?.code) {
+      item?.districts?.map((district) => {
+        districtOption.push({
+          value: district?.code,
+          label: district?.name,
         });
-      }
-    });
+      });
+    }
   });
 
   dataDistrict?.map((item) => {
