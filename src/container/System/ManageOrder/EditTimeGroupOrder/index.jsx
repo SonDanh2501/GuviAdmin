@@ -1,27 +1,22 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Button, Checkbox, DatePicker, Drawer, Input, List } from "antd";
-import "./index.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { loadingAction } from "../../../../redux/actions/loading";
+import { Button, Checkbox, DatePicker, Drawer } from "antd";
 import dayjs from "dayjs";
-import _debounce from "lodash/debounce";
-import { DATA_TIME_TOTAL } from "../../../../api/fakeData";
 import moment from "moment";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { DATA_TIME_TOTAL } from "../../../../api/fakeData";
 import {
-  editTimeOrderApi,
   editTimeOrderScheduleApi,
   getOrderApi,
   getOrderByGroupOrderApi,
 } from "../../../../api/order";
-import LoadingPagination from "../../../../components/paginationLoading";
 import { errorNotify } from "../../../../helper/toast";
-import { getLanguageState } from "../../../../redux/selectors/auth";
 import i18n from "../../../../i18n";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import "./index.scss";
 const EditTimeOrder = (props) => {
   const {
     idOrder,
     dateWork,
-    code,
     status,
     kind,
     startPage,
@@ -118,9 +113,9 @@ const EditTimeOrder = (props) => {
 
   return (
     <>
-      <a className="text-add" onClick={showDrawer}>
+      <p className="text-add m-0" onClick={showDrawer}>
         {`${i18n.t("edit", { lng: lang })}`}
-      </a>
+      </p>
       <Drawer
         title={`${i18n.t("edit_work_time", { lng: lang })}`}
         placement="right"

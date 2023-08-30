@@ -56,9 +56,10 @@ export const addCollaboratorToOrderApi = (id, data) => {
   );
 };
 
-export const changeCollaboratorToOrderApi = (id) => {
+export const changeCollaboratorToOrderApi = (id, data) => {
   return axiosClient.post(
-    `/admin/order_manager/change_collaborator/${id}?lang=vi`
+    `/admin/order_manager/change_collaborator/${id}?lang=vi`,
+    data
   );
 };
 

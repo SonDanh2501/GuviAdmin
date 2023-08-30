@@ -36,6 +36,7 @@
         font-size: 16px;
         color: #727272;
         text-decoration: none;
+        margin: 0;
       }
 
       .text-money-remainder {
@@ -45,6 +46,7 @@
         font-size: 16px;
         color: #fb942e;
         text-decoration: none;
+        margin: 0;
       }
 
       .text-money-gift {
@@ -54,6 +56,7 @@
         font-size: 16px;
         color: #fb422e;
         text-decoration: none;
+        margin: 0;
       }
     }
     .div-item-wallet-last {
@@ -77,6 +80,7 @@
         font-weight: 500;
         font-size: 16px;
         color: #d931ff;
+        margin: 0;
         text-decoration: none;
       }
     }
@@ -128,7 +132,7 @@
     font-size: 14px;
     color: #000000;
     text-decoration: none;
-    margin-right: 5px;
+    margin-right: 0 5px 0 0;
   }
 
   .icon-deduction {
@@ -155,6 +159,7 @@
     font-size: 12px;
     color: #000000;
     text-decoration: none;
+    margin: 0;
   }
 }
 
@@ -169,6 +174,7 @@
     font-size: 12px;
     color: #000000;
     text-decoration: none;
+    margin: 0;
   }
 }
 
@@ -181,6 +187,7 @@
   font-size: 12px;
   color: #000000;
   text-decoration: none;
+  margin: 0;
 }
 .div-date-finance {
   display: flex;
@@ -245,6 +252,7 @@
     font-size: 12px;
     color: #000000;
     text-decoration: none;
+    margin: 0;
   }
 }
 
@@ -258,6 +266,7 @@
     font-size: 12px;
     color: #000000;
     text-decoration: none;
+    margin: 0;
   }
 
   .div-contai-wallet {
@@ -305,6 +314,7 @@
           font-size: 16px;
           color: #fb942e;
           text-decoration: none;
+          margin: 0;
         }
 
         .text-money-gift {
@@ -314,6 +324,7 @@
           font-size: 16px;
           color: #fb422e;
           text-decoration: none;
+          margin: 0;
         }
       }
       .div-item-wallet-last {
@@ -329,6 +340,7 @@
           font-size: 16px;
           color: #727272;
           text-decoration: none;
+          margin: 0;
         }
 
         .text-money-paypoint {
@@ -338,6 +350,7 @@
           font-size: 16px;
           color: #d931ff;
           text-decoration: none;
+          margin: 0;
         }
       }
     }
