@@ -1,34 +1,18 @@
-import {
-  Button,
-  Checkbox,
-  Drawer,
-  Input,
-  Modal,
-  Radio,
-  Select,
-  Space,
-} from "antd";
-import "./index.scss";
+import { Button, Checkbox } from "antd";
 import { memo, useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   createRoleApi,
   getSettingAccountApi,
 } from "../../../../../../api/configuration";
-import { errorNotify } from "../../../../../../helper/toast";
 import LoadingPagination from "../../../../../../components/paginationLoading";
-import { getListRoleAdmin } from "../../../../../../api/createAccount";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import InputCustom from "../../../../../../components/textInputCustom";
+import { errorNotify } from "../../../../../../helper/toast";
 import { getProvince } from "../../../../../../redux/selectors/service";
-import { SearchOutlined } from "@ant-design/icons";
+import "./index.scss";
 
 const CreateRole = (props) => {
-  const { setDataList, setTotal } = props;
-  const [state, setState] = useState({
-    address: [],
-    ratioCheckArea: 1,
-    isAreaManager: false,
-  });
   const [data, setData] = useState([]);
   const [keyApi, setKeyApi] = useState([]);
   const [nameRole, setNameRole] = useState("");
@@ -38,14 +22,11 @@ const CreateRole = (props) => {
   const province = useSelector(getProvince);
 
   province?.map((item) => {
-    cityOptions?.push({
+    return cityOptions?.push({
       value: item?.code,
       label: item?.name,
     });
   });
-
-  const [open, setOpen] = useState(false);
-
   useEffect(() => {
     getSettingAccountApi()
       .then((res) => {
@@ -56,20 +37,16 @@ const CreateRole = (props) => {
 
   const onChangeRole = (check, item, role) => {
     if (check) {
-      for (var i = 0; i < role?.permission?.length; i++) {
+      for (let i = 0; i < role?.permission?.length; i++) {
         const newArr = [...keyApi];
-        // if (role?.permission[i]?.key_api_parent?.includes(item?._id)) {
-        //   keyApi.push(role.permission[i]?._id);
-        //   setKeyApi(newArr);
-        //  } else
         if (item?.key_api_parent?.includes(role?.permission[i]?._id)) {
           keyApi.push(role.permission[i]?._id);
           setKeyApi(newArr);
         }
       }
 
-      for (var i = 0; i < data?.length; i++) {
-        for (var j = 0; j < data[i]?.permission?.length; j++) {
+      for (let i = 0; i < data?.length; i++) {
+        for (let j = 0; j < data[i]?.permission?.length; j++) {
           if (item?.key_api_parent?.includes(data[i]?.permission[j]?._id)) {
             setKeyApi([...keyApi, data[i]?.permission[j]?._id]);
           }
@@ -77,7 +54,7 @@ const CreateRole = (props) => {
       }
       setKeyApi([...keyApi, item?._id]);
     } else {
-      for (var i = 0; i < role?.permission?.length; i++) {
+      for (let i = 0; i < role?.permission?.length; i++) {
         if (role?.permission[i]?.key_api_parent?.includes(item?._id)) {
         }
       }
@@ -93,12 +70,9 @@ const CreateRole = (props) => {
       type_role: "",
       name_role: nameRole,
       id_key_api: keyApi,
-      // is_area_manager: state.ratioCheckArea === 2 ? true : false,
-      // area_manager_level_1: state.ratioCheckArea === 2 ? state.address : [],
     })
       .then((res) => {
         setIsLoading(false);
-        setOpen(false);
         navigate(-1);
       })
       .catch((err) => {
@@ -107,51 +81,23 @@ const CreateRole = (props) => {
         });
         setIsLoading(false);
       });
-  }, [nameRole, keyApi, state]);
+  }, [nameRole, keyApi, navigate]);
 
   return (
     <div>
-      <div className="div-input">
-        <a>Tên quyền</a>
-        <Input
-          placeholder="Vui lòng nhập tên quyền"
-          style={{ width: "50%", marginTop: 2 }}
-          onChange={(e) => setNameRole(e.target.value)}
-        />
-      </div>
-      {/* <div className="div-input mt-3">
-        <Radio.Group
-          onChange={(e) =>
-            setState({ ...state, ratioCheckArea: e.target.value })
-          }
-          value={state?.ratioCheckArea}
-        >
-          <Space direction="vertical">
-            <Radio value={1}>Toàn quốc</Radio>
-            <Radio value={2}>Theo khu vực</Radio>
-          </Space>
-        </Radio.Group>
-
-        {state.ratioCheckArea === 2 && (
-          <Select
-            options={cityOptions}
-            style={{ width: "50%", marginTop: 2 }}
-            onChange={(e) => {
-              setState({ ...state, address: e });
-            }}
-            mode="multiple"
-            suffixIcon={<SearchOutlined />}
-          />
-        )}
-      </div> */}
-
+      <InputCustom
+        title="Tên quyền"
+        placeholder="Vui lòng nhập tên quyền"
+        style={{ width: "50%" }}
+        onChange={(e) => setNameRole(e.target.value)}
+      />
       <div className="div-title-role">
         {data?.map((item, index) => {
           return (
             <div key={index} className="div-item-role">
-              <a className="title-role">
+              <p className="title-role">
                 {item?.permission[0]?.name_group_api}
-              </a>
+              </p>
               {item?.permission?.map((per, i) => {
                 return (
                   <div className="div-item-per" key={i}>
@@ -161,7 +107,7 @@ const CreateRole = (props) => {
                         onChangeRole(e.target.checked, per, item)
                       }
                     />
-                    <a className="text-name-per">{per?.name_api}</a>
+                    <p className="text-name-per">{per?.name_api}</p>
                   </div>
                 );
               })}

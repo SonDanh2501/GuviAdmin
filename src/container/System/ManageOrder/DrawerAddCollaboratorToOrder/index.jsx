@@ -90,6 +90,13 @@ const AddCollaboratorOrder = (props) => {
             message: err,
           });
           setIsLoading(false);
+          setOpen(false);
+          getOrderApi("", startPage, 20, type, kind, "", "", "", "", "")
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+            })
+            .catch((err) => {});
         });
     } else {
       addCollaboratorToOrderApi(idOrder, {
@@ -111,6 +118,13 @@ const AddCollaboratorOrder = (props) => {
             message: err,
           });
           setIsLoading(false);
+          setOpen(false);
+          getOrderApi("", startPage, 20, type, kind, "", "", "", "", "")
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+            })
+            .catch((err) => {});
         });
     }
   }, [id, idOrder, startPage, type, kind, check]);

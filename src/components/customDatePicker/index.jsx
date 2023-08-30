@@ -36,8 +36,8 @@ const CustomDatePicker = (props) => {
   const [title, setTitle] = useState();
 
   useEffect(() => {
-    setStart(defaults ? moment().subtract(30, "days") : "");
-    setEnd(defaults ? moment().subtract(1, "days") : "");
+    setStart(defaults ? moment().subtract(30, "days").startOf("days") : "");
+    setEnd(defaults ? moment().subtract(1, "days").endOf("days") : "");
     setTitle(
       defaults
         ? `${i18n.t("thirty_ago", {
@@ -61,8 +61,8 @@ const CustomDatePicker = (props) => {
 
   const onSelectTab = (item) => {
     setValueTab(item?.value);
-    const today = moment().subtract(1, "days").toISOString();
-    const startToday = moment().startOf("date").toISOString();
+    const today = moment().subtract(1, "days").startOf("days").toISOString();
+    const startToday = moment().startOf("date").startOf("days").toISOString();
     const startYesterday = moment()
       .subtract(1, "days")
       .startOf("date")
@@ -71,10 +71,22 @@ const CustomDatePicker = (props) => {
       .subtract(1, "days")
       .endOf("date")
       .toISOString();
-    const lastSeven = moment().subtract(1, "week").toISOString();
-    const lastThirty = moment().subtract(30, "days").toISOString();
-    const lastNinety = moment().subtract(90, "days").toISOString();
-    const startThisMonth = moment().startOf("month").toISOString();
+    const lastSeven = moment()
+      .subtract(1, "week")
+      .startOf("days")
+      .toISOString();
+    const lastThirty = moment()
+      .subtract(30, "days")
+      .startOf("days")
+      .toISOString();
+    const lastNinety = moment()
+      .subtract(90, "days")
+      .startOf("days")
+      .toISOString();
+    const startThisMonth = moment()
+      .startOf("month")
+      .startOf("days")
+      .toISOString();
     const endThisMonth = moment().endOf("days").toISOString();
     const startLastMonth = moment()
       .subtract(1, "months")
@@ -89,33 +101,45 @@ const CustomDatePicker = (props) => {
     switch (item?.value) {
       case "last_seven":
         setStartDate(lastSeven);
-        setStart(moment().subtract(1, "week"));
+        setStart(moment().subtract(1, "week").startOf("days"));
         setEndDate(today);
-        setEnd(moment().subtract(1, "days"));
-        setSameStart(moment(lastSeven).subtract(1, "week").toISOString());
-        setSameEnd(moment(today).subtract(1, "week").toISOString());
+        setEnd(moment().subtract(1, "days").endOf("days"));
+        setSameStart(
+          moment(lastSeven).subtract(1, "week").startOf("days").toISOString()
+        );
+        setSameEnd(
+          moment(today).subtract(1, "week").endOf("days").toISOString()
+        );
         break;
       case "last_thirty":
         setStartDate(lastThirty);
-        setStart(moment().subtract(30, "days"));
+        setStart(moment().subtract(30, "days").startOf("days"));
         setEndDate(today);
-        setEnd(moment().subtract(1, "days"));
-        setSameStart(moment(lastThirty).subtract(30, "days").toISOString());
-        setSameEnd(moment(today).subtract(30, "days").toISOString());
+        setEnd(moment().subtract(1, "days").endOf("days"));
+        setSameStart(
+          moment(lastThirty).subtract(30, "days").startOf("days").toISOString()
+        );
+        setSameEnd(
+          moment(today).subtract(30, "days").endOf("days").toISOString()
+        );
         break;
       case "last_ninety":
         setStartDate(lastNinety);
-        setStart(moment().subtract(90, "days"));
+        setStart(moment().subtract(90, "days").startOf("days"));
         setEndDate(today);
-        setEnd(moment().subtract(1, "days"));
-        setSameStart(moment(lastNinety).subtract(90, "days").toISOString());
-        setSameEnd(moment(today).subtract(90, "days").toISOString());
+        setEnd(moment().subtract(1, "days").endOf("days"));
+        setSameStart(
+          moment(lastNinety).subtract(90, "days").startOf("days").toISOString()
+        );
+        setSameEnd(
+          moment(today).subtract(90, "days").endOf("days").toISOString()
+        );
         break;
       case "this_month":
         setStartDate(startThisMonth);
-        setStart(moment().startOf("month"));
+        setStart(moment().startOf("month").startOf("days"));
         setEndDate(endThisMonth);
-        setEnd(moment().endOf("days"));
+        setEnd(moment().endOf("days").endOf("days"));
         const samDiff = moment(endThisMonth).diff(
           moment(startThisMonth),
           "day"
@@ -125,7 +149,11 @@ const CustomDatePicker = (props) => {
           .startOf("months")
           .toISOString();
         setSameStart(
-          moment().subtract(1, "months").startOf("months").toISOString()
+          moment()
+            .subtract(1, "months")
+            .startOf("months")
+            .startOf("days")
+            .toISOString()
         );
         setSameEnd(
           moment(sameStart).add(samDiff, "days").endOf("days").toISOString()
@@ -133,19 +161,23 @@ const CustomDatePicker = (props) => {
         break;
       case "last_month":
         setStartDate(startLastMonth);
-        setStart(moment().subtract(1, "months").startOf("months"));
+        setStart(
+          moment().subtract(1, "months").startOf("months").startOf("days")
+        );
         setEndDate(endLastMonth);
-        setEnd(moment().subtract(1, "months").endOf("months"));
+        setEnd(moment().subtract(1, "months").endOf("months").endOf("days"));
         setSameStart(
           moment(startLastMonth)
             .subtract(1, "months")
             .startOf("months")
+            .startOf("days")
             .toISOString()
         );
         setSameEnd(
           moment(endLastMonth)
             .subtract(1, "months")
             .endOf("months")
+            .endOf("days")
             .toISOString()
         );
         break;
@@ -153,28 +185,33 @@ const CustomDatePicker = (props) => {
         setStartDate(today);
         setStart(today);
         setEndDate(endNextDay);
-        setEnd(moment().add(3, "day"));
+        setEnd(moment().add(3, "day").startOf("days"));
         break;
       case "today":
         setStartDate(startToday);
-        setStart(moment().startOf("date"));
+        setStart(moment().startOf("days"));
         setEndDate(today);
         setEnd(moment());
         setSameStart(
-          moment(startToday).subtract(1, "day").startOf("day").toISOString()
+          moment(startToday).subtract(1, "day").startOf("days").toISOString()
         );
-        setSameEnd(moment(today).subtract(1, "day").endOf("day").toISOString());
+        setSameEnd(
+          moment(today).subtract(1, "day").endOf("days").toISOString()
+        );
         break;
       case "yesterday":
         setStartDate(startYesterday);
-        setStart(moment().subtract(1, "day").startOf("date"));
+        setStart(moment().subtract(1, "day").startOf("days"));
         setEndDate(endYesterday);
-        setEnd(moment().subtract(1, "day").endOf("date"));
+        setEnd(moment().subtract(1, "day").endOf("days"));
         setSameStart(
-          moment(startYesterday).subtract(1, "day").startOf("day").toISOString()
+          moment(startYesterday)
+            .subtract(1, "days")
+            .startOf("days")
+            .toISOString()
         );
         setSameEnd(
-          moment(endYesterday).subtract(1, "day").endOf("day").toISOString()
+          moment(endYesterday).subtract(1, "days").endOf("days").toISOString()
         );
         break;
       case "setting":
@@ -195,12 +232,12 @@ const CustomDatePicker = (props) => {
     const end = moment(value[1]).format("YYYY-MM-DD");
     const daySame = moment(end)
       .startOf("day")
-      .diff(moment(start).startOf("day"), "day");
+      .diff(moment(start).startOf("days"), "days");
     setSameStart(
-      moment(value[0]).subtract(daySame, "day").startOf("day").toISOString()
+      moment(value[0]).subtract(daySame, "days").startOf("days").toISOString()
     );
     setSameEnd(
-      moment(value[1]).subtract(daySame, "day").startOf("day").toISOString()
+      moment(value[1]).subtract(daySame, "days").startOf("days").toISOString()
     );
   };
 
@@ -215,7 +252,7 @@ const CustomDatePicker = (props) => {
           ? "date"
           : "quarter"
       )
-      .add(7, "hours")
+
       .toISOString();
     const dayEnd = moment(end)
       .endOf(
@@ -227,15 +264,17 @@ const CustomDatePicker = (props) => {
           ? "date"
           : "quarter"
       )
-      .add(7, "hours")
+
       .toISOString();
     setStartDate(dayStart);
     setEndDate(dayEnd);
     const sam = moment(dayEnd).diff(moment(dayStart), "day");
     setSameStart(
-      moment(dayStart).subtract(sam, "day").startOf("day").toISOString()
+      moment(dayStart).subtract(sam, "days").startOf("days").toISOString()
     );
-    setSameEnd(moment(dayEnd).subtract(sam, "day").endOf("day").toISOString());
+    setSameEnd(
+      moment(dayEnd).subtract(sam, "days").endOf("days").toISOString()
+    );
   }, []);
 
   return (

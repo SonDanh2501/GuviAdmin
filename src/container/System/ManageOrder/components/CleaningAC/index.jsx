@@ -186,7 +186,7 @@ const CleaningAC = (props) => {
       }
       setIdCollaborator("");
     }, 500),
-    []
+    [id]
   );
 
   useEffect(() => {

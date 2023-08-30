@@ -1,11 +1,11 @@
 import { Tabs } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import "./index.scss";
-import TableDeepCleaning from "./TableDeepCleaning";
-import { getLanguageState } from "../../../../redux/selectors/auth";
 import { useSelector } from "react-redux";
 import i18n from "../../../../i18n";
+import { getLanguageState } from "../../../../redux/selectors/auth";
+import TableDeepCleaning from "./TableDeepCleaning";
+import "./index.scss";
 
 const DeepCleaning = () => {
   const [status, setStatus] = useState("all");

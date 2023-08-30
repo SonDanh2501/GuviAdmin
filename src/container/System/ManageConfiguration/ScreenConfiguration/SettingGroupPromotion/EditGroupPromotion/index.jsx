@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
-import "./styles.scss";
 import { Button, Drawer, Select } from "antd";
-import InputCustom from "../../../../../../components/textInputCustom";
-import UploadImage from "../../../../../../components/uploadImage";
+import { useEffect, useState } from "react";
 import {
-  createGroupPromotion,
   editGroupPromotion,
   getGroupPromotion,
 } from "../../../../../../api/configuration";
-import { errorNotify } from "../../../../../../helper/toast";
 import LoadingPagination from "../../../../../../components/paginationLoading";
+import InputCustom from "../../../../../../components/textInputCustom";
+import UploadImage from "../../../../../../components/uploadImage";
+import { errorNotify } from "../../../../../../helper/toast";
+import "./styles.scss";
 
 const EditGroupPromotion = (props) => {
   const { setData, data, item } = props;
@@ -69,12 +68,12 @@ const EditGroupPromotion = (props) => {
 
   return (
     <>
-      <a
+      <p
         className="text-btn"
         onClick={() => setState({ ...state, open: true })}
       >
         Chỉnh sửa
-      </a>
+      </p>
 
       <Drawer
         title="Chỉnh sửa nhóm khuyến mãi"
@@ -84,7 +83,7 @@ const EditGroupPromotion = (props) => {
         headerStyle={{ height: 40, padding: 0 }}
       >
         <div className="form-input">
-          <a className="label-input">Tiêu đề</a>
+          <p className="label-input">Tiêu đề</p>
           {Object.entries(title).map(([key, value]) => {
             return (
               <div key={key} className="div-item-input">
@@ -128,7 +127,7 @@ const EditGroupPromotion = (props) => {
           />
         </div>
         <div className="form-input">
-          <a className="label-input">Mô tả</a>
+          <p className="label-input">Mô tả</p>
           {Object.entries(description).map(([key, value]) => {
             return (
               <div key={key} className="div-item-input">

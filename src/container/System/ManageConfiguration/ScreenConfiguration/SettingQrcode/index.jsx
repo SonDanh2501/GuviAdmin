@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { QRCode } from "react-qrcode-logo";
 import InputCustom from "../../../../../components/textInputCustom";
-import Logo from "../../../../../assets/images/LogoS.png";
 import "./styles.scss";
 
 const SettingQrCode = () => {
@@ -11,9 +10,6 @@ const SettingQrCode = () => {
       <InputCustom title="Link" onChange={(e) => setValue(e.target.value)} />
       <QRCode
         value={value}
-        // logoImage={Logo}
-        // logoWidth={50}
-        // logoHeight={20}
         ecLevel={"L"}
         removeQrCodeBehindLogo={true}
         renderAs={"svg"}

@@ -59,10 +59,10 @@ const AddGroupPromotion = (props) => {
         className="btn-add-group-promo"
         onClick={() => setState({ ...state, open: true })}
       >
-        <a className="text-btn">
+        <p className="text-btn">
           {" "}
           <i class="uil uil-plus-circle"></i> Tạo mới
-        </a>
+        </p>
       </div>
       <Drawer
         title="Thêm nhóm khuyến mãi"
@@ -72,7 +72,7 @@ const AddGroupPromotion = (props) => {
         headerStyle={{ height: 60, padding: 0 }}
       >
         <div className="form-input">
-          <a className="label-input">Tiêu đề</a>
+          <p className="label-input">Tiêu đề</p>
           {Object.entries(title).map(([key, value]) => {
             return (
               <div key={key} className="div-item-input">
@@ -115,7 +115,7 @@ const AddGroupPromotion = (props) => {
           />
         </div>
         <div className="form-input">
-          <a className="label-input">Mô tả</a>
+          <p className="label-input">Mô tả</p>
           {Object.entries(description).map(([key, value]) => {
             return (
               <div key={key} className="div-item-input">
