@@ -3,7 +3,6 @@ import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
-  activeReasonPunish,
   deleteReasonPunish,
   getReasonPunishApi,
 } from "../../../../../api/reasons";
@@ -22,21 +21,17 @@ const width = window.innerWidth;
 
 const ReasonPunish = () => {
   const [data, setData] = useState([]);
-  const [total, setTotal] = useState(0);
   const [itemEdit, setItemEdit] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [modal, setModal] = useState(false);
-  const [modalBlock, setModalBlock] = useState(false);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
 
   const toggle = () => setModal(!modal);
-  const toggleBlock = () => setModalBlock(!modalBlock);
   useEffect(() => {
     getReasonPunishApi(0, 20)
       .then((res) => {
         setData(res?.data);
-        setTotal(res?.totalItem);
       })
       .catch((err) => {});
   }, []);
@@ -50,7 +45,6 @@ const ReasonPunish = () => {
         getReasonPunishApi(0, 20)
           .then((res) => {
             setData(res?.data);
-            setTotal(res?.totalItem);
           })
           .catch((err) => {});
       })
@@ -62,46 +56,42 @@ const ReasonPunish = () => {
       });
   }, []);
 
-  const activePunish = useCallback((id, is_active) => {
-    setIsLoading(true);
-    if (is_active === true) {
-      activeReasonPunish(id, { is_active: false })
-        .then((res) => {
-          setIsLoading(false);
-          setModalBlock(false);
-          getReasonPunishApi(0, 20)
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          errorNotify({
-            message: err,
-          });
-        });
-    } else {
-      activeReasonPunish(id, { is_active: true })
-        .then((res) => {
-          setModalBlock(false);
-          setIsLoading(false);
-          getReasonPunishApi(0, 20)
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          errorNotify({
-            message: err,
-          });
-        });
-    }
-  }, []);
+  // const activePunish = useCallback((id, is_active) => {
+  //   setIsLoading(true);
+  //   if (is_active === true) {
+  //     activeReasonPunish(id, { is_active: false })
+  //       .then((res) => {
+  //         setIsLoading(false);
+  //         getReasonPunishApi(0, 20)
+  //           .then((res) => {
+  //             setData(res?.data);
+  //           })
+  //           .catch((err) => {});
+  //       })
+  //       .catch((err) => {
+  //         setIsLoading(false);
+  //         errorNotify({
+  //           message: err,
+  //         });
+  //       });
+  //   } else {
+  //     activeReasonPunish(id, { is_active: true })
+  //       .then((res) => {
+  //         setIsLoading(false);
+  //         getReasonPunishApi(0, 20)
+  //           .then((res) => {
+  //             setData(res?.data);
+  //           })
+  //           .catch((err) => {});
+  //       })
+  //       .catch((err) => {
+  //         setIsLoading(false);
+  //         errorNotify({
+  //           message: err,
+  //         });
+  //       });
+  //   }
+  // }, []);
 
   const columns = [
     {
@@ -109,32 +99,32 @@ const ReasonPunish = () => {
       render: (data) => {
         return (
           <div className="div-date-create-punish">
-            <a className="text-time">
+            <p className="text-time">
               {moment(new Date(data?.date_create)).format("DD/MM/yyy")}
-            </a>
-            <a className="text-time">
+            </p>
+            <p className="text-time">
               {moment(new Date(data?.date_create)).format("HH:mm")}
-            </a>
+            </p>
           </div>
         );
       },
     },
     {
       title: `${i18n.t("name", { lng: lang })}`,
-      render: (data) => <a>{data?.title?.[lang]}</a>,
+      render: (data) => <p className="m-0">{data?.title?.[lang]}</p>,
     },
     {
       title: `${i18n.t("describe", { lng: lang })}`,
-      render: (data) => <a>{data?.description?.[lang]}</a>,
+      render: (data) => <p className="m-0">{data?.description?.[lang]}</p>,
     },
     {
       title: `${i18n.t("apply", { lng: lang })}`,
       render: (data) => (
-        <a>
+        <p className="m-0">
           {data?.apply_user === "collaborator"
             ? `${i18n.t("collaborator", { lng: lang })}`
             : ""}
-        </a>
+        </p>
       ),
     },
     // {
@@ -166,9 +156,9 @@ const ReasonPunish = () => {
             placement="bottom"
             trigger={["click"]}
           >
-            <a>
+            <>
               <i class="uil uil-ellipsis-v"></i>
-            </a>
+            </>
           </Dropdown>
         </Space>
       ),
@@ -182,7 +172,6 @@ const ReasonPunish = () => {
         <EditReasonPubnish
           setIsLoading={setIsLoading}
           setData={setData}
-          setTotal={setTotal}
           id={itemEdit?._id}
         />
       ),
@@ -190,7 +179,9 @@ const ReasonPunish = () => {
     {
       key: 2,
       label: checkElement?.includes("delete_reason_punish_setting") && (
-        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
+        <p className="m-0" onClick={toggle}>{`${i18n.t("delete", {
+          lng: lang,
+        })}`}</p>
       ),
     },
   ];
@@ -199,11 +190,7 @@ const ReasonPunish = () => {
       <h3>{`${i18n.t("config_punish_reason", { lng: lang })}`}</h3>
       <div>
         {checkElement?.includes("create_reason_punish_setting") && (
-          <CreateReasonPubnish
-            setIsLoading={setIsLoading}
-            setData={setData}
-            setTotal={setTotal}
-          />
+          <CreateReasonPubnish setIsLoading={setIsLoading} setData={setData} />
         )}
       </div>
       <div className="mt-3">
@@ -237,8 +224,8 @@ const ReasonPunish = () => {
           textOk={`${i18n.t("delete", { lng: lang })}`}
           body={
             <>
-              <a>{`${i18n.t("want_remove_punish", { lng: lang })}`}</a>
-              <a className="text-name-modal">{itemEdit?.title?.[lang]}</a>
+              <p>{`${i18n.t("want_remove_punish", { lng: lang })}`}</p>
+              <p className="text-name-modal">{itemEdit?.title?.[lang]}</p>
             </>
           }
         />

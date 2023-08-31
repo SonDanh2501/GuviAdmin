@@ -1,19 +1,19 @@
-import { Button, Drawer, Input } from "antd";
+import { Button, Drawer } from "antd";
 import { useCallback, useState } from "react";
-import "./styles.scss";
+import { useSelector } from "react-redux";
 import {
   createReasonPunish,
   getReasonPunishApi,
 } from "../../../../../../../api/reasons";
-import { errorNotify } from "../../../../../../../helper/toast";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../../../redux/selectors/auth";
-import i18n from "../../../../../../../i18n";
-import InputCustom from "../../../../../../../components/textInputCustom";
 import InputLanguage from "../../../../../../../components/inputLanguage";
+import InputCustom from "../../../../../../../components/textInputCustom";
+import { errorNotify } from "../../../../../../../helper/toast";
+import i18n from "../../../../../../../i18n";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import "./styles.scss";
 
-const CreateReasonPubnish = (props) => {
-  const { setIsLoading, setData, setTotal } = props;
+const CreateReasonPunish = (props) => {
+  const { setIsLoading, setData } = props;
   const [title, setTitle] = useState({
     vi: "",
   });
@@ -43,7 +43,6 @@ const CreateReasonPubnish = (props) => {
         setOpen(false);
         getReasonPunishApi(0, 20).then((res) => {
           setData(res?.data);
-          setTotal(res?.totalItem);
         });
       })
       .catch((err) => {
@@ -66,7 +65,7 @@ const CreateReasonPubnish = (props) => {
         headerStyle={{ height: 50 }}
       >
         <div>
-          <a>{`${i18n.t("name", { lng: lang })}`}</a>
+          <p className="m-0">{`${i18n.t("name", { lng: lang })}`}</p>
           <InputLanguage
             state={title}
             setState={setTitle}
@@ -74,7 +73,7 @@ const CreateReasonPubnish = (props) => {
           />
         </div>
         <div className="mt-2">
-          <a>{`${i18n.t("describe", { lng: lang })}`}</a>
+          <p className="m-0">{`${i18n.t("describe", { lng: lang })}`}</p>
           <InputLanguage
             state={description}
             setState={setDescription}
@@ -100,4 +99,4 @@ const CreateReasonPubnish = (props) => {
   );
 };
 
-export default CreateReasonPubnish;
+export default CreateReasonPunish;

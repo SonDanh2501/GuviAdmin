@@ -1,21 +1,20 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import "./styles.scss";
+import { Button, Drawer, Dropdown, Image, Pagination, Space } from "antd";
+import moment from "moment";
+import { useSelector } from "react-redux";
 import {
   deleteFileImage,
   getListImageApi,
   postFile,
 } from "../../../../../api/file";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../redux/selectors/auth";
-import i18n from "../../../../../i18n";
-import { Button, Drawer, Dropdown, Image, Pagination, Space } from "antd";
-import { MoreOutlined } from "@ant-design/icons";
-import LoadingPagination from "../../../../../components/paginationLoading";
-import { errorNotify } from "../../../../../helper/toast";
-import moment from "moment";
 import ModalCustom from "../../../../../components/modalCustom";
+import LoadingPagination from "../../../../../components/paginationLoading";
 import resizeFile from "../../../../../helper/resizer";
+import { errorNotify } from "../../../../../helper/toast";
+import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import "./styles.scss";
 
 const ImageManage = () => {
   const [data, setData] = useState([]);
@@ -123,14 +122,18 @@ const ImageManage = () => {
     {
       key: "1",
       label: (
-        <a onClick={() => setModal(true)}>{`${i18n.t("delete", {
+        <p className="m-0" onClick={() => setModal(true)}>{`${i18n.t("delete", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
       ),
     },
     {
       key: "2",
-      label: <a onClick={showDrawer}>{`${i18n.t("detail", { lng: lang })}`}</a>,
+      label: (
+        <p className="m-0" onClick={showDrawer}>{`${i18n.t("detail", {
+          lng: lang,
+        })}`}</p>
+      ),
     },
   ];
 
@@ -139,8 +142,8 @@ const ImageManage = () => {
       <h5> {`${i18n.t("image_management", { lng: lang })}`}</h5>
       {itemDelete.length > 0 && (
         <div className="div-item-select-delete">
-          <a className="text-select">{itemDelete.length} được chọn</a>
-          <i class="uil uil-trash-alt" onClick={() => setModal(true)}></i>
+          <p className="text-select m-0">{itemDelete.length} được chọn</p>
+          <i className="uil uil-trash-alt" onClick={() => setModal(true)}></i>
         </div>
       )}
 
@@ -163,23 +166,24 @@ const ImageManage = () => {
           return (
             <div key={index} className={"div-item-list-image"}>
               <div className="div-name-image">
-                <a>{item?.title.slice(0, 10)}...</a>
+                <p className="m-0">{item?.title.slice(0, 10)}...</p>
                 <Dropdown
                   menu={{
                     items,
                   }}
                   trigger={"click"}
                 >
-                  <a
+                  <p
+                    className="m-0"
                     onClick={(e) => {
                       setItemEdit(item);
                       e.preventDefault();
                     }}
                   >
                     <Space>
-                      <i class="uil uil-ellipsis-v icon_menu"></i>
+                      <i className="uil uil-ellipsis-v icon_menu"></i>
                     </Space>
-                  </a>
+                  </p>
                 </Dropdown>
               </div>
               <Image src={item?.link_url} className="image" preview={false} />
@@ -189,9 +193,9 @@ const ImageManage = () => {
       </div>
 
       <div className="mt-5 div-pagination p-2">
-        <a>
+        <p>
           {`${i18n.t("total", { lng: lang })}`}: {total}
-        </a>
+        </p>
         <div>
           <Pagination
             current={currentPage}
@@ -211,8 +215,8 @@ const ImageManage = () => {
         headerStyle={{ height: 50 }}
       >
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <a style={{ fontSize: 14, fontWeight: 600 }}>Tên</a>
-          <a>{itemEdit?.title}</a>
+          <p style={{ fontSize: 14, fontWeight: 600, margin: 0 }}>Tên</p>
+          <p className="m-0">{itemEdit?.title}</p>
           <Image
             src={itemEdit?.link_url}
             style={{
@@ -223,18 +227,21 @@ const ImageManage = () => {
               marginTop: 10,
             }}
           />
-          <a style={{ fontSize: 14, fontWeight: 600 }}>Ngày tạo</a>
-          <a>{moment(itemEdit?.date_create).format("DD/MM/YYYY - HH:mm")}</a>
-          <a style={{ fontSize: 14, fontWeight: 600 }}>Link</a>
-          <a
+          <p style={{ fontSize: 14, fontWeight: 600, margin: 0 }}>Ngày tạo</p>
+          <p className="m-0">
+            {moment(itemEdit?.date_create).format("DD/MM/YYYY - HH:mm")}
+          </p>
+          <p style={{ fontSize: 14, fontWeight: 600, margin: 0 }}>Link</p>
+          <p
             style={{
               fontSize: 12,
               width: 400,
               wordWrap: "break-word",
+              margin: 0,
             }}
           >
             {itemEdit?.link_url}
-          </a>
+          </p>
           <Button
             onClick={() => navigator.clipboard.writeText(itemEdit?.link_url)}
             style={{ width: "auto", marginTop: 20 }}

@@ -1,15 +1,7 @@
 import { Dropdown, Pagination, Space, Table } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Button,
-  Col,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Row,
-} from "reactstrap";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import "./ReasonManage.scss";
 
 import {
@@ -21,21 +13,18 @@ import AddReason from "../../../../../components/addReason/addReason";
 import EditReason from "../../../../../components/editReason/editReason";
 import LoadingPagination from "../../../../../components/paginationLoading";
 import { errorNotify } from "../../../../../helper/toast";
+import i18n from "../../../../../i18n";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import {
   getElementState,
   getLanguageState,
 } from "../../../../../redux/selectors/auth";
-import { getReasonTotal } from "../../../../../redux/selectors/reason";
-import i18n from "../../../../../i18n";
-const width = window.innerWidth;
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const ReasonManage = () => {
   const dispatch = useDispatch();
-  const totalReason = useSelector(getReasonTotal);
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const [modal, setModal] = useState(false);
   const [modalBlock, setModalBlock] = useState(false);
@@ -44,6 +33,7 @@ const ReasonManage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     fetchReasons(0, 20)
@@ -85,31 +75,24 @@ const ReasonManage = () => {
   const blockReason = useCallback(
     (id, is_active) => {
       dispatch(loadingAction.loadingRequest(true));
-      if (is_active === true) {
-        activeReason(id, { is_active: false })
-          .then((res) => {
-            setModalBlock(false);
-            fetchReasons(startPage, 20)
-              .then((res) => {
-                setData(res?.data);
-                setTotal(res?.totalItem);
-              })
-              .catch((err) => {});
-          })
-          .catch((err) => console.log(err));
-      } else {
-        activeReason(id, { is_active: true })
-          .then((res) => {
-            setModalBlock(false);
-            fetchReasons(startPage, 20)
-              .then((res) => {
-                setData(res?.data);
-                setTotal(res?.totalItem);
-              })
-              .catch((err) => {});
-          })
-          .catch((err) => console.log(err));
-      }
+
+      activeReason(id, { is_active: is_active ? false : true })
+        .then((res) => {
+          setModalBlock(false);
+          dispatch(loadingAction.loadingRequest(false));
+          fetchReasons(startPage, 20)
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+            })
+            .catch((err) => {});
+        })
+        .catch((err) => {
+          dispatch(loadingAction.loadingRequest(false));
+          errorNotify({
+            message: err,
+          });
+        });
     },
     [startPage]
   );
@@ -143,7 +126,9 @@ const ReasonManage = () => {
     {
       key: "2",
       label: checkElement?.includes("delete_reason_cancel_setting") && (
-        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
+        <p className="m-0" onClick={toggle}>{`${i18n.t("delete", {
+          lng: lang,
+        })}`}</p>
       ),
     },
   ];
@@ -151,18 +136,18 @@ const ReasonManage = () => {
   const columns = [
     {
       title: `${i18n.t("reason", { lng: lang })}`,
-      render: (data) => <a>{data?.title?.[lang]}</a>,
+      render: (data) => <p className="m-0">{data?.title?.[lang]}</p>,
       width: "20%",
     },
     {
       title: `${i18n.t("describe", { lng: lang })}`,
-      render: (data) => <a>{data?.description?.[lang]}</a>,
+      render: (data) => <p className="m-0">{data?.description?.[lang]}</p>,
       width: "20%",
     },
     {
       title: `${i18n.t("applicable_object", { lng: lang })}`,
       render: (data) => (
-        <a>
+        <p className="m-0">
           {data?.apply_user === "admin"
             ? "Admin"
             : data?.apply_user === "customer"
@@ -170,7 +155,7 @@ const ReasonManage = () => {
             : data?.apply_user === "collaborator"
             ? `${i18n.t("collaborator", { lng: lang })}`
             : `${i18n.t("system", { lng: lang })}`}
-        </a>
+        </p>
       ),
       width: "20%",
     },
@@ -212,9 +197,9 @@ const ReasonManage = () => {
             }}
             placement="bottom"
           >
-            <a>
-              <i class="uil uil-ellipsis-v"></i>
-            </a>
+            <>
+              <i className="uil uil-ellipsis-v"></i>
+            </>
           </Dropdown>
         </Space>
       ),
@@ -247,19 +232,15 @@ const ReasonManage = () => {
                 },
               };
             }}
-            scroll={
-              width <= 490
-                ? {
-                    x: 1000,
-                  }
-                : null
-            }
+            scroll={{
+              x: width <= 490 ? 1000 : 0,
+            }}
           />
         </div>
         <div className="mt-2 div-pagination p-2">
-          <a>
+          <p>
             {`${i18n.t("total", { lng: lang })}`}: {total}
-          </a>
+          </p>
           <div>
             <Pagination
               current={currentPage}
@@ -275,11 +256,8 @@ const ReasonManage = () => {
           <Modal isOpen={modal} toggle={toggle}>
             <ModalHeader toggle={toggle}>Xóa lí do huỷ việc</ModalHeader>
             <ModalBody>
-              <a>
-                Bạn có chắc muốn xóa lí do{" "}
-                <a className="text-name-modal"> {itemEdit?.title?.vi} </a>này
-                không?
-              </a>
+              <p className="m-0">Bạn có chắc muốn xóa lí do này không?</p>
+              <p className="text-name-modal"> {itemEdit?.title?.vi} </p>
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={() => onDelete(itemEdit?._id)}>

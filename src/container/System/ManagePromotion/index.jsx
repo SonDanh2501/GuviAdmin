@@ -557,32 +557,30 @@ const ManagePromotions = () => {
               data?.type_discount === "partner_promotion" ? (
                 <></>
               ) : (
-                <div className="div-content-promotion">
-                  <p className="text-title-promotion">
-                    {data?.discount_unit === "amount"
-                      ? `Giảm giá ${formatMoney(
-                          data?.discount_max_price
-                        )} cho dịch vụ`
-                      : `Giảm giá ${
-                          data?.discount_value
-                        }%, tối đa ${formatMoney(data?.discount_max_price)} ${
-                          data?.price_min_order > 0
-                            ? ` đơn từ ${formatMoney(
-                                data?.price_min_order
-                              )} cho dịch vụ `
-                            : "cho dịch vụ"
-                        } `}
-                  </p>
+                <a className="text-title-promotion">
+                  {data?.discount_unit === "amount"
+                    ? `Giảm giá ${formatMoney(
+                        data?.discount_max_price
+                      )} cho dịch vụ`
+                    : `Giảm giá ${data?.discount_value}%, tối đa ${formatMoney(
+                        data?.discount_max_price
+                      )} ${
+                        data?.price_min_order > 0
+                          ? ` đơn từ ${formatMoney(
+                              data?.price_min_order
+                            )} cho dịch vụ `
+                          : "cho dịch vụ"
+                      } `}
                   {service?.map((item, index) => {
                     return (
-                      <p key={index} className="text-service">
+                      <a key={index} className="text-service">
                         {data?.service_apply?.includes(item?._id)
                           ? item?.title?.vi
                           : null}
-                      </p>
+                      </a>
                     );
                   })}
-                </div>
+                </a>
               )}
             </div>
           </div>
@@ -836,10 +834,10 @@ const ManagePromotions = () => {
       },
       align: "center",
       render: (data) => {
-        const startDate = moment(new Date(data?.limit_start_date)).format(
-          "DD/MM/YYYY"
-        );
-        const start = moment(new Date(data?.date_create)).format("DD/MM/YYYY");
+        const startDate = moment(data?.limit_start_date)
+          .utc()
+          .format("DD/MM/YYYY");
+        const start = moment(data?.date_create).utc().format("DD/MM/YYYY");
         return (
           <div
             onClick={() =>
@@ -871,9 +869,7 @@ const ManagePromotions = () => {
         );
       },
       render: (data) => {
-        const endDate = moment(new Date(data?.limit_end_date)).format(
-          "DD/MM/YYYY"
-        );
+        const endDate = moment(data?.limit_end_date).utc().format("DD/MM/YYYY");
         return (
           <div className="div-date-promotion">
             {data?.is_limit_date ? (

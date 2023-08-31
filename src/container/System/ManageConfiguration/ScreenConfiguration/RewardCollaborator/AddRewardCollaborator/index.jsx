@@ -73,14 +73,14 @@ const AddRewardCollaborator = () => {
   }, []);
 
   dataCity?.map((item) => {
-    cityOptions.push({
+    return cityOptions.push({
       value: item?.code,
       label: item?.name,
     });
   });
 
   service?.map((item) => {
-    serviceOptions.push({
+    return serviceOptions.push({
       value: item?._id,
       label: item?.title?.vi,
     });
@@ -253,11 +253,12 @@ const AddRewardCollaborator = () => {
     condition,
     isServiceApply,
     serviceApply,
+    navigate,
   ]);
 
   return (
     <div>
-      <a className="title-add">Thêm mới điều kiện thưởng CTV</a>
+      <p className="title-add">Thêm mới điều kiện thưởng CTV</p>
       <div className="mt-3">
         <Row>
           <Col span={8}>
@@ -283,14 +284,14 @@ const AddRewardCollaborator = () => {
               </Checkbox>
               {isLimitDate && (
                 <>
-                  <a className="label-input-date">Ngày bắt đầu</a>
+                  <p className="label-input-date">Ngày bắt đầu</p>
                   <DatePicker
                     style={{ width: "90%" }}
                     onChange={(date, dateString) =>
                       setStartDate(moment(dateString).toISOString())
                     }
                   />
-                  <a className="label-input-date">Ngày kết thúc</a>
+                  <p className="label-input-date">Ngày kết thúc</p>
                   <DatePicker
                     style={{ width: "90%" }}
                     onChange={(date, dateString) =>
@@ -382,14 +383,14 @@ const AddRewardCollaborator = () => {
                   <>
                     {indexOne !== 0 && (
                       <div className="div-or-and-one">
-                        <a className="text-and-or">
+                        <p className="text-and-or">
                           {item?.type_condition === "and" ? "And" : "Or"}
-                        </a>
+                        </p>
                       </div>
                     )}
                     <div className="div-condition-level-one" key={indexOne}>
                       <div className="div-money">
-                        <a className="label-money">Nhập số tiền</a>
+                        <p className="label-money">Nhập số tiền</p>
                         <InputNumber
                           formatter={(value) =>
                             `${value}  đ`.replace(
@@ -411,11 +412,11 @@ const AddRewardCollaborator = () => {
                             <>
                               {indexTwo !== 0 && (
                                 <div className="div-or-and-two">
-                                  <a className="text-and-or">
+                                  <p className="text-and-or">
                                     {conditionOne?.type_condition === "and"
                                       ? "And"
                                       : "Or"}
-                                  </a>
+                                  </p>
                                 </div>
                               )}
                               <div
@@ -428,12 +429,12 @@ const AddRewardCollaborator = () => {
                                       <>
                                         {indexCon !== 0 && (
                                           <div className="div-or-and-con">
-                                            <a className="text-and-or">
+                                            <p className="text-and-or">
                                               {conditionTwo?.type_condition ===
                                               "and"
                                                 ? "And"
                                                 : "Or"}
-                                            </a>
+                                            </p>
                                           </div>
                                         )}
                                         <div
@@ -502,7 +503,7 @@ const AddRewardCollaborator = () => {
                                               }
                                               className="delete-codition"
                                             >
-                                              <i class="uil uil-trash"></i>
+                                              <i className="uil uil-trash"></i>
                                             </div>
                                           )}
                                         </div>
@@ -517,7 +518,7 @@ const AddRewardCollaborator = () => {
                                     }
                                     className="btn-add-condition"
                                   >
-                                    <i class="uil uil-plus"></i>
+                                    <i className="uil uil-plus"></i>
                                   </Button>
                                   <Radio.Group
                                     defaultValue={conditionTwo?.type_condition}
@@ -546,7 +547,7 @@ const AddRewardCollaborator = () => {
                                   }
                                   className="btn-delete-codition-level-two"
                                 >
-                                  <i class="uil uil-trash"></i>
+                                  <i className="uil uil-trash"></i>
                                 </Button>
                               )}
                             </>
@@ -558,7 +559,7 @@ const AddRewardCollaborator = () => {
                           className="btn-add-codition-level-two"
                           onClick={() => onAddConditionLevelTwo(indexOne)}
                         >
-                          <a className="text-add">Thêm</a>
+                          <p className="text-add">Thêm</p>
                         </Button>
                         <Radio.Group
                           defaultValue={conditionOne?.type_condition}
@@ -581,7 +582,7 @@ const AddRewardCollaborator = () => {
                         className="btn-delete-condition-level-one"
                         onClick={() => onDeleteConditionLevelOne(indexOne)}
                       >
-                        <a className="text-btn ">Xoá</a>
+                        <p className="text-btn">Xoá</p>
                       </Button>
                     )}
                   </>
@@ -593,7 +594,7 @@ const AddRewardCollaborator = () => {
                   onClick={onAddConditionLevelOne}
                   className="btn-add-condition-level-one"
                 >
-                  <a className="text-add">Thêm</a>
+                  <p className="text-add">Thêm</p>
                 </Button>
                 <Radio.Group
                   defaultValue={item?.type_condition}

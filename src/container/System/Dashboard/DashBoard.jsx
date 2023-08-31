@@ -81,10 +81,10 @@ export default function Home() {
   const [codeCity, setCodeCity] = useState();
   const [nameCity, setNameCity] = useState("");
   const [startDate, setStartDate] = useState(
-    moment().subtract(30, "d").startOf("date").toISOString()
+    moment().subtract(30, "days").startOf("days").add(7, "hours").toISOString()
   );
   const [endDate, setEndDate] = useState(
-    moment(moment(new Date()).toISOString()).add(7, "hours").toISOString()
+    moment().endOf("days").add(7, "hours").toISOString()
   );
   const [dataChartServiceDetails, setDataChartServiceDetails] = useState([]);
   const historyActivity = useSelector(getHistoryActivitys);

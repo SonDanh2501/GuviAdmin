@@ -20,7 +20,6 @@ import { getLanguageState } from "../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../i18n";
 import InputCustom from "../../../../../../components/textInputCustom";
 import { getProvince } from "../../../../../../redux/selectors/service";
-const { TextArea } = Input;
 
 const AddGroupCustomer = () => {
   const [nameGroup, setNameGroup] = useState("");
@@ -55,7 +54,7 @@ const AddGroupCustomer = () => {
   const province = useSelector(getProvince);
 
   province?.map((item) => {
-    cityOptions?.push({
+    return cityOptions?.push({
       value: item?.code,
       label: item?.name,
     });
@@ -82,12 +81,12 @@ const AddGroupCustomer = () => {
   };
 
   const deleteConditionLevelIn = (index) => {
-    const arr = conditionLevel[0].condition_level_1.splice(index, 1);
+    conditionLevel[0].condition_level_1.splice(index, 1);
     setConditionLevel([...conditionLevel]);
   };
 
   const deleteConditionLevelOut = (index) => {
-    const arr = conditionLevelOut[0].condition_level_1.splice(index, 1);
+    conditionLevelOut[0].condition_level_1.splice(index, 1);
     setConditionLevelOut([...conditionLevelOut]);
   };
 
@@ -213,13 +212,13 @@ const AddGroupCustomer = () => {
         });
         setIsLoading(false);
       });
-  }, [nameGroup, description, conditionLevel, conditionLevelOut]);
+  }, [nameGroup, description, conditionLevel, conditionLevelOut, navigate]);
 
   return (
     <>
-      <a className="title-condition">{`${i18n.t("add_group_customer", {
+      <p className="title-condition">{`${i18n.t("add_group_customer", {
         lng: lang,
-      })}`}</a>
+      })}`}</p>
       <div className="div-input-name">
         <InputCustom
           title={`${i18n.t("name", { lng: lang })}`}
@@ -235,9 +234,9 @@ const AddGroupCustomer = () => {
         />
       </div>
       <div>
-        <a className="title-condition">{`${i18n.t("entry_conditions", {
+        <p className="title-condition">{`${i18n.t("entry_conditions", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
         {conditionLevel?.map((item, index) => {
           return (
             <div className="condition-level mb-2" key={index}>
@@ -253,9 +252,9 @@ const AddGroupCustomer = () => {
                           : "div-tab"
                       }
                     >
-                      <a className="text-tab">{`${i18n.t(i?.title, {
+                      <p className="text-tab">{`${i18n.t(i?.title, {
                         lng: lang,
-                      })}`}</a>
+                      })}`}</p>
                     </div>
                   );
                 })}
@@ -279,9 +278,9 @@ const AddGroupCustomer = () => {
                                     : "div-tab"
                                 }
                               >
-                                <a className="text-tab">{`${i18n.t(i?.title, {
+                                <p className="text-tab">{`${i18n.t(i?.title, {
                                   lng: lang,
-                                })}`}</a>
+                                })}`}</p>
                               </div>
                             );
                           })}
@@ -301,24 +300,24 @@ const AddGroupCustomer = () => {
                                 {idx !== 0 && (
                                   <div className="condition-btn">
                                     {condition?.type_condition === "and" ? (
-                                      <a className="text-btn">
+                                      <p className="text-btn">
                                         {" "}
                                         {`${i18n.t("and", { lng: lang })}`}
-                                      </a>
+                                      </p>
                                     ) : (
-                                      <a className="text-btn">
+                                      <p className="text-btn">
                                         {" "}
                                         {`${i18n.t("or", { lng: lang })}`}
-                                      </a>
+                                      </p>
                                     )}
                                   </div>
                                 )}
                                 <div className="div-input-condition">
                                   <div className="div-select-kind">
-                                    <a className="label-kind">
+                                    <p className="label-kind">
                                       {" "}
                                       {`${i18n.t("type", { lng: lang })}`}
-                                    </a>
+                                    </p>
                                     <Select
                                       onChange={(value) =>
                                         onChangeKindIn(value, idx, ix)
@@ -333,10 +332,10 @@ const AddGroupCustomer = () => {
                                   </div>
 
                                   <div className="div-select-kind">
-                                    <a className="label-kind">
+                                    <p className="label-kind">
                                       {" "}
                                       {`${i18n.t("method", { lng: lang })}`}
-                                    </a>
+                                    </p>
                                     <Select
                                       onChange={(value) =>
                                         onChangeOperatorIn(value, idx, ix)
@@ -374,10 +373,10 @@ const AddGroupCustomer = () => {
                                   </div>
 
                                   <div className="div-select-kind">
-                                    <a className="label-kind">{`${i18n.t(
+                                    <p className="label-kind">{`${i18n.t(
                                       "value",
                                       { lng: lang }
-                                    )}`}</a>
+                                    )}`}</p>
                                     {condition?.condition[idx].kind ===
                                     "gender" ? (
                                       <Select
@@ -517,9 +516,9 @@ const AddGroupCustomer = () => {
                           : "div-tab"
                       }
                     >
-                      <a className="text-tab">{`${i18n.t(i?.title, {
+                      <p className="text-tab">{`${i18n.t(i?.title, {
                         lng: lang,
-                      })}`}</a>
+                      })}`}</p>
                     </div>
                   );
                 })}
@@ -543,9 +542,9 @@ const AddGroupCustomer = () => {
                                     : "div-tab"
                                 }
                               >
-                                <a className="text-tab">{`${i18n.t(i?.title, {
+                                <p className="text-tab">{`${i18n.t(i?.title, {
                                   lng: lang,
-                                })}`}</a>
+                                })}`}</p>
                               </div>
                             );
                           })}
@@ -565,23 +564,23 @@ const AddGroupCustomer = () => {
                                 {idx !== 0 && (
                                   <div className="condition-btn">
                                     {condition?.type_condition === "and" ? (
-                                      <a className="text-btn">{`${i18n.t(
+                                      <p className="text-btn">{`${i18n.t(
                                         "and",
                                         { lng: lang }
-                                      )}`}</a>
+                                      )}`}</p>
                                     ) : (
-                                      <a className="text-btn">{`${i18n.t("or", {
+                                      <p className="text-btn">{`${i18n.t("or", {
                                         lng: lang,
-                                      })}`}</a>
+                                      })}`}</p>
                                     )}
                                   </div>
                                 )}
                                 <div className="div-input-condition">
                                   <div className="div-select-kind">
-                                    <a className="label-kind">{`${i18n.t(
+                                    <p className="label-kind">{`${i18n.t(
                                       "type",
                                       { lng: lang }
-                                    )}`}</a>
+                                    )}`}</p>
                                     <Select
                                       onChange={(value) =>
                                         onChangeKindOut(value, idx, ix)
@@ -596,10 +595,10 @@ const AddGroupCustomer = () => {
                                   </div>
 
                                   <div className="div-select-kind">
-                                    <a className="label-kind">{`${i18n.t(
+                                    <p className="label-kind">{`${i18n.t(
                                       "method",
                                       { lng: lang }
-                                    )}`}</a>
+                                    )}`}</p>
                                     <Select
                                       onChange={(value) =>
                                         onChangeOperatorOut(value, idx, ix)
@@ -637,10 +636,10 @@ const AddGroupCustomer = () => {
                                   </div>
 
                                   <div className="div-select-kind">
-                                    <a className="label-kind">{`${i18n.t(
+                                    <p className="label-kind">{`${i18n.t(
                                       "value",
                                       { lng: lang }
-                                    )}`}</a>
+                                    )}`}</p>
                                     {condition?.condition[idx].kind ===
                                     "gender" ? (
                                       <Select
