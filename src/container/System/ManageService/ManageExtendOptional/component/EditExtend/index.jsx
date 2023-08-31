@@ -639,9 +639,9 @@ const EditExtend = ({ idOption, setData, data }) => {
                           )}
                           onChange={(date, dateString) =>
                             onChangePriceTimeStart(
-                              moment(moment(dateString).toISOString())
-                                .add(7, "hours")
-                                .toISOString(),
+                              moment(
+                                moment(dateString).toISOString()
+                              ).toISOString(),
                               index
                             )
                           }
@@ -656,9 +656,9 @@ const EditExtend = ({ idOption, setData, data }) => {
                           )}
                           onChange={(date, dateString) =>
                             onChangePriceTimeEnd(
-                              moment(moment(dateString).toISOString())
-                                .add(7, "hours")
-                                .toISOString(),
+                              moment(
+                                moment(dateString).toISOString()
+                              ).toISOString(),
                               index
                             )
                           }
