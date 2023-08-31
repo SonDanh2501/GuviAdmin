@@ -1,31 +1,28 @@
-import React, { useCallback, useEffect, useState } from "react";
-import "./styles.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { getGroupCustomers } from "../../../../../redux/actions/customerAction";
-import {
-  getGroupCustomer,
-  getGroupCustomerTotalItem,
-} from "../../../../../redux/selectors/customer";
-import { Dropdown, Pagination, Space, Table } from "antd";
 import { UilEllipsisV } from "@iconscout/react-unicons";
+import { Dropdown, Pagination, Space, Switch, Table } from "antd";
 import moment from "moment";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   activeGroupCustomerApi,
   deleteGroupCustomerApi,
 } from "../../../../../api/configuration";
-import { errorNotify } from "../../../../../helper/toast";
+import ModalCustom from "../../../../../components/modalCustom";
 import LoadingPagination from "../../../../../components/paginationLoading";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import onToggle from "../../../../../assets/images/on-button.png";
-import offToggle from "../../../../../assets/images/off-button.png";
+import { errorNotify } from "../../../../../helper/toast";
+import i18n from "../../../../../i18n";
+import { getGroupCustomers } from "../../../../../redux/actions/customerAction";
 import {
   getElementState,
   getLanguageState,
 } from "../../../../../redux/selectors/auth";
-import i18n from "../../../../../i18n";
-import ModalCustom from "../../../../../components/modalCustom";
-const width = window.innerWidth;
+import {
+  getGroupCustomer,
+  getGroupCustomerTotalItem,
+} from "../../../../../redux/selectors/customer";
+import "./styles.scss";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const GroupCustomerManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -41,6 +38,7 @@ const GroupCustomerManage = () => {
   const toggleActive = () => setModalActive(!modalActive);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
+  const { width } = useWindowDimensions();
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -100,7 +98,9 @@ const GroupCustomerManage = () => {
   const columns = [
     {
       title: `${i18n.t("name", { lng: lang })}`,
-      render: (data) => <a className="text-name-group-cutomer">{data?.name}</a>,
+      render: (data) => (
+        <p className="text-name-group-customer">{data?.name}</p>
+      ),
     },
     {
       title: `${i18n.t("detail", { lng: lang })}`,
@@ -109,9 +109,9 @@ const GroupCustomerManage = () => {
     {
       title: `${i18n.t("date_create", { lng: lang })}`,
       render: (data) => (
-        <a className="text-date-group">
+        <p className="text-date-group">
           {moment(data?.date_create).format("DD/MM/YYYY HH:mm")}
-        </a>
+        </p>
       ),
     },
     {
@@ -121,10 +121,11 @@ const GroupCustomerManage = () => {
         return (
           <>
             {checkElement?.includes("active_group_customer_setting") && (
-              <img
-                className="img-unlock-banner"
-                src={data?.is_active ? onToggle : offToggle}
+              <Switch
+                checked={data?.is_active}
                 onClick={toggleActive}
+                style={{ backgroundColor: data?.is_active ? "#00cf3a" : "" }}
+                size="small"
               />
             )}
           </>
@@ -156,7 +157,8 @@ const GroupCustomerManage = () => {
     {
       key: 1,
       label: checkElement?.includes("edit_group_customer_setting") && (
-        <a
+        <p
+          className="m-0"
           onClick={() =>
             navigate(
               "/adminManage/manage-configuration/manage-group-customer/details-edit",
@@ -167,13 +169,15 @@ const GroupCustomerManage = () => {
           }
         >
           {`${i18n.t("detail", { lng: lang })}`}
-        </a>
+        </p>
       ),
     },
     {
       key: 2,
       label: checkElement?.includes("delete_group_customer_setting") && (
-        <a onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</a>
+        <p className="m-0" onClick={toggle}>{`${i18n.t("delete", {
+          lng: lang,
+        })}`}</p>
       ),
     },
   ];
@@ -183,7 +187,7 @@ const GroupCustomerManage = () => {
     const dataLength =
       listGroupCustomers?.length < 10 ? 10 : listGroupCustomers.length;
     const start = page * dataLength - dataLength;
-    startPage(start);
+    setStartPage(start);
     dispatch(
       getGroupCustomers.getGroupCustomersRequest({ start: start, length: 10 })
     );
@@ -200,7 +204,9 @@ const GroupCustomerManage = () => {
             )
           }
         >
-          <a>{`${i18n.t("add_group_customer", { lng: lang })}`}</a>
+          <p className="m-0">{`${i18n.t("add_group_customer", {
+            lng: lang,
+          })}`}</p>
         </div>
       )}
       <div className="mt-3 p-3 ">
@@ -216,20 +222,16 @@ const GroupCustomerManage = () => {
                 },
               };
             }}
-            scroll={
-              width <= 490
-                ? {
-                    x: 1000,
-                  }
-                : null
-            }
+            scroll={{
+              x: width <= 490 ? 1000 : 0,
+            }}
           />
         </div>
 
         <div className="div-pagination p-2">
-          <a>
+          <p>
             {`${i18n.t("total", { lng: lang })}`}: {totalGroupCustomers}
-          </a>
+          </p>
           <div>
             <Pagination
               current={currentPage}
@@ -252,8 +254,10 @@ const GroupCustomerManage = () => {
           handleCancel={toggle}
           body={
             <>
-              <a>{`${i18n.t("want_delete_group_customer", { lng: lang })}`}</a>
-              <a className="text-name-modal">{item?.name}</a>
+              <p className="m-0">{`${i18n.t("want_delete_group_customer", {
+                lng: lang,
+              })}`}</p>
+              <p className="text-name-modal m-0">{item?.name}</p>
             </>
           }
         />
@@ -276,11 +280,11 @@ const GroupCustomerManage = () => {
           handleOk={() => activeGroupCustomer(item?._id, item?.is_active)}
           body={
             <>
-              <a>
+              <p className="m-0">
                 {item?.is_active === true
                   ? `${i18n.t("want_lock_group_customer", { lng: lang })}`
                   : `${i18n.t("want_unlock_group_customer", { lng: lang })}`}
-              </a>
+              </p>
 
               <h3>{item?.title}</h3>
             </>

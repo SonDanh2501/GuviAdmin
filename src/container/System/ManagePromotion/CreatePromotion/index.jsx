@@ -797,6 +797,7 @@ const CreatePromotion = () => {
                               ...statePromo,
                               startDate: moment(date?.$d)
                                 .startOf("date")
+                                .add(7, "hours")
                                 .toISOString(),
                             });
                           }}
@@ -822,6 +823,7 @@ const CreatePromotion = () => {
                               ...statePromo,
                               endDate: moment(date?.$d)
                                 .endOf("date")
+                                .add(7, "hours")
                                 .toISOString(),
                             });
                           }}

@@ -30,16 +30,25 @@ import { Image, Select } from "antd";
 const ReportOverview = () => {
   const lang = useSelector(getLanguageState);
   const [startDate, setStartDate] = useState(
-    moment().subtract(30, "days").startOf("days").toISOString()
+    moment().subtract(30, "days").startOf("days").add(7, "hours").toISOString()
   );
   const [endDate, setEndDate] = useState(
-    moment().subtract(1, "days").endOf("days").startOf("days").toISOString()
+    moment()
+      .subtract(1, "days")
+      .endOf("days")
+      .startOf("days")
+      .add(7, "hours")
+      .toISOString()
   );
   const [sameStartDate, setSameStartDate] = useState(
-    moment(startDate).subtract(30, "days").endOf("days").toISOString()
+    moment(startDate)
+      .subtract(30, "days")
+      .endOf("days")
+      .add(7, "hours")
+      .toISOString()
   );
   const [sameEndDate, setSameEndDate] = useState(
-    moment(endDate).subtract(30, "days").toISOString()
+    moment(endDate).subtract(30, "days").add(7, "hours").toISOString()
   );
   const [data, setData] = useState([]);
   const [dataSame, setDataSame] = useState([]);
@@ -66,8 +75,12 @@ const ReportOverview = () => {
     getReportOrderDaily(
       0,
       40,
-      moment().subtract(30, "days").startOf("days").toISOString(),
-      moment().subtract(1, "day").endOf("days").toISOString(),
+      moment()
+        .subtract(30, "days")
+        .startOf("days")
+        .add(7, "hours")
+        .toISOString(),
+      moment().subtract(1, "day").endOf("days").add(7, "hours").toISOString(),
       "date_work"
     )
       .then((res) => {
@@ -81,11 +94,15 @@ const ReportOverview = () => {
     getReportOrderDaily(
       0,
       40,
-      moment(moment().subtract(30, "days").startOf("days").toISOString())
+      moment(moment().subtract(30, "days").toISOString())
         .subtract(30, "days")
+        .startOf("days")
+        .add(7, "hours")
         .toISOString(),
-      moment(moment().subtract(1, "days").endOf("days").toISOString())
+      moment(moment().subtract(1, "days").toISOString())
         .subtract(30, "days")
+        .endOf("days")
+        .add(7, "hours")
         .toISOString(),
       "date_work"
     )
@@ -100,8 +117,12 @@ const ReportOverview = () => {
     getReportOrderByCity(
       0,
       20,
-      moment().subtract(30, "days").startOf("days").toISOString(),
-      moment().subtract(1, "days").endOf("days").toISOString(),
+      moment()
+        .subtract(30, "days")
+        .startOf("days")
+        .add(7, "hours")
+        .toISOString(),
+      moment().subtract(1, "days").endOf("days").add(7, "hours").toISOString(),
       0
     )
       .then((res) => {
@@ -112,11 +133,15 @@ const ReportOverview = () => {
     getReportOrderByCity(
       0,
       20,
-      moment(moment().subtract(30, "days").startOf("days").toISOString())
+      moment(moment().subtract(30, "days").toISOString())
         .subtract(30, "days")
+        .startOf("days")
+        .add(7, "hours")
         .toISOString(),
-      moment(moment().subtract(1, "days").endOf("days").toISOString())
+      moment(moment().subtract(1, "days").toISOString())
         .subtract(30, "days")
+        .endOf("days")
+        .add(7, "hours")
         .toISOString(),
       0
     )
@@ -126,8 +151,12 @@ const ReportOverview = () => {
       .catch((err) => {});
 
     getReportServiceByArea(
-      moment().subtract(30, "days").toISOString(),
-      moment().subtract(1, "days").toISOString(),
+      moment()
+        .subtract(30, "days")
+        .startOf("days")
+        .add(7, "hours")
+        .toISOString(),
+      moment().subtract(1, "days").endOf("days").add(7, "hours").toISOString(),
       ""
     )
       .then((res) => {
@@ -137,9 +166,13 @@ const ReportOverview = () => {
     getReportServiceByArea(
       moment(moment().subtract(30, "days").toISOString())
         .subtract(30, "days")
+        .startOf("days")
+        .add(7, "hours")
         .toISOString(),
       moment(moment().subtract(1, "days").toISOString())
         .subtract(30, "days")
+        .endOf("days")
+        .add(7, "hours")
         .toISOString(),
       ""
     )
@@ -426,13 +459,13 @@ const ReportOverview = () => {
         />
         <div className="div-same">
           <p className="m-0 text-date-same">
-            Kỳ này: {moment(startDate).utc().format("DD/MM/YYYY")}-
+            Kỳ này: {moment(startDate).format("DD/MM/YYYY")}-
             {moment(endDate).format("DD/MM/YYYY")}
           </p>
         </div>
         <div className="div-same">
           <p className="m-0 text-date-same">
-            Kỳ trước: {moment(sameStartDate).utc().format("DD/MM/YYYY")}-
+            Kỳ trước: {moment(sameStartDate).format("DD/MM/YYYY")}-
             {moment(sameEndDate).format("DD/MM/YYYY")}
           </p>
         </div>

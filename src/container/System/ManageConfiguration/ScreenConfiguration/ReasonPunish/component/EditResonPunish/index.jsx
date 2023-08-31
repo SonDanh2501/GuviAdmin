@@ -1,21 +1,20 @@
-import { Button, Drawer, Input } from "antd";
+import { Button, Drawer } from "antd";
 import { useCallback, useEffect, useState } from "react";
-import "./styles.scss";
+import { useSelector } from "react-redux";
 import {
-  createReasonPunish,
   editReasonPunish,
   getDetailsReasonPunishApi,
   getReasonPunishApi,
 } from "../../../../../../../api/reasons";
-import { errorNotify } from "../../../../../../../helper/toast";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../../../redux/selectors/auth";
-import i18n from "../../../../../../../i18n";
-import InputCustom from "../../../../../../../components/textInputCustom";
 import InputLanguage from "../../../../../../../components/inputLanguage";
+import InputCustom from "../../../../../../../components/textInputCustom";
+import { errorNotify } from "../../../../../../../helper/toast";
+import i18n from "../../../../../../../i18n";
+import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import "./styles.scss";
 
 const EditReasonPubnish = (props) => {
-  const { id, setIsLoading, setData, setTotal } = props;
+  const { id, setIsLoading, setData } = props;
   const [title, setTitle] = useState({
     vi: "",
   });
@@ -57,7 +56,6 @@ const EditReasonPubnish = (props) => {
         setOpen(false);
         getReasonPunishApi(0, 20).then((res) => {
           setData(res?.data);
-          setTotal(res?.totalItem);
         });
       })
       .catch((err) => {
@@ -69,7 +67,9 @@ const EditReasonPubnish = (props) => {
   }, [id, title, description, note]);
   return (
     <div>
-      <a onClick={showDrawer}>{`${i18n.t("edit", { lng: lang })}`}</a>
+      <p className="m-0" onClick={showDrawer}>{`${i18n.t("edit", {
+        lng: lang,
+      })}`}</p>
       <Drawer
         title="Tạo lí do"
         placement="right"
@@ -78,7 +78,7 @@ const EditReasonPubnish = (props) => {
         headerStyle={{ height: 50 }}
       >
         <div>
-          <a>{`${i18n.t("name", { lng: lang })}`}</a>
+          <p className="m-0">{`${i18n.t("name", { lng: lang })}`}</p>
           <InputLanguage
             state={title}
             setState={setTitle}
@@ -86,7 +86,7 @@ const EditReasonPubnish = (props) => {
           />
         </div>
         <div className="mt-2">
-          <a>{`${i18n.t("describe", { lng: lang })}`}</a>
+          <p className="m-0">{`${i18n.t("describe", { lng: lang })}`}</p>
 
           <InputLanguage
             state={description}

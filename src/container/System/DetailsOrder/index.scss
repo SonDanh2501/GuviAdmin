@@ -312,13 +312,25 @@
               margin: 0;
             }
 
-            .count-ac {
-              font-family: "Roboto";
-              font-style: normal;
-              font-weight: 400;
-              font-size: 14px;
-              color: #ffb411;
-              margin: 0;
+            .div-price-count {
+              display: flex;
+              flex-direction: row;
+              .count-ac {
+                font-family: "Roboto";
+                font-style: normal;
+                font-weight: 400;
+                font-size: 14px;
+                color: #ffb411;
+                margin: 0;
+              }
+              .price-ac {
+                font-family: "Roboto";
+                font-style: normal;
+                font-weight: 400;
+                font-size: 14px;
+                color: #000000;
+                margin: 0 0 0 10px;
+              }
             }
           }
         }
@@ -791,6 +803,84 @@
             font-weight: 400;
             font-size: 12px !important;
             color: #19202c;
+          }
+        }
+      }
+
+      .div-detail-order-service {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .title-service {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 500;
+          font-size: 12px;
+          color: #000000;
+          margin: 0;
+          width: 100px;
+        }
+        .text-colon {
+          font-family: "Roboto";
+          font-style: normal;
+          font-weight: 600;
+          font-size: 12px;
+          color: #000000;
+          margin: 0 5px 0 0;
+        }
+
+        .div-detail-service {
+          display: flex;
+          flex-direction: column;
+
+          .text-service {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 12px;
+            color: #000000;
+            margin: 0;
+          }
+
+          .detail-service-ac {
+            display: flex;
+            flex-direction: column;
+            width: 250px;
+            .div-item-ac {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+              .text-type-ac {
+                font-family: "Roboto";
+                font-style: normal;
+                font-weight: 400;
+                font-size: 12px;
+                color: #000000;
+                margin: 0;
+              }
+
+              .div-price-count {
+                display: flex;
+                flex-direction: row;
+                .count-ac {
+                  font-family: "Roboto";
+                  font-style: normal;
+                  font-weight: 400;
+                  font-size: 12px;
+                  color: #ffb411;
+                  margin: 0;
+                }
+                .price-ac {
+                  font-family: "Roboto";
+                  font-style: normal;
+                  font-weight: 400;
+                  font-size: 12px;
+                  color: #000000;
+                  margin: 0 0 0 10px;
+                }
+              }
+            }
           }
         }
       }

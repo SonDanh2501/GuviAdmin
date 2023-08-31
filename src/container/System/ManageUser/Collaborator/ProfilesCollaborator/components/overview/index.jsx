@@ -170,7 +170,7 @@ const Overview = ({ id }) => {
                         alignItems: "center",
                       }}
                     >
-                      <p className="title-status mr-2">Trạng thái: </p>
+                      <p className="title-status mr-2 m-0">Trạng thái: </p>
                       <p
                         className={
                           item?.status === "pending"
