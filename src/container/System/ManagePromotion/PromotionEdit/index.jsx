@@ -410,20 +410,23 @@ const EditPromotion = () => {
     setTimeApply(arr);
   };
 
-  const onActive = useCallback((id, is_active) => {
-    setIsLoading(true);
-    activePromotion(id, { is_active: is_active ? false : true })
-      .then((res) => {
-        setIsLoading(false);
-        setIsActive(false);
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
+  const onActive = useCallback(
+    (id, is_active) => {
+      setIsLoading(true);
+      activePromotion(id, { is_active: is_active ? false : true })
+        .then((res) => {
+          setIsLoading(false);
+          setIsActive(res);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err,
+          });
+          setIsLoading(false);
         });
-        setIsLoading(false);
-      });
-  }, []);
+    },
+    [setIsActive]
+  );
 
   const onDelete = useCallback(
     (id) => {
