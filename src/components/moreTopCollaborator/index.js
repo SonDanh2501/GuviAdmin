@@ -31,8 +31,16 @@ const MoreTopCollaborator = () => {
   const isLoadMore = () => {
     dispatch(
       getTopCollaborator.getTopCollaboratorRequest({
-        startDate: moment().startOf("month").toISOString(),
-        endDate: moment().endOf("month").toISOString(),
+        startDate: moment()
+          .startOf("month")
+          .startOf("days")
+          .add(7, "hours")
+          .toISOString(),
+        endDate: moment()
+          .endOf("month")
+          .endOf("days")
+          .add(7, "hours")
+          .toISOString(),
         start: topCollaborator.length,
         length: 10,
       })
@@ -40,8 +48,11 @@ const MoreTopCollaborator = () => {
   };
 
   const onChangeDate = useCallback((start, end) => {
-    const dayStart = moment(start).toISOString();
-    const dayEnd = moment(end).toISOString();
+    const dayStart = moment(start)
+      .startOf("days")
+      .add(7, "hours")
+      .toISOString();
+    const dayEnd = moment(end).endOf("days").add(7, "hours").toISOString();
     getTopCollaboratorApi(dayStart, dayEnd, 0, 10)
       .then((res) => setData(res.data))
       .catch((err) => console.log(err));

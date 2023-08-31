@@ -12,13 +12,14 @@
   justify-content: center;
 }
 
-.text-name-group-cutomer {
+.text-name-group-customer {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
   color: black;
   text-decoration: none;
+  margin: 0;
 }
 
 .text-date-group {
@@ -28,6 +29,7 @@
   font-size: 14px;
   color: black;
   text-decoration: none;
+  margin: 0;
 }
 
 @media screen and (max-width: 490px) {

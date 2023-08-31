@@ -788,20 +788,30 @@ const DetailsOrder = () => {
                               ? `${i18n.t("Máy lạnh", { lng: lang })}`
                               : ""}
                           </p>
-                          <div className="detail-service-ac">
-                            {dataGroup?.service?.optional_service[0]?.extend_optional?.map(
-                              (item, index) => {
-                                return (
-                                  <div key={index} className="div-item-ac">
-                                    <p className="text-type-ac">
-                                      {item?.title[lang]}
-                                    </p>
-                                    <p className="count-ac">x{item?.count}</p>
-                                  </div>
-                                );
-                              }
-                            )}
-                          </div>
+                          {dataGroup?.service?._id?.kind ===
+                            "ve_sinh_may_lanh" && (
+                            <div className="detail-service-ac">
+                              {dataGroup?.service?.optional_service[0]?.extend_optional?.map(
+                                (item, index) => {
+                                  return (
+                                    <div key={index} className="div-item-ac">
+                                      <p className="text-type-ac">
+                                        {item?.title[lang]}
+                                      </p>
+                                      <div className="div-price-count">
+                                        <p className="count-ac">
+                                          x{item?.count}
+                                        </p>
+                                        <p className="price-ac">
+                                          + {formatMoney(item?.price)}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  );
+                                }
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="div-details-order">

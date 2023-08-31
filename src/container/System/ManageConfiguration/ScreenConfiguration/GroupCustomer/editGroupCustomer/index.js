@@ -2,29 +2,28 @@ import { Button, DatePicker, Input, Select } from "antd";
 import dayjs from "dayjs";
 import moment from "moment";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import {
   editGroupCustomerApi,
   getDetailsGroupCustomerApi,
 } from "../../../../../../api/configuration";
 import {
   DATA_GENDER,
+  DATA_IS_ACTIVE,
+  DATA_IS_STAFF,
   DATA_KIND,
   DATA_OPERTATOR,
   DATA_OPERTATOR_GENDER,
   MONTH,
-  DATA_IS_ACTIVE,
-  DATA_IS_STAFF,
 } from "../../../../../../api/fakeData";
 import LoadingPagination from "../../../../../../components/paginationLoading";
-import { errorNotify } from "../../../../../../helper/toast";
-import "./index.scss";
-import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../../../../redux/selectors/auth";
-import i18n from "../../../../../../i18n";
 import InputCustom from "../../../../../../components/textInputCustom";
+import { errorNotify } from "../../../../../../helper/toast";
+import i18n from "../../../../../../i18n";
+import { getLanguageState } from "../../../../../../redux/selectors/auth";
 import { getProvince } from "../../../../../../redux/selectors/service";
-const { TextArea } = Input;
+import "./index.scss";
 
 const EditGroupCustomer = () => {
   const { state } = useLocation();
@@ -61,7 +60,7 @@ const EditGroupCustomer = () => {
   const province = useSelector(getProvince);
 
   province?.map((item) => {
-    cityOptions?.push({
+    return cityOptions?.push({
       value: item?.code,
       label: item?.name,
     });
@@ -119,12 +118,12 @@ const EditGroupCustomer = () => {
   };
 
   const deleteConditionLevelIn = (index) => {
-    const arr = conditionLevel[0].condition_level_1.splice(index, 1);
+    conditionLevel[0].condition_level_1.splice(index, 1);
     setConditionLevel([...conditionLevel]);
   };
 
   const deleteConditionLevelOut = (index) => {
-    const arr = conditionLevelOut[0].condition_level_1.splice(index, 1);
+    conditionLevelOut[0].condition_level_1.splice(index, 1);
     setConditionLevelOut([...conditionLevelOut]);
   };
 
@@ -254,9 +253,9 @@ const EditGroupCustomer = () => {
 
   return (
     <>
-      <a className="title-condition">{`${i18n.t("edit_group_customer", {
+      <p className="title-condition">{`${i18n.t("edit_group_customer", {
         lng: lang,
-      })}`}</a>
+      })}`}</p>
       <div className="div-input-name">
         <InputCustom
           title={`${i18n.t("name", { lng: lang })}`}
@@ -274,9 +273,9 @@ const EditGroupCustomer = () => {
         />
       </div>
       <div>
-        <a className="title-condition">{`${i18n.t("entry_conditions", {
+        <p className="title-condition">{`${i18n.t("entry_conditions", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
         {conditionLevel?.map((item, index) => {
           return (
             <div className="condition-level mb-2" key={index}>
@@ -292,9 +291,9 @@ const EditGroupCustomer = () => {
                           : "div-tab"
                       }
                     >
-                      <a className="text-tab">{`${i18n.t(i?.title, {
+                      <p className="text-tab">{`${i18n.t(i?.title, {
                         lng: lang,
-                      })}`}</a>
+                      })}`}</p>
                     </div>
                   );
                 })}
@@ -318,9 +317,9 @@ const EditGroupCustomer = () => {
                                     : "div-tab"
                                 }
                               >
-                                <a className="text-tab">{`${i18n.t(i?.title, {
+                                <p className="text-tab">{`${i18n.t(i?.title, {
                                   lng: lang,
-                                })}`}</a>
+                                })}`}</p>
                               </div>
                             );
                           })}
@@ -340,84 +339,75 @@ const EditGroupCustomer = () => {
                                 {idx !== 0 && (
                                   <div className="condition-btn">
                                     {condition?.type_condition === "and" ? (
-                                      <a className="text-btn">{`${i18n.t(
+                                      <p className="text-btn">{`${i18n.t(
                                         "and",
                                         { lng: lang }
-                                      )}`}</a>
+                                      )}`}</p>
                                     ) : (
-                                      <a className="text-btn">{`${i18n.t("or", {
+                                      <p className="text-btn">{`${i18n.t("or", {
                                         lng: lang,
-                                      })}`}</a>
+                                      })}`}</p>
                                     )}
                                   </div>
                                 )}
                                 <div className="div-input-condition">
-                                  <div className="div-select-kind">
-                                    <a className="label-kind">{`${i18n.t(
-                                      "type",
-                                      { lng: lang }
-                                    )}`}</a>
-                                    <Select
-                                      onChange={(value) =>
-                                        onChangeKindIn(value, idx, ix)
-                                      }
-                                      value={it?.kind}
-                                      className="select-kind"
-                                      options={DATA_KIND}
-                                      showSearch
-                                      filterOption={(input, option) =>
-                                        (option?.label ?? "").includes(input)
-                                      }
-                                    />
-                                  </div>
+                                  <InputCustom
+                                    title={`${i18n.t("type", { lng: lang })}`}
+                                    onChange={(value) =>
+                                      onChangeKindIn(value, idx, ix)
+                                    }
+                                    value={it?.kind}
+                                    className="select-kind"
+                                    options={DATA_KIND}
+                                    showSearch
+                                    filterOption={(input, option) =>
+                                      (option?.label ?? "").includes(input)
+                                    }
+                                    select={true}
+                                  />
+                                  <InputCustom
+                                    title={`${i18n.t("method", { lng: lang })}`}
+                                    onChange={(value) =>
+                                      onChangeOperatorIn(value, idx, ix)
+                                    }
+                                    className="select-kind"
+                                    value={it?.operator}
+                                    options={
+                                      condition?.condition[idx].kind ===
+                                      "gender"
+                                        ? DATA_OPERTATOR_GENDER
+                                        : condition?.condition[idx].kind ===
+                                          "area"
+                                        ? [
+                                            {
+                                              value: "==",
+                                              label: "Bằng",
+                                            },
+                                            {
+                                              value: "!=",
+                                              label: "Khác",
+                                            },
+                                          ]
+                                        : condition?.condition[idx].kind ===
+                                            "is_active" ||
+                                          condition?.condition[idx].kind ===
+                                            "is_staff"
+                                        ? [
+                                            {
+                                              value: "==",
+                                              label: "Bằng",
+                                            },
+                                          ]
+                                        : DATA_OPERTATOR
+                                    }
+                                    select={true}
+                                  />
 
                                   <div className="div-select-kind">
-                                    <a className="label-kind">{`${i18n.t(
-                                      "method",
-                                      { lng: lang }
-                                    )}`}</a>
-                                    <Select
-                                      onChange={(value) =>
-                                        onChangeOperatorIn(value, idx, ix)
-                                      }
-                                      className="select-kind"
-                                      value={it?.operator}
-                                      options={
-                                        condition?.condition[idx].kind ===
-                                        "gender"
-                                          ? DATA_OPERTATOR_GENDER
-                                          : condition?.condition[idx].kind ===
-                                            "area"
-                                          ? [
-                                              {
-                                                value: "==",
-                                                label: "Bằng",
-                                              },
-                                              {
-                                                value: "!=",
-                                                label: "Khác",
-                                              },
-                                            ]
-                                          : condition?.condition[idx].kind ===
-                                              "is_active" ||
-                                            condition?.condition[idx].kind ===
-                                              "is_staff"
-                                          ? [
-                                              {
-                                                value: "==",
-                                                label: "Bằng",
-                                              },
-                                            ]
-                                          : DATA_OPERTATOR
-                                      }
-                                    />
-                                  </div>
-
-                                  <div className="div-select-kind">
-                                    <a className="label-kind">{`${i18n.t(
+                                    <p className="label-kind">{`${i18n.t(
                                       "value",
                                       { lng: lang }
-                                    )}`}</a>
+                                    )}`}</p>
                                     {condition?.condition[idx].kind ===
                                     "gender" ? (
                                       <Select
@@ -527,7 +517,7 @@ const EditGroupCustomer = () => {
                                     <></>
                                   ) : (
                                     <i
-                                      class="uil uil-times-circle"
+                                      className="uil uil-times-circle"
                                       onClick={() => deleteConditionIn(idx, ix)}
                                     ></i>
                                   )}
@@ -563,9 +553,9 @@ const EditGroupCustomer = () => {
       </div>
 
       <div>
-        <a className="title-condition">{`${i18n.t("output_conditions", {
+        <p className="title-condition">{`${i18n.t("output_conditions", {
           lng: lang,
-        })}`}</a>
+        })}`}</p>
         {conditionLevelOut?.map((item, index) => {
           return (
             <div className="condition-level mb-2" key={index}>
@@ -581,9 +571,9 @@ const EditGroupCustomer = () => {
                           : "div-tab"
                       }
                     >
-                      <a className="text-tab">{`${i18n.t(i?.title, {
+                      <p className="text-tab">{`${i18n.t(i?.title, {
                         lng: lang,
-                      })}`}</a>
+                      })}`}</p>
                     </div>
                   );
                 })}
@@ -607,9 +597,9 @@ const EditGroupCustomer = () => {
                                     : "div-tab"
                                 }
                               >
-                                <a className="text-tab">{`${i18n.t(i?.title, {
+                                <p className="text-tab">{`${i18n.t(i?.title, {
                                   lng: lang,
-                                })}`}</a>
+                                })}`}</p>
                               </div>
                             );
                           })}
@@ -629,80 +619,71 @@ const EditGroupCustomer = () => {
                                 {idx !== 0 && (
                                   <div className="condition-btn">
                                     {condition?.type_condition === "and" ? (
-                                      <a className="text-btn">{`${i18n.t(
+                                      <p className="text-btn">{`${i18n.t(
                                         "and",
                                         { lng: lang }
-                                      )}`}</a>
+                                      )}`}</p>
                                     ) : (
-                                      <a className="text-btn">{`${i18n.t("or", {
+                                      <p className="text-btn">{`${i18n.t("or", {
                                         lng: lang,
-                                      })}`}</a>
+                                      })}`}</p>
                                     )}
                                   </div>
                                 )}
                                 <div className="div-input-condition">
-                                  <div className="div-select-kind">
-                                    <a className="label-kind">{`${i18n.t(
-                                      "type",
-                                      { lng: lang }
-                                    )}`}</a>
-                                    <Select
-                                      onChange={(value) =>
-                                        onChangeKindOut(value, idx, ix)
-                                      }
-                                      value={it?.kind}
-                                      className="select-kind"
-                                      options={DATA_KIND}
-                                    />
-                                  </div>
+                                  <InputCustom
+                                    title={`${i18n.t("type", { lng: lang })}`}
+                                    onChange={(value) =>
+                                      onChangeKindOut(value, idx, ix)
+                                    }
+                                    value={it?.kind}
+                                    className="select-kind"
+                                    options={DATA_KIND}
+                                    select={true}
+                                  />
+                                  <InputCustom
+                                    title={`${i18n.t("method", { lng: lang })}`}
+                                    onChange={(value) =>
+                                      onChangeOperatorOut(value, idx, ix)
+                                    }
+                                    className="select-kind"
+                                    value={it?.operator}
+                                    options={
+                                      condition?.condition[idx].kind ===
+                                      "gender"
+                                        ? DATA_OPERTATOR_GENDER
+                                        : condition?.condition[idx].kind ===
+                                          "area"
+                                        ? [
+                                            {
+                                              value: "==",
+                                              label: "Bằng",
+                                            },
+                                            {
+                                              value: "!=",
+                                              label: "Khác",
+                                            },
+                                          ]
+                                        : condition?.condition[idx].kind ===
+                                            "is_active" ||
+                                          condition?.condition[idx].kind ===
+                                            "is_staff"
+                                        ? [
+                                            {
+                                              value: "==",
+                                              label: "Bằng",
+                                            },
+                                          ]
+                                        : DATA_OPERTATOR
+                                    }
+                                    select={true}
+                                  />
 
                                   <div className="div-select-kind">
-                                    <a className="label-kind">{`${i18n.t(
-                                      "method",
-                                      { lng: lang }
-                                    )}`}</a>
-                                    <Select
-                                      onChange={(value) =>
-                                        onChangeOperatorOut(value, idx, ix)
-                                      }
-                                      className="select-kind"
-                                      value={it?.operator}
-                                      options={
-                                        condition?.condition[idx].kind ===
-                                        "gender"
-                                          ? DATA_OPERTATOR_GENDER
-                                          : condition?.condition[idx].kind ===
-                                            "area"
-                                          ? [
-                                              {
-                                                value: "==",
-                                                label: "Bằng",
-                                              },
-                                              {
-                                                value: "!=",
-                                                label: "Khác",
-                                              },
-                                            ]
-                                          : condition?.condition[idx].kind ===
-                                              "is_active" ||
-                                            condition?.condition[idx].kind ===
-                                              "is_staff"
-                                          ? [
-                                              {
-                                                value: "==",
-                                                label: "Bằng",
-                                              },
-                                            ]
-                                          : DATA_OPERTATOR
-                                      }
-                                    />
-                                  </div>
-
-                                  <div className="div-select-kind">
-                                    <a className="label-kind">{`${i18n.t(
+                                    <p className="label-kind">{`${i18n.t(
                                       "value",
                                       { lng: lang }
-                                    )}`}</a>
+                                    )}`}</p>
                                     {condition?.condition[idx].kind ===
                                     "gender" ? (
                                       <Select
@@ -812,7 +793,7 @@ const EditGroupCustomer = () => {
                                     <></>
                                   ) : (
                                     <i
-                                      class="uil uil-times-circle"
+                                      className="uil uil-times-circle"
                                       onClick={() =>
                                         deleteConditionOut(idx, ix)
                                       }

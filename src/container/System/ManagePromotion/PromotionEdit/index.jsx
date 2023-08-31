@@ -458,12 +458,8 @@ const EditPromotion = () => {
         statePromo?.serviceApply?.length > 0 ? [statePromo?.serviceApply] : [],
       brand: statePromo?.namebrand.toUpperCase(),
       is_limit_date: statePromo?.limitedDate,
-      limit_start_date: statePromo?.limitedDate
-        ? moment(statePromo?.startDate).toISOString()
-        : null,
-      limit_end_date: statePromo?.limitedDate
-        ? moment(statePromo?.endDate).toISOString()
-        : null,
+      limit_start_date: statePromo?.limitedDate ? statePromo?.startDate : null,
+      limit_end_date: statePromo?.limitedDate ? statePromo?.endDate : null,
       type_date_apply: statePromo?.typeDateApply,
       is_loop: statePromo?.isApplyTimeUse,
       day_loop: statePromo?.isApplyTimeUse ? timeApply : [],
@@ -858,12 +854,17 @@ const EditPromotion = () => {
                   <>
                     <div className="div-time-select">
                       <div className="div-time">
-                        <p>{`${i18n.t("start_date", { lng: lang })}`}</p>
+                        <p className="m-0">{`${i18n.t("start_date", {
+                          lng: lang,
+                        })}`}</p>
                         <DatePicker
                           onChange={(date, dateString) => {
                             setStatePromo({
                               ...statePromo,
-                              startDate: dateString,
+                              startDate: moment(date?.$d)
+                                .startOf("date")
+                                .add(7, "hours")
+                                .toISOString(),
                             });
                           }}
                           style={{ width: "90%", marginTop: 3 }}
@@ -891,7 +892,10 @@ const EditPromotion = () => {
                           onChange={(date, dateString) =>
                             setStatePromo({
                               ...statePromo,
-                              endDate: dateString,
+                              endDate: moment(date?.$d)
+                                .endOf("date")
+                                .add(7, "hours")
+                                .toISOString(),
                             })
                           }
                           style={{ width: "90%", marginTop: 2 }}
