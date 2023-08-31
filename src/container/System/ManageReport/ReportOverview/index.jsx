@@ -33,22 +33,30 @@ const ReportOverview = () => {
     moment().subtract(30, "days").startOf("days").add(7, "hours").toISOString()
   );
   const [endDate, setEndDate] = useState(
-    moment()
-      .subtract(1, "days")
-      .endOf("days")
+    moment().subtract(1, "days").endOf("days").add(7, "hours").toISOString()
+  );
+  const [sameStartDate, setSameStartDate] = useState(
+    moment(
+      moment()
+        .subtract(30, "days")
+        .startOf("days")
+        .add(7, "hours")
+        .toISOString()
+    )
+      .subtract(30, "days")
       .startOf("days")
       .add(7, "hours")
       .toISOString()
   );
-  const [sameStartDate, setSameStartDate] = useState(
-    moment(startDate)
+  const [sameEndDate, setSameEndDate] = useState(
+    moment(
+      moment().subtract(1, "days").endOf("days").add(7, "hours").toISOString()
+    )
       .subtract(30, "days")
+      .subtract(1, "days")
       .endOf("days")
       .add(7, "hours")
       .toISOString()
-  );
-  const [sameEndDate, setSameEndDate] = useState(
-    moment(endDate).subtract(30, "days").add(7, "hours").toISOString()
   );
   const [data, setData] = useState([]);
   const [dataSame, setDataSame] = useState([]);
@@ -72,17 +80,7 @@ const ReportOverview = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getReportOrderDaily(
-      0,
-      40,
-      moment()
-        .subtract(30, "days")
-        .startOf("days")
-        .add(7, "hours")
-        .toISOString(),
-      moment().subtract(1, "day").endOf("days").add(7, "hours").toISOString(),
-      "date_work"
-    )
+    getReportOrderDaily(0, 40, startDate, endDate, "date_work")
       .then((res) => {
         setData(res?.data);
         setTotalNetIncome(res?.total[0]?.total_net_income);
@@ -91,21 +89,7 @@ const ReportOverview = () => {
       })
       .catch((err) => {});
 
-    getReportOrderDaily(
-      0,
-      40,
-      moment(moment().subtract(30, "days").toISOString())
-        .subtract(30, "days")
-        .startOf("days")
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment().subtract(1, "days").toISOString())
-        .subtract(30, "days")
-        .endOf("days")
-        .add(7, "hours")
-        .toISOString(),
-      "date_work"
-    )
+    getReportOrderDaily(0, 40, sameStartDate, sameEndDate, "date_work")
       .then((res) => {
         setDataSame(res?.data);
         setTotalNetIncomeSame(res?.total[0]?.total_net_income);
@@ -114,68 +98,24 @@ const ReportOverview = () => {
       })
       .catch((err) => {});
 
-    getReportOrderByCity(
-      0,
-      20,
-      moment()
-        .subtract(30, "days")
-        .startOf("days")
-        .add(7, "hours")
-        .toISOString(),
-      moment().subtract(1, "days").endOf("days").add(7, "hours").toISOString(),
-      0
-    )
+    getReportOrderByCity(0, 20, startDate, endDate, 0)
       .then((res) => {
         setDataArea(res?.data);
       })
       .catch((err) => {});
 
-    getReportOrderByCity(
-      0,
-      20,
-      moment(moment().subtract(30, "days").toISOString())
-        .subtract(30, "days")
-        .startOf("days")
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment().subtract(1, "days").toISOString())
-        .subtract(30, "days")
-        .endOf("days")
-        .add(7, "hours")
-        .toISOString(),
-      0
-    )
+    getReportOrderByCity(0, 20, sameStartDate, sameEndDate, 0)
       .then((res) => {
         setDataAreSame(res?.data);
       })
       .catch((err) => {});
 
-    getReportServiceByArea(
-      moment()
-        .subtract(30, "days")
-        .startOf("days")
-        .add(7, "hours")
-        .toISOString(),
-      moment().subtract(1, "days").endOf("days").add(7, "hours").toISOString(),
-      ""
-    )
+    getReportServiceByArea(startDate, endDate, "")
       .then((res) => {
         setDataService(res?.data);
       })
       .catch((err) => {});
-    getReportServiceByArea(
-      moment(moment().subtract(30, "days").toISOString())
-        .subtract(30, "days")
-        .startOf("days")
-        .add(7, "hours")
-        .toISOString(),
-      moment(moment().subtract(1, "days").toISOString())
-        .subtract(30, "days")
-        .endOf("days")
-        .add(7, "hours")
-        .toISOString(),
-      ""
-    )
+    getReportServiceByArea(sameStartDate, sameEndDate, "")
       .then((res) => {
         setDataServiceSame(res?.data);
       })
@@ -460,13 +400,13 @@ const ReportOverview = () => {
         <div className="div-same">
           <p className="m-0 text-date-same">
             Kỳ này: {moment(startDate).format("DD/MM/YYYY")}-
-            {moment(endDate).format("DD/MM/YYYY")}
+            {moment(endDate).utc().format("DD/MM/YYYY")}
           </p>
         </div>
         <div className="div-same">
           <p className="m-0 text-date-same">
             Kỳ trước: {moment(sameStartDate).format("DD/MM/YYYY")}-
-            {moment(sameEndDate).format("DD/MM/YYYY")}
+            {moment(sameEndDate).utc().format("DD/MM/YYYY")}
           </p>
         </div>
       </div>
@@ -848,3 +788,5 @@ const ReportOverview = () => {
 };
 
 export default ReportOverview;
+
+//Today 31/08/2023 Le Minh Dang!!!!!!

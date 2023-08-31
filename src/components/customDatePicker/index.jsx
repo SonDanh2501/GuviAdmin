@@ -72,6 +72,8 @@ const CustomDatePicker = (props) => {
       .add(7, "hours")
       .toISOString();
     const startToday = moment().startOf("days").add(7, "hours").toISOString();
+    const endToday = moment().endOf("days").add(7, "hours").toISOString();
+
     const startYesterday = moment()
       .subtract(1, "days")
       .startOf("date")
@@ -131,6 +133,7 @@ const CustomDatePicker = (props) => {
         setSameEnd(
           moment(todayEnd)
             .subtract(1, "week")
+            .subtract(1, "days")
             .endOf("days")
             .add(7, "hours")
             .toISOString()
@@ -151,6 +154,7 @@ const CustomDatePicker = (props) => {
         setSameEnd(
           moment(todayEnd)
             .subtract(30, "days")
+            .subtract(1, "days")
             .endOf("days")
             .add(7, "hours")
             .toISOString()
@@ -159,7 +163,7 @@ const CustomDatePicker = (props) => {
       case "last_ninety":
         setStartDate(lastNinety);
         setStart(moment().subtract(90, "days").startOf("days"));
-        setEndDate(today);
+        setEndDate(todayEnd);
         setEnd(moment().subtract(1, "days").endOf("days"));
         setSameStart(
           moment(lastNinety)
@@ -169,8 +173,9 @@ const CustomDatePicker = (props) => {
             .toISOString()
         );
         setSameEnd(
-          moment(today)
+          moment(todayEnd)
             .subtract(90, "days")
+            .subtract(1, "days")
             .endOf("days")
             .add(7, "hours")
             .toISOString()
@@ -221,7 +226,7 @@ const CustomDatePicker = (props) => {
             .toISOString()
         );
         setSameEnd(
-          moment(endLastMonth)
+          moment(startLastMonth)
             .subtract(1, "months")
             .endOf("months")
             .endOf("days")
@@ -238,7 +243,7 @@ const CustomDatePicker = (props) => {
       case "today":
         setStartDate(startToday);
         setStart(moment().startOf("days"));
-        setEndDate(moment().endOf("days").add(7, "hours").toISOString());
+        setEndDate(endToday);
         setEnd(moment());
         setSameStart(
           moment(startToday)

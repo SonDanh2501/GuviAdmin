@@ -5,6 +5,7 @@ import {
   DatePicker,
   FloatButton,
   Input,
+  InputNumber,
   Select,
   Switch,
   TimePicker,
@@ -20,10 +21,12 @@ import InputCustom from "../../../../../components/textInputCustom";
 import { errorNotify } from "../../../../../helper/toast";
 import { getProvince } from "../../../../../redux/selectors/service";
 import "./styles.scss";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+const { Option } = Select;
 
 const EditPrice = () => {
   const { state } = useLocation();
-  const { id, data_price } = state || {};
+  const { id, data_price, title } = state || {};
   const [dataDistrict, setDataDistrict] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([
@@ -63,6 +66,7 @@ const EditPrice = () => {
     },
   ]);
   const province = useSelector(getProvince);
+  const lang = useSelector(getLanguageState);
   const cityOption = [];
   const districtOption = [];
   const hourFormat = "HH:mm";
@@ -246,17 +250,15 @@ const EditPrice = () => {
     const arr = [...data];
     data[index].price_option_holiday[indexHoliday].time_start = moment(
       value?.$d
-    )
-      .add(7, "hour")
-      .toISOString();
+    ).toISOString();
     setData(arr);
   };
 
   const onChangeTimeEndHoliday = (value, index, indexHoliday) => {
     const arr = [...data];
-    data[index].price_option_holiday[indexHoliday].time_end = moment(value?.$d)
-      .add(7, "hour")
-      .toISOString();
+    data[index].price_option_holiday[indexHoliday].time_end = moment(
+      value?.$d
+    ).toISOString();
     setData(arr);
   };
 
@@ -339,7 +341,7 @@ const EditPrice = () => {
   return (
     <div className="div-container-edit-price">
       <div className="div-head-edit-price">
-        <h6>Chỉnh sửa giá</h6>
+        <h6>Chỉnh sửa giá {title[lang]}</h6>
         <Button
           type="primary"
           className="btn-edit-price"
@@ -405,8 +407,286 @@ const EditPrice = () => {
                     />
                   </div>
                 </div>
+                <div className="div-day-price">
+                  <div className="div-holiday-price">
+                    <p className="m-0">Theo ngày lễ</p>
+                    {item?.price_option_holiday?.map(
+                      (itemHoliday, indexHoliday) => {
+                        const timeStart = moment(itemHoliday?.time_start)
+                          .utc()
+                          .format(dateFormat);
+                        const timeEnd = moment(itemHoliday?.time_end)
+                          .utc()
+                          .format(dateFormat);
+                        return (
+                          <>
+                            <div
+                              className="div-item-holiday-price"
+                              key={indexHoliday}
+                            >
+                              <div className="div-chose-date">
+                                <div className="div-date-pick">
+                                  <p className="label-pick">Ngày bắt đầu</p>
+                                  <DatePicker
+                                    format={dateFormat}
+                                    allowClear={false}
+                                    value={dayjs(timeStart, dateFormat)}
+                                    onChange={(date) =>
+                                      onChangeTimeStartHoliday(
+                                        date,
+                                        index,
+                                        indexHoliday
+                                      )
+                                    }
+                                  />
+                                </div>
+                                <div className="div-date-pick">
+                                  <p className="label-pick">Ngày kết thúc</p>
+                                  <DatePicker
+                                    format={dateFormat}
+                                    allowClear={false}
+                                    value={dayjs(timeEnd, dateFormat)}
+                                    onChange={(date) =>
+                                      onChangeTimeEndHoliday(
+                                        date,
+                                        index,
+                                        indexHoliday
+                                      )
+                                    }
+                                  />
+                                </div>
+                              </div>
+                              <div className="div-chose-row">
+                                <div className="div-input-holiday ">
+                                  <p className="label-input">Giá trị</p>
+                                  {itemHoliday?.price_type_increase ===
+                                  "amount_accumulate" ? (
+                                    <InputNumber
+                                      style={{ width: "95%" }}
+                                      addonAfter="đ"
+                                      defaultValue={itemHoliday?.price}
+                                      min={0}
+                                      formatter={(value) =>
+                                        `${value}`.replace(
+                                          /\B(?=(\d{3})+(?!\d))/g,
+                                          ","
+                                        )
+                                      }
+                                      onChange={(e) =>
+                                        onChangePriceHoliday(
+                                          e,
+                                          index,
+                                          indexHoliday
+                                        )
+                                      }
+                                    />
+                                  ) : (
+                                    <InputNumber
+                                      style={{ width: "95%" }}
+                                      addonAfter="%"
+                                      min={0}
+                                      max={100}
+                                      value={itemHoliday?.price}
+                                      onChange={(e) =>
+                                        onChangePriceHoliday(
+                                          e,
+                                          index,
+                                          indexHoliday
+                                        )
+                                      }
+                                    />
+                                  )}
+                                </div>
+                                <div className="div-input-holiday ">
+                                  <InputCustom
+                                    title="Loại"
+                                    select={true}
+                                    value={itemHoliday?.price_type_increase}
+                                    options={[
+                                      {
+                                        value: "amount_accumulate",
+                                        label: "Tăng theo giá tiền",
+                                      },
+                                      {
+                                        value: "percent_accumulate",
+                                        label: "Tăng theo phần trăm",
+                                      },
+                                    ]}
+                                    style={{ width: "100%" }}
+                                    onChange={(e) =>
+                                      onChangeTypeHoliday(
+                                        e,
+                                        index,
+                                        indexHoliday
+                                      )
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <Button
+                              className="btn-delete-price-holiday"
+                              onClick={() =>
+                                onDeletePriceHoliday(index, indexHoliday)
+                              }
+                            >
+                              Xoá
+                            </Button>
+                          </>
+                        );
+                      }
+                    )}
+                    <Button
+                      className="btn-add-price-holiday"
+                      onClick={() => onAddPriceHoliday(index)}
+                    >
+                      Thêm giá ngày lễ
+                    </Button>
+                  </div>
+                  <div className="div-rush-day-price">
+                    <p className="m-0">Theo ngày trong tuần</p>
+                    {item?.price_option_rush_day?.map((itemRush, indexRush) => {
+                      return (
+                        <>
+                          <div
+                            className="div-item-rush-day-price"
+                            key={indexRush}
+                          >
+                            <InputCustom
+                              title="Chọn thứ"
+                              select={true}
+                              options={dateOptions}
+                              mode="multiple"
+                              value={itemRush?.rush_days}
+                              onChange={(e) =>
+                                onChangeDayRush(e, index, indexRush)
+                              }
+                            />
+                            <div className="div-chose-time">
+                              <div className="div-input-time">
+                                <p className="label-time">Thời gian bắt đầu</p>
+                                <TimePicker
+                                  defaultValue={dayjs(
+                                    itemRush?.start_time.slice(0, 5),
+                                    hourFormat
+                                  )}
+                                  format={hourFormat}
+                                  style={{ width: "100%" }}
+                                  allowClear={false}
+                                  onChange={(time, timeString) =>
+                                    onChangeTimeStartRush(
+                                      timeString,
+                                      index,
+                                      indexRush
+                                    )
+                                  }
+                                />
+                              </div>
+                              <div className="div-input-time">
+                                <p className="label-time">Thời gian kết thúc</p>
+                                <TimePicker
+                                  defaultValue={dayjs(
+                                    itemRush?.end_time.slice(0, 5),
+                                    hourFormat
+                                  )}
+                                  format={hourFormat}
+                                  style={{ width: "100%" }}
+                                  allowClear={false}
+                                  onChange={(time, timeString) =>
+                                    onChangeTimeEndRush(
+                                      timeString,
+                                      index,
+                                      indexRush
+                                    )
+                                  }
+                                />
+                              </div>
+                            </div>
+                            <div className="div-chose-row">
+                              <div className="div-input-rush">
+                                {/* <InputCustom
+                                  title="Giá trị"
+                                  value={itemRush?.price}
+                                  inputMoney={true}
+                                  style={{ width: "100%" }}
+                                  onChange={(e) =>
+                                    onChangePriceRush(e, index, indexRush)
+                                  }
+                                /> */}
+                                <p className="label-input">Giá trị</p>
+                                {itemRush?.price_type_increase ===
+                                "amount_accumulate" ? (
+                                  <InputNumber
+                                    style={{ width: "95%" }}
+                                    addonAfter="đ"
+                                    value={itemRush?.price}
+                                    min={0}
+                                    formatter={(value) =>
+                                      `${value}`.replace(
+                                        /\B(?=(\d{3})+(?!\d))/g,
+                                        ","
+                                      )
+                                    }
+                                    onChange={(e) =>
+                                      onChangePriceRush(e, index, indexRush)
+                                    }
+                                  />
+                                ) : (
+                                  <InputNumber
+                                    style={{ width: "95%" }}
+                                    addonAfter="%"
+                                    min={0}
+                                    max={100}
+                                    value={itemRush?.price}
+                                    onChange={(e) =>
+                                      onChangePriceRush(e, index, indexRush)
+                                    }
+                                  />
+                                )}
+                              </div>
+                              <div className="div-input-rush">
+                                <InputCustom
+                                  title="Loại"
+                                  value={itemRush?.price_type_increase}
+                                  select={true}
+                                  options={[
+                                    {
+                                      value: "amount_accumulate",
+                                      label: "Tăng theo giá tiền",
+                                    },
+                                    {
+                                      value: "percent_accumulate",
+                                      label: "Tăng theo phần trăm",
+                                    },
+                                  ]}
+                                  style={{ width: "100%" }}
+                                  onChange={(e) =>
+                                    onChangeTypeRush(e, index, indexRush)
+                                  }
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <Button
+                            className="btn-delete-price-rush-day"
+                            onClick={() => onDeletePriceRush(index, indexRush)}
+                          >
+                            Xoá
+                          </Button>
+                        </>
+                      );
+                    })}
+                    <Button
+                      className="btn-add-price-rush-day"
+                      onClick={() => onAddRushDayPrice(index)}
+                    >
+                      Thêm giá ngày{" "}
+                    </Button>
+                  </div>
+                </div>
                 <div className="div-district">
                   <div className="div-list-district-price">
+                    <p className="m-0">Theo quận/ huyện</p>
                     {item?.area_lv_2?.map((district, indexDistrict) => {
                       return (
                         <>
@@ -501,226 +781,6 @@ const EditPrice = () => {
                   >
                     Thêm quận
                   </Button>
-                </div>
-                <div className="div-day-price">
-                  <div className="div-holiday-price">
-                    {item?.price_option_holiday?.map(
-                      (itemHoliday, indexHoliday) => {
-                        const timeStart = moment(itemHoliday?.time_start)
-                          .utc()
-                          .format(dateFormat);
-                        const timeEnd = moment(itemHoliday?.time_end)
-                          .utc()
-                          .format(dateFormat);
-                        return (
-                          <>
-                            <div
-                              className="div-item-holiday-price"
-                              key={indexHoliday}
-                            >
-                              <div className="div-chose-date">
-                                <div className="div-date-pick">
-                                  <p className="label-pick">Ngày bắt đầu</p>
-                                  <DatePicker
-                                    format={dateFormat}
-                                    allowClear={false}
-                                    value={dayjs(timeStart, dateFormat)}
-                                    onChange={(date) =>
-                                      onChangeTimeStartHoliday(
-                                        date,
-                                        index,
-                                        indexHoliday
-                                      )
-                                    }
-                                  />
-                                </div>
-                                <div className="div-date-pick">
-                                  <p className="label-pick">Ngày kết thúc</p>
-                                  <DatePicker
-                                    format={dateFormat}
-                                    allowClear={false}
-                                    value={dayjs(timeEnd, dateFormat)}
-                                    onChange={(date) =>
-                                      onChangeTimeEndHoliday(
-                                        date,
-                                        index,
-                                        indexHoliday
-                                      )
-                                    }
-                                  />
-                                </div>
-                              </div>
-                              <div className="div-chose-row">
-                                <div className="div-input-holiday ">
-                                  <InputCustom
-                                    title="Giá"
-                                    value={itemHoliday?.price}
-                                    inputMoney={true}
-                                    style={{ width: "100%" }}
-                                    onChange={(e) =>
-                                      onChangePriceHoliday(
-                                        e,
-                                        index,
-                                        indexHoliday
-                                      )
-                                    }
-                                  />
-                                </div>
-                                <div className="div-input-holiday ">
-                                  <InputCustom
-                                    title="Loại"
-                                    select={true}
-                                    value={itemHoliday?.price_type_increase}
-                                    options={[
-                                      {
-                                        value: "amount_accumulate",
-                                        label: "Tăng theo giá tiền",
-                                      },
-                                      {
-                                        value: "percent_accumulate",
-                                        label: "Tăng theo phần trăm",
-                                      },
-                                    ]}
-                                    style={{ width: "100%" }}
-                                    onChange={(e) =>
-                                      onChangeTypeHoliday(
-                                        e,
-                                        index,
-                                        indexHoliday
-                                      )
-                                    }
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            <Button
-                              className="btn-delete-price-holiday"
-                              onClick={() =>
-                                onDeletePriceHoliday(index, indexHoliday)
-                              }
-                            >
-                              Xoá
-                            </Button>
-                          </>
-                        );
-                      }
-                    )}
-                    <Button
-                      className="btn-add-price-holiday"
-                      onClick={() => onAddPriceHoliday(index)}
-                    >
-                      Thêm giá ngày lễ
-                    </Button>
-                  </div>
-                  <div className="div-rush-day-price">
-                    {item?.price_option_rush_day?.map((itemRush, indexRush) => {
-                      return (
-                        <>
-                          <div
-                            className="div-item-rush-day-price"
-                            key={indexRush}
-                          >
-                            <InputCustom
-                              title="Chọn thứ"
-                              select={true}
-                              options={dateOptions}
-                              mode="multiple"
-                              value={itemRush?.rush_days}
-                              onChange={(e) =>
-                                onChangeDayRush(e, index, indexRush)
-                              }
-                            />
-                            <div className="div-chose-time">
-                              <div className="div-input-time">
-                                <p className="label-time">Thời gian bắt đầu</p>
-                                <TimePicker
-                                  defaultValue={dayjs(
-                                    itemRush?.start_time.slice(0, 5),
-                                    hourFormat
-                                  )}
-                                  format={hourFormat}
-                                  style={{ width: "100%" }}
-                                  allowClear={false}
-                                  onChange={(time, timeString) =>
-                                    onChangeTimeStartRush(
-                                      timeString,
-                                      index,
-                                      indexRush
-                                    )
-                                  }
-                                />
-                              </div>
-                              <div className="div-input-time">
-                                <p className="label-time">Thời gian kết thúc</p>
-                                <TimePicker
-                                  defaultValue={dayjs(
-                                    itemRush?.end_time.slice(0, 5),
-                                    hourFormat
-                                  )}
-                                  format={hourFormat}
-                                  style={{ width: "100%" }}
-                                  allowClear={false}
-                                  onChange={(time, timeString) =>
-                                    onChangeTimeEndRush(
-                                      timeString,
-                                      index,
-                                      indexRush
-                                    )
-                                  }
-                                />
-                              </div>
-                            </div>
-                            <div className="div-chose-row">
-                              <div className="div-input-rush">
-                                <InputCustom
-                                  title="Giá trị"
-                                  value={itemRush?.price}
-                                  inputMoney={true}
-                                  style={{ width: "100%" }}
-                                  onChange={(e) =>
-                                    onChangePriceRush(e, index, indexRush)
-                                  }
-                                />
-                              </div>
-                              <div className="div-input-rush">
-                                <InputCustom
-                                  title="Loại"
-                                  value={itemRush?.price_type_increase}
-                                  select={true}
-                                  options={[
-                                    {
-                                      value: "amount_accumulate",
-                                      label: "Tăng theo giá tiền",
-                                    },
-                                    {
-                                      value: "percent_accumulate",
-                                      label: "Tăng theo phần trăm",
-                                    },
-                                  ]}
-                                  style={{ width: "100%" }}
-                                  onChange={(e) =>
-                                    onChangeTypeRush(e, index, indexRush)
-                                  }
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <Button
-                            className="btn-delete-price-rush-day"
-                            onClick={() => onDeletePriceRush(index, indexRush)}
-                          >
-                            Xoá
-                          </Button>
-                        </>
-                      );
-                    })}
-                    <Button
-                      className="btn-add-price-rush-day"
-                      onClick={() => onAddRushDayPrice(index)}
-                    >
-                      Thêm giá ngày{" "}
-                    </Button>
-                  </div>
                 </div>
               </div>
               {index !== 0 && (
