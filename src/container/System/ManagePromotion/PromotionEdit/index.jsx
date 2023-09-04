@@ -416,7 +416,7 @@ const EditPromotion = () => {
       activePromotion(id, { is_active: is_active ? false : true })
         .then((res) => {
           setIsLoading(false);
-          setIsActive(res);
+          setIsActive(!is_active);
         })
         .catch((err) => {
           errorNotify({

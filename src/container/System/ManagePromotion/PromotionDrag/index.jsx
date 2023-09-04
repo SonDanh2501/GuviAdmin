@@ -12,7 +12,8 @@ const PromotionDrag = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [draggedItem, setDraggedItem] = useState();
-  const item = [];
+  // let item = [];
+  const [item, setItem] = useState([]);
 
   useEffect(() => {
     getPromotionByPosition()
@@ -38,27 +39,37 @@ const PromotionDrag = () => {
     // filter out the currently dragged item
     let items = data.filter((item) => item !== draggedItem);
     items.splice(index, 0, draggedItem);
-
     for (let i = 0; i < items.length; i++) {
       const arr = [...items];
       items[i].position = i;
       setData(arr);
     }
-
-    for (let i = 0; i < items.length; i++) {
-      item.push({
-        _id: items[i]._id,
-        position: i,
-      });
-    }
+    // item = [];
+    // for (let i = 0; i < items.length; i++) {
+    //   item.push({
+    //     _id: items[i]._id,
+    //     position: i,
+    //   });
+    // }
+    // // setItem(item);
+    // console.log(item, "item");
   };
 
   const onDragEnd = () => {
     setDraggedItem(null);
+    const tempItem = [];
+    for (let i = 0; i < data.length; i++) {
+      tempItem.push({
+        _id: data[i]._id,
+        position: i,
+      });
+    }
+    setItem(tempItem);
   };
 
   const onUpdatePositon = () => {
     setIsLoading(true);
+    console.log(item, "item");
     updatePositionPromotion({
       arr_promotion: item,
     })
