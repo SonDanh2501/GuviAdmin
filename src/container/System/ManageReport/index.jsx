@@ -31,7 +31,9 @@ const ManageReport = () => {
     setTab(tabCookie === "" ? 1 : Number(tabCookie));
   }, [tabCookie]);
 
-  const DATA = [
+  
+
+  let DATA = [
     {
       value: 1,
       label: `${i18n.t("overview", {
@@ -76,11 +78,20 @@ const ManageReport = () => {
     },
   ];
 
+
+  for(let i = 0 ; i < DATA.length ; i++) {
+    DATA[i] = (checkElement?.includes(DATA[i].role)) ? DATA[i] : false;
+  }
+  DATA = DATA.filter(x => x !== false);
+  saveToCookie("tab_report", DATA[0].value)
+
+
   return (
     <>
       <div className="div-header-report">
         <p className="title-header">{`${i18n.t("report", { lng: lang })}`}</p>
       </div>
+      
       <div className="div-container-report">
         {width > 490 ? (
           <div className="div-tab-report" ref={scrollRef}>
@@ -95,11 +106,11 @@ const ManageReport = () => {
                   className={
                     item?.value === tab ? "div-item-tab-select" : "div-item-tab"
                   }
-                  style={
-                    checkElement?.includes(item?.role)
-                      ? {}
-                      : { display: "none" }
-                  }
+                  // style={
+                  //   checkElement?.includes(item?.role)
+                  //     ? {}
+                  //     : { display: "none" }
+                  // }
                 >
                   <p className="text-tab">{item?.label}</p>
                 </div>
@@ -117,7 +128,9 @@ const ManageReport = () => {
             }}
           />
         )}
-        {tab === 2 ? (
+        {tab === 1 ? ( 
+          <ReportOverview/>
+        ) : tab === 2 ? (
           <ManageReportOrder />
         ) : tab === 3 ? (
           <ManageReportCollaborator />

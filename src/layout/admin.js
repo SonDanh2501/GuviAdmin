@@ -29,8 +29,8 @@ import ManageFeedback from "../container/System/ManageFeedback";
 import ManageFinance from "../container/System/ManageFinance";
 import ManageOrder from "../container/System/ManageOrder";
 import AddOrder from "../container/System/ManageOrder/DrawerAddOrder";
-import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDoingManage";
-import OrderExpired from "../container/System/ManageOrder/OrderExpired";
+// import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDoingManage";
+// import OrderExpired from "../container/System/ManageOrder/OrderExpired";
 import ManagePromotions from "../container/System/ManagePromotion";
 import ChildPromotion from "../container/System/ManagePromotion/ChildPromotion";
 import CreatePromotion from "../container/System/ManagePromotion/CreatePromotion";
@@ -182,13 +182,6 @@ const Admin = () => {
         path="/group-order/manage-order/create-order"
         element={<AddOrder />}
       />
-
-      <Route path="/group-order/manage-order/all" element={<ManageOrder />} />
-      <Route
-        path="/group-order/manage-order/doing"
-        element={<OrderDoingManage />}
-      />
-      <Route path="/group-order/manage-order/done" element={<OrderExpired />} />
 
       <Route path="/topup/manage-topup" element={<ManageTopup />} />
       <Route

@@ -8,6 +8,8 @@ getToken().then((res) => (token = res));
 
 const BaseUrl = process.env.REACT_APP_BASE_URL;
 const TestUrl = process.env.REACT_APP_TEST_URL;
+const TestLocalUrl = process.env.REACT_APP_LOCAL_TEST_URL;
+
 
 const axiosClient = axios.create({
   baseURL: TestUrl,
