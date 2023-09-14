@@ -822,6 +822,11 @@ const ManageOrder = () => {
       key: "date_work"
     },
     {
+      i18n_title: 'address',
+      dataIndex: 'address',
+      key: "address"
+    },
+    {
       i18n_title: 'collaborator',
       dataIndex: 'collaborator',
       key: "collaborator"
