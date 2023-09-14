@@ -10,12 +10,16 @@ import useWindowDimensions from "../../../helper/useWindowDimensions";
 import { formatMoney } from "../../../helper/formatMoney";
 import { useWindowScrollPositions } from "../../../helper/useWindowPosition";
 import moment from "moment";
-import { Spin } from 'antd';
+import { Spin, Image } from 'antd';
 import {
     getElementState,
     getLanguageState,
 } from "../../../redux/selectors/auth";
 import "./style.scss";
+import gold from "../../../assets/images/iconGold.svg";
+import member from "../../../assets/images/iconMember.svg";
+import platinum from "../../../assets/images/iconPlatinum.svg";
+import silver from "../../../assets/images/iconSilver.svg";
 
 const DataTable = (props) => {
     const {
@@ -101,6 +105,7 @@ const DataTable = (props) => {
                         return (
                             <Link to={`/profile-customer/${data?.id_customer?._id}`}>
                                 <div className="div-name-order-cutomer">
+                                    
                                     <p className="text-name-customer">
                                         {data?.id_customer?.full_name}
                                     </p>
@@ -211,32 +216,32 @@ const DataTable = (props) => {
                                 </p>
                             </div>
                         )
-                    // case "customer":
-                    //     return (
-                    //         <Link
-                    //             to={
-                    //                 checkElement?.includes("detail_customer")
-                    //                     ? `/profile-customer/${data?._id}`
-                    //                     : ""
-                    //             }
-                    //             className="div-name-customer"
-                    //         >
-                    //             <Image
-                    //                 preview={false}
-                    //                 src={
-                    //                     data?.rank_point < 100
-                    //                         ? member
-                    //                         : data?.rank_point >= 100 && data?.rank_point < 300
-                    //                             ? silver
-                    //                             : data?.rank_point >= 300 && data?.rank_point < 1500
-                    //                                 ? gold
-                    //                                 : platinum
-                    //                 }
-                    //                 style={{ width: 20, height: 20 }}
-                    //             />
-                    //             <p className="text-name-customer"> {data?.full_name}</p>
-                    //         </Link>
-                    //     )
+                    case "customer":
+                        return (
+                            <Link
+                                to={
+                                    checkElement?.includes("detail_customer")
+                                        ? `/profile-customer/${data?._id}`
+                                        : ""
+                                }
+                                className="div-name-customer"
+                            >
+                                <Image
+                                    preview={false}
+                                    src={
+                                        data?.rank_point < 100
+                                            ? member
+                                            : data?.rank_point >= 100 && data?.rank_point < 300
+                                                ? silver
+                                                : data?.rank_point >= 300 && data?.rank_point < 1500
+                                                    ? gold
+                                                    : platinum
+                                    }
+                                    style={{ width: 20, height: 20 }}
+                                />
+                                <p className="text-name-customer"> {data?.full_name}</p>
+                            </Link>
+                        )
                     case "phone":
                         const phone = data?.phone.slice(0, 7);
                         return (

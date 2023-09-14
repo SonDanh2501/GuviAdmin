@@ -629,7 +629,7 @@
 // };
 // export default ManageOrder;
 
-
+import { UilEllipsisH, UilFileExport } from "@iconscout/react-unicons";
 import { SearchOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -663,8 +663,8 @@ import { deleteOrderApi, getOrderApi } from "../../../api/order";
 import { errorNotify } from "../../../helper/toast";
 import useWindowDimensions from "../../../helper/useWindowDimensions";
 import { useCookies } from "../../../helper/useCookies";
-import "./index.scss";
 
+import "./index.scss";
 
 const ManageOrder = () => {
 
@@ -732,6 +732,7 @@ const ManageOrder = () => {
   const [keyActive, setKeyActive] = useState(0);
   const { width } = useWindowDimensions();
   const { RangePicker } = DatePicker;
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log("check");
@@ -1078,6 +1079,34 @@ const ManageOrder = () => {
       <div className="div-header">
         <p className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</p>
       </div>
+      <div className="div-add-order">
+          {/* <div className="div-add-export">
+            <Dropdown
+              menu={{
+                items,
+              }}
+              trigger={["click"]}
+              className="dropdown-export"
+            >
+              <p className="m-0" onClick={(e) => e.preventDefault()}>
+                <Space>
+                  <UilEllipsisH className="icon-menu" />
+                </Space>
+              </p>
+            </Dropdown>
+          </div> */}
+          {checkElement?.includes("create_guvi_job") ? (
+            <Button
+              className="btn-create-order"
+              onClick={() => navigate("/group-order/manage-order/create-order")}
+            >
+              <i class="uil uil-plus-circle"></i>
+              {`${i18n.t("create_order", { lng: lang })}`}
+            </Button>
+          ) : (
+            <></>
+          )}
+        </div>
 
       <div className="div-body-order">
         {width > 900 ? (
