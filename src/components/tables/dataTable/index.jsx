@@ -177,6 +177,7 @@ const DataTable = (props) => {
                         )
                     case "status":
                         return (
+                            <div className="text-status-order">
                             <p
                                 className={
                                     data?.status === "pending"
@@ -200,6 +201,8 @@ const DataTable = (props) => {
                                                 ? `${i18n.t("complete", { lng: lang })}`
                                                 : `${i18n.t("cancel", { lng: lang })}`}
                             </p>
+                            </div>
+
                         )
                     case "pay":
                         return (
@@ -293,14 +296,21 @@ const DataTable = (props) => {
                                 {formatMoney(data?.total_price)}
                             </p>
                         )
+                        case "address":
+                            return (
+                                <p className="text-address-order">
+                                    {data.address}
+                                </p>
+                            )
                     default:
                         const dataView = data[item.dataIndex] || "";
                         return (
-                            <p className="text-id-view-order" > {dataView}</p>
+                            <p > {dataView}</p>
                         )
                         break;
                 }
-            }
+            },
+            width: item.width || 20
         };
         headerTable.push(temp)
     }

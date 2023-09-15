@@ -629,7 +629,10 @@
 // };
 // export default ManageOrder;
 
-import { UilEllipsisH, UilFileExport } from "@iconscout/react-unicons";
+
+
+
+import { UilEllipsisH, UilFileExport, UilTimes } from "@iconscout/react-unicons";
 import { SearchOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -734,8 +737,10 @@ const ManageOrder = () => {
   const { RangePicker } = DatePicker;
   const navigate = useNavigate();
 
+  const [arrFilter, setArrFilter] = useState([])
+
+
   useEffect(() => {
-    console.log("check");
     getJobList();
   }, [valueSearch, startPage, tab, kind, type, startDate, endDate, city, district]);
 
@@ -800,47 +805,63 @@ const ManageOrder = () => {
     {
       i18n_title: 'code_order',
       dataIndex: 'id_view',
-      key: "id_view"
+      key: "id_view",
+      width: 60
     },
     {
       i18n_title: 'date_create',
       dataIndex: 'date_create',
-      key: "date_create"
+      key: "date_create",
+      width: 35
+
     },
     {
       i18n_title: 'customer',
       dataIndex: 'customer',
-      key: "customer-phone"
+      key: "customer-phone",
+      width: 45
     },
     {
       i18n_title: 'service',
       dataIndex: 'service._id.title.vi',
-      key: "service"
+      key: "service",
+      width: 40
+
     },
     {
       i18n_title: 'date_work',
       dataIndex: 'date_work',
-      key: "date_work"
+      key: "date_work",
+      width: 35
+
     },
     {
       i18n_title: 'address',
       dataIndex: 'address',
-      key: "address"
+      key: "address",
+      width: 70
+
     },
     {
       i18n_title: 'collaborator',
       dataIndex: 'collaborator',
-      key: "collaborator"
+      key: "collaborator",
+      width: 45
+
     },
     {
       i18n_title: 'status',
       dataIndex: 'status',
-      key: "status"
+      key: "status",
+      width: 40
+
     },
     {
       i18n_title: 'pay',
       dataIndex: 'pay',
-      key: "pay"
+      key: "pay",
+      width: 30
+
     },
   ]
 
@@ -908,7 +929,7 @@ const ManageOrder = () => {
     dataIndex: 'action',
     key: "action",
     fixed: 'right',
-    width: 40,
+    width: 20,
     render: () => (
       <Space size="middle">
         <Dropdown menu={{ items }} trigger={["click"]}>
@@ -996,11 +1017,21 @@ const ManageOrder = () => {
   });
 
   province?.forEach((item) => {
+    const itemDistrict = [];
+    console.log(item, 'item');
+    for (const item2 of item.districts) {
+      itemDistrict.push({
+        value: item2.code,
+        label: item2.name
+      })
+    }
+
     if (user?.area_manager_lv_1?.length === 0) {
       cityOptions.push({
         value: item?.code,
         label: item?.name,
         district: item?.districts,
+        children: itemDistrict
       });
       return;
     } else if (user?.area_manager_lv_1?.includes(item?.code)) {
@@ -1008,6 +1039,7 @@ const ManageOrder = () => {
         value: item?.code,
         label: item?.name,
         district: item?.districts,
+        children: itemDistrict
       });
       return;
     }
@@ -1028,6 +1060,7 @@ const ManageOrder = () => {
       return;
     }
   });
+
 
 
   const handleFilterByCondition = () => {
@@ -1072,30 +1105,45 @@ const ManageOrder = () => {
   };
 
 
-
   return (
-    <div className="div-container-order">
-
-      <div className="div-header">
-        <p className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</p>
+    <div className="div-container-content">
+      <div className="div-header-container">
+        <h4 className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</h4>
       </div>
-      <div className="div-add-order">
-          {/* <div className="div-add-export">
-            <Dropdown
-              menu={{
-                items,
+
+
+      <div className="div-flex-row">
+        <div className="div-tab-order">
+          {width > 900 ? (
+            <div className="div-tab">
+              {itemTab.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={
+                      item?.key === keyActive ? "item-tab-select" : "item-tab"
+                    }
+                    onClick={() => {
+                      onChangeTab(item);
+                    }}
+                  >
+                    <p className="text-title">{item?.label}</p>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <Select
+              options={itemTab}
+              value={tab}
+              onChange={(e, item) => {
+                onChangeTab(item);
               }}
-              trigger={["click"]}
-              className="dropdown-export"
-            >
-              <p className="m-0" onClick={(e) => e.preventDefault()}>
-                <Space>
-                  <UilEllipsisH className="icon-menu" />
-                </Space>
-              </p>
-            </Dropdown>
-          </div> */}
-          {checkElement?.includes("create_guvi_job") ? (
+              style={{ width: "100%" }}
+            />
+          )}
+        </div>
+        {checkElement?.includes("create_guvi_job") ? (
             <Button
               className="btn-create-order"
               onClick={() => navigate("/group-order/manage-order/create-order")}
@@ -1106,112 +1154,61 @@ const ManageOrder = () => {
           ) : (
             <></>
           )}
-        </div>
-
-      <div className="div-body-order">
-        {width > 900 ? (
-          <div className="div-tab">
-            {itemTab.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className={
-                    item?.key === keyActive ? "item-tab-select" : "item-tab"
-                  }
-                  onClick={() => {
-                    onChangeTab(item);
-                  }}
-                >
-                  <p className="text-title">{item?.label}</p>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <Select
-            options={itemTab}
-            value={tab}
-            onChange={(e, item) => {
-              onChangeTab(item);
-            }}
-            style={{ width: "100%" }}
-          />
-        )}
-
-
-        <div className="div-search-filter-job">
-          <div className="div-condition">
-            <div
-              className="div-codition-filter-job"
+      </div>
+      <div className="div-flex-row">
+        <div className="div-filter">
+          <div className="header-filter">
+            <Button
+              type="primary"
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                display: "flex",
+              }}
               onClick={() => setCheckCondition(!checkCondition)}
             >
-              <i class="uil uil-filter"></i>
-              <p className="text-condition">Điều kiện lọc</p>
-            </div>
+              Bộ lọc
+            </Button>
 
-            {checkCondition && (
-              <div className="div-condition-body">
-                <p className="text-display-job">
-                  Hiện thị tất cả đơn hàng theo:
-                </p>
+          </div>
+          {checkCondition && (
+            <div className="filter-container">
+              <div className="item-select">
+                <span>Dịch vụ</span>
                 <Select
-                  onChange={(e) => {
-                    setCondition(e);
-                    if (e === "date_create") {
-                      setType("date_create");
-                      setCity("");
-                      setKind("");
-                      // saveToCookie("type_order", "date_create");
-                      // saveToCookie("kind_order", "");
-                      // saveToCookie("city_order", "");
-                    } else if (e === "date_work") {
-                      setType("date_work");
-                      setCity("");
-                      setKind("");
-                      // saveToCookie("type_order", "date_work");
-                      // saveToCookie("kind_order", "");
-                      // saveToCookie("city_order", "");
-                    } else if (e === "id_service") {
-                      setCity("");
-                      setStartDate(
-                        moment("1-1-2023").startOf("date").toISOString()
-                      );
-                      setEndDate(
-                        moment().endOf("date").add(7, "hours").toISOString()
-                      );
-                      // saveToCookie("city_order", "");
-                    } else {
-                      setKind("");
-                      setStartDate(
-                        moment("1-1-2023").startOf("date").toISOString()
-                      );
-                      setEndDate(
-                        moment().endOf("date").add(7, "hours").toISOString()
-                      );
-                      // saveToCookie("kind_order", "");
-                    }
+                  style={{ width: "100%", marginRight: 10 }}
+                  options={optionsService}
+                  value={kind}
+                  onChange={(e, item) => {
+                    setKind(e);
+                    setName(item?.label);
+                    setArrFilter({key: "service", value: item.value, label: item.label})
                   }}
-                  options={[
-                    { value: "id_service", label: "Dịch vụ" },
-                    { value: "city", label: "Tỉnh/Thành phố" },
-                    { value: "date_create", label: "Ngày tạo" },
-                    { value: "date_work", label: "Ngày làm" },
-                  ]}
                 />
-                <div className="mt-2">
-                  {condition === "id_service" ? (
-                    <Select
-                      style={{ width: "100%", marginRight: 10 }}
-                      options={optionsService}
-                      value={kind}
-                      onChange={(e, item) => {
-                        setKind(e);
+              </div>
+              {/* <div className="item-select">
+                <span>Ngày tạo</span>
+                <RangePicker
+                  onChange={(date, dateString) => {
+                    setStartDate(moment(dateString[0]).toISOString());
+                    setEndDate(moment(dateString[1]).toISOString());
+                  }}
+                />
+              </div>
 
-                        setName(item?.label);
-                      }}
-                    />
-                  ) : condition === "city" ? (
-                    <Select
+              <div className="item-select">
+                <span>Ngày tạo</span>
+                <RangePicker
+                  onChange={(date, dateString) => {
+                    setStartDate(moment(dateString[0]).toISOString());
+                    setEndDate(moment(dateString[1]).toISOString());
+                  }}
+                />
+              </div> */}
+
+              <div className="item-select">
+                <span>Tỉnh/Thành phố</span>
+                <Select
                       style={{ width: "100%", marginRight: 10 }}
                       options={cityOptions}
                       value={city}
@@ -1230,19 +1227,10 @@ const ManageOrder = () => {
                           .localeCompare((optionB?.label ?? "").toLowerCase())
                       }
                     />
-                  ) : condition === "date_create" ||
-                    condition === "date_work" ? (
-                    <RangePicker
-                      onChange={(date, dateString) => {
-                        setStartDate(moment(dateString[0]).toISOString());
-                        setEndDate(moment(dateString[1]).toISOString());
-                      }}
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {dataDistrict.length > 0 && (
-                    <Select
+              </div>
+              <div className="item-select">
+                <span>Quận/Huyện</span>
+                <Select
                       placeholde="Chọn quận/huyện"
                       style={{ width: "100%", marginRight: 10, marginTop: 10 }}
                       mode="multiple"
@@ -1256,25 +1244,11 @@ const ManageOrder = () => {
                         (option?.label ?? "").includes(input)
                       }
                     />
-                  )}
-                </div>
-                <div className="footer-condition-filter">
-                  <Button
-                    type="primary"
-                    style={{
-                      width: "20%",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      display: "flex",
-                    }}
-                    onClick={handleFilterByCondition}
-                  >
-                    Lọc
-                  </Button>
-                </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
+        </div>
+        <div className="div-search">
           <Input
             placeholder={`${i18n.t("search", { lng: lang })}`}
             // value={valueSearch}
@@ -1286,9 +1260,7 @@ const ManageOrder = () => {
             }}
           />
         </div>
-
       </div>
-
 
 
       <div >
@@ -1320,8 +1292,6 @@ const ManageOrder = () => {
         </div>
       </div>
     </div>
-
-
   );
 };
 
