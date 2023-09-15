@@ -54,15 +54,15 @@ const DataTable = (props) => {
     const [currentPage, setCurrentPage] = useState(1);
     // const [items3, setItems3] = useState(items);
     // let items3 = [...items]
+    let widthPage = 0;
 
 
     let headerTable = []
     const [hidePhone, setHidePhone] = useState(false);
     const [rowIndex, setRowIndex] = useState();
 
-    console.log(width, 'width');
     for (const item of columns) {
-        const temp = {
+        const temp: any = {
             title: () => {
                 if (item.i18n_title) {
                     return (
@@ -313,9 +313,10 @@ const DataTable = (props) => {
                         break;
                 }
             },
-            width: item.width || 20
+            width: item.width || 100
         };
         headerTable.push(temp)
+        widthPage += Number(temp.width);
     }
     if(actionColumn) headerTable.push(actionColumn)
     
@@ -323,7 +324,6 @@ const DataTable = (props) => {
         setCurrentPage(event)
         props.onCurrentPageChange((event * pageSize) - pageSize);
     }
-
     // const onChange = (page) => {
     //     setCurrentPage(page);
     //     saveToCookie("page_order", page);
@@ -350,7 +350,6 @@ const DataTable = (props) => {
     //       .catch((err) => {});
     //   };
 
-
     return (
         <React.Fragment>
             <div className="mt-3">
@@ -358,7 +357,7 @@ const DataTable = (props) => {
                     columns={headerTable}
                     dataSource={data}
                     pagination={false}
-                    scroll={{ x: 1500 }}
+                    scroll={{ x: widthPage }}
                     onRow={(record, rowIndex) => {
                         return {
                           onClick: (event) => {

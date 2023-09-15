@@ -806,61 +806,61 @@ const ManageOrder = () => {
       i18n_title: 'code_order',
       dataIndex: 'id_view',
       key: "id_view",
-      width: 40
+      width: 150
     },
     {
       i18n_title: 'date_create',
       dataIndex: 'date_create',
       key: "date_create",
-      width: 25
+      width: 100
 
     },
     {
       i18n_title: 'customer',
       dataIndex: 'customer',
       key: "customer-phone",
-      width: 45
+      width: 140
     },
     {
       i18n_title: 'service',
       dataIndex: 'service._id.title.vi',
       key: "service",
-      width: 30
+      width: 140
 
     },
     {
       i18n_title: 'date_work',
       dataIndex: 'date_work',
       key: "date_work",
-      width: 25
+      width: 100
 
     },
     {
       i18n_title: 'address',
       dataIndex: 'address',
       key: "address",
-      width: 60
+      width: 220
 
     },
     {
       i18n_title: 'collaborator',
       dataIndex: 'collaborator',
       key: "collaborator",
-      width: 45
+      width: 160
 
     },
     {
       i18n_title: 'status',
       dataIndex: 'status',
       key: "status",
-      width: 30
+      width: 100
 
     },
     {
       i18n_title: 'pay',
       dataIndex: 'pay',
       key: "pay",
-      width: 30
+      // width: 20
     },
   ]
 
@@ -928,7 +928,7 @@ const ManageOrder = () => {
     dataIndex: 'action',
     key: "action",
     fixed: 'right',
-    width: 10,
+    width: 50,
     render: () => (
       <Space size="middle">
         <Dropdown menu={{ items }} trigger={["click"]}>
