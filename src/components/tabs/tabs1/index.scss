@@ -1,0 +1,86 @@
+.div-tab-order {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    width: 100%;
+
+
+    .div-tab {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        width: 100%;
+
+        .item-tab {
+            padding: 5px;
+            width: auto;
+            margin-right: 10px;
+            cursor: pointer;
+
+            .text-title {
+                color: black;
+                font-weight: 400;
+                font-size: 14px;
+                font-family: "Roboto";
+                text-decoration: none;
+                margin: 0;
+            }
+        }
+
+        .item-tab-select {
+            padding: 5px;
+            width: auto;
+            border-bottom: 1px solid blue;
+            margin-right: 10px;
+
+            .text-title {
+                color: blue;
+                font-weight: 400;
+                font-size: 14px;
+                font-family: "Roboto";
+                text-decoration: none;
+                margin: 0;
+            }
+        }
+    }
+}
+
+
+
+// .div-tab {
+//   display: flex;
+//   flex-direction: row;
+//   overflow-x: auto;
+//   width: 100%;
+
+//   .item-tab {
+//     padding: 5px;
+//     width: auto;
+//     margin-right: 5px;
+//     cursor: pointer;
+
+//     .text-title {
+//       color: rgb(200, 199, 199);
+//       font-weight: 400;
+//       font-size: 14px;
+//       font-family: "Roboto";
+//       text-decoration: none;
+//       margin: 0;
+//     }
+//   }
+//   .item-tab-select {
+//     padding: 5px;
+//     width: auto;
+//     border-bottom: 1px solid blue;
+//     margin-right: 5px;
+
+//     .text-title {
+//       color: black;
+//       font-weight: 400;
+//       font-size: 14px;
+//       font-family: "Roboto";
+//       text-decoration: none;
+//       margin: 0;
+//     }
+//   }
+// }

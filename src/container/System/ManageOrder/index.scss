@@ -1,44 +1,44 @@
 @import '../../../index.scss';
 
 
-.div-tab-order {
-  display: flex;
-  flex-direction: row;
-  overflow-x: auto;
-  width: 100%;
+// .div-tab-order {
+//   display: flex;
+//   flex-direction: row;
+//   overflow-x: auto;
+//   width: 100%;
 
-  .item-tab {
-    padding: 5px;
-    width: auto;
-    margin-right: 5px;
-    cursor: pointer;
+//   .item-tab {
+//     padding: 5px;
+//     width: auto;
+//     margin-right: 5px;
+//     cursor: pointer;
 
-    .text-title {
-      color: rgb(200, 199, 199);
-      font-weight: 400;
-      font-size: 14px;
-      font-family: "Roboto";
-      text-decoration: none;
-      margin: 0;
-    }
-  }
+//     .text-title {
+//       color: rgb(200, 199, 199);
+//       font-weight: 400;
+//       font-size: 14px;
+//       font-family: "Roboto";
+//       text-decoration: none;
+//       margin: 0;
+//     }
+//   }
 
-  .item-tab-select {
-    padding: 5px;
-    width: auto;
-    border-bottom: 1px solid blue;
-    margin-right: 5px;
+//   .item-tab-select {
+//     padding: 5px;
+//     width: auto;
+//     border-bottom: 1px solid blue;
+//     margin-right: 5px;
 
-    .text-title {
-      color: black;
-      font-weight: 400;
-      font-size: 14px;
-      font-family: "Roboto";
-      text-decoration: none;
-      margin: 0;
-    }
-  }
-}
+//     .text-title {
+//       color: black;
+//       font-weight: 400;
+//       font-size: 14px;
+//       font-family: "Roboto";
+//       text-decoration: none;
+//       margin: 0;
+//     }
+//   }
+// }
 
 .div-filter {
   display: flex;
@@ -64,7 +64,7 @@
 }
 
 .div-search {
-  width: 50%;
+  width: 45%;
 }
 
 .btn-create-order {
@@ -72,15 +72,12 @@
   flex-direction: row;
   justify-content: space-between;
   width: 100px;
-  height: 30px;
   border: none;
   border-radius: 5px;
   background-color: #48cae4;
   color: white;
-  margin-left: 20px;
-  margin-right: 10px;
   box-shadow: 2px 3px 2px rgb(216, 216, 216);
-  margin-top: 5px;
+  margin: auto auto auto 15px;
 }
 
 

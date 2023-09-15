@@ -163,14 +163,17 @@ const DataTable = (props) => {
                                             <p className="text-collaborator">
                                                 {data?.id_collaborator?.full_name}
                                             </p>
-                                            {data?.id_collaborator?.star && (
+                                        </div>
+                                                <div className="div-phone-star">
+                                                <p className="text-phone">{data?.id_collaborator?.phone}</p>
+                                                {data?.id_collaborator?.star && (
                                                 <div className="div-star">
-                                                    <p className="text-star">{data?.id_collaborator?.star}</p>
                                                     <StarFilled className="icon-star" />
+                                                    <p className="text-star">{data?.id_collaborator?.star}</p>
+
                                                 </div>
                                             )}
-                                        </div>
-                                        <p className="text-phone">{data?.id_collaborator?.phone}</p>
+                                                </div>
                                     </Link>
                                 )}
                             </>

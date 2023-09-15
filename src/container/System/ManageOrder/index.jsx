@@ -666,6 +666,7 @@ import { deleteOrderApi, getOrderApi } from "../../../api/order";
 import { errorNotify } from "../../../helper/toast";
 import useWindowDimensions from "../../../helper/useWindowDimensions";
 import { useCookies } from "../../../helper/useCookies";
+import Tabs from "../../../components/tabs/tabs1"
 
 import "./index.scss";
 
@@ -732,7 +733,6 @@ const ManageOrder = () => {
   const toggle = () => setModal(!modal);
   const [modal, setModal] = useState(false);
 
-  const [keyActive, setKeyActive] = useState(0);
   const { width } = useWindowDimensions();
   const { RangePicker } = DatePicker;
   const navigate = useNavigate();
@@ -806,54 +806,54 @@ const ManageOrder = () => {
       i18n_title: 'code_order',
       dataIndex: 'id_view',
       key: "id_view",
-      width: 60
+      width: 40
     },
     {
       i18n_title: 'date_create',
       dataIndex: 'date_create',
       key: "date_create",
-      width: 35
+      width: 25
 
     },
     {
       i18n_title: 'customer',
       dataIndex: 'customer',
       key: "customer-phone",
-      width: 50
+      width: 45
     },
     {
       i18n_title: 'service',
       dataIndex: 'service._id.title.vi',
       key: "service",
-      width: 40
+      width: 30
 
     },
     {
       i18n_title: 'date_work',
       dataIndex: 'date_work',
       key: "date_work",
-      width: 35
+      width: 25
 
     },
     {
       i18n_title: 'address',
       dataIndex: 'address',
       key: "address",
-      width: 70
+      width: 60
 
     },
     {
       i18n_title: 'collaborator',
       dataIndex: 'collaborator',
       key: "collaborator",
-      width: 50
+      width: 45
 
     },
     {
       i18n_title: 'status',
       dataIndex: 'status',
       key: "status",
-      width: 40
+      width: 30
 
     },
     {
@@ -861,7 +861,6 @@ const ManageOrder = () => {
       dataIndex: 'pay',
       key: "pay",
       width: 30
-
     },
   ]
 
@@ -929,7 +928,7 @@ const ManageOrder = () => {
     dataIndex: 'action',
     key: "action",
     fixed: 'right',
-    width: 20,
+    width: 10,
     render: () => (
       <Space size="middle">
         <Dropdown menu={{ items }} trigger={["click"]}>
@@ -976,10 +975,10 @@ const ManageOrder = () => {
 
 
   const onChangeTab = (item) => {
+    console.log(item, 'item');
     setTab(item.value);
     setCheckCondition(false);
     setStartPage(0);
-    setKeyActive(item.key);
     saveToCookie("tab-order", item?.key);
     saveToCookie("status-order", item?.value);
     saveToCookie("order_scrolly", 0);
@@ -1107,54 +1106,31 @@ const ManageOrder = () => {
 
   return (
     <div className="div-container-content">
-      <div className="div-header-container">
+    <div className="div-flex-row">
+    <div className="div-header-container">
         <h4 className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</h4>
       </div>
 
-
+      {checkElement?.includes("create_guvi_job") ? (
+          <Button
+            className="btn-create-order"
+            onClick={() => navigate("/group-order/manage-order/create-order")}
+          >
+            <i class="uil uil-plus-circle"></i>
+            {`${i18n.t("create_order", { lng: lang })}`}
+          </Button>
+        ) : (
+          <></>
+        )}
+    </div>
+      
       <div className="div-flex-row">
-        <div className="div-tab-order">
-          {width > 900 ? (
-            <div className="div-tab">
-              {itemTab.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    className={
-                      item?.key === keyActive ? "item-tab-select" : "item-tab"
-                    }
-                    onClick={() => {
-                      onChangeTab(item);
-                    }}
-                  >
-                    <p className="text-title">{item?.label}</p>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <Select
-              options={itemTab}
-              value={tab}
-              onChange={(e, item) => {
-                onChangeTab(item);
-              }}
-              style={{ width: "100%" }}
-            />
-          )}
-        </div>
-        {checkElement?.includes("create_guvi_job") ? (
-            <Button
-              className="btn-create-order"
-              onClick={() => navigate("/group-order/manage-order/create-order")}
-            >
-              <i class="uil uil-plus-circle"></i>
-              {`${i18n.t("create_order", { lng: lang })}`}
-            </Button>
-          ) : (
-            <></>
-          )}
+        <Tabs
+          itemTab={itemTab}
+          onValueChangeTab={onChangeTab}
+        />
       </div>
+
       <div className="div-flex-row">
         <div className="div-filter">
           <div className="header-filter">
@@ -1182,7 +1158,7 @@ const ManageOrder = () => {
                   onChange={(e, item) => {
                     setKind(e);
                     setName(item?.label);
-                    setArrFilter({key: "service", value: item.value, label: item.label})
+                    setArrFilter({ key: "service", value: item.value, label: item.label })
                   }}
                 />
               </div>
@@ -1209,41 +1185,41 @@ const ManageOrder = () => {
               <div className="item-select">
                 <span>Tỉnh/Thành phố</span>
                 <Select
-                      style={{ width: "100%", marginRight: 10 }}
-                      options={cityOptions}
-                      value={city}
-                      onChange={(e, item) => {
-                        setCity(e);
-                        setDataDistrict(item?.district);
-                        setName(item?.label);
-                      }}
-                      showSearch
-                      filterOption={(input, option) =>
-                        (option?.label ?? "").includes(input)
-                      }
-                      filterSort={(optionA, optionB) =>
-                        (optionA?.label ?? "")
-                          .toLowerCase()
-                          .localeCompare((optionB?.label ?? "").toLowerCase())
-                      }
-                    />
+                  style={{ width: "100%", marginRight: 10 }}
+                  options={cityOptions}
+                  value={city}
+                  onChange={(e, item) => {
+                    setCity(e);
+                    setDataDistrict(item?.district);
+                    setName(item?.label);
+                  }}
+                  showSearch
+                  filterOption={(input, option) =>
+                    (option?.label ?? "").includes(input)
+                  }
+                  filterSort={(optionA, optionB) =>
+                    (optionA?.label ?? "")
+                      .toLowerCase()
+                      .localeCompare((optionB?.label ?? "").toLowerCase())
+                  }
+                />
               </div>
               <div className="item-select">
                 <span>Quận/Huyện</span>
                 <Select
-                      placeholde="Chọn quận/huyện"
-                      style={{ width: "100%", marginRight: 10, marginTop: 10 }}
-                      mode="multiple"
-                      options={districtOption}
-                      value={district}
-                      onChange={(e, item) => {
-                        setDistrict(e);
-                      }}
-                      showSearch
-                      filterOption={(input, option) =>
-                        (option?.label ?? "").includes(input)
-                      }
-                    />
+                  placeholde="Chọn quận/huyện"
+                  style={{ width: "100%", marginRight: 10, marginTop: 10 }}
+                  mode="multiple"
+                  options={districtOption}
+                  value={district}
+                  onChange={(e, item) => {
+                    setDistrict(e);
+                  }}
+                  showSearch
+                  filterOption={(input, option) =>
+                    (option?.label ?? "").includes(input)
+                  }
+                />
               </div>
             </div>
           )}
@@ -1260,8 +1236,8 @@ const ManageOrder = () => {
             }}
           />
         </div>
-      </div>
 
+      </div>
 
       <div >
         <DataTable

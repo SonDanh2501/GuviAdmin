@@ -81,7 +81,7 @@
   font-size: 14px;
   text-decoration-line: underline;
   color: #023e8a;
-  text-align: center;
+  text-align: left;
 }
 
 .div-name-order-cutomer {
@@ -171,38 +171,6 @@
   .div-name-star {
     display: flex;
     flex-direction: row;
-
-    .div-star {
-      display: flex;
-      flex-direction: row;
-      margin-left: 10px;
-
-      .text-star {
-        font-family: "Roboto";
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        color: #000000;
-        text-decoration: none;
-        margin: 0;
-      }
-
-      .icon-star {
-        color: #f2cc0e;
-        width: 10px;
-        height: 10px;
-      }
-    }
-
-    .text-collaborator {
-      font-family: "Roboto";
-      font-style: normal;
-      font-weight: 400;
-      font-size: 12px;
-      margin: 0;
-      text-decoration-line: underline;
-      color: #023e8a;
-    }
   }
 
   .text-phone {
@@ -213,7 +181,48 @@
     color: #000000 !important;
     margin: 0;
   }
+
+
+  .div-phone-star {
+    display: flex;
+    .text-collaborator {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      margin: 0;
+      text-decoration-line: underline;
+      color: #023e8a;
+    }
+    .div-star {
+      display: flex;
+      flex-direction: row;
+      margin-left: 15px;
+
+      .text-star {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        color: #000000;
+        text-decoration: none;
+        margin: 0px 0px 0px 5px;
+      }
+
+      .icon-star {
+        color: #f2cc0e;
+        margin: auto;
+      }
+    }
+  }
 }
+
+
+
+
+
+
+
 
 .div-payment {
   display: flex;
@@ -298,7 +307,7 @@
     font-size: 12px;
     color: black;
     display: block;
-    width: 150px;
+    // width: 150px;
     text-decoration: none;
     margin: 0;
   }
