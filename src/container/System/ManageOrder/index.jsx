@@ -819,7 +819,7 @@ const ManageOrder = () => {
       i18n_title: 'customer',
       dataIndex: 'customer',
       key: "customer-phone",
-      width: 45
+      width: 50
     },
     {
       i18n_title: 'service',
@@ -846,7 +846,7 @@ const ManageOrder = () => {
       i18n_title: 'collaborator',
       dataIndex: 'collaborator',
       key: "collaborator",
-      width: 45
+      width: 50
 
     },
     {
