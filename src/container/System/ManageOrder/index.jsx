@@ -882,7 +882,7 @@ const ManageOrder = () => {
     {
       key: "2",
       label: checkElement?.includes("add_collaborator_guvi_job") &&
-        item?.status === "pending" && (
+        (item?.status === "pending" || item?.status === "confirm") && (
           <AddCollaboratorOrder
             idOrder={item?._id}
             idCustomer={item?.id_customer?._id}
