@@ -256,7 +256,7 @@ const UserManage = (props) => {
                   : setHidePhone(!hidePhone)
               }
             >
-              {rowIndex === index ? (
+              {rowIndex === index ? ( 
                 hidePhone ? (
                   <i class="uil uil-eye"></i>
                 ) : (

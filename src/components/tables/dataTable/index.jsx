@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import i18n from "../../../i18n";
 import { Dropdown, Pagination, Space, Table } from "antd";
 import { StarFilled } from "@ant-design/icons";
@@ -20,6 +20,7 @@ import gold from "../../../assets/images/iconGold.svg";
 import member from "../../../assets/images/iconMember.svg";
 import platinum from "../../../assets/images/iconPlatinum.svg";
 import silver from "../../../assets/images/iconSilver.svg";
+import LoadingPagination from "../../../components/paginationLoading";
 
 const DataTable = (props) => {
     const {
@@ -28,7 +29,8 @@ const DataTable = (props) => {
         actionColumn,
         start,
         pageSize,
-        totalItem
+        totalItem,
+        detectLoading
         // items
         // currentPage,
         // setCurrentPage
@@ -55,11 +57,19 @@ const DataTable = (props) => {
     // const [items3, setItems3] = useState(items);
     // let items3 = [...items]
     let widthPage = 0;
-
-
     let headerTable = []
     const [hidePhone, setHidePhone] = useState(false);
-    const [rowIndex, setRowIndex] = useState();
+    const [rowIndex, setRowIndex] = useState(0);
+
+
+    useEffect(() => {
+        setIsLoading(false)
+    }, [data]);
+
+    useEffect(() => {
+        setIsLoading(true)
+    }, [detectLoading]);
+
 
     for (const item of columns) {
         const temp: any = {
@@ -77,15 +87,33 @@ const DataTable = (props) => {
                 }
             },
             render: (data, record, index) => {
+                let linkRedirect = `#`
+
                 switch (item.key) {
                     case "id_view":
-                        const linkRedirect = `/details-order/${data?.id_group_order}`
+                        return (
+                            <p className="text-id-view-order">{data?.id_view}</p>
+                        )
+                        break;
+                    case "code_order":
+                        linkRedirect = `/details-order/${data?.id_group_order}`
                         return (
                             <Link
                                 onClick={() => saveToCookie("order_scrolly", scrollY)}
                                 to={linkRedirect}
                             >
                                 <p className="text-id-view-order">{data?.id_view}</p>
+                            </Link>
+                        )
+                        break;
+                    case "code_customer":
+                        linkRedirect = checkElement?.includes("detail_customer") ? `/profile-customer/${data?._id}` : ""
+                        return (
+                            <Link
+                                onClick={() => saveToCookie("order_scrolly", scrollY)}
+                                to={linkRedirect}
+                            >
+                                <p className="text-code-customer">{data?.id_view}</p>
                             </Link>
                         )
                         break;
@@ -105,7 +133,7 @@ const DataTable = (props) => {
                         return (
                             <Link to={`/profile-customer/${data?.id_customer?._id}`}>
                                 <div className="div-name-order-cutomer">
-                                    
+
                                     <p className="text-name-customer">
                                         {data?.id_customer?.full_name}
                                     </p>
@@ -164,49 +192,51 @@ const DataTable = (props) => {
                                                 {data?.id_collaborator?.full_name}
                                             </p>
                                         </div>
-                                                <div className="div-phone-star">
-                                                <p className="text-phone">{data?.id_collaborator?.phone}</p>
-                                                {data?.id_collaborator?.star && (
+                                        <div className="div-phone-star">
+                                            <p className="text-phone">{data?.id_collaborator?.phone}</p>
+                                            {data?.id_collaborator?.star && (
                                                 <div className="div-star">
                                                     <StarFilled className="icon-star" />
                                                     <p className="text-star">{data?.id_collaborator?.star}</p>
 
                                                 </div>
                                             )}
-                                                </div>
+                                        </div>
                                     </Link>
                                 )}
                             </>
                         )
+                        break;
                     case "status":
                         return (
                             <div className="text-status-order">
-                            <p
-                                className={
-                                    data?.status === "pending"
-                                        ? "text-pen-order"
+                                <p
+                                    className={
+                                        data?.status === "pending"
+                                            ? "text-pen-order"
+                                            : data?.status === "confirm"
+                                                ? "text-confirm-order"
+                                                : data?.status === "doing"
+                                                    ? "text-doing-order"
+                                                    : data?.status === "done"
+                                                        ? "text-done-order"
+                                                        : "text-cancel-order"
+                                    }
+                                >
+                                    {data?.status === "pending"
+                                        ? `${i18n.t("pending", { lng: lang })}`
                                         : data?.status === "confirm"
-                                            ? "text-confirm-order"
+                                            ? `${i18n.t("confirm", { lng: lang })}`
                                             : data?.status === "doing"
-                                                ? "text-doing-order"
+                                                ? `${i18n.t("doing", { lng: lang })}`
                                                 : data?.status === "done"
-                                                    ? "text-done-order"
-                                                    : "text-cancel-order"
-                                }
-                            >
-                                {data?.status === "pending"
-                                    ? `${i18n.t("pending", { lng: lang })}`
-                                    : data?.status === "confirm"
-                                        ? `${i18n.t("confirm", { lng: lang })}`
-                                        : data?.status === "doing"
-                                            ? `${i18n.t("doing", { lng: lang })}`
-                                            : data?.status === "done"
-                                                ? `${i18n.t("complete", { lng: lang })}`
-                                                : `${i18n.t("cancel", { lng: lang })}`}
-                            </p>
+                                                    ? `${i18n.t("complete", { lng: lang })}`
+                                                    : `${i18n.t("cancel", { lng: lang })}`}
+                                </p>
                             </div>
 
                         )
+                        break;
                     case "pay":
                         return (
                             <div className="div-payment">
@@ -222,7 +252,8 @@ const DataTable = (props) => {
                                 </p>
                             </div>
                         )
-                    case "customer":
+                        break;
+                    case "name_customer":
                         return (
                             <Link
                                 to={
@@ -230,7 +261,7 @@ const DataTable = (props) => {
                                         ? `/profile-customer/${data?._id}`
                                         : ""
                                 }
-                                className="div-name-customer"
+                                className="name_customer"
                             >
                                 <Image
                                     preview={false}
@@ -245,40 +276,10 @@ const DataTable = (props) => {
                                     }
                                     style={{ width: 20, height: 20 }}
                                 />
-                                <p className="text-name-customer"> {data?.full_name}</p>
+                                <span className="text-name-customer"> {data?.full_name}</span>
                             </Link>
                         )
-                    case "phone":
-                        const phone = data?.phone.slice(0, 7);
-                        return (
-                            <div className="hide-phone">
-                                <p className="text-phone">
-                                    {rowIndex === index
-                                        ? hidePhone
-                                            ? data?.phone
-                                            : phone + "***"
-                                        : phone + "***"}
-                                </p>
-                                <p
-                                    className="btn-eyes"
-                                    onClick={() =>
-                                        rowIndex === index
-                                            ? setHidePhone(!hidePhone)
-                                            : setHidePhone(!hidePhone)
-                                    }
-                                >
-                                    {rowIndex === index ? (
-                                        hidePhone ? (
-                                            <i class="uil uil-eye"></i>
-                                        ) : (
-                                            <i class="uil uil-eye-slash"></i>
-                                        )
-                                    ) : (
-                                        <i class="uil uil-eye-slash"></i>
-                                    )}
-                                </p>
-                            </div>
-                        );
+                        break;
                     case "nearest_order":
                         return (
                             <>
@@ -293,18 +294,62 @@ const DataTable = (props) => {
                                 )}
                             </>
                         );
+                        break;
                     case "money":
                         return (
                             <p className="text-address-customer">
                                 {formatMoney(data?.total_price)}
                             </p>
                         )
-                        case "address":
-                            return (
-                                <p className="text-address-order">
-                                    {data.address}
+                    case "address":
+                        const temp = item.dataIndex.split(".");
+                        let getData = data[temp[0]];
+                        for (let i = 1; i < temp.length; i++) {
+                            if (getData === undefined || getData === null) {
+                                getData = ""
+                                break;
+                            }
+                            getData = getData[temp[i]]
+                        }
+                        return (
+                            <p className="text-address-order">
+                                {getData !== "" ? getData : `${i18n.t("not_available", { lng: lang })}`}
+                            </p>
+                        )
+                        break;
+                    case "phone_action_hide":
+                        const phone = data?.phone.slice(0, 7);
+                        return (
+                            <div className="hide-phone">
+                                <p className="text-phone">
+                                    {rowIndex === index
+                                        ? hidePhone
+                                            ? data?.phone
+                                            : phone + "***"
+                                        : phone + "***"}
                                 </p>
-                            )
+                                <p className="btn-eyes"
+                                    onClick={() => rowIndex === index ? setHidePhone(!hidePhone) : setHidePhone(!hidePhone)}>
+                                    {rowIndex === index ? (
+                                        hidePhone ? (
+                                            <i class="uil uil-eye"></i>
+                                        ) : (
+                                            <i class="uil uil-eye-slash"></i>
+                                        )
+                                    ) : (
+                                        <i class="uil uil-eye-slash"></i>
+                                    )}
+                                </p>
+                            </div>
+                        )
+                        break;
+                    case "total_order":
+                        return (
+                            <p className="text-address-customer">
+                                {data[item.dataIndex] || 0}
+                            </p>
+                        )
+                        break;
                     default:
                         const dataView = data[item.dataIndex] || "";
                         return (
@@ -318,11 +363,14 @@ const DataTable = (props) => {
         headerTable.push(temp)
         widthPage += Number(temp.width);
     }
-    if(actionColumn) headerTable.push(actionColumn)
-    
+    if (actionColumn) headerTable.push(actionColumn)
+
     const calculateCurrentPage = (event) => {
         setCurrentPage(event)
-        props.onCurrentPageChange((event * pageSize) - pageSize);
+        if (props.onCurrentPageChange) {
+            setIsLoading(true);
+            props.onCurrentPageChange((event * pageSize) - pageSize);
+        }
     }
     // const onChange = (page) => {
     //     setCurrentPage(page);
@@ -358,31 +406,34 @@ const DataTable = (props) => {
                     dataSource={data}
                     pagination={false}
                     scroll={{ x: widthPage }}
+                    loading={isLoading}
                     onRow={(record, rowIndex) => {
                         return {
-                          onClick: (event) => {
-                            setItem(record)
-                            props.onValueChange(record);
-                          },
+                            onClick: (event) => {
+                                setItem(record)
+                                setRowIndex(rowIndex)
+                                if (props.onValueChange) props.onValueChange(record);
+                            },
                         };
-                      }}
+                    }}
                 />
             </div>
 
             <div className="mt-2 div-pagination-order p-2">
-          <p>
-            {`${i18n.t("total", { lng: lang })}`}: {totalItem}
-          </p>
-          <div>
-            <Pagination
-              current={currentPage}
-              onChange={calculateCurrentPage}
-              total={totalItem}
-              showSizeChanger={false}
-              pageSize={20}
-            />
-          </div>
-        </div>
+                <p>
+                    {`${i18n.t("total", { lng: lang })}`}: {totalItem}
+                </p>
+                <div>
+                    <Pagination
+                        current={currentPage}
+                        onChange={calculateCurrentPage}
+                        total={totalItem}
+                        showSizeChanger={false}
+                        pageSize={20}
+                        hideOnSinglePage={true}
+                    />
+                </div>
+            </div>
 
             {/* {isLoading && <LoadingPagination />} */}
         </React.Fragment>

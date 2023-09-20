@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { getReviewByCustomers } from "../../../../../../api/customer";
+import { getReviewByCustomers } from "../../../../../api/customer";
 import { Rate, Table } from "antd";
 import "./styles.scss";
 import moment from "moment";
 import { Link } from "react-router-dom";
-import useWindowDimensions from "../../../../../../helper/useWindowDimensions";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const CustomerReview = ({ id }) => {
   const { width } = useWindowDimensions();

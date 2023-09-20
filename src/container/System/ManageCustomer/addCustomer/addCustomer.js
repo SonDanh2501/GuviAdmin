@@ -4,15 +4,16 @@ import React, { memo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Form } from "reactstrap";
 
-import { createCustomer, fetchCustomers } from "../../api/customer";
-import { errorNotify } from "../../helper/toast";
-import { getElementState, getLanguageState } from "../../redux/selectors/auth";
-import { validateAddCustomerSchema } from "../../utils/schema";
-import CustomButton from "../customButton/customButton";
-import InputCustom from "../textInputCustom";
+import { createCustomer, fetchCustomers } from "../../../../api/customer";
+import { errorNotify } from "../../../../helper/toast";
+import { getElementState, getLanguageState } from "../../../../redux/selectors/auth";
+import { validateAddCustomerSchema } from "../../../../utils/schema";
+import CustomButton from "../../../../components/customButton/customButton";
+import InputCustom from "../../../../components/textInputCustom";
 import "./addCustomer.scss";
-import i18n from "../../i18n";
-import useWindowDimensions from "../../helper/useWindowDimensions";
+import i18n from "../../../../i18n";
+import useWindowDimensions from "../../../../helper/useWindowDimensions";
+import { Button } from "antd";
 
 const AddCustomer = (props) => {
   const { setIsLoading, setData, setTotal, startPage, status, idGroup } = props;
@@ -70,12 +71,18 @@ const AddCustomer = (props) => {
   return (
     <>
       {/* Button trigger modal */}
-      <CustomButton
+      {/* <CustomButton
         title={`${i18n.t("create_new_customer", { lng: lang })}`}
-        className={"btn-add-customer"}
+        // className={"btn-add-customer"}
         style={{ width: "auto" }}
         onClick={showDrawer}
-      />
+      /> */}
+          <Button className="btn-add"
+            onClick={showDrawer}
+          >
+            <i class="uil uil-plus-circle"></i>
+            {`${i18n.t("create_new_customer", { lng: lang })}`}
+          </Button>
 
       {/* Modal */}
       <Formik

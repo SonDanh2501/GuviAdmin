@@ -215,12 +215,6 @@
 }
 
 
-
-
-
-
-
-
 .div-payment {
   display: flex;
   flex-direction: column;
@@ -320,4 +314,55 @@
 
 .text-status-order {
   text-align: left;
+}
+
+
+.hide-phone {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  .text-phone {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000;
+    text-decoration: none;
+    margin: 0;
+  }
+
+  .btn-eyes {
+    background-color: transparent;
+    border: none;
+    color: #000000;
+    margin: 0;
+  }
+}
+
+
+.name_customer {
+  display: flex;
+  .text-name-customer {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    color: #000000;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: auto 0px auto 24px;
+  }
+}
+
+.text-code-customer {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  color: rgb(0, 0, 0);
+  text-decoration: none !important;
+  margin: 0;
 }

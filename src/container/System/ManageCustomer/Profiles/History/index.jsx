@@ -2,11 +2,11 @@ import { Pagination } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getHistoryTransitionByCustomers } from "../../../../../../api/customer";
-import LoadingPagination from "../../../../../../components/paginationLoading";
-import { formatMoney } from "../../../../../../helper/formatMoney";
-import i18n from "../../../../../../i18n";
-import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import { getHistoryTransitionByCustomers } from "../../../../../api/customer";
+import LoadingPagination from "../../../../../components/paginationLoading";
+import { formatMoney } from "../../../../../helper/formatMoney";
+import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
 import "./index.scss";
 
 const HistoryTransition = ({ id }) => {

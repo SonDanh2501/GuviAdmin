@@ -4,13 +4,13 @@ import { useSelector } from "react-redux";
 import { Pagination, Table } from "antd";
 import moment from "moment";
 import { Link } from "react-router-dom";
-import { getOrderByCustomers } from "../../../../../../api/customer";
-import { formatMoney } from "../../../../../../helper/formatMoney";
-import i18n from "../../../../../../i18n";
-import { getLanguageState } from "../../../../../../redux/selectors/auth";
+import { getOrderByCustomers } from "../../../../../api/customer";
+import { formatMoney } from "../../../../../helper/formatMoney";
+import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
 import "./index.scss";
-import useWindowDimensions from "../../../../../../helper/useWindowDimensions";
-import { useCookies } from "../../../../../../helper/useCookies";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import { useCookies } from "../../../../../helper/useCookies";
 
 const OrderCustomer = ({ id }) => {
   const { width } = useWindowDimensions();

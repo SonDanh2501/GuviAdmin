@@ -739,6 +739,8 @@ const ManageOrder = () => {
 
   const [arrFilter, setArrFilter] = useState([])
 
+  const [detectLoading, setDetectLoading] = useState(null)
+
 
   useEffect(() => {
     getJobList();
@@ -756,6 +758,8 @@ const ManageOrder = () => {
 
   const handleSearch = useCallback(
     _debounce((value) => {
+      // setIsLoading(true);
+      setDetectLoading(value)
       setValueSearch(value);
       // getJobList();
     }, 1000),
@@ -805,7 +809,7 @@ const ManageOrder = () => {
     {
       i18n_title: 'code_order',
       dataIndex: 'id_view',
-      key: "id_view",
+      key: "code_order",
       width: 150
     },
     {
@@ -975,10 +979,10 @@ const ManageOrder = () => {
 
 
   const onChangeTab = (item) => {
-    console.log(item, 'item');
     setTab(item.value);
     setCheckCondition(false);
     setStartPage(0);
+    setDetectLoading(item)
     saveToCookie("tab-order", item?.key);
     saveToCookie("status-order", item?.value);
     saveToCookie("order_scrolly", 0);
@@ -1017,7 +1021,6 @@ const ManageOrder = () => {
 
   province?.forEach((item) => {
     const itemDistrict = [];
-    console.log(item, 'item');
     for (const item2 of item.districts) {
       itemDistrict.push({
         value: item2.code,
@@ -1106,14 +1109,16 @@ const ManageOrder = () => {
 
   return (
     <div className="div-container-content">
-    <div className="div-flex-row">
-    <div className="div-header-container">
-        <h4 className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</h4>
-      </div>
+      <div className="div-flex-row">
+        <div className="div-header-container">
+          <h4 className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</h4>
+        </div>
 
-      {checkElement?.includes("create_guvi_job") ? (
+
+        <div className="btn-action-header">
+        {checkElement?.includes("create_guvi_job") ? (
           <Button
-            className="btn-create-order"
+            className="btn-add"
             onClick={() => navigate("/group-order/manage-order/create-order")}
           >
             <i class="uil uil-plus-circle"></i>
@@ -1122,8 +1127,11 @@ const ManageOrder = () => {
         ) : (
           <></>
         )}
-    </div>
-      
+        </div>
+
+
+      </div>
+
       <div className="div-flex-row">
         <Tabs
           itemTab={itemTab}
@@ -1229,7 +1237,7 @@ const ManageOrder = () => {
             placeholder={`${i18n.t("search", { lng: lang })}`}
             // value={valueSearch}
             prefix={<SearchOutlined />}
-            className="input-filter-job"
+            className="input-search"
             onChange={(e) => {
               handleSearch(e.target.value);
               // setValueSearch(e.target.value);
@@ -1249,6 +1257,7 @@ const ManageOrder = () => {
           totalItem={total}
           onValueChange={setItem}
           onCurrentPageChange={onChangePage}
+          detectLoading={detectLoading}
         />
 
         <div>

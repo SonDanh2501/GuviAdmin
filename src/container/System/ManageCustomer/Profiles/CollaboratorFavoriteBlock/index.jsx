@@ -2,20 +2,20 @@ import { Button, Image, List } from "antd";
 import _debounce from "lodash/debounce";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { fetchCollaborators } from "../../../../../../api/collaborator";
+import { fetchCollaborators } from "../../../../../api/collaborator";
 import {
   blockCustomerApi,
   favouriteCustomerApi,
   getFavoriteAndBlockByCustomers,
   unblockCustomerApi,
   unfavouriteCustomerApi,
-} from "../../../../../../api/customer";
-import ModalCustom from "../../../../../../components/modalCustom";
-import LoadingPagination from "../../../../../../components/paginationLoading";
-import InputCustom from "../../../../../../components/textInputCustom";
-import { errorNotify } from "../../../../../../helper/toast";
-import i18n from "../../../../../../i18n";
-import { getLanguageState } from "../../../../../../redux/selectors/auth";
+} from "../../../../../api/customer";
+import ModalCustom from "../../../../../components/modalCustom";
+import LoadingPagination from "../../../../../components/paginationLoading";
+import InputCustom from "../../../../../components/textInputCustom";
+import { errorNotify } from "../../../../../helper/toast";
+import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
 import "./index.scss";
 
 const FavouriteBlock = ({ id }) => {

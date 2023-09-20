@@ -1,3 +1,4 @@
 export const formatMoney = (number) => {
-  return number?.toString()?.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + " đ";
+  const result = (number) ? number?.toString()?.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + " đ" : "0 đ"
+  return result;
 };

@@ -1,6 +1,6 @@
 import Home from "../container/System/Dashboard/DashBoard";
 import ManageOrder from "../container/System/ManageOrder";
-import ManageCustomer from "../container/System/ManageUser/Customer";
+import ManageCustomer from "../container/System/ManageCustomer";
 import ManageCollaborator from "../container/System/ManageUser/Collaborator";
 import EditPriceService from "../container/System/ManageService/EditPriceService";
 import ManageSetting from "../container/System/ManageSetting";

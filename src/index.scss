@@ -26,5 +26,54 @@
             font-size: 20px;
             font-weight: 600;
         }
+
+        .input-search {
+            width: 100%;
+            border-radius: 5px;
+            margin-left: 15px;
+            align-items: center;
+            margin: 0px;
+            height: 35px;
+
+        }
+
+        .btn-action-header {
+
+            Button {
+                border: none;
+                border-radius: 5px;
+                box-shadow: 2px 3px 2px rgb(216, 216, 216);
+                margin: auto auto auto 15px;
+            }
+
+            .btn-add {
+                background-color: #48cae4;
+                color: white;
+            }
+
+
+
+            // .btn-action {
+            //     display: flex;
+            //     flex-direction: row;
+            //     justify-content: space-between;
+            //     width: 100px;
+            //     border: none;
+            //     border-radius: 5px;
+            //     background-color: #48cae4;
+            //     color: white;
+            //     box-shadow: 2px 3px 2px rgb(216, 216, 216);
+            //     margin: auto auto auto 15px;
+            // }
+        }
     }
 }
+
+.text-select-dropdown {
+    margin: 0;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #19202c;
+  }

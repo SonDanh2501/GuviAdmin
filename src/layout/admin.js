@@ -73,8 +73,8 @@ import DetailReward from "../container/System/ManageTopup/ManageTopupCollaborato
 import ManageCollaborator from "../container/System/ManageUser/Collaborator";
 import ProfileCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/ProfileCollaborator";
 import DetailActivityCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/components/DetailActivity";
-import ManageCustomer from "../container/System/ManageUser/Customer";
-import Profiles from "../container/System/ManageUser/Customer/Profiles";
+import ManageCustomer from "../container/System/ManageCustomer";
+import Profiles from "../container/System/ManageCustomer/Profiles";
 
 const Admin = () => {
   return (

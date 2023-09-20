@@ -8,19 +8,19 @@ import {
   getInviteCustomerById,
   setIsStaffCustomerApi,
   updateCustomer,
-} from "../../../../../../api/customer";
-import iconGold from "../../../../../../assets/images/iconGold.svg";
-import iconMember from "../../../../../../assets/images/iconMember.svg";
-import iconPlatinum from "../../../../../../assets/images/iconPlatinum.svg";
-import iconSilver from "../../../../../../assets/images/iconSilver.svg";
-import user from "../../../../../../assets/images/user.png";
-import LoadingPagination from "../../../../../../components/paginationLoading";
-import InputCustom from "../../../../../../components/textInputCustom";
-import { formatMoney } from "../../../../../../helper/formatMoney";
-import { errorNotify, successNotify } from "../../../../../../helper/toast";
-import i18n from "../../../../../../i18n";
-import { loadingAction } from "../../../../../../redux/actions/loading";
-import { getLanguageState } from "../../../../../../redux/selectors/auth";
+} from "../../../../../api/customer";
+import iconGold from "../../../../../assets/images/iconGold.svg";
+import iconMember from "../../../../../assets/images/iconMember.svg";
+import iconPlatinum from "../../../../../assets/images/iconPlatinum.svg";
+import iconSilver from "../../../../../assets/images/iconSilver.svg";
+import user from "../../../../../assets/images/user.png";
+import LoadingPagination from "../../../../../components/paginationLoading";
+import InputCustom from "../../../../../components/textInputCustom";
+import { formatMoney } from "../../../../../helper/formatMoney";
+import { errorNotify, successNotify } from "../../../../../helper/toast";
+import i18n from "../../../../../i18n";
+import { loadingAction } from "../../../../../redux/actions/loading";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
 import "./index.scss";
 // core components
 

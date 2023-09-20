@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { getUsedPromotionByCustomers } from "../../../../../../api/customer";
+import { getUsedPromotionByCustomers } from "../../../../../api/customer";
 import "./styles.scss";
-import { formatMoney } from "../../../../../../helper/formatMoney";
+import { formatMoney } from "../../../../../helper/formatMoney";
 import { Table } from "antd";
 import moment from "moment";
 import { Link } from "react-router-dom";
-import useWindowDimensions from "../../../../../../helper/useWindowDimensions";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const UsedPromotion = ({ id }) => {
   const [data, setData] = useState([]);

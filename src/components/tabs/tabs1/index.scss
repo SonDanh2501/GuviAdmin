@@ -1,16 +1,10 @@
 .div-tab-order {
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
     width: 100%;
-
-
     .div-tab {
         display: flex;
         flex-direction: row;
         overflow-x: auto;
-        width: 100%;
-
+        white-space: nowrap;
         .item-tab {
             padding: 5px;
             width: auto;
