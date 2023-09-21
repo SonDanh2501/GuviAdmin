@@ -261,7 +261,7 @@ const ManageCustomer = () => {
           <div className="btn-action-header">
             {checkElement?.includes("create_customer") && (
               <AddCustomer
-                setIsLoading={setDetectLoading}
+                returnValueIsLoading={setDetectLoading}
                 setData={setData}
                 setTotal={setTotal}
                 startPage={startPage}
@@ -356,7 +356,6 @@ const ManageCustomer = () => {
 
         <FloatButton.BackTop />
       </div>
-
     </>
 
   )

@@ -14,14 +14,16 @@ import "./addCustomer.scss";
 import i18n from "../../../../i18n";
 import useWindowDimensions from "../../../../helper/useWindowDimensions";
 import { Button } from "antd";
+import LoadingPagination from "../../../../components/paginationLoading";
 
 const AddCustomer = (props) => {
-  const { setIsLoading, setData, setTotal, startPage, status, idGroup } = props;
+  const { returnValueIsLoading, setData, setTotal, startPage, status, idGroup } = props;
   const formikRef = useRef();
   const dispatch = useDispatch();
   const checkElement = useSelector(getElementState);
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -42,6 +44,7 @@ const AddCustomer = (props) => {
 
   const addCustomer = () => {
     setIsLoading(true);
+    returnValueIsLoading(true);
     createCustomer({
       code_phone_area: "+84",
       phone: formikRef?.current?.values?.phone,
@@ -52,6 +55,7 @@ const AddCustomer = (props) => {
     })
       .then((res) => {
         setOpen(false);
+        returnValueIsLoading(false);
         setIsLoading(false);
         fetchCustomers(lang, startPage, 50, status, idGroup, "")
           .then((res) => {
@@ -64,7 +68,8 @@ const AddCustomer = (props) => {
         errorNotify({
           message: err,
         });
-        setIsLoading(false);
+        returnValueIsLoading(false);
+      setIsLoading(false);
       });
   };
 
@@ -154,6 +159,7 @@ const AddCustomer = (props) => {
           );
         }}
       </Formik>
+      {isLoading && <LoadingPagination />}
     </>
   );
 };
