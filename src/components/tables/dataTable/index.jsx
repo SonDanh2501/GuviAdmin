@@ -102,7 +102,7 @@ const DataTable = (props) => {
                                 onClick={() => saveToCookie("order_scrolly", scrollY)}
                                 to={linkRedirect}
                             >
-                                <p className="text-id-view-order">{data?.id_view}</p>
+                                <p className="text-id-code-order">{data?.id_view}</p>
                             </Link>
                         )
                         break;
@@ -113,17 +113,17 @@ const DataTable = (props) => {
                                 onClick={() => saveToCookie("order_scrolly", scrollY)}
                                 to={linkRedirect}
                             >
-                                <p className="text-code-customer">{data?.id_view}</p>
+                                <p className="text-id-code-customer">{data?.id_view}</p>
                             </Link>
                         )
                         break;
                     case "date_create":
                         return (
-                            <div className="div-create-order">
-                                <p className="text-create">
+                            <div className="div-date-create">
+                                <p className="text">
                                     {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
                                 </p>
-                                <p className="text-create">
+                                <p className="text">
                                     {moment(new Date(data?.date_create)).format("HH:mm")}
                                 </p>
                             </div>
@@ -132,12 +132,12 @@ const DataTable = (props) => {
                     case "customer-phone":
                         return (
                             <Link to={`/profile-customer/${data?.id_customer?._id}`}>
-                                <div className="div-name-order-cutomer">
+                                <div className="div-customer-phone">
 
                                     <p className="text-name-customer">
                                         {data?.id_customer?.full_name}
                                     </p>
-                                    <p className="text-phone-order-customer">
+                                    <p className="text-phone-customer">
                                         {data?.id_customer?.phone}
                                     </p>
                                 </div>
@@ -146,7 +146,7 @@ const DataTable = (props) => {
                         break;
                     case "service":
                         return (
-                            <div className="div-service-order">
+                            <div className="div-service">
                                 <p className="text-service">
                                     {data?.type === "loop" && data?.is_auto_order
                                         ? `${i18n.t("repeat", { lng: lang })}`
@@ -166,7 +166,7 @@ const DataTable = (props) => {
                         break;
                     case "date_work":
                         return (
-                            <div className="div-worktime-order">
+                            <div className="div-date-work">
                                 <p className="text-worktime">
                                     {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
                                 </p>
@@ -178,22 +178,23 @@ const DataTable = (props) => {
                     case "collaborator":
                         return (
                             <>
-                                {!data?.id_collaborator ? (
+                            <div className="div-collaborator">
+                            {!data?.id_collaborator ? (
                                     <p className="text-pending-search">{`${i18n.t("searching", {
                                         lng: lang,
                                     })}`}</p>
                                 ) : (
                                     <Link
                                         to={`/details-collaborator/${data?.id_collaborator?._id}`}
-                                        className="div-name-order"
+                                        className="div-name-star"
                                     >
-                                        <div className="div-name-star">
-                                            <p className="text-collaborator">
+                                        <div className="div-name">
+                                            <p>
                                                 {data?.id_collaborator?.full_name}
                                             </p>
                                         </div>
                                         <div className="div-phone-star">
-                                            <p className="text-phone">{data?.id_collaborator?.phone}</p>
+                                            <p>{data?.id_collaborator?.phone}</p>
                                             {data?.id_collaborator?.star && (
                                                 <div className="div-star">
                                                     <StarFilled className="icon-star" />
@@ -204,23 +205,24 @@ const DataTable = (props) => {
                                         </div>
                                     </Link>
                                 )}
+                            </div>
                             </>
                         )
                         break;
                     case "status":
                         return (
-                            <div className="text-status-order">
+                            <div className="div-status-order">
                                 <p
                                     className={
                                         data?.status === "pending"
-                                            ? "text-pen-order"
+                                            ? "text-pending"
                                             : data?.status === "confirm"
-                                                ? "text-confirm-order"
+                                                ? "text-confirm"
                                                 : data?.status === "doing"
-                                                    ? "text-doing-order"
+                                                    ? "text-doing"
                                                     : data?.status === "done"
-                                                        ? "text-done-order"
-                                                        : "text-cancel-order"
+                                                        ? "text-done"
+                                                        : "text-cancel"
                                     }
                                 >
                                     {data?.status === "pending"
@@ -285,7 +287,7 @@ const DataTable = (props) => {
                             <>
                                 {data?.id_group_order ? (
                                     <Link to={`/details-order/${data?.id_group_order}`}>
-                                        <p className="text-id-order">{data?.id_view_group_order}</p>
+                                        <p className="text-id-code-order">{data?.id_view_group_order}</p>
                                     </Link>
                                 ) : (
                                     <p className="text-address-customer">{`${i18n.t("not_available", {
