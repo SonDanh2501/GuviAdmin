@@ -212,7 +212,7 @@ const DataTable = (props) => {
                     case "status":
                         return (
                             <div className="div-status-order">
-                                <p
+                                <span
                                     className={
                                         data?.status === "pending"
                                             ? "text-pending"
@@ -234,7 +234,7 @@ const DataTable = (props) => {
                                                 : data?.status === "done"
                                                     ? `${i18n.t("complete", { lng: lang })}`
                                                     : `${i18n.t("cancel", { lng: lang })}`}
-                                </p>
+                                </span>
                             </div>
 
                         )

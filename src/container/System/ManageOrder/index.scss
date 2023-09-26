@@ -44,7 +44,7 @@
   display: flex;
   flex-direction: row;
   overflow-x: auto;
-  width: 50%;
+  width: 25%;
 
   .header-filter {
     font-size: 10;
@@ -63,9 +63,6 @@
   }
 }
 
-.div-search {
-  width: 50%;
-}
 
 .btn-create-order {
   display: flex;

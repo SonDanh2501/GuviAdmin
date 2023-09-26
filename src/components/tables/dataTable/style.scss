@@ -3,23 +3,33 @@
 }
 
 p {
-  font-family: "Roboto";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 13px;
+  font-family: "Roboto" !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 12px !important;
     text-decoration: none;
     margin: 0;
     text-align: left;
+    line-height: 18px !important;
+}
+
+span {
+  font-family: "Roboto" !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 12px !important;
+  text-decoration: none;
+  margin: 0;
+  text-align: left;
+  line-height: 18px !important;
 }
 
 .text-id-code-order {
-  color: #023e8a;
-  font-weight: 500;
+  color: #2962ff;
 }
 
 .text-id-code-customer {
   color: #000000;
-  font-weight: 500;
 }
 
 .div-date-create {
@@ -33,11 +43,10 @@ p {
 .div-customer-phone {
   .text-name-customer {
     margin: 0;
-    font-size: 12px;
+    font-weight: 500 !important;
   }
   .text-phone-customer {
     margin: 0;
-    font-size: 12px;
   }
 }
 
@@ -51,9 +60,11 @@ p {
 }
 
 
-// .div-date-work {
-//   text-worktime
-// }
+.div-date-work {
+  .text-worktime {
+    text-transform: capitalize
+  }
+}
 
 .div-collaborator {
   .text-pending-search {
@@ -64,7 +75,6 @@ p {
   .div-name-star {
     .div-name {
       p {
-        font-size: 13px;
         text-decoration-line: underline;
         color: #023e8a;
         margin: 0;
@@ -94,20 +104,41 @@ p {
 }
 
 .div-status-order {
+
   .text-pending {
-    color: #ece200;
+    color: #c88a04 !important;
+    border: 1px solid #c88a04;
+    padding: 4px;
+    border-radius: 5px;
+    background-color: #fefce7;
   }
   .text-confirm {
-    color: #023e8a;
+    color: #2463eb !important;
+    border: 1px solid #2463eb;
+    padding: 4px;
+    border-radius: 5px;
+    background-color: #f0f6ff;
   }
   .text-doing {
-    color: #023e8a;
+    color: #2463eb !important;
+    border: 1px solid #2463eb;
+    padding: 4px;
+    border-radius: 5px;
+    background-color: #f0f6ff;
   }
   .text-done {
-    color: #00cf3a;
+    color: #00cf3a !important;
+    border: 1px solid #00cf3a;
+    padding: 4px;
+    border-radius: 5px;
+    background-color: #f2fdf5;
   }
   .text-cancel {
-    color: #fd7070;
+    color: #dc2828 !important;
+    border: 1px solid #dc2828;
+    padding: 4px;
+    border-radius: 5px;
+    background-color: #fef1f1;
   }
 }
 
@@ -133,8 +164,6 @@ p {
   justify-content: space-between;
   align-items: center;
   .text-phone {
-    font-weight: 400;
-    font-size: 12px;
     color: #000000;
     text-decoration: none;
     margin: 0;

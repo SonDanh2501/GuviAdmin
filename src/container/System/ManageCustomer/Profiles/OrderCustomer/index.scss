@@ -7,19 +7,19 @@
   margin: 0;
 }
 
-.div-service {
-  display: flex;
-  flex-direction: column;
+// .div-service {
+//   display: flex;
+//   flex-direction: column;
 
-  .text-service {
-    font-family: "Roboto";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 12px;
-    color: black;
-    margin: 0;
-  }
-}
+//   .text-service {
+//     font-family: "Roboto";
+//     font-style: normal;
+//     font-weight: 500;
+//     font-size: 12px;
+//     color: black;
+//     margin: 0;
+//   }
+// }
 
 .div-create {
   display: flex;
@@ -75,7 +75,7 @@
 .text-pending {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 12px;
   color: #ece200 !important;
   margin: 0;
@@ -93,7 +93,7 @@
 .text-doing {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 12px;
   margin: 0;
   color: #023e8a;
