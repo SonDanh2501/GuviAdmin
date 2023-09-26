@@ -147,8 +147,9 @@ p {
   }
 }
 
-
-
-
-
-
+.pagination {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}

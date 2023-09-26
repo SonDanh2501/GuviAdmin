@@ -423,7 +423,7 @@ const DataTable = (props) => {
                 />
             </div>
 
-            <div className="mt-2 div-pagination-order p-2">
+            <div className="mt-2 p-2 pagination">
                 <p>
                     {`${i18n.t("total", { lng: lang })}`}: {totalItem}
                 </p>
