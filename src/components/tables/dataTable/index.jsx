@@ -92,7 +92,7 @@ const DataTable = (props) => {
                 switch (item.key) {
                     case "id_view":
                         return (
-                            <p className="text-id-view-order">{data?.id_view}</p>
+                            <p>{data?.id_view}</p>
                         )
                         break;
                     case "code_order":
@@ -120,19 +120,19 @@ const DataTable = (props) => {
                     case "date_create":
                         return (
                             <div className="div-date-create">
-                                <p className="text">
+                                <p>
                                     {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
                                 </p>
-                                <p className="text">
+                                <p>
                                     {moment(new Date(data?.date_create)).format("HH:mm")}
                                 </p>
                             </div>
                         )
                         break;
-                    case "customer-phone":
+                    case "customer-name-phone":
                         return (
                             <Link to={`/profile-customer/${data?.id_customer?._id}`}>
-                                <div className="div-customer-phone">
+                                <div className="div-customer-name-phone">
 
                                     <p className="text-name-customer">
                                         {data?.id_customer?.full_name}
@@ -146,8 +146,8 @@ const DataTable = (props) => {
                         break;
                     case "service":
                         return (
-                            <div className="div-service">
-                                <p className="text-service">
+                            <div>
+                                <p>
                                     {data?.type === "loop" && data?.is_auto_order
                                         ? `${i18n.t("repeat", { lng: lang })}`
                                         : data?.service?._id?.kind === "giup_viec_theo_gio"
@@ -160,7 +160,7 @@ const DataTable = (props) => {
                                                         ? `${i18n.t("Máy lạnh", { lng: lang })}`
                                                         : ""}
                                 </p>
-                                <p className="text-service">{timeWork(data)}</p>
+                                <p>{timeWork(data)}</p>
                             </div>
                         );
                         break;
@@ -215,14 +215,14 @@ const DataTable = (props) => {
                                 <span
                                     className={
                                         data?.status === "pending"
-                                            ? "text-pending"
+                                            ? "text-status-pending"
                                             : data?.status === "confirm"
-                                                ? "text-confirm"
+                                                ? "text-status-confirm"
                                                 : data?.status === "doing"
-                                                    ? "text-doing"
+                                                    ? "text-status-doing"
                                                     : data?.status === "done"
-                                                        ? "text-done"
-                                                        : "text-cancel"
+                                                        ? "text-status-done"
+                                                        : "text-status-cancel"
                                     }
                                 >
                                     {data?.status === "pending"
@@ -290,7 +290,7 @@ const DataTable = (props) => {
                                         <p className="text-id-code-order">{data?.id_view_group_order}</p>
                                     </Link>
                                 ) : (
-                                    <p className="text-address-customer">{`${i18n.t("not_available", {
+                                    <p>{`${i18n.t("not_available", {
                                         lng: lang,
                                     })}`}</p>
                                 )}
@@ -325,7 +325,7 @@ const DataTable = (props) => {
                         const phone = data?.phone.slice(0, 7);
                         return (
                             <div className="hide-phone">
-                                <p className="text-phone">
+                                <p className="phone-text">
                                     {rowIndex === index
                                         ? hidePhone
                                             ? data?.phone
@@ -404,6 +404,24 @@ const DataTable = (props) => {
 
     return (
         <React.Fragment>
+
+{/* <div className="mt-2 p-2 pagination">
+                <p>
+                    {`${i18n.t("total", { lng: lang })}`}: {totalItem}
+                </p>
+                <div>
+                    <Pagination
+                        current={currentPage}
+                        onChange={calculateCurrentPage}
+                        total={totalItem}
+                        showSizeChanger={false}
+                        pageSize={20}
+                        hideOnSinglePage={true}
+                    />
+                </div>
+            </div> */}
+
+
             <div className="mt-3">
                 <Table
                     columns={headerTable}

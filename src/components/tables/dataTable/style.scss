@@ -1,49 +1,39 @@
+@import '../../../index.scss';
+
 .title-column {
   text-align: left;
 }
 
 p {
-  font-family: "Roboto" !important;
-    font-style: normal !important;
-    font-weight: 400 !important;
-    font-size: 12px !important;
     text-decoration: none;
     margin: 0;
     text-align: left;
-    line-height: 18px !important;
 }
 
 span {
-  font-family: "Roboto" !important;
-  font-style: normal !important;
-  font-weight: 400 !important;
-  font-size: 12px !important;
   text-decoration: none;
   margin: 0;
   text-align: left;
-  line-height: 18px !important;
 }
 
 .text-id-code-order {
-  color: #2962ff;
+  color: $color1;
 }
 
 .text-id-code-customer {
-  color: #000000;
+  color: $colorBlack;
 }
 
 .div-date-create {
   display: flex;
   flex-direction: column;
-  .text {
-    margin: 0;
-  }
 }
 
-.div-customer-phone {
+.div-customer-name-phone {
+  color: $colorBlack;
   .text-name-customer {
     margin: 0;
-    font-weight: 500 !important;
+    font-weight: $fontWeightM;
   }
   .text-phone-customer {
     margin: 0;
@@ -68,7 +58,7 @@ span {
 
 .div-collaborator {
   .text-pending-search {
-    color: #000000;
+    color: $color2;
     margin: 0;
   }
 
@@ -83,14 +73,14 @@ span {
     .div-phone-star {
       display: flex;
       p {
-        color: #000000;
+        color: $colorBlack;
       }
       .div-star {
         display: flex;
         flex-direction: row;
         margin-left: 15px;
         .text-star {
-          color: #000000;
+          color: $colorBlack;
           text-decoration: none;
           margin: 0px 0px 0px 5px;
         }
@@ -105,40 +95,40 @@ span {
 
 .div-status-order {
 
-  .text-pending {
-    color: #c88a04 !important;
-    border: 1px solid #c88a04;
+  .text-status-pending {
+    color: $color2;
+    border: 1px solid $color2;
     padding: 4px;
     border-radius: 5px;
-    background-color: #fefce7;
+    background-color: $backGroundColor2;
   }
-  .text-confirm {
-    color: #2463eb !important;
-    border: 1px solid #2463eb;
+  .text-status-confirm {
+    color: $color1;
+    border: 1px solid $color1;
     padding: 4px;
     border-radius: 5px;
-    background-color: #f0f6ff;
+    background-color: $backGroundColor1;
   }
-  .text-doing {
-    color: #2463eb !important;
-    border: 1px solid #2463eb;
+  .text-status-doing {
+    color: $color1;
+    border: 1px solid $color1;
     padding: 4px;
     border-radius: 5px;
-    background-color: #f0f6ff;
+    background-color: $backGroundColor1;
   }
-  .text-done {
-    color: #00cf3a !important;
-    border: 1px solid #00cf3a;
+  .text-status-done {
+    color: $colorSuccess;
+    border: 1px solid $colorSuccess;
     padding: 4px;
     border-radius: 5px;
-    background-color: #f2fdf5;
+    background-color: $backGroundColorSuccess;
   }
-  .text-cancel {
-    color: #dc2828 !important;
-    border: 1px solid #dc2828;
+  .text-status-cancel {
+    color: $colorError;
+    border: 1px solid $colorError;
     padding: 4px;
     border-radius: 5px;
-    background-color: #fef1f1;
+    background-color: $backGroundColorError;
   }
 }
 
@@ -150,6 +140,7 @@ span {
 .name_customer {
   display: flex;
   .text-name-customer {
+    color: $colorBlack;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -163,15 +154,15 @@ span {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  .text-phone {
-    color: #000000;
+  .phone-text {
+    color: $colorBlack;
     text-decoration: none;
     margin: 0;
   }
   .btn-eyes {
     background-color: transparent;
     border: none;
-    color: #000000;
+    color: $colorBlack;
     margin: 0;
   }
 }

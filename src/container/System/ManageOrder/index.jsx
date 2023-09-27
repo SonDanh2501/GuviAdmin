@@ -822,7 +822,7 @@ const ManageOrder = () => {
     {
       i18n_title: 'customer',
       dataIndex: 'customer',
-      key: "customer-phone",
+      key: "customer-name-phone",
       width: 140
     },
     {

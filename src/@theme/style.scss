@@ -1,0 +1,74 @@
+$textFontSizeS: 10px;
+$textFontSizeM: 12px; 
+$textFontSizeL: 14px;
+$textFontSizeXL: 16px;
+$textFontSizeXXL: 18px;
+
+$fontFamily: "Roboto";
+$fontWeightM: 300;
+$fontWeightL: 400;
+$fontWeightXL: 500;
+
+$fontStyleNormal: normal;
+$fontStyleItalic: italic;
+
+
+$colorWhite: #ffffff;
+$colorBackgroundWhite: #ffffff1f;
+$colorBlack: #212121;
+$colorBackgroundBlack: #21212125;
+$color1: #2463eb;
+$backGroundColor1: #f0f6ff;
+$color2: #c88a04;
+$backGroundColor2: #fefce7;
+$colorSuccess: #00cf3a;
+$backGroundColorSuccess: #f2fdf5;
+$colorError: #dc2828;
+$backGroundColorError: #fef1f1;
+
+
+h3 {
+    font-family: $fontFamily;
+    font-style: $fontStyleNormal;
+    font-weight: $fontWeightXL;
+    line-height: 18px;
+}
+
+p {
+    font-family: $fontFamily;
+    font-style: $fontStyleNormal;
+    font-weight: $fontWeightL;
+    font-size: $textFontSizeM;
+    line-height: 18px;
+}
+
+span {
+    font-family: $fontFamily;
+    font-style: $fontStyleNormal;
+    font-weight: $fontWeightL;
+    font-size: $textFontSizeM;
+}
+
+.button-info {
+    color: $colorBlack;
+    background-color: $colorWhite;
+    width: 100%;
+}
+
+.button-primary {
+    color: $colorWhite;
+    background-color: $color2;
+    width: 100%;
+}
+
+.button-success {
+    color: $colorWhite;
+    background-color: $colorSuccess;
+    width: 100%;
+}
+
+.button-danger {
+    color: $colorWhite;
+    background-color: $colorError;
+    width: 100%;
+}
