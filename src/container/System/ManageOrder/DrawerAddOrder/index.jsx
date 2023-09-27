@@ -1,24 +1,261 @@
-import { List, Select } from "antd";
-import _debounce from "lodash/debounce";
-import React, { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { searchCustomersApi } from "../../../../api/customer";
-import {
-  getExtendOptionalByOptionalServiceApi,
-  getOptionalServiceByServiceApi,
-} from "../../../../api/service";
-import LoadingPagination from "../../../../components/paginationLoading";
-import InputCustom from "../../../../components/textInputCustom";
-import { errorNotify } from "../../../../helper/toast";
-import i18n from "../../../../i18n";
-import { getLanguageState, getUser } from "../../../../redux/selectors/auth";
-import { getService } from "../../../../redux/selectors/service";
-import BussinessType from "../components/BussinessType";
-import CleaningAC from "../components/CleaningAC";
-import CleaningHourly from "../components/CleaningHourly";
-import CleaningSchedule from "../components/CleaningSchedule";
-import DeepCleaning from "../components/DeepCleaning";
-import "./index.scss";
+// import { List, Select } from "antd";
+// import _debounce from "lodash/debounce";
+// import React, { useCallback, useEffect, useState } from "react";
+// import { useSelector } from "react-redux";
+// import { searchCustomersApi } from "../../../../api/customer";
+// import {
+//   getExtendOptionalByOptionalServiceApi,
+//   getOptionalServiceByServiceApi,
+// } from "../../../../api/service";
+// import LoadingPagination from "../../../../components/paginationLoading";
+// import InputCustom from "../../../../components/textInputCustom";
+// import { errorNotify } from "../../../../helper/toast";
+// import i18n from "../../../../i18n";
+// import { getLanguageState, getUser } from "../../../../redux/selectors/auth";
+// import { getService } from "../../../../redux/selectors/service";
+// import BussinessType from "../components/BussinessType";
+// import CleaningAC from "../components/CleaningAC";
+// import CleaningHourly from "../components/CleaningHourly";
+// import CleaningSchedule from "../components/CleaningSchedule";
+// import DeepCleaning from "../components/DeepCleaning";
+// import "./index.scss";
+
+// const AddOrder = () => {
+//   const [optionalService, setOptionalService] = useState([]);
+//   const [idOptional, setIdOptional] = useState("");
+//   const [extendService, setExtendService] = useState([]);
+//   const [bussinessType, setBussinessType] = useState([]);
+//   const [kindService, setKindService] = useState("");
+//   const [nameService, setNameService] = useState("");
+//   const [addService, setAddService] = useState([]);
+//   const [dataFilter, setDataFilter] = useState([]);
+//   const [extraService, setExtraService] = useState([]);
+//   const [name, setName] = useState("");
+//   const [errorNameCustomer, setErrorNameCustomer] = useState("");
+//   const [id, setId] = useState("");
+//   const service = useSelector(getService);
+//   const [serviceApply, setServiceApply] = useState({});
+//   const [isLoading, setIsLoading] = useState(false);
+//   // const serviceSelect = [];
+//   const optionalSelect = [];
+//   const lang = useSelector(getLanguageState);
+//   const user = useSelector(getUser);
+//   const [serviceSelect, setServiceSelect] = useState([]);
+
+
+
+//   useEffect(() => {
+//     console.log(service, 's');
+//     console.log(user, 'user');
+//     const tempService = [];
+//     if (user?.id_service_manager?.length === 0) {
+//       for(const item of user.id_service_manager) {
+//         tempService.push({
+//           label: item?.title?.[lang],
+//           value: item?._id,
+//           kind: item?.kind
+//         })
+//       }
+//     } else {
+//       for(const item of service) {
+//         tempService.push({
+//           label: item?.title?.[lang],
+//           value: item?._id,
+//           kind: item?.kind
+//         })
+//       }
+//     }
+//     setServiceSelect(tempService)
+//     setServiceApply(tempService[0])
+//     console.log(serviceSelect, 'serviceSelect');
+//     // if(user?.id_service_manager?.length === 0)
+//   }, [service])
+
+//     const onChangeServiceApply = (value, item) => {
+//       console.log(value, 'value');
+//       console.log(item, 'item');
+//       setServiceApply(item)
+//   }; 
+
+//   useEffect(() => {
+//       getOptionalServiceByServiceApi(service[0]?._id)
+//         .then((res) => {
+//           setOptionalService(res?.data);
+//           setIdOptional(res?.data[0]?._id);
+//           setIsLoading(false);
+//         })
+//         .catch((err) => {
+//           setIsLoading(false);
+//         });
+//   }, [serviceApply])
+
+//   const onChangeOptionalService = (value) => {
+//     setIdOptional(value);
+//     getExtendOptionalByOptionalServiceApi(value)
+//       .then((res) => {
+//         setExtendService(res?.data);
+//         setIsLoading(false);
+//       })
+//       .catch((err) => {
+//         setIsLoading(false);
+//       });
+//   };
+
+//   const handleSearch = useCallback(
+//     _debounce((value) => {
+//       setName(value);
+//       if (value) {
+//         searchCustomersApi(value)
+//           .then((res) => {
+//             setDataFilter(res.data);
+//           })
+//           .catch((err) => {
+//             errorNotify({
+//               message: err,
+//             });
+//           });
+//       } else if (id) {
+//         setDataFilter([]);
+//       } else {
+//         setDataFilter([]);
+//       }
+//       setId("");
+//     }, 500),
+//     []
+//   );
+
+
+
+
+
+//   return (
+//     <React.Fragment>
+
+//       <div className="div-container-content">
+//         <div className="div-flex-row">
+//         <div className="div-header-container">
+//           <h4>{`${i18n.t("create_order", { lng: lang })}`}</h4>
+//         </div>
+//         </div>
+//         <div className="div-flex-row">
+//         <div className="info-service div-flex-column">
+//           <Select
+//             className="select-service-order-add"
+//             onChange={onChangeServiceApply}
+//             options={serviceSelect}
+//             value={serviceApply}
+//           />
+
+
+// {serviceApply?.kind === "ve_sinh_may_lanh" && (
+//         <InputCustom
+//           title="Loại máy lạnh"
+//           select={true}
+//           options={optionalSelect}
+//           style={{ width: "50%" }}
+//           value={idOptional}
+//           onChange={onChangeOptionalService}
+//         />
+//       )}
+
+//       <div className="mt-3">
+//         {serviceApply?.kind === "giup_viec_theo_gio" ? (
+//           <CleaningHourly
+//             extendService={extendService}
+//             addService={addService}
+//             id={id}
+//             name={name}
+//             setErrorNameCustomer={setErrorNameCustomer}
+//             idService={serviceApply}
+//             nameService={nameService}
+//           />
+//         ) : serviceApply?.kind === "giup_viec_co_dinh" ? (
+//           <CleaningSchedule
+//             extendService={extendService}
+//             id={id}
+//             name={name}
+//             setErrorNameCustomer={setErrorNameCustomer}
+//             idService={serviceApply}
+//             nameService={nameService}
+//           />
+//         ) : serviceApply?.kind === "phuc_vu_nha_hang" ? (
+//           <BussinessType
+//             extendService={extendService}
+//             extraService={extraService}
+//             bussinessType={bussinessType}
+//             id={id}
+//             name={name}
+//             setErrorNameCustomer={setErrorNameCustomer}
+//             idService={serviceApply}
+//             nameService={nameService}
+//           />
+//         ) : serviceApply?.kind === "tong_ve_sinh" ? (
+//           <DeepCleaning
+//             id={id}
+//             idService={serviceApply}
+//             extendService={extendService}
+//             setErrorNameCustomer={setErrorNameCustomer}
+//           />
+//         ) : serviceApply?.kind === "ve_sinh_may_lanh" ? (
+//           <CleaningAC
+//             id={id}
+//             idService={serviceApply}
+//             extendService={extendService}
+//             optionalService={optionalService}
+//             setErrorNameCustomer={setErrorNameCustomer}
+//           />
+//         ) : (
+//           <></>
+//         )}
+//         </div>
+
+//         </div>
+
+//         <div className="info-customer div-flex-column">
+//         <InputCustom
+//           title={`${i18n.t("customer", { lng: lang })}`}
+//           value={name}
+//           className="input-search-customer"
+//           type="text"
+//           onChange={(e) => {
+//             setName(e.target.value);
+//             handleSearch(e.target.value);
+//           }}
+//           placeholder={`${i18n.t("search", { lng: lang })}`}
+//           error={errorNameCustomer}
+//         />
+//         </div>
+
+//         </div>
+
+//         <div className="div-flex-row">
+
+//         </div>
+
+
+
+
+
+
+//       </div>
+
+//     </React.Fragment>
+//   )
+// }
+
+// export default AddOrder;
+
+
+
+
+
+
+
+
+
+
+
+
 
 const AddOrder = () => {
   const [optionalService, setOptionalService] = useState([]);
@@ -330,3 +567,5 @@ const AddOrder = () => {
   );
 };
 export default AddOrder;
+
+

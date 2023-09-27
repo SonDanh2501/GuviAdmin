@@ -313,8 +313,8 @@ const DataTable = (props) => {
                             }
                             getData = getData[temp[i]]
                         }
-                        const indexSlice = getData.length - 60;
-                        const viewAddress = ( indexSlice > 0 ) ? getData.slice(0, 60) + "..." : getData;
+                        const indexSlice = getData.length - 65;
+                        const viewAddress = ( indexSlice > 0 ) ? getData.slice(0, 65) + "..." : getData;
                         return (
                             <p className="text-address-order">
                                 {getData !== "" ? viewAddress : `${i18n.t("not_available", { lng: lang })}`}

@@ -11,65 +11,59 @@
     flex-direction: column;
     width: 100%;
 
+}
 
-    .div-flex-row {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-        margin: 8px 0px;
+.div-flex-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin: 8px 0px;
+}
 
-
-        .div-header-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            width: 100%;
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .input-search {
-            width: 100%;
-            border-radius: 5px;
-            margin-left: 15px;
-            align-items: center;
-            margin: 0px;
-            height: 35px;
-
-        }
-
-        .btn-action-header {
-
-            Button {
-                border: none;
-                border-radius: 5px;
-                box-shadow: 2px 3px 2px rgb(216, 216, 216);
-                margin: auto auto auto 15px;
-            }
-
-            .btn-add {
-                background-color: #48cae4;
-                color: white;
-            }
+.div-flex-column {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin: 8px 0px;
+}
 
 
-
-            // .btn-action {
-            //     display: flex;
-            //     flex-direction: row;
-            //     justify-content: space-between;
-            //     width: 100px;
-            //     border: none;
-            //     border-radius: 5px;
-            //     background-color: #48cae4;
-            //     color: white;
-            //     box-shadow: 2px 3px 2px rgb(216, 216, 216);
-            //     margin: auto auto auto 15px;
-            // }
-        }
+.div-header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 20px;
+    font-weight: 600;
+}
+.input-search {
+    width: 100%;
+    border-radius: 5px;
+    margin-left: 15px;
+    align-items: center;
+    margin: 0px;
+    height: 35px;
+}
+.btn-action-header {
+    Button {
+        border: none;
+        border-radius: 5px;
+        box-shadow: 2px 3px 2px rgb(216, 216, 216);
+        margin: auto auto auto 15px;
+    }
+    .btn-add {
+        background-color: #48cae4;
+        color: white;
     }
 }
+
+
+
+
+
+
 
 .text-select-dropdown {
     margin: 0;

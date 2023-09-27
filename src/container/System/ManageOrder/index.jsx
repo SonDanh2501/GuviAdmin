@@ -1134,102 +1134,102 @@ const ManageOrder = () => {
 
 
 
-//   <div className="div-filter">
-//   <div className="header-filter">
-//     <Button
-//       type="primary"
-//       style={{
-//         alignItems: "center",
-//         justifyContent: "center",
-//         display: "flex",
-//       }}
-//       onClick={() => setCheckCondition(!checkCondition)}
-//     >
-//       Bộ lọc
-//     </Button>
+  //   <div className="div-filter">
+  //   <div className="header-filter">
+  //     <Button
+  //       type="primary"
+  //       style={{
+  //         alignItems: "center",
+  //         justifyContent: "center",
+  //         display: "flex",
+  //       }}
+  //       onClick={() => setCheckCondition(!checkCondition)}
+  //     >
+  //       Bộ lọc
+  //     </Button>
 
-//   </div>
-//   {checkCondition && (
-//     <div className="filter-container">
-//       <div className="item-select">
-//         <span>Dịch vụ</span>
-//         <Select
-//           style={{ width: "100%", marginRight: 10 }}
-//           options={optionsService}
-//           value={kind}
-//           onChange={(e, item) => {
-//             setKind(e);
-//             setName(item?.label);
-//             setArrFilter({ key: "service", value: item.value, label: item.label })
-//           }}
-//         />
-//       </div>
-//       {/* <div className="item-select">
-//         <span>Ngày tạo</span>
-//         <RangePicker
-//           onChange={(date, dateString) => {
-//             setStartDate(moment(dateString[0]).toISOString());
-//             setEndDate(moment(dateString[1]).toISOString());
-//           }}
-//         />
-//       </div>
+  //   </div>
+  //   {checkCondition && (
+  //     <div className="filter-container">
+  //       <div className="item-select">
+  //         <span>Dịch vụ</span>
+  //         <Select
+  //           style={{ width: "100%", marginRight: 10 }}
+  //           options={optionsService}
+  //           value={kind}
+  //           onChange={(e, item) => {
+  //             setKind(e);
+  //             setName(item?.label);
+  //             setArrFilter({ key: "service", value: item.value, label: item.label })
+  //           }}
+  //         />
+  //       </div>
+  //       {/* <div className="item-select">
+  //         <span>Ngày tạo</span>
+  //         <RangePicker
+  //           onChange={(date, dateString) => {
+  //             setStartDate(moment(dateString[0]).toISOString());
+  //             setEndDate(moment(dateString[1]).toISOString());
+  //           }}
+  //         />
+  //       </div>
 
-//       <div className="item-select">
-//         <span>Ngày tạo</span>
-//         <RangePicker
-//           onChange={(date, dateString) => {
-//             setStartDate(moment(dateString[0]).toISOString());
-//             setEndDate(moment(dateString[1]).toISOString());
-//           }}
-//         />
-//       </div> */}
+  //       <div className="item-select">
+  //         <span>Ngày tạo</span>
+  //         <RangePicker
+  //           onChange={(date, dateString) => {
+  //             setStartDate(moment(dateString[0]).toISOString());
+  //             setEndDate(moment(dateString[1]).toISOString());
+  //           }}
+  //         />
+  //       </div> */}
 
-//       <div className="item-select">
-//         <span>Tỉnh/Thành phố</span>
-//         <Select
-//           style={{ width: "100%", marginRight: 10 }}
-//           options={cityOptions}
-//           value={city}
-//           onChange={(e, item) => {
-//             setCity(e);
-//             setDataDistrict(item?.district);
-//             setName(item?.label);
-//           }}
-//           showSearch
-//           filterOption={(input, option) =>
-//             (option?.label ?? "").includes(input)
-//           }
-//           filterSort={(optionA, optionB) =>
-//             (optionA?.label ?? "")
-//               .toLowerCase()
-//               .localeCompare((optionB?.label ?? "").toLowerCase())
-//           }
-//         />
-//       </div>
-//       <div className="item-select">
-//         <span>Quận/Huyện</span>
-//         <Select
-//           placeholde="Chọn quận/huyện"
-//           style={{ width: "100%", marginRight: 10, marginTop: 10 }}
-//           mode="multiple"
-//           options={districtOption}
-//           value={district}
-//           onChange={(e, item) => {
-//             setDistrict(e);
-//           }}
-//           showSearch
-//           filterOption={(input, option) =>
-//             (option?.label ?? "").includes(input)
-//           }
-//         />
-//       </div>
-//     </div>
-//   )}
-// </div>
+  //       <div className="item-select">
+  //         <span>Tỉnh/Thành phố</span>
+  //         <Select
+  //           style={{ width: "100%", marginRight: 10 }}
+  //           options={cityOptions}
+  //           value={city}
+  //           onChange={(e, item) => {
+  //             setCity(e);
+  //             setDataDistrict(item?.district);
+  //             setName(item?.label);
+  //           }}
+  //           showSearch
+  //           filterOption={(input, option) =>
+  //             (option?.label ?? "").includes(input)
+  //           }
+  //           filterSort={(optionA, optionB) =>
+  //             (optionA?.label ?? "")
+  //               .toLowerCase()
+  //               .localeCompare((optionB?.label ?? "").toLowerCase())
+  //           }
+  //         />
+  //       </div>
+  //       <div className="item-select">
+  //         <span>Quận/Huyện</span>
+  //         <Select
+  //           placeholde="Chọn quận/huyện"
+  //           style={{ width: "100%", marginRight: 10, marginTop: 10 }}
+  //           mode="multiple"
+  //           options={districtOption}
+  //           value={district}
+  //           onChange={(e, item) => {
+  //             setDistrict(e);
+  //           }}
+  //           showSearch
+  //           filterOption={(input, option) =>
+  //             (option?.label ?? "").includes(input)
+  //           }
+  //         />
+  //       </div>
+  //     </div>
+  //   )}
+  // </div>
 
 
 
-const test = ""
+  const test = ""
 
 
 
@@ -1242,17 +1242,17 @@ const test = ""
 
 
         <div className="btn-action-header">
-        {checkElement?.includes("create_guvi_job") ? (
-          <Button
-            className="btn-add"
-            onClick={() => navigate("/group-order/manage-order/create-order")}
-          >
-            <i class="uil uil-plus-circle"></i>
-            {`${i18n.t("create_order", { lng: lang })}`}
-          </Button>
-        ) : (
-          <></>
-        )}
+          {checkElement?.includes("create_guvi_job") ? (
+            <Button
+              className="btn-add"
+              onClick={() => navigate("/group-order/manage-order/create-order")}
+            >
+              <i class="uil uil-plus-circle"></i>
+              {`${i18n.t("create_order", { lng: lang })}`}
+            </Button>
+          ) : (
+            <></>
+          )}
         </div>
 
 
@@ -1268,37 +1268,37 @@ const test = ""
       <div className="div-flex-row">
 
 
-<div className="div-filter">
-  <div className="header-filter">
-    <Button
-      type="primary"
-      style={{
-        alignItems: "center",
-        justifyContent: "center",
-        display: "flex",
-      }}
-      onClick={() => setCheckCondition(!checkCondition)}
-    >
-      Bộ lọc
-    </Button>
+        <div className="div-filter">
+          <div className="header-filter">
+            <Button
+              type="primary"
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                display: "flex",
+              }}
+              onClick={() => setCheckCondition(!checkCondition)}
+            >
+              Bộ lọc
+            </Button>
 
-  </div>
-  {checkCondition && (
-    <div className="filter-container">
-      <div className="item-select">
-        <span>Dịch vụ</span>
-        <Select
-          style={{ width: "100%", marginRight: 10 }}
-          options={optionsService}
-          value={kind}
-          onChange={(e, item) => {
-            setKind(e);
-            setName(item?.label);
-            setArrFilter({ key: "service", value: item.value, label: item.label })
-          }}
-        />
-      </div>
-      {/* <div className="item-select">
+          </div>
+          {checkCondition && (
+            <div className="filter-container">
+              <div className="item-select">
+                <span>Dịch vụ</span>
+                <Select
+                  style={{ width: "100%", marginRight: 10 }}
+                  options={optionsService}
+                  value={kind}
+                  onChange={(e, item) => {
+                    setKind(e);
+                    setName(item?.label);
+                    setArrFilter({ key: "service", value: item.value, label: item.label })
+                  }}
+                />
+              </div>
+              {/* <div className="item-select">
         <span>Ngày tạo</span>
         <RangePicker
           onChange={(date, dateString) => {
@@ -1318,49 +1318,49 @@ const test = ""
         />
       </div> */}
 
-      <div className="item-select">
-        <span>Tỉnh/Thành phố</span>
-        <Select
-          style={{ width: "100%", marginRight: 10 }}
-          options={cityOptions}
-          value={city}
-          onChange={(e, item) => {
-            setCity(e);
-            setDataDistrict(item?.district);
-            setName(item?.label);
-          }}
-          showSearch
-          filterOption={(input, option) =>
-            (option?.label ?? "").includes(input)
-          }
-          filterSort={(optionA, optionB) =>
-            (optionA?.label ?? "")
-              .toLowerCase()
-              .localeCompare((optionB?.label ?? "").toLowerCase())
-          }
-        />
-      </div>
-      <div className="item-select">
-        <span>Quận/Huyện</span>
-        <Select
-          placeholde="Chọn quận/huyện"
-          style={{ width: "100%", marginRight: 10, marginTop: 10 }}
-          mode="multiple"
-          options={districtOption}
-          value={district}
-          onChange={(e, item) => {
-            setDistrict(e);
-          }}
-          showSearch
-          filterOption={(input, option) =>
-            (option?.label ?? "").includes(input)
-          }
-        />
-      </div>
-    </div>
-  )}
-</div>
-        
+              <div className="item-select">
+                <span>Tỉnh/Thành phố</span>
+                <Select
+                  style={{ width: "100%", marginRight: 10 }}
+                  options={cityOptions}
+                  value={city}
+                  onChange={(e, item) => {
+                    setCity(e);
+                    setDataDistrict(item?.district);
+                    setName(item?.label);
+                  }}
+                  showSearch
+                  filterOption={(input, option) =>
+                    (option?.label ?? "").includes(input)
+                  }
+                  filterSort={(optionA, optionB) =>
+                    (optionA?.label ?? "")
+                      .toLowerCase()
+                      .localeCompare((optionB?.label ?? "").toLowerCase())
+                  }
+                />
+              </div>
+              <div className="item-select">
+                <span>Quận/Huyện</span>
+                <Select
+                  placeholde="Chọn quận/huyện"
+                  style={{ width: "100%", marginRight: 10, marginTop: 10 }}
+                  mode="multiple"
+                  options={districtOption}
+                  value={district}
+                  onChange={(e, item) => {
+                    setDistrict(e);
+                  }}
+                  showSearch
+                  filterOption={(input, option) =>
+                    (option?.label ?? "").includes(input)
+                  }
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
 
         <div className="div-search">
           <Input
