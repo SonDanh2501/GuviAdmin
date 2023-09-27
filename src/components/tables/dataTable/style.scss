@@ -30,12 +30,13 @@ span {
 }
 
 .div-customer-name-phone {
-  color: $colorBlack;
   .text-name-customer {
+    color: $color1;
     margin: 0;
-    font-weight: $fontWeightM;
+    font-weight: $fontWeightL;
   }
   .text-phone-customer {
+  color: $colorBlack;
     margin: 0;
   }
 }
@@ -66,7 +67,7 @@ span {
     .div-name {
       p {
         text-decoration-line: underline;
-        color: #023e8a;
+        color: $color1;
         margin: 0;
       }
     }
