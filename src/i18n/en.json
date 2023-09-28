@@ -593,5 +593,6 @@
     "end_of_term": "End of term",
     "overview": "Overview",
     "training": "Training",
-    "unfavourite": "Unfavourite"
+    "unfavourite": "Unfavourite",
+    "manage_request_service": "Manage request"
 }

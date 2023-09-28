@@ -23,6 +23,7 @@ import document from "../assets/images/document.svg";
 import notification from "../assets/images/notification.svg";
 import setting from "../assets/images/setting.svg";
 import ManageConfiguration from "../container/System/ManageConfiguration/ManageConfiguration";
+import ManageRequestService from "../container/System/ManageRequestService";
 
 const router = [
   {
@@ -41,32 +42,32 @@ const router = [
     component: ManageOrder,
     layout: "job",
     tab: [
-      {
-        path: "/group-order/manage-order/all",
-        name: "Tất cả",
-        icon: bag,
-        role: "all",
-      },
-      {
-        path: "/group-order/manage-order/doing",
-        name: "Chưa hoàn tất",
-        icon: bag,
-        role: "all",
-      },
-      {
-        path: "/group-order/manage-order/done",
-        name: "Hết hạn",
-        icon: bag,
-        role: "all",
-      },
+      // {
+      //   path: "/group-order/manage-order/all",
+      //   name: "Tất cả",
+      //   icon: bag,
+      //   role: "all",
+      // },
+      // {
+      //   path: "/group-order/manage-order/doing",
+      //   name: "Chưa hoàn tất",
+      //   icon: bag,
+      //   role: "all",
+      // },
+      // {
+      //   path: "/group-order/manage-order/done",
+      //   name: "Hết hạn",
+      //   icon: bag,
+      //   role: "all",
+      // },
     ],
     id_sidebar: "guvi_job",
   },
   {
-    path: "/system/deep-cleaning",
+    path: "/system/request-service-manage",
     name: "service_request",
     icon: request,
-    component: ManageOrder,
+    component: ManageRequestService,
     layout: "admin",
     tab: [],
     id_sidebar: "request_service",

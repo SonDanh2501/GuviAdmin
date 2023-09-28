@@ -1,0 +1,9 @@
+@import '../../../index.scss';
+
+
+.div-filter {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    width: 25%;
+}

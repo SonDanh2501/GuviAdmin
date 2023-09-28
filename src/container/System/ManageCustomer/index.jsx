@@ -124,49 +124,56 @@ const ManageCustomer = () => {
       i18n_title: 'code_customer',
       dataIndex: 'id_view',
       key: "code_customer",
+      fontSize: "text-size-L",
       width: 110
-    },
-    {
-      i18n_title: 'name_customer',
-      dataIndex: 'full_name',
-      key: "name_customer",
-      width: 120
-
-    },
-    {
-      i18n_title: 'phone',
-      dataIndex: 'phone_customer',
-      key: "phone_action_hide",
-      width: 120
-    },
-    {
-      i18n_title: 'address',
-      dataIndex: 'default_address.address',
-      key: "address",
-      width: 220
     },
     {
       i18n_title: 'date_create',
       dataIndex: 'date_create',
       key: "date_create",
+      fontSize: "text-size-L",
       width: 100
     },
+    {
+      i18n_title: 'customer',
+      dataIndex: 'customer',
+      key: "customer-name-phone",
+      fontSize: "text-size-L",
+      width: 140
+    },
+    // {
+    //   i18n_title: 'phone',
+    //   dataIndex: 'phone_customer',
+    //   key: "phone_action_hide",
+    //   width: 120
+    // },
+    {
+      i18n_title: 'address',
+      dataIndex: 'default_address.address',
+      key: "address",
+      fontSize: "text-size-L",
+      width: 220
+    },
+
     {
       i18n_title: 'total_order',
       dataIndex: 'total_order',
       key: "total_order",
-      width: 120
+      fontSize: "text-size-L",
+      width: 110
     },
     {
       i18n_title: 'nearest_order',
       dataIndex: 'nearest_order',
       key: "nearest_order",
-      width: 120
+      fontSize: "text-size-L",
+      width: 110
     },
     {
       i18n_title: 'total',
       dataIndex: 'total',
       key: "money",
+      fontSize: "text-size-L",
       width: 100
     }
   ]
@@ -306,7 +313,7 @@ const ManageCustomer = () => {
             pageSize={20}
             totalItem={total}
             detectLoading={detectLoading}
-              onValueChange={setItem}
+            getItemRow={setItem}
             onCurrentPageChange={onChangePage}
           />
         </div>

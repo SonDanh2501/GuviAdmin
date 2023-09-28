@@ -88,7 +88,7 @@ const DataTable = (props) => {
             },
             render: (data, record, index) => {
                 let linkRedirect = `#`
-
+                console.log(item, 'item');
                 switch (item.key) {
                     case "id_view":
                         return (
@@ -102,7 +102,7 @@ const DataTable = (props) => {
                                 onClick={() => saveToCookie("order_scrolly", scrollY)}
                                 to={linkRedirect}
                             >
-                                <p className="text-id-code-order">{data?.id_view}</p>
+                                <p className={`text-id-code-order ${item?.fontSize}`}>{data?.id_view}</p>
                             </Link>
                         )
                         break;
@@ -113,17 +113,17 @@ const DataTable = (props) => {
                                 onClick={() => saveToCookie("order_scrolly", scrollY)}
                                 to={linkRedirect}
                             >
-                                <p className="text-id-code-customer">{data?.id_view}</p>
+                                <p className={`text-id-code-customer ${item?.fontSize}`}>{data?.id_view}</p>
                             </Link>
                         )
                         break;
                     case "date_create":
                         return (
                             <div className="div-date-create">
-                                <p>
+                                <p className={`${item?.fontSize}`}>
                                     {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
                                 </p>
-                                <p>
+                                <p className={`${item?.fontSize}`}>
                                     {moment(new Date(data?.date_create)).format("HH:mm")}
                                 </p>
                             </div>
@@ -133,12 +133,11 @@ const DataTable = (props) => {
                         return (
                             <Link to={`/profile-customer/${data?.id_customer?._id}`}>
                                 <div className="div-customer-name-phone">
-
-                                    <p className="text-name-customer">
-                                        {data?.id_customer?.full_name}
+                                    <p className={`text-name-customer ${item?.fontSize}`}>
+                                        {data?.id_customer?.full_name || data?.full_name}
                                     </p>
-                                    <p className="text-phone-customer">
-                                        {data?.id_customer?.phone}
+                                    <p className={`text-phone-customer ${item?.fontSize}`}>
+                                        {data?.id_customer?.phone || data?.phone}
                                     </p>
                                 </div>
                             </Link>
@@ -147,7 +146,7 @@ const DataTable = (props) => {
                     case "service":
                         return (
                             <div>
-                                <p>
+                                <p className={`${item?.fontSize}`}>
                                     {data?.type === "loop" && data?.is_auto_order
                                         ? `${i18n.t("repeat", { lng: lang })}`
                                         : data?.service?._id?.kind === "giup_viec_theo_gio"
@@ -160,17 +159,17 @@ const DataTable = (props) => {
                                                         ? `${i18n.t("Máy lạnh", { lng: lang })}`
                                                         : ""}
                                 </p>
-                                <p>{timeWork(data)}</p>
+                                <p className={`${item?.fontSize}`}>{timeWork(data)}</p>
                             </div>
                         );
                         break;
                     case "date_work":
                         return (
                             <div className="div-date-work">
-                                <p className="text-worktime">
+                                <p className={`text-worktime ${item?.fontSize}`}>
                                     {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
                                 </p>
-                                <p className="text-worktime">
+                                <p className={`text-worktime ${item?.fontSize}`}>
                                     {moment(new Date(data?.date_work)).locale(lang).format("dddd")}
                                 </p>
                             </div>
@@ -242,14 +241,14 @@ const DataTable = (props) => {
                     case "pay":
                         return (
                             <div className="div-payment">
-                                <p className="text-payment-method">
+                                <p className={`text-payment-method ${item?.fontSize}`}>
                                     {data?.payment_method === "cash"
                                         ? `${i18n.t("cash", { lng: lang })}`
                                         : data?.payment_method === "point"
                                             ? `${i18n.t("wallet_gpay", { lng: lang })}`
                                             : ""}
                                 </p>
-                                <p className="text-payment-method">
+                                <p className={`text-payment-method ${item?.fontSize}`}>
                                     {formatMoney(data?.final_fee)}
                                 </p>
                             </div>
@@ -278,7 +277,7 @@ const DataTable = (props) => {
                                     }
                                     style={{ width: 20, height: 20 }}
                                 />
-                                <span className="text-name-customer"> {data?.full_name}</span>
+                                <span className={`text-name-customer ${item?.fontSize}`}> {data?.full_name}</span>
                             </Link>
                         )
                         break;
@@ -287,10 +286,10 @@ const DataTable = (props) => {
                             <>
                                 {data?.id_group_order ? (
                                     <Link to={`/details-order/${data?.id_group_order}`}>
-                                        <p className="text-id-code-order">{data?.id_view_group_order}</p>
+                                        <p className={`text-id-code-order ${item?.fontSize}`}>{data?.id_view_group_order}</p>
                                     </Link>
                                 ) : (
-                                    <p>{`${i18n.t("not_available", {
+                                    <p className={`${item?.fontSize}`}>{`${i18n.t("not_available", {
                                         lng: lang,
                                     })}`}</p>
                                 )}
@@ -299,7 +298,7 @@ const DataTable = (props) => {
                         break;
                     case "money":
                         return (
-                            <p className="text-address-customer">
+                            <p className={`text-address-customer ${item?.fontSize}`}>
                                 {formatMoney(data?.total_price)}
                             </p>
                         )
@@ -316,7 +315,7 @@ const DataTable = (props) => {
                         const indexSlice = getData.length - 65;
                         const viewAddress = ( indexSlice > 0 ) ? getData.slice(0, 65) + "..." : getData;
                         return (
-                            <p className="text-address-order">
+                            <p className={`text-address-order ${item?.fontSize}`}>
                                 {getData !== "" ? viewAddress : `${i18n.t("not_available", { lng: lang })}`}
                             </p>
                         )
@@ -349,7 +348,7 @@ const DataTable = (props) => {
                         break;
                     case "total_order":
                         return (
-                            <p className="text-address-customer">
+                            <p className={`text-address-customer ${item?.fontSize}`}>
                                 {data[item.dataIndex] || 0}
                             </p>
                         )
@@ -357,7 +356,7 @@ const DataTable = (props) => {
                     default:
                         const dataView = data[item.dataIndex] || "";
                         return (
-                            <p > {dataView}</p>
+                            <p className={`${item?.fontSize}`}> {dataView}</p>
                         )
                         break;
                 }
@@ -434,7 +433,7 @@ const DataTable = (props) => {
                             onClick: (event) => {
                                 setItem(record)
                                 setRowIndex(rowIndex)
-                                if (props.onValueChange) props.onValueChange(record);
+                                if (props.getItemRow) props.getItemRow(record);
                             },
                         };
                     }}

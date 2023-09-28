@@ -10,6 +10,11 @@ p {
     text-align: left;
 }
 
+
+.text-size-L {
+  font-size: $textFontSizeL;
+}
+
 span {
   text-decoration: none;
   margin: 0;
@@ -21,7 +26,7 @@ span {
 }
 
 .text-id-code-customer {
-  color: $colorBlack;
+  color: $color1;
 }
 
 .div-date-create {

@@ -1385,7 +1385,7 @@ const ManageOrder = () => {
           start={startPage}
           pageSize={20}
           totalItem={total}
-          onValueChange={setItem}
+          getItemRow={setItem}
           onCurrentPageChange={onChangePage}
           detectLoading={detectLoading}
         />

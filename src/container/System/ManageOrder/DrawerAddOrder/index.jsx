@@ -1,24 +1,30 @@
-// import { List, Select } from "antd";
-// import _debounce from "lodash/debounce";
-// import React, { useCallback, useEffect, useState } from "react";
-// import { useSelector } from "react-redux";
-// import { searchCustomersApi } from "../../../../api/customer";
-// import {
-//   getExtendOptionalByOptionalServiceApi,
-//   getOptionalServiceByServiceApi,
-// } from "../../../../api/service";
-// import LoadingPagination from "../../../../components/paginationLoading";
-// import InputCustom from "../../../../components/textInputCustom";
-// import { errorNotify } from "../../../../helper/toast";
-// import i18n from "../../../../i18n";
-// import { getLanguageState, getUser } from "../../../../redux/selectors/auth";
-// import { getService } from "../../../../redux/selectors/service";
-// import BussinessType from "../components/BussinessType";
-// import CleaningAC from "../components/CleaningAC";
-// import CleaningHourly from "../components/CleaningHourly";
-// import CleaningSchedule from "../components/CleaningSchedule";
-// import DeepCleaning from "../components/DeepCleaning";
-// import "./index.scss";
+import { List, Select } from "antd";
+import _debounce from "lodash/debounce";
+import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { searchCustomersApi } from "../../../../api/customer";
+import {
+  getExtendOptionalByOptionalServiceApi,
+  getOptionalServiceByServiceApi,
+} from "../../../../api/service";
+import LoadingPagination from "../../../../components/paginationLoading";
+import InputCustom from "../../../../components/textInputCustom";
+import InputCustomize from "../../../../components/inputCustomize";
+import { errorNotify } from "../../../../helper/toast";
+import i18n from "../../../../i18n";
+import { getLanguageState, getUser } from "../../../../redux/selectors/auth";
+import { getService } from "../../../../redux/selectors/service";
+import BussinessType from "../components/BussinessType";
+import CleaningAC from "../components/CleaningAC";
+import CleaningHourly from "../components/CleaningHourly";
+import CleaningSchedule from "../components/CleaningSchedule";
+import DeepCleaning from "../components/DeepCleaning";
+import {
+  getPlaceDetailApi,
+  googlePlaceAutocomplete,
+} from "../../../../api/location";
+import "./index.scss";
+
 
 // const AddOrder = () => {
 //   const [optionalService, setOptionalService] = useState([]);
@@ -41,6 +47,11 @@
 //   const lang = useSelector(getLanguageState);
 //   const user = useSelector(getUser);
 //   const [serviceSelect, setServiceSelect] = useState([]);
+//   const [dataCustomer, setDataCustomer] = useState([]);
+//   const [valueCustomer, setValueCustomer] = useState(null);
+//   const [address, setAddress] = useState("");
+//   const [places, setPlaces] = useState([]);
+
 
 
 
@@ -101,29 +112,92 @@
 //       });
 //   };
 
-//   const handleSearch = useCallback(
+//   const handleSearchCustomer = useCallback(
 //     _debounce((value) => {
-//       setName(value);
+//       // setName(value);
+//       console.log(value, 'valuevalue');
 //       if (value) {
 //         searchCustomersApi(value)
 //           .then((res) => {
-//             setDataFilter(res.data);
+//             const temp = [];
+//             console.log(res, 'res');
+//             for(const item of res.data) {
+//               temp.push({
+//                 label: `${item.full_name} - ${item.phone} - ${item.id_view}`,
+//                 value: item._id
+//               })
+//             }
+//       console.log(temp, 'temp');
+
+//             setDataCustomer(temp);
 //           })
 //           .catch((err) => {
-//             errorNotify({
-//               message: err,
-//             });
+//             console.log(err,'err');
+//             // errorNotify({
+//             //   message: err,
+//             // });
 //           });
 //       } else if (id) {
-//         setDataFilter([]);
+//         // setDataCustomer([]); 
 //       } else {
-//         setDataFilter([]);
+//         // setDataCustomer([]);
 //       }
-//       setId("");
 //     }, 500),
-//     []
+//     [dataCustomer]
 //   );
 
+//   useEffect(() => {
+//     searchCustomersApi("")
+//     .then((res) => {
+//       const temp = [];
+//       for(const item of res.data.length) {
+//         temp.push({
+//           label: `${item.full_name} - ${item.phone} - ${item.id_view}`,
+//           value: item._id
+//         })
+//       }
+//       console.log(temp, 'temp');
+//       setDataCustomer(temp);
+//     })
+//     .catch((err) => {
+//       errorNotify({
+//         message: err,
+//       });
+//     });
+// }, [])
+
+
+// const onChangeCustomer = (item) => {
+//   console.log(item, 'item');
+//   setValueCustomer(item);   
+// }
+
+//   // const searchCustomersApi = () => {
+    
+//   // }
+
+
+
+//   const handleSearchLocation = useCallback(
+//     _debounce((value) => {
+//       setAddress(value);
+//       setIsLoading(true);
+//       googlePlaceAutocomplete(value)
+//         .then((res) => {
+//           if (res.predictions) {
+//             setPlaces(res.predictions);
+//           } else {
+//             setPlaces([]);
+//           }
+//           setIsLoading(false);
+//         })
+//         .catch((err) => {
+//           setIsLoading(false);
+//           setPlaces([]);
+//         });
+//     }, 1500),
+//     []
+//   );
 
 
 
@@ -139,26 +213,33 @@
 //         </div>
 //         <div className="div-flex-row">
 //         <div className="info-service div-flex-column">
+//           <div className="select-service">
 //           <Select
 //             className="select-service-order-add"
 //             onChange={onChangeServiceApply}
 //             options={serviceSelect}
 //             value={serviceApply}
 //           />
+//           </div>
+//           <div className="div-search-address">
+//           <InputCustom
+//             title={`${i18n.t("address", { lng: lang })}`}
+//             placeholder={`${i18n.t("enter_address", { lng: lang })}`}
+//             className="input-search-address"
+//             value={address}
+//             type="text"
+//             onChange={(e) => {
+//               setAddress(e.target.value);
+//               handleSearchLocation(e.target.value);
+//             }}
+//           />
+//         </div>
 
 
-// {serviceApply?.kind === "ve_sinh_may_lanh" && (
-//         <InputCustom
-//           title="Loại máy lạnh"
-//           select={true}
-//           options={optionalSelect}
-//           style={{ width: "50%" }}
-//           value={idOptional}
-//           onChange={onChangeOptionalService}
-//         />
-//       )}
 
-//       <div className="mt-3">
+
+
+//       <div className="mt-3 service">
 //         {serviceApply?.kind === "giup_viec_theo_gio" ? (
 //           <CleaningHourly
 //             extendService={extendService}
@@ -179,31 +260,34 @@
 //             nameService={nameService}
 //           />
 //         ) : serviceApply?.kind === "phuc_vu_nha_hang" ? (
-//           <BussinessType
-//             extendService={extendService}
-//             extraService={extraService}
-//             bussinessType={bussinessType}
-//             id={id}
-//             name={name}
-//             setErrorNameCustomer={setErrorNameCustomer}
-//             idService={serviceApply}
-//             nameService={nameService}
-//           />
+//           <></>
+//           // <BussinessType
+//           //   extendService={extendService}
+//           //   extraService={extraService}
+//           //   bussinessType={bussinessType}
+//           //   id={id}
+//           //   name={name}
+//           //   setErrorNameCustomer={setErrorNameCustomer}
+//           //   idService={serviceApply}
+//           //   nameService={nameService}
+//           // />
 //         ) : serviceApply?.kind === "tong_ve_sinh" ? (
-//           <DeepCleaning
-//             id={id}
-//             idService={serviceApply}
-//             extendService={extendService}
-//             setErrorNameCustomer={setErrorNameCustomer}
-//           />
+//           <></>
+//           // <DeepCleaning
+//           //   id={id}
+//           //   idService={serviceApply}
+//           //   extendService={extendService}
+//           //   setErrorNameCustomer={setErrorNameCustomer}
+//           // />
 //         ) : serviceApply?.kind === "ve_sinh_may_lanh" ? (
-//           <CleaningAC
-//             id={id}
-//             idService={serviceApply}
-//             extendService={extendService}
-//             optionalService={optionalService}
-//             setErrorNameCustomer={setErrorNameCustomer}
-//           />
+//           <></>
+//           // <CleaningAC
+//           //   id={id}
+//           //   idService={serviceApply}
+//           //   extendService={extendService}
+//           //   optionalService={optionalService}
+//           //   setErrorNameCustomer={setErrorNameCustomer}
+//           // />
 //         ) : (
 //           <></>
 //         )}
@@ -212,18 +296,25 @@
 //         </div>
 
 //         <div className="info-customer div-flex-column">
-//         <InputCustom
-//           title={`${i18n.t("customer", { lng: lang })}`}
-//           value={name}
-//           className="input-search-customer"
-//           type="text"
-//           onChange={(e) => {
-//             setName(e.target.value);
-//             handleSearch(e.target.value);
-//           }}
-//           placeholder={`${i18n.t("search", { lng: lang })}`}
-//           error={errorNameCustomer}
+//           <div className="input-customer">
+//           <p className="title-input-custom">{i18n.t("customer", { lng: lang })}</p>
+//         <Select 
+//         className="input-select"
+//         options={dataCustomer}
+//         value={valueCustomer}
+//         onChange={onChangeCustomer}
+//         onSearch={handleSearchCustomer}
+//         disabled={false}
+//         notFoundContent={null}
+//         defaultActiveFirstOption={false}
+//         suffixIcon={null}
+//         showSearch
+//         filterOption={false}
 //         />
+//           </div>
+
+
+
 //         </div>
 
 //         </div>
@@ -290,9 +381,9 @@ const AddOrder = () => {
         .catch((err) => {
           setIsLoading(false);
         });
-      setKindService(service[0]?.kind);
-      setServiceApply(service[0]?._id);
-      setNameService(service[0]?.title?.[lang]);
+      setKindService(service[1]?.kind);
+      setServiceApply(service[1]?._id);
+      setNameService(service[1]?.title?.[lang]);
     } else {
       getOptionalServiceByServiceApi(user?.id_service_manager[0]?._id)
         .then((res) => {
@@ -452,9 +543,17 @@ const AddOrder = () => {
     []
   );
 
+
+
+  useEffect(() => {
+
+  })
+
+
   return (
     <div className="div-container-add-order">
-      <h5>{`${i18n.t("create_order", { lng: lang })}`}</h5>
+
+<h5>{`${i18n.t("create_order", { lng: lang })}`}</h5>
       <div className="mt-3">
         <Select
           className="select-service-order-add"
@@ -561,6 +660,22 @@ const AddOrder = () => {
           <></>
         )}
       </div>
+
+
+
+
+
+{/* <div className="div-flex-column content-left">
+
+</div> */}
+
+{/* <div className="div-flex-column content-right">
+dsgfsaifsdiofsoi
+</div> */}
+
+
+
+   
 
       {isLoading && <LoadingPagination />}
     </div>

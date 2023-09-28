@@ -31,7 +31,7 @@
     "order_cancel_admin": "Đơn huỷ từ quản trị viên",
     "system": "Hệ thống",
     "admin" : "Quản trị viên",
-    "address": "Địa điểm",
+    "address": "Địa chỉ",
     "progress": "Tiến độ",
     "detail": "Chi tiết",
     "pending": "Đang chờ làm",
@@ -593,5 +593,6 @@
     "end_of_term": "Cuối kỳ",
     "overview": "Tổng quan",
     "training": "Đào tạo",
-    "unfavourite": "Bỏ yêu thích"
+    "unfavourite": "Bỏ yêu thích",
+    "manage_request_service": "Quản lý yêu cầu"
 }

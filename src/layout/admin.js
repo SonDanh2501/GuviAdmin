@@ -75,12 +75,15 @@ import ProfileCollaborator from "../container/System/ManageUser/Collaborator/Pro
 import DetailActivityCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/components/DetailActivity";
 import ManageCustomer from "../container/System/ManageCustomer";
 import Profiles from "../container/System/ManageCustomer/Profiles";
+import ManageRequestService from "../container/System/ManageRequestService";
 
 const Admin = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/system/deep-cleaning" element={<DeepCleaningManager />} />
+      <Route path="/system/request-service-manage" element={<ManageRequestService />} />
+
       <Route path="/details-order/:id" element={<DetailsOrder />} />
       <Route
         path="/details-order/details-order-schedule/:id"

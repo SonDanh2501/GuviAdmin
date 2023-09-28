@@ -21,11 +21,18 @@
     margin: 8px 0px;
 }
 
+.div-flex-row-wrap-reverse {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap-reverse;
+    justify-content: space-between;
+    margin: 8px 0px;
+}
+
 .div-flex-column {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: space-between;
     margin: 8px 0px;
 }
 
