@@ -810,61 +810,64 @@ const ManageOrder = () => {
       i18n_title: 'code_order',
       dataIndex: 'id_view',
       key: "code_order",
-      width: 140
+      width: 140,
+      fontSize: "text-size-M"
     },
     {
       i18n_title: 'date_create',
       dataIndex: 'date_create',
       key: "date_create",
-      width: 100
-
+      width: 100,
+      fontSize: "text-size-M"
     },
     {
       i18n_title: 'customer',
       dataIndex: 'customer',
       key: "customer-name-phone",
-      width: 140
+      width: 140,
+      fontSize: "text-size-M"
     },
     {
       i18n_title: 'service',
       dataIndex: 'service._id.title.vi',
       key: "service",
-      width: 110
-
+      width: 110,
+      fontSize: "text-size-M"
     },
     {
       i18n_title: 'date_work',
       dataIndex: 'date_work',
       key: "date_work",
-      width: 100
-
+      width: 100,
+      fontSize: "text-size-M"
     },
     {
       i18n_title: 'address',
       dataIndex: 'address',
       key: "address",
-      width: 220
-
+      width: 220,
+      fontSize: "text-size-M"
     },
     {
       i18n_title: 'collaborator',
       dataIndex: 'collaborator',
       key: "collaborator",
-      width: 160
-
+      width: 160,
+      fontSize: "text-size-M"
     },
     {
       i18n_title: 'status',
       dataIndex: 'status',
       key: "status",
-      width: 120
-
+      width: 120,
+      fontSize: "text-size-M"
     },
     {
       i18n_title: 'pay',
       dataIndex: 'pay',
       key: "pay",
-      // width: 20
+      width: 90,
+      fontSize: "text-size-M"
     },
   ]
 

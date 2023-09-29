@@ -179,7 +179,7 @@ const DataTable = (props) => {
                             <>
                             <div className="div-collaborator">
                             {!data?.id_collaborator ? (
-                                    <p className="text-pending-search">{`${i18n.t("searching", {
+                                    <p className={`text-pending-search ${item?.fontSize}`}>{`${i18n.t("searching", {
                                         lng: lang,
                                     })}`}</p>
                                 ) : (
@@ -188,16 +188,16 @@ const DataTable = (props) => {
                                         className="div-name-star"
                                     >
                                         <div className="div-name">
-                                            <p>
+                                            <p className={`${item?.fontSize}`}>
                                                 {data?.id_collaborator?.full_name}
                                             </p>
                                         </div>
                                         <div className="div-phone-star">
-                                            <p>{data?.id_collaborator?.phone}</p>
+                                            <p className={`${item?.fontSize}`}>{data?.id_collaborator?.phone}</p>
                                             {data?.id_collaborator?.star && (
                                                 <div className="div-star">
                                                     <StarFilled className="icon-star" />
-                                                    <p className="text-star">{data?.id_collaborator?.star}</p>
+                                                    <p className={`text-star ${item?.fontSize}`}>{data?.id_collaborator?.star}</p>
 
                                                 </div>
                                             )}
@@ -212,17 +212,17 @@ const DataTable = (props) => {
                         return (
                             <div className="div-status-order">
                                 <span
-                                    className={
-                                        data?.status === "pending"
-                                            ? "text-status-pending"
-                                            : data?.status === "confirm"
-                                                ? "text-status-confirm"
-                                                : data?.status === "doing"
-                                                    ? "text-status-doing"
-                                                    : data?.status === "done"
-                                                        ? "text-status-done"
-                                                        : "text-status-cancel"
-                                    }
+                                className={`text-star ${item?.fontSize} ${
+                                    data?.status === "pending"
+                                        ? "text-status-pending"
+                                        : data?.status === "confirm"
+                                            ? "text-status-confirm"
+                                            : data?.status === "doing"
+                                                ? "text-status-doing"
+                                                : data?.status === "done"
+                                                    ? "text-status-done"
+                                                    : "text-status-cancel"
+                                }`}
                                 >
                                     {data?.status === "pending"
                                         ? `${i18n.t("pending", { lng: lang })}`
@@ -324,7 +324,7 @@ const DataTable = (props) => {
                         const phone = data?.phone.slice(0, 7);
                         return (
                             <div className="hide-phone">
-                                <p className="phone-text">
+                                <p className={`phone-text ${item?.fontSize}`}>
                                     {rowIndex === index
                                         ? hidePhone
                                             ? data?.phone
