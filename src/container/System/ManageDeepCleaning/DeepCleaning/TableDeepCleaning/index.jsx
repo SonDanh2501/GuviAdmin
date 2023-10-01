@@ -38,7 +38,7 @@ const TableDeepCleaning = (props) => {
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    getCusomerRequest(status, 0, 20, "", lang)
+    getCusomerRequest("", 0, 20, status, "", lang)
       .then((res) => {
         setIsLoading(false);
         setData(res?.data);
@@ -53,7 +53,7 @@ const TableDeepCleaning = (props) => {
       deleteCusomerRequest(id)
         .then((res) => {
           setIsLoading(false);
-          getCusomerRequest(status, startPage, 20, "", lang)
+          getCusomerRequest("", startPage, 20, status, lang, "")
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);
@@ -77,7 +77,7 @@ const TableDeepCleaning = (props) => {
       contactedCusomerRequest(id)
         .then((res) => {
           setIsLoading(false);
-          getCusomerRequest(status, startPage, 20, "", lang)
+          getCusomerRequest("", startPage, 20, status, lang, "")
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItem);
@@ -103,7 +103,7 @@ const TableDeepCleaning = (props) => {
         changeStatusCusomerRequest(id, { status: "done" })
           .then((res) => {
             setIsLoading(false);
-            getCusomerRequest(status, startPage, 20, "", lang)
+            getCusomerRequest("", startPage, 20, status, lang, "")
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
@@ -120,7 +120,7 @@ const TableDeepCleaning = (props) => {
       } else if (statusModal === "cancel") {
         changeStatusCusomerRequest(id, { status: "cancel" })
           .then((res) => {
-            getCusomerRequest(status, startPage, 20, "", lang)
+            getCusomerRequest("", startPage, 20, status, lang, "")
               .then((res) => {
                 setData(res?.data);
                 setTotal(res?.totalItem);
@@ -288,7 +288,7 @@ const TableDeepCleaning = (props) => {
     const lenghtData = data.length < 20 ? 20 : data.length;
     const start = page * lenghtData - lenghtData;
     setStartPage(start);
-    getCusomerRequest(status, start, 20, "", lang)
+    getCusomerRequest("", startPage, 20, status, lang, "")
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);

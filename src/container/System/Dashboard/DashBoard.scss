@@ -1,6 +1,11 @@
 .container-dash {
   width: 100%;
 
+  p {
+    margin: 0px 0px 6px 0px;
+  }
+
+
   .div-chart_total_service_collaborator {
     display: flex;
     flex-direction: row;
@@ -83,7 +88,7 @@
         .label-persen {
           color: black;
           font-weight: 600;
-          font-size: 30px;
+          font-size: 18px;
           font-family: "Roboto", sans-serif;
         }
         .label-total {
@@ -413,6 +418,7 @@
           text-decoration: none;
           text-align: center;
           padding-top: 20px;
+          padding-bottom: 10px;
         }
 
         .div-seemore {
@@ -432,8 +438,9 @@
   .label-service {
     color: black;
     font-weight: 600;
-    font-size: 27px;
+    font-size: 20px;
     font-family: "Roboto", sans-serif;
+    margin-bottom: 5px;
   }
 
   .div-action {
@@ -1170,7 +1177,7 @@
         .label-active {
           color: black;
           font-weight: 600;
-          font-size: 30px;
+          font-size: 20px;
           font-family: "Roboto", sans-serif;
         }
         .div-persen {
@@ -1180,7 +1187,7 @@
           .label-persen {
             color: black;
             font-weight: 600;
-            font-size: 30px;
+            font-size: 18px;
             font-family: "Roboto", sans-serif;
           }
           .label-total {
@@ -1509,6 +1516,7 @@
             text-decoration: none;
             text-align: center;
             padding-top: 20px;
+            padding-bottom: 10px;
           }
 
           .div-seemore {
@@ -1528,8 +1536,9 @@
     .label-service {
       color: black;
       font-weight: 600;
-      font-size: 27px;
+      font-size: 20px;
       font-family: "Roboto", sans-serif;
+      margin-bottom: 5px;
     }
 
     .div-action {
@@ -2192,7 +2201,7 @@
           .label-persen {
             color: black;
             font-weight: 600;
-            font-size: 30px;
+            font-size: 18px;
             font-family: "Roboto", sans-serif;
           }
           .label-total {
@@ -2521,6 +2530,7 @@
             text-decoration: none;
             text-align: center;
             padding-top: 20px;
+            padding-bottom: 10px;
           }
 
           .div-seemore {
@@ -2540,8 +2550,9 @@
     .label-service {
       color: black;
       font-weight: 600;
-      font-size: 27px;
+      font-size: 20px;
       font-family: "Roboto", sans-serif;
+      margin-bottom: 5px;
     }
 
     .div-action {
@@ -3209,7 +3220,7 @@
           .label-persen {
             color: black;
             font-weight: 600;
-            font-size: 30px;
+            font-size: 18px;
             font-family: "Roboto", sans-serif;
           }
           .label-total {
@@ -3539,6 +3550,7 @@
             text-decoration: none;
             text-align: center;
             padding-top: 20px;
+            padding-bottom: 10px;
           }
 
           .div-seemore {

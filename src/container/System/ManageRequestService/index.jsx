@@ -61,9 +61,9 @@ const ManageRequestService = () => {
             width: 220
         },
         {
-            i18n_title: 'note',
+            title: 'Nội dung',
             dataIndex: 'description',
-            key: "note",
+            key: "description_request",
             width: 220
         },
         {

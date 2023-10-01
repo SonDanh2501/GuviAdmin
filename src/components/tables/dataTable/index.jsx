@@ -353,6 +353,20 @@ const DataTable = (props) => {
                             </p>
                         )
                         break;
+                    case "description_request":
+                        return (
+                            <p className={`text-address-customer ${item?.fontSize}`}>
+                                {data[item.dataIndex] || 0}
+                            </p>
+                        )
+                        break;
+                    // case "description_request":
+                    //     return (
+                    //         <p className={`text-address-customer ${item?.fontSize}`}>
+                    //             {data[item.dataIndex] || 0}
+                    //         </p>
+                    //     )
+                    //     break;
                     default:
                         const dataView = data[item.dataIndex] || "";
                         return (
