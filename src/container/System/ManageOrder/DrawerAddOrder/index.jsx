@@ -381,11 +381,11 @@ const AddOrder = () => {
         .catch((err) => {
           setIsLoading(false);
         });
-      setKindService(service[1]?.kind);
-      setServiceApply(service[1]?._id);
-      setNameService(service[1]?.title?.[lang]);
+      setKindService(service[0]?.kind);
+      setServiceApply(service[0]?._id);
+      setNameService(service[0]?.title?.[lang]);
     } else {
-      getOptionalServiceByServiceApi(user?.id_service_manager[0]?._id)
+      getOptionalServiceByServiceApi(user?.id_service_manager[1]?._id)
         .then((res) => {
           setOptionalService(res?.data);
           setIsLoading(false);
@@ -405,7 +405,7 @@ const AddOrder = () => {
         return;
       });
       setServiceApply(user?.id_service_manager[0]?._id);
-      // setKindService(user?.id_service_manager[0]?.kind);
+      // setKindService(user?.id_service_manager[1]?.kind);
       setNameService(user?.id_service_manager[0]?.title?.[lang]);
     }
   }, [user]);
