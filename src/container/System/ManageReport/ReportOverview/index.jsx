@@ -30,32 +30,22 @@ import { Image, Select } from "antd";
 const ReportOverview = () => {
   const lang = useSelector(getLanguageState);
   const [startDate, setStartDate] = useState(
-    moment().subtract(30, "days").startOf("days").add(7, "hours").toISOString()
+    moment().subtract(30, "days").startOf("days").toISOString()
   );
   const [endDate, setEndDate] = useState(
-    moment().subtract(1, "days").endOf("days").add(7, "hours").toISOString()
+    moment().subtract(1, "days").endOf("days").toISOString()
   );
   const [sameStartDate, setSameStartDate] = useState(
-    moment(
-      moment()
-        .subtract(30, "days")
-        .startOf("days")
-        .add(7, "hours")
-        .toISOString()
-    )
-      .subtract(30, "days")
-      .startOf("days")
-      .add(7, "hours")
-      .toISOString()
+    moment()
+    .subtract(61, "days")
+    .startOf("days")
+    .toISOString()
   );
   const [sameEndDate, setSameEndDate] = useState(
     moment(
-      moment().subtract(1, "days").endOf("days").add(7, "hours").toISOString()
     )
-      .subtract(30, "days")
-      .subtract(1, "days")
+      .subtract(29, "days")
       .endOf("days")
-      .add(7, "hours")
       .toISOString()
   );
   const [data, setData] = useState([]);
@@ -78,6 +68,7 @@ const ReportOverview = () => {
   const dataChartAreaOrder = [];
   const dataChartSerive = [];
   const navigate = useNavigate();
+
 
   useEffect(() => {
     getReportOrderDaily(0, 40, startDate, endDate, "date_work")

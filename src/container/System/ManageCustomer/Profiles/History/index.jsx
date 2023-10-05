@@ -17,7 +17,7 @@ const HistoryTransition = ({ id }) => {
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    getHistoryTransitionByCustomers(id, 0, 10)
+    getHistoryTransitionByCustomers(id, 0, 20)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -32,9 +32,9 @@ const HistoryTransition = ({ id }) => {
   const onChange = (page) => {
     setCurrentPage(page);
     setIsLoading(true);
-    const dataLength = data.length < 20 ? 20 : data.length;
+    const dataLength = 20;
     const start = page * dataLength - dataLength;
-    getHistoryTransitionByCustomers(id, start, 10)
+    getHistoryTransitionByCustomers(id, start, 20)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -110,7 +110,7 @@ const HistoryTransition = ({ id }) => {
               onChange={onChange}
               total={total}
               showSizeChanger={false}
-              pageSize={10}
+              pageSize={20}
             />
           </div>
         </div>
