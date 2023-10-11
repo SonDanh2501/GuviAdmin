@@ -1,0 +1,39 @@
+@import '../../../index.scss';
+
+.div-filter {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  width: 25%;
+
+  .header-filter {
+    font-size: 10;
+  }
+
+  .filter-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 1000;
+    margin-top: 35px;
+    background-color: white;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    padding: 5px;
+  }
+}
+
+
+.btn-create-order {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100px;
+  border: none;
+  border-radius: 5px;
+  background-color: #48cae4;
+  color: white;
+  box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  margin: auto auto auto 15px;
+}
+

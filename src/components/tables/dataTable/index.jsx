@@ -174,37 +174,38 @@ const DataTable = (props) => {
                                 </p>
                             </div>
                         )
+                        break;
                     case "collaborator":
                         return (
                             <>
-                            <div className="div-collaborator">
-                            {!data?.id_collaborator ? (
-                                    <p className={`text-pending-search ${item?.fontSize}`}>{`${i18n.t("searching", {
-                                        lng: lang,
-                                    })}`}</p>
-                                ) : (
-                                    <Link
-                                        to={`/details-collaborator/${data?.id_collaborator?._id}`}
-                                        className="div-name-star"
-                                    >
-                                        <div className="div-name">
-                                            <p className={`${item?.fontSize}`}>
-                                                {data?.id_collaborator?.full_name}
-                                            </p>
-                                        </div>
-                                        <div className="div-phone-star">
-                                            <p className={`${item?.fontSize}`}>{data?.id_collaborator?.phone}</p>
-                                            {data?.id_collaborator?.star && (
-                                                <div className="div-star">
-                                                    <StarFilled className="icon-star" />
-                                                    <p className={`text-star ${item?.fontSize}`}>{data?.id_collaborator?.star}</p>
+                                <div className="div-collaborator">
+                                    {!data?.id_collaborator ? (
+                                        <p className={`text-pending-search ${item?.fontSize}`}>{`${i18n.t("searching", {
+                                            lng: lang,
+                                        })}`}</p>
+                                    ) : (
+                                        <Link
+                                            to={`/details-collaborator/${data?.id_collaborator?._id}`}
+                                            className="div-name-star"
+                                        >
+                                            <div className="div-name">
+                                                <p className={`${item?.fontSize}`}>
+                                                    {data?.id_collaborator?.full_name}
+                                                </p>
+                                            </div>
+                                            <div className="div-phone-star">
+                                                <p className={`${item?.fontSize}`}>{data?.id_collaborator?.phone}</p>
+                                                {data?.id_collaborator?.star && (
+                                                    <div className="div-star">
+                                                        <StarFilled className="icon-star" />
+                                                        <p className={`text-star ${item?.fontSize}`}>{data?.id_collaborator?.star}</p>
 
-                                                </div>
-                                            )}
-                                        </div>
-                                    </Link>
-                                )}
-                            </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </Link>
+                                    )}
+                                </div>
                             </>
                         )
                         break;
@@ -212,17 +213,16 @@ const DataTable = (props) => {
                         return (
                             <div className="div-status-order">
                                 <span
-                                className={`text-star ${item?.fontSize} ${
-                                    data?.status === "pending"
-                                        ? "text-status-pending"
-                                        : data?.status === "confirm"
-                                            ? "text-status-confirm"
-                                            : data?.status === "doing"
-                                                ? "text-status-doing"
-                                                : data?.status === "done"
-                                                    ? "text-status-done"
-                                                    : "text-status-cancel"
-                                }`}
+                                    className={`text-star ${item?.fontSize} ${data?.status === "pending"
+                                            ? "text-status-pending"
+                                            : data?.status === "confirm"
+                                                ? "text-status-confirm"
+                                                : data?.status === "doing"
+                                                    ? "text-status-doing"
+                                                    : data?.status === "done"
+                                                        ? "text-status-done"
+                                                        : "text-status-cancel"
+                                        }`}
                                 >
                                     {data?.status === "pending"
                                         ? `${i18n.t("pending", { lng: lang })}`
@@ -302,6 +302,7 @@ const DataTable = (props) => {
                                 {formatMoney(data?.total_price)}
                             </p>
                         )
+                        break;
                     case "address":
                         const temp = item.dataIndex.split(".");
                         let getData = data[temp[0]];
@@ -312,8 +313,8 @@ const DataTable = (props) => {
                             }
                             getData = getData[temp[i]]
                         }
-                        const indexSlice = getData.length - 65;
-                        const viewAddress = ( indexSlice > 0 ) ? getData.slice(0, 65) + "..." : getData;
+                        const indexSlice = getData.length - 75;
+                        const viewAddress = (indexSlice > 0) ? getData.slice(0, 75) + "..." : getData;
                         return (
                             <p className={`text-address-order ${item?.fontSize}`}>
                                 {getData !== "" ? viewAddress : `${i18n.t("not_available", { lng: lang })}`}
@@ -360,14 +361,51 @@ const DataTable = (props) => {
                             </p>
                         )
                         break;
-                    // case "description_request":
-                    //     return (
-                    //         <p className={`text-address-customer ${item?.fontSize}`}>
-                    //             {data[item.dataIndex] || 0}
-                    //         </p>
-                    //     )
-                    //     break;
-                    default:
+                    case "status_request":
+                        return (
+                            <div className="status_request">
+                                {data?.status === "done" ?  (
+                                    <p className={`text-contacted ${item?.fontSize}`}>
+                                    {`${i18n.t("contacted", { lng: lang })}`}
+                                </p>
+                                ) : (
+                                    <div className="div-uncontact">
+                                         <p className="text-uncontact">{`${i18n.t("not_contacted", {
+                                             lng: lang,
+                                         })}`}</p>
+                                         {checkElement?.includes("contact_request_service") && (
+                                                <div className="btn-contacted-deep2" onClick={toggleModal} >
+                                                    <p className="text-btn-contact">{`${i18n.t("contact", {
+                                                        lng: lang,
+                                                    })}`}</p>
+                                                </div>
+                                         )}
+                                    </div>
+                                )}
+                            </div>
+                        )
+                        break;
+                    case "user_contact":
+                        return (
+                            <>
+                                <div className="user_contact">
+                                    {data?.status === "done" ? (
+                                        <>
+                                            <p className={`text-user ${item?.fontSize}`}> {data?.full_name_admin}</p>
+                                            <p className={`${item?.fontSize}`}> 
+                                            {moment(new Date(data?.date_admin_contact_create)).format("DD/MM/YYYY")}
+                                            </p>
+                                            <p className={`${item?.fontSize}`}> 
+                                            {moment(new Date(data?.date_admin_contact_create)).format("HH:mm")}
+                                            </p>
+                                        </>
+                                    ) : (<></>)
+                                    }
+                                </div>
+                            </>
+                        )
+                        break;
+                        default:
                         const dataView = data[item.dataIndex] || "";
                         return (
                             <p className={`${item?.fontSize}`}> {dataView}</p>
@@ -389,36 +427,15 @@ const DataTable = (props) => {
             props.onCurrentPageChange((event * pageSize) - pageSize);
         }
     }
-    // const onChange = (page) => {
-    //     setCurrentPage(page);
-    //     saveToCookie("page_order", page);
-    //     const dataLength = data.length < 20 ? 20 : data.length;
-    //     const start = page * dataLength - dataLength;
-    //     setStartPage(start);
-    //     saveToCookie("start_order", start);
-    //     getOrderApi(
-    //       valueSearch,
-    //       start,
-    //       20,
-    //       status,
-    //       kind,
-    //       type,
-    //       startDate,
-    //       endDate,
-    //       city,
-    //       ""
-    //     )
-    //       .then((res) => {
-    //         setData(res?.data);
-    //         setTotal(res?.totalItem);
-    //       })
-    //       .catch((err) => {});
-    //   };
+
+    const toggleModal = (event) => {
+        if(props.onToggleModal) props.onToggleModal(true);
+    }
 
     return (
         <React.Fragment>
 
-{/* <div className="mt-2 p-2 pagination">
+            {/* <div className="mt-2 p-2 pagination">
                 <p>
                     {`${i18n.t("total", { lng: lang })}`}: {totalItem}
                 </p>

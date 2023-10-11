@@ -351,7 +351,7 @@ const CollaboratorManage = (props) => {
     {
       title: () => {
         return (
-          <p className="title-column">{`${i18n.t("name", { lng: lang })}`}</p>
+          <p className="title-column">{`${i18n.t("name_collaborator", { lng: lang })}`}</p>
         );
       },
       render: (data) => {
@@ -404,15 +404,15 @@ const CollaboratorManage = (props) => {
         );
       },
     },
-    {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("sdt", { lng: lang })}`}</p>
-        );
-      },
-      render: (data) => <p className="text-phone-ctv">{data?.phone}</p>,
-      align: "center",
-    },
+    // {
+    //   title: () => {
+    //     return (
+    //       <p className="title-column">{`${i18n.t("sdt", { lng: lang })}`}</p>
+    //     );
+    //   },
+    //   render: (data) => <p className="text-phone-ctv">{data?.phone}</p>,
+    //   align: "center",
+    // },
     {
       title: () => {
         return <p className="title-column">Khu vực</p>;

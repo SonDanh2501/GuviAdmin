@@ -1137,3 +1137,12 @@
     }
   }
 }
+
+
+.div-service {
+  display: flex;
+  flex-direction: column;
+  a {
+    font-size: 14px;
+  }
+}

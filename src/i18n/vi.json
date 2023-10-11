@@ -116,7 +116,7 @@
     "contact_customers": "Liên hệ khách hàng",
     "sure_contact_customers": "Bạn có chắc đã liên hệ khách hàng này không?",
     "request_status_change": "Chuyển trạng thái yêu cầu",
-    "sure_change_status": "Bạn có chắc muốn chuyển trạng thái yêu cầu của khách hàng này sang huỷ không?",
+    "sure_change_status": "Bạn có chắc đã liên hệ với khách hàng này rồi chứ?",
     "list_customer": "Danh sách khách hàng",
     "member_customer": "Khách hàng thành viên",
     "silver_customer": "Khách hàng bạc",
@@ -594,5 +594,6 @@
     "overview": "Tổng quan",
     "training": "Đào tạo",
     "unfavourite": "Bỏ yêu thích",
-    "manage_request_service": "Quản lý yêu cầu"
+    "manage_request_service": "Quản lý yêu cầu",
+    "name_collaborator": "CTV"
 }

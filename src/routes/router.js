@@ -64,7 +64,7 @@ const router = [
     id_sidebar: "guvi_job",
   },
   {
-    path: "/system/deep-cleaning",
+    path: "/system/request-service-manage",
     name: "service_request",
     icon: request,
     component: ManageRequestService,

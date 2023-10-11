@@ -594,5 +594,6 @@
     "overview": "Overview",
     "training": "Training",
     "unfavourite": "Unfavourite",
-    "manage_request_service": "Manage request"
+    "manage_request_service": "Manage request",
+    "name_collaborator": "Collaborator"
 }

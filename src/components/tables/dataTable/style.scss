@@ -183,3 +183,37 @@ span {
   flex-wrap: wrap;
   justify-content: space-between;
 }
+
+.status_request {
+  .text-contacted {
+    color: $colorSuccess;
+  }
+  .div-uncontact {
+    .text-uncontact {
+      color: $colorBlack;
+    }
+    .btn-contacted-deep2 {
+      width: 5em;
+      padding: 3px 0px;
+      background-color: $colorSuccess;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      margin-top: 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      .text-btn-contact {
+        color: $colorWhite;
+      }
+    }
+  }
+}
+
+.user_contact {
+  display: flex;
+  flex-direction: column;
+}
+
+.text-user {
+  color: $color1;
+}

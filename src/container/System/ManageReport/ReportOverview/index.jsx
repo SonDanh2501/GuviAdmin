@@ -32,22 +32,35 @@ const ReportOverview = () => {
   const [startDate, setStartDate] = useState(
     moment().subtract(30, "days").startOf("days").toISOString()
   );
+
   const [endDate, setEndDate] = useState(
     moment().subtract(1, "days").endOf("days").toISOString()
   );
   const [sameStartDate, setSameStartDate] = useState(
     moment()
-    .subtract(61, "days")
+    .subtract(60, "days")
     .startOf("days")
     .toISOString()
   );
   const [sameEndDate, setSameEndDate] = useState(
     moment(
     )
-      .subtract(29, "days")
+      .subtract(31, "days")
       .endOf("days")
       .toISOString()
   );
+
+  console.log(startDate, 'startDate');
+  console.log(endDate, 'endDate');
+  console.log(sameStartDate, 'sameStartDate');
+  console.log(sameEndDate, 'sameEndDate');
+  const totalDate = (new Date(endDate).getTime()  - new Date(startDate).getTime() + 1)/(24 * 60 * 60 * 1000)
+  const totalSameDate = (new Date(sameEndDate).getTime()  - new Date(sameStartDate).getTime() + 1)/(24 * 60 * 60 * 1000)
+
+  console.log(totalDate, 'totalDate');
+  console.log(totalSameDate, 'totalSameDate');
+
+
   const [data, setData] = useState([]);
   const [dataSame, setDataSame] = useState([]);
   const [dataArea, setDataArea] = useState([]);
@@ -349,6 +362,12 @@ const ReportOverview = () => {
   };
   const renderTooltipContentNetIncome = (o) => {
     const { payload } = o;
+
+
+
+
+
+
 
     return (
       <div className="div-content-chart-net-income">

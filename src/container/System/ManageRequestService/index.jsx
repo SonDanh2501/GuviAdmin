@@ -28,7 +28,7 @@ import {
     getLanguageState
   } from "../../../redux/selectors/auth";
   import _debounce from "lodash/debounce";
-
+  const { TextArea } = Input;
 const ManageRequestService = () => {
     const lang = useSelector(getLanguageState);
     const [valueSearch, setValueSearch] = useState("");
@@ -46,13 +46,13 @@ const ManageRequestService = () => {
             i18n_title: 'date_create',
             dataIndex: 'date_create',
             key: "date_create",
-            width: 100
+            width: 110
         },
         {
             i18n_title: 'customer',
             dataIndex: 'customer',
             key: "customer-name-phone",
-            width: 140
+            width: 120
         },
         {
             i18n_title: 'address',
@@ -70,7 +70,13 @@ const ManageRequestService = () => {
             i18n_title: 'status',
             dataIndex: 'status',
             key: "status_request",
-            width: 100
+            width: 110
+        },
+        {
+          title: 'NV liên hệ',
+          dataIndex: null,
+          key: "user_contact",
+          width: 110
         },
         {
             i18n_title: 'note',
@@ -162,9 +168,12 @@ const ManageRequestService = () => {
         setStartPage(value)
       }
 
-      const deleteRequest = (value) => {
-        changeStatusCusomerRequest(value, {status: "done"}).then(() => {
-
+      const contactedRequest = (idCustomer) => {
+        setDetectLoading(idCustomer)
+        const note_admin = document.getElementById("note_admin").value;
+        changeStatusCusomerRequest(idCustomer, {status: "done", note_admin: note_admin}).then(() => {
+          setModal(false)
+          getListRequest();
         }).catch((err) => {});
         // setModalStatus(false);
       }
@@ -217,13 +226,14 @@ const ManageRequestService = () => {
                     onCurrentPageChange={onChangePage}
                     detectLoading={detectLoading}
                     getItemRow={setItemRow}
+                    onToggleModal={setModal}
                 />
 
                 <div>
                 <ModalCustom
           isOpen={modal}
           title={`${i18n.t("request_status_change", { lng: lang })}`}
-          handleOk={() => deleteRequest(itemRow?._id)}
+          handleOk={() => contactedRequest(itemRow?._id)}
           textOk={`${i18n.t("yes", { lng: lang })}`}
           handleCancel={toggle}
           body={
@@ -232,6 +242,7 @@ const ManageRequestService = () => {
                 {`${i18n.t("sure_change_status", { lng: lang })}`}
               </p>
               <p className="text-name-modal">{itemRow?.name_customer}</p>
+              <TextArea id="note_admin" rows={4} placeholder="Thêm ghi chú tại đây"/>
             </div>
           }
         />
