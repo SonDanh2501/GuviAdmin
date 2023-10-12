@@ -84,7 +84,7 @@ const ReportOverview = () => {
 
 
   useEffect(() => {
-    getReportOrderDaily(0, 40, startDate, endDate, "date_work")
+    getReportOrderDaily(0, 90, startDate, endDate, "date_work")
       .then((res) => {
         setData(res?.data);
         setTotalNetIncome(res?.total[0]?.total_net_income);
@@ -93,7 +93,7 @@ const ReportOverview = () => {
       })
       .catch((err) => {});
 
-    getReportOrderDaily(0, 40, sameStartDate, sameEndDate, "date_work")
+    getReportOrderDaily(0, 90, sameStartDate, sameEndDate, "date_work")
       .then((res) => {
         setDataSame(res?.data);
         setTotalNetIncomeSame(res?.total[0]?.total_net_income);
@@ -102,13 +102,13 @@ const ReportOverview = () => {
       })
       .catch((err) => {});
 
-    getReportOrderByCity(0, 20, startDate, endDate, 0)
+    getReportOrderByCity(0, 90, startDate, endDate, 0)
       .then((res) => {
         setDataArea(res?.data);
       })
       .catch((err) => {});
 
-    getReportOrderByCity(0, 20, sameStartDate, sameEndDate, 0)
+    getReportOrderByCity(0, 90, sameStartDate, sameEndDate, 0)
       .then((res) => {
         setDataAreSame(res?.data);
       })
@@ -128,7 +128,7 @@ const ReportOverview = () => {
 
   const onChangeDay = () => {
     setIsLoading(true);
-    getReportOrderDaily(0, 40, startDate, endDate, "date_work")
+    getReportOrderDaily(0, 90, startDate, endDate, "date_work")
       .then((res) => {
         setData(res?.data);
         setIsLoading(false);
@@ -140,7 +140,7 @@ const ReportOverview = () => {
         setIsLoading(false);
       });
 
-    getReportOrderDaily(0, 40, sameStartDate, sameEndDate, "date_work")
+    getReportOrderDaily(0, 90, sameStartDate, sameEndDate, "date_work")
       .then((res) => {
         setDataSame(res?.data);
         setIsLoading(false);
@@ -151,13 +151,13 @@ const ReportOverview = () => {
       .catch((err) => {
         setIsLoading(false);
       });
-    getReportOrderByCity(0, 20, startDate, endDate, 0)
+    getReportOrderByCity(0, 90, startDate, endDate, 0)
       .then((res) => {
         setDataArea(res?.data);
       })
       .catch((err) => {});
 
-    getReportOrderByCity(0, 20, sameStartDate, sameEndDate, 0)
+    getReportOrderByCity(0, 90, sameStartDate, sameEndDate, 0)
       .then((res) => {
         setDataAreSame(res?.data);
       })
