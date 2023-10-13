@@ -460,21 +460,30 @@ const CustomDatePicker = (props) => {
         setStart(moment().subtract(1, "week").startOf("days"));
         setEndDate(todayEnd);
         setEnd(moment().subtract(1, "days").endOf("days"));
-        setSameStart(
-          moment(lastSeven)
-            .subtract(1, "week")
-            .startOf("days")
-            .add(timeZone, "hours")
-            .toISOString()
-        );
-        setSameEnd(
-          moment(todayEnd)
-            .subtract(1, "week")
-            .subtract(1, "days")
-            .endOf("days")
-            .add(timeZone, "hours")
-            .toISOString()
-        );
+
+
+        rangeDate = new Date(todayEnd).getTime() - new Date(lastSeven).getTime();
+        sameEnd = new Date(lastSeven).getTime() - 1;
+        sameStart = sameEnd - rangeDate;
+        setSameStart(new Date(sameStart).toISOString())
+        setSameEnd(new Date(sameEnd).toISOString())
+
+
+        // setSameStart(
+        //   moment(lastSeven)
+        //     .subtract(1, "week")
+        //     .startOf("days")
+        //     .add(timeZone, "hours")
+        //     .toISOString()
+        // );
+        // setSameEnd(
+        //   moment(todayEnd)
+        //     .subtract(1, "week")
+        //     .subtract(1, "days")
+        //     .endOf("days")
+        //     .add(timeZone, "hours")
+        //     .toISOString()
+        // );
         break;
       case "last_thirty":
         setStartDate(lastThirty);
