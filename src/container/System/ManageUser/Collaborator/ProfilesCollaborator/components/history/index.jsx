@@ -17,8 +17,10 @@ const History = ({ id }) => {
   const [data, setData] = useState([]);
   const [totalData, setTotalData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [remainder, setRemainder] = useState(0);
-  const [giftRemainder, setGiftRemainder] = useState(0);
+  // const [remainder, setRemainder] = useState(0);
+  // const [giftRemainder, setGiftRemainder] = useState(0);
+  const [work_wallet, setWorkWallet] = useState(0);
+  const [collaborator_wallet, setCollaboratorWallet] = useState(0);
   const dispatch = useDispatch();
   const lang = useSelector(getLanguageState);
 
@@ -39,8 +41,9 @@ const History = ({ id }) => {
 
     getCollaboratorRemainder(id)
       .then((res) => {
-        setRemainder(res?.remainder);
-        setGiftRemainder(res?.gift_remainder);
+        setWorkWallet(res?.work_wallet);
+        setCollaboratorWallet(res?.collaborator_wallet);
+
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -65,15 +68,15 @@ const History = ({ id }) => {
       <div className="div-monney">
         <div style={{ display: "flex", flexDirection: "row" }}>
           <p className="text-title-monney">
-            {`${i18n.t("wallet_ctv", { lng: lang })}`}:
+            {`${i18n.t("work_wallet", { lng: lang })}`}:
           </p>
-          <p className="text-monney"> {formatMoney(remainder)}</p>
+          <p className="text-monney"> {formatMoney(work_wallet)}</p>
         </div>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <p className="text-title-monney">
-            {`${i18n.t("gift_wallet", { lng: lang })}`}:{" "}
+            {`${i18n.t("collaborator_wallet", { lng: lang })}`}:{" "}
           </p>
-          <p className="text-monney">{formatMoney(giftRemainder)}</p>
+          <p className="text-monney">{formatMoney(collaborator_wallet)}</p>
         </div>
       </div>
       <div className="div-list-collaborator mt-3">
@@ -107,22 +110,22 @@ const History = ({ id }) => {
               </p>
               <div className="div-surplus">
                 <div className="div-text-title-surplus">
-                  <p className="text-title-surplus">{`${i18n.t("wallet_ctv", {
+                  <p className="text-title-surplus">{`${i18n.t("work_wallet", {
                     lng: lang,
                   })}`}</p>
                 </div>
                 <p style={{ margin: 0 }}>:</p>
                 <div className="div-money">
                   <p className="text-money">
-                    {item?.current_remainder
-                      ? formatMoney(item?.current_remainder)
+                    {item?.current_work_wallet
+                      ? formatMoney(item?.current_work_wallet)
                       : formatMoney(0)}
                   </p>
                 </div>
                 <div className="div-icon">
-                  {item?.status_current_remainder === "down" ? (
+                  {item?.status_current_work_wallet === "down" ? (
                     <i class="uil uil-arrow-down icon-deduction"></i>
-                  ) : item?.status_current_remainder === "up" ? (
+                  ) : item?.status_current_work_wallet === "up" ? (
                     <i class="uil uil-arrow-up icon-plus"></i>
                   ) : (
                     <i class="uil uil-minus icon-minus"></i>
@@ -131,22 +134,22 @@ const History = ({ id }) => {
               </div>
               <div className="div-surplus">
                 <div className="div-text-title-surplus">
-                  <p className="text-title-surplus">{`${i18n.t("gift_wallet", {
+                  <p className="text-title-surplus">{`${i18n.t("collaborator_wallet", {
                     lng: lang,
                   })}`}</p>
                 </div>
                 <p style={{ margin: 0 }}>:</p>
                 <div className="div-money">
                   <p className="text-money">
-                    {item?.current_gift_remainder
-                      ? formatMoney(item?.current_gift_remainder)
+                    {item?.current_collaborator_wallet
+                      ? formatMoney(item?.current_collaborator_wallet)
                       : formatMoney(0)}
                   </p>
                 </div>
                 <div className="div-icon">
-                  {item?.status_current_gift_remainder === "down" ? (
+                  {item?.status_current_collaborator_wallet === "down" ? (
                     <i class="uil uil-arrow-down icon-deduction"></i>
-                  ) : item?.status_current_gift_remainder === "up" ? (
+                  ) : item?.status_current_collaborator_wallet === "up" ? (
                     <i class="uil uil-arrow-up icon-plus"></i>
                   ) : (
                     <i class="uil uil-minus icon-minus"></i>

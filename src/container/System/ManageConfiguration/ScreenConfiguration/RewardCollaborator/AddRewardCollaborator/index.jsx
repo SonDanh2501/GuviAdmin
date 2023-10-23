@@ -223,7 +223,7 @@ const AddRewardCollaborator = () => {
       city: codeCity,
       timezone: "Asia/Ho_Chi_Minh",
       condition: condition[0],
-      type_wallet: "gift_wallet",
+      type_wallet: "work_wallet",
       is_service_apply: isServiceApply,
       service_apply: serviceApply,
       is_auto_verify: false,

@@ -729,7 +729,7 @@ const ManageOrder = () => {
     new Date("2022-12-31").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
-  const [item, setItem] = useState({});
+  const [item, setItem] = useState({date_work: ""});
   const toggle = () => setModal(!modal);
   const [modal, setModal] = useState(false);
 

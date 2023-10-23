@@ -62,7 +62,7 @@ const DetailsOrder = () => {
   const [openCancelOrder, setOpenCancelOrder] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [rowIndex, setRowIndex] = useState();
-  const [itemEdit, setItemEdit] = useState([]);
+  const [itemEdit, setItemEdit] = useState({date_work: ""});
   const [currentPage, setCurrentPage] = useState(1);
   const [price, setPrice] = useState(0);
   const [priceAddService, setPriceAddService] = useState(0);

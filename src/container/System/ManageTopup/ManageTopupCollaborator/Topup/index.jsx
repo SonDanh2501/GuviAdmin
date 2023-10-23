@@ -308,8 +308,12 @@ const TopupCollaborator = ({ type }) => {
       render: (data) => (
         <p className="text-name-verify">
           {data?.type_wallet === "wallet"
-            ? `${i18n.t("main_wallet", { lng: lang })}`
-            : `${i18n.t("gift_wallet", { lng: lang })}`}
+                              ? `${i18n.t("main_wallet", { lng: lang })}`
+                              : data?.type_wallet === "work_wallet" 
+                              ? `${i18n.t("work_wallet", { lng: lang })}`
+                              : data?.type_wallet === "collaborator_wallet"
+                              ? `${i18n.t("collaborator_wallet", { lng: lang })}`
+                              : `${i18n.t("gift_wallet", { lng: lang })}`}
         </p>
       ),
       align: "center",
@@ -549,6 +553,10 @@ const TopupCollaborator = ({ type }) => {
                           <p className="text-detail">
                             {record?.type_wallet === "wallet"
                               ? `${i18n.t("main_wallet", { lng: lang })}`
+                              : record?.type_wallet === "work_wallet" 
+                              ? `${i18n.t("work_wallet", { lng: lang })}`
+                              : record?.type_wallet === "collaborator_wallet"
+                              ? `${i18n.t("collaborator_wallet", { lng: lang })}`
                               : `${i18n.t("gift_wallet", { lng: lang })}`}
                           </p>
                         </div>
@@ -656,8 +664,12 @@ const TopupCollaborator = ({ type }) => {
                 <p className="text-content">
                   {`${i18n.t("wallet", { lng: lang })}`}:{" "}
                   {itemEdit?.type_wallet === "wallet"
-                    ? `${i18n.t("main_wallet", { lng: lang })}`
-                    : `${i18n.t("gift_wallet", { lng: lang })}`}
+                              ? `${i18n.t("main_wallet", { lng: lang })}`
+                              : itemEdit?.type_wallet === "work_wallet" 
+                              ? `${i18n.t("work_wallet", { lng: lang })}`
+                              : itemEdit?.type_wallet === "collaborator_wallet"
+                              ? `${i18n.t("collaborator_wallet", { lng: lang })}`
+                              : `${i18n.t("gift_wallet", { lng: lang })}`}
                 </p>
               </div>
             </>

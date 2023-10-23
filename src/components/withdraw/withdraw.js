@@ -189,14 +189,24 @@ const Withdraw = (props) => {
               onChange={(e) => {
                 setState({ ...state, wallet: e });
               }}
+              // options={[
+              //   {
+              //     value: "wallet",
+              //     label: `${i18n.t("main_wallet", { lng: lang })}`,
+              //   },
+              //   {
+              //     value: "gift_wallet",
+              //     label: `${i18n.t("gift_wallet", { lng: lang })}`,
+              //   },
+              // ]}
               options={[
                 {
-                  value: "wallet",
-                  label: `${i18n.t("main_wallet", { lng: lang })}`,
+                  value: "work_wallet",
+                  label: `${i18n.t("work_wallet", { lng: lang })}`,
                 },
                 {
-                  value: "gift_wallet",
-                  label: `${i18n.t("gift_wallet", { lng: lang })}`,
+                  value: "collaborator_wallet",
+                  label: `${i18n.t("collaborator_wallet", { lng: lang })}`,
                 },
               ]}
               select={true}
