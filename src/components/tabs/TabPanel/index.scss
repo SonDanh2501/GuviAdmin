@@ -1,0 +1,41 @@
+@import '../../../index.scss';
+
+.tab-panel-content {
+    width: -webkit-fill-available;
+
+    .header-tabs {
+        color: $colorBackgroundWhite;
+        display: flex;
+        flex-direction: row;
+
+            .item-tab {
+                padding: 5px;
+                width: auto;
+                margin-right: 15px;
+                cursor: pointer;
+                .text-title {
+                    color: black;
+                }
+            }
+    
+            .item-tab-select {
+                padding: 5px;
+                width: auto;
+                border-bottom: 1px solid blue;
+                margin-right: 15px;
+                .text-title {
+                    color: blue;
+                }
+            }
+    }
+
+    .content-tabs {
+
+        .active {
+            display: block !important;
+        }
+        .inactive {
+            display: none !important;
+        }
+    }
+}

@@ -1,7 +1,7 @@
 import "@iconscout/react-unicons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { memo } from "react";
-import ReactDOM from "react-dom";
+// import ReactDOM from "react-dom";
 import { Provider, useSelector } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -16,6 +16,7 @@ import "./index.scss";
 import reducers from "./redux/reducers/rootReducer";
 import rootSaga from "./redux/sagas/rootSaga";
 import { loadingSelector } from "./redux/selectors/loading";
+import { createRoot } from "react-dom/client";
 
 const sagaMiddleware = createSagaMiddleware();
 export const store = createStore(reducers, applyMiddleware(sagaMiddleware));
@@ -27,8 +28,8 @@ const AppLoading = memo(() => {
   const loading = useSelector(loadingSelector);
   return <LoadingPage loading={loading} />;
 });
-
-ReactDOM.render(
+const root = createRoot(document.getElementById("root"));
+root.render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
       <BrowserRouter>
@@ -38,5 +39,5 @@ ReactDOM.render(
       </BrowserRouter>
     </PersistGate>
   </Provider>,
-  document.getElementById("root")
+  // document.getElementById("root")
 );
