@@ -108,54 +108,114 @@ const History = ({ id }) => {
                   "DD/MM/yyy - HH:mm"
                 )}
               </p>
-              <div className="div-surplus">
-                <div className="div-text-title-surplus">
-                  <p className="text-title-surplus">{`${i18n.t("work_wallet", {
-                    lng: lang,
-                  })}`}</p>
-                </div>
-                <p style={{ margin: 0 }}>:</p>
-                <div className="div-money">
-                  <p className="text-money">
-                    {item?.current_work_wallet
-                      ? formatMoney(item?.current_work_wallet)
-                      : formatMoney(0)}
-                  </p>
-                </div>
-                <div className="div-icon">
-                  {item?.status_current_work_wallet === "down" ? (
-                    <i class="uil uil-arrow-down icon-deduction"></i>
-                  ) : item?.status_current_work_wallet === "up" ? (
-                    <i class="uil uil-arrow-up icon-plus"></i>
-                  ) : (
-                    <i class="uil uil-minus icon-minus"></i>
-                  )}
-                </div>
-              </div>
-              <div className="div-surplus">
-                <div className="div-text-title-surplus">
-                  <p className="text-title-surplus">{`${i18n.t("collaborator_wallet", {
-                    lng: lang,
-                  })}`}</p>
-                </div>
-                <p style={{ margin: 0 }}>:</p>
-                <div className="div-money">
-                  <p className="text-money">
-                    {item?.current_collaborator_wallet
-                      ? formatMoney(item?.current_collaborator_wallet)
-                      : formatMoney(0)}
-                  </p>
-                </div>
-                <div className="div-icon">
-                  {item?.status_current_collaborator_wallet === "down" ? (
-                    <i class="uil uil-arrow-down icon-deduction"></i>
-                  ) : item?.status_current_collaborator_wallet === "up" ? (
-                    <i class="uil uil-arrow-up icon-plus"></i>
-                  ) : (
-                    <i class="uil uil-minus icon-minus"></i>
-                  )}
-                </div>
-              </div>
+
+              {(item?.current_work_wallet !== 0 && item?.current_collaborator_wallet !== 0 ) ? (
+                <>
+                  <div className="div-surplus">
+                    <div className="div-text-title-surplus">
+                      <p className="text-title-surplus">{`${i18n.t("work_wallet", {
+                        lng: lang,
+                      })}`}</p>
+                    </div>
+                    <p style={{ margin: 0 }}>:</p>
+                    <div className="div-money">
+                      <p className="text-money">
+                        {item?.current_work_wallet
+                          ? formatMoney(item?.current_work_wallet)
+                          : formatMoney(0)}
+                      </p>
+                    </div>
+                    <div className="div-icon">
+                      {item?.status_current_work_wallet === "down" ? (
+                        <i class="uil uil-arrow-down icon-deduction"></i>
+                      ) : item?.status_current_work_wallet === "up" ? (
+                        <i class="uil uil-arrow-up icon-plus"></i>
+                      ) : (
+                        <i class="uil uil-minus icon-minus"></i>
+                      )}
+                    </div>
+                  </div>
+                  <div className="div-surplus">
+                    <div className="div-text-title-surplus">
+                      <p className="text-title-surplus">{`${i18n.t("collaborator_wallet", {
+                        lng: lang,
+                      })}`}</p>
+                    </div>
+                    <p style={{ margin: 0 }}>:</p>
+                    <div className="div-money">
+                      <p className="text-money">
+                        {item?.current_collaborator_wallet
+                          ? formatMoney(item?.current_collaborator_wallet)
+                          : formatMoney(0)}
+                      </p>
+                    </div>
+                    <div className="div-icon">
+                      {item?.status_current_collaborator_wallet === "down" ? (
+                        <i class="uil uil-arrow-down icon-deduction"></i>
+                      ) : item?.status_current_collaborator_wallet === "up" ? (
+                        <i class="uil uil-arrow-up icon-plus"></i>
+                      ) : (
+                        <i class="uil uil-minus icon-minus"></i>
+                      )}
+                    </div>
+                  </div>
+                </>
+
+              ) : (
+                <>
+                  <div className="div-surplus">
+                    <div className="div-text-title-surplus">
+                      <p className="text-title-surplus">{`${i18n.t("wallet_ctv", {
+                        lng: lang,
+                      })}`}</p>
+                    </div>
+                    <p style={{ margin: 0 }}>:</p>
+                    <div className="div-money">
+                      <p className="text-money">
+                        {item?.current_remainder
+                          ? formatMoney(item?.current_remainder)
+                          : formatMoney(0)}
+                      </p>
+                    </div>
+                    <div className="div-icon">
+                      {item?.status_current_remainder === "down" ? (
+                        <i class="uil uil-arrow-down icon-deduction"></i>
+                      ) : item?.status_current_remainder === "up" ? (
+                        <i class="uil uil-arrow-up icon-plus"></i>
+                      ) : (
+                        <i class="uil uil-minus icon-minus"></i>
+                      )}
+                    </div>
+                  </div>
+                  <div className="div-surplus">
+                    <div className="div-text-title-surplus">
+                      <p className="text-title-surplus">{`${i18n.t("gift_wallet", {
+                        lng: lang,
+                      })}`}</p>
+                    </div>
+                    <p style={{ margin: 0 }}>:</p>
+                    <div className="div-money">
+                      <p className="text-money">
+                        {item?.current_gift_remainder
+                          ? formatMoney(item?.current_gift_remainder)
+                          : formatMoney(0)}
+                      </p>
+                    </div>
+                    <div className="div-icon">
+                      {item?.status_current_gift_remainder === "down" ? (
+                        <i class="uil uil-arrow-down icon-deduction"></i>
+                      ) : item?.status_current_gift_remainder === "up" ? (
+                        <i class="uil uil-arrow-up icon-plus"></i>
+                      ) : (
+                        <i class="uil uil-minus icon-minus"></i>
+                      )}
+                    </div>
+                  </div>
+                </>
+
+              )}
+
+
             </div>
           );
         })}
