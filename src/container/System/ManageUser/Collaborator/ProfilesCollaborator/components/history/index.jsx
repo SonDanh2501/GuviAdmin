@@ -109,7 +109,7 @@ const History = ({ id }) => {
                 )}
               </p>
 
-              {(item?.current_work_wallet !== 0 && item?.current_collaborator_wallet !== 0 ) ? (
+              {((item?.current_work_wallet !== 0 || item?.current_collaborator_wallet !== 0) ) ? (
                 <>
                   <div className="div-surplus">
                     <div className="div-text-title-surplus">
@@ -160,7 +160,6 @@ const History = ({ id }) => {
                     </div>
                   </div>
                 </>
-
               ) : (
                 <>
                   <div className="div-surplus">

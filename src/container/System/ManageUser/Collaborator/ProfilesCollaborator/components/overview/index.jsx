@@ -42,6 +42,8 @@ const Overview = ({ id }) => {
           total_order: res?.total_order,
           remainder: res?.remainder,
           gift_remainder: res?.gift_remainder,
+          work_wallet: res?.work_wallet,
+          collaborator_wallet: res?.collaborator_wallet
         });
       })
       .catch((err) => {});
@@ -87,12 +89,18 @@ const Overview = ({ id }) => {
         <div className="div-body-overview">
           <div className="div-head-overview">
             <div className="div-wallet">
+            <p className="text-wallet">
+                Ví công việc: {formatMoney(total?.work_wallet)}
+              </p>
               <p className="text-wallet">
+                Ví CTV: {formatMoney(total?.collaborator_wallet)}
+              </p>
+              {/* <p className="text-wallet">
                 Ví Chính: {formatMoney(total?.remainder)}
               </p>
               <p className="text-wallet">
                 Ví Thưởng: {formatMoney(total?.gift_remainder)}
-              </p>
+              </p> */}
             </div>
             <Switch
               style={{

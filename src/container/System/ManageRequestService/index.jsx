@@ -186,7 +186,7 @@ const ManageRequestService = () => {
         <div className="div-container-content">
             <div className="div-flex-row">
                 <div className="div-header-container">
-                    <h4 className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</h4>
+                    <h4 className="title-cv">{`${i18n.t("manage_request_service", { lng: lang })}`}</h4>
                 </div>
                 <div className="btn-action-header">
                 </div>
