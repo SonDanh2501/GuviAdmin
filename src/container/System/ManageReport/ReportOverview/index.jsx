@@ -834,7 +834,6 @@ import { number_processing } from "../../../../helper/numberProcessing";
 import { getLanguageState } from "../../../../redux/selectors/auth";
 import "./styles.scss";
 import { Image, Select } from "antd";
-import RechartsLineChart from "../../../../components/chart/recharts/LineChart"
 
 
 const ReportOverview = () => {
