@@ -1019,9 +1019,9 @@ const ReportOverview = () => {
     const temp = []
     for (let i = 0; i < data.data.length; i++) {
       const payload = {
-        total_net_income: data.data[i].total_income,
+        total_net_income: data.data[i].total_net_income,
         date_report: data.data[i]._id.slice(0, 5),
-        total_net_income_same: dataInsame.data[i]?.total_income,
+        total_net_income_same: dataInsame.data[i]?.total_net_income,
         date_report_same: dataInsame.data[i]?._id.slice(0, 5)
       }
       temp.push(payload)
@@ -1030,7 +1030,7 @@ const ReportOverview = () => {
     const percent = (data.total[0]?.total_net_income / (data.total[0]?.total_net_income + dataInsame.total[0]?.total_net_income)) * 100;
     const percentSame = (dataInsame.total[0]?.total_net_income / (data.total[0]?.total_net_income + dataInsame.total[0]?.total_net_income)) * 100
     const headerTemp = {
-      total: formatMoney(data.total[0]?.total_income),
+      total: formatMoney(data.total[0]?.total_net_income),
       arrow: (percent - percentSame > 0) ? "up" : "down",
       percent: Math.abs((percent - percentSame).toFixed(2))
     }
@@ -1142,7 +1142,7 @@ const ReportOverview = () => {
     const { payload } = data;
     return (
       <>
-        {payload.length > 0 ? (<>
+        {payload && payload.length > 0 ? (<>
           <div className="tool-tip">
             <div style={{ color: payload[0].color }}>
               <span>{payload[0].payload?.date_report}: </span>
