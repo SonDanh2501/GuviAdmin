@@ -21,11 +21,22 @@
     margin: 8px 0px;
 }
 
+
+
 .div-flex-row-wrap-reverse {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap-reverse;
     justify-content: space-between;
+    margin: 8px 0px;
+}
+
+
+.div-flex-row-flex-start {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
     margin: 8px 0px;
 }
 
@@ -85,6 +96,16 @@
     width: 75%;
   }
 
+
+
+  @media screen and (max-width: 900px) {
+    .div-flex-row {
+        flex-direction: column;
+    }
+    .div-flex-row-flex-start {
+        flex-direction: column;
+    }
+  }
 
 
 //   @media screen and (max-width: 900px) {
