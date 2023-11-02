@@ -12,6 +12,7 @@ import { formatMoney } from "../../../../../helper/formatMoney";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 import i18n from "../../../../../i18n";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
+import RangeDatePicker from "../../../../../components/datePicker/RangeDatePicker";
 import "./index.scss";
 
 const ReportCustomer = () => {
@@ -28,56 +29,68 @@ const ReportCustomer = () => {
   const [totalOrderOld, setTotalOrderOld] = useState([]);
   const [type, setType] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
-  const [startDate, setStartDate] = useState(
-    moment().subtract(30, "d").startOf("date").toISOString()
-  );
-  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
+
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] = useState("")
+
+  // const [startDate, setStartDate] = useState(
+  //   moment().subtract(30, "d").startOf("date").toISOString()
+  // );
+  // const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
 
+  // useEffect(() => {
+  //   getReportCustomer(
+  //     0,
+  //     20,
+  //     moment().subtract(30, "d").startOf("date").toISOString(),
+  //     moment().endOf("date").toISOString(),
+  //     "all"
+  //   )
+  //     .then((res) => {
+  //       setData(res?.data);
+  //       setTotal(res?.totalItem);
+  //       setTotalColumn(res?.total[0]);
+  //     })
+  //     .catch((err) => {});
+
+  //   getReportCustomer(
+  //     0,
+  //     20,
+  //     moment().subtract(30, "d").startOf("date").toISOString(),
+  //     moment().endOf("date").toISOString(),
+  //     "new"
+  //   )
+  //     .then((res) => {
+  //       setCustomerNew(res?.totalItem);
+  //       setTotalOrderNew(res?.total[0]?.total_item);
+  //       setMoneyNew(res?.total[0]?.total_net_income_business);
+  //     })
+  //     .catch((err) => {});
+
+  //   getReportCustomer(
+  //     0,
+  //     20,
+  //     moment().subtract(30, "d").startOf("date").toISOString(),
+  //     moment().endOf("date").toISOString(),
+  //     "old"
+  //   )
+  //     .then((res) => {
+  //       setCustomerOld(res?.totalItem);
+  //       setTotalOrderOld(res?.total[0]?.total_item);
+  //       setMoneyOld(res?.total[0]?.total_net_income_business);
+  //     })
+  //     .catch((err) => {});
+  // }, []);
+
   useEffect(() => {
-    getReportCustomer(
-      0,
-      20,
-      moment().subtract(30, "d").startOf("date").toISOString(),
-      moment().endOf("date").toISOString(),
-      "all"
-    )
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-        setTotalColumn(res?.total[0]);
-      })
-      .catch((err) => {});
+    if (startDate !== "") {
+      onChangeDay();
+    }
+  }, [startDate])
 
-    getReportCustomer(
-      0,
-      20,
-      moment().subtract(30, "d").startOf("date").toISOString(),
-      moment().endOf("date").toISOString(),
-      "new"
-    )
-      .then((res) => {
-        setCustomerNew(res?.totalItem);
-        setTotalOrderNew(res?.total[0]?.total_item);
-        setMoneyNew(res?.total[0]?.total_net_income_business);
-      })
-      .catch((err) => {});
 
-    getReportCustomer(
-      0,
-      20,
-      moment().subtract(30, "d").startOf("date").toISOString(),
-      moment().endOf("date").toISOString(),
-      "old"
-    )
-      .then((res) => {
-        setCustomerOld(res?.totalItem);
-        setTotalOrderOld(res?.total[0]?.total_item);
-        setMoneyOld(res?.total[0]?.total_net_income_business);
-      })
-      .catch((err) => {});
-  }, []);
 
   const onChangeDay = () => {
     setIsLoading(true);
@@ -561,14 +574,22 @@ const ReportCustomer = () => {
     <div className="div-container-report-customer">
       <h3>{`${i18n.t("order_report_customer", { lng: lang })}`}</h3>
       <div className="div-date">
-        <CustomDatePicker
+
+      <RangeDatePicker
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+              onCancel={() => { }}
+              defaults={"last_thirty"}
+            />
+
+        {/* <CustomDatePicker
           setStartDate={setStartDate}
           setEndDate={setEndDate}
           onClick={onChangeDay}
           onCancel={() => {}}
           setSameStart={() => {}}
           setSameEnd={() => {}}
-        />
+        /> */}
         {startDate && (
           <div className="ml-2">
             <p className="text-date m-0">

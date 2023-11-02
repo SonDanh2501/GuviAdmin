@@ -165,9 +165,15 @@ export const getReportTypeService = (start_date, end_date, city, district) => {
 };
 
 export const getReportServiceByArea = (start_date, end_date, city) => {
-  return axiosClient.get(
-    `/admin/report_mananger/report_service_by_area?lang=vi&start_date=${start_date}&end_date=${end_date}&city=${city}&district=`
-  );
+  if(city) {
+    return axiosClient.get(
+      `/admin/report_mananger/report_service_by_area?lang=vi&start_date=${start_date}&end_date=${end_date}&city=${city}&district=`
+    );
+  } else {
+    return axiosClient.get(
+      `/admin/report_mananger/report_service_by_area?lang=vi&start_date=${start_date}&end_date=${end_date}`
+    );
+  }
 };
 
 export const getReportServiceDetails = (start_date, end_date, city) => {

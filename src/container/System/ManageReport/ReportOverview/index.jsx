@@ -1086,8 +1086,8 @@ const ReportOverview = () => {
 
   const getDataReportServiceByArea = async () => {
     const arrGetResult = await Promise.all([
-      getReportServiceByArea(startDate, endDate, ""),
-      getReportServiceByArea(sameStartDate, sameEndDate, "")
+      getReportServiceByArea(startDate, endDate),
+      getReportServiceByArea(sameStartDate, sameEndDate)
     ])
 
     const payload = [];
@@ -1423,76 +1423,3 @@ const ReportOverview = () => {
 
 
 export default memo(ReportOverview);
-
-
-
-//               {dataChartSerive.slice(0, 5)?.map((item, index) => {
-//                 return (
-//                   <div key={index} className="div-item-chart">
-//                     <div className="div-name-service">
-//                       <Image
-//                         preview={false}
-//                         className="imagte-service"
-//                         src={item?.thumbnail}
-//                       />
-//                       <p className="name-service">{item?.name[lang]}</p>
-//                     </div>
-//                     <div className="div-number-area">
-//                       <p className="money-area">
-//                         {typePriceService === "income"
-//                           ? formatMoney(item?.income)
-//                           : formatMoney(item?.net_income)}
-//                       </p>
-//                       {typePriceService === "income" ? (
-//                         <>
-//                           {item?.percent_income < 0 ? (
-//                             <p className="text-number-persent-down">
-//                               <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
-//                               {Math.abs(
-//                                 isNaN(item?.percent_income)
-//                                   ? 0
-//                                   : item?.percent_income
-//                               ).toFixed(2)}
-//                               %
-//                             </p>
-//                           ) : (
-//                             <p className="text-number-persent-up">
-//                               <CaretUpOutlined style={{ marginRight: 5 }} />
-//                               {Number(
-//                                 isNaN(item?.percent_income)
-//                                   ? 0
-//                                   : item?.percent_income
-//                               ).toFixed(2)}
-//                               %
-//                             </p>
-//                           )}
-//                         </>
-//                       ) : (
-//                         <>
-//                           {item?.percent_net_income < 0 ? (
-//                             <p className="text-number-persent-down">
-//                               <CaretDownOutlined style={{ marginRight: 5 }} />{" "}
-//                               {Math.abs(
-//                                 isNaN(item?.percent_net_income)
-//                                   ? 0
-//                                   : item?.percent_net_income
-//                               ).toFixed(2)}
-//                               %
-//                             </p>
-//                           ) : (
-//                             <p className="text-number-persent-up">
-//                               <CaretUpOutlined style={{ marginRight: 5 }} />
-//                               {Number(
-//                                 isNaN(item?.percent_net_income)
-//                                   ? 0
-//                                   : item?.percent_net_income
-//                               ).toFixed(2)}
-//                               %
-//                             </p>
-//                           )}
-//                         </>
-//                       )}
-//                     </div>
-//                   </div>
-//                 );
-//               })}
