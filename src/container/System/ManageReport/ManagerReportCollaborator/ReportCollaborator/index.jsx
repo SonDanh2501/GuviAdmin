@@ -13,6 +13,7 @@ import { formatMoney } from "../../../../../helper/formatMoney";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 import i18n from "../../../../../i18n";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
+import RangeDatePicker from "../../../../../components/datePicker/RangeDatePicker";
 import "./index.scss";
 
 const ReportCollaborator = () => {
@@ -20,16 +21,26 @@ const ReportCollaborator = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [totalColumn, setTotalColumn] = useState([]);
-  const [startDate, setStartDate] = useState(
-    moment().subtract(30, "d").startOf("date").toISOString()
-  );
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] = useState("")
+  // const [startDate, setStartDate] = useState(
+  //   moment().subtract(30, "d").startOf("date").toISOString()
+  // );
+  // const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const { width } = useWindowDimensions();
-  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const lang = useSelector(getLanguageState);
 
+
   useEffect(() => {
+    if (startDate !== "") {
+      onChangeDay();
+    }
+  }, [startDate])
+
+
+  const getDataReportCollaborator = () => {
     getReportCollaborator(
       0,
       40,
@@ -42,7 +53,22 @@ const ReportCollaborator = () => {
         setTotalColumn(res?.total[0]);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }
+
+  // useEffect(() => {
+  //   getReportCollaborator(
+  //     0,
+  //     40,
+  //     moment().subtract(30, "d").startOf("date").toISOString(),
+  //     moment().endOf("date").toISOString()
+  //   )
+  //     .then((res) => {
+  //       setData(res?.data);
+  //       setTotal(res?.totalItem);
+  //       setTotalColumn(res?.total[0]);
+  //     })
+  //     .catch((err) => console.log(err));
+  // }, []);
 
   const onChange = (page) => {
     setIsLoading(true);
@@ -508,14 +534,22 @@ const ReportCollaborator = () => {
       <h5>{`${i18n.t("collaborator_report", { lng: lang })}`}</h5>
       <div className="div-header-report">
         <div className="div-date">
-          <CustomDatePicker
+        <RangeDatePicker
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+              onCancel={() => { }}
+              defaults={"last_thirty"}
+            />
+
+
+          {/* <CustomDatePicker
             setStartDate={setStartDate}
             setEndDate={setEndDate}
             onClick={onChangeDay}
             onCancel={() => {}}
             setSameStart={() => {}}
             setSameEnd={() => {}}
-          />
+          /> */}
           {startDate && (
             <div className="ml-2">
               <p className="text-date m-0">

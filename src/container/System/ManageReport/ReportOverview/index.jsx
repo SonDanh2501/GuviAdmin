@@ -984,11 +984,14 @@ const ReportOverview = () => {
     console.log(tempIncome, 'tempIncome');
     setDataIncome(tempIncome);
 
-    const percent = (data.total[0]?.percent_income - dataInsame.total[0]?.percent_income).toFixed(2)
+
+    const percentGrossIncome = (data.total[0]?.total_gross_income / (data.total[0]?.total_gross_income + dataInsame.total[0]?.total_gross_income)) * 100;
+    const percentGrossIncomeSame = (dataInsame.total[0]?.total_gross_income / (data.total[0]?.total_gross_income + dataInsame.total[0]?.total_gross_income)) * 100
+
     const headerTempIncome = {
       total: formatMoney(data.total[0]?.total_gross_income),
-      arrow: (percent > 0) ? "up" : "down",
-      percent: Math.abs(percent)
+      arrow: (percentGrossIncome - percentGrossIncomeSame > 0) ? "up" : "down",
+      percent: Math.abs((percentGrossIncome - percentGrossIncomeSame).toFixed(2))
     }
     setHeaderIncome(headerTempIncome)
   }
