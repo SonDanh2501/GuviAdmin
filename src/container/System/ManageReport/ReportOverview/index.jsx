@@ -866,13 +866,13 @@ const ReportOverview = () => {
 
   const configLineIncome = [
     {
-      dataKey: "total_income",
+      dataKey: "total_gross_income",
       stroke: "#2962ff",
       name: "Hiện tại",
       strokeDasharray: ""
     },
     {
-      dataKey: "total_income_same",
+      dataKey: "total_gross_income_same",
       stroke: "#82ca9d",
       name: "Cùng kỳ",
       strokeDasharray: "3 4 5 2"
@@ -973,9 +973,9 @@ const ReportOverview = () => {
     const tempIncome = []
     for (let i = 0; i < data.data.length; i++) {
       const payload = {
-        total_income: data.data[i].total_income,
+        total_gross_income: data.data[i].total_gross_income,
         date_report: data.data[i]._id.slice(0, 5),
-        total_income_same: dataInsame.data[i]?.total_income,
+        total_gross_income_same: dataInsame.data[i]?.total_gross_income,
         date_report_same: dataInsame.data[i]?._id.slice(0, 5)
       }
       tempIncome.push(payload)
