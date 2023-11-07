@@ -1687,7 +1687,7 @@ export default function Home() {
         <a className="money-text-dashboard">
           GMV:{" "}
           {payload?.length > 0
-            ? formatMoney(payload[0]?.payload?.total_income)
+            ? formatMoney(payload[0]?.payload?.total_gross_income)
             : 0}
         </a>
 
@@ -1774,7 +1774,7 @@ export default function Home() {
               setStartDate={setStartDate}
               setEndDate={setEndDate}
               onCancel={() => { }}
-              defaults={"last_thirty"}
+              defaults={"thirty_last"}
             />
 
                 {/* <CustomDatePicker
@@ -1839,14 +1839,14 @@ export default function Home() {
                       }
                     />
                     <YAxis
-                      dataKey="total_income"
+                      dataKey="total_gross_income"
                       fontSize={12}
                       tickFormatter={(tickItem) => number_processing(tickItem)}
                     />
                     <Tooltip content={renderTooltipContent} />
                     <Area
                       type="monotone"
-                      dataKey="total_income"
+                      dataKey="total_gross_income"
                       stroke="#00CF3A"
                       fill="#00CF3A"
                       name="GMV"

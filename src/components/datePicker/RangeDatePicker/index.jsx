@@ -267,6 +267,18 @@ const DATA_TAB = [
     range: [30, 1],
   },
   {
+    title: "seven_last",
+    value: "seven_last",
+    type_range: "days",
+    range: [6, 0],
+  },
+  {
+    title: "thirty_last",
+    value: "thirty_last",
+    type_range: "days",
+    range: [29, 0],
+  },
+  {
     title: "ninety_ago",
     value: "last_ninety",
     type_range: "days",
@@ -291,6 +303,7 @@ const DATA_TAB = [
     range: []
   },
 ];
+
 
 const OPTION = [
   {
