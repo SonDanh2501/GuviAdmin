@@ -313,7 +313,7 @@ const TopupCustomer = () => {
           <p className="text-money-customer-topup">
             {data?.method_transfer === "vnpay"
               ? "VNPay"
-              : `${i18n.t("transfer", { lng: lang })}`}
+              : data?.method_transfer === "momo" ? "Momo" : `${i18n.t("transfer", { lng: lang })}`}
           </p>
         );
       },
