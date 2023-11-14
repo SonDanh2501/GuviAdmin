@@ -39,6 +39,7 @@ import PromotionDrag from "../container/System/ManagePromotion/PromotionDrag";
 import EditPromotion from "../container/System/ManagePromotion/PromotionEdit";
 import ManagePushNotification from "../container/System/ManagePushNotification";
 import ManageReport from "../container/System/ManageReport";
+// import ManageReport from "../pages/ManageReport";
 import DetailReportManager from "../container/System/ManageReport/DetailsReportCollaborator";
 import ReportCustomerArea from "../container/System/ManageReport/ManageReportCustomer/ReportCustomerArea";
 import ReportCustomerOrderByArea from "../container/System/ManageReport/ManageReportCustomer/ReportCustomerOrderByArea";
@@ -49,7 +50,8 @@ import ReportUser from "../container/System/ManageReport/ManageReportCustomer/Re
 import DetailRegisterCustomer from "../container/System/ManageReport/ManageReportCustomer/ReportUser/DetailRegisterCustomer";
 import ReportCollaborator from "../container/System/ManageReport/ManagerReportCollaborator/ReportCollaborator";
 import ReportCustomer from "../container/System/ManageReport/MangeReportOrder/ReportCutomer";
-import ReportOrder from "../container/System/ManageReport/MangeReportOrder/ReportOrder";
+// import ReportOrder from "../container/System/ManageReport/MangeReportOrder/ReportOrder";
+import ReportOrder from "../pages/ManageReport/MangeReportOrder/ReportOrder";
 import ReportOrderCity from "../container/System/ManageReport/MangeReportOrder/ReportOrderByCity";
 import ReportOrderCreate from "../container/System/ManageReport/MangeReportOrder/ReportOrderCreate";
 import ReportOrderDaily from "../container/System/ManageReport/MangeReportOrder/ReportOrderDaily";

@@ -19,6 +19,18 @@ p {
   font-size: $textFontSizeM;
 }
 
+.text-color-1 {
+  color: $color1;
+}
+
+.text-color-black {
+  color: $colorBlack;
+}
+
+.text-weight-500 {
+  font-weight: 500;
+}
+
 span {
   text-decoration: none;
   margin: 0;

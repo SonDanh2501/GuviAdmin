@@ -71,28 +71,53 @@ const DataTable = (props) => {
     }, [detectLoading]);
 
 
+
+    const HeaderTitle = (title) => {
+        return (
+            <React.Fragment>
+            <p className="title-column">{title}</p>
+            </React.Fragment>
+        )
+    }
+
+
     for (const item of columns) {
+        const title = (item.i18n_title) ? i18n.t(`${item.i18n_title}`, {lng: lang}) : item.title;
+
+
         const temp: any = {
             title: () => {
-                if (item.i18n_title) {
-                    return (
-                        <p className="title-column">{`${i18n.t(`${item.i18n_title}`, {
-                            lng: lang,
-                        })}`}</p>
-                    );
+
+                if(item.customTitle) {
+                    return item.customTitle
                 } else {
                     return (
-                        <p className="title-column">{item.title}</p>
-                    );
+                        <>
+                        <p className={`title-column ${item?.fontSize}`}>{title}</p>
+                        </>
+                    )
                 }
+
+
+
+                // if (item.i18n_title) {
+                //     return (
+                //         <p className="title-column">{`${i18n.t(`${item.i18n_title}`, {
+                //             lng: lang,
+                //         })}`}</p>
+                //     );
+                // } else {
+                //     return (
+                //         <p className="title-column">{item.title}</p>
+                //     );
+                // }
             },
             render: (data, record, index) => {
                 let linkRedirect = `#`
-                console.log(item, 'item');
                 switch (item.key) {
                     case "id_view":
                         return (
-                            <p>{data?.id_view}</p>
+                            <p>{data[item.dataIndex]}</p>
                         )
                         break;
                     case "code_order":
@@ -214,14 +239,14 @@ const DataTable = (props) => {
                             <div className="div-status-order">
                                 <span
                                     className={`text-star ${item?.fontSize} ${data?.status === "pending"
-                                            ? "text-status-pending"
-                                            : data?.status === "confirm"
-                                                ? "text-status-confirm"
-                                                : data?.status === "doing"
-                                                    ? "text-status-doing"
-                                                    : data?.status === "done"
-                                                        ? "text-status-done"
-                                                        : "text-status-cancel"
+                                        ? "text-status-pending"
+                                        : data?.status === "confirm"
+                                            ? "text-status-confirm"
+                                            : data?.status === "doing"
+                                                ? "text-status-doing"
+                                                : data?.status === "done"
+                                                    ? "text-status-done"
+                                                    : "text-status-cancel"
                                         }`}
                                 >
                                     {data?.status === "pending"
@@ -296,13 +321,6 @@ const DataTable = (props) => {
                             </>
                         );
                         break;
-                    case "money":
-                        return (
-                            <p className={`text-address-customer ${item?.fontSize}`}>
-                                {formatMoney(data?.total_price)}
-                            </p>
-                        )
-                        break;
                     case "address":
                         const temp = item.dataIndex.split(".");
                         let getData = data[temp[0]];
@@ -364,22 +382,22 @@ const DataTable = (props) => {
                     case "status_request":
                         return (
                             <div className="status_request">
-                                {data?.status === "done" ?  (
+                                {data?.status === "done" ? (
                                     <p className={`text-contacted ${item?.fontSize}`}>
-                                    {`${i18n.t("contacted", { lng: lang })}`}
-                                </p>
+                                        {`${i18n.t("contacted", { lng: lang })}`}
+                                    </p>
                                 ) : (
                                     <div className="div-uncontact">
-                                         <p className="text-uncontact">{`${i18n.t("not_contacted", {
-                                             lng: lang,
-                                         })}`}</p>
-                                         {checkElement?.includes("contact_request_service") && (
-                                                <div className="btn-contacted-deep2" onClick={toggleModal} >
-                                                    <p className="text-btn-contact">{`${i18n.t("contact", {
-                                                        lng: lang,
-                                                    })}`}</p>
-                                                </div>
-                                         )}
+                                        <p className="text-uncontact">{`${i18n.t("not_contacted", {
+                                            lng: lang,
+                                        })}`}</p>
+                                        {checkElement?.includes("contact_request_service") && (
+                                            <div className="btn-contacted-deep2" onClick={toggleModal} >
+                                                <p className="text-btn-contact">{`${i18n.t("contact", {
+                                                    lng: lang,
+                                                })}`}</p>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -392,11 +410,11 @@ const DataTable = (props) => {
                                     {data?.status === "done" ? (
                                         <>
                                             <p className={`text-user ${item?.fontSize}`}> {data?.full_name_admin}</p>
-                                            <p className={`${item?.fontSize}`}> 
-                                            {moment(new Date(data?.date_admin_contact_create)).format("DD/MM/YYYY")}
+                                            <p className={`${item?.fontSize}`}>
+                                                {moment(new Date(data?.date_admin_contact_create)).format("DD/MM/YYYY")}
                                             </p>
-                                            <p className={`${item?.fontSize}`}> 
-                                            {moment(new Date(data?.date_admin_contact_create)).format("HH:mm")}
+                                            <p className={`${item?.fontSize}`}>
+                                                {moment(new Date(data?.date_admin_contact_create)).format("HH:mm")}
                                             </p>
                                         </>
                                     ) : (<></>)
@@ -405,15 +423,68 @@ const DataTable = (props) => {
                             </>
                         )
                         break;
-                        default:
+
+                    case "money": {
+                            return (
+                                <p className={`text-address-customer ${item?.fontSize}`}>
+                                    {formatMoney(data[item.dataIndex] || 0)}
+                                </p>
+                            )
+                            break;
+                    }
+                    case "percent": {
+                        return (
+                            <p className={`text-address-customer ${item?.fontSize}`}>
+                                {data[item.dataIndex]} %
+                            </p>
+                        )
+                        break;
+                    }
+                    case "punish": {
+                        return (
+                            <p className={`text-user ${item?.fontSize}`}> {data?.punish}</p>
+                        )
+                        break;
+                    }
+                    case "date_hour": {
+                        return (
+                            <div className="div-date-create">
+                                <p className={`${item?.fontSize}`}>
+                                    {moment(new Date(data[item.dataIndex])).format("DD/MM/YYYY")}
+                                </p>
+                                <p className={`${item?.fontSize}`}>
+                                    {moment(new Date(data[item.dataIndex])).format("HH:mm")}
+                                </p>
+                            </div>
+                        )
+                        break;
+                    }
+                    case "id_view_group_report": {
+                        return (
+
+
+                            <Link to={`/details-order/${data?.id_group_order?._id}`}>
+                            <p className={`${item?.fontSize}`}>
+                              {data?.id_group_order?.id_view}
+                            </p>
+                          </Link>
+
+                        )
+                        break;
+                    }
+                    default: {
                         const dataView = data[item.dataIndex] || "";
                         return (
                             <p className={`${item?.fontSize}`}> {dataView}</p>
                         )
                         break;
+                    }
+
                 }
             },
-            width: item.width || 100
+            width: item.width || 100,
+            // sorter: (a, b) => {a[item.dataIndex] - b[item.dataIndex]},
+            // align: "center",
         };
         headerTable.push(temp)
         widthPage += Number(temp.width);
@@ -430,6 +501,10 @@ const DataTable = (props) => {
 
     const toggleModal = (event) => {
         if(props.onToggleModal) props.onToggleModal(true);
+    }
+
+    const onSort = (typeSort, valueSort) => {
+        
     }
 
     return (
