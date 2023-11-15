@@ -557,6 +557,132 @@ const ReportOrder = () => {
   }
 
 
+  // const columns = [
+  //   {
+  //     customTitle: <HeaderInfo title="Thời gian"  />,
+  //     dataIndex: 'date_work',
+  //     key: "date_hour",
+  //     width: 50,
+  //     fontSize: "text-size-M text-weight-500"
+  //   },
+  //   {
+  //     customTitle: <HeaderInfo title="Mã đơn"  />,
+  //     dataIndex: 'id_group_order.id_view',
+  //     key: "id_view_group_report",
+  //     width: 90,
+  //     fontSize: "text-size-M text-color-black text-weight-500"
+  //   },
+  //   {
+  //     customTitle: <HeaderInfo title="Số đơn hàng" 
+  //     subValue={dataTotal.total_item} />,
+  //     dataIndex: 'total_item',
+  //     key: "number",
+  //     width: 50,
+  //     fontSize: "text-size-M text-weight-500"
+  //   },
+  //   {
+  //     customTitle: <HeaderInfo title="Doanh thu" 
+  //     subValue={dataTotal.total_gross_income} 
+  //     typeSubValue="money"
+  //     textToolTip="GMV: tổng giá trị giao dịch"/>,
+  //     dataIndex: 'total_gross_income',
+  //     key: "money",
+  //     width: 120,
+  //     fontSize: "text-size-M text-weight-500"
+  //   },
+  //   {
+  //     customTitle: <HeaderInfo title="Giảm giá" 
+  //     subValue={dataTotal.total_discount} 
+  //     typeSubValue="money"
+  //     textToolTip="Tổng số tiền giảm giá từ giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,…"/>,
+  //     dataIndex: 'total_discount',
+  //     key: "money",
+  //     width: 120,
+  //     fontSize: "text-size-M text-weight-500"
+  //   },
+  //   {
+  //     customTitle: <HeaderInfo title="Doanh thu thuần" 
+  //     subValue={dataTotal.total_net_income} 
+  //     typeSubValue="money"
+  //     textToolTip="Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần = Doanh thu (-) Giảm giá."/>,
+  //     dataIndex: 'total_net_income',
+  //     key: "money",
+  //     width: 120,
+  //     fontSize: "text-size-M text-weight-500"
+  //   },
+  //   {
+  //     customTitle: <HeaderInfo title="Bonus" 
+  //     subValue={dataTotal.total_tip} 
+  //     typeSubValue="money"
+  //     textToolTip="Số tiền KH tip thêm cho CTV/Đối tác"/>,
+  //     dataIndex: 'total_tip',
+  //     key: "money",
+  //     width: 120,
+  //     fontSize: "text-size-M text-weight-500"
+  //   },
+  //   {
+  //     customTitle: <HeaderInfo title="Tổng hoá đơn" 
+  //     subValue={dataTotal.total_order_fee} 
+  //     typeSubValue="money"
+  //     textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Doanh thu thuần + Phí vận chuyển* - Giảm giá vận chuyển*"/>,
+  //     dataIndex: 'total_order_fee',
+  //     key: "money",
+  //     width: 120,
+  //     fontSize: "text-size-M text-weight-500 text-color-1"
+  //   },
+  //   {
+  //     customTitle: <HeaderInfo title="Giá vốn" 
+  //     subValue={dataTotal.total_collabotator_fee} 
+  //     typeSubValue="money"
+  //     textToolTip="Phí dịch vụ/giá vốn hàng bán phải trả (+) Tiền tip từ KH"/>,
+  //     dataIndex: 'total_collabotator_fee',
+  //     key: "money",
+  //     width: 120,
+  //     fontSize: "text-size-M text-weight-500"
+  //   },
+  //   {
+  //     customTitle: <HeaderInfo title="Phí phạt" 
+  //     subValue={dataTotal.punish} 
+  //     typeSubValue="money"/>,
+  //     // title: 'Phí phạt',
+  //     dataIndex: 'punish',
+  //     key: "money",
+  //     width: 120,
+  //     fontSize: "text-size-M text-weight-500"
+  //   },
+  //   {
+  //     customTitle: <HeaderInfo title="Tổng lợi nhuận" 
+  //     subValue={dataTotal.total_net_income_business} 
+  //     typeSubValue="money"
+  //     textToolTip="Tổng lợi nhuận = Doanh thu thuần - Tổng giá vốn + Phí phạt"/>,
+  //     dataIndex: 'total_net_income_business',
+  //     key: "money",
+  //     width: 120,
+  //     fontSize: "text-size-M text-weight-500"
+  //   },
+  //   {
+  //     customTitle: <HeaderInfo title="% Lợi nhuận" 
+  //     subValue={dataTotal.percent_income} 
+  //     typeSubValue="percent"
+  //     textToolTip="% Lợi nhuận = Tổng lợi nhuận (/) Doanh thu thuần."/>,
+  //     dataIndex: 'percent_income',
+  //     key: "percent",
+  //     width: 90,
+  //     fontSize: "text-size-M text-weight-500"
+  //   },
+  //   {
+  //     customTitle: <HeaderInfo title="Phí áp dụng"  
+  //     subValue={dataTotal.total_service_fee}  
+  //     typeSubValue="money" />,
+  //     title: 'Phí áp dụng',
+  //     dataIndex: 'total_service_fee',
+  //     key: "money",
+  //     width: 120,
+  //     fontSize: "text-size-M text-weight-500"
+  //   },
+  // ]
+
+
   const columns = [
     {
       customTitle: <HeaderInfo title="Thời gian"  />,
@@ -571,6 +697,7 @@ const ReportOrder = () => {
       key: "id_view_group_report",
       width: 90,
       fontSize: "text-size-M text-color-black text-weight-500"
+
     },
     {
       customTitle: <HeaderInfo title="Số đơn hàng" 
@@ -579,16 +706,40 @@ const ReportOrder = () => {
       key: "number",
       width: 50,
       fontSize: "text-size-M text-weight-500"
+
     },
     {
-      customTitle: <HeaderInfo title="Doanh thu" 
+      customTitle: <HeaderInfo title="Tổng giá trị giao dịch" 
       subValue={dataTotal.total_gross_income} 
       typeSubValue="money"
-      textToolTip="GMV: tổng giá trị giao dịch"/>,
+      textToolTip="GMV - Gross Merchandise Volume"/>,
       dataIndex: 'total_gross_income',
       key: "money",
       width: 120,
       fontSize: "text-size-M text-weight-500"
+
+    },
+    {
+      customTitle: <HeaderInfo title="Thu hộ dịch vụ" 
+      subValue={dataTotal.total_collabotator_fee} 
+      typeSubValue="money"
+      textToolTip="Bao gồm phí dịch vụ trả cho CTV, tiền tip từ khách,…"/>,
+      dataIndex: 'total_collabotator_fee',
+      key: "money",
+      width: 120,
+      fontSize: "text-size-M text-weight-500"
+
+    },
+    {
+      customTitle: <HeaderInfo title="Doanh thu" 
+      subValue={dataTotal.total_income} 
+      typeSubValue="money"
+      textToolTip=""/>,
+      dataIndex: 'total_income',
+      key: "money",
+      width: 120,
+      fontSize: "text-size-M text-color-1 text-weight-500"
+
     },
     {
       customTitle: <HeaderInfo title="Giảm giá" 
@@ -599,7 +750,9 @@ const ReportOrder = () => {
       key: "money",
       width: 120,
       fontSize: "text-size-M text-weight-500"
+
     },
+
     {
       customTitle: <HeaderInfo title="Doanh thu thuần" 
       subValue={dataTotal.total_net_income} 
@@ -609,32 +762,32 @@ const ReportOrder = () => {
       key: "money",
       width: 120,
       fontSize: "text-size-M text-weight-500"
+
     },
     {
       customTitle: <HeaderInfo title="Tổng hoá đơn" 
       subValue={dataTotal.total_order_fee} 
       typeSubValue="money"
-      textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Doanh thu thuần + Phí vận chuyển* - Giảm giá vận chuyển*"/>,
+      textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."/>,
       dataIndex: 'total_order_fee',
-      key: "money",
-      width: 120,
-      fontSize: "text-size-M text-weight-500 text-color-1"
-    },
-    {
-      customTitle: <HeaderInfo title="Giá vốn" 
-      subValue={dataTotal.total_collabotator_fee} 
-      typeSubValue="money"
-      textToolTip="Phí dịch vụ/giá vốn hàng bán phải trả"/>,
-      dataIndex: 'total_collabotator_fee',
       key: "money",
       width: 120,
       fontSize: "text-size-M text-weight-500"
     },
     {
-      customTitle: <HeaderInfo title="Phí phạt" 
-      subValue={dataTotal.punish} 
+      customTitle: <HeaderInfo title="Giá vốn" 
+      subValue={dataTotal.punishss} 
       typeSubValue="money"/>,
-      // title: 'Phí phạt',
+      dataIndex: 'punishss',
+      key: "money",
+      width: 120,
+      fontSize: "text-size-M text-weight-500"
+    },
+    {
+      customTitle: <HeaderInfo title="Thu nhập khác" 
+      subValue={dataTotal.punish} 
+      typeSubValue="money"
+      textToolTip="Bao gồm phí phạt trễ và huỷ ca"/>,
       dataIndex: 'punish',
       key: "money",
       width: 120,
@@ -644,7 +797,7 @@ const ReportOrder = () => {
       customTitle: <HeaderInfo title="Tổng lợi nhuận" 
       subValue={dataTotal.total_net_income_business} 
       typeSubValue="money"
-      textToolTip="Tổng lợi nhuận = Doanh thu thuần - Tổng giá vốn + Phí phạt"/>,
+      textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác"/>,
       dataIndex: 'total_net_income_business',
       key: "money",
       width: 120,
@@ -654,24 +807,14 @@ const ReportOrder = () => {
       customTitle: <HeaderInfo title="% Lợi nhuận" 
       subValue={dataTotal.percent_income} 
       typeSubValue="percent"
-      textToolTip="% Lợi nhuận = Tổng lợi nhuận (/) Doanh thu thuần."/>,
+      textToolTip="% Lợi nhuận = Tổng lợi nhuận (/) Doanh thu."/>,
       dataIndex: 'percent_income',
       key: "percent",
       width: 90,
       fontSize: "text-size-M text-weight-500"
-    },
-    {
-      customTitle: <HeaderInfo title="Phí áp dụng"  
-      subValue={dataTotal.total_service_fee}  
-      typeSubValue="money" />,
-      title: 'Phí áp dụng',
-      dataIndex: 'total_service_fee',
-      key: "money",
-      width: 120,
-      fontSize: "text-size-M text-weight-500"
+
     },
   ]
-
 
   // const columns = [
   //   {
