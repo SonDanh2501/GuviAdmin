@@ -54,7 +54,9 @@ import ReportCustomer from "../container/System/ManageReport/MangeReportOrder/Re
 import ReportOrder from "../pages/ManageReport/MangeReportOrder/ReportOrder";
 import ReportOrderCity from "../container/System/ManageReport/MangeReportOrder/ReportOrderByCity";
 import ReportOrderCreate from "../container/System/ManageReport/MangeReportOrder/ReportOrderCreate";
-import ReportOrderDaily from "../container/System/ManageReport/MangeReportOrder/ReportOrderDaily";
+// import ReportOrderDaily from "../container/System/ManageReport/MangeReportOrder/ReportOrderDaily";
+import ReportOrderDaily from "../pages/ManageReport/MangeReportOrder/ReportOrderDaily";
+
 import ReportDetailOrderDaily from "../container/System/ManageReport/MangeReportOrder/ReportOrderDaily/DetailOrderDaily";
 import ReportOrderDayInWeek from "../container/System/ManageReport/MangeReportOrder/ReportOrderDayOfWeek";
 import EditPriceService from "../container/System/ManageService/EditPriceService";

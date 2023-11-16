@@ -21,6 +21,7 @@ import member from "../../../assets/images/iconMember.svg";
 import platinum from "../../../assets/images/iconPlatinum.svg";
 import silver from "../../../assets/images/iconSilver.svg";
 import LoadingPagination from "../../../components/paginationLoading";
+import { useNavigate } from "react-router-dom";
 
 const DataTable = (props) => {
     const {
@@ -60,7 +61,7 @@ const DataTable = (props) => {
     let headerTable = []
     const [hidePhone, setHidePhone] = useState(false);
     const [rowIndex, setRowIndex] = useState(0);
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         setIsLoading(false)
@@ -469,6 +470,18 @@ const DataTable = (props) => {
                             </p>
                           </Link>
 
+                        )
+                        break;
+                    }
+                    case "id_date_work": {
+                        const dataView = data[item.dataIndex] || "";
+                        return (
+                            <p className={`${item?.fontSize}`}
+                                onClick={() =>
+                                    navigate("/report/manage-report/report-order-work", {
+                                        state: { date: data?._id },
+                                    })}
+                            > {dataView}</p>
                         )
                         break;
                     }
