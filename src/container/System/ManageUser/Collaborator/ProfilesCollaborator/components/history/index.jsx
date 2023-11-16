@@ -109,7 +109,7 @@ const History = ({ id }) => {
                 )}
               </p>
 
-              {((item?.current_work_wallet !== 0 || item?.current_collaborator_wallet !== 0) ) ? (
+              {(( new Date(item?.date_create).getTime() > new Date("2023-10-28T17:00:00.000Z").getTime())) ? (
                 <>
                   <div className="div-surplus">
                     <div className="div-text-title-surplus">

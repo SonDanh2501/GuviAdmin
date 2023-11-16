@@ -249,6 +249,12 @@ export const getReportPercentOrderDaily = (start_date, end_date) => {
   );
 };
 
+export const getTotalReportOrderDaily = (start_date, end_date) => {
+  return axiosClient.get(
+    `/admin/report_mananger/total_order_daily?start_date=${start_date}&end_date=${end_date}`
+  );
+};
+
 export const getReportOrderByCity = (
   start,
   length,

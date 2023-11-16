@@ -2,7 +2,7 @@ import { Pagination, Popover, Table } from "antd";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getReportOrder } from "../../../../api/report";
 import CustomDatePicker from "../../../../components/customDatePicker";
 import LoadingPagination from "../../../../components/paginationLoading";
@@ -13,7 +13,6 @@ import { getLanguageState } from "../../../../redux/selectors/auth";
 import RangeDatePicker from "../../../../components/datePicker/RangeDatePicker";
 import DataTable from "../../../../components/tables/dataTable"
 import "./index.scss";
-
 const ReportOrder = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
@@ -30,6 +29,17 @@ const ReportOrder = () => {
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
 
+  const { state } = useLocation();
+  const date = state?.date;
+
+  useEffect(() => {
+    console.log(date, 'date');
+    if(date) {
+      console.log(date, 'date');
+      setStartDate(moment(date, "DD-MM-YYYY").startOf("date").toISOString())
+      setEndDate(moment(date, "DD-MM-YYYY").endOf("date").toISOString())
+    }
+  }, [])
 
 
   useEffect(() => {
@@ -43,7 +53,7 @@ const ReportOrder = () => {
     const res = await getReportOrder(start, 20, startDate, endDate, "date_work");
     setData(res?.data);
     setTotal(res?.totalItem);
-    setDataTotal(res?.total[0]);
+    setDataTotal(res?.total[0]);  
   }
 
 
@@ -530,7 +540,7 @@ const ReportOrder = () => {
       <React.Fragment>
         <div className="header-table-custom">
         <div className="title-report">
-        <p style={{color: title === "Tổng hoá đơn" ? "#2463eb" : "none"}} >{title}</p>
+        <p style={{color: title === "Doanh thu" ? "#2463eb" : "none"}} >{title}</p>
         {textToolTip ? (
         <Popover
         content={content}
@@ -540,14 +550,14 @@ const ReportOrder = () => {
         }}
       >
         <div>
-          <i style={{color: title === "Tổng hoá đơn" ? "#2463eb" : "none"}} class="uil uil-question-circle icon-question"></i>
+          <i style={{color: title === "Doanh thu" ? "#2463eb" : "none"}} class="uil uil-question-circle icon-question"></i>
         </div>
       </Popover>
         ) : (<></>)}
         </div>
         <div className="sub-value">
           {subValue ? (
-           <p style={{color: title === "Tổng hoá đơn" ? "#2463eb" : "none"}} >{subValue}</p> 
+           <p style={{color: title === "Doanh thu" ? "#2463eb" : "none"}} >{subValue}</p> 
           ) : (<div style={{marginTop: "35px"}}></div>)}
         </div>
         </div>

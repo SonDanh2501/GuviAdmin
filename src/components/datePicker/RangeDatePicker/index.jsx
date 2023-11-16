@@ -56,6 +56,8 @@ const RangeDatePicker = (props) => {
     setOpen(false);
     setStartDate(start.toISOString());
     setEndDate(end.toISOString());
+    // setValueTab(DATA_TAB[DATA_TAB.length - 1].value);
+
     // onClick();
   };
 
@@ -74,8 +76,14 @@ const RangeDatePicker = (props) => {
 
     setStart(value[0]);
     setEnd(value[1]);
-    setStartDate(value[0].toISOString());
-    setEndDate(value[1].toISOString());
+
+
+    // setStartDate(value[0].toISOString());
+    // setEndDate(value[1].toISOString());
+    
+    setTitle(`${i18n.t(DATA_TAB[DATA_TAB.length - 1].title, {lng: lang})}`);
+
+
 
 
     // const start = moment(value[0]).format("YYYY-MM-DD");
