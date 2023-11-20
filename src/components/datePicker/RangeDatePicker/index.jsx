@@ -33,9 +33,11 @@ const RangeDatePicker = (props) => {
   const [valueTab, setValueTab] = useState("");
   const [tabTime, setTabTime] = useState("day");
   const [title, setTitle] = useState("");
+  // const [defaultRangeDate, setDefaultRangeDate] = useState((defaults.length === 2) ? [new Date(defaults[0]), new Date(defaults[1]) ] : []);
   const timeZone = 0;
 
   useEffect(() => {
+    console.log(defaults, 'defaults');
     if(defaults) {
       const item = DATA_TAB.find(x => x.value === defaults);
       if(item) {
@@ -46,8 +48,14 @@ const RangeDatePicker = (props) => {
         setEndDate(endDate.toISOString());
         setTitle(`${i18n.t(item.title, {lng: lang,})}`)
         setValueTab(item.value);
+      } else {
+        // const {startDate, endDate} = calculateRangeDate(item.range, item.type_range);
+        // setDefaultRangeDate([defaults.startDate, defaults.endDate])
+        setValueTab(DATA_TAB[DATA_TAB.length - 1].value)
+        setTitle(`${i18n.t(DATA_TAB[DATA_TAB.length - 1].title, {lng: lang})}`)
+        // console.log(defaultRangeDate, 'defaultRangeDate');
       }
-    }
+    } 
   }, []);
 
   
@@ -207,6 +215,7 @@ const RangeDatePicker = (props) => {
                       className="picker"
                       onChange={(e) => onChangeFilter(e[0]?.$d, e[1]?.$d)}
                       locale={lang}
+                      // defaultValue={defaultRangeDate}
                     />
                   </div>
                 </>

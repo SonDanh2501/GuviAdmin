@@ -32,13 +32,16 @@ const ReportOrder = () => {
   const { state } = useLocation();
   const date = state?.date;
 
+  const [defaultRangeTime, setDefaultRangeTime] = 
+  useState( (date) ? [moment(date, "DD-MM-YYYY").startOf("date").toISOString(), moment(date, "DD-MM-YYYY").endOf("date").toISOString()] : "last_thirty")
+
   useEffect(() => {
-    console.log(date, 'date');
     if(date) {
-      console.log(date, 'date');
-      setStartDate(moment(date, "DD-MM-YYYY").startOf("date").toISOString())
-      setEndDate(moment(date, "DD-MM-YYYY").endOf("date").toISOString())
-    }
+      const startDate = moment(date, "DD-MM-YYYY").startOf("date").toISOString()
+      const endDate = moment(date, "DD-MM-YYYY").endOf("date").toISOString()
+      setStartDate(startDate)
+      setEndDate(endDate)
+    } 
   }, [])
 
 
@@ -1027,7 +1030,7 @@ const ReportOrder = () => {
               setStartDate={setStartDate}
               setEndDate={setEndDate}
               onCancel={() => { }}
-              defaults={"last_thirty"}
+              defaults={defaultRangeTime}
             />
       </div>
     </div>
