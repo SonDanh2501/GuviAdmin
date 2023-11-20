@@ -90,7 +90,7 @@ const Overview = ({ id }) => {
           <div className="div-head-overview">
             <div className="div-wallet">
             <p className="text-wallet">
-                Ví công việc: {formatMoney(total?.work_wallet)}
+                Ví nạp: {formatMoney(total?.work_wallet)}
               </p>
               <p className="text-wallet">
                 Ví CTV: {formatMoney(total?.collaborator_wallet)}
