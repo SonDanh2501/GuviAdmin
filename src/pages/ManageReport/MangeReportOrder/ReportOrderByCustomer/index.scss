@@ -1,0 +1,554 @@
+// .div-container-report-customer {
+//   background-color: white;
+//   padding: 10px;
+//   margin-top: 10px;
+//   border-radius: 8px;
+//   .text-title {
+//     font-family: "Roboto";
+//     font-style: normal;
+//     font-weight: 700;
+//     font-size: 27px;
+//     color: #000000;
+//     text-decoration: none;
+//   }
+
+//   .div-date {
+//     display: flex;
+//     flex-direction: row;
+//     width: 40%;
+//     align-items: center;
+
+//     .text-date {
+//       color: #000000;
+//       font-family: "Roboto";
+//       font-style: normal;
+//       font-size: 12px;
+//       margin-left: 10px;
+//     }
+//   }
+
+//   .header-report-customer {
+//     display: flex;
+//     flex-direction: row;
+//     justify-content: space-between;
+//     margin-top: 20px;
+//     flex-wrap: wrap;
+
+//     .div-tab-header-service {
+//       width: 20%;
+//       height: 65px;
+//       filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
+//       background-color: white;
+//       border-radius: 8px;
+//       display: flex;
+//       flex-direction: row;
+//       align-items: center;
+//       justify-content: space-between;
+//       padding-left: 10px;
+//       padding-right: 10px;
+
+//       .div-img {
+//         display: flex;
+//         width: 48px;
+//         height: 48px;
+//         align-items: center;
+//         justify-content: center;
+
+//         .img {
+//           width: 30px;
+//           height: 30px;
+//           position: relative;
+//         }
+//       }
+
+//       .div-text-tab {
+//         display: flex;
+//         flex-direction: row;
+
+//         .div-t {
+//           display: flex;
+//           flex-direction: column;
+//           margin-right: 10px;
+//           .text-tab-header {
+//             font-family: "Roboto";
+//             font-style: normal;
+//             font-weight: 700;
+//             font-size: 12px;
+//             text-align: center;
+//             color: #11263c;
+//             margin: 0;
+//           }
+//         }
+//       }
+//     }
+//   }
+
+//   .div-chart {
+//     width: 100%;
+//     min-height: 419px;
+//     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
+//     background-color: white;
+//     border-radius: 15px;
+//     padding: 20px;
+//     margin-top: 50px;
+//     margin-bottom: 30px;
+
+//     .div-time-area {
+//       display: flex;
+//       flex-direction: row;
+
+//       .text-time {
+//         font-family: "Roboto";
+//         font-style: normal;
+//         font-weight: 700;
+//         font-size: 16px;
+//         line-height: 28px;
+//         color: #11263c;
+//         margin-right: 10px;
+//       }
+
+//       .text-area {
+//         font-family: "Roboto";
+//         font-style: normal;
+//         font-weight: 700;
+//         font-size: 16px;
+//         line-height: 28px;
+//         color: #11263c;
+//         margin-left: 30px;
+//         margin-right: 10px;
+//       }
+//     }
+//     .divl-total {
+//       display: flex;
+//       flex-direction: row;
+//       .text-total-user {
+//         font-family: "Roboto";
+//         font-style: normal;
+//         font-weight: 700;
+//         font-size: 16px;
+//         line-height: 28px;
+//         color: #11263c;
+//         margin-right: 10px;
+//       }
+
+//       .div-total {
+//         display: flex;
+//         align-items: center;
+//         justify-content: center;
+//         width: 100px;
+//         height: 30px;
+//         border: 1px solid #bbbbbb;
+//         border-radius: 6px;
+//       }
+
+//       .text-number-total {
+//         font-family: "Roboto";
+//         font-style: normal;
+//         font-weight: 400;
+//         font-size: 16px;
+//         line-height: 28px;
+//         color: #000000;
+//         margin-right: 10px;
+//         text-decoration: none;
+//       }
+//     }
+//   }
+
+//   .div-ratio {
+//     width: 100%;
+//     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
+//     background-color: white;
+//     border-radius: 15px;
+//     padding: 20px;
+//     margin-top: 30px;
+
+//     .title {
+//       font-family: "Roboto";
+//       font-style: normal;
+//       font-weight: 500;
+//       font-size: 16px;
+//       color: #000000;
+//     }
+
+//     .div-progress {
+//       display: flex;
+//       flex-direction: row;
+//       justify-content: space-between;
+//       margin-top: 20px;
+//       padding-left: 20px;
+//       padding-right: 20px;
+
+//       .div-square-cus {
+//         display: flex;
+//         flex-direction: row;
+//         .div-square {
+//           width: 20px;
+//           height: 20px;
+//           background-color: #48cae4;
+//           border-radius: 5px;
+//           margin-right: 10px;
+//         }
+
+//         .title-square-cus {
+//           font-family: "Roboto";
+//           font-style: normal;
+//           font-weight: 400;
+//           font-size: 12px;
+//           color: #000000;
+//         }
+
+//         .div-unsquare {
+//           width: 20px;
+//           height: 20px;
+//           background-color: #e6e8f4;
+//           border-radius: 5px;
+//           margin-right: 10px;
+//         }
+//       }
+
+//       .div-progress-item {
+//         display: flex;
+//         flex-direction: row;
+//         align-items: center;
+
+//         .div-cus-job {
+//           display: flex;
+//           flex-direction: column;
+//           margin-left: 20px;
+
+//           .label-cus-job {
+//             font-family: "Roboto";
+//             font-style: normal;
+//             font-weight: 500;
+//             font-size: 14px;
+//             color: #000000;
+//             margin-bottom: 10px;
+//           }
+//         }
+//       }
+//     }
+//   }
+
+//   .div-table {
+//     width: 100%;
+//     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
+//     background-color: white;
+//     border-radius: 15px;
+//     padding: 20px;
+
+//     .div-tab-customer-report {
+//       display: flex;
+//       flex-direction: row;
+
+//       .div-tab {
+//         padding: 5px;
+//         margin-right: 10px;
+
+//         .title-tab {
+//           font-family: "Roboto";
+//           font-style: normal;
+//           font-weight: 400;
+//           font-size: 14px;
+//           color: #b3b3b3;
+//           text-decoration: none;
+//           margin: 0;
+//         }
+//       }
+
+//       .div-tab-select {
+//         padding: 5px;
+//         margin-right: 10px;
+//         border-bottom: 2px solid blue;
+
+//         .title-tab {
+//           font-family: "Roboto";
+//           font-style: normal;
+//           font-weight: 400;
+//           font-size: 14px;
+//           color: #000000;
+//           text-decoration: none;
+//           margin: 0;
+//         }
+//       }
+//     }
+
+//     .div-header-table {
+//       display: flex;
+//       flex-direction: row;
+//       .text-time {
+//         font-family: "Roboto";
+//         font-style: normal;
+//         font-weight: 700;
+//         font-size: 16px;
+//         color: #11263c;
+//         margin-right: 10px;
+//       }
+//     }
+//   }
+// }
+
+// .btn-details {
+//   width: 75px;
+//   height: 21px;
+//   background-color: #0075ff;
+//   border-radius: 5px;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+
+//   .text-details {
+//     color: #fff;
+//     font-family: "Roboto";
+//     font-style: normal;
+//     font-weight: 700;
+//     font-size: 14px;
+//   }
+// }
+
+// .div-title-customer-id {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+
+//   .text-money-title {
+//     font-family: "Roboto";
+//     font-style: normal;
+//     font-weight: 500;
+//     font-size: 12px !important;
+//     color: #000;
+//     text-decoration: none !important;
+//     margin: 20px 0 0 0;
+//   }
+
+//   .div-top {
+//     margin-top: 35px;
+//   }
+
+//   .div-title-report {
+//     display: flex;
+//     flex-direction: row;
+//     align-items: center;
+
+//     .text-title-column {
+//       font-family: "Roboto";
+//       font-style: normal;
+//       font-weight: 500;
+//       font-size: 12px !important;
+//       color: #000;
+//       text-decoration: none !important;
+//       margin: 0;
+//     }
+
+//     .btn-question {
+//       border: none;
+//       background-color: transparent;
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
+//     }
+
+//     .icon-question {
+//       color: aqua;
+//     }
+//   }
+// }
+// .div-title-customer {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+
+//   .text-money-title {
+//     font-family: "Roboto";
+//     font-style: normal;
+//     font-weight: 500;
+//     font-size: 12px !important;
+//     color: #000;
+//     text-decoration: none !important;
+//     margin: 20px 0 0 0;
+//   }
+
+//   .text-money-title-blue {
+//     font-family: "Roboto";
+//     font-style: normal;
+//     font-weight: 500;
+//     font-size: 12px !important;
+//     color: #2e2aff;
+//     text-decoration: none !important;
+//     margin: 20px 0 0 0;
+//   }
+
+//   .div-top {
+//     margin-top: 35px;
+//   }
+
+//   .div-title-report {
+//     display: flex;
+//     flex-direction: row;
+//     align-items: center;
+
+//     .text-title-column {
+//       font-family: "Roboto";
+//       font-style: normal;
+//       font-weight: 500;
+//       font-size: 13px !important;
+//       color: #000;
+//       text-decoration: none !important;
+//       margin: 0;
+//     }
+
+//     .text-title-column-blue {
+//       font-family: "Roboto";
+//       font-style: normal;
+//       font-weight: 500;
+//       font-size: 13px !important;
+//       color: #2e2aff;
+//       text-decoration: none !important;
+//       margin: 0;
+//     }
+
+//     .btn-question {
+//       border: none;
+//       background-color: transparent;
+//       width: 10px;
+//       height: 10px;
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
+//     }
+
+//     .icon-question {
+//       color: aqua;
+//     }
+//   }
+// }
+
+// .div-name-kh-report {
+//   display: flex;
+//   flex-direction: column;
+
+//   .text-name-report {
+//     font-family: "Roboto";
+//     font-style: normal;
+//     font-weight: 500;
+//     font-size: 12px;
+//     color: #023e8a;
+//     margin: 0;
+//   }
+
+//   .text-id {
+//     font-family: "Roboto";
+//     font-style: normal;
+//     font-weight: 400;
+//     font-size: 12px;
+//     color: #000000;
+//     text-decoration: none;
+//     margin: 0;
+//   }
+// }
+
+// @media screen and (max-width: 490px) {
+//   .div-container-report-customer {
+//     .div-date {
+//       display: flex;
+//       flex-direction: row;
+//       width: 100%;
+//       align-items: center;
+
+//       .text-date {
+//         color: #000000;
+//         font-family: "Roboto";
+//         font-style: normal;
+//         font-size: 12px;
+//         margin-left: 10px;
+//       }
+//     }
+
+//     .header-report-customer {
+//       display: flex;
+//       flex-direction: column;
+//       justify-content: space-between;
+//       margin-top: 20px;
+
+//       .div-tab-header-service {
+//         width: 100% !important;
+//         height: 65px;
+//         filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
+//         background-color: white;
+//         border-radius: 8px;
+//         display: flex;
+//         flex-direction: row;
+//         align-items: center;
+//         justify-content: space-between;
+//         padding-left: 10px;
+//         padding-right: 10px;
+//         margin-top: 20px;
+
+//         .div-img {
+//           display: flex;
+//           width: 48px;
+//           height: 48px;
+//           align-items: center;
+//           justify-content: center;
+
+//           .img {
+//             width: 30px;
+//             height: 30px;
+//             position: relative;
+//           }
+//         }
+
+//         .div-text-tab {
+//           display: flex;
+//           flex-direction: row;
+
+//           .div-t {
+//             display: flex;
+//             flex-direction: column;
+//             margin-right: 10px;
+//             .text-tab-header {
+//               font-family: "Roboto";
+//               font-style: normal;
+//               font-weight: 700;
+//               font-size: 12px;
+//               text-align: center;
+//               color: #11263c;
+//               margin: 0;
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
+
+
+@import '../../../../index.scss';
+
+.header-table-custom {
+    .title-report {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        p {
+            font-size: $textFontSizeM;
+            font-weight: 500;
+        }
+
+        div {
+            i {
+                font-size: $textFontSizeM;
+                margin: 0px 0px 0px 5px;
+            }
+        }
+
+    }
+
+    .sub-value {
+        margin: 10px 0px 0px 0px;
+
+        p {
+            font-size: $textFontSizeM;
+            font-weight: 500;
+        }
+    }
+}
