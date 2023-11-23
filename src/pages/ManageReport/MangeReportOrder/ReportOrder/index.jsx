@@ -24,6 +24,8 @@ const ReportOrder = () => {
   const [endDate, setEndDate] = useState("")
   const [start, setStart] = useState(0)
 
+  const typeDate = (window.location.pathname.slice(-5) === "-work") ? "date_work" : "date_create";
+
 
   const [isLoading, setIsLoading] = useState(false);
   const { width } = useWindowDimensions();
@@ -33,7 +35,9 @@ const ReportOrder = () => {
   const date = state?.date;
 
   const [defaultRangeTime, setDefaultRangeTime] = 
-  useState( (date) ? [moment(date, "DD-MM-YYYY").startOf("date").toISOString(), moment(date, "DD-MM-YYYY").endOf("date").toISOString()] : "last_thirty")
+  useState( (date) ? [moment(date, "DD-MM-YYYY").startOf("date").toISOString(), moment(date, "DD-MM-YYYY").endOf("date").toISOString()] : "thirty_last")
+
+
 
   useEffect(() => {
     if(date) {
@@ -53,7 +57,7 @@ const ReportOrder = () => {
 
 
   const getDataReportOrder = async () => {
-    const res = await getReportOrder(start, 20, startDate, endDate, "date_work");
+    const res = await getReportOrder(start, 20, startDate, endDate, typeDate);
     setData(res?.data);
     setTotal(res?.totalItem);
     setDataTotal(res?.total[0]);  
@@ -539,6 +543,7 @@ const ReportOrder = () => {
         </p>
     );
     if(subValue) subValue = (typeSubValue === "money") ? formatMoney(subValue) : (typeSubValue === "percent") ? subValue + " %" : subValue;
+    if(title == "Giá vốn") subValue = "0 đ";
     return (
       <React.Fragment>
         <div className="header-table-custom">
@@ -698,8 +703,8 @@ const ReportOrder = () => {
 
   const columns = [
     {
-      customTitle: <HeaderInfo title="Thời gian"  />,
-      dataIndex: 'date_work',
+      customTitle: (typeDate === "date_work") ? <HeaderInfo title="Ngày làm" /> : <HeaderInfo title="Ngày tạo" />,
+      dataIndex: (typeDate === "date_work") ? 'date_work' : 'date_create',
       key: "date_hour",
       width: 50,
       fontSize: "text-size-M text-weight-500"
@@ -825,7 +830,16 @@ const ReportOrder = () => {
       key: "percent",
       width: 90,
       fontSize: "text-size-M text-weight-500"
-
+    },
+    {
+      customTitle: <HeaderInfo title="Phí áp dụng"
+        subValue={dataTotal.total_service_fee}
+        typeSubValue="money" />,
+      title: 'Phí áp dụng',
+      dataIndex: 'total_service_fee',
+      key: "money",
+      width: 120,
+      fontSize: "text-size-M text-weight-500"
     },
   ]
 

@@ -1169,7 +1169,7 @@ const ReportOrder = () => {
               setStartDate={setStartDate}
               setEndDate={setEndDate}
               onCancel={() => { }}
-              defaults={"last_thirty"}
+              defaults={"thirty_last"}
             />
 
           {/* <CustomDatePicker
