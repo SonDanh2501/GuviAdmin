@@ -28,7 +28,11 @@ import DeepCleaningManager from "../container/System/ManageDeepCleaning";
 import ManageFeedback from "../container/System/ManageFeedback";
 import ManageFinance from "../container/System/ManageFinance";
 import ManageOrder from "../container/System/ManageOrder";
+// import ManageOrder from "../pages/ManageOrder";
+
 import AddOrder from "../container/System/ManageOrder/DrawerAddOrder";
+// import CreateOrder from "../pages/ManageOrder/CreateOrder";
+
 // import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDoingManage";
 // import OrderExpired from "../container/System/ManageOrder/OrderExpired";
 import ManagePromotions from "../container/System/ManagePromotion";
@@ -38,8 +42,8 @@ import OrderUsePromotion from "../container/System/ManagePromotion/OrderUsePromo
 import PromotionDrag from "../container/System/ManagePromotion/PromotionDrag";
 import EditPromotion from "../container/System/ManagePromotion/PromotionEdit";
 import ManagePushNotification from "../container/System/ManagePushNotification";
-import ManageReport from "../container/System/ManageReport";
-// import ManageReport from "../pages/ManageReport";
+// import ManageReport from "../container/System/ManageReport";
+import ManageReport from "../pages/ManageReport";
 import DetailReportManager from "../container/System/ManageReport/DetailsReportCollaborator";
 import ReportCustomerArea from "../container/System/ManageReport/ManageReportCustomer/ReportCustomerArea";
 import ReportCustomerOrderByArea from "../container/System/ManageReport/ManageReportCustomer/ReportCustomerOrderByArea";
@@ -49,7 +53,9 @@ import ReportRatio from "../container/System/ManageReport/ManageReportCustomer/R
 import ReportUser from "../container/System/ManageReport/ManageReportCustomer/ReportUser";
 import DetailRegisterCustomer from "../container/System/ManageReport/ManageReportCustomer/ReportUser/DetailRegisterCustomer";
 import ReportCollaborator from "../container/System/ManageReport/ManagerReportCollaborator/ReportCollaborator";
-import ReportCustomer from "../container/System/ManageReport/MangeReportOrder/ReportCutomer";
+// import ReportCustomer from "../container/System/ManageReport/MangeReportOrder/ReportCutomer";
+import ReportOrderByCustomer from "../pages/ManageReport/MangeReportOrder/ReportOrderByCustomer";
+
 // import ReportOrder from "../container/System/ManageReport/MangeReportOrder/ReportOrder";
 import ReportOrder from "../pages/ManageReport/MangeReportOrder/ReportOrder";
 import ReportOrderCity from "../container/System/ManageReport/MangeReportOrder/ReportOrderByCity";
@@ -190,6 +196,11 @@ const Admin = () => {
         element={<AddOrder />}
       />
 
+      {/* <Route
+        path="/group-order/manage-order/create-order"
+        element={<CreateOrder />}
+      /> */}
+
       <Route path="/topup/manage-topup" element={<ManageTopup />} />
       <Route
         path="/topup/manage-topup/details-reward-collaborator/:id"
@@ -209,6 +220,16 @@ const Admin = () => {
         path="/report/manage-report/report-order-work"
         element={<ReportOrder />}
       />
+
+      <Route
+        path="/report/manage-report/report-detail-order-date-work"
+        element={<ReportOrder />}
+      />
+      <Route
+        path="/report/manage-report/report-detail-order-date-create"
+        element={<ReportOrder />}
+      />
+
       <Route
         path="/report/manage-report/report-order-create"
         element={<ReportOrderCreate />}
@@ -217,6 +238,16 @@ const Admin = () => {
         path="/report/manage-report/report-order-daily"
         element={<ReportOrderDaily />}
       />
+
+      <Route
+        path="/report/manage-report/report-order-daily-date-work"
+        element={<ReportOrderDaily />}
+      />
+      <Route
+        path="/report/manage-report/report-order-daily-date-create"
+        element={<ReportOrderDaily />}
+      />
+
       <Route
         path="/report/manage-report/report-order-day-of-week"
         element={<ReportOrderDayInWeek />}
@@ -229,9 +260,13 @@ const Admin = () => {
         path="/report/manage-report/report-order-area"
         element={<ReportOrderCity />}
       />
-      <Route
+      {/* <Route
         path="/report/manage-report/report-order-customer"
         element={<ReportCustomer />}
+      /> */}
+      <Route
+        path="/report/manage-report/report-order-by-customer"
+        element={<ReportOrderByCustomer />}
       />
       <Route
         path="/report/manage-report/report-user"

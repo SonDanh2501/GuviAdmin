@@ -1,614 +1,3 @@
-// import { Pagination, Popover, Table } from "antd";
-// import moment from "moment";
-// import { useEffect, useState } from "react";
-// import { useSelector } from "react-redux";
-// import { useNavigate } from "react-router-dom";
-// import {
-//   Bar,
-//   BarChart,
-//   CartesianGrid,
-//   Legend,
-//   ResponsiveContainer,
-//   Tooltip,
-//   XAxis,
-//   YAxis,
-// } from "recharts";
-// import {
-//   getReportOrderDaily,
-//   getReportPercentOrderDaily,
-// } from "../../../../api/report";
-// import CustomDatePicker from "../../../../components/customDatePicker";
-// import { formatMoney } from "../../../../helper/formatMoney";
-// import useWindowDimensions from "../../../../helper/useWindowDimensions";
-// import i18n from "../../../../i18n";
-// import { getLanguageState } from "../../../../redux/selectors/auth";
-// import "./styles.scss";
-
-// const ReportOrderDaily = () => {
-//   const [data, setData] = useState([]);
-//   const [dataChart, setDataChart] = useState([]);
-//   const [total, setTotal] = useState(0);
-//   const [dataTotal, setDataTotal] = useState([]);
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const [startPage, setStartPage] = useState(0);
-//   const [startDate, setStartDate] = useState(
-//     moment().subtract(30, "d").startOf("date").toISOString()
-//   );
-//   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
-//   const { width } = useWindowDimensions();
-//   const navigate = useNavigate();
-//   const lang = useSelector(getLanguageState);
-
-//   useEffect(() => {
-//     getReportOrderDaily(
-//       0,
-//       40,
-//       moment().subtract(30, "d").startOf("date").toISOString(),
-//       moment().endOf("date").toISOString(),
-//       "date_work"
-//     )
-//       .then((res) => {
-//         setData(res?.data);
-//         setTotal(res?.totalItem);
-//         setDataTotal(res?.total[0]);
-//       })
-//       .catch((err) => {});
-
-//     getReportPercentOrderDaily(
-//       moment().subtract(30, "d").startOf("date").toISOString(),
-//       moment().endOf("date").toISOString()
-//     )
-//       .then((res) => {
-//         setDataChart(res?.data);
-//       })
-//       .catch((err) => {});
-//   }, []);
-
-//   const onChange = (page) => {
-//     setCurrentPage(page);
-//     const dataLength = data.length < 20 ? 20 : data.length;
-//     const start = page * dataLength - dataLength;
-//     setStartPage(start);
-//     getReportOrderDaily(start, 40, startDate, endDate, "date_work")
-//       .then((res) => {
-//         setData(res?.data);
-//         setTotal(res?.totalItem);
-//         setDataTotal(res?.total[0]);
-//       })
-//       .catch((err) => {});
-//   };
-
-//   const onChangeDay = () => {
-//     getReportOrderDaily(startPage, 40, startDate, endDate, "date_work")
-//       .then((res) => {
-//         setData(res?.data);
-//         setTotal(res?.totalItem);
-//         setDataTotal(res?.total[0]);
-//       })
-//       .catch((err) => {});
-
-//     getReportPercentOrderDaily(startDate, endDate)
-//       .then((res) => {
-//         setDataChart(res?.data);
-//       })
-//       .catch((err) => {});
-//   };
-
-//   const columns = [
-//     {
-//       title: () => {
-//         return (
-//           <div className="div-title-collaborator-id">
-//             <div className="div-title-report">
-//               <p className="text-title-column">{`${i18n.t("time", {
-//                 lng: lang,
-//               })}`}</p>
-//             </div>
-//             <div className="div-top"></div>
-//           </div>
-//         );
-//       },
-//       render: (data) => (
-//         <div
-//           className="div-date-report-order"
-//           onClick={() =>
-//             navigate("/report/manage-report/report-order-daily/details", {
-//               state: { date: data?._id },
-//             })
-//           }
-//         >
-//           <p className="text-date-report-order">{data?._id}</p>
-//         </div>
-//       ),
-//     },
-//     {
-//       title: () => {
-//         return (
-//           <div className="div-title-order-report">
-//             <div className="div-title-report">
-//               <p className="text-title-column">{`${i18n.t("shift", {
-//                 lng: lang,
-//               })}`}</p>
-//             </div>
-//             <p className="text-money-title">
-//               {dataTotal?.total_item > 0 ? dataTotal?.total_item : 0}
-//             </p>
-//           </div>
-//         );
-//       },
-//       render: (data) => {
-//         return <p className="text-money">{data?.total_item}</p>;
-//       },
-//       align: "center",
-//       sorter: (a, b) => a.total_item - b.total_item,
-//     },
-//     {
-//       title: () => {
-//         return (
-//           <div className="div-title-order-report">
-//             <div className="div-title-report">
-//               <p className="text-title-column">{`${i18n.t("sales", {
-//                 lng: lang,
-//               })}`}</p>
-//             </div>
-//             <p className="text-money-title">
-//               {dataTotal?.total_gross_income > 0
-//                 ? formatMoney(dataTotal?.total_gross_income)
-//                 : formatMoney(0)}
-//             </p>
-//           </div>
-//         );
-//       },
-//       align: "center",
-//       render: (data) => {
-//         return (
-//           <p className="text-money">{formatMoney(data?.total_gross_income)}</p>
-//         );
-//       },
-
-//       sorter: (a, b) => a.total_gross_income - b.total_gross_income,
-//     },
-//     {
-//       title: () => {
-//         const content = (
-//           <div className="div-content">
-//             <p className="text-content">{`${i18n.t(
-//               "service_fee_pay_collaborator",
-//               {
-//                 lng: lang,
-//               }
-//             )}`}</p>
-//           </div>
-//         );
-//         return (
-//           <div className="div-title-order-report">
-//             <div className="div-title-report">
-//               <p className="text-title-column">{`${i18n.t("service_fee", {
-//                 lng: lang,
-//               })}`}</p>
-//               <Popover
-//                 content={content}
-//                 placement="bottom"
-//                 overlayInnerStyle={{
-//                   backgroundColor: "white",
-//                   width: 200,
-//                 }}
-//               >
-//                 <div>
-//                   <i class="uil uil-question-circle icon-question"></i>
-//                 </div>
-//               </Popover>
-//             </div>
-//             <p className="text-money-title">
-//               {dataTotal?.total_collabotator_fee > 0
-//                 ? formatMoney(dataTotal?.total_collabotator_fee)
-//                 : formatMoney(0)}
-//             </p>
-//           </div>
-//         );
-//       },
-//       align: "center",
-//       render: (data) => {
-//         return (
-//           <p className="text-money">
-//             {formatMoney(data?.total_collabotator_fee)}
-//           </p>
-//         );
-//       },
-
-//       sorter: (a, b) => a.total_collabotator_fee - b.total_collabotator_fee,
-//     },
-//     {
-//       title: () => {
-//         const content = (
-//           <div className="div-content">
-//             <p className="text-content">
-//               {`${i18n.t("revenue_sales", { lng: lang })}`}
-//             </p>
-//           </div>
-//         );
-//         return (
-//           <div className="div-title-order-report">
-//             <div className="div-title-report">
-//               <p className="text-title-column-blue">{`${i18n.t("revenue", {
-//                 lng: lang,
-//               })}`}</p>
-//               <Popover
-//                 content={content}
-//                 placement="bottom"
-//                 overlayInnerStyle={{
-//                   backgroundColor: "white",
-//                   width: 300,
-//                 }}
-//               >
-//                 <div>
-//                   <i class="uil uil-question-circle icon-question"></i>
-//                 </div>
-//               </Popover>
-//             </div>
-//             <p className="text-money-title-blue">
-//               {dataTotal?.total_income > 0
-//                 ? formatMoney(dataTotal?.total_income)
-//                 : formatMoney(0)}
-//             </p>
-//           </div>
-//         );
-//       },
-//       align: "center",
-//       render: (data) => {
-//         return (
-//           <p className="text-money-blue">{formatMoney(data?.total_income)}</p>
-//         );
-//       },
-
-//       sorter: (a, b) => a.total_income - b.total_income,
-//     },
-//     {
-//       title: () => {
-//         const content = (
-//           <div className="div-content">
-//             <p className="text-content">{`${i18n.t("total_discount", {
-//               lng: lang,
-//             })}`}</p>
-//           </div>
-//         );
-//         return (
-//           <div className="div-title-order-report">
-//             <div className="div-title-report">
-//               <p className="text-title-column">{`${i18n.t("discount", {
-//                 lng: lang,
-//               })}`}</p>
-//               <Popover
-//                 content={content}
-//                 placement="bottom"
-//                 overlayInnerStyle={{
-//                   backgroundColor: "white",
-//                   width: 200,
-//                 }}
-//               >
-//                 <div>
-//                   <i class="uil uil-question-circle icon-question"></i>
-//                 </div>
-//               </Popover>
-//             </div>
-//             <p className="text-money-title">
-//               {dataTotal?.total_discount > 0
-//                 ? formatMoney(dataTotal?.total_discount)
-//                 : formatMoney(0)}
-//             </p>
-//           </div>
-//         );
-//       },
-//       align: "center",
-//       render: (data) => {
-//         return (
-//           <p className="text-money">{formatMoney(data?.total_discount)}</p>
-//         );
-//       },
-
-//       sorter: (p, b) => p.total_discount - b.total_discount,
-//     },
-//     {
-//       title: () => {
-//         const content = (
-//           <div className="div-content">
-//             <p className="text-content">
-//               {`${i18n.t("note_net_revenue", { lng: lang })}`}
-//             </p>
-//           </div>
-//         );
-//         return (
-//           <div className="div-title-order-report">
-//             <div className="div-title-report">
-//               <p className="text-title-column">{`${i18n.t("net_revenue", {
-//                 lng: lang,
-//               })}`}</p>
-//               <Popover
-//                 content={content}
-//                 placement="bottom"
-//                 overlayInnerStyle={{
-//                   backgroundColor: "white",
-//                   width: 300,
-//                 }}
-//               >
-//                 <div>
-//                   <i class="uil uil-question-circle icon-question"></i>
-//                 </div>
-//               </Popover>
-//             </div>
-//             <p className="text-money-title">
-//               {dataTotal?.total_net_income > 0
-//                 ? formatMoney(dataTotal?.total_net_income)
-//                 : formatMoney(0)}
-//             </p>
-//           </div>
-//         );
-//       },
-//       align: "center",
-//       render: (data) => {
-//         return (
-//           <p className="text-money">{formatMoney(data?.total_net_income)}</p>
-//         );
-//       },
-
-//       sorter: (a, b) => a.total_net_income - b.total_net_income,
-//     },
-//     {
-//       title: () => {
-//         return (
-//           <div className="div-title-order-report">
-//             <div className="div-title-report">
-//               <p className="text-title-column">{`${i18n.t("fees_apply", {
-//                 lng: lang,
-//               })}`}</p>
-//             </div>
-//             <p className="text-money-title">
-//               {dataTotal?.total_service_fee > 0
-//                 ? formatMoney(dataTotal?.total_service_fee)
-//                 : formatMoney(0)}
-//             </p>
-//           </div>
-//         );
-//       },
-//       render: (data) => {
-//         return (
-//           <p className="text-money">{formatMoney(data?.total_service_fee)}</p>
-//         );
-//       },
-//       align: "center",
-//     },
-//     {
-//       title: () => {
-//         const content = (
-//           <div className="div-content">
-//             <p className="text-content">
-//               {`${i18n.t("note_total_bill", {
-//                 lng: lang,
-//               })}`}
-//             </p>
-//           </div>
-//         );
-//         return (
-//           <div className="div-title-order-report">
-//             <div className="div-title-report">
-//               <p className="text-title-column">{`${i18n.t("total_bill", {
-//                 lng: lang,
-//               })}`}</p>
-//               <Popover
-//                 content={content}
-//                 placement="bottom"
-//                 overlayInnerStyle={{
-//                   backgroundColor: "white",
-//                   width: 300,
-//                 }}
-//               >
-//                 <div>
-//                   <i class="uil uil-question-circle icon-question"></i>
-//                 </div>
-//               </Popover>
-//             </div>
-//             <p className="text-money-title">
-//               {dataTotal?.total_order_fee > 0
-//                 ? formatMoney(dataTotal?.total_order_fee)
-//                 : formatMoney(0)}
-//             </p>
-//           </div>
-//         );
-//       },
-//       align: "center",
-//       render: (data) => {
-//         return (
-//           <p className="text-money">{formatMoney(data?.total_order_fee)}</p>
-//         );
-//       },
-
-//       sorter: (a, b) => a.total_order_fee - b.total_order_fee,
-//     },
-//     {
-//       title: () => {
-//         const content = (
-//           <div className="div-content">
-//             <p className="text-content">
-//               {`${i18n.t("note_profit", { lng: lang })}`}
-//             </p>
-//           </div>
-//         );
-//         return (
-//           <div className="div-title-order-report">
-//             <div className="div-title-report">
-//               <p className="text-title-column">{`${i18n.t("profit", {
-//                 lng: lang,
-//               })}`}</p>
-//               <Popover
-//                 content={content}
-//                 placement="bottom"
-//                 overlayInnerStyle={{
-//                   backgroundColor: "white",
-//                   width: 300,
-//                 }}
-//               >
-//                 <div>
-//                   <i class="uil uil-question-circle icon-question"></i>
-//                 </div>
-//               </Popover>
-//             </div>
-//             <p className="text-money-title">
-//               {dataTotal?.total_net_income_business > 0
-//                 ? formatMoney(dataTotal?.total_net_income_business)
-//                 : formatMoney(0)}
-//             </p>
-//           </div>
-//         );
-//       },
-//       align: "center",
-//       render: (data) => {
-//         return (
-//           <p className="text-money">
-//             {formatMoney(data?.total_net_income_business)}
-//           </p>
-//         );
-//       },
-
-//       sorter: (a, b) =>
-//         a.total_net_income_business - b.total_net_income_business,
-//     },
-//     {
-//       title: () => {
-//         const content = (
-//           <div className="div-content">
-//             <p className="text-content">
-//               %{" "}
-//               {`${i18n.t("percent_profit", {
-//                 lng: lang,
-//               })}`}
-//             </p>
-//           </div>
-//         );
-//         return (
-//           <div className="div-title-order-report">
-//             <div className="div-title-report">
-//               <p className="text-title-column">
-//                 %{" "}
-//                 {`${i18n.t("profit", {
-//                   lng: lang,
-//                 })}`}
-//               </p>
-//               <Popover
-//                 content={content}
-//                 placement="bottom"
-//                 overlayInnerStyle={{
-//                   backgroundColor: "white",
-//                   width: 300,
-//                 }}
-//               >
-//                 <div>
-//                   <i class="uil uil-question-circle icon-question"></i>
-//                 </div>
-//               </Popover>
-//             </div>
-//             <div className="div-top"></div>
-//           </div>
-//         );
-//       },
-//       align: "center",
-//       render: (data) => {
-//         return (
-//           <p className="text-money">
-//             {data?.percent_income ? data?.percent_income + "%" : ""}
-//           </p>
-//         );
-//       },
-//     },
-//   ];
-
-//   return (
-//     <div className="div-container-report-daily">
-//       <h3>{`${i18n.t("completed_order_report_day", { lng: lang })}`}</h3>
-//       <div className="div-date">
-//         <CustomDatePicker
-//           setStartDate={setStartDate}
-//           setEndDate={setEndDate}
-//           onClick={onChangeDay}
-//           onCancel={() => {}}
-//           setSameStart={() => {}}
-//           setSameEnd={() => {}}
-//         />
-//         {startDate && (
-//           <p className="text-date m-0">
-//             {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-//             {moment(endDate).utc().format("DD/MM/YYYY")}
-//           </p>
-//         )}
-//       </div>
-//       <div className="div-chart-order-daily">
-//         <ResponsiveContainer width={"100%"} height={350} min-width={350}>
-//           <BarChart
-//             width={500}
-//             height={400}
-//             data={dataChart}
-//             margin={{
-//               top: 5,
-//               right: 0,
-//               left: 0,
-//               bottom: 5,
-//             }}
-//           >
-//             <CartesianGrid strokeDasharray="3 3" />
-
-//             <XAxis
-//               dataKey="_id"
-//               tick={{ fontSize: 8 }}
-//               angle={-30}
-//               textAnchor="end"
-//             />
-
-//             <YAxis />
-//             <Tooltip />
-//             <Legend />
-//             <Bar
-//               dataKey="total_item"
-//               fill="#4376CC"
-//               barSize={20}
-//               minPointSize={10}
-//               label={{ position: "centerTop", fill: "white", fontSize: 10 }}
-//               name={`${i18n.t("number_shift", { lng: lang })}`}
-//             />
-//           </BarChart>
-//         </ResponsiveContainer>
-//       </div>
-//       <div className="mt-3">
-//         <Table
-//           dataSource={data.reverse()}
-//           columns={columns}
-//           pagination={false}
-//           scroll={{
-//             x: width <= 490 ? 1600 : 0,
-//           }}
-//         />
-//       </div>
-
-//       <div className="mt-2 div-pagination p-2">
-//         <p>
-//           {`${i18n.t("total", { lng: lang })}`}: {total}
-//         </p>
-//         <div>
-//           <Pagination
-//             current={currentPage}
-//             onChange={onChange}
-//             total={total}
-//             showSizeChanger={false}
-//             pageSize={40}
-//           />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ReportOrderDaily;
-
-
-
 import React, { useCallback, useEffect, useState } from "react";
 import { Pagination, Popover, Table } from "antd";
 import moment from "moment";
@@ -652,7 +41,7 @@ const ReportOrderDaily = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [dataTotal, setDataTotal] = useState({});
-
+  const typeDate = (window.location.pathname.slice(-5) === "-work") ? "date_work" : "date_create";
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
   const [sameStartDate, setSameStartDate] = useState("")
@@ -680,12 +69,27 @@ const ReportOrderDaily = () => {
     }
   ]
 
+
+  // const [totalInfo, setTotalOrder] = useState({
+  //   total_gross_income: 0,
+  //   total_item: 0,
+  //   total_discount: 0
+  // });
+  // const [todayInfo, setTodayInfo] = useState({
+  //   total_gross_income: 0,
+  //   total_item: 0,
+  //   total_income: 0,
+  //   total_net_income_business: 0
+  // });
+
+
   useEffect(() => {
     if (startDate !== "") {
       const oneDay = 24 * 60 * 60 * 1000;
       const diffDays = Math.round(Math.abs((new Date(startDate).getTime() - new Date(endDate).getTime()) / oneDay));
        getDataReportDaily(diffDays);
        getTotalReportDaily()
+      //  getDataReportToday()
     }
   }, [sameStartDate])
 
@@ -711,8 +115,8 @@ const ReportOrderDaily = () => {
 
   const getTotalReportDaily = async () => {
     const arrGetResult = await Promise.all([
-      getTotalReportOrderDaily(startDate, endDate),
-      getTotalReportOrderDaily(sameStartDate, sameEndDate)
+      getTotalReportOrderDaily(startDate, endDate, typeDate),
+      getTotalReportOrderDaily(sameStartDate, sameEndDate, typeDate)
     ])
     visualizationDataOrder(arrGetResult[0], arrGetResult[1])
   }
@@ -720,20 +124,19 @@ const ReportOrderDaily = () => {
 
 
   const getDataReportDaily = async () => {
-    const res = await getReportOrderDaily(start, 20, startDate, endDate, "date_work");
+    const res = await getReportOrderDaily(start, 20, startDate, endDate, typeDate, -1);
     setData(res.data);
     setTotal(res?.totalItem);
+    console.log(res?.total[0], 'res?.total[0]');
     setDataTotal(res?.total[0]);
-    // const arrGetResult = await Promise.all([
-      
-    //   getReportOrderDaily(0, diffDays, sameStartDate, sameEndDate, "date_work")
-    // ])
-    // visualizationDataOrder(arrGetResult[0], arrGetResult[1])
+  }
 
-    // const res = await getReportOrderDaily(start, 20, startDate, endDate, "date_work");
-    // setData(res?.data);
-    // setTotal(res?.totalItem);
-    // setDataTotal(res?.total[0]);
+  const getDataReportToday = async () => {
+    const startToday = moment().subtract(0, "days").startOf("days").toISOString();
+    const endToday = moment().subtract(0, "days").endOf("days").toISOString();
+    const res = await getReportOrderDaily(start, 20, startToday, endToday, "date_work");
+    // setTodayInfo(res.total[0])
+
   }
 
   const visualizationDataOrder = (data, dataInsame) => {
@@ -809,6 +212,8 @@ const ReportOrderDaily = () => {
         </p>
     );
     if(subValue) subValue = (typeSubValue === "money") ? formatMoney(subValue) : (typeSubValue === "percent") ? subValue + " %" : subValue;
+    if(title == "Giá vốn") subValue = "0 đ";
+    console.log(subValue, 'subValue');
     return (
       <React.Fragment>
         <div className="header-table-custom">
@@ -841,9 +246,10 @@ const ReportOrderDaily = () => {
 
   const columns = [
     {
-      customTitle: <CustomHeaderDatatable title="Ngày làm" />,
+      customTitle: <CustomHeaderDatatable title= {(typeDate === "date_work") ? "Ngày làm" : "Ngày tạo"} />,
       dataIndex: '_id',
       key: "id_date_work",
+      navigate: (typeDate === "date_create") ? "/report/manage-report/report-detail-order-date-create": "/report/manage-report/report-detail-order-date-work",
       width: 100,
       fontSize: "text-size-M text-weight-500"
     },
@@ -924,9 +330,9 @@ const ReportOrderDaily = () => {
     },
     {
       customTitle: <CustomHeaderDatatable title="Giá vốn"
-        subValue={dataTotal.punishss}
+        subValue={dataTotal.cost_price}
         typeSubValue="money" />,
-      dataIndex: 'punishss',
+      dataIndex: 'cost_price',
       key: "money",
       width: 120,
       fontSize: "text-size-M text-weight-500"
@@ -960,9 +366,21 @@ const ReportOrderDaily = () => {
       key: "percent",
       width: 90,
       fontSize: "text-size-M text-weight-500"
-
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Phí áp dụng"
+        subValue={dataTotal.total_service_fee}
+        typeSubValue="money" />,
+      title: 'Phí áp dụng',
+      dataIndex: 'total_service_fee',
+      key: "money",
+      width: 120,
+      fontSize: "text-size-M text-weight-500"
     },
   ]
+
+
+
 
 
 
@@ -1005,12 +423,12 @@ const ReportOrderDaily = () => {
     <div className="div-container-content">
       <div className="div-flex-row">
         <div className="div-header-container">
-          <h4 className="title-cv">Báo cáo đơn hàng hoàn thành theo ngày</h4>
+          <h4 className="title-cv">{(typeDate === "date_work") ? "Báo cáo đơn hàng hoàn thành theo ngày làm" : "Báo cáo đơn hàng hoàn thành theo ngày tạo"}</h4>
         </div>
 
       </div>
 
-      <div className="div-flex-row-flex-start">
+      {/* <div className="div-flex-row-flex-start">
       <div>
         <RangeDatePicker
               setStartDate={setStartDate}
@@ -1020,7 +438,68 @@ const ReportOrderDaily = () => {
             />
         </div>
 
+      </div> */}
+
+
+
+        <div className="div-flex-row-flex-start">
+          <div className="date-picker">
+            <RangeDatePicker
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+              onCancel={() => { }}
+              defaults={"thirty_last"}
+            />
+          </div>
+          <div className="div-same">
+            <p className="m-0 text-date-same">
+              Kỳ này: {moment(startDate).format("DD/MM/YYYY")}-
+              {moment(endDate).format("DD/MM/YYYY")}
+            </p>
+          </div>
+          <div className="div-same">
+            <p className="m-0 text-date-same">
+              Kỳ trước: {moment(sameStartDate).format("DD/MM/YYYY")}-
+              {moment(sameEndDate).format("DD/MM/YYYY")}
+            </p>
+          </div>
+        </div>
+
+
+
+
+      <div className="div-flex-row">
+
+          <div class="card">
+            <img src="/static/media/customer.08e2f54c.png" class="img"/>
+              <div class="div-details">
+                <a class="text-title">Tổng giá trị giao dịch</a>
+                <a class="text-detail">{formatMoney(dataTotal.total_gross_income)}</a>
+              </div>
+          </div>
+          <div class="card">
+            <img src="/static/media/customer.08e2f54c.png" class="img"/>
+              <div class="div-details">
+                <a class="text-title">Tổng số đơn hàng</a>
+                <a class="text-detail">{dataTotal.total_item} ca</a>
+              </div>
+          </div>
+          <div class="card">
+            <img src="/static/media/customer.08e2f54c.png" class="img"/>
+              <div class="div-details">
+                <a class="text-title">Tổng doanh thu</a>
+                <a class="text-detail">{formatMoney(dataTotal.total_income)}</a>
+              </div>
+          </div>
+          <div class="card">
+            <img src="/static/media/customer.08e2f54c.png" class="img"/>
+              <div class="div-details">
+                <a class="text-title">Tổng lợi nhuận</a>
+                <a class="text-detail">{formatMoney(dataTotal.total_net_income_business)}</a>
+              </div>
+          </div>
       </div>
+
 
       <div className="div-flex-row-flex-start">
           <div className="block-content-100">
@@ -1054,10 +533,7 @@ const ReportOrderDaily = () => {
 
 
 
-      <div className="div-flex-row">
 
-
-      </div>
 
       <div className="div-flex-row-start">
 
@@ -1082,3 +558,5 @@ const ReportOrderDaily = () => {
 }
 
 export default ReportOrderDaily;
+
+

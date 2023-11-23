@@ -478,10 +478,21 @@ const DataTable = (props) => {
                         return (
                             <p className={`${item?.fontSize}`}
                                 onClick={() =>
-                                    navigate("/report/manage-report/report-order-work", {
+                                    navigate(item.navigate, {
                                         state: { date: data?._id },
                                     })}
                             > {dataView}</p>
+                        )
+                        break;
+                    }
+                    case "id_customer_report": {
+                        return (
+                            <p className={`${item?.fontSize}`}
+                                onClick={() =>
+                                    navigate(`/profile-customer/${data.id_customer._id}`, {
+                                        state: { date: data?._id },
+                                    })}
+                            > {data.id_customer.full_name}</p>
                         )
                         break;
                     }

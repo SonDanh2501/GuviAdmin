@@ -37,7 +37,6 @@ const RangeDatePicker = (props) => {
   const timeZone = 0;
 
   useEffect(() => {
-    console.log(defaults, 'defaults');
     if(defaults) {
       const item = DATA_TAB.find(x => x.value === defaults);
       if(item) {
@@ -78,41 +77,14 @@ const RangeDatePicker = (props) => {
 
   const onChange = (value, event) => {
 
-    console.log(value, 'value');
-    console.log(event, 'event');
 
 
     setStart(value[0]);
     setEnd(value[1]);
 
 
-    // setStartDate(value[0].toISOString());
-    // setEndDate(value[1].toISOString());
-    
     setTitle(`${i18n.t(DATA_TAB[DATA_TAB.length - 1].title, {lng: lang})}`);
 
-
-
-
-    // const start = moment(value[0]).format("YYYY-MM-DD");
-    // const end = moment(value[1]).format("YYYY-MM-DD");
-    // const daySame = moment(end)
-    //   .startOf("day")
-    //   .diff(moment(start).startOf("days"), "days");
-    // setSameStart(
-    //   moment(value[0])
-    //     .subtract(daySame, "days")
-    //     .startOf("days")
-    //     .add(timeZone, "hours")
-    //     .toISOString()
-    // );
-    // setSameEnd(
-    //   moment(value[1])
-    //     .subtract(daySame, "days")
-    //     .startOf("days")
-    //     .add(timeZone, "hours")
-    //     .toISOString()
-    // );
   };
 
   const onSelectTab = (item: any) => {
@@ -271,26 +243,26 @@ const DATA_TAB = [
     type_range: "days",
     range: [1, 1],
   },
+  // {
+  //   title: "seven_ago",
+  //   value: "last_seven",
+  //   type_range: "days",
+  //   range: [7, 1],
+  // },
+  // {
+  //   title: "thirty_ago",
+  //   value: "last_thirty",
+  //   type_range: "days",
+  //   range: [30, 1],
+  // },
   {
     title: "seven_ago",
-    value: "last_seven",
-    type_range: "days",
-    range: [7, 1],
-  },
-  {
-    title: "thirty_ago",
-    value: "last_thirty",
-    type_range: "days",
-    range: [30, 1],
-  },
-  {
-    title: "seven_last",
     value: "seven_last",
     type_range: "days",
     range: [6, 0],
   },
   {
-    title: "thirty_last",
+    title: "thirty_ago",
     value: "thirty_last",
     type_range: "days",
     range: [29, 0],

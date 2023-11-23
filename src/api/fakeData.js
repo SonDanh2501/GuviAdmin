@@ -262,13 +262,13 @@ export const DATA_KIND = [
     label: "Ngày tạo",
   },
   {
-    value: "group_order_success_done",
+    value: "order_success",
     label: "Số đơn hoàn thành",
   },
-  {
-    value: "group_order_success",
-    label: "Số đơn đặt thành công",
-  },
+  // {
+  //   value: "group_order_success",
+  //   label: "Số đơn đặt thành công",
+  // },
   {
     value: "last_order_date_work_success",
     label: "Ngày làm gần nhất",
