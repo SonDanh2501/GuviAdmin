@@ -301,6 +301,6 @@ export const getReportOrderByCustomer = (start_date, end_date, type_customer, ty
 
 export const getReportTotalOrderByCustomer = (start_date, end_date, type_customer, type_date) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_customer_rate?start_date=${start_date}&end_date=${end_date}`
+    `/admin/report_mananger/report_total_order_by_customer?start_date=${start_date}&end_date=${end_date}&type_customer=${type_customer}&type_date=${type_date}`
   );
 };

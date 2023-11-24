@@ -757,8 +757,8 @@
 
 
 import { formatMoney } from "../../../../helper/formatMoney";
-import {getReportOrderByCustomer} from "../../../../api/report"
-import { Pagination, Popover, Table } from "antd";
+import {getReportOrderByCustomer, getReportTotalOrderByCustomer} from "../../../../api/report"
+import { Pagination, Popover, Table, Select } from "antd";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -769,6 +769,8 @@ import RangeDatePicker from "../../../../components/datePicker/RangeDatePicker";
 import i18n from "../../../../i18n";
 import useWindowDimensions from "../../../../helper/useWindowDimensions";
 import { getLanguageState } from "../../../../redux/selectors/auth";
+import CardMultiInfo from "../../../../components/card/cardMultiInfo"
+
 import "./index.scss";
 
 
@@ -789,27 +791,70 @@ const ReportOrderByCustomer = () => {
 
   const [typeCustomer, setTypeCustomer] = useState("all")
   const [typeDate, setTypeDate] = useState("date_work")
-
+  const [detectLoading, setDetectLoading] = useState(null)
 
 
   const [isLoading, setIsLoading] = useState(false);
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
 
+  const [customerNew, setCustomerNew] = useState({
+    mainInfo: {
+      title: "Khách hàng mới",
+      detail: 0,
+      percentPeriod: 0
+    },
+    secondInfo: [
+      {
+        title: "Tổng giá trị giao dịch",
+        detail: 0,
+        percentPeriod: 0
+      },
+      {
+        title: "Đơn hàng",
+        detail: 0,
+        percentPeriod: 0
+      }
+    ]
+  })
+  const [customerOld, setCustomerOld] = useState({
+    mainInfo: {
+      title: "Khách hàng mới",
+      detail: 0,
+      percentPeriod: 0
+    },
+    secondInfo: [
+      {
+        title: "Tổng giá trị giao dịch",
+        detail: 0,
+        percentPeriod: 0
+      },
+      {
+        title: "Đơn hàng",
+        detail: 0,
+        percentPeriod: 0
+      }
+    ]
+  })
+
+
+
 
 
   useEffect(() => {
     if (startDate !== "") {
+      setDetectLoading(sameStartDate)
       const oneDay = 24 * 60 * 60 * 1000;
       const diffDays = Math.round(Math.abs((new Date(startDate).getTime() - new Date(endDate).getTime()) / oneDay));
       getDataReportOrderByCustomer();
-      //  getDataReportToday()
+      getDataReportTotalOrderByCustomer();
     }
   }, [sameStartDate])
 
   useEffect(() => {
+    setDetectLoading(start+typeCustomer)
     getDataReportOrderByCustomer();
-  }, [start])
+  }, [start, typeCustomer])
 
 
   useEffect(() => {
@@ -829,17 +874,89 @@ const ReportOrderByCustomer = () => {
     const res = await getReportOrderByCustomer(startDate, endDate, typeCustomer, typeDate,  start, 20);
     setData(res.data);
     setTotal(res?.totalItem);
-    console.log(res?.total[0], 'res?.total[0]');
     setDataTotal(res?.total[0]);
   }
 
-  // const getDataReportTotalOrderByCustomer = async () => {
-  //   const res = await getReportOrderDaily(start, 20, startDate, endDate, typeDate);
-  //   setData(res.data);
-  //   setTotal(res?.totalItem);
-  //   console.log(res?.total[0], 'res?.total[0]');
-  //   setDataTotal(res?.total[0]);
-  // }
+  const getDataReportTotalOrderByCustomer = async () => {
+
+    const arrGetResult = await Promise.all([
+      getReportTotalOrderByCustomer(startDate, endDate, "new", typeDate),
+      getReportTotalOrderByCustomer(startDate, endDate, "old", typeDate),
+      getReportTotalOrderByCustomer(sameStartDate, sameEndDate, "new", typeDate),
+      getReportTotalOrderByCustomer(sameStartDate, sameEndDate, "old", typeDate)
+    ])
+
+    const tempPercentCustomer = (arrGetResult[0].totalItem*100/(arrGetResult[0].totalItem + arrGetResult[2].totalItem)).toFixed(2);
+    const tempSamePercentCustomer = (arrGetResult[2].totalItem*100/(arrGetResult[0].totalItem + arrGetResult[2].totalItem)).toFixed(2);
+
+    const tempPercentTotalGrossIncome = 
+    (arrGetResult[0].total[0].total_gross_income*100/(arrGetResult[0].total[0].total_gross_income + arrGetResult[2].total[0].total_gross_income)).toFixed(2)
+    const tempSamePercentTotalGrossIncome = 
+    (arrGetResult[2].total[0].total_gross_income*100/(arrGetResult[0].total[0].total_gross_income + arrGetResult[2].total[0].total_gross_income)).toFixed(2)
+
+    const tempPercentTotalOrder = (arrGetResult[0].total[0].total_item*100/(arrGetResult[0].total[0].total_item + arrGetResult[2].total[0].total_item)).toFixed(2)
+    const tempSamePercentTotalOrder = (arrGetResult[2].total[0].total_item*100/(arrGetResult[0].total[0].total_item + arrGetResult[2].total[0].total_item)).toFixed(2)
+
+
+    setCustomerNew({
+      mainInfo: {
+        title: "Khách hàng mới",
+        detail: arrGetResult[0].totalItem,
+        percentPeriod: Math.abs(tempPercentCustomer - tempSamePercentCustomer).toFixed(2),
+        arrow: (tempPercentCustomer - tempSamePercentCustomer > 0) ? "up" : "down"
+      },
+      secondInfo: [
+        {
+          title: "Tổng giá trị giao dịch",
+          detail: formatMoney(arrGetResult[0].total[0].total_gross_income),
+          percentPeriod: Math.abs(tempPercentTotalGrossIncome - tempSamePercentTotalGrossIncome).toFixed(2),
+          arrow: (tempPercentTotalGrossIncome - tempSamePercentTotalGrossIncome > 0) ? "up" : "down"
+        },
+        {
+          title: "Đơn hàng",
+          detail: arrGetResult[0].total[0].total_item + " đơn",
+          percentPeriod: Math.abs(tempPercentTotalOrder - tempSamePercentTotalOrder).toFixed(2),
+          arrow: (tempPercentTotalOrder - tempSamePercentTotalOrder > 0) ? "up" : "down"
+        }
+      ]
+    })
+
+
+    const tempPercentCustomerOld = (arrGetResult[1].totalItem*100/(arrGetResult[1].totalItem + arrGetResult[3].totalItem)).toFixed(2);
+    const tempSamePercentCustomerOld = (arrGetResult[3].totalItem*100/(arrGetResult[3].totalItem + arrGetResult[3].totalItem)).toFixed(2);
+
+    const tempPercentTotalGrossIncomeOld = 
+    (arrGetResult[1].total[0].total_gross_income*100/(arrGetResult[1].total[0].total_gross_income + arrGetResult[3].total[0].total_gross_income)).toFixed(2)
+    const tempSamePercentTotalGrossIncomeOld = 
+    (arrGetResult[3].total[0].total_gross_income*100/(arrGetResult[1].total[0].total_gross_income + arrGetResult[3].total[0].total_gross_income)).toFixed(2)
+
+    const tempPercentTotalOrderOld = (arrGetResult[1].total[0].total_item*100/(arrGetResult[1].total[0].total_item + arrGetResult[3].total[0].total_item)).toFixed(2)
+    const tempSamePercentTotalOrderOld = (arrGetResult[3].total[0].total_item*100/(arrGetResult[1].total[0].total_item + arrGetResult[3].total[0].total_item)).toFixed(2)
+
+    setCustomerOld({
+      mainInfo: {
+        title: "Khách hàng cũ",
+        detail: arrGetResult[1].totalItem,
+        percentPeriod: Math.abs(tempPercentCustomerOld - tempSamePercentCustomerOld).toFixed(2),
+        arrow: (tempPercentCustomerOld - tempSamePercentCustomerOld > 0) ? "up" : "down"
+      },
+      secondInfo: [
+        {
+          title: "Tổng giá trị giao dịch",
+          detail: formatMoney(arrGetResult[1].total[0].total_gross_income),
+          percentPeriod: Math.abs(tempPercentTotalGrossIncomeOld - tempSamePercentTotalGrossIncomeOld).toFixed(2),
+          arrow: (tempPercentTotalGrossIncomeOld - tempSamePercentTotalGrossIncomeOld > 0) ? "up" : "down"
+        },
+        {
+          title: "Đơn hàng",
+          detail: arrGetResult[1].total[0].total_item + " đơn",
+          percentPeriod: Math.abs(tempPercentTotalOrderOld - tempSamePercentTotalOrderOld).toFixed(2),
+          arrow: (tempPercentTotalOrderOld - tempSamePercentTotalOrderOld > 0) ? "up" : "down"
+        }
+      ]
+    })
+  }
+
 
 
 
@@ -1017,8 +1134,11 @@ const ReportOrderByCustomer = () => {
       fontSize: "text-size-M text-weight-500"
     },
   ]
+  const changeTypeCustomer = (value: string) => {
+    setTypeCustomer(value)
+  };
 
-
+  
 
 
   return (
@@ -1056,39 +1176,16 @@ const ReportOrderByCustomer = () => {
         </div>
 
 
-
-
-      {/* <div className="div-flex-row">
-
-          <div class="card">
-            <img src="/static/media/customer.08e2f54c.png" class="img"/>
-              <div class="div-details">
-                <a class="text-title">Tổng giá trị giao dịch</a>
-                <a class="text-detail">{formatMoney(dataTotal.total_gross_income)}</a>
-              </div>
-          </div>
-          <div class="card">
-            <img src="/static/media/customer.08e2f54c.png" class="img"/>
-              <div class="div-details">
-                <a class="text-title">Tổng số đơn hàng</a>
-                <a class="text-detail">{dataTotal.total_item} ca</a>
-              </div>
-          </div>
-          <div class="card">
-            <img src="/static/media/customer.08e2f54c.png" class="img"/>
-              <div class="div-details">
-                <a class="text-title">Tổng doanh thu</a>
-                <a class="text-detail">{formatMoney(dataTotal.total_income)}</a>
-              </div>
-          </div>
-          <div class="card">
-            <img src="/static/media/customer.08e2f54c.png" class="img"/>
-              <div class="div-details">
-                <a class="text-title">Tổng lợi nhuận</a>
-                <a class="text-detail">{formatMoney(dataTotal.total_net_income_business)}</a>
-              </div>
-          </div>
-      </div> */}
+        <div className="div-flex-row">
+          <CardMultiInfo
+            mainInfo={customerNew.mainInfo} 
+            secondInfo={customerNew.secondInfo}
+            />
+                      <CardMultiInfo
+            mainInfo={customerOld.mainInfo} 
+            secondInfo={customerOld.secondInfo}
+            />
+        </div>
 
 
       {/* <div className="div-flex-row-flex-start">
@@ -1122,6 +1219,18 @@ const ReportOrderByCustomer = () => {
         </div> */}
 
 
+<div className="div-flex-row">
+<Select
+      defaultValue="all"
+      style={{ width: 150 }}
+      onChange={changeTypeCustomer}
+      options={[
+        { value: 'all', label: 'Tất cả' },
+        { value: 'new', label: 'Khách hàng mới' },
+        { value: 'old', label: 'Khách hàng cũ' },
+      ]}
+    />
+</div>
 
 
 
@@ -1134,7 +1243,7 @@ const ReportOrderByCustomer = () => {
           start={startPage}
           pageSize={20}
           totalItem={total}
-          // detectLoading={detectLoading}
+          detectLoading={detectLoading}
           // getItemRow={setItem}
           onCurrentPageChange={setStart}
         />
