@@ -451,10 +451,10 @@ const DataTable = (props) => {
                         return (
                             <div className="div-date-create">
                                 <p className={`${item?.fontSize}`}>
-                                    {moment(new Date(data[item.dataIndex])).format("DD/MM/YYYY")}
+                                    {moment(new Date(data[item.dataIndex][0])).format("DD/MM/YYYY")}
                                 </p>
                                 <p className={`${item?.fontSize}`}>
-                                    {moment(new Date(data[item.dataIndex])).format("HH:mm")}
+                                    {moment(new Date(data[item.dataIndex][0])).format("HH:mm")}
                                 </p>
                             </div>
                         )
@@ -493,6 +493,17 @@ const DataTable = (props) => {
                                         state: { date: data?._id },
                                     })}
                             > {data.id_customer.full_name}</p>
+                        )
+                        break;
+                    }
+                    case "id_collaborator": {
+                        return (
+                            <p className={`${item?.fontSize}`}
+                                onClick={() =>
+                                    navigate(`/profile-customer/${data.id_customer._id}`, {
+                                        state: { date: data?._id },
+                                    })}
+                            > {data.id_collaborator.full_name}</p>
                         )
                         break;
                     }

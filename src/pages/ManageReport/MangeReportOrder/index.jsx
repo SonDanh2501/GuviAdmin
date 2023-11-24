@@ -49,36 +49,45 @@ const ManageReportOrder = () => {
 
   const cardItemReport = [
     {
-      title: "Báo cáo đơn hàng theo ngày làm",
-      detail: "Báo cáo chi tiết đơn hàng theo ngày làm",
-      linkNavigate: "/report/manage-report/report-detail-order-date-work",
-      checkPermition: "order_report"
-    },
-    {
-      title: "Báo cáo đơn hàng theo ngày tạo",
-      detail: "Báo cáo chi tiết đơn hàng theo ngày tạo",
-      linkNavigate: "/report/manage-report/report-detail-order-date-create",
-      checkPermition: "order_report"
-    },
-
-    {
-      title: "Báo cáo số lượng đơn hàng hoàn thành theo ngày làm",
+      title: "Báo cáo số lượng đơn hàng theo ngày làm",
       detail: "Báo cáo số lượng đơn hàng hoàn thành theo ngày làm",
       linkNavigate: "/report/manage-report/report-order-daily-date-work",
       checkPermition: "order_report"
     },
     {
-      title: "Báo cáo số lượng đơn hàng hoàn thành theo ngày tạo",
-      detail: "Báo cáo số lượng đơn hàng hoàn thành theo ngày tạo",
-      linkNavigate: "/report/manage-report/report-order-daily-date-create",
+      title: "Báo cáo chi tiết đơn hàng theo ngày làm",
+      detail: "Báo cáo chi tiết đơn hàng theo ngày làm, chỉ bao gồm các đơn đã hoàn thành",
+      linkNavigate: "/report/manage-report/report-detail-order-date-work",
       checkPermition: "order_report"
     },
     {
       title: "Báo cáo số lượng đơn hàng theo khách hàng",
-      detail: "Báo cáo số lượng đơn hàng theo khách hàng",
+      detail: "Báo cáo số lượng đơn hàng đã hoàn thành theo khách hàng ",
       linkNavigate: "/report/manage-report/report-order-by-customer",
       checkPermition: "order_report"
-    }
+    },
+    {
+      title: "Báo cáo số lượng đơn hàng theo ngày tạo",
+      detail: "Bao gồm các đơn hàng đã nhận, đang làm và hoàn thành theo ngày tạo",
+      linkNavigate: "/report/manage-report/report-order-daily-date-create",
+      checkPermition: "order_report"
+    },
+    {
+      title: "Báo cáo chi tiết đơn hàng theo ngày tạo",
+      detail: "Báo cáo chi tiết đơn hàng theo ngày tạo, bao gồm các đơn đã nhận, đang làm và hoàn thành",
+      linkNavigate: "/report/manage-report/report-detail-order-date-create",
+      checkPermition: "order_report"
+    },
+    // {
+    //   title: "Báo cáo số lượng đơn hàng theo khu vực",
+    //   detail: "Báo cáo chi tiết đơn hàng theo khu vực",
+    //   linkNavigate: "/report/manage-report/report-detail-order-date-create",
+    //   checkPermition: "order_report"
+    // },
+
+
+
+
     
   ]
 
