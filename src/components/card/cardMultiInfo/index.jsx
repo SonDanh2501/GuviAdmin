@@ -16,15 +16,17 @@ const CardMultiInfo = (props) => {
                     <p className="text-title">{mainInfo.title}</p>
                     <div className="div-detail">
                         <p className="text-detail">{mainInfo.detail}</p>
-                        <p className="percent-period">
+                        {mainInfo.percentPeriod ? (
+                            <p className="percent-period">
 
-                            {mainInfo.percentPeriod + " %"}
-                            {
-                                mainInfo.arrow === "up" ?
-                                    (<CaretUpOutlined style={{ marginRight: 5 }} />) :
-                                    (<CaretDownOutlined style={{ marginRight: 5 }} />)
-                            }
-                        </p>
+                                {mainInfo.percentPeriod + " %"}
+                                {
+                                    mainInfo.arrow === "up" ?
+                                        (<CaretUpOutlined style={{ marginRight: 5 }} />) :
+                                        (<CaretDownOutlined style={{ marginRight: 5 }} />)
+                                }
+                            </p>
+                        ) : (<></>)}
                     </div>
 
                 </div>
@@ -35,15 +37,18 @@ const CardMultiInfo = (props) => {
                                 <p class="text-title">{item.title}</p>
                                 <div className="div-detail">
                                     <p class="text-detail">{item.detail}</p>
-                                    <p className="percent-period">
+                                    {item.percentPeriod ? (
+                                        <p className="percent-period">
 
-                                        {item.percentPeriod + " %"}
-                                        {
-                                            item.arrow === "up" ?
-                                                (<CaretUpOutlined style={{ marginRight: 5 }} />) :
-                                                (<CaretDownOutlined style={{ marginRight: 5 }} />)
-                                        }
-                                    </p>
+                                            {item.percentPeriod + " %"}
+                                            {
+                                                item.arrow === "up" ?
+                                                    (<CaretUpOutlined style={{ marginRight: 5 }} />) :
+                                                    (<CaretDownOutlined style={{ marginRight: 5 }} />)
+                                            }
+                                        </p>
+                                    ) : (<></>)}
+
                                 </div>
 
 

@@ -591,7 +591,7 @@ const DataTable = (props) => {
                         onChange={calculateCurrentPage}
                         total={totalItem}
                         showSizeChanger={false}
-                        pageSize={20}
+                        pageSize={pageSize || 20}
                         hideOnSinglePage={true}
                     />
                 </div>
