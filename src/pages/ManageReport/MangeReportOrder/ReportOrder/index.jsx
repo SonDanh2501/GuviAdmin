@@ -1,4 +1,4 @@
-import { Pagination, Popover, Table } from "antd";
+import { Pagination, Popover, Table, Select } from "antd";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -12,10 +12,13 @@ import i18n from "../../../../i18n";
 import { getLanguageState } from "../../../../redux/selectors/auth";
 import RangeDatePicker from "../../../../components/datePicker/RangeDatePicker";
 import DataTable from "../../../../components/tables/dataTable"
+import CardMultiInfo from "../../../../components/card/cardMultiInfo"
 import "./index.scss";
 const ReportOrder = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
+  const [lengthPage, setLengthPage] = useState(100);
+
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [dataTotal, setDataTotal] = useState({});
@@ -34,9 +37,16 @@ const ReportOrder = () => {
   const { state } = useLocation();
   const date = state?.date;
 
+  const [selectStatus, setSelectStatus] = useState(["done", "doing", "confirm"])
+
   const [defaultRangeTime, setDefaultRangeTime] = 
   useState( (date) ? [moment(date, "DD-MM-YYYY").startOf("date").toISOString(), moment(date, "DD-MM-YYYY").endOf("date").toISOString()] : "thirty_last")
-
+  const [orderStatus, setOrderStatus] = useState({
+    total_item: 0,
+    total_order_confirm: 0,
+    total_order_done: 0,
+    total_order_doing: 0
+  })
 
 
   useEffect(() => {
@@ -53,14 +63,20 @@ const ReportOrder = () => {
     if (startDate !== "") {
       getDataReportOrder();
     }
-  }, [startDate, start])
+  }, [startDate, start, selectStatus])
 
 
   const getDataReportOrder = async () => {
-    const res = await getReportOrder(start, 20, startDate, endDate, typeDate);
+    const res = await getReportOrder(start, lengthPage, startDate, endDate, typeDate, selectStatus);
     setData(res?.data);
     setTotal(res?.totalItem);
     setDataTotal(res?.total[0]);  
+    setOrderStatus({
+      total_item: res?.total[0].total_item,
+      total_order_confirm: res?.total[0].total_order_confirm,
+      total_order_done: res?.total[0].total_order_done,
+      total_order_doing: res?.total[0].total_order_doing
+    })
   }
 
 
@@ -574,133 +590,6 @@ const ReportOrder = () => {
     )
   }
 
-
-  // const columns = [
-  //   {
-  //     customTitle: <HeaderInfo title="Thời gian"  />,
-  //     dataIndex: 'date_work',
-  //     key: "date_hour",
-  //     width: 50,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Mã đơn"  />,
-  //     dataIndex: 'id_group_order.id_view',
-  //     key: "id_view_group_report",
-  //     width: 90,
-  //     fontSize: "text-size-M text-color-black text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Số đơn hàng" 
-  //     subValue={dataTotal.total_item} />,
-  //     dataIndex: 'total_item',
-  //     key: "number",
-  //     width: 50,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Doanh thu" 
-  //     subValue={dataTotal.total_gross_income} 
-  //     typeSubValue="money"
-  //     textToolTip="GMV: tổng giá trị giao dịch"/>,
-  //     dataIndex: 'total_gross_income',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Giảm giá" 
-  //     subValue={dataTotal.total_discount} 
-  //     typeSubValue="money"
-  //     textToolTip="Tổng số tiền giảm giá từ giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,…"/>,
-  //     dataIndex: 'total_discount',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Doanh thu thuần" 
-  //     subValue={dataTotal.total_net_income} 
-  //     typeSubValue="money"
-  //     textToolTip="Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần = Doanh thu (-) Giảm giá."/>,
-  //     dataIndex: 'total_net_income',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Bonus" 
-  //     subValue={dataTotal.total_tip} 
-  //     typeSubValue="money"
-  //     textToolTip="Số tiền KH tip thêm cho CTV/Đối tác"/>,
-  //     dataIndex: 'total_tip',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Tổng hoá đơn" 
-  //     subValue={dataTotal.total_order_fee} 
-  //     typeSubValue="money"
-  //     textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Doanh thu thuần + Phí vận chuyển* - Giảm giá vận chuyển*"/>,
-  //     dataIndex: 'total_order_fee',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500 text-color-1"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Giá vốn" 
-  //     subValue={dataTotal.total_collabotator_fee} 
-  //     typeSubValue="money"
-  //     textToolTip="Phí dịch vụ/giá vốn hàng bán phải trả (+) Tiền tip từ KH"/>,
-  //     dataIndex: 'total_collabotator_fee',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Phí phạt" 
-  //     subValue={dataTotal.punish} 
-  //     typeSubValue="money"/>,
-  //     // title: 'Phí phạt',
-  //     dataIndex: 'punish',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Tổng lợi nhuận" 
-  //     subValue={dataTotal.total_net_income_business} 
-  //     typeSubValue="money"
-  //     textToolTip="Tổng lợi nhuận = Doanh thu thuần - Tổng giá vốn + Phí phạt"/>,
-  //     dataIndex: 'total_net_income_business',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="% Lợi nhuận" 
-  //     subValue={dataTotal.percent_income} 
-  //     typeSubValue="percent"
-  //     textToolTip="% Lợi nhuận = Tổng lợi nhuận (/) Doanh thu thuần."/>,
-  //     dataIndex: 'percent_income',
-  //     key: "percent",
-  //     width: 90,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Phí áp dụng"  
-  //     subValue={dataTotal.total_service_fee}  
-  //     typeSubValue="money" />,
-  //     title: 'Phí áp dụng',
-  //     dataIndex: 'total_service_fee',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  // ]
-
-
   const columns = [
     {
       customTitle: (typeDate === "date_work") ? <HeaderInfo title="Ngày làm" /> : <HeaderInfo title="Ngày tạo" />,
@@ -711,18 +600,17 @@ const ReportOrder = () => {
     },
     {
       customTitle: <HeaderInfo title="Mã đơn"  />,
-      dataIndex: 'id_group_order.id_view',
-      key: "id_view_group_report",
+      dataIndex: 'id_view',
+      key: "text",
       width: 90,
       fontSize: "text-size-M text-color-black text-weight-500"
-
     },
     {
-      customTitle: <HeaderInfo title="Số đơn hàng" 
-      subValue={dataTotal.total_item} />,
-      dataIndex: 'total_item',
-      key: "number",
-      width: 50,
+      customTitle: <HeaderInfo title="Trạng thái" 
+      />,
+      dataIndex: 'status',
+      key: "status",
+      width: 120,
       fontSize: "text-size-M text-weight-500"
 
     },
@@ -798,7 +686,7 @@ const ReportOrder = () => {
       typeSubValue="money"/>,
       dataIndex: 'punishss',
       key: "money",
-      width: 120,
+      width: 90,
       fontSize: "text-size-M text-weight-500"
     },
     {
@@ -843,166 +731,13 @@ const ReportOrder = () => {
     },
   ]
 
-  // const columns = [
-  //   {
-  //     customTitle: <HeaderInfo title="Thời gian"  />,
-  //     // title: 'Thời gian',
-  //     dataIndex: 'date_work',
-  //     key: "date_hour",
-  //     width: 50,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Mã đơn"  />,
-  //     // title: 'Mã đơn',
-  //     dataIndex: 'id_group_order.id_view',
-  //     key: "id_view_group_report",
-  //     width: 90,
-  //     fontSize: "text-size-M text-color-black text-weight-500"
-
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Số ca" 
-  //     subValue={dataTotal.total_item} />,
-  //     // title: 'Số ca',
-  //     dataIndex: 'total_item',
-  //     key: "number",
-  //     width: 50,
-  //     fontSize: "text-size-M text-weight-500"
-
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="GMV" 
-  //     subValue={dataTotal.total_gross_income} 
-  //     typeSubValue="money"
-  //     textToolTip="Tổng giá trị giao dịch (Gross Merchandise Volume)"/>,
-  //     // title: 'GMV',
-  //     dataIndex: 'total_gross_income',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Phí dịch vụ" 
-  //     subValue={dataTotal.total_collabotator_fee} 
-  //     typeSubValue="money"
-  //     textToolTip="Phí dịch vụ trả cho CTV"/>,
-  //     // title: 'Phí dịch vụ',
-  //     titleToolTip: "Phí dịch vụ trả cho CTV",
-  //     dataIndex: 'total_collabotator_fee',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Doanh thu" 
-  //     subValue={dataTotal.total_income} 
-  //     typeSubValue="money"
-  //     textToolTip="Doanh thu = GMV (-) Phí dịch vụ trả CTV"/>,
-  //     // title: 'Doanh thu',
-  //     titleToolTip: "Doanh thu = GMV (-) Phí dịch vụ trả CTV",
-  //     dataIndex: 'total_income',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-color-1 text-weight-500"
-
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Giảm giá" 
-  //     subValue={dataTotal.total_discount} 
-  //     typeSubValue="money"
-  //     textToolTip="Tổng số tiền giảm giá từ giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,..."/>,
-  //     // title: 'Giảm giá',
-  //     // titleToolTip: "Tổng số tiền giảm giá từ giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,...",
-  //     dataIndex: 'total_discount',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-
-  //   },
-
-  //   {
-  //     customTitle: <HeaderInfo title="Doanh thu thuần" 
-  //     subValue={dataTotal.total_net_income} 
-  //     typeSubValue="money"
-  //     textToolTip="Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần = Doanh thu (-) Giảm giá."/>,
-  //     // title: 'Doanh thu thuần',
-  //     // titleToolTip: "Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần = Doanh thu (-) Giảm giá.",
-  //     dataIndex: 'total_net_income',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Phí áp dụng"  
-  //     subValue={dataTotal.total_service_fee}  
-  //     typeSubValue="money" />,
-  //     title: 'Phí áp dụng',
-  //     dataIndex: 'total_service_fee',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Tổng hoá đơn" 
-  //     subValue={dataTotal.total_order_fee} 
-  //     typeSubValue="money"
-  //     textToolTip="Tổng tiền trên dịch vụ. Tổng hoá đơn = GMV - Giảm giá"/>,
-  //     // title: 'Tổng hoá đơn',
-  //     // titleToolTip: "Tổng tiền trên dịch vụ. Tổng hoá đơn = GMV - Giảm giá",
-  //     dataIndex: 'total_order_fee',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Phí phạt" 
-  //     subValue={dataTotal.punish} 
-  //     typeSubValue="money"/>,
-  //     // title: 'Phí phạt',
-  //     dataIndex: 'punish',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="Lợi nhuận" 
-  //     subValue={dataTotal.total_net_income_business} 
-  //     typeSubValue="money"
-  //     textToolTip="Lợi nhuận = Doanh thu thuần (-) Tổng giá vốn."/>,
-  //     // title: 'Lợi nhuận',
-  //     // titleToolTip: "Lợi nhuận = Doanh thu thuần (-) Tổng giá vốn.",
-  //     dataIndex: 'total_net_income_business',
-  //     key: "money",
-  //     width: 120,
-  //     fontSize: "text-size-M text-weight-500"
-  //   },
-  //   {
-  //     customTitle: <HeaderInfo title="% Lợi nhuận" 
-  //     subValue={dataTotal.percent_income} 
-  //     typeSubValue="percent"
-  //     textToolTip="% Lợi nhuận = Tổng lợi nhuận (/) Doanh thu."/>,
-  //     // title: '% Lợi nhuận',
-  //     // titleToolTip: "% Lợi nhuận = Tổng lợi nhuận (/) Doanh thu.",
-  //     dataIndex: 'percent_income',
-  //     key: "percent",
-  //     width: 90,
-  //     fontSize: "text-size-M text-weight-500"
-
-  //   },
-  // ]
-
   const onChange = useCallback(
     (page) => {
       // setIsLoading(true);
       setCurrentPage(page);
-      const lengthData = data.length < 20 ? 20 : data.length;
-      const start = page * lengthData - lengthData;
+      const start = page * lengthPage - lengthPage;
       setStartPage(start);
-      getReportOrder(start, 20, startDate, endDate, "date_work")
+      getReportOrder(start, lengthPage, startDate, endDate, "date_work")
         .then((res) => {
           setIsLoading(false);
           setData(res?.data);
@@ -1031,6 +766,13 @@ const ReportOrder = () => {
       });
   };
 
+
+  const changeStatusOrder = (value: string) => {
+    setSelectStatus(value)
+
+    // if(value )
+  };
+
   return (
 
 
@@ -1047,7 +789,102 @@ const ReportOrder = () => {
               defaults={defaultRangeTime}
             />
       </div>
+
+      <div className="total-order-status div-flex-row">
+          <div class="card">
+            <img src="/static/media/customer.08e2f54c.png" class="img"/>
+              <div class="div-details">
+                <a class="text-title">Tổng đơn hàng</a>
+                <a class="text-detail">{orderStatus.total_item}</a>
+              </div>
+          </div>
+          <div class="card">
+            <img src="/static/media/customer.08e2f54c.png" class="img"/>
+              <div class="div-details">
+                <a class="text-title">Đơn hoàn thành</a>
+                <a class="text-detail">{orderStatus.total_order_done}</a>
+              </div>
+          </div>
+          <div class="card">
+            <img src="/static/media/customer.08e2f54c.png" class="img"/>
+              <div class="div-details">
+              <a class="text-title">Đơn đang làm</a>
+                <a class="text-detail">{orderStatus.total_order_doing}</a>
+              </div>
+          </div>
+          <div class="card">
+            <img src="/static/media/customer.08e2f54c.png" class="img"/>
+              <div class="div-details">
+              <a class="text-title">Đơn đã nhận</a>
+                <a class="text-detail">{orderStatus.total_order_confirm}</a>
+              </div>
+          </div>
+      </div>
+
+      {/* <div className="total-order-status">
+      <CardMultiInfo
+            mainInfo={orderStatus.mainInfo} 
+            secondInfo={orderStatus.secondInfo}
+            />
+      </div> */}
     </div>
+
+      <div className="div-flex-row">
+        <Select
+          mode="multiple"
+          defaultValue="all"
+          onChange={changeStatusOrder}
+          value={selectStatus}
+          options={[
+            { value: 'done', label: 'Hoàn thành' },
+            { value: 'doing', label: 'Đang làm' },
+            { value: 'confirm', label: 'Đã nhận' },
+          ]}
+        />
+      </div>
+
+
+
+
+      {/* <div className="div-flex-row">
+          <div class="card">
+            <img src="/static/media/customer.08e2f54c.png" class="img"/>
+              <div class="div-details">
+                <a class="text-title">Tổng đơn hàng</a>
+                <a class="text-detail">{orderStatus.total_item}</a>
+              </div>
+          </div>
+          <div class="card">
+            <img src="/static/media/customer.08e2f54c.png" class="img"/>
+              <div class="div-details">
+                <a class="text-title">Đơn hoàn thành</a>
+                <a class="text-detail">{orderStatus.total_order_done}</a>
+              </div>
+          </div>
+          <div class="card">
+            <img src="/static/media/customer.08e2f54c.png" class="img"/>
+              <div class="div-details">
+              <a class="text-title">Đơn đang làm</a>
+                <a class="text-detail">{orderStatus.total_order_doing}</a>
+              </div>
+          </div>
+          <div class="card">
+            <img src="/static/media/customer.08e2f54c.png" class="img"/>
+              <div class="div-details">
+              <a class="text-title">Đơn đã nhận</a>
+                <a class="text-detail">{orderStatus.total_order_confirm}</a>
+              </div>
+          </div>
+      </div> */}
+
+
+
+      {/* <div className="div-flex-row">
+          <CardMultiInfo
+            mainInfo={orderStatus.mainInfo} 
+            secondInfo={orderStatus.secondInfo}
+            />
+        </div> */}
 
 
     <div>
@@ -1056,7 +893,7 @@ const ReportOrder = () => {
         data={data}
         // actionColumn={addActionColumn}
         start={startPage}
-        pageSize={20}
+        pageSize={lengthPage}
         totalItem={total}
         // detectLoading={detectLoading}
         // getItemRow={setItem}

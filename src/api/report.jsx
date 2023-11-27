@@ -102,9 +102,9 @@ export const getReportCustomerOrderByAreaApi = () => {
 //   );
 // };
 
-export const getReportOrder = (start, length, start_date, end_date, type) => {
+export const getReportOrder = (start, length, start_date, end_date, type_date, status) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_group_order?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&type=${type}`
+    `/admin/report_mananger/report_group_order?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&type_date=${type_date}&status=${status}`
   );
 };
 

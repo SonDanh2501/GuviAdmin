@@ -37,7 +37,7 @@ const ReportOrderDaily = () => {
     percent: 0,
   }
   const [currentPage, setCurrentPage] = useState(1);
-  const [startPage, setStartPage] = useState(0);
+  // const [startPage, setStartPage] = useState(0);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [dataTotal, setDataTotal] = useState({});
@@ -47,7 +47,7 @@ const ReportOrderDaily = () => {
   const [sameStartDate, setSameStartDate] = useState("")
   const [sameEndDate, setSameEndDate] = useState("")
   const [start, setStart] = useState(0)
-
+  const [startPage, setStartPage] = useState(0);
   const [dataChartsOrder, setDataChartsOrder] = useState([]);
   const [headerChartsOrder, setHeaderChartsOrder] = useState(headerDefault);
 
@@ -87,7 +87,7 @@ const ReportOrderDaily = () => {
     if (startDate !== "") {
       const oneDay = 24 * 60 * 60 * 1000;
       const diffDays = Math.round(Math.abs((new Date(startDate).getTime() - new Date(endDate).getTime()) / oneDay));
-       getDataReportDaily(diffDays);
+       getDataReportDaily();
        getTotalReportDaily()
       //  getDataReportToday()
     }
@@ -124,7 +124,7 @@ const ReportOrderDaily = () => {
 
 
   const getDataReportDaily = async () => {
-    const res = await getReportOrderDaily(start, 20, startDate, endDate, typeDate, -1);
+    const res = await getReportOrderDaily(start, 100, startDate, endDate, typeDate, -1);
     setData(res.data);
     setTotal(res?.totalItem);
     console.log(res?.total[0], 'res?.total[0]');
@@ -134,7 +134,7 @@ const ReportOrderDaily = () => {
   const getDataReportToday = async () => {
     const startToday = moment().subtract(0, "days").startOf("days").toISOString();
     const endToday = moment().subtract(0, "days").endOf("days").toISOString();
-    const res = await getReportOrderDaily(start, 20, startToday, endToday, "date_work");
+    const res = await getReportOrderDaily(start, 100, startToday, endToday, "date_work");
     // setTodayInfo(res.total[0])
 
   }
@@ -254,7 +254,7 @@ const ReportOrderDaily = () => {
       fontSize: "text-size-M text-weight-500"
     },
     {
-      customTitle: <CustomHeaderDatatable title="Số đơn hàng"
+      customTitle: <CustomHeaderDatatable title="Số ĐH"
         subValue={dataTotal.total_item} />,
       dataIndex: 'total_item',
       key: "number",
@@ -542,7 +542,7 @@ const ReportOrderDaily = () => {
           data={data}
           // actionColumn={addActionColumn}
           start={startPage}
-          pageSize={20}
+          pageSize={100}
           totalItem={total}
           // detectLoading={detectLoading}
           // getItemRow={setItem}
