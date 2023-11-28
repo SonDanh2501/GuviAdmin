@@ -305,8 +305,14 @@ export const getReportTotalOrderByCustomer = (start_date, end_date, type_custome
   );
 };
 
-export const getReportOrderByCollaborator = (start, length, start_date, end_date) => {
+export const getReportOrderByCollaborator = (start, length, start_date, end_date, status) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_orer_by_collaborator?start_date=${start_date}&end_date=${end_date}&type_date=date_work&start=${start}&length=${length}`
+    `/admin/report_mananger/report_order_by_collaborator?start_date=${start_date}&end_date=${end_date}&type_date=date_work&start=${start}&length=${length}&status=${status}`
+  );
+};
+
+export const getReportDetailOrderByCollaborator = (idCollaborator, start, length, start_date, end_date, status) => {
+  return axiosClient.get(
+    `/admin/report_mananger/report_order_by_collaborator/get_detail/${idCollaborator}?start_date=${start_date}&end_date=${end_date}&type_date=date_work&start=${start}&length=${length}&status=${status}`
   );
 };

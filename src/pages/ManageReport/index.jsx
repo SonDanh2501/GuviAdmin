@@ -9,7 +9,9 @@ import {
 } from "../../redux/selectors/auth";
 import ReportOverview from "./ReportOverview";
 import ManageReportOrder from "./MangeReportOrder"
-import ManageReportCollaborator from "../../container/System/ManageReport/ManagerReportCollaborator"
+// import ManageReportCollaborator from "../../container/System/ManageReport/ManagerReportCollaborator"
+import MamageReportCollaborator from "./MamageReportCollaborator"
+
 import ManageReportCustomer from "../../container/System/ManageReport/ManageReportCustomer"
 import ReportCancelOrder from "../../container/System/ManageReport/ReportCancelOrder"
 import ReportService from "../../container/System/ManageReport/ReportService"
@@ -32,7 +34,7 @@ const ManageReport = () => {
     },
     {
       label: "Báo cáo CTV",
-      content: <ManageReportCollaborator/>,
+      content: <MamageReportCollaborator/>,
       key: 2,
     },
     {
