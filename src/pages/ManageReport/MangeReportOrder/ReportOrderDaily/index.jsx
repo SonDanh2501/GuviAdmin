@@ -94,7 +94,9 @@ const ReportOrderDaily = () => {
   }, [sameStartDate])
 
   useEffect(() => {
-    getDataReportDaily();
+    if (startDate !== "") { 
+      getDataReportDaily();
+    }
   }, [start])
 
 
