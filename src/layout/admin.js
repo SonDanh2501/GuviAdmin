@@ -53,6 +53,11 @@ import ReportRatio from "../container/System/ManageReport/ManageReportCustomer/R
 import ReportUser from "../container/System/ManageReport/ManageReportCustomer/ReportUser";
 import DetailRegisterCustomer from "../container/System/ManageReport/ManageReportCustomer/ReportUser/DetailRegisterCustomer";
 import ReportCollaborator from "../container/System/ManageReport/ManagerReportCollaborator/ReportCollaborator";
+import ManageReportOrderByCollaborator from "../pages/ManageReport/MamageReportCollaborator/ManageReportOrderByCollaborator";
+
+import DetailReportOrderByCollaborator from "../pages/ManageReport/MamageReportCollaborator/ManageReportOrderByCollaborator/DetailReportOrderByCollaborator"
+
+
 // import ReportCustomer from "../container/System/ManageReport/MangeReportOrder/ReportCutomer";
 import ReportOrderByCustomer from "../pages/ManageReport/MangeReportOrder/ReportOrderByCustomer";
 
@@ -212,10 +217,16 @@ const Admin = () => {
         element={<GroupCustomerManage />}
       />
       <Route path="/report/manage-report" element={<ManageReport />} />
-      <Route
+      {/* <Route
         path="/report/manage-report/report-collaborator"
         element={<ReportCollaborator />}
+      /> */}
+
+      <Route
+        path="/report/manage-report/report-order-by-collaborator"
+        element={<ManageReportOrderByCollaborator />}
       />
+
       <Route
         path="/report/manage-report/report-order-work"
         element={<ReportOrder />}
@@ -293,6 +304,11 @@ const Admin = () => {
       <Route
         path="/report/manage-report/report-details"
         element={<DetailReportManager />}
+      />
+
+      <Route
+        path="/report/manage-report/report-order-by-collaborator/:id"
+        element={<DetailReportOrderByCollaborator />}
       />
       <Route
         path="/report/manage-report/details-register-customer"

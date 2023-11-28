@@ -769,8 +769,6 @@ const ReportOrder = () => {
 
   const changeStatusOrder = (value: string) => {
     setSelectStatus(value)
-
-    // if(value )
   };
 
   return (
@@ -790,36 +788,7 @@ const ReportOrder = () => {
             />
       </div>
 
-      <div className="total-order-status div-flex-row">
-          <div class="card">
-            <img src="/static/media/customer.08e2f54c.png" class="img"/>
-              <div class="div-details">
-                <a class="text-title">Tổng đơn hàng</a>
-                <a class="text-detail">{orderStatus.total_item}</a>
-              </div>
-          </div>
-          <div class="card">
-            <img src="/static/media/customer.08e2f54c.png" class="img"/>
-              <div class="div-details">
-                <a class="text-title">Đơn hoàn thành</a>
-                <a class="text-detail">{orderStatus.total_order_done}</a>
-              </div>
-          </div>
-          <div class="card">
-            <img src="/static/media/customer.08e2f54c.png" class="img"/>
-              <div class="div-details">
-              <a class="text-title">Đơn đang làm</a>
-                <a class="text-detail">{orderStatus.total_order_doing}</a>
-              </div>
-          </div>
-          <div class="card">
-            <img src="/static/media/customer.08e2f54c.png" class="img"/>
-              <div class="div-details">
-              <a class="text-title">Đơn đã nhận</a>
-                <a class="text-detail">{orderStatus.total_order_confirm}</a>
-              </div>
-          </div>
-      </div>
+
 
       {/* <div className="total-order-status">
       <CardMultiInfo
@@ -828,6 +797,37 @@ const ReportOrder = () => {
             />
       </div> */}
     </div>
+
+    <div className="div-flex-row">
+          <div class="card">
+            <img src="/static/media/add.1c86de41.png" class="img"/>
+              <div class="div-details">
+                <a class="text-title">Tổng đơn hàng</a>
+                <a class="text-detail">{orderStatus.total_item}</a>
+              </div>
+          </div>
+          <div class="card">
+            <img src="/static/media/add.1c86de41.png" class="img"/>
+              <div class="div-details">
+                <a class="text-title">Đơn hoàn thành</a>
+                <a class="text-detail">{orderStatus.total_order_done}</a>
+              </div>
+          </div>
+          <div class="card">
+            <img src="/static/media/add.1c86de41.png" class="img"/>
+              <div class="div-details">
+              <a class="text-title">Đơn đang làm</a>
+                <a class="text-detail">{orderStatus.total_order_doing}</a>
+              </div>
+          </div>
+          <div class="card">
+            <img src="/static/media/add.1c86de41.png" class="img"/>
+              <div class="div-details">
+              <a class="text-title">Đơn đã nhận</a>
+                <a class="text-detail">{orderStatus.total_order_confirm}</a>
+              </div>
+          </div>
+      </div>
 
       <div className="div-flex-row">
         <Select

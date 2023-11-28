@@ -37,24 +37,56 @@ const RangeDatePicker = (props) => {
   const timeZone = 0;
 
   useEffect(() => {
+
+
+
     if(defaults) {
-      const item = DATA_TAB.find(x => x.value === defaults);
-      if(item) {
-        const {startDate, endDate} = calculateRangeDate(item.range, item.type_range);
-        setStart(startDate)
-        setEnd(endDate)
-        setStartDate(startDate.toISOString());
-        setEndDate(endDate.toISOString());
-        setTitle(`${i18n.t(item.title, {lng: lang,})}`)
-        setValueTab(item.value);
-      } else {
-        // const {startDate, endDate} = calculateRangeDate(item.range, item.type_range);
-        // setDefaultRangeDate([defaults.startDate, defaults.endDate])
+      if(Array.isArray(defaults) === true) {
         setValueTab(DATA_TAB[DATA_TAB.length - 1].value)
         setTitle(`${i18n.t(DATA_TAB[DATA_TAB.length - 1].title, {lng: lang})}`)
-        // console.log(defaultRangeDate, 'defaultRangeDate');
+        setStart(defaults[0])
+        setEnd(defaults[1])
+        setStartDate(defaults[0]);
+        setEndDate(defaults[1]);
+
+      } else {
+        const item = DATA_TAB.find(x => x.value === defaults);
+        if(item) {
+          const {startDate, endDate} = calculateRangeDate(item.range, item.type_range);
+          setStart(startDate)
+          setEnd(endDate)
+          setStartDate(startDate.toISOString());
+          setEndDate(endDate.toISOString());
+          setTitle(`${i18n.t(item.title, {lng: lang,})}`)
+          setValueTab(item.value);
+        }
       }
-    } 
+
+    }
+
+
+
+
+    // if(defaults) {
+    //   const item = DATA_TAB.find(x => x.value === defaults);
+    //   if(item) {
+    //     const {startDate, endDate} = calculateRangeDate(item.range, item.type_range);
+    //     setStart(startDate)
+    //     setEnd(endDate)
+    //     setStartDate(startDate.toISOString());
+    //     setEndDate(endDate.toISOString());
+    //     setTitle(`${i18n.t(item.title, {lng: lang,})}`)
+    //     setValueTab(item.value);
+    //   } else {
+    //     // const {startDate, endDate} = calculateRangeDate(item.range, item.type_range);
+    //     // setDefaultRangeDate([defaults.startDate, defaults.endDate])
+    //     setValueTab(DATA_TAB[DATA_TAB.length - 1].value)
+    //     setTitle(`${i18n.t(DATA_TAB[DATA_TAB.length - 1].title, {lng: lang})}`)
+    //     setStart(startDate)
+    //     setEnd(endDate)
+    //     // console.log(defaultRangeDate, 'defaultRangeDate');
+    //   }
+    // } 
   }, []);
 
   
