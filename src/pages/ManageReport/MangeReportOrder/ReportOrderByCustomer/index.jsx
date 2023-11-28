@@ -94,8 +94,10 @@ const ReportOrderByCustomer = () => {
   }, [sameStartDate])
 
   useEffect(() => {
-    setDetectLoading(start+typeCustomer)
-    getDataReportOrderByCustomer();
+    if (startDate !== "") { 
+      setDetectLoading(start+typeCustomer)
+      getDataReportOrderByCustomer();
+    }
   }, [start, typeCustomer])
 
 
