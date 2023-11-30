@@ -91,7 +91,7 @@ const ReportOrderDaily = () => {
        getTotalReportDaily()
       //  getDataReportToday()
     }
-  }, [sameStartDate])
+  }, [sameStartDate, sameEndDate])
 
   useEffect(() => {
     if (startDate !== "") { 
@@ -110,7 +110,7 @@ const ReportOrderDaily = () => {
     setSameStartDate(new Date(tempSameStartDate).toISOString())
     setSameEndDate(new Date(tempSameEndDate).toISOString())
     }
-  }, [startDate])
+  }, [startDate, endDate])
 
 
 
