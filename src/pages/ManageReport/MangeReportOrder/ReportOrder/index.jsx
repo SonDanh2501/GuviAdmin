@@ -63,7 +63,7 @@ const ReportOrder = () => {
     if (startDate !== "") {
       getDataReportOrder();
     }
-  }, [startDate, start, selectStatus])
+  }, [startDate, endDate, start, selectStatus])
 
 
   const getDataReportOrder = async () => {

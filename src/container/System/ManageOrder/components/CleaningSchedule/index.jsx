@@ -645,7 +645,7 @@ const CleaningSchedule = (props) => {
         <div className="div-add-service mt-3">
           <p className="label m-0">{`${i18n.t("times", { lng: lang })}`} </p>
           <div className="div-service">
-            {extendService.slice(0, 3).map((item) => {
+            {extendService.map((item) => {
               return (
                 <div
                   className={

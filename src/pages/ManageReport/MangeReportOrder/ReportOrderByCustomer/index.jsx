@@ -91,7 +91,7 @@ const ReportOrderByCustomer = () => {
       getDataReportOrderByCustomer();
       getDataReportTotalOrderByCustomer();
     }
-  }, [sameStartDate])
+  }, [sameStartDate, sameEndDate])
 
   useEffect(() => {
     if (startDate !== "") { 
@@ -108,10 +108,11 @@ const ReportOrderByCustomer = () => {
     const rangeDate = timeEndDate - timeStartDate;
     const tempSameEndDate = timeStartDate - 1;
     const tempSameStartDate = tempSameEndDate - rangeDate;
+
     setSameStartDate(new Date(tempSameStartDate).toISOString())
     setSameEndDate(new Date(tempSameEndDate).toISOString())
     }
-  }, [startDate])
+  }, [startDate, endDate])
 
 
   const getDataReportOrderByCustomer = async () => {
@@ -214,7 +215,6 @@ const ReportOrderByCustomer = () => {
     );
     if(subValue) subValue = (typeSubValue === "money") ? formatMoney(subValue) : (typeSubValue === "percent") ? subValue + " %" : subValue;
     if(title == "Giá vốn") subValue = "0 đ";
-    console.log(subValue, 'subValue');
     return (
       <React.Fragment>
         <div className="header-table-custom">
