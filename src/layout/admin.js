@@ -91,6 +91,9 @@ import DetailActivityCollaborator from "../container/System/ManageUser/Collabora
 import ManageCustomer from "../container/System/ManageCustomer";
 import Profiles from "../container/System/ManageCustomer/Profiles";
 import ManageRequestService from "../container/System/ManageRequestService";
+// import ManageReportViolationCollaborator from "../pages/ManageReport/MamageReportCollaborator/ManageReportViolationCollaborator";
+
+// import ManageCashBook from "../pages/ManageCashBook";
 
 const Admin = () => {
   return (
@@ -206,6 +209,11 @@ const Admin = () => {
         element={<CreateOrder />}
       /> */}
 
+
+{/* 
+      <Route path="/topup/manage-cashbook" element={< ManageCashBook />} /> */}
+
+
       <Route path="/topup/manage-topup" element={<ManageTopup />} />
       <Route
         path="/topup/manage-topup/details-reward-collaborator/:id"
@@ -226,6 +234,12 @@ const Admin = () => {
         path="/report/manage-report/report-order-by-collaborator"
         element={<ManageReportOrderByCollaborator />}
       />
+      {/* <Route
+        path="/report/manage-report/report-violation-collaborator"
+        element={<ManageReportViolationCollaborator />}
+      /> */}
+
+
 
       <Route
         path="/report/manage-report/report-order-work"
