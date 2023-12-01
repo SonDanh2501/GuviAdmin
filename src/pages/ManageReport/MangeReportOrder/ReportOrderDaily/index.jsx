@@ -153,12 +153,14 @@ const ReportOrderDaily = () => {
       tempOrder.push(payload)
     }
     setDataChartsOrder(tempOrder);
-    const percentOrder = (data.totalOrder[0]?.total_item / (data.totalOrder[0]?.total_item + dataInsame.totalOrder[0]?.total_item)) * 100;
-    const percentSameOrder = (dataInsame.totalOrder[0]?.total_item / (data.totalOrder[0]?.total_item + dataInsame.totalOrder[0]?.total_item)) * 100
+    // const percentOrder = (data.totalOrder[0]?.total_item / (data.totalOrder[0]?.total_item + dataInsame.totalOrder[0]?.total_item)) * 100;
+    // const percentSameOrder = (dataInsame.totalOrder[0]?.total_item / (data.totalOrder[0]?.total_item + dataInsame.totalOrder[0]?.total_item)) * 100
+
+    const percentOrder = (data.totalOrder[0]?.total_item / dataInsame.totalOrder[0]?.total_item) - 1;
     const headerTempOrder = {
       total: data.totalOrder[0]?.total_item + " Đơn hàng",
-      arrow: (percentOrder - percentSameOrder > 0) ? "up" : "down",
-      percent: Math.abs((percentOrder - percentSameOrder).toFixed(2))
+      arrow: (percentOrder > 0) ? "up" : "down",
+      percent: Math.abs((percentOrder * 100).toFixed(2))
     }
     setHeaderChartsOrder(headerTempOrder)
   }

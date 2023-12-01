@@ -177,13 +177,15 @@ const ReportOverview = () => {
     setDataIncome(tempIncome);
 
 
-    const percentGrossIncome = (data.total[0]?.total_gross_income / (data.total[0]?.total_gross_income + dataInsame.total[0]?.total_gross_income)) * 100;
-    const percentGrossIncomeSame = (dataInsame.total[0]?.total_gross_income / (data.total[0]?.total_gross_income + dataInsame.total[0]?.total_gross_income)) * 100
+    // const percentGrossIncome = (data.total[0]?.total_gross_income / (data.total[0]?.total_gross_income + dataInsame.total[0]?.total_gross_income)) * 100;
+    // const percentGrossIncomeSame = (dataInsame.total[0]?.total_gross_income / (data.total[0]?.total_gross_income + dataInsame.total[0]?.total_gross_income)) * 100
 
+
+    const percentGrossIncome = (data.total[0]?.total_gross_income / dataInsame.total[0]?.total_gross_income) - 1;
     const headerTempIncome = {
       total: formatMoney(data.total[0]?.total_gross_income),
-      arrow: (percentGrossIncome - percentGrossIncomeSame > 0) ? "up" : "down",
-      percent: Math.abs((percentGrossIncome - percentGrossIncomeSame).toFixed(2))
+      arrow: (percentGrossIncome > 0) ? "up" : "down",
+      percent: Math.abs((percentGrossIncome * 100).toFixed(2))
     }
     setHeaderIncome(headerTempIncome)
   }
@@ -200,12 +202,16 @@ const ReportOverview = () => {
       tempOrder.push(payload)
     }
     setDataOrder(tempOrder);
-    const percentOrder = (data.total[0]?.total_item / (data.total[0]?.total_item + dataInsame.total[0]?.total_item)) * 100;
-    const percentSameOrder = (dataInsame.total[0]?.total_item / (data.total[0]?.total_item + dataInsame.total[0]?.total_item)) * 100
+    // const percentOrder = (data.total[0]?.total_item / (data.total[0]?.total_item + dataInsame.total[0]?.total_item)) * 100;
+    // const percentSameOrder = (dataInsame.total[0]?.total_item / (data.total[0]?.total_item + dataInsame.total[0]?.total_item)) * 100
+
+    const percentOrder = (data.total[0]?.total_item / dataInsame.total[0]?.total_item) - 1
+
+    console.log(percentOrder, 'percentOrder');
     const headerTempOrder = {
       total: data.total[0]?.total_item + " Đơn hàng",
-      arrow: (percentOrder - percentSameOrder > 0) ? "up" : "down",
-      percent: Math.abs((percentOrder - percentSameOrder).toFixed(2))
+      arrow: (percentOrder > 0) ? "up" : "down",
+      percent: Math.abs((percentOrder * 100).toFixed(2))
     }
     setHeaderOrder(headerTempOrder)
   }
@@ -222,12 +228,15 @@ const ReportOverview = () => {
       temp.push(payload)
     }
     setDataNetIncome(temp);
-    const percent = (data.total[0]?.total_net_income / (data.total[0]?.total_net_income + dataInsame.total[0]?.total_net_income)) * 100;
-    const percentSame = (dataInsame.total[0]?.total_net_income / (data.total[0]?.total_net_income + dataInsame.total[0]?.total_net_income)) * 100
+    // const percent = (data.total[0]?.total_net_income / (data.total[0]?.total_net_income + dataInsame.total[0]?.total_net_income)) * 100;
+    // const percentSame = (dataInsame.total[0]?.total_net_income / (data.total[0]?.total_net_income + dataInsame.total[0]?.total_net_income)) * 100
+
+    const percent = (data.total[0]?.total_net_income / dataInsame.total[0]?.total_net_income) - 1;
+
     const headerTemp = {
       total: formatMoney(data.total[0]?.total_net_income),
-      arrow: (percent - percentSame > 0) ? "up" : "down",
-      percent: Math.abs((percent - percentSame).toFixed(2))
+      arrow: (percent > 0) ? "up" : "down",
+      percent: Math.abs((percent * 100).toFixed(2))
     }
     setHeaderNetIncome(headerTemp)
   }
@@ -244,12 +253,15 @@ const ReportOverview = () => {
       temp.push(payload)
     }
     setDataProfit(temp);
-    const percent = (data.total[0]?.total_net_income_business / (data.total[0]?.total_net_income_business + dataInsame.total[0]?.total_net_income_business)) * 100;
-    const percentSame = (dataInsame.total[0]?.total_net_income_business / (data.total[0]?.total_net_income_business + dataInsame.total[0]?.total_net_income_business)) * 100
+    // const percent = (data.total[0]?.total_net_income_business / (data.total[0]?.total_net_income_business + dataInsame.total[0]?.total_net_income_business)) * 100;
+    // const percentSame = (dataInsame.total[0]?.total_net_income_business / (data.total[0]?.total_net_income_business + dataInsame.total[0]?.total_net_income_business)) * 100
+
+    const percent = (data.total[0]?.total_net_income_business / dataInsame.total[0]?.total_net_income_business) - 1;
+
     const headerTemp = {
       total: formatMoney(data.total[0]?.total_net_income_business),
-      arrow: (percent - percentSame > 0) ? "up" : "down",
-      percent: Math.abs((percent - percentSame).toFixed(2))
+      arrow: (percent > 0) ? "up" : "down",
+      percent: Math.abs((percent * 100).toFixed(2))
     }
     setHeaderProfit(headerTemp)
   }
@@ -262,15 +274,18 @@ const ReportOverview = () => {
     ])
     const payload = [];
     for(let i = 0 ; i < arrGetResult[0].totalItem ; i ++) {
-      const percentNetIncome = (arrGetResult[0].data[i]?.total_net_income / (arrGetResult[0].data[i]?.total_net_income + arrGetResult[1].data[i]?.total_net_income)) * 100
-      const percentNetIncomeSame = (arrGetResult[1].data[i]?.total_net_income / (arrGetResult[0].data[i]?.total_net_income + arrGetResult[1].data[i]?.total_net_income)) * 100
-      const percent = (percentNetIncome - percentNetIncomeSame).toFixed(2)
+      // const percentNetIncome = (arrGetResult[0].data[i]?.total_net_income / (arrGetResult[0].data[i]?.total_net_income + arrGetResult[1].data[i]?.total_net_income)) * 100
+      // const percentNetIncomeSame = (arrGetResult[1].data[i]?.total_net_income / (arrGetResult[0].data[i]?.total_net_income + arrGetResult[1].data[i]?.total_net_income)) * 100
+      // const percent = (percentNetIncome - percentNetIncomeSame).toFixed(2)
+
+
+      const percent = (arrGetResult[0].data[i]?.total_net_income / arrGetResult[1].data[i]?.total_net_income) - 1
 
       payload.push({
         city: arrGetResult[0].data[i]?.city,
         total_item: arrGetResult[0].data[i]?.total_item,
         total_net_income: arrGetResult[0].data[i]?.total_net_income,
-        percent_net_income: percent
+        percent_net_income: (percent).toFixed(2) * 100
       })
     }
     setDataChartAreaOrder(payload);
