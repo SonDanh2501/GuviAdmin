@@ -131,72 +131,88 @@ const ReportOrderByCustomer = () => {
       getReportTotalOrderByCustomer(sameStartDate, sameEndDate, "old", typeDate)
     ])
 
-    const tempPercentCustomer = (arrGetResult[0].totalItem*100/(arrGetResult[0].totalItem + arrGetResult[2].totalItem)).toFixed(2);
-    const tempSamePercentCustomer = (arrGetResult[2].totalItem*100/(arrGetResult[0].totalItem + arrGetResult[2].totalItem)).toFixed(2);
+    // const tempPercentCustomer = (arrGetResult[0].totalItem*100/(arrGetResult[0].totalItem + arrGetResult[2].totalItem)).toFixed(2);
+    // const tempSamePercentCustomer = (arrGetResult[2].totalItem*100/(arrGetResult[0].totalItem + arrGetResult[2].totalItem)).toFixed(2);
 
-    const tempPercentTotalGrossIncome = 
-    (arrGetResult[0].total[0].total_gross_income*100/(arrGetResult[0].total[0].total_gross_income + arrGetResult[2].total[0].total_gross_income)).toFixed(2)
-    const tempSamePercentTotalGrossIncome = 
-    (arrGetResult[2].total[0].total_gross_income*100/(arrGetResult[0].total[0].total_gross_income + arrGetResult[2].total[0].total_gross_income)).toFixed(2)
+    // const tempPercentTotalGrossIncome = 
+    // (arrGetResult[0].total[0].total_gross_income*100/(arrGetResult[0].total[0].total_gross_income + arrGetResult[2].total[0].total_gross_income)).toFixed(2)
+    // const tempSamePercentTotalGrossIncome = 
+    // (arrGetResult[2].total[0].total_gross_income*100/(arrGetResult[0].total[0].total_gross_income + arrGetResult[2].total[0].total_gross_income)).toFixed(2)
 
-    const tempPercentTotalOrder = (arrGetResult[0].total[0].total_item*100/(arrGetResult[0].total[0].total_item + arrGetResult[2].total[0].total_item)).toFixed(2)
-    const tempSamePercentTotalOrder = (arrGetResult[2].total[0].total_item*100/(arrGetResult[0].total[0].total_item + arrGetResult[2].total[0].total_item)).toFixed(2)
+    // const tempPercentTotalOrder = (arrGetResult[0].total[0].total_item*100/(arrGetResult[0].total[0].total_item + arrGetResult[2].total[0].total_item)).toFixed(2)
+    // const tempSamePercentTotalOrder = (arrGetResult[2].total[0].total_item*100/(arrGetResult[0].total[0].total_item + arrGetResult[2].total[0].total_item)).toFixed(2)
+
+
+
+    const tempPercentCustomer = ( arrGetResult[0].totalItem / arrGetResult[2].totalItem ) - 1
+
+    const tempPercentTotalGrossIncome = (arrGetResult[0].total[0].total_gross_income / arrGetResult[2].total[0].total_gross_income) - 1
+
+    const tempPercentTotalOrder = (arrGetResult[0].total[0].total_item / arrGetResult[2].total[0].total_item) - 1
 
     setCustomerNew({
       mainInfo: {
         title: "Khách hàng mới",
         detail: arrGetResult[0].totalItem || 0,
-        percentPeriod: Math.abs(tempPercentCustomer - tempSamePercentCustomer).toFixed(2),
-        arrow: (tempPercentCustomer - tempSamePercentCustomer > 0) ? "up" : "down"
+        percentPeriod: Math.abs(tempPercentCustomer * 100).toFixed(2),
+        arrow: (tempPercentCustomer > 0) ? "up" : "down"
       },
       secondInfo: [
         {
           title: "Tổng giá trị giao dịch",
           detail: formatMoney(arrGetResult[0].total[0].total_gross_income) || 0,
-          percentPeriod: Math.abs(tempPercentTotalGrossIncome - tempSamePercentTotalGrossIncome).toFixed(2),
-          arrow: (tempPercentTotalGrossIncome - tempSamePercentTotalGrossIncome > 0) ? "up" : "down"
+          percentPeriod: Math.abs(tempPercentTotalGrossIncome * 100).toFixed(2),
+          arrow: (tempPercentTotalGrossIncome > 0) ? "up" : "down"
         },
         {
           title: "Đơn hàng",
           detail: arrGetResult[0].total[0].total_item + " đơn" || 0 + " đơn",
-          percentPeriod: Math.abs(tempPercentTotalOrder - tempSamePercentTotalOrder).toFixed(2),
-          arrow: (tempPercentTotalOrder - tempSamePercentTotalOrder > 0) ? "up" : "down"
+          percentPeriod: Math.abs(tempPercentTotalOrder * 100).toFixed(2),
+          arrow: (tempPercentTotalOrder > 0) ? "up" : "down"
         }
       ]
     })
 
 
 
-    const tempPercentCustomerOld = (arrGetResult[1].totalItem*100/(arrGetResult[1].totalItem + arrGetResult[3].totalItem)).toFixed(2);
-    const tempSamePercentCustomerOld = (arrGetResult[3].totalItem*100/(arrGetResult[1].totalItem + arrGetResult[3].totalItem)).toFixed(2);
+    // const tempPercentCustomerOld = (arrGetResult[1].totalItem*100/(arrGetResult[1].totalItem + arrGetResult[3].totalItem)).toFixed(2);
+    // const tempSamePercentCustomerOld = (arrGetResult[3].totalItem*100/(arrGetResult[1].totalItem + arrGetResult[3].totalItem)).toFixed(2);
 
-    const tempPercentTotalGrossIncomeOld = 
-    (arrGetResult[1].total[0].total_gross_income*100/(arrGetResult[1].total[0].total_gross_income + arrGetResult[3].total[0].total_gross_income)).toFixed(2)
-    const tempSamePercentTotalGrossIncomeOld = 
-    (arrGetResult[3].total[0].total_gross_income*100/(arrGetResult[1].total[0].total_gross_income + arrGetResult[3].total[0].total_gross_income)).toFixed(2)
+    // const tempPercentTotalGrossIncomeOld = 
+    // (arrGetResult[1].total[0].total_gross_income*100/(arrGetResult[1].total[0].total_gross_income + arrGetResult[3].total[0].total_gross_income)).toFixed(2)
+    // const tempSamePercentTotalGrossIncomeOld = 
+    // (arrGetResult[3].total[0].total_gross_income*100/(arrGetResult[1].total[0].total_gross_income + arrGetResult[3].total[0].total_gross_income)).toFixed(2)
 
-    const tempPercentTotalOrderOld = (arrGetResult[1].total[0].total_item*100/(arrGetResult[1].total[0].total_item + arrGetResult[3].total[0].total_item)).toFixed(2)
-    const tempSamePercentTotalOrderOld = (arrGetResult[3].total[0].total_item*100/(arrGetResult[1].total[0].total_item + arrGetResult[3].total[0].total_item)).toFixed(2)
+    // const tempPercentTotalOrderOld = (arrGetResult[1].total[0].total_item*100/(arrGetResult[1].total[0].total_item + arrGetResult[3].total[0].total_item)).toFixed(2)
+    // const tempSamePercentTotalOrderOld = (arrGetResult[3].total[0].total_item*100/(arrGetResult[1].total[0].total_item + arrGetResult[3].total[0].total_item)).toFixed(2)
+
+
+
+    const tempPercentCustomerOld = (arrGetResult[1].totalItem / arrGetResult[3].totalItem) - 1
+    const tempPercentTotalGrossIncomeOld = (arrGetResult[1].total[0].total_gross_income / arrGetResult[3].total[0].total_gross_income) - 1
+    const tempPercentTotalOrderOld = (arrGetResult[1].total[0].total_item / arrGetResult[3].total[0].total_item) - 1
+
+
 
     setCustomerOld({
       mainInfo: {
         title: "Khách hàng cũ",
         detail: arrGetResult[1]?.totalItem || 0,
-        percentPeriod: Math.abs(tempPercentCustomerOld - tempSamePercentCustomerOld).toFixed(2),
-        arrow: (tempPercentCustomerOld - tempSamePercentCustomerOld > 0) ? "up" : "down"
+        percentPeriod: Math.abs(tempPercentCustomerOld * 100 ).toFixed(2),
+        arrow: (tempPercentCustomerOld > 0) ? "up" : "down"
       },
       secondInfo: [
         {
           title: "Tổng giá trị giao dịch",
           detail: formatMoney(arrGetResult[1].total[0]?.total_gross_income || 0),
-          percentPeriod: Math.abs(tempPercentTotalGrossIncomeOld - tempSamePercentTotalGrossIncomeOld).toFixed(2),
-          arrow: (tempPercentTotalGrossIncomeOld - tempSamePercentTotalGrossIncomeOld > 0) ? "up" : "down"
+          percentPeriod: Math.abs(tempPercentTotalGrossIncomeOld * 100).toFixed(2),
+          arrow: (tempPercentTotalGrossIncomeOld > 0) ? "up" : "down"
         },
         {
           title: "Đơn hàng",
           detail: arrGetResult[1].total[0]?.total_item + " đơn" || 0 + " đơn",
-          percentPeriod: Math.abs(tempPercentTotalOrderOld - tempSamePercentTotalOrderOld).toFixed(2),
-          arrow: (tempPercentTotalOrderOld - tempSamePercentTotalOrderOld > 0) ? "up" : "down"
+          percentPeriod: Math.abs(tempPercentTotalOrderOld * 100).toFixed(2),
+          arrow: (tempPercentTotalOrderOld > 0) ? "up" : "down"
         }
       ]
     })
