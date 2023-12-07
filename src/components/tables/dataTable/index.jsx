@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import i18n from "../../../i18n";
-import { Dropdown, Pagination, Space, Table, Tooltip } from "antd";
+import { Dropdown, Pagination, Space, Table, Tooltip, Rate} from "antd";
 import { StarFilled } from "@ant-design/icons";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import { Link } from "react-router-dom";
@@ -448,7 +448,6 @@ const DataTable = (props) => {
                             </>
                         )
                         break;
-
                     case "money": {
                         return (
                             <p className={`text-address-customer ${item?.fontSize}`}>
@@ -554,14 +553,15 @@ const DataTable = (props) => {
                         break
                     }
                     case "text": {
+                        const max = item.maxLength || 75;
                         let getDataView = data[item.dataIndex] || "";
-                        const indexSlice = getDataView.length - 75;
-                        const sliceData = (indexSlice > 0) ? getDataView.slice(0, 75) + "..." : getDataView;
+                        const indexSlice = getDataView.length - max;
+                        const sliceData = (indexSlice > 0) ? getDataView.slice(0, max) + "..." : getDataView;
                         return (
                             <>
-                                <span className={`${item?.fontSize}`}> {sliceData}</span>
                                 <Tooltip placement="leftTop" title={getDataView}>
-                                    {indexSlice > 0 ? (<span className={`div-more ${item?.fontSize}`}> Xem thêm</span>) : (<></>)}
+                                <span className={`${item?.fontSize}`}> {sliceData}</span>
+                                    {/* {indexSlice > 0 ? (<span className={`div-more ${item?.fontSize}`}> Xem thêm</span>) : (<></>)} */}
                                 </Tooltip>
                             </>
                         )
@@ -576,6 +576,23 @@ const DataTable = (props) => {
                             </div>
                         )
                         break;
+                    }
+                    case "code_order_start": {
+                            linkRedirect = `/details-order/${data?.id_group_order}`
+                            return (
+                                <Link
+                                    onClick={() => saveToCookie("order_scrolly", scrollY)}
+                                    to={linkRedirect}
+                                >
+                                    <p className={`text-id-code-order ${item?.fontSize}`}>{data?.id_view}</p>
+                                    <Rate
+                                        value={data?.star}
+                                        style={{ width: "100%" }}
+                                        disabled={true}
+                                    />
+                                </Link>
+                            )
+                            break;
                     }
                     default: {
                         const dataView = data[item.dataIndex] || "";

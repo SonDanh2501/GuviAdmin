@@ -28,7 +28,7 @@ const ReviewCollaborator = () => {
   const lang = useSelector(getLanguageState);
   const [data, setData] = useState([]);
   const [startPage, setStartPage] = useState(0);
-  const [lengthPage, setLengthPage] = useState(50);
+  const [lengthPage, setLengthPage] = useState(25);
   const [valueSearch, setValueSearch] = useState("");
   const [detectLoading, setDetectLoading] = useState(null)
   const [totalItem, setTotalItem] = useState(0)
@@ -58,7 +58,10 @@ const ReviewCollaborator = () => {
     const res = await getDataReviewCollaborator(startPage, lengthPage, startDate, endDate);
     const clearData = [];
     for (let i = 0; i < res.data.length; i++) {
+      // res.data[i]["service_title"] = (res.data[i].service._id.title.vi === "Vệ sinh Rèm - Thảm - Sofa") ? "Rèm, Thảm, Sofa" : res.data[i].service._id.title.vi;
+
       res.data[i]["service_title"] = res.data[i].service._id.title.vi
+
       res.data[i]["short_review"] = res.data[i].short_review.toString();
       res.data[i]["full_name_user_system_handle_review"] = (res.data[i].id_user_system_handle_review) ? res.data[i].id_user_system_handle_review.full_name : "";
     }
@@ -105,18 +108,18 @@ const ReviewCollaborator = () => {
 
   const columns = [
     {
-      title: "Mã đơn",
-      dataIndex: 'id_view',
-      key: "code_order",
-      width: 140,
-      fontSize: "text-size-M"
-    },
-    {
       // i18n_title: 'date_create',
       title: 'Ngày đánh giá',
       dataIndex: 'date_create_review',
       key: "date_time",
-      width: 110,
+      width: 125,
+      fontSize: "text-size-M"
+    },
+    {
+      title: "Mã đơn",
+      dataIndex: 'id_view',
+      key: "code_order_start",
+      width: 140,
       fontSize: "text-size-M"
     },
     {
@@ -130,7 +133,8 @@ const ReviewCollaborator = () => {
       title: 'Dịch vụ',
       dataIndex: 'service_title',
       key: "text",
-      width: 120,
+      width: 100,
+      maxLength: 20,
       fontSize: "text-size-M"
     },
     {
@@ -146,14 +150,16 @@ const ReviewCollaborator = () => {
       title: "Đánh giá nhanh",
       dataIndex: 'short_review',
       key: "text",
-      width: 200,
+      width: 140,
+      maxLength: 35,
       fontSize: "text-size-M"
     },
     {
-      title: 'Nội dung',
+      title: 'Chi tiết đánh giá',
       dataIndex: 'review',
       key: "text",
       width: 220,
+      maxLength: 90,
       fontSize: "text-size-M"
     },
     {
@@ -175,6 +181,7 @@ const ReviewCollaborator = () => {
       i18n_title: 'note',
       dataIndex: 'note_admin',
       key: "text",
+      maxLength: 90,
       width: 220,
       fontSize: "text-size-M"
     },
