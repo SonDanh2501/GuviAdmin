@@ -1,0 +1,313 @@
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  Dropdown,
+  Space,
+  Input,
+} from "antd";
+import { UilEllipsisV } from "@iconscout/react-unicons";
+import { SearchOutlined } from "@ant-design/icons";
+import moment from "moment";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../redux/selectors/auth";
+import DataTable from "../../../components/tables/dataTable"
+import RangeDatePicker from "../../../components/datePicker/RangeDatePicker"
+import { getDataReviewCollaborator, updateProcessHandleReview } from "../../../api/feedback"
+import { useSelector } from "react-redux";
+import _debounce from "lodash/debounce";
+import ModalNoteAdmin from "./components/NoteAdminModal"
+import i18n from "../../../i18n";
+import { OPTIONS_SELECT_STATUS_HANDLE_REVIEW } from "../../../@core/constant/constant"
+
+import "./index.scss";
+import DeleteModal from "./components/DeleteModal";
+
+const ReviewCollaborator = () => {
+  const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
+  const [data, setData] = useState([]);
+  const [startPage, setStartPage] = useState(0);
+  const [lengthPage, setLengthPage] = useState(50);
+  const [valueSearch, setValueSearch] = useState("");
+  const [detectLoading, setDetectLoading] = useState(null)
+  const [totalItem, setTotalItem] = useState(0)
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] = useState("")
+  // const toggle = () => setModal(!modal);
+  const [modal, setModal] = useState("");
+  const [inputModal, setInputModal] = useState(null);
+  const [item, setItem] = useState(null);
+
+
+  useEffect(() => {
+    if (startDate !== "") {
+      getReviewCollaborator();
+    }
+  }, [valueSearch, startPage, startDate]);
+
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      setDetectLoading(value)
+      setValueSearch(value);
+    }, 500),
+    []
+  );
+
+  const getReviewCollaborator = async () => {
+    const res = await getDataReviewCollaborator(startPage, lengthPage, startDate, endDate);
+    const clearData = [];
+    for (let i = 0; i < res.data.length; i++) {
+      res.data[i]["service_title"] = res.data[i].service._id.title.vi
+      res.data[i]["short_review"] = res.data[i].short_review.toString();
+      res.data[i]["full_name_user_system_handle_review"] = (res.data[i].id_user_system_handle_review) ? res.data[i].id_user_system_handle_review.full_name : "";
+    }
+    console.log(res?.data, 'res?.data');
+    setData(res?.data);
+    setTotalItem(res?.totalItem);
+  }
+
+  const onChangePage = (value) => {
+    setStartPage(value)
+  }
+
+  const onChangePropsValue = async (props) => {
+    if(props.dataIndex === "status_handle_review") {
+      console.log("check");
+      setModal("update_handle_review");
+
+      // const payload = {
+      //   id_order: props.item._id,
+      //   status_handle_review: props.value,
+      //   note_admin: props.item.note_admin
+      // }
+      // await updateProcessHandleReview(payload)
+      // getReviewCollaborator()
+    }
+  }
+
+  const processHandleReview = async (dataChange) => {
+    const payload = {
+      id_order: item._id,
+      note_admin: dataChange.note_admin,
+      status_handle_review: dataChange.status_handle_review
+    }
+    console.log(payload, 'payload');
+    await updateProcessHandleReview(payload)
+    getReviewCollaborator()
+    setModal("");
+  }
+
+
+
+
+
+
+  const columns = [
+    {
+      title: "Mã đơn",
+      dataIndex: 'id_view',
+      key: "code_order",
+      width: 140,
+      fontSize: "text-size-M"
+    },
+    {
+      // i18n_title: 'date_create',
+      title: 'Ngày đánh giá',
+      dataIndex: 'date_create_review',
+      key: "date_time",
+      width: 110,
+      fontSize: "text-size-M"
+    },
+    {
+      i18n_title: 'customer',
+      dataIndex: 'id_customer',
+      key: "customer-name-phone",
+      width: 120,
+      fontSize: "text-size-M"
+    },
+    {
+      title: 'Dịch vụ',
+      dataIndex: 'service_title',
+      key: "text",
+      width: 120,
+      fontSize: "text-size-M"
+    },
+    {
+      // i18n_title: 'customer',
+      title: 'Cộng tác viên',
+      dataIndex: 'id_collaborator',
+      key: "collaborator",
+      width: 140,
+      fontSize: "text-size-M"
+    },
+    {
+      // i18n_title: 'address',
+      title: "Đánh giá nhanh",
+      dataIndex: 'short_review',
+      key: "text",
+      width: 200,
+      fontSize: "text-size-M"
+    },
+    {
+      title: 'Nội dung',
+      dataIndex: 'review',
+      key: "text",
+      width: 220,
+      fontSize: "text-size-M"
+    },
+    {
+      i18n_title: 'status',
+      dataIndex: 'status_handle_review',
+      key: "status_handle_review",
+      selectOptions: OPTIONS_SELECT_STATUS_HANDLE_REVIEW,
+      width: 185,
+      fontSize: "text-size-M"
+    },
+    {
+      title: 'NV liên hệ',
+      dataIndex: "full_name_user_system_handle_review",
+      key: "other",
+      width: 110,
+      fontSize: "text-size-M"
+    },
+    {
+      i18n_title: 'note',
+      dataIndex: 'note_admin',
+      key: "text",
+      width: 220,
+      fontSize: "text-size-M"
+    },
+  ]
+
+  const showModal = (key) => {
+    setModal(key);
+    console.log(modal, "modal");
+  } 
+
+  let items = [
+    // {
+    //   key: "0",
+    //   label: checkElement?.includes("delete_request_service") &&
+    //     (<p className="m-0" onClick={()=>showModal("delete")}>{`${i18n.t("delete", { lng: lang })}`}</p>)
+    // },
+    {
+      key: "0",
+      label: checkElement?.includes("delete_request_service") &&
+        (<p className="m-0" onClick={() =>showModal("update_handle_review")}>Cập nhật ghi chú</p>)
+    }
+  ]
+
+  items = items.filter(x => x.label !== false);
+
+  // let items = [
+  //   {
+  //     key: "0",
+  //     label: <p className="m-0" onClick={()=>showModal("delete")}>{`${i18n.t("delete", { lng: lang })}`}</p>
+  //   },
+  //   {
+  //     key: "1",
+  //     label: <p className="m-0" onClick={() =>showModal("update_handle_review")}>Cập nhật ghi chú</p>
+  //   }
+  // ]
+
+
+  const addActionColumn = {
+    i18n_title: '',
+    dataIndex: 'action',
+    key: "action",
+    fixed: 'right',
+    width: 40,
+    render: () => (
+      <Space size="middle">
+        <Dropdown menu={{ items }} trigger={["click"]}>
+          <a>
+            <UilEllipsisV />
+          </a>
+        </Dropdown>
+      </Space>
+    )
+  };
+
+
+
+
+
+
+  return (
+    <React.Fragment>
+
+      <div className="div-container-content">
+        <div className="div-flex-row">
+          <div className="div-header-container">
+            <h4 className="title-cv">Đánh giá CTV</h4>
+          </div>
+          <div className="btn-action-header">
+          </div>
+        </div>
+
+        <div className="div-flex-row">
+          {/* <Tabs
+            itemTab={itemTab}
+            onValueChangeTab={onChangeTab}
+          /> */}
+        </div>
+
+        <div className="div-flex-row-flex-start">
+          <div className="date-picker">
+            <RangeDatePicker
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+              onCancel={() => { }}
+              defaults={"thirty_last"}
+            />
+          </div>
+          <div className="div-same">
+            <p className="m-0 text-date-same">
+              Kỳ này: {moment(startDate).format("DD/MM/YYYY")}-
+              {moment(endDate).format("DD/MM/YYYY")}
+            </p>
+          </div>
+        </div>
+
+        <div className="div-flex-row">
+          <div className="div-filter">
+          </div>
+          <div className="div-search">
+            <Input
+              placeholder={`${i18n.t("search", { lng: lang })}`}
+              // value={valueSearch}
+              prefix={<SearchOutlined />}
+              className="input-search"
+              onChange={(e) => {
+                handleSearch(e.target.value);
+                // setValueSearch(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+        <div >
+          <DataTable
+            columns={columns}
+            data={data}
+            actionColumn={addActionColumn}
+            start={startPage}
+            pageSize={lengthPage}
+            totalItem={totalItem}
+            onCurrentPageChange={onChangePage}
+            detectLoading={detectLoading}
+            onChangeValue={onChangePropsValue}
+            // onShowModal={onShowModal}
+            getItemRow={setItem}
+          />
+        </div>
+      </div>
+
+<ModalNoteAdmin isShow={(modal === "update_handle_review") ? true : false} item={item} handleOk={(payload) => processHandleReview(payload)} handleCancel={setModal}/>
+{/* <DeleteModal isShow={(modal === "delete") ? true : false} item={item} handleOk={(payload) => processHandleReview(payload)} handleCancel={setModal}/> */}
+
+    </React.Fragment>
+  );
+};
+
+export default ReviewCollaborator;

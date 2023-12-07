@@ -26,6 +26,7 @@ import SettingGroupPromotion from "../container/System/ManageConfiguration/Scree
 import SettingQrCode from "../container/System/ManageConfiguration/ScreenConfiguration/SettingQrcode";
 import DeepCleaningManager from "../container/System/ManageDeepCleaning";
 import ManageFeedback from "../container/System/ManageFeedback";
+
 import ManageFinance from "../container/System/ManageFinance";
 import ManageOrder from "../container/System/ManageOrder";
 // import ManageOrder from "../pages/ManageOrder";
@@ -94,6 +95,9 @@ import ManageRequestService from "../container/System/ManageRequestService";
 // import ManageReportViolationCollaborator from "../pages/ManageReport/MamageReportCollaborator/ManageReportViolationCollaborator";
 
 // import ManageCashBook from "../pages/ManageCashBook";
+
+import Feedback from "../pages/ManageFeedBack/FeedBack";
+import ReviewCollaborator from "../pages/ManageFeedBack/ReviewCollaborator";
 
 const Admin = () => {
   return (
@@ -197,6 +201,13 @@ const Admin = () => {
         element={<PriceService />}
       />
       <Route path="/feedback/manage-feedback" element={<ManageFeedback />} />
+
+
+      <Route path="/customer-care/feedback" element={<Feedback />} />
+      <Route path="/customer-care/review-collaborator" element={<ReviewCollaborator />} />
+
+
+
       <Route path="/group-order/manage-order" element={<ManageOrder />} />
 
       <Route
