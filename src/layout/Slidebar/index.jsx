@@ -26,6 +26,7 @@ const Sidebar = ({ hide }) => {
     console.log('click', e);
     navigate(e.key);
   };
+  const typeDate = window.location.pathname;
   return (
     <>
       <div className="div-logo">
@@ -34,7 +35,7 @@ const Sidebar = ({ hide }) => {
       <div className="demo-logo-vertical" />
       <Menu
         onClick={onClick}
-        defaultSelectedKeys={[router[0].key]}
+        defaultSelectedKeys={[typeDate]}
         mode="inline"
         theme="light"
         items={router}
