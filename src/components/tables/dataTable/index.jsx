@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import i18n from "../../../i18n";
-import { Dropdown, Pagination, Space, Table } from "antd";
+import { Dropdown, Pagination, Space, Table, Tooltip } from "antd";
 import { StarFilled } from "@ant-design/icons";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import { Link } from "react-router-dom";
@@ -22,6 +22,10 @@ import platinum from "../../../assets/images/iconPlatinum.svg";
 import silver from "../../../assets/images/iconSilver.svg";
 import LoadingPagination from "../../../components/paginationLoading";
 import { useNavigate } from "react-router-dom";
+import SelectCustomTagRender from "../../Select/SelectCustomTagRender"
+import SelectDefault from "../../Select/SelectDefault"
+import { OPTIONS_SELECT_STATUS_HANDLE_REVIEW } from "../../../@core/constant/constant"
+
 
 const DataTable = (props) => {
     const {
@@ -76,25 +80,41 @@ const DataTable = (props) => {
     const HeaderTitle = (title) => {
         return (
             <React.Fragment>
-            <p className="title-column">{title}</p>
+                <p className="title-column">{title}</p>
             </React.Fragment>
         )
     }
 
+    const onChangeValue = (item, dataIndex, value) => {
+
+        // item: phan tu trong mang data
+        // dataIndex: ten field thay doi
+        // value: gia tri moi da thay doi
+
+        if (props.onChangeValue) {
+            const data = {
+                item,
+                dataIndex,
+                value
+            }
+            props.onChangeValue(data);
+        }
+    }
+
 
     for (const item of columns) {
-        const title = (item.i18n_title) ? i18n.t(`${item.i18n_title}`, {lng: lang}) : item.title;
+        const title = (item.i18n_title) ? i18n.t(`${item.i18n_title}`, { lng: lang }) : item.title;
 
 
         const temp: any = {
             title: () => {
 
-                if(item.customTitle) {
+                if (item.customTitle) {
                     return item.customTitle
                 } else {
                     return (
                         <>
-                        <p className={`title-column ${item?.fontSize}`}>{title}</p>
+                            <p className={`title-column ${item?.fontSize}`}>{title}</p>
                         </>
                     )
                 }
@@ -157,16 +177,18 @@ const DataTable = (props) => {
                         break;
                     case "customer-name-phone":
                         return (
-                            <Link to={`/profile-customer/${data?.id_customer?._id}`}>
-                                <div className="div-customer-name-phone">
+                            <div className="div-customer-name-phone">
+                                <Link to={`/profile-customer/${data?.id_customer?._id}`}>
+
                                     <p className={`text-name-customer ${item?.fontSize}`}>
                                         {data?.id_customer?.full_name || data?.full_name}
                                     </p>
-                                    <p className={`text-phone-customer ${item?.fontSize}`}>
-                                        {data?.id_customer?.phone || data?.phone}
-                                    </p>
-                                </div>
-                            </Link>
+                                </Link>
+
+                                <p className={`text-phone-customer ${item?.fontSize}`}>
+                                    {data?.id_customer?.phone || data?.phone}
+                                </p>
+                            </div>
                         );
                         break;
                     case "service":
@@ -210,15 +232,16 @@ const DataTable = (props) => {
                                             lng: lang,
                                         })}`}</p>
                                     ) : (
-                                        <Link
-                                            to={`/details-collaborator/${data?.id_collaborator?._id}`}
-                                            className="div-name-star"
-                                        >
-                                            <div className="div-name">
-                                                <p className={`${item?.fontSize}`}>
-                                                    {data?.id_collaborator?.full_name}
-                                                </p>
-                                            </div>
+                                        <>
+                                            <Link
+                                                to={`/details-collaborator/${data?.id_collaborator?._id}`}
+                                                className="div-name-star"
+                                            >
+                                                <div className="div-name">
+                                                    <p className={`${item?.fontSize}`}>
+                                                        {data?.id_collaborator?.full_name}
+                                                    </p>
+                                                </div>
                                             <div className="div-phone-star">
                                                 <p className={`${item?.fontSize}`}>{data?.id_collaborator?.phone}</p>
                                                 {data?.id_collaborator?.star && (
@@ -229,7 +252,8 @@ const DataTable = (props) => {
                                                     </div>
                                                 )}
                                             </div>
-                                        </Link>
+                                            </Link>
+                                        </>
                                     )}
                                 </div>
                             </>
@@ -426,12 +450,12 @@ const DataTable = (props) => {
                         break;
 
                     case "money": {
-                            return (
-                                <p className={`text-address-customer ${item?.fontSize}`}>
-                                    {formatMoney(data[item.dataIndex] || 0)}
-                                </p>
-                            )
-                            break;
+                        return (
+                            <p className={`text-address-customer ${item?.fontSize}`}>
+                                {formatMoney(data[item.dataIndex] || 0)}
+                            </p>
+                        )
+                        break;
                     }
                     case "percent": {
                         return (
@@ -462,14 +486,11 @@ const DataTable = (props) => {
                     }
                     case "id_view_group_report": {
                         return (
-
-
                             <Link to={`/details-order/${data?.id_group_order?._id}`}>
-                            <p className={`${item?.fontSize}`}>
-                              {data?.id_group_order?.id_view}
-                            </p>
-                          </Link>
-
+                                <p className={`${item?.fontSize}`}>
+                                    {data?.id_group_order?.id_view}
+                                </p>
+                            </Link>
                         )
                         break;
                     }
@@ -507,6 +528,55 @@ const DataTable = (props) => {
                         )
                         break;
                     }
+                    case "date_time": {
+                        return (
+                            <div className="div-date-create">
+                                <p className={`${item?.fontSize}`}>
+                                    {moment(new Date(data[item.dataIndex])).format("DD/MM/YYYY")}
+                                </p>
+                                <p className={`${item?.fontSize}`}>
+                                    {moment(new Date(data[item.dataIndex])).format("HH:mm")}
+                                </p>
+                            </div>
+                        )
+                        break;
+                    }
+                    case "select": {
+                        return (<>
+                            <SelectDefault
+                                className={`${item?.fontSize}`}
+                                onChange={(value) => {
+                                    return onChangeValue(data, item.dataIndex, value)
+                                }}
+                                value={data[item.dataIndex]}
+                                selectOptions={item.selectOptions} />
+                        </>)
+                        break
+                    }
+                    case "text": {
+                        let getDataView = data[item.dataIndex] || "";
+                        const indexSlice = getDataView.length - 75;
+                        const sliceData = (indexSlice > 0) ? getDataView.slice(0, 75) + "..." : getDataView;
+                        return (
+                            <>
+                                <span className={`${item?.fontSize}`}> {sliceData}</span>
+                                <Tooltip placement="leftTop" title={getDataView}>
+                                    {indexSlice > 0 ? (<span className={`div-more ${item?.fontSize}`}> Xem thêm</span>) : (<></>)}
+                                </Tooltip>
+                            </>
+                        )
+                        break;
+                    }
+                    case "status_handle_review": {
+                        const getItemStatus = OPTIONS_SELECT_STATUS_HANDLE_REVIEW.filter(a => a.value === data.status_handle_review);
+
+                        return (
+                            <div className={`current-status-handle ${getItemStatus[0]?.className}`} onClick={() => onChangeValue(item, "status_handle_review", getItemStatus[0].value)}>
+                                <p>{getItemStatus[0].label}</p>
+                            </div>
+                        )
+                        break;
+                    }
                     default: {
                         const dataView = data[item.dataIndex] || "";
                         return (
@@ -518,12 +588,12 @@ const DataTable = (props) => {
                 }
             },
             width: item.width || 100,
-            // sorter: (a, b) => {a[item.dataIndex] - b[item.dataIndex]},
-            // align: "center",
         };
         headerTable.push(temp)
         widthPage += Number(temp.width);
     }
+    // console.log("render Title");
+
     if (actionColumn) headerTable.push(actionColumn)
 
     const calculateCurrentPage = (event) => {
@@ -535,33 +605,17 @@ const DataTable = (props) => {
     }
 
     const toggleModal = (event) => {
-        if(props.onToggleModal) props.onToggleModal(true);
+        if (props.onToggleModal) props.onToggleModal(true);
     }
 
     const onSort = (typeSort, valueSort) => {
-        
+
     }
+
+    // console.log(headerTable, 'headerTable');
 
     return (
         <React.Fragment>
-
-            {/* <div className="mt-2 p-2 pagination">
-                <p>
-                    {`${i18n.t("total", { lng: lang })}`}: {totalItem}
-                </p>
-                <div>
-                    <Pagination
-                        current={currentPage}
-                        onChange={calculateCurrentPage}
-                        total={totalItem}
-                        showSizeChanger={false}
-                        pageSize={20}
-                        hideOnSinglePage={true}
-                    />
-                </div>
-            </div> */}
-
-
             <div className="mt-3">
                 <Table
                     columns={headerTable}

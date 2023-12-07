@@ -30,6 +30,9 @@ const RangeDatePicker = (props) => {
   const [open, setOpen] = useState(false);
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
+  const [startCalendar, setStartCalendar] = useState("")
+  const [endCalendar, setEndCalendar] = useState("")
+
   const [valueTab, setValueTab] = useState("");
   const [tabTime, setTabTime] = useState("day");
   const [title, setTitle] = useState("");
@@ -95,20 +98,23 @@ const RangeDatePicker = (props) => {
     setOpen(false);
     setStartDate(start.toISOString());
     setEndDate(end.toISOString());
-    // setValueTab(DATA_TAB[DATA_TAB.length - 1].value);
-
-    // onClick();
   };
 
   const handleCancel = () => {
     setOpen(false);
     onCancel();
-    setTitle();
+    // setTitle();
   };
 
 
   const onChange = (value, event) => {
 
+    console.log(value[0].toISOString(), "sssss");
+    console.log(value[1].toISOString(), "sssss");
+
+
+    setStartCalendar(value[0])
+    setEndCalendar(value[1])
 
 
     setStart(value[0]);
@@ -128,6 +134,9 @@ const RangeDatePicker = (props) => {
       const {startDate, endDate} = calculateRangeDate(item.range, item.type_range);
       setStart(startDate);
       setEnd(endDate);
+      setStartCalendar(new Date(startDate))
+      setEndCalendar(new Date(endDate))
+  
     }
   }
 
@@ -226,7 +235,7 @@ const RangeDatePicker = (props) => {
               ) : (
                 <Calendar
                   onChange={onChange}
-                  value={[start, end]}
+                  value={[startCalendar, endCalendar]}
                   selectRange={true}
                   view="month" 
                   className="calendar-picker"

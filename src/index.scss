@@ -113,3 +113,30 @@
 //         flex-direction: column;
 //     }
 //   }
+
+
+
+.ant-menu {
+    .ant-menu-item {
+        height: 50px;
+        padding-left: 10px !important;
+        .ant-menu-title-content {
+            font-family: $fontFamily;
+            font-style: $fontStyleNormal;
+            font-weight: $fontWeightXL;
+            font-size: $textFontSizeL;
+        }
+    }
+    .ant-menu-submenu {
+        .ant-menu-submenu-title {
+        padding-left: 10px !important;
+        height: 50px;
+            .ant-menu-title-content {
+                font-family: $fontFamily;
+                font-style: $fontStyleNormal;
+                font-weight: $fontWeightXL;
+                font-size: $textFontSizeL;
+            }
+        }
+    }
+}
