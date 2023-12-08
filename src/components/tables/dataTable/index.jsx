@@ -259,6 +259,37 @@ const DataTable = (props) => {
                             </>
                         )
                         break;
+                    case "collaborator_no_start":
+                        {
+                            return (
+                                <>
+                                    <div className="div-collaborator">
+                                        {!data?.id_collaborator ? (
+                                            <p className={`text-pending-search ${item?.fontSize}`}>{`${i18n.t("searching", {
+                                                lng: lang,
+                                            })}`}</p>
+                                        ) : (
+                                            <>
+                                                <Link
+                                                    to={`/details-collaborator/${data?.id_collaborator?._id}`}
+                                                    className="div-name-star"
+                                                >
+                                                    <div className="div-name">
+                                                        <p className={`${item?.fontSize}`}>
+                                                            {data?.id_collaborator?.full_name}
+                                                        </p>
+                                                    </div>
+                                                <div className="div-phone-star">
+                                                    <p className={`${item?.fontSize}`}>{data?.id_collaborator?.phone}</p>
+                                                </div>
+                                                </Link>
+                                            </>
+                                        )}
+                                    </div>
+                                </>
+                            )
+                            break;
+                        }
                     case "status":
                         return (
                             <div className="div-status-order">
@@ -568,19 +599,19 @@ const DataTable = (props) => {
                         break;
                     }
                     case "status_handle_review": {
-                        const getItemStatus = OPTIONS_SELECT_STATUS_HANDLE_REVIEW.filter(a => a.value === data.status_handle_review);
+                        const getItemStatus = item.selectOptions.filter(a => a.value === data[item.dataIndex]);
 
                         return (
-                            <div className={`current-status-handle ${getItemStatus[0]?.className}`} onClick={() => onChangeValue(item, "status_handle_review", getItemStatus[0].value)}>
+                            <div className={`current-status-handle ${getItemStatus[0]?.className}`} onClick={() => onChangeValue(item, item.dataIndex, getItemStatus[0].value)}>
                                 <p>{getItemStatus[0].label}</p>
                             </div>
                         )
                         break;
                     }
-                    case "code_order_start": {
+                    case "code_order_star": {
                             linkRedirect = `/details-order/${data?.id_group_order}`
                             return (
-                                <Link
+                                <Link className="code_order_star"
                                     onClick={() => saveToCookie("order_scrolly", scrollY)}
                                     to={linkRedirect}
                                 >

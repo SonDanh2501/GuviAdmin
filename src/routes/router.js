@@ -556,26 +556,26 @@ const IconCustom = ({icon}) => {
 
 
 const router = [
-  getItem('Tổng quan', '/', <IconCustom icon={home} />),
-  getItem('GUVIJOBS', '/group-order/manage-order', <IconCustom icon={bag} />),
-  getItem('Yêu cầu dịch vụ', '/system/request-service-manage', <IconCustom icon={request} />),
-  getItem('Khách hàng', '/system/user-manage', <IconCustom icon={customer} />),
-  getItem('Cộng tác viên', '/system/collaborator-manage', <IconCustom icon={collaborator} />),
-  getItem('Dịch vụ', '/services/manage-group-service/service', <IconCustom icon={service} />),
+  getItem('Tổng quan', '/', <IconCustom icon={home} />, null, "dashboard"),
+  getItem('GUVIJOBS', '/group-order/manage-order', <IconCustom icon={bag} />, null, "guvi_job"),
+  getItem('Yêu cầu dịch vụ', '/system/request-service-manage', <IconCustom icon={request} />, null, "request_service"),
+  getItem('Khách hàng', '/system/user-manage', <IconCustom icon={customer} />, null, "customer"),
+  getItem('Cộng tác viên', '/system/collaborator-manage', <IconCustom icon={collaborator} />, null, "collaborator"),
+  getItem('Dịch vụ', '/services/manage-group-service/service', <IconCustom icon={service} />, null, "service"),
   getItem('Marketing', 'sub1', <IconCustom icon={ticket} />, [
-    getItem('Khuyến mãi', '/promotion/manage-setting'),
-    getItem('Banner', '/promotion/manage-setting/banner'),
-    getItem('Bài viết', '/promotion/manage-setting/news'),
-  ]),
+    getItem('Khuyến mãi', '/promotion/manage-setting', null, null), "promotion",
+    getItem('Banner', '/promotion/manage-setting/banner', null, null, "promotion"),
+    getItem('Bài viết', '/promotion/manage-setting/news', null, null, "promotion"),
+  ], "promotion"),
   getItem('CSKH', '/feedback/manage-feedback', <IconCustom icon={like} />,[
-    getItem('Đánh giá CTV', '/customer-care/review-collaborator'),
-    getItem('Phản hồi', '/customer-care/feedback'),
-  ]),
-  getItem('Tài chính', '/finance/manage-finance', <IconCustom icon={finance} />),
-  getItem('Sổ quỹ', '/topup/manage-topup', <IconCustom icon={cards} />),
-  getItem('Báo cáo', '/report/manage-report', <IconCustom icon={document} />),
-  getItem('Thông báo', '/notification/manage-push-notification', <IconCustom icon={notification} />),
-  getItem('Cấu hình', '/adminManage/manage-configuration', <IconCustom icon={setting} />),
+    getItem('Đánh giá CTV', '/customer-care/review-collaborator', null, null, "support_customer"),
+    getItem('Phản hồi', '/customer-care/feedback', null, null, "support_customer"),
+  ], "support_customer"),
+  getItem('Tài chính', '/finance/manage-finance', <IconCustom icon={finance} />, null, "finance"),
+  getItem('Sổ quỹ', '/topup/manage-topup', <IconCustom icon={cards} />, null, "cash_book"),
+  getItem('Báo cáo', '/report/manage-report', <IconCustom icon={document} />, null, "report"),
+  getItem('Thông báo', '/notification/manage-push-notification', <IconCustom icon={notification} />, null, "notification"),
+  getItem('Cấu hình', '/adminManage/manage-configuration', <IconCustom icon={setting} />, null, "setting"),
 ];
 
 export default router;
