@@ -13,6 +13,7 @@ import {
   getLanguageState,
   getPermissionState,
 } from "../../redux/selectors/auth";
+import { useSelector } from "react-redux";
 import logo from "../../assets/images/LogoS.png";
 import router from "../../routes/router";
 import { Layout, Menu } from 'antd';
@@ -22,8 +23,20 @@ const { Header, Sider, Content } = Layout;
 
 const Sidebar = ({ hide }) => {
   const navigate = useNavigate();
+  const checkElement = useSelector(getElementState);
+  const permission = useSelector(getPermissionState);
+
+  let menuItem = []
+  for(const item of router) {
+    const havePermission = permission.filter(x => x.id_side_bar === item.type)
+    if(havePermission.length > 0) {
+      menuItem.push(item)
+    }
+  }
+
+
+
   const onClick: MenuProps['onClick'] = (e) => {
-    console.log('click', e);
     navigate(e.key);
   };
   const typeDate = window.location.pathname;
@@ -38,7 +51,7 @@ const Sidebar = ({ hide }) => {
         defaultSelectedKeys={[typeDate]}
         mode="inline"
         theme="light"
-        items={router}
+        items={menuItem}
         style={{ height: "100%" }}
       />
     </>

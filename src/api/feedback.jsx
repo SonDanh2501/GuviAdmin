@@ -59,3 +59,11 @@ export const getFeedback = (search, start, length) => {
     `/admin/feedback_manager/get_list?search=${search}&start=${start}&length=${length}`
   );
 };
+
+
+export const updateProcessHandleFeedback = (idFeedback, payload) => {
+  return axiosClient.post(
+    `/admin/feedback_manager/update_process_handle_feedback/${idFeedback}`,
+    payload
+  )
+}
