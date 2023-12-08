@@ -58,12 +58,15 @@ const ReviewCollaborator = () => {
     const res = await getDataReviewCollaborator(startPage, lengthPage, startDate, endDate);
     const clearData = [];
     for (let i = 0; i < res.data.length; i++) {
-      // res.data[i]["service_title"] = (res.data[i].service._id.title.vi === "Vệ sinh Rèm - Thảm - Sofa") ? "Rèm, Thảm, Sofa" : res.data[i].service._id.title.vi;
+      res.data[i]["service_title"] = (res.data[i].service._id._id === "654dd5598b3f1a21b7011e3f") ? "Rèm - Thảm - Sofa" : res.data[i].service._id.title.vi;
 
-      res.data[i]["service_title"] = res.data[i].service._id.title.vi
+      // res.data[i]["service_title"] = res.data[i].service._id.title.vi
+
 
       res.data[i]["short_review"] = res.data[i].short_review.toString();
       res.data[i]["full_name_user_system_handle_review"] = (res.data[i].id_user_system_handle_review) ? res.data[i].id_user_system_handle_review.full_name : "";
+
+      // res.data[i]["name_service"] = res.data[i].service._id.title.vi
     }
     console.log(res?.data, 'res?.data');
     setData(res?.data);
@@ -76,16 +79,7 @@ const ReviewCollaborator = () => {
 
   const onChangePropsValue = async (props) => {
     if(props.dataIndex === "status_handle_review") {
-      console.log("check");
       setModal("update_handle_review");
-
-      // const payload = {
-      //   id_order: props.item._id,
-      //   status_handle_review: props.value,
-      //   note_admin: props.item.note_admin
-      // }
-      // await updateProcessHandleReview(payload)
-      // getReviewCollaborator()
     }
   }
 
@@ -109,16 +103,16 @@ const ReviewCollaborator = () => {
   const columns = [
     {
       // i18n_title: 'date_create',
-      title: 'Ngày đánh giá',
+      title: 'Ngày',
       dataIndex: 'date_create_review',
       key: "date_time",
-      width: 125,
+      width: 100,
       fontSize: "text-size-M"
     },
     {
-      title: "Mã đơn",
+      title: "Đơn hàng",
       dataIndex: 'id_view',
-      key: "code_order_start",
+      key: "code_order_name_service",
       width: 140,
       fontSize: "text-size-M"
     },
@@ -130,10 +124,10 @@ const ReviewCollaborator = () => {
       fontSize: "text-size-M"
     },
     {
-      title: 'Dịch vụ',
+      title: 'Đánh giá sao',
       dataIndex: 'service_title',
-      key: "text",
-      width: 100,
+      key: "id_view_name_service",
+      width: 140,
       maxLength: 20,
       fontSize: "text-size-M"
     },
@@ -141,8 +135,8 @@ const ReviewCollaborator = () => {
       // i18n_title: 'customer',
       title: 'Cộng tác viên',
       dataIndex: 'id_collaborator',
-      key: "collaborator",
-      width: 140,
+      key: "collaborator_no_star",
+      width: 150,
       fontSize: "text-size-M"
     },
     {
@@ -206,18 +200,6 @@ const ReviewCollaborator = () => {
   ]
 
   items = items.filter(x => x.label !== false);
-
-  // let items = [
-  //   {
-  //     key: "0",
-  //     label: <p className="m-0" onClick={()=>showModal("delete")}>{`${i18n.t("delete", { lng: lang })}`}</p>
-  //   },
-  //   {
-  //     key: "1",
-  //     label: <p className="m-0" onClick={() =>showModal("update_handle_review")}>Cập nhật ghi chú</p>
-  //   }
-  // ]
-
 
   const addActionColumn = {
     i18n_title: '',

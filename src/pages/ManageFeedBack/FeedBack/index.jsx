@@ -15,11 +15,13 @@ import {
   getFeedbacks,
   getFeedbackTotal,
 } from "../../../redux/selectors/feedback";
-import { getFeedback, deleteFeedbackApi} from "../../../api/feedback"
+import { getFeedback, deleteFeedbackApi, updateProcessHandleFeedback } from "../../../api/feedback"
 import "./index.scss";
 import _debounce from "lodash/debounce";
 import DataTable from "../../../components/tables/dataTable"
 import ModalCustom from "../../../components/modalCustom";
+import ModalNoteAdmin from "./components/NoteAdminModal"
+import {OPTIONS_SELECT_STATUS_HANDLE_FEEDBACK} from "../../../@core/constant/constant"
 
 import i18n from "../../../i18n";
 
@@ -56,10 +58,21 @@ const Feedback = () => {
 
     for (let i = 0; i < res.data.length; i++) {
       res.data[i]["type_name_feedback"] = (res.data[i].type.name) ? res.data[i].type.name[lang] : "";
+      res.data[i]["full_name_user_system_handle"] = (res.data[i].id_user_system_handle) ? res.data[i].id_user_system_handle.full_name : "";
     }
 
     setData(res?.data);
     setTotalItem(res?.totalItem);
+  }
+
+  const processHandleFeedback = async (dataChange) => {
+    const payload = {
+      note_handle_admin: dataChange.note_handle_admin,
+      status_handle: dataChange.status_handle
+    }
+    await updateProcessHandleFeedback(item._id, payload)
+    getDataFeedback()
+    setModal("");
   }
 
 
@@ -67,8 +80,6 @@ const Feedback = () => {
     setStart(value)
   }
 
-  const onChangePropsValue = async (props) => {
-  }
     
   const columns = [
     {
@@ -81,29 +92,41 @@ const Feedback = () => {
       title: "Loại phản hồi",
       dataIndex: 'type_name_feedback',
       key: "text",
-      width: 140,
+      width: 120,
     },
     {
       i18n_title: 'customer',
       dataIndex: 'customer',
       key: "customer-name-phone",
-      width: 120,
-      fontSize: "text-size-M"
+      width: 130,
     },
     {
       title: "Nội dung",
       dataIndex: 'body',
       key: "text",
-      width: 300,
+      maxLength: 85,
+      width: 250
+    },
+    {
+      i18n_title: 'status',
+      dataIndex: 'status_handle',
+      key: "status_handle_review",
+      selectOptions: OPTIONS_SELECT_STATUS_HANDLE_FEEDBACK,
+      width: 150
+    },
+    {
+      title: 'NV liên hệ',
+      dataIndex: "full_name_user_system_handle",
+      key: "text",
+      width: 110
+    },
+    {
+      i18n_title: 'note',
+      dataIndex: 'note_handle_admin',
+      key: "text",
+      maxLength: 85,
+      width: 250
     }
-    // {
-    //   title: "Người phản hồi",
-    //   dataIndex: 'id_view',
-    //   key: "code_order",
-    //   width: 140,
-    // },
-
-
   ]
 
 
@@ -116,8 +139,8 @@ const Feedback = () => {
   let items = [
     {
       key: "0",
-      label: checkElement?.includes("delete_feedback_support_customer") &&
-        (<p className="m-0" onClick={()=>showModal("delete")}>{`${i18n.t("delete", { lng: lang })}`}</p>)
+      label: checkElement?.includes("delete_request_service") &&
+        (<p className="m-0" onClick={() =>showModal("update_handle_feedback")}>Cập nhật ghi chú</p>)
     }
   ]
 
@@ -147,6 +170,14 @@ const Feedback = () => {
     getDataFeedback();
     showModal("")
   }
+
+  const onChangePropsValue = async (props) => {
+    if(props.dataIndex === "status_handle") {
+      setModal("update_handle_feedback");
+    }
+  }
+
+
 
     
   return (
@@ -235,6 +266,7 @@ const Feedback = () => {
             }
           />
 
+<ModalNoteAdmin isShow={(modal === "update_handle_feedback") ? true : false} item={item} handleOk={(payload) => processHandleFeedback(payload)} handleCancel={setModal}/>
 
     </React.Fragment>
   );

@@ -259,7 +259,7 @@ const DataTable = (props) => {
                             </>
                         )
                         break;
-                    case "collaborator_no_start":
+                    case "collaborator_no_star":
                         {
                             return (
                                 <>
@@ -608,22 +608,40 @@ const DataTable = (props) => {
                         )
                         break;
                     }
-                    case "code_order_star": {
+                    case "code_order_name_service": {
                             linkRedirect = `/details-order/${data?.id_group_order}`
                             return (
-                                <Link className="code_order_star"
+                                <>
+                                                                <Link className="code_order_star"
                                     onClick={() => saveToCookie("order_scrolly", scrollY)}
                                     to={linkRedirect}
                                 >
                                     <p className={`text-id-code-order ${item?.fontSize}`}>{data?.id_view}</p>
-                                    <Rate
-                                        value={data?.star}
-                                        style={{ width: "100%" }}
-                                        disabled={true}
-                                    />
                                 </Link>
+
+                                    <p className={` ${item?.fontSize}`}>{data?.service_title}</p>
+                                </>
+
+
                             )
                             break;
+                    }
+                    case "id_view_name_service": {
+                        linkRedirect = `/details-order/${data?.id_group_order}`
+                        return (
+                            <Link className="id_order_start"
+                                onClick={() => saveToCookie("order_scrolly", scrollY)}
+                                to={linkRedirect}
+                            >
+                                {/* <p className={`text-id-code-order ${item?.fontSize}`}>{data?.service_title}</p> */}
+                                <Rate
+                                    value={data?.star}
+                                    style={{ width: "100%" }}
+                                    disabled={true}
+                                />
+                            </Link>
+                        )
+                        break;
                     }
                     default: {
                         const dataView = data[item.dataIndex] || "";
