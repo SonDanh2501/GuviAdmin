@@ -19,14 +19,14 @@ const Profiles = () => {
   const [activeKey, setActiceKey] = useState("1");
   const lang = useSelector(getLanguageState);
 
-  useEffect(() => {
-    setActiceKey(
-      readCookie("tab-detail-kh") === "" ? "1" : readCookie("tab-detail-kh")
-    );
-  }, [readCookie]);
+  // useEffect(() => {
+  //   setActiceKey(
+  //     readCookie("tab-detail-kh") === "" ? "1" : readCookie("tab-detail-kh")
+  //   );
+  // }, [readCookie]);
 
   const onChangeTab = (key) => {
-    saveToCookie("tab-detail-kh", key);
+    // saveToCookie("tab-detail-kh", key);
     setActiceKey(key);
   };
   return (
