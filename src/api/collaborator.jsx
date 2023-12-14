@@ -4,14 +4,14 @@ export const createCollaborator = (payload) => {
 };
 export const fetchCollaborators = (
   lang,
+  search,
   start,
   length,
   type,
-  payload,
   city
 ) => {
   return axiosClient.get(
-    `/admin/collaborator_manager/get_collaborator_by_type?lang=${lang}&start=${start}&length=${length}&collaborator_type=${type}&search=${payload}&city=${city}`
+    `/admin/collaborator_manager/get_collaborator_by_type?lang=${lang}&start=${start}&length=${length}&collaborator_type=${type}&search=${search}&city=${city}`
   );
 };
 
@@ -37,10 +37,9 @@ export const activeCollaborator = (id, payload) => {
     payload
   );
 };
-export const deleteCollaborator = (id, payload) => {
+export const deleteCollaborator = (id) => {
   return axiosClient.post(
-    `/admin/collaborator_manager/delete_item/${id}`,
-    payload
+    `/admin/collaborator_manager/delete_item/${id}`
   );
 };
 

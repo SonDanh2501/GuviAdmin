@@ -290,6 +290,59 @@ const DataTable = (props) => {
                             )
                             break;
                         }
+                    case "collaborator_name_phone_avatar": {
+                        return (
+                            <>
+                                <div className="div-collaborator-avatar">
+                                    <div className="div-avatar ">
+                                        <img class="ant-image-img img_collaborator css-2q8sxy" src={data?.avatar}></img>
+                                    </div>
+
+
+                                    <div  className="div-name-star">
+                                        <Link
+                                            to={`/details-collaborator/${data?._id}`}
+                                           
+                                        >
+                                            <p className={`${item?.fontSize}`}>
+                                                {data.full_name}
+                                            </p>
+                                            </Link>
+                                            <div className="div-phone-star">
+                                                <p className={`${item?.fontSize}`}>{data?.phone}</p>
+                                                {data?.star && (
+                                                    <div className="div-star">
+                                                        <StarFilled className="icon-star" />
+                                                        <p className={`text-star ${item?.fontSize}`}>{data?.star}</p>
+
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                {/* <div className="div-collaborator">
+                                    <Link
+                                        to={`/details-collaborator/${data?._id}`}
+                                        className="div-name-star"
+                                    >
+
+
+                                        <div className="div-name">
+
+                                        </div>
+                                        <div className="div-phone-star">
+                                            <p className={`${item?.fontSize}`}>{data?.phone}</p>
+                                        </div>
+                                    </Link>
+                                </div> */}
+                            </>
+                        )
+                        break;
+                    }
                     case "status":
                         return (
                             <div className="div-status-order">
@@ -640,6 +693,23 @@ const DataTable = (props) => {
                                     disabled={true}
                                 />
                             </Link>
+                        )
+                        break;
+                    }
+                    case "status_handle_collaborator": {
+                        const getItemStatus = item.selectOptions.filter(a => a.value === data[item.dataIndex]);
+
+                        return (
+                            <div className={`current-status-handle ${getItemStatus[0]?.className}`} onClick={() => onChangeValue(item, item.dataIndex, getItemStatus[0].value)}>
+                                <p>{getItemStatus[0].label}</p>
+                            </div>
+                        )
+                        break;
+                    }
+                    case "number": {
+                        const dataView = data[item.dataIndex] || 0;
+                        return (
+                            <p className={`${item?.fontSize}`}> {dataView}</p>
                         )
                         break;
                     }

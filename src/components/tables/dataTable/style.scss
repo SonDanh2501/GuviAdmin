@@ -113,6 +113,52 @@ span {
       }
     }
   }
+
+
+}
+
+.div-collaborator-avatar {
+  display: flex;
+  flex-direction: row;
+  .div-avatar {
+    margin-right: 10px;
+    img {
+      width: 50px;
+    }
+  }
+
+  .div-name-star {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+      p {
+        text-decoration-line: underline;
+        color: $color1;
+        margin: 0;
+      }
+    .div-phone-star {
+      display: flex;
+      p {
+        color: $colorBlack;
+        text-decoration-line: unset !important;
+      }
+      .div-star {
+        display: flex;
+        flex-direction: row;
+        margin-left: 15px;
+        .text-star {
+          color: $colorBlack;
+          text-decoration: none;
+          margin: 0px 0px 0px 5px;
+        }
+        .icon-star {
+          color: #f2cc0e;
+          margin: auto;
+        }
+      }
+    }
+  }
+  
 }
 
 .div-status-order {
