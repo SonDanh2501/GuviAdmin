@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { Drawer, Layout, Menu, Button, theme } from "antd";
+import { Drawer, Layout, Menu, Button, theme, FloatButton } from "antd";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -110,6 +110,8 @@ const Main = ({ hide }) => {
               overflow: "initial",
             }}
           >
+        <FloatButton.BackTop />
+
             <Admin />
           </Content>
         </Layout>

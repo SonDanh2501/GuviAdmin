@@ -86,7 +86,8 @@ import BannerManage from "../container/System/ManageSetting/ManageBanner/BannerM
 import NewsManage from "../container/System/ManageSetting/ManageNews/NewsManage";
 import ManageTopup from "../container/System/ManageTopup";
 import DetailReward from "../container/System/ManageTopup/ManageTopupCollaborator/Reward/DetailReward";
-import ManageCollaborator from "../container/System/ManageUser/Collaborator";
+// import ManageCollaborator from "../container/System/ManageUser/Collaborator";
+import ManageCollaborator from "../pages/ManageCollaborator";
 import ProfileCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/ProfileCollaborator";
 import DetailActivityCollaborator from "../container/System/ManageUser/Collaborator/ProfilesCollaborator/components/DetailActivity";
 import ManageCustomer from "../container/System/ManageCustomer";

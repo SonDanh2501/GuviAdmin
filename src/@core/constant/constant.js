@@ -59,3 +59,38 @@ export const OPTIONS_SELECT_STATUS_HANDLE_FEEDBACK = [
         className: 'status-done'
     }
 ]
+
+
+export const OPTIONS_SELECT_STATUS_COLLABORATOR = [
+    {
+        label: "Chưa xử lý",
+        value: "pending",
+        color: color1,
+        className: 'status-pending',
+        disableSelect: true,
+    },
+    {
+        label: "Đã liên hệ",
+        value: "contacted",
+        color: color2,
+        className: 'status-processing'
+    },
+    // {
+    //     label: "Chưa xác thực",
+    //     value: "not_verify",
+    //     color: color1,
+    //     className: 'status-not-contact'
+    // },
+    {
+        label: "Đang hoạt động",
+        value: "online",
+        color: color3,
+        className: 'status-done'
+    },
+    {
+        label: "Đã khoá",
+        value: "lock",
+        color: color1,
+        className: 'status-not-contact'
+    }
+]
