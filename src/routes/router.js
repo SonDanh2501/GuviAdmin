@@ -560,7 +560,14 @@ const router = [
   getItem('GUVIJOBS', '/group-order/manage-order', <IconCustom icon={bag} />, null, "guvi_job"),
   getItem('Yêu cầu dịch vụ', '/system/request-service-manage', <IconCustom icon={request} />, null, "request_service"),
   getItem('Khách hàng', '/system/user-manage', <IconCustom icon={customer} />, null, "customer"),
-  getItem('Cộng tác viên', '/system/collaborator-manage', <IconCustom icon={collaborator} />, null, "collaborator"),
+  // getItem('Cộng tác viên', '/system/collaborator-manage', <IconCustom icon={collaborator} />, null, "collaborator"),
+
+  getItem('Cộng tác viên', '/system/collaborator-manage', <IconCustom icon={collaborator} />, [
+    getItem('Đã xác thực', '/system/collaborator-verify-manage', null, null), "collaborator",
+    getItem('Đang chờ duyệt', '/system/collaborator-not-verify-manage', null, null), "collaborator",
+  ], "collaborator"),
+
+
   getItem('Dịch vụ', '/services/manage-group-service/service', <IconCustom icon={service} />, null, "service"),
   getItem('Marketing', 'sub1', <IconCustom icon={ticket} />, [
     getItem('Khuyến mãi', '/promotion/manage-setting', null, null), "promotion",

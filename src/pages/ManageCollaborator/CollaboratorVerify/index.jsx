@@ -10,46 +10,50 @@ import {
   Pagination
 } from "antd";
 import { useSelector } from "react-redux";
-import i18n from "../../i18n";
-import { useCookies } from "../../helper/useCookies";
-import useWindowDimensions from "../../helper/useWindowDimensions";
+import i18n from "../../../i18n";
+import { useCookies } from "../../../helper/useCookies";
+import useWindowDimensions from "../../../helper/useWindowDimensions";
 import "./index.scss";
 import {
   getElementState,
   getLanguageState,
   getUser
-} from "../../redux/selectors/auth";
-import { getProvince, getService } from "../../redux/selectors/service.js";
+} from "../../../redux/selectors/auth";
+import { getProvince, getService } from "../../../redux/selectors/service.js";
 
 import { 
   fetchCollaborators, 
   lockTimeCollaborator,
   verifyCollaborator,
   deleteCollaborator,
-  changeContactedCollaborator
- } from "../../api/collaborator"
-import DataTable from "../../components/tables/dataTable"
+  changeContactedCollaborator,
+  getTotalCollaboratorByStatus,
+  getListDataCollaborator,
+  updateStatusCollaborator
+ } from "../../../api/collaborator"
+import DataTable from "../../../components/tables/dataTable"
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import { useCallback, useEffect, useState } from "react";
 import _debounce from "lodash/debounce";
-import Tabs from "../../components/tabs/tabs1"
+import Tabs from "../../../components/tabs/tabs1"
 
-import ModalCustom from "../../components/modalCustom";
-import { errorNotify } from "../../helper/toast";
-import { OPTIONS_SELECT_STATUS_COLLABORATOR } from "../../@core/constant/constant.js";
-import ModalNoteAdmin from "./components/NoteAdminModal"
+import ModalCustom from "../../../components/modalCustom";
+import { errorNotify } from "../../../helper/toast";
+import { OPTIONS_SELECT_STATUS_COLLABORATOR_VERIFY } from "../../../@core/constant/constant.js";
+import ModalStatusNoteAdmin from "./components/NoteAdminModal"
 
-const ManageCollaborator = () => {
+const CollaboratorVerify = () => {
 
   const itemTabStatusCollaborator = [
     {
       label: "Tất cả",
-      value: "verify",
+      value: "actived,locked",
       key: 0,
+      dataIndexTotal: "all"
     },
     {
       label: "Đang hoạt động",
-      value: "online",
+      value: "actived",
       key: 1,
     },
     {
@@ -57,98 +61,9 @@ const ManageCollaborator = () => {
       value: "locked",
       key: 2,
     },
-    {
-      label: "Chưa xác thực",
-      value: "not_verify",
-      key: 3,
-    }
   ];
 
-  const columnsOnline = [
-    {
-      title: "Mã CTV",
-      dataIndex: 'id_view',
-      key: "other",
-      width: 85,
-      fontSize: "text-size-M"
-    },
-    // {
-    //   title: "Ngày tạo",
-    //   dataIndex: 'date_create',
-    //   key: "date_create",
-    //   width: 80,
-    //   fontSize: "text-size-M",
-    // },
-    {
-      title: "Cộng tác viên",
-      dataIndex: 'custom',
-      key: "collaborator_name_phone_avatar",
-      width: 150,
-      fontSize: "text-size-M"
-    },
-    // {
-    //     title: 'Ngày vào làm',
-    //     dataIndex: 'date_create',
-    //     key: "date_create",
-    //     width: 90
-    // },
-    {
-      title: 'Khu vực',
-      dataIndex: 'name_level_1',
-      key: "text",
-      width: 110,
-      fontSize: "text-size-M"
-    },
-    //   {
-    //     title: 'Nơi ở',
-    //     dataIndex: 'name_level_1',
-    //     key: "text",
-    //     width: 110
-    // },
-    {
-      title: 'Nhóm dịch vụ',
-      dataIndex: 'name_service_apply',
-      key: "text",
-      maxLength: 20,
-      width: 110,
-      fontSize: "text-size-M"
-    },
-    {
-      title: 'Tổng ca làm',
-      dataIndex: 'total_job',
-      key: "number",
-      width: 110,
-      fontSize: "text-size-M"
-    },
-    // {
-    //     title: 'Tỉ lệ đánh giá',
-    //     dataIndex: 'id_view',
-    //     key: "code_customer",
-    //     width: 110
-    // },
-    // {
-    //     title: 'Số đơn vi phạm',
-    //     dataIndex: 'id_view',
-    //     key: "code_customer",
-    //     width: 110
-    // },
-    // {
-    //     title: 'Hạng',
-    //     dataIndex: 'id_view',
-    //     key: "code_customer",
-    //     width: 110
-    // },
-    {
-      title: 'Trạng thái',
-      dataIndex: 'status_collaborator',
-      key: "status_handle_collaborator",
-      selectOptions: OPTIONS_SELECT_STATUS_COLLABORATOR,
-      width: 110,
-      fontSize: "text-size-M"
-    }
-  ]
-
-  const columnsNotVerify = [
+  const columns = [
     {
       title: "Mã CTV",
       dataIndex: 'id_view',
@@ -157,9 +72,9 @@ const ManageCollaborator = () => {
       fontSize: "text-size-M"
     },
     {
-      title: "Ngày tạo",
-      dataIndex: 'date_create',
-      key: "date_create",
+      title: "Ngày kích hoạt",
+      dataIndex: 'date_actived',
+      key: "hour_date",
       width: 80,
       fontSize: "text-size-M",
     },
@@ -170,12 +85,6 @@ const ManageCollaborator = () => {
       width: 150,
       fontSize: "text-size-M"
     },
-    // {
-    //     title: 'Ngày vào làm',
-    //     dataIndex: 'date_create',
-    //     key: "date_create",
-    //     width: 90
-    // },
     {
       title: 'Khu vực',
       dataIndex: 'name_level_1',
@@ -217,9 +126,10 @@ const ManageCollaborator = () => {
     // },
     {
       title: 'Trạng thái',
-      dataIndex: 'status_collaborator',
+      // dataIndex: 'status_collaborator',
+      dataIndex: 'status',
       key: "status_handle_collaborator",
-      selectOptions: OPTIONS_SELECT_STATUS_COLLABORATOR,
+      selectOptions: OPTIONS_SELECT_STATUS_COLLABORATOR_VERIFY,
       width: 110,
       fontSize: "text-size-M"
     }
@@ -246,6 +156,7 @@ const [modal, setModal] = useState("");
   const [detectLoading, setDetectLoading] = useState(null)
   const [saveToCookie, readCookie] = useCookies();
   const [selectStatus, setSelectStatus] = useState(["done", "doing", "confirm"])
+  const [totalItemOnTab, setTotalItemOnTab] = useState(null)
   const cityOptions = [
     {
       value: "",
@@ -286,7 +197,6 @@ const [modal, setModal] = useState("");
     },
   ];
 
-  const [columns, setColumns] = useState(columnsOnline)
 
   province?.forEach((item) => {
     if(item.code === 1 ||
@@ -314,7 +224,7 @@ const [modal, setModal] = useState("");
 
 
   const getListCollaborator = async () => {
-    const res = await fetchCollaborators(lang, valueSearch, startPage, lengthPage, tabStatus, city);
+    const res = await getListDataCollaborator(lang, valueSearch, startPage, lengthPage, city, tabStatus);
 
     for(let i = 0 ; i < res.data.length ; i++) {
       const tempCity = province.filter(x => x.code === res.data[i].city);
@@ -337,6 +247,15 @@ const [modal, setModal] = useState("");
       }
     }
 
+   const result = await getTotalCollaboratorByStatus(itemTabStatusCollaborator[0].value, valueSearch);
+   let tempPayload = {
+    all: 0
+   }
+   for(const item of result) {
+    tempPayload[item._id] = item.total
+    tempPayload.all += item.total
+   }
+   setTotalItemOnTab(tempPayload);
       setData(res?.data);
       setTotalItem(res?.totalItems);
   }
@@ -444,13 +363,6 @@ const [modal, setModal] = useState("");
     setStartPage(0);
     setDetectLoading(item)
 
-    if(item.value === "not_verify") {
-      setColumns(columnsNotVerify)
-    } else {
-      setColumns(columnsOnline)
-    }
-
-
     saveToCookie("tab-order", item?.key);
     saveToCookie("status-order", item?.value);
     saveToCookie("order_scrolly", 0);
@@ -465,7 +377,7 @@ const [modal, setModal] = useState("");
 
 
   const onChangePropsValue = async (props) => {
-    if(props.dataIndex === "status_collaborator") {
+    if(props.dataIndex === "status") {
       setModal("status_collaborator");
     }
   }
@@ -475,14 +387,9 @@ const [modal, setModal] = useState("");
 
     if(modal === "delete_collaborator") {
       await deleteCollaborator(dataChange._id)
-      getListCollaborator();
     } else {
-      switch (dataChange.status_collaborator) {
-        case "contacted": {
-          changeContactedCollaborator(dataChange._id);
-          break;
-        }
-        case "online": {
+      switch (dataChange.status) {
+        case "actived": {
           if(dataChange.is_locked === true) {
             const payload = {
               is_locked: false,
@@ -494,7 +401,7 @@ const [modal, setModal] = useState("");
           }
           break;
         }
-        case "lock": {
+        case "locked": {
           const payload = {
             is_locked: true,
             date_lock: dataChange.date_lock
@@ -504,7 +411,13 @@ const [modal, setModal] = useState("");
         }
         default: break;
       }
+      let payload = {
+        note_handle_admin: dataChange.note_handle_admin,
+        status: dataChange.status
+      };
+      await updateStatusCollaborator(dataChange._id, payload)
     }
+    getListCollaborator();
     setModal("");
   }
 
@@ -602,6 +515,7 @@ const [modal, setModal] = useState("");
           <Tabs
             itemTab={itemTabStatusCollaborator}
             onValueChangeTab={onChangeTab}
+            dataTotal={totalItemOnTab}
           />
         </div>
 
@@ -699,7 +613,7 @@ const [modal, setModal] = useState("");
         </div> */}
 
       </div>
-      <ModalNoteAdmin isShow={(modal === "status_collaborator") ? true : false} item={item} handleOk={(payload) => processHandle(payload)} handleCancel={setModal}/>
+      <ModalStatusNoteAdmin isShow={(modal === "status_collaborator") ? true : false} item={item} handleOk={(payload) => processHandle(payload)} handleCancel={setModal}/>
 
 
         <div>
@@ -723,4 +637,4 @@ const [modal, setModal] = useState("");
   )
 }
 
-export default ManageCollaborator;
+export default CollaboratorVerify;

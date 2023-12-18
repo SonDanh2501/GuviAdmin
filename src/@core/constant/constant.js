@@ -66,7 +66,7 @@ export const OPTIONS_SELECT_STATUS_COLLABORATOR = [
         label: "Chưa xử lý",
         value: "pending",
         color: color1,
-        className: 'status-pending',
+        className: 'status-not-process',
         disableSelect: true,
     },
     {
@@ -93,4 +93,59 @@ export const OPTIONS_SELECT_STATUS_COLLABORATOR = [
         color: color1,
         className: 'status-not-contact'
     }
+]
+
+export const OPTIONS_SELECT_STATUS_COLLABORATOR_VERIFY = [
+    {
+        label: "Đang hoạt động",
+        value: "actived",
+        color: color1,
+        className: 'status-done',
+    },
+    {
+        label: "Đã khoá",
+        value: "locked",
+        color: color1,
+        className: 'status-not-contact'
+    }
+]
+
+export const OPTIONS_SELECT_STATUS_COLLABORATOR_NOT_VERIFY = [
+    {
+        label: "Chưa xử lý",
+        value: "pending",
+        color: color1,
+        className: 'status-not-process',
+        disableSelect: true,
+    },
+    {
+        label: "Hoàn thành test",
+        value: "test_complete",
+        color: color1,
+        className: 'status-processing',
+    },
+    {
+        label: "Đã liên hệ",
+        value: "contacted",
+        color: color1,
+        className: 'status-processing',
+    },
+    {
+        label: "Hẹn phỏng vấn",
+        value: "interview",
+        color: color1,
+        className: 'status-processing',
+    },
+    {
+        label: "Từ chối",
+        value: "reject",
+        color: color1,
+        className: 'status-not-contact',
+    },
+    {
+        label: "Kích hoạt",
+        value: "actived",
+        color: color1,
+        className: 'status-done',
+    },
 ]

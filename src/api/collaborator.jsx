@@ -15,6 +15,19 @@ export const fetchCollaborators = (
   );
 };
 
+export const getListDataCollaborator = (
+  lang,
+  search,
+  start,
+  length,
+  city,
+  status
+) => {
+  return axiosClient.get(
+    `/admin/collaborator_manager/get_list?lang=${lang}&start=${start}&length=${length}&search=${search}&city=${city}&status=${status}`
+  );
+};
+
 export const getCollaboratorsById = (id) => {
   return axiosClient.get(`/admin/collaborator_manager/get_detail/${id}`);
 };
@@ -172,3 +185,17 @@ export const passInfoTestApi = (data) => {
     data
   );
 };
+
+export const updateStatusCollaborator = (idCollaborator, payload) => {
+  return axiosClient.post(
+    `/admin/collaborator_manager/update_status_collaborator/${idCollaborator}`,
+    payload
+  )
+}
+
+
+export const getTotalCollaboratorByStatus = (arrStatus, search) => {
+  return axiosClient.get(
+    `/admin/collaborator_manager/get_total_collaborator_by_status?arr_status=${arrStatus}&search=${search}`
+  )
+}
