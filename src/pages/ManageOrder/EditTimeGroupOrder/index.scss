@@ -1,0 +1,45 @@
+.select-date {
+  width: 100%;
+}
+
+.select-time {
+  font-size: 14px;
+  font-family: "Roboto";
+  color: rgb(59, 109, 184);
+  margin-bottom: 10px;
+  margin-left: 10px;
+  border: 1px solid rgb(59, 109, 184);
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.select-time-default {
+  font-size: 14px;
+  font-family: "Roboto";
+  color: rgb(171, 171, 171);
+  margin-bottom: 10px;
+  margin-left: 10px;
+  border: 1px solid rgb(182, 182, 182);
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.btn-update-time-order {
+  display: flex;
+  float: right;
+  margin-top: 20px;
+}
+
+.text-add {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #000000;
+}
+
+.div-check {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}

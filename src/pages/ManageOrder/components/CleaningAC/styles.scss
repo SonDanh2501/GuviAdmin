@@ -1,0 +1,450 @@
+.div-search-address {
+  display: flex;
+  flex-direction: column;
+
+  .input-search-address {
+    width: 50%;
+  }
+
+  .label-input {
+    font-size: 12px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    color: black;
+    margin: 0 0 2px 0;
+  }
+}
+
+.list-item-place {
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  position: absolute;
+  width: 40%;
+  border: 1px solid rgb(175, 175, 175);
+  border-radius: 5px;
+  z-index: 1000;
+  .div-item {
+    border-bottom: 1px solid #d6d6d6;
+    .item-option-place {
+      border-bottom: 1px silid #000000;
+      font-size: 14px;
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      color: black;
+      width: 100%;
+      margin: 0;
+    }
+  }
+}
+
+.list-item-address-customer {
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  width: 50%;
+  border: 1px solid rgb(231, 231, 231);
+  border-radius: 5px;
+
+  .div-item-address {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid rgb(209, 209, 209);
+
+    .div-name-address {
+      display: flex;
+      flex-direction: column;
+      margin-left: 10px;
+
+      .title-address {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
+      .title-details-address {
+        font-size: 12px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
+    }
+  }
+
+  .div-item-address-selected {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid rgb(209, 209, 209);
+    background-color: #f3f3f3;
+    border-radius: 4px;
+
+    .div-name-address {
+      display: flex;
+      flex-direction: column;
+      margin-left: 10px;
+
+      .title-address {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
+      .title-details-address {
+        font-size: 12px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
+    }
+  }
+}
+
+.form-picker {
+  display: flex;
+  flex-direction: column;
+
+  .label {
+    font-size: 14px !important;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    color: black;
+    margin-bottom: 10px;
+  }
+  .select-time {
+    width: 50%;
+  }
+}
+
+.form-picker-hours {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+
+  .label-hours {
+    font-size: 14px !important;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    color: black;
+    margin-bottom: 10px;
+    margin-top: 15px;
+    margin: 15px 0 10px 0;
+  }
+
+  .div-hours {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+
+    .select-time {
+      font-size: 14px;
+      font-family: "Roboto";
+      color: rgb(59, 109, 184);
+      margin-bottom: 10px;
+      margin-left: 10px;
+      border: 1px solid rgb(59, 109, 184);
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    .select-time-default {
+      font-size: 14px;
+      font-family: "Roboto";
+      color: rgb(171, 171, 171);
+      margin-bottom: 10px;
+      margin-left: 10px;
+      border: 1px solid rgb(182, 182, 182);
+      border-radius: 5px;
+      padding: 5px;
+    }
+  }
+}
+.input-form-select-payment {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+.input-form-note {
+  width: 50%;
+}
+.div-money {
+  display: flex;
+  flex-direction: column;
+  .label-tip {
+    font-size: 12px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    color: #000000;
+    margin: 0;
+  }
+
+  .input-note {
+    width: 50%;
+  }
+}
+.input-search-collaborator {
+  width: 50%;
+}
+.list-item-add-ctv-order {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  position: absolute;
+  width: 35%;
+  border: 1px solid rgb(175, 175, 175);
+  border-radius: 5px;
+
+  .div-item-add-order {
+    display: flex;
+    flex-direction: row !important;
+    align-items: center;
+    margin-top: 5px;
+    border: none;
+    background-color: rgb(255, 255, 255);
+    width: 95%;
+    height: 35px;
+
+    .div-name {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .img-collaborator {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+
+      .text-name {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
+    }
+  }
+
+  .div-item-add-order-block {
+    display: flex;
+    flex-direction: row !important;
+    align-items: center;
+    background-color: #d6d6d6;
+    border-radius: 4px;
+    border: none;
+    width: 95%;
+    margin-top: 10px;
+    padding: 5px;
+
+    .div-name {
+      display: flex;
+      flex-direction: row;
+      .img-collaborator {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+
+      .text-name {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
+    }
+  }
+
+  .div-item-add-order-favorite {
+    display: flex;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    border-radius: 4px;
+    border-bottom: 1px solid red;
+    border-top: 1px solid red;
+    border-left: none;
+    border-right: none;
+    width: 95%;
+    margin-top: 10px;
+    padding: 5px;
+
+    .div-name {
+      display: flex;
+      flex-direction: row;
+      .img-collaborator {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+
+      .text-name {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+      }
+    }
+
+    .icon-heart {
+      color: red;
+      margin-left: 50px;
+    }
+  }
+}
+.div-promotion {
+  display: flex;
+  flex-direction: row;
+  width: 60%;
+  flex-wrap: wrap;
+  .div-item-promotion {
+    margin-right: 20px;
+    border: 1px solid rgb(182, 182, 182);
+    height: 60px;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    justify-content: center;
+    padding-left: 8px;
+    margin-top: 10px;
+
+    .text-code-promotion {
+      font-size: 16px;
+      font-family: "Roboto";
+      font-weight: 500;
+      text-transform: uppercase;
+      color: #000000;
+      margin: 0;
+    }
+    .text-title-promotion {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 14px;
+      font-family: "Roboto";
+      font-weight: 200;
+      color: black;
+      margin-top: 5px;
+    }
+  }
+
+  .div-item-promotion-selected {
+    margin-right: 20px;
+    border: 1px solid rgb(182, 182, 182);
+    height: 60px;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    justify-content: center;
+    padding-left: 8px;
+    background-color: plum;
+
+    .text-code-promotion {
+      font-size: 16px;
+      font-family: "Roboto";
+      font-weight: 500;
+      color: black;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .text-title-promotion {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 14px;
+      font-family: "Roboto";
+      font-weight: 200;
+      color: black;
+      margin-top: 5px;
+    }
+  }
+}
+.div-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 50%;
+
+  .text-price {
+    font-size: 18px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 500;
+    color: black;
+    text-align: center;
+    margin: 0;
+  }
+}
+
+.div-add-service-ac {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+
+  .label-time {
+    font-size: 14px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    color: black;
+    margin: 0 0 10px 0;
+  }
+
+  .div-service-ac {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .div-item-service-ac {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      margin-bottom: 5px;
+      padding: 10px;
+
+      .text-title-ac {
+        font-size: 14px;
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        color: black;
+        margin: 0;
+      }
+
+      .div-count-service-ac {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100px;
+        background-color: #eeeeee;
+        padding: 0 10px;
+        border-radius: 4px;
+
+        .div-icon-plus-disable {
+          pointer-events: none;
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+}
