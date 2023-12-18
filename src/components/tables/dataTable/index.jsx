@@ -106,161 +106,126 @@ const DataTable = (props) => {
         const title = (item.i18n_title) ? i18n.t(`${item.i18n_title}`, { lng: lang }) : item.title;
 
 
-        const temp: any = {
-            title: () => {
-
-                if (item.customTitle) {
-                    return item.customTitle
-                } else {
-                    return (
-                        <>
-                            <p className={`title-column ${item?.fontSize}`}>{title}</p>
-                        </>
-                    )
-                }
-
-
-
-                // if (item.i18n_title) {
-                //     return (
-                //         <p className="title-column">{`${i18n.t(`${item.i18n_title}`, {
-                //             lng: lang,
-                //         })}`}</p>
-                //     );
-                // } else {
-                //     return (
-                //         <p className="title-column">{item.title}</p>
-                //     );
-                // }
-            },
-            render: (data, record, index) => {
-                let linkRedirect = `#`
-                switch (item.key) {
-                    case "id_view":
-                        return (
-                            <p>{data[item.dataIndex]}</p>
-                        )
-                        break;
-                    case "code_order":
-                        linkRedirect = `/details-order/${data?.id_group_order}`
-                        return (
-                            <Link
-                                onClick={() => saveToCookie("order_scrolly", scrollY)}
-                                to={linkRedirect}
-                            >
-                                <p className={`text-id-code-order ${item?.fontSize}`}>{data?.id_view}</p>
-                            </Link>
-                        )
-                        break;
-                    case "code_customer":
-                        linkRedirect = checkElement?.includes("detail_customer") ? `/profile-customer/${data?._id}` : ""
-                        return (
-                            <Link
-                                onClick={() => saveToCookie("order_scrolly", scrollY)}
-                                to={linkRedirect}
-                            >
-                                <p className={`text-id-code-customer ${item?.fontSize}`}>{data?.id_view}</p>
-                            </Link>
-                        )
-                        break;
-                    case "date_create":
-                        return (
-                            <div className="div-date-create">
-                                <p className={`${item?.fontSize}`}>
-                                    {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-                                </p>
-                                <p className={`${item?.fontSize}`}>
-                                    {moment(new Date(data?.date_create)).format("HH:mm")}
-                                </p>
-                            </div>
-                        )
-                        break;
-                    case "customer-name-phone":
-                        return (
-                            <div className="div-customer-name-phone">
-                                <Link to={`/profile-customer/${data?.id_customer?._id}`}>
-
-                                    <p className={`text-name-customer ${item?.fontSize}`}>
-                                        {data?.id_customer?.full_name || data?.full_name}
-                                    </p>
-                                </Link>
-
-                                <p className={`text-phone-customer ${item?.fontSize}`}>
-                                    {data?.id_customer?.phone || data?.phone}
-                                </p>
-                            </div>
-                        );
-                        break;
-                    case "service":
-                        return (
-                            <div>
-                                <p className={`${item?.fontSize}`}>
-                                    {data?.type === "loop" && data?.is_auto_order
-                                        ? `${i18n.t("repeat", { lng: lang })}`
-                                        : data?.service?._id?.kind === "giup_viec_theo_gio"
-                                            ? `${i18n.t("cleaning", { lng: lang })}`
-                                            : data?.service?._id?.kind === "giup_viec_co_dinh"
-                                                ? `${i18n.t("cleaning_subscription", { lng: lang })}`
-                                                : data?.service?._id?.kind === "phuc_vu_nha_hang"
-                                                    ? `${i18n.t("serve", { lng: lang })}`
-                                                    : data?.service?._id?.kind === "ve_sinh_may_lanh"
-                                                        ? `${i18n.t("Máy lạnh", { lng: lang })}`
-                                                        : ""}
-                                </p>
-                                <p className={`${item?.fontSize}`}>{timeWork(data)}</p>
-                            </div>
-                        );
-                        break;
-                    case "date_work":
-                        return (
-                            <div className="div-date-work">
-                                <p className={`text-worktime ${item?.fontSize}`}>
-                                    {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
-                                </p>
-                                <p className={`text-worktime ${item?.fontSize}`}>
-                                    {moment(new Date(data?.date_work)).locale(lang).format("dddd")}
-                                </p>
-                            </div>
-                        )
-                        break;
-                    case "collaborator":
+            const temp: any = {
+                title: () => {
+    
+                    if (item.customTitle) {
+                        return item.customTitle
+                    } else {
                         return (
                             <>
-                                <div className="div-collaborator">
-                                    {!data?.id_collaborator ? (
-                                        <p className={`text-pending-search ${item?.fontSize}`}>{`${i18n.t("searching", {
-                                            lng: lang,
-                                        })}`}</p>
-                                    ) : (
-                                        <>
-                                            <Link
-                                                to={`/details-collaborator/${data?.id_collaborator?._id}`}
-                                                className="div-name-star"
-                                            >
-                                                <div className="div-name">
-                                                    <p className={`${item?.fontSize}`}>
-                                                        {data?.id_collaborator?.full_name}
-                                                    </p>
-                                                </div>
-                                            <div className="div-phone-star">
-                                                <p className={`${item?.fontSize}`}>{data?.id_collaborator?.phone}</p>
-                                                {data?.id_collaborator?.star && (
-                                                    <div className="div-star">
-                                                        <StarFilled className="icon-star" />
-                                                        <p className={`text-star ${item?.fontSize}`}>{data?.id_collaborator?.star}</p>
-
-                                                    </div>
-                                                )}
-                                            </div>
-                                            </Link>
-                                        </>
-                                    )}
-                                </div>
+                                <p className={`title-column ${item?.fontSize}`}>{title}</p>
                             </>
                         )
-                        break;
-                    case "collaborator_no_star":
-                        {
+                    }
+    
+    
+    
+                    // if (item.i18n_title) {
+                    //     return (
+                    //         <p className="title-column">{`${i18n.t(`${item.i18n_title}`, {
+                    //             lng: lang,
+                    //         })}`}</p>
+                    //     );
+                    // } else {
+                    //     return (
+                    //         <p className="title-column">{item.title}</p>
+                    //     );
+                    // }
+                },
+                render: (data, record, index) => {
+                    let linkRedirect = `#`
+                    switch (item.key) {
+                        case "id_view":
+                            return (
+                                <p>{data[item.dataIndex]}</p>
+                            )
+                            break;
+                        case "code_order":
+                            linkRedirect = `/details-order/${data?.id_group_order}`
+                            return (
+                                <Link
+                                    onClick={() => saveToCookie("order_scrolly", scrollY)}
+                                    to={linkRedirect}
+                                >
+                                    <p className={`text-id-code-order ${item?.fontSize}`}>{data?.id_view}</p>
+                                </Link>
+                            )
+                            break;
+                        case "code_customer":
+                            linkRedirect = checkElement?.includes("detail_customer") ? `/profile-customer/${data?._id}` : ""
+                            return (
+                                <Link
+                                    onClick={() => saveToCookie("order_scrolly", scrollY)}
+                                    to={linkRedirect}
+                                >
+                                    <p className={`text-id-code-customer ${item?.fontSize}`}>{data?.id_view}</p>
+                                </Link>
+                            )
+                            break;
+                        case "date_create":
+                            return (
+                                <div className="div-date-create">
+                                    <p className={`${item?.fontSize}`}>
+                                        {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
+                                    </p>
+                                    <p className={`${item?.fontSize}`}>
+                                        {moment(new Date(data?.date_create)).format("HH:mm")}
+                                    </p>
+                                </div>
+                            )
+                            break;
+                        case "customer-name-phone":
+                            return (
+                                <div className="div-customer-name-phone">
+                                    <Link to={`/profile-customer/${data?.id_customer?._id}`}>
+    
+                                        <p className={`text-name-customer ${item?.fontSize}`}>
+                                            {data?.id_customer?.full_name || data?.full_name}
+                                        </p>
+                                    </Link>
+    
+                                    <p className={`text-phone-customer ${item?.fontSize}`}>
+                                        {data?.id_customer?.phone || data?.phone}
+                                    </p>
+                                </div>
+                            );
+                            break;
+                        case "service":
+                            return (
+                                <div>
+                                    <p className={`${item?.fontSize}`}>
+                                        {data?.type === "loop" && data?.is_auto_order
+                                            ? `${i18n.t("repeat", { lng: lang })}`
+                                            : data?.service?._id?.kind === "giup_viec_theo_gio"
+                                                ? `${i18n.t("cleaning", { lng: lang })}`
+                                                : data?.service?._id?.kind === "giup_viec_co_dinh"
+                                                    ? `${i18n.t("cleaning_subscription", { lng: lang })}`
+                                                    : data?.service?._id?.kind === "phuc_vu_nha_hang"
+                                                        ? `${i18n.t("serve", { lng: lang })}`
+                                                        : data?.service?._id?.kind === "ve_sinh_may_lanh"
+                                                            ? `${i18n.t("Máy lạnh", { lng: lang })}`
+                                                            : data?.service?._id?.kind === "rem_tham_sofa"
+                                                                ? `${i18n.t("Rèm - Thảm - Sofa", { lng: lang })}`
+                                                                : ""}
+                                    </p>
+                                    <p className={`${item?.fontSize}`}>{timeWork(data)}</p>
+                                </div>
+                            );
+                            break;
+                        case "date_work":
+                            return (
+                                <div className="div-date-work">
+                                    <p className={`text-worktime ${item?.fontSize}`}>
+                                        {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
+                                    </p>
+                                    <p className={`text-worktime ${item?.fontSize}`}>
+                                        {moment(new Date(data?.date_work)).locale(lang).format("dddd")}
+                                    </p>
+                                </div>
+                            )
+                            break;
+                        case "collaborator":
                             return (
                                 <>
                                     <div className="div-collaborator">
@@ -281,6 +246,13 @@ const DataTable = (props) => {
                                                     </div>
                                                 <div className="div-phone-star">
                                                     <p className={`${item?.fontSize}`}>{data?.id_collaborator?.phone}</p>
+                                                    {data?.id_collaborator?.star && (
+                                                        <div className="div-star">
+                                                            <StarFilled className="icon-star" />
+                                                            <p className={`text-star ${item?.fontSize}`}>{data?.id_collaborator?.star}</p>
+    
+                                                        </div>
+                                                    )}
                                                 </div>
                                                 </Link>
                                             </>
@@ -289,444 +261,493 @@ const DataTable = (props) => {
                                 </>
                             )
                             break;
-                        }
-                    case "collaborator_name_phone_avatar": {
-                        return (
-                            <>
-                                <div className="div-collaborator-avatar">
-                                    <div className="div-avatar ">
-                                        <img class="ant-image-img img_collaborator css-2q8sxy" src={data?.avatar}></img>
-                                    </div>
-
-
-                                    <div  className="div-name-star">
-                                        <Link
-                                            to={`/details-collaborator/${data?._id}`}
-                                           
-                                        >
-                                            <p className={`${item?.fontSize}`}>
-                                                {data.full_name}
-                                            </p>
-                                            </Link>
-                                            <div className="div-phone-star">
-                                                <p className={`${item?.fontSize}`}>{data?.phone}</p>
-                                                {data?.star && (
-                                                    <div className="div-star">
-                                                        <StarFilled className="icon-star" />
-                                                        <p className={`text-star ${item?.fontSize}`}>{data?.star}</p>
-
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                    </div>
-
-                                </div>
-
-
-                                {/* <div className="div-collaborator">
-                                    <Link
-                                        to={`/details-collaborator/${data?._id}`}
-                                        className="div-name-star"
-                                    >
-
-
-                                        <div className="div-name">
-
-                                        </div>
-                                        <div className="div-phone-star">
-                                            <p className={`${item?.fontSize}`}>{data?.phone}</p>
-                                        </div>
-                                    </Link>
-                                </div> */}
-                            </>
-                        )
-                        break;
-                    }
-                    case "status":
-                        return (
-                            <div className="div-status-order">
-                                <span
-                                    className={`text-star ${item?.fontSize} ${data?.status === "pending"
-                                        ? "text-status-pending"
-                                        : data?.status === "confirm"
-                                            ? "text-status-confirm"
-                                            : data?.status === "doing"
-                                                ? "text-status-doing"
-                                                : data?.status === "done"
-                                                    ? "text-status-done"
-                                                    : "text-status-cancel"
-                                        }`}
-                                >
-                                    {data?.status === "pending"
-                                        ? `${i18n.t("pending", { lng: lang })}`
-                                        : data?.status === "confirm"
-                                            ? `${i18n.t("confirm", { lng: lang })}`
-                                            : data?.status === "doing"
-                                                ? `${i18n.t("doing", { lng: lang })}`
-                                                : data?.status === "done"
-                                                    ? `${i18n.t("complete", { lng: lang })}`
-                                                    : `${i18n.t("cancel", { lng: lang })}`}
-                                </span>
-                            </div>
-
-                        )
-                        break;
-                    case "pay":
-                        return (
-                            <div className="div-payment">
-                                <p className={`text-payment-method ${item?.fontSize}`}>
-                                    {data?.payment_method === "cash"
-                                        ? `${i18n.t("cash", { lng: lang })}`
-                                        : data?.payment_method === "point"
-                                            ? `${i18n.t("wallet_gpay", { lng: lang })}`
-                                            : ""}
-                                </p>
-                                <p className={`text-payment-method ${item?.fontSize}`}>
-                                    {formatMoney(data?.final_fee)}
-                                </p>
-                            </div>
-                        )
-                        break;
-                    case "name_customer":
-                        return (
-                            <Link
-                                to={
-                                    checkElement?.includes("detail_customer")
-                                        ? `/profile-customer/${data?._id}`
-                                        : ""
-                                }
-                                className="name_customer"
-                            >
-                                <Image
-                                    preview={false}
-                                    src={
-                                        data?.rank_point < 100
-                                            ? member
-                                            : data?.rank_point >= 100 && data?.rank_point < 300
-                                                ? silver
-                                                : data?.rank_point >= 300 && data?.rank_point < 1500
-                                                    ? gold
-                                                    : platinum
-                                    }
-                                    style={{ width: 20, height: 20 }}
-                                />
-                                <span className={`text-name-customer ${item?.fontSize}`}> {data?.full_name}</span>
-                            </Link>
-                        )
-                        break;
-                    case "nearest_order":
-                        return (
-                            <>
-                                {data?.id_group_order ? (
-                                    <Link to={`/details-order/${data?.id_group_order}`}>
-                                        <p className={`text-id-code-order ${item?.fontSize}`}>{data?.id_view_group_order}</p>
-                                    </Link>
-                                ) : (
-                                    <p className={`${item?.fontSize}`}>{`${i18n.t("not_available", {
-                                        lng: lang,
-                                    })}`}</p>
-                                )}
-                            </>
-                        );
-                        break;
-                    case "address":
-                        const temp = item.dataIndex.split(".");
-                        let getData = data[temp[0]];
-                        for (let i = 1; i < temp.length; i++) {
-                            if (getData === undefined || getData === null) {
-                                getData = ""
-                                break;
-                            }
-                            getData = getData[temp[i]]
-                        }
-                        const indexSlice = getData.length - 75;
-                        const viewAddress = (indexSlice > 0) ? getData.slice(0, 75) + "..." : getData;
-                        return (
-                            <p className={`text-address-order ${item?.fontSize}`}>
-                                {getData !== "" ? viewAddress : `${i18n.t("not_available", { lng: lang })}`}
-                            </p>
-                        )
-                        break;
-                    case "phone_action_hide":
-                        const phone = data?.phone.slice(0, 7);
-                        return (
-                            <div className="hide-phone">
-                                <p className={`phone-text ${item?.fontSize}`}>
-                                    {rowIndex === index
-                                        ? hidePhone
-                                            ? data?.phone
-                                            : phone + "***"
-                                        : phone + "***"}
-                                </p>
-                                <p className="btn-eyes"
-                                    onClick={() => rowIndex === index ? setHidePhone(!hidePhone) : setHidePhone(!hidePhone)}>
-                                    {rowIndex === index ? (
-                                        hidePhone ? (
-                                            <i class="uil uil-eye"></i>
-                                        ) : (
-                                            <i class="uil uil-eye-slash"></i>
-                                        )
-                                    ) : (
-                                        <i class="uil uil-eye-slash"></i>
-                                    )}
-                                </p>
-                            </div>
-                        )
-                        break;
-                    case "total_order":
-                        return (
-                            <p className={`text-address-customer ${item?.fontSize}`}>
-                                {data[item.dataIndex] || 0}
-                            </p>
-                        )
-                        break;
-                    case "description_request":
-                        return (
-                            <p className={`text-address-customer ${item?.fontSize}`}>
-                                {data[item.dataIndex] || 0}
-                            </p>
-                        )
-                        break;
-                    case "status_request":
-                        return (
-                            <div className="status_request">
-                                {data?.status === "done" ? (
-                                    <p className={`text-contacted ${item?.fontSize}`}>
-                                        {`${i18n.t("contacted", { lng: lang })}`}
-                                    </p>
-                                ) : (
-                                    <div className="div-uncontact">
-                                        <p className="text-uncontact">{`${i18n.t("not_contacted", {
-                                            lng: lang,
-                                        })}`}</p>
-                                        {checkElement?.includes("contact_request_service") && (
-                                            <div className="btn-contacted-deep2" onClick={toggleModal} >
-                                                <p className="text-btn-contact">{`${i18n.t("contact", {
+                        case "collaborator_no_star":
+                            {
+                                return (
+                                    <>
+                                        <div className="div-collaborator">
+                                            {!data?.id_collaborator ? (
+                                                <p className={`text-pending-search ${item?.fontSize}`}>{`${i18n.t("searching", {
                                                     lng: lang,
                                                 })}`}</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        )
-                        break;
-                    case "user_contact":
-                        return (
-                            <>
-                                <div className="user_contact">
-                                    {data?.status === "done" ? (
-                                        <>
-                                            <p className={`text-user ${item?.fontSize}`}> {data?.full_name_admin}</p>
-                                            <p className={`${item?.fontSize}`}>
-                                                {moment(new Date(data?.date_admin_contact_create)).format("DD/MM/YYYY")}
-                                            </p>
-                                            <p className={`${item?.fontSize}`}>
-                                                {moment(new Date(data?.date_admin_contact_create)).format("HH:mm")}
-                                            </p>
-                                        </>
-                                    ) : (<></>)
-                                    }
-                                </div>
-                            </>
-                        )
-                        break;
-                    case "money": {
-                        return (
-                            <p className={`text-address-customer ${item?.fontSize}`}>
-                                {formatMoney(data[item.dataIndex] || 0)}
-                            </p>
-                        )
-                        break;
-                    }
-                    case "percent": {
-                        return (
-                            <p className={`text-address-customer ${item?.fontSize}`}>
-                                {data[item.dataIndex]} %
-                            </p>
-                        )
-                        break;
-                    }
-                    case "punish": {
-                        return (
-                            <p className={`text-user ${item?.fontSize}`}> {data?.punish}</p>
-                        )
-                        break;
-                    }
-                    case "date_hour": {
-                        return (
-                            <div className="div-date-create">
-                                <p className={`${item?.fontSize}`}>
-                                    {moment(new Date(data[item.dataIndex][0])).format("DD/MM/YYYY")}
-                                </p>
-                                <p className={`${item?.fontSize}`}>
-                                    {moment(new Date(data[item.dataIndex][0])).format("HH:mm")}
-                                </p>
-                            </div>
-                        )
-                        break;
-                    }
-                    case "id_view_group_report": {
-                        return (
-                            <Link to={`/details-order/${data?.id_group_order?._id}`}>
-                                <p className={`${item?.fontSize}`}>
-                                    {data?.id_group_order?.id_view}
-                                </p>
-                            </Link>
-                        )
-                        break;
-                    }
-                    case "id_date_work": {
-                        const dataView = data[item.dataIndex] || "";
-                        return (
-                            <p className={`${item?.fontSize}`}
-                                onClick={() =>
-                                    navigate(item.navigate, {
-                                        state: { date: data?._id },
-                                    })}
-                            > {dataView}</p>
-                        )
-                        break;
-                    }
-                    case "id_customer_report": {
-                        return (
-                            <p className={`${item?.fontSize}`}
-                                onClick={() =>
-                                    navigate(`/profile-customer/${data.id_customer._id}`, {
-                                        state: { date: data?._id },
-                                    })}
-                            > {data.id_customer.full_name}</p>
-                        )
-                        break;
-                    }
-                    case "id_collaborator": {
-                        return (
-                            <p className={`${item?.fontSize}`}
-                                onClick={() =>
-                                    navigate(`/report/manage-report/report-order-by-collaborator/${data.id_collaborator._id}`, {
-                                        state: { startDate: data?.start_date, endDate: data?.end_date, status: data.status },
-                                    })}
-                            > {data.id_collaborator.full_name}</p>
-                        )
-                        break;
-                    }
-                    case "date_time": {
-                        return (
-                            <div className="div-date-create">
-                                <p className={`${item?.fontSize}`}>
-                                    {moment(new Date(data[item.dataIndex])).format("DD/MM/YYYY")}
-                                </p>
-                                <p className={`${item?.fontSize}`}>
-                                    {moment(new Date(data[item.dataIndex])).format("HH:mm")}
-                                </p>
-                            </div>
-                        )
-                        break;
-                    }
-                    case "select": {
-                        return (<>
-                            <SelectDefault
-                                className={`${item?.fontSize}`}
-                                onChange={(value) => {
-                                    return onChangeValue(data, item.dataIndex, value)
-                                }}
-                                value={data[item.dataIndex]}
-                                selectOptions={item.selectOptions} />
-                        </>)
-                        break
-                    }
-                    case "text": {
-                        const max = item.maxLength || 75;
-                        let getDataView = data[item.dataIndex] || "";
-                        const indexSlice = getDataView.length - max;
-                        const sliceData = (indexSlice > 0) ? getDataView.slice(0, max) + "..." : getDataView;
-                        return (
-                            <>
-                                <Tooltip placement="leftTop" title={getDataView}>
-                                <span className={`${item?.fontSize}`}> {sliceData}</span>
-                                    {/* {indexSlice > 0 ? (<span className={`div-more ${item?.fontSize}`}> Xem thêm</span>) : (<></>)} */}
-                                </Tooltip>
-                            </>
-                        )
-                        break;
-                    }
-                    case "status_handle_review": {
-                        const getItemStatus = item.selectOptions.filter(a => a.value === data[item.dataIndex]);
-
-                        return (
-                            <div className={`current-status-handle ${getItemStatus[0]?.className}`} onClick={() => onChangeValue(item, item.dataIndex, getItemStatus[0].value)}>
-                                <p>{getItemStatus[0].label}</p>
-                            </div>
-                        )
-                        break;
-                    }
-                    case "code_order_name_service": {
-                            linkRedirect = `/details-order/${data?.id_group_order}`
+                                            ) : (
+                                                <>
+                                                    <Link
+                                                        to={`/details-collaborator/${data?.id_collaborator?._id}`}
+                                                        className="div-name-star"
+                                                    >
+                                                        <div className="div-name">
+                                                            <p className={`${item?.fontSize}`}>
+                                                                {data?.id_collaborator?.full_name}
+                                                            </p>
+                                                        </div>
+                                                    <div className="div-phone-star">
+                                                        <p className={`${item?.fontSize}`}>{data?.id_collaborator?.phone}</p>
+                                                    </div>
+                                                    </Link>
+                                                </>
+                                            )}
+                                        </div>
+                                    </>
+                                )
+                                break;
+                            }
+                        case "collaborator_name_phone_avatar": {
                             return (
                                 <>
-                                                                <Link className="code_order_star"
+                                    <div className="div-collaborator-avatar">
+                                        <div className="div-avatar ">
+                                            <img class="ant-image-img img_collaborator css-2q8sxy" src={data?.avatar}></img>
+                                        </div>
+    
+    
+                                        <div  className="div-name-star">
+                                            <Link
+                                                to={`/details-collaborator/${data?._id}`}
+                                               
+                                            >
+                                                <p className={`${item?.fontSize}`}>
+                                                    {data.full_name}
+                                                </p>
+                                                </Link>
+                                                <div className="div-phone-star">
+                                                    <p className={`${item?.fontSize}`}>{data?.phone}</p>
+                                                    {data?.star && (
+                                                        <div className="div-star">
+                                                            <StarFilled className="icon-star" />
+                                                            <p className={`text-star ${item?.fontSize}`}>{data?.star}</p>
+    
+                                                        </div>
+                                                    )}
+                                                </div>
+    
+                                        </div>
+    
+                                    </div>
+    
+    
+                                    {/* <div className="div-collaborator">
+                                        <Link
+                                            to={`/details-collaborator/${data?._id}`}
+                                            className="div-name-star"
+                                        >
+    
+    
+                                            <div className="div-name">
+    
+                                            </div>
+                                            <div className="div-phone-star">
+                                                <p className={`${item?.fontSize}`}>{data?.phone}</p>
+                                            </div>
+                                        </Link>
+                                    </div> */}
+                                </>
+                            )
+                            break;
+                        }
+                        case "status":
+                            return (
+                                <div className="div-status-order">
+                                    <span
+                                        className={`text-star ${item?.fontSize} ${data?.status === "pending"
+                                            ? "text-status-pending"
+                                            : data?.status === "confirm"
+                                                ? "text-status-confirm"
+                                                : data?.status === "doing"
+                                                    ? "text-status-doing"
+                                                    : data?.status === "done"
+                                                        ? "text-status-done"
+                                                        : "text-status-cancel"
+                                            }`}
+                                    >
+                                        {data?.status === "pending"
+                                            ? `${i18n.t("pending", { lng: lang })}`
+                                            : data?.status === "confirm"
+                                                ? `${i18n.t("confirm", { lng: lang })}`
+                                                : data?.status === "doing"
+                                                    ? `${i18n.t("doing", { lng: lang })}`
+                                                    : data?.status === "done"
+                                                        ? `${i18n.t("complete", { lng: lang })}`
+                                                        : `${i18n.t("cancel", { lng: lang })}`}
+                                    </span>
+                                </div>
+    
+                            )
+                            break;
+                        case "pay":
+                            return (
+                                <div className="div-payment">
+                                    <p className={`text-payment-method ${item?.fontSize}`}>
+                                        {data?.payment_method === "cash"
+                                            ? `${i18n.t("cash", { lng: lang })}`
+                                            : data?.payment_method === "point"
+                                                ? `${i18n.t("wallet_gpay", { lng: lang })}`
+                                                : ""}
+                                    </p>
+                                    <p className={`text-payment-method ${item?.fontSize}`}>
+                                        {formatMoney(data?.final_fee)}
+                                    </p>
+                                </div>
+                            )
+                            break;
+                        case "name_customer":
+                            return (
+                                <Link
+                                    to={
+                                        checkElement?.includes("detail_customer")
+                                            ? `/profile-customer/${data?._id}`
+                                            : ""
+                                    }
+                                    className="name_customer"
+                                >
+                                    <Image
+                                        preview={false}
+                                        src={
+                                            data?.rank_point < 100
+                                                ? member
+                                                : data?.rank_point >= 100 && data?.rank_point < 300
+                                                    ? silver
+                                                    : data?.rank_point >= 300 && data?.rank_point < 1500
+                                                        ? gold
+                                                        : platinum
+                                        }
+                                        style={{ width: 20, height: 20 }}
+                                    />
+                                    <span className={`text-name-customer ${item?.fontSize}`}> {data?.full_name}</span>
+                                </Link>
+                            )
+                            break;
+                        case "nearest_order":
+                            return (
+                                <>
+                                    {data?.id_group_order ? (
+                                        <Link to={`/details-order/${data?.id_group_order}`}>
+                                            <p className={`text-id-code-order ${item?.fontSize}`}>{data?.id_view_group_order}</p>
+                                        </Link>
+                                    ) : (
+                                        <p className={`${item?.fontSize}`}>{`${i18n.t("not_available", {
+                                            lng: lang,
+                                        })}`}</p>
+                                    )}
+                                </>
+                            );
+                            break;
+                        case "address":
+                            const temp = item.dataIndex.split(".");
+                            let getData = data[temp[0]];
+                            for (let i = 1; i < temp.length; i++) {
+                                if (getData === undefined || getData === null) {
+                                    getData = ""
+                                    break;
+                                }
+                                getData = getData[temp[i]]
+                            }
+                            const indexSlice = getData.length - 75;
+                            const viewAddress = (indexSlice > 0) ? getData.slice(0, 75) + "..." : getData;
+                            return (
+                                <p className={`text-address-order ${item?.fontSize}`}>
+                                    {getData !== "" ? viewAddress : `${i18n.t("not_available", { lng: lang })}`}
+                                </p>
+                            )
+                            break;
+                        case "phone_action_hide":
+                            const phone = data?.phone.slice(0, 7);
+                            return (
+                                <div className="hide-phone">
+                                    <p className={`phone-text ${item?.fontSize}`}>
+                                        {rowIndex === index
+                                            ? hidePhone
+                                                ? data?.phone
+                                                : phone + "***"
+                                            : phone + "***"}
+                                    </p>
+                                    <p className="btn-eyes"
+                                        onClick={() => rowIndex === index ? setHidePhone(!hidePhone) : setHidePhone(!hidePhone)}>
+                                        {rowIndex === index ? (
+                                            hidePhone ? (
+                                                <i class="uil uil-eye"></i>
+                                            ) : (
+                                                <i class="uil uil-eye-slash"></i>
+                                            )
+                                        ) : (
+                                            <i class="uil uil-eye-slash"></i>
+                                        )}
+                                    </p>
+                                </div>
+                            )
+                            break;
+                        case "total_order":
+                            return (
+                                <p className={`text-address-customer ${item?.fontSize}`}>
+                                    {data[item.dataIndex] || 0}
+                                </p>
+                            )
+                            break;
+                        case "description_request":
+                            return (
+                                <p className={`text-address-customer ${item?.fontSize}`}>
+                                    {data[item.dataIndex] || 0}
+                                </p>
+                            )
+                            break;
+                        case "status_request":
+                            return (
+                                <div className="status_request">
+                                    {data?.status === "done" ? (
+                                        <p className={`text-contacted ${item?.fontSize}`}>
+                                            {`${i18n.t("contacted", { lng: lang })}`}
+                                        </p>
+                                    ) : (
+                                        <div className="div-uncontact">
+                                            <p className="text-uncontact">{`${i18n.t("not_contacted", {
+                                                lng: lang,
+                                            })}`}</p>
+                                            {checkElement?.includes("contact_request_service") && (
+                                                <div className="btn-contacted-deep2" onClick={toggleModal} >
+                                                    <p className="text-btn-contact">{`${i18n.t("contact", {
+                                                        lng: lang,
+                                                    })}`}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            )
+                            break;
+                        case "user_contact":
+                            return (
+                                <>
+                                    <div className="user_contact">
+                                        {data?.status === "done" ? (
+                                            <>
+                                                <p className={`text-user ${item?.fontSize}`}> {data?.full_name_admin}</p>
+                                                <p className={`${item?.fontSize}`}>
+                                                    {moment(new Date(data?.date_admin_contact_create)).format("DD/MM/YYYY")}
+                                                </p>
+                                                <p className={`${item?.fontSize}`}>
+                                                    {moment(new Date(data?.date_admin_contact_create)).format("HH:mm")}
+                                                </p>
+                                            </>
+                                        ) : (<></>)
+                                        }
+                                    </div>
+                                </>
+                            )
+                            break;
+                        case "money": {
+                            return (
+                                <p className={`text-address-customer ${item?.fontSize}`}>
+                                    {formatMoney(data[item.dataIndex] || 0)}
+                                </p>
+                            )
+                            break;
+                        }
+                        case "percent": {
+                            return (
+                                <p className={`text-address-customer ${item?.fontSize}`}>
+                                    {data[item.dataIndex]} %
+                                </p>
+                            )
+                            break;
+                        }
+                        case "punish": {
+                            return (
+                                <p className={`text-user ${item?.fontSize}`}> {data?.punish}</p>
+                            )
+                            break;
+                        }
+                        case "date_hour": {
+                            return (
+                                <div className="div-date-create">
+                                    <p className={`${item?.fontSize}`}>
+                                        {moment(new Date(data[item.dataIndex][0])).format("DD/MM/YYYY")}
+                                    </p>
+                                    <p className={`${item?.fontSize}`}>
+                                        {moment(new Date(data[item.dataIndex][0])).format("HH:mm")}
+                                    </p>
+                                </div>
+                            )
+                            break;
+                        }
+                        case "id_view_group_report": {
+                            return (
+                                <Link to={`/details-order/${data?.id_group_order?._id}`}>
+                                    <p className={`${item?.fontSize}`}>
+                                        {data?.id_group_order?.id_view}
+                                    </p>
+                                </Link>
+                            )
+                            break;
+                        }
+                        case "id_date_work": {
+                            const dataView = data[item.dataIndex] || "";
+                            return (
+                                <p className={`${item?.fontSize}`}
+                                    onClick={() =>
+                                        navigate(item.navigate, {
+                                            state: { date: data?._id },
+                                        })}
+                                > {dataView}</p>
+                            )
+                            break;
+                        }
+                        case "id_customer_report": {
+                            return (
+                                <p className={`${item?.fontSize}`}
+                                    onClick={() =>
+                                        navigate(`/profile-customer/${data.id_customer._id}`, {
+                                            state: { date: data?._id },
+                                        })}
+                                > {data.id_customer.full_name}</p>
+                            )
+                            break;
+                        }
+                        case "id_collaborator": {
+                            return (
+                                <p className={`${item?.fontSize}`}
+                                    onClick={() =>
+                                        navigate(`/report/manage-report/report-order-by-collaborator/${data.id_collaborator._id}`, {
+                                            state: { startDate: data?.start_date, endDate: data?.end_date, status: data.status },
+                                        })}
+                                > {data.id_collaborator.full_name}</p>
+                            )
+                            break;
+                        }
+                        case "date_time": {
+                            return (
+                                <div className="div-date-create">
+                                    <p className={`${item?.fontSize}`}>
+                                        {moment(new Date(data[item.dataIndex])).format("DD/MM/YYYY")}
+                                    </p>
+                                    <p className={`${item?.fontSize}`}>
+                                        {moment(new Date(data[item.dataIndex])).format("HH:mm")}
+                                    </p>
+                                </div>
+                            )
+                            break;
+                        }
+                        case "select": {
+                            return (<>
+                                <SelectDefault
+                                    className={`${item?.fontSize}`}
+                                    onChange={(value) => {
+                                        return onChangeValue(data, item.dataIndex, value)
+                                    }}
+                                    value={data[item.dataIndex]}
+                                    selectOptions={item.selectOptions} />
+                            </>)
+                            break
+                        }
+                        case "text": {
+                            const max = item.maxLength || 75;
+                            let getDataView = data[item.dataIndex] || "";
+                            const indexSlice = getDataView.length - max;
+                            const sliceData = (indexSlice > 0) ? getDataView.slice(0, max) + "..." : getDataView;
+                            return (
+                                <>
+                                    <Tooltip placement="leftTop" title={getDataView}>
+                                    <span className={`${item?.fontSize}`}> {sliceData}</span>
+                                        {/* {indexSlice > 0 ? (<span className={`div-more ${item?.fontSize}`}> Xem thêm</span>) : (<></>)} */}
+                                    </Tooltip>
+                                </>
+                            )
+                            break;
+                        }
+                        case "status_handle_review": {
+                            const getItemStatus = item.selectOptions.filter(a => a.value === data[item.dataIndex]);
+    
+                            return (
+                                <div className={`current-status-handle ${getItemStatus[0]?.className}`} onClick={() => onChangeValue(item, item.dataIndex, getItemStatus[0].value)}>
+                                    <p>{getItemStatus[0].label}</p>
+                                </div>
+                            )
+                            break;
+                        }
+                        case "code_order_name_service": {
+                                linkRedirect = `/details-order/${data?.id_group_order}`
+                                return (
+                                    <>
+                                                                    <Link className="code_order_star"
+                                        onClick={() => saveToCookie("order_scrolly", scrollY)}
+                                        to={linkRedirect}
+                                    >
+                                        <p className={`text-id-code-order ${item?.fontSize}`}>{data?.id_view}</p>
+                                    </Link>
+    
+                                        <p className={` ${item?.fontSize}`}>{data?.service_title}</p>
+                                    </>
+    
+    
+                                )
+                                break;
+                        }
+                        case "id_view_name_service": {
+                            linkRedirect = `/details-order/${data?.id_group_order}`
+                            return (
+                                <Link className="id_order_start"
                                     onClick={() => saveToCookie("order_scrolly", scrollY)}
                                     to={linkRedirect}
                                 >
-                                    <p className={`text-id-code-order ${item?.fontSize}`}>{data?.id_view}</p>
+                                    {/* <p className={`text-id-code-order ${item?.fontSize}`}>{data?.service_title}</p> */}
+                                    <Rate
+                                        value={data?.star}
+                                        style={{ width: "100%" }}
+                                        disabled={true}
+                                    />
                                 </Link>
-
-                                    <p className={` ${item?.fontSize}`}>{data?.service_title}</p>
-                                </>
-
-
                             )
                             break;
+                        }
+                        case "status_handle_collaborator": {
+                            console.log(data[item.dataIndex], 'data[item.dataIndex]');
+                            const getItemStatus = item.selectOptions.filter(a => a.value === data[item.dataIndex]);
+                            console.log(getItemStatus, 'getItemStatus');
+                            return (
+                                <>
+                                    {(getItemStatus.length > 0) ? (
+                                        <div className={`current-status-handle ${getItemStatus[0]?.className}`} onClick={() => onChangeValue(item, item.dataIndex, getItemStatus[0].value)}>
+                                            <p>{getItemStatus[0].label}</p>
+                                        </div>
+                                    ) : (<></>)}
+                                </>
+                            )
+                            break;
+                        }
+                        case "number": {
+                            const dataView = data[item.dataIndex] || 0;
+                            return (
+                                <p className={`${item?.fontSize}`}> {dataView}</p>
+                            )
+                            break;
+                        }
+                        case "hour_date": {
+                            return (
+                                <div className="div-date-create">
+                                    <p className={`${item?.fontSize}`}>
+                                        {moment(new Date(data[item.dataIndex])).format("DD/MM/YYYY")}
+                                    </p>
+                                    <p className={`${item?.fontSize}`}>
+                                        {moment(new Date(data[item.dataIndex])).format("HH:mm")}
+                                    </p>
+                                </div>
+                            )
+                            break;
+                        }
+                        default: {
+                            const dataView = data[item.dataIndex] || "";
+                            return (
+                                <p className={`${item?.fontSize}`}> {dataView}</p>
+                            )
+                            break;
+                        }
+    
                     }
-                    case "id_view_name_service": {
-                        linkRedirect = `/details-order/${data?.id_group_order}`
-                        return (
-                            <Link className="id_order_start"
-                                onClick={() => saveToCookie("order_scrolly", scrollY)}
-                                to={linkRedirect}
-                            >
-                                {/* <p className={`text-id-code-order ${item?.fontSize}`}>{data?.service_title}</p> */}
-                                <Rate
-                                    value={data?.star}
-                                    style={{ width: "100%" }}
-                                    disabled={true}
-                                />
-                            </Link>
-                        )
-                        break;
-                    }
-                    case "status_handle_collaborator": {
-                        const getItemStatus = item.selectOptions.filter(a => a.value === data[item.dataIndex]);
+                },
+                width: item.width || 100,
+            };
+            headerTable.push(temp)
+            widthPage += Number(temp.width);
 
-                        return (
-                            <div className={`current-status-handle ${getItemStatus[0]?.className}`} onClick={() => onChangeValue(item, item.dataIndex, getItemStatus[0].value)}>
-                                <p>{getItemStatus[0].label}</p>
-                            </div>
-                        )
-                        break;
-                    }
-                    case "number": {
-                        const dataView = data[item.dataIndex] || 0;
-                        return (
-                            <p className={`${item?.fontSize}`}> {dataView}</p>
-                        )
-                        break;
-                    }
-                    default: {
-                        const dataView = data[item.dataIndex] || "";
-                        return (
-                            <p className={`${item?.fontSize}`}> {dataView}</p>
-                        )
-                        break;
-                    }
-
-                }
-            },
-            width: item.width || 100,
-        };
-        headerTable.push(temp)
-        widthPage += Number(temp.width);
     }
     // console.log("render Title");
 

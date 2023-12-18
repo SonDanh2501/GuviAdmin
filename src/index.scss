@@ -199,6 +199,12 @@
     border: 1px solid $colorPending !important;
     background-color: $backGroundPending !important;
   }
+
+  .status-not-process {
+    color: #000000 !important;
+    border: 1px solid #f8f8f8 !important;
+    background-color: #f8f8f8 !important;
+  }
   
   .status-processing {
     color: $colorPending !important;

@@ -15,6 +15,7 @@ import useWindowDimensions from "../../../helper/useWindowDimensions";
 const Tabs = (props) => {
   const {
     itemTab,
+    dataTotal
   } = props;
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -22,8 +23,9 @@ const Tabs = (props) => {
   // const [keyActive, setKeyActive] = useState(0);
   const { width } = useWindowDimensions();
 
+
+
   const onChangeTab = (item) => {
-    console.log(item, 'item');
     setTab(item.value);
     // setKeyActive(item.value);
     props.onValueChangeTab(item);
@@ -45,6 +47,13 @@ const Tabs = (props) => {
                   }}
                 >
                   <p className="text-title">{item?.label}</p>
+
+                  {dataTotal ? (
+                    <>
+                    <span className="number-total"> {dataTotal[item.value] || dataTotal[item.dataIndexTotal] || 0} </span>
+                    </>
+                  ) : (<></>)}
+                  
                 </div>
               );
             })}

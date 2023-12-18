@@ -10,7 +10,9 @@
             width: auto;
             margin-right: 24px;
             cursor: pointer;
-
+            display: flex;
+            flex-direction: row;
+            align-items: center;
             .text-title {
                 color: black;
                 font-weight: 400;
@@ -19,6 +21,14 @@
                 text-decoration: none;
                 margin: 0;
             }
+
+            .number-total {
+                margin-left: 7px;
+                border-radius: 50%;
+                font-size: 12px;
+                padding: 2px 5px;
+                background-color: #dcdcdc;
+            }
         }
 
         .item-tab-select {
@@ -26,7 +36,9 @@
             width: auto;
             border-bottom: 1px solid blue;
             margin-right: 24px;
-
+            display: flex;
+            flex-direction: row;
+            align-items: center;
             .text-title {
                 color: blue;
                 font-weight: 400;
@@ -34,6 +46,14 @@
                 font-family: "Roboto";
                 text-decoration: none;
                 margin: 0;
+            }
+
+            .number-total {
+                margin-left: 7px;
+                border-radius: 50%;
+                font-size: 12px;
+                padding: 2px 5px;
+                background-color: #dcdcdc;
             }
         }
     }
