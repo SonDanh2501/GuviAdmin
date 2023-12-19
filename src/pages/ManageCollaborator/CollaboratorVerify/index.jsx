@@ -21,16 +21,17 @@ import {
 } from "../../../redux/selectors/auth";
 import { getProvince, getService } from "../../../redux/selectors/service.js";
 
-import { 
-  fetchCollaborators, 
+import {
+  fetchCollaborators,
   lockTimeCollaborator,
   verifyCollaborator,
   deleteCollaborator,
   changeContactedCollaborator,
   getTotalCollaboratorByStatus,
   getListDataCollaborator,
-  updateStatusCollaborator
- } from "../../../api/collaborator"
+  updateStatusCollaborator,
+  getTotalCollaboratorByArea
+} from "../../../api/collaborator"
 import DataTable from "../../../components/tables/dataTable"
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import { useCallback, useEffect, useState } from "react";
@@ -41,6 +42,7 @@ import ModalCustom from "../../../components/modalCustom";
 import { errorNotify } from "../../../helper/toast";
 import { OPTIONS_SELECT_STATUS_COLLABORATOR_VERIFY } from "../../../@core/constant/constant.js";
 import ModalStatusNoteAdmin from "./components/NoteAdminModal"
+import "./index.scss";
 
 const CollaboratorVerify = () => {
 
@@ -149,7 +151,7 @@ const CollaboratorVerify = () => {
 
   const [totalItem, setTotalItem] = useState(0)
 
-const [modal, setModal] = useState("");
+  const [modal, setModal] = useState("");
   const [valueSearch, setValueSearch] = useState("");
   const [item, setItem] = useState(null);
   const [tabStatus, setTabStatus] = useState(itemTabStatusCollaborator[0].value);
@@ -157,68 +159,23 @@ const [modal, setModal] = useState("");
   const [saveToCookie, readCookie] = useCookies();
   const [selectStatus, setSelectStatus] = useState(["done", "doing", "confirm"])
   const [totalItemOnTab, setTotalItemOnTab] = useState(null)
-  const cityOptions = [
+
+  const [cityOptions, setCityOptions] = useState([
     {
       value: "",
       label: "Tất cả khu vực",
+      totalUser: 0
     },
-  ];
-  
-  const itemTab = [
-    {
-      label: "Tất cả đơn hàng",
-      value: "all",
-      key: 0,
-    },
-    {
-      label: "Đang chờ làm",
-      value: "pending",
-      key: 1,
-    },
-    {
-      label: "Đã nhận",
-      value: "confirm",
-      key: 2,
-    },
-    {
-      label: "Đang làm",
-      value: "doing",
-      key: 3,
-    },
-    {
-      label: "Đã huỷ",
-      value: "cancel",
-      key: 4,
-    },
-    {
-      label: "Hoàn thành",
-      value: "done",
-      key: 5,
-    },
-  ];
+  ])
+  // const []
 
 
-  province?.forEach((item) => {
-    if(item.code === 1 ||
-      item.code === 79 ||
-      item.code === 74 ||
-      item.code === 48
-      )
-    cityOptions.push({
-      value: item?.code,
-      label: item?.name,
-    });
-  });
+  // const cityOptions = 
+
 
   const onFilterCity = (value) => {
     setCity(value);
     // saveToCookie("ctv-city", value);
-    // fetchCollaborators(lang, startPage, 20, status, valueSearch, value)
-    //   .then((res) => {
-    //     setData(res?.data);
-    //     setTotal(res?.totalItems);
-    //   })
-    //   .catch((err) => {});
   };
 
 
@@ -226,17 +183,17 @@ const [modal, setModal] = useState("");
   const getListCollaborator = async () => {
     const res = await getListDataCollaborator(lang, valueSearch, startPage, lengthPage, city, tabStatus);
 
-    for(let i = 0 ; i < res.data.length ; i++) {
+    for (let i = 0; i < res.data.length; i++) {
       const tempCity = province.filter(x => x.code === res.data[i].city);
 
-      const tempService = service.filter(x => res.data[i].service_apply.includes(x._id) )
-      res.data[i]["name_level_1"] = (tempCity.length > 0) ? tempCity[0].name.replace(new RegExp(`${"Thành phố"}|${"Tỉnh"}`),"") : "Khác";
+      const tempService = service.filter(x => res.data[i].service_apply.includes(x._id))
+      res.data[i]["name_level_1"] = (tempCity.length > 0) ? tempCity[0].name.replace(new RegExp(`${"Thành phố"}|${"Tỉnh"}`), "") : "Khác";
       res.data[i]["name_service_apply"] = ""
-      for(const item of tempService) {
-        res.data[i]["name_service_apply"] += (res.data[i]["name_service_apply"] === "") ? `${item.title.vi}` : `, ${item.title.vi}` 
+      for (const item of tempService) { 
+        res.data[i]["name_service_apply"] += (res.data[i]["name_service_apply"] === "") ? `${item.title.vi}` : `, ${item.title.vi}`
       }
 
-      if(res.data[i].is_locked === true) {
+      if (res.data[i].is_locked === true) {
         res.data[i]["status_collaborator"] = "lock"
       } else if (res.data[i].is_verify === true) {
         res.data[i]["status_collaborator"] = "online"
@@ -247,17 +204,44 @@ const [modal, setModal] = useState("");
       }
     }
 
-   const result = await getTotalCollaboratorByStatus(itemTabStatusCollaborator[0].value, valueSearch);
-   let tempPayload = {
-    all: 0
-   }
-   for(const item of result) {
-    tempPayload[item._id] = item.total
-    tempPayload.all += item.total
-   }
-   setTotalItemOnTab(tempPayload);
-      setData(res?.data);
-      setTotalItem(res?.totalItems);
+    const result = await getTotalCollaboratorByStatus(itemTabStatusCollaborator[0].value, valueSearch, city);
+    let tempPayload = {
+      all: 0
+    }
+    for (const item of result) {
+      tempPayload[item._id] = item.total
+      tempPayload.all += item.total
+    }
+    setTotalItemOnTab(tempPayload);
+
+
+ // set tong so user cho khu vuc
+    const getTotalCity = await getTotalCollaboratorByArea(itemTabStatusCollaborator[0].value, valueSearch)
+    const getSetOptions = [
+      {
+        value: "",
+        label: "Tất cả khu vực",
+        totalUser: 0
+      }
+    ];
+    let allUser = 0;
+    getTotalCity.sort((a, b) => {return a._id - b._id});
+    for(const item of getTotalCity) {
+      const tempCity = province.filter(x => x.code === item._id);
+      if(tempCity.length > 0) {
+        getSetOptions.push({
+          value: tempCity[0]?.code,
+          label: tempCity[0]?.name,
+          totalUser: item.total
+        })
+        allUser += item.total;
+      }
+    }
+    getSetOptions[0].totalUser = allUser
+    setCityOptions(getSetOptions)
+
+    setData(res?.data);
+    setTotalItem(res?.totalItems);
   }
 
 
@@ -275,7 +259,7 @@ const [modal, setModal] = useState("");
 
   const showModal = (key) => {
     setModal(key);
-  } 
+  }
 
 
 
@@ -301,17 +285,17 @@ const [modal, setModal] = useState("");
         //     : `${i18n.t("lock", { lng: lang })}`}
         // </p>
 
-            <p
-            className={
-              checkElement?.includes("lock_unlock_collaborator")
-                ? "text-click-block"
-                : "text-click-block-hide"
-            }
-            onClick={() =>showModal("status_collaborator")}
-            >
-              Cập nhật trạng thái
-            </p>
-        
+        <p
+          className={
+            checkElement?.includes("lock_unlock_collaborator")
+              ? "text-click-block"
+              : "text-click-block-hide"
+          }
+          onClick={() => showModal("status_collaborator")}
+        >
+          Cập nhật trạng thái
+        </p>
+
       ),
     },
     // {
@@ -327,8 +311,8 @@ const [modal, setModal] = useState("");
     {
       key: "2",
       label: checkElement?.includes("delete_collaborator") && (
-        <p className="text-dropdown" 
-        onClick={() =>showModal("delete_collaborator")}
+        <p className="text-dropdown"
+          onClick={() => showModal("delete_collaborator")}
         >{`${i18n.t("delete", {
           lng: lang,
         })}`}</p>
@@ -377,7 +361,7 @@ const [modal, setModal] = useState("");
 
 
   const onChangePropsValue = async (props) => {
-    if(props.dataIndex === "status") {
+    if (props.dataIndex === "status") {
       setModal("status_collaborator");
     }
   }
@@ -385,12 +369,12 @@ const [modal, setModal] = useState("");
 
   const processHandle = async (dataChange) => {
 
-    if(modal === "delete_collaborator") {
+    if (modal === "delete_collaborator") {
       await deleteCollaborator(dataChange._id)
     } else {
       switch (dataChange.status) {
         case "actived": {
-          if(dataChange.is_locked === true) {
+          if (dataChange.is_locked === true) {
             const payload = {
               is_locked: false,
               date_lock: null
@@ -426,65 +410,65 @@ const [modal, setModal] = useState("");
     setSelectStatus(value)
   };
 
-//   const processHandleReview = async (dataChange) => {
-//     const payload = {
-//       id_order: item._id,
-//       note_admin: dataChange.note_admin,
-//       status_handle_review: dataChange.status_handle_review
-//     }
-//     console.log(payload, 'payload');
-//     await updateProcessHandleReview(payload)
-//     getReviewCollaborator()
-//     setModal("");
-//   }
+  //   const processHandleReview = async (dataChange) => {
+  //     const payload = {
+  //       id_order: item._id,
+  //       note_admin: dataChange.note_admin,
+  //       status_handle_review: dataChange.status_handle_review
+  //     }
+  //     console.log(payload, 'payload');
+  //     await updateProcessHandleReview(payload)
+  //     getReviewCollaborator()
+  //     setModal("");
+  //   }
 
-//   const onDelete = useCallback(
-//     (id) => {
-//       setIsLoading(true);
-//       deleteCustomer(id, { is_delete: true })
-//         .then((res) => {
-//           fetchCustomers(lang, startPage, 50, status, idGroup, "")
-//             .then((res) => {
-//               setData(res?.data);
-//               setTotal(res?.totalItems);
-//             })
-//             .catch((err) => {});
-//           setModal(false);
-//           setIsLoading(false);
-//         })
-//         .catch((err) => {
-//           errorNotify({
-//             message: err,
-//           });
-//           setIsLoading(false);
-//         });
-//     },
-//     [status, startPage, idGroup, lang]
-//   );
+  //   const onDelete = useCallback(
+  //     (id) => {
+  //       setIsLoading(true);
+  //       deleteCustomer(id, { is_delete: true })
+  //         .then((res) => {
+  //           fetchCustomers(lang, startPage, 50, status, idGroup, "")
+  //             .then((res) => {
+  //               setData(res?.data);
+  //               setTotal(res?.totalItems);
+  //             })
+  //             .catch((err) => {});
+  //           setModal(false);
+  //           setIsLoading(false);
+  //         })
+  //         .catch((err) => {
+  //           errorNotify({
+  //             message: err,
+  //           });
+  //           setIsLoading(false);
+  //         });
+  //     },
+  //     [status, startPage, idGroup, lang]
+  //   );
 
-//   const blockCustomer = useCallback(
-//     (id, active) => {
-//       setIsLoading(true);
-//       activeCustomer(id, { is_active: active ? false : true })
-//         .then((res) => {
-//           setModalBlock(false);
-//           fetchCustomers(lang, startPage, 50, status, idGroup, "")
-//             .then((res) => {
-//               setData(res?.data);
-//               setTotal(res?.totalItems);
-//             })
-//             .catch((err) => {});
-//           setIsLoading(false);
-//         })
-//         .catch((err) => {
-//           errorNotify({
-//             message: err,
-//           });
-//           setIsLoading(false);
-//         });
-//     },
-//     [startPage, status, idGroup, lang]
-//   );
+  //   const blockCustomer = useCallback(
+  //     (id, active) => {
+  //       setIsLoading(true);
+  //       activeCustomer(id, { is_active: active ? false : true })
+  //         .then((res) => {
+  //           setModalBlock(false);
+  //           fetchCustomers(lang, startPage, 50, status, idGroup, "")
+  //             .then((res) => {
+  //               setData(res?.data);
+  //               setTotal(res?.totalItems);
+  //             })
+  //             .catch((err) => {});
+  //           setIsLoading(false);
+  //         })
+  //         .catch((err) => {
+  //           errorNotify({
+  //             message: err,
+  //           });
+  //           setIsLoading(false);
+  //         });
+  //     },
+  //     [startPage, status, idGroup, lang]
+  //   );
 
 
 
@@ -522,7 +506,7 @@ const [modal, setModal] = useState("");
 
         <div className="div-flex-row">
           <div>
-          {/* <Select
+            {/* <Select
           mode="multiple"
           defaultValue="all"
           onChange={changeStatusOrder}
@@ -536,21 +520,44 @@ const [modal, setModal] = useState("");
 
 
 
-<Select
-            options={cityOptions}
-            style={{ width: "300px" }}
-            value={city}
-            onChange={onFilterCity}
-            showSearch
-            filterOption={(input, option) =>
-              (option?.label ?? "").includes(input)
-            }
-            filterSort={(optionA, optionB) =>
-              (optionA?.label ?? "")
-                .toLowerCase()
-                .localeCompare((optionB?.label ?? "").toLowerCase())
-            }
-          />
+            {/* <Select
+              options={cityOptions}
+              style={{ width: "300px" }}
+              value={city}
+              onChange={onFilterCity}
+              showSearch
+              filterOption={(input, option) =>
+                (option?.label ?? "").includes(input)
+              }
+              filterSort={(optionA, optionB) =>
+                (optionA?.label ?? "")
+                  .toLowerCase()
+                  .localeCompare((optionB?.label ?? "").toLowerCase())
+              }
+            /> */}
+
+
+            <Select
+              options={cityOptions}
+              style={{ width: "300px" }}
+              value={city}
+              onChange={onFilterCity}
+              showSearch
+              optionLabelProp="label"
+              optionRender={(option) => (
+                <Space>
+                  <div className="div-select-area-total">
+                  <span>
+                  {option.data.label}
+                  </span>
+                  <span>
+                {option.data.totalUser}
+                  </span>
+                  </div>
+
+                </Space>
+              )}
+            />
 
 
 
@@ -613,24 +620,24 @@ const [modal, setModal] = useState("");
         </div> */}
 
       </div>
-      <ModalStatusNoteAdmin isShow={(modal === "status_collaborator") ? true : false} item={item} handleOk={(payload) => processHandle(payload)} handleCancel={setModal}/>
+      <ModalStatusNoteAdmin isShow={(modal === "status_collaborator") ? true : false} item={item} handleOk={(payload) => processHandle(payload)} handleCancel={setModal} />
 
 
-        <div>
-          <ModalCustom
-            isOpen={(modal === "delete_collaborator") ? true : false}
-            title={`${i18n.t("customer_delete", { lng: lang })}`}
-            handleOk={() => processHandle(item)}
-            textOk={`${i18n.t("delete", { lng: lang })}`}
-            handleCancel={() => setModal("")}
-            body={
-              <>
-                <p>{`${i18n.t("sure_delete_customer", { lng: lang })}`}</p>
-                <p className="text-name-modal">{item?.full_name}</p>
-              </>
-            }
-          />
-        </div>
+      <div>
+        <ModalCustom
+          isOpen={(modal === "delete_collaborator") ? true : false}
+          title={`${i18n.t("customer_delete", { lng: lang })}`}
+          handleOk={() => processHandle(item)}
+          textOk={`${i18n.t("delete", { lng: lang })}`}
+          handleCancel={() => setModal("")}
+          body={
+            <>
+              <p>{`${i18n.t("sure_delete_customer", { lng: lang })}`}</p>
+              <p className="text-name-modal">{item?.full_name}</p>
+            </>
+          }
+        />
+      </div>
 
     </>
 

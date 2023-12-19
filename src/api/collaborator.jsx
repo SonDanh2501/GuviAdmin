@@ -194,8 +194,14 @@ export const updateStatusCollaborator = (idCollaborator, payload) => {
 }
 
 
-export const getTotalCollaboratorByStatus = (arrStatus, search) => {
+export const getTotalCollaboratorByStatus = (arrStatus, search, city) => {
   return axiosClient.get(
-    `/admin/collaborator_manager/get_total_collaborator_by_status?arr_status=${arrStatus}&search=${search}`
+    `/admin/collaborator_manager/get_total_collaborator_by_status?arr_status=${arrStatus}&search=${search}&city=${city}`
+  )
+}
+
+export const getTotalCollaboratorByArea = (arrStatus, search) => {
+  return axiosClient.get(
+    `/admin/collaborator_manager/get_total_collaborator_by_area?arr_status=${arrStatus}&search=${search}&city=`
   )
 }

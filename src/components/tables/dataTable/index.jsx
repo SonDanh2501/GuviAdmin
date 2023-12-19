@@ -699,9 +699,7 @@ const DataTable = (props) => {
                             break;
                         }
                         case "status_handle_collaborator": {
-                            console.log(data[item.dataIndex], 'data[item.dataIndex]');
                             const getItemStatus = item.selectOptions.filter(a => a.value === data[item.dataIndex]);
-                            console.log(getItemStatus, 'getItemStatus');
                             return (
                                 <>
                                     {(getItemStatus.length > 0) ? (
