@@ -277,7 +277,7 @@ const [modal, setModal] = useState("");
    }
 
  // set tong so user cho khu vuc
- const getTotalCity = await getTotalCollaboratorByArea(itemTabStatusCollaborator[0].value, valueSearch)
+ const getTotalCity = await getTotalCollaboratorByArea(tabStatus, valueSearch)
  const getSetOptions = [];
  let allUser = 0;
  // getTotalCity.sort((a, b) => {return a.total - b.total});

@@ -143,6 +143,12 @@ export const OPTIONS_SELECT_STATUS_COLLABORATOR_NOT_VERIFY = [
         className: 'status-not-contact',
     },
     {
+        label: "Hoàn thành",
+        value: "pass_interview",
+        color: color1,
+        className: 'status-done',
+    },
+    {
         label: "Kích hoạt",
         value: "actived",
         color: color1,
