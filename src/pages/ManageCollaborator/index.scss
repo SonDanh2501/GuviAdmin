@@ -3,4 +3,11 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    .number-user {
+        margin-left: 7px;
+        border-radius: 50%;
+        font-size: 12px;
+        padding: 2px 5px;
+        background-color: #dcdcdc;
+    }
   }

@@ -276,44 +276,37 @@ const [modal, setModal] = useState("");
     tempPayload.all += item.total
    }
 
+ // set tong so user cho khu vuc
+ const getTotalCity = await getTotalCollaboratorByArea(itemTabStatusCollaborator[0].value, valueSearch)
+ const getSetOptions = [];
+ let allUser = 0;
+ // getTotalCity.sort((a, b) => {return a.total - b.total});
+ for(const item of getTotalCity) {
+   const tempCity = province.filter(x => x.code === item._id);
+   if(tempCity.length > 0) {
+     getSetOptions.push({
+       value: tempCity[0]?.code,
+       label: tempCity[0]?.name,
+       totalUser: item.total
+     })
+     allUser += item.total;
+   }
+ }
+ getSetOptions.sort((a, b) => {
+   let tempA = a.label.replace("Thành phố ", "")
+   tempA = tempA.replace("Tỉnh ", "")
+   let tempB = b.label.replace("Thành phố ", "")
+   tempB = tempB.replace("Tỉnh ", "")
+   return tempA[0].toLowerCase().localeCompare(tempB[0].toLowerCase())
+ })
 
-       // set tong so user cho khu vuc
-       const getTotalCity = await getTotalCollaboratorByArea(itemTabStatusCollaborator[0].value, valueSearch)
-       const getSetOptions = [
-         {
-           value: "",
-           label: "Tất cả khu vực",
-           totalUser: 0
-         }
-       ];
-       let allUser = 0;
-       getTotalCity.sort((a, b) => {return a._id - b._id});
-       for(const item of getTotalCity) {
-         const tempCity = province.filter(x => x.code === item._id);
-         if(tempCity.length > 0) {
-           getSetOptions.push({
-             value: tempCity[0]?.code,
-             label: tempCity[0]?.name,
-             totalUser: item.total
-           })
-           allUser += item.total;
-         }
-       }
+ getSetOptions.unshift({
+     value: "",
+     label: "Tất cả khu vực",
+     totalUser: allUser
+ })
 
-       // them nhung khu vuc khong xac dinh
-
-       const tempCityOther = getTotalCity.filter(x => x._id === -1);
-       if(tempCityOther.length > 0) {
-        getSetOptions.push({
-          value: -1,
-          label: "Khác",
-          totalUser: tempCityOther[0].total
-         })
-         allUser += tempCityOther[0].total
-       }
-
-       getSetOptions[0].totalUser = allUser
-       setCityOptions(getSetOptions)
+ setCityOptions(getSetOptions)
 
    setTotalItemOnTab(tempPayload);
       setData(res?.data);
@@ -654,13 +647,16 @@ const [modal, setModal] = useState("");
               onChange={onFilterCity}
               showSearch
               optionLabelProp="label"
+              filterOption={(input, option) => {
+                return (option?.label.toLowerCase() ?? '').includes(input)
+              }}
               optionRender={(option) => (
                 <Space>
                   <div className="div-select-area-total">
                   <span>
                   {option.data.label}
                   </span>
-                  <span>
+                  <span className="number-user">
                 {option.data.totalUser}
                   </span>
                   </div>
