@@ -29,7 +29,8 @@ import {
   changeContactedCollaborator,
   updateStatusCollaborator,
   getTotalCollaboratorByStatus,
-  getListDataCollaborator
+  getListDataCollaborator,
+  getTotalCollaboratorByArea
  } from "../../../api/collaborator"
 import DataTable from "../../../components/tables/dataTable"
 import { UilEllipsisV } from "@iconscout/react-unicons";
@@ -180,12 +181,13 @@ const [modal, setModal] = useState("");
 
   const [totalItemOnTab, setTotalItemOnTab] = useState(null)
 
-  const cityOptions = [
+  const [cityOptions, setCityOptions] = useState([
     {
       value: "",
       label: "Tất cả khu vực",
+      totalUser: 0
     },
-  ];
+  ])
   
   const itemTab = [
     {
@@ -221,12 +223,12 @@ const [modal, setModal] = useState("");
   ];
 
 
-  province?.forEach((item) => {
-    cityOptions.push({
-      value: item?.code,
-      label: item?.name,
-    });
-  });
+  // province?.forEach((item) => {
+  //   cityOptions.push({
+  //     value: item?.code,
+  //     label: item?.name,
+  //   });
+  // });
 
   const onFilterCity = (value) => {
     setCity(value);
@@ -265,7 +267,7 @@ const [modal, setModal] = useState("");
       }
     }
 
-   const result = await getTotalCollaboratorByStatus(itemTabStatusCollaborator[0].value, valueSearch);
+   const result = await getTotalCollaboratorByStatus(itemTabStatusCollaborator[0].value, valueSearch, city);
    let tempPayload = {
     all: 0
    }
@@ -273,6 +275,45 @@ const [modal, setModal] = useState("");
     tempPayload[item._id] = item.total
     tempPayload.all += item.total
    }
+
+
+       // set tong so user cho khu vuc
+       const getTotalCity = await getTotalCollaboratorByArea(itemTabStatusCollaborator[0].value, valueSearch)
+       const getSetOptions = [
+         {
+           value: "",
+           label: "Tất cả khu vực",
+           totalUser: 0
+         }
+       ];
+       let allUser = 0;
+       getTotalCity.sort((a, b) => {return a._id - b._id});
+       for(const item of getTotalCity) {
+         const tempCity = province.filter(x => x.code === item._id);
+         if(tempCity.length > 0) {
+           getSetOptions.push({
+             value: tempCity[0]?.code,
+             label: tempCity[0]?.name,
+             totalUser: item.total
+           })
+           allUser += item.total;
+         }
+       }
+
+       // them nhung khu vuc khong xac dinh
+
+       const tempCityOther = getTotalCity.filter(x => x._id === -1);
+       if(tempCityOther.length > 0) {
+        getSetOptions.push({
+          value: -1,
+          label: "Khác",
+          totalUser: tempCityOther[0].total
+         })
+         allUser += tempCityOther[0].total
+       }
+
+       getSetOptions[0].totalUser = allUser
+       setCityOptions(getSetOptions)
 
    setTotalItemOnTab(tempPayload);
       setData(res?.data);
@@ -588,7 +629,7 @@ const [modal, setModal] = useState("");
 
 
 
-<Select
+{/* <Select
             options={cityOptions}
             style={{ width: "300px" }}
             value={city}
@@ -602,8 +643,31 @@ const [modal, setModal] = useState("");
                 .toLowerCase()
                 .localeCompare((optionB?.label ?? "").toLowerCase())
             }
-          />
+          /> */}
 
+
+
+<Select
+              options={cityOptions}
+              style={{ width: "300px" }}
+              value={city}
+              onChange={onFilterCity}
+              showSearch
+              optionLabelProp="label"
+              optionRender={(option) => (
+                <Space>
+                  <div className="div-select-area-total">
+                  <span>
+                  {option.data.label}
+                  </span>
+                  <span>
+                {option.data.totalUser}
+                  </span>
+                  </div>
+
+                </Space>
+              )}
+            />
 
 
 
