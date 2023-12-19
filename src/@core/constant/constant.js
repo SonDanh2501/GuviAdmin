@@ -118,12 +118,12 @@ export const OPTIONS_SELECT_STATUS_COLLABORATOR_NOT_VERIFY = [
         className: 'status-not-process',
         disableSelect: true,
     },
-    {
-        label: "Hoàn thành test",
-        value: "test_complete",
-        color: color1,
-        className: 'status-processing',
-    },
+    // {
+    //     label: "Hoàn thành test",
+    //     value: "test_complete",
+    //     color: color1,
+    //     className: 'status-processing',
+    // },
     {
         label: "Đã liên hệ",
         value: "contacted",
