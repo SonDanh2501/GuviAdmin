@@ -563,8 +563,8 @@ const router = [
   // getItem('Cộng tác viên', '/system/collaborator-manage', <IconCustom icon={collaborator} />, null, "collaborator"),
 
   getItem('Cộng tác viên', '/system/collaborator-manage', <IconCustom icon={collaborator} />, [
-    getItem('Đã xác thực', '/system/collaborator-verify-manage', null, null), "collaborator",
-    getItem('Đang chờ duyệt', '/system/collaborator-not-verify-manage', null, null), "collaborator",
+    getItem('Đang hoạt động', '/system/collaborator-verify-manage', null, null), "collaborator",
+    getItem('Hồ sơ ứng tuyển', '/system/collaborator-not-verify-manage', null, null), "collaborator",
   ], "collaborator"),
 
 
