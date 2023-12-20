@@ -48,7 +48,7 @@ const CollaboratorNotVerify = () => {
   let itemTabStatusCollaborator = [
     {
       label: "Tất cả",
-      value: "pending,test_complete,contacted,interview,reject",
+      value: "pending,test_complete,contacted,pass_interview,interview,reject",
       key: 0,
       dataIndexTotal: "all"
     },
