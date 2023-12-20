@@ -73,9 +73,14 @@ const CollaboratorNotVerify = () => {
       key: 4,
     },
     {
+      label: "Hoàn thành",
+      value: "pass_interview",
+      key: 5,
+    },
+    {
       label: "Từ chối",
       value: "reject",
-      key: 5,
+      key: 6,
     }
   ];
 
