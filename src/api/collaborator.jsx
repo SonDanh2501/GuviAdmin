@@ -4,10 +4,10 @@ export const createCollaborator = (payload) => {
 };
 export const fetchCollaborators = (
   lang,
-  search,
   start,
   length,
   type,
+  search,
   city
 ) => {
   return axiosClient.get(
