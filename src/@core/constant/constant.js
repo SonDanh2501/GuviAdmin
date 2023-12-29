@@ -114,44 +114,58 @@ export const OPTIONS_SELECT_STATUS_COLLABORATOR_NOT_VERIFY = [
     {
         label: "Chưa xử lý",
         value: "pending",
-        color: color1,
+        key: 1,
         className: 'status-not-process',
         disableSelect: true,
     },
-    // {
-    //     label: "Hoàn thành test",
-    //     value: "test_complete",
-    //     color: color1,
-    //     className: 'status-processing',
-    // },
     {
         label: "Đã liên hệ",
         value: "contacted",
-        color: color1,
+        key: 2,
         className: 'status-processing',
+    },
+    {
+        label: "Phù hợp",
+        value: "appropriate",
+        key: 3,
+        className: 'status-confirm',
     },
     {
         label: "Hẹn phỏng vấn",
         value: "interview",
-        color: color1,
+        key: 4,
         className: 'status-processing',
     },
     {
         label: "Từ chối",
         value: "reject",
-        color: color1,
+        key: 5,
         className: 'status-not-contact',
     },
     {
         label: "Hoàn thành",
         value: "pass_interview",
-        color: color1,
+        key: 6,
         className: 'status-done',
     },
     {
         label: "Kích hoạt",
         value: "actived",
-        color: color1,
+        key: 7,
         className: 'status-done',
     },
+]
+
+
+export const COUNTRY = [
+    {
+        country: "Việt Nam",
+        timeZone: "+07:00",
+        miliTimeZone: 7*3600000
+    },
+    {
+        country: "English",
+        timeZone: "+07:00",
+        miliTimeZone: 7*3600000
+    }
 ]
