@@ -22,7 +22,6 @@ import {
 } from "antd";
 import { PAYMENT_METHOD } from "../../../@core/constant/service.constant.js"
 import _debounce from "lodash/debounce";
-import CleaningHourly from "../components/CleaningHourly";
 import ServiceComponent from "../components/ServiceComponent"
 import "./index.scss"
 import DateWorkComponent from "../components/DateWorkComponent";
