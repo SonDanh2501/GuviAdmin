@@ -21,6 +21,24 @@
     margin: 8px 0px;
 }
 
+.div-flex-row-wrap-flex-start {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 8px 0px;
+}
+
+
+.flex-justify-content-flex-start {
+  justify-content: flex-start !important;
+}
+
+.flex-wrap {
+  flex-wrap: wrap !important;
+}
+
+
 
 
 .div-flex-row-wrap-reverse {
@@ -232,3 +250,10 @@
     border: 1px solid #cfc4c4 !important;
   }
 
+  .status-confirm {
+    display: block;
+    pointer-events: none !important;
+    background-color: $backGroundConfirmDoing !important;
+    color: $colorConfirmDoing !important;
+    border: 1px solid $colorConfirmDoing !important;
+  }

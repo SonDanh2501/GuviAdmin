@@ -28,11 +28,11 @@ import DeepCleaningManager from "../container/System/ManageDeepCleaning";
 import ManageFeedback from "../container/System/ManageFeedback";
 
 import ManageFinance from "../container/System/ManageFinance";
-import ManageOrder from "../container/System/ManageOrder";
-// import ManageOrder from "../pages/ManageOrder";
+// import ManageOrder from "../container/System/ManageOrder";
+import ManageOrder from "../pages/ManageOrder";
 
-import AddOrder from "../container/System/ManageOrder/DrawerAddOrder";
-// import CreateOrder from "../pages/ManageOrder/CreateOrder";
+// import AddOrder from "../container/System/ManageOrder/DrawerAddOrder";
+import CreateOrder from "../pages/ManageOrder/CreateOrder";
 
 // import OrderDoingManage from "../container/System/ManageOrder/OrderDoing/OrderDoingManage";
 // import OrderExpired from "../container/System/ManageOrder/OrderExpired";
@@ -225,15 +225,15 @@ const Admin = () => {
 
       <Route path="/group-order/manage-order" element={<ManageOrder />} />
 
-      <Route
-        path="/group-order/manage-order/create-order"
-        element={<AddOrder />}
-      />
-
       {/* <Route
         path="/group-order/manage-order/create-order"
-        element={<CreateOrder />}
+        element={<AddOrder />}
       /> */}
+
+      <Route
+        path="/group-order/manage-order/create-order"
+        element={<CreateOrder />}
+      />
 
 
 {/* 
