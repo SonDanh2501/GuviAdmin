@@ -27,6 +27,7 @@ import "./index.scss"
 import DateWorkComponent from "../components/DateWorkComponent";
 import { useNavigate } from "react-router-dom";
 import { formatMoney } from "../../../helper/formatMoney";
+import LoadingPagination from "../../../components/paginationLoading";
 var AES = require("crypto-js/aes");
 const { TextArea } = Input;
 
@@ -60,6 +61,7 @@ const CreateOrder = () => {
   const [serviceFee, setServiceFee] = useState([])
   const [note, setNote] = useState("")
 
+  const [isLoading, setIsLoading] = useState(false)
 
 
   useEffect(() => {
@@ -293,7 +295,9 @@ const CreateOrder = () => {
   }
 
   const createOrder = () => {
+    setIsLoading(true)
     createOrderApi(payloadOrder).then((res) => {
+      setIsLoading(false)
       navigate("/group-order/manage-order")
     }).catch()
   }
@@ -532,6 +536,8 @@ const CreateOrder = () => {
         </div>
 
       </div>
+
+      {isLoading && <LoadingPagination />}
     </React.Fragment>
   )
 }
