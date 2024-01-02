@@ -20,7 +20,7 @@ const Chat = () => {
     // socketRef.current = socketIOClient.connect(host);
     var socket = io(TestUrl);
     socket.on("msgToClient", (socket) => {
-      console.log("jjjj", socket.id);
+      // console.log("jjjj", socket.id);
     });
 
     // socketRef.current.on("getId", (data) => {

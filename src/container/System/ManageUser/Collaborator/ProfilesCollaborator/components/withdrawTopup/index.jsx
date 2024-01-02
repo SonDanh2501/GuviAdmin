@@ -35,7 +35,7 @@ const WithdrawTopup = ({ id }) => {
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         dispatch(loadingAction.loadingRequest(false));
       });
     getListTransitionByCollaborator(id, 0, 10)

@@ -69,7 +69,7 @@ const PromotionDrag = () => {
 
   const onUpdatePositon = () => {
     setIsLoading(true);
-    console.log(item, "item");
+    // console.log(item, "item");
     updatePositionPromotion({
       arr_promotion: item,
     })

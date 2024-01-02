@@ -1,4 +1,3 @@
-
 import { Button, DatePicker, Modal } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
@@ -30,8 +29,8 @@ const RangeDatePicker = (props) => {
   const [open, setOpen] = useState(false);
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
-  const [startCalendar, setStartCalendar] = useState("")
-  const [endCalendar, setEndCalendar] = useState("")
+  const [startCalendar, setStartCalendar] = useState("");
+  const [endCalendar, setEndCalendar] = useState("");
 
   const [valueTab, setValueTab] = useState("");
   const [tabTime, setTabTime] = useState("day");
@@ -40,35 +39,32 @@ const RangeDatePicker = (props) => {
   const timeZone = 0;
 
   useEffect(() => {
-
-
-
-    if(defaults) {
-      if(Array.isArray(defaults) === true) {
-        setValueTab(DATA_TAB[DATA_TAB.length - 1].value)
-        setTitle(`${i18n.t(DATA_TAB[DATA_TAB.length - 1].title, {lng: lang})}`)
-        setStart(defaults[0])
-        setEnd(defaults[1])
+    if (defaults) {
+      if (Array.isArray(defaults) === true) {
+        setValueTab(DATA_TAB[DATA_TAB.length - 1].value);
+        setTitle(
+          `${i18n.t(DATA_TAB[DATA_TAB.length - 1].title, { lng: lang })}`
+        );
+        setStart(defaults[0]);
+        setEnd(defaults[1]);
         setStartDate(defaults[0]);
         setEndDate(defaults[1]);
-
       } else {
-        const item = DATA_TAB.find(x => x.value === defaults);
-        if(item) {
-          const {startDate, endDate} = calculateRangeDate(item.range, item.type_range);
-          setStart(startDate)
-          setEnd(endDate)
+        const item = DATA_TAB.find((x) => x.value === defaults);
+        if (item) {
+          const { startDate, endDate } = calculateRangeDate(
+            item.range,
+            item.type_range
+          );
+          setStart(startDate);
+          setEnd(endDate);
           setStartDate(startDate.toISOString());
           setEndDate(endDate.toISOString());
-          setTitle(`${i18n.t(item.title, {lng: lang,})}`)
+          setTitle(`${i18n.t(item.title, { lng: lang })}`);
           setValueTab(item.value);
         }
       }
-
     }
-
-
-
 
     // if(defaults) {
     //   const item = DATA_TAB.find(x => x.value === defaults);
@@ -89,10 +85,8 @@ const RangeDatePicker = (props) => {
     //     setEnd(endDate)
     //     // console.log(defaultRangeDate, 'defaultRangeDate');
     //   }
-    // } 
+    // }
   }, []);
-
-  
 
   const handleOk = () => {
     setOpen(false);
@@ -106,62 +100,64 @@ const RangeDatePicker = (props) => {
     // setTitle();
   };
 
-
   const onChange = (value, event) => {
+    // console.log(value[0].toISOString(), "sssss");
+    // console.log(value[1].toISOString(), "sssss");
 
-    console.log(value[0].toISOString(), "sssss");
-    console.log(value[1].toISOString(), "sssss");
-
-
-    setStartCalendar(value[0])
-    setEndCalendar(value[1])
-
+    setStartCalendar(value[0]);
+    setEndCalendar(value[1]);
 
     setStart(value[0]);
     setEnd(value[1]);
 
-
-    setTitle(`${i18n.t(DATA_TAB[DATA_TAB.length - 1].title, {lng: lang})}`);
-
+    setTitle(`${i18n.t(DATA_TAB[DATA_TAB.length - 1].title, { lng: lang })}`);
   };
 
-  const onSelectTab = (item: any) => {
-    setValueTab(item.value)
-    if(item.type_range === "setting") {
+  const onSelectTab = (item) => {
+    setValueTab(item.value);
+    if (item.type_range === "setting") {
       setStart("");
       setEnd("");
     } else {
-      const {startDate, endDate} = calculateRangeDate(item.range, item.type_range);
+      const { startDate, endDate } = calculateRangeDate(
+        item.range,
+        item.type_range
+      );
       setStart(startDate);
       setEnd(endDate);
-      setStartCalendar(new Date(startDate))
-      setEndCalendar(new Date(endDate))
-  
+      setStartCalendar(new Date(startDate));
+      setEndCalendar(new Date(endDate));
     }
-  }
+  };
 
   const calculateRangeDate = (rangeDate, typeRange) => {
-    const startDate = moment().subtract(rangeDate[0], typeRange).startOf(typeRange).startOf("days");
-    const endDate = moment().subtract(rangeDate[1], typeRange).endOf(typeRange).endOf("days");
-    return { startDate, endDate}
-  }
+    const startDate = moment()
+      .subtract(rangeDate[0], typeRange)
+      .startOf(typeRange)
+      .startOf("days");
+    const endDate = moment()
+      .subtract(rangeDate[1], typeRange)
+      .endOf(typeRange)
+      .endOf("days");
+    return { startDate, endDate };
+  };
 
   const calculateGetStartDate = (date, type) => {
     const temp = moment(date).startOf(`${type}s`).startOf("days");
     return temp;
-  }
+  };
 
   const calculateGetEndDate = (date, type) => {
     const temp = moment(date).endOf(`${type}s`).endOf("days");
     return temp;
-  }
+  };
 
   const onChangeFilter = useCallback((start, end) => {
     const startDate = calculateGetStartDate(start, tabTime);
     const endDate = calculateGetEndDate(end, tabTime);
-    setStart(startDate)
-    setEnd(endDate)
-  }, [])
+    setStart(startDate);
+    setEnd(endDate);
+  }, []);
 
   return (
     <div>
@@ -237,7 +233,7 @@ const RangeDatePicker = (props) => {
                   onChange={onChange}
                   value={[startCalendar, endCalendar]}
                   selectRange={true}
-                  view="month" 
+                  view="month"
                   className="calendar-picker"
                   locale={lang}
                   next2Label={
@@ -318,22 +314,21 @@ const DATA_TAB = [
     title: "this_month",
     value: "this_month",
     type_range: "months",
-    range: [0,0]
+    range: [0, 0],
   },
   {
     title: "last_month",
     value: "last_month",
     type_range: "months",
-    range: [1,1]
+    range: [1, 1],
   },
   {
     title: "custom",
     value: "setting",
     type_range: "setting",
-    range: []
+    range: [],
   },
 ];
-
 
 const OPTION = [
   {
