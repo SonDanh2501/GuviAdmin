@@ -1,12 +1,9 @@
-@import '../../index.scss';
-
+@import "../../index.scss";
 
 .content-create-order {
   // max-width: 61%;
   max-width: 630px;
 }
-
-
 
 .div-filter {
   display: flex;
@@ -30,7 +27,6 @@
     padding: 5px;
   }
 }
-
 
 .btn-create-order {
   display: flex;
@@ -71,9 +67,7 @@
 }
 
 .date-picker-select-time {
-
 }
-
 
 .select_horizontal_no_thumbnail {
   .item {
@@ -90,7 +84,6 @@
     padding: 5px;
   }
 }
-
 
 .select_horizontal_thumbnail {
   img {
@@ -156,36 +149,31 @@
   }
   .item {
     display: flex;
-    flex-direction: column;
+    box-sizing: border-box;
     border: 1px solid #9f9f9f;
     width: 200px;
-    height: 105px;
+    margin: 0px 10px 10px 0px;
+    height: 115px;
     border-radius: 8px;
-    margin-right: 10px;
-    align-items: center;
+    padding: 3px;
+    align-items: start;
+    flex-direction: column;
     justify-content: space-between;
-    padding: 5px;
-    .text-checkbox {
-      width: 100%;
+    align-items: center;
+    .container-title {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      .text-item {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-      .div-checkbox {
-
-      }
+      padding: 0px 10px 0px 10px;
+      width: 100%;
     }
-
     .counter-optional {
       display: flex;
       flex-direction: row;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
+      width: 100%;
+      height: 65px;
     }
   }
 }
@@ -197,7 +185,7 @@
   color: #fff;
 }
 
-.date-of-week {    
+.date-of-week {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -212,7 +200,6 @@
     }
   }
 }
-
 
 .content-date-of-week {
   display: flex;
@@ -250,11 +237,9 @@
   }
 }
 
-
 Select {
   width: 300px;
 }
-
 
 .div-list-address-default {
   max-height: 300px;
@@ -266,15 +251,15 @@ Select {
   width: 80%;
   border: 1px solid #ffff;
   .div-item-address {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid #d1d1d1;
+    .div-name-address {
       display: flex;
-      flex-direction: row;
-      align-items: center;
-      border-bottom: 1px solid #d1d1d1;
-      .div-name-address {
-          display: flex;
-          flex-direction: column;
-          margin-left: 10px;
-      }
+      flex-direction: column;
+      margin-left: 10px;
+    }
   }
 }
 
@@ -289,18 +274,17 @@ Select {
   width: 80%;
   border: 1px solid #ffff;
   .div-item-address {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid #d1d1d1;
+    .div-name-address {
       display: flex;
-      flex-direction: row;
-      align-items: center;
-      border-bottom: 1px solid #d1d1d1;
-      .div-name-address {
-          display: flex;
-          flex-direction: column;
-          margin-left: 10px;
-      }
+      flex-direction: column;
+      margin-left: 10px;
+    }
   }
 }
-
 
 .list-code-promotion-available {
   display: flex;
@@ -354,49 +338,46 @@ Select {
       color: $colorDiscount;
     }
   }
-    .final-fee {
-      margin: 3px 0px !important;
-      p {
-        font-size: 18px;
-        font-weight: 500;
-      }
+  .final-fee {
+    margin: 3px 0px !important;
+    p {
+      font-size: 18px;
+      font-weight: 500;
     }
-
-
+  }
 }
-
 
 .date-detail-schedule {
   margin: 20px;
   .div-title-month {
-      font-size: 20px;
-      font-weight: 500;
+    font-size: 20px;
+    font-weight: 500;
   }
   .div-month {
-      margin: 0px 0px 20px 0px;
-      .column-week {
-          .div-title-week {
-              font-size: 17px;
-              font-weight: 500;
-          }
-          .empty-date {
-              margin: 40px 0px 0px 0px;
-          }
-          .div-date-schedule {
-              cursor: pointer;
-              text-align: center;
-              padding: 5px;
-              margin: 10px 0px 0px 0px;
-              border: 1px solid #fff;
-          }
-
-          .div-date-selected {
-              cursor: unset !important;
-              border: 1px solid $color1;
-              background-color: $color1;
-              color: #fff;
-              border-radius: 50%;
-          }
+    margin: 0px 0px 20px 0px;
+    .column-week {
+      .div-title-week {
+        font-size: 17px;
+        font-weight: 500;
       }
+      .empty-date {
+        margin: 40px 0px 0px 0px;
+      }
+      .div-date-schedule {
+        cursor: pointer;
+        text-align: center;
+        padding: 5px;
+        margin: 10px 0px 0px 0px;
+        border: 1px solid #fff;
+      }
+
+      .div-date-selected {
+        cursor: unset !important;
+        border: 1px solid $color1;
+        background-color: $color1;
+        color: #fff;
+        border-radius: 50%;
+      }
+    }
   }
 }

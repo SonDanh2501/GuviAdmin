@@ -5,7 +5,11 @@ import {
   getExtendOptionalByOptionalServiceApi,
   getOptionalServiceByServiceApi,
 } from "../../../api/service";
-import { searchCustomersApi } from "../../../api/customer";
+import {
+  createAddressForCustomer,
+  getFavoriteAndBlockByCustomers,
+  searchCustomersApi,
+} from "../../../api/customer";
 import {
   getAddressCustomerApi,
   createOrderApi,
@@ -31,6 +35,7 @@ import {
   Select,
   Space,
   Pagination,
+  Switch,
 } from "antd";
 import { PAYMENT_METHOD } from "../../../@core/constant/service.constant.js";
 import _debounce from "lodash/debounce";
@@ -40,6 +45,11 @@ import DateWorkComponent from "../components/DateWorkComponent";
 import { useNavigate } from "react-router-dom";
 import { formatMoney } from "../../../helper/formatMoney";
 import LoadingPagination from "../../../components/paginationLoading";
+import ItemCollaborator from "../../../components/collaborator/itemCollaborator/index.jsx";
+import {
+  COLLABORATOR_BLOCK,
+  COLLABORATOR_FAVORITE,
+} from "../../../constants/index.js";
 var AES = require("crypto-js/aes");
 const { TextArea } = Input;
 
@@ -48,33 +58,39 @@ const CreateOrder = () => {
   const service = useSelector(getService);
   const [selectService, setSelectService] = useState(null);
   const [serviceData, setServiceData] = useState(null);
-  const [searchCustomer, setSearchCustomer] = useState("");
   const [listCustomer, setListCustomer] = useState([]);
   const [customer, setCustomer] = useState(null);
   const [listAddressDefault, setListAddressDefault] = useState([]);
   const [listAddress, setListAddress] = useState([]);
   const [addressEncode, setAddressEncode] = useState(null);
-  const [searchAddress, setSearchAddress] = useState("");
   const [listExtend, setListExtend] = useState([]);
   const [payloadOrder, setPayloadOrder] = useState(null);
   const [dateWorkSchedule, setDateWorkSchedule] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState(PAYMENT_METHOD[0].value);
   const [collaborator, setCollaborator] = useState(null);
-  const [searchCollaborator, setSearchCollaborator] = useState("");
   const [listCollaborator, setListCollaborator] = useState([]);
   const [listShowCodePromotion, setListShowCodePromotion] = useState([]);
   const [selectCodePromotion, setSelectCodePromotion] = useState(null);
   const [resultCodePromotion, setResultCodePromotion] = useState(null);
   const [discountCodePromotion, setDiscountCodePromotion] = useState(null);
-
   const [listEventPromotion, setListEventPromotion] = useState([]);
   const [initialFee, setInitialFee] = useState(0);
   const [finalFee, setFinalFee] = useState(0);
   const [serviceFee, setServiceFee] = useState([]);
   const [note, setNote] = useState("");
-
   const [isLoading, setIsLoading] = useState(false);
-
+  const [collaboratorFavourite, setCollaboratorFavourite] = useState([]);
+  const [collaboratorBlock, setCollaboratorBlock] = useState([]);
+  const [collaboratorRecently, setCollaboratorRecently] = useState([]);
+  const [total, setTotal] = useState({
+    totalFavourite: 0,
+    totalRecently: 0,
+    totalBlock: 0,
+  });
+  const [isShowCollaborator, setIsShowCollaborator] = useState(false);
+  const [tempValueCollaborator, setTempValueCollaborator] = useState("");
+  const [isChoicePaymentMethod, setIsChoicePaymentMethod] = useState(true);
+  const [newAddress, setNewAddress] = useState(null);
   useEffect(() => {
     if (service.length > 0) {
       setSelectService(service[1]._id);
@@ -85,25 +101,26 @@ const CreateOrder = () => {
     if (selectService !== null) {
       getDataOptionalService();
     }
+    if (selectService) {
+      const findService = service.filter((a) => a._id === selectService);
+      if (findService.length > 0 && findService[0].type === "schedule") {
+        setIsChoicePaymentMethod(false);
+        setPaymentMethod(PAYMENT_METHOD[1].value);
+      } else {
+        setPaymentMethod(PAYMENT_METHOD[0].value);
+        setIsChoicePaymentMethod(true);
+      }
+    }
   }, [selectService]);
-
-  // useEffect(() => {
-  //   getDataListCustomer();
-  // }, [searchCustomer])
 
   useEffect(() => {
     if (customer !== null) {
       getDataListAddressDefault();
+      getCollaboratorByCustomer();
+      setIsShowCollaborator(true);
     }
   }, [customer]);
-
   useEffect(() => {
-    // console.log(dateWorkSchedule, "dateWorkSchedule");
-    // console.log(serviceData, "serviceData");
-    // console.log(customer, "customer");
-    // console.log(listExtend, "listExtend");
-    // console.log(paymentMethod, "paymentMethod");
-
     if (
       serviceData !== null &&
       addressEncode !== null &&
@@ -124,6 +141,7 @@ const CreateOrder = () => {
           selectCodePromotion.code.toString() || "";
       if (collaborator !== null) tempPayload["id_collaborator"] = collaborator;
       tempPayload["type_address_work"] = "house";
+      // if (is)
       setPayloadOrder(tempPayload);
     }
   }, [
@@ -144,7 +162,6 @@ const CreateOrder = () => {
       dateWorkSchedule.length > 0 &&
       addressEncode !== null
     ) {
-      // console.log(payloadOrder, "payloadOrder");
       calculateFeeGroupOrder(payloadOrder);
       getDataCodePromotionAvaiable();
       getCheckEventPromotion();
@@ -162,7 +179,6 @@ const CreateOrder = () => {
 
     if (listEventPromotion.length > 0) {
       for (const item of listEventPromotion) {
-        // console.log(item.discount, "item.discount");
         finalFee -= item.discount;
       }
     }
@@ -172,7 +188,6 @@ const CreateOrder = () => {
     }
     setFinalFee(finalFee);
   }, [listEventPromotion, resultCodePromotion, initialFee]);
-
   const getDataOptionalService = async () => {
     const res = await getOptionalServiceByServiceApi(selectService);
     const findService = service.filter((a) => a._id === selectService);
@@ -190,7 +205,6 @@ const CreateOrder = () => {
       });
       payloadService.optional_service[i]["extend_optional"] = resExtend.data;
     }
-    if (payloadService.type === "schedule") setPaymentMethod("point");
     setServiceData(payloadService);
     setInitialFee(0);
     setFinalFee(0);
@@ -219,7 +233,6 @@ const CreateOrder = () => {
 
   const getCheckEventPromotion = async () => {
     const res = await checkEventCodePromotionOrderApi(customer, payloadOrder);
-    // console.log(res, "resresres");
     setListEventPromotion(res.event_promotion);
   };
 
@@ -240,29 +253,54 @@ const CreateOrder = () => {
 
   const getDataListAddressDefault = async () => {
     const res = await getAddressCustomerApi(customer, 0, 50);
+    setListAddress(res.data);
     setListAddressDefault(res.data);
   };
-
-  const getDataListAddress = async (search) => {
-    const res = await googlePlaceAutocomplete(search);
-    // setListAddress(res.predictions)
-    const dataRes = [];
-    for (const item of res.predictions) {
-      dataRes.push({
-        place_id: item.place_id,
-        address: item.description,
-      });
-    }
-    setListAddress(dataRes);
-  };
-
   const handleSearchAddress = useCallback(
-    _debounce((newValue) => {
-      getDataListAddress(newValue);
+    _debounce(async (newValue) => {
+      const dataRes = [];
+      if (newValue.trim() !== "") {
+        const res = await googlePlaceAutocomplete(newValue);
+        for (const item of res.predictions) {
+          dataRes.push({
+            place_id: item.place_id,
+            _id: item.place_id,
+            address: item.description,
+          });
+        }
+        setListAddress(dataRes);
+      } else {
+        setListAddress(listAddressDefault);
+      }
     }, 1000),
     []
   );
 
+  const handleChangeAddress = async (newValue) => {
+    if (listAddress[0].place_id) {
+      const res = await getPlaceDetailApi(newValue);
+      const temp = JSON.stringify({
+        lat: res.result.geometry.location.lat,
+        lng: res.result.geometry.location.lng,
+        address: res.result.formatted_address,
+      });
+      const accessToken = AES.encrypt(temp, "guvico");
+      setAddressEncode(accessToken);
+      setNewAddress(accessToken);
+    } else {
+      const address = listAddress.filter((item) => item._id === newValue)[0];
+      if (address) {
+        const tempAddres = JSON.stringify({
+          lat: address.lat,
+          lng: address.lng,
+          address: address.address,
+        });
+        const accessToken = AES.encrypt(tempAddres, "guvico");
+        setAddressEncode(accessToken);
+        setNewAddress(null);
+      }
+    }
+  };
   const handleSearchCustomer = useCallback(
     _debounce((newValue) => {
       getDataListCustomer(newValue);
@@ -293,6 +331,12 @@ const CreateOrder = () => {
     setCollaborator(newValue);
   };
 
+  const onFocusSelectCollaborator = () => {
+    isShowCollaborator && setIsShowCollaborator(false);
+  };
+  const handleFocusAddress = () => {
+    setListAddress(listAddressDefault);
+  };
   const changeService = (tempService) => {
     const temp = [];
     for (let i = 0; i < tempService.optional_service.length; i++) {
@@ -311,7 +355,6 @@ const CreateOrder = () => {
         }
       }
     }
-    // console.log(temp, "temp");
     setListExtend(temp);
   };
 
@@ -319,7 +362,6 @@ const CreateOrder = () => {
     const res = await getCalculateFeeApi(payload);
     const resServiceFee = await getServiceFeeOrderApi(payload);
     setInitialFee(res.initial_fee);
-    // console.log(resServiceFee.service_fee, "resServiceFee.service_fee");
     setServiceFee(resServiceFee.service_fee);
   };
 
@@ -333,32 +375,56 @@ const CreateOrder = () => {
       .catch();
   };
 
-  const selectAddressDefault = (newValue) => {
-    // console.log(newValue, "selectAddressDefault");
-    const temp = JSON.stringify({
-      lat: newValue.lat,
-      lng: newValue.lng,
-      address: newValue.address,
-    });
-    // console.log(temp, "selectAddressDefault");
-    const accessToken = AES.encrypt(temp, "guvico");
-    setAddressEncode(accessToken);
-    setSearchAddress(newValue.address);
+  const getCollaboratorByCustomer = () => {
+    getFavoriteAndBlockByCustomers(customer, COLLABORATOR_FAVORITE)
+      .then((res) => {
+        setTotal((prev) => {
+          prev.totalFavourite = prev.totalFavourite || res?.totalItem;
+          return prev;
+        });
+        setCollaboratorFavourite(res?.data);
+      })
+      .catch((err) => {
+        console.log("res  ", err);
+      });
+    getFavoriteAndBlockByCustomers(customer, COLLABORATOR_BLOCK)
+      .then((res) => {
+        setTotal((prev) => {
+          prev.totalBlock = prev.totalBlock || res?.totalItem;
+          return prev;
+        });
+        setCollaboratorBlock(res?.data);
+      })
+      .catch((err) => {
+        console.log("res  ", err);
+      });
   };
-
-  const selectAddress = async (newValue) => {
-    const res = await getPlaceDetailApi(newValue.place_id);
-    const temp = JSON.stringify({
-      lat: res.result.geometry.location.lat,
-      lng: res.result.geometry.location.lng,
-      address: newValue.address,
-    });
-    // console.log(temp, "selectAddress");
-    const accessToken = AES.encrypt(temp, "guvico");
-    setAddressEncode(accessToken);
-    setSearchAddress(newValue.address);
+  const chooseCollaborator = (collaborator) => {
+    setListCollaborator([collaborator]);
+    setCollaborator(collaborator._id);
+    setTempValueCollaborator(
+      `${collaborator.id_view} - ${collaborator.full_name} - ${collaborator.phone}`
+    );
   };
-
+  const onAddAddressCustomer = () => {
+    const data = {
+      token: addressEncode.toString(),
+      type_address_work: "house",
+      note_address: "",
+      address: "",
+    };
+    createAddressForCustomer(customer, data)
+      .then((res) => {
+        setNewAddress(false);
+        console.log("res ", res);
+      })
+      .catch((err) => {
+        console.log("err ", err);
+      });
+  };
+  const handleOnclearCollaborator = () => {
+    tempValueCollaborator !== "" && setTempValueCollaborator("");
+  };
   return (
     <React.Fragment>
       <div className="div-container-content">
@@ -384,78 +450,31 @@ const CreateOrder = () => {
                   value: d._id,
                   label: `${d.id_view} - ${d.full_name} - ${d.phone}`,
                 }))}
+                placeholder={"Nhập tên hoặc SĐT khách hàng"}
               />
             </div>
 
             <div className="div-flex-column">
               <p>Địa chỉ</p>
-              <Input
-                value={searchAddress}
-                onChange={(event) => {
-                  setAddressEncode(null);
-                  setSearchAddress(event.target.value);
-                  handleSearchAddress(event.target.value);
-                }}
-              ></Input>
-
-              {addressEncode === null ? (
-                <>
-                  {listAddress.length > 0 ? (
-                    <>
-                      <div className="div-list-address-search">
-                        <p>Kết quả tìm kiếm</p>
-                        {listAddress.map((item, index) => (
-                          <div
-                            key={index}
-                            class="div-item-address"
-                            onClick={() => {
-                              selectAddress(item);
-                            }}
-                          >
-                            <i class="uil uil-map-marker"></i>
-                            <div class="div-name-address">
-                              <p class="title-address">
-                                {item.address.split(",")[0]}
-                              </p>
-                              <p class="title-details-address">
-                                {item.address}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  ) : listAddressDefault.length > 0 ? (
-                    <>
-                      <div className="div-list-address-default">
-                        <p>Địa chỉ đã lưu</p>
-                        {listAddressDefault.map((item, index) => (
-                          <div
-                            key={index}
-                            class="div-item-address"
-                            onClick={() => {
-                              selectAddressDefault(item);
-                            }}
-                          >
-                            <i class="uil uil-map-marker"></i>
-                            <div class="div-name-address">
-                              <p class="title-address">
-                                {item.address.split(",")[0]}
-                              </p>
-                              <p class="title-details-address">
-                                {item.address}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                </>
-              ) : (
-                <></>
+              <Select
+                showSearch
+                style={{ width: "100%" }}
+                defaultActiveFirstOption={false}
+                suffixIcon={null}
+                filterOption={false}
+                onSearch={handleSearchAddress}
+                onChange={handleChangeAddress}
+                onFocus={handleFocusAddress}
+                options={listAddress.map((d) => ({
+                  value: d._id,
+                  label: `${d.address}`,
+                }))}
+                placeholder={"Nhấn vào để chọn địa chỉ hoặc nhập địa chỉ mới"}
+              />
+              {customer && newAddress && (
+                <Button onClick={onAddAddressCustomer}>
+                  Thêm địa chỉ mới cho KH
+                </Button>
               )}
             </div>
 
@@ -482,22 +501,22 @@ const CreateOrder = () => {
               <DateWorkComponent
                 serviceData={serviceData}
                 changeTimeSchedule={setDateWorkSchedule}
+                setPaymentMethod={setPaymentMethod}
+                setIsChoicePaymentMethod={setIsChoicePaymentMethod}
               />
               {/* -------------------- Phương thức thanh toán (nếu đơn hàng cố định thì không hiển thị mà mặc định là 'point') -------------------- */}
-              {serviceData && serviceData.type !== "schedule" && (
-                <>
-                  <div className="div-flex-column">
-                    <p>Phương thức thanh toán</p>
-                    <Select
-                      onChange={handleChangePaymentMethod}
-                      value={paymentMethod}
-                      options={PAYMENT_METHOD}
-                    />
-                  </div>
-                </>
-              )}
+              <div className="div-flex-column">
+                <p>Phương thức thanh toán</p>
+                <Select
+                  onChange={handleChangePaymentMethod}
+                  value={paymentMethod}
+                  options={PAYMENT_METHOD}
+                  disabled={!isChoicePaymentMethod}
+                />
+              </div>
               {/* -------------------- Phương thức thanh toán -------------------- */}
-              <div>
+              {/* -------------------- Chọn Cộng Tác Viên ------------------------ */}
+              <div className="div-select-collaborator">
                 <p>Cộng tác viên</p>
                 <Select
                   showSearch
@@ -505,17 +524,65 @@ const CreateOrder = () => {
                   defaultActiveFirstOption={false}
                   suffixIcon={null}
                   filterOption={false}
+                  value={
+                    tempValueCollaborator !== ""
+                      ? tempValueCollaborator
+                      : undefined
+                  }
                   onSearch={handleSearchCollaborator}
                   onChange={handleChangeCollaborator}
+                  onFocus={onFocusSelectCollaborator}
+                  onClear={handleOnclearCollaborator}
+                  allowClear={() => <div>xoa</div>}
                   options={listCollaborator.map((d) => ({
                     value: d._id,
                     label: `${d.id_view} - ${d.full_name} - ${d.phone}`,
                   }))}
+                  placeholder={"Nhập tên hoặc SĐT CTV"}
                 />
               </div>
-            </div>
+              <div className="div-list-collaborator_toggle-switch">
+                <p>Danh sách CTV yêu thích/hạn chế</p>
+                <Switch
+                  disabled={!customer}
+                  checked={isShowCollaborator}
+                  onChange={() => setIsShowCollaborator(!isShowCollaborator)}
+                />
+              </div>
 
-            <div>
+              {isShowCollaborator && (
+                <div className="container-collaborator-by-customer">
+                  <div>
+                    <p>CTV yêu thích</p>
+                    {collaboratorFavourite.map((item, index) => {
+                      return (
+                        <ItemCollaborator
+                          onClick={() => chooseCollaborator(item)}
+                          key={index}
+                          data={item}
+                        />
+                      );
+                    })}
+                  </div>
+                  <div>
+                    <p>CTV hạn chế</p>
+                    {collaboratorBlock.map((item, index) => {
+                      return (
+                        <ItemCollaborator
+                          onClick={() => chooseCollaborator(item)}
+                          key={index}
+                          data={item}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+            {/* -------------------- Chọn Cộng Tác Viên ------------------------ */}
+
+            <div className="div-note-collaborator">
+              <p>Ghi chú cho CTV</p>
               <TextArea
                 allowClear
                 rows={4}
@@ -523,6 +590,7 @@ const CreateOrder = () => {
                 onChange={(event) => {
                   setNote(event.target.value);
                 }}
+                placeholder="Nhập ghi chú cho CTV (nếu có)"
               />
             </div>
 

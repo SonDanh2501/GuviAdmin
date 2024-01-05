@@ -1,2 +1,6 @@
-@import '../../index.scss';
+@import "../../index.scss";
 
+.warning-loop {
+  padding-left: 10px;
+  color: $colorError !important;
+}

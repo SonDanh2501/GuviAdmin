@@ -18,7 +18,6 @@ const ServiceComponent = (props) => {
 
   const [listOptionalService, setOptionalService] = useState([]);
   const [service, setService] = useState(null);
-
   useEffect(() => {
     if (serviceData !== null) {
       setService(serviceData);
@@ -249,22 +248,16 @@ const ServiceComponent = (props) => {
     return (
       <>
         {optionalService.extend_optional.map((extend, index) => (
-          <div
-            key={index}
-            className={`${extend.selected ? "item-selected" : ""} item`}
-          >
-            <div className="text-checkbox">
-              <div className="text-item">
-                <p>{extend.title.vi}</p>
-                <p>{extend.description.vi}</p>
-                {extend.kind !== "" && (
-                  <p className="extend-kind">
-                    {extend.kind === "leather" && "Sofa da"}
-                    {extend.kind === "fabric" && "Sofa vải/nỉ"}
-                  </p>
-                )}
-              </div>
-              <div className="div-checkbox">
+          <div key={index} className={` item`}>
+            <div className="container-title">
+              {extend.kind !== "" && (
+                <p className="extend-kind">
+                  {extend.kind === "leather" && "(da)"}
+                  {extend.kind === "fabric" && "(vải/nỉ)"}
+                </p>
+              )}
+              <p>{extend.title.vi}</p>
+              <div className="check-box">
                 <Checkbox
                   checked={extend.selected}
                   onChange={() => {
@@ -273,33 +266,31 @@ const ServiceComponent = (props) => {
                 ></Checkbox>
               </div>
             </div>
-
+            <p>{extend.description.vi}</p>
             {extend.selected === true ? (
-              <>
-                <div className="counter-optional">
-                  <Button
-                    onClick={() => {
-                      counterNumber(optionalService.type, extend, "-");
-                    }}
-                  >
-                    -
-                  </Button>
-                  <InputNumber
-                    value={extend.count}
-                    controls={false}
-                    readOnly={true}
-                  />
-                  <Button
-                    onClick={() => {
-                      counterNumber(optionalService.type, extend, "+");
-                    }}
-                  >
-                    +
-                  </Button>
-                </div>
-              </>
+              <div className="counter-optional">
+                <Button
+                  onClick={() => {
+                    counterNumber(optionalService.type, extend, "-");
+                  }}
+                >
+                  -
+                </Button>
+                <InputNumber
+                  value={extend.count}
+                  controls={false}
+                  readOnly={true}
+                />
+                <Button
+                  onClick={() => {
+                    counterNumber(optionalService.type, extend, "+");
+                  }}
+                >
+                  +
+                </Button>
+              </div>
             ) : (
-              <></>
+              <div className="counter-optional"></div>
             )}
           </div>
         ))}

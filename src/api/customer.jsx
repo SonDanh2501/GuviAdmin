@@ -57,6 +57,14 @@ export const getHistoryTransitionByCustomers = (id, start, length) => {
   );
 };
 
+/**
+ *
+ * @param {*} id id của khách hàng
+ * @param {*} status hiện tại đang chỉ nhận favourite hoặc không, nếu không thì lấy thông tin collaborator block
+ * @param {*} start điểm bắt đầu lấy dữ liệu
+ * @param {*} length số lượng dữ liệu cần lấy
+ * @returns
+ */
 export const getFavoriteAndBlockByCustomers = (id, status, start, length) => {
   return axiosClient.get(
     `/admin/collaborator_manager/get_list_collaborator_block_or_favourite/${id}?status=${status}&start=${start}&length=${length}`
@@ -101,4 +109,17 @@ export const getReviewByCustomers = (id, start, length) => {
 
 export const setIsStaffCustomerApi = (id, data) => {
   return axiosClient.post(`/admin/customer_manager/set_is_staff/${id}`, data);
+};
+
+/**
+ *
+ * @param {*} id của KH
+ * @param {*} data  token:string; type_address_work?: string; note_address?: string;
+ * @returns
+ */
+export const createAddressForCustomer = (id, data) => {
+  return axiosClient.post(
+    `/admin/customer_manager/create_address_for_customer/${id}`,
+    data
+  );
 };

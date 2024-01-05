@@ -17,25 +17,22 @@ import {
   TYPE_VIEW_OPTIONAL_SERVICE,
   DATE_OF_WEEK,
   MONTH_SCHEDULE,
+  PAYMENT_METHOD,
 } from "../../../../@core/constant/service.constant.js";
 import "./index.scss";
 
 const DateWorkComponent = (props) => {
-  const { serviceData } = props;
-
+  const { serviceData, setPaymentMethod, setIsChoicePaymentMethod } = props;
   const [listTimeQuickSelect, setListTimeQuickSelect] = useState(SELECT_TIME);
   const [time, setTime] = useState(null);
   const [date, setDate] = useState(null);
   const [timeSchedule, setTimeSchedule] = useState([]);
-  const timeZoneLocal = 7 * 60 * 60 * 1000;
-
   const [dateOfWeek, setDateOfWeek] = useState([]);
   const [monthSchedule, setMonthSchedule] = useState(null);
   const [service, setService] = useState(null);
   const [isOpenDetailSchedule, setIsOpenDetailSchedule] = useState(false);
-
   const [listSchedule, setListSchedule] = useState([]);
-
+  const timeZoneLocal = 7 * 60 * 60 * 1000;
   useEffect(() => {
     const tempListSchedule = [];
     const dateNow = new Date();
@@ -187,8 +184,11 @@ const DateWorkComponent = (props) => {
     if (timeSchedule !== null && newValue === true) {
       const getDateOfWeek = new Date(timeSchedule).getDay();
       setDateOfWeek([getDateOfWeek]);
+      setPaymentMethod(PAYMENT_METHOD[0].value);
+      setIsChoicePaymentMethod(false);
     } else {
       setDateOfWeek([]);
+      setIsChoicePaymentMethod(true);
     }
     setService(tempService);
   };
@@ -324,6 +324,7 @@ const DateWorkComponent = (props) => {
                                 item.value === time ? "item-selected" : ""
                               } div-select-time`}
                               onClick={() => {
+                                console.log("ahhahassdas");
                                 setTime(item.value);
                               }}
                             >
@@ -340,37 +341,36 @@ const DateWorkComponent = (props) => {
                           <div className="div-active-loop-week">
                             <p>Lặp lại theo tuần</p>
                             <Switch
+                              disabled={!timeSchedule.length > 0}
                               checked={service.is_auto_order}
                               onChange={() => {
                                 onChangeLoopDate(!service.is_auto_order);
                               }}
                             />
+                            {!timeSchedule.length > 0 && (
+                              <p className="warning-loop">{`(Vui lòng chọn thời gian làm việc trước khi tích vào đây)`}</p>
+                            )}
                           </div>
-
-                          {service.is_auto_order === true ? (
-                            <>
-                              <div className="content-date-of-week">
-                                {DATE_OF_WEEK.map((item, index) => (
-                                  <div
-                                    key={index}
-                                    className={`${
-                                      dateOfWeek.findIndex(
-                                        (x) => x === item.value
-                                      ) > -1
-                                        ? "item-selected"
-                                        : ""
-                                    } item-date-of-week`}
-                                    onClick={() => {
-                                      onClickDateOfWeek(item.value);
-                                    }}
-                                  >
-                                    <p>{item.label}</p>
-                                  </div>
-                                ))}
-                              </div>
-                            </>
-                          ) : (
-                            <></>
+                          {service.is_auto_order && (
+                            <div className="content-date-of-week">
+                              {DATE_OF_WEEK.map((item, index) => (
+                                <div
+                                  key={index}
+                                  className={`${
+                                    dateOfWeek.findIndex(
+                                      (x) => x === item.value
+                                    ) > -1
+                                      ? "item-selected"
+                                      : ""
+                                  } item-date-of-week`}
+                                  onClick={() => {
+                                    onClickDateOfWeek(item.value);
+                                  }}
+                                >
+                                  <p>{item.label}</p>
+                                </div>
+                              ))}
+                            </div>
                           )}
                         </div>
                       </>
