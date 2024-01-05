@@ -246,7 +246,7 @@ const EditOptional = (props) => {
     setPriceRushHour(data?.price_option_rush_hour);
   }, [data]);
 
-  console.log(data);
+  // console.log(data);
 
   const editOptionalService = useCallback(() => {
     setIsLoading(true);

@@ -16,7 +16,6 @@
 // import "react-calendar/dist/Calendar.css";
 // const { RangePicker } = DatePicker;
 
-
 // const CustomDatePicker = (props) => {
 //   const lang = useSelector(getLanguageState);
 //   const {
@@ -37,9 +36,8 @@
 //   const [title, setTitle] = useState();
 //   const timeZone = 0;
 
-
 //   const onSelectTab = (item) => {
-//     console.log(item, 'item');  
+//     console.log(item, 'item');
 //   }
 //   const onChange = (value, event) => {
 
@@ -50,8 +48,6 @@
 //     console.log(event, 'vaeventlue');
 //     console.log(startDate.toISOString(), 'startDate');
 //     console.log(endDate.toISOString(), 'endDate');
-
-
 
 //     // setStart(value[0]);
 //     // setEnd(value[1]);
@@ -122,8 +118,6 @@
 //     // );
 //   }, []);
 
-
-
 //   const handleCancel = () => {
 //     setOpen(false);
 //     onCancel();
@@ -134,7 +128,6 @@
 //     setOpen(false);
 //     onClick();
 //   };
-
 
 //   return (
 //     <div>
@@ -202,7 +195,7 @@
 //                       className="picker"
 //                       onChange={(e) => onChangeFilter(e[0]?.$d, e[1]?.$d)}
 //                       locale={lang}
-                      
+
 //                     />
 //                   </div>
 //                 </>
@@ -316,20 +309,6 @@
 //   },
 // ];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { Button, DatePicker, Modal } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
@@ -404,8 +383,14 @@ const CustomDatePicker = (props) => {
       .endOf("days")
       .add(timeZone, "hours")
       .toISOString();
-    const startToday = moment().startOf("days").add(timeZone, "hours").toISOString();
-    const endToday = moment().endOf("days").add(timeZone, "hours").toISOString();
+    const startToday = moment()
+      .startOf("days")
+      .add(timeZone, "hours")
+      .toISOString();
+    const endToday = moment()
+      .endOf("days")
+      .add(timeZone, "hours")
+      .toISOString();
 
     const startYesterday = moment()
       .subtract(1, "days")
@@ -437,7 +422,10 @@ const CustomDatePicker = (props) => {
       .startOf("days")
       .add(timeZone, "hours")
       .toISOString();
-    const endThisMonth = moment().endOf("days").add(timeZone, "hours").toISOString();
+    const endThisMonth = moment()
+      .endOf("days")
+      .add(timeZone, "hours")
+      .toISOString();
     const startLastMonth = moment()
       .subtract(1, "months")
       .startOf("months")
@@ -448,26 +436,27 @@ const CustomDatePicker = (props) => {
       .endOf("months")
       .add(timeZone, "hours")
       .toISOString();
-    const endNextDay = moment().add(3, "days").add(timeZone, "hours").toISOString();
+    const endNextDay = moment()
+      .add(3, "days")
+      .add(timeZone, "hours")
+      .toISOString();
 
     let sameStart = 0;
     let sameEnd = 0;
     let rangeDate = 0;
     switch (item?.value) {
       case "last_seven":
-
         setStartDate(lastSeven);
         setStart(moment().subtract(1, "week").startOf("days"));
         setEndDate(todayEnd);
         setEnd(moment().subtract(1, "days").endOf("days"));
 
-
-        rangeDate = new Date(todayEnd).getTime() - new Date(lastSeven).getTime();
+        rangeDate =
+          new Date(todayEnd).getTime() - new Date(lastSeven).getTime();
         sameEnd = new Date(lastSeven).getTime() - 1;
         sameStart = sameEnd - rangeDate;
-        setSameStart(new Date(sameStart).toISOString())
-        setSameEnd(new Date(sameEnd).toISOString())
-
+        setSameStart(new Date(sameStart).toISOString());
+        setSameEnd(new Date(sameEnd).toISOString());
 
         // setSameStart(
         //   moment(lastSeven)
@@ -491,12 +480,12 @@ const CustomDatePicker = (props) => {
         setEndDate(todayEnd);
         setEnd(moment().subtract(1, "days").endOf("days"));
 
-
-        rangeDate = new Date(todayEnd).getTime() - new Date(lastThirty).getTime();
+        rangeDate =
+          new Date(todayEnd).getTime() - new Date(lastThirty).getTime();
         sameEnd = new Date(lastThirty).getTime() - 1;
         sameStart = sameEnd - rangeDate;
-        setSameStart(new Date(sameStart).toISOString())
-        setSameEnd(new Date(sameEnd).toISOString())
+        setSameStart(new Date(sameStart).toISOString());
+        setSameEnd(new Date(sameEnd).toISOString());
 
         // setSameStart(
         //   moment(lastThirty)
@@ -520,12 +509,12 @@ const CustomDatePicker = (props) => {
         setEndDate(todayEnd);
         setEnd(moment().subtract(1, "days").endOf("days"));
 
-        rangeDate = new Date(todayEnd).getTime() - new Date(lastNinety).getTime();
+        rangeDate =
+          new Date(todayEnd).getTime() - new Date(lastNinety).getTime();
         sameEnd = new Date(lastNinety).getTime() - 1;
         sameStart = sameEnd - rangeDate;
-        setSameStart(new Date(sameStart).toISOString())
-        setSameEnd(new Date(sameEnd).toISOString())
-
+        setSameStart(new Date(sameStart).toISOString());
+        setSameEnd(new Date(sameEnd).toISOString());
 
         // setSameStart(
         //   moment(lastNinety)
@@ -552,11 +541,12 @@ const CustomDatePicker = (props) => {
           moment(startThisMonth),
           "day"
         );
-        rangeDate = new Date(endThisMonth).getTime() - new Date(startThisMonth).getTime();
+        rangeDate =
+          new Date(endThisMonth).getTime() - new Date(startThisMonth).getTime();
         sameEnd = new Date(startThisMonth).getTime() - 1;
         sameStart = sameEnd - rangeDate;
-        setSameStart(new Date(sameStart).toISOString())
-        setSameEnd(new Date(sameEnd).toISOString())
+        setSameStart(new Date(sameStart).toISOString());
+        setSameEnd(new Date(sameEnd).toISOString());
 
         // const sameStart = moment()
         //   .subtract(1, "months")
@@ -585,12 +575,12 @@ const CustomDatePicker = (props) => {
         );
         setEndDate(endLastMonth);
         setEnd(moment().subtract(1, "months").endOf("months").endOf("days"));
-        rangeDate = new Date(endLastMonth).getTime() - new Date(startLastMonth).getTime();
+        rangeDate =
+          new Date(endLastMonth).getTime() - new Date(startLastMonth).getTime();
         sameEnd = new Date(startLastMonth).getTime() - 1;
         sameStart = sameEnd - rangeDate;
-        setSameStart(new Date(sameStart).toISOString())
-        setSameEnd(new Date(sameEnd).toISOString())
-
+        setSameStart(new Date(sameStart).toISOString());
+        setSameEnd(new Date(sameEnd).toISOString());
 
         // setSameStart(
         //   moment(startLastMonth)
@@ -691,10 +681,10 @@ const CustomDatePicker = (props) => {
   };
 
   const onChangeFilter = useCallback((start, end) => {
-    console.log(tabTime, 'tabTime');
+    // console.log(tabTime, 'tabTime');
 
-    console.log(start, 'start');
-    console.log(end, 'end');
+    // console.log(start, 'start');
+    // console.log(end, 'end');
 
     const dayStart = moment(start)
       .startOf(
@@ -721,10 +711,8 @@ const CustomDatePicker = (props) => {
 
       .toISOString();
 
-      console.log(dayStart, 'dayStart');
-      console.log(dayEnd, 'dayEnd');
-
-
+    // console.log(dayStart, 'dayStart');
+    // console.log(dayEnd, 'dayEnd');
 
     setStartDate(dayStart);
     setEndDate(dayEnd);
@@ -733,10 +721,8 @@ const CustomDatePicker = (props) => {
     const rangeDate = new Date(dayEnd).getTime() - new Date(dayStart).getTime();
     const sameEnd = new Date(dayStart).getTime() - 1;
     const sameStart = sameEnd - rangeDate;
-    setSameStart(new Date(sameStart).toISOString())
-    setSameEnd(new Date(sameEnd).toISOString())
-
-    
+    setSameStart(new Date(sameStart).toISOString());
+    setSameEnd(new Date(sameEnd).toISOString());
 
     // setSameStart(
     //   moment(dayStart)

@@ -114,7 +114,7 @@ const PunishMoneyCollaborator = ({ type, setDataT, setTotal }) => {
 
   const onChangeMoney = (value) => {
     const deleteComma = value.replace(/,/g, "");
-    console.log(deleteComma.toString());
+    // console.log(deleteComma.toString());
     // setMoney(
     //   deleteComma.toString()?.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
     // );

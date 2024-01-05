@@ -7,7 +7,7 @@ import {
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 // import Sidebar from "../../components/Sidebar/Sidebar";
 import Sidebar from "../Slidebar";
 import { getUserAction, permissionAction } from "../../redux/actions/auth";
@@ -37,7 +37,6 @@ const Main = ({ hide }) => {
     dispatch(getUserAction.getUserRequest());
   }, [dispatch, navigate]);
 
-
   useEffect(() => {
     if (width > 900) {
       setCollapsed(true);
@@ -45,8 +44,6 @@ const Main = ({ hide }) => {
       setCollapsed(false);
     }
   }, [width]);
-
-
 
   return (
     <Layout style={{ overflowX: "hidden" }}>
@@ -110,7 +107,7 @@ const Main = ({ hide }) => {
               overflow: "initial",
             }}
           >
-        <FloatButton.BackTop />
+            <FloatButton.BackTop />
 
             <Admin />
           </Content>
