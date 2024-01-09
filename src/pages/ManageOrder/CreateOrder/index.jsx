@@ -141,6 +141,8 @@ const CreateOrder = () => {
           selectCodePromotion.code.toString() || "";
       if (collaborator !== null) tempPayload["id_collaborator"] = collaborator;
       tempPayload["type_address_work"] = "house";
+      tempPayload["note"] = note;
+
       // if (is)
       setPayloadOrder(tempPayload);
     }
@@ -153,6 +155,7 @@ const CreateOrder = () => {
     selectCodePromotion,
     collaborator,
     serviceData,
+    note
   ]);
 
   useEffect(() => {
