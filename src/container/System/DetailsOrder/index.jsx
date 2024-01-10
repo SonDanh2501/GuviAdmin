@@ -62,7 +62,9 @@ const DetailsOrder = () => {
   const [openCancelOrder, setOpenCancelOrder] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [rowIndex, setRowIndex] = useState();
-  const [itemEdit, setItemEdit] = useState({date_work: new Date().toISOString()});
+  const [itemEdit, setItemEdit] = useState({
+    date_work: new Date().toISOString(),
+  });
   const [currentPage, setCurrentPage] = useState(1);
   const [price, setPrice] = useState(0);
   const [priceAddService, setPriceAddService] = useState(0);
@@ -1493,6 +1495,7 @@ const DetailsOrder = () => {
             </>
           }
         />
+        <h2>asdbafsbhjk</h2>
       </div>
       {isLoading && <LoadingPagination />}
     </div>
