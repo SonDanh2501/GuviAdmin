@@ -13,6 +13,7 @@ import createSagaMiddleware from "redux-saga";
 import LoadingPage from "./components/LoadingPage";
 import App from "./container/App";
 import "./index.scss";
+import "./styles/rootStyles.scss";
 import reducers from "./redux/reducers/rootReducer";
 import rootSaga from "./redux/sagas/rootSaga";
 import { loadingSelector } from "./redux/selectors/loading";
@@ -38,6 +39,6 @@ root.render(
         <AppLoading />
       </BrowserRouter>
     </PersistGate>
-  </Provider>,
+  </Provider>
   // document.getElementById("root")
 );

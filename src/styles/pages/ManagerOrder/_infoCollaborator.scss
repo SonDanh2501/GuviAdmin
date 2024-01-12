@@ -1,0 +1,28 @@
+.info-collaborator {
+  padding-right: 2rem;
+  .container-button-favourite-block {
+    // @include bordered(1px);
+    @include flexbox(space-between, center);
+    padding-bottom: 0.5rem;
+  }
+  .col-button-favourite,
+  .col-button-favourite :hover {
+    background-color: var(--main-color-2);
+    color: white;
+  }
+}
+
+.info-collaborator_container {
+  @include flexbox();
+
+  ul {
+    @include padding-x(10px, 10px);
+  }
+  li {
+    @include padding-y(0.3rem, 0);
+    a:hover {
+      background-color: white;
+      text-decoration: underline;
+    }
+  }
+}

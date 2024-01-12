@@ -1,0 +1,17 @@
+.info-customer {
+  padding-left: 2rem;
+}
+
+.info-customer_container {
+  @include flexbox();
+  ul {
+    @include padding-x(10px, 10px);
+  }
+  li {
+    @include padding-y(0.3rem, 0);
+    a:hover {
+      background-color: white;
+      text-decoration: underline;
+    }
+  }
+}
