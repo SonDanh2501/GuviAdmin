@@ -1149,7 +1149,7 @@ const DetailsOrder = () => {
                     </>
                   )}
 
-                  <div className="mt-3">
+                  <div className="mt-3 table-detail">
                     <Table
                       columns={columns}
                       dataSource={dataList}
