@@ -112,7 +112,7 @@ const Admin = () => {
         element={<ManageRequestService />}
       />
 
-      <Route path="/details-order/:id" element={<DetailOrder />} />
+      <Route path="/details-order/:id" element={<DetailsOrder />} />
       <Route
         path="/details-order/details-order-schedule/:id"
         element={<DetailsOrderSchedule />}

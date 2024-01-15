@@ -59,7 +59,7 @@ const EditTimeOrder = (props) => {
   const timeWorkEnd = moment(new Date(timeW))
     .add(estimate, "hours")
     .toISOString();
-
+  console.log("idDetail ", idDetail, lang);
   const editOrder = () => {
     setIsLoading(true);
     editTimeOrderScheduleApi(idOrder, {
@@ -73,7 +73,7 @@ const EditTimeOrder = (props) => {
         setOpen(false);
 
         if (details) {
-          getOrderByGroupOrderApi(idDetail)
+          getOrderByGroupOrderApi(idDetail, lang)
             .then((res) => {
               setDataGroup(res?.data?.groupOrder);
               setDataList(res?.data?.listOrder);

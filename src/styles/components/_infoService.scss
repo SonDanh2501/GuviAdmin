@@ -1,0 +1,19 @@
+.info-title-service {
+  background-color: var(--twitter-color);
+  color: var(--white-color);
+  padding: 10px;
+}
+.gird-3-1-1 {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr;
+  gap: 1rem;
+  padding: 5px 0px;
+  max-width: 60%;
+}
+
+.gird-1-4 {
+  display: grid;
+  grid-template-columns: 0.5fr 4.5fr;
+  gap: 1rem;
+  padding: 5px 0px;
+}
