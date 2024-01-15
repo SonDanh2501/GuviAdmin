@@ -56,8 +56,7 @@ import DetailRegisterCustomer from "../container/System/ManageReport/ManageRepor
 import ReportCollaborator from "../container/System/ManageReport/ManagerReportCollaborator/ReportCollaborator";
 import ManageReportOrderByCollaborator from "../pages/ManageReport/MamageReportCollaborator/ManageReportOrderByCollaborator";
 
-import DetailReportOrderByCollaborator from "../pages/ManageReport/MamageReportCollaborator/ManageReportOrderByCollaborator/DetailReportOrderByCollaborator"
-
+import DetailReportOrderByCollaborator from "../pages/ManageReport/MamageReportCollaborator/ManageReportOrderByCollaborator/DetailReportOrderByCollaborator";
 
 // import ReportCustomer from "../container/System/ManageReport/MangeReportOrder/ReportCutomer";
 import ReportOrderByCustomer from "../pages/ManageReport/MangeReportOrder/ReportOrderByCustomer";
@@ -100,14 +99,18 @@ import ManageRequestService from "../container/System/ManageRequestService";
 import Feedback from "../pages/ManageFeedBack/FeedBack";
 import ReviewCollaborator from "../pages/ManageFeedBack/ReviewCollaborator";
 import CollaboratorVerify from "../pages/ManageCollaborator/CollaboratorVerify";
-import CollaboratorNotVerify from "../pages/ManageCollaborator/CollaboratorNotVerify"
+import CollaboratorNotVerify from "../pages/ManageCollaborator/CollaboratorNotVerify";
+import DetailOrder from "../pages/ManageOrder/DetailOrder";
 
 const Admin = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/system/deep-cleaning" element={<DeepCleaningManager />} />
-      <Route path="/system/request-service-manage" element={<ManageRequestService />} />
+      <Route
+        path="/system/request-service-manage"
+        element={<ManageRequestService />}
+      />
 
       <Route path="/details-order/:id" element={<DetailsOrder />} />
       <Route
@@ -133,8 +136,6 @@ const Admin = () => {
         path="/system/collaborator-not-verify-manage"
         element={<CollaboratorNotVerify />}
       />
-
-
 
       <Route
         path="/system/collaborator-manage/details-collaborator/details-activity"
@@ -217,11 +218,11 @@ const Admin = () => {
       />
       <Route path="/feedback/manage-feedback" element={<ManageFeedback />} />
 
-
       <Route path="/customer-care/feedback" element={<Feedback />} />
-      <Route path="/customer-care/review-collaborator" element={<ReviewCollaborator />} />
-
-
+      <Route
+        path="/customer-care/review-collaborator"
+        element={<ReviewCollaborator />}
+      />
 
       <Route path="/group-order/manage-order" element={<ManageOrder />} />
 
@@ -235,10 +236,8 @@ const Admin = () => {
         element={<CreateOrder />}
       />
 
-
-{/* 
+      {/* 
       <Route path="/topup/manage-cashbook" element={< ManageCashBook />} /> */}
-
 
       <Route path="/topup/manage-topup" element={<ManageTopup />} />
       <Route
@@ -264,8 +263,6 @@ const Admin = () => {
         path="/report/manage-report/report-violation-collaborator"
         element={<ManageReportViolationCollaborator />}
       /> */}
-
-
 
       <Route
         path="/report/manage-report/report-order-work"

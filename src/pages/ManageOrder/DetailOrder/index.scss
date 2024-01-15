@@ -2,19 +2,15 @@
   background-color: white;
   border-radius: 5px;
   min-height: 100%;
-  margin: 10px;
-  padding: 10px;
+  margin: 0px;
+  //   padding: 10px;
   width: 100%;
-
   .label-detail {
     font-family: "Roboto";
     font-style: normal;
-    font-weight: 600;
-    font-size: 24px;
-    line-height: 30px;
+    font-size: 20px;
     color: #19202c;
     align-items: center;
-    margin-bottom: 20px;
   }
 
   .div-details-kh-ctv {
@@ -30,7 +26,6 @@
       .label-customer {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 600;
         font-size: 20px;
         line-height: 30px;
         color: #19202c;
@@ -57,7 +52,6 @@
           .label-name {
             font-family: "Roboto";
             font-style: normal;
-            font-weight: 300;
             font-size: 18px;
             line-height: 30px;
             color: #19202c;
@@ -80,7 +74,6 @@
         .label-ctv {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 600;
           font-size: 20px;
           line-height: 30px;
           color: #19202c;
@@ -142,7 +135,6 @@
           .label-name {
             font-family: "Roboto";
             font-style: normal;
-            font-weight: 300;
             font-size: 18px;
             line-height: 30px;
             color: #19202c;
@@ -160,7 +152,6 @@
   .label-details {
     font-family: "Roboto";
     font-style: normal;
-    font-weight: 600;
     font-size: 20px;
     line-height: 30px;
     color: #19202c;
@@ -180,7 +171,6 @@
       .title-price-order {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 600;
         font-size: 16px;
         line-height: 30px;
         color: #000000;
@@ -202,7 +192,6 @@
         .title {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 500;
           font-size: 16px;
           color: #000000;
         }
@@ -210,7 +199,6 @@
       .text-colon {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 600;
         font-size: 16px;
         color: #000000;
         margin-right: 5px;
@@ -218,7 +206,6 @@
       .text-service-order {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 500;
         font-size: 14px;
         color: #000000;
       }
@@ -231,7 +218,6 @@
         .text-date {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 500;
           font-size: 14px;
           color: #000000;
         }
@@ -240,7 +226,6 @@
       .text-address-details {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 400;
         font-size: 14px;
         color: #000000;
       }
@@ -252,7 +237,6 @@
         .text-title-add {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 400;
           font-size: 14px;
           color: #19202c;
         }
@@ -267,7 +251,6 @@
       .title-service {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 500;
         font-size: 16px;
         color: #000000;
         margin: 0;
@@ -276,7 +259,6 @@
       .text-colon {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 600;
         font-size: 16px;
         color: #000000;
         margin: 0 5px 0 0;
@@ -289,7 +271,6 @@
         .text-service {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 400;
           font-size: 14px;
           color: #000000;
           margin: 0;
@@ -306,7 +287,6 @@
             .text-type-ac {
               font-family: "Roboto";
               font-style: normal;
-              font-weight: 400;
               font-size: 14px;
               color: #000000;
               margin: 0;
@@ -318,7 +298,6 @@
               .count-ac {
                 font-family: "Roboto";
                 font-style: normal;
-                font-weight: 400;
                 font-size: 14px;
                 color: #ffb411;
                 margin: 0;
@@ -326,7 +305,6 @@
               .price-ac {
                 font-family: "Roboto";
                 font-style: normal;
-                font-weight: 400;
                 font-size: 14px;
                 color: #000000;
                 margin: 0 0 0 10px;
@@ -351,7 +329,6 @@
         .title {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 500;
           font-size: 16px;
           color: #000000;
         }
@@ -359,7 +336,6 @@
       .text-colon {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 600;
         font-size: 16px;
         color: #000000;
         margin-right: 5px;
@@ -385,7 +361,6 @@
               .title {
                 font-family: "Roboto";
                 font-style: normal;
-                font-weight: 400;
                 font-size: 14px;
                 color: #000000;
               }
@@ -393,7 +368,6 @@
               .title-total {
                 font-family: "Roboto";
                 font-style: normal;
-                font-weight: 500;
                 font-size: 16px;
                 color: #000000;
               }
@@ -401,7 +375,6 @@
             .text-colon {
               font-family: "Roboto";
               font-style: normal;
-              font-weight: 600;
               font-size: 16px;
               color: #000000;
               margin-right: 5px;
@@ -411,7 +384,6 @@
           .text-moeny-details {
             font-family: "Roboto";
             font-style: normal;
-            font-weight: 400;
             font-size: 14px;
             color: #000000;
           }
@@ -419,7 +391,6 @@
           .text-moeny-details-total {
             font-family: "Roboto";
             font-style: normal;
-            font-weight: 500;
             font-size: 16px;
             color: #000000;
           }
@@ -427,14 +398,12 @@
           .money-red {
             font-family: "Roboto";
             font-style: normal;
-            font-weight: 400;
             font-size: 14px;
             color: #ff0000;
           }
           .text-name-promotion {
             font-family: "Roboto";
             font-style: normal;
-            font-weight: 400;
             font-size: 12px;
             color: #000000;
           }
@@ -442,7 +411,6 @@
           .money-event-discount {
             font-family: "Roboto";
             font-style: normal;
-            font-weight: 400;
             font-size: 14px;
             color: #ff0000;
             text-align: right;
@@ -453,7 +421,6 @@
     .text-pending {
       font-family: "Roboto";
       font-style: normal;
-      font-weight: 400;
       font-size: 18px;
       line-height: 16px;
       color: #ece200 !important;
@@ -462,7 +429,6 @@
     .text-confirm {
       font-family: "Roboto";
       font-style: normal;
-      font-weight: 400;
       font-size: 18px;
       line-height: 16px;
       color: #023e8a;
@@ -471,7 +437,6 @@
     .text-doing {
       font-family: "Roboto";
       font-style: normal;
-      font-weight: 400;
       font-size: 18px;
       line-height: 16px;
       color: #023e8a;
@@ -480,7 +445,6 @@
     .text-done {
       font-family: "Roboto";
       font-style: normal;
-      font-weight: 400;
       font-size: 18px;
       line-height: 16px;
       color: #00cf3a;
@@ -489,7 +453,6 @@
     .text-cancel {
       font-family: "Roboto";
       font-style: normal;
-      font-weight: 400;
       font-size: 18px;
       line-height: 16px;
       color: #ff0000;
@@ -511,20 +474,6 @@
   border-radius: 5px;
 }
 
-.label-activity-detail-order {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 20px;
-  line-height: 30px;
-  color: #19202c;
-  align-items: center;
-  margin-top: 20px;
-  background-color: #dadada;
-  padding: 5px 10px 5px 5px;
-  border-radius: 0px 12px 12px 0px;
-}
-
 .div-item-activity-detail-order {
   display: flex;
   flex-direction: column;
@@ -539,7 +488,6 @@
 
     .text-title {
       font-family: "Roboto";
-      font-weight: 500;
       font-size: 14px;
       color: #000000;
       text-decoration: none;
@@ -548,7 +496,6 @@
 
     .text-money-plus {
       font-family: "Roboto";
-      font-weight: 500;
       font-size: 14px;
       color: #00cf3a;
       text-decoration: none;
@@ -556,7 +503,6 @@
 
     .text-money-deduction {
       font-family: "Roboto";
-      font-weight: 500;
       font-size: 14px;
       color: #ff0000;
       text-decoration: none;
@@ -565,21 +511,8 @@
 
   .text-date {
     font-family: "Roboto";
-    font-weight: 400;
     font-size: 14px;
     color: rgb(139, 139, 139);
-    text-decoration: none;
-  }
-}
-
-.div-create-details-order {
-  display: flex;
-  flex-direction: column;
-  .text-create {
-    font-family: "Roboto";
-    font-weight: 400;
-    font-size: 12px;
-    color: rgb(0, 0, 0);
     text-decoration: none;
   }
 }
@@ -590,14 +523,32 @@
 
   .text-worktime {
     font-family: "Roboto";
-    font-weight: 500;
     font-size: 14px;
     color: #023e8a;
     text-decoration: none;
     text-transform: capitalize;
   }
 }
-
+.detail-order_info-order {
+  min-height: 600px;
+  width: auto;
+  .detail-order_info-order_lable {
+    background-color: #108ee9;
+    color: white;
+    font-size: 18px;
+    padding: 5px;
+  }
+  .detail-order_info-order_detail-address-time {
+    border: 1px solid;
+    min-height: 400px;
+    width: 500px;
+  }
+  .detail-order_info-order_detail-service {
+    border: 1px solid;
+    min-height: 400px;
+    width: 500px;
+  }
+}
 @media screen and (max-width: 490px) {
   .div-container {
     background-color: white;
@@ -608,7 +559,6 @@
     .label-detail {
       font-family: "Roboto";
       font-style: normal;
-      font-weight: 500;
       font-size: 18px;
       color: #19202c;
       align-items: center;
@@ -631,7 +581,6 @@
         .label-customer {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 500;
           font-size: 16px;
           color: #19202c;
           align-items: center;
@@ -658,7 +607,6 @@
             .label-name {
               font-family: "Roboto";
               font-style: normal;
-              font-weight: 300;
               font-size: 14px;
               color: #19202c;
               align-items: center;
@@ -680,7 +628,6 @@
         .label-ctv {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 500;
           font-size: 16px;
           color: #19202c;
           align-items: center;
@@ -708,7 +655,6 @@
             .label-name {
               font-family: "Roboto";
               font-style: normal;
-              font-weight: 300;
               font-size: 14px;
               color: #19202c;
               align-items: center;
@@ -731,7 +677,6 @@
       .label-details {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 500;
         font-size: 16px;
         align-items: center;
         margin-bottom: 10px;
@@ -751,7 +696,6 @@
           .title {
             font-family: "Roboto";
             font-style: normal;
-            font-weight: 500 !important;
             font-size: 12px !important;
             color: #000000 !important;
           }
@@ -759,15 +703,13 @@
         .text-colon {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 500 !important;
           font-size: 14px !important;
           color: #000000;
         }
         .text-service-order {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 500 !important;
-          font-size: 12px !important;
+          font-size: 16px !important;
           color: #000000;
         }
 
@@ -779,7 +721,6 @@
           .text-date {
             font-family: "Roboto";
             font-style: normal;
-            font-weight: 500;
             font-size: 12px !important;
             color: #000000;
           }
@@ -788,7 +729,6 @@
         .text-address-details {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 400;
           font-size: 12px !important;
           color: #000000;
         }
@@ -800,7 +740,6 @@
           .text-title-add {
             font-family: "Roboto";
             font-style: normal;
-            font-weight: 400;
             font-size: 12px !important;
             color: #19202c;
           }
@@ -815,7 +754,6 @@
         .title-service {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 500;
           font-size: 12px;
           color: #000000;
           margin: 0;
@@ -824,7 +762,6 @@
         .text-colon {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 600;
           font-size: 12px;
           color: #000000;
           margin: 0 5px 0 0;
@@ -837,7 +774,6 @@
           .text-service {
             font-family: "Roboto";
             font-style: normal;
-            font-weight: 400;
             font-size: 12px;
             color: #000000;
             margin: 0;
@@ -854,7 +790,6 @@
               .text-type-ac {
                 font-family: "Roboto";
                 font-style: normal;
-                font-weight: 400;
                 font-size: 12px;
                 color: #000000;
                 margin: 0;
@@ -866,7 +801,6 @@
                 .count-ac {
                   font-family: "Roboto";
                   font-style: normal;
-                  font-weight: 400;
                   font-size: 12px;
                   color: #ffb411;
                   margin: 0;
@@ -874,7 +808,6 @@
                 .price-ac {
                   font-family: "Roboto";
                   font-style: normal;
-                  font-weight: 400;
                   font-size: 12px;
                   color: #000000;
                   margin: 0 0 0 10px;
@@ -899,7 +832,6 @@
           .title {
             font-family: "Roboto";
             font-style: normal;
-            font-weight: 400;
             font-size: 14px;
             color: #000000;
           }
@@ -907,7 +839,6 @@
         .text-colon {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 600;
           font-size: 16px;
           color: #000000;
           margin-right: 5px;
@@ -934,7 +865,6 @@
                 .title {
                   font-family: "Roboto";
                   font-style: normal;
-                  font-weight: 400;
                   font-size: 14px;
                   color: #000000;
                 }
@@ -942,7 +872,6 @@
                 .title-total {
                   font-family: "Roboto";
                   font-style: normal;
-                  font-weight: 500;
                   font-size: 16px;
                   color: #000000;
                 }
@@ -950,7 +879,6 @@
               .text-colon {
                 font-family: "Roboto";
                 font-style: normal;
-                font-weight: 600;
                 font-size: 16px;
                 color: #000000;
                 margin-right: 5px;
@@ -960,7 +888,6 @@
             .text-moeny-details {
               font-family: "Roboto";
               font-style: normal;
-              font-weight: 400;
               font-size: 12px;
               color: #000000;
             }
@@ -968,7 +895,6 @@
             .text-moeny-details-total {
               font-family: "Roboto";
               font-style: normal;
-              font-weight: 500;
               font-size: 16px;
               color: #000000;
             }
@@ -976,7 +902,6 @@
             .money-red {
               font-family: "Roboto";
               font-style: normal;
-              font-weight: 400;
               font-size: 12px;
               color: #ff0000;
             }
@@ -984,7 +909,6 @@
             .text-name-promotion {
               font-family: "Roboto";
               font-style: normal;
-              font-weight: 400;
               font-size: 12px;
               color: #000000;
             }
@@ -992,7 +916,6 @@
             .money-event-discount {
               font-family: "Roboto";
               font-style: normal;
-              font-weight: 400;
               font-size: 12px;
               color: #ff0000;
               text-align: right;
@@ -1008,7 +931,6 @@
         .title-price-order {
           font-family: "Roboto";
           font-style: normal;
-          font-weight: 500;
           font-size: 14px;
           color: #000000;
           width: 15%;
@@ -1018,7 +940,6 @@
       .text-pending {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 400;
         font-size: 18px;
         line-height: 16px;
         color: #ece200 !important;
@@ -1027,7 +948,6 @@
       .text-confirm {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 400;
         font-size: 18px;
         line-height: 16px;
         color: #023e8a;
@@ -1036,7 +956,6 @@
       .text-doing {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 400;
         font-size: 18px;
         line-height: 16px;
         color: #023e8a;
@@ -1045,7 +964,6 @@
       .text-done {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 400;
         font-size: 18px;
         line-height: 16px;
         color: #00cf3a;
@@ -1054,7 +972,6 @@
       .text-cancel {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 400;
         font-size: 18px;
         line-height: 16px;
         color: #ff0000;
@@ -1079,7 +996,6 @@
   .label-activity-detail-order {
     font-family: "Roboto";
     font-style: normal;
-    font-weight: 600;
     font-size: 20px;
     line-height: 30px;
     color: #19202c;
@@ -1104,7 +1020,6 @@
 
       .text-title {
         font-family: "Roboto";
-        font-weight: 500;
         font-size: 14px;
         color: #000000;
         text-decoration: none;
@@ -1113,7 +1028,6 @@
 
       .text-money-plus {
         font-family: "Roboto";
-        font-weight: 500;
         font-size: 14px;
         color: #00cf3a;
         text-decoration: none;
@@ -1121,7 +1035,6 @@
 
       .text-money-deduction {
         font-family: "Roboto";
-        font-weight: 500;
         font-size: 14px;
         color: #ff0000;
         text-decoration: none;
@@ -1130,7 +1043,6 @@
 
     .text-date {
       font-family: "Roboto";
-      font-weight: 400;
       font-size: 14px;
       color: rgb(139, 139, 139);
       text-decoration: none;
@@ -1144,8 +1056,4 @@
   a {
     font-size: 14px;
   }
-}
-
-.table-detail {
-  overflow-x: scroll;
 }

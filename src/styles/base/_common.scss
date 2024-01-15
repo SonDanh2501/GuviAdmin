@@ -1,0 +1,10 @@
+.avatar {
+  width: 100px !important;
+  @include img-fit();
+  height: 100px !important;
+  border-radius: 50px;
+}
+.div-flex {
+  display: flex;
+  flex-direction: column;
+}
