@@ -159,7 +159,7 @@ const TopupCollaborator = ({ type }) => {
 
   const onChange = (page) => {
     setCurrentPage(page);
-    saveToCookie("current_page_topup_ctv", page);
+    // saveToCookie("current_page_topup_ctv", page);
     const dataLength = data.length < 20 ? 20 : data.length;
     const searchLength = dataSearch.length < 20 ? 20 : dataSearch.length;
     const start =
@@ -167,7 +167,7 @@ const TopupCollaborator = ({ type }) => {
         ? page * searchLength - searchLength
         : page * dataLength - dataLength;
     setStartPage(start);
-    saveToCookie("start_page_topup_ctv", start);
+    // saveToCookie("start_page_topup_ctv", start);
     dataSearch.length > 0
       ? searchTopupCollaboratorApi(valueSearch, start, 20, type)
           .then((res) => {
@@ -308,12 +308,12 @@ const TopupCollaborator = ({ type }) => {
       render: (data) => (
         <p className="text-name-verify">
           {data?.type_wallet === "wallet"
-                              ? `${i18n.t("main_wallet", { lng: lang })}`
-                              : data?.type_wallet === "work_wallet" 
-                              ? `${i18n.t("work_wallet", { lng: lang })}`
-                              : data?.type_wallet === "collaborator_wallet"
-                              ? `${i18n.t("collaborator_wallet", { lng: lang })}`
-                              : `${i18n.t("gift_wallet", { lng: lang })}`}
+            ? `${i18n.t("main_wallet", { lng: lang })}`
+            : data?.type_wallet === "work_wallet"
+            ? `${i18n.t("work_wallet", { lng: lang })}`
+            : data?.type_wallet === "collaborator_wallet"
+            ? `${i18n.t("collaborator_wallet", { lng: lang })}`
+            : `${i18n.t("gift_wallet", { lng: lang })}`}
         </p>
       ),
       align: "center",
@@ -553,10 +553,12 @@ const TopupCollaborator = ({ type }) => {
                           <p className="text-detail">
                             {record?.type_wallet === "wallet"
                               ? `${i18n.t("main_wallet", { lng: lang })}`
-                              : record?.type_wallet === "work_wallet" 
+                              : record?.type_wallet === "work_wallet"
                               ? `${i18n.t("work_wallet", { lng: lang })}`
                               : record?.type_wallet === "collaborator_wallet"
-                              ? `${i18n.t("collaborator_wallet", { lng: lang })}`
+                              ? `${i18n.t("collaborator_wallet", {
+                                  lng: lang,
+                                })}`
                               : `${i18n.t("gift_wallet", { lng: lang })}`}
                           </p>
                         </div>
@@ -664,12 +666,12 @@ const TopupCollaborator = ({ type }) => {
                 <p className="text-content">
                   {`${i18n.t("wallet", { lng: lang })}`}:{" "}
                   {itemEdit?.type_wallet === "wallet"
-                              ? `${i18n.t("main_wallet", { lng: lang })}`
-                              : itemEdit?.type_wallet === "work_wallet" 
-                              ? `${i18n.t("work_wallet", { lng: lang })}`
-                              : itemEdit?.type_wallet === "collaborator_wallet"
-                              ? `${i18n.t("collaborator_wallet", { lng: lang })}`
-                              : `${i18n.t("gift_wallet", { lng: lang })}`}
+                    ? `${i18n.t("main_wallet", { lng: lang })}`
+                    : itemEdit?.type_wallet === "work_wallet"
+                    ? `${i18n.t("work_wallet", { lng: lang })}`
+                    : itemEdit?.type_wallet === "collaborator_wallet"
+                    ? `${i18n.t("collaborator_wallet", { lng: lang })}`
+                    : `${i18n.t("gift_wallet", { lng: lang })}`}
                 </p>
               </div>
             </>

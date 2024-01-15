@@ -758,62 +758,6 @@ const DetailsOrder = () => {
                       </div>
                     )}
                   </div>
-                  <div>
-                    <div className="div-details-service">
-                      <a className="label-details">
-                        {" "}
-                        {`${i18n.t("detail", { lng: lang })}`}
-                      </a>
-                      <div className="div-details-order">
-                        <div className="div-title-details">
-                          <a className="title">{`${i18n.t("time", {
-                            lng: lang,
-                          })}`}</a>
-                        </div>
-                        <a className="text-colon">:</a>
-                        <div className="div-times">
-                          <a className="text-date">
-                            - {`${i18n.t("date_work", { lng: lang })}`}:{" "}
-                            {moment(
-                              new Date(dataGroup?.date_work_schedule[0]?.date)
-                            ).format("DD/MM/YYYY")}{" "}
-                            (
-                            {moment(
-                              new Date(dataGroup?.date_work_schedule[0].date)
-                            )
-                              .locale(lang)
-                              .format("dd")}
-                            )
-                          </a>
-                          <a className="text-date">
-                            - {`${i18n.t("time_work", { lng: lang })}`}:{" "}
-                            {timeWork(dataGroup)}
-                          </a>
-                        </div>
-                        {dataGroup?.status === "pending" &&
-                          dataGroup?.service?._id?.kind !==
-                            "giup_viec_co_dinh" && (
-                            <div className="div-edit">
-                              <EditTimeOrder
-                                idOrder={dataGroup?._id}
-                                dateWork={dataGroup?.date_work_schedule[0].date}
-                                code={
-                                  dataGroup?.code_promotion
-                                    ? dataGroup?.code_promotion?.code
-                                    : ""
-                                }
-                                setIsLoading={setIsLoading}
-                                idDetail={id}
-                                setDataGroup={setDataGroup}
-                                setDataList={setDataList}
-                                details={true}
-                              />
-                            </div>
-                          )}
-                      </div>
-                    </div>
-                  </div>
-
                   <InfoService
                     data={dataGroup}
                     setIsLoading={setIsLoading}
@@ -838,7 +782,7 @@ const DetailsOrder = () => {
                     </>
                   )}
 
-                  <div className="mt-3">
+                  <div className="mt-3 table-detail">
                     <Table
                       columns={columns}
                       dataSource={dataList}

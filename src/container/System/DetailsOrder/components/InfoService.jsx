@@ -7,12 +7,13 @@ import EditTimeOrder from "../../ManageOrder/EditTimeGroupOrder";
 
 const InfoService = (props) => {
   const { data, setIsLoading, setDataGroup, setDataList } = props;
-  console.log("data ", data);
+  // console.log("data ", data);
   const [arrExtend, setArrExtend] = useState([]);
   const [titleService, setTitleService] = useState("???");
   const [systemFee, setSystemFee] = useState(0);
   const [dateWork, setDateWork] = useState("??:??:??");
   const [timeWork, setTimeWork] = useState("??:??");
+  const [isShowEdit, setIsShowEdit] = useState(false);
   useEffect(() => {
     const tempArr = [];
     let tempSystemFee = 0;
@@ -35,24 +36,30 @@ const InfoService = (props) => {
       addHours(new Date(_date), data?.total_estimate),
       "HH:mm"
     );
-    const _temp = sortArrObject(tempArr, "price", 1);
-    setTimeWork(`${_start_time} - ${_end_time} ${data?.total_estimate} Giờ`);
-    setDateWork(_tempDateWork + ` (${_tempDay})`);
+    const _temp = tempArr.sort((a, b) => b.price - a.price);
+    if (
+      data?.status === "pending" ||
+      (data?.status === "confirm" && data?.date_work_schedule.length < 2)
+    ) {
+      setIsShowEdit(true);
+    }
+    setTimeWork(`${_start_time} - ${_end_time} (${data?.total_estimate} Giờ)`);
+    setDateWork(_tempDateWork + `  (${_tempDay})`);
     setArrExtend(_temp);
     setTitleService(data?.service?._id?.title["vi"]);
     setSystemFee(tempSystemFee);
   }, [data]);
-
+  // console.log("arr extend ", arrExtend.length > 0 && sortArrObject(arrExtend));
   return (
     <>
       <h5 className="info-title-service">{titleService}</h5>
-      <div className="gird-1-4">
+      <div className="gird-1-1-3">
         <span>Thời gian</span>
         <div className="div-flex">
           <p>Ngày làm: {dateWork}</p>
           <p>Giờ làm: {timeWork}</p>
         </div>
-        {true && (
+        {isShowEdit && (
           <div>
             <EditTimeOrder
               idOrder={data?.id_order[0]}
@@ -82,7 +89,8 @@ const InfoService = (props) => {
       <h6>Thông tin dịch vụ đã chọn</h6>
       <div className="gird-3-1-1">
         <span>Tên dịch vụ</span>
-        <span>Số giờ</span>
+        {/* <span>Số giờ</span> */}
+        <p></p>
         <span>Số tiền</span>
       </div>
       {arrExtend?.map((item, index) => {
@@ -93,8 +101,9 @@ const InfoService = (props) => {
               <p>{item?._id?.kind === "leather" && "(da)"}</p>
               <p>{item?._id?.kind === "fabric" && "(nỉ/vải)"}</p>
             </div>
-            <p>{item?.estimate} giờ</p>
-            <p>{formatMoney(item?.price || 0)}</p>
+            {/* <p>{item?.estimate} giờ</p> */}
+            <p></p>
+            {item?.price !== 0 && <p>{formatMoney(item?.price || 0)}</p>}
           </div>
         );
       })}

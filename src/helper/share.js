@@ -2,6 +2,7 @@ export const sortArrObject = (data, valueSort, typeSort) => {
   let temp = [];
   let arrNumber = [];
   let arrString = [];
+  console.log("data ", data);
   for (let i = 0; i < Number(data.length); i++) {
     if (data[i][valueSort] / 2 > 0) {
       arrNumber.push(data[i]);
