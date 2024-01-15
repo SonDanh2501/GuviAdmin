@@ -664,7 +664,7 @@ const DataTable = (props) => {
               indexSlice > 0 ? getDataView.slice(0, max) + "..." : getDataView;
             return (
               <>
-                <Tooltip placement="leftTop" title={getDataView}>
+                <Tooltip placement="topRight" title={getDataView}>
                   <span className={`${item?.fontSize}`}> {sliceData}</span>
                 </Tooltip>
               </>
