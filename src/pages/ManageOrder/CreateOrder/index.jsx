@@ -50,6 +50,7 @@ import {
   COLLABORATOR_BLOCK,
   COLLABORATOR_FAVORITE,
 } from "../../../constants/index.js";
+import ModalCustom from "../../../components/modalCustom/index.jsx";
 var AES = require("crypto-js/aes");
 const { TextArea } = Input;
 
@@ -59,7 +60,7 @@ const CreateOrder = () => {
   const [selectService, setSelectService] = useState(null);
   const [serviceData, setServiceData] = useState(null);
   const [listCustomer, setListCustomer] = useState([]);
-  const [customer, setCustomer] = useState(null);
+  const [customer, setCustomer] = useState("6437a11067a9f6a3b554f0ab");
   const [listAddressDefault, setListAddressDefault] = useState([]);
   const [listAddress, setListAddress] = useState([]);
   const [addressEncode, setAddressEncode] = useState(null);
@@ -91,6 +92,12 @@ const CreateOrder = () => {
   const [tempValueCollaborator, setTempValueCollaborator] = useState("");
   const [isChoicePaymentMethod, setIsChoicePaymentMethod] = useState(true);
   const [newAddress, setNewAddress] = useState(null);
+  const [modal, setModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [tempValueAddress, setTempValueAddress] = useState("");
+  const [isShowAddressDefault, setIsShowAddressDefault] = useState(false);
+  const [arrExtend, setArrExtend] = useState([]);
+
   useEffect(() => {
     if (service.length > 0) {
       setSelectService(service[1]._id);
@@ -118,6 +125,7 @@ const CreateOrder = () => {
       getDataListAddressDefault();
       getCollaboratorByCustomer();
       setIsShowCollaborator(true);
+      setIsShowAddressDefault(true);
     }
   }, [customer]);
   useEffect(() => {
@@ -155,7 +163,7 @@ const CreateOrder = () => {
     selectCodePromotion,
     collaborator,
     serviceData,
-    note
+    note,
   ]);
 
   useEffect(() => {
@@ -280,6 +288,7 @@ const CreateOrder = () => {
   );
 
   const handleChangeAddress = async (newValue) => {
+    console.log("new value ", newValue);
     if (listAddress[0].place_id) {
       const res = await getPlaceDetailApi(newValue);
       const temp = JSON.stringify({
@@ -301,6 +310,8 @@ const CreateOrder = () => {
         const accessToken = AES.encrypt(tempAddres, "guvico");
         setAddressEncode(accessToken);
         setNewAddress(null);
+        setTempValueAddress(address?.address);
+        setIsShowAddressDefault(false);
       }
     }
   };
@@ -363,10 +374,20 @@ const CreateOrder = () => {
 
   const calculateFeeGroupOrder = async (payload) => {
     const res = await getCalculateFeeApi(payload);
+    console.log("ré ", res);
     const resServiceFee = await getServiceFeeOrderApi(payload);
     setInitialFee(res.initial_fee);
     setServiceFee(resServiceFee.service_fee);
+    const tempArr = [];
+    res?.service?.optional_service?.map((item) => {
+      item?.extend_optional?.map((i) => {
+        tempArr.push(i);
+      });
+    });
+    console.log("tempArr ", tempArr);
+    setArrExtend(tempArr);
   };
+  console.log("arrExtend ", arrExtend);
 
   const createOrder = () => {
     setIsLoading(true);
@@ -375,7 +396,11 @@ const CreateOrder = () => {
         setIsLoading(false);
         navigate("/group-order/manage-order");
       })
-      .catch();
+      .catch((err) => {
+        setIsLoading(false);
+        setModal(true);
+        setErrorMessage(err);
+      });
   };
 
   const getCollaboratorByCustomer = () => {
@@ -402,6 +427,7 @@ const CreateOrder = () => {
         console.log("res  ", err);
       });
   };
+  console.log("customer ", customer);
   const chooseCollaborator = (collaborator) => {
     setListCollaborator([collaborator]);
     setCollaborator(collaborator._id);
@@ -461,6 +487,7 @@ const CreateOrder = () => {
               <p>Địa chỉ</p>
               <Select
                 showSearch
+                size="middle"
                 style={{ width: "100%" }}
                 defaultActiveFirstOption={false}
                 suffixIcon={null}
@@ -468,6 +495,7 @@ const CreateOrder = () => {
                 onSearch={handleSearchAddress}
                 onChange={handleChangeAddress}
                 onFocus={handleFocusAddress}
+                value={tempValueAddress !== "" && tempValueAddress}
                 options={listAddress.map((d) => ({
                   value: d._id,
                   label: `${d.address}`,
@@ -475,12 +503,30 @@ const CreateOrder = () => {
                 placeholder={"Nhấn vào để chọn địa chỉ hoặc nhập địa chỉ mới"}
               />
               {customer && newAddress && (
-                <Button onClick={onAddAddressCustomer}>
+                <Button
+                  className="button-address"
+                  onClick={onAddAddressCustomer}
+                >
                   Thêm địa chỉ mới cho KH
                 </Button>
               )}
             </div>
-
+            {isShowAddressDefault && (
+              <>
+                <h6>Địa chỉ mặc định</h6>
+                {listAddressDefault.map((item, index) => {
+                  return (
+                    <div
+                      onClick={() => handleChangeAddress(item?._id)}
+                      className="item-address"
+                      key={index}
+                    >
+                      <p>{item?.address}</p>
+                    </div>
+                  );
+                })}
+              </>
+            )}
             <div className="div-flex-column">
               <p>Dịch vụ</p>
               <Select
@@ -567,7 +613,7 @@ const CreateOrder = () => {
                       );
                     })}
                   </div>
-                  <div>
+                  {/* <div>
                     <p>CTV hạn chế</p>
                     {collaboratorBlock.map((item, index) => {
                       return (
@@ -578,7 +624,7 @@ const CreateOrder = () => {
                         />
                       );
                     })}
-                  </div>
+                  </div> */}
                 </div>
               )}
             </div>
@@ -617,7 +663,7 @@ const CreateOrder = () => {
               ))}
             </div>
 
-            <div className="div-flex-column fee-order">
+            {/* <div className="div-flex-column fee-order">
               <div className="div-flex-row initial-fee">
                 <p>Tạm tính:</p>
                 <p>{formatMoney(initialFee)}</p>
@@ -652,10 +698,46 @@ const CreateOrder = () => {
                 <p>Giá:</p>
                 <p>{formatMoney(finalFee)}</p>
               </div>
+            </div> */}
+            <div>
+              {arrExtend?.map((item, index) => {
+                return (
+                  <div key={index} className="gird-3-1-1">
+                    <div>
+                      <p>{item?.title["vi"]} </p>
+                      <p>{item?._id?.kind === "leather" && "(da)"}</p>
+                      <p>{item?._id?.kind === "fabric" && "(nỉ/vải)"}</p>
+                    </div>
+                    {/* <p>{item?.estimate} giờ</p> */}
+                    <p></p>
+                    {item?.price !== 0 && (
+                      <p>{formatMoney(item?.price || 0)}</p>
+                    )}
+                  </div>
+                );
+              })}
+              <h6>Chi phí khác</h6>
+              <div className="gird-3-1-1">
+                <span>Phí hệ thống</span>
+                <p></p>
+                <span>{formatMoney(serviceFee | 0)}</span>
+              </div>
+              {true && (
+                <div className="gird-3-1-1">
+                  <span>Tip CTV</span>
+                  <p></p>
+                  <span>itne tip</span>
+                </div>
+              )}
+              <div className="gird-3-1-1">
+                <span>Tạm tính</span>
+                <p></p>
+                <span>{formatMoney(1111111)}</span>
+              </div>
             </div>
           </div>
 
-          <div className=""></div>
+          {/* <div className=""></div> */}
         </div>
 
         <div className="div-flex-row">
@@ -668,8 +750,14 @@ const CreateOrder = () => {
           </Button>
         </div>
       </div>
-
       {isLoading && <LoadingPagination />}
+      <ModalCustom
+        title={errorMessage}
+        isOpen={modal}
+        handleCancel={() => setModal(false)}
+        handleOk={() => setModal(false)}
+        textOk="OK"
+      />
     </React.Fragment>
   );
 };
