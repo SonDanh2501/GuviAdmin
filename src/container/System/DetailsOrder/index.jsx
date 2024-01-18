@@ -44,6 +44,8 @@ import EditTimeOrder from "../ManageOrder/EditTimeGroupOrder";
 import EditTimeOrderSchedule from "./EditTimeOrderSchedule";
 import "./index.scss";
 import InfoService from "./components/InfoService";
+import InfoBill from "../../../pages/ManageOrder/CreateOrder/InfoBill";
+import DetailBill from "../../../pages/ManageOrder/CreateOrder/DetailBill";
 const width = window.innerWidth;
 
 const DetailsOrder = () => {
@@ -65,6 +67,7 @@ const DetailsOrder = () => {
   const [rowIndex, setRowIndex] = useState();
   const [itemEdit, setItemEdit] = useState({
     date_work: new Date().toISOString(),
+    event_promotion: [],
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [price, setPrice] = useState(0);
@@ -629,7 +632,49 @@ const DetailsOrder = () => {
       ),
     },
   ];
-
+  // ------------------------ Phần mới viết---------------------------------------- //
+  const [infoBill, setInfoBill] = useState();
+  const [codePromotion, setCodePromotion] = useState();
+  const [eventPromotion, setEventPromotion] = useState();
+  const [tipCollaborator, setTipCollaborator] = useState(0);
+  const [serviceFee, setServiceFee] = useState(0);
+  const [totalFee, setTotalFee] = useState(0);
+  const [finalFee, setFinalFee] = useState(0);
+  const [initialFee, setInitialFee] = useState(0);
+  const [platformFee, setPlatformFee] = useState(0);
+  const [netIncomeCollaborator, setNetIncomeCollaborator] = useState(0);
+  // code_promotion={resultCodePromotion}
+  // event_promotion={listEventPromotion}
+  // tip_collaborator={tipCollaborator}
+  // service_fee={serviceFee}
+  // total_fee={totalFee}
+  // final_fee={finalFee}
+  // initial_fee={initialFee}
+  // platform_fee={platformFee}
+  // net_income_collaborator={netIncomeCollaborator}
+  useEffect(() => {
+    let _temp_service_fee = 0;
+    if (dataGroup) {
+      setInfoBill({
+        date_work_schedule: dataGroup?.date_work_schedule,
+        info: dataGroup,
+      });
+      dataGroup?.service_fee?.map((item) => {
+        _temp_service_fee += item.fee;
+      });
+      setCodePromotion(dataGroup?.code_promotion);
+      setEventPromotion(dataGroup?.event_promotion);
+      setTipCollaborator(dataGroup?.tip_collaborator);
+      setFinalFee(dataGroup?.final_fee);
+      setInitialFee(dataGroup?.initial_fee);
+      setPlatformFee(dataGroup?.platform_fee);
+      setNetIncomeCollaborator(dataGroup?.net_income_collaborator);
+      setTotalFee(dataGroup?.initial_fee + _temp_service_fee);
+      setServiceFee(_temp_service_fee);
+    }
+  }, [dataGroup]);
+  // console.log("codePromotion   ", codePromotion);
+  // ------------------------ Phần mới viết---------------------------------------- //
   return (
     <div>
       <>
@@ -764,6 +809,25 @@ const DetailsOrder = () => {
                     setDataGroup={setDataGroup}
                     setDataList={setDataList}
                   />
+                  <div className="detail-order_info-service">
+                    <InfoBill
+                      data={infoBill}
+                      title={"Thông tin dịch vụ đơn hàng"}
+                    />
+                    <DetailBill
+                      code_promotion={codePromotion}
+                      event_promotion={eventPromotion}
+                      tip_collaborator={tipCollaborator}
+                      service_fee={serviceFee}
+                      total_fee={totalFee}
+                      final_fee={finalFee}
+                      initial_fee={initialFee}
+                      platform_fee={platformFee}
+                      net_income_collaborator={netIncomeCollaborator}
+                      total_date_work={dataGroup?.date_work_schedule.length}
+                    />
+                  </div>
+
                   {checkElement?.includes("cancel_order_detail_guvi_job") && (
                     <>
                       {dataGroup?.type === "schedule" && (

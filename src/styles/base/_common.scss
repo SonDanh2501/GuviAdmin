@@ -8,3 +8,26 @@
   display: flex;
   flex-direction: column;
 }
+.b-shadow {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.b-shadow-2 {
+  box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
+    rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+}
+.gird-3-1-1-1 {
+  display: grid;
+  grid-template-columns: 3fr repeat(3, 1fr);
+}
+.text-align-end {
+  text-align: end;
+}
+.common-container {
+  background-color: var(--white-color);
+  width: auto;
+  border-radius: 5px;
+  padding: 16px 12px;
+}
+.fw-500 {
+  font-weight: 500;
+}

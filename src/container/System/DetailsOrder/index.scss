@@ -1149,3 +1149,11 @@
 .table-detail {
   overflow-x: scroll;
 }
+.detail-order_info-service {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  column-gap: 10px;
+}
+.mar-1 {
+  margin-right: 1rem;
+}

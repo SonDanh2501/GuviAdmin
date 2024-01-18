@@ -13,6 +13,7 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import { TYPE_VIEW_OPTIONAL_SERVICE } from "../../../../@core/constant/service.constant.js";
 import "./index.scss";
+import { formatMoney } from "../../../../helper/formatMoney.js";
 const ServiceComponent = (props) => {
   const { serviceData } = props;
 
@@ -161,6 +162,7 @@ const ServiceComponent = (props) => {
             }}
           >
             <p>{extend.title.vi}</p>
+            <p>{extend.description.vi}</p>
           </div>
         ))}
       </>
@@ -181,6 +183,7 @@ const ServiceComponent = (props) => {
             }}
           >
             <p>{extend.title.vi}</p>
+            <p>{extend.description.vi}</p>
           </div>
         ))}
       </>
@@ -202,6 +205,7 @@ const ServiceComponent = (props) => {
           >
             <img src={extend.thumbnail} />
             <p>{extend.title.vi}</p>
+            <p>{extend.description.vi}</p>
           </div>
         ))}
       </>
@@ -220,6 +224,7 @@ const ServiceComponent = (props) => {
             }}
           >
             <p>{extend.title.vi}</p>
+            <p>{extend.description.vi}</p>
           </div>
         ))}
       </>
@@ -268,27 +273,29 @@ const ServiceComponent = (props) => {
             </div>
             <p>{extend.description.vi}</p>
             {extend.selected === true ? (
-              <div className="counter-optional">
-                <Button
-                  onClick={() => {
-                    counterNumber(optionalService.type, extend, "-");
-                  }}
-                >
-                  -
-                </Button>
-                <InputNumber
-                  value={extend.count}
-                  controls={false}
-                  readOnly={true}
-                />
-                <Button
-                  onClick={() => {
-                    counterNumber(optionalService.type, extend, "+");
-                  }}
-                >
-                  +
-                </Button>
-              </div>
+              <>
+                <div className="counter-optional">
+                  <Button
+                    onClick={() => {
+                      counterNumber(optionalService.type, extend, "-");
+                    }}
+                  >
+                    -
+                  </Button>
+                  <InputNumber
+                    value={extend.count}
+                    controls={false}
+                    readOnly={true}
+                  />
+                  <Button
+                    onClick={() => {
+                      counterNumber(optionalService.type, extend, "+");
+                    }}
+                  >
+                    +
+                  </Button>
+                </div>
+              </>
             ) : (
               <div className="counter-optional"></div>
             )}
@@ -306,7 +313,7 @@ const ServiceComponent = (props) => {
             <div className="optional-service div-flex-column">
               {service.optional_service.map((item, index) => (
                 <div key={index} className="div-flex-column">
-                  <p> {item.title.vi}</p>
+                  <p className="fw-500"> {item.title.vi}</p>
                   <div className={TYPE_VIEW_OPTIONAL_SERVICE[item.type]}>
                     {item.type === "select_horizontal_no_thumbnail" ? (
                       <SelectHorizontalNoThumbnail optionalService={item} />

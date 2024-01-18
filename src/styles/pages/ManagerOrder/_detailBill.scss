@@ -1,0 +1,22 @@
+.detail-bill_container {
+  @extend .common-container;
+  @extend .b-shadow;
+  li {
+    padding-left: 0.5rem;
+  }
+  del {
+    color: var(--text-color);
+  }
+}
+.detail-bill_p-final-fee {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.detail-bill_last-item {
+  border-top: solid 1px #1f242e;
+  padding: 0.5rem 0px;
+}
+.detail-bill_p-code-promotion {
+  font-weight: 500;
+  color: var(--selected-color);
+}
