@@ -43,3 +43,24 @@
   margin-bottom: 5px;
   border-radius: 4px;
 }
+.item-tip-ctv {
+  border: 1px solid #212529;
+  padding: 5px;
+  border-radius: 6px;
+  width: 70px;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.create-order_tip {
+  display: flex;
+  flex-direction: row;
+  div {
+    margin-right: 1rem;
+  }
+}
+.item-tip-ctv_selected {
+  background-color: var(--selected-color);
+  color: var(--white-color);
+}

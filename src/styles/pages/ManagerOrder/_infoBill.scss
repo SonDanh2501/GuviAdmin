@@ -1,0 +1,20 @@
+.info-bill-container {
+  @extend .common-container;
+}
+.info-bill_header {
+  background-color: var(--bg-color-2);
+  padding: 10px 8px;
+  border-radius: 4px 4px 0px 0px;
+  border-bottom: solid 1px #1f242e;
+}
+.info-bill_item {
+  align-items: center;
+  margin-top: 0.5rem;
+  padding: 10px;
+}
+.detail-bill_p-discount {
+  color: var(--red-color);
+}
+.detail-bill_p-voucher {
+  color: var(--yellow-color);
+}

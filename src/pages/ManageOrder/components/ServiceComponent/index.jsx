@@ -313,7 +313,7 @@ const ServiceComponent = (props) => {
             <div className="optional-service div-flex-column">
               {service.optional_service.map((item, index) => (
                 <div key={index} className="div-flex-column">
-                  <p> {item.title.vi}</p>
+                  <p className="fw-500"> {item.title.vi}</p>
                   <div className={TYPE_VIEW_OPTIONAL_SERVICE[item.type]}>
                     {item.type === "select_horizontal_no_thumbnail" ? (
                       <SelectHorizontalNoThumbnail optionalService={item} />

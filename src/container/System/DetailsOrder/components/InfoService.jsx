@@ -86,10 +86,9 @@ const InfoService = (props) => {
         <span>Thanh toán</span>
         <p>{data?.payment_method === "cash" ? "Tiền mặt" : "G-Pay"}</p>
       </div>
-      <h6>Thông tin dịch vụ đã chọn</h6>
+      {/* <h6>Thông tin dịch vụ đã chọn</h6>
       <div className="gird-3-1-1">
         <span>Tên dịch vụ</span>
-        {/* <span>Số giờ</span> */}
         <p></p>
         <span>Số tiền</span>
       </div>
@@ -101,7 +100,6 @@ const InfoService = (props) => {
               <p>{item?._id?.kind === "leather" && "(da)"}</p>
               <p>{item?._id?.kind === "fabric" && "(nỉ/vải)"}</p>
             </div>
-            {/* <p>{item?.estimate} giờ</p> */}
             <p></p>
             {item?.price !== 0 && <p>{formatMoney(item?.price || 0)}</p>}
           </div>
@@ -149,7 +147,7 @@ const InfoService = (props) => {
           <del>{formatMoney(data?.initial_fee + systemFee)}</del>
           <h7>{formatMoney(data?.final_fee)}</h7>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };
