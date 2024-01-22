@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../redux/selectors/auth";
-import { formatMoney } from "../../../helper/formatMoney";
-import React from "react";
+import { formatMoney } from "../../../../helper/formatMoney";
+import { getLanguageState } from "../../../../redux/selectors/auth";
 
 const InfoBill = (props) => {
   const { data, title } = props;
@@ -68,4 +67,4 @@ const InfoBill = (props) => {
     </div>
   );
 };
-export default React.memo(InfoBill);
+export default memo(InfoBill);

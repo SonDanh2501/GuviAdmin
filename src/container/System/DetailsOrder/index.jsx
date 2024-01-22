@@ -44,8 +44,6 @@ import EditTimeOrder from "../ManageOrder/EditTimeGroupOrder";
 import EditTimeOrderSchedule from "./EditTimeOrderSchedule";
 import "./index.scss";
 import InfoService from "./components/InfoService";
-import InfoBill from "../../../pages/ManageOrder/CreateOrder/InfoBill";
-import DetailBill from "../../../pages/ManageOrder/CreateOrder/DetailBill";
 const width = window.innerWidth;
 
 const DetailsOrder = () => {
@@ -809,7 +807,7 @@ const DetailsOrder = () => {
                     setDataGroup={setDataGroup}
                     setDataList={setDataList}
                   />
-                  <div className="detail-order_info-service">
+                  {/* <div className="detail-order_info-service">
                     <InfoBill
                       data={infoBill}
                       title={"Thông tin dịch vụ đơn hàng"}
@@ -826,7 +824,7 @@ const DetailsOrder = () => {
                       net_income_collaborator={netIncomeCollaborator}
                       total_date_work={dataGroup?.date_work_schedule.length}
                     />
-                  </div>
+                  </div> */}
 
                   {checkElement?.includes("cancel_order_detail_guvi_job") && (
                     <>

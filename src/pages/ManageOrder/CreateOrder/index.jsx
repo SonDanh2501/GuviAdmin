@@ -52,8 +52,6 @@ import {
   COLLABORATOR_FAVORITE,
 } from "../../../constants/index.js";
 import ModalCustom from "../../../components/modalCustom/index.jsx";
-import InfoBill from "./InfoBill.jsx";
-import DetailBill from "./DetailBill.jsx";
 var AES = require("crypto-js/aes");
 const { TextArea } = Input;
 
@@ -765,7 +763,7 @@ const CreateOrder = () => {
               ))}
             </div>
 
-            <InfoBill data={infoBill} title={"Thông tin dịch vụ đã chọn"} />
+            {/* <InfoBill data={infoBill} title={"Thông tin dịch vụ đã chọn"} />
             <br />
             <DetailBill
               code_promotion={resultCodePromotion}
@@ -778,7 +776,7 @@ const CreateOrder = () => {
               platform_fee={platformFee}
               net_income_collaborator={netIncomeCollaborator}
               total_date_work={dateWorkSchedule.length}
-            />
+            /> */}
           </div>
         </div>
 

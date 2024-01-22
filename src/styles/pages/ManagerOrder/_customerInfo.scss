@@ -1,0 +1,37 @@
+.customer-info_container {
+  background-color: var(--bg-color);
+  border-radius: 5px;
+  padding: 1rem;
+  @extend .b-shadow-2;
+  width: 300px;
+  display: grid;
+  grid-template-areas:
+    "title title . avatar"
+    "detail detail . avatar";
+  gap: 0.5rem;
+  min-height: 130px;
+}
+.customer-info_title {
+  grid-area: title;
+}
+.customer-info_detail {
+  grid-area: detail;
+  @include flexbox(space-between);
+  flex-direction: column;
+  p {
+    margin: 0px 0px 4px;
+  }
+}
+.customer-info_avatar {
+  grid-area: avatar;
+}
+.customer-info_avatar-img {
+  border-radius: 10px;
+}
+.customer-info_detail-p-name {
+  @extend .fw-500;
+  margin-bottom: 0.8rem;
+}
+.customer-info_detail-p {
+  color: var(--text-color);
+}

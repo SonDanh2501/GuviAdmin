@@ -56,13 +56,13 @@ const DataTable = (props) => {
   const [rowIndex, setRowIndex] = useState(0);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, [data]);
+  // useEffect(() => {
+  //   setIsLoading(false);
+  // }, [data]);
 
-  useEffect(() => {
-    setIsLoading(true);
-  }, [detectLoading]);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  // }, [detectLoading]);
 
   const HeaderTitle = (title) => {
     return (
@@ -802,7 +802,7 @@ const DataTable = (props) => {
           dataSource={data}
           pagination={false}
           scroll={{ x: widthPage }}
-          loading={isLoading}
+          // loading={detectLoading}
           onRow={(record, rowIndex) => {
             return {
               onClick: (event) => {

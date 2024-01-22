@@ -1,7 +1,7 @@
-import React from "react";
-import { formatMoney } from "../../../helper/formatMoney";
+import React, { memo } from "react";
 import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../redux/selectors/auth";
+import { formatMoney } from "../../../../helper/formatMoney";
+import { getLanguageState } from "../../../../redux/selectors/auth";
 
 const DetailBill = (props) => {
   const {
@@ -81,4 +81,4 @@ const DetailBill = (props) => {
     </div>
   );
 };
-export default React.memo(DetailBill);
+export default memo(DetailBill);

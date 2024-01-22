@@ -1,7 +1,12 @@
-@mixin flexbox($justifyContent: flex-start, $alignItems: flex-start) {
+@mixin flexbox(
+  $justifyContent: flex-start,
+  $alignItems: flex-start,
+  $flexdirection: "row"
+) {
   display: flex;
   justify-content: $justifyContent;
   align-items: $alignItems;
+  flex-direction: $flexdirection;
 }
 
 @mixin bordered($borderWidth, $borderColor: black) {
@@ -26,4 +31,9 @@
 @mixin padding-y($paddingTop, $paddingBottom) {
   padding-top: $paddingTop;
   padding-bottom: $paddingBottom;
+}
+@mixin gird($columns, $gap: 1) {
+  display: grid;
+  grid-template-columns: $columns;
+  gap: $gap;
 }

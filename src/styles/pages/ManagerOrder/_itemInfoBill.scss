@@ -1,0 +1,22 @@
+.item-info-bill_container {
+  background-color: var(--bg-color);
+  border-radius: 5px;
+  padding: 1rem;
+  @extend .b-shadow-2;
+  width: 300px;
+  display: grid;
+  grid-template-areas:
+    "title title . img"
+    "detail detail . img";
+  gap: 0.5rem;
+  min-height: 130px;
+}
+.item-info-bill_title {
+  grid-area: title;
+}
+.item-info-bill_detail {
+  grid-area: detail;
+}
+.item-info-bill_img {
+  grid-area: img;
+}
