@@ -1,6 +1,14 @@
 import React, { memo, useEffect, useState } from "react";
 import i18n from "../../../i18n";
-import { Dropdown, Pagination, Space, Table, Tooltip, Rate } from "antd";
+import {
+  Dropdown,
+  Pagination,
+  Space,
+  Table,
+  Tooltip,
+  Rate,
+  Button,
+} from "antd";
 import { StarFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -31,6 +39,8 @@ const DataTable = (props) => {
     pageSize,
     totalItem,
     detectLoading,
+    setOpenModalChangeStatus,
+    setOpenModalCancel,
   } = props;
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -764,6 +774,32 @@ const DataTable = (props) => {
                 <p className={`${item?.fontSize}`}>
                   {moment(new Date(data[item.dataIndex])).format("HH:mm")}
                 </p>
+              </div>
+            );
+            break;
+          }
+          case "change_status": {
+            let _isShow = true;
+            let _title = "Bắt đầu";
+            if (data?.status === "pending") {
+              _isShow = false;
+            } else if (data?.status === "doing") {
+              _title = "Kết thúc";
+            }
+            return (
+              <div className="div-date-create">
+                {_isShow && (
+                  <Button onClick={() => setOpenModalChangeStatus(true)}>
+                    {_title}
+                  </Button>
+                )}
+                <Button
+                  type="primary"
+                  danger
+                  onClick={() => setOpenModalCancel(true)}
+                >
+                  Huỷ đơn
+                </Button>
               </div>
             );
             break;

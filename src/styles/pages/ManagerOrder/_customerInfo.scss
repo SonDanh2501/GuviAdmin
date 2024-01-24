@@ -3,7 +3,7 @@
   border-radius: 5px;
   padding: 1rem;
   @extend .b-shadow-2;
-  width: 300px;
+  width: 320px;
   display: grid;
   grid-template-areas:
     "title title . avatar"
@@ -29,7 +29,6 @@
   border-radius: 10px;
 }
 .customer-info_detail-p-name {
-  @extend .fw-500;
   margin-bottom: 0.8rem;
 }
 .customer-info_detail-p {

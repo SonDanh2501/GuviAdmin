@@ -1,15 +1,14 @@
-@import '../../../index.scss';
+@import "../../../index.scss";
 
 .title-column {
   text-align: left;
 }
 
 p {
-    text-decoration: none;
-    margin: 0;
-    text-align: left;
+  text-decoration: none;
+  margin: 0;
+  text-align: left;
 }
-
 
 .text-size-L {
   font-size: $textFontSizeL;
@@ -48,6 +47,9 @@ span {
 .div-date-create {
   display: flex;
   flex-direction: column;
+  button {
+    margin-bottom: 5px;
+  }
 }
 
 .div-customer-name-phone {
@@ -57,7 +59,7 @@ span {
     font-weight: $fontWeightL;
   }
   .text-phone-customer {
-  color: $colorBlack;
+    color: $colorBlack;
     margin: 0;
   }
 }
@@ -71,10 +73,9 @@ span {
   }
 }
 
-
 .div-date-work {
   .text-worktime {
-    text-transform: capitalize
+    text-transform: capitalize;
   }
 }
 
@@ -113,8 +114,6 @@ span {
       }
     }
   }
-
-
 }
 
 .div-collaborator-avatar {
@@ -131,11 +130,11 @@ span {
     display: flex;
     flex-direction: column;
     justify-content: center;
-      p {
-        text-decoration-line: underline;
-        color: $color1;
-        margin: 0;
-      }
+    p {
+      text-decoration-line: underline;
+      color: $color1;
+      margin: 0;
+    }
     .div-phone-star {
       display: flex;
       p {
@@ -158,11 +157,9 @@ span {
       }
     }
   }
-  
 }
 
 .div-status-order {
-
   .text-status-pending {
     color: $color2;
     border: 1px solid $color2;
@@ -202,7 +199,7 @@ span {
 
 .div-payment {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
 }
 
 .name_customer {
@@ -297,7 +294,6 @@ span {
   display: flex;
   flex-direction: column;
 }
-
 
 .id_order_start {
   display: flex;

@@ -3,22 +3,25 @@
   border-radius: 5px;
   padding: 1rem;
   @extend .b-shadow-2;
-  width: 300px;
+  width: 320px;
   display: grid;
   grid-template-areas:
     "title title . avatar"
     "detail detail . avatar";
   gap: 0.5rem;
   min-height: 130px;
+  span {
+    color: var(--black-color);
+  }
+  p {
+    color: var(--text-color);
+  }
 }
 .collaborator-info_title {
   grid-area: title;
 }
 .collaborator-info_detail {
   grid-area: detail;
-  span {
-    @extend .fw-500;
-  }
 }
 .collaborator-info_avatar {
   grid-area: avatar;
@@ -30,4 +33,5 @@
 }
 .collaborator-info_avatar-img {
   border-radius: 10px;
+  margin-bottom: 5px;
 }

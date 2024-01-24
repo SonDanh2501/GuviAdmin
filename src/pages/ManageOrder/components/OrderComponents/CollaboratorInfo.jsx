@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { default_avatar } from "../../../../constants";
 import { Button, Image } from "antd";
 import { formatDistanceToNowStrict } from "date-fns";
-import { CloseCircleFilled, HeartFilled } from "@ant-design/icons";
+import {
+  CloseCircleFilled,
+  HeartFilled,
+  RetweetOutlined,
+} from "@ant-design/icons";
 
 const CollaboratorInfo = ({
   full_name,
@@ -14,6 +18,8 @@ const CollaboratorInfo = ({
   star,
   handleFavourite,
   handleLock,
+  handleChangeCollaborator,
+  isChangeCollaborator,
 }) => {
   const [age, setAge] = useState(0);
   useEffect(() => {
@@ -29,15 +35,22 @@ const CollaboratorInfo = ({
     <div className="collaborator-info_container">
       <h6 className="collaborator-info_title">Thông tin CTV</h6>
       <div className="collaborator-info_detail">
-        <p>
-          Tên: <span>{full_name}</span>
-        </p>
-        <p>
-          Tuổi: <span>{age} Tuổi</span>
-        </p>
-        <p>
-          SĐT: <span>{phone}</span>
-        </p>
+        {full_name ? (
+          <>
+            <p>
+              Tên: <span>{full_name}</span>
+            </p>
+            <p>
+              SĐT: <span>{phone}</span>
+            </p>
+            <p>
+              Số sao: <span>{star}</span>
+              <i class="uil uil-star icon-star"></i>
+            </p>{" "}
+          </>
+        ) : (
+          <p>Đang tìm kiếm</p>
+        )}
       </div>
       <div className="collaborator-info_avatar">
         <Image
@@ -45,9 +58,11 @@ const CollaboratorInfo = ({
           className="collaborator-info_avatar-img"
           src={avatar || default_avatar}
         />
-        <p>
-          {star} <i class="uil uil-star icon-star"></i>
-        </p>
+        {age !== 0 && (
+          <p>
+            <span>{age}</span> Tuổi
+          </p>
+        )}
         <div className="collaborator-info_container-favourite">
           <p onClick={handleFavourite}>
             <HeartFilled
@@ -65,6 +80,16 @@ const CollaboratorInfo = ({
               }}
             />
           </p>
+          {isChangeCollaborator && (
+            <p onClick={handleChangeCollaborator}>
+              <RetweetOutlined
+                style={{
+                  fontSize: "22px",
+                  color: "#2463eb",
+                }}
+              />
+            </p>
+          )}
         </div>
       </div>
     </div>

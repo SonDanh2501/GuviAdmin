@@ -18,3 +18,9 @@
 .detail-bill_p-voucher {
   color: var(--yellow-color);
 }
+.info-bill-container_title {
+  @include flexbox(space-between, center);
+  button {
+    margin-bottom: 0.5rem;
+  }
+}

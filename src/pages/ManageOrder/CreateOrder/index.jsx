@@ -335,8 +335,6 @@ const CreateOrder = () => {
       setNewAddress(accessToken);
       setTempValueAddress(res.result.formatted_address);
       setIsShowAddressSearch(false); //
-      setIsShowAddressSearch(false);
-      setIsShowAddressDefault(false);
     } else {
       const address = listAddressDefault.filter(
         (item) => item._id === newValue
@@ -352,7 +350,6 @@ const CreateOrder = () => {
         setNewAddress(null);
         setTempValueAddress(address.address);
         setIsShowAddressSearch(false);
-        setIsShowAddressDefault(false);
       }
     }
   };
