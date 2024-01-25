@@ -227,7 +227,8 @@ const ManageOrder = () => {
     {
       i18n_title: "address",
       dataIndex: "address",
-      key: "address",
+      key: "text",
+      maxLength: 75,
       width: 220,
       fontSize: "text-size-M",
     },
