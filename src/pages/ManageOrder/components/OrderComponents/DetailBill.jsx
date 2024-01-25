@@ -13,11 +13,18 @@ const DetailBill = (props) => {
     final_fee,
     initial_fee,
     total_date_work,
+    payment_method,
   } = props;
   const lang = useSelector(getLanguageState);
   return (
     <div className="detail-bill_container">
       <h6>Thông tin thanh toán đơn hàng</h6>
+      {payment_method && (
+        <div className="div-flex-row">
+          <p className="fw-500">Thanh toán</p>
+          <p>{payment_method}</p>
+        </div>
+      )}
       {total_date_work && total_date_work > 1 && (
         <div className="div-flex-row">
           <p className="fw-500">Số buổi</p>

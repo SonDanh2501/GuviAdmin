@@ -61,3 +61,7 @@
   @include gird(3fr 1fr, 10px);
   margin-bottom: 0.5rem;
 }
+.info-detail-order_back {
+  @extend .box-common;
+  margin-bottom: -15px;
+}

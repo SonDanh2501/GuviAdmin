@@ -1,5 +1,6 @@
 .info-bill-container {
   @extend .common-container;
+  padding: 4px 8px 10px 8px;
 }
 .info-bill_header {
   background-color: var(--bg-color-2);
@@ -22,5 +23,15 @@
   @include flexbox(space-between, center);
   button {
     margin-bottom: 0.5rem;
+  }
+}
+.info-bill-container_title-service {
+  margin: 5px 0px;
+  background-color: var(--twitter-color);
+  color: var(--white-color);
+  padding: 4px 6px;
+  border-radius: 5px;
+  span {
+    font-size: 14px;
   }
 }

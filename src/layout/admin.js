@@ -100,7 +100,8 @@ import Feedback from "../pages/ManageFeedBack/FeedBack";
 import ReviewCollaborator from "../pages/ManageFeedBack/ReviewCollaborator";
 import CollaboratorVerify from "../pages/ManageCollaborator/CollaboratorVerify";
 import CollaboratorNotVerify from "../pages/ManageCollaborator/CollaboratorNotVerify";
-import DetailOrder from "../pages/ManageOrder/DetailOrder";
+import DetailGroupOrder from "../pages/ManageOrder/DetailOrder/index";
+import DetailOrder from "../pages/ManageOrder/DetailOrder/DetailOrder";
 
 const Admin = () => {
   return (
@@ -112,10 +113,10 @@ const Admin = () => {
         element={<ManageRequestService />}
       />
 
-      <Route path="/details-order/:id" element={<DetailOrder />} />
+      <Route path="/details-order/:id" element={<DetailGroupOrder />} />
       <Route
         path="/details-order/details-order-schedule/:id"
-        element={<DetailsOrderSchedule />}
+        element={<DetailOrder />}
       />
       <Route
         path="/details-collaborator/:id"

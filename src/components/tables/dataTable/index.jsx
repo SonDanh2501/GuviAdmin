@@ -779,27 +779,36 @@ const DataTable = (props) => {
             break;
           }
           case "change_status": {
-            let _isShow = true;
+            let _isShowChangeStatus = true;
             let _title = "Bắt đầu";
+            let _isShow = true;
             if (data?.status === "pending") {
-              _isShow = false;
+              _isShowChangeStatus = false;
             } else if (data?.status === "doing") {
               _title = "Kết thúc";
+            } else if (data?.status === "done") {
+              _isShow = false;
+            } else if (data?.status === "cancel") {
+              _isShow = false;
             }
             return (
               <div className="div-date-create">
                 {_isShow && (
-                  <Button onClick={() => setOpenModalChangeStatus(true)}>
-                    {_title}
-                  </Button>
+                  <>
+                    {_isShowChangeStatus && (
+                      <Button onClick={() => setOpenModalChangeStatus(true)}>
+                        {_title}
+                      </Button>
+                    )}
+                    <Button
+                      type="primary"
+                      danger
+                      onClick={() => setOpenModalCancel(true)}
+                    >
+                      Huỷ đơn
+                    </Button>
+                  </>
                 )}
-                <Button
-                  type="primary"
-                  danger
-                  onClick={() => setOpenModalCancel(true)}
-                >
-                  Huỷ đơn
-                </Button>
               </div>
             );
             break;

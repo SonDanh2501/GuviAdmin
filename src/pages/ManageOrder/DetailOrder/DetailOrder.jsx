@@ -1,55 +1,35 @@
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getElementState,
-  getLanguageState,
-} from "../../../redux/selectors/auth";
-import { loadingAction } from "../../../redux/actions/loading";
-import { errorNotify, successNotify } from "../../../helper/toast";
+import { Input } from "antd";
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
-import {
-  cancelGroupOrderApi,
-  changeStatusOrderApi,
-  getOrderByGroupOrderApi,
-} from "../../../api/order";
+import { useDispatch } from "react-redux";
+import CustomerInfo from "../components/OrderComponents/CustomerInfo";
+import CollaboratorInfo from "../components/OrderComponents/CollaboratorInfo";
+import ItemInfoBill from "./ItemInfoBill";
+import InfoBill from "../components/OrderComponents/InfoBill";
+import DetailBill from "../components/OrderComponents/DetailBill";
+import ModalCustom from "../../../components/modalCustom";
+import { getOrderDetailApi } from "../../../api/order";
+import { loadingAction } from "../../../redux/actions/loading";
+import { UilCalender, UilClock } from "@iconscout/react-unicons";
+import { arrDaysVN } from "../../../constants";
+import { errorNotify } from "../../../helper/toast";
 import {
   blockCustomerApi,
   favouriteCustomerApi,
   unblockCustomerApi,
   unfavouriteCustomerApi,
 } from "../../../api/customer";
-import CustomerInfo from "../components/OrderComponents/CustomerInfo";
-import { UilCalender, UilClock } from "@iconscout/react-unicons";
-import CollaboratorInfo from "../components/OrderComponents/CollaboratorInfo";
-import InfoBill from "../components/OrderComponents/InfoBill";
-import DetailBill from "../components/OrderComponents/DetailBill";
-import { Dropdown, FloatButton, Input, Space } from "antd";
-import DataTable from "../../../components/tables/dataTable";
-import { UilEllipsisV } from "@iconscout/react-unicons";
-import i18n from "../../../i18n";
-import { Link } from "react-router-dom";
-import EditTimeOrder from "../EditTimeGroupOrder";
-import AddCollaboratorOrder from "../DrawerAddCollaboratorToOrder/index";
-import { format } from "date-fns";
-import { arrDaysVN } from "../../../constants";
-import ItemInfoBill from "./ItemInfoBill";
-import ModalCustom from "../../../components/modalCustom";
-import moment from "moment";
-import { getListReasonCancel } from "../../../api/reasons";
-import InputCustom from "../../../components/textInputCustom";
+import { useNavigate, useParams } from "react-router-dom";
+import { ArrowLeftOutlined } from "@ant-design/icons";
+import LoadingPagination from "../../../components/paginationLoading";
 const { TextArea } = Input;
-const InForDetailGroupOrder = (props) => {
-  const { id } = props;
-  const lang = useSelector(getLanguageState);
-  const checkElement = useSelector(getElementState);
+const DetailOrder = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [dataGroup, setDataGroup] = useState();
-  const [dataList, setDataList] = useState([]);
   const [customer, setCustomer] = useState();
   const [collaborator, setCollaborator] = useState();
-  const [data, setData] = useState([]);
-  const [startPage, setStartPage] = useState(0);
-  const [total, setTotal] = useState(0);
-  const [item, setItem] = useState({ date_work: "" });
   const [detectLoading, setDetectLoading] = useState(false);
   const [dateCreate, setDateCreate] = useState({
     day: "?? ??:??:????",
@@ -67,35 +47,10 @@ const InForDetailGroupOrder = (props) => {
   const [serviceFee, setServiceFee] = useState(0);
   const [modalFavourite, setModalFavourite] = useState(false);
   const [modalLock, setModalLock] = useState(false);
-  const [isChangeCollaborator, setIsChangeCollaborator] = useState(false);
   const [modalCancel, setModalCancel] = useState(false);
-  const [isOpenModalCancel, setIsOpenModalCancel] = useState(false);
-  const [isOpenModalChangeStatus, setIsOpenModalChangeStatus] = useState(false);
-  const [columns, setColumns] = useState(base_columns);
-  const [dataReason, setDataReason] = useState();
-  const [idReason, setIdReason] = useState("");
-  const [noteReason, setNoteReason] = useState("");
   const [isOpenCancelGroupOrder, setIsOpenCancelGroupOrder] = useState(false);
   const [reCallData, setReCallData] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("Tiền mặt");
-  const onChangePage = (value) => {
-    setStartPage(value);
-  };
-  useEffect(() => {
-    getListReasonCancel("vi")
-      .then((res) => {
-        const _reason_option = [];
-        res?.data?.map((item) => {
-          _reason_option.push({
-            value: item?._id,
-            label: item?.title?.["vi"],
-          });
-        });
-        setDataReason(_reason_option);
-      })
-      .catch((err) => {});
-  }, []);
-
   useEffect(() => {
     getData();
   }, [id, reCallData]);
@@ -135,7 +90,7 @@ const InForDetailGroupOrder = (props) => {
       }
       setInfoBill({
         info: dataGroup,
-        date_work_schedule: dataGroup?.date_work_schedule,
+        date_work_schedule: [],
       });
       setCustomer(dataGroup?.id_customer);
       setCollaborator(dataGroup?.id_collaborator);
@@ -157,25 +112,6 @@ const InForDetailGroupOrder = (props) => {
         _service_fee += item?.fee;
       });
       setServiceFee(_service_fee);
-      if (dataGroup?.status === "confirm") {
-        setIsChangeCollaborator(true);
-      }
-      if (dataGroup?.status === "done" || dataGroup?.status === "cancel") {
-        setColumns(base_columns.slice(0, base_columns.length - 1));
-      }
-      if (dataGroup?.date_work_schedule?.length > 1) {
-        if (
-          dataGroup.status === "pending" ||
-          dataGroup.status === "confirm" ||
-          dataGroup.status === "doing"
-        ) {
-          setIsOpenCancelGroupOrder(true);
-        } else {
-          setIsOpenCancelGroupOrder(false);
-        }
-      } else {
-        setIsOpenCancelGroupOrder(false);
-      }
       if (dataGroup?.payment_method === "point") {
         setPaymentMethod("Ví G-pay");
       }
@@ -184,10 +120,9 @@ const InForDetailGroupOrder = (props) => {
 
   const getData = () => {
     setDetectLoading(true);
-    getOrderByGroupOrderApi(id, lang)
+    getOrderDetailApi(id)
       .then((res) => {
-        setDataGroup(res?.data?.groupOrder);
-        setDataList(res?.data?.listOrder);
+        setDataGroup(res);
         setDetectLoading(false);
       })
       .catch((err) => {
@@ -210,52 +145,6 @@ const InForDetailGroupOrder = (props) => {
       </div>
     );
   };
-  let items = [
-    {
-      key: "1",
-      label: checkElement?.includes("detail_guvi_job") && (
-        <Link to={`/details-order/details-order-schedule/${item?._id}`}>
-          <p style={{ margin: 0 }}>{`${i18n.t("see_more", {
-            lng: lang,
-          })}`}</p>
-        </Link>
-      ),
-    },
-    {
-      key: "3",
-      label: checkElement?.includes("edit_guvi_job") &&
-        item?.status !== "done" &&
-        item?.status !== "cancel" &&
-        item?.status !== "doing" && (
-          <EditTimeOrder
-            idOrder={item?._id}
-            dateWork={item?.date_work}
-            estimate={item?.total_estimate}
-            setReCallData={setReCallData}
-            reCallData={reCallData}
-          />
-        ),
-    },
-  ];
-
-  items = items.filter((x) => x.label !== false);
-  const addActionColumn = {
-    i18n_title: "",
-    dataIndex: "action",
-    key: "action",
-    fixed: "right",
-    width: 40,
-    render: () => (
-      <Space size="middle">
-        <Dropdown menu={{ items }} trigger={["click"]}>
-          <a>
-            <UilEllipsisV />
-          </a>
-        </Dropdown>
-      </Space>
-    ),
-  };
-
   const handleFavourite = () => {
     setModalFavourite(!modalFavourite);
     if (isFavourite) {
@@ -281,7 +170,6 @@ const InForDetailGroupOrder = (props) => {
   const openModalCancel = () => {
     setModalCancel(!modalCancel);
   };
-  const openModalChangeStatus = () => {};
   const handleLock = () => {
     setModalLock(!modalLock);
     if (isLock) {
@@ -298,72 +186,11 @@ const InForDetailGroupOrder = (props) => {
         .catch((err) => {});
     }
   };
-  const handleChangeCollaborator = () => {
-    console.log("change ");
-  };
-  const handleCancelGroupOrder = () => {
-    if (idReason && idReason !== "") {
-      cancelGroupOrderApi(dataGroup?._id, {
-        id_reason_cancel: idReason,
-      })
-        .then((res) => {
-          errorNotify({
-            message: "Huỷ đơn hàng thành công",
-          });
-          getData();
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err,
-          });
-          dispatch(loadingAction.loadingRequest(false));
-        });
-    } else {
-      errorNotify({
-        message: "Chưa chọn lý do huỷ việc",
-      });
-    }
-
-    setModalCancel(false);
-  };
-  const handleCancelOrder = () => {
-    if (idReason && idReason !== "") {
-      onChangeStatus(item?._id, {
-        status: "cancel",
-        id_reason_cancel: idReason,
-        note_admin: noteReason,
-      });
-    } else {
-      errorNotify({
-        message: "Chưa chọn lý do huỷ việc",
-      });
-    }
-    setIsOpenModalCancel(false);
-  };
-
-  const onChangeStatus = (_id, data) => {
-    dispatch(loadingAction.loadingRequest(true));
-    changeStatusOrderApi(_id, data)
-      .then((res) => {
-        getData();
-        dispatch(loadingAction.loadingRequest(false));
-        successNotify({
-          message: "Huỷ ca làm thành công",
-        });
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err,
-        });
-        dispatch(loadingAction.loadingRequest(false));
-      });
-  };
-  const handleChangeStatus = () => {
-    onChangeStatus(item?._id, { status: "next" });
-    setIsOpenModalChangeStatus(false);
-  };
   return (
     <div className="info-detail-order_container ">
+      <div className="info-detail-order_back">
+        <ArrowLeftOutlined onClick={() => navigate(-1)} />
+      </div>
       <div className="info-detail-order_header">
         <div className="info-detail-order_header-idview">
           <p>Mã đơn hàng</p>
@@ -412,8 +239,8 @@ const InForDetailGroupOrder = (props) => {
         )}
         <ItemInfoBill
           address={dataGroup?.address}
-          date_work={dataList.length > 0 && dataList[0]?.date_work}
-          end_date_work={dataList.length > 0 && dataList[0]?.end_date_work}
+          date_work={dataGroup?.date_work}
+          end_date_work={dataGroup?.end_date_work}
           type_address_work={dataGroup?.type_address_work}
           title="Thông tin thời gian và địa chỉ"
           avatar={address}
@@ -439,7 +266,7 @@ const InForDetailGroupOrder = (props) => {
           }
           final_fee={dataGroup?.final_fee}
           initial_fee={dataGroup?.initial_fee}
-          total_date_work={dataGroup?.date_work_schedule.length}
+          total_date_work={1}
           payment_method={paymentMethod}
         />
       </div>
@@ -447,22 +274,7 @@ const InForDetailGroupOrder = (props) => {
         <OrderNote title="Ghi chú nội bộ" />
         <OrderNote title="Ghi chú của khách KH" value={dataGroup?.note} />
       </div>
-      {dataList.length > 0 && (
-        <DataTable
-          columns={columns}
-          data={dataList}
-          actionColumn={addActionColumn}
-          start={startPage}
-          pageSize={20}
-          totalItem={total}
-          getItemRow={setItem}
-          onCurrentPageChange={onChangePage}
-          detectLoading={detectLoading}
-          setOpenModalCancel={setIsOpenModalCancel}
-          setOpenModalChangeStatus={setIsOpenModalChangeStatus}
-        />
-      )}
-      <FloatButton.BackTop />
+
       <ModalCustom
         isOpen={modalFavourite}
         title={isFavourite ? "Bỏ yêu cộng tác viên" : "Yêu thích công tác viên"}
@@ -491,70 +303,11 @@ const InForDetailGroupOrder = (props) => {
           </p>
         }
       />
-      <ModalCustom
-        isOpen={modalCancel}
-        title={"Bạn có chắc muốn huỷ đơn hàng này"}
-        handleOk={handleCancelGroupOrder}
-        textOk={"OK"}
-        handleCancel={() => setModalCancel(false)}
-        body={
-          <>
-            <InputCustom
-              title={`${i18n.t("reason_cancellation", { lng: lang })}`}
-              style={{ width: "100%" }}
-              value={idReason}
-              onChange={(e) => setIdReason(e)}
-              options={dataReason}
-              select={true}
-            />
-            <InputCustom
-              title={`${i18n.t("other_reason", { lng: lang })}`}
-              onChange={(e) => setNoteReason(e.target.value)}
-            />
-          </>
-        }
-      />
-      <ModalCustom
-        isOpen={isOpenModalCancel}
-        title={"Bạn có chắc muốn huỷ ca làm này"}
-        handleOk={handleCancelOrder}
-        textOk={"OK"}
-        handleCancel={() => setIsOpenModalCancel(false)}
-        body={
-          <>
-            <InputCustom
-              title={`${i18n.t("reason_cancellation", { lng: lang })}`}
-              style={{ width: "100%" }}
-              value={idReason}
-              onChange={(e) => setIdReason(e)}
-              options={dataReason}
-              select={true}
-            />
-            <InputCustom
-              title={`${i18n.t("other_reason", { lng: lang })}`}
-              onChange={(e) => setNoteReason(e.target.value)}
-            />
-          </>
-        }
-      />
-      <ModalCustom
-        isOpen={isOpenModalChangeStatus}
-        title={"Bạn có chắc muốn thay đổi trạng thái ca làm này không?"}
-        handleOk={handleChangeStatus}
-        textOk={"OK"}
-        handleCancel={openModalChangeStatus}
-        body={
-          <p>
-            {`Bạn có chắc muốn thay đổi trạng thái ca làm này sang ${
-              item?.status === "confirm" ? "ĐANG LÀM" : "HOÀN THÀNH"
-            }`}
-          </p>
-        }
-      />
+      {detectLoading && <LoadingPagination />}
     </div>
   );
 };
-export default InForDetailGroupOrder;
+export default DetailOrder;
 
 const a =
   "https://server.guvico.com/image/upload/8b216c92894c6d252f4c3ae64afd2ec4.png";

@@ -3,7 +3,7 @@ import CustomTab from "../../../components/customTab/CustomTab";
 import ActivityOrder from "./ActivityOrder";
 import InForDetailGroupOrder from "./InForDetailGroupOrder";
 
-const DetailOrder = () => {
+const DetailGroupOrder = () => {
   const params = useParams();
   const idGroupOrder = params?.id;
   const tempData = [
@@ -23,4 +23,4 @@ const DetailOrder = () => {
   );
 };
 
-export default DetailOrder;
+export default DetailGroupOrder;
