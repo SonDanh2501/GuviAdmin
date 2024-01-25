@@ -52,6 +52,8 @@ import {
   COLLABORATOR_FAVORITE,
 } from "../../../constants/index.js";
 import ModalCustom from "../../../components/modalCustom/index.jsx";
+import InfoBill from "../components/OrderComponents/InfoBill.jsx";
+import DetailBill from "../components/OrderComponents/DetailBill.jsx";
 var AES = require("crypto-js/aes");
 const { TextArea } = Input;
 
@@ -61,7 +63,7 @@ const CreateOrder = () => {
   const [selectService, setSelectService] = useState(null);
   const [serviceData, setServiceData] = useState(null);
   const [listCustomer, setListCustomer] = useState([]);
-  const [customer, setCustomer] = useState();
+  const [customer, setCustomer] = useState("6437a11067a9f6a3b554f0ab");
   const [listAddressDefault, setListAddressDefault] = useState([]);
   const [listAddress, setListAddress] = useState([]);
   const [addressEncode, setAddressEncode] = useState(null);
@@ -309,6 +311,7 @@ const CreateOrder = () => {
       setIsShowAddressSearch(true);
       if (newValue.trim() !== "") {
         const res = await googlePlaceAutocomplete(newValue);
+        setIsShowAddressDefault(false);
         for (const item of res.predictions) {
           dataRes.push({
             place_id: item.place_id,
@@ -335,6 +338,7 @@ const CreateOrder = () => {
       setNewAddress(accessToken);
       setTempValueAddress(res.result.formatted_address);
       setIsShowAddressSearch(false); //
+      setIsShowAddressDefault(false);
     } else {
       const address = listAddressDefault.filter(
         (item) => item._id === newValue
@@ -350,6 +354,7 @@ const CreateOrder = () => {
         setNewAddress(null);
         setTempValueAddress(address.address);
         setIsShowAddressSearch(false);
+        setIsShowAddressDefault(false);
       }
     }
   };
@@ -377,6 +382,7 @@ const CreateOrder = () => {
 
   const handleChangePaymentMethod = (newValue) => {
     setPaymentMethod(newValue);
+    console.log("new value: ", newValue);
   };
 
   const handleChangeCollaborator = (newValue) => {
@@ -502,6 +508,10 @@ const CreateOrder = () => {
       setSelectCodePromotion(null);
     }
   };
+  console.log("selectService", serviceData);
+  const handleChangeAddressDefault = (checked) => {
+    setIsShowAddressDefault(checked);
+  };
   return (
     <React.Fragment>
       <div className="div-container-content">
@@ -533,24 +543,6 @@ const CreateOrder = () => {
 
             <div className="div-flex-column">
               <p className="fw-500">Địa chỉ</p>
-              {/* <Select
-                showSearch
-                size="middle"
-                style={{ width: "100%" }}
-                defaultActiveFirstOption={false}
-                suffixIcon={null}
-                filterOption={false}
-                onSearch={handleSearchAddress}
-                onChange={handleChangeAddress}
-                onFocus={handleFocusAddress}
-                value={tempValueAddress !== "" && tempValueAddress}
-                options={listAddress.map((d) => ({
-                  value: d._id,
-                  label: `${d.address}`,
-                }))}
-                placeholder={"Nhấn vào để chọn địa chỉ hoặc nhập địa chỉ mới"}
-                virtual={false}
-              /> */}
               <TextArea
                 placeholder="Nhập địa chỉ"
                 autoSize={{
@@ -562,6 +554,7 @@ const CreateOrder = () => {
                   setTempValueAddress(e.target.value);
                 }}
                 value={tempValueAddress}
+                style={{ fontSize: 12 }}
               />
               {isShowAddressSearch &&
                 listAddress.map((item, index) => {
@@ -571,7 +564,7 @@ const CreateOrder = () => {
                       className="item-address"
                       onClick={() => handleChangeAddress(item)}
                     >
-                      {item?.address}
+                      <p>{item?.address}</p>
                     </div>
                   );
                 })}
@@ -584,10 +577,20 @@ const CreateOrder = () => {
                 </Button>
               )}
             </div>
-            {isShowAddressDefault && (
-              <>
+
+            <>
+              <div className="div-flex-row">
                 <p className="fw-500">Địa chỉ mặc định</p>
-                {listAddressDefault.map((item, index) => {
+                <Switch
+                  size="small"
+                  value={isShowAddressDefault}
+                  onChange={handleChangeAddressDefault}
+                  checked={isShowAddressDefault}
+                />
+              </div>
+
+              {isShowAddressDefault &&
+                listAddressDefault.map((item, index) => {
                   return (
                     <div
                       onClick={() => handleChangeAddress(item?._id)}
@@ -598,8 +601,8 @@ const CreateOrder = () => {
                     </div>
                   );
                 })}
-              </>
-            )}
+            </>
+
             <div className="div-flex-column">
               <p className="fw-500">Dịch vụ</p>
               <Select
@@ -759,8 +762,12 @@ const CreateOrder = () => {
                 </div>
               ))}
             </div>
-
-            {/* <InfoBill data={infoBill} title={"Thông tin dịch vụ đã chọn"} />
+            <h6>Chi tiết hoá đơn</h6>
+            <InfoBill
+              data={infoBill}
+              titleService={serviceData?.title?.vi}
+              title={"Thông tin dịch vụ đã chọn"}
+            />
             <br />
             <DetailBill
               code_promotion={resultCodePromotion}
@@ -773,7 +780,8 @@ const CreateOrder = () => {
               platform_fee={platformFee}
               net_income_collaborator={netIncomeCollaborator}
               total_date_work={dateWorkSchedule.length}
-            /> */}
+              payment_method={paymentMethod === "cash" ? "Tiền mặt" : "G-pay"}
+            />
           </div>
         </div>
 

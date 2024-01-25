@@ -390,8 +390,9 @@ const InForDetailGroupOrder = (props) => {
           email={customer?.email}
           full_name={customer?.full_name}
           phone={customer?.phone}
-          rank_point={1500}
+          rank_point={customer?.rank_point}
           avatar={customer?.avatar}
+          id={customer?._id}
         />
         {dataGroup?.id_collaborator ? (
           <CollaboratorInfo
@@ -404,6 +405,7 @@ const InForDetailGroupOrder = (props) => {
             handleLock={openModalLock}
             isFavourite={isFavourite}
             isLock={isLock}
+            id={collaborator?._id}
             // isChangeCollaborator={isChangeCollaborator}
             // handleChangeCollaborator={handleChangeCollaborator}
           />

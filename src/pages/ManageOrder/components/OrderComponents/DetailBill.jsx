@@ -16,6 +16,7 @@ const DetailBill = (props) => {
     payment_method,
   } = props;
   const lang = useSelector(getLanguageState);
+  console.log("paymen ", payment_method);
   return (
     <div className="detail-bill_container">
       <h6>Thông tin thanh toán đơn hàng</h6>

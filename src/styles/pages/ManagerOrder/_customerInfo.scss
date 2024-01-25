@@ -1,14 +1,15 @@
 .customer-info_container {
   background-color: var(--bg-color);
   border-radius: 5px;
-  padding: 1rem;
+  padding: 1rem 1rem 0px 1rem;
   @extend .b-shadow-2;
   width: 320px;
   display: grid;
   grid-template-areas:
     "title title . avatar"
-    "detail detail . avatar";
-  gap: 0.5rem;
+    "detail detail . avatar"
+    ". . . footer";
+  gap: 0.1rem;
   min-height: 130px;
 }
 .customer-info_title {
@@ -24,9 +25,20 @@
 }
 .customer-info_avatar {
   grid-area: avatar;
+  justify-self: center;
+}
+.customer-info_footer {
+  grid-area: footer;
+  align-content: end;
+  justify-self: end;
+  cursor: pointer;
+  p {
+    text-decoration: underline;
+  }
 }
 .customer-info_avatar-img {
-  border-radius: 10px;
+  border-radius: 50px;
+  align-self: center;
 }
 .customer-info_detail-p-name {
   margin-bottom: 0.8rem;

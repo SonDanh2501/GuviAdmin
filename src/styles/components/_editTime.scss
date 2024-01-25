@@ -2,6 +2,7 @@
   width: 70px;
   @include flexbox(start, start);
   margin-top: 3px;
+  cursor: pointer;
   .edit-time_button-edit {
     background-color: var(--twitter-color);
     border-radius: 5px;

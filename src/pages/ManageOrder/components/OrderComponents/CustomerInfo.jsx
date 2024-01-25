@@ -1,8 +1,9 @@
 import { Image } from "antd";
 import { useEffect, useState } from "react";
 import { default_avatar } from "../../../../constants";
+import { Link } from "react-router-dom";
 
-const CustomerInfo = ({ full_name, phone, email, rank_point, avatar }) => {
+const CustomerInfo = ({ full_name, phone, email, rank_point, avatar, id }) => {
   const [rank, setRank] = useState("Thành viên");
   useEffect(() => {
     if (rank_point > 1499) {
@@ -38,6 +39,11 @@ const CustomerInfo = ({ full_name, phone, email, rank_point, avatar }) => {
           src={avatar || default_avatar}
         />
         <p>{rank}</p>
+      </div>
+      <div className="customer-info_footer">
+        <p>
+          <Link to={`/profile-customer/${id}`}>xem chi tiết</Link>
+        </p>
       </div>
     </div>
   );

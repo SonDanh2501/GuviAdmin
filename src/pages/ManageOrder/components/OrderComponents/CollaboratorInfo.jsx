@@ -7,6 +7,7 @@ import {
   HeartFilled,
   RetweetOutlined,
 } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const CollaboratorInfo = ({
   full_name,
@@ -20,6 +21,7 @@ const CollaboratorInfo = ({
   handleLock,
   handleChangeCollaborator,
   isChangeCollaborator,
+  id,
 }) => {
   const [age, setAge] = useState(0);
   useEffect(() => {
@@ -91,6 +93,13 @@ const CollaboratorInfo = ({
             </p>
           )}
         </div>
+        {id && (
+          <div className="customer-info_footer">
+            <p>
+              <Link to={`/details-collaborator/${id}`}>xem chi tiết</Link>
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
