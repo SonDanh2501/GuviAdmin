@@ -43,7 +43,7 @@ export const getOrderDetailApi = (id) => {
   return axiosClient.get(`/admin/order_manager/get_detail/${id}`);
 };
 
-export const getHistoryOrderApi = (id, start, length, lang) => {
+export const getHistoryOrderApi = (id, start, length, lang = "vi") => {
   return axiosClient.get(
     `/admin/group-order-manager/get_history_order_by_group_order/${id}?start=${start}&length=${length}&lang=${lang}`
   );
@@ -111,7 +111,7 @@ export const getServiceFeeOrderApi = (data) => {
   return axiosClient.post(`/admin/group-order-manager/get_service_fee`, data);
 };
 
-export const getOrderByGroupOrderApi = (id, lang) => {
+export const getOrderByGroupOrderApi = (id, lang = "vi") => {
   return axiosClient.get(
     `/admin/order_manager/get_order_by_group_order/${id}?lang=${lang}`
   );
@@ -139,5 +139,6 @@ export const editTimeOrderScheduleApi = (id, data) => {
 
 export const searchOrderApiForCollaborator = (id_collaborator, search) => {
   return axiosClient.get(
-    `/admin/order_manager/search_order/lang=vi&id_collaborator=${id_collaborator}&search=${search}`);
+    `/admin/order_manager/search_order/lang=vi&id_collaborator=${id_collaborator}&search=${search}`
+  );
 };

@@ -1,7 +1,7 @@
-import React from "react";
-import { formatMoney } from "../../../helper/formatMoney";
+import React, { memo } from "react";
 import { useSelector } from "react-redux";
-import { getLanguageState } from "../../../redux/selectors/auth";
+import { formatMoney } from "../../../../helper/formatMoney";
+import { getLanguageState } from "../../../../redux/selectors/auth";
 
 const DetailBill = (props) => {
   const {
@@ -13,11 +13,19 @@ const DetailBill = (props) => {
     final_fee,
     initial_fee,
     total_date_work,
+    payment_method,
   } = props;
   const lang = useSelector(getLanguageState);
+  console.log("paymen ", payment_method);
   return (
     <div className="detail-bill_container">
       <h6>Thông tin thanh toán đơn hàng</h6>
+      {payment_method && (
+        <div className="div-flex-row">
+          <p className="fw-500">Thanh toán</p>
+          <p>{payment_method}</p>
+        </div>
+      )}
       {total_date_work && total_date_work > 1 && (
         <div className="div-flex-row">
           <p className="fw-500">Số buổi</p>
@@ -81,4 +89,4 @@ const DetailBill = (props) => {
     </div>
   );
 };
-export default React.memo(DetailBill);
+export default memo(DetailBill);

@@ -1,0 +1,67 @@
+.info-detail-order_container {
+  background-color: var(--bg-color-2);
+  width: 100%;
+  min-height: 600px;
+  padding: 1.5rem 1rem;
+}
+.info-detail-order_header {
+  background-color: var(--white-color);
+  padding: 1rem;
+  @include flexbox(space-between, stretch);
+  border-radius: 0.5rem;
+  @extend .b-shadow-2;
+  .info-detail-order_header-idview {
+    @include flexbox(space-between);
+    flex-direction: column;
+  }
+  .info-detail-order_header-date-create {
+    @include flexbox(flex-end, center);
+    .info-detail-order_header-date {
+      @include flexbox(space-between, center);
+      p {
+        margin-right: 1rem;
+      }
+    }
+    .info-detail-order_header-hour {
+      @include flexbox(flex-end, center);
+      p {
+        margin-right: 1rem;
+      }
+    }
+  }
+}
+.info-detail-order_status-pending {
+  @extend .status-pending;
+  padding: 0.5rem;
+  border: 1px solid;
+  border-radius: 6px;
+  margin-left: 2rem;
+}
+.info-detail-order_status-confirm,
+.info-detail-order_status-doing {
+  @extend .info-detail-order_status-pending;
+  @extend .status-confirm-doing;
+}
+.info-detail-order_status-cancel {
+  @extend .info-detail-order_status-pending;
+  @extend .status-not-contact;
+}
+.info-detail-order_status-done {
+  @extend .info-detail-order_status-pending;
+  @extend .status-done;
+}
+.info-detail-order_detail {
+  @include gird(1fr 1fr 2fr, 10px);
+  margin: 5px 0px;
+}
+.info-detail-order_container-note {
+  @include gird(1fr 1fr, 10px);
+}
+.info-detail-order_container-info-bill {
+  @include gird(3fr 1fr, 10px);
+  margin-bottom: 0.5rem;
+}
+.info-detail-order_back {
+  @extend .box-common;
+  margin-bottom: -15px;
+}

@@ -1,4 +1,8 @@
-import { UilEllipsisH, UilFileExport, UilTimes } from "@iconscout/react-unicons";
+import {
+  UilEllipsisH,
+  UilFileExport,
+  UilTimes,
+} from "@iconscout/react-unicons";
 import { SearchOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -8,7 +12,7 @@ import {
   Input,
   Select,
   Space,
-  Pagination
+  Pagination,
 } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
@@ -23,7 +27,7 @@ import {
 import { getProvince, getService } from "../../redux/selectors/service";
 import AddCollaboratorOrder from "./DrawerAddCollaboratorToOrder";
 import EditTimeOrder from "./EditTimeGroupOrder";
-import DataTable from "../../components/tables/dataTable"
+import DataTable from "../../components/tables/dataTable";
 import i18n from "../../i18n";
 import { Link } from "react-router-dom";
 import { UilEllipsisV } from "@iconscout/react-unicons";
@@ -32,12 +36,11 @@ import { deleteOrderApi, getOrderApi } from "../../api/order";
 import { errorNotify } from "../../helper/toast";
 import useWindowDimensions from "../../helper/useWindowDimensions";
 import { useCookies } from "../../helper/useCookies";
-import Tabs from "../../components/tabs/tabs1"
-import FilterSelect from "../../components/filter/filterSelect"
+import Tabs from "../../components/tabs/tabs1";
+import FilterSelect from "../../components/filter/filterSelect";
 import "./index.scss";
 
 const ManageOrder = () => {
-
   const itemTab = [
     {
       label: "Tất cả đơn hàng",
@@ -95,7 +98,7 @@ const ManageOrder = () => {
     new Date("2022-12-31").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
-  const [item, setItem] = useState({date_work: ""});
+  const [item, setItem] = useState({ date_work: "" });
   const toggle = () => setModal(!modal);
   const [modal, setModal] = useState(false);
 
@@ -103,15 +106,23 @@ const ManageOrder = () => {
   const { RangePicker } = DatePicker;
   const navigate = useNavigate();
 
-  const [arrFilter, setArrFilter] = useState([])
+  const [arrFilter, setArrFilter] = useState([]);
 
-  const [detectLoading, setDetectLoading] = useState(null)
-
+  const [detectLoading, setDetectLoading] = useState(null);
 
   useEffect(() => {
     getJobList();
-  }, [valueSearch, startPage, tab, kind, type, startDate, endDate, city, district]);
-
+  }, [
+    valueSearch,
+    startPage,
+    tab,
+    kind,
+    type,
+    startDate,
+    endDate,
+    city,
+    district,
+  ]);
 
   // useEffect(() => {
   //   const delayDebounceFn = setTimeout(() => {
@@ -121,17 +132,15 @@ const ManageOrder = () => {
   //   return () => clearTimeout(delayDebounceFn)
   // }, [valueSearch])
 
-
   const handleSearch = useCallback(
     _debounce((value) => {
       // setIsLoading(true);
-      setDetectLoading(value)
+      setDetectLoading(value);
       setValueSearch(value);
       // getJobList();
     }, 1000),
     []
   );
-
 
   // const onChange = (page) => {
   //   setCurrentPage(page);
@@ -159,84 +168,92 @@ const ManageOrder = () => {
   //     .catch((err) => {});
   // };
 
-
   const getJobList = () => {
-    getOrderApi(valueSearch, startPage, 20, tab, kind, type, startDate, endDate, city, district)
+    getOrderApi(
+      valueSearch,
+      startPage,
+      20,
+      tab,
+      kind,
+      type,
+      startDate,
+      endDate,
+      city,
+      district
+    )
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
-      .catch((err) => { })
-  }
-
-
+      .catch((err) => {});
+  };
 
   const columns = [
     {
-      i18n_title: 'code_order',
-      dataIndex: 'id_view',
+      i18n_title: "code_order",
+      dataIndex: "id_view",
       key: "code_order",
       width: 140,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'date_create',
-      dataIndex: 'date_create',
+      i18n_title: "date_create",
+      dataIndex: "date_create",
       key: "date_create",
       width: 100,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'customer',
-      dataIndex: 'customer',
+      i18n_title: "customer",
+      dataIndex: "customer",
       key: "customer-name-phone",
       width: 140,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'service',
-      dataIndex: 'service._id.title.vi',
+      i18n_title: "service",
+      dataIndex: "service._id.title.vi",
       key: "service",
       width: 130,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'date_work',
-      dataIndex: 'date_work',
+      i18n_title: "date_work",
+      dataIndex: "date_work",
       key: "date_work",
       width: 100,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'address',
-      dataIndex: 'address',
+      i18n_title: "address",
+      dataIndex: "address",
       key: "text",
       maxLength: 75,
       width: 220,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'collaborator',
-      dataIndex: 'collaborator',
+      i18n_title: "collaborator",
+      dataIndex: "collaborator",
       key: "collaborator",
       width: 160,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'status',
-      dataIndex: 'status',
+      i18n_title: "status",
+      dataIndex: "status",
       key: "status",
       width: 120,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'pay',
-      dataIndex: 'pay',
+      i18n_title: "pay",
+      dataIndex: "pay",
       key: "pay",
       width: 90,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
-  ]
+  ];
 
   let items = [
     {
@@ -268,40 +285,46 @@ const ManageOrder = () => {
     },
     {
       key: "3",
-      label: checkElement?.includes("edit_guvi_job") && item?.status !== "done" && item?.status !== "cancel" && item?.status !== "doing" && (
-        <EditTimeOrder
-          idOrder={item?._id}
-          dateWork={item?.date_work}
-          code={item?.code_promotion ? item?.code_promotion?.code : ""}
-          status={tab}
-          kind={kind}
-          startPage={startPage}
-          setData={setData}
-          setTotal={setTotal}
-          setIsLoading={setIsLoading}
-          details={false}
-          estimate={item?.total_estimate}
-          valueSearch={valueSearch}
-          type={type}
-          startDate={startDate}
-          endDate={endDate}
-        />
-      )
+      label: checkElement?.includes("edit_guvi_job") &&
+        item?.status !== "done" &&
+        item?.status !== "cancel" &&
+        item?.status !== "doing" && (
+          <EditTimeOrder
+            idOrder={item?._id}
+            dateWork={item?.date_work}
+            code={item?.code_promotion ? item?.code_promotion?.code : ""}
+            status={tab}
+            kind={kind}
+            startPage={startPage}
+            setData={setData}
+            setTotal={setTotal}
+            setIsLoading={setIsLoading}
+            details={false}
+            estimate={item?.total_estimate}
+            valueSearch={valueSearch}
+            type={type}
+            startDate={startDate}
+            endDate={endDate}
+          />
+        ),
     },
     {
       key: "4",
-      label: checkElement?.includes("delete_order_guvi_job") &&
-        (<p className="m-0" onClick={toggle}>{`${i18n.t("delete", { lng: lang })}`}</p>)
-    }
-  ]
+      label: checkElement?.includes("delete_order_guvi_job") && (
+        <p className="m-0" onClick={toggle}>{`${i18n.t("delete", {
+          lng: lang,
+        })}`}</p>
+      ),
+    },
+  ];
 
-  items = items.filter(x => x.label !== false);
+  items = items.filter((x) => x.label !== false);
 
   const addActionColumn = {
-    i18n_title: '',
-    dataIndex: 'action',
+    i18n_title: "",
+    dataIndex: "action",
     key: "action",
-    fixed: 'right',
+    fixed: "right",
     width: 40,
     render: () => (
       <Space size="middle">
@@ -311,9 +334,8 @@ const ManageOrder = () => {
           </a>
         </Dropdown>
       </Space>
-    )
+    ),
   };
-
 
   const deleteOrder = (id) => {
     setIsLoading(true);
@@ -335,7 +357,7 @@ const ManageOrder = () => {
             setData(res?.data);
             setTotal(res?.totalItem);
           })
-          .catch((err) => { });
+          .catch((err) => {});
         setModal(false);
         setIsLoading(false);
       })
@@ -347,12 +369,11 @@ const ManageOrder = () => {
       });
   };
 
-
   const onChangeTab = (item) => {
     setTab(item.value);
     setCheckCondition(false);
     setStartPage(0);
-    setDetectLoading(item)
+    setDetectLoading(item);
     saveToCookie("tab-order", item?.key);
     saveToCookie("status-order", item?.value);
     saveToCookie("order_scrolly", 0);
@@ -361,9 +382,8 @@ const ManageOrder = () => {
   };
 
   const onChangePage = (value) => {
-    setStartPage(value)
-  }
-
+    setStartPage(value);
+  };
 
   const cityOptions = [];
   const districtOption = [];
@@ -394,8 +414,8 @@ const ManageOrder = () => {
     for (const item2 of item.districts) {
       itemDistrict.push({
         value: item2.code,
-        label: item2.name
-      })
+        label: item2.name,
+      });
     }
 
     if (user?.area_manager_lv_1?.length === 0) {
@@ -403,7 +423,7 @@ const ManageOrder = () => {
         value: item?.code,
         label: item?.name,
         district: item?.districts,
-        children: itemDistrict
+        children: itemDistrict,
       });
       return;
     } else if (user?.area_manager_lv_1?.includes(item?.code)) {
@@ -411,7 +431,7 @@ const ManageOrder = () => {
         value: item?.code,
         label: item?.name,
         district: item?.districts,
-        children: itemDistrict
+        children: itemDistrict,
       });
       return;
     }
@@ -432,8 +452,6 @@ const ManageOrder = () => {
       return;
     }
   });
-
-
 
   const handleFilterByCondition = () => {
     setIsLoading(true);
@@ -476,14 +494,13 @@ const ManageOrder = () => {
       });
   };
 
-
   const itemFilter = [
     {
       header: "Dịch vụ",
       data: optionsService,
       setForField: "id_service",
-      type: "select_data_single"
-    }
+      type: "select_data_single",
+    },
     // {
     //   header: "title 1",
     //   data: [
@@ -499,10 +516,7 @@ const ManageOrder = () => {
     //   setForField: "status",
     //   type: "select_data_single"
     // },
-  ]
-
-
-
+  ];
 
   //   <div className="div-filter">
   //   <div className="header-filter">
@@ -597,19 +611,16 @@ const ManageOrder = () => {
   //   )}
   // </div>
 
-
-
-  const test = ""
-
-
+  const test = "";
 
   return (
     <div className="div-container-content">
       <div className="div-flex-row">
         <div className="div-header-container">
-          <h4 className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</h4>
+          <h4 className="title-cv">{`${i18n.t("work_list", {
+            lng: lang,
+          })}`}</h4>
         </div>
-
 
         <div className="btn-action-header">
           {checkElement?.includes("create_guvi_job") ? (
@@ -624,20 +635,13 @@ const ManageOrder = () => {
             <></>
           )}
         </div>
-
-
       </div>
 
       <div className="div-flex-row">
-        <Tabs
-          itemTab={itemTab}
-          onValueChangeTab={onChangeTab}
-        />
+        <Tabs itemTab={itemTab} onValueChangeTab={onChangeTab} />
       </div>
 
       <div className="div-flex-row">
-
-
         <div className="div-filter">
           <div className="header-filter">
             <Button
@@ -651,7 +655,6 @@ const ManageOrder = () => {
             >
               Bộ lọc
             </Button>
-
           </div>
           {checkCondition && (
             <div className="filter-container">
@@ -664,7 +667,11 @@ const ManageOrder = () => {
                   onChange={(e, item) => {
                     setKind(e);
                     setName(item?.label);
-                    setArrFilter({ key: "service", value: item.value, label: item.label })
+                    setArrFilter({
+                      key: "service",
+                      value: item.value,
+                      label: item.label,
+                    });
                   }}
                 />
               </div>
@@ -731,7 +738,6 @@ const ManageOrder = () => {
           )}
         </div>
 
-
         <div className="div-search">
           <Input
             placeholder={`${i18n.t("search", { lng: lang })}`}
@@ -744,10 +750,9 @@ const ManageOrder = () => {
             }}
           />
         </div>
-
       </div>
 
-      <div >
+      <div>
         <DataTable
           columns={columns}
           data={data}

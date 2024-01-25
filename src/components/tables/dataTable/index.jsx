@@ -1,6 +1,14 @@
 import React, { memo, useEffect, useState } from "react";
 import i18n from "../../../i18n";
-import { Dropdown, Pagination, Space, Table, Tooltip, Rate } from "antd";
+import {
+  Dropdown,
+  Pagination,
+  Space,
+  Table,
+  Tooltip,
+  Rate,
+  Button,
+} from "antd";
 import { StarFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -31,6 +39,8 @@ const DataTable = (props) => {
     pageSize,
     totalItem,
     detectLoading,
+    setOpenModalChangeStatus,
+    setOpenModalCancel,
   } = props;
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -56,13 +66,13 @@ const DataTable = (props) => {
   const [rowIndex, setRowIndex] = useState(0);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, [data]);
+  // useEffect(() => {
+  //   setIsLoading(false);
+  // }, [data]);
 
-  useEffect(() => {
-    setIsLoading(true);
-  }, [detectLoading]);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  // }, [detectLoading]);
 
   const HeaderTitle = (title) => {
     return (
@@ -768,6 +778,41 @@ const DataTable = (props) => {
             );
             break;
           }
+          case "change_status": {
+            let _isShowChangeStatus = true;
+            let _title = "Bắt đầu";
+            let _isShow = true;
+            if (data?.status === "pending") {
+              _isShowChangeStatus = false;
+            } else if (data?.status === "doing") {
+              _title = "Kết thúc";
+            } else if (data?.status === "done") {
+              _isShow = false;
+            } else if (data?.status === "cancel") {
+              _isShow = false;
+            }
+            return (
+              <div className="div-date-create">
+                {_isShow && (
+                  <>
+                    {_isShowChangeStatus && (
+                      <Button onClick={() => setOpenModalChangeStatus(true)}>
+                        {_title}
+                      </Button>
+                    )}
+                    <Button
+                      type="primary"
+                      danger
+                      onClick={() => setOpenModalCancel(true)}
+                    >
+                      Huỷ đơn
+                    </Button>
+                  </>
+                )}
+              </div>
+            );
+            break;
+          }
           default: {
             const dataView = data[item.dataIndex] || "";
             return <p className={`${item?.fontSize}`}> {dataView}</p>;
@@ -802,7 +847,7 @@ const DataTable = (props) => {
           dataSource={data}
           pagination={false}
           scroll={{ x: widthPage }}
-          loading={isLoading}
+          // loading={detectLoading}
           onRow={(record, rowIndex) => {
             return {
               onClick: (event) => {

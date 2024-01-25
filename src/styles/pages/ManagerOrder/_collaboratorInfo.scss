@@ -1,0 +1,37 @@
+.collaborator-info_container {
+  background-color: var(--bg-color);
+  border-radius: 5px;
+  padding: 1rem;
+  @extend .b-shadow-2;
+  width: 320px;
+  display: grid;
+  grid-template-areas:
+    "title title . avatar"
+    "detail detail . avatar";
+  gap: 0.5rem;
+  min-height: 130px;
+  span {
+    color: var(--black-color);
+  }
+  p {
+    color: var(--text-color);
+  }
+}
+.collaborator-info_title {
+  grid-area: title;
+}
+.collaborator-info_detail {
+  grid-area: detail;
+}
+.collaborator-info_avatar {
+  grid-area: avatar;
+  @include flexbox(start, center, column);
+  .collaborator-info_container-favourite {
+    @include flexbox(space-evenly, center);
+    width: 100%;
+  }
+}
+.collaborator-info_avatar-img {
+  border-radius: 10px;
+  margin-bottom: 5px;
+}

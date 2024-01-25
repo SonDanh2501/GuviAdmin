@@ -6,13 +6,17 @@
 
 // Pages
 @import "./pages/ManagerOrder/detailOrder";
-@import "./pages/ManagerOrder/infoCustomer";
-@import "./pages/ManagerOrder/infoCollaborator";
+@import "./pages/ManagerOrder/customerInfo";
+@import "./pages/ManagerOrder/collaboratorInfo";
 @import "./pages/ManagerOrder/createOrder";
 @import "./pages/ManagerOrder/infoBill";
 @import "./pages/ManagerOrder/detailBill";
+@import "./pages/ManagerOrder/infoDetailGroupOrder";
+@import "./pages/ManagerOrder/itemInfoBill";
+@import "./pages/ManagerOrder/activityOrder";
 
 // Components
 
 @import "./components/customTab";
 @import "./components/infoService";
+@import "./components/editTime";

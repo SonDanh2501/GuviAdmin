@@ -1,0 +1,28 @@
+.item-info-bill_container {
+  background-color: var(--bg-color);
+  border-radius: 5px;
+  padding: 1rem;
+  @extend .b-shadow-2;
+  width: 340;
+  display: grid;
+  grid-template-areas:
+    "title title . img"
+    "detail detail . img";
+  min-height: 130px;
+  span {
+    color: var(--black-color);
+  }
+  p {
+    color: var(--text-color);
+  }
+}
+.item-info-bill_title {
+  grid-area: title;
+}
+.item-info-bill_detail {
+  grid-area: detail;
+}
+.item-info-bill_img {
+  grid-area: img;
+  margin-left: 10px;
+}

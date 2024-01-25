@@ -24,14 +24,14 @@ const EditTimeOrder = (props) => {
     setTotal,
     setIsLoading,
     idDetail,
-    setDataGroup,
-    setDataList,
     details,
     estimate,
     valueSearch,
     type,
     startDate,
     endDate,
+    setReCallData,
+    reCallData,
   } = props;
   const [open, setOpen] = useState(false);
 
@@ -61,7 +61,6 @@ const EditTimeOrder = (props) => {
     .toISOString();
 
   const editOrder = () => {
-    setIsLoading(true);
     editTimeOrderScheduleApi(idOrder, {
       date_work: timeW,
       end_date_work: timeWorkEnd,
@@ -69,51 +68,19 @@ const EditTimeOrder = (props) => {
       is_change_price: isChangePrice,
     })
       .then((res) => {
-        setIsLoading(false);
+        setReCallData(!reCallData);
         setOpen(false);
-
-        if (details) {
-          getOrderByGroupOrderApi(idDetail)
-            .then((res) => {
-              setDataGroup(res?.data?.groupOrder);
-              setDataList(res?.data?.listOrder);
-            })
-            .catch((err) => {
-              errorNotify({
-                message: err,
-              });
-            });
-        } else {
-          getOrderApi(
-            valueSearch,
-            startPage,
-            20,
-            status,
-            kind,
-            type,
-            startDate,
-            endDate,
-            "",
-            ""
-          )
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-        }
       })
       .catch((err) => {
         errorNotify({
           message: err,
         });
-        setIsLoading(false);
       });
   };
 
   return (
-    <>
-      <p className="text-add m-0" onClick={showDrawer}>
+    <div className="edit-time_container">
+      <p className="edit-time_button-edit" onClick={showDrawer}>
         {`${i18n.t("edit", { lng: lang })}`}
       </p>
       <Drawer
@@ -128,7 +95,7 @@ const EditTimeOrder = (props) => {
           className="select-date"
           format={dateFormat}
           onChange={onChange}
-          value={dayjs(wordDate.slice(0, 11), dateFormat)}
+          value={dayjs(wordDate?.slice(0, 11), dateFormat)}
         />
 
         <div className="mt-3">
@@ -172,7 +139,7 @@ const EditTimeOrder = (props) => {
           {`${i18n.t("update", { lng: lang })}`}
         </Button>
       </Drawer>
-    </>
+    </div>
   );
 };
 export default EditTimeOrder;

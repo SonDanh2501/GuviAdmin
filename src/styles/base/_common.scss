@@ -31,3 +31,46 @@
 .fw-500 {
   font-weight: 500;
 }
+
+.status-pending {
+  color: var(--pending-color) !important;
+  border: 1px solid var(--pending-color) !important;
+  background-color: var(--bg-pending-color) !important;
+}
+
+.status-not-process {
+  color: #000000 !important;
+  border: 1px solid #dedede !important;
+  background-color: #f8f8f8 !important;
+}
+
+.status-processing {
+  color: var(--pending-color) !important;
+  border: 1px solid var(--pending-color) !important;
+  background-color: var(--bg-pending-color) !important;
+}
+
+.status-confirm-doing {
+  color: var(--confirm-doing-color) !important;
+  border: 1px solid var(--confirm-doing-color) !important;
+  background-color: var(--bg-confirm-doing-color) !important;
+}
+
+.status-done {
+  color: var(--success-color) !important;
+  border: 1px solid var(--success-color) !important;
+  background-color: var(--bg-success-color) !important;
+}
+
+.status-not-contact {
+  color: var(--error-color) !important;
+  border: 1px solid var(--error-color) !important;
+  background-color: var(--bg-error-color) !important;
+}
+
+.box-common {
+  background-color: var(--bg-color);
+  border-radius: 5px;
+  padding: 1rem;
+  @extend .b-shadow-2;
+}

@@ -226,7 +226,7 @@ const DateWorkComponent = (props) => {
                 <>
                   <div className="date-schedule div-flex-column">
                     <div>
-                      <p>Ngày làm trong tuần</p>
+                      <p className="f-500">Ngày làm trong tuần</p>
                       <div className="content-date-of-week">
                         {DATE_OF_WEEK.map((item, index) => (
                           <div
@@ -303,6 +303,7 @@ const DateWorkComponent = (props) => {
                 <>
                   <div className="date-loop div-flex-column">
                     <div>
+                      <p className="fw-500">Chọn ngày làm</p>
                       <DatePicker
                         style={{ width: "100%" }}
                         format={"DD/MM/YYYY"}
@@ -312,6 +313,7 @@ const DateWorkComponent = (props) => {
                     </div>
 
                     <div className="div-flex-column">
+                      <p className="fw-500">Chọn giờ làm</p>
                       {listTimeQuickSelect.map((groupTime, index) => (
                         <div
                           key={index}
@@ -339,7 +341,7 @@ const DateWorkComponent = (props) => {
                       <>
                         <div className="date-of-week">
                           <div className="div-active-loop-week">
-                            <p>Lặp lại theo tuần</p>
+                            <p className="fw-500">Lặp lại theo tuần</p>
                             <Switch
                               disabled={!timeSchedule.length > 0}
                               checked={service.is_auto_order}
