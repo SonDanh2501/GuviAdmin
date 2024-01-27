@@ -875,7 +875,7 @@ const DataTable = (props) => {
 
   return (
     <React.Fragment>
-      <div className="mt-3">
+      <div className="mr-t">
         <Table
           columns={headerTable}
           dataSource={data}

@@ -55,9 +55,6 @@
   @include gird(1fr 1fr 2fr, 10px);
   margin: 0.5rem 0px;
 }
-.info-detail-order_container-note {
-  @include gird(1fr 1fr, 10px);
-}
 .info-detail-order_container-info-bill {
   @include gird(3fr 1fr, 10px);
   margin-bottom: 0.5rem;

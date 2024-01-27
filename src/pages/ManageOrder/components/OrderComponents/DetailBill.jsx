@@ -23,7 +23,7 @@ const DetailBill = (props) => {
       {payment_method && (
         <div className="div-flex-row">
           <p className="fw-500">Thanh toán</p>
-          <p>{payment_method}</p>
+          <p className="fz-16 fw-500">{payment_method}</p>
         </div>
       )}
       {total_date_work && total_date_work > 1 && (
