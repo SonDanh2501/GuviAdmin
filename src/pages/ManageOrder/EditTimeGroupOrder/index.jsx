@@ -32,6 +32,7 @@ const EditTimeOrder = (props) => {
     endDate,
     setReCallData,
     reCallData,
+    title,
   } = props;
   const [open, setOpen] = useState(false);
 
@@ -79,10 +80,14 @@ const EditTimeOrder = (props) => {
   };
 
   return (
-    <div className="edit-time_container">
-      <p className="edit-time_button-edit" onClick={showDrawer}>
-        {`${i18n.t("edit", { lng: lang })}`}
-      </p>
+    <div className="">
+      {title ? (
+        <Button className="edit-time_button-edit" onClick={showDrawer}>
+          <p>{title}</p>
+        </Button>
+      ) : (
+        <p>{`${i18n.t("edit", { lng: lang })}`}</p>
+      )}
       <Drawer
         title={`${i18n.t("edit_work_time", { lng: lang })}`}
         placement="right"

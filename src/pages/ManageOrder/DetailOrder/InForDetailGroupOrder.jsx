@@ -387,32 +387,39 @@ const InForDetailGroupOrder = (props) => {
       </div>
       <div className="info-detail-order_detail">
         <CustomerInfo
+          title={"Thông tin khách hàng"}
           email={customer?.email}
           full_name={customer?.full_name}
           phone={customer?.phone}
           rank_point={customer?.rank_point}
           avatar={customer?.avatar}
           id={customer?._id}
+          isCustomer
         />
-        {dataGroup?.id_collaborator ? (
-          <CollaboratorInfo
-            full_name={collaborator?.full_name}
-            phone={collaborator?.phone}
-            avatar={collaborator?.avatar}
-            birthday={collaborator?.birthday}
-            star={collaborator?.star}
-            handleFavourite={openModalFavourite}
-            handleLock={openModalLock}
-            isFavourite={isFavourite}
-            isLock={isLock}
-            id={collaborator?._id}
-            // isChangeCollaborator={isChangeCollaborator}
-            // handleChangeCollaborator={handleChangeCollaborator}
-          />
-        ) : (
-          <CollaboratorInfo />
-        )}
-        <ItemInfoBill
+        <CustomerInfo
+          title={"Thông tin cộng tác viên"}
+          star={collaborator?.star}
+          full_name={collaborator?.full_name}
+          phone={collaborator?.phone}
+          avatar={collaborator?.avatar}
+          id={collaborator?._id}
+          handleFavourite={collaborator && openModalFavourite}
+          handleLock={collaborator && openModalLock}
+          isFavourite={isFavourite}
+          isLock={isLock}
+          isCollaborator
+        />
+        <CustomerInfo
+          title={"Thông tin thời gian và đia chỉ"}
+          address={dataGroup?.address}
+          dataGroupOrder={dataGroup}
+          isAddress
+          date_work={dataList.length > 0 && dataList[0]?.date_work}
+          end_date_work={dataList.length > 0 && dataList[0]?.end_date_work}
+          setReCallData={setReCallData}
+          reCallData={reCallData}
+        />
+        {/* <ItemInfoBill
           address={dataGroup?.address}
           date_work={dataList.length > 0 && dataList[0]?.date_work}
           end_date_work={dataList.length > 0 && dataList[0]?.end_date_work}
@@ -423,7 +430,7 @@ const InForDetailGroupOrder = (props) => {
           setReCallData={setReCallData}
           reCallData={reCallData}
           total_estimate={dataGroup?.total_estimate}
-        />
+        /> */}
       </div>
       <div className="info-detail-order_container-info-bill">
         <InfoBill
@@ -561,9 +568,6 @@ export default InForDetailGroupOrder;
 const a =
   "https://server.guvico.com/image/upload/8b216c92894c6d252f4c3ae64afd2ec4.png";
 
-const address =
-  "https://server.guvico.com/image/upload/9bd3b28bfc3b6da26f4553a4e70092b4.png";
-
 const base_columns = [
   {
     i18n_title: "code_order",
@@ -611,6 +615,20 @@ const base_columns = [
     i18n_title: "status",
     dataIndex: "status",
     key: "status",
+    width: 120,
+    fontSize: "text-size-M",
+  },
+  {
+    i18n_title: "Tổng tiền",
+    dataIndex: "total_fee",
+    key: "total_fee",
+    width: 120,
+    fontSize: "text-size-M",
+  },
+  {
+    i18n_title: "Tổng khuyến mãi",
+    dataIndex: "total_discount",
+    key: "total_discount",
     width: 120,
     fontSize: "text-size-M",
   },

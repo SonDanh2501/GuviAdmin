@@ -68,6 +68,7 @@ const ItemInfoBill = ({
               estimate={data?.estimate}
               setReCallData={setReCallData}
               reCallData={reCallData}
+              title={"Chỉnh sửa thời gian làm việc"}
             />
           )}
         </p>
