@@ -79,23 +79,23 @@ const CustomerInfo = ({
         )}
         {isCollaborator && (
           <Link to={`/details-collaborator/${id}`}>
-            <p className="customer-info_box-title_detail">{`xem chi tiết >>>`}</p>
+            {id && <p className="customer-info_box-title_detail">{`xem chi tiết >>>`}</p>}
           </Link>
         )}
       </div>
       <div className="customer-info_detail">
         <div>
-          {full_name && (
+          {(isCollaborator || isCustomer) && (
             <p className="customer-info_detail-p-name">
-              <span className="customer-info_detail-p">Tên: </span>
-              {full_name}
+              <span className="customer-info_detail-p"> Tên: </span>
+              {full_name ? full_name : "Đang tìm kiếm"}
             </p>
           )}
 
-          {phone && (
+          {(isCollaborator || isCustomer) && (
             <p className="customer-info_detail-p-name">
               <span className="customer-info_detail-p">SĐT: </span>
-              {phone}
+              {phone ? phone : 'Đang tìm kiếm'}
             </p>
           )}
           {isCustomer && (
@@ -107,7 +107,7 @@ const CustomerInfo = ({
           {isCollaborator && (
             <p className="customer-info_detail-p-name">
               <span className="customer-info_detail-p">Số sao: </span>
-              {star}sao
+              {star ? `${star} sao` : 'Đang tìm kiếm'}
             </p>
           )}
           {isAddress && (
