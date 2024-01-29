@@ -1,12 +1,6 @@
-.edit-time_container {
-  width: 70px;
-  @include flexbox(start, start);
-  margin-top: 3px;
-  cursor: pointer;
-  .edit-time_button-edit {
-    background-color: var(--twitter-color);
-    border-radius: 5px;
-    color: var(--white-color);
-    padding: 3px 5px;
+.edit-time_button-edit {
+  background-color: var(--twitter-color);
+  p {
+    color: #fff;
   }
 }

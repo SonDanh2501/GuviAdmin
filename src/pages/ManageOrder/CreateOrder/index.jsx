@@ -63,7 +63,7 @@ const CreateOrder = () => {
   const [selectService, setSelectService] = useState(null);
   const [serviceData, setServiceData] = useState(null);
   const [listCustomer, setListCustomer] = useState([]);
-  const [customer, setCustomer] = useState("6437a11067a9f6a3b554f0ab");
+  const [customer, setCustomer] = useState();
   const [listAddressDefault, setListAddressDefault] = useState([]);
   const [listAddress, setListAddress] = useState([]);
   const [addressEncode, setAddressEncode] = useState(null);
@@ -715,10 +715,9 @@ const CreateOrder = () => {
                       <div
                         onClick={() => onBonusTipCollaborator(item.amount)}
                         key={index}
-                        className={`item-tip-ctv ${
-                          tipCollaborator === item.amount &&
+                        className={`item-tip-ctv ${tipCollaborator === item.amount &&
                           "item-tip-ctv_selected"
-                        } `}
+                          } `}
                       >
                         <p>{formatMoney(item.amount | 0)}</p>
                       </div>
@@ -744,12 +743,11 @@ const CreateOrder = () => {
               {listShowCodePromotion.map((item, index) => (
                 <div
                   key={index}
-                  className={`${
-                    selectCodePromotion !== null &&
-                    item?.code === selectCodePromotion
+                  className={`${selectCodePromotion !== null &&
+                      item?.code === selectCodePromotion
                       ? "item-selected"
                       : ""
-                  } item`}
+                    } item`}
                   onClick={() => handleChoosePromotion(item?.code)}
                 >
                   <p className="title">{item.code}</p>

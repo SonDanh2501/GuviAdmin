@@ -36,6 +36,7 @@ import ModalCustom from "../../../components/modalCustom";
 import moment from "moment";
 import { getListReasonCancel } from "../../../api/reasons";
 import InputCustom from "../../../components/textInputCustom";
+import LoadingPagination from "../../../components/paginationLoading";
 const { TextArea } = Input;
 const InForDetailGroupOrder = (props) => {
   const { id } = props;
@@ -46,8 +47,8 @@ const InForDetailGroupOrder = (props) => {
   const [dataList, setDataList] = useState([]);
   const [customer, setCustomer] = useState();
   const [collaborator, setCollaborator] = useState();
-  const [data, setData] = useState([]);
-  const [startPage, setStartPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [startPage, setStartPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [item, setItem] = useState({ date_work: "" });
   const [detectLoading, setDetectLoading] = useState(false);
@@ -58,7 +59,7 @@ const InForDetailGroupOrder = (props) => {
   });
   const [statusGroupOrder, setStatusGroupOrder] = useState({
     status: "pending",
-    title: "Đang chờ làm",
+    title: "",
   });
   const [isLock, setIsLock] = useState(false);
   const [isFavourite, setIsFavourite] = useState(false);
@@ -93,12 +94,12 @@ const InForDetailGroupOrder = (props) => {
         });
         setDataReason(_reason_option);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }, []);
 
   useEffect(() => {
     getData();
-  }, [id, reCallData]);
+  }, [id, reCallData, startPage]);
   useEffect(() => {
     if (dataGroup) {
       const _date_create = new Date(dataGroup?.date_create);
@@ -131,6 +132,11 @@ const InForDetailGroupOrder = (props) => {
         setStatusGroupOrder({
           status: "cancel",
           title: "Đã huỷ",
+        });
+      } else {
+        setStatusGroupOrder({
+          status: "pending",
+          title: "Đang chờ làm",
         });
       }
       setInfoBill({
@@ -184,19 +190,24 @@ const InForDetailGroupOrder = (props) => {
 
   const getData = () => {
     setDetectLoading(true);
-    getOrderByGroupOrderApi(id, lang)
+    setIsLoading(true);
+    getOrderByGroupOrderApi(id, lang, startPage, 20)
       .then((res) => {
         setDataGroup(res?.data?.groupOrder);
         setDataList(res?.data?.listOrder);
         setDetectLoading(false);
+        setTotal(res?.totalItem);
+        setIsLoading(false);
       })
       .catch((err) => {
+        setIsLoading(false);
         errorNotify({
           message: err,
         });
         dispatch(loadingAction.loadingRequest(false));
       });
   };
+
   const OrderNote = ({ title, value, disabled = true }) => {
     return (
       <div className="box-common">
@@ -263,13 +274,13 @@ const InForDetailGroupOrder = (props) => {
         .then((res) => {
           getData();
         })
-        .catch((err) => {});
+        .catch((err) => { });
     } else {
       favouriteCustomerApi(customer?._id, collaborator?._id)
         .then((res) => {
           getData();
         })
-        .catch((err) => {});
+        .catch((err) => { });
     }
   };
   const openModalFavourite = () => {
@@ -281,7 +292,7 @@ const InForDetailGroupOrder = (props) => {
   const openModalCancel = () => {
     setModalCancel(!modalCancel);
   };
-  const openModalChangeStatus = () => {};
+  const openModalChangeStatus = () => { };
   const handleLock = () => {
     setModalLock(!modalLock);
     if (isLock) {
@@ -289,13 +300,13 @@ const InForDetailGroupOrder = (props) => {
         .then((res) => {
           getData();
         })
-        .catch((err) => {});
+        .catch((err) => { });
     } else {
       blockCustomerApi(customer?._id, collaborator?._id)
         .then((res) => {
           getData();
         })
-        .catch((err) => {});
+        .catch((err) => { });
     }
   };
   const handleChangeCollaborator = () => {
@@ -347,8 +358,14 @@ const InForDetailGroupOrder = (props) => {
       .then((res) => {
         getData();
         dispatch(loadingAction.loadingRequest(false));
+        let _message = ""
+        if (data?.status === "next") {
+          _message = "Thay đổi trạng thái làm việc thành công"
+        } else {
+          _message = "Hủy công việc thành công"
+        }
         successNotify({
-          message: "Huỷ ca làm thành công",
+          message: _message,
         });
       })
       .catch((err) => {
@@ -387,50 +404,51 @@ const InForDetailGroupOrder = (props) => {
       </div>
       <div className="info-detail-order_detail">
         <CustomerInfo
+          title={"Thông tin khách hàng"}
           email={customer?.email}
           full_name={customer?.full_name}
           phone={customer?.phone}
           rank_point={customer?.rank_point}
           avatar={customer?.avatar}
           id={customer?._id}
+          isCustomer
         />
-        {dataGroup?.id_collaborator ? (
-          <CollaboratorInfo
-            full_name={collaborator?.full_name}
-            phone={collaborator?.phone}
-            avatar={collaborator?.avatar}
-            birthday={collaborator?.birthday}
-            star={collaborator?.star}
-            handleFavourite={openModalFavourite}
-            handleLock={openModalLock}
-            isFavourite={isFavourite}
-            isLock={isLock}
-            id={collaborator?._id}
-            // isChangeCollaborator={isChangeCollaborator}
-            // handleChangeCollaborator={handleChangeCollaborator}
-          />
-        ) : (
-          <CollaboratorInfo />
-        )}
-        <ItemInfoBill
+        <CustomerInfo
+          title={"Thông tin cộng tác viên"}
+          star={collaborator?.star}
+          full_name={collaborator?.full_name}
+          phone={collaborator?.phone}
+          avatar={collaborator?.avatar}
+          id={collaborator?._id}
+          handleFavourite={collaborator && openModalFavourite}
+          handleLock={collaborator && openModalLock}
+          isFavourite={isFavourite}
+          isLock={isLock}
+          isCollaborator
+        />
+        {/* Tạm thời chưa sửa tên component CustomerInfo do không kịp */}
+        <CustomerInfo
+          title={"Thông tin thời gian và đia chỉ"}
           address={dataGroup?.address}
+          dataGroupOrder={dataGroup}
+          isAddress
           date_work={dataList.length > 0 && dataList[0]?.date_work}
           end_date_work={dataList.length > 0 && dataList[0]?.end_date_work}
-          type_address_work={dataGroup?.type_address_work}
-          title="Thông tin thời gian và địa chỉ"
-          avatar={address}
-          data={dataGroup}
           setReCallData={setReCallData}
           reCallData={reCallData}
-          total_estimate={dataGroup?.total_estimate}
         />
       </div>
       <div className="info-detail-order_container-info-bill">
-        <InfoBill
-          data={infoBill}
-          titleService={titleService}
-          handleCancel={isOpenCancelGroupOrder && openModalCancel}
-        />
+        <div>
+          <InfoBill
+            data={infoBill}
+            titleService={titleService}
+            handleCancel={isOpenCancelGroupOrder && openModalCancel}
+          />
+          <div className="mr-t" />
+          <OrderNote title="Ghi chú của khách KH" value={dataGroup?.note} />
+        </div>
+
         <DetailBill
           code_promotion={dataGroup?.code_promotion}
           event_promotion={dataGroup?.event_promotion}
@@ -444,10 +462,6 @@ const InForDetailGroupOrder = (props) => {
           total_date_work={dataGroup?.date_work_schedule.length}
           payment_method={paymentMethod}
         />
-      </div>
-      <div className="info-detail-order_container-note">
-        <OrderNote title="Ghi chú nội bộ" />
-        <OrderNote title="Ghi chú của khách KH" value={dataGroup?.note} />
       </div>
       {dataList.length > 0 && (
         <DataTable
@@ -547,12 +561,12 @@ const InForDetailGroupOrder = (props) => {
         handleCancel={openModalChangeStatus}
         body={
           <p>
-            {`Bạn có chắc muốn thay đổi trạng thái ca làm này sang ${
-              item?.status === "confirm" ? "ĐANG LÀM" : "HOÀN THÀNH"
-            }`}
+            {`Bạn có chắc muốn thay đổi trạng thái ca làm này sang ${item?.status === "confirm" ? "ĐANG LÀM" : "HOÀN THÀNH"
+              }`}
           </p>
         }
       />
+      {isLoading && <LoadingPagination />}
     </div>
   );
 };
@@ -560,9 +574,6 @@ export default InForDetailGroupOrder;
 
 const a =
   "https://server.guvico.com/image/upload/8b216c92894c6d252f4c3ae64afd2ec4.png";
-
-const address =
-  "https://server.guvico.com/image/upload/9bd3b28bfc3b6da26f4553a4e70092b4.png";
 
 const base_columns = [
   {
@@ -611,6 +622,20 @@ const base_columns = [
     i18n_title: "status",
     dataIndex: "status",
     key: "status",
+    width: 120,
+    fontSize: "text-size-M",
+  },
+  {
+    i18n_title: "Tổng tiền",
+    dataIndex: "total_fee",
+    key: "total_fee",
+    width: 120,
+    fontSize: "text-size-M",
+  },
+  {
+    i18n_title: "Tổng khuyến mãi",
+    dataIndex: "total_discount",
+    key: "total_discount",
     width: 120,
     fontSize: "text-size-M",
   },

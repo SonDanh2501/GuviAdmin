@@ -1,48 +1,44 @@
 .customer-info_container {
   background-color: var(--bg-color);
   border-radius: 5px;
-  padding: 1rem 1rem 0px 1rem;
+  padding: 1rem;
   @extend .b-shadow-2;
-  width: 320px;
-  display: grid;
-  grid-template-areas:
-    "title title . avatar"
-    "detail detail . avatar"
-    ". . . footer";
-  gap: 0.1rem;
-  min-height: 130px;
+  // min-height: 130px;
 }
-.customer-info_title {
-  grid-area: title;
-}
-.customer-info_detail {
-  grid-area: detail;
-  @include flexbox(space-between);
-  flex-direction: column;
-  p {
-    margin: 0px 0px 4px;
+.customer-info_box-title {
+  @include flexbox(space-between, center);
+  .customer-info_box-title_detail {
+    text-decoration: underline;
+    text-align: center;
+  }
+  .customer-info_box-title_title {
+    font-size: 1rem;
+    @extend .fw-500;
   }
 }
-.customer-info_avatar {
-  grid-area: avatar;
-  justify-self: center;
-}
-.customer-info_footer {
-  grid-area: footer;
-  align-content: end;
-  justify-self: end;
-  cursor: pointer;
+.customer-info_detail {
+  @include flexbox(space-between, start);
+  margin-top: 0.4rem;
+  .customer-info_detail-avatar {
+    @include flexbox(center, center, column);
+    width: 90px;
+  }
   p {
-    text-decoration: underline;
+    color: var(--black-color);
+  }
+  span {
+    color: var(--text-color);
   }
 }
 .customer-info_avatar-img {
   border-radius: 50px;
   align-self: center;
 }
-.customer-info_detail-p-name {
-  margin-bottom: 0.8rem;
+.customer-info_detail-avatar_action {
+  @include flexbox(space-between, center);
+  padding-top: 0.3rem;
+  width: 60px;
 }
-.customer-info_detail-p {
-  color: var(--text-color);
+.customer-info_detail-avatar_rank {
+  padding-top: 0.3rem;
 }

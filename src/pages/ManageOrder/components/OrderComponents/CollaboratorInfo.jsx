@@ -66,22 +66,26 @@ const CollaboratorInfo = ({
           </p>
         )}
         <div className="collaborator-info_container-favourite">
-          <p onClick={handleFavourite}>
-            <HeartFilled
-              style={{
-                fontSize: "22px",
-                color: isFavourite ? "#dc2828" : "#8d8d8d",
-              }}
-            />
-          </p>
-          <p onClick={handleLock}>
-            <CloseCircleFilled
-              style={{
-                fontSize: "22px",
-                color: isLock ? "#dc2828" : "#8d8d8d",
-              }}
-            />
-          </p>
+          {handleFavourite && (
+            <p onClick={handleFavourite}>
+              <HeartFilled
+                style={{
+                  fontSize: "22px",
+                  color: isFavourite ? "#dc2828" : "#8d8d8d",
+                }}
+              />
+            </p>
+          )}
+          {handleLock && (
+            <p onClick={handleLock}>
+              <CloseCircleFilled
+                style={{
+                  fontSize: "22px",
+                  color: isLock ? "#dc2828" : "#8d8d8d",
+                }}
+              />
+            </p>
+          )}
           {isChangeCollaborator && (
             <p onClick={handleChangeCollaborator}>
               <RetweetOutlined

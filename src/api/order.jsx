@@ -67,7 +67,7 @@ export const createOrderApi = (data) => {
   return axiosClient.post(`/admin/group-order-manager/create`, data);
 };
 
-export const getAddressCustomerApi = (id, start, length) => {
+export const getAddressCustomerApi = (id, start = 0, length = 10) => {
   return axiosClient.get(
     `admin/customer_manager/get_address_by_customer/${id}?start=${start}&length=${length}`
   );
@@ -111,9 +111,14 @@ export const getServiceFeeOrderApi = (data) => {
   return axiosClient.post(`/admin/group-order-manager/get_service_fee`, data);
 };
 
-export const getOrderByGroupOrderApi = (id, lang = "vi") => {
+export const getOrderByGroupOrderApi = (
+  id,
+  lang = "vi",
+  start = 0,
+  length = 20
+) => {
   return axiosClient.get(
-    `/admin/order_manager/get_order_by_group_order/${id}?lang=${lang}`
+    `/admin/order_manager/get_order_by_group_order/${id}?lang=${lang}&start=${start}&length=${length}`
   );
 };
 

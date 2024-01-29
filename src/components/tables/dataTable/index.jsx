@@ -813,6 +813,40 @@ const DataTable = (props) => {
             );
             break;
           }
+          case "total_fee": {
+            let _service_fee = 0;
+            for (let i of record?.service_fee) {
+              _service_fee += i?.fee;
+            }
+            const total_fee =
+              record?.initial_fee + record?.tip_collaborator + _service_fee;
+            return (
+              <div className="div-date-create">
+                <p className={`${item?.fontSize}`}>{formatMoney(total_fee)}</p>
+                <p className={`${item?.fontSize}`}></p>
+              </div>
+            );
+            break;
+          }
+          case "total_discount": {
+            let _total_code_promotion_fee = record?.code_promotion
+              ? record?.code_promotion?.discount
+              : 0;
+            let _total_event_fee = 0;
+            for (let i of record?.event_promotion) {
+              _total_event_fee += i?.discount;
+            }
+            const total_discount = _total_code_promotion_fee + _total_event_fee;
+            return (
+              <div className="div-date-create">
+                <p className={`${item?.fontSize}`}>
+                  {formatMoney(total_discount)}
+                </p>
+                <p className={`${item?.fontSize}`}></p>
+              </div>
+            );
+            break;
+          }
           default: {
             const dataView = data[item.dataIndex] || "";
             return <p className={`${item?.fontSize}`}> {dataView}</p>;
@@ -841,7 +875,7 @@ const DataTable = (props) => {
 
   return (
     <React.Fragment>
-      <div className="mt-3">
+      <div className="mr-t">
         <Table
           columns={headerTable}
           dataSource={data}

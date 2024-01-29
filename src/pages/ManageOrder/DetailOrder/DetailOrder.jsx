@@ -1,14 +1,14 @@
 import { Input } from "antd";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CustomerInfo from "../components/OrderComponents/CustomerInfo";
 import CollaboratorInfo from "../components/OrderComponents/CollaboratorInfo";
 import ItemInfoBill from "./ItemInfoBill";
 import InfoBill from "../components/OrderComponents/InfoBill";
 import DetailBill from "../components/OrderComponents/DetailBill";
 import ModalCustom from "../../../components/modalCustom";
-import { getOrderDetailApi } from "../../../api/order";
+import { getOrderByGroupOrderApi, getOrderDetailApi } from "../../../api/order";
 import { loadingAction } from "../../../redux/actions/loading";
 import { UilCalender, UilClock } from "@iconscout/react-unicons";
 import { arrDaysVN } from "../../../constants";
@@ -22,15 +22,19 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import LoadingPagination from "../../../components/paginationLoading";
+import { getElementState, getLanguageState } from "../../../redux/selectors/auth";
 const { TextArea } = Input;
-const DetailOrder = () => {
+
+const DetailOrder = (props) => {
   const { id } = useParams();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [dataGroup, setDataGroup] = useState();
   const [customer, setCustomer] = useState();
   const [collaborator, setCollaborator] = useState();
+  const [startPage, setStartPage] = useState(1);
   const [detectLoading, setDetectLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [dateCreate, setDateCreate] = useState({
     day: "?? ??:??:????",
     time: "??:??",
@@ -38,7 +42,7 @@ const DetailOrder = () => {
   });
   const [statusGroupOrder, setStatusGroupOrder] = useState({
     status: "pending",
-    title: "Đang chờ làm",
+    title: "",
   });
   const [isLock, setIsLock] = useState(false);
   const [isFavourite, setIsFavourite] = useState(false);
@@ -47,13 +51,24 @@ const DetailOrder = () => {
   const [serviceFee, setServiceFee] = useState(0);
   const [modalFavourite, setModalFavourite] = useState(false);
   const [modalLock, setModalLock] = useState(false);
+  const [isChangeCollaborator, setIsChangeCollaborator] = useState(false);
   const [modalCancel, setModalCancel] = useState(false);
+  const [isOpenModalCancel, setIsOpenModalCancel] = useState(false);
+  const [isOpenModalChangeStatus, setIsOpenModalChangeStatus] = useState(false);
+  const [dataReason, setDataReason] = useState();
+  const [idReason, setIdReason] = useState("");
+  const [noteReason, setNoteReason] = useState("");
   const [isOpenCancelGroupOrder, setIsOpenCancelGroupOrder] = useState(false);
   const [reCallData, setReCallData] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("Tiền mặt");
+  const onChangePage = (value) => {
+    setStartPage(value);
+  };
+
+
   useEffect(() => {
     getData();
-  }, [id, reCallData]);
+  }, [id, reCallData, startPage]);
   useEffect(() => {
     if (dataGroup) {
       const _date_create = new Date(dataGroup?.date_create);
@@ -87,11 +102,17 @@ const DetailOrder = () => {
           status: "cancel",
           title: "Đã huỷ",
         });
+      } else {
+        setStatusGroupOrder({
+          status: "pending",
+          title: "Đang chờ làm",
+        });
       }
       setInfoBill({
         info: dataGroup,
         date_work_schedule: [],
       });
+
       setCustomer(dataGroup?.id_customer);
       setCollaborator(dataGroup?.id_collaborator);
       setTitleService(dataGroup?.service?._id?.title?.vi);
@@ -112,20 +133,40 @@ const DetailOrder = () => {
         _service_fee += item?.fee;
       });
       setServiceFee(_service_fee);
+      if (dataGroup?.status === "confirm") {
+        setIsChangeCollaborator(true);
+      }
+
+      if (dataGroup?.date_work_schedule?.length > 1) {
+        if (
+          dataGroup.status === "pending" ||
+          dataGroup.status === "confirm" ||
+          dataGroup.status === "doing"
+        ) {
+          setIsOpenCancelGroupOrder(true);
+        } else {
+          setIsOpenCancelGroupOrder(false);
+        }
+      } else {
+        setIsOpenCancelGroupOrder(false);
+      }
       if (dataGroup?.payment_method === "point") {
         setPaymentMethod("Ví G-pay");
       }
     }
   }, [dataGroup]);
-
   const getData = () => {
     setDetectLoading(true);
+    setIsLoading(true);
     getOrderDetailApi(id)
       .then((res) => {
+        setIsLoading(false);
         setDataGroup(res);
         setDetectLoading(false);
       })
       .catch((err) => {
+        setDetectLoading(false);
+        setIsLoading(false);
         errorNotify({
           message: err,
         });
@@ -145,6 +186,7 @@ const DetailOrder = () => {
       </div>
     );
   };
+
   const handleFavourite = () => {
     setModalFavourite(!modalFavourite);
     if (isFavourite) {
@@ -152,13 +194,13 @@ const DetailOrder = () => {
         .then((res) => {
           getData();
         })
-        .catch((err) => {});
+        .catch((err) => { });
     } else {
       favouriteCustomerApi(customer?._id, collaborator?._id)
         .then((res) => {
           getData();
         })
-        .catch((err) => {});
+        .catch((err) => { });
     }
   };
   const openModalFavourite = () => {
@@ -177,13 +219,13 @@ const DetailOrder = () => {
         .then((res) => {
           getData();
         })
-        .catch((err) => {});
+        .catch((err) => { });
     } else {
       blockCustomerApi(customer?._id, collaborator?._id)
         .then((res) => {
           getData();
         })
-        .catch((err) => {});
+        .catch((err) => { });
     }
   };
   return (
@@ -214,48 +256,51 @@ const DetailOrder = () => {
       </div>
       <div className="info-detail-order_detail">
         <CustomerInfo
+          title={"Thông tin khách hàng"}
           email={customer?.email}
           full_name={customer?.full_name}
           phone={customer?.phone}
-          rank_point={1500}
+          rank_point={customer?.rank_point}
           avatar={customer?.avatar}
+          id={customer?._id}
+          isCustomer
         />
-        {dataGroup?.id_collaborator ? (
-          <CollaboratorInfo
-            full_name={collaborator?.full_name}
-            phone={collaborator?.phone}
-            avatar={collaborator?.avatar}
-            birthday={collaborator?.birthday}
-            star={collaborator?.star}
-            handleFavourite={openModalFavourite}
-            handleLock={openModalLock}
-            isFavourite={isFavourite}
-            isLock={isLock}
-            // isChangeCollaborator={isChangeCollaborator}
-            // handleChangeCollaborator={handleChangeCollaborator}
-          />
-        ) : (
-          <CollaboratorInfo />
-        )}
-        <ItemInfoBill
+        <CustomerInfo
+          title={"Thông tin cộng tác viên"}
+          star={collaborator?.star}
+          full_name={collaborator?.full_name}
+          phone={collaborator?.phone}
+          avatar={collaborator?.avatar}
+          id={collaborator?._id}
+          handleFavourite={collaborator && openModalFavourite}
+          handleLock={collaborator && openModalLock}
+          isFavourite={isFavourite}
+          isLock={isLock}
+          isCollaborator
+        />
+        {/* Tạm thời chưa sửa tên component CustomerInfo do không kịp */}
+        <CustomerInfo
+          title={"Thông tin thời gian và đia chỉ"}
           address={dataGroup?.address}
+          dataGroupOrder={dataGroup}
+          isAddress
           date_work={dataGroup?.date_work}
           end_date_work={dataGroup?.end_date_work}
-          type_address_work={dataGroup?.type_address_work}
-          title="Thông tin thời gian và địa chỉ"
-          avatar={address}
-          data={dataGroup}
           setReCallData={setReCallData}
           reCallData={reCallData}
-          total_estimate={dataGroup?.total_estimate}
         />
       </div>
       <div className="info-detail-order_container-info-bill">
-        <InfoBill
-          data={infoBill}
-          titleService={titleService}
-          handleCancel={isOpenCancelGroupOrder && openModalCancel}
-        />
+        <div>
+          <InfoBill
+            data={infoBill}
+            titleService={titleService}
+            handleCancel={isOpenCancelGroupOrder && openModalCancel}
+          />
+          <div className="mr-t" />
+          <OrderNote title="Ghi chú của khách KH" value={dataGroup?.note} />
+        </div>
+
         <DetailBill
           code_promotion={dataGroup?.code_promotion}
           event_promotion={dataGroup?.event_promotion}
@@ -270,11 +315,6 @@ const DetailOrder = () => {
           payment_method={paymentMethod}
         />
       </div>
-      <div className="info-detail-order_container-note">
-        <OrderNote title="Ghi chú nội bộ" />
-        <OrderNote title="Ghi chú của khách KH" value={dataGroup?.note} />
-      </div>
-
       <ModalCustom
         isOpen={modalFavourite}
         title={isFavourite ? "Bỏ yêu cộng tác viên" : "Yêu thích công tác viên"}
@@ -303,79 +343,13 @@ const DetailOrder = () => {
           </p>
         }
       />
-      {detectLoading && <LoadingPagination />}
+      {isLoading && <LoadingPagination />}
     </div>
   );
 };
 export default DetailOrder;
 
-const a =
-  "https://server.guvico.com/image/upload/8b216c92894c6d252f4c3ae64afd2ec4.png";
-
 const address =
   "https://server.guvico.com/image/upload/9bd3b28bfc3b6da26f4553a4e70092b4.png";
 
-const base_columns = [
-  {
-    i18n_title: "code_order",
-    dataIndex: "id_view",
-    key: "code_order",
-    width: 140,
-    fontSize: "text-size-M",
-  },
-  // {
-  //   i18n_title: "customer",
-  //   dataIndex: "customer",
-  //   key: "customer-name-phone",
-  //   width: 140,
-  //   fontSize: "text-size-M",
-  // },
-  {
-    i18n_title: "service",
-    dataIndex: "service._id.title.vi",
-    key: "service",
-    width: 130,
-    fontSize: "text-size-M",
-  },
-  {
-    i18n_title: "date_work",
-    dataIndex: "date_work",
-    key: "date_work",
-    width: 100,
-    fontSize: "text-size-M",
-  },
-  // {
-  //   i18n_title: "address",
-  //   dataIndex: "address",
-  //   key: "address",
-  //   width: 220,
-  //   fontSize: "text-size-M",
-  // },
-  {
-    i18n_title: "collaborator",
-    dataIndex: "collaborator",
-    key: "collaborator",
-    width: 160,
-    fontSize: "text-size-M",
-  },
-  {
-    i18n_title: "status",
-    dataIndex: "status",
-    key: "status",
-    width: 120,
-    fontSize: "text-size-M",
-  },
-  {
-    i18n_title: "pay",
-    dataIndex: "pay",
-    key: "pay",
-    width: 90,
-    fontSize: "text-size-M",
-  },
-  {
-    dataIndex: "change_status",
-    key: "change_status",
-    width: 120,
-    fontSize: "text-size-L",
-  },
-];
+
