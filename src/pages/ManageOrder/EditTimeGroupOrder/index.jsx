@@ -9,7 +9,7 @@ import {
   getOrderApi,
   getOrderByGroupOrderApi,
 } from "../../../api/order";
-import { errorNotify } from "../../../helper/toast";
+import { errorNotify, successNotify } from "../../../helper/toast";
 import i18n from "../../../i18n";
 import { getLanguageState } from "../../../redux/selectors/auth";
 import "./index.scss";
@@ -69,8 +69,12 @@ const EditTimeOrder = (props) => {
       is_change_price: isChangePrice,
     })
       .then((res) => {
+        console.log("resssss ", res);
         setReCallData(!reCallData);
         setOpen(false);
+        successNotify({
+          message: "Thay đổi thời gian làm việc thành công",
+        });
       })
       .catch((err) => {
         errorNotify({
@@ -86,7 +90,7 @@ const EditTimeOrder = (props) => {
           <p>{title}</p>
         </Button>
       ) : (
-        <p>{`${i18n.t("edit", { lng: lang })}`}</p>
+        <p onClick={showDrawer}>{`${i18n.t("edit", { lng: lang })}`}</p>
       )}
       <Drawer
         title={`${i18n.t("edit_work_time", { lng: lang })}`}
