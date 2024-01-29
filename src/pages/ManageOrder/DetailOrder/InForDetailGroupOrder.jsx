@@ -79,6 +79,8 @@ const InForDetailGroupOrder = (props) => {
   const [isOpenCancelGroupOrder, setIsOpenCancelGroupOrder] = useState(false);
   const [reCallData, setReCallData] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("Tiền mặt");
+  const [isOpenModalAddCollaborator, setIsOpenModalAddCollaborator] =
+    useState(false);
   const onChangePage = (value) => {
     setStartPage(value);
   };
@@ -193,9 +195,6 @@ const InForDetailGroupOrder = (props) => {
     setIsLoading(true);
     getOrderByGroupOrderApi(id, lang, startPage, 20)
       .then((res) => {
-        console.log("====================================");
-        console.log("res ", res);
-        console.log("====================================");
         setDataGroup(res?.data?.groupOrder);
         setDataList(res?.data?.listOrder);
         setDetectLoading(false);
@@ -315,6 +314,9 @@ const InForDetailGroupOrder = (props) => {
   const handleChangeCollaborator = () => {
     console.log("change ");
   };
+  const handleAddCollaborator = () => {
+    console.log("change ");
+  };
   const handleCancelGroupOrder = () => {
     if (idReason && idReason !== "") {
       cancelGroupOrderApi(dataGroup?._id, {
@@ -428,6 +430,7 @@ const InForDetailGroupOrder = (props) => {
           isFavourite={isFavourite}
           isLock={isLock}
           isCollaborator
+          handleAddCollaborator={!collaborator && handleAddCollaborator}
         />
         {/* Tạm thời chưa sửa tên component CustomerInfo do không kịp */}
         <CustomerInfo

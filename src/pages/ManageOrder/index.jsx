@@ -39,6 +39,7 @@ import { useCookies } from "../../helper/useCookies";
 import Tabs from "../../components/tabs/tabs1";
 import FilterSelect from "../../components/filter/filterSelect";
 import "./index.scss";
+import CommonFilter from "../../components/filter/commonFilter/CommonFilter";
 
 const ManageOrder = () => {
   const itemTab = [
@@ -751,7 +752,7 @@ const ManageOrder = () => {
           />
         </div>
       </div>
-
+      <CommonFilter />
       <div>
         <DataTable
           columns={columns}
