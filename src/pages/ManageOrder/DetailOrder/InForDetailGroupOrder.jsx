@@ -191,11 +191,11 @@ const InForDetailGroupOrder = (props) => {
   const getData = () => {
     setDetectLoading(true);
     setIsLoading(true);
+    console.log("bug ơ day");
     getOrderByGroupOrderApi(id, lang, startPage, 20)
       .then((res) => {
-        console.log("====================================");
-        console.log("res ", res);
-        console.log("====================================");
+        console.log("bug ơ day 111");
+
         setDataGroup(res?.data?.groupOrder);
         setDataList(res?.data?.listOrder);
         setDetectLoading(false);

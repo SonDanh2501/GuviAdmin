@@ -105,7 +105,7 @@ const ManageOrder = () => {
   const { width } = useWindowDimensions();
   const { RangePicker } = DatePicker;
   const navigate = useNavigate();
-
+  const [reCallData, setReCallData] = useState(false);
   const [arrFilter, setArrFilter] = useState([]);
 
   const [detectLoading, setDetectLoading] = useState(null);
@@ -122,6 +122,7 @@ const ManageOrder = () => {
     endDate,
     city,
     district,
+    reCallData,
   ]);
 
   // useEffect(() => {
@@ -292,19 +293,21 @@ const ManageOrder = () => {
           <EditTimeOrder
             idOrder={item?._id}
             dateWork={item?.date_work}
-            code={item?.code_promotion ? item?.code_promotion?.code : ""}
-            status={tab}
-            kind={kind}
-            startPage={startPage}
-            setData={setData}
-            setTotal={setTotal}
-            setIsLoading={setIsLoading}
-            details={false}
+            reCallData={reCallData}
+            setReCallData={setReCallData}
+            // code={item?.code_promotion ? item?.code_promotion?.code : ""}
+            // status={tab}
+            // kind={kind}
+            // startPage={startPage}
+            // setData={setData}
+            // setTotal={setTotal}
+            // setIsLoading={setIsLoading}
+            // details={false}
             estimate={item?.total_estimate}
-            valueSearch={valueSearch}
-            type={type}
-            startDate={startDate}
-            endDate={endDate}
+            // valueSearch={valueSearch}
+            // type={type}
+            // startDate={startDate}
+            // endDate={endDate}
           />
         ),
     },
