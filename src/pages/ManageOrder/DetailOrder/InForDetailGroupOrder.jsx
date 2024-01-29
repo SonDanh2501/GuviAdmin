@@ -48,7 +48,7 @@ const InForDetailGroupOrder = (props) => {
   const [customer, setCustomer] = useState();
   const [collaborator, setCollaborator] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [startPage, setStartPage] = useState(1);
+  const [startPage, setStartPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [item, setItem] = useState({ date_work: "" });
   const [detectLoading, setDetectLoading] = useState(false);
@@ -94,7 +94,7 @@ const InForDetailGroupOrder = (props) => {
         });
         setDataReason(_reason_option);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   }, []);
 
   useEffect(() => {
@@ -193,6 +193,9 @@ const InForDetailGroupOrder = (props) => {
     setIsLoading(true);
     getOrderByGroupOrderApi(id, lang, startPage, 20)
       .then((res) => {
+        console.log("====================================");
+        console.log("res ", res);
+        console.log("====================================");
         setDataGroup(res?.data?.groupOrder);
         setDataList(res?.data?.listOrder);
         setDetectLoading(false);
@@ -274,13 +277,13 @@ const InForDetailGroupOrder = (props) => {
         .then((res) => {
           getData();
         })
-        .catch((err) => { });
+        .catch((err) => {});
     } else {
       favouriteCustomerApi(customer?._id, collaborator?._id)
         .then((res) => {
           getData();
         })
-        .catch((err) => { });
+        .catch((err) => {});
     }
   };
   const openModalFavourite = () => {
@@ -292,7 +295,7 @@ const InForDetailGroupOrder = (props) => {
   const openModalCancel = () => {
     setModalCancel(!modalCancel);
   };
-  const openModalChangeStatus = () => { };
+  const openModalChangeStatus = () => {};
   const handleLock = () => {
     setModalLock(!modalLock);
     if (isLock) {
@@ -300,13 +303,13 @@ const InForDetailGroupOrder = (props) => {
         .then((res) => {
           getData();
         })
-        .catch((err) => { });
+        .catch((err) => {});
     } else {
       blockCustomerApi(customer?._id, collaborator?._id)
         .then((res) => {
           getData();
         })
-        .catch((err) => { });
+        .catch((err) => {});
     }
   };
   const handleChangeCollaborator = () => {
@@ -358,11 +361,11 @@ const InForDetailGroupOrder = (props) => {
       .then((res) => {
         getData();
         dispatch(loadingAction.loadingRequest(false));
-        let _message = ""
+        let _message = "";
         if (data?.status === "next") {
-          _message = "Thay đổi trạng thái làm việc thành công"
+          _message = "Thay đổi trạng thái làm việc thành công";
         } else {
-          _message = "Hủy công việc thành công"
+          _message = "Hủy công việc thành công";
         }
         successNotify({
           message: _message,
@@ -561,8 +564,9 @@ const InForDetailGroupOrder = (props) => {
         handleCancel={openModalChangeStatus}
         body={
           <p>
-            {`Bạn có chắc muốn thay đổi trạng thái ca làm này sang ${item?.status === "confirm" ? "ĐANG LÀM" : "HOÀN THÀNH"
-              }`}
+            {`Bạn có chắc muốn thay đổi trạng thái ca làm này sang ${
+              item?.status === "confirm" ? "ĐANG LÀM" : "HOÀN THÀNH"
+            }`}
           </p>
         }
       />

@@ -34,6 +34,9 @@ const CustomerInfo = ({
     time: "",
     day: "",
   });
+  console.log("====================================");
+  console.log("date wwork ", date_work);
+  console.log("====================================");
   const [isEditTime, setIsEditTime] = useState(false);
   useEffect(() => {
     if (rank_point > 1499) {
@@ -79,7 +82,9 @@ const CustomerInfo = ({
         )}
         {isCollaborator && (
           <Link to={`/details-collaborator/${id}`}>
-            {id && <p className="customer-info_box-title_detail">{`xem chi tiết >>>`}</p>}
+            {id && (
+              <p className="customer-info_box-title_detail">{`xem chi tiết >>>`}</p>
+            )}
           </Link>
         )}
       </div>
@@ -95,7 +100,7 @@ const CustomerInfo = ({
           {(isCollaborator || isCustomer) && (
             <p className="customer-info_detail-p-name">
               <span className="customer-info_detail-p">SĐT: </span>
-              {phone ? phone : 'Đang tìm kiếm'}
+              {phone ? phone : "Đang tìm kiếm"}
             </p>
           )}
           {isCustomer && (
@@ -107,7 +112,7 @@ const CustomerInfo = ({
           {isCollaborator && (
             <p className="customer-info_detail-p-name">
               <span className="customer-info_detail-p">Số sao: </span>
-              {star ? `${star} sao` : 'Đang tìm kiếm'}
+              {star ? `${star} sao` : "Đang tìm kiếm"}
             </p>
           )}
           {isAddress && (
