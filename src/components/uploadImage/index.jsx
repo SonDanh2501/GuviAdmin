@@ -72,7 +72,7 @@ const UploadImage = (props) => {
         .catch((err) => {
           setImage("");
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setLoading(false);
         });

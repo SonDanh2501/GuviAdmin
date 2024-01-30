@@ -53,7 +53,7 @@ const ExtendOptional = () => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     },
@@ -78,7 +78,7 @@ const ExtendOptional = () => {
         .then((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     },

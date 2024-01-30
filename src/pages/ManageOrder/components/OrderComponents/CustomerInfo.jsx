@@ -2,7 +2,11 @@ import { Image } from "antd";
 import { useEffect, useState } from "react";
 import { arrDaysVN, default_avatar } from "../../../../constants";
 import { Link } from "react-router-dom";
-import { CloseCircleFilled, HeartFilled } from "@ant-design/icons";
+import {
+  CloseCircleFilled,
+  HeartFilled,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
 import { format } from "date-fns";
 import EditTimeOrder from "../../EditTimeGroupOrder";
 
@@ -17,6 +21,7 @@ const CustomerInfo = ({
   star,
   handleFavourite,
   handleLock,
+  handleAddCollaborator,
   isFavourite,
   isLock,
   isCustomer,
@@ -34,9 +39,6 @@ const CustomerInfo = ({
     time: "",
     day: "",
   });
-  console.log("====================================");
-  console.log("date wwork ", date_work);
-  console.log("====================================");
   const [isEditTime, setIsEditTime] = useState(false);
   useEffect(() => {
     if (rank_point > 1499) {
@@ -170,6 +172,16 @@ const CustomerInfo = ({
                       style={{
                         fontSize: "22px",
                         color: isLock ? "#dc2828" : "#8d8d8d",
+                      }}
+                    />
+                  </p>
+                )}
+                {handleAddCollaborator && (
+                  <p onClick={handleAddCollaborator}>
+                    <PlusCircleOutlined
+                      style={{
+                        fontSize: "22px",
+                        color: "#2463eb",
                       }}
                     />
                   </p>

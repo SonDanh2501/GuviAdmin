@@ -73,7 +73,7 @@ const TestExam = (props) => {
         setIsLoading(false);
 
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   };

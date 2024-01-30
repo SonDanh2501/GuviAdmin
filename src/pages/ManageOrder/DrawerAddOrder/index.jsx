@@ -25,7 +25,6 @@ import {
 } from "../../../../api/location";
 import "./index.scss";
 
-
 // const AddOrder = () => {
 //   const [optionalService, setOptionalService] = useState([]);
 //   const [idOptional, setIdOptional] = useState("");
@@ -51,9 +50,6 @@ import "./index.scss";
 //   const [valueCustomer, setValueCustomer] = useState(null);
 //   const [address, setAddress] = useState("");
 //   const [places, setPlaces] = useState([]);
-
-
-
 
 //   useEffect(() => {
 //     console.log(service, 's');
@@ -86,7 +82,7 @@ import "./index.scss";
 //       console.log(value, 'value');
 //       console.log(item, 'item');
 //       setServiceApply(item)
-//   }; 
+//   };
 
 //   useEffect(() => {
 //       getOptionalServiceByServiceApi(service[0]?._id)
@@ -134,11 +130,11 @@ import "./index.scss";
 //           .catch((err) => {
 //             console.log(err,'err');
 //             // errorNotify({
-//             //   message: err,
+//             //     message: err?.message,
 //             // });
 //           });
 //       } else if (id) {
-//         // setDataCustomer([]); 
+//         // setDataCustomer([]);
 //       } else {
 //         // setDataCustomer([]);
 //       }
@@ -161,22 +157,19 @@ import "./index.scss";
 //     })
 //     .catch((err) => {
 //       errorNotify({
-//         message: err,
+//           message: err?.message,
 //       });
 //     });
 // }, [])
 
-
 // const onChangeCustomer = (item) => {
 //   console.log(item, 'item');
-//   setValueCustomer(item);   
+//   setValueCustomer(item);
 // }
 
 //   // const searchCustomersApi = () => {
-    
+
 //   // }
-
-
 
 //   const handleSearchLocation = useCallback(
 //     _debounce((value) => {
@@ -198,9 +191,6 @@ import "./index.scss";
 //     }, 1500),
 //     []
 //   );
-
-
-
 
 //   return (
 //     <React.Fragment>
@@ -234,10 +224,6 @@ import "./index.scss";
 //             }}
 //           />
 //         </div>
-
-
-
-
 
 //       <div className="mt-3 service">
 //         {serviceApply?.kind === "giup_viec_theo_gio" ? (
@@ -298,7 +284,7 @@ import "./index.scss";
 //         <div className="info-customer div-flex-column">
 //           <div className="input-customer">
 //           <p className="title-input-custom">{i18n.t("customer", { lng: lang })}</p>
-//         <Select 
+//         <Select
 //         className="input-select"
 //         options={dataCustomer}
 //         value={valueCustomer}
@@ -313,8 +299,6 @@ import "./index.scss";
 //         />
 //           </div>
 
-
-
 //         </div>
 
 //         </div>
@@ -323,11 +307,6 @@ import "./index.scss";
 
 //         </div>
 
-
-
-
-
-
 //       </div>
 
 //     </React.Fragment>
@@ -335,18 +314,6 @@ import "./index.scss";
 // }
 
 // export default AddOrder;
-
-
-
-
-
-
-
-
-
-
-
-
 
 const AddOrder = () => {
   const [optionalService, setOptionalService] = useState([]);
@@ -530,7 +497,7 @@ const AddOrder = () => {
           })
           .catch((err) => {
             errorNotify({
-              message: err,
+              message: err?.message,
             });
           });
       } else if (id) {
@@ -543,17 +510,11 @@ const AddOrder = () => {
     []
   );
 
-
-
-  useEffect(() => {
-
-  })
-
+  useEffect(() => {});
 
   return (
     <div className="div-container-add-order">
-
-<h5>{`${i18n.t("create_order", { lng: lang })}`}</h5>
+      <h5>{`${i18n.t("create_order", { lng: lang })}`}</h5>
       <div className="mt-3">
         <Select
           className="select-service-order-add"
@@ -661,26 +622,16 @@ const AddOrder = () => {
         )}
       </div>
 
-
-
-
-
-{/* <div className="div-flex-column content-left">
+      {/* <div className="div-flex-column content-left">
 
 </div> */}
 
-{/* <div className="div-flex-column content-right">
+      {/* <div className="div-flex-column content-right">
 dsgfsaifsdiofsoi
 </div> */}
-
-
-
-   
 
       {isLoading && <LoadingPagination />}
     </div>
   );
 };
 export default AddOrder;
-
-

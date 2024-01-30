@@ -330,7 +330,7 @@ const ReviewCollaborator = () => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     },

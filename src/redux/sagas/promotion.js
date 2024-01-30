@@ -61,7 +61,7 @@ function* updatePromotionSaga(action) {
     window.location.reload();
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(loadingAction.loadingRequest(false));
   }

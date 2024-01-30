@@ -50,7 +50,7 @@ const AddReason = (props) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [title, description, applyUser, note, startPage]);

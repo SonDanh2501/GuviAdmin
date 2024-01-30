@@ -113,7 +113,7 @@ const DetailsOrder = () => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         dispatch(loadingAction.loadingRequest(false));
       });
@@ -187,14 +187,14 @@ const DetailsOrder = () => {
           })
           .catch((err) => {
             errorNotify({
-              message: err,
+              message: err?.message,
             });
             dispatch(loadingAction.loadingRequest(false));
           });
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         dispatch(loadingAction.loadingRequest(false));
       });
@@ -214,7 +214,7 @@ const DetailsOrder = () => {
           })
           .catch((err) => {
             errorNotify({
-              message: err,
+              message: err?.message,
             });
             dispatch(loadingAction.loadingRequest(false));
           });
@@ -222,7 +222,7 @@ const DetailsOrder = () => {
       .catch((err) => {
         setOpenStatus(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         dispatch(loadingAction.loadingRequest(false));
       });
@@ -247,7 +247,7 @@ const DetailsOrder = () => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         dispatch(loadingAction.loadingRequest(false));
       });
@@ -278,7 +278,7 @@ const DetailsOrder = () => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     } else {
@@ -300,7 +300,7 @@ const DetailsOrder = () => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     }
@@ -331,7 +331,7 @@ const DetailsOrder = () => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     } else {
@@ -353,7 +353,7 @@ const DetailsOrder = () => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     }

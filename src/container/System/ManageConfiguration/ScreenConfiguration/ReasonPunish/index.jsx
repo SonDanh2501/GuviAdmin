@@ -51,7 +51,7 @@ const ReasonPunish = () => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, []);
@@ -71,7 +71,7 @@ const ReasonPunish = () => {
   //       .catch((err) => {
   //         setIsLoading(false);
   //         errorNotify({
-  //           message: err,
+  //             message: err?.message,
   //         });
   //       });
   //   } else {
@@ -87,7 +87,7 @@ const ReasonPunish = () => {
   //       .catch((err) => {
   //         setIsLoading(false);
   //         errorNotify({
-  //           message: err,
+  //             message: err?.message,
   //         });
   //       });
   //   }

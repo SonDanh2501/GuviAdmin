@@ -171,7 +171,7 @@ const DeepCleaning = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
 
@@ -197,7 +197,7 @@ const DeepCleaning = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     }
@@ -229,7 +229,7 @@ const DeepCleaning = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     }
@@ -265,7 +265,7 @@ const DeepCleaning = (props) => {
           })
           .catch((err) => {
             errorNotify({
-              message: err,
+              message: err?.message,
             });
             setIsLoading(false);
           });
@@ -302,7 +302,7 @@ const DeepCleaning = (props) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });

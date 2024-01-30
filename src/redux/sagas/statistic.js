@@ -43,7 +43,7 @@ function* getActiveUserSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(getActiveUser.getActiveUserFailure(err));
     yield put(loadingAction.loadingRequest(false));
@@ -57,7 +57,7 @@ function* getServiceConnectSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(getServiceConnect.getServiceConnectFailure(err));
     yield put(loadingAction.loadingRequest(false));
@@ -82,7 +82,7 @@ function* getTopCollaboratorSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(getTopCollaborator.getTopCollaboratorFailure(err));
     yield put(loadingAction.loadingRequest(false));
@@ -100,7 +100,7 @@ function* getLastestServiceSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(getLastestService.getLastestServiceFailure(err));
     yield put(loadingAction.loadingRequest(false));

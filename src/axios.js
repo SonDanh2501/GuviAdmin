@@ -11,7 +11,7 @@ const TestUrl = process.env.REACT_APP_TEST_URL;
 const TestLocalUrl = process.env.REACT_APP_LOCAL_TEST_URL;
 
 const axiosClient = axios.create({
-  baseURL: TestUrl,
+  baseURL: TestLocalUrl,
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
@@ -37,7 +37,7 @@ axiosClient.interceptors.response.use(
       window.location = "/auth/login";
       store.dispatch(logoutAction.logoutRequest());
     }
-    return Promise.reject(error?.response.data[0].message);
+    return Promise.reject(error?.response.data[0]);
   }
 );
 

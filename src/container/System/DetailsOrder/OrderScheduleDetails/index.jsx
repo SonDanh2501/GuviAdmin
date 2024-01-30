@@ -80,7 +80,7 @@ const DetailsOrderSchedule = () => {
       .catch((err) => {
         setModal(!modal);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         dispatch(loadingAction.loadingRequest(false));
       });

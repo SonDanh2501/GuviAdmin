@@ -266,7 +266,7 @@ const CleaningSchedule = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     }
@@ -313,7 +313,7 @@ const CleaningSchedule = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     }
@@ -352,7 +352,7 @@ const CleaningSchedule = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     }
@@ -376,7 +376,7 @@ const CleaningSchedule = (props) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });
@@ -425,7 +425,7 @@ const CleaningSchedule = (props) => {
           })
           .catch((err) => {
             errorNotify({
-              message: err,
+              message: err?.message,
             });
             setIsLoading(false);
           });
@@ -458,7 +458,7 @@ const CleaningSchedule = (props) => {
           })
           .catch((err) => {
             errorNotify({
-              message: err,
+              message: err?.message,
             });
             dispatch(loadingAction.loadingRequest(false));
           });
@@ -482,7 +482,7 @@ const CleaningSchedule = (props) => {
           })
           .catch((err) => {
             errorNotify({
-              message: err,
+              message: err?.message,
             });
             dispatch(loadingAction.loadingRequest(false));
           });

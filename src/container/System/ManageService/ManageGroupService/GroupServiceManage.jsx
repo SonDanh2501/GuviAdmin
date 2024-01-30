@@ -54,7 +54,7 @@ const GroupServiceManage = () => {
         setIsLoading(false);
 
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, []);
@@ -71,7 +71,7 @@ const GroupServiceManage = () => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, []);

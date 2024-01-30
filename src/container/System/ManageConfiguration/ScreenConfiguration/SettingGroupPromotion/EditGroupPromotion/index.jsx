@@ -61,7 +61,7 @@ const EditGroupPromotion = (props) => {
         setState({ ...state, isLoading: false });
 
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   };

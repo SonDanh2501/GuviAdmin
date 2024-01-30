@@ -39,6 +39,7 @@ import { useCookies } from "../../helper/useCookies";
 import Tabs from "../../components/tabs/tabs1";
 import FilterSelect from "../../components/filter/filterSelect";
 import "./index.scss";
+import CommonFilter from "../../components/filter/commonFilter/CommonFilter";
 
 const ManageOrder = () => {
   const itemTab = [
@@ -366,7 +367,7 @@ const ManageOrder = () => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         setIsLoading(false);
       });
@@ -492,7 +493,7 @@ const ManageOrder = () => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   };
@@ -754,7 +755,7 @@ const ManageOrder = () => {
           />
         </div>
       </div>
-
+      {/* <CommonFilter /> */}
       <div>
         <DataTable
           columns={columns}

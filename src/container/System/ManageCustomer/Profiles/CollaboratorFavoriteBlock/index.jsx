@@ -51,7 +51,7 @@ const FavouriteBlock = ({ id }) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });
@@ -68,7 +68,7 @@ const FavouriteBlock = ({ id }) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });
@@ -91,7 +91,7 @@ const FavouriteBlock = ({ id }) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });
@@ -109,7 +109,7 @@ const FavouriteBlock = ({ id }) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });
@@ -127,7 +127,7 @@ const FavouriteBlock = ({ id }) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, 1000);

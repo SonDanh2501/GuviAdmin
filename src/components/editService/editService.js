@@ -71,7 +71,7 @@ const EditService = (props) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   };
@@ -113,7 +113,7 @@ const EditService = (props) => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [

@@ -84,7 +84,7 @@ const UserManage = (props) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });
@@ -108,7 +108,7 @@ const UserManage = (props) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });
@@ -256,7 +256,7 @@ const UserManage = (props) => {
                   : setHidePhone(!hidePhone)
               }
             >
-              {rowIndex === index ? ( 
+              {rowIndex === index ? (
                 hidePhone ? (
                   <i class="uil uil-eye"></i>
                 ) : (

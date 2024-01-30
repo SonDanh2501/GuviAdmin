@@ -1,0 +1,15 @@
+.common-filter_container {
+  @extend .box-common;
+}
+.common-filter_button-container {
+  @include flexbox(end, end);
+  button:last-of-type {
+    margin-left: 10px;
+  }
+}
+.common-filter_filter-container {
+  margin-bottom: 0.5rem;
+}
+.date-picker {
+  font-size: 12;
+}

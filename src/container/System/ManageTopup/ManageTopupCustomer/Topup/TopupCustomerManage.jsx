@@ -74,7 +74,7 @@ const TopupCustomer = () => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setModal(false);
           dispatch(loadingAction.loadingRequest(false));
@@ -98,7 +98,7 @@ const TopupCustomer = () => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           dispatch(loadingAction.loadingRequest(false));
         });
@@ -121,7 +121,7 @@ const TopupCustomer = () => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           dispatch(loadingAction.loadingRequest(false));
         });
@@ -313,7 +313,9 @@ const TopupCustomer = () => {
           <p className="text-money-customer-topup">
             {data?.method_transfer === "vnpay"
               ? "VNPay"
-              : data?.method_transfer === "momo" ? "Momo" : `${i18n.t("transfer", { lng: lang })}`}
+              : data?.method_transfer === "momo"
+              ? "Momo"
+              : `${i18n.t("transfer", { lng: lang })}`}
           </p>
         );
       },

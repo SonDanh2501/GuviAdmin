@@ -86,7 +86,7 @@ const EditTopup = ({ iconEdit, item, type, setDataT, setTotal }) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         dispatch(loadingAction.loadingRequest(false));
       });

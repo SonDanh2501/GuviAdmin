@@ -106,7 +106,7 @@ const EditBusiness = (props) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   };

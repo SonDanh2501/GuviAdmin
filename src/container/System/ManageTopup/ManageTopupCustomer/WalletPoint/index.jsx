@@ -69,7 +69,7 @@ const TopupPoint = () => {
             })
             .catch((err) => {
               errorNotify({
-                message: err,
+                message: err?.message,
               });
               setIsLoading(false);
             });
@@ -93,14 +93,14 @@ const TopupPoint = () => {
             })
             .catch((err) => {
               errorNotify({
-                message: err,
+                message: err?.message,
               });
               setIsLoading(false);
             });
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });
@@ -124,7 +124,7 @@ const TopupPoint = () => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(true);
         });

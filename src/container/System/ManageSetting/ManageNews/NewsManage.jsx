@@ -82,7 +82,7 @@ const NewsManage = () => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           dispatch(loadingAction.loadingRequest(false));
           setModal(false);
@@ -103,7 +103,7 @@ const NewsManage = () => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           dispatch(loadingAction.loadingRequest(false));
         });

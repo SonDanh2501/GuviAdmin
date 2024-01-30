@@ -65,7 +65,7 @@ const ReasonManage = () => {
           setIsLoading(false);
 
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     },
@@ -90,7 +90,7 @@ const ReasonManage = () => {
         .catch((err) => {
           dispatch(loadingAction.loadingRequest(false));
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     },

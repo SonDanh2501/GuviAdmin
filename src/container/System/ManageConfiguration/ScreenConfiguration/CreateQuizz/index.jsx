@@ -68,7 +68,7 @@ const CreateQuizz = () => {
         .then((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     },
@@ -93,7 +93,7 @@ const CreateQuizz = () => {
           .catch((err) => {
             setIsLoading(false);
             errorNotify({
-              message: err,
+              message: err?.message,
             });
           });
       } else {
@@ -111,7 +111,7 @@ const CreateQuizz = () => {
           .catch((err) => {
             setIsLoading(false);
             errorNotify({
-              message: err,
+              message: err?.message,
             });
           });
       }

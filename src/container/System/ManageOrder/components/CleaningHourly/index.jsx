@@ -228,7 +228,7 @@ const CleaningHourly = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
 
@@ -254,7 +254,7 @@ const CleaningHourly = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     }
@@ -295,7 +295,7 @@ const CleaningHourly = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     }
@@ -332,7 +332,7 @@ const CleaningHourly = (props) => {
           .catch((err) => {
             setCodePromotion("");
             errorNotify({
-              message: err,
+              message: err?.message,
             });
             setIsLoading(false);
           });
@@ -388,7 +388,7 @@ const CleaningHourly = (props) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           dispatch(loadingAction.loadingRequest(false));
         });

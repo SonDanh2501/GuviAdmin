@@ -34,7 +34,7 @@ const History = ({ id }) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         dispatch(loadingAction.loadingRequest(false));
       });
@@ -109,13 +109,17 @@ const History = ({ id }) => {
                 )}
               </p>
 
-              {(( new Date(item?.date_create).getTime() > new Date("2023-10-28T17:00:00.000Z").getTime())) ? (
+              {new Date(item?.date_create).getTime() >
+              new Date("2023-10-28T17:00:00.000Z").getTime() ? (
                 <>
                   <div className="div-surplus">
                     <div className="div-text-title-surplus">
-                      <p className="text-title-surplus">{`${i18n.t("work_wallet", {
-                        lng: lang,
-                      })}`}</p>
+                      <p className="text-title-surplus">{`${i18n.t(
+                        "work_wallet",
+                        {
+                          lng: lang,
+                        }
+                      )}`}</p>
                     </div>
                     <p style={{ margin: 0 }}>:</p>
                     <div className="div-money">
@@ -137,9 +141,12 @@ const History = ({ id }) => {
                   </div>
                   <div className="div-surplus">
                     <div className="div-text-title-surplus">
-                      <p className="text-title-surplus">{`${i18n.t("collaborator_wallet", {
-                        lng: lang,
-                      })}`}</p>
+                      <p className="text-title-surplus">{`${i18n.t(
+                        "collaborator_wallet",
+                        {
+                          lng: lang,
+                        }
+                      )}`}</p>
                     </div>
                     <p style={{ margin: 0 }}>:</p>
                     <div className="div-money">
@@ -164,9 +171,12 @@ const History = ({ id }) => {
                 <>
                   <div className="div-surplus">
                     <div className="div-text-title-surplus">
-                      <p className="text-title-surplus">{`${i18n.t("wallet_ctv", {
-                        lng: lang,
-                      })}`}</p>
+                      <p className="text-title-surplus">{`${i18n.t(
+                        "wallet_ctv",
+                        {
+                          lng: lang,
+                        }
+                      )}`}</p>
                     </div>
                     <p style={{ margin: 0 }}>:</p>
                     <div className="div-money">
@@ -188,9 +198,12 @@ const History = ({ id }) => {
                   </div>
                   <div className="div-surplus">
                     <div className="div-text-title-surplus">
-                      <p className="text-title-surplus">{`${i18n.t("gift_wallet", {
-                        lng: lang,
-                      })}`}</p>
+                      <p className="text-title-surplus">{`${i18n.t(
+                        "gift_wallet",
+                        {
+                          lng: lang,
+                        }
+                      )}`}</p>
                     </div>
                     <p style={{ margin: 0 }}>:</p>
                     <div className="div-money">
@@ -211,10 +224,7 @@ const History = ({ id }) => {
                     </div>
                   </div>
                 </>
-
               )}
-
-
             </div>
           );
         })}

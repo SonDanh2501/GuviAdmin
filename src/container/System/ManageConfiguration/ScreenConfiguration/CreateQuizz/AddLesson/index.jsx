@@ -66,7 +66,7 @@ const AddLesson = ({ setData, setTotal, setIsLoading, tab }) => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [state, tab, title, description]);

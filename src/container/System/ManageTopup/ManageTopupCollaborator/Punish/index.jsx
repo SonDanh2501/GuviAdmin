@@ -77,13 +77,13 @@ const Punish = () => {
           .catch((err) => {
             setIsLoading(false);
             errorNotify({
-              message: err,
+              message: err?.message,
             });
           })
           .catch((err) => {
             setIsLoading(false);
             errorNotify({
-              message: err,
+              message: err?.message,
             });
           });
       });
@@ -109,7 +109,7 @@ const Punish = () => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     },
@@ -134,7 +134,7 @@ const Punish = () => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     },
@@ -158,7 +158,7 @@ const Punish = () => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   };

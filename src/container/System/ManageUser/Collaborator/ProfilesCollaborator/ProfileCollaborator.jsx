@@ -54,7 +54,7 @@ const ProfileCollaborator = () => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         dispatch(loadingAction.loadingRequest(false));
       });
@@ -88,7 +88,7 @@ const ProfileCollaborator = () => {
       .catch((err) => {
         setImg("");
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         dispatch(loadingAction.loadingRequest(false));
       });

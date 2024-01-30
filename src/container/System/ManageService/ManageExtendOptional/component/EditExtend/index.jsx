@@ -155,7 +155,7 @@ const EditExtend = ({ idOption, setData, data }) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     } catch (err) {
@@ -193,7 +193,7 @@ const EditExtend = ({ idOption, setData, data }) => {
           setIsLoading(false);
 
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     } catch (err) {
@@ -422,7 +422,7 @@ const EditExtend = ({ idOption, setData, data }) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         setIsLoading(false);
       });

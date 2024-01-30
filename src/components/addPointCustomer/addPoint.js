@@ -92,7 +92,7 @@ const AddPoint = ({ start, setDataL, setTotal }) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           dispatch(loadingAction.loadingRequest(false));
         });

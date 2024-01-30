@@ -169,7 +169,7 @@ const CollaboratorManage = (props) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     }, 1000),
@@ -193,7 +193,7 @@ const CollaboratorManage = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     },
@@ -218,7 +218,7 @@ const CollaboratorManage = (props) => {
           .catch((err) => {
             setIsLoading(false);
             errorNotify({
-              message: err,
+              message: err?.message,
             });
           });
       } else {
@@ -239,7 +239,7 @@ const CollaboratorManage = (props) => {
           .catch((err) => {
             setIsLoading(false);
             errorNotify({
-              message: err,
+              message: err?.message,
             });
           });
       }
@@ -263,7 +263,7 @@ const CollaboratorManage = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     },
@@ -287,7 +287,7 @@ const CollaboratorManage = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     },
@@ -351,7 +351,9 @@ const CollaboratorManage = (props) => {
     {
       title: () => {
         return (
-          <p className="title-column">{`${i18n.t("name_collaborator", { lng: lang })}`}</p>
+          <p className="title-column">{`${i18n.t("name_collaborator", {
+            lng: lang,
+          })}`}</p>
         );
       },
       render: (data) => {

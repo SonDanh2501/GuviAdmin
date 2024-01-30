@@ -78,7 +78,7 @@ const EditTimeOrder = (props) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   };

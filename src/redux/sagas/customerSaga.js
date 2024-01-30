@@ -23,7 +23,7 @@ function* fetchCustomersSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(actions.getCustomers.getCustomersFailure(err));
     yield put(loadingAction.loadingRequest(false));
@@ -37,7 +37,7 @@ function* createCustomerSaga(action) {
     yield put(actions.createCustomer.createCustomerSuccess(Customer.data));
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(actions.createCustomer.createCustomerFailure(err));
     yield put(loadingAction.loadingRequest(false));
@@ -57,7 +57,7 @@ function* updateCustomerSaga(action) {
     );
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(actions.updateCustomer.updateCustomerFailure(err));
     yield put(loadingAction.loadingRequest(false));
@@ -77,7 +77,7 @@ function* deleteCustomerSaga(action) {
     );
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(actions.deleteCustomerAction.deleteCustomerFailure(err));
     yield put(loadingAction.loadingRequest(false));
@@ -100,7 +100,7 @@ function* fetchGroupCustomersSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(actions.getGroupCustomers.getGroupCustomersFailure(err));
     yield put(loadingAction.loadingRequest(false));

@@ -60,7 +60,7 @@ const CreateAccount = () => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     },
@@ -85,7 +85,7 @@ const CreateAccount = () => {
           .catch((err) => {
             setIsLoading(false);
             errorNotify({
-              message: err,
+              message: err?.message,
             });
           });
       } else {
@@ -103,7 +103,7 @@ const CreateAccount = () => {
           .catch((err) => {
             setIsLoading(false);
             errorNotify({
-              message: err,
+              message: err?.message,
             });
           });
       }

@@ -80,7 +80,7 @@ const EditTimeOrder = (props) => {
             })
             .catch((err) => {
               errorNotify({
-                message: err,
+                message: err?.message,
               });
             });
         } else {
@@ -105,7 +105,7 @@ const EditTimeOrder = (props) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         setIsLoading(false);
       });

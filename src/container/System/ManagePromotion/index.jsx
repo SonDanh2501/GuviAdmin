@@ -172,7 +172,7 @@ const ManagePromotions = () => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });
@@ -207,7 +207,7 @@ const ManagePromotions = () => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });
@@ -473,7 +473,7 @@ const ManagePromotions = () => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   };

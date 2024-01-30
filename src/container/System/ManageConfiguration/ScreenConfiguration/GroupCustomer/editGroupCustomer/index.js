@@ -245,7 +245,7 @@ const EditGroupCustomer = () => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         setIsLoading(false);
       });

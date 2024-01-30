@@ -6,7 +6,10 @@ import { Form } from "reactstrap";
 
 import { createCustomer, fetchCustomers } from "../../../../api/customer";
 import { errorNotify } from "../../../../helper/toast";
-import { getElementState, getLanguageState } from "../../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../../redux/selectors/auth";
 import { validateAddCustomerSchema } from "../../../../utils/schema";
 import CustomButton from "../../../../components/customButton/customButton";
 import InputCustom from "../../../../components/textInputCustom";
@@ -17,7 +20,14 @@ import { Button } from "antd";
 import LoadingPagination from "../../../../components/paginationLoading";
 
 const AddCustomer = (props) => {
-  const { returnValueIsLoading, setData, setTotal, startPage, status, idGroup } = props;
+  const {
+    returnValueIsLoading,
+    setData,
+    setTotal,
+    startPage,
+    status,
+    idGroup,
+  } = props;
   const formikRef = useRef();
   const dispatch = useDispatch();
   const checkElement = useSelector(getElementState);
@@ -66,10 +76,10 @@ const AddCustomer = (props) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         returnValueIsLoading(false);
-      setIsLoading(false);
+        setIsLoading(false);
       });
   };
 
@@ -82,12 +92,10 @@ const AddCustomer = (props) => {
         style={{ width: "auto" }}
         onClick={showDrawer}
       /> */}
-          <Button className="btn-add"
-            onClick={showDrawer}
-          >
-            <i class="uil uil-plus-circle"></i>
-            {`${i18n.t("create_new_customer", { lng: lang })}`}
-          </Button>
+      <Button className="btn-add" onClick={showDrawer}>
+        <i class="uil uil-plus-circle"></i>
+        {`${i18n.t("create_new_customer", { lng: lang })}`}
+      </Button>
 
       {/* Modal */}
       <Formik

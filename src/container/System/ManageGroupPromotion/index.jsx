@@ -1,4 +1,8 @@
-import { UilEllipsisH, UilFileExport, UilTimes } from "@iconscout/react-unicons";
+import {
+  UilEllipsisH,
+  UilFileExport,
+  UilTimes,
+} from "@iconscout/react-unicons";
 import { SearchOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -8,7 +12,7 @@ import {
   Input,
   Select,
   Space,
-  Pagination
+  Pagination,
 } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
@@ -23,7 +27,7 @@ import {
 import { getProvince, getService } from "../../../redux/selectors/service";
 import AddCollaboratorOrder from "./DrawerAddCollaboratorToOrder";
 import EditTimeOrder from "./EditTimeGroupOrder";
-import DataTable from "../../../components/tables/dataTable"
+import DataTable from "../../../components/tables/dataTable";
 import i18n from "../../../i18n";
 import { Link } from "react-router-dom";
 import { UilEllipsisV } from "@iconscout/react-unicons";
@@ -32,18 +36,17 @@ import { deleteOrderApi, getOrderApi } from "../../../api/order";
 import { errorNotify } from "../../../helper/toast";
 import useWindowDimensions from "../../../helper/useWindowDimensions";
 import { useCookies } from "../../../helper/useCookies";
-import Tabs from "../../../components/tabs/tabs1"
-import FilterSelect from "../../../components/filter/filterSelect"
+import Tabs from "../../../components/tabs/tabs1";
+import FilterSelect from "../../../components/filter/filterSelect";
 import "./index.scss";
 
 const ManageGroupPromotion = () => {
-
   const itemTab = [
     {
       label: "Tất cả",
       value: "all",
       key: 0,
-    }
+    },
   ];
 
   const [saveToCookie, readCookie] = useCookies();
@@ -53,7 +56,7 @@ const ManageGroupPromotion = () => {
   const toggle = () => setModal(!modal);
   const [modal, setModal] = useState(false);
   const [tab, setTab] = useState(itemTab[0].value);
-  const [detectLoading, setDetectLoading] = useState(null)
+  const [detectLoading, setDetectLoading] = useState(null);
   const [valueSearch, setValueSearch] = useState("");
   const [startPage, setStartPage] = useState(0);
   const [length, setLength] = useState(20);
@@ -61,14 +64,13 @@ const ManageGroupPromotion = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
 
-
   useEffect(() => {
     getGroupPromotion(valueSearch, startPage, length);
   }, [valueSearch, startPage, length]);
 
   const handleSearch = useCallback(
     _debounce((value) => {
-      setDetectLoading(value, startPage, length)
+      setDetectLoading(value, startPage, length);
       setValueSearch(value);
     }, 1000),
     []
@@ -80,76 +82,74 @@ const ManageGroupPromotion = () => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
-      .catch((err) => { })
-  }
-
-
+      .catch((err) => {});
+  };
 
   const columns = [
     {
-      i18n_title: 'code_order',
-      dataIndex: 'id_view',
+      i18n_title: "code_order",
+      dataIndex: "id_view",
       key: "code_order",
       width: 140,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'date_create',
-      dataIndex: 'date_create',
+      i18n_title: "date_create",
+      dataIndex: "date_create",
       key: "date_create",
       width: 100,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'customer',
-      dataIndex: 'customer',
+      i18n_title: "customer",
+      dataIndex: "customer",
       key: "customer-name-phone",
       width: 140,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'service',
-      dataIndex: 'service._id.title.vi',
+      i18n_title: "service",
+      dataIndex: "service._id.title.vi",
       key: "service",
       width: 110,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'date_work',
-      dataIndex: 'date_work',
+      i18n_title: "date_work",
+      dataIndex: "date_work",
       key: "date_work",
       width: 100,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'address',
-      dataIndex: 'address',
+      i18n_title: "address",
+      dataIndex: "address",
       key: "address",
       width: 220,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'collaborator',
-      dataIndex: 'collaborator',
+      i18n_title: "collaborator",
+      dataIndex: "collaborator",
       key: "collaborator",
       width: 160,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'status',
-      dataIndex: 'status',
+      i18n_title: "status",
+      dataIndex: "status",
       key: "status",
       width: 120,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      i18n_title: 'pay',
-      dataIndex: 'pay',
+      i18n_title: "pay",
+      dataIndex: "pay",
       key: "pay",
       width: 90,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
-  ]
+  ];
 
   let items = [
     // {
@@ -179,15 +179,15 @@ const ManageGroupPromotion = () => {
     //       />
     //     ),
     // }
-  ]
+  ];
 
-  items = items.filter(x => x.label !== false);
+  items = items.filter((x) => x.label !== false);
 
   const addActionColumn = {
-    i18n_title: '',
-    dataIndex: 'action',
+    i18n_title: "",
+    dataIndex: "action",
     key: "action",
-    fixed: 'right',
+    fixed: "right",
     width: 40,
     render: () => (
       <Space size="middle">
@@ -197,9 +197,8 @@ const ManageGroupPromotion = () => {
           </a>
         </Dropdown>
       </Space>
-    )
+    ),
   };
-
 
   const deleteGroupPromotion = (id) => {
     setIsLoading(true);
@@ -211,30 +210,28 @@ const ManageGroupPromotion = () => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         setIsLoading(false);
       });
   };
 
-
   const onChangeTab = (item) => {
     setTab(item.value);
-
   };
 
   const onChangePage = (value) => {
-    setStartPage(value)
-  }
-
+    setStartPage(value);
+  };
 
   return (
     <div className="div-container-content">
       <div className="div-flex-row">
         <div className="div-header-container">
-          <h4 className="title-cv">{`${i18n.t("work_list", { lng: lang })}`}</h4>
+          <h4 className="title-cv">{`${i18n.t("work_list", {
+            lng: lang,
+          })}`}</h4>
         </div>
-
 
         <div className="btn-action-header">
           {checkElement?.includes("create_guvi_job") ? (
@@ -249,20 +246,13 @@ const ManageGroupPromotion = () => {
             <></>
           )}
         </div>
-
-
       </div>
 
       <div className="div-flex-row">
-        <Tabs
-          itemTab={itemTab}
-          onValueChangeTab={onChangeTab}
-        />
+        <Tabs itemTab={itemTab} onValueChangeTab={onChangeTab} />
       </div>
 
       <div className="div-flex-row">
-
-
         <div className="div-filter">
           <div className="header-filter">
             <Button
@@ -276,7 +266,6 @@ const ManageGroupPromotion = () => {
             >
               Bộ lọc
             </Button>
-
           </div>
           {checkCondition && (
             <div className="filter-container">
@@ -289,11 +278,14 @@ const ManageGroupPromotion = () => {
                   onChange={(e, item) => {
                     setKind(e);
                     setName(item?.label);
-                    setArrFilter({ key: "service", value: item.value, label: item.label })
+                    setArrFilter({
+                      key: "service",
+                      value: item.value,
+                      label: item.label,
+                    });
                   }}
                 />
               </div>
-  
 
               <div className="item-select">
                 <span>Tỉnh/Thành phố</span>
@@ -338,7 +330,6 @@ const ManageGroupPromotion = () => {
           )}
         </div>
 
-
         <div className="div-search">
           <Input
             placeholder={`${i18n.t("search", { lng: lang })}`}
@@ -351,10 +342,9 @@ const ManageGroupPromotion = () => {
             }}
           />
         </div>
-
       </div>
 
-      <div >
+      <div>
         <DataTable
           columns={columns}
           data={data}

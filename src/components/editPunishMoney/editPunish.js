@@ -70,7 +70,7 @@ const EditPunish = ({ item, setDataT, setTotal, setIsLoading, iconEdit }) => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [id, money, note, setDataT, setTotal]);

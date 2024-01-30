@@ -77,7 +77,7 @@ const CreateBusiness = (props) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   };
