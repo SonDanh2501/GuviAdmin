@@ -56,7 +56,7 @@ const AddCollaboratorOrder = (props) => {
           })
           .catch((err) => {
             errorNotify({
-              message: err,
+              message: err?.message,
             });
           });
       } else {
@@ -87,7 +87,7 @@ const AddCollaboratorOrder = (props) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
           setOpen(false);
@@ -115,7 +115,7 @@ const AddCollaboratorOrder = (props) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
           setOpen(false);

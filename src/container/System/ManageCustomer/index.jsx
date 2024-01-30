@@ -7,7 +7,7 @@ import {
   Input,
   Select,
   Space,
-  Pagination
+  Pagination,
 } from "antd";
 import { useSelector } from "react-redux";
 import i18n from "../../../i18n";
@@ -17,18 +17,18 @@ import "./index.scss";
 import AddCustomer from "./addCustomer/addCustomer";
 import {
   getElementState,
-  getLanguageState
+  getLanguageState,
 } from "../../../redux/selectors/auth";
 import {
   activeCustomer,
   deleteCustomer,
   fetchCustomers,
 } from "../../../api/customer";
-import DataTable from "../../../components/tables/dataTable"
+import DataTable from "../../../components/tables/dataTable";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import { useCallback, useEffect, useState } from "react";
 import _debounce from "lodash/debounce";
-import Tabs from "../../../components/tabs/tabs1"
+import Tabs from "../../../components/tabs/tabs1";
 import { getGroupCustomerApi } from "../../../api/promotion";
 import ModalCustom from "../../../components/modalCustom";
 import { errorNotify } from "../../../helper/toast";
@@ -45,11 +45,11 @@ const ManageCustomer = () => {
   const [modalBlock, setModalBlock] = useState(false);
   const toggleBlock = () => setModalBlock(!modalBlock);
   const toggle = () => setModal(!modal);
-  const [status, setStatus] = useState("")
+  const [status, setStatus] = useState("");
   const [valueSearch, setValueSearch] = useState("");
   const [item, setItem] = useState({});
   const [dataTab, setDataTab] = useState([{ label: "Tất cả", value: "all" }]);
-  const [detectLoading, setDetectLoading] = useState(null)
+  const [detectLoading, setDetectLoading] = useState(null);
   const [saveToCookie, readCookie] = useCookies();
 
   const getListCustomerByType = () => {
@@ -58,26 +58,23 @@ const ManageCustomer = () => {
         setData(res?.data);
         setTotal(res?.totalItems);
       })
-      .catch((err) => { });
-  }
+      .catch((err) => {});
+  };
 
   useEffect(() => {
     getGroupCustomerApi(0, 20)
       .then((res) => {
-        const temp = []
+        const temp = [];
         res?.data.map((item) => {
           temp.push({
             value: item?._id,
-            label: item?.name
+            label: item?.name,
           });
         });
-        setDataTab(dataTab.concat(temp))
+        setDataTab(dataTab.concat(temp));
       })
-      .catch((err) => { });
+      .catch((err) => {});
   }, []);
-
-
-
 
   useEffect(() => {
     getListCustomerByType();
@@ -92,8 +89,8 @@ const ManageCustomer = () => {
   );
 
   const onChangePage = (value) => {
-    setStartPage(value)
-  }
+    setStartPage(value);
+  };
 
   let items = [
     {
@@ -117,29 +114,29 @@ const ManageCustomer = () => {
     },
   ];
 
-  items = items.filter(x => x.label !== false);
+  items = items.filter((x) => x.label !== false);
 
   const columns = [
     {
-      i18n_title: 'code_customer',
-      dataIndex: 'id_view',
+      i18n_title: "code_customer",
+      dataIndex: "id_view",
       key: "code_customer",
       fontSize: "text-size-L",
-      width: 110
+      width: 110,
     },
     {
-      i18n_title: 'date_create',
-      dataIndex: 'date_create',
+      i18n_title: "date_create",
+      dataIndex: "date_create",
       key: "date_create",
       fontSize: "text-size-L",
-      width: 100
+      width: 100,
     },
     {
-      i18n_title: 'customer',
-      dataIndex: 'customer',
+      i18n_title: "customer",
+      dataIndex: "customer",
       key: "customer-name-phone",
       fontSize: "text-size-L",
-      width: 140
+      width: 140,
     },
     // {
     //   i18n_title: 'phone',
@@ -148,41 +145,41 @@ const ManageCustomer = () => {
     //   width: 120
     // },
     {
-      i18n_title: 'address',
-      dataIndex: 'default_address.address',
+      i18n_title: "address",
+      dataIndex: "default_address.address",
       key: "address",
       fontSize: "text-size-L",
-      width: 220
+      width: 220,
     },
 
     {
-      i18n_title: 'total_order',
-      dataIndex: 'total_order',
+      i18n_title: "total_order",
+      dataIndex: "total_order",
       key: "total_order",
       fontSize: "text-size-L",
-      width: 110
+      width: 110,
     },
     {
-      i18n_title: 'nearest_order',
-      dataIndex: 'nearest_order',
+      i18n_title: "nearest_order",
+      dataIndex: "nearest_order",
       key: "nearest_order",
       fontSize: "text-size-L",
-      width: 110
+      width: 110,
     },
     {
-      i18n_title: 'total',
-      dataIndex: 'total',
+      i18n_title: "total",
+      dataIndex: "total",
       key: "money",
       fontSize: "text-size-L",
-      width: 100
-    }
-  ]
+      width: 100,
+    },
+  ];
 
   const addActionColumn = {
-    i18n_title: '',
-    dataIndex: 'action',
+    i18n_title: "",
+    dataIndex: "action",
     key: "action",
-    fixed: 'right',
+    fixed: "right",
     width: 50,
     render: () => (
       <Space size="middle">
@@ -192,21 +189,19 @@ const ManageCustomer = () => {
           </a>
         </Dropdown>
       </Space>
-    )
+    ),
   };
-
 
   const onChangeTab = (item) => {
     setIdGroup(item.value);
     setStartPage(0);
-    setDetectLoading(item)
+    setDetectLoading(item);
     saveToCookie("tab-order", item?.key);
     saveToCookie("status-order", item?.value);
     saveToCookie("order_scrolly", 0);
     saveToCookie("start_order", 0);
     saveToCookie("page_order", 1);
   };
-
 
   const onDelete = useCallback(
     (id) => {
@@ -224,7 +219,7 @@ const ManageCustomer = () => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });
@@ -248,7 +243,7 @@ const ManageCustomer = () => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });
@@ -256,13 +251,14 @@ const ManageCustomer = () => {
     [startPage, status, idGroup, lang]
   );
 
-
   return (
     <>
       <div className="div-container-content">
         <div className="div-flex-row">
           <div className="div-header-container">
-            <h4 className="title-cv">{`${i18n.t("list_customer", { lng: lang })}`}</h4>
+            <h4 className="title-cv">{`${i18n.t("list_customer", {
+              lng: lang,
+            })}`}</h4>
           </div>
 
           <div className="btn-action-header">
@@ -280,17 +276,11 @@ const ManageCustomer = () => {
         </div>
 
         <div className="div-flex-row">
-          <Tabs
-            itemTab={dataTab}
-            onValueChangeTab={onChangeTab}
-          />
+          <Tabs itemTab={dataTab} onValueChangeTab={onChangeTab} />
         </div>
 
-
         <div className="div-flex-row">
-          <div>
-
-          </div>
+          <div></div>
           <div className="div-search">
             <Input
               placeholder={`${i18n.t("search", { lng: lang })}`}
@@ -301,7 +291,6 @@ const ManageCustomer = () => {
               }}
             />
           </div>
-
         </div>
 
         <div>
@@ -317,8 +306,6 @@ const ManageCustomer = () => {
             onCurrentPageChange={onChangePage}
           />
         </div>
-
-
 
         <div>
           <ModalCustom
@@ -364,8 +351,7 @@ const ManageCustomer = () => {
         <FloatButton.BackTop />
       </div>
     </>
-
-  )
-}
+  );
+};
 
 export default ManageCustomer;

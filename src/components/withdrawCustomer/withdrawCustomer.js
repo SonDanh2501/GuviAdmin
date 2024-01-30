@@ -83,7 +83,7 @@ const WithdrawCustomer = () => {
         .catch((err) => {
           dispatch(loadingAction.loadingRequest(false));
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setOpen(false);
         });

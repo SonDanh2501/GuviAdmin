@@ -45,7 +45,7 @@ const BusinessConfig = () => {
         .catch((err) => {
           setState({ ...state, isLoading: false });
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     },
@@ -66,7 +66,7 @@ const BusinessConfig = () => {
       .catch((err) => {
         setState({ ...state, isLoading: false });
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, []);

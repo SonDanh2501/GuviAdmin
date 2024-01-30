@@ -61,7 +61,7 @@ const EditReasonPubnish = (props) => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [id, title, description, note]);

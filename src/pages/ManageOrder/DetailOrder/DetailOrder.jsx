@@ -22,7 +22,10 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import LoadingPagination from "../../../components/paginationLoading";
-import { getElementState, getLanguageState } from "../../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+} from "../../../redux/selectors/auth";
 const { TextArea } = Input;
 
 const DetailOrder = (props) => {
@@ -64,7 +67,6 @@ const DetailOrder = (props) => {
   const onChangePage = (value) => {
     setStartPage(value);
   };
-
 
   useEffect(() => {
     getData();
@@ -168,7 +170,7 @@ const DetailOrder = (props) => {
         setDetectLoading(false);
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         dispatch(loadingAction.loadingRequest(false));
       });
@@ -194,13 +196,13 @@ const DetailOrder = (props) => {
         .then((res) => {
           getData();
         })
-        .catch((err) => { });
+        .catch((err) => {});
     } else {
       favouriteCustomerApi(customer?._id, collaborator?._id)
         .then((res) => {
           getData();
         })
-        .catch((err) => { });
+        .catch((err) => {});
     }
   };
   const openModalFavourite = () => {
@@ -219,13 +221,13 @@ const DetailOrder = (props) => {
         .then((res) => {
           getData();
         })
-        .catch((err) => { });
+        .catch((err) => {});
     } else {
       blockCustomerApi(customer?._id, collaborator?._id)
         .then((res) => {
           getData();
         })
-        .catch((err) => { });
+        .catch((err) => {});
     }
   };
   return (
@@ -351,5 +353,3 @@ export default DetailOrder;
 
 const address =
   "https://server.guvico.com/image/upload/9bd3b28bfc3b6da26f4553a4e70092b4.png";
-
-

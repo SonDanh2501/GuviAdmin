@@ -23,7 +23,6 @@
 // import "./OrderManage.scss";
 // import DataTable from "../../../../components/tables/dataTable"
 
-
 // const OrderManage = (props) => {
 //   const {
 //     data,
@@ -88,7 +87,7 @@
 //       })
 //       .catch((err) => {
 //         errorNotify({
-//           message: err,
+//             message: err?.message,
 //         });
 //         setIsLoading(false);
 //       });
@@ -188,9 +187,6 @@
 //   //             )),
 //   //         },
 //   //       ];
-
-
-
 
 //   // const columns = [
 //   //   {
@@ -588,7 +584,7 @@
 //           <UilEllipsisV />
 //         </a>
 //       </Dropdown>
-//     </Space>  
+//     </Space>
 //   )
 //   };
 

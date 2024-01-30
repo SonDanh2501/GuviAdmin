@@ -155,7 +155,7 @@ const EditQuizz = ({
         setIsLoading(false);
 
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [dataQuestion, startPage, id, idLesson]);

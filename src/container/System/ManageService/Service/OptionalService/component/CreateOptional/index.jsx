@@ -102,7 +102,7 @@ const CreateOptional = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     } catch (err) {
@@ -261,7 +261,7 @@ const CreateOptional = (props) => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [

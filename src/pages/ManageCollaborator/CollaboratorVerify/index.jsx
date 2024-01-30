@@ -7,7 +7,7 @@ import {
   Input,
   Select,
   Space,
-  Pagination
+  Pagination,
 } from "antd";
 import { useSelector } from "react-redux";
 import i18n from "../../../i18n";
@@ -17,7 +17,7 @@ import "./index.scss";
 import {
   getElementState,
   getLanguageState,
-  getUser
+  getUser,
 } from "../../../redux/selectors/auth";
 import { getProvince, getService } from "../../../redux/selectors/service.js";
 
@@ -30,28 +30,27 @@ import {
   getTotalCollaboratorByStatus,
   getListDataCollaborator,
   updateStatusCollaborator,
-  getTotalCollaboratorByArea
-} from "../../../api/collaborator"
-import DataTable from "../../../components/tables/dataTable"
+  getTotalCollaboratorByArea,
+} from "../../../api/collaborator";
+import DataTable from "../../../components/tables/dataTable";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import { useCallback, useEffect, useState } from "react";
 import _debounce from "lodash/debounce";
-import Tabs from "../../../components/tabs/tabs1"
+import Tabs from "../../../components/tabs/tabs1";
 
 import ModalCustom from "../../../components/modalCustom";
 import { errorNotify } from "../../../helper/toast";
 import { OPTIONS_SELECT_STATUS_COLLABORATOR_VERIFY } from "../../../@core/constant/constant.js";
-import ModalStatusNoteAdmin from "./components/NoteAdminModal"
+import ModalStatusNoteAdmin from "./components/NoteAdminModal";
 import "./index.scss";
 
 const CollaboratorVerify = () => {
-
   const itemTabStatusCollaborator = [
     {
       label: "Tất cả",
       value: "actived,locked",
       key: 0,
-      dataIndexTotal: "all"
+      dataIndexTotal: "all",
     },
     {
       label: "Đang hoạt động",
@@ -68,31 +67,31 @@ const CollaboratorVerify = () => {
   const columns = [
     {
       title: "Mã CTV",
-      dataIndex: 'id_view',
+      dataIndex: "id_view",
       key: "other",
       width: 85,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
       title: "Ngày kích hoạt",
-      dataIndex: 'date_actived',
+      dataIndex: "date_actived",
       key: "hour_date",
       width: 80,
       fontSize: "text-size-M",
     },
     {
       title: "Cộng tác viên",
-      dataIndex: 'custom',
+      dataIndex: "custom",
       key: "collaborator_name_phone_avatar",
       width: 150,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     {
-      title: 'Khu vực',
-      dataIndex: 'name_level_1',
+      title: "Khu vực",
+      dataIndex: "name_level_1",
       key: "text",
       width: 110,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     //   {
     //     title: 'Nơi ở',
@@ -101,12 +100,12 @@ const CollaboratorVerify = () => {
     //     width: 110
     // },
     {
-      title: 'Dịch vụ đăng kí',
-      dataIndex: 'name_service_apply',
+      title: "Dịch vụ đăng kí",
+      dataIndex: "name_service_apply",
       key: "text",
       maxLength: 20,
       width: 110,
-      fontSize: "text-size-M"
+      fontSize: "text-size-M",
     },
     // {
     //     title: 'Tỉ lệ đánh giá',
@@ -127,16 +126,15 @@ const CollaboratorVerify = () => {
     //     width: 110
     // },
     {
-      title: 'Trạng thái',
+      title: "Trạng thái",
       // dataIndex: 'status_collaborator',
-      dataIndex: 'status',
+      dataIndex: "status",
       key: "status_handle_collaborator",
       selectOptions: OPTIONS_SELECT_STATUS_COLLABORATOR_VERIFY,
       width: 110,
-      fontSize: "text-size-M"
-    }
-  ]
-
+      fontSize: "text-size-M",
+    },
+  ];
 
   const province = useSelector(getProvince);
   const service = useSelector(getService);
@@ -149,108 +147,130 @@ const CollaboratorVerify = () => {
   const [lengthPage, setLengthPage] = useState(25);
   const [city, setCity] = useState("");
 
-  const [totalItem, setTotalItem] = useState(0)
+  const [totalItem, setTotalItem] = useState(0);
 
   const [modal, setModal] = useState("");
   const [valueSearch, setValueSearch] = useState("");
   const [item, setItem] = useState(null);
-  const [tabStatus, setTabStatus] = useState(itemTabStatusCollaborator[0].value);
-  const [detectLoading, setDetectLoading] = useState(null)
+  const [tabStatus, setTabStatus] = useState(
+    itemTabStatusCollaborator[0].value
+  );
+  const [detectLoading, setDetectLoading] = useState(null);
   const [saveToCookie, readCookie] = useCookies();
-  const [selectStatus, setSelectStatus] = useState(["done", "doing", "confirm"])
-  const [totalItemOnTab, setTotalItemOnTab] = useState(null)
+  const [selectStatus, setSelectStatus] = useState([
+    "done",
+    "doing",
+    "confirm",
+  ]);
+  const [totalItemOnTab, setTotalItemOnTab] = useState(null);
 
   const [cityOptions, setCityOptions] = useState([
     {
       value: "",
       label: "Tất cả khu vực",
-      totalUser: 0
+      totalUser: 0,
     },
-  ])
+  ]);
   // const []
 
-
-  // const cityOptions = 
-
+  // const cityOptions =
 
   const onFilterCity = (value) => {
     setCity(value);
     // saveToCookie("ctv-city", value);
   };
 
-
-
   const getListCollaborator = async () => {
-    const res = await getListDataCollaborator(lang, valueSearch, startPage, lengthPage, city, tabStatus);
+    const res = await getListDataCollaborator(
+      lang,
+      valueSearch,
+      startPage,
+      lengthPage,
+      city,
+      tabStatus
+    );
 
     for (let i = 0; i < res.data.length; i++) {
-      const tempCity = province.filter(x => x.code === res.data[i].city);
+      const tempCity = province.filter((x) => x.code === res.data[i].city);
 
-      const tempService = service.filter(x => res.data[i].service_apply.includes(x._id))
-      res.data[i]["name_level_1"] = (tempCity.length > 0) ? tempCity[0].name.replace(new RegExp(`${"Thành phố"}|${"Tỉnh"}`), "") : "Khác";
-      res.data[i]["name_service_apply"] = ""
-      for (const item of tempService) { 
-        res.data[i]["name_service_apply"] += (res.data[i]["name_service_apply"] === "") ? `${item.title.vi}` : `, ${item.title.vi}`
+      const tempService = service.filter((x) =>
+        res.data[i].service_apply.includes(x._id)
+      );
+      res.data[i]["name_level_1"] =
+        tempCity.length > 0
+          ? tempCity[0].name.replace(new RegExp(`${"Thành phố"}|${"Tỉnh"}`), "")
+          : "Khác";
+      res.data[i]["name_service_apply"] = "";
+      for (const item of tempService) {
+        res.data[i]["name_service_apply"] +=
+          res.data[i]["name_service_apply"] === ""
+            ? `${item.title.vi}`
+            : `, ${item.title.vi}`;
       }
 
       if (res.data[i].is_locked === true) {
-        res.data[i]["status_collaborator"] = "lock"
+        res.data[i]["status_collaborator"] = "lock";
       } else if (res.data[i].is_verify === true) {
-        res.data[i]["status_collaborator"] = "online"
+        res.data[i]["status_collaborator"] = "online";
       } else if (res.data[i].is_contacted === true) {
-        res.data[i]["status_collaborator"] = "contacted"
+        res.data[i]["status_collaborator"] = "contacted";
       } else {
-        res.data[i]["status_collaborator"] = "pending"
+        res.data[i]["status_collaborator"] = "pending";
       }
     }
 
-    const result = await getTotalCollaboratorByStatus(itemTabStatusCollaborator[0].value, valueSearch, city);
+    const result = await getTotalCollaboratorByStatus(
+      itemTabStatusCollaborator[0].value,
+      valueSearch,
+      city
+    );
     let tempPayload = {
-      all: 0
-    }
+      all: 0,
+    };
     for (const item of result) {
-      tempPayload[item._id] = item.total
-      tempPayload.all += item.total
+      tempPayload[item._id] = item.total;
+      tempPayload.all += item.total;
     }
     setTotalItemOnTab(tempPayload);
 
-
- // set tong so user cho khu vuc
-    const getTotalCity = await getTotalCollaboratorByArea(tabStatus, valueSearch)
+    // set tong so user cho khu vuc
+    const getTotalCity = await getTotalCollaboratorByArea(
+      tabStatus,
+      valueSearch
+    );
     const getSetOptions = [];
     let allUser = 0;
     // getTotalCity.sort((a, b) => {return a.total - b.total});
-    for(const item of getTotalCity) {
-      const tempCity = province.filter(x => x.code === item._id);
-      if(tempCity.length > 0) {
+    for (const item of getTotalCity) {
+      const tempCity = province.filter((x) => x.code === item._id);
+      if (tempCity.length > 0) {
         getSetOptions.push({
           value: tempCity[0]?.code,
           label: tempCity[0]?.name,
-          totalUser: item.total
-        })
+          totalUser: item.total,
+        });
         allUser += item.total;
       }
     }
     getSetOptions.sort((a, b) => {
-      let tempA = a.label.replace("Thành phố ", "")
-      tempA = tempA.replace("Tỉnh ", "")
-      let tempB = b.label.replace("Thành phố ", "")
-      tempB = tempB.replace("Tỉnh ", "")
-      return tempA[0].toLowerCase().localeCompare(tempB[0].toLowerCase())
-    })
+      let tempA = a.label.replace("Thành phố ", "");
+      tempA = tempA.replace("Tỉnh ", "");
+      let tempB = b.label.replace("Thành phố ", "");
+      tempB = tempB.replace("Tỉnh ", "");
+      return tempA[0].toLowerCase().localeCompare(tempB[0].toLowerCase());
+    });
 
     getSetOptions.unshift({
-        value: "",
-        label: "Tất cả khu vực",
-        totalUser: allUser
-    })
+      value: "",
+      label: "Tất cả khu vực",
+      totalUser: allUser,
+    });
 
-    setCityOptions(getSetOptions)
+    setCityOptions(getSetOptions);
 
     setData(res?.data);
     setTotalItem(res?.totalItems);
-  }
-
+  };
 
   useEffect(() => {
     getListCollaborator();
@@ -266,14 +286,7 @@ const CollaboratorVerify = () => {
 
   const showModal = (key) => {
     setModal(key);
-  }
-
-
-
-
-
-
-
+  };
 
   let items = [
     {
@@ -302,13 +315,12 @@ const CollaboratorVerify = () => {
         >
           Cập nhật trạng thái
         </p>
-
       ),
     },
     // {
     //   key: "1",
     //   label: checkElement?.includes("xác thực") && (
-    //     <p className="text-dropdown" 
+    //     <p className="text-dropdown"
     //     // onClick={toggle}
     //     >{`${i18n.t("delete", {
     //       lng: lang,
@@ -318,7 +330,8 @@ const CollaboratorVerify = () => {
     {
       key: "2",
       label: checkElement?.includes("delete_collaborator") && (
-        <p className="text-dropdown"
+        <p
+          className="text-dropdown"
           onClick={() => showModal("delete_collaborator")}
         >{`${i18n.t("delete", {
           lng: lang,
@@ -327,15 +340,13 @@ const CollaboratorVerify = () => {
     },
   ];
 
-  items = items.filter(x => x.label !== false);
-
-
+  items = items.filter((x) => x.label !== false);
 
   const addActionColumn = {
-    i18n_title: '',
-    dataIndex: 'action',
+    i18n_title: "",
+    dataIndex: "action",
     key: "action",
-    fixed: 'right',
+    fixed: "right",
     width: 50,
     render: () => (
       <Space size="middle">
@@ -345,14 +356,13 @@ const CollaboratorVerify = () => {
           </a>
         </Dropdown>
       </Space>
-    )
+    ),
   };
-
 
   const onChangeTab = (item) => {
     setTabStatus(item.value);
     setStartPage(0);
-    setDetectLoading(item)
+    setDetectLoading(item);
 
     saveToCookie("tab-order", item?.key);
     saveToCookie("status-order", item?.value);
@@ -361,60 +371,56 @@ const CollaboratorVerify = () => {
     saveToCookie("page_order", 1);
   };
 
-
   const onChangePage = (value) => {
-    setStartPage(value)
-  }
-
+    setStartPage(value);
+  };
 
   const onChangePropsValue = async (props) => {
     if (props.dataIndex === "status") {
       setModal("status_collaborator");
     }
-  }
-
+  };
 
   const processHandle = async (dataChange) => {
-
     if (modal === "delete_collaborator") {
-      await deleteCollaborator(dataChange._id)
+      await deleteCollaborator(dataChange._id);
     } else {
       switch (dataChange.status) {
         case "actived": {
           if (dataChange.is_locked === true) {
             const payload = {
               is_locked: false,
-              date_lock: null
-            }
-            lockTimeCollaborator(dataChange._id, payload)
+              date_lock: null,
+            };
+            lockTimeCollaborator(dataChange._id, payload);
           } else {
-            verifyCollaborator(dataChange._id)
+            verifyCollaborator(dataChange._id);
           }
           break;
         }
         case "locked": {
           const payload = {
             is_locked: true,
-            date_lock: dataChange.date_lock
-          }
-          lockTimeCollaborator(dataChange._id, payload)
+            date_lock: dataChange.date_lock,
+          };
+          lockTimeCollaborator(dataChange._id, payload);
           break;
         }
-        default: break;
+        default:
+          break;
       }
       let payload = {
         note_handle_admin: dataChange.note_handle_admin,
-        status: dataChange.status
+        status: dataChange.status,
       };
-      await updateStatusCollaborator(dataChange._id, payload)
+      await updateStatusCollaborator(dataChange._id, payload);
     }
     getListCollaborator();
     setModal("");
-  }
-
+  };
 
   const changeStatusOrder = (value: string) => {
-    setSelectStatus(value)
+    setSelectStatus(value);
   };
 
   //   const processHandleReview = async (dataChange) => {
@@ -445,7 +451,7 @@ const CollaboratorVerify = () => {
   //         })
   //         .catch((err) => {
   //           errorNotify({
-  //             message: err,
+  //               message: err?.message,
   //           });
   //           setIsLoading(false);
   //         });
@@ -469,7 +475,7 @@ const CollaboratorVerify = () => {
   //         })
   //         .catch((err) => {
   //           errorNotify({
-  //             message: err,
+  //               message: err?.message,
   //           });
   //           setIsLoading(false);
   //         });
@@ -477,15 +483,14 @@ const CollaboratorVerify = () => {
   //     [startPage, status, idGroup, lang]
   //   );
 
-
-
-
   return (
     <>
       <div className="div-container-content">
         <div className="div-flex-row">
           <div className="div-header-container">
-            <h4 className="title-cv">{`${i18n.t("collaborator_list", { lng: lang })}`}</h4>
+            <h4 className="title-cv">{`${i18n.t("collaborator_list", {
+              lng: lang,
+            })}`}</h4>
           </div>
 
           <div className="btn-action-header">
@@ -510,7 +515,6 @@ const CollaboratorVerify = () => {
           />
         </div>
 
-
         <div className="div-flex-row">
           <div>
             {/* <Select
@@ -524,8 +528,6 @@ const CollaboratorVerify = () => {
             { value: 'confirm', label: 'Đã nhận' },
           ]}
         /> */}
-
-
 
             {/* <Select
               options={cityOptions}
@@ -543,7 +545,6 @@ const CollaboratorVerify = () => {
               }
             /> */}
 
-
             <Select
               options={cityOptions}
               style={{ width: "300px" }}
@@ -552,26 +553,17 @@ const CollaboratorVerify = () => {
               showSearch
               optionLabelProp="label"
               filterOption={(input, option) => {
-                return (option?.label.toLowerCase() ?? '').includes(input)
+                return (option?.label.toLowerCase() ?? "").includes(input);
               }}
               optionRender={(option) => (
                 <Space>
                   <div className="div-select-area-total">
-                  <span>
-                  {option.data.label}
-                  </span>
-                  <span className="number-user">
-                {option.data.totalUser}
-                  </span>
+                    <span>{option.data.label}</span>
+                    <span className="number-user">{option.data.totalUser}</span>
                   </div>
-
                 </Space>
               )}
             />
-
-
-
-
           </div>
           <div className="div-search">
             <Input
@@ -600,9 +592,6 @@ const CollaboratorVerify = () => {
           />
         </div>
 
-
-
-
         {/* <div>
           <ModalCustom
             isOpen={modalBlock}
@@ -628,14 +617,17 @@ const CollaboratorVerify = () => {
             }
           />
         </div> */}
-
       </div>
-      <ModalStatusNoteAdmin isShow={(modal === "status_collaborator") ? true : false} item={item} handleOk={(payload) => processHandle(payload)} handleCancel={setModal} />
-
+      <ModalStatusNoteAdmin
+        isShow={modal === "status_collaborator" ? true : false}
+        item={item}
+        handleOk={(payload) => processHandle(payload)}
+        handleCancel={setModal}
+      />
 
       <div>
         <ModalCustom
-          isOpen={(modal === "delete_collaborator") ? true : false}
+          isOpen={modal === "delete_collaborator" ? true : false}
           title={`${i18n.t("customer_delete", { lng: lang })}`}
           handleOk={() => processHandle(item)}
           textOk={`${i18n.t("delete", { lng: lang })}`}
@@ -648,10 +640,8 @@ const CollaboratorVerify = () => {
           }
         />
       </div>
-
     </>
-
-  )
-}
+  );
+};
 
 export default CollaboratorVerify;

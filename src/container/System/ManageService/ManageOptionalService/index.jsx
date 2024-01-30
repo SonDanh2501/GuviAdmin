@@ -51,7 +51,7 @@ const ManageOptionService = () => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     },
@@ -77,7 +77,7 @@ const ManageOptionService = () => {
         .then((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     },

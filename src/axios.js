@@ -37,7 +37,7 @@ axiosClient.interceptors.response.use(
       window.location = "/auth/login";
       store.dispatch(logoutAction.logoutRequest());
     }
-    return Promise.reject(error?.response.data[0].message);
+    return Promise.reject(error?.response.data[0]);
   }
 );
 

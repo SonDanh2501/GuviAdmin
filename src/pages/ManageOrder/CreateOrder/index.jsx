@@ -54,6 +54,7 @@ import {
 import ModalCustom from "../../../components/modalCustom/index.jsx";
 import InfoBill from "../components/OrderComponents/InfoBill.jsx";
 import DetailBill from "../components/OrderComponents/DetailBill.jsx";
+import { errorNotify, successNotify } from "../../../helper/toast.js";
 var AES = require("crypto-js/aes");
 const { TextArea } = Input;
 
@@ -127,21 +128,6 @@ const CreateOrder = () => {
     setResultCodePromotion(null);
     setListEventPromotion([]);
   };
-  useEffect(() => {
-    // tinh lai cac gia tien
-    let _total_fee = initialFee + serviceFee + tipCollaborator;
-    let _final_fee = _total_fee - totalDiscount;
-    setTotalFee(_total_fee);
-    setFinalFee(_final_fee);
-  }, [
-    initialFee,
-    serviceFee,
-    totalFee,
-    finalFee,
-    tipCollaborator,
-    totalDiscount,
-  ]);
-
   useEffect(() => {
     if (selectService !== null) {
       getDataOptionalService();
@@ -225,17 +211,16 @@ const CreateOrder = () => {
     ) {
       calculateFeeGroupOrder(payloadOrder);
       getDataCodePromotionAvaiable();
-      getCheckEventPromotion();
-      if (payloadOrder.code_promotion) {
-        checkCodePromotion();
-      } else {
-        setResultCodePromotion(null);
-      }
+      // getCheckEventPromotion();
+      // if (payloadOrder.code_promotion) {
+      //   checkCodePromotion();
+      // } else {
+      //   setResultCodePromotion(null);
+      // }
     }
   }, [payloadOrder]);
 
   useEffect(() => {
-    //tính total discount
     let _total_discount = 0;
     listEventPromotion?.map((item) => {
       _total_discount += item?.discount;
@@ -276,15 +261,15 @@ const CreateOrder = () => {
     setListShowCodePromotion(res.data);
   };
 
-  const checkCodePromotion = async () => {
-    const res = await checkCodePromotionOrderApi(customer, payloadOrder);
-    setResultCodePromotion(res);
-  };
+  // const checkCodePromotion = async () => {
+  //   const res = await checkCodePromotionOrderApi(customer, payloadOrder);
+  //   setResultCodePromotion(res);
+  // };
 
-  const getCheckEventPromotion = async () => {
-    const res = await checkEventCodePromotionOrderApi(customer, payloadOrder);
-    setListEventPromotion(res.event_promotion);
-  };
+  // const getCheckEventPromotion = async () => {
+  //   const res = await checkEventCodePromotionOrderApi(customer, payloadOrder);
+  //   setListEventPromotion(res.event_promotion);
+  // };
 
   const getDataExtendOptional = async (idOptional) => {
     const res = await getExtendOptionalByOptionalServiceApi(idOptional);
@@ -382,7 +367,6 @@ const CreateOrder = () => {
 
   const handleChangePaymentMethod = (newValue) => {
     setPaymentMethod(newValue);
-    console.log("new value: ", newValue);
   };
 
   const handleChangeCollaborator = (newValue) => {
@@ -414,21 +398,36 @@ const CreateOrder = () => {
     setListExtend(temp);
   };
 
-  const calculateFeeGroupOrder = async (payload) => {
-    const res = await getCalculateFeeApi(payload);
-    const resServiceFee = await getServiceFeeOrderApi(payload);
-    let _service_fee = 0;
-    resServiceFee?.service_fee?.map((item) => {
-      _service_fee += item?.fee;
-    });
-    setInitialFee(res?.initial_fee);
-    setNetIncomeCollaborator(res?.net_income_collaborator);
-    setPlatformFee(res?.platform_fee);
-    setServiceFee(_service_fee);
-    setInfoBill({
-      info: res,
-      date_work_schedule: dateWorkSchedule,
-    });
+  const calculateFeeGroupOrder = (payload) => {
+    getCalculateFeeApi(payload)
+      .then((res) => {
+        // console.log("ress caculate ", res);
+        setListEventPromotion(res?.event_promotion);
+        setResultCodePromotion(res?.code_promotion);
+        setTotalFee(res?.total_fee);
+        setInitialFee(res?.initial_fee);
+        setFinalFee(res?.final_fee);
+        setTipCollaborator(res?.tip_collaborator);
+        setInfoBill({
+          info: res,
+          date_work_schedule: res?.date_work_schedule,
+        });
+        // ------------------------- tính giá trị service fee--------------------------------------- //
+        let _service_fee = 0;
+        res?.service_fee?.map((item) => {
+          _service_fee += item?.fee;
+        });
+        setServiceFee(_service_fee);
+      })
+      .catch((err) => {
+        console.log("err ", err);
+        if (err?.field === "code_promotion") {
+          setSelectCodePromotion(null);
+        }
+        errorNotify({
+          message: err?.message,
+        });
+      });
   };
 
   const createOrder = () => {
@@ -437,11 +436,15 @@ const CreateOrder = () => {
       .then((res) => {
         setIsLoading(false);
         navigate("/group-order/manage-order");
+        successNotify({
+          message: "Tạo đơn hàng thành công",
+        });
       })
       .catch((err) => {
         setIsLoading(false);
-        setModal(true);
-        setErrorMessage(err);
+        errorNotify({
+          message: err?.message,
+        });
       });
   };
 
@@ -508,7 +511,6 @@ const CreateOrder = () => {
       setSelectCodePromotion(null);
     }
   };
-  console.log("selectService", serviceData);
   const handleChangeAddressDefault = (checked) => {
     setIsShowAddressDefault(checked);
   };
@@ -715,9 +717,10 @@ const CreateOrder = () => {
                       <div
                         onClick={() => onBonusTipCollaborator(item.amount)}
                         key={index}
-                        className={`item-tip-ctv ${tipCollaborator === item.amount &&
+                        className={`item-tip-ctv ${
+                          tipCollaborator === item.amount &&
                           "item-tip-ctv_selected"
-                          } `}
+                        } `}
                       >
                         <p>{formatMoney(item.amount | 0)}</p>
                       </div>
@@ -743,11 +746,12 @@ const CreateOrder = () => {
               {listShowCodePromotion.map((item, index) => (
                 <div
                   key={index}
-                  className={`${selectCodePromotion !== null &&
-                      item?.code === selectCodePromotion
+                  className={`${
+                    selectCodePromotion !== null &&
+                    item?.code === selectCodePromotion
                       ? "item-selected"
                       : ""
-                    } item`}
+                  } item`}
                   onClick={() => handleChoosePromotion(item?.code)}
                 >
                   <p className="title">{item.code}</p>
@@ -794,13 +798,13 @@ const CreateOrder = () => {
         </div>
       </div>
       {isLoading && <LoadingPagination />}
-      <ModalCustom
+      {/* <ModalCustom
         title={errorMessage}
         isOpen={modal}
         handleCancel={() => setModal(false)}
         handleOk={() => setModal(false)}
         textOk="OK"
-      />
+      /> */}
     </React.Fragment>
   );
 };

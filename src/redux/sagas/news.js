@@ -33,7 +33,7 @@ function* createNewSaga(action) {
     yield put(actions.createNew.createNewSuccess(New.data));
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(loadingAction.loadingRequest(false));
     yield put(actions.createNew.createNewFailure(err));
@@ -52,7 +52,7 @@ function* updateNewSaga(action) {
     yield put(actions.updateNew.updateNewSuccess(updatedNew.data));
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(loadingAction.loadingRequest(false));
     yield put(actions.updateNew.updateNewFailure(err));

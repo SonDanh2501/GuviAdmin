@@ -162,7 +162,7 @@ const AddQuizz = ({ setIsLoading, setData, setTotal, startPage, tab, id }) => {
         setIsLoading(false);
 
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [dataQuestion, startPage, tab, id]);

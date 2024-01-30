@@ -79,7 +79,7 @@ const RewardCollaborator = () => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   };
@@ -100,7 +100,7 @@ const RewardCollaborator = () => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   };
@@ -121,7 +121,7 @@ const RewardCollaborator = () => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   };

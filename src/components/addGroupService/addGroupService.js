@@ -50,7 +50,7 @@ const AddGroupService = ({ setIsLoading, setData }) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         dispatch(loadingAction.loadingRequest(false));
       });
@@ -81,7 +81,7 @@ const AddGroupService = ({ setIsLoading, setData }) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         setIsLoading(false);
       });

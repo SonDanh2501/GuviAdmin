@@ -399,7 +399,7 @@ const CreatePromotion = () => {
             .catch((err) => {
               setIsLoading(false);
               errorNotify({
-                message: err,
+                message: err?.message,
               });
             });
         } else {
@@ -409,7 +409,7 @@ const CreatePromotion = () => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [statePromo, timeApply, title, shortDescription, description, navigate]);

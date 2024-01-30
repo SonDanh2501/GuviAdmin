@@ -134,7 +134,7 @@ const CreateExtend = ({ idOption, setData }) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     } catch (err) {
@@ -172,7 +172,7 @@ const CreateExtend = ({ idOption, setData }) => {
           setIsLoading(false);
 
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     } catch (err) {

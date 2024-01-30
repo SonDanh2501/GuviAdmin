@@ -63,7 +63,7 @@ const TableDeepCleaning = (props) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });
@@ -88,7 +88,7 @@ const TableDeepCleaning = (props) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });
@@ -113,7 +113,7 @@ const TableDeepCleaning = (props) => {
           })
           .catch((err) => {
             errorNotify({
-              message: err,
+              message: err?.message,
             });
             setIsLoading(false);
           });
@@ -131,7 +131,7 @@ const TableDeepCleaning = (props) => {
           })
           .catch((err) => {
             errorNotify({
-              message: err,
+              message: err?.message,
             });
             setIsLoading(false);
           });

@@ -43,7 +43,7 @@ const Overview = ({ id }) => {
           remainder: res?.remainder,
           gift_remainder: res?.gift_remainder,
           work_wallet: res?.work_wallet,
-          collaborator_wallet: res?.collaborator_wallet
+          collaborator_wallet: res?.collaborator_wallet,
         });
       })
       .catch((err) => {});
@@ -54,7 +54,7 @@ const Overview = ({ id }) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [id]);
@@ -69,7 +69,7 @@ const Overview = ({ id }) => {
           })
           .catch((err) => {
             errorNotify({
-              message: err,
+              message: err?.message,
             });
           });
         setModalVerify(false);
@@ -78,7 +78,7 @@ const Overview = ({ id }) => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, []);
@@ -89,7 +89,7 @@ const Overview = ({ id }) => {
         <div className="div-body-overview">
           <div className="div-head-overview">
             <div className="div-wallet">
-            <p className="text-wallet">
+              <p className="text-wallet">
                 Ví nạp: {formatMoney(total?.work_wallet)}
               </p>
               <p className="text-wallet">

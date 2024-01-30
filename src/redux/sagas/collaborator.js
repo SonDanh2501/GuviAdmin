@@ -23,7 +23,7 @@ function* fetchCollaboratorsSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(actions.getCollaborators.getCollaboratorsFailure(err));
     yield put(loadingAction.loadingRequest(false));
@@ -39,7 +39,7 @@ function* createCollaboratorSaga(action) {
     );
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(actions.createCollaborator.createCollaboratorFailure(err));
     yield put(loadingAction.loadingRequest(false));
@@ -61,7 +61,7 @@ function* updateCollaboratorSaga(action) {
     );
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(actions.updateCollaborator.updateCollaboratorFailure(err));
     yield put(loadingAction.loadingRequest(false));

@@ -193,11 +193,8 @@ const InForDetailGroupOrder = (props) => {
   const getData = () => {
     setDetectLoading(true);
     setIsLoading(true);
-    console.log("bug ơ day");
     getOrderByGroupOrderApi(id, lang, startPage, 20)
       .then((res) => {
-        console.log("bug ơ day 111");
-
         setDataGroup(res?.data?.groupOrder);
         setDataList(res?.data?.listOrder);
         setDetectLoading(false);
@@ -207,7 +204,7 @@ const InForDetailGroupOrder = (props) => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         dispatch(loadingAction.loadingRequest(false));
       });
@@ -333,7 +330,7 @@ const InForDetailGroupOrder = (props) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           dispatch(loadingAction.loadingRequest(false));
         });
@@ -378,7 +375,7 @@ const InForDetailGroupOrder = (props) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         dispatch(loadingAction.loadingRequest(false));
       });
@@ -433,7 +430,7 @@ const InForDetailGroupOrder = (props) => {
           isFavourite={isFavourite}
           isLock={isLock}
           isCollaborator
-          handleAddCollaborator={!collaborator && handleAddCollaborator}
+          // handleAddCollaborator={!collaborator && handleAddCollaborator}
         />
         {/* Tạm thời chưa sửa tên component CustomerInfo do không kịp */}
         <CustomerInfo

@@ -59,7 +59,7 @@ const EditReason = (props) => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [applyUser, note, data, startPage]);

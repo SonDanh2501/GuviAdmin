@@ -367,7 +367,7 @@ const ManageOrder = () => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         setIsLoading(false);
       });
@@ -493,7 +493,7 @@ const ManageOrder = () => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   };
@@ -755,7 +755,7 @@ const ManageOrder = () => {
           />
         </div>
       </div>
-      <CommonFilter />
+      {/* <CommonFilter /> */}
       <div>
         <DataTable
           columns={columns}

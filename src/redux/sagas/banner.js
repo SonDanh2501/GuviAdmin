@@ -22,7 +22,7 @@ function* fetchBannersSaga(action) {
   } catch (err) {
     yield put(loadingAction.loadingRequest(false));
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(actions.getBanners.getBannersFailure(err));
   }
@@ -35,7 +35,7 @@ function* createBannerSaga(action) {
     yield put(actions.createBanner.createBannerSuccess(Banner.data));
   } catch (err) {
     errorNotify({
-      message: err,
+      message: err?.message,
     });
     yield put(loadingAction.loadingRequest(false));
     yield put(actions.createBanner.createBannerFailure(err));
@@ -55,7 +55,7 @@ function* updateBannerSaga(action) {
     yield put(actions.updateBanner.updateBannerFailure(err));
     yield put(loadingAction.loadingRequest(false));
     errorNotify({
-      message: err,
+      message: err?.message,
     });
   }
 }

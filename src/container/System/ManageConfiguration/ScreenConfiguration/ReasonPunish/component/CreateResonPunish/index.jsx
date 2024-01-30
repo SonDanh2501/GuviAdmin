@@ -48,7 +48,7 @@ const CreateReasonPunish = (props) => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [title, description, note]);

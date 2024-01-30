@@ -94,7 +94,7 @@ const EditLesson = ({ setData, setTotal, setIsLoading, data, tab }) => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [data, state, title, description]);

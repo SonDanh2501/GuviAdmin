@@ -64,7 +64,7 @@ const EditGroupService = (props) => {
       .catch((err) => {
         dispatch(loadingAction.loadingRequest(false));
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   };
@@ -95,7 +95,7 @@ const EditGroupService = (props) => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [

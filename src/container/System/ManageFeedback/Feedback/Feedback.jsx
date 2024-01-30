@@ -52,7 +52,7 @@ const Feedback = () => {
       .catch((err) => {
         dispatch(loadingAction.loadingRequest(false));
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   };

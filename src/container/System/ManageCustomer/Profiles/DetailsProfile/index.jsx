@@ -106,7 +106,7 @@ const DetailsProfile = ({ id }) => {
           })
           .catch((err) => {
             errorNotify({
-              message: err,
+              message: err?.message,
             });
             dispatch(loadingAction.loadingRequest(false));
           });
@@ -132,7 +132,7 @@ const DetailsProfile = ({ id }) => {
       })
       .catch((err) => {
         errorNotify({
-          message: err,
+          message: err?.message,
         });
         setIsLoading(false);
       });

@@ -210,7 +210,7 @@ const CleaningAC = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
 
@@ -236,7 +236,7 @@ const CleaningAC = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     }
@@ -268,7 +268,7 @@ const CleaningAC = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     }
@@ -313,7 +313,7 @@ const CleaningAC = (props) => {
           })
           .catch((err) => {
             errorNotify({
-              message: err,
+              message: err?.message,
             });
             setIsLoading(false);
           });
@@ -350,7 +350,7 @@ const CleaningAC = (props) => {
         })
         .catch((err) => {
           errorNotify({
-            message: err,
+            message: err?.message,
           });
           setIsLoading(false);
         });

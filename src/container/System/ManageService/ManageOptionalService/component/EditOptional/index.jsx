@@ -102,7 +102,7 @@ const EditOptional = (props) => {
         .catch((err) => {
           setIsLoading(false);
           errorNotify({
-            message: err,
+            message: err?.message,
           });
         });
     } catch (err) {
@@ -276,7 +276,7 @@ const EditOptional = (props) => {
       .catch((err) => {
         setIsLoading(false);
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [

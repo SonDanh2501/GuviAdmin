@@ -95,14 +95,14 @@ const AppCustomer = () => {
             dispatch(loadingAction.loadingRequest(false));
 
             errorNotify({
-              message: err,
+              message: err?.message,
             });
           });
       })
       .catch((err) => {
         dispatch(loadingAction.loadingRequest(false));
         errorNotify({
-          message: err,
+          message: err?.message,
         });
       });
   }, [
