@@ -11,7 +11,7 @@ const TestUrl = process.env.REACT_APP_TEST_URL;
 const TestLocalUrl = process.env.REACT_APP_LOCAL_TEST_URL;
 
 const axiosClient = axios.create({
-  baseURL: TestLocalUrl,
+  baseURL: TestUrl,
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
