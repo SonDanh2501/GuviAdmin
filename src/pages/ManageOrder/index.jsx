@@ -40,6 +40,7 @@ import Tabs from "../../components/tabs/tabs1";
 import FilterSelect from "../../components/filter/filterSelect";
 import "./index.scss";
 import CommonFilter from "../../components/filter/commonFilter/CommonFilter";
+import RangeDatePicker from "../../components/datePicker/RangeDatePicker";
 
 const ManageOrder = () => {
   const itemTab = [

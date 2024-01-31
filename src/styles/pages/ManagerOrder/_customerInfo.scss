@@ -25,6 +25,7 @@
   }
   p {
     color: var(--black-color);
+    font-size: 14px;
   }
   span {
     color: var(--text-color);
@@ -41,4 +42,8 @@
 }
 .customer-info_detail-avatar_rank {
   padding-top: 0.3rem;
+}
+.customer-info_detail-p-name {
+  font-size: 16;
+  color: aquamarine;
 }

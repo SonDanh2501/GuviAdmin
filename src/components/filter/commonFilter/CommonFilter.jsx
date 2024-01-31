@@ -1,4 +1,6 @@
 import { Button, DatePicker } from "antd";
+import RangeDatePicker from "../../datePicker/RangeDatePicker";
+const { RangePicker } = DatePicker;
 
 const CommonFilter = (props) => {
   const {
@@ -17,18 +19,31 @@ const CommonFilter = (props) => {
     onClick,
     onReset,
   } = props;
-  const onChange = (date, dateString) => {
+  const onChangeStartDate = (date, dateString) => {
     console.log("=>> ", date, dateString);
   };
+  const onChangeEndDate = (date, dateString) => {
+    console.log("=>> ", date, dateString);
+  };
+
   return (
     <div className="common-filter_container">
       <div className="common-filter_filter-container">
-        <DatePicker
+        {/* <DatePicker
           style={{ fontSize: 6 }}
           className="date-picker"
           placeholder="Ngày bắt đầu"
-          onChange={onChange}
+          onChange={onChangeStartDate}
         />
+        <DatePicker
+          style={{ fontSize: 6 }}
+          className="date-picker"
+          placeholder="Ngày kết thúc"
+          onChange={onChangeEndDate}
+        /> */}
+        <RangePicker placeholder={["Ngày bắt đầu", "Ngày kết thúc"]} />
+
+        <RangeDatePicker />
       </div>
       <div className="common-filter_button-container">
         <Button onClick={onReset}>Reset</Button>

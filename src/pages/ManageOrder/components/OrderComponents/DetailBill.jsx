@@ -1,7 +1,9 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { useSelector } from "react-redux";
 import { formatMoney } from "../../../../helper/formatMoney";
 import { getLanguageState } from "../../../../redux/selectors/auth";
+import { Button, Drawer } from "antd";
+import { format } from "date-fns";
 
 const DetailBill = (props) => {
   const {
@@ -14,19 +16,36 @@ const DetailBill = (props) => {
     initial_fee,
     total_date_work,
     payment_method,
+    date_work_schedule,
   } = props;
   const lang = useSelector(getLanguageState);
-  console.log("paymen ", payment_method);
+  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+  const onClose = () => {
+    setIsOpenDrawer(false);
+  };
+  const onOpen = () => {
+    setIsOpenDrawer(true);
+  };
+  console.log("detail ", date_work_schedule);
   return (
     <div className="detail-bill_container">
-      <h6>Thông tin thanh toán đơn hàng</h6>
+      <div className="div-flex-row">
+        <h6>Thông tin thanh toán đơn hàng</h6>
+        {total_date_work > 1 && date_work_schedule && (
+          <p
+            className="detail-bill_detail-date"
+            onClick={onOpen}
+          >{`Chi tiết ngày làm >>>`}</p>
+        )}
+      </div>
+
       {payment_method && (
         <div className="div-flex-row">
           <p className="fw-500">Thanh toán</p>
           <p className="fz-16 fw-500">{payment_method}</p>
         </div>
       )}
-      {total_date_work && total_date_work > 1 && (
+      {total_date_work > 1 && (
         <div className="div-flex-row">
           <p className="fw-500">Số buổi</p>
           <p>{total_date_work}</p>
@@ -86,6 +105,23 @@ const DetailBill = (props) => {
           <p className="detail-bill_p-final-fee">{formatMoney(final_fee)}</p>
         </div>
       </div>
+      <Drawer title="Chi tiết ngày làm" onClose={onClose} open={isOpenDrawer}>
+        <div>
+          <div className="detail-bill_detail-date-work_header">
+            <p>Ngày làm</p>
+            <p>Tạm tính</p>
+          </div>
+          {date_work_schedule?.map((item, i) => {
+            const _date = format(new Date(item?.date), "dd/MM/yyyy");
+            return (
+              <div className="detail-bill_detail-date-work_header_item" key={i}>
+                <p>{_date}</p>
+                <p>{formatMoney(item?.initial_fee || 0)}</p>
+              </div>
+            );
+          })}
+        </div>
+      </Drawer>
     </div>
   );
 };

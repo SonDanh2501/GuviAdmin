@@ -14,6 +14,9 @@
   .info-detail-order_header-idview {
     @include flexbox(space-between);
     flex-direction: column;
+    p:last-child {
+      color: var(--selected-color);
+    }
   }
   .info-detail-order_header-date-create {
     @include flexbox(flex-end, center);
@@ -56,7 +59,7 @@
   margin: 0.5rem 0px;
 }
 .info-detail-order_container-info-bill {
-  @include gird(3fr 1fr, 10px);
+  @include gird(3fr 1.5fr, 10px);
   margin-bottom: 0.5rem;
 }
 .info-detail-order_back {

@@ -21,3 +21,21 @@
   font-weight: 500;
   color: var(--selected-color);
 }
+.detail-bill_detail-date-work_header {
+  padding: 10px 8px;
+  @include flexbox(space-between, center);
+  background-color: var(--bg-color-2);
+  border-bottom: solid 1px #1f242e;
+  border-radius: 4px 4px 0px 0px;
+}
+.detail-bill_detail-date-work_header_item {
+  @include flexbox(space-between, center);
+  align-items: center;
+  margin-top: 0.5rem;
+  padding: 10px;
+  @extend .b-shadow-2;
+}
+.detail-bill_detail-date {
+  cursor: pointer;
+  text-decoration: underline;
+}
