@@ -26,7 +26,7 @@ export const deleteReason = (id, payload) => {
 
 export const getListReasonCancel = (lang) => {
   return axiosClient.get(
-    `/admin/reason_cancel_manager/get_list_reason_admin?lang=${lang}`
+    `/admin/reason_cancel_manager/get_list_reason_admin?lang=${lang}&start=0&length=100`
   );
 };
 
