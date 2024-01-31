@@ -79,13 +79,19 @@ const CustomerInfo = ({
         <p className="customer-info_box-title_title">{title}</p>
         {isCustomer && (
           <Link to={`/profile-customer/${id}`}>
-            <p className="customer-info_box-title_detail">{`xem chi tiết >>>`}</p>
+            <p
+              className="customer-info_box-title_detail"
+              id="color-selected"
+            >{`Chi tiết >>>`}</p>
           </Link>
         )}
         {isCollaborator && (
           <Link to={`/details-collaborator/${id}`}>
             {id && (
-              <p className="customer-info_box-title_detail">{`xem chi tiết >>>`}</p>
+              <p
+                className="customer-info_box-title_detail"
+                id="color-selected"
+              >{`Chi tiết >>>`}</p>
             )}
           </Link>
         )}
@@ -93,7 +99,7 @@ const CustomerInfo = ({
       <div className="customer-info_detail">
         <div>
           {(isCollaborator || isCustomer) && (
-            <p className="customer-info_detail-p-name">
+            <p className="customer-info_detail-p-name " id="color-selected">
               <span className="customer-info_detail-p"> Tên: </span>
               {full_name ? full_name : "Đang tìm kiếm"}
             </p>

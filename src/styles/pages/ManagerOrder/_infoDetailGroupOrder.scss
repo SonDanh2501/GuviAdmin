@@ -16,6 +16,7 @@
     flex-direction: column;
     p:last-child {
       color: var(--selected-color);
+      font-size: 14px;
     }
   }
   .info-detail-order_header-date-create {
