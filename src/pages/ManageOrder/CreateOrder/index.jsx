@@ -447,7 +447,6 @@ const CreateOrder = () => {
         });
       });
   };
-
   const getCollaboratorByCustomer = () => {
     getFavoriteAndBlockByCustomers(customer, COLLABORATOR_FAVORITE)
       .then((res) => {
@@ -783,6 +782,7 @@ const CreateOrder = () => {
               net_income_collaborator={netIncomeCollaborator}
               total_date_work={dateWorkSchedule.length}
               payment_method={paymentMethod === "cash" ? "Tiền mặt" : "G-pay"}
+              date_work_schedule={infoBill?.date_work_schedule}
             />
           </div>
         </div>

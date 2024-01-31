@@ -19,7 +19,6 @@ const InfoBill = (props) => {
     setArrExtend(tempArr);
     setTotalDateWork(data?.date_work_schedule.length);
   }, [data]);
-  console.log("dât ", data);
   return (
     <div className="info-bill-container b-shadow">
       <div className="info-bill-container_title">
