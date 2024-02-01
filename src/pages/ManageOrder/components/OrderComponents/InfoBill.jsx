@@ -50,7 +50,7 @@ const InfoBill = (props) => {
           _count = 0;
         }
         if (totalDateWork > 1) {
-          _price = totalDateWork * _price;
+          // _price = totalDateWork * _price;
           _count = totalDateWork;
         }
         if (item?.count > 1) {
