@@ -70,6 +70,7 @@ const InfoBill = (props) => {
           <div key={index} className="gird-3-1-1-1 info-bill_item b-shadow-2">
             <div>
               <p>
+                {titleService === "Vệ sinh máy lạnh" && "Treo tường - "}
                 {item?.title[lang]} {item?.kind === "leather" && "(da)"}{" "}
                 {item?.kind === "fabric" && "(vải/nỉ)"}
               </p>
