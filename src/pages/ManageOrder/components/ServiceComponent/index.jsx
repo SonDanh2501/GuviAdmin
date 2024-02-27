@@ -327,6 +327,8 @@ const ServiceComponent = (props) => {
                       <SingleSelectHorizontalThumbnail optionalService={item} />
                     ) : item.type === "multi_select_count_sofa" ? (
                       <MultiSelectCountSofa optionalService={item} />
+                    ) : item.type === "multi_select_count_ac" ? (
+                      <MultiSelectCountSofa optionalService={item} />
                     ) : (
                       <></>
                     )}
