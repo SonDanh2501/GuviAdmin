@@ -1,5 +1,9 @@
 .common-filter_container {
   @extend .box-common;
+  background-color: aquamarine;
+  border-radius: 12px;
+  @include flexbox(start, center);
+  flex-wrap: wrap;
 }
 .common-filter_button-container {
   @include flexbox(end, end);

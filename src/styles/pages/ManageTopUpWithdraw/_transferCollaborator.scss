@@ -1,0 +1,23 @@
+.transfer-collaborator_container {
+  width: 100%;
+  // height: 100vh;
+  .transfer-collaborator_header {
+    // @include flexbox(space-evenly);
+    background-color: aqua;
+  }
+  p {
+    font-size: 12px;
+  }
+}
+.transfer-collaborator_total {
+  @include flexbox(space-evenly);
+  margin-top: 1rem;
+}
+.transfer-collaborator_action {
+  width: 240px;
+  margin: 1rem 0;
+  @include flexbox(space-between);
+  button {
+    width: 100px;
+  }
+}

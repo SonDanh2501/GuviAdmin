@@ -1,0 +1,19 @@
+.filter-transfer_container {
+  @extend .box-common;
+  @include flexbox(start, center);
+  flex-wrap: wrap;
+}
+.filter-transfer_payment-method {
+  margin-right: 1rem;
+}
+.filter-transfer_status {
+  margin-right: 1rem;
+}
+.filter-transfer_date {
+  margin-right: 1rem;
+
+  @include flexbox(center, center);
+  p {
+    margin-right: 0.3rem;
+  }
+}

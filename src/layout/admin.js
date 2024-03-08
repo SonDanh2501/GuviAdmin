@@ -102,6 +102,8 @@ import CollaboratorVerify from "../pages/ManageCollaborator/CollaboratorVerify";
 import CollaboratorNotVerify from "../pages/ManageCollaborator/CollaboratorNotVerify";
 import DetailGroupOrder from "../pages/ManageOrder/DetailOrder/index";
 import DetailOrder from "../pages/ManageOrder/DetailOrder/DetailOrder";
+import ManageTopUpWithdraw from "../pages/ManageTopUpWithdraw";
+// import ManageFinance from "../pages/ManageFinance";
 
 const Admin = () => {
   return (
@@ -240,7 +242,7 @@ const Admin = () => {
       {/* 
       <Route path="/topup/manage-cashbook" element={< ManageCashBook />} /> */}
 
-      <Route path="/topup/manage-topup" element={<ManageTopup />} />
+      <Route path="/topup/manage-topup" element={<ManageTopUpWithdraw />} />
       <Route
         path="/topup/manage-topup/details-reward-collaborator/:id"
         element={<DetailReward />}
