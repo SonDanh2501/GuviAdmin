@@ -2,8 +2,6 @@
   width: 100%;
   // height: 100vh;
   .transfer-collaborator_header {
-    // @include flexbox(space-evenly);
-    background-color: aqua;
   }
   p {
     font-size: 12px;
@@ -20,4 +18,16 @@
   button {
     width: 100px;
   }
+}
+.transfer-collaborator_search {
+  margin-top: 0.5rem;
+  @include flexbox(center, center);
+  .input-search {
+    margin-right: 1rem;
+  }
+}
+.transfer-collaborator_transaction {
+  margin: 0.5rem 0px;
+  @include flexbox(space-between, center);
+  width: 200px;
 }

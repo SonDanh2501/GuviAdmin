@@ -1,19 +1,37 @@
 import { CaretDownOutlined, DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import RangeDatePicker from "../../../components/datePicker/RangeDatePicker";
 import moment from "moment";
-
 const FilterTransfer = (props) => {
   const { setReturnFilter, dataFilter, onClick, onReset } = props;
-  const [subject, setSubject] = useState(dataSubjects[1]);
-  const [paymentMethod, setPaymentMethod] = useState(dataPaymentMethods[0]);
-  const [status, setStatus] = useState(dataStatus[0]);
-  const [typeTransfer, setTypeTransfer] = useState(dataTypeTransfers[0]);
-  const [kindTransfer, setKindTransfer] = useState(dataKindTransfers[0]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [arrElement, setArrElement] = useState([]);
+  const [subject, setSubject] = useState({
+    label: "Tất cả",
+    key: "0",
+    value: "",
+  });
+  const [paymentMethod, setPaymentMethod] = useState({
+    label: "Tất cả",
+    key: "0",
+    value: "",
+  });
+  const [status, setStatus] = useState({
+    label: "Tất cả",
+    key: "0",
+    value: "",
+  });
+  const [typeTransfer, setTypeTransfer] = useState({
+    label: "Tất cả",
+    key: "0",
+    value: "",
+  });
+  const [kindTransfer, setKindTransfer] = useState({
+    label: "Tất cả",
+    key: "0",
+    value: "",
+  });
+  const [startDate, setStartDate] = useState("2023-02-12T17:00:00.000Z");
+  const [endDate, setEndDate] = useState("2023-02-12T17:00:00.000Z");
   // ------------------------- xử lý action --------------------------------------- //
   const handleChooseSubject = ({ key }) => {
     setSubject(dataSubjects[key]);
@@ -33,103 +51,72 @@ const FilterTransfer = (props) => {
   const handleAction = (event) => {
     console.log("event", event);
   };
-  // ------------------------- xử lý useEffect --------------------------------------- //
-  useEffect(() => {
+  const handleFilter = () => {
     const temp = [
       {
         key: "subject",
-        value: subject.value,
+        value: subject?.value,
       },
       {
         key: "status",
-        value: status.value,
+        value: status?.value,
       },
       {
-        key: "payment_method",
-        value: paymentMethod.value,
+        key: "payment_source",
+        value: paymentMethod?.value,
       },
       {
         key: "type_transfer",
-        value: typeTransfer.value,
+        value: typeTransfer?.value,
       },
       {
         key: "kind_transfer",
-        value: kindTransfer.value,
+        value: kindTransfer?.value,
       },
       {
         key: "start_date",
-        value: startDate.toString(),
+        value: startDate?.toString(),
       },
       {
         key: "end_date",
-        value: endDate.toString(),
+        value: endDate?.toString(),
       },
     ];
     setReturnFilter(temp);
-  }, [subject, startDate, endDate, status, typeTransfer, kindTransfer]);
+  };
+  // ------------------------- xử lý useEffect --------------------------------------- //
   useEffect(() => {
-    const tempDataFilter = [
-      {
-        key: "status",
-        type: "dropdown",
-        title: "Trạng thái",
-        data: [
-          {
-            label: "Tất cả",
-            key: "0",
-            value: "all",
-          },
-          {
-            label: "Đang xử lý",
-            key: "1",
-            value: "pending",
-          },
-          {
-            label: "Hoàn thành",
-            key: "2",
-            value: "done",
-          },
-          {
-            label: "Đã chuyển tiền",
-            key: "3",
-            value: "transferred",
-          },
-          {
-            label: "Đã huỷ",
-            key: "4",
-            value: "cancel",
-          },
-        ],
-        default_key_value: "1",
-      },
-    ];
-    tempDataFilter.map((item, index) => {
-      const ElementFilter = () => {
-        return (
-          <div>
-            <Dropdown
-              menu={{
-                items: item?.data,
-                selectable: true,
-                defaultSelectedKeys: [item?.default_key_value],
-                onClick: (event) => handleAction(event),
-              }}
-              trigger={["click"]}
-            >
-              <Space>
-                <p>
-                  {item?.title}: <span className="fw-500">{status?.label}</span>
-                </p>
-                <CaretDownOutlined />
-              </Space>
-            </Dropdown>
-          </div>
-        );
-      };
-      setArrElement((a) => [ElementFilter, ...a]);
-    });
+    if (dataFilter) {
+      dataFilter.map((item) => {
+        if (item?.key === "subject") {
+          const index = dataSubjects.findIndex(
+            (i) => i.value === item.default_value
+          );
+          setSubject(dataSubjects[index > -1 ? index : 0]);
+        } else if (item?.key === "status") {
+          setStatus(item);
+        } else if (item?.key === "type_transfer") {
+          setTypeTransfer(item);
+        } else if (item?.key === "kind_transfer") {
+          setKindTransfer(item);
+        } else if (item?.key === "payment_source") {
+          setPaymentMethod(item);
+        }
+      });
+    }
+    handleFilter();
   }, []);
-
+  useEffect(() => {
+    handleFilter();
+  }, [
+    subject,
+    startDate,
+    endDate,
+    status,
+    typeTransfer,
+    kindTransfer,
+    paymentMethod,
+  ]);
   return (
     <div className="filter-transfer_container">
       <div className="filter-transfer_date">
@@ -184,25 +171,6 @@ const FilterTransfer = (props) => {
           </Space>
         </Dropdown>
       </div>
-      {/* <div className="filter-transfer_subject">
-        <Dropdown
-          menu={{
-            items: dataSubjects,
-            selectable: true,
-            defaultSelectedKeys: ["1"],
-            onClick: handleChooseSubject,
-          }}
-          trigger={["click"]}
-        >
-          <Space>
-            <p>
-              Đối tượng: <span className="fw-500">{subject?.label}</span>
-            </p>
-
-            <CaretDownOutlined />
-          </Space>
-        </Dropdown>
-      </div> */}
       <div className="filter-transfer_payment-method">
         <Dropdown
           menu={{
@@ -222,15 +190,11 @@ const FilterTransfer = (props) => {
           </Space>
         </Dropdown>
       </div>
-
-      {arrElement.map((EL, index) => {
-        return <EL />;
-      })}
     </div>
   );
 };
 
-export default FilterTransfer;
+export default React.memo(FilterTransfer);
 
 const dataSubjects = [
   {
@@ -254,7 +218,7 @@ const dataPaymentMethods = [
   {
     label: "Tất cả",
     key: "0",
-    value: "all",
+    value: "",
   },
   {
     label: "Ngân hàng",
@@ -282,7 +246,7 @@ const dataStatus = [
   {
     label: "Tất cả",
     key: "0",
-    value: "all",
+    value: "",
   },
   {
     label: "Đang xử lý",
@@ -304,12 +268,17 @@ const dataStatus = [
     key: "4",
     value: "cancel",
   },
+  {
+    label: "Tạm giữ",
+    key: "5",
+    value: "holding",
+  },
 ];
 const dataTypeTransfers = [
   {
     label: "Tất cả",
     key: "0",
-    value: "all",
+    value: "",
   },
   {
     label: "Nạp",
@@ -336,7 +305,7 @@ const dataKindTransfers = [
   {
     label: "Tất cả",
     key: "0",
-    value: "all",
+    value: "",
   },
   {
     label: "Phiếu thu",

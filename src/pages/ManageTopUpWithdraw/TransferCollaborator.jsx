@@ -1,19 +1,29 @@
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import { formatMoney } from "../../helper/formatMoney";
-import { Button, Dropdown, Pagination, Popover, Space } from "antd";
+import { Button, Dropdown, Input, Pagination, Popover, Space } from "antd";
 import ItemTotal from "./components/ItemTotal";
 import Tabs from "../../components/tabs/tabs1";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import DataTable from "../../components/tables/dataTable";
 import { getElementState } from "../../redux/selectors/auth";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import _debounce from "lodash/debounce";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import CommonFilter from "../../components/filter/commonFilter/CommonFilter";
 import FilterTransfer from "./components/TransferFIlter";
 import ModalCustom from "../../components/modalCustom";
 import i18n from "../../i18n";
-
+import AddTopup from "../../components/addTopup/addTopup";
+import TransactionDrawer from "../../components/transactionDrawer";
+import {
+  createTransactionApi,
+  getListTransactionApi,
+  getListTransactionV2Api,
+  verifyTransactionApi,
+} from "../../api/transaction";
+import { LENGTH_ITEM } from "../../constants";
+import { errorNotify, successNotify } from "../../helper/toast";
 const TransferCollaborator = () => {
   const itemTab = [
     {
@@ -46,13 +56,10 @@ const TransferCollaborator = () => {
   const [openModalCancel, setOpenModalCancel] = useState(false);
   const [openModalChangeStatus, setOpenModalChangeStatus] = useState(false);
   const [returnFilter, setReturnFilter] = useState();
-  const onChangeTab = (item) => {
-    setTab(item.value);
-    setStartPage(0);
-  };
-  const onChangePage = () => {
-    console.log("change page");
-  };
+  const [valueSearch, setValueSearch] = useState("");
+  const [query, setQuery] = useState("");
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [statePunish, setStatePunish] = useState();
   let items = [
     {
       key: "1",
@@ -85,28 +92,142 @@ const TransferCollaborator = () => {
     ),
   };
   // ---------------------------- action ------------------------------------ /
-  const handleTopup = () => {
-    alert("Najp");
-  };
-  const handleWithdraw = () => {
-    alert("rut");
-  };
-  const handleCancelTransfer = () => {
+  const onChangeTab = useCallback((item) => {
+    setTab(item.value);
+    setStartPage(0);
+  }, []);
+  const onChangePage = useCallback((value) => {
+    setStartPage(value);
+  }, []);
+  const handleTopUp = useCallback((value) => {
+    createTransaction({
+      transfer_note: value.transfer_note,
+      type_transfer: "top_up",
+      money: value.money,
+      id_collaborator: value.id,
+      type_wallet: value.wallet,
+    });
+  }, []);
+  const handleWithdraw = useCallback((value) => {
+    createTransaction({
+      transfer_note: value.transfer_note,
+      type_transfer: "withdraw",
+      money: value.money,
+      id_collaborator: value.id,
+      type_wallet: value.wallet,
+    });
+  }, []);
+  const createTransaction = useCallback(
+    (data) => {
+      createTransactionApi(data)
+        .then((res) => {
+          getList(query);
+          console.log("res", res);
+          successNotify({
+            message: "Tạo lệnh giao dịch thành công",
+          });
+        })
+        .catch((err) => {
+          console.log("err", err);
+          errorNotify({
+            message: "Tạo lệnh giao dịch thất bại",
+          });
+        });
+    },
+    [query]
+  );
+  const handleCancelTransfer = useCallback(() => {
     setOpenModalCancel(false);
-    console.log("call APi xoa ");
-  };
-  const handleConfirmTransfer = () => {
+  }, []);
+  const handleVerifyTransfer = useCallback(() => {
+    verifyTransactionApi(item?._id)
+      .then((res) => {
+        successNotify({
+          message: "Duyệt lệnh thành công",
+        });
+      })
+      .catch((err) => {
+        console.log("err ", err);
+      });
     setOpenModalChangeStatus(false);
     console.log("call APi xác nhận ");
-  };
+  }, []);
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      setValueSearch(value);
+    }, 1000),
+    []
+  );
+  const getList = useCallback(
+    async (_query) => {
+      await getListTransactionV2Api(startPage, LENGTH_ITEM, _query)
+        .then((res) => {
+          setData(res?.data);
+          setTotal(res?.totalItem);
+        })
+        .catch((err) => {
+          console.log("err ", err);
+        });
+    },
+    [startPage]
+  );
+  // ---------------------------- use effect ------------------------------------ //
 
-  // ---------------------------------------------------------------- //
-  // console.log("data filter ", returnFilter);
+  useEffect(() => {
+    let tempQuery = "";
+    if (returnFilter) {
+      returnFilter.map((i) => {
+        tempQuery = tempQuery + `${i.key}=${i.value}&`;
+      });
+      tempQuery = tempQuery + `search=${valueSearch}`;
+      setQuery(tempQuery);
+    }
+  }, [returnFilter, valueSearch]);
+
+  useEffect(() => {
+    if (query && query !== "") {
+      getList(query);
+    }
+  }, [startPage, query]);
+
   // ---------------------------- UI ------------------------------------ //
   return (
     <div className="transfer-collaborator_container">
       <div className="transfer-collaborator_header">
-        <FilterTransfer setReturnFilter={setReturnFilter} />
+        <FilterTransfer
+          setReturnFilter={setReturnFilter}
+          dataFilter={[
+            {
+              key: "subject",
+              default_value: "collaborator",
+            },
+          ]}
+        />
+        <div className="transfer-collaborator_search">
+          <Input
+            placeholder={"Tìm kiếm"}
+            prefix={<SearchOutlined />}
+            className="input-search"
+            onChange={(e) => {
+              handleSearch(e.target.value);
+            }}
+          />
+          <Button type="primary">Tìm kiếm</Button>
+        </div>
+      </div>
+      <div className="transfer-collaborator_transaction">
+        <TransactionDrawer
+          titleButton="Nạp tiền"
+          subject="collaborator"
+          titleHeader="Nạp tiền cộng tác viên"
+          onClick={handleTopUp}
+        />
+        <TransactionDrawer
+          titleButton="Rút tiền"
+          titleHeader="Rút cộng tác viên"
+          subject="collaborator"
+          onClick={handleWithdraw}
+        />
       </div>
       <div className="transfer-collaborator_total">
         {statisticsTransition.map((item, index) => {
@@ -121,24 +242,13 @@ const TransferCollaborator = () => {
           );
         })}
       </div>
-      {/* <div className="transfer-collaborator_tabs">
-        <Tabs itemTab={itemTab} onValueChangeTab={onChangeTab} />
-        <div className="transfer-collaborator_action">
-          <Button onClick={handleTopup} type="primary">
-            Nạp
-          </Button>
-          <Button onClick={handleWithdraw} type="primary">
-            Rút
-          </Button>
-        </div>
-      </div> */}
       <div>
         <DataTable
           columns={columns}
-          data={tempTransfers}
+          data={data}
           actionColumn={addActionColumn}
           start={startPage}
-          pageSize={20}
+          pageSize={LENGTH_ITEM}
           totalItem={total}
           getItemRow={setItem}
           onCurrentPageChange={onChangePage}
@@ -178,7 +288,7 @@ const TransferCollaborator = () => {
         <ModalCustom
           isOpen={openModalChangeStatus}
           title={`Duyệt giao dịch`}
-          handleOk={handleConfirmTransfer}
+          handleOk={handleVerifyTransfer}
           handleCancel={() => setOpenModalChangeStatus(false)}
           textOk={`Xác nhận`}
           body={
@@ -255,8 +365,8 @@ const columns = [
   },
   {
     title: "Phương thức thanh toán",
-    dataIndex: "payment_method",
-    key: "source_transfer",
+    dataIndex: "payment_source",
+    key: "payment_source",
     width: 60,
     fontSize: "text-size-M",
   },
@@ -300,7 +410,7 @@ const statisticsTransition = [
   {
     key: "top_up",
     value: 1203000,
-    title: "Tổng giá trị nạp",
+    title: "Tổng giá trị NẠP",
     description:
       "Là tổng giá trị mà hệ thống ghi nhận CTV đã nạp thành công vào hệ thống",
     convertMoney: true,
@@ -308,31 +418,61 @@ const statisticsTransition = [
   {
     key: "withdraw",
     value: 203000,
-    title: "Tổng giá trị nạp",
+    title: "Tổng giá trị RÚT",
     description:
-      "Là tổng giá trị mà hệ thống ghi nhận CTV đã nạp thành công vào hệ thống",
+      "Là tổng giá trị mà hệ thống ghi nhận CTV đã rút tiền ra khỏi hệ thống thành công.",
+    convertMoney: true,
+  },
+  {
+    key: "holding",
+    value: 2030000,
+    title: "Tổng giá trị TẠM GIỮ",
+    description:
+      "Là tổng số tiền mà hệ thống tạm giữ của CTV khi CTV đang yêu cầu lệnh rút tiền và chờ xét duyệt",
     convertMoney: true,
   },
   {
     key: "reward",
     value: 2030000,
-    title: "Tổng giá trị thưởng",
-    description: "Là tổng giá trị mà hệ thống đã thưởng cho CTV",
+    title: "Tổng giá trị THƯỞNG",
+    description:
+      "Là tổng giá trị mà hệ thống (hoặc quản trị viên) đã thưởng cho CTV",
     convertMoney: true,
   },
   {
-    key: "total_done_transition",
-    value: 20,
-    title: "Giao dịch thành công",
-    description: "Là tổng số giao dịch mà hệ thống ghi nhận là hoàn thành",
-    convertMoney: false,
+    key: "punish",
+    value: 2030000,
+    title: "Tổng giá trị PHẠT",
+    description: "Là tổng giá trị mà hệ thống (hoặc quản trị viên) đã phạt CTV",
+    convertMoney: true,
+  },
+  // {
+  //   key: "total_done_transition",
+  //   value: 20,
+  //   title: "Giao dịch thành công",
+  //   description: "Là tổng số giao dịch mà hệ thống ghi nhận là hoàn thành",
+  //   convertMoney: false,
+  // },
+  // {
+  //   key: "total_cancel_transition",
+  //   value: 18,
+  //   title: "Giao dịch huỷ",
+  //   description: "Là tổng số giao dịch mà hệ thống ghi nhận là chưa thành công",
+  //   convertMoney: false,
+  // },
+  {
+    key: "total_work_wallet",
+    value: 10030000,
+    title: "Tổng giá trị ví Nạp",
+    description: "Là tổng số tiền còn tồn tại trong ví Nạp của ctv",
+    convertMoney: true,
   },
   {
-    key: "total_cancel_transition",
-    value: 18,
-    title: "Giao dịch huỷ",
-    description: "Là tổng số giao dịch mà hệ thống ghi nhận là chưa thành công",
-    convertMoney: false,
+    key: "total_collaborator_wallet",
+    value: 1030000,
+    title: "Tổng giá trị ví CTV",
+    description: "Là tổng số tiền còn tồn tại trong ví CTV của các ctv",
+    convertMoney: true,
   },
 ];
 const tempTransfers = [

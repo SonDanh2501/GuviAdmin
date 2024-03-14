@@ -380,7 +380,6 @@ const DataTable = (props) => {
             );
             break;
           case "name_customer":
-            console.log("dât ", data);
             return (
               <Link
                 to={
@@ -897,7 +896,7 @@ const DataTable = (props) => {
                   )}`}</p>
                 );
                 break;
-              case "transfered":
+              case "transferred":
                 _text_status = (
                   <p className="text-transfered">{`${i18n.t(
                     "money_transferred"
@@ -915,6 +914,8 @@ const DataTable = (props) => {
                     "cancel"
                   )}`}</p>
                 );
+              case "holding":
+                _text_status = <p className="text-transfered">{`Tạm giữ`}</p>;
                 break;
               default:
                 break;
@@ -956,16 +957,20 @@ const DataTable = (props) => {
               </div>
             );
             break;
-          case "source_transfer":
-            let _source_transfer = "Chuyển khoản";
-            if (data?.momo_transfer) {
-              _source_transfer = "MoMo";
-            } else if (data?.vnpay_transfer) {
-              _source_transfer = "VNPAY";
+          case "payment_source":
+            let _payment_source = "Chuyển khoản";
+            if (data?.paymnet_source === "momo") {
+              _payment_source = "MoMo";
+            } else if (data?.paymnet_source === "vnpay") {
+              _payment_source = "VNPAY";
+            } else if (data?.paymnet_source === "viettel_pay") {
+              _payment_source = "Viettel Pay";
+            } else if (data?.paymnet_source === "other") {
+              _payment_source = "Khác";
             }
             return (
               <div className="div-date-create">
-                <p>{_source_transfer}</p>
+                <p>{_payment_source}</p>
               </div>
             );
             break;
@@ -1017,7 +1022,6 @@ const DataTable = (props) => {
     headerTable.push(temp);
     widthPage += Number(temp.width);
   }
-  console.log("action ", actionColumn);
   if (actionColumn) headerTable.push(actionColumn);
 
   const calculateCurrentPage = (event) => {
