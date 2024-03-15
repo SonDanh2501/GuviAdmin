@@ -103,6 +103,11 @@ import CollaboratorNotVerify from "../pages/ManageCollaborator/CollaboratorNotVe
 import DetailGroupOrder from "../pages/ManageOrder/DetailOrder/index";
 import DetailOrder from "../pages/ManageOrder/DetailOrder/DetailOrder";
 import ManageTopUpWithdraw from "../pages/ManageTopUpWithdraw";
+import TransferCustomer from "../pages/ManageTopUpWithdraw/TransferCustomer";
+import TransferCollaborator from "../pages/ManageTopUpWithdraw/TransferCollaborator";
+import ManagePunish from "../pages/ManagePunish";
+import ManageReward from "../pages/ManageReward";
+import TransferStaff from "../pages/ManageTopUpWithdraw/TransferStaff";
 // import ManageFinance from "../pages/ManageFinance";
 
 const Admin = () => {
@@ -242,7 +247,21 @@ const Admin = () => {
       {/* 
       <Route path="/topup/manage-cashbook" element={< ManageCashBook />} /> */}
 
-      <Route path="/topup/manage-topup" element={<ManageTopUpWithdraw />} />
+      <Route
+        path="/transaction/manage-transaction-collaborator"
+        element={<TransferCollaborator />}
+      />
+      <Route
+        path="/transaction/manage-transaction-customer"
+        element={<TransferCustomer />}
+      />
+      <Route
+        path="/transaction/manage-transaction-staff"
+        element={<TransferStaff />}
+      />
+
+      <Route path="/punish/manage-punish" element={<ManagePunish />} />
+      <Route path="/reward/manage-reward" element={<ManageReward />} />
       <Route
         path="/topup/manage-topup/details-reward-collaborator/:id"
         element={<DetailReward />}

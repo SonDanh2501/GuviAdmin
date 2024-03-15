@@ -6,24 +6,17 @@ import {
   getLanguageState,
   getUser,
 } from "../../../redux/selectors/auth";
-import {
-  Select
-} from "antd";
+import { Select } from "antd";
 import i18n from "../../../i18n";
 import useWindowDimensions from "../../../helper/useWindowDimensions";
 
 const Tabs = (props) => {
-  const {
-    itemTab,
-    dataTotal
-  } = props;
+  const { itemTab, dataTotal } = props;
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [tab, setTab] = useState(itemTab[0].value);
   // const [keyActive, setKeyActive] = useState(0);
   const { width } = useWindowDimensions();
-
-
 
   const onChangeTab = (item) => {
     setTab(item.value);
@@ -31,7 +24,6 @@ const Tabs = (props) => {
     props.onValueChangeTab(item);
   };
   return (
-
     <React.Fragment>
       <div className="div-tab-order">
         {width > 900 ? (
@@ -47,13 +39,19 @@ const Tabs = (props) => {
                   }}
                 >
                   <p className="text-title">{item?.label}</p>
-
                   {dataTotal ? (
                     <>
-                    <span className="number-total"> {dataTotal[item.value] || dataTotal[item.dataIndexTotal] || 0} </span>
+                      <span className="number-total">
+                        {" "}
+                        {dataTotal[item.value] ||
+                          dataTotal[item.dataIndexTotal] ||
+                          dataTotal[index]?.value ||
+                          0}{" "}
+                      </span>
                     </>
-                  ) : (<></>)}
-                  
+                  ) : (
+                    <></>
+                  )}
                 </div>
               );
             })}
@@ -70,10 +68,7 @@ const Tabs = (props) => {
         )}
       </div>
     </React.Fragment>
-
-
-
-  )
-}
+  );
+};
 
 export default Tabs;

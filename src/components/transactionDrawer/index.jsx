@@ -120,24 +120,9 @@ const TransactionDrawer = (props) => {
   const handleChangeReason = (id, value) => {
     setState({ ...state, note: value?.note, id: id });
   };
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
+
   // ----------------------------- UseEffect ----------------------------------- //
-
   // ----------------------------- UI ----------------------------------- //
-
-  const handleSearch = (newValue) => {
-    fetch(newValue, setData);
-  };
-  const handleChange = (newValue) => {
-    console.log("new value ", newValue);
-    setValue(newValue);
-  };
-
   return (
     <div>
       <Button onClick={showDrawer} type="primary">
@@ -242,6 +227,7 @@ const TransactionDrawer = (props) => {
             type="button"
             onClick={() => {
               onClose();
+              console.log("on withdraw");
               setState({
                 money: 0,
                 note: "",
@@ -253,6 +239,7 @@ const TransactionDrawer = (props) => {
                 id: "",
                 id_order: "",
               });
+              setName("");
               onClick(state);
             }}
           />
