@@ -58,3 +58,29 @@ export const deleteTransactionApi = (id) => {
 export const cancelTransactionApi = (id) => {
   return axiosClient.post(`/admin/transaction_manager/cancel_item/${id}`);
 };
+
+export const getTotalTransactionApi = (_query) => {
+  return axiosClient.get(
+    `/admin/transaction_manager/get_total?lang=vi&${_query}`
+  );
+};
+export const getTotalTransactionCustomerApi = (_query) => {
+  return axiosClient.get(
+    `/admin/transaction_manager/get_total_transaction_customer?lang=vi&${_query}`
+  );
+};
+export const getTotalTransactionStaffApi = (_query) => {
+  return axiosClient.get(
+    `/admin/transaction_manager/get_total_transaction_staff?lang=vi&${_query}`
+  );
+};
+export const getTotalMoneyTransactionApi = (key, _query) => {
+  return axiosClient.get(
+    `/admin/transaction_manager/get_total_money/${key}?lang=vi&${_query}`
+  );
+};
+export const getTotalMoneyTransactionPaySourceApi = (key, _query) => {
+  return axiosClient.get(
+    `/admin/transaction_manager/get_total_money/${key}?lang=vi&${_query}`
+  );
+};

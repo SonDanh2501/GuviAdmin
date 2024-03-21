@@ -8,7 +8,7 @@ export const getListRoleAdmin = () => {
 
 export const getListAccount = (start, length, search = "") => {
   return axiosClient.get(
-    `admin/user_system_manager/get_list?lang=vi&start=${start}&length=${length}&search="${search}`
+    `admin/user_system_manager/get_list?lang=vi&start=${start}&length=${length}&search=${search}`
   );
 };
 

@@ -17,13 +17,16 @@ import i18n from "../../i18n";
 import AddTopup from "../../components/addTopup/addTopup";
 import TransactionDrawer from "../../components/transactionDrawer";
 import {
+  cancelTransactionApi,
   createTransactionApi,
-  getListTransactionApi,
   getListTransactionV2Api,
+  getTotalMoneyTransactionApi,
+  getTotalTransactionApi,
   verifyTransactionApi,
 } from "../../api/transaction";
 import { LENGTH_ITEM } from "../../constants";
 import { errorNotify, successNotify } from "../../helper/toast";
+import { endOfDay, startOfDay } from "date-fns";
 const TransferCollaborator = () => {
   const itemTab = [
     {
@@ -60,6 +63,18 @@ const TransferCollaborator = () => {
   const [query, setQuery] = useState("");
   const [openDrawer, setOpenDrawer] = useState(false);
   const [statePunish, setStatePunish] = useState();
+  const [totalTransaction, setTotalTransaction] = useState([]);
+  const [totalTopUp, setTotalTopUp] = useState(0);
+  const [totalWithdraw, setTotalWithdraw] = useState(0);
+  const [totalHolding, setTotalHolding] = useState(0);
+  const [totalReward, setTotalReward] = useState(0);
+  const [totalPunish, setTotalPunish] = useState(0);
+  const [status, setStatus] = useState({
+    label: "Tất cả",
+    key: "0",
+    value: "",
+  });
+  const [queryTotal, setQueryTotal] = useState("");
   let items = [
     {
       key: "1",
@@ -91,15 +106,64 @@ const TransferCollaborator = () => {
       </Space>
     ),
   };
+  // ---------------------------- handle data ------------------------------------ //
+  const statisticsTransition = [
+    {
+      key: "top_up",
+      value: totalTopUp,
+      title: "Tổng giá trị NẠP",
+      description:
+        "Là tổng giá trị mà hệ thống ghi nhận CTV đã nạp thành công vào hệ thống (trong ngày)",
+      convertMoney: true,
+    },
+    {
+      key: "withdraw",
+      value: totalWithdraw,
+      title: "Tổng giá trị RÚT",
+      description:
+        "Là tổng giá trị mà hệ thống ghi nhận CTV đã rút tiền ra khỏi hệ thống thành công (trong ngày)",
+      convertMoney: true,
+    },
+    // {
+    //   key: "holding",
+    //   value: totalHolding,
+    //   title: "Tổng giá trị TẠM GIỮ",
+    //   description:
+    //     "Là tổng số tiền mà hệ thống tạm giữ của CTV khi CTV đang yêu cầu lệnh rút tiền và chờ xét duyệt (trong ngày)",
+    //   convertMoney: true,
+    // },
+    {
+      key: "reward",
+      value: totalReward,
+      title: "Tổng giá trị THƯỞNG",
+      description:
+        "Là tổng giá trị mà hệ thống (hoặc quản trị viên) đã thưởng cho CTV (trong ngày)",
+      convertMoney: true,
+    },
+    {
+      key: "punish",
+      value: totalPunish,
+      title: "Tổng giá trị PHẠT",
+      description:
+        "Là tổng giá trị mà hệ thống (hoặc quản trị viên) đã phạt CTV (trong ngày)",
+      convertMoney: true,
+    },
+  ];
   // ---------------------------- action ------------------------------------ /
-  const onChangeTab = useCallback((item) => {
-    setTab(item.value);
-    setStartPage(0);
-  }, []);
-  const onChangePage = useCallback((value) => {
+  const onChangeTab = (item) => {
+    if (tab !== item.value) {
+      setTab(item.value);
+      setStartPage(0);
+      const _temp = returnFilter;
+      _temp.pop();
+      _temp.push({ key: "status", value: item?.value });
+      setReturnFilter(_temp);
+    }
+  };
+  const onChangePage = (value) => {
     setStartPage(value);
-  }, []);
-  const handleTopUp = useCallback((value) => {
+  };
+  const handleTopUp = (value) => {
     createTransaction({
       transfer_note: value.transfer_note,
       type_transfer: "top_up",
@@ -108,8 +172,8 @@ const TransferCollaborator = () => {
       type_wallet: value.wallet,
       subject: "collaborator",
     });
-  }, []);
-  const handleWithdraw = useCallback((value) => {
+  };
+  const handleWithdraw = (value) => {
     createTransaction({
       transfer_note: value.transfer_note,
       type_transfer: "withdraw",
@@ -118,128 +182,132 @@ const TransferCollaborator = () => {
       type_wallet: value.wallet,
       subject: "collaborator",
     });
-  }, []);
-  const createTransaction = useCallback(
-    (data) => {
-      console.log("dât ", data);
-      createTransactionApi(data)
-        .then((res) => {
-          getList(query);
-          console.log("res", res);
-          successNotify({
-            message: "Tạo lệnh giao dịch thành công",
-          });
-        })
-        .catch((err) => {
-          console.log("err", err);
-          errorNotify({
-            message: "Tạo lệnh giao dịch thất bại",
-          });
+  };
+
+  const createTransaction = (data) => {
+    createTransactionApi(data)
+      .then((res) => {
+        reCallData();
+        successNotify({
+          message: "Tạo lệnh giao dịch thành công",
         });
-    },
-    [query]
-  );
-  const handleCancelTransfer = useCallback(() => {
+      })
+      .catch((err) => {
+        console.log("err", err);
+        errorNotify({
+          message: "Tạo lệnh giao dịch thất bại",
+        });
+      });
+  };
+  const handleCancelTransfer = () => {
+    cancelTransactionApi(item?._id)
+      .then((res) => {
+        console.log("ress ", res);
+        successNotify({
+          message: "Huỷ lệnh giao dịch thành công",
+        });
+        reCallData();
+      })
+      .catch((err) => {
+        console.log("err ", err);
+      });
     setOpenModalCancel(false);
-  }, []);
-  const handleVerifyTransfer = useCallback(() => {
+  };
+  const handleVerifyTransfer = () => {
     verifyTransactionApi(item?._id)
       .then((res) => {
         successNotify({
           message: "Duyệt lệnh thành công",
         });
+        reCallData();
       })
       .catch((err) => {
         console.log("err ", err);
       });
     setOpenModalChangeStatus(false);
-    console.log("call APi xác nhận ");
-  }, []);
+  };
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueSearch(value);
     }, 1000),
     []
   );
-  const getList = useCallback(
-    async (_query) => {
-      await getListTransactionV2Api(startPage, LENGTH_ITEM, _query)
-        .then((res) => {
-          setData(res?.data);
-          setTotal(res?.totalItem);
-          console.log("ress ", res);
-        })
-        .catch((err) => {
-          console.log("err ", err);
-        });
-    },
-    [startPage]
-  );
+  const getList = (_query) => {
+    getListTransactionV2Api(startPage, LENGTH_ITEM, _query)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {
+        console.log("err ", err);
+      });
+  };
+  const getTotalMoney = (key, _tempQueryTotal, _setValue) => {
+    let result;
+    getTotalMoneyTransactionApi(key, _tempQueryTotal)
+      .then((res) => {
+        _setValue(res?.total);
+      })
+      .catch((err) => {
+        console.log("err ", err);
+      });
+    return result;
+  };
+  const getTotal = (_tempQueryTotal) => {
+    getTotalTransactionApi(_tempQueryTotal)
+      .then((res) => {
+        const temp_arr = [];
+        for (let i of Object.values(res)) {
+          temp_arr.push({ value: i });
+        }
+        setTotalTransaction(temp_arr);
+      })
+      .catch((err) => {
+        console.log("err ", err);
+      });
+  };
+  const reCallData = () => {
+    getList(query);
+    getTotal(queryTotal);
+    const date = new Date(Date.now());
+    const start_date = startOfDay(date).toISOString();
+    const end_date = endOfDay(date).toISOString();
+    const _query = `subject=collaborator&type_transfer=top_up&start_date=${start_date}
+    &end_date=${end_date}`;
+    getTotalMoney("top_up", _query, setTotalTopUp);
+    getTotalMoney("withdraw", _query, setTotalWithdraw);
+    getTotalMoney("reward", _query, setTotalReward);
+    getTotalMoney("punish", _query, setTotalPunish);
+    getTotalMoney("holding", _query, setTotalHolding);
+  };
   // ---------------------------- use effect ------------------------------------ //
 
   useEffect(() => {
     let tempQuery = "";
+    let _tempQueryTotal = "";
     if (returnFilter) {
       returnFilter.map((i) => {
         tempQuery = tempQuery + `${i.key}=${i.value}&`;
+        if (i.key === "start_date" || i.key === "end_date") {
+          _tempQueryTotal = _tempQueryTotal + `${i.key}=${i.value}&`;
+        }
       });
       tempQuery = tempQuery + `search=${valueSearch}`;
       setQuery(tempQuery);
     }
-  }, [returnFilter, valueSearch]);
+    setQueryTotal(_tempQueryTotal);
+  }, [returnFilter, valueSearch, tab]);
 
   useEffect(() => {
     if (query && query !== "") {
-      getList(query);
-      console.log("query ", query);
+      reCallData();
     }
   }, [startPage, query]);
 
   // ---------------------------- UI ------------------------------------ //
   return (
     <div className="transfer-collaborator_container">
-      <h5>Sổ quỷ CTV</h5>
-      <div className="transfer-collaborator_header">
-        <Tabs
-          itemTab={itemTabStatus}
-          onValueChangeTab={onChangeTab}
-          dataTotal={dataTotal}
-        />
-        <FilterTransfer
-          setReturnFilter={setReturnFilter}
-          dataFilter={[
-            {
-              key: "subject",
-              default_value: "collaborator",
-            },
-          ]}
-        />
-        {/* <div className="transfer-collaborator_search">
-          <Input
-            placeholder={"Tìm kiếm"}
-            prefix={<SearchOutlined />}
-            className="input-search"
-            onChange={(e) => {
-              handleSearch(e.target.value);
-            }}
-          />
-          <Button type="primary">Tìm kiếm</Button>
-        </div> */}
-      </div>
-      <div className="transfer-collaborator_transaction">
-        <TransactionDrawer
-          titleButton="Nạp tiền"
-          subject="collaborator"
-          titleHeader="Nạp tiền cộng tác viên"
-          onClick={handleTopUp}
-        />
-        <TransactionDrawer
-          titleButton="Rút tiền"
-          titleHeader="Rút tiền cộng tác viên"
-          subject="collaborator"
-          onClick={handleWithdraw}
-        />
-      </div>
+      <h5>Sổ quỹ CTV</h5>
       <div className="transfer-collaborator_total">
         {statisticsTransition.map((item, index) => {
           return (
@@ -253,6 +321,49 @@ const TransferCollaborator = () => {
           );
         })}
       </div>
+      <div className="transfer-collaborator_search">
+        <div className="transfer-collaborator_transaction">
+          <TransactionDrawer
+            titleButton="Nạp tiền"
+            subject="collaborator"
+            titleHeader="Nạp tiền cộng tác viên"
+            onClick={handleTopUp}
+          />
+          <TransactionDrawer
+            titleButton="Rút tiền"
+            titleHeader="Rút tiền cộng tác viên"
+            subject="collaborator"
+            onClick={handleWithdraw}
+            defaultWallet={"collaborator_wallet"}
+          />
+        </div>
+        <Input
+          placeholder={"Tìm kiếm"}
+          prefix={<SearchOutlined />}
+          className="input-search"
+          onChange={(e) => {
+            handleSearch(e.target.value);
+          }}
+        />
+        <Button type="primary">Tìm kiếm</Button>
+      </div>
+      <div className="transfer-collaborator_header">
+        <Tabs
+          itemTab={itemTabStatus}
+          onValueChangeTab={onChangeTab}
+          dataTotal={totalTransaction}
+        />
+        <FilterTransfer
+          setReturnFilter={setReturnFilter}
+          dataFilter={[
+            {
+              key: "subject",
+              default_value: "collaborator",
+            },
+          ]}
+        />
+      </div>
+
       <div>
         <DataTable
           columns={columns}
@@ -417,116 +528,35 @@ const columns = [
   },
 ];
 
-const statisticsTransition = [
-  {
-    key: "top_up",
-    value: 1203000,
-    title: "Tổng giá trị NẠP",
-    description:
-      "Là tổng giá trị mà hệ thống ghi nhận CTV đã nạp thành công vào hệ thống",
-    convertMoney: true,
-  },
-  {
-    key: "withdraw",
-    value: 203000,
-    title: "Tổng giá trị RÚT",
-    description:
-      "Là tổng giá trị mà hệ thống ghi nhận CTV đã rút tiền ra khỏi hệ thống thành công.",
-    convertMoney: true,
-  },
-  {
-    key: "holding",
-    value: 2030000,
-    title: "Tổng giá trị TẠM GIỮ",
-    description:
-      "Là tổng số tiền mà hệ thống tạm giữ của CTV khi CTV đang yêu cầu lệnh rút tiền và chờ xét duyệt",
-    convertMoney: true,
-  },
-  {
-    key: "reward",
-    value: 2030000,
-    title: "Tổng giá trị THƯỞNG",
-    description:
-      "Là tổng giá trị mà hệ thống (hoặc quản trị viên) đã thưởng cho CTV",
-    convertMoney: true,
-  },
-  {
-    key: "punish",
-    value: 2030000,
-    title: "Tổng giá trị PHẠT",
-    description: "Là tổng giá trị mà hệ thống (hoặc quản trị viên) đã phạt CTV",
-    convertMoney: true,
-  },
-  // {
-  //   key: "total_done_transition",
-  //   value: 20,
-  //   title: "Giao dịch thành công",
-  //   description: "Là tổng số giao dịch mà hệ thống ghi nhận là hoàn thành",
-  //   convertMoney: false,
-  // },
-  // {
-  //   key: "total_cancel_transition",
-  //   value: 18,
-  //   title: "Giao dịch huỷ",
-  //   description: "Là tổng số giao dịch mà hệ thống ghi nhận là chưa thành công",
-  //   convertMoney: false,
-  // },
-  {
-    key: "total_work_wallet",
-    value: 10030000,
-    title: "Tổng giá trị ví Nạp",
-    description: "Là tổng số tiền còn tồn tại trong ví Nạp của ctv",
-    convertMoney: true,
-  },
-  {
-    key: "total_collaborator_wallet",
-    value: 1030000,
-    title: "Tổng giá trị ví CTV",
-    description: "Là tổng số tiền còn tồn tại trong ví CTV của các ctv",
-    convertMoney: true,
-  },
-];
 const itemTabStatus = [
   {
     label: "Tất cả",
-    value: "all",
-    key: 0,
+    key: "0",
+    value: "",
   },
   {
     label: "Đang xử lý",
-    value: "processing",
-    key: 1,
+    key: "1",
+    value: "pending",
   },
   {
     label: "Đã chuyển tiền",
+    key: "3",
     value: "transferred",
-    key: 2,
   },
   {
     label: "Tạm giữ",
-    value: "hoding",
-    key: 3,
+    key: "5",
+    value: "holding",
   },
   {
     label: "Hoàn thành",
+    key: "2",
     value: "done",
-    key: 4,
-  },
-];
-const dataTotal = [
-  {
-    value: 400,
   },
   {
-    value: 100,
-  },
-  {
-    value: 100,
-  },
-  {
-    value: 80,
-  },
-  {
-    value: 120,
+    label: "Đã huỷ",
+    key: "4",
+    value: "cancel",
   },
 ];

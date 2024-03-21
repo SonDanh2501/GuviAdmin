@@ -31,6 +31,7 @@ const TransactionDrawer = (props) => {
     titleButton,
     subject,
     onClick,
+    defaultWallet,
   } = props;
   const [state, setState] = useState({
     money: 0,
@@ -43,7 +44,15 @@ const TransactionDrawer = (props) => {
     id: "",
     id_order: "",
   });
+  // ---------------------------- xử lý data ------------------------------------//
+  const titleInput =
+    subject === "collaborator"
+      ? "collaborator"
+      : subject === "customer"
+      ? "Khách hàng"
+      : "Nhân viên";
   // --------------------------- action ------------------------------------- //
+
   const showDrawer = () => {
     setOpen(true);
   };
@@ -77,8 +86,9 @@ const TransactionDrawer = (props) => {
     _debounce((value) => {
       setName(value);
       if (value) {
-        fetchCustomers(lang, 0, 20, "", value, "")
+        fetchCustomers(lang, 0, 20, "", "", value, "")
           .then((res) => {
+            console.log("retsss ", res);
             if (value === "") {
               setState({ ...state, data: [] });
             } else {
@@ -98,9 +108,11 @@ const TransactionDrawer = (props) => {
   const searchStaff = useCallback(
     _debounce((value) => {
       setName(value);
+      console.log(value);
       if (value) {
         getListAccount(0, 20, value)
           .then((res) => {
+            console.log("ressss ", res);
             if (value === "") {
               setState({ ...state, data: [] });
             } else {
@@ -140,19 +152,21 @@ const TransactionDrawer = (props) => {
       >
         <div className="modal-body">
           <div>
-            <InputCustom
-              title={`${i18n.t("collaborator", { lng: lang })}`}
-              placeholder={`${i18n.t("search", { lng: lang })}`}
-              value={name}
-              onChange={(e) => {
-                subject === "customer" && searchCustomer(e.target.value);
-                subject === "collaborator" &&
-                  searchCollaborator(e.target.value);
-                subject === "staff" && searchStaff(e.target.value);
-                setName(e.target.value);
-              }}
-              error={state?.errorName}
-            />
+            {subject !== "staff" && (
+              <InputCustom
+                title={titleInput}
+                placeholder={`${i18n.t("search", { lng: lang })}`}
+                value={name}
+                onChange={(e) => {
+                  subject === "customer" && searchCustomer(e.target.value);
+                  subject === "collaborator" &&
+                    searchCollaborator(e.target.value);
+                  //  searchStaff(e.target.value);
+                  setName(e.target.value);
+                }}
+                error={state?.errorName}
+              />
+            )}
             {state?.data.length > 0 && (
               <List type={"unstyled"} className="list-item">
                 {state?.data?.map((item, index) => {
@@ -212,7 +226,7 @@ const TransactionDrawer = (props) => {
           {subject === "collaborator" && (
             <div className="mt-2">
               <Select
-                defaultValue="work_wallet"
+                defaultValue={defaultWallet ? defaultWallet : "work_wallet"}
                 style={{ width: "100%" }}
                 onChange={(e) => {
                   setState({ ...state, wallet: e });
@@ -227,7 +241,6 @@ const TransactionDrawer = (props) => {
             type="button"
             onClick={() => {
               onClose();
-              console.log("on withdraw");
               setState({
                 money: 0,
                 note: "",

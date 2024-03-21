@@ -15,11 +15,11 @@ const FilterTransfer = (props) => {
     key: "0",
     value: "",
   });
-  const [status, setStatus] = useState({
-    label: "Tất cả",
-    key: "0",
-    value: "",
-  });
+  // const [status, setStatus] = useState({
+  //   label: "Tất cả",
+  //   key: "0",
+  //   value: "",
+  // });
   const [typeTransfer, setTypeTransfer] = useState({
     label: "Tất cả",
     key: "0",
@@ -40,7 +40,7 @@ const FilterTransfer = (props) => {
     setPaymentMethod(dataPaymentMethods[key]);
   };
   const handleChooseStatus = ({ key }) => {
-    setStatus(dataStatus[key]);
+    // setStatus(dataStatus[key]);
   };
   const handleChooseTypeTransfer = ({ key }) => {
     setTypeTransfer(dataTypeTransfers[key]);
@@ -56,10 +56,6 @@ const FilterTransfer = (props) => {
       {
         key: "subject",
         value: subject?.value,
-      },
-      {
-        key: "status",
-        value: status?.value,
       },
       {
         key: "payment_source",
@@ -81,6 +77,10 @@ const FilterTransfer = (props) => {
         key: "end_date",
         value: endDate?.toString(),
       },
+      {
+        key: "status",
+        value: "",
+      },
     ];
     setReturnFilter(temp);
   };
@@ -94,7 +94,7 @@ const FilterTransfer = (props) => {
           );
           setSubject(dataSubjects[index > -1 ? index : 0]);
         } else if (item?.key === "status") {
-          setStatus(item);
+          // setStatus(item);
         } else if (item?.key === "type_transfer") {
           setTypeTransfer(item);
         } else if (item?.key === "kind_transfer") {
@@ -112,7 +112,7 @@ const FilterTransfer = (props) => {
     subject,
     startDate,
     endDate,
-    status,
+    // status,
     typeTransfer,
     kindTransfer,
     paymentMethod,
@@ -134,7 +134,7 @@ const FilterTransfer = (props) => {
           defaults={"thirty_last"}
         />
       </div>
-      <div className="filter-transfer_status">
+      {/* <div className="filter-transfer_status">
         <Dropdown
           menu={{
             items: dataStatus,
@@ -151,7 +151,7 @@ const FilterTransfer = (props) => {
             <CaretDownOutlined />
           </Space>
         </Dropdown>
-      </div>
+      </div> */}
       <div className="filter-transfer_status">
         <Dropdown
           menu={{

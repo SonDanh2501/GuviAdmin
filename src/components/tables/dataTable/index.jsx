@@ -58,6 +58,7 @@ const DataTable = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [item, setItem] = useState(data[0]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [ordinalNumber, setOrdinalNumber] = useState(1);
   // const [items3, setItems3] = useState(items);
   // let items3 = [...items]
   let widthPage = 0;
@@ -65,10 +66,14 @@ const DataTable = (props) => {
   const [hidePhone, setHidePhone] = useState(false);
   const [rowIndex, setRowIndex] = useState(0);
   const navigate = useNavigate();
+  useEffect(() => {}, []);
 
-  // useEffect(() => {
-  //   setIsLoading(false);
-  // }, [data]);
+  useEffect(() => {
+    setOrdinalNumber(start);
+    if (start === 0) {
+      setCurrentPage(1);
+    }
+  }, [start]);
 
   // useEffect(() => {
   //   setIsLoading(true);
@@ -409,6 +414,13 @@ const DataTable = (props) => {
               </Link>
             );
             break;
+          case "admin_action":
+            return (
+              <div>
+                <p>{data?.id_admin_action?.full_name}</p>
+              </div>
+            );
+            break;
           case "nearest_order":
             return (
               <>
@@ -488,6 +500,15 @@ const DataTable = (props) => {
             return (
               <p className={`text-address-customer ${item?.fontSize}`}>
                 {data[item.dataIndex] || 0}
+              </p>
+            );
+            break;
+          case "kind_transfer":
+            const _kind_transfer =
+              data?.kind_transfer === "income" ? "Phiếu thu" : "Phiếu chi";
+            return (
+              <p className={`text-address-customer ${item?.fontSize}`}>
+                {_kind_transfer}
               </p>
             );
             break;
@@ -909,11 +930,8 @@ const DataTable = (props) => {
                 );
                 break;
               case "cancel":
-                _text_status = (
-                  <p className="text-cancel-topup-ctv">{`${i18n.t(
-                    "cancel"
-                  )}`}</p>
-                );
+                _text_status = <p className="text-cancel-topup-ctv">Đã huỷ</p>;
+                break;
               case "holding":
                 _text_status = <p className="text-transfered">{`Tạm giữ`}</p>;
                 break;
@@ -945,6 +963,17 @@ const DataTable = (props) => {
                     {moment(new Date(data?.date_verify_created)).format(
                       "HH:mm"
                     )}
+                  </p>
+                )}
+
+                {data?.date_verify && (
+                  <p className={`${item?.fontSize}`}>
+                    {moment(new Date(data?.date_verify)).format("DD/MM/YYYY")}
+                  </p>
+                )}
+                {data?.date_verify && (
+                  <p className={`${item?.fontSize}`}>
+                    {moment(new Date(data?.date_verify)).format("HH:mm")}
                   </p>
                 )}
               </div>
@@ -1000,12 +1029,7 @@ const DataTable = (props) => {
           case "ordinal": {
             return (
               <div className="div-date-create">
-                <p>
-                  {index +
-                    1 +
-                    currentPage * (pageSize || 20) -
-                    (pageSize || 20)}
-                </p>
+                <p>{index + ordinalNumber + 1}</p>
               </div>
             );
             break;
@@ -1025,6 +1049,7 @@ const DataTable = (props) => {
   if (actionColumn) headerTable.push(actionColumn);
 
   const calculateCurrentPage = (event) => {
+    console.log("evet", event);
     setCurrentPage(event);
     if (props.onCurrentPageChange) {
       setIsLoading(true);
