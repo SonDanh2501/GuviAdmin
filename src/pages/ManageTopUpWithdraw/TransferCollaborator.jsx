@@ -165,11 +165,11 @@ const TransferCollaborator = () => {
   };
   const handleTopUp = (value) => {
     createTransaction({
-      transfer_note: value.transfer_note,
+      transfer_note: value?.note,
       type_transfer: "top_up",
       money: value.money,
-      id_collaborator: value.id,
-      type_wallet: value.wallet,
+      id_collaborator: value?.id,
+      type_wallet: value?.wallet,
       subject: "collaborator",
     });
   };

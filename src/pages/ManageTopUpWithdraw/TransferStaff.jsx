@@ -27,6 +27,7 @@ import {
 } from "../../api/transaction";
 import { LENGTH_ITEM } from "../../constants";
 import { errorNotify, successNotify } from "../../helper/toast";
+import { endOfDay, startOfDay } from "date-fns";
 const TransferStaff = () => {
   const itemTab = [
     {
@@ -137,26 +138,23 @@ const TransferStaff = () => {
   };
   const handleTopUp = (value) => {
     createTransaction({
-      transfer_note: value.transfer_note,
+      transfer_note: value.note,
       type_transfer: "top_up",
-      kind_transfer: "income",
       money: value.money,
-      id_collaborator: value.id,
-      type_wallet: value.wallet,
       subject: "other",
+      type_wallet: "cash_book",
+      payment_source: "other",
     });
   };
   const handleWithdraw = (value) => {
-    console.log("valua ", value);
-    // createTransaction({
-    //   transfer_note: value.transfer_note,
-    //   type_transfer: "withdraw",
-    //   kind_transfer: "expense",
-    //   money: value.money,
-    //   id_collaborator: value.id,
-    //   type_wallet: value.wallet,
-    //   subject: "other",
-    // });
+    createTransaction({
+      transfer_note: value.note,
+      type_transfer: "withdraw",
+      money: value.money,
+      subject: "other",
+      type_wallet: "cash_book",
+      payment_source: "other",
+    });
   };
 
   const createTransaction = (data) => {
@@ -244,8 +242,13 @@ const TransferStaff = () => {
   const reCallData = () => {
     getList(query);
     getTotal(queryTotal);
-    getTotalMoney("top_up", queryTotal, setTotalTopUp);
-    getTotalMoney("withdraw", queryTotal, setTotalWithdraw);
+    const date = new Date(Date.now());
+    const start_date = startOfDay(date).toISOString();
+    const end_date = endOfDay(date).toISOString();
+    const _query = `subject=other&type_transfer=top_up&start_date=${start_date}
+    &end_date=${end_date}`;
+    getTotalMoney("top_up", _query, setTotalTopUp);
+    getTotalMoney("withdraw", _query, setTotalWithdraw);
   };
   // ---------------------------- use effect ------------------------------------ //
 
@@ -260,7 +263,6 @@ const TransferStaff = () => {
         }
       });
       tempQuery = tempQuery + `search=${valueSearch}`;
-      console.log("query: ", tempQuery);
       setQuery(tempQuery);
     }
     setQueryTotal(_tempQueryTotal);
@@ -276,6 +278,45 @@ const TransferStaff = () => {
   return (
     <div className="transfer-collaborator_container">
       <h5>Phiếu thu chi nhân viên</h5>
+      <div className="transfer-collaborator_total">
+        {statisticsTransition.map((item, index) => {
+          return (
+            <ItemTotal
+              key={index}
+              title={item.title}
+              description={item.description}
+              value={item.value}
+              convertMoney={item.convertMoney}
+            />
+          );
+        })}
+      </div>
+      <div className="transfer-collaborator_search">
+        <div className="transfer-collaborator_transaction">
+          <TransactionDrawer
+            titleButton="Nạp tiền"
+            subject="staff"
+            titleHeader="Nạp tiền cộng tác viên"
+            onClick={handleTopUp}
+          />
+          <TransactionDrawer
+            titleButton="Rút tiền"
+            titleHeader="Rút tiền cộng tác viên"
+            subject="staff"
+            onClick={handleWithdraw}
+            defaultWallet={"collaborator_wallet"}
+          />
+        </div>
+        <Input
+          placeholder={"Tìm kiếm"}
+          prefix={<SearchOutlined />}
+          className="input-search"
+          onChange={(e) => {
+            handleSearch(e.target.value);
+          }}
+        />
+        <Button type="primary">Tìm kiếm</Button>
+      </div>
       <div className="transfer-collaborator_header">
         <Tabs
           itemTab={itemTabStatus}
@@ -291,45 +332,8 @@ const TransferStaff = () => {
             },
           ]}
         />
-        <div className="transfer-collaborator_search">
-          <Input
-            placeholder={"Tìm kiếm"}
-            prefix={<SearchOutlined />}
-            className="input-search"
-            onChange={(e) => {
-              handleSearch(e.target.value);
-            }}
-          />
-          <Button type="primary">Tìm kiếm</Button>
-        </div>
       </div>
-      <div className="transfer-staff_transaction">
-        <TransactionDrawer
-          titleButton="Tạo phiếu thu"
-          subject="staff"
-          titleHeader="Tạo phiếu thu"
-          onClick={handleTopUp}
-        />
-        <TransactionDrawer
-          titleButton="Tạo phiếu chi"
-          titleHeader="Tạo phiếu chi"
-          subject="staff"
-          onClick={handleWithdraw}
-        />
-      </div>
-      <div className="transfer-collaborator_total">
-        {statisticsTransition.map((item, index) => {
-          return (
-            <ItemTotal
-              key={index}
-              title={item.title}
-              description={item.description}
-              value={item.value}
-              convertMoney={item.convertMoney}
-            />
-          );
-        })}
-      </div>
+
       <div>
         <DataTable
           columns={columns}
