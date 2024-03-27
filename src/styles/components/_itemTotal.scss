@@ -1,0 +1,8 @@
+.item-total_container {
+  @extend .box-common;
+  min-width: 120px;
+  @include flexbox(center, center, column);
+}
+.item-total_title {
+  @include flexbox(space-evenly, center);
+}

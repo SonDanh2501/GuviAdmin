@@ -25,7 +25,6 @@ import setting from "../assets/images/setting.svg";
 import ManageConfiguration from "../container/System/ManageConfiguration/ManageConfiguration";
 import ManageRequestService from "../container/System/ManageRequestService";
 
-
 import {
   AppstoreOutlined,
   ContainerOutlined,
@@ -34,10 +33,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PieChartOutlined,
-} from '@ant-design/icons';
-
-
-
+} from "@ant-design/icons";
 
 // const router = [
 //   {
@@ -544,45 +540,175 @@ function getItem(label, key, icon, children, type) {
   };
 }
 
-const IconCustom = ({icon}) => {
+const IconCustom = ({ icon }) => {
   return (
-
     <span className="anticon anticon-desktop ant-menu-item-icon">
-      <embed style={{padding: "50% 0"}} src={icon} />
+      <embed style={{ padding: "50% 0" }} src={icon} />
     </span>
-
-  )
-}
-
+  );
+};
 
 const router = [
-  getItem('Tổng quan', '/', <IconCustom icon={home} />, null, "dashboard"),
-  getItem('GUVIJOBS', '/group-order/manage-order', <IconCustom icon={bag} />, null, "guvi_job"),
-  getItem('Yêu cầu dịch vụ', '/system/request-service-manage', <IconCustom icon={request} />, null, "request_service"),
-  getItem('Khách hàng', '/system/user-manage', <IconCustom icon={customer} />, null, "customer"),
+  getItem("Tổng quan", "/", <IconCustom icon={home} />, null, "dashboard"),
+  getItem(
+    "GUVIJOBS",
+    "/group-order/manage-order",
+    <IconCustom icon={bag} />,
+    null,
+    "guvi_job"
+  ),
+  getItem(
+    "Yêu cầu dịch vụ",
+    "/system/request-service-manage",
+    <IconCustom icon={request} />,
+    null,
+    "request_service"
+  ),
+  getItem(
+    "Khách hàng",
+    "/system/user-manage",
+    <IconCustom icon={customer} />,
+    null,
+    "customer"
+  ),
   // getItem('Cộng tác viên', '/system/collaborator-manage', <IconCustom icon={collaborator} />, null, "collaborator"),
 
-  getItem('Cộng tác viên', '/system/collaborator-manage', <IconCustom icon={collaborator} />, [
-    getItem('Đang hoạt động', '/system/collaborator-verify-manage', null, null), "collaborator",
-    getItem('Hồ sơ ứng tuyển', '/system/collaborator-not-verify-manage', null, null), "collaborator",
-  ], "collaborator"),
+  getItem(
+    "Cộng tác viên",
+    "/system/collaborator-manage",
+    <IconCustom icon={collaborator} />,
+    [
+      getItem(
+        "Đang hoạt động",
+        "/system/collaborator-verify-manage",
+        null,
+        null
+      ),
+      "collaborator",
+      getItem(
+        "Hồ sơ ứng tuyển",
+        "/system/collaborator-not-verify-manage",
+        null,
+        null
+      ),
+      "collaborator",
+    ],
+    "collaborator"
+  ),
 
-
-  getItem('Dịch vụ', '/services/manage-group-service/service', <IconCustom icon={service} />, null, "service"),
-  getItem('Marketing', 'sub1', <IconCustom icon={ticket} />, [
-    getItem('Khuyến mãi', '/promotion/manage-setting', null, null), "promotion",
-    getItem('Banner', '/promotion/manage-setting/banner', null, null, "promotion"),
-    getItem('Bài viết', '/promotion/manage-setting/news', null, null, "promotion"),
-  ], "promotion"),
-  getItem('CSKH', '/feedback/manage-feedback', <IconCustom icon={like} />,[
-    getItem('Đánh giá CTV', '/customer-care/review-collaborator', null, null, "support_customer"),
-    getItem('Phản hồi', '/customer-care/feedback', null, null, "support_customer"),
-  ], "support_customer"),
-  getItem('Tài chính', '/finance/manage-finance', <IconCustom icon={finance} />, null, "finance"),
-  getItem('Sổ quỹ', '/topup/manage-topup', <IconCustom icon={cards} />, null, "cash_book"),
-  getItem('Báo cáo', '/report/manage-report', <IconCustom icon={document} />, null, "report"),
-  getItem('Thông báo', '/notification/manage-push-notification', <IconCustom icon={notification} />, null, "notification"),
-  getItem('Cấu hình', '/adminManage/manage-configuration', <IconCustom icon={setting} />, null, "setting"),
+  getItem(
+    "Dịch vụ",
+    "/services/manage-group-service/service",
+    <IconCustom icon={service} />,
+    null,
+    "service"
+  ),
+  getItem(
+    "Marketing",
+    "sub1",
+    <IconCustom icon={ticket} />,
+    [
+      getItem("Khuyến mãi", "/promotion/manage-setting", null, null),
+      "promotion",
+      getItem(
+        "Banner",
+        "/promotion/manage-setting/banner",
+        null,
+        null,
+        "promotion"
+      ),
+      getItem(
+        "Bài viết",
+        "/promotion/manage-setting/news",
+        null,
+        null,
+        "promotion"
+      ),
+    ],
+    "promotion"
+  ),
+  getItem(
+    "CSKH",
+    "/feedback/manage-feedback",
+    <IconCustom icon={like} />,
+    [
+      getItem(
+        "Đánh giá CTV",
+        "/customer-care/review-collaborator",
+        null,
+        null,
+        "support_customer"
+      ),
+      getItem(
+        "Phản hồi",
+        "/customer-care/feedback",
+        null,
+        null,
+        "support_customer"
+      ),
+    ],
+    "support_customer"
+  ),
+  getItem(
+    "Tài chính",
+    "/finance/manage-finance",
+    <IconCustom icon={finance} />,
+    null,
+    "finance"
+  ),
+  getItem(
+    "Sổ quỹ",
+    "transaction",
+    <IconCustom icon={cards} />,
+    [
+      getItem(
+        "CTV",
+        "/transaction/manage-transaction-collaborator",
+        null,
+        null
+      ),
+      "cash_book",
+      getItem(
+        "Khách hàng",
+        "/transaction/manage-transaction-customer",
+        null,
+        null
+      ),
+      "cash_book",
+      getItem("Nhân viên", "/transaction/manage-transaction-staff", null, null),
+      "cash_book",
+      getItem(
+        "Thưởng",
+        "/reward/manage-reward",
+        null,
+        null,
+        "/support_customer"
+      ),
+      getItem("Phạt", "/punish/manage-punish", null, null, "support_customer"),
+    ],
+    "cash_book"
+  ),
+  getItem(
+    "Báo cáo",
+    "/report/manage-report",
+    <IconCustom icon={document} />,
+    null,
+    "report"
+  ),
+  getItem(
+    "Thông báo",
+    "/notification/manage-push-notification",
+    <IconCustom icon={notification} />,
+    null,
+    "notification"
+  ),
+  getItem(
+    "Cấu hình",
+    "/adminManage/manage-configuration",
+    <IconCustom icon={setting} />,
+    null,
+    "setting"
+  ),
 ];
 
 export default router;

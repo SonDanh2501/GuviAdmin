@@ -14,6 +14,10 @@
 @import "./pages/ManagerOrder/infoDetailGroupOrder";
 @import "./pages/ManagerOrder/itemInfoBill";
 @import "./pages/ManagerOrder/activityOrder";
+@import "./pages/ManageTopUpWithdraw/transferCollaborator";
+@import "./pages/ManageTopUpWithdraw/transferCustomer";
+@import "./pages/ManageTopUpWithdraw/drawer";
+@import "./pages/ManageTopUpWithdraw/transferStaff";
 
 // Components
 
@@ -21,3 +25,6 @@
 @import "./components/infoService";
 @import "./components/editTime";
 @import "./components/commonFilter";
+@import "./components/itemTotal";
+@import "./components/filterTransfer";
+// @import "./components/drawerTransaction;

@@ -1,13 +1,13 @@
 import { Tabs } from "antd";
 
 const CustomTab = (props) => {
-  const { dataItems } = props;
+  const { dataItems, type, size } = props;
   return (
     <>
       <Tabs
         defaultActiveKey="1"
-        type="card"
-        size={"middle"}
+        type={type ? type : "card"}
+        size={size ? size : "middle"}
         items={dataItems.map((item, i) => {
           const id = String(i + 1);
           return {

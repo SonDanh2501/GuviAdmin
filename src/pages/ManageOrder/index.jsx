@@ -641,7 +641,6 @@ const ManageOrder = () => {
           )}
         </div>
       </div>
-
       <div className="div-flex-row">
         <Tabs itemTab={itemTab} onValueChangeTab={onChangeTab} />
       </div>

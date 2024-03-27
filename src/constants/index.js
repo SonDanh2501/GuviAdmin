@@ -64,3 +64,5 @@ export const arrDaysVN = [
 ];
 export const default_avatar =
   "https://admin.guvico.com/static/media/user.724b79cd.png";
+
+export const LENGTH_ITEM = 20;

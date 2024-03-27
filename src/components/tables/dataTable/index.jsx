@@ -58,6 +58,7 @@ const DataTable = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [item, setItem] = useState(data[0]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [ordinalNumber, setOrdinalNumber] = useState(1);
   // const [items3, setItems3] = useState(items);
   // let items3 = [...items]
   let widthPage = 0;
@@ -65,10 +66,14 @@ const DataTable = (props) => {
   const [hidePhone, setHidePhone] = useState(false);
   const [rowIndex, setRowIndex] = useState(0);
   const navigate = useNavigate();
+  useEffect(() => {}, []);
 
-  // useEffect(() => {
-  //   setIsLoading(false);
-  // }, [data]);
+  useEffect(() => {
+    setOrdinalNumber(start);
+    if (start === 0) {
+      setCurrentPage(1);
+    }
+  }, [start]);
 
   // useEffect(() => {
   //   setIsLoading(true);
@@ -175,6 +180,22 @@ const DataTable = (props) => {
               </div>
             );
             break;
+          case "customer_full_name":
+            return (
+              <div className="div-customer-name-phone">
+                <Link
+                  to={`/profile-customer/${
+                    data?.id_customer?._id || data?._id
+                  }`}
+                >
+                  <p className={`text-name-customer ${item?.fontSize}`}>
+                    {data?.id_customer?.full_name || data?.full_name}
+                  </p>
+                </Link>
+              </div>
+            );
+            break;
+
           case "service":
             return (
               <div>
@@ -393,6 +414,13 @@ const DataTable = (props) => {
               </Link>
             );
             break;
+          case "admin_action":
+            return (
+              <div>
+                <p>{data?.id_admin_action?.full_name}</p>
+              </div>
+            );
+            break;
           case "nearest_order":
             return (
               <>
@@ -435,15 +463,17 @@ const DataTable = (props) => {
             );
             break;
           case "phone_action_hide":
-            const phone = data?.phone.slice(0, 7);
+            const phone = data?.phone
+              ? data?.phone.slice(-4)
+              : data?.id_customer?.phone.slice(-4);
             return (
               <div className="hide-phone">
                 <p className={`phone-text ${item?.fontSize}`}>
                   {rowIndex === index
                     ? hidePhone
-                      ? data?.phone
-                      : phone + "***"
-                    : phone + "***"}
+                      ? data?.phone || data?.id_customer?.phone
+                      : "********" + phone
+                    : "********" + phone}
                 </p>
                 <p
                   className="btn-eyes"
@@ -470,6 +500,15 @@ const DataTable = (props) => {
             return (
               <p className={`text-address-customer ${item?.fontSize}`}>
                 {data[item.dataIndex] || 0}
+              </p>
+            );
+            break;
+          case "kind_transfer":
+            const _kind_transfer =
+              data?.kind_transfer === "income" ? "Phiếu thu" : "Phiếu chi";
+            return (
+              <p className={`text-address-customer ${item?.fontSize}`}>
+                {_kind_transfer}
               </p>
             );
             break;
@@ -847,6 +886,154 @@ const DataTable = (props) => {
             );
             break;
           }
+          case "method_transfer": {
+            return (
+              <div className="div-date-create">
+                {data?.type_transfer === "top_up" ? (
+                  <div className="div-money-withdraw-topup">
+                    <i class="uil uil-money-insert icon-topup"></i>
+                    <p className="text-topup">{`${i18n.t("topup", {
+                      lng: lang,
+                    })}`}</p>
+                  </div>
+                ) : (
+                  <div className="div-money-withdraw-topup">
+                    <i class="uil uil-money-withdraw icon-withdraw"></i>
+                    <p className="text-withdraw">
+                      {`${i18n.t("withdraw", { lng: lang })}`}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          }
+          case "status_transfer": {
+            let _text_status = <p></p>;
+            switch (data.status) {
+              case "pending":
+                _text_status = (
+                  <p className="text-pending-topup">{`${i18n.t(
+                    "processing"
+                  )}`}</p>
+                );
+                break;
+              case "transferred":
+                _text_status = (
+                  <p className="text-transfered">{`${i18n.t(
+                    "money_transferred"
+                  )}`}</p>
+                );
+                break;
+              case "done":
+                _text_status = (
+                  <p className="text-done-topup">{`${i18n.t("complete")}`}</p>
+                );
+                break;
+              case "cancel":
+                _text_status = <p className="text-cancel-topup-ctv">Đã huỷ</p>;
+                break;
+              case "holding":
+                _text_status = <p className="text-transfered">{`Tạm giữ`}</p>;
+                break;
+              default:
+                break;
+            }
+            return <div className="div-date-create">{_text_status}</div>;
+          }
+          case "type_wallet": {
+            let _wallet = data?.type_wallet === "work_wallet" ? "Nạp" : "CTV";
+            return (
+              <div className="div-date-create">
+                <p className="title-detail">Ví {_wallet}</p>
+              </div>
+            );
+          }
+          case "date_verify":
+            return (
+              <div className="div-date-create">
+                {data?.date_verify_created && (
+                  <p className={`${item?.fontSize}`}>
+                    {moment(new Date(data?.date_verify_created)).format(
+                      "DD/MM/YYYY"
+                    )}
+                  </p>
+                )}
+                {data?.date_verify_created && (
+                  <p className={`${item?.fontSize}`}>
+                    {moment(new Date(data?.date_verify_created)).format(
+                      "HH:mm"
+                    )}
+                  </p>
+                )}
+
+                {data?.date_verify && (
+                  <p className={`${item?.fontSize}`}>
+                    {moment(new Date(data?.date_verify)).format("DD/MM/YYYY")}
+                  </p>
+                )}
+                {data?.date_verify && (
+                  <p className={`${item?.fontSize}`}>
+                    {moment(new Date(data?.date_verify)).format("HH:mm")}
+                  </p>
+                )}
+              </div>
+            );
+            break;
+          case "admin_verify":
+            return (
+              <div className="div-date-create">
+                <p className="fw-500">{data?.id_admin_verify?.full_name}</p>
+              </div>
+            );
+            break;
+          case "payment_source":
+            let _payment_source = "Chuyển khoản";
+            if (data?.paymnet_source === "momo") {
+              _payment_source = "MoMo";
+            } else if (data?.paymnet_source === "vnpay") {
+              _payment_source = "VNPAY";
+            } else if (data?.paymnet_source === "viettel_pay") {
+              _payment_source = "Viettel Pay";
+            } else if (data?.paymnet_source === "other") {
+              _payment_source = "Khác";
+            }
+            return (
+              <div className="div-date-create">
+                <p>{_payment_source}</p>
+              </div>
+            );
+            break;
+          case "verify": {
+            const _isDisableVerify =
+              data?.status === "done" || data?.status === "cancel";
+            return (
+              <div className="div-date-create">
+                <Button
+                  disabled={_isDisableVerify}
+                  onClick={() => setOpenModalChangeStatus(true)}
+                >
+                  Duyệt lệnh
+                </Button>
+                <Button
+                  type="primary"
+                  danger
+                  disabled={_isDisableVerify}
+                  onClick={() => setOpenModalCancel(true)}
+                >
+                  Huỷ lệnh
+                </Button>
+              </div>
+            );
+            break;
+          }
+          case "ordinal": {
+            return (
+              <div className="div-date-create">
+                <p>{index + ordinalNumber + 1}</p>
+              </div>
+            );
+            break;
+          }
           default: {
             const dataView = data[item.dataIndex] || "";
             return <p className={`${item?.fontSize}`}> {dataView}</p>;
@@ -862,6 +1049,7 @@ const DataTable = (props) => {
   if (actionColumn) headerTable.push(actionColumn);
 
   const calculateCurrentPage = (event) => {
+    console.log("evet", event);
     setCurrentPage(event);
     if (props.onCurrentPageChange) {
       setIsLoading(true);
