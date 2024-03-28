@@ -142,8 +142,8 @@ export const editTimeOrderScheduleApi = (id, data) => {
   );
 };
 
-export const searchOrderApiForCollaborator = (id_collaborator, search) => {
+export const searchOrderApi = (start = 0, length = 20, query) => {
   return axiosClient.get(
-    `/admin/order_manager/search_order/lang=vi&id_collaborator=${id_collaborator}&search=${search}`
+    `/admin/order_manager/search_order?lang=vi&start=${start}&length=${length}&${query}`
   );
 };
