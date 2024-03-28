@@ -421,6 +421,13 @@ const DataTable = (props) => {
               </div>
             );
             break;
+          case "id_admin_action":
+            return (
+              <div>
+                <p>{data?.id_admin_action?.full_name || "Hệ thống"}</p>
+              </div>
+            );
+            break;
           case "nearest_order":
             return (
               <>
@@ -908,43 +915,56 @@ const DataTable = (props) => {
             );
           }
           case "status_transfer": {
-            let _text_status = <p></p>;
+            let _text_status = <span></span>;
             switch (data.status) {
-              case "pending":
+              case "pending" || "stanby":
                 _text_status = (
-                  <p className="text-pending-topup">{`${i18n.t(
+                  <span className="text-status-pending">{`${i18n.t(
                     "processing"
-                  )}`}</p>
+                  )}`}</span>
                 );
                 break;
-              case "transferred":
+              case "transferred" || "processing" || "doing" || "revoke":
                 _text_status = (
-                  <p className="text-transfered">{`${i18n.t(
+                  <span className="text-status-confirm">{`${i18n.t(
                     "money_transferred"
-                  )}`}</p>
+                  )}`}</span>
                 );
                 break;
               case "done":
                 _text_status = (
-                  <p className="text-done-topup">{`${i18n.t("complete")}`}</p>
+                  <span className="text-status-done">{`${i18n.t(
+                    "complete"
+                  )}`}</span>
                 );
                 break;
-              case "cancel":
-                _text_status = <p className="text-cancel-topup-ctv">Đã huỷ</p>;
+              case "cancel" || "cancel" || "out_date":
+                _text_status = (
+                  <span className="text-status-cancel">Đã huỷ</span>
+                );
                 break;
               case "holding":
-                _text_status = <p className="text-transfered">{`Tạm giữ`}</p>;
+                _text_status = (
+                  <span className="text-status-doing">{`Tạm giữ`}</span>
+                );
                 break;
               default:
                 break;
             }
-            return <div className="div-date-create">{_text_status}</div>;
+            return <div className="div-status-order">{_text_status}</div>;
           }
           case "type_wallet": {
             let _wallet = data?.type_wallet === "work_wallet" ? "Nạp" : "CTV";
             return (
               <div className="div-date-create">
                 <p className="title-detail">Ví {_wallet}</p>
+              </div>
+            );
+          }
+          case "title_punish_ticket": {
+            return (
+              <div className="div-date-create">
+                <p className="title-detail">{data?.title["vi"]}</p>
               </div>
             );
           }
