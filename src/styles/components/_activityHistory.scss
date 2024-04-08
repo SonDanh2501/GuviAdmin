@@ -1,0 +1,33 @@
+.activity-history_item-container {
+  @include flexbox();
+
+  .item-info {
+    margin-left: 1rem;
+    span {
+      font-weight: 500;
+      color: var(--selected-color);
+    }
+  }
+  .item-vertical-line {
+    margin-left: 1rem;
+    width: 10px;
+    @include flexbox(center, center, column);
+    .circle {
+      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+      background-color: var(--selected-color);
+    }
+    .line {
+      width: 1.5px;
+      height: 60px;
+      background-color: var(--text-color);
+    }
+    .circle-black {
+      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+      background-color: var(--thumb-hover-color);
+    }
+  }
+}

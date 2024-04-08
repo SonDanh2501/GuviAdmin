@@ -138,6 +138,30 @@ const DataTable = (props) => {
               </Link>
             );
             break;
+          case "id_view_order":
+            linkRedirect = `/details-order/${data?.id_order?.id_group_order}`;
+            return (
+              <Link
+                onClick={() => saveToCookie("order_scrolly", scrollY)}
+                to={linkRedirect}
+                target="_blank"
+              >
+                <p className={`text-id-code-order ${item?.fontSize}`}>
+                  {data?.id_order?.id_view}
+                </p>
+              </Link>
+            );
+            break;
+          case "code_punish_ticket":
+            linkRedirect = `/punish/punish-detail/${data?._id}`;
+            return (
+              <Link to={linkRedirect} target="_blank">
+                <p className={`text-id-code-order ${item?.fontSize}`}>
+                  {data?.id_view}
+                </p>
+              </Link>
+            );
+            break;
           case "code_customer":
             linkRedirect = checkElement?.includes("detail_customer")
               ? `/profile-customer/${data?._id}`
@@ -288,6 +312,7 @@ const DataTable = (props) => {
                       <Link
                         to={`/details-collaborator/${data?.id_collaborator?._id}`}
                         className="div-name-star"
+                        target="_blank"
                       >
                         <div className="div-name">
                           <p className={`${item?.fontSize}`}>
@@ -425,6 +450,20 @@ const DataTable = (props) => {
             return (
               <div>
                 <p>{data?.id_admin_action?.full_name || "Hệ thống"}</p>
+              </div>
+            );
+            break;
+          case "id_transaction":
+            return (
+              <div className="div-name">
+                <Link
+                  to={`/transaction-detail/${data?.id_transaction?._id}`}
+                  target="_blank"
+                >
+                  <p className={`text-color-1 ${item?.fontSize}`}>
+                    {data?.id_transaction?.id_view}
+                  </p>
+                </Link>
               </div>
             );
             break;
@@ -917,14 +956,18 @@ const DataTable = (props) => {
           case "status_transfer": {
             let _text_status = <span></span>;
             switch (data.status) {
-              case "pending" || "stanby":
+              case "stanby":
+              case "pending":
                 _text_status = (
                   <span className="text-status-pending">{`${i18n.t(
                     "processing"
                   )}`}</span>
                 );
                 break;
-              case "transferred" || "processing" || "doing" || "revoke":
+              case "transferred":
+              case "processing":
+              case "doing":
+              case "revoke":
                 _text_status = (
                   <span className="text-status-confirm">{`${i18n.t(
                     "money_transferred"
@@ -938,7 +981,9 @@ const DataTable = (props) => {
                   )}`}</span>
                 );
                 break;
-              case "cancel" || "cancel" || "out_date":
+              case "cancel":
+              case "cancel":
+              case "out_date":
                 _text_status = (
                   <span className="text-status-cancel">Đã huỷ</span>
                 );
@@ -946,6 +991,40 @@ const DataTable = (props) => {
               case "holding":
                 _text_status = (
                   <span className="text-status-doing">{`Tạm giữ`}</span>
+                );
+                break;
+              default:
+                break;
+            }
+            return <div className="div-status-order">{_text_status}</div>;
+          }
+          case "status_ticket": {
+            let _text_status = <span></span>;
+            switch (data.status) {
+              case "standby":
+                _text_status = (
+                  <span className="text-status-pending">Chờ duyệt</span>
+                );
+                break;
+              case "processing":
+              case "waiting":
+                _text_status = (
+                  <span className="text-status-confirm">Đang xử lý</span>
+                );
+                break;
+              case "doing":
+                _text_status = (
+                  <span className="text-status-done">Đang thực thi</span>
+                );
+                break;
+              case "cancel":
+                _text_status = (
+                  <span className="text-status-cancel">Đã huỷ</span>
+                );
+                break;
+              case "done":
+                _text_status = (
+                  <span className="text-status-doing">Hoàn thành</span>
                 );
                 break;
               default:
@@ -1025,7 +1104,12 @@ const DataTable = (props) => {
             break;
           case "verify": {
             const _isDisableVerify =
-              data?.status === "done" || data?.status === "cancel";
+              data?.status === "done" ||
+              data?.status === "cancel" ||
+              data?.status === "revoke" ||
+              data?.status === "waiting" ||
+              data?.status === "doing" ||
+              data?.status === "processing";
             return (
               <div className="div-date-create">
                 <Button

@@ -6,6 +6,7 @@ import { Button, Dropdown, Input, Pagination, Popover, Space } from "antd";
 import {
   createPunishTicketApi,
   getListPunishTicketApi,
+  getTotalPunishTicket,
 } from "../../api/punish";
 import _debounce from "lodash/debounce";
 import { SearchOutlined } from "@ant-design/icons";
@@ -13,6 +14,11 @@ import TransactionDrawer from "../../components/transactionDrawer";
 import PunishDrawer from "../../components/punishDrawer";
 import dayjs from "dayjs";
 import { successNotify } from "../../helper/toast";
+import ActivityHistory from "../../components/activityHistory";
+import { Link } from "react-router-dom";
+import CommonFilter from "../../components/commonFilter";
+import Tabs from "../../components/tabs/tabs1";
+import ModalCustom from "../../components/modalCustom";
 const ManagePunish = () => {
   const [startPage, setStartPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -21,13 +27,30 @@ const ManagePunish = () => {
   const [openModalCancel, setOpenModalCancel] = useState(false);
   const [data, setData] = useState([]);
   const [valueSearch, setValueSearch] = useState("");
-  const onChangePage = (value) => {
-    setStartPage(value);
-  };
+  const [returnFilter, setReturnFilter] = useState([]);
+  const [totalPunishTicket, setTotalPunishTicket] = useState([]);
+  const [selectedDate, setSelectedDate] = useState({
+    start_date: "2024-02-09T17:00:00.000Z",
+    end_date: "2024-04-08T16:59:59.999Z",
+  });
+  const [currentTab, setCurrentTab] = useState(itemTabStatus[0]);
+  // ------------------------------ xử lý data ---------------------------------- /
+  let queryDate = "&";
+  for (const key of Object.keys(selectedDate)) {
+    queryDate += `${key}=${selectedDate[key]}&`;
+  }
+  const query =
+    returnFilter.map((item) => `&${item.key}=${item.value}`).join("") +
+    queryDate;
+
   let items = [
     {
       key: "1",
-      label: <p style={{ margin: 0 }}>Chi tiết</p>,
+      label: (
+        <Link to={`/punish/punish-detail/${item?._id}`} target="_blank">
+          <p style={{ margin: 0 }}>Chi tiết</p>
+        </Link>
+      ),
     },
     {
       key: "2",
@@ -37,6 +60,7 @@ const ManagePunish = () => {
       ),
     },
   ];
+
   const addActionColumn = {
     i18n_title: "",
     dataIndex: "action",
@@ -53,17 +77,36 @@ const ManagePunish = () => {
       </Space>
     ),
   };
+  // ----------------------------- xử lý  action ----------------------------------- //
+  const onChangePage = (value) => {
+    setStartPage(value);
+  };
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueSearch(value);
     }, 1000),
     []
   );
-  const getList = (_query) => {
-    getListPunishTicketApi(startPage, LENGTH_ITEM, _query)
+  const getList = () => {
+    getListPunishTicketApi(startPage, LENGTH_ITEM, currentTab.value, query)
       .then((res) => {
+        console.log("ré ", res);
+
         setData(res?.data);
         setTotal(res?.totalItem);
+      })
+      .catch((err) => {
+        console.log("err ", err);
+      });
+  };
+  const getTotal = () => {
+    getTotalPunishTicket(query)
+      .then((res) => {
+        const temp_arr = [];
+        for (let i of Object.values(res)) {
+          temp_arr.push({ value: i });
+        }
+        setTotalPunishTicket(temp_arr);
       })
       .catch((err) => {
         console.log("err ", err);
@@ -74,6 +117,9 @@ const ManagePunish = () => {
       id_collaborator: value?.id_collaborator,
       id_punish_policy: value?.id_punish_policy,
       date_start_lock_time: value?.start_date,
+      user_apply: "collaborator",
+      note_admin: value?.note,
+      id_order: value?.id_order,
     };
     createPunishTicketApi(payload)
       .then((res) => {
@@ -86,13 +132,35 @@ const ManagePunish = () => {
         console.log("err ", err);
       });
   };
+  const onChangeTab = (item) => {
+    setCurrentTab(item);
+  };
+  const handleCancelPunishTicket = () => {
+    console.log("vé này sẽ bị huỷ ", item);
+    setOpenModalCancel(false);
+  };
+  const handleVerify = () => {
+    console.log("vé này sẽ bị huỷ ", item);
+    setOpenModalChangeStatus(false);
+  };
+  // --------------------------- xử lý useEffect ------------------------------------- //
   useEffect(() => {
     getList();
-  }, []);
-
+    getTotal();
+  }, [startPage, returnFilter, selectedDate, currentTab]);
   return (
     <div className="manage-punish_container">
       <h5>Quản lý lệnh phạt</h5>
+      <CommonFilter
+        setDate={setSelectedDate}
+        data={dataFilter}
+        setReturnFilter={setReturnFilter}
+      />
+      <Tabs
+        itemTab={itemTabStatus}
+        onValueChangeTab={onChangeTab}
+        dataTotal={totalPunishTicket}
+      />
       <div className="transfer-collaborator_search">
         <div className="transfer-collaborator_transaction">
           <PunishDrawer
@@ -127,6 +195,44 @@ const ManagePunish = () => {
           // detectLoading={detectLoading}
         />
       </div>
+      <div>
+        <ModalCustom
+          isOpen={openModalCancel}
+          title={`Huỷ vé phạt`}
+          handleOk={handleCancelPunishTicket}
+          handleCancel={() => setOpenModalCancel(false)}
+          textOk={`Xác nhận`}
+          body={
+            <>
+              <p>Bạn có xác nhận muốn huỷ vé phạt không?</p>
+              <p>
+                Mã vé phạt: <span className="fw-500">{item?.id_view}</span>
+              </p>
+              <p>Tên: {item?.id_collaborator?.full_name}</p>
+              <p>SĐT: {item?.id_collaborator?.phone}</p>
+            </>
+          }
+        />
+      </div>
+      <div>
+        <ModalCustom
+          isOpen={openModalChangeStatus}
+          title={`Duyệt vé phạt`}
+          handleOk={handleVerify}
+          handleCancel={() => setOpenModalChangeStatus(false)}
+          textOk={`Xác nhận`}
+          body={
+            <>
+              <p>Bạn có xác nhận muốn duyệt vé phạt này? </p>
+              <p>
+                Mã vé phạt: <span className="fw-500">{item?.id_view}</span>
+              </p>
+              <p>Tên: {item?.id_collaborator?.full_name}</p>
+              <p>SĐT: {item?.id_collaborator?.phone}</p>
+            </>
+          }
+        />
+      </div>
     </div>
   );
 };
@@ -143,7 +249,7 @@ const columns = [
   {
     title: "Mã lệnh phạt",
     dataIndex: "id_view",
-    key: "id_view",
+    key: "code_punish_ticket",
     width: 50,
     fontSize: "text-size-M",
   },
@@ -157,7 +263,7 @@ const columns = [
   {
     title: "Trạng thái",
     dataIndex: "status",
-    key: "status",
+    key: "status_ticket",
     width: 50,
     fontSize: "text-size-M",
   },
@@ -176,7 +282,21 @@ const columns = [
     fontSize: "text-size-M",
   },
   {
-    title: "Ngày duyệt",
+    title: "Mã lệnh giao dịch",
+    dataIndex: "id_transaction",
+    key: "id_transaction",
+    width: 70,
+    fontSize: "text-size-M",
+  },
+  {
+    title: "Mã đơn hàng",
+    dataIndex: "id_order",
+    key: "id_view_order",
+    width: 70,
+    fontSize: "text-size-M",
+  },
+  {
+    title: "Ngày hoàn thành",
     dataIndex: "date_done",
     key: "date_verify",
     width: 50,
@@ -184,9 +304,84 @@ const columns = [
   },
   {
     title: "Nội dung",
-    dataIndex: "title_punish_ticket",
-    key: "title_punish_ticket",
+    dataIndex: "note_admin",
+    key: "text",
     width: 80,
     fontSize: "text-size-M",
+  },
+  {
+    dataIndex: "verify",
+    key: "verify",
+    width: 50,
+    fontSize: "text-size-M",
+  },
+];
+
+const dataFilter = [
+  // {
+  //   key: "status",
+  //   label: "Trạng thái",
+  //   data: [
+  //     { key: "0", value: "", label: "Tất cả" },
+  //     { key: "1", value: "stanby", label: "Chờ duyệt" },
+  //     { key: "2", value: "waiting", label: "Đang xử lý" },
+  //     { key: "3", value: "processing", label: "Đang xét duyệt" },
+  //     { key: "4", value: "doing", label: "Đang thực thi" },
+  //     { key: "5", value: "done", label: "Hoàn thành" },
+  //     { key: "6", value: "cancel", label: "Đã huỷ" },
+  //     { key: "7", value: "revoke", label: "Đã thu hồi" },
+  //   ],
+  // },
+  {
+    key: "payment_out",
+    label: "Loại ví phạt",
+    data: [
+      { key: "0", value: "", label: "Tất cả" },
+      { key: "1", value: "collaborator_wallet", label: "Ví CTV" },
+      { key: "2", value: "work_wallet", label: "Ví công việc" },
+      { key: "3", value: "pay_point", label: "Pay Point" },
+    ],
+  },
+];
+const itemTabStatus = [
+  {
+    label: "Tất cả",
+    key: "0",
+    value: "",
+  },
+  {
+    label: "Chờ duyệt",
+    key: "1",
+    value: "standby",
+  },
+  {
+    label: "Đang xử lý",
+    key: "2",
+    value: "waiting",
+  },
+  {
+    label: "Đang xét duyệt",
+    key: "3",
+    value: "processing",
+  },
+  {
+    label: "Đang thực thi",
+    key: "4",
+    value: "doing",
+  },
+  {
+    label: "Hoàn thành",
+    key: "6",
+    value: "done",
+  },
+  {
+    label: "Đã huỷ",
+    key: "7",
+    value: "cancel",
+  },
+  {
+    label: "Đã thu hồi",
+    key: "5",
+    value: "revoke",
   },
 ];

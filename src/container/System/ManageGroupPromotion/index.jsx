@@ -37,7 +37,6 @@ import { errorNotify } from "../../../helper/toast";
 import useWindowDimensions from "../../../helper/useWindowDimensions";
 import { useCookies } from "../../../helper/useCookies";
 import Tabs from "../../../components/tabs/tabs1";
-import FilterSelect from "../../../components/filter/filterSelect";
 import "./index.scss";
 
 const ManageGroupPromotion = () => {

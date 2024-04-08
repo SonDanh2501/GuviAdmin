@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import _debounce from "lodash/debounce";
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import CommonFilter from "../../components/filter/commonFilter/CommonFilter";
 import FilterTransfer from "./components/TransferFIlter";
 import ModalCustom from "../../components/modalCustom";
 import i18n from "../../i18n";

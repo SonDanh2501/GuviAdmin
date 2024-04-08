@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import _debounce from "lodash/debounce";
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import CommonFilter from "../../components/filter/commonFilter/CommonFilter";
 import FilterTransfer from "./components/TransferFIlter";
 import ModalCustom from "../../components/modalCustom";
 import i18n from "../../i18n";
@@ -124,14 +123,6 @@ const TransferCollaborator = () => {
         "Là tổng giá trị mà hệ thống ghi nhận CTV đã rút tiền ra khỏi hệ thống thành công (trong ngày)",
       convertMoney: true,
     },
-    // {
-    //   key: "holding",
-    //   value: totalHolding,
-    //   title: "Tổng giá trị TẠM GIỮ",
-    //   description:
-    //     "Là tổng số tiền mà hệ thống tạm giữ của CTV khi CTV đang yêu cầu lệnh rút tiền và chờ xét duyệt (trong ngày)",
-    //   convertMoney: true,
-    // },
     {
       key: "reward",
       value: totalReward,
