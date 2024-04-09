@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { getDetailPunishTicket } from "../../api/punish";
+import { getDetailPunishTicketApi } from "../../api/punish";
 import { useEffect, useState } from "react";
 import ActivityHistory from "../../components/activityHistory";
 import { format } from "date-fns";
@@ -17,7 +17,7 @@ const PunishDetail = () => {
 
   // ---------------------------- xử lý action ------------------------------------ //
   const getDetail = (idPunishTicket) => {
-    getDetailPunishTicket(idPunishTicket)
+    getDetailPunishTicketApi(idPunishTicket)
       .then((ticket) => {
         const _created_by = ticket?.id_admin_action?.full_name
           ? ticket?.id_admin_action?.full_name

@@ -147,3 +147,9 @@ export const searchOrderApi = (start = 0, length = 20, query) => {
     `/admin/order_manager/search_order?lang=vi&start=${start}&length=${length}&${query}`
   );
 };
+
+export const getTotalOrder = (query) => {
+  return axiosClient.get(
+    `/admin/order_manager/get_total_order?lang=vi&${query}`
+  );
+};

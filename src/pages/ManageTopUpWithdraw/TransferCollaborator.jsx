@@ -106,40 +106,40 @@ const TransferCollaborator = () => {
     ),
   };
   // ---------------------------- handle data ------------------------------------ //
-  const statisticsTransition = [
-    {
-      key: "top_up",
-      value: totalTopUp,
-      title: "Tổng giá trị NẠP",
-      description:
-        "Là tổng giá trị mà hệ thống ghi nhận CTV đã nạp thành công vào hệ thống (trong ngày)",
-      convertMoney: true,
-    },
-    {
-      key: "withdraw",
-      value: totalWithdraw,
-      title: "Tổng giá trị RÚT",
-      description:
-        "Là tổng giá trị mà hệ thống ghi nhận CTV đã rút tiền ra khỏi hệ thống thành công (trong ngày)",
-      convertMoney: true,
-    },
-    {
-      key: "reward",
-      value: totalReward,
-      title: "Tổng giá trị THƯỞNG",
-      description:
-        "Là tổng giá trị mà hệ thống (hoặc quản trị viên) đã thưởng cho CTV (trong ngày)",
-      convertMoney: true,
-    },
-    {
-      key: "punish",
-      value: totalPunish,
-      title: "Tổng giá trị PHẠT",
-      description:
-        "Là tổng giá trị mà hệ thống (hoặc quản trị viên) đã phạt CTV (trong ngày)",
-      convertMoney: true,
-    },
-  ];
+  // const statisticsTransition = [
+  //   {
+  //     key: "top_up",
+  //     value: totalTopUp,
+  //     title: "Tổng giá trị NẠP",
+  //     description:
+  //       "Là tổng giá trị mà hệ thống ghi nhận CTV đã nạp thành công vào hệ thống (trong ngày)",
+  //     convertMoney: true,
+  //   },
+  //   {
+  //     key: "withdraw",
+  //     value: totalWithdraw,
+  //     title: "Tổng giá trị RÚT",
+  //     description:
+  //       "Là tổng giá trị mà hệ thống ghi nhận CTV đã rút tiền ra khỏi hệ thống thành công (trong ngày)",
+  //     convertMoney: true,
+  //   },
+  //   {
+  //     key: "reward",
+  //     value: totalReward,
+  //     title: "Tổng giá trị THƯỞNG",
+  //     description:
+  //       "Là tổng giá trị mà hệ thống (hoặc quản trị viên) đã thưởng cho CTV (trong ngày)",
+  //     convertMoney: true,
+  //   },
+  //   {
+  //     key: "punish",
+  //     value: totalPunish,
+  //     title: "Tổng giá trị PHẠT",
+  //     description:
+  //       "Là tổng giá trị mà hệ thống (hoặc quản trị viên) đã phạt CTV (trong ngày)",
+  //     convertMoney: true,
+  //   },
+  // ];
   // ---------------------------- action ------------------------------------ /
   const onChangeTab = (item) => {
     if (tab !== item.value) {
@@ -160,8 +160,9 @@ const TransferCollaborator = () => {
       type_transfer: "top_up",
       money: value.money,
       id_collaborator: value?.id,
-      type_wallet: value?.wallet,
+      payment_out: "bank",
       subject: "collaborator",
+      payment_in: value?.wallet,
     });
   };
   const handleWithdraw = (value) => {
@@ -170,7 +171,8 @@ const TransferCollaborator = () => {
       type_transfer: "withdraw",
       money: value.money,
       id_collaborator: value.id,
-      type_wallet: value.wallet,
+      payment_in: "bank",
+      payment_out: value.wallet,
       subject: "collaborator",
     });
   };
@@ -299,7 +301,7 @@ const TransferCollaborator = () => {
   return (
     <div className="transfer-collaborator_container">
       <h5>Sổ quỹ CTV</h5>
-      <div className="transfer-collaborator_total">
+      {/* <div className="transfer-collaborator_total">
         {statisticsTransition.map((item, index) => {
           return (
             <ItemTotal
@@ -311,7 +313,7 @@ const TransferCollaborator = () => {
             />
           );
         })}
-      </div>
+      </div> */}
       <div className="transfer-collaborator_search">
         <div className="transfer-collaborator_transaction">
           <TransactionDrawer
@@ -464,8 +466,8 @@ const columns = [
   },
   {
     title: "Loại giao dịch",
-    dataIndex: "method_transfer",
-    key: "method_transfer",
+    dataIndex: "type_transfer",
+    key: "type_transfer",
     width: 50,
     fontSize: "text-size-M",
   },

@@ -18,13 +18,13 @@ export const createPunishTicketApi = (data) => {
   );
 };
 
-export const getDetailPunishTicket = (idPunishTicket) => {
+export const getDetailPunishTicketApi = (idPunishTicket) => {
   return axiosClient.get(
     `/admin/punish_ticket_manage/get_item_by_id/${idPunishTicket}?lang=vi`
   );
 };
 
-export const getActivityHistoryPunishTicket = (
+export const getActivityHistoryPunishTicketApi = (
   start = 0,
   length = 20,
   idPunishTicket
@@ -34,8 +34,19 @@ export const getActivityHistoryPunishTicket = (
   );
 };
 
-export const getTotalPunishTicket = (query) => {
+export const getTotalPunishTicketApi = (query) => {
   return axiosClient.get(
     `/admin/punish_ticket_manage/get_total_punish_ticket?lang=vi${query}`
+  );
+};
+export const verifyPunishTicketApi = (idPunishTicket) => {
+  return axiosClient.post(
+    `/admin/punish_ticket_manage/verify_item/${idPunishTicket}?lang=vi`
+  );
+};
+
+export const cancelPunishTicketApi = (idPunishTicket) => {
+  return axiosClient.post(
+    `/admin/punish_ticket_manage/cancel_item/${idPunishTicket}?lang=vi`
   );
 };

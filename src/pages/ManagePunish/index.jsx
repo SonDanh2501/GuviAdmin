@@ -4,16 +4,18 @@ import DataTable from "../../components/tables/dataTable";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import { Button, Dropdown, Input, Pagination, Popover, Space } from "antd";
 import {
+  cancelPunishTicketApi,
   createPunishTicketApi,
   getListPunishTicketApi,
-  getTotalPunishTicket,
+  getTotalPunishTicketApi,
+  verifyPunishTicketApi,
 } from "../../api/punish";
 import _debounce from "lodash/debounce";
 import { SearchOutlined } from "@ant-design/icons";
 import TransactionDrawer from "../../components/transactionDrawer";
 import PunishDrawer from "../../components/punishDrawer";
 import dayjs from "dayjs";
-import { successNotify } from "../../helper/toast";
+import { errorNotify, successNotify } from "../../helper/toast";
 import ActivityHistory from "../../components/activityHistory";
 import { Link } from "react-router-dom";
 import CommonFilter from "../../components/commonFilter";
@@ -90,8 +92,6 @@ const ManagePunish = () => {
   const getList = () => {
     getListPunishTicketApi(startPage, LENGTH_ITEM, currentTab.value, query)
       .then((res) => {
-        console.log("ré ", res);
-
         setData(res?.data);
         setTotal(res?.totalItem);
       })
@@ -100,7 +100,7 @@ const ManagePunish = () => {
       });
   };
   const getTotal = () => {
-    getTotalPunishTicket(query)
+    getTotalPunishTicketApi(query)
       .then((res) => {
         const temp_arr = [];
         for (let i of Object.values(res)) {
@@ -113,13 +113,17 @@ const ManagePunish = () => {
       });
   };
   const createPunishTicket = (value) => {
+    let id_order;
+    if (value?.id_order && id_order !== "") {
+      id_order = value.id_order;
+    }
     const payload = {
       id_collaborator: value?.id_collaborator,
       id_punish_policy: value?.id_punish_policy,
       date_start_lock_time: value?.start_date,
       user_apply: "collaborator",
       note_admin: value?.note,
-      id_order: value?.id_order,
+      id_order: id_order,
     };
     createPunishTicketApi(payload)
       .then((res) => {
@@ -137,10 +141,36 @@ const ManagePunish = () => {
   };
   const handleCancelPunishTicket = () => {
     console.log("vé này sẽ bị huỷ ", item);
+    cancelPunishTicketApi(item?._id)
+      .then(() => {
+        getList();
+        getTotal();
+        successNotify({
+          message: "Huỷ vé phạt thành công",
+        });
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+      });
     setOpenModalCancel(false);
   };
   const handleVerify = () => {
-    console.log("vé này sẽ bị huỷ ", item);
+    console.log("vé này sẽ được duyệt ", item);
+    verifyPunishTicketApi(item?._id)
+      .then(() => {
+        getList();
+        getTotal();
+        successNotify({
+          message: "Duyệt vé phạt thành công",
+        });
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+      });
     setOpenModalChangeStatus(false);
   };
   // --------------------------- xử lý useEffect ------------------------------------- //
@@ -297,8 +327,8 @@ const columns = [
   },
   {
     title: "Ngày hoàn thành",
-    dataIndex: "date_done",
-    key: "date_verify",
+    dataIndex: "time_end",
+    key: "time_end",
     width: 50,
     fontSize: "text-size-M",
   },
@@ -318,28 +348,22 @@ const columns = [
 ];
 
 const dataFilter = [
-  // {
-  //   key: "status",
-  //   label: "Trạng thái",
-  //   data: [
-  //     { key: "0", value: "", label: "Tất cả" },
-  //     { key: "1", value: "stanby", label: "Chờ duyệt" },
-  //     { key: "2", value: "waiting", label: "Đang xử lý" },
-  //     { key: "3", value: "processing", label: "Đang xét duyệt" },
-  //     { key: "4", value: "doing", label: "Đang thực thi" },
-  //     { key: "5", value: "done", label: "Hoàn thành" },
-  //     { key: "6", value: "cancel", label: "Đã huỷ" },
-  //     { key: "7", value: "revoke", label: "Đã thu hồi" },
-  //   ],
-  // },
   {
-    key: "payment_out",
-    label: "Loại ví phạt",
+    key: "user_apply",
+    label: "Đối tượng phạt",
     data: [
       { key: "0", value: "", label: "Tất cả" },
-      { key: "1", value: "collaborator_wallet", label: "Ví CTV" },
-      { key: "2", value: "work_wallet", label: "Ví công việc" },
-      { key: "3", value: "pay_point", label: "Pay Point" },
+      { key: "1", value: "collaborator", label: "Cộng tác viên" },
+      { key: "2", value: "customer", label: "Khách hàng" },
+    ],
+  },
+  {
+    key: "created_by",
+    label: "Đối tượng tạo",
+    data: [
+      { key: "0", value: "", label: "Tất cả" },
+      { key: "1", value: "system", label: "Hệ thống" },
+      { key: "2", value: "admin_action", label: "Quản trị viên" },
     ],
   },
 ];

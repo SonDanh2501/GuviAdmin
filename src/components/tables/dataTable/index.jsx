@@ -932,24 +932,33 @@ const DataTable = (props) => {
             );
             break;
           }
-          case "method_transfer": {
+          case "type_transfer": {
+            let type_transfer = "Nạp";
+            switch (data?.type_transfer) {
+              case "other":
+                type_transfer = "Khác";
+                break;
+              case "withdraw":
+                type_transfer = "Rút";
+                break;
+              case "refund_service":
+                type_transfer = "Hoàn tiền đơn hàng";
+                break;
+              case "reward":
+                type_transfer = "Thưởng";
+                break;
+              case "punish":
+                type_transfer = "Phạt";
+                break;
+              case "payment_service":
+                type_transfer = "Thanh toán đơn hàng";
+                break;
+              default:
+                break;
+            }
             return (
               <div className="div-date-create">
-                {data?.type_transfer === "top_up" ? (
-                  <div className="div-money-withdraw-topup">
-                    <i class="uil uil-money-insert icon-topup"></i>
-                    <p className="text-topup">{`${i18n.t("topup", {
-                      lng: lang,
-                    })}`}</p>
-                  </div>
-                ) : (
-                  <div className="div-money-withdraw-topup">
-                    <i class="uil uil-money-withdraw icon-withdraw"></i>
-                    <p className="text-withdraw">
-                      {`${i18n.t("withdraw", { lng: lang })}`}
-                    </p>
-                  </div>
-                )}
+                <p>{type_transfer}</p>
               </div>
             );
           }
@@ -1073,6 +1082,22 @@ const DataTable = (props) => {
                 {data?.date_verify && (
                   <p className={`${item?.fontSize}`}>
                     {moment(new Date(data?.date_verify)).format("HH:mm")}
+                  </p>
+                )}
+              </div>
+            );
+            break;
+          case "time_end":
+            return (
+              <div className="div-date-create">
+                {data?.time_end && (
+                  <p className={`${item?.fontSize}`}>
+                    {moment(new Date(data?.time_end)).format("DD/MM/YYYY")}
+                  </p>
+                )}
+                {data?.time_end && (
+                  <p className={`${item?.fontSize}`}>
+                    {moment(new Date(data?.time_end)).format("HH:mm")}
                   </p>
                 )}
               </div>
