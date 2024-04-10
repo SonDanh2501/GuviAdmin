@@ -24,13 +24,9 @@ export const getDetailPunishTicketApi = (idPunishTicket) => {
   );
 };
 
-export const getActivityHistoryPunishTicketApi = (
-  start = 0,
-  length = 20,
-  idPunishTicket
-) => {
+export const getActivityHistoryPunishTicketApi = (idPunishTicket) => {
   return axiosClient.get(
-    `/admin/punish_ticket_manage/get_item_by_id/${idPunishTicket}?lang=vi`
+    `/admin/punish_ticket_manage/get_activity_history_punish_ticket/${idPunishTicket}?lang=vi`
   );
 };
 

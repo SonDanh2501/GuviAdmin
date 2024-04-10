@@ -7,6 +7,16 @@
       font-weight: 500;
       color: var(--selected-color);
     }
+    .body {
+      margin-top: 0.3rem;
+      color: var(--text-color);
+    }
+    i {
+      font-size: 12px;
+    }
+    p {
+      font-weight: 400;
+    }
   }
   .item-vertical-line {
     margin-left: 1rem;

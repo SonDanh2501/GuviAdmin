@@ -1,5 +1,8 @@
 import { Link, useParams } from "react-router-dom";
-import { getDetailPunishTicketApi } from "../../api/punish";
+import {
+  getActivityHistoryPunishTicketApi,
+  getDetailPunishTicketApi,
+} from "../../api/punish";
 import { useEffect, useState } from "react";
 import ActivityHistory from "../../components/activityHistory";
 import { format } from "date-fns";
@@ -14,10 +17,10 @@ const PunishDetail = () => {
   const [infoTicket, setInfoTicket] = useState();
   const [returnFilter, setReturnFilter] = useState();
   const [modalRevoke, setModalRevoke] = useState(false);
-
+  const [data, setData] = useState([]);
   // ---------------------------- xử lý action ------------------------------------ //
-  const getDetail = (idPunishTicket) => {
-    getDetailPunishTicketApi(idPunishTicket)
+  const getDetail = () => {
+    getDetailPunishTicketApi(id)
       .then((ticket) => {
         const _created_by = ticket?.id_admin_action?.full_name
           ? ticket?.id_admin_action?.full_name
@@ -96,11 +99,21 @@ const PunishDetail = () => {
         console.log("err detail punish ticket ", err);
       });
   };
-  const getActivityHistory = () => {};
+  const getActivityHistory = () => {
+    getActivityHistoryPunishTicketApi(id)
+      .then((res) => {
+        // console.log("resss ", res);
+        setData(res?.data);
+      })
+      .catch((err) => {
+        console.log("err ", err);
+      });
+  };
   const handleRevoke = () => {};
   // ---------------------------- xử lý use effect ------------------------------------ //
   useEffect(() => {
-    getDetail(id);
+    getDetail();
+    getActivityHistory();
   }, []);
   const linkSubject = `/details-collaborator/${infoTicket?.id_collaborator}`;
   const linkTransaction = `/transaction-detail/${infoTicket?.id_transaction}`;
@@ -179,19 +192,20 @@ const PunishDetail = () => {
               <p id="color-selected">{infoTicket?.id_view_order}</p>
             </div>
           )}
+          <Button
+            className="button-revoke"
+            type="primary"
+            danger
+            onClick={() => setModalRevoke(true)}
+          >
+            Thu hồi vé phạt
+          </Button>
         </div>
         <div className="activity-history">
-          <ActivityHistory data={[]} />
+          <ActivityHistory data={data} />
         </div>
       </div>
-      <Button
-        className="button-revoke"
-        type="primary"
-        danger
-        onClick={() => setModalRevoke(true)}
-      >
-        Thu hồi vé phạt
-      </Button>
+
       <div>
         <ModalCustom
           isOpen={modalRevoke}
