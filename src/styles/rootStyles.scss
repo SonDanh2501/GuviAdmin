@@ -19,6 +19,7 @@
 @import "./pages/ManageTopUpWithdraw/drawer";
 @import "./pages/ManageTopUpWithdraw/transferStaff";
 @import "./pages/ManagePunish/managePunish";
+@import "./pages/ManagePunish/punishDetail";
 
 // Components
 
@@ -28,4 +29,4 @@
 @import "./components/commonFilter";
 @import "./components/itemTotal";
 @import "./components/filterTransfer";
-// @import "./components/drawerTransaction;
+@import "./components/activityHistory";

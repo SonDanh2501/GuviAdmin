@@ -12,9 +12,14 @@ export const getListTransactionApi = (
     `/admin/transaction_manager/get_list?lang=vi&start=${start}&length=${length}&type_transfer=${type_transfer}&kind_transfer=${kind_transfer}&search=${search}`
   );
 };
-export const getListTransactionV2Api = (start = 0, length = 20, query) => {
+export const getListTransactionV2Api = (
+  start = 0,
+  length = 20,
+  query,
+  search = ""
+) => {
   return axiosClient.get(
-    `/admin/transaction_manager/get_list?lang=vi&start=${start}&length=${length}&${query}`
+    `/admin/transaction_manager/get_list?lang=vi&start=${start}&length=${length}&search=${search}&${query}`
   );
 };
 /**
@@ -83,4 +88,22 @@ export const getTotalMoneyTransactionPaySourceApi = (key, _query) => {
   return axiosClient.get(
     `/admin/transaction_manager/get_total_money/${key}?lang=vi&${_query}`
   );
+};
+
+/**
+ *
+ * @param {*} id của transaction
+ * @returns
+ */
+export const getDetailTransactionApi = (id) => {
+  return axiosClient.get(`/admin/transaction_manager/detail_item/${id}`);
+};
+
+/**
+ *
+ * @param {*} id của transaction
+ * @returns
+ */
+export const getActivityHistoryTransactionApi = (id) => {
+  return axiosClient.get(`/admin/transaction_manager/detail_item/${id}`);
 };

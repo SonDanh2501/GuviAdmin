@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import _debounce from "lodash/debounce";
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import CommonFilter from "../../components/filter/commonFilter/CommonFilter";
 import FilterTransfer from "./components/TransferFIlter";
 import ModalCustom from "../../components/modalCustom";
 import i18n from "../../i18n";
@@ -112,48 +111,48 @@ const TransferCustomer = () => {
     ),
   };
   // ---------------------------- handle data ------------------------------------ //
-  const statisticsTransition = [
-    {
-      key: "top_up",
-      value: totalTopUp,
-      title: "Tổng giá trị NẠP",
-      description:
-        "Là tổng giá trị mà hệ thống ghi nhận KH đã nạp thành công vào hệ thống (trong ngày)",
-      convertMoney: true,
-    },
-    {
-      key: "withdraw",
-      value: totalWithdraw,
-      title: "Tổng giá trị RÚT",
-      description:
-        "Là tổng giá trị mà hệ thống ghi nhận KH đã rút tiền ra khỏi hệ thống thành công (trong ngày)",
-      convertMoney: true,
-    },
-    {
-      key: "momo",
-      value: totalMoMo,
-      title: "Tổng giá trị Nạp MoMo",
-      description:
-        "Là tổng giá trị mà hệ thống ghi nhận KH đã nạp thành công vào hệ thống bằng phương thức nạp tiền MoMo (trong ngày)",
-      convertMoney: true,
-    },
-    {
-      key: "vnpay",
-      value: totalVNPay,
-      title: "Tổng giá trị Nạp VNPAY",
-      description:
-        "Là tổng giá trị mà hệ thống ghi nhận KH đã nạp thành công vào hệ thống bằng phương thức nạp tiền VNPay (trong ngày)",
-      convertMoney: true,
-    },
-    {
-      key: "bank",
-      value: totalBank,
-      title: "Tổng giá trị Nạp VNPAY",
-      description:
-        "Là tổng giá trị mà hệ thống ghi nhận KH đã nạp thành công vào hệ thống bằng phương thức nạp tiền qua Ngân hàng (trong ngày)",
-      convertMoney: true,
-    },
-  ];
+  // const statisticsTransition = [
+  //   {
+  //     key: "top_up",
+  //     value: totalTopUp,
+  //     title: "Tổng giá trị NẠP",
+  //     description:
+  //       "Là tổng giá trị mà hệ thống ghi nhận KH đã nạp thành công vào hệ thống (trong ngày)",
+  //     convertMoney: true,
+  //   },
+  //   {
+  //     key: "withdraw",
+  //     value: totalWithdraw,
+  //     title: "Tổng giá trị RÚT",
+  //     description:
+  //       "Là tổng giá trị mà hệ thống ghi nhận KH đã rút tiền ra khỏi hệ thống thành công (trong ngày)",
+  //     convertMoney: true,
+  //   },
+  //   {
+  //     key: "momo",
+  //     value: totalMoMo,
+  //     title: "Tổng giá trị Nạp MoMo",
+  //     description:
+  //       "Là tổng giá trị mà hệ thống ghi nhận KH đã nạp thành công vào hệ thống bằng phương thức nạp tiền MoMo (trong ngày)",
+  //     convertMoney: true,
+  //   },
+  //   {
+  //     key: "vnpay",
+  //     value: totalVNPay,
+  //     title: "Tổng giá trị Nạp VNPAY",
+  //     description:
+  //       "Là tổng giá trị mà hệ thống ghi nhận KH đã nạp thành công vào hệ thống bằng phương thức nạp tiền VNPay (trong ngày)",
+  //     convertMoney: true,
+  //   },
+  //   {
+  //     key: "bank",
+  //     value: totalBank,
+  //     title: "Tổng giá trị Nạp VNPAY",
+  //     description:
+  //       "Là tổng giá trị mà hệ thống ghi nhận KH đã nạp thành công vào hệ thống bằng phương thức nạp tiền qua Ngân hàng (trong ngày)",
+  //     convertMoney: true,
+  //   },
+  // ];
   // ---------------------------- action ------------------------------------ /
   const onChangeTab = (item) => {
     if (tab !== item.value) {
@@ -325,7 +324,7 @@ const TransferCustomer = () => {
   return (
     <div className="transfer-collaborator_container">
       <h5>Sổ quỹ KH</h5>
-      <div className="transfer-collaborator_total">
+      {/* <div className="transfer-collaborator_total">
         {statisticsTransition.map((item, index) => {
           return (
             <ItemTotal
@@ -337,7 +336,7 @@ const TransferCustomer = () => {
             />
           );
         })}
-      </div>
+      </div> */}
       <div className="transfer-collaborator_search">
         <div className="transfer-collaborator_transaction">
           <TransactionDrawer
@@ -496,8 +495,8 @@ const columns = [
   // },
   {
     title: "Loại giao dịch",
-    dataIndex: "method_transfer",
-    key: "method_transfer",
+    dataIndex: "type_transfer",
+    key: "type_transfer",
     width: 50,
     fontSize: "text-size-M",
   },

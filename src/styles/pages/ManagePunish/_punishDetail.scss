@@ -1,0 +1,25 @@
+.punish-detail_container {
+  //   background-color: #e6e6e6;
+
+  p {
+    font-size: 12px;
+  }
+  .info-detail {
+    width: 500px;
+    // border: 1px solid;
+    @extend .box-common;
+    .item-detail {
+      @include gird(1fr 1fr);
+      margin-bottom: 0.3rem;
+    }
+  }
+  .activity-history {
+    margin-right: 2rem;
+  }
+  .button-revoke {
+    margin-top: 1rem;
+  }
+}
+.punish-detail_content {
+  @include flexbox(space-between);
+}

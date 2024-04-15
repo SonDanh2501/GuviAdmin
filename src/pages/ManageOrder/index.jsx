@@ -32,15 +32,12 @@ import i18n from "../../i18n";
 import { Link } from "react-router-dom";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import ModalCustom from "../../components/modalCustom";
-import { deleteOrderApi, getOrderApi } from "../../api/order";
+import { deleteOrderApi, getOrderApi, getTotalOrder } from "../../api/order";
 import { errorNotify } from "../../helper/toast";
 import useWindowDimensions from "../../helper/useWindowDimensions";
 import { useCookies } from "../../helper/useCookies";
 import Tabs from "../../components/tabs/tabs1";
-import FilterSelect from "../../components/filter/filterSelect";
 import "./index.scss";
-import CommonFilter from "../../components/filter/commonFilter/CommonFilter";
-import RangeDatePicker from "../../components/datePicker/RangeDatePicker";
 
 const ManageOrder = () => {
   const itemTab = [
@@ -111,9 +108,10 @@ const ManageOrder = () => {
   const [arrFilter, setArrFilter] = useState([]);
 
   const [detectLoading, setDetectLoading] = useState(null);
-
+  const [totalOrder, setTotalOrder] = useState([]);
   useEffect(() => {
     getJobList();
+    getTotal();
   }, [
     valueSearch,
     startPage,
@@ -127,14 +125,6 @@ const ManageOrder = () => {
     reCallData,
   ]);
 
-  // useEffect(() => {
-  //   const delayDebounceFn = setTimeout(() => {
-  //     console.log(valueSearch, 'valueSearchvalueSearch');
-  //   }, 3000)
-
-  //   return () => clearTimeout(delayDebounceFn)
-  // }, [valueSearch])
-
   const handleSearch = useCallback(
     _debounce((value) => {
       // setIsLoading(true);
@@ -144,32 +134,6 @@ const ManageOrder = () => {
     }, 1000),
     []
   );
-
-  // const onChange = (page) => {
-  //   setCurrentPage(page);
-  //   // saveToCookie("page_order", page);
-  //   const dataLength = data.length < 20 ? 20 : data.length;
-  //   const start = page * dataLength - dataLength;
-  //   setStartPage(start);
-  //   // saveToCookie("start_order", start);
-  //   getOrderApi(
-  //     valueSearch,
-  //     start,
-  //     20,
-  //     tab,
-  //     kind,
-  //     type,
-  //     startDate,
-  //     endDate,
-  //     city,
-  //     ""
-  //   )
-  //     .then((res) => {
-  //       setData(res?.data);
-  //       setTotal(res?.totalItem);
-  //     })
-  //     .catch((err) => {});
-  // };
 
   const getJobList = () => {
     getOrderApi(
@@ -458,166 +422,19 @@ const ManageOrder = () => {
     }
   });
 
-  const handleFilterByCondition = () => {
-    setIsLoading(true);
-    setCheckCondition(false);
-    saveToCookie("district_order", district);
-    saveToCookie(
-      "start_date_order",
-      condition === "date_create" || condition === "date_work" ? startDate : ""
-    );
-    saveToCookie(
-      "end_date_order",
-      condition === "date_create" || condition === "date_work" ? endDate : ""
-    );
-    saveToCookie("name_filter", name);
-    saveToCookie("kind_order", kind);
-    saveToCookie("city_order", city);
-
-    getOrderApi(
-      valueSearch,
-      startPage,
-      20,
-      tab,
-      kind,
-      type,
-      startDate,
-      endDate,
-      city,
-      district
-    )
+  const getTotal = () => {
+    getTotalOrder()
       .then((res) => {
-        setIsLoading(false);
-        setData(res?.data);
-        setTotal(res?.totalItem);
+        const temp_arr = [];
+        for (let i of Object.values(res)) {
+          temp_arr.push({ value: i });
+        }
+        setTotalOrder(temp_arr);
       })
-      .catch((err) => {
-        setIsLoading(false);
-        errorNotify({
-          message: err?.message,
-        });
+      .then((err) => {
+        console.log("err ", err);
       });
   };
-
-  const itemFilter = [
-    {
-      header: "Dịch vụ",
-      data: optionsService,
-      setForField: "id_service",
-      type: "select_data_single",
-    },
-    // {
-    //   header: "title 1",
-    //   data: [
-    //       {
-    //           label: "haha 1",
-    //           value: 1
-    //       },
-    //       {
-    //           label: "haha 2",
-    //           value: 2
-    //       }
-    //   ],
-    //   setForField: "status",
-    //   type: "select_data_single"
-    // },
-  ];
-
-  //   <div className="div-filter">
-  //   <div className="header-filter">
-  //     <Button
-  //       type="primary"
-  //       style={{
-  //         alignItems: "center",
-  //         justifyContent: "center",
-  //         display: "flex",
-  //       }}
-  //       onClick={() => setCheckCondition(!checkCondition)}
-  //     >
-  //       Bộ lọc
-  //     </Button>
-
-  //   </div>
-  //   {checkCondition && (
-  //     <div className="filter-container">
-  //       <div className="item-select">
-  //         <span>Dịch vụ</span>
-  //         <Select
-  //           style={{ width: "100%", marginRight: 10 }}
-  //           options={optionsService}
-  //           value={kind}
-  //           onChange={(e, item) => {
-  //             setKind(e);
-  //             setName(item?.label);
-  //             setArrFilter({ key: "service", value: item.value, label: item.label })
-  //           }}
-  //         />
-  //       </div>
-  //       {/* <div className="item-select">
-  //         <span>Ngày tạo</span>
-  //         <RangePicker
-  //           onChange={(date, dateString) => {
-  //             setStartDate(moment(dateString[0]).toISOString());
-  //             setEndDate(moment(dateString[1]).toISOString());
-  //           }}
-  //         />
-  //       </div>
-
-  //       <div className="item-select">
-  //         <span>Ngày tạo</span>
-  //         <RangePicker
-  //           onChange={(date, dateString) => {
-  //             setStartDate(moment(dateString[0]).toISOString());
-  //             setEndDate(moment(dateString[1]).toISOString());
-  //           }}
-  //         />
-  //       </div> */}
-
-  //       <div className="item-select">
-  //         <span>Tỉnh/Thành phố</span>
-  //         <Select
-  //           style={{ width: "100%", marginRight: 10 }}
-  //           options={cityOptions}
-  //           value={city}
-  //           onChange={(e, item) => {
-  //             setCity(e);
-  //             setDataDistrict(item?.district);
-  //             setName(item?.label);
-  //           }}
-  //           showSearch
-  //           filterOption={(input, option) =>
-  //             (option?.label ?? "").includes(input)
-  //           }
-  //           filterSort={(optionA, optionB) =>
-  //             (optionA?.label ?? "")
-  //               .toLowerCase()
-  //               .localeCompare((optionB?.label ?? "").toLowerCase())
-  //           }
-  //         />
-  //       </div>
-  //       <div className="item-select">
-  //         <span>Quận/Huyện</span>
-  //         <Select
-  //           placeholde="Chọn quận/huyện"
-  //           style={{ width: "100%", marginRight: 10, marginTop: 10 }}
-  //           mode="multiple"
-  //           options={districtOption}
-  //           value={district}
-  //           onChange={(e, item) => {
-  //             setDistrict(e);
-  //           }}
-  //           showSearch
-  //           filterOption={(input, option) =>
-  //             (option?.label ?? "").includes(input)
-  //           }
-  //         />
-  //       </div>
-  //     </div>
-  //   )}
-  // </div>
-
-  const test = "";
-
   return (
     <div className="div-container-content">
       <div className="div-flex-row">
@@ -642,7 +459,11 @@ const ManageOrder = () => {
         </div>
       </div>
       <div className="div-flex-row">
-        <Tabs itemTab={itemTab} onValueChangeTab={onChangeTab} />
+        <Tabs
+          itemTab={itemTab}
+          onValueChangeTab={onChangeTab}
+          dataTotal={totalOrder}
+        />
       </div>
 
       <div className="div-flex-row">
@@ -755,7 +576,6 @@ const ManageOrder = () => {
           />
         </div>
       </div>
-      {/* <CommonFilter /> */}
       <div>
         <DataTable
           columns={columns}

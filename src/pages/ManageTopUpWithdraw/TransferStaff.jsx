@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import _debounce from "lodash/debounce";
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import CommonFilter from "../../components/filter/commonFilter/CommonFilter";
 import FilterTransfer from "./components/TransferFIlter";
 import ModalCustom from "../../components/modalCustom";
 import i18n from "../../i18n";
@@ -106,22 +105,22 @@ const TransferStaff = () => {
     ),
   };
   // ---------------------------- handle data ------------------------------------ //
-  const statisticsTransition = [
-    {
-      key: "top_up",
-      value: totalTopUp,
-      title: "Tổng giá trị THU",
-      description: "Là tổng giá trị mà hệ thống ghi nhận ...",
-      convertMoney: true,
-    },
-    {
-      key: "withdraw",
-      value: totalWithdraw,
-      title: "Tổng giá trị CHI",
-      description: "Là tổng giá trị mà hệ thống ghi nhận ...",
-      convertMoney: true,
-    },
-  ];
+  // const statisticsTransition = [
+  //   {
+  //     key: "top_up",
+  //     value: totalTopUp,
+  //     title: "Tổng giá trị THU",
+  //     description: "Là tổng giá trị mà hệ thống ghi nhận ...",
+  //     convertMoney: true,
+  //   },
+  //   {
+  //     key: "withdraw",
+  //     value: totalWithdraw,
+  //     title: "Tổng giá trị CHI",
+  //     description: "Là tổng giá trị mà hệ thống ghi nhận ...",
+  //     convertMoney: true,
+  //   },
+  // ];
   // ---------------------------- action ------------------------------------ /
   const onChangeTab = (item) => {
     if (tab !== item.value) {
@@ -278,7 +277,7 @@ const TransferStaff = () => {
   return (
     <div className="transfer-collaborator_container">
       <h5>Phiếu thu chi nhân viên</h5>
-      <div className="transfer-collaborator_total">
+      {/* <div className="transfer-collaborator_total">
         {statisticsTransition.map((item, index) => {
           return (
             <ItemTotal
@@ -290,7 +289,7 @@ const TransferStaff = () => {
             />
           );
         })}
-      </div>
+      </div> */}
       <div className="transfer-collaborator_search">
         <div className="transfer-collaborator_transaction">
           <TransactionDrawer
