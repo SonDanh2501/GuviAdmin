@@ -47,7 +47,7 @@ const TransactionDrawer = (props) => {
   // ---------------------------- xử lý data ------------------------------------//
   const titleInput =
     subject === "collaborator"
-      ? "collaborator"
+      ? "Cộng tác viên"
       : subject === "customer"
       ? "Khách hàng"
       : "Nhân viên";

@@ -162,6 +162,16 @@ const DataTable = (props) => {
               </Link>
             );
             break;
+          case "code_transaction":
+            linkRedirect = `/transaction/transaction-detail/${data?._id}`;
+            return (
+              <Link to={linkRedirect} target="_blank">
+                <p className={`text-id-code-order ${item?.fontSize}`}>
+                  {data?.id_view}
+                </p>
+              </Link>
+            );
+            break;
           case "code_customer":
             linkRedirect = checkElement?.includes("detail_customer")
               ? `/profile-customer/${data?._id}`

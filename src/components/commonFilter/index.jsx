@@ -7,8 +7,10 @@ import moment from "moment";
 const CommonFilter = (props) => {
   const { data, setReturnFilter, setDate } = props;
   const [selected, setSelected] = useState([]);
-  const [startDate, setStartDate] = useState("2023-02-12T17:00:00.000Z");
-  const [endDate, setEndDate] = useState("2023-02-12T17:00:00.000Z");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  // const [startDate, setStartDate] = useState("2023-02-12T17:00:00.000Z");
+  // const [endDate, setEndDate] = useState("2023-02-12T17:00:00.000Z");
   useEffect(() => {
     const tempArr = [];
     data.map((item) => {
