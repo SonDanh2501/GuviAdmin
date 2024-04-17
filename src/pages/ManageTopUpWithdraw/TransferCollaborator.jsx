@@ -1,7 +1,6 @@
 import { InfoCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import { formatMoney } from "../../helper/formatMoney";
 import { Button, Dropdown, Input, Pagination, Popover, Space } from "antd";
-import ItemTotal from "./components/ItemTotal";
 import Tabs from "../../components/tabs/tabs1";
 import { useCallback, useEffect, useState } from "react";
 import DataTable from "../../components/tables/dataTable";
@@ -10,10 +9,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import _debounce from "lodash/debounce";
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import FilterTransfer from "./components/TransferFIlter";
 import ModalCustom from "../../components/modalCustom";
-import i18n from "../../i18n";
-import AddTopup from "../../components/addTopup/addTopup";
 import TransactionDrawer from "../../components/transactionDrawer";
 import {
   cancelTransactionApi,
@@ -25,7 +21,6 @@ import {
 } from "../../api/transaction";
 import { LENGTH_ITEM } from "../../constants";
 import { errorNotify, successNotify } from "../../helper/toast";
-import { endOfDay, startOfDay } from "date-fns";
 import CommonFilter from "../../components/commonFilter";
 const TransferCollaborator = () => {
   const [tab, setTab] = useState(itemTabStatus[0].value);
@@ -44,7 +39,6 @@ const TransferCollaborator = () => {
     end_date: "",
   });
   // ---------------------------- xử lý data ------------------------------------ //
-  console.log("selected date: ", selectedDate);
   let items = [
     {
       key: "1",
@@ -65,7 +59,7 @@ const TransferCollaborator = () => {
   let query =
     returnFilter.map((item) => `&${item.key}=${item.value}`).join("") +
     queryDate +
-    `status=${tab}`;
+    `status=${tab}&subject=collaborator`;
   items = items.filter((x) => x.label !== false);
   const addActionColumn = {
     i18n_title: "",
@@ -118,7 +112,6 @@ const TransferCollaborator = () => {
   };
 
   const createTransaction = (data) => {
-    console.log("data ", data);
     createTransactionApi(data)
       .then((res) => {
         getList();
@@ -140,9 +133,12 @@ const TransferCollaborator = () => {
         successNotify({
           message: "Huỷ lệnh giao dịch thành công",
         });
+        getList();
       })
       .catch((err) => {
-        console.log("err ", err);
+        errorNotify({
+          message: "Huỷ lệnh giao dịch thất bại \n" + err?.message,
+        });
       });
     setOpenModalCancel(false);
   };
@@ -152,9 +148,13 @@ const TransferCollaborator = () => {
         successNotify({
           message: "Duyệt lệnh thành công",
         });
+        getList();
       })
+
       .catch((err) => {
-        console.log("err ", err);
+        errorNotify({
+          message: "Duyệt lệnh giao dịch thất bại \n" + err?.message,
+        });
       });
     setOpenModalChangeStatus(false);
   };
@@ -175,19 +175,8 @@ const TransferCollaborator = () => {
         console.log("err ", err);
       });
   };
-  // const getTotalMoney = (key, _tempQueryTotal, _setValue) => {
-  //   let result;
-  //   getTotalMoneyTransactionApi(key, _tempQueryTotal)
-  //     .then((res) => {
-  //       _setValue(res?.total);
-  //     })
-  //     .catch((err) => {
-  //       console.log("err ", err);
-  //     });
-  //   return result;
-  // };
   const getTotal = () => {
-    getTotalTransactionApi(query)
+    getTotalTransactionApi(query, valueSearch)
       .then((res) => {
         const temp_arr = [];
         for (let i of Object.values(res)) {
@@ -222,11 +211,7 @@ const TransferCollaborator = () => {
           );
         })}
       </div> */}
-      <Tabs
-        itemTab={itemTabStatus}
-        onValueChangeTab={onChangeTab}
-        dataTotal={totalTransaction}
-      />
+
       <div className="transfer-collaborator_search">
         <div className="transfer-collaborator_transaction">
           <TransactionDrawer
@@ -254,6 +239,11 @@ const TransferCollaborator = () => {
         <Button type="primary">Tìm kiếm</Button>
       </div>
       <div className="transfer-collaborator_header">
+        <Tabs
+          itemTab={itemTabStatus}
+          onValueChangeTab={onChangeTab}
+          dataTotal={totalTransaction}
+        />
         <CommonFilter
           data={dataFilter}
           setReturnFilter={setReturnFilter}
@@ -480,53 +470,18 @@ const dataFilter = [
       { key: "4", value: "viettel_money", label: "Viettel Money" },
     ],
   },
-  {
-    key: "payment_in",
-    label: "Ví",
-    data: [
-      { key: "0", value: "", label: "Tất cả" },
-      { key: "1", value: "collaborator_wallet", label: "Ví cộng tác viên" },
-      { key: "2", value: "work_wallet", label: "Ví công việc" },
-    ],
-  },
-  {
-    key: "subject",
-    label: "Đối tượng",
-    data: [{ key: "0", value: "", label: "Cộng tác viên" }],
-  },
+  // {
+  //   key: "payment_in",
+  //   label: "Ví",
+  //   data: [
+  //     { key: "0", value: "", label: "Tất cả" },
+  //     { key: "1", value: "collaborator_wallet", label: "Ví cộng tác viên" },
+  //     { key: "2", value: "work_wallet", label: "Ví công việc" },
+  //   ],
+  // },
+  // {
+  //   key: "subject",
+  //   label: "Đối tượng",
+  //   data: [{ key: "0", value: "collaborator", label: "Cộng tác viên" }],
+  // },
 ];
-
-// const statisticsTransition = [
-//   {
-//     key: "top_up",
-//     value: totalTopUp,
-//     title: "Tổng giá trị NẠP",
-//     description:
-//       "Là tổng giá trị mà hệ thống ghi nhận CTV đã nạp thành công vào hệ thống (trong ngày)",
-//     convertMoney: true,
-//   },
-//   {
-//     key: "withdraw",
-//     value: totalWithdraw,
-//     title: "Tổng giá trị RÚT",
-//     description:
-//       "Là tổng giá trị mà hệ thống ghi nhận CTV đã rút tiền ra khỏi hệ thống thành công (trong ngày)",
-//     convertMoney: true,
-//   },
-//   {
-//     key: "reward",
-//     value: totalReward,
-//     title: "Tổng giá trị THƯỞNG",
-//     description:
-//       "Là tổng giá trị mà hệ thống (hoặc quản trị viên) đã thưởng cho CTV (trong ngày)",
-//     convertMoney: true,
-//   },
-//   {
-//     key: "punish",
-//     value: totalPunish,
-//     title: "Tổng giá trị PHẠT",
-//     description:
-//       "Là tổng giá trị mà hệ thống (hoặc quản trị viên) đã phạt CTV (trong ngày)",
-//     convertMoney: true,
-//   },
-// ];

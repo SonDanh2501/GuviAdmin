@@ -11,105 +11,193 @@ import CommonFilter from "../../components/commonFilter";
 import { Button } from "antd";
 import ModalCustom from "../../components/modalCustom";
 import {
+  cancelTransactionApi,
   getActivityHistoryTransactionApi,
   getDetailTransactionApi,
+  verifyTransactionApi,
 } from "../../api/transaction";
 
 const TransferDetail = () => {
   const params = useParams();
   const id = params?.id;
-  const [infoTicket, setInfoTicket] = useState();
-  const [returnFilter, setReturnFilter] = useState();
-  const [modalRevoke, setModalRevoke] = useState(false);
+  const [transactionDetail, setTransactionDetail] = useState();
+  const [modalVerify, setModalVerify] = useState(false);
+  const [modalCancel, setModalCancel] = useState(false);
   const [data, setData] = useState([]);
+  const [disableVerify, setDisableVerify] = useState(false);
+  const [disableCancel, setDisableCancel] = useState(false);
   // ---------------------------- xử lý action ------------------------------------ //
   const getDetail = () => {
     getDetailTransactionApi(id)
       .then((transaction) => {
-        console.log("transaction", transaction);
-        const _created_by = transaction?.id_admin_action?.full_name
-          ? transaction?.id_admin_action?.full_name
-          : "Hệ thống";
-        let _status = "Đang xử lý";
-        if (transaction?.status === "doing") {
-          _status = "Đang thực thi";
-        } else if (transaction?.status === "done") {
-          _status = "Hoàn thành";
-        } else if (transaction?.status === "revoke") {
-          _status = "Đã thu hồi";
-        } else if (transaction?.status === "cancel") {
-          _status = "Đã huỷ";
+        const {
+          id_admin_action,
+          id_admin_verify,
+          id_punish_ticket,
+          id_collaborator,
+          id_customer,
+          date_create,
+          status,
+          id_order,
+          type_transfer,
+          payment_out,
+          payment_in,
+        } = transaction;
+        let _create_by = "Hệ thống";
+        if (id_admin_action) {
+          _create_by = id_admin_action?.full_name + " (quản trị viên)";
+        } else if (id_punish_ticket) {
+        } else if (!id_punish_ticket && id_collaborator) {
+          _create_by = +id_collaborator?.full_name + " (CTV)";
+        } else if (!id_punish_ticket && id_customer) {
+          _create_by = +id_customer?.full_name + " (KH)";
         }
-        let _type_action_punish = "Phạt tiền";
-        if (transaction?.action_lock === "lock_create_order") {
-          _type_action_punish = "Khoá tạo đơn";
-        } else if (transaction?.action_lock === "lock_pending_to_confirm") {
-          _type_action_punish = "Khoá xác nhận đơn";
-        } else if (transaction?.action_lock === "lock_login") {
-          _type_action_punish = "Khoá đăng nhập";
+        let _status = "Đang xử lý" + +"Đã thu hồi";
+        switch (status) {
+          case "pending":
+            _status = <span className="text-status-pending">Đang xử lý</span>;
+            break;
+          case "transferred":
+            _status = <span className="text-status-doing">Đã chuyển tiền</span>;
+            break;
+          case "done":
+            _status = <span className="text-status-done">Hoàn thành</span>;
+            break;
+          case "cancel":
+            _status = <span className="text-status-cancel">Đã Huỷ</span>;
+            break;
+          case "holding":
+            _status = <span className="text-status-doing">Tạm giữ</span>;
+            break;
+          default:
+            _status = <span className="text-status-pending">Đang xử lý</span>;
+            break;
         }
-        let _punish_source = "";
-        if (transaction?.type_wallet === "work_wallet") {
-          _punish_source = "Ví công việc";
-        } else if (transaction?.type_wallet === "collaborator_wallet") {
-          _punish_source = "Ví cộng tác viên";
-        } else if (transaction?.type_wallet === "pay_point") {
-          _punish_source = "Ví Pay-Point";
+        let _verify_by = "";
+        if (status === "done" && id_admin_verify) {
+          _verify_by = id_admin_verify?.full_name + " (quản trị viên)";
+        } else if (status === "done" && !id_admin_verify) {
+          _verify_by = "Hệ thống";
         }
-        let _user_apply = "Cộng tác viên";
-        if (transaction?.user_apply === "customer") {
-          _user_apply = "Khách hàng";
+        let _type_transfer = "Khác";
+        switch (type_transfer) {
+          case "top_up":
+            _type_transfer = "Nạp";
+            break;
+          case "withdraw":
+            _type_transfer = "Rút";
+            break;
+          case "reward":
+            _type_transfer = "Thưởng";
+            break;
+          case "punish":
+            _type_transfer = "Phạt";
+            break;
+          case "refurn_service":
+            _type_transfer = "Hoàn tiền dịch vụ";
+            break;
+          case "pay_service":
+            _type_transfer = "Mua dịch vụ";
+            break;
+          default:
+            break;
         }
-        let _full_name = "unknown";
-        let _phone = "***********";
-        let _id_view_user = "###########";
-        if (transaction?.user_apply === "customer") {
-          _full_name = transaction?.id_customer?.full_name;
-          _phone = transaction?.id_customer?.phone;
-          _id_view_user = transaction?.id_customer?.id_view;
-        } else if (transaction?.user_apply === "collaborator") {
-          _full_name = transaction?.id_collaborator?.full_name;
-          _phone = transaction?.id_collaborator?.phone;
-          _id_view_user = transaction?.id_collaborator?.id_view;
+        let _payment_source = "Chuyển khoản";
+        switch (payment_out) {
+          case "bank":
+            _payment_source = "Chuyển khoản";
+            break;
+          case "momo":
+            _payment_source = "Ví MoMo";
+            break;
+          case "vnpay":
+            _payment_source = "Ví VN Pay";
+            break;
+          case "viettel_money":
+            _payment_source = "Ví Viettel Money";
+            break;
+          case "pay_point":
+            _payment_source = "Pay Point";
+            break;
+          case "collaborator_wallet":
+            _payment_source = "Ví CTV";
+            break;
+          case "work_wallet":
+            _payment_source = "Ví công việc";
+            break;
+          case "other":
+            _payment_source = "Chuyển khoản";
+            break;
+          default:
+            break;
+        }
+        let _type_wallet = "Ví CTV";
+        switch (payment_in) {
+          case "bank":
+            _type_wallet = "Chuyển khoản";
+            break;
+          case "momo":
+            _type_wallet = "Ví MoMo";
+            break;
+          case "vnpay":
+            _type_wallet = "Ví VN Pay";
+            break;
+          case "viettel_money":
+            _type_wallet = "Ví Viettel Money";
+            break;
+          case "pay_point":
+            _type_wallet = "Pay Point";
+            break;
+          case "collaborator_wallet":
+            _type_wallet = "Ví CTV";
+            break;
+          case "work_wallet":
+            _type_wallet = "Ví công việc";
+            break;
+          case "other":
+            _type_wallet = "Chuyển khoản";
+            break;
+          default:
+            break;
         }
         const item = {
           id_view: transaction?.id_view,
-          date_create: format(
-            new Date(transaction?.date_create),
-            "dd/MM/yyyy  HH:mm"
-          ),
-          created_by: _created_by,
+          date_create: format(new Date(date_create), "dd/MM/yyyy  HH:mm"),
+          created_by: _create_by,
+          verify_by: _verify_by,
           status: _status,
-          id_view_policy: transaction?.id_policy?.id_view,
-          id_view_order: transaction?.id_order?.id_view,
-          id_view_transaction: transaction?.id_transaction?.id_view,
-          type_action_punish: _type_action_punish,
-          punish_source: _punish_source,
-          time_start: format(
-            new Date(transaction?.time_start),
-            "dd/MM/yyyy  HH:mm"
-          ),
-          time_end: format(
-            new Date(transaction?.time_end),
-            "dd/MM/yyyy  HH:mm"
-          ),
-          money: transaction?.punish_money,
-          user_apply: _user_apply,
-          full_name: _full_name,
-          phone: _phone,
-          id_view_user: _id_view_user,
-          punish_money:
-            transaction?.punish_money > 0
-              ? formatMoney(transaction?.punish_money)
-              : "--",
-          id_transaction: transaction?.id_transaction?._id,
-          id_collaborator: transaction?.id_collaborator?._id,
-          id_group_order: transaction?.id_order?.id_group_order,
+          user_apply: id_customer ? "Khách hàng" : "Cộng tác viên",
+          id_view_user: id_customer
+            ? id_customer?.id_view
+            : id_collaborator?.id_view,
+          id_customer: id_customer?._id,
+          id_collaborator: id_collaborator?._id,
+          full_name: id_customer?.full_name
+            ? id_customer.full_name
+            : id_collaborator?.full_name,
+          phone: id_customer?.phone
+            ? id_customer.phone
+            : id_collaborator?.phone,
+          money:
+            transaction?.money > 0 ? formatMoney(transaction?.money) : "--",
+          type_transfer: _type_transfer,
+          type_wallet: _type_wallet,
+          payment_source: _payment_source,
+          id_punish_ticket: transaction?.id_punish_ticket,
+          id_reward_ticket: transaction?.id_reward_ticket,
+          id_order: id_order,
         };
-        // setInfoTicket(item);
+        if (status === "cancel" || status === "done") {
+          setDisableCancel(true);
+          setDisableVerify(true);
+        } else {
+          setDisableCancel(false);
+          setDisableVerify(false);
+        }
+        setTransactionDetail(item);
       })
       .catch((err) => {
-        console.log("err detail punish ticket ", err);
+        console.log("err detail transaction ", err);
       });
   };
   const getActivityHistory = () => {
@@ -122,15 +210,45 @@ const TransferDetail = () => {
         console.log("err ", err);
       });
   };
-  const handleRevoke = () => {};
+  const handleCancel = () => {
+    cancelTransactionApi(id)
+      .then((res) => {
+        console.log("resss ", res);
+        setModalCancel(false);
+        getDetail();
+        getActivityHistory();
+      })
+      .catch((err) => {
+        console.log("err ", err);
+        setModalCancel(false);
+      });
+  };
+  const handleVerify = () => {
+    verifyTransactionApi(id)
+      .then((res) => {
+        console.log("resss ", res);
+        setModalVerify(false);
+        getDetail();
+        getActivityHistory();
+      })
+      .catch((err) => {
+        console.log("err ", err);
+        setModalVerify(false);
+      });
+  };
   // ---------------------------- xử lý use effect ------------------------------------ //
   useEffect(() => {
     getDetail();
     getActivityHistory();
   }, []);
-  const linkSubject = `/details-collaborator/${infoTicket?.id_collaborator}`;
-  const linkTransaction = `/transaction-detail/${infoTicket?.id_transaction}`;
-  const linkOrder = `/details-order/${infoTicket?.id_group_order}`;
+  const linkSubject = transactionDetail?.id_customer
+    ? `/profile-customer/${transactionDetail?.id_customer?._id}`
+    : `/details-collaborator/${transactionDetail?.id_collaborator?._id}`;
+  const linkTransaction = `/transaction-detail/${transactionDetail?.id_transaction}`;
+  const linkOrder = `/details-order/${transactionDetail?.id_group_order}`;
+  const linkPunishTicket = `/details-punish-ticket/${transactionDetail?.id_punish_ticket?._id}`;
+  const linkRewardTicket = `/details-reward-ticket/${transactionDetail?.id_reward_ticket?._id}`;
+  // console.log("link subject ", transactionDetail);
   return (
     <div className="punish-detail_container">
       <h5>Chi tiết lệnh giao dịch</h5>
@@ -138,81 +256,120 @@ const TransferDetail = () => {
         <div className="info-detail">
           <div className="item-detail">
             <p>Mã giao dịch:</p>
-            <p id="color-selected">{infoTicket?.id_view}</p>
+            <p id="color-selected">{transactionDetail?.id_view}</p>
           </div>
           <div className="item-detail">
             <p>Thời gian tạo:</p>
-            <p>{infoTicket?.date_create}</p>
+            <p>{transactionDetail?.date_create}</p>
           </div>
           <div className="item-detail">
             <p>Tạo bởi:</p>
-            <p>{infoTicket?.created_by}</p>
+            <p>{transactionDetail?.created_by}</p>
+          </div>
+          <div className="item-detail">
+            <p>Duyệt bởi:</p>
+
+            <p>{transactionDetail?.verify_by}</p>
           </div>
           <div className="item-detail">
             <p>Trạng thái:</p>
-            <p>{infoTicket?.status}</p>
+            {transactionDetail?.status && (
+              <div className="div-status-order">
+                {transactionDetail?.status}
+              </div>
+            )}
           </div>
           <div className="item-detail">
             <p>Đối tượng:</p>
-            <p>{infoTicket?.user_apply}</p>
+            <p>{transactionDetail?.user_apply}</p>
           </div>
           <Link to={linkSubject} target="_blank">
             <div className="item-detail">
               <p>Mã đối tượng:</p>
-              <p id="color-selected">{infoTicket?.id_view_user}</p>
+              <p id="color-selected">{transactionDetail?.id_view_user}</p>
             </div>
           </Link>
 
           <div className="item-detail">
             <p>Tên:</p>
-            <p id="color-selected"> {infoTicket?.full_name}</p>
+            <p id="color-selected"> {transactionDetail?.full_name}</p>
           </div>
           <div className="item-detail">
             <p>SĐT:</p>
-            <p>{infoTicket?.phone}</p>
+            <p>{transactionDetail?.phone}</p>
           </div>
           <div className="item-detail">
-            <p>Hình thức phạt:</p>
-            <p>{infoTicket?.type_action_punish}</p>
+            <p>Loại giao dịch:</p>
+            <p>{transactionDetail?.type_transfer}</p>
           </div>
+
+          {transactionDetail?.id_punish_ticket && (
+            <div className="item-detail">
+              <p>Mã lệnh phạt:</p>
+
+              <Link to={linkPunishTicket} target="_blank">
+                <p id="color-selected">
+                  {transactionDetail?.id_punish_ticket?.id_view}
+                </p>
+              </Link>
+            </div>
+          )}
+          {transactionDetail?.id_punish_ticket && (
+            <div className="item-detail">
+              <p>Mã lệnh thưởng:</p>
+
+              <Link to={linkRewardTicket} target="_blank">
+                <p id="color-selected">
+                  {transactionDetail?.id_reward_ticket?.id_view}
+                </p>
+              </Link>
+            </div>
+          )}
+
+          {transactionDetail?.id_order && (
+            <div className="item-detail">
+              <p>Mã đơn hàng:</p>
+
+              <Link to={linkOrder} target="_blank">
+                <p id="color-selected">
+                  {transactionDetail?.id_order?.id_group_order}
+                </p>
+              </Link>
+            </div>
+          )}
           <div className="item-detail">
             <p>Số tiền:</p>
-            <p className="fw-500">{infoTicket?.punish_money}</p>
+            <p className="fw-500">{transactionDetail?.money}</p>
           </div>
-          {infoTicket?.id_transaction ? (
-            <Link to={linkTransaction} target="_blank">
-              <div className="item-detail">
-                <p>Mã giao dịch:</p>
-                <p id="color-selected">{infoTicket?.id_view_transaction}</p>
-              </div>
-            </Link>
-          ) : (
-            <div className="item-detail">
-              <p>Mã giao dịch:</p>
-              <p id="color-selected">{infoTicket?.id_view_transaction}</p>
-            </div>
-          )}
-          {infoTicket?.id_view_order ? (
-            <Link to={linkOrder} target="_blank">
-              <div className="item-detail">
-                <p>Mã ca làm:</p>
-                <p id="color-selected">{infoTicket?.id_view_order}</p>
-              </div>
-            </Link>
-          ) : (
-            <div className="item-detail">
-              <p>Mã ca làm:</p>
-              <p id="color-selected">{infoTicket?.id_view_order}</p>
-            </div>
-          )}
+
+          <div className="item-detail">
+            <p>Ví:</p>
+            <p>{transactionDetail?.type_wallet}</p>
+          </div>
+
+          <div className="item-detail">
+            <p>Phương thức thanh toán:</p>
+            <p>{transactionDetail?.payment_source}</p>
+          </div>
+
           <div>
             <Button
               className="button-revoke"
               type="primary"
-              danger
-              onClick={() => setModalRevoke(true)}
+              // danger
+              onClick={() => setModalVerify(true)}
+              disabled={disableVerify}
             >
-              Thu hồi vé phạt
+              Duyệt lệnh
+            </Button>
+            <Button
+              // className="button-revoke"
+              type="primary"
+              danger
+              onClick={() => setModalCancel(true)}
+              disabled={disableCancel}
+            >
+              Huỷ lệnh
             </Button>
           </div>
         </div>
@@ -223,24 +380,49 @@ const TransferDetail = () => {
 
       <div>
         <ModalCustom
-          isOpen={modalRevoke}
-          title={`Thu hồi vé phạt`}
-          handleOk={handleRevoke}
-          handleCancel={() => setModalRevoke(false)}
+          isOpen={modalCancel}
+          title={`Huỷ lệnh giao dịch`}
+          handleOk={handleCancel}
+          handleCancel={() => setModalCancel(false)}
           textOk={`Xác nhận`}
           body={
             <>
-              <p>Bạn có xác nhận muốn duyệt vé phạt này? </p>
+              <p>Bạn có xác nhận muốn huỷ lệnh giao dịch này? </p>
               <p>
-                Mã vé phạt:{" "}
-                <span className="fw-500">{infoTicket?.id_view}</span>
+                Mã giao dịch:{" "}
+                <span className="fw-500">{transactionDetail?.id_view}</span>
               </p>
-              <p>Tên: {infoTicket?.full_name}</p>
-              <p>SĐT: {infoTicket?.phone}</p>
-              <i>
+              <p>Tên: {transactionDetail?.full_name}</p>
+              <p>SĐT: {transactionDetail?.phone}</p>
+              {/* <i>
                 Note: việc thu hồi sẽ huỷ các giao dịch phát sinh từ vé phạt và
                 đưa các trạng thái của CTV về trước thời điểm thực thi vé phạt{" "}
-              </i>
+              </i> */}
+            </>
+          }
+        />
+      </div>
+
+      <div>
+        <ModalCustom
+          isOpen={modalVerify}
+          title={`Duyệt lệnh giao dịch`}
+          handleOk={handleVerify}
+          handleCancel={() => setModalVerify(false)}
+          textOk={`Xác nhận`}
+          body={
+            <>
+              <p>Bạn có xác nhận muốn duyệt lệnh giao dịch này? </p>
+              <p>
+                Mã giao dịch:{" "}
+                <span className="fw-500">{transactionDetail?.id_view}</span>
+              </p>
+              <p>Tên: {transactionDetail?.full_name}</p>
+              <p>SĐT: {transactionDetail?.phone}</p>
+              {/* <i>
+                Note: việc thu hồi sẽ huỷ các giao dịch phát sinh từ vé phạt và
+                đưa các trạng thái của CTV về trước thời điểm thực thi vé phạt{" "}
+              </i> */}
             </>
           }
         />
@@ -250,28 +432,3 @@ const TransferDetail = () => {
 };
 
 export default TransferDetail;
-
-const dataFilter = [
-  {
-    key: "status",
-    label: "Trạng thái",
-    data: [
-      { key: "0", value: "", label: "Tất cả" },
-      { key: "1", value: "pending", label: "Đang xử lý" },
-      { key: "2", value: "doing", label: "Đang thực thi" },
-      { key: "3", value: "cancel", label: "Huỷ" },
-      { key: "4", value: "done", label: "Hoàn thành" },
-    ],
-  },
-  {
-    key: "payment",
-    label: "Phương thức thanh khoản",
-    data: [
-      { key: "0", value: "", label: "Tất cả" },
-      { key: "1", value: "bank", label: "Ngân hàng" },
-      { key: "2", value: "momo", label: "MoMo" },
-      { key: "3", value: "vnpay", label: "VNPay" },
-      { key: "4", value: "pay_point", label: "Pay Point" },
-    ],
-  },
-];
