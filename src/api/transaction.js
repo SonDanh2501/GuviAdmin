@@ -19,7 +19,7 @@ export const getListTransactionV2Api = (
   search = ""
 ) => {
   return axiosClient.get(
-    `/admin/transaction_manager/get_list?lang=vi&start=${start}&length=${length}&search=${search}&${query}`
+    `/admin/transaction_manager/get_list?lang=vi&start=${start}&length=${length}&search=${search}${query}`
   );
 };
 /**
@@ -64,9 +64,9 @@ export const cancelTransactionApi = (id) => {
   return axiosClient.post(`/admin/transaction_manager/cancel_item/${id}`);
 };
 
-export const getTotalTransactionApi = (_query) => {
+export const getTotalTransactionApi = (_query, search = "") => {
   return axiosClient.get(
-    `/admin/transaction_manager/get_total?lang=vi&${_query}`
+    `/admin/transaction_manager/get_total?lang=vi&${_query}&search=${search}`
   );
 };
 export const getTotalTransactionCustomerApi = (_query) => {
@@ -105,5 +105,7 @@ export const getDetailTransactionApi = (id) => {
  * @returns
  */
 export const getActivityHistoryTransactionApi = (id) => {
-  return axiosClient.get(`/admin/transaction_manager/detail_item/${id}`);
+  return axiosClient.get(
+    `/admin/transaction_manager/get_activity_history_transaction/${id}`
+  );
 };

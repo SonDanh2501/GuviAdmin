@@ -1052,7 +1052,7 @@ const DataTable = (props) => {
             return <div className="div-status-order">{_text_status}</div>;
           }
           case "type_wallet": {
-            let _wallet = data?.type_wallet === "work_wallet" ? "Nạp" : "CTV";
+            let _wallet = data?.payment_in === "work_wallet" ? "Nạp" : "CTV";
             return (
               <div className="div-date-create">
                 <p className="title-detail">Ví {_wallet}</p>
@@ -1128,8 +1128,6 @@ const DataTable = (props) => {
               _payment_source = "VNPAY";
             } else if (data?.paymnet_source === "viettel_pay") {
               _payment_source = "Viettel Pay";
-            } else if (data?.paymnet_source === "other") {
-              _payment_source = "Khác";
             }
             return (
               <div className="div-date-create">

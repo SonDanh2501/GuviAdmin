@@ -3,14 +3,12 @@ import { Popover, Steps } from "antd";
 import { format } from "date-fns";
 const ActivityHistory = (props) => {
   const { data } = props;
-  console.log("data", data);
   return (
     <div>
       <h5>Hoạt động</h5>
       {data?.length > 0 ? (
         data.map((item, index) => {
           const { title, body, date_create } = item;
-          console.log("discript ion ", body);
           return (
             <div className="activity-history_item-container">
               <div>
