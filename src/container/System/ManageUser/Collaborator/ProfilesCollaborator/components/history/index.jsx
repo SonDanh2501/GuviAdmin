@@ -12,6 +12,7 @@ import i18n from "../../../../../../../i18n";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import "./index.scss";
+import HistoryActivity from "../../../../../../../components/historyActivity";
 
 const History = ({ id }) => {
   const [data, setData] = useState([]);
@@ -80,6 +81,7 @@ const History = ({ id }) => {
         </div>
       </div>
       <div className="div-list-collaborator mt-3">
+        {/* <HistoryActivity /> */}
         {data?.map((item, index) => {
           const money = item?.value?.toString();
           return (

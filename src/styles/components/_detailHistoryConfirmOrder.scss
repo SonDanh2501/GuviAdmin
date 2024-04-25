@@ -1,0 +1,15 @@
+.detail-history-activity_confirm-order_container {
+  border: 2px solid var(--text-color);
+  border-top: none;
+  padding: 10px 5px;
+  border-radius: 6px;
+  border-start-start-radius: 0px;
+  border-start-end-radius: 0px;
+  @include flexbox(space-between, start);
+  .content-container {
+    @include flexbox(space-between, center);
+    width: 220px;
+    // border: 1px solid;
+    margin-bottom: 0.3rem;
+  }
+}

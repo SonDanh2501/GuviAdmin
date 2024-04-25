@@ -234,3 +234,9 @@
   color: $colorConfirmDoing !important;
   border: 1px solid $colorConfirmDoing !important;
 }
+.ant-btn-primary:not([disabled]) {
+  background: #1677ff !important;
+}
+.ant-btn-primary:not([disabled]):hover {
+  background: #1f4ce0 !important;
+}
