@@ -960,8 +960,8 @@ const DataTable = (props) => {
               case "punish":
                 type_transfer = "Phạt";
                 break;
-              case "payment_service":
-                type_transfer = "Thanh toán đơn hàng";
+              case "pay_service":
+                type_transfer = "Thanh toán dịch vụ";
                 break;
               default:
                 break;
