@@ -3,3 +3,5 @@ const configData = (arr) => {
 
   return result;
 };
+
+export const formatDataHistoryActivity = (data) => {};

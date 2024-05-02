@@ -88,7 +88,7 @@ const TransferCustomer = () => {
       ),
     },
   ];
-  console.log("quẻ y", query);
+  // console.log("quẻ y", query);
   items = items.filter((x) => x.label !== false);
   const addActionColumn = {
     i18n_title: "",
@@ -523,8 +523,8 @@ const dataFilter = [
       { key: "0", value: "", label: "Tất cả" },
       { key: "1", value: "withdraw", label: "Rút" },
       { key: "2", value: "top_up", label: "Nạp" },
-      { key: "3", value: "punish", label: "Phạt" },
-      { key: "4", value: "reward", label: "Thưởng" },
+      { key: "3", value: "pay_service", label: "Thanh toán dịch vụ" },
+      { key: "4", value: "refurn_service", label: "Hoàn tiền dịch vụ" },
     ],
   },
   {
@@ -538,18 +538,4 @@ const dataFilter = [
       { key: "4", value: "viettel_money", label: "Viettel Money" },
     ],
   },
-  // {
-  //   key: "payment_in",
-  //   label: "Ví",
-  //   data: [
-  //     { key: "0", value: "", label: "Tất cả" },
-  //     { key: "1", value: "collaborator_wallet", label: "Ví cộng tác viên" },
-  //     { key: "2", value: "work_wallet", label: "Ví công việc" },
-  //   ],
-  // },
-  // {
-  //   key: "subject",
-  //   label: "Đối tượng",
-  //   data: [{ key: "0", value: "customer", label: "Khách hàng" }],
-  // },
 ];

@@ -1,16 +1,15 @@
 import { useSelector } from "react-redux";
 import { getElementState, getLanguageState } from "../../redux/selectors/auth";
-import { Button, Drawer, List, Checkbox, Form, Input, Select } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import _debounce from "lodash/debounce";
 import useWindowDimensions from "../../helper/useWindowDimensions";
 import { fetchCollaborators } from "../../api/collaborator";
 import { fetchCustomers } from "../../api/customer";
 import { getListAccount } from "../../api/createAccount";
-import { getReasonPunishApi } from "../../api/reasons";
 import InputCustom from "../textInputCustom";
 import i18n from "../../i18n";
 import CustomButton from "../customButton/customButton";
+import { Button, Drawer, List, Select } from "antd";
 
 const TransactionDrawer = (props) => {
   const checkElement = useSelector(getElementState);
@@ -136,8 +135,9 @@ const TransactionDrawer = (props) => {
   // ----------------------------- UseEffect ----------------------------------- //
   // ----------------------------- UI ----------------------------------- //
   return (
-    <div>
-      <Button onClick={showDrawer} type="primary">
+    <div className="transaction-drawer_container">
+      <Button type="primary" onClick={showDrawer}>
+        {/* <p className="title-button"> {titleButton}</p> */}
         {titleButton}
       </Button>
       <Drawer
@@ -235,7 +235,29 @@ const TransactionDrawer = (props) => {
               />
             </div>
           )}
-          <CustomButton
+          <Button
+            type="primary"
+            className="btn-confirm-drawer"
+            onClick={() => {
+              onClose();
+              setState({
+                money: 0,
+                note: "",
+                data: [],
+                name: "",
+                errorName: "",
+                errorMoney: "",
+                wallet: "work_wallet",
+                id: "",
+                id_order: "",
+              });
+              setName("");
+              onClick(state);
+            }}
+          >
+            {titleButton}
+          </Button>
+          {/* <CustomButton
             title={titleButton}
             className="float-left btn-add-t"
             type="button"
@@ -255,7 +277,7 @@ const TransactionDrawer = (props) => {
               setName("");
               onClick(state);
             }}
-          />
+          /> */}
         </div>
       </Drawer>
     </div>
