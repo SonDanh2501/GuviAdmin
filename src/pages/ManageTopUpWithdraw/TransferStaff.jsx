@@ -246,7 +246,9 @@ const TransferStaff = () => {
   // ---------------------------- use effect ------------------------------------ //
 
   useEffect(() => {
-    getList();
+    if (selectedDate.end_date !== "") {
+      getList();
+    }
   }, [startPage, returnFilter, tab, valueSearch, selectedDate]);
 
   // ---------------------------- UI ------------------------------------ //

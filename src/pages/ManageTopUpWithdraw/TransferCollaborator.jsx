@@ -165,6 +165,7 @@ const TransferCollaborator = () => {
     []
   );
   const getList = () => {
+    console.log("query2", query);
     getListTransactionV2Api(startPage, LENGTH_ITEM, query, valueSearch)
       .then((res) => {
         setData(res?.data);
@@ -191,7 +192,10 @@ const TransferCollaborator = () => {
   // ---------------------------- use effect ------------------------------------ //
 
   useEffect(() => {
-    getList();
+    console.log("query ", query);
+    if (selectedDate.end_date !== "") {
+      getList();
+    }
   }, [startPage, returnFilter, tab, valueSearch, selectedDate]);
 
   // ---------------------------- UI ------------------------------------ //
