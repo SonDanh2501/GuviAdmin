@@ -67,7 +67,7 @@ const TransferCustomer = () => {
     start_date: "",
     end_date: "",
   });
-  let queryDate = "";
+  let queryDate = "&";
   for (const key of Object.keys(selectedDate)) {
     queryDate += `${key}=${selectedDate[key]}&`;
   }
@@ -239,6 +239,7 @@ const TransferCustomer = () => {
     console.log("query ", query);
     getListTransactionV2Api(startPage, LENGTH_ITEM, query, valueSearch)
       .then((res) => {
+        console.log("ressss ", res);
         setData(res?.data);
         setTotal(res?.totalItem);
         getTotal();
@@ -265,9 +266,9 @@ const TransferCustomer = () => {
   // ---------------------------- use effect ------------------------------------ //
 
   useEffect(() => {
-    // if (selectedDate.end_date !== "") {
-    getList();
-    // }
+    if (selectedDate.end_date !== "") {
+      getList();
+    }
   }, [startPage, returnFilter, tab, valueSearch, selectedDate]);
 
   // ---------------------------- UI ------------------------------------ //

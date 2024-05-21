@@ -383,7 +383,7 @@ const columns = [
     fontSize: "text-size-M",
   },
   {
-    title: "Ví",
+    title: "Vào Ví",
     dataIndex: "type_wallet",
     key: "type_wallet",
     width: 30,

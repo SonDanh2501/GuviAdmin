@@ -1122,12 +1122,27 @@ const DataTable = (props) => {
             break;
           case "payment_source":
             let _payment_source = "Chuyển khoản";
-            if (data?.paymnet_source === "momo") {
-              _payment_source = "MoMo";
-            } else if (data?.paymnet_source === "vnpay") {
-              _payment_source = "VNPAY";
-            } else if (data?.paymnet_source === "viettel_pay") {
-              _payment_source = "Viettel Pay";
+            switch (data?.payment_out) {
+              case "momo":
+                _payment_source = "MoMo";
+                break;
+              case "vnpay":
+                _payment_source = "VNPAY";
+                break;
+              case "viettel_pay":
+                _payment_source = "Viettel Pay";
+                break;
+              case "collaborator_wallet":
+                _payment_source = "Ví CTV";
+                break;
+              case "work_wallet":
+                _payment_source = "Ví công việc";
+                break;
+              case "pay_point":
+                _payment_source = "G-Pay";
+                break;
+              default:
+                break;
             }
             return (
               <div className="div-date-create">

@@ -195,8 +195,9 @@ const InForDetailGroupOrder = (props) => {
     setIsLoading(true);
     getOrderByGroupOrderApi(id, lang, startPage, 20)
       .then((res) => {
+        console.log("resss ", res);
         setDataGroup(res?.data?.groupOrder);
-        setDataList(res?.data?.listOrder);
+        setDataList(res?.data?.listOrder?.data);
         setDetectLoading(false);
         setTotal(res?.totalItem);
         setIsLoading(false);
@@ -384,6 +385,7 @@ const InForDetailGroupOrder = (props) => {
     onChangeStatus(item?._id, { status: "next" });
     setIsOpenModalChangeStatus(false);
   };
+  console.log("data ", dataGroup);
   return (
     <div className="info-detail-order_container ">
       <div className="info-detail-order_header">
