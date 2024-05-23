@@ -321,12 +321,37 @@ const PunishDrawer = (props) => {
               textArea={true}
             />
           </div>
-          <CustomButton
+          <Button
+            className="btn-confirm-drawer"
+            type="primary"
+            onClick={() => {
+              onClose();
+              setState({
+                money: defaultPolicy?.punish_money,
+                note: defaultPolicy?.value,
+                data: [],
+                name: "",
+                errorName: "",
+                errorMoney: "",
+                id_collaborator: "",
+                id_punish_policy: defaultPolicy?._id,
+                id_order: "",
+                start_date: "",
+              });
+              setName("");
+              setDataSearchOrder([]);
+              onClick(state);
+              setIdViewOrder("");
+            }}
+          >
+            {titleButton}
+          </Button>
+          {/* <CustomButton
             title={titleButton}
             className="float-left btn-add-t"
             type="button"
             onClick={() => {
-              onClose();
+              onClose(); 
 
               setState({
                 money: defaultPolicy?.punish_money,
@@ -345,7 +370,7 @@ const PunishDrawer = (props) => {
               onClick(state);
               setIdViewOrder("");
             }}
-          />
+          /> */}
         </div>
       </Drawer>
     </div>

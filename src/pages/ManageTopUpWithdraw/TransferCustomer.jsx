@@ -236,8 +236,10 @@ const TransferCustomer = () => {
     []
   );
   const getList = () => {
+    console.log("query ", query);
     getListTransactionV2Api(startPage, LENGTH_ITEM, query, valueSearch)
       .then((res) => {
+        console.log("ressss ", res);
         setData(res?.data);
         setTotal(res?.totalItem);
         getTotal();
@@ -264,7 +266,9 @@ const TransferCustomer = () => {
   // ---------------------------- use effect ------------------------------------ //
 
   useEffect(() => {
-    getList();
+    if (selectedDate.end_date !== "") {
+      getList();
+    }
   }, [startPage, returnFilter, tab, valueSearch, selectedDate]);
 
   // ---------------------------- UI ------------------------------------ //

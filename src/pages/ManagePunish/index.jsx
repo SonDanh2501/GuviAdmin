@@ -133,7 +133,9 @@ const ManagePunish = () => {
         });
       })
       .catch((err) => {
-        console.log("err ", err);
+        errorNotify({
+          message: err?.message,
+        });
       });
   };
   const onChangeTab = (item) => {
@@ -273,14 +275,14 @@ const columns = [
     title: "STT",
     dataIndex: "",
     key: "ordinal",
-    width: 30,
+    width: 25,
     fontSize: "text-size-M",
   },
   {
     title: "Mã lệnh phạt",
     dataIndex: "id_view",
     key: "code_punish_ticket",
-    width: 50,
+    width: 53,
     fontSize: "text-size-M",
   },
   {
@@ -311,10 +313,17 @@ const columns = [
     width: 40,
     fontSize: "text-size-M",
   },
+  // {
+  //   title: "Mã lệnh giao dịch",
+  //   dataIndex: "id_transaction",
+  //   key: "id_transaction",
+  //   width: 70,
+  //   fontSize: "text-size-M",
+  // },
   {
-    title: "Mã lệnh giao dịch",
-    dataIndex: "id_transaction",
-    key: "id_transaction",
+    title: "Số tiền",
+    dataIndex: "punish_money",
+    key: "money",
     width: 70,
     fontSize: "text-size-M",
   },

@@ -465,7 +465,6 @@ const ManageOrder = () => {
           dataTotal={totalOrder}
         />
       </div>
-
       <div className="div-flex-row">
         <div className="div-filter">
           <div className="header-filter">

@@ -155,11 +155,11 @@ const DataTable = (props) => {
           case "code_punish_ticket":
             linkRedirect = `/punish/punish-detail/${data?._id}`;
             return (
-              <Link to={linkRedirect} target="_blank">
-                <p className={`text-id-code-order ${item?.fontSize}`}>
-                  {data?.id_view}
-                </p>
-              </Link>
+              // <Link to={linkRedirect} target="_blank">
+              <p className={`text-id-code-order ${item?.fontSize}`}>
+                {data?.id_view}
+              </p>
+              // </Link>
             );
             break;
           case "code_transaction":
@@ -1038,7 +1038,12 @@ const DataTable = (props) => {
                 break;
               case "cancel":
                 _text_status = (
-                  <span className="text-status-cancel">Đã huỷ</span>
+                  <span className="text-status-cancel">Đã hủy</span>
+                );
+                break;
+              case "revoke":
+                _text_status = (
+                  <span className="text-status-cancel">Đã thu hồi</span>
                 );
                 break;
               case "done":
@@ -1122,12 +1127,27 @@ const DataTable = (props) => {
             break;
           case "payment_source":
             let _payment_source = "Chuyển khoản";
-            if (data?.paymnet_source === "momo") {
-              _payment_source = "MoMo";
-            } else if (data?.paymnet_source === "vnpay") {
-              _payment_source = "VNPAY";
-            } else if (data?.paymnet_source === "viettel_pay") {
-              _payment_source = "Viettel Pay";
+            switch (data?.payment_out) {
+              case "momo":
+                _payment_source = "MoMo";
+                break;
+              case "vnpay":
+                _payment_source = "VNPAY";
+                break;
+              case "viettel_pay":
+                _payment_source = "Viettel Pay";
+                break;
+              case "collaborator_wallet":
+                _payment_source = "Ví CTV";
+                break;
+              case "work_wallet":
+                _payment_source = "Ví công việc";
+                break;
+              case "pay_point":
+                _payment_source = "G-Pay";
+                break;
+              default:
+                break;
             }
             return (
               <div className="div-date-create">
