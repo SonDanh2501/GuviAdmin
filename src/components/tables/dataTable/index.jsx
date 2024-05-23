@@ -155,11 +155,11 @@ const DataTable = (props) => {
           case "code_punish_ticket":
             linkRedirect = `/punish/punish-detail/${data?._id}`;
             return (
-              <Link to={linkRedirect} target="_blank">
-                <p className={`text-id-code-order ${item?.fontSize}`}>
-                  {data?.id_view}
-                </p>
-              </Link>
+              // <Link to={linkRedirect} target="_blank">
+              <p className={`text-id-code-order ${item?.fontSize}`}>
+                {data?.id_view}
+              </p>
+              // </Link>
             );
             break;
           case "code_transaction":
@@ -1038,7 +1038,12 @@ const DataTable = (props) => {
                 break;
               case "cancel":
                 _text_status = (
-                  <span className="text-status-cancel">Đã huỷ</span>
+                  <span className="text-status-cancel">Đã hủy</span>
+                );
+                break;
+              case "revoke":
+                _text_status = (
+                  <span className="text-status-cancel">Đã thu hồi</span>
                 );
                 break;
               case "done":

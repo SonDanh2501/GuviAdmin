@@ -675,7 +675,7 @@ const router = [
         null
       ),
       "cash_book",
-      getItem("Nhân viên", "/transaction/manage-transaction-staff", null, null),
+      getItem("Khác", "/transaction/manage-transaction-staff", null, null),
       "cash_book",
       getItem("Phạt", "/punish/manage-punish", null, null, "support_customer"),
       getItem(
