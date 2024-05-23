@@ -49,9 +49,10 @@ const ManagePunish = () => {
     {
       key: "1",
       label: (
-        <Link to={`/punish/punish-detail/${item?._id}`} target="_blank">
-          <p style={{ margin: 0 }}>Chi tiết</p>
-        </Link>
+        // <Link to={`/punish/punish-detail/${item?._id}`} target="_blank">
+        //   <p style={{ margin: 0 }}>Chi tiết</p>
+        // </Link>
+        <div>Thu hồi</div>
       ),
     },
     {
