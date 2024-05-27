@@ -36,6 +36,7 @@ const ManagePunish = () => {
     end_date: "2024-04-08T16:59:59.999Z",
   });
   const [currentTab, setCurrentTab] = useState(itemTabStatus[0]);
+  const [openModalRevoke, setOpenModalRevoke] = useState(false);
   // ------------------------------ xử lý data ---------------------------------- /
   let queryDate = "&";
   for (const key of Object.keys(selectedDate)) {
@@ -52,14 +53,23 @@ const ManagePunish = () => {
         // <Link to={`/punish/punish-detail/${item?._id}`} target="_blank">
         //   <p style={{ margin: 0 }}>Chi tiết</p>
         // </Link>
-        <div>Thu hồi</div>
+        <div onClick={() => setOpenModalRevoke(true)}>Thu hồi</div>
       ),
     },
     {
       key: "2",
       label: (
         // checkElement?.includes("delete_transaction") &&
-        <p className="m-0">xoá</p>
+        <p
+          onClick={() => {
+            errorNotify({
+              message: "Tính năng không khả dụng",
+            });
+          }}
+          className="m-0"
+        >
+          xoá
+        </p>
       ),
     },
   ];
@@ -159,6 +169,9 @@ const ManagePunish = () => {
       });
     setOpenModalCancel(false);
   };
+  const handleRevoke = () => {
+    console.log("thu hooif");
+  };
   const handleVerify = () => {
     console.log("vé này sẽ được duyệt ", item);
     verifyPunishTicketApi(item?._id)
@@ -257,6 +270,26 @@ const ManagePunish = () => {
           body={
             <>
               <p>Bạn có xác nhận muốn duyệt vé phạt này? </p>
+              <p>
+                Mã vé phạt: <span className="fw-500">{item?.id_view}</span>
+              </p>
+              <p>Tên: {item?.id_collaborator?.full_name}</p>
+              <p>SĐT: {item?.id_collaborator?.phone}</p>
+            </>
+          }
+        />
+      </div>
+
+      <div>
+        <ModalCustom
+          isOpen={openModalRevoke}
+          title={`Thu hồi vé phạt`}
+          handleOk={handleRevoke}
+          handleCancel={() => setOpenModalRevoke(false)}
+          textOk={`Xác nhận`}
+          body={
+            <>
+              <p>Bạn có xác nhận muốn thu hồi vé phạt này? </p>
               <p>
                 Mã vé phạt: <span className="fw-500">{item?.id_view}</span>
               </p>
