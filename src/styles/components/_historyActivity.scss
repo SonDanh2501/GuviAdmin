@@ -1,0 +1,60 @@
+.history-activity_item-container {
+  @include flexbox();
+  width: 100%;
+  height: 100%;
+
+  .item-info {
+    margin-left: 1rem;
+    width: 100%;
+    margin-bottom: 10px;
+    .item-info_title {
+      @include flexbox(space-between, center);
+      border: 2px solid var(--text-color);
+      padding: 10px 5px;
+      border-radius: 6px;
+      .title_admin {
+        @include flexbox(space-between, center);
+      }
+    }
+    .item-info_detail {
+      padding: 0px 10px;
+    }
+    span {
+      font-weight: 500;
+      color: var(--selected-color);
+    }
+    .body {
+      margin-top: 0.3rem;
+      color: var(--text-color);
+    }
+  }
+  .item-vertical-line {
+    margin-left: 1rem;
+    @include flexbox(center, center, column);
+    height: 100%;
+    .circle {
+      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+      background-color: var(--selected-color);
+    }
+    .line {
+      width: 1.5px;
+      min-height: 50px;
+      background-color: var(--text-color);
+      height: 100%;
+    }
+    .circle-black {
+      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+      background-color: var(--thumb-hover-color);
+    }
+  }
+  .item-left {
+    width: 140px;
+  }
+}
+.history-activity_container {
+  padding-top: 14px;
+}

@@ -108,6 +108,8 @@ import TransferCollaborator from "../pages/ManageTopUpWithdraw/TransferCollabora
 import ManagePunish from "../pages/ManagePunish";
 import ManageReward from "../pages/ManageReward";
 import TransferStaff from "../pages/ManageTopUpWithdraw/TransferStaff";
+import PunishDetail from "../pages/ManagePunish/PunishDetail";
+import TransferDetail from "../pages/ManageTopUpWithdraw/TransferDetail";
 // import ManageFinance from "../pages/ManageFinance";
 
 const Admin = () => {
@@ -131,6 +133,11 @@ const Admin = () => {
       />
       <Route path="/system/user-manage" element={<ManageCustomer />} />
       <Route path="/profile-customer/:id" element={<Profiles />} />
+      <Route path="/punish/punish-detail/:id" element={<PunishDetail />} />
+      <Route
+        path="/transaction/transaction-detail/:id"
+        element={<TransferDetail />}
+      />
       <Route
         path="/system/collaborator-manage"
         element={<ManageCollaborator />}
