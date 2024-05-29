@@ -130,13 +130,13 @@ const PunishDrawer = (props) => {
   const searchOrder = useCallback(
     _debounce((value) => {
       if (value) {
-        const _query = `search=${value.toString().replace("#", "")}`;
-        searchOrderApi(0, 10, _query)
+        const _query = `search=${value.toString()}`;
+        searchOrderApi(0, 20, _query)
           .then((res) => {
             if (value === "") {
               setDataSearchOrder([]);
             } else {
-              setDataSearchOrder(res?.data);
+              setDataSearchOrder(res);
             }
           })
           .catch((err) => {});
@@ -149,7 +149,6 @@ const PunishDrawer = (props) => {
   const getPunishPolicy = () => {
     getListPunishTicketPolicyApi()
       .then((res) => {
-        console.log("res ", res);
         const arr = [];
         for (let i of res?.data) {
           const temp = {
@@ -166,7 +165,6 @@ const PunishDrawer = (props) => {
         if (arr.length) {
           setState({
             ...state,
-            note: arr[0].value,
             money: arr[0]?.punish_money,
             id_punish_policy: arr[0]?._id,
           });
@@ -248,10 +246,8 @@ const PunishDrawer = (props) => {
               defaultValue={defaultPolicy}
               style={{ width: "100%" }}
               onChange={(e, option) => {
-                console.log("option ", option);
                 setState({
                   ...state,
-                  note: e,
                   money: option?.punish_money,
                   id_punish_policy: option?._id,
                 });
@@ -325,24 +321,37 @@ const PunishDrawer = (props) => {
               textArea={true}
             />
           </div>
-          {/* {subject === "collaborator" && (
-            <div className="mt-2">
-              <Select
-                defaultValue={defaultWallet ? defaultWallet : "work_wallet"}
-                style={{ width: "100%" }}
-                onChange={(e) => {
-                  setState({ ...state, wallet: e });
-                }}
-                options={arrWallet}
-              />
-            </div>
-          )} */}
-          <CustomButton
+          <Button
+            className="btn-confirm-drawer"
+            type="primary"
+            onClick={() => {
+              onClose();
+              setState({
+                money: defaultPolicy?.punish_money,
+                note: defaultPolicy?.value,
+                data: [],
+                name: "",
+                errorName: "",
+                errorMoney: "",
+                id_collaborator: "",
+                id_punish_policy: defaultPolicy?._id,
+                id_order: "",
+                start_date: "",
+              });
+              setName("");
+              setDataSearchOrder([]);
+              onClick(state);
+              setIdViewOrder("");
+            }}
+          >
+            {titleButton}
+          </Button>
+          {/* <CustomButton
             title={titleButton}
             className="float-left btn-add-t"
             type="button"
             onClick={() => {
-              onClose();
+              onClose(); 
 
               setState({
                 money: defaultPolicy?.punish_money,
@@ -361,7 +370,7 @@ const PunishDrawer = (props) => {
               onClick(state);
               setIdViewOrder("");
             }}
-          />
+          /> */}
         </div>
       </Drawer>
     </div>

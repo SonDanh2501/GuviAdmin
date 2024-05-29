@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import _debounce from "lodash/debounce";
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import CommonFilter from "../../components/filter/commonFilter/CommonFilter";
 import FilterTransfer from "./components/TransferFIlter";
 import ModalCustom from "../../components/modalCustom";
 import i18n from "../../i18n";
@@ -28,6 +27,7 @@ import {
 import { LENGTH_ITEM } from "../../constants";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { endOfDay, startOfDay } from "date-fns";
+import CommonFilter from "../../components/commonFilter";
 const TransferStaff = () => {
   const itemTab = [
     {
@@ -51,7 +51,7 @@ const TransferStaff = () => {
       key: 3,
     },
   ];
-  const [tab, setTab] = useState(itemTab[0].value);
+  const [tab, setTab] = useState(itemTabStatus[0].value);
   const checkElement = useSelector(getElementState);
   const [data, setData] = useState([]);
   const [startPage, setStartPage] = useState(0);
@@ -59,21 +59,15 @@ const TransferStaff = () => {
   const [item, setItem] = useState();
   const [openModalCancel, setOpenModalCancel] = useState(false);
   const [openModalChangeStatus, setOpenModalChangeStatus] = useState(false);
-  const [returnFilter, setReturnFilter] = useState();
+  const [returnFilter, setReturnFilter] = useState([]);
   const [valueSearch, setValueSearch] = useState("");
-  const [query, setQuery] = useState("");
   const [openDrawer, setOpenDrawer] = useState(false);
   const [statePunish, setStatePunish] = useState();
   const [totalTransaction, setTotalTransaction] = useState([]);
-  const [totalTopUp, setTotalTopUp] = useState(0);
-  const [totalWithdraw, setTotalWithdraw] = useState(0);
-  const [totalIncome, setTotalIncome] = useState(0);
-  const [status, setStatus] = useState({
-    label: "Tất cả",
-    key: "0",
-    value: "",
+  const [selectedDate, setSelectedDate] = useState({
+    start_date: "",
+    end_date: "",
   });
-  const [queryTotal, setQueryTotal] = useState("");
   let items = [
     {
       key: "1",
@@ -87,7 +81,14 @@ const TransferStaff = () => {
       ),
     },
   ];
-
+  let queryDate = "&";
+  for (const key of Object.keys(selectedDate)) {
+    queryDate += `${key}=${selectedDate[key]}&`;
+  }
+  let query =
+    returnFilter.map((item) => `&${item.key}=${item.value}`).join("") +
+    queryDate +
+    `status=${tab}&subject=other`;
   items = items.filter((x) => x.label !== false);
   const addActionColumn = {
     i18n_title: "",
@@ -105,32 +106,29 @@ const TransferStaff = () => {
       </Space>
     ),
   };
+
   // ---------------------------- handle data ------------------------------------ //
-  const statisticsTransition = [
-    {
-      key: "top_up",
-      value: totalTopUp,
-      title: "Tổng giá trị THU",
-      description: "Là tổng giá trị mà hệ thống ghi nhận ...",
-      convertMoney: true,
-    },
-    {
-      key: "withdraw",
-      value: totalWithdraw,
-      title: "Tổng giá trị CHI",
-      description: "Là tổng giá trị mà hệ thống ghi nhận ...",
-      convertMoney: true,
-    },
-  ];
+  // const statisticsTransition = [
+  //   {
+  //     key: "top_up",
+  //     value: totalTopUp,
+  //     title: "Tổng giá trị THU",
+  //     description: "Là tổng giá trị mà hệ thống ghi nhận ...",
+  //     convertMoney: true,
+  //   },
+  //   {
+  //     key: "withdraw",
+  //     value: totalWithdraw,
+  //     title: "Tổng giá trị CHI",
+  //     description: "Là tổng giá trị mà hệ thống ghi nhận ...",
+  //     convertMoney: true,
+  //   },
+  // ];
   // ---------------------------- action ------------------------------------ /
   const onChangeTab = (item) => {
     if (tab !== item.value) {
       setTab(item.value);
       setStartPage(0);
-      const _temp = returnFilter;
-      _temp.pop();
-      _temp.push({ key: "status", value: item?.value });
-      setReturnFilter(_temp);
     }
   };
   const onChangePage = (value) => {
@@ -138,29 +136,29 @@ const TransferStaff = () => {
   };
   const handleTopUp = (value) => {
     createTransaction({
-      transfer_note: value.note,
+      transfer_note: value?.note,
       type_transfer: "top_up",
       money: value.money,
       subject: "other",
-      type_wallet: "cash_book",
-      payment_source: "other",
+      payment_in: "cash_book",
+      payment_out: "other",
     });
   };
   const handleWithdraw = (value) => {
     createTransaction({
-      transfer_note: value.note,
+      transfer_note: value.transfer_note,
       type_transfer: "withdraw",
       money: value.money,
+      payment_in: "other",
+      payment_out: "cash_book",
       subject: "other",
-      type_wallet: "cash_book",
-      payment_source: "other",
     });
   };
 
   const createTransaction = (data) => {
     createTransactionApi(data)
       .then((res) => {
-        reCallData();
+        getList();
         successNotify({
           message: "Tạo lệnh giao dịch thành công",
         });
@@ -175,14 +173,16 @@ const TransferStaff = () => {
   const handleCancelTransfer = () => {
     cancelTransactionApi(item?._id)
       .then((res) => {
-        console.log("ress ", res);
+        getList();
         successNotify({
           message: "Huỷ lệnh giao dịch thành công",
         });
-        reCallData();
+        getList();
       })
       .catch((err) => {
-        console.log("err ", err);
+        errorNotify({
+          message: "Huỷ lệnh giao dịch thất bại \n" + err?.message,
+        });
       });
     setOpenModalCancel(false);
   };
@@ -192,10 +192,13 @@ const TransferStaff = () => {
         successNotify({
           message: "Duyệt lệnh thành công",
         });
-        reCallData();
+        getList();
       })
+
       .catch((err) => {
-        console.log("err ", err);
+        errorNotify({
+          message: "Duyệt lệnh giao dịch thất bại \n" + err?.message,
+        });
       });
     setOpenModalChangeStatus(false);
   };
@@ -205,11 +208,12 @@ const TransferStaff = () => {
     }, 1000),
     []
   );
-  const getList = (_query) => {
-    getListTransactionV2Api(startPage, LENGTH_ITEM, _query)
+  const getList = () => {
+    getListTransactionV2Api(startPage, LENGTH_ITEM, query, valueSearch)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
+        getTotal();
       })
       .catch((err) => {
         console.log("err ", err);
@@ -226,8 +230,8 @@ const TransferStaff = () => {
       });
     return result;
   };
-  const getTotal = (_tempQueryTotal) => {
-    getTotalTransactionStaffApi(_tempQueryTotal)
+  const getTotal = () => {
+    getTotalTransactionApi(query, valueSearch)
       .then((res) => {
         const temp_arr = [];
         for (let i of Object.values(res)) {
@@ -239,46 +243,19 @@ const TransferStaff = () => {
         console.log("err ", err);
       });
   };
-  const reCallData = () => {
-    getList(query);
-    getTotal(queryTotal);
-    const date = new Date(Date.now());
-    const start_date = startOfDay(date).toISOString();
-    const end_date = endOfDay(date).toISOString();
-    const _query = `subject=other&type_transfer=top_up&start_date=${start_date}
-    &end_date=${end_date}`;
-    getTotalMoney("top_up", _query, setTotalTopUp);
-    getTotalMoney("withdraw", _query, setTotalWithdraw);
-  };
   // ---------------------------- use effect ------------------------------------ //
 
   useEffect(() => {
-    let tempQuery = "";
-    let _tempQueryTotal = "";
-    if (returnFilter) {
-      returnFilter.map((i) => {
-        tempQuery = tempQuery + `${i.key}=${i.value}&`;
-        if (i.key === "start_date" || i.key === "end_date") {
-          _tempQueryTotal = _tempQueryTotal + `${i.key}=${i.value}&`;
-        }
-      });
-      tempQuery = tempQuery + `search=${valueSearch}`;
-      setQuery(tempQuery);
+    if (selectedDate.end_date !== "") {
+      getList();
     }
-    setQueryTotal(_tempQueryTotal);
-  }, [returnFilter, valueSearch, tab]);
-
-  useEffect(() => {
-    if (query && query !== "") {
-      reCallData();
-    }
-  }, [startPage, query]);
+  }, [startPage, returnFilter, tab, valueSearch, selectedDate]);
 
   // ---------------------------- UI ------------------------------------ //
   return (
     <div className="transfer-collaborator_container">
       <h5>Phiếu thu chi nhân viên</h5>
-      <div className="transfer-collaborator_total">
+      {/* <div className="transfer-collaborator_total">
         {statisticsTransition.map((item, index) => {
           return (
             <ItemTotal
@@ -290,7 +267,7 @@ const TransferStaff = () => {
             />
           );
         })}
-      </div>
+      </div> */}
       <div className="transfer-collaborator_search">
         <div className="transfer-collaborator_transaction">
           <TransactionDrawer
@@ -323,14 +300,10 @@ const TransferStaff = () => {
           onValueChangeTab={onChangeTab}
           dataTotal={totalTransaction}
         />
-        <FilterTransfer
+        <CommonFilter
+          data={dataFilter}
           setReturnFilter={setReturnFilter}
-          dataFilter={[
-            {
-              key: "subject",
-              default_value: "other",
-            },
-          ]}
+          setDate={setSelectedDate}
         />
       </div>
 
@@ -528,5 +501,29 @@ const itemTabStatus = [
     label: "Đã huỷ",
     key: "4",
     value: "cancel",
+  },
+];
+const dataFilter = [
+  {
+    key: "type_transfer",
+    label: "Loại giao dịch",
+    data: [
+      { key: "0", value: "", label: "Tất cả" },
+      { key: "1", value: "withdraw", label: "Rút" },
+      { key: "2", value: "top_up", label: "Nạp" },
+      // { key: "3", value: "punish", label: "Phạt" },
+      // { key: "4", value: "reward", label: "Thưởng" },
+    ],
+  },
+  {
+    key: "payment_out",
+    label: "Phương thức thanh toán",
+    data: [
+      { key: "0", value: "", label: "Tất cả" },
+      { key: "1", value: "bank", label: "Ngân hàng" },
+      { key: "2", value: "momo", label: "MoMo" },
+      { key: "3", value: "vnpay", label: "VN Pay" },
+      { key: "4", value: "viettel_money", label: "Viettel Money" },
+    ],
   },
 ];
