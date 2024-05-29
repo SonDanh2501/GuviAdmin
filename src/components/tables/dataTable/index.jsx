@@ -1169,7 +1169,7 @@ const DataTable = (props) => {
                   disabled={_isDisableVerify}
                   onClick={() => setOpenModalChangeStatus(true)}
                 >
-                  Duyệt lệnh
+                  Xác nhận
                 </Button>
                 <Button
                   type="primary"
@@ -1177,7 +1177,7 @@ const DataTable = (props) => {
                   disabled={_isDisableVerify}
                   onClick={() => setOpenModalCancel(true)}
                 >
-                  Huỷ lệnh
+                  Huỷ
                 </Button>
               </div>
             );
@@ -1206,7 +1206,7 @@ const DataTable = (props) => {
   if (actionColumn) headerTable.push(actionColumn);
 
   const calculateCurrentPage = (event) => {
-    console.log("evet", event);
+    // console.log("evet", event);
     setCurrentPage(event);
     if (props.onCurrentPageChange) {
       setIsLoading(true);
