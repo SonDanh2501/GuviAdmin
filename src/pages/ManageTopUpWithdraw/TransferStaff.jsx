@@ -271,17 +271,16 @@ const TransferStaff = () => {
       <div className="transfer-collaborator_search">
         <div className="transfer-collaborator_transaction">
           <TransactionDrawer
-            titleButton="Nạp tiền"
+            titleButton="Phiếu thu"
             subject="staff"
-            titleHeader="Nạp tiền cộng tác viên"
+            titleHeader="Phiếu thu"
             onClick={handleTopUp}
           />
           <TransactionDrawer
-            titleButton="Rút tiền"
-            titleHeader="Rút tiền cộng tác viên"
+            titleButton="Phiếu chi"
+            titleHeader="Phiếu chi"
             subject="staff"
             onClick={handleWithdraw}
-            defaultWallet={"collaborator_wallet"}
           />
         </div>
         <Input
@@ -509,10 +508,8 @@ const dataFilter = [
     label: "Loại giao dịch",
     data: [
       { key: "0", value: "", label: "Tất cả" },
-      { key: "1", value: "withdraw", label: "Rút" },
-      { key: "2", value: "top_up", label: "Nạp" },
-      // { key: "3", value: "punish", label: "Phạt" },
-      // { key: "4", value: "reward", label: "Thưởng" },
+      { key: "1", value: "withdraw", label: "Phiếu thu" },
+      { key: "2", value: "top_up", label: "Phiếu chi" },
     ],
   },
   {
