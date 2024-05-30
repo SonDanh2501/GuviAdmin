@@ -8,6 +8,7 @@ import {
   createPunishTicketApi,
   getListPunishTicketApi,
   getTotalPunishTicketApi,
+  revokePunishTicketApi,
   verifyPunishTicketApi,
 } from "../../api/punish";
 import _debounce from "lodash/debounce";
@@ -171,6 +172,19 @@ const ManagePunish = () => {
   };
   const handleRevoke = () => {
     console.log("thu hooif");
+    revokePunishTicketApi(item?._id)
+      .then((res) => {
+        console.log("ré ", res);
+        successNotify({
+          message: "Thu hồi lệnh phạt thành công",
+        });
+        setOpenModalRevoke(false);
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+      });
   };
   const handleVerify = () => {
     console.log("vé này sẽ được duyệt ", item);
@@ -238,7 +252,7 @@ const ManagePunish = () => {
           onCurrentPageChange={onChangePage}
           setOpenModalChangeStatus={setOpenModalChangeStatus}
           setOpenModalCancel={setOpenModalCancel}
-          // detectLoading={detectLoading}
+          // detectLoading={detectLoading}ljllilslkjljowj
         />
       </div>
       <div>
