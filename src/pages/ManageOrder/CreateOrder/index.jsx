@@ -150,7 +150,7 @@ const CreateOrder = () => {
   }, [selectService]);
 
   useEffect(() => {
-    if (customer !== null && customer !== "") {
+    if (customer !== null && customer !== "" && customer !== undefined) {
       getDataListAddressDefault();
       getCollaboratorByCustomer();
       setIsShowCollaborator(true);
