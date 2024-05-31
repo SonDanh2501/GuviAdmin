@@ -339,6 +339,7 @@ const TransferCustomer = () => {
           setOpenModalChangeStatus={setOpenModalChangeStatus}
           setOpenModalCancel={setOpenModalCancel}
           // detectLoading={detectLoading}
+          scrollX={1600}
         />
       </div>
       {/* ********************** Modal custom ***************************** */}

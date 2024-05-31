@@ -249,6 +249,7 @@ const ManagePunish = () => {
           setOpenModalChangeStatus={setOpenModalChangeStatus}
           setOpenModalCancel={setOpenModalCancel}
           // detectLoading={detectLoading}
+          scrollX={1600}
         />
       </div>
       <div>

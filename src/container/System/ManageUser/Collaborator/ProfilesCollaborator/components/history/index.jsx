@@ -63,7 +63,7 @@ const History = ({ id }) => {
       })
       .catch((err) => console.log(err));
   };
-
+  // console.log("data ", data);
   return (
     <>
       <div className="div-monney">
@@ -81,8 +81,8 @@ const History = ({ id }) => {
         </div>
       </div>
       <div className="div-list-collaborator mt-3">
-        {/* <HistoryActivity /> */}
-        {data?.map((item, index) => {
+        <HistoryActivity data={data} />
+        {/* {data?.map((item, index) => {
           const money = item?.value?.toString();
           return (
             <div className="div-item-list" key={index}>
@@ -229,7 +229,7 @@ const History = ({ id }) => {
               )}
             </div>
           );
-        })}
+        })} */}
       </div>
       <div className="div-pagination p-2">
         <p>
