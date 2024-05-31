@@ -45,17 +45,13 @@ const ManagePunish = () => {
   }
   const query =
     returnFilter.map((item) => `&${item.key}=${item.value}`).join("") +
-    queryDate;
+    queryDate +
+    `&search=${valueSearch}`;
 
   let items = [
     {
       key: "1",
-      label: (
-        // <Link to={`/punish/punish-detail/${item?._id}`} target="_blank">
-        //   <p style={{ margin: 0 }}>Chi tiết</p>
-        // </Link>
-        <div onClick={() => setOpenModalRevoke(true)}>Thu hồi</div>
-      ),
+      label: <div onClick={() => setOpenModalRevoke(true)}>Thu hồi</div>,
     },
     {
       key: "2",
@@ -207,7 +203,7 @@ const ManagePunish = () => {
   useEffect(() => {
     getList();
     getTotal();
-  }, [startPage, returnFilter, selectedDate, currentTab]);
+  }, [startPage, returnFilter, selectedDate, currentTab, valueSearch]);
   return (
     <div className="manage-punish_container">
       <h5>Quản lý lệnh phạt</h5>
@@ -252,7 +248,7 @@ const ManagePunish = () => {
           onCurrentPageChange={onChangePage}
           setOpenModalChangeStatus={setOpenModalChangeStatus}
           setOpenModalCancel={setOpenModalCancel}
-          // detectLoading={detectLoading}ljllilslkjljowj
+          // detectLoading={detectLoading}
         />
       </div>
       <div>

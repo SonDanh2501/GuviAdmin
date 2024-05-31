@@ -337,14 +337,14 @@ const columns = [
     title: "Ngày tạo",
     dataIndex: "date_create",
     key: "date_create",
-    width: 50,
+    width: 45,
     fontSize: "text-size-M",
   },
   {
     title: "Mã giao dịch",
     dataIndex: "code_transaction",
     key: "code_transaction",
-    width: 60,
+    width: 65,
     fontSize: "text-size-M",
   },
   {
@@ -358,7 +358,7 @@ const columns = [
     i18n_title: "collaborator",
     dataIndex: "collaborator",
     key: "collaborator_no_star",
-    width: 100,
+    width: 70,
     fontSize: "text-size-M",
   },
   {
@@ -386,7 +386,7 @@ const columns = [
     title: "Vào Ví",
     dataIndex: "type_wallet",
     key: "type_wallet",
-    width: 30,
+    width: 60,
     fontSize: "text-size-M",
   },
   {

@@ -678,13 +678,13 @@ const router = [
       getItem("Khác", "/transaction/manage-transaction-staff", null, null),
       "cash_book",
       getItem("Phạt", "/punish/manage-punish", null, null, "support_customer"),
-      getItem(
-        "Thưởng",
-        "/reward/manage-reward",
-        null,
-        null,
-        "/support_customer"
-      ),
+      // getItem(
+      //   "Thưởng",
+      //   "/reward/manage-reward",
+      //   null,
+      //   null,
+      //   "/support_customer"
+      // ),
     ],
     "cash_book"
   ),
