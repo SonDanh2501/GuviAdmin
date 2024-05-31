@@ -1,6 +1,8 @@
 import { format } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { DownOutlined } from "@ant-design/icons";
+import { formatMoney } from "../../helper/formatMoney";
+import { Link } from "react-router-dom";
 
 const HistoryActivity = (props) => {
   const { data } = props;
@@ -14,7 +16,7 @@ const HistoryActivity = (props) => {
       setChooseItem(item);
     }
   };
-  const DetailHistoryConfirmOrder = (detailHistoryActivity) => {
+  const DetailHistoryConfirmOrder = ({ detailHistoryActivity }) => {
     const {
       id_order,
       id_customer,
@@ -22,48 +24,81 @@ const HistoryActivity = (props) => {
       id_transaction,
       id_punish_ticket,
     } = detailHistoryActivity;
+    console.log("detailHistoryActivity ", detailHistoryActivity);
     return (
       <div className="detail-history-activity_confirm-order_container">
         <div className="item-left">
-          <div className="content-container">
-            <p>Đơn hàng: </p>
-            <p>{"#24790002789.001"}</p>
-          </div>
-          <div className="content-container">
-            <p>Khách hàng: </p>
-            <p>{"Nguyễn Nguyên"}</p>
-          </div>
-          <div className="content-container">
-            <p>CTV: </p>
-            <p>{"Nguyễn Lam Trường"}</p>
-          </div>
+          {id_order?.id_view && (
+            <div className="content-container">
+              <p>Đơn hàng: </p>
+              <Link
+                to={`/details-order/${id_order?.id_group_order}`}
+                target="_blank"
+              >
+                <p className="link-to">{id_order?.id_view}</p>
+              </Link>
+            </div>
+          )}
+          {id_customer && (
+            <div className="content-container">
+              <p>Khách hàng: </p>
+              <Link to={`/profile-customer/${id_customer?._id}`}>
+                <p className="link-to">{id_customer?.id_view}</p>
+              </Link>
+            </div>
+          )}
+          {id_collaborator && (
+            <div className="content-container">
+              <p>CTV: </p>
+              <Link
+                to={`/details-collaborator/${id_collaborator?._id}`}
+                target="_balance"
+              >
+                <p className="link-to">{id_collaborator?.full_name}</p>
+              </Link>
+            </div>
+          )}
         </div>
         <div className="item-right">
-          <div className="content-container">
-            <p>Mã giao dịch: </p>
-            <p>{"#0328374810BAHF"}</p>
-          </div>
-          <div className="content-container">
-            <p>Mã lệnh phạt: </p>
-            <p>{"#24790002789.001"}</p>
-          </div>
+          {id_transaction && (
+            <div className="content-container">
+              <p>Mã giao dịch: </p>
+              {/* <Link
+                to={`transaction/manage-transaction`} // link to page manager transaction
+                target="_blank"
+              > */}
+              <p className="link-to">{id_transaction?.id_view}</p>
+              {/* </Link> */}
+            </div>
+          )}
+          {id_punish_ticket && (
+            <div className="content-container">
+              <p>Mã lệnh phạt: </p>
+              {/* <Link 
+              to={`punish/manage-punish`} target="_blank"// link to page manager punish ticket
+              >  */}
+              <p className="link-to">{id_punish_ticket?.id_view}</p>
+              {/* </Link> */}
+            </div>
+          )}
         </div>
       </div>
     );
   };
   return (
     <div className="history-activity_container">
-      {arr.map((item, index) => {
+      {data.map((item, index) => {
         const { title, body, date_create, id_admin_action } = item;
+        console.log("item ", item);
         return (
           <div className="history-activity_item-container">
             <div className="item-left">
               <p>{format(new Date(date_create), "dd/MM/yyyy - HH:mm")}</p>
-              <p>name admin action</p>
+              <p className="link-to">{id_admin_action?.full_name}</p>
             </div>
             <div className="item-vertical-line">
               <div className={index === 0 ? `circle` : "circle-black"}></div>
-              {index !== arr.length - 1 && <div className="line"></div>}
+              {index !== data.length - 1 && <div className="line"></div>}
             </div>
 
             <div className="item-info">
@@ -74,14 +109,24 @@ const HistoryActivity = (props) => {
                 <div className="title_admin">
                   <div>
                     <p className="">{title.vi}</p>
-                    <div className="flex">
-                      <p className="">Ví Nạp {230000}</p>
-                      <p className="">Ví CTV: {120000}</p>
+                    <div className="container-wallet">
+                      <p className="">
+                        <span className="title-wallet">Ví Nạp:</span>{" "}
+                        <span>{formatMoney(item?.current_work_wallet)}</span>
+                      </p>
+                      <p className="">
+                        <span className="title-wallet"> Ví CTV: </span>{" "}
+                        <span>
+                          {formatMoney(item?.current_collaborator_wallet)}
+                        </span>
+                      </p>
                     </div>
                   </div>
                 </div>
-                <div className="flex">
-                  <p>{"+230.000 VND"}</p>
+                <div className="container-drop-down">
+                  <p className={item?.value > 0 ? "plus-money" : "minus-money"}>
+                    {`${item?.value > 0 ? "+" : ""}` + formatMoney(item?.value)}
+                  </p>
                   <DownOutlined color="#000" />
                 </div>
               </div>
@@ -98,30 +143,3 @@ const HistoryActivity = (props) => {
   );
 };
 export default HistoryActivity;
-
-const arr = [
-  {
-    _id: 1,
-    title: { vi: "admin đã tạo lệnh phạt" },
-    body: { vi: "description activity history" },
-    date_create: "2024-04-01T04:05:08.169Z",
-  },
-  {
-    _id: 3,
-    title: { vi: "Log lich sủ" },
-    body: { vi: "description activity history" },
-    date_create: "2024-03-31T04:05:08.169Z",
-  },
-  {
-    _id: 4,
-    title: { vi: "Log lịch sử" },
-    body: { vi: "description activity history" },
-    date_create: "2024-03-01T04:05:08.169Z",
-  },
-  {
-    _id: 2,
-    title: { vi: "Log lịch sử" },
-    body: { vi: "description activity history" },
-    date_create: "2024-02-01T04:05:08.169Z",
-  },
-];

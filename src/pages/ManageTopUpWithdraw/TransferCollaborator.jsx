@@ -267,6 +267,7 @@ const TransferCollaborator = () => {
           onCurrentPageChange={onChangePage}
           setOpenModalChangeStatus={setOpenModalChangeStatus}
           setOpenModalCancel={setOpenModalCancel}
+          scrollX={1600}
         />
       </div>
       {/* ********************** Modal custom ***************************** */}

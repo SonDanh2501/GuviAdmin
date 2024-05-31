@@ -290,10 +290,7 @@ const AddPushNotification = ({ idOrder }) => {
           classUpload="upload-img-background-noti"
         />
 
-        <Button
-          className="btn-create-notification"
-          onClick={onCreateNotification}
-        >
+        <Button className="mr-t" type="primary" onClick={onCreateNotification}>
           {`${i18n.t("create", { lng: lang })}`}
         </Button>
       </Drawer>

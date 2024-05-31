@@ -41,6 +41,7 @@ const DataTable = (props) => {
     detectLoading,
     setOpenModalChangeStatus,
     setOpenModalCancel,
+    scrollX,
   } = props;
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -1242,7 +1243,6 @@ const DataTable = (props) => {
   const toggleModal = (event) => {
     if (props.onToggleModal) props.onToggleModal(true);
   };
-  console.log("widthPage", widthPage);
   return (
     <React.Fragment>
       <div className="mr-t">
@@ -1250,7 +1250,7 @@ const DataTable = (props) => {
           columns={headerTable}
           dataSource={data}
           pagination={false}
-          scroll={{ x: widthPage + 1000 }}
+          scroll={{ x: scrollX ? scrollX : widthPage }}
           // loading={detectLoading}
           onRow={(record, rowIndex) => {
             return {
