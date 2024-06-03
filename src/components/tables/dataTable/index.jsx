@@ -41,6 +41,7 @@ const DataTable = (props) => {
     detectLoading,
     setOpenModalChangeStatus,
     setOpenModalCancel,
+    scrollX,
   } = props;
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -1033,7 +1034,7 @@ const DataTable = (props) => {
                 break;
               case "doing":
                 _text_status = (
-                  <span className="text-status-done">Đang thực thi</span>
+                  <span className="text-status-doing">Đang thực thi</span>
                 );
                 break;
               case "cancel":
@@ -1048,7 +1049,7 @@ const DataTable = (props) => {
                 break;
               case "done":
                 _text_status = (
-                  <span className="text-status-doing">Hoàn thành</span>
+                  <span className="text-status-done">Hoàn thành</span>
                 );
                 break;
               default:
@@ -1057,10 +1058,35 @@ const DataTable = (props) => {
             return <div className="div-status-order">{_text_status}</div>;
           }
           case "type_wallet": {
-            let _wallet = data?.payment_in === "work_wallet" ? "Nạp" : "CTV";
+            let _wallet;
+            switch (data?.payment_in) {
+              case "momo":
+                _wallet = "MoMo";
+                break;
+              case "vnpay":
+                _wallet = "VNPAY";
+                break;
+              case "viettel_pay":
+                _wallet = "Viettel Pay";
+                break;
+              case "collaborator_wallet":
+                _wallet = "Ví CTV";
+                break;
+              case "work_wallet":
+                _wallet = "Ví công việc";
+                break;
+              case "pay_point":
+                _wallet = "G-Pay";
+                break;
+              case "other":
+                _wallet = "Khác";
+                break;
+              default:
+                break;
+            }
             return (
               <div className="div-date-create">
-                <p className="title-detail">Ví {_wallet}</p>
+                <p className="title-detail">{_wallet}</p>
               </div>
             );
           }
@@ -1169,7 +1195,7 @@ const DataTable = (props) => {
                   disabled={_isDisableVerify}
                   onClick={() => setOpenModalChangeStatus(true)}
                 >
-                  Duyệt lệnh
+                  Xác nhận
                 </Button>
                 <Button
                   type="primary"
@@ -1177,7 +1203,7 @@ const DataTable = (props) => {
                   disabled={_isDisableVerify}
                   onClick={() => setOpenModalCancel(true)}
                 >
-                  Huỷ lệnh
+                  Huỷ
                 </Button>
               </div>
             );
@@ -1206,7 +1232,7 @@ const DataTable = (props) => {
   if (actionColumn) headerTable.push(actionColumn);
 
   const calculateCurrentPage = (event) => {
-    console.log("evet", event);
+    // console.log("evet", event);
     setCurrentPage(event);
     if (props.onCurrentPageChange) {
       setIsLoading(true);
@@ -1217,7 +1243,6 @@ const DataTable = (props) => {
   const toggleModal = (event) => {
     if (props.onToggleModal) props.onToggleModal(true);
   };
-
   return (
     <React.Fragment>
       <div className="mr-t">
@@ -1225,7 +1250,7 @@ const DataTable = (props) => {
           columns={headerTable}
           dataSource={data}
           pagination={false}
-          scroll={{ x: widthPage }}
+          scroll={{ x: scrollX ? scrollX : widthPage }}
           // loading={detectLoading}
           onRow={(record, rowIndex) => {
             return {

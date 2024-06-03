@@ -14,6 +14,32 @@
       border-radius: 6px;
       .title_admin {
         @include flexbox(space-between, center);
+        .container-wallet {
+          @include flexbox(space-between, center);
+          width: 240px;
+          margin-top: 0.6rem;
+          span {
+            color: var(--black-color);
+          }
+          .title-wallet {
+            color: var(--text-color);
+            font-weight: 400;
+          }
+        }
+      }
+      .container-drop-down {
+        @include flexbox(space-between, center);
+        // border: 1px solid;
+        .plus-money {
+          margin-right: 1rem;
+          color: var(--success-color);
+          font-weight: 400;
+        }
+        .minus-money {
+          margin-right: 1rem;
+          color: var(--error-color);
+          font-weight: 400;
+        }
       }
     }
     .item-info_detail {
@@ -53,6 +79,9 @@
   }
   .item-left {
     width: 140px;
+  }
+  .link-to {
+    color: var(--selected-color);
   }
 }
 .history-activity_container {
