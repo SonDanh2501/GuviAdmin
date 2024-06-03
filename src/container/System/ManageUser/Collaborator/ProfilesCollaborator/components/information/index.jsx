@@ -59,7 +59,6 @@ const Information = ({ data, image, idCTV, setData }) => {
   const businessOption = [];
   const dateFormat = "YYYY-MM-DD";
   const lang = useSelector(getLanguageState);
-
   useEffect(() => {
     province.forEach((item) => {
       if (item?.code === data?.city) {
@@ -87,9 +86,7 @@ const Information = ({ data, image, idCTV, setData }) => {
     setPhone(data?.phone);
     setCodeInvite(data?.invite_code);
     setType(data?.type);
-    data?.service_apply?.map((item) => {
-      return serviceApply.push(item?._id);
-    });
+    setServiceApply(data?.service_apply);
     setIdBusiness(data?.id_business);
     setCodeCity(data?.city);
     setCodeDistrict(data?.district);
@@ -251,7 +248,7 @@ const Information = ({ data, image, idCTV, setData }) => {
     dispatch,
     lang,
   ]);
-
+  console.log("serviceApply ", serviceApply);
   return (
     <>
       <Form>
@@ -350,7 +347,9 @@ const Information = ({ data, image, idCTV, setData }) => {
                 mode="multiple"
                 allowClear
                 value={serviceApply}
-                onChange={(e) => setServiceApply(e)}
+                onChange={(e) => {
+                  setServiceApply(e);
+                }}
                 options={serviceOption}
                 select={true}
               />
