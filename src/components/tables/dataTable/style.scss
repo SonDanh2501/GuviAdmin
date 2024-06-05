@@ -158,7 +158,20 @@ span {
     }
   }
 }
-
+.div-type-transaction {
+  p {
+    text-align: center;
+  }
+  // .div-withdraw {
+  //   background-color: $backGroundDiscount;
+  //   padding: 0.2rem;
+  //   border-radius: 6px;
+  //   border: 1px solid $colorError;
+  // }
+  // .div-top-up {
+  //   background-color: $colorSuccess;
+  // }
+}
 .div-status-order {
   .text-status-pending {
     color: $color2;
