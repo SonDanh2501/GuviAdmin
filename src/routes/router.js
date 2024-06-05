@@ -661,23 +661,21 @@ const router = [
     "transaction",
     <IconCustom icon={cards} />,
     [
-      getItem(
-        "CTV",
-        "/transaction/manage-transaction-collaborator",
-        null,
-        null
-      ),
-      "cash_book",
-      getItem(
-        "Khách hàng",
-        "/transaction/manage-transaction-customer",
-        null,
-        null
-      ),
-      "cash_book",
-      getItem("Khác", "/transaction/manage-transaction-staff", null, null),
-      "cash_book",
-      getItem("Phạt", "/punish/manage-punish", null, null, "support_customer"),
+      // getItem(
+      //   "CTV",
+      //   "/transaction/manage-transaction-collaborator",
+      //   null,
+      //   null
+      // ),
+      // getItem(
+      //   "Khách hàng",
+      //   "/transaction/manage-transaction-customer",
+      //   null,
+      //   null
+      // ),
+      // getItem("Khác", "/transaction/manage-transaction-staff", null, null),
+      getItem("Sổ quỹ", "/transaction/manage-transaction", null, null),
+      getItem("Phạt", "/punish/manage-punish", null, null),
       // getItem(
       //   "Thưởng",
       //   "/reward/manage-reward",
