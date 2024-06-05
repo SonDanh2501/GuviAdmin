@@ -375,6 +375,63 @@ const DataTable = (props) => {
             );
             break;
           }
+          case "subject_transaction": {
+            return (
+              <>
+                <div className="div-collaborator">
+                  {data?.id_customer && (
+                    <div className="div-name-star">
+                      <Link
+                        to={`/profile-customer/${
+                          data?.id_customer?._id || data?._id
+                        }`}
+                        target="_blank"
+                      >
+                        <div className="div-name">
+                          <p className={`${item?.fontSize}`}>
+                            KH - {data?.id_customer?.full_name}
+                          </p>
+                        </div>
+                        <div className="div-phone-star">
+                          <p className={`${item?.fontSize}`}>
+                            {data?.id_customer?.phone}
+                          </p>
+                        </div>
+                      </Link>
+                    </div>
+                  )}
+                  {data?.id_collaborator && (
+                    <>
+                      <Link
+                        to={`/details-collaborator/${data?.id_collaborator?._id}`}
+                        className="div-name-star"
+                        target="_blank"
+                      >
+                        <div className="div-name">
+                          <p className={`${item?.fontSize}`}>
+                            CTV - {data?.id_collaborator?.full_name}
+                          </p>
+                        </div>
+                        <div className="div-phone-star">
+                          <p className={`${item?.fontSize}`}>
+                            {data?.id_collaborator?.phone}
+                          </p>
+                        </div>
+                      </Link>
+                    </>
+                  )}
+                  {!data?.id_collaborator && !data?.id_customer && (
+                    <div className="div-name">
+                      <p className={`${item?.fontSize}`}>
+                        Khác - {data?.id_admin_action?.full_name}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </>
+            );
+            break;
+          }
           case "status":
             return (
               <div className="div-status-order">
@@ -968,8 +1025,16 @@ const DataTable = (props) => {
                 break;
             }
             return (
-              <div className="div-date-create">
-                <p>{type_transfer}</p>
+              <div className="div-type-transaction">
+                {type_transfer === "Rút" ? (
+                  <div className="div-status-order">
+                    <p className="text-status-cancel">{type_transfer}</p>
+                  </div>
+                ) : (
+                  <div className="div-status-order">
+                    <p className="text-status-done">{type_transfer}</p>
+                  </div>
+                )}
               </div>
             );
           }
