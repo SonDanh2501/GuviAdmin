@@ -10,7 +10,7 @@ import InputCustom from "../textInputCustom";
 import i18n from "../../i18n";
 import { Button, Drawer, List, Select } from "antd";
 
-const TransactionDrawer = (props) => {
+const TransactionDrawer2 = (props) => {
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const { width } = useWindowDimensions();
@@ -21,16 +21,8 @@ const TransactionDrawer = (props) => {
   const [reason, setReason] = useState();
   const [data, setData] = useState([]);
   const [value, setValue] = useState();
-  const {
-    type,
-    setDataT,
-    setTotal,
-    titleHeader,
-    titleButton,
-    subject,
-    onClick,
-    defaultWallet,
-  } = props;
+  const [subject, setSubject] = useState("collaborator");
+  const { type, titleHeader, titleButton, onClick, defaultWallet } = props;
   const [state, setState] = useState({
     money: 0,
     note: "",
@@ -41,6 +33,7 @@ const TransactionDrawer = (props) => {
     wallet: "work_wallet",
     id: "",
     id_order: "",
+    subject: subject,
   });
   // ---------------------------- xử lý data ------------------------------------//
   const titleInput =
@@ -48,7 +41,7 @@ const TransactionDrawer = (props) => {
       ? "Cộng tác viên"
       : subject === "customer"
       ? "Khách hàng"
-      : "Nhân viên";
+      : "Khác";
   // --------------------------- action ------------------------------------- //
 
   const showDrawer = () => {
@@ -151,6 +144,15 @@ const TransactionDrawer = (props) => {
       >
         <div className="modal-body">
           <div>
+            <p>Đối tượng</p>
+            <Select
+              defaultValue={"collaborator"}
+              style={{ width: "100%" }}
+              onChange={(e) => {
+                setSubject(e);
+              }}
+              options={subjects}
+            />
             {subject !== "staff" && (
               <InputCustom
                 title={titleInput}
@@ -261,7 +263,7 @@ const TransactionDrawer = (props) => {
     </div>
   );
 };
-export default React.memo(TransactionDrawer);
+export default React.memo(TransactionDrawer2);
 
 const arrWallet = [
   {
@@ -271,5 +273,20 @@ const arrWallet = [
   {
     value: "collaborator_wallet",
     label: `Ví CTV`,
+  },
+];
+
+const subjects = [
+  {
+    value: "collaborator",
+    label: `Cộng tác viên`,
+  },
+  {
+    value: "customer",
+    label: `Khách hàng`,
+  },
+  {
+    value: "other",
+    label: `Khác`,
   },
 ];
