@@ -101,9 +101,6 @@ const RangeDatePicker = (props) => {
   };
 
   const onChange = (value, event) => {
-    // console.log(value[0].toISOString(), "sssss");
-    // console.log(value[1].toISOString(), "sssss");
-
     setStartCalendar(value[0]);
     setEndCalendar(value[1]);
 
@@ -112,7 +109,6 @@ const RangeDatePicker = (props) => {
 
     setTitle(`${i18n.t(DATA_TAB[DATA_TAB.length - 1].title, { lng: lang })}`);
   };
-
   const onSelectTab = (item) => {
     setValueTab(item.value);
     if (item.type_range === "setting") {
