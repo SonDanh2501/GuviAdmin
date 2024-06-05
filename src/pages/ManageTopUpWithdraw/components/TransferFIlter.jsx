@@ -233,7 +233,7 @@ const dataPaymentMethods = [
   {
     label: "VNPay",
     key: "3",
-    value: "vn_pay",
+    value: "vnpay",
   },
   {
     label: "Pay-Point",
