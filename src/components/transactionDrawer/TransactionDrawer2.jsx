@@ -9,7 +9,18 @@ import { getListAccount } from "../../api/createAccount";
 import InputCustom from "../textInputCustom";
 import i18n from "../../i18n";
 import { Button, Drawer, List, Select } from "antd";
-
+const initValue = {
+  money: 0,
+  note: "",
+  data: [],
+  name: "",
+  errorName: "",
+  errorMoney: "",
+  payment_in: "work_wallet",
+  payment_out: "bank",
+  id: "",
+  subject: "collaborator",
+};
 const TransactionDrawer2 = (props) => {
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -18,23 +29,9 @@ const TransactionDrawer2 = (props) => {
   // ---------------------------- usestate ------------------------------------ //
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
-  const [reason, setReason] = useState();
-  const [data, setData] = useState([]);
-  const [value, setValue] = useState();
-  const [subject, setSubject] = useState("collaborator");
+  const [subject, setSubject] = useState(initValue.subject);
   const { type, titleHeader, titleButton, onClick, defaultWallet } = props;
-  const [state, setState] = useState({
-    money: 0,
-    note: "",
-    data: [],
-    name: "",
-    errorName: "",
-    errorMoney: "",
-    wallet: "work_wallet",
-    id: "",
-    id_order: "",
-    subject: subject,
-  });
+  const [state, setState] = useState(initValue);
   // ---------------------------- xử lý data ------------------------------------//
   const titleInput =
     subject === "collaborator"
@@ -49,6 +46,9 @@ const TransactionDrawer2 = (props) => {
   };
   const onClose = () => {
     setOpen(false);
+    setState(initValue);
+    setSubject("collaborator");
+    setName("");
   };
   const searchCollaborator = useCallback(
     _debounce((value) => {
@@ -56,7 +56,6 @@ const TransactionDrawer2 = (props) => {
       if (value) {
         fetchCollaborators(lang, 0, 20, "", value, "")
           .then((res) => {
-            setData(res.data);
             if (value === "") {
               setState({ ...state, data: [] });
             } else {
@@ -96,30 +95,6 @@ const TransactionDrawer2 = (props) => {
     }, 500),
     [state]
   );
-  const searchStaff = useCallback(
-    _debounce((value) => {
-      setName(value);
-      console.log(value);
-      if (value) {
-        getListAccount(0, 20, value)
-          .then((res) => {
-            console.log("ressss ", res);
-            if (value === "") {
-              setState({ ...state, data: [] });
-            } else {
-              setState({ ...state, data: res?.data });
-            }
-          })
-          .catch((err) => {});
-      } else if (state?.id) {
-        setState({ ...state, data: [] });
-      } else {
-        setState({ ...state, data: [] });
-      }
-      setState({ ...state, id: "" });
-    }, 500),
-    [state]
-  );
   const handleChangeReason = (id, value) => {
     setState({ ...state, note: value?.note, id: id });
   };
@@ -129,7 +104,6 @@ const TransactionDrawer2 = (props) => {
   return (
     <div className="transaction-drawer_container">
       <Button type="primary" onClick={showDrawer}>
-        {/* <p className="title-button"> {titleButton}</p> */}
         {titleButton}
       </Button>
       <Drawer
@@ -150,10 +124,18 @@ const TransactionDrawer2 = (props) => {
               style={{ width: "100%" }}
               onChange={(e) => {
                 setSubject(e);
+                if (e === "customer") {
+                  setState({ ...state, subject: e, payment_in: "pay_point" });
+                } else if (e === "other") {
+                  setState({ ...state, subject: e, payment_in: "cash_book" });
+                } else if (e === "collaborator") {
+                  setState({ ...state, subject: e });
+                }
               }}
               options={subjects}
+              value={subject}
             />
-            {subject !== "staff" && (
+            {subject !== "other" && (
               <InputCustom
                 title={titleInput}
                 placeholder={`${i18n.t("search", { lng: lang })}`}
@@ -162,7 +144,6 @@ const TransactionDrawer2 = (props) => {
                   subject === "customer" && searchCustomer(e.target.value);
                   subject === "collaborator" &&
                     searchCollaborator(e.target.value);
-                  //  searchStaff(e.target.value);
                   setName(e.target.value);
                 }}
                 error={state?.errorName}
@@ -224,15 +205,29 @@ const TransactionDrawer2 = (props) => {
               textArea={true}
             />
           </div>
+          <div className="mt-2">
+            <p>Phương thức thanh toán: </p>
+            <Select
+              defaultValue={"bank"}
+              style={{ width: "100%" }}
+              onChange={(e) => {
+                setState({ ...state, payment_out: e });
+              }}
+              options={payments}
+              value={state?.payment_out}
+            />
+          </div>
           {subject === "collaborator" && (
             <div className="mt-2">
+              <p>Vào ví: </p>
               <Select
                 defaultValue={defaultWallet ? defaultWallet : "work_wallet"}
                 style={{ width: "100%" }}
                 onChange={(e) => {
-                  setState({ ...state, wallet: e });
+                  setState({ ...state, payment_in: e });
                 }}
                 options={arrWallet}
+                value={state?.payment_in}
               />
             </div>
           )}
@@ -240,20 +235,8 @@ const TransactionDrawer2 = (props) => {
             type="primary"
             className="btn-confirm-drawer"
             onClick={() => {
-              onClose();
-              setState({
-                money: 0,
-                note: "",
-                data: [],
-                name: "",
-                errorName: "",
-                errorMoney: "",
-                wallet: "work_wallet",
-                id: "",
-                id_order: "",
-              });
-              setName("");
               onClick(state);
+              onClose();
             }}
           >
             {titleButton}
@@ -288,5 +271,32 @@ const subjects = [
   {
     value: "other",
     label: `Khác`,
+  },
+];
+
+const payments = [
+  {
+    value: "bank",
+    label: `Chuyển khoản`,
+  },
+  {
+    value: "cash",
+    label: `Tiền mặt`,
+  },
+  {
+    value: "momo",
+    label: `MoMo`,
+  },
+  {
+    value: "vnpay",
+    label: `VN PAY`,
+  },
+  {
+    value: "viettel_money",
+    label: `Viettel Money`,
+  },
+  {
+    value: "other",
+    label: "Khác",
   },
 ];

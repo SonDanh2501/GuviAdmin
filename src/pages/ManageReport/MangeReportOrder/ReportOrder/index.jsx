@@ -11,8 +11,8 @@ import useWindowDimensions from "../../../../helper/useWindowDimensions";
 import i18n from "../../../../i18n";
 import { getLanguageState } from "../../../../redux/selectors/auth";
 import RangeDatePicker from "../../../../components/datePicker/RangeDatePicker";
-import DataTable from "../../../../components/tables/dataTable"
-import CardMultiInfo from "../../../../components/card/cardMultiInfo"
+import DataTable from "../../../../components/tables/dataTable";
+import CardMultiInfo from "../../../../components/card/cardMultiInfo";
 import "./index.scss";
 const ReportOrder = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,12 +23,14 @@ const ReportOrder = () => {
   const [total, setTotal] = useState([]);
   const [dataTotal, setDataTotal] = useState({});
 
-  const [startDate, setStartDate] = useState("")
-  const [endDate, setEndDate] = useState("")
-  const [start, setStart] = useState(0)
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [start, setStart] = useState(0);
 
-  const typeDate = (window.location.pathname.slice(-5) === "-work") ? "date_work" : "date_create";
-
+  const typeDate =
+    window.location.pathname.slice(-5) === "-work"
+      ? "date_work"
+      : "date_create";
 
   const [isLoading, setIsLoading] = useState(false);
   const { width } = useWindowDimensions();
@@ -37,49 +39,63 @@ const ReportOrder = () => {
   const { state } = useLocation();
   const date = state?.date;
 
-  const [selectStatus, setSelectStatus] = useState(["done", "doing", "confirm"])
+  const [selectStatus, setSelectStatus] = useState([
+    "done",
+    "doing",
+    "confirm",
+  ]);
 
-  const [defaultRangeTime, setDefaultRangeTime] = 
-  useState( (date) ? [moment(date, "DD-MM-YYYY").startOf("date").toISOString(), moment(date, "DD-MM-YYYY").endOf("date").toISOString()] : "thirty_last")
+  const [defaultRangeTime, setDefaultRangeTime] = useState(
+    date
+      ? [
+          moment(date, "DD-MM-YYYY").startOf("date").toISOString(),
+          moment(date, "DD-MM-YYYY").endOf("date").toISOString(),
+        ]
+      : "thirty_last"
+  );
   const [orderStatus, setOrderStatus] = useState({
     total_item: 0,
     total_order_confirm: 0,
     total_order_done: 0,
-    total_order_doing: 0
-  })
-
+    total_order_doing: 0,
+  });
 
   useEffect(() => {
-    if(date) {
-      const startDate = moment(date, "DD-MM-YYYY").startOf("date").toISOString()
-      const endDate = moment(date, "DD-MM-YYYY").endOf("date").toISOString()
-      setStartDate(startDate)
-      setEndDate(endDate)
-    } 
-  }, [])
-
+    if (date) {
+      const startDate = moment(date, "DD-MM-YYYY")
+        .startOf("date")
+        .toISOString();
+      const endDate = moment(date, "DD-MM-YYYY").endOf("date").toISOString();
+      setStartDate(startDate);
+      setEndDate(endDate);
+    }
+  }, []);
 
   useEffect(() => {
     if (startDate !== "") {
       getDataReportOrder();
     }
-  }, [startDate, endDate, start, selectStatus])
-
+  }, [startDate, endDate, start, selectStatus]);
 
   const getDataReportOrder = async () => {
-    const res = await getReportOrder(start, lengthPage, startDate, endDate, typeDate, selectStatus);
+    const res = await getReportOrder(
+      start,
+      lengthPage,
+      startDate,
+      endDate,
+      typeDate,
+      selectStatus
+    );
     setData(res?.data);
     setTotal(res?.totalItem);
-    setDataTotal(res?.total[0]);  
+    setDataTotal(res?.total[0]);
     setOrderStatus({
       total_item: res?.total[0].total_item,
       total_order_confirm: res?.total[0].total_order_confirm,
       total_order_done: res?.total[0].total_order_done,
-      total_order_doing: res?.total[0].total_order_doing
-    })
-  }
-
-
+      total_order_doing: res?.total[0].total_order_doing,
+    });
+  };
 
   // const getDataReportOrder = () => {
   //   getReportOrder(
@@ -551,185 +567,240 @@ const ReportOrder = () => {
   //   },
   // ];
 
-
-  const HeaderInfo = ({title, subValue, typeSubValue, textToolTip}) => {
-    const content = (
-        <p>
-          {textToolTip ? textToolTip : ""}
-        </p>
-    );
-    if(subValue) subValue = (typeSubValue === "money") ? formatMoney(subValue) : (typeSubValue === "percent") ? subValue + " %" : subValue;
-    if(title == "Giá vốn") subValue = "0 đ";
+  const HeaderInfo = ({ title, subValue, typeSubValue, textToolTip }) => {
+    const content = <p>{textToolTip ? textToolTip : ""}</p>;
+    if (subValue)
+      subValue =
+        typeSubValue === "money"
+          ? formatMoney(subValue)
+          : typeSubValue === "percent"
+          ? subValue + " %"
+          : subValue;
+    if (title == "Giá vốn") subValue = "0 đ";
     return (
       <React.Fragment>
         <div className="header-table-custom">
-        <div className="title-report">
-        <p style={{color: title === "Doanh thu" ? "#2463eb" : "none"}} >{title}</p>
-        {textToolTip ? (
-        <Popover
-        content={content}
-        placement="bottom"
-        overlayInnerStyle={{
-        backgroundColor: "white"
-        }}
-      >
-        <div>
-          <i style={{color: title === "Doanh thu" ? "#2463eb" : "none"}} class="uil uil-question-circle icon-question"></i>
+          <div className="title-report">
+            <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
+              {title}
+            </p>
+            {textToolTip ? (
+              <Popover
+                content={content}
+                placement="bottom"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                }}
+              >
+                <div>
+                  <i
+                    style={{
+                      color: title === "Doanh thu" ? "#2463eb" : "none",
+                    }}
+                    class="uil uil-question-circle icon-question"
+                  ></i>
+                </div>
+              </Popover>
+            ) : (
+              <></>
+            )}
+          </div>
+          <div className="sub-value">
+            {subValue ? (
+              <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
+                {subValue}
+              </p>
+            ) : (
+              <div style={{ marginTop: "35px" }}></div>
+            )}
+          </div>
         </div>
-      </Popover>
-        ) : (<></>)}
-        </div>
-        <div className="sub-value">
-          {subValue ? (
-           <p style={{color: title === "Doanh thu" ? "#2463eb" : "none"}} >{subValue}</p> 
-          ) : (<div style={{marginTop: "35px"}}></div>)}
-        </div>
-        </div>
-
       </React.Fragment>
-    )
-  }
+    );
+  };
 
   const columns = [
     {
-      customTitle: (typeDate === "date_work") ? <HeaderInfo title="Ngày làm" /> : <HeaderInfo title="Ngày tạo" />,
-      dataIndex: (typeDate === "date_work") ? 'date_work' : 'date_create',
+      customTitle:
+        typeDate === "date_work" ? (
+          <HeaderInfo title="Ngày làm" />
+        ) : (
+          <HeaderInfo title="Ngày tạo" />
+        ),
+      dataIndex: typeDate === "date_work" ? "date_work" : "date_create",
       key: "date_hour",
       width: 50,
-      fontSize: "text-size-M text-weight-500"
+      fontSize: "text-size-M text-weight-500",
     },
     {
-      customTitle: <HeaderInfo title="Mã đơn"  />,
-      dataIndex: 'id_view',
+      customTitle: <HeaderInfo title="Mã đơn" />,
+      dataIndex: "id_view",
       key: "text",
       width: 90,
-      fontSize: "text-size-M text-color-black text-weight-500"
+      fontSize: "text-size-M text-color-black text-weight-500",
     },
     {
-      customTitle: <HeaderInfo title="Trạng thái" 
-      />,
-      dataIndex: 'status',
+      customTitle: <HeaderInfo title="Trạng thái" />,
+      dataIndex: "status",
       key: "status",
       width: 120,
-      fontSize: "text-size-M text-weight-500"
-
+      fontSize: "text-size-M text-weight-500",
     },
     {
-      customTitle: <HeaderInfo title="Tổng giá trị giao dịch" 
-      subValue={dataTotal.total_gross_income} 
-      typeSubValue="money"
-      textToolTip="GMV - Gross Merchandise Volume"/>,
-      dataIndex: 'total_gross_income',
+      customTitle: (
+        <HeaderInfo
+          title="Tổng giá trị giao dịch"
+          subValue={dataTotal.total_gross_income}
+          typeSubValue="money"
+          textToolTip="GMV - Gross Merchandise Volume"
+        />
+      ),
+      dataIndex: "total_gross_income",
       key: "money",
       width: 120,
-      fontSize: "text-size-M text-weight-500"
-
+      fontSize: "text-size-M text-weight-500",
     },
     {
-      customTitle: <HeaderInfo title="Thu hộ dịch vụ" 
-      subValue={dataTotal.total_collabotator_fee} 
-      typeSubValue="money"
-      textToolTip="Bao gồm phí dịch vụ trả cho CTV, tiền tip từ khách,…"/>,
-      dataIndex: 'total_collabotator_fee',
+      customTitle: (
+        <HeaderInfo
+          title="Thu hộ dịch vụ"
+          subValue={dataTotal.total_collabotator_fee}
+          typeSubValue="money"
+          textToolTip="Bao gồm phí dịch vụ trả cho CTV, tiền tip từ khách,…"
+        />
+      ),
+      dataIndex: "total_collabotator_fee",
       key: "money",
       width: 120,
-      fontSize: "text-size-M text-weight-500"
-
+      fontSize: "text-size-M text-weight-500",
     },
     {
-      customTitle: <HeaderInfo title="Doanh thu" 
-      subValue={dataTotal.total_income} 
-      typeSubValue="money"
-      textToolTip=""/>,
-      dataIndex: 'total_income',
+      customTitle: (
+        <HeaderInfo
+          title="Doanh thu"
+          subValue={dataTotal.total_income}
+          typeSubValue="money"
+          textToolTip=""
+        />
+      ),
+      dataIndex: "total_income",
       key: "money",
       width: 120,
-      fontSize: "text-size-M text-color-1 text-weight-500"
-
+      fontSize: "text-size-M text-color-1 text-weight-500",
     },
     {
-      customTitle: <HeaderInfo title="Giảm giá" 
-      subValue={dataTotal.total_discount} 
-      typeSubValue="money"
-      textToolTip="Tổng số tiền giảm giá từ giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,…"/>,
-      dataIndex: 'total_discount',
+      customTitle: (
+        <HeaderInfo
+          title="Giảm giá"
+          subValue={dataTotal.total_discount}
+          typeSubValue="money"
+          textToolTip="Tổng số tiền giảm giá từ giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,…"
+        />
+      ),
+      dataIndex: "total_discount",
       key: "money",
       width: 120,
-      fontSize: "text-size-M text-weight-500"
-
+      fontSize: "text-size-M text-weight-500",
     },
 
     {
-      customTitle: <HeaderInfo title="Doanh thu thuần" 
-      subValue={dataTotal.total_net_income} 
-      typeSubValue="money"
-      textToolTip="Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần = Doanh thu (-) Giảm giá."/>,
-      dataIndex: 'total_net_income',
+      customTitle: (
+        <HeaderInfo
+          title="Doanh thu thuần"
+          subValue={dataTotal.total_net_income}
+          typeSubValue="money"
+          textToolTip="Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần = Doanh thu (-) Giảm giá."
+        />
+      ),
+      dataIndex: "total_net_income",
       key: "money",
       width: 120,
-      fontSize: "text-size-M text-weight-500"
-
+      fontSize: "text-size-M text-weight-500",
     },
     {
-      customTitle: <HeaderInfo title="Tổng hoá đơn" 
-      subValue={dataTotal.total_order_fee} 
-      typeSubValue="money"
-      textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."/>,
-      dataIndex: 'total_order_fee',
+      customTitle: (
+        <HeaderInfo
+          title="Tổng hoá đơn"
+          subValue={dataTotal.total_order_fee}
+          typeSubValue="money"
+          textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."
+        />
+      ),
+      dataIndex: "total_order_fee",
       key: "money",
       width: 120,
-      fontSize: "text-size-M text-weight-500"
+      fontSize: "text-size-M text-weight-500",
     },
     {
-      customTitle: <HeaderInfo title="Giá vốn" 
-      subValue={dataTotal.punishss} 
-      typeSubValue="money"/>,
-      dataIndex: 'punishss',
+      customTitle: (
+        <HeaderInfo
+          title="Giá vốn"
+          subValue={dataTotal.punishss}
+          typeSubValue="money"
+        />
+      ),
+      dataIndex: "punishss",
       key: "money",
       width: 90,
-      fontSize: "text-size-M text-weight-500"
+      fontSize: "text-size-M text-weight-500",
     },
     {
-      customTitle: <HeaderInfo title="Thu nhập khác" 
-      subValue={dataTotal.punish} 
-      typeSubValue="money"
-      textToolTip="Bao gồm phí phạt trễ và huỷ ca"/>,
-      dataIndex: 'punish',
+      customTitle: (
+        <HeaderInfo
+          title="Thu nhập khác"
+          subValue={dataTotal.punish}
+          typeSubValue="money"
+          textToolTip="Bao gồm phí phạt trễ và huỷ ca"
+        />
+      ),
+      dataIndex: "punish",
       key: "money",
       width: 120,
-      fontSize: "text-size-M text-weight-500"
+      fontSize: "text-size-M text-weight-500",
     },
     {
-      customTitle: <HeaderInfo title="Tổng lợi nhuận" 
-      subValue={dataTotal.total_net_income_business} 
-      typeSubValue="money"
-      textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác"/>,
-      dataIndex: 'total_net_income_business',
+      customTitle: (
+        <HeaderInfo
+          title="Tổng lợi nhuận"
+          subValue={dataTotal.total_net_income_business}
+          typeSubValue="money"
+          textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác"
+        />
+      ),
+      dataIndex: "total_net_income_business",
       key: "money",
       width: 120,
-      fontSize: "text-size-M text-weight-500"
+      fontSize: "text-size-M text-weight-500",
     },
     {
-      customTitle: <HeaderInfo title="% Lợi nhuận" 
-      subValue={dataTotal.percent_income} 
-      typeSubValue="percent"
-      textToolTip="% Lợi nhuận = Tổng lợi nhuận (/) Doanh thu."/>,
-      dataIndex: 'percent_income',
+      customTitle: (
+        <HeaderInfo
+          title="% Lợi nhuận"
+          subValue={dataTotal.percent_income}
+          typeSubValue="percent"
+          textToolTip="% Lợi nhuận = Tổng lợi nhuận (/) Doanh thu."
+        />
+      ),
+      dataIndex: "percent_income",
       key: "percent",
       width: 90,
-      fontSize: "text-size-M text-weight-500"
+      fontSize: "text-size-M text-weight-500",
     },
     {
-      customTitle: <HeaderInfo title="Phí áp dụng"
-        subValue={dataTotal.total_service_fee}
-        typeSubValue="money" />,
-      title: 'Phí áp dụng',
-      dataIndex: 'total_service_fee',
+      customTitle: (
+        <HeaderInfo
+          title="Phí áp dụng"
+          subValue={dataTotal.total_service_fee}
+          typeSubValue="money"
+        />
+      ),
+      title: "Phí áp dụng",
+      dataIndex: "total_service_fee",
       key: "money",
       width: 120,
-      fontSize: "text-size-M text-weight-500"
+      fontSize: "text-size-M text-weight-500",
     },
-  ]
+  ];
 
   const onChange = useCallback(
     (page) => {
@@ -766,67 +837,68 @@ const ReportOrder = () => {
       });
   };
 
-
-  const changeStatusOrder = (value: string) => {
-    setSelectStatus(value)
+  const changeStatusOrder = (value) => {
+    setSelectStatus(value);
   };
-
   return (
-
-
     <div className="div-container-content">
-    <div className="div-flex-row">
-      {/* <div className="div-header-container"> */}
-      <div className="">
-
-        <h4 className="title-cv">{`${i18n.t("order_report", { lng: lang })}`}</h4>
-              <RangeDatePicker
+      <div className="div-flex-row">
+        {/* <div className="div-header-container"> */}
+        <div className="">
+          <h4 className="title-cv">{`${i18n.t("order_report", {
+            lng: lang,
+          })}`}</h4>
+          <div className="div-range-date">
+            <RangeDatePicker
               setStartDate={setStartDate}
               setEndDate={setEndDate}
-              onCancel={() => { }}
+              onCancel={() => {}}
               defaults={defaultRangeTime}
             />
-      </div>
+            <p className="date">
+              {moment(startDate).format("DD/MM/YYYY")} -{" "}
+              {moment(endDate).format("DD/MM/YYYY")}
+            </p>
+          </div>
+        </div>
 
-
-
-      {/* <div className="total-order-status">
+        {/* <div className="total-order-status">
       <CardMultiInfo
             mainInfo={orderStatus.mainInfo} 
             secondInfo={orderStatus.secondInfo}
             />
       </div> */}
-    </div>
-
-    <div className="div-flex-row">
-          <div class="card">
-            <img src="/static/media/add.1c86de41.png" class="img"/>
-              <div class="div-details">
-                <a class="text-title">Tổng đơn hàng</a>
-                <a class="text-detail">{orderStatus.total_item}</a>
-              </div>
+      </div>
+      <h4>aksudgahs</h4>
+      <div className="div-flex-row">
+        <div class="card">
+          <img src="/static/media/add.1c86de41.png" class="img" />
+          <div class="div-details">
+            <a class="text-title">Tổng đơn hàng</a>
+            <a class="text-detail">{orderStatus.total_item}</a>
           </div>
-          <div class="card">
-            <img src="/static/media/add.1c86de41.png" class="img"/>
-              <div class="div-details">
-                <a class="text-title">Đơn hoàn thành</a>
-                <a class="text-detail">{orderStatus.total_order_done}</a>
-              </div>
+        </div>
+        <div class="card">
+          <img src="/static/media/add.1c86de41.png" class="img" />
+          <div class="div-details">
+            <a class="text-title">Đơn hoàn thành</a>
+            <a class="text-detail">{orderStatus.total_order_done}</a>
           </div>
-          <div class="card">
-            <img src="/static/media/add.1c86de41.png" class="img"/>
-              <div class="div-details">
-              <a class="text-title">Đơn đang làm</a>
-                <a class="text-detail">{orderStatus.total_order_doing}</a>
-              </div>
+        </div>
+        <div class="card">
+          <img src="/static/media/add.1c86de41.png" class="img" />
+          <div class="div-details">
+            <a class="text-title">Đơn đang làm</a>
+            <a class="text-detail">{orderStatus.total_order_doing}</a>
           </div>
-          <div class="card">
-            <img src="/static/media/add.1c86de41.png" class="img"/>
-              <div class="div-details">
-              <a class="text-title">Đơn đã nhận</a>
-                <a class="text-detail">{orderStatus.total_order_confirm}</a>
-              </div>
+        </div>
+        <div class="card">
+          <img src="/static/media/add.1c86de41.png" class="img" />
+          <div class="div-details">
+            <a class="text-title">Đơn đã nhận</a>
+            <a class="text-detail">{orderStatus.total_order_confirm}</a>
           </div>
+        </div>
       </div>
 
       <div className="div-flex-row">
@@ -836,15 +908,12 @@ const ReportOrder = () => {
           onChange={changeStatusOrder}
           value={selectStatus}
           options={[
-            { value: 'done', label: 'Hoàn thành' },
-            { value: 'doing', label: 'Đang làm' },
-            { value: 'confirm', label: 'Đã nhận' },
+            { value: "done", label: "Hoàn thành" },
+            { value: "doing", label: "Đang làm" },
+            { value: "confirm", label: "Đã nhận" },
           ]}
         />
       </div>
-
-
-
 
       {/* <div className="div-flex-row">
           <div class="card">
@@ -877,8 +946,6 @@ const ReportOrder = () => {
           </div>
       </div> */}
 
-
-
       {/* <div className="div-flex-row">
           <CardMultiInfo
             mainInfo={orderStatus.mainInfo} 
@@ -886,20 +953,19 @@ const ReportOrder = () => {
             />
         </div> */}
 
-
-    <div>
-      <DataTable
-        columns={columns}
-        data={data}
-        // actionColumn={addActionColumn}
-        start={startPage}
-        pageSize={lengthPage}
-        totalItem={total}
-        // detectLoading={detectLoading}
-        // getItemRow={setItem}
-        onCurrentPageChange={setStart}
-      />
-    </div>
+      <div>
+        <DataTable
+          columns={columns}
+          data={data}
+          // actionColumn={addActionColumn}
+          start={startPage}
+          pageSize={lengthPage}
+          totalItem={total}
+          // detectLoading={detectLoading}
+          // getItemRow={setItem}
+          onCurrentPageChange={setStart}
+        />
+      </div>
     </div>
   );
 };
