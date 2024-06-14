@@ -1241,7 +1241,7 @@ const DataTable = (props) => {
                 _payment_out = "Tiền mặt";
                 break;
               case "bank":
-                _payment_out = "Chuyển khoảng";
+                _payment_out = "Chuyển khoản";
                 break;
               default:
                 break;

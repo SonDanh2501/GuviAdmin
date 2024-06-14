@@ -88,7 +88,7 @@ const HistoryActivity = (props) => {
   return (
     <div className="history-activity_container">
       {data.map((item, index) => {
-        const { title, body, date_create, id_admin_action } = item;
+        const { title, body, date_create, id_admin_action, title_admin } = item;
         console.log("item ", item);
         return (
           <div className="history-activity_item-container">
@@ -108,7 +108,7 @@ const HistoryActivity = (props) => {
               >
                 <div className="title_admin">
                   <div>
-                    <p className="">{title.vi}</p>
+                    <p className="">{title?.vi}</p>
                     <div className="container-wallet">
                       <p className="">
                         <span className="title-wallet">Ví Nạp:</span>{" "}
