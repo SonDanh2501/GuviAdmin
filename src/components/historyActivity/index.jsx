@@ -108,7 +108,7 @@ const HistoryActivity = (props) => {
               >
                 <div className="title_admin">
                   <div>
-                    <p className="">{title_admin}</p>
+                    <p className="">{title?.vi}</p>
                     <div className="container-wallet">
                       <p className="">
                         <span className="title-wallet">Ví Nạp:</span>{" "}
