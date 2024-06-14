@@ -138,9 +138,10 @@ const ManageTopUpWithdraw = () => {
       type_transfer: "top_up",
       money: value.money,
       id_collaborator: value?.id,
+      id_customer: value.id,
       subject: value?.subject,
-      payment_in: value?.wallet,
-      payment_out: "other",
+      payment_in: value?.payment_in,
+      payment_out: value?.payment_out,
     });
   };
   const handleWithdraw = (value) => {
@@ -149,13 +150,15 @@ const ManageTopUpWithdraw = () => {
       type_transfer: "withdraw",
       money: value.money,
       id_collaborator: value.id,
-      payment_in: "other",
-      payment_out: value.wallet,
+      id_customer: value.id,
+      payment_in: value?.payment_in,
+      payment_out: value?.payment_out,
       subject: value?.subject,
     });
   };
 
   const createTransaction = (data) => {
+    console.log("data ", data);
     createTransactionApi(data)
       .then((res) => {
         getList();
@@ -418,8 +421,8 @@ const columns = [
   },
   {
     title: "Phương thức thanh toán",
-    dataIndex: "payment_source",
-    key: "payment_source",
+    dataIndex: "payment_out",
+    key: "payment_out",
     width: 60,
     fontSize: "text-size-M",
   },

@@ -30,7 +30,7 @@
     "lodash": "~4.17.21",
     "moment": "~2.29.1",
     "react": "~18.2.0",
-    "react-calendar": "~4.1.0",
+    "react-calendar": "~5.0.0",
     "react-cool-onclickoutside": "~1.7.0",
     "react-custom-scrollbars": "~4.2.1",
     "react-dom": "~18.2.0",

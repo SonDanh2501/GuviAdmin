@@ -1,39 +1,46 @@
-@import '../../../../index.scss';
+@import "../../../../index.scss";
 
 .header-table-custom {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .title-report {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    .title-report {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        
-        p {
-            font-size: $textFontSizeM;
-            font-weight: 500;
-        }
+    flex-direction: row;
+    align-items: center;
 
-        div {
-            i {
-                font-size: $textFontSizeM;
-                margin: 0px 0px 0px 5px;
-            }
-        }
-
+    p {
+      font-size: $textFontSizeM;
+      font-weight: 500;
     }
 
-    .sub-value {
-        margin: 10px 0px 0px 0px;
-
-        p {
-            font-size: $textFontSizeM;
-            font-weight: 500;
-        }
+    div {
+      i {
+        font-size: $textFontSizeM;
+        margin: 0px 0px 0px 5px;
+      }
     }
+  }
+
+  .sub-value {
+    margin: 10px 0px 0px 0px;
+
+    p {
+      font-size: $textFontSizeM;
+      font-weight: 500;
+    }
+  }
 }
 
 .total-order-status {
-    // width: 75%;
-    margin: 0px 30px;
+  // width: 75%;
+  margin: 0px 30px;
+}
+.div-range-date {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .date {
+    margin-left: 0.5rem;
+  }
 }
