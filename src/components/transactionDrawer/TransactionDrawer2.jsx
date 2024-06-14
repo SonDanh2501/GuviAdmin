@@ -98,6 +98,15 @@ const TransactionDrawer2 = (props) => {
   const handleChangeReason = (id, value) => {
     setState({ ...state, note: value?.note, id: id });
   };
+  // useEffect(() => {
+  //   if (subject === "customer") {
+  //     setState({ ...state, payment_in: "pay_point", payment_out: "bank" });
+  //   } else if (subject === "collaborator") {
+  //     setState({ ...state, payment_in: "work_wallet", payment_out: "bank" });
+  //   } else if (subject === "other") {
+  //     setState({ ...state, payment_in: "cash_book", payment_out: "bank" });
+  //   }
+  // }, [subject]);
 
   // ----------------------------- UseEffect ----------------------------------- //
   // ----------------------------- UI ----------------------------------- //
@@ -125,11 +134,26 @@ const TransactionDrawer2 = (props) => {
               onChange={(e) => {
                 setSubject(e);
                 if (e === "customer") {
-                  setState({ ...state, subject: e, payment_in: "pay_point" });
+                  setState({
+                    ...state,
+                    subject: e,
+                    payment_in: "pay_point",
+                    payment_out: "bank",
+                  });
                 } else if (e === "other") {
-                  setState({ ...state, subject: e, payment_in: "cash_book" });
+                  setState({
+                    ...state,
+                    subject: e,
+                    payment_in: "cash_book",
+                    payment_out: "bank",
+                  });
                 } else if (e === "collaborator") {
-                  setState({ ...state, subject: e });
+                  setState({
+                    ...state,
+                    subject: e,
+                    payment_in: "work_wallet",
+                    payment_out: "bank",
+                  });
                 }
               }}
               options={subjects}

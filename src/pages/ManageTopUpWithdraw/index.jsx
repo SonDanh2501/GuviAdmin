@@ -36,15 +36,7 @@
 // const columns = [];
 
 import { InfoCircleOutlined, SearchOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Dropdown,
-  Input,
-  Pagination,
-  Popover,
-  Space,
-  Tabs,
-} from "antd";
+import { Button, Dropdown, Input, Pagination, Popover, Space } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import _debounce from "lodash/debounce";
@@ -66,6 +58,7 @@ import DataTable from "../../components/tables/dataTable";
 import ModalCustom from "../../components/modalCustom";
 import { formatMoney } from "../../helper/formatMoney";
 import TransactionDrawer2 from "../../components/transactionDrawer/TransactionDrawer2";
+import Tabs from "../../components/tabs/tabs1";
 const ManageTopUpWithdraw = () => {
   const [tab, setTab] = useState(itemTabStatus[0].value);
   const checkElement = useSelector(getElementState);
