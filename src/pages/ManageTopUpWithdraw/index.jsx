@@ -135,6 +135,7 @@ const ManageTopUpWithdraw = () => {
       subject: value?.subject,
       payment_in: value?.payment_in,
       payment_out: value?.payment_out,
+      type_wallet: value?.type_wallet,
     });
   };
   const handleWithdraw = (value) => {
@@ -147,6 +148,7 @@ const ManageTopUpWithdraw = () => {
       payment_in: value?.payment_in,
       payment_out: value?.payment_out,
       subject: value?.subject,
+      type_wallet: value?.type_wallet,
     });
   };
 
@@ -414,18 +416,18 @@ const columns = [
   },
   {
     title: "Phương thức thanh toán",
-    dataIndex: "payment_out",
-    key: "payment_out",
+    dataIndex: "payment_method",
+    key: "payment_method",
     width: 60,
     fontSize: "text-size-M",
   },
-  {
-    title: "Vào Ví",
-    dataIndex: "type_wallet",
-    key: "type_wallet",
-    width: 60,
-    fontSize: "text-size-M",
-  },
+  // {
+  //   title: "Vào Ví",
+  //   dataIndex: "type_wallet",
+  //   key: "type_wallet",
+  //   width: 60,
+  //   fontSize: "text-size-M",
+  // },
   {
     title: "Nội dung",
     dataIndex: "transfer_note",

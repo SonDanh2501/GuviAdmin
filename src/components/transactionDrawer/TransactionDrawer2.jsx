@@ -16,10 +16,11 @@ const initValue = {
   name: "",
   errorName: "",
   errorMoney: "",
-  payment_in: "work_wallet",
+  payment_in: "bank",
   payment_out: "bank",
   id: "",
   subject: "collaborator",
+  type_wallet: "work_wallet",
 };
 const TransactionDrawer2 = (props) => {
   const checkElement = useSelector(getElementState);
@@ -98,17 +99,6 @@ const TransactionDrawer2 = (props) => {
   const handleChangeReason = (id, value) => {
     setState({ ...state, note: value?.note, id: id });
   };
-  // useEffect(() => {
-  //   if (subject === "customer") {
-  //     setState({ ...state, payment_in: "pay_point", payment_out: "bank" });
-  //   } else if (subject === "collaborator") {
-  //     setState({ ...state, payment_in: "work_wallet", payment_out: "bank" });
-  //   } else if (subject === "other") {
-  //     setState({ ...state, payment_in: "cash_book", payment_out: "bank" });
-  //   }
-  // }, [subject]);
-
-  // ----------------------------- UseEffect ----------------------------------- //
   // ----------------------------- UI ----------------------------------- //
   return (
     <div className="transaction-drawer_container">
@@ -137,22 +127,25 @@ const TransactionDrawer2 = (props) => {
                   setState({
                     ...state,
                     subject: e,
-                    payment_in: "pay_point",
+                    payment_in: "bank",
                     payment_out: "bank",
+                    type_wallet: "pay_point",
                   });
                 } else if (e === "other") {
                   setState({
                     ...state,
                     subject: e,
-                    payment_in: "cash_book",
+                    payment_in: "bank",
                     payment_out: "bank",
+                    type_wallet: "other",
                   });
                 } else if (e === "collaborator") {
                   setState({
                     ...state,
                     subject: e,
-                    payment_in: "work_wallet",
+                    payment_in: "bank",
                     payment_out: "bank",
+                    type_wallet: "work_wallet",
                   });
                 }
               }}
@@ -235,7 +228,7 @@ const TransactionDrawer2 = (props) => {
               defaultValue={"bank"}
               style={{ width: "100%" }}
               onChange={(e) => {
-                setState({ ...state, payment_out: e });
+                setState({ ...state, payment_out: e, payment_in: e });
               }}
               options={payments}
               value={state?.payment_out}
@@ -243,15 +236,15 @@ const TransactionDrawer2 = (props) => {
           </div>
           {subject === "collaborator" && (
             <div className="mt-2">
-              <p>Vào ví: </p>
+              <p>Ví: </p>
               <Select
                 defaultValue={defaultWallet ? defaultWallet : "work_wallet"}
                 style={{ width: "100%" }}
                 onChange={(e) => {
-                  setState({ ...state, payment_in: e });
+                  setState({ ...state, type_wallet: e });
                 }}
                 options={arrWallet}
-                value={state?.payment_in}
+                value={state?.type_wallet}
               />
             </div>
           )}

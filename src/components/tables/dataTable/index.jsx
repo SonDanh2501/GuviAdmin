@@ -1216,39 +1216,39 @@ const DataTable = (props) => {
               </div>
             );
             break;
-          case "payment_out":
-            let _payment_out = "Chuyển khoản";
-            switch (data?.payment_out) {
+          case "payment_method":
+            let _payment_method = "Chuyển khoản";
+            switch (data?.payment_method) {
               case "momo":
-                _payment_out = "MoMo";
+                _payment_method = "MoMo";
                 break;
               case "vnpay":
-                _payment_out = "VNPAY";
+                _payment_method = "VNPAY";
                 break;
               case "viettel_pay":
-                _payment_out = "Viettel Pay";
+                _payment_method = "Viettel Pay";
                 break;
               case "collaborator_wallet":
-                _payment_out = "Ví CTV";
+                _payment_method = "Ví CTV";
                 break;
               case "work_wallet":
-                _payment_out = "Ví công việc";
+                _payment_method = "Ví công việc";
                 break;
               case "pay_point":
-                _payment_out = "G-Pay";
+                _payment_method = "G-Pay";
                 break;
               case "cash":
-                _payment_out = "Tiền mặt";
+                _payment_method = "Tiền mặt";
                 break;
               case "bank":
-                _payment_out = "Chuyển khoản";
+                _payment_method = "Chuyển khoản";
                 break;
               default:
                 break;
             }
             return (
               <div className="div-date-create">
-                <p>{_payment_out}</p>
+                <p>{_payment_method}</p>
               </div>
             );
             break;
