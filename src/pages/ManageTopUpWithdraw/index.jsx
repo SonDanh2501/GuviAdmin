@@ -305,7 +305,7 @@ const ManageTopUpWithdraw = () => {
           onCurrentPageChange={onChangePage}
           setOpenModalChangeStatus={setOpenModalChangeStatus}
           setOpenModalCancel={setOpenModalCancel}
-          scrollX={1600}
+          scrollX={2000}
         />
       </div>
       {/* ********************** Modal custom ***************************** */}
@@ -387,19 +387,28 @@ const columns = [
     fontSize: "text-size-M",
   },
   {
+    title: "Người tạo",
+    dataIndex: "",
+    key: "created_by",
+    width: 70,
+    fontSize: "text-size-M",
+  },
+  {
     title: "Trạng thái",
     dataIndex: "status",
     key: "status_transfer",
     width: 60,
     fontSize: "text-size-M",
   },
+
   {
-    title: "Đối tượng",
+    title: "Nạp vào tài khoản",
     dataIndex: "",
     key: "subject_transaction",
-    width: 70,
+    width: 90,
     fontSize: "text-size-M",
   },
+
   {
     title: "Loại giao dịch",
     dataIndex: "type_transfer",
@@ -411,7 +420,7 @@ const columns = [
     i18n_title: "money",
     dataIndex: "money",
     key: "money",
-    width: 40,
+    width: 60,
     fontSize: "text-size-M",
   },
   {
