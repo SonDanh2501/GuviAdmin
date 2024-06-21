@@ -397,6 +397,9 @@ const DataTable = (props) => {
                             {data?.id_customer?.phone}
                           </p>
                         </div>
+                        <div>
+                          <p>Nạp</p>
+                        </div>
                       </Link>
                     </div>
                   )}
@@ -1216,39 +1219,39 @@ const DataTable = (props) => {
               </div>
             );
             break;
-          case "payment_method":
-            let _payment_method = "Chuyển khoản";
-            switch (data?.payment_method) {
+          case "payment_out":
+            let _payment_out = "Chuyển khoản";
+            switch (data?.payment_out) {
               case "momo":
-                _payment_method = "MoMo";
+                _payment_out = "MoMo";
                 break;
               case "vnpay":
-                _payment_method = "VNPAY";
+                _payment_out = "VNPAY";
                 break;
               case "viettel_pay":
-                _payment_method = "Viettel Pay";
+                _payment_out = "Viettel Pay";
                 break;
               case "collaborator_wallet":
-                _payment_method = "Ví CTV";
+                _payment_out = "Ví CTV";
                 break;
               case "work_wallet":
-                _payment_method = "Ví công việc";
+                _payment_out = "Ví công việc";
                 break;
               case "pay_point":
-                _payment_method = "G-Pay";
+                _payment_out = "G-Pay";
                 break;
               case "cash":
-                _payment_method = "Tiền mặt";
+                _payment_out = "Tiền mặt";
                 break;
               case "bank":
-                _payment_method = "Chuyển khoản";
+                _payment_out = "Chuyển khoản";
                 break;
               default:
                 break;
             }
             return (
               <div className="div-date-create">
-                <p>{_payment_method}</p>
+                <p>{_payment_out}</p>
               </div>
             );
             break;
