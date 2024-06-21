@@ -135,6 +135,7 @@ const ManageTopUpWithdraw = () => {
       subject: value?.subject,
       payment_in: value?.payment_in,
       payment_out: value?.payment_out,
+      type_wallet: value?.type_wallet,
     });
   };
   const handleWithdraw = (value) => {
@@ -147,6 +148,7 @@ const ManageTopUpWithdraw = () => {
       payment_in: value?.payment_in,
       payment_out: value?.payment_out,
       subject: value?.subject,
+      type_wallet: value?.type_wallet,
     });
   };
 
@@ -303,7 +305,7 @@ const ManageTopUpWithdraw = () => {
           onCurrentPageChange={onChangePage}
           setOpenModalChangeStatus={setOpenModalChangeStatus}
           setOpenModalCancel={setOpenModalCancel}
-          scrollX={1600}
+          scrollX={2000}
         />
       </div>
       {/* ********************** Modal custom ***************************** */}
@@ -385,19 +387,28 @@ const columns = [
     fontSize: "text-size-M",
   },
   {
+    title: "Người tạo",
+    dataIndex: "",
+    key: "created_by",
+    width: 70,
+    fontSize: "text-size-M",
+  },
+  {
     title: "Trạng thái",
     dataIndex: "status",
     key: "status_transfer",
     width: 60,
     fontSize: "text-size-M",
   },
+
   {
-    title: "Đối tượng",
+    title: "Nạp vào tài khoản",
     dataIndex: "",
     key: "subject_transaction",
-    width: 70,
+    width: 90,
     fontSize: "text-size-M",
   },
+
   {
     title: "Loại giao dịch",
     dataIndex: "type_transfer",
@@ -409,7 +420,7 @@ const columns = [
     i18n_title: "money",
     dataIndex: "money",
     key: "money",
-    width: 40,
+    width: 60,
     fontSize: "text-size-M",
   },
   {
@@ -419,13 +430,13 @@ const columns = [
     width: 60,
     fontSize: "text-size-M",
   },
-  {
-    title: "Vào Ví",
-    dataIndex: "type_wallet",
-    key: "type_wallet",
-    width: 60,
-    fontSize: "text-size-M",
-  },
+  // {
+  //   title: "Vào Ví",
+  //   dataIndex: "type_wallet",
+  //   key: "type_wallet",
+  //   width: 60,
+  //   fontSize: "text-size-M",
+  // },
   {
     title: "Nội dung",
     dataIndex: "transfer_note",
@@ -450,6 +461,20 @@ const columns = [
     title: "Ngày duyệt",
     dataIndex: "date_verify_created",
     key: "date_verify",
+    width: 50,
+    fontSize: "text-size-M",
+  },
+  {
+    title: "Nguồn vào",
+    // dataIndex: "payment_in",
+    key: "text",
+    width: 50,
+    fontSize: "text-size-M",
+  },
+  {
+    title: "Nguồn ra",
+    // dataIndex: "payment_out",
+    key: "text",
     width: 50,
     fontSize: "text-size-M",
   },
@@ -513,7 +538,7 @@ const dataFilter = [
     label: "Phương thức thanh toán",
     data: [
       { key: "0", value: "", label: "Tất cả" },
-      { key: "1", value: "other", label: "Chuyển khoản" },
+      { key: "1", value: "bank", label: "Chuyển khoản" },
       { key: "2", value: "momo", label: "MoMo" },
       { key: "3", value: "vnpay", label: "VN Pay" },
       { key: "4", value: "viettel_money", label: "Viettel Money" },
