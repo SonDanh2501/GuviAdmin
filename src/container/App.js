@@ -13,6 +13,7 @@ const App = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  {/*Check nếu chưa đăng nhập thì navigate tới trang login */}
   useEffect(() => {
     if (!isCheckLogin) {
       navigate("/auth/login");
@@ -20,6 +21,8 @@ const App = () => {
     dispatch(getServiceAction.getServiceRequest());
   }, []);
 
+
+    {/*Nếu đăng nhập rồi thì navigation tới Main (chứa các layout) */}
   return <>{!isCheckLogin ? <Auth /> : <Main />}</>;
 };
 

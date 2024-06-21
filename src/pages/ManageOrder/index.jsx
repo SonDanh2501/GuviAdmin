@@ -3,7 +3,7 @@ import {
   UilFileExport,
   UilTimes,
 } from "@iconscout/react-unicons";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, CaretDownOutlined } from "@ant-design/icons";
 import {
   Button,
   DatePicker,
@@ -100,15 +100,16 @@ const ManageOrder = () => {
   const [item, setItem] = useState({ date_work: "" });
   const toggle = () => setModal(!modal);
   const [modal, setModal] = useState(false);
-
   const { width } = useWindowDimensions();
   const { RangePicker } = DatePicker;
   const navigate = useNavigate();
   const [reCallData, setReCallData] = useState(false);
   const [arrFilter, setArrFilter] = useState([]);
-
   const [detectLoading, setDetectLoading] = useState(null);
   const [totalOrder, setTotalOrder] = useState([]);
+  const [serviceLabel, setServiceLabel] = useState("");
+  const [cityLabel, setCityLabel] = useState("");
+  const [districtLabel, setDistrictLabel] = useState([]);
   useEffect(() => {
     getJobList();
     getTotal();
@@ -222,6 +223,7 @@ const ManageOrder = () => {
     },
   ];
 
+  // Items list các option có thể chọn
   let items = [
     {
       key: "1",
@@ -286,7 +288,7 @@ const ManageOrder = () => {
       ),
     },
   ];
-
+  // Lọc những items list các option có thể chọn
   items = items.filter((x) => x.label !== false);
 
   const addActionColumn = {
@@ -358,10 +360,16 @@ const ManageOrder = () => {
   const districtOption = [];
   const optionsService = [];
 
+  // Thêm giá trị all vào list dữ liệu serce
+  optionsService.push({
+    key: "",
+    label: "Tất cả",
+  });
+  // Create optionsService List
   service.forEach((item) => {
     if (user?.id_service_manager?.length === 0) {
       optionsService.push({
-        value: item?._id,
+        key: item?._id,
         label: item?.title?.[lang],
       });
       return;
@@ -378,6 +386,12 @@ const ManageOrder = () => {
     }
   });
 
+  // Thêm giá trị all vào list dữ liệu city
+  cityOptions.push({
+    key: 0,
+    label: "Tất cả",
+    district: [],
+  });
   province?.forEach((item) => {
     const itemDistrict = [];
     for (const item2 of item.districts) {
@@ -386,35 +400,37 @@ const ManageOrder = () => {
         label: item2.name,
       });
     }
-
+    // Create cityOptions List
     if (user?.area_manager_lv_1?.length === 0) {
       cityOptions.push({
-        value: item?.code,
+        key: item?.code,
         label: item?.name,
         district: item?.districts,
-        children: itemDistrict,
+        // children: itemDistrict,
       });
       return;
     } else if (user?.area_manager_lv_1?.includes(item?.code)) {
       cityOptions.push({
-        value: item?.code,
+        key: item?.code,
         label: item?.name,
         district: item?.districts,
-        children: itemDistrict,
+        // children: itemDistrict,
       });
       return;
     }
   });
 
-  dataDistrict?.forEach((item) => {
+  dataDistrict?.forEach((item, index) => {
     if (user?.area_manager_lv_2?.length === 0) {
       districtOption.push({
+        key: index,
         value: item?.code,
         label: item?.name,
       });
       return;
     } else if (user?.area_manager_lv_2?.includes(item?.code)) {
       districtOption.push({
+        key: index,
         value: item?.code,
         label: item?.name,
       });
@@ -435,29 +451,85 @@ const ManageOrder = () => {
         console.log("err ", err);
       });
   };
+  const handleClickService = ({ key }) => {
+    const found = optionsService.find((el) => el.key === key);
+    setKind(found?.key);
+    setServiceLabel(found?.label);
+  };
+  const handleClickSelectCity = ({ key }) => {
+    console.log("CHECK KEY SELECTED >>> ", key)
+    const found = cityOptions.find((el) => el.key === +key);
+    console.log("CHECK FOUND >>> ", found);
+    if (found && found?.key !== 0) {
+      setCity(found?.key);
+      setCityLabel(found?.label);
+      setDataDistrict(found?.district);
+    } else {
+      setCity("");
+      setCityLabel(found?.label);
+      setDataDistrict(found?.district);
+    }
+   
+  };
+  const handleClickSelectDistrict = ({ key }) => {
+    const found = districtOption.find((el) => el.key === +key);
+    setDistrictLabel([...districtLabel, found?.label]);
+    setDistrict([...district, found?.value]);
+  };
+  const handleClickDeselectDistrict = ({ key }) => {
+    const found = districtOption.find((el) => el.key === +key);
+    const district_filter = district.filter((el) => el !== found?.value);
+    const district_label_filter = districtLabel.filter(
+      (el) => el !== found?.label
+    );
+    setDistrictLabel(district_label_filter);
+    setDistrict(district_filter);
+  };
+  // console.log("CHECK OPTION SERVICE >>>", optionsService);
+  // console.log("CHECK >>>", cityOptions);
+  console.log("setCity >>>", city);
+  console.log("setCityLabel >>>", cityLabel);
+  console.log("setDataDistrict >>>", dataDistrict);
+
   return (
     <div className="div-container-content">
       <div className="div-flex-row">
+        {/*Tiêu đề trang order*/}
         <div className="div-header-container">
           <h4 className="title-cv">{`${i18n.t("work_list", {
             lng: lang,
           })}`}</h4>
         </div>
-
+        {/*Button tạo đơn*/}
         <div className="btn-action-header">
           {checkElement?.includes("create_guvi_job") ? (
-            <Button
-              className="btn-add"
-              onClick={() => navigate("/group-order/manage-order/create-order")}
-            >
-              <i class="uil uil-plus-circle"></i>
-              {`${i18n.t("create_order", { lng: lang })}`}
-            </Button>
+            <div className="transfer-collaborator_search">
+              <Button
+                className="btn-add"
+                onClick={() =>
+                  navigate("/group-order/manage-order/create-order")
+                }
+              >
+                <i class="uil uil-plus-circle"></i>
+                {`${i18n.t("create_order", { lng: lang })}`}
+              </Button>
+              <Input
+                placeholder={`${i18n.t("search", { lng: lang })}`}
+                // value={valueSearch}
+                prefix={<SearchOutlined />}
+                className="input-search"
+                onChange={(e) => {
+                  handleSearch(e.target.value);
+                  // setValueSearch(e.target.value);
+                }}
+              />
+            </div>
           ) : (
             <></>
           )}
         </div>
       </div>
+      {/*Các tab phân loại đơn hàng*/}
       <div className="div-flex-row">
         <Tabs
           itemTab={itemTab}
@@ -465,33 +537,108 @@ const ManageOrder = () => {
           dataTotal={totalOrder}
         />
       </div>
-      <div className="div-flex-row">
-        <div className="div-filter">
-          <div className="header-filter">
-            <Button
-              type="primary"
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                display: "flex",
+      {/*Container tìm kiếm và bộ lọc*/}
+      <div className="div-flex-row ">
+        <div className="div-filter box-filter">
+          {/*Service Select Option Drop Down*/}
+          <div className="filter-transfer_status">
+            {/*Drop down Menu*/}
+            <Dropdown
+              menu={{
+                items: optionsService,
+                selectable: true,
+                defaultSelectedKeys: [""],
+                onSelect: (key) => handleClickService(key),
+                // onDeselect: () => {
+                //   setKind("");
+                //   setServiceLabel("");
+                // },
               }}
-              onClick={() => setCheckCondition(!checkCondition)}
+              trigger={["click"]}
             >
-              Bộ lọc
-            </Button>
+              <Space>
+                <span>Dịch vụ</span>
+                <span className="fw-500">
+                  {serviceLabel ? serviceLabel : optionsService[0]?.label}
+                </span>
+                <CaretDownOutlined />
+              </Space>
+            </Dropdown>
           </div>
+          {/*City Select Option Drop Down*/}
+          <div className="filter-transfer_status">
+            {/*Drop down Menu*/}
+            <Dropdown
+              menu={{
+                items: cityOptions,
+                selectable: true,
+                defaultSelectedKeys: ["0"],
+                onSelect: (key) => handleClickSelectCity(key),
+                // onDeselect: () => {
+                //   setCity("");
+                //   setCityLabel("");
+                //   setDataDistrict([]);
+                // },
+              }}
+              trigger={["click"]}
+            >
+              <Space>
+                <span>Thành Phố:</span>
+                <span className="fw-500">
+                  {cityLabel ? cityLabel : "Tất cả"}
+                </span>
+                <CaretDownOutlined />
+              </Space>
+            </Dropdown>
+          </div>
+          {/*Province Select Option Drop Down*/}
+          <div className="filter-transfer_status">
+            {/*Drop down Menu*/}
+            <Dropdown
+              menu={{
+                multiple: true,
+                items: districtOption,
+                selectable: true,
+                // defaultSelectedKeys: ["0"],
+                onSelect: (key) => handleClickSelectDistrict(key),
+                onDeselect: (key) => handleClickDeselectDistrict(key),
+              }}
+              trigger={["click"]}
+            >
+              <Space>
+                <span>Quận/Huyện:</span>
+                <div>
+                  {districtLabel?.map((el, index) => {
+                    if (index < 3) {
+                      return (
+                        <span className="fw-500" style={{ marginRight: 4 }}>
+                          {el},
+                        </span>
+                      );
+                    } else if (index === 3) {
+                      return <span className="fw-500">{el}</span>;
+                    }
+                  })}
+                </div>
+                <CaretDownOutlined />
+              </Space>
+            </Dropdown>
+          </div>
+          {/*Các giá trị lọc*/}
           {checkCondition && (
             <div className="filter-container">
-              <div className="item-select">
+              {/*Dịch vụ*/}
+              <div className="iteServicem-select">
                 <span>Dịch vụ</span>
                 <Select
                   style={{ width: "100%", marginRight: 10 }}
                   options={optionsService}
                   value={kind}
                   onChange={(e, item) => {
-                    setKind(e);
-                    setName(item?.label);
+                    setKind(e); // Trả về value của dịch vụ, lọc theo id của dịch vụ
+                    setName(item?.label); // Not using
                     setArrFilter({
+                      // Not using
                       key: "service",
                       value: item.value,
                       label: item.label,
@@ -499,26 +646,7 @@ const ManageOrder = () => {
                   }}
                 />
               </div>
-              {/* <div className="item-select">
-        <span>Ngày tạo</span>
-        <RangePicker
-          onChange={(date, dateString) => {
-            setStartDate(moment(dateString[0]).toISOString());
-            setEndDate(moment(dateString[1]).toISOString());
-          }}
-        />
-      </div>
-
-      <div className="item-select">
-        <span>Ngày tạo</span>
-        <RangePicker
-          onChange={(date, dateString) => {
-            setStartDate(moment(dateString[0]).toISOString());
-            setEndDate(moment(dateString[1]).toISOString());
-          }}
-        />
-      </div> */}
-
+              {/*Thành Phố*/}
               <div className="item-select">
                 <span>Tỉnh/Thành phố</span>
                 <Select
@@ -541,6 +669,7 @@ const ManageOrder = () => {
                   }
                 />
               </div>
+              {/*Huyện*/}
               <div className="item-select">
                 <span>Quận/Huyện</span>
                 <Select
@@ -561,20 +690,9 @@ const ManageOrder = () => {
             </div>
           )}
         </div>
-
-        <div className="div-search">
-          <Input
-            placeholder={`${i18n.t("search", { lng: lang })}`}
-            // value={valueSearch}
-            prefix={<SearchOutlined />}
-            className="input-search"
-            onChange={(e) => {
-              handleSearch(e.target.value);
-              // setValueSearch(e.target.value);
-            }}
-          />
-        </div>
+        {/*Thanh tìm kiếm*/}
       </div>
+      {/*Table đơn hàng*/}
       <div>
         <DataTable
           columns={columns}
@@ -587,7 +705,6 @@ const ManageOrder = () => {
           onCurrentPageChange={onChangePage}
           detectLoading={detectLoading}
         />
-
         <div>
           <ModalCustom
             isOpen={modal}

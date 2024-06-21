@@ -59,7 +59,10 @@ import ModalCustom from "../../components/modalCustom";
 import { formatMoney } from "../../helper/formatMoney";
 import TransactionDrawer2 from "../../components/transactionDrawer/TransactionDrawer2";
 import Tabs from "../../components/tabs/tabs1";
+import useWindowDimensions from "../../helper/useWindowDimensions";
+import { EditLocationOutlined } from "@material-ui/icons";
 const ManageTopUpWithdraw = () => {
+  let { width } = useWindowDimensions();
   const [tab, setTab] = useState(itemTabStatus[0].value);
   const checkElement = useSelector(getElementState);
   const [data, setData] = useState([]);
@@ -76,55 +79,148 @@ const ManageTopUpWithdraw = () => {
     end_date: "",
   });
   // ---------------------------- xử lý data ------------------------------------ //
+  // List items trong dấu 3 chấm
   let items = [
     {
       key: "1",
       label: <p style={{ margin: 0 }}>Chi tiết</p>,
+      disabled: false,
     },
     {
       key: "2",
-      label: (
-        // checkElement?.includes("delete_transaction") &&
-        <p className="m-0">xoá</p>
-      ),
+      label: <p className="m-0">Xóa</p>,
+      disabled: false,
+    },
+    {
+      key: "3",
+      label:
+        width < 900 ? (
+          <a
+            onClick={() => setOpenModalChangeStatus(true)}
+            style={{ margin: 0 }}
+          >
+            Xác Nhận
+          </a>
+        ) : (
+          false
+        ),
+      disabled: false,
+    },
+    {
+      key: "4",
+      label:
+        width < 900 ? (
+          <a onClick={() => setOpenModalCancel(true)} style={{ margin: 0 }}>
+            Hủy Bỏ
+          </a>
+        ) : (
+          false
+        ),
+      disabled: false,
     },
   ];
   let queryDate = "&";
   for (const key of Object.keys(selectedDate)) {
     queryDate += `${key}=${selectedDate[key]}&`;
   }
+  // NOTE
   let query =
     returnFilter.map((item) => `&${item.key}=${item.value}`).join("") +
     queryDate +
     `status=${tab}`;
+  // Lọc bỏ những items không có label
   items = items.filter((x) => x.label !== false);
+  // Dấu ba chấm
   const addActionColumn = {
     i18n_title: "",
     dataIndex: "action",
     key: "action",
     fixed: "right",
-    width: 20,
-    render: () => (
-      <Space size="middle">
-        <Dropdown menu={{ items }} trigger={["click"]}>
-          <a>
-            <UilEllipsisV />
-          </a>
-        </Dropdown>
-      </Space>
-    ),
+    width: width > 900 ? 60 : 20,
+    render: (_, record) => {
+      // console.log("CHECK STATUS", record?.status);
+      const _isDisableVerify =
+        record?.status === "done" ||
+        record?.status === "cancel" ||
+        record?.status === "revoke" ||
+        record?.status === "waiting" ||
+        record?.status === "doing" ||
+        record?.status === "processing";
+      // Set disabled = true nếu status là một trong các trường hợp trên
+      if (_isDisableVerify) {
+        items?.map((el) => {
+          // console.log("CHECK DISABLED >>> ", el?.disabled);
+          if (+el?.key === 3 || +el?.key === 4) {
+            el.disabled = true;
+            // console.log("CHECK DISABLED >>> ", el?.disabled);
+          }
+        });
+      }
+      // Nếu không có thì phải trả lại giá trị initial là disabled = false
+      else {
+        items?.map((el) => {
+          el.disabled = false;
+        });
+      }
+      return (
+        <div style={{ display: "flex" }}>
+          {width < 900 ? (
+            <>
+              <Space size="middle">
+                <Dropdown menu={{ items }} trigger={["click"]}>
+                  <a>
+                    <UilEllipsisV />
+                  </a>
+                </Dropdown>
+              </Space>
+            </>
+          ) : (
+            <>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "4px" }}
+              >
+                <Button
+                  disabled={_isDisableVerify}
+                  onClick={() => setOpenModalChangeStatus(true)}
+                >
+                  Xác nhận
+                </Button>
+                <Button
+                  disabled={_isDisableVerify}
+                  type="primary"
+                  danger
+                  onClick={() => setOpenModalCancel(true)}
+                >
+                  Huỷ
+                </Button>
+              </div>
+              <Space size="middle">
+                <Dropdown menu={{ items }} trigger={["click"]}>
+                  <a>
+                    <UilEllipsisV />
+                  </a>
+                </Dropdown>
+              </Space>
+            </>
+          )}
+        </div>
+      );
+    },
   };
 
   // ---------------------------- action ------------------------------------ /
+  // Action đổi tab
   const onChangeTab = (item) => {
     if (tab !== item.value) {
       setTab(item.value);
       setStartPage(0);
     }
   };
+  // NOTE
   const onChangePage = (value) => {
     setStartPage(value);
   };
+  // NOTE
   const handleTopUp = (value) => {
     createTransaction({
       transfer_note: value?.note,
@@ -138,6 +234,7 @@ const ManageTopUpWithdraw = () => {
       type_wallet: value?.type_wallet,
     });
   };
+  // Action rút tiền
   const handleWithdraw = (value) => {
     createTransaction({
       transfer_note: value.transfer_note,
@@ -151,7 +248,7 @@ const ManageTopUpWithdraw = () => {
       type_wallet: value?.type_wallet,
     });
   };
-
+  // Action tạo mã nạp tiền (cần phải xác nhận)
   const createTransaction = (data) => {
     console.log("data ", data);
     createTransactionApi(data)
@@ -168,6 +265,7 @@ const ManageTopUpWithdraw = () => {
         });
       });
   };
+  // Action từ chối (hủy) lệnh giao dịch
   const handleCancelTransfer = () => {
     cancelTransactionApi(item?._id)
       .then((res) => {
@@ -184,6 +282,7 @@ const ManageTopUpWithdraw = () => {
       });
     setOpenModalCancel(false);
   };
+  // Action đồng ý lệnh giao dịch
   const handleVerifyTransfer = () => {
     verifyTransactionApi(item?._id)
       .then((res) => {
@@ -200,6 +299,7 @@ const ManageTopUpWithdraw = () => {
       });
     setOpenModalChangeStatus(false);
   };
+  // Action re-render sau khi search
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueSearch(value);
@@ -207,6 +307,7 @@ const ManageTopUpWithdraw = () => {
     }, 1000),
     []
   );
+  // Fetch dữ liệu
   const getList = () => {
     getListTransactionV2Api(startPage, LENGTH_ITEM, query, valueSearch)
       .then((res) => {
@@ -218,6 +319,7 @@ const ManageTopUpWithdraw = () => {
         console.log("err ", err);
       });
   };
+  // NOTE
   const getTotal = () => {
     getTotalTransactionApi(query, valueSearch)
       .then((res) => {
@@ -232,13 +334,13 @@ const ManageTopUpWithdraw = () => {
       });
   };
   // ---------------------------- use effect ------------------------------------ //
-
+  // Re-render nếu một vài giá trị thay đổi
   useEffect(() => {
     if (selectedDate.end_date !== "") {
       getList();
     }
   }, [startPage, returnFilter, tab, valueSearch, selectedDate]);
-
+  // console.log("CHECK DATA >>> ", data);
   // ---------------------------- UI ------------------------------------ //
   return (
     <div className="transfer-collaborator_container">
@@ -256,20 +358,24 @@ const ManageTopUpWithdraw = () => {
           );
         })}
       </div> */}
-
+      {/*Container của nạp, rút, tìm kiếm*/}
       <div className="transfer-collaborator_search">
+        {/*Container của hai button nạp và rút*/}
         <div className="transfer-collaborator_transaction">
+          {/*Nạp tiền*/}
           <TransactionDrawer2
             titleButton="Nạp tiền"
             titleHeader="Nạp tiền"
             onClick={handleTopUp}
           />
+          {/*Rút tiền*/}
           <TransactionDrawer2
             titleButton="Rút tiền"
             titleHeader="Rút tiền"
             onClick={handleWithdraw}
           />
         </div>
+        {/*Input search field*/}
         <Input
           placeholder={"Tìm kiếm"}
           prefix={<SearchOutlined />}
@@ -278,8 +384,10 @@ const ManageTopUpWithdraw = () => {
             handleSearch(e.target.value);
           }}
         />
+        {/*Button tìm kiếm*/}
         <Button type="primary">Tìm kiếm</Button>
       </div>
+      {/*Container của list of tab và các bộ lọc filter*/}
       <div className="transfer-collaborator_header">
         <Tabs
           itemTab={itemTabStatus}
@@ -292,7 +400,7 @@ const ManageTopUpWithdraw = () => {
           setDate={setSelectedDate}
         />
       </div>
-
+      {/*Datatable component*/}
       <div>
         <DataTable
           columns={columns}
@@ -309,6 +417,7 @@ const ManageTopUpWithdraw = () => {
         />
       </div>
       {/* ********************** Modal custom ***************************** */}
+      {/*Pop up xác thực*/}
       <div>
         <ModalCustom
           isOpen={openModalCancel}
@@ -349,8 +458,10 @@ const ManageTopUpWithdraw = () => {
                 Mã giao dịch: <span className="fw-500">{item?.id_view}</span>
               </p>
               <p>
-                Số tiền:{" "}
-                <span className="fw-500">{formatMoney(item?.money || 0)}</span>{" "}
+                Số tiền:
+                <span className="fw-500">
+                  {formatMoney(item?.money || 0)}
+                </span>{" "}
               </p>
               <p>
                 Nội dung: <span>{item?.transfer_note}</span>
@@ -364,6 +475,7 @@ const ManageTopUpWithdraw = () => {
 };
 
 export default ManageTopUpWithdraw;
+// Các cột trong table
 const columns = [
   {
     title: "STT",
@@ -470,7 +582,7 @@ const columns = [
     fontSize: "text-size-M",
   },
 ];
-
+// Các tab trong list of tabs
 const itemTabStatus = [
   {
     label: "Tất cả",
@@ -506,6 +618,7 @@ const itemTabStatus = [
 
 const dataFilter = [
   {
+    // Các giá trị filter ở ĐỐI TƯỢNG
     key: "subject",
     label: "Đối tượng",
     data: [
@@ -516,6 +629,7 @@ const dataFilter = [
     ],
   },
   {
+    // Các giá trị filter ở LOẠI GIAO DỊCH
     key: "type_transfer",
     label: "Loại giao dịch",
     data: [
@@ -525,6 +639,7 @@ const dataFilter = [
     ],
   },
   {
+    // Các giá trị filter ở PHƯƠNG THỨC THANH TOÁN
     key: "payment_out",
     label: "Phương thức thanh toán",
     data: [
@@ -536,6 +651,7 @@ const dataFilter = [
     ],
   },
   {
+    // Các giá trị filter ở VÀO VÍ
     key: "payment_in",
     label: "Vào Ví",
     data: [
