@@ -110,6 +110,7 @@ const ManageOrder = () => {
   const [serviceLabel, setServiceLabel] = useState("");
   const [cityLabel, setCityLabel] = useState("");
   const [districtLabel, setDistrictLabel] = useState([]);
+  const [selectedDistrict, setSelectedDistrict] = useState([]);
   useEffect(() => {
     getJobList();
     getTotal();
@@ -360,7 +361,7 @@ const ManageOrder = () => {
   const districtOption = [];
   const optionsService = [];
 
-  // Thêm giá trị all vào list dữ liệu serce
+  // Thêm giá trị all vào list dữ liệu service
   optionsService.push({
     key: "",
     label: "Tất cả",
@@ -457,9 +458,7 @@ const ManageOrder = () => {
     setServiceLabel(found?.label);
   };
   const handleClickSelectCity = ({ key }) => {
-    console.log("CHECK KEY SELECTED >>> ", key)
     const found = cityOptions.find((el) => el.key === +key);
-    console.log("CHECK FOUND >>> ", found);
     if (found && found?.key !== 0) {
       setCity(found?.key);
       setCityLabel(found?.label);
@@ -469,28 +468,32 @@ const ManageOrder = () => {
       setCityLabel(found?.label);
       setDataDistrict(found?.district);
     }
-   
+    setSelectedDistrict([]); // Unselected all iteam in district menu when choose a new city
+    setDistrict([]);
+    setDistrictLabel([]);
   };
   const handleClickSelectDistrict = ({ key }) => {
     const found = districtOption.find((el) => el.key === +key);
+    setSelectedDistrict([...selectedDistrict, key]);
     setDistrictLabel([...districtLabel, found?.label]);
     setDistrict([...district, found?.value]);
   };
   const handleClickDeselectDistrict = ({ key }) => {
     const found = districtOption.find((el) => el.key === +key);
     const district_filter = district.filter((el) => el !== found?.value);
+    // Filter district label when unselected
     const district_label_filter = districtLabel.filter(
       (el) => el !== found?.label
     );
+    // Delete unseleted district item
+    const district_selected_filter = selectedDistrict.filter(
+      (el) => +el !== +found?.key
+    );
+    // Set select with value after filter
+    setSelectedDistrict(district_selected_filter);
     setDistrictLabel(district_label_filter);
     setDistrict(district_filter);
   };
-  // console.log("CHECK OPTION SERVICE >>>", optionsService);
-  // console.log("CHECK >>>", cityOptions);
-  console.log("setCity >>>", city);
-  console.log("setCityLabel >>>", cityLabel);
-  console.log("setDataDistrict >>>", dataDistrict);
-
   return (
     <div className="div-container-content">
       <div className="div-flex-row">
@@ -538,7 +541,7 @@ const ManageOrder = () => {
         />
       </div>
       {/*Container tìm kiếm và bộ lọc*/}
-      <div className="div-flex-row ">
+      <div className="div-flex-row">
         <div className="div-filter box-filter">
           {/*Service Select Option Drop Down*/}
           <div className="filter-transfer_status">
@@ -549,10 +552,6 @@ const ManageOrder = () => {
                 selectable: true,
                 defaultSelectedKeys: [""],
                 onSelect: (key) => handleClickService(key),
-                // onDeselect: () => {
-                //   setKind("");
-                //   setServiceLabel("");
-                // },
               }}
               trigger={["click"]}
             >
@@ -569,16 +568,12 @@ const ManageOrder = () => {
           <div className="filter-transfer_status">
             {/*Drop down Menu*/}
             <Dropdown
+              style={{}}
               menu={{
                 items: cityOptions,
                 selectable: true,
                 defaultSelectedKeys: ["0"],
                 onSelect: (key) => handleClickSelectCity(key),
-                // onDeselect: () => {
-                //   setCity("");
-                //   setCityLabel("");
-                //   setDataDistrict([]);
-                // },
               }}
               trigger={["click"]}
             >
@@ -599,7 +594,7 @@ const ManageOrder = () => {
                 multiple: true,
                 items: districtOption,
                 selectable: true,
-                // defaultSelectedKeys: ["0"],
+                selectedKeys: selectedDistrict,
                 onSelect: (key) => handleClickSelectDistrict(key),
                 onDeselect: (key) => handleClickDeselectDistrict(key),
               }}
