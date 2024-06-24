@@ -13,7 +13,7 @@
 
 .div-flex-row {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
   margin: 8px 0px;
@@ -30,7 +30,9 @@
     box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
       rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
   }
+
 }
+
 
 .div-flex-row-wrap-flex-start {
   display: flex;
@@ -264,4 +266,8 @@
 
 .ant-btn-primary:not([disabled]):hover {
   background: #1f4ce0 !important;
+}
+.ant-dropdown-menu {
+  max-height: 250px;
+  overflow: auto;
 }
