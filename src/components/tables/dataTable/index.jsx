@@ -1503,35 +1503,35 @@ const DataTable = (props) => {
             );
             break;
           // Verify nạp tiền
-          // case "verify": {
-          //   // Nếu các status sau là true thì button sẽ disable
-          //   const _isDisableVerify =
-          //     data?.status === "done" ||
-          //     data?.status === "cancel" ||
-          //     data?.status === "revoke" ||
-          //     data?.status === "waiting" ||
-          //     data?.status === "doing" ||
-          //     data?.status === "processing";
-          //   return (
-          //     <div className="div-date-create">
-          //       <Button
-          //         disabled={_isDisableVerify}
-          //         onClick={() => setOpenModalChangeStatus(true)}
-          //       >
-          //         Xác nhận
-          //       </Button>
-          //       <Button
-          //         type="primary"
-          //         danger
-          //         disabled={_isDisableVerify}
-          //         onClick={() => setOpenModalCancel(true)}
-          //       >
-          //         Huỷ
-          //       </Button>
-          //     </div>
-          //   );
-          //   break;
-          // }
+          case "verify": {
+            // Nếu các status sau là true thì button sẽ disable
+            const _isDisableVerify =
+              data?.status === "done" ||
+              data?.status === "cancel" ||
+              data?.status === "revoke" ||
+              data?.status === "waiting" ||
+              data?.status === "doing" ||
+              data?.status === "processing";
+            return (
+              <div className="div-date-create">
+                <Button
+                  disabled={_isDisableVerify}
+                  onClick={() => setOpenModalChangeStatus(true)}
+                >
+                  Xác nhận
+                </Button>
+                <Button
+                  type="primary"
+                  danger
+                  disabled={_isDisableVerify}
+                  onClick={() => setOpenModalCancel(true)}
+                >
+                  Huỷ
+                </Button>
+              </div>
+            );
+            break;
+          }
           // STT Sổ quỹ
           case "ordinal": {
             return (

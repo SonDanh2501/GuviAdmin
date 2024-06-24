@@ -393,12 +393,12 @@ const columns = [
     width: 80,
     fontSize: "text-size-M",
   },
-  {
-    dataIndex: "verify",
-    key: "verify",
-    width: 50,
-    fontSize: "text-size-M",
-  },
+  // {
+  //   dataIndex: "verify",
+  //   key: "verify",
+  //   width: 50,
+  //   fontSize: "text-size-M",
+  // },
 ];
 
 const dataFilter = [
