@@ -612,6 +612,10 @@ const ManageOrder = () => {
                       );
                     } else if (index === 3) {
                       return <span className="fw-500">{el}</span>;
+                    } else if (index === 4) {
+                      return <span className="fw-500">,...</span>;
+                    } else {
+                      return <span></span>;
                     }
                   })}
                 </div>
