@@ -104,12 +104,16 @@ const DataTable = (props) => {
   };
 
   for (const item of columns) {
+    // Duyệt qua từng item trong list Columns
+    // Gán title = item title (i18n => đa ngôn ngữ)
     const title = item.i18n_title
       ? i18n.t(`${item.i18n_title}`, { lng: lang })
       : item.title;
 
     const temp = {
+      // Title
       title: () => {
+        // Nếu có customTitle thì trả về customTitle không thì trả về title bình thường
         if (item.customTitle) {
           return item.customTitle;
         } else {
@@ -120,7 +124,9 @@ const DataTable = (props) => {
           );
         }
       },
+      // Dữ liệu
       render: (data, record, index) => {
+        // Link default
         let linkRedirect = `#`;
         switch (item.key) {
           case "id_view":
@@ -188,6 +194,7 @@ const DataTable = (props) => {
               </Link>
             );
             break;
+          // Ngày tạo của sổ quỹ
           case "date_create":
             return (
               <div className="div-date-create">
@@ -1495,7 +1502,9 @@ const DataTable = (props) => {
               </div>
             );
             break;
+          // Verify nạp tiền
           case "verify": {
+            // Nếu các status sau là true thì button sẽ disable
             const _isDisableVerify =
               data?.status === "done" ||
               data?.status === "cancel" ||
@@ -1523,6 +1532,7 @@ const DataTable = (props) => {
             );
             break;
           }
+          // STT Sổ quỹ
           case "ordinal": {
             return (
               <div className="div-date-create">
@@ -1543,8 +1553,8 @@ const DataTable = (props) => {
     headerTable.push(temp);
     widthPage += Number(temp.width);
   }
+  // Nếu có actionColumn thì đẩy vào table
   if (actionColumn) headerTable.push(actionColumn);
-
   const calculateCurrentPage = (event) => {
     // console.log("evet", event);
     setCurrentPage(event);
@@ -1557,6 +1567,7 @@ const DataTable = (props) => {
   const toggleModal = (event) => {
     if (props.onToggleModal) props.onToggleModal(true);
   };
+  // console.log("CHECK WIDTH", width);
   return (
     <React.Fragment>
       <div className="mr-t">

@@ -16,12 +16,13 @@ const Header = () => {
   const [dataTotal, setDataTotal] = useState([]);
   const lang = useSelector(getLanguageState);
   useEffect(() => {
-    getTotalReportApi("", "")
+    getTotalReportApi("", "") // Hàm get dữ liệu truyền vào hai giá trị là started day và ended day
       .then((res) => setDataTotal(res))
       .catch((err) => console.log(err));
   }, []);
   return (
     <div className="container-header-board">
+      {/*4 Cái card thống kê*/}
       <div className="card">
         <img src={customer} className="img" />
         <div className="div-details">
@@ -33,7 +34,6 @@ const Header = () => {
           </a>
         </div>
       </div>
-
       <div className="card">
         <img src={collaborator} className="img" />
         <div className="div-details">
@@ -45,7 +45,6 @@ const Header = () => {
           </a>
         </div>
       </div>
-
       <div className="card">
         <img src={add} className="img" />
         <div className="div-details">
@@ -57,7 +56,6 @@ const Header = () => {
           </a>
         </div>
       </div>
-
       <div className="card">
         <img src={revenues} className="img" />
         <div className="div-details">

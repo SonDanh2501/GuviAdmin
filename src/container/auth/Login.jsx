@@ -33,17 +33,27 @@ const Login = () => {
 
   return (
     <div className="container-login">
+      {/*Login Card*/}
       <div className="div-card-login">
+        {/*Login Card Left Side*/}
         <div className="div-card-left">
+          {/*Header Text Left Side*/}
           <p className="text-wel-login">Chào mừng đến với GUVI</p>
+          {/*Image Left Side*/}
           <Image src={login} className="image-login" preview={false} />
         </div>
+        {/*Simple Line Between To Side*/}
         <div className="line" />
+        {/*Login Card Right Side*/}
         <div className="div-card-right">
+          {/*Container Right Side*/}
           <div className="div-head-card">
+            {/*Image Right Side*/}
             <Image preview={false} src={logo} className="img-logo" />
+            {/*Header Text Right Side*/}
             <p className="title-login">Đăng nhập hệ thống Guvi</p>
           </div>
+          {/*Submit Information*/}
           <form onSubmit={onLogin}>
             <div className="div-body-login">
               <div>
@@ -56,7 +66,6 @@ const Login = () => {
                   onChange={(text) => setEmail(text.target.value)}
                 />
               </div>
-
               <div>
                 <label>Password</label>
                 <Input.Password
@@ -66,7 +75,6 @@ const Login = () => {
                   onChange={(text) => setPassword(text.target.value)}
                 />
               </div>
-
               <div className="text-center">
                 <button type="submit" className="btn-login">
                   Đăng nhập

@@ -530,6 +530,11 @@ import {
 //   //   ],
 //   // },
 // ];
+
+
+{
+  /*Function: Label: tên hiển thị, Key: link navigate, Icon: icon hiển thị, Children: link sub nếu có, type: loại */
+}
 function getItem(label, key, icon, children, type) {
   return {
     key,
@@ -539,7 +544,7 @@ function getItem(label, key, icon, children, type) {
     type,
   };
 }
-
+{/*Return Icon*/}
 const IconCustom = ({ icon }) => {
   return (
     <span className="anticon anticon-desktop ant-menu-item-icon">
