@@ -104,12 +104,16 @@ const DataTable = (props) => {
   };
 
   for (const item of columns) {
+    // Duyệt qua từng item trong list Columns
+    // Gán title = item title (i18n => đa ngôn ngữ)
     const title = item.i18n_title
       ? i18n.t(`${item.i18n_title}`, { lng: lang })
       : item.title;
 
     const temp = {
+      // Title
       title: () => {
+        // Nếu có customTitle thì trả về customTitle không thì trả về title bình thường
         if (item.customTitle) {
           return item.customTitle;
         } else {
@@ -120,7 +124,9 @@ const DataTable = (props) => {
           );
         }
       },
+      // Dữ liệu
       render: (data, record, index) => {
+        // Link default
         let linkRedirect = `#`;
         switch (item.key) {
           case "id_view":
@@ -188,6 +194,7 @@ const DataTable = (props) => {
               </Link>
             );
             break;
+          // Ngày tạo của sổ quỹ
           case "date_create":
             return (
               <div className="div-date-create">
@@ -375,7 +382,7 @@ const DataTable = (props) => {
             );
             break;
           }
-          case "subject_transaction": {
+          case "subject_transaction_top_up": {
             let _type_wallet = "";
             if (data?.type_transfer === "top_up") {
               if (data?.subject === "customer") {
@@ -400,7 +407,122 @@ const DataTable = (props) => {
                 }
               } else if (data?.subject === "other") {
               }
-            } else if (data?.type_transfer === "withdraw") {
+            }
+            // else if (data?.type_transfer === "withdraw") {
+            //   if (data?.subject === "customer") {
+            //     _type_wallet = (
+            //       <p>
+            //         Rút từ: <strong>Pay-Point</strong>
+            //       </p>
+            //     );
+            //   } else if (data?.subject === "collaborator") {
+            //     if (data?.type_wallet === "work_wallet") {
+            //       _type_wallet = (
+            //         <p>
+            //           Rút từ: <strong>Ví Công việc</strong>
+            //         </p>
+            //       );
+            //     } else {
+            //       _type_wallet = (
+            //         <p>
+            //           Rút từ: <strong>Ví CTV</strong>
+            //         </p>
+            //       );
+            //     }
+            //   } else if (data?.subject === "other") {
+            //   }
+            // }
+            return (
+              <>
+                {data?.type_transfer === "top_up" && (
+                  <div className="div-collaborator">
+                    {data?.id_customer && (
+                      <div className="div-name-star">
+                        <Link
+                          to={`/profile-customer/${
+                            data?.id_customer?._id || data?._id
+                          }`}
+                          target="_blank"
+                        >
+                          <div className="div-name">
+                            <p className={`${item?.fontSize}`}>
+                              KH - {data?.id_customer?.full_name}
+                            </p>
+                          </div>
+                          <div className="div-phone-star">
+                            <p className={`${item?.fontSize}`}>
+                              {data?.id_customer?.phone}
+                            </p>
+                          </div>
+                          <div>
+                            <p>{_type_wallet}</p>
+                          </div>
+                        </Link>
+                      </div>
+                    )}
+                    {data?.id_collaborator && (
+                      <>
+                        <Link
+                          to={`/details-collaborator/${data?.id_collaborator?._id}`}
+                          className="div-name-star"
+                          target="_blank"
+                        >
+                          <div className="div-name">
+                            <p className={`${item?.fontSize}`}>
+                              CTV - {data?.id_collaborator?.full_name}
+                            </p>
+                          </div>
+                          <div className="div-phone-star">
+                            <p className={`${item?.fontSize}`}>
+                              {data?.id_collaborator?.phone}
+                            </p>
+                          </div>
+                          <div>
+                            <p>{_type_wallet}</p>
+                          </div>
+                        </Link>
+                      </>
+                    )}
+                    {!data?.id_collaborator && !data?.id_customer && (
+                      <div className="div-name">
+                        <p className={`${item?.fontSize}`}>
+                          Khác - {data?.id_admin_action?.full_name}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            );
+            break;
+          }
+          case "subject_transaction_withdraw": {
+            let _type_wallet = "";
+            // if (data?.type_transfer === "top_up") {
+            //   if (data?.subject === "customer") {
+            //     _type_wallet = (
+            //       <p>
+            //         Nạp vào: <strong>Pay-Point</strong>
+            //       </p>
+            //     );
+            //   } else if (data?.subject === "collaborator") {
+            //     if (data?.type_wallet === "work_wallet") {
+            //       _type_wallet = (
+            //         <p>
+            //           Nạp vào: <strong>Ví Công việc</strong>
+            //         </p>
+            //       );
+            //     } else {
+            //       _type_wallet = (
+            //         <p>
+            //           Nạp vào: <strong>Ví CTV</strong>
+            //         </p>
+            //       );
+            //     }
+            //   } else if (data?.subject === "other") {
+            //   }
+            // } else
+            if (data?.type_transfer === "withdraw") {
               if (data?.subject === "customer") {
                 _type_wallet = (
                   <p>
@@ -426,62 +548,64 @@ const DataTable = (props) => {
             }
             return (
               <>
-                <div className="div-collaborator">
-                  {data?.id_customer && (
-                    <div className="div-name-star">
-                      <Link
-                        to={`/profile-customer/${
-                          data?.id_customer?._id || data?._id
-                        }`}
-                        target="_blank"
-                      >
-                        <div className="div-name">
-                          <p className={`${item?.fontSize}`}>
-                            KH - {data?.id_customer?.full_name}
-                          </p>
-                        </div>
-                        <div className="div-phone-star">
-                          <p className={`${item?.fontSize}`}>
-                            {data?.id_customer?.phone}
-                          </p>
-                        </div>
-                        <div>
-                          <p>{_type_wallet}</p>
-                        </div>
-                      </Link>
-                    </div>
-                  )}
-                  {data?.id_collaborator && (
-                    <>
-                      <Link
-                        to={`/details-collaborator/${data?.id_collaborator?._id}`}
-                        className="div-name-star"
-                        target="_blank"
-                      >
-                        <div className="div-name">
-                          <p className={`${item?.fontSize}`}>
-                            CTV - {data?.id_collaborator?.full_name}
-                          </p>
-                        </div>
-                        <div className="div-phone-star">
-                          <p className={`${item?.fontSize}`}>
-                            {data?.id_collaborator?.phone}
-                          </p>
-                        </div>
-                        <div>
-                          <p>{_type_wallet}</p>
-                        </div>
-                      </Link>
-                    </>
-                  )}
-                  {!data?.id_collaborator && !data?.id_customer && (
-                    <div className="div-name">
-                      <p className={`${item?.fontSize}`}>
-                        Khác - {data?.id_admin_action?.full_name}
-                      </p>
-                    </div>
-                  )}
-                </div>
+                {data?.type_transfer === "withdraw" && (
+                  <div className="div-collaborator">
+                    {data?.id_customer && (
+                      <div className="div-name-star">
+                        <Link
+                          to={`/profile-customer/${
+                            data?.id_customer?._id || data?._id
+                          }`}
+                          target="_blank"
+                        >
+                          <div className="div-name">
+                            <p className={`${item?.fontSize}`}>
+                              KH - {data?.id_customer?.full_name}
+                            </p>
+                          </div>
+                          <div className="div-phone-star">
+                            <p className={`${item?.fontSize}`}>
+                              {data?.id_customer?.phone}
+                            </p>
+                          </div>
+                          <div>
+                            <p>{_type_wallet}</p>
+                          </div>
+                        </Link>
+                      </div>
+                    )}
+                    {data?.id_collaborator && (
+                      <>
+                        <Link
+                          to={`/details-collaborator/${data?.id_collaborator?._id}`}
+                          className="div-name-star"
+                          target="_blank"
+                        >
+                          <div className="div-name">
+                            <p className={`${item?.fontSize}`}>
+                              CTV - {data?.id_collaborator?.full_name}
+                            </p>
+                          </div>
+                          <div className="div-phone-star">
+                            <p className={`${item?.fontSize}`}>
+                              {data?.id_collaborator?.phone}
+                            </p>
+                          </div>
+                          <div>
+                            <p>{_type_wallet}</p>
+                          </div>
+                        </Link>
+                      </>
+                    )}
+                    {!data?.id_collaborator && !data?.id_customer && (
+                      <div className="div-name">
+                        <p className={`${item?.fontSize}`}>
+                          Khác - {data?.id_admin_action?.full_name}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </>
             );
             break;
@@ -1378,7 +1502,9 @@ const DataTable = (props) => {
               </div>
             );
             break;
+          // Verify nạp tiền
           case "verify": {
+            // Nếu các status sau là true thì button sẽ disable
             const _isDisableVerify =
               data?.status === "done" ||
               data?.status === "cancel" ||
@@ -1406,6 +1532,7 @@ const DataTable = (props) => {
             );
             break;
           }
+          // STT Sổ quỹ
           case "ordinal": {
             return (
               <div className="div-date-create">
@@ -1426,8 +1553,8 @@ const DataTable = (props) => {
     headerTable.push(temp);
     widthPage += Number(temp.width);
   }
+  // Nếu có actionColumn thì đẩy vào table
   if (actionColumn) headerTable.push(actionColumn);
-
   const calculateCurrentPage = (event) => {
     // console.log("evet", event);
     setCurrentPage(event);
@@ -1440,6 +1567,7 @@ const DataTable = (props) => {
   const toggleModal = (event) => {
     if (props.onToggleModal) props.onToggleModal(true);
   };
+  // console.log("CHECK WIDTH", width);
   return (
     <React.Fragment>
       <div className="mr-t">

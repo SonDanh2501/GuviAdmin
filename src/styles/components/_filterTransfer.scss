@@ -6,8 +6,10 @@
 .filter-transfer_payment-method {
   margin-right: 1rem;
 }
+
 .filter-transfer_status {
   margin-right: 1rem;
+
 }
 .filter-transfer_date {
   margin-right: 1rem;
@@ -17,3 +19,10 @@
     margin-right: 0.3rem;
   }
 }
+
+.ant-dropdown {
+  height: 312px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+

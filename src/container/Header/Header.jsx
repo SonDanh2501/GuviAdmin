@@ -41,11 +41,12 @@ const Header = ({ onClick, hide }) => {
 
   return (
     <div className="div-container-header">
+      {/*Icon open or close sidebar menu*/}
       <div className="menu-icon" onClick={onClick}>
         {hide ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
       </div>
-
       <div className="nav-header">
+        {/*Sign Out Drop Down Menu*/}
         <Dropdown
           menu={{
             items,
@@ -60,6 +61,7 @@ const Header = ({ onClick, hide }) => {
           </a>
         </Dropdown>
         <>
+          {/*Notification Drop Down Menu*/}
           <div className="div-noti" onClick={() => setStatus(!status)}>
             {data.length > 0 && <div className="dot-noti" />}
             <BellOutlined className="icon" />
@@ -80,7 +82,7 @@ const Header = ({ onClick, hide }) => {
             </div>
           )}
         </>
-
+        {/*Drop down select language */}
         <Select
           style={{ width: 120 }}
           value={lang}

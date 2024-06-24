@@ -20,17 +20,18 @@ import "./index.scss";
 
 import { useDispatch } from "react-redux";
 
-const { Header, Sider, Content } = Layout;
+const { Header, Sider, Content } = Layout; // Set content có trong Layout, ở đây là gồm 3 phần Header, Thanh Sider, Content
 
 const Main = ({ hide }) => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  const { width } = useWindowDimensions();
+  const { width } = useWindowDimensions(); // Lấy độ rộng của màn hình hiển thị
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
   useEffect(() => {
     dispatch(permissionAction.permissionRequest({ navigate: navigate }));
     dispatch(getProvinceAction.getProvinceRequest());
@@ -38,6 +39,7 @@ const Main = ({ hide }) => {
   }, [dispatch, navigate]);
 
   useEffect(() => {
+    // Responsive cho thanh side bar
     if (width > 900) {
       setCollapsed(true);
     } else {
@@ -47,6 +49,7 @@ const Main = ({ hide }) => {
 
   return (
     <Layout style={{ overflowX: "hidden" }}>
+      {/*Header Container*/}
       <Header
         style={{
           padding: 0,
@@ -57,10 +60,12 @@ const Main = ({ hide }) => {
           zIndex: 1,
         }}
       >
+        {/*Component for header*/}
         <HeaderBar onClick={() => setCollapsed(!collapsed)} hide={collapsed} />
       </Header>
       <Layout>
         {width > 900 ? (
+          // Width lớn hơn 900 thì hiển thị sider
           <Sider
             trigger={null}
             collapsible
@@ -78,9 +83,11 @@ const Main = ({ hide }) => {
               borderColor: "yellow",
             }}
           >
+            {/*Sider content*/}
             <Sidebar hide={collapsed} />
           </Sider>
         ) : (
+          // Width <= 900 thì hiển thị Drawler
           <Drawer
             open={collapsed}
             width={250}
@@ -93,9 +100,11 @@ const Main = ({ hide }) => {
               margin: 0,
             }}
           >
+            {/*Drawler content*/}
             <Sidebar hide={true} />
           </Drawer>
         )}
+        {/*Layout for Content*/}
         <Layout>
           <Content
             style={{
@@ -107,8 +116,9 @@ const Main = ({ hide }) => {
               overflow: "initial",
             }}
           >
+            {/*Button để scroll to top page*/}
             <FloatButton.BackTop />
-
+            {/*Các navigate page trong admin */}
             <Admin />
           </Content>
         </Layout>

@@ -1,6 +1,7 @@
 export const COLLABORATOR_FAVORITE = "favourite";
 export const COLLABORATOR_BLOCK = "block";
 
+{/*Những giá trị cứng*/}
 export const arrDays = [
   {
     id: 0,

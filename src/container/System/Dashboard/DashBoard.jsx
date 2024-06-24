@@ -80,7 +80,7 @@
 //   const [dataTotalChartCancel, setDataTotalChartCancel] = useState([]);
 //   const [codeCity, setCodeCity] = useState();
 //   const [nameCity, setNameCity] = useState("");
-  
+
 //   const [startDate, setStartDate] = useState(
 //     moment().subtract(30, "days").startOf("days").add(7, "hours").toISOString()
 //   );
@@ -1222,13 +1222,6 @@
 
 // //Today 31/08/2023 Le Minh Dang!!!!!!
 
-
-
-
-
-
-
-
 import {
   Col,
   DatePicker,
@@ -1313,10 +1306,9 @@ export default function Home() {
   const [dataTotalChartCancel, setDataTotalChartCancel] = useState([]);
   const [codeCity, setCodeCity] = useState();
   const [nameCity, setNameCity] = useState("");
-  
 
-  const [startDate, setStartDate] = useState("")
-  const [endDate, setEndDate] = useState("")
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   // const [startDate, setStartDate] = useState(
   //   moment().subtract(30, "days").startOf("days").add(7, "hours").toISOString()
@@ -1339,83 +1331,80 @@ export default function Home() {
   const lang = useSelector(getLanguageState);
   const province = useSelector(getProvince);
 
-
   // useEffect(() => {
   //   if (startDate !== "") {
   //     onChange()
   //   }
   // }, [startDate])
 
-
   useEffect(() => {
-
     if (startDate !== "") {
+      // Nếu có total finance job dashboard thì chạy api với giá trị startDate và endDate
+      if (checkElement?.includes("total_finance_job_dashboard")) {
+        getDayReportApi(startDate, endDate)
+          .then((res) => {
+            setArrResult(res.arrResult);
+            setTotalMoneyChart(res?.total_money);
+            getDates(startDate, endDate);
+          })
+          .catch((err) => {});
+      }
+      if (checkElement?.includes("connection_service_dashboard")) {
+        dispatch(getServiceConnect.getServiceConnectRequest());
+      }
+      if (checkElement?.includes("history_activity_dashboard")) {
+        dispatch(
+          getHistoryActivity.getHistoryActivityRequest({
+            lang: lang,
+            start: 0,
+            length: 20,
+          })
+        );
+      }
+      if (checkElement?.includes("lastest_services_dashboard")) {
+        dispatch(
+          getLastestService.getLastestServiceRequest({ start: 0, length: 5 })
+        );
+      }
+      if (checkElement?.includes("top_collaborator_dashboard")) {
+        dispatch(
+          getTopCollaborator.getTopCollaboratorRequest({
+            startDate: startDate,
+            endDate: endDate,
+            start: 0,
+            length: 10,
+          })
+        );
+      }
+      if (checkElement?.includes("total_customer_monthly_dashboard")) {
+        getTotalCustomerYear(moment().year())
+          .then((res) => {
+            setDataUser(res);
+          })
+          .catch((err) => {});
+      }
 
-    if (checkElement?.includes("total_finance_job_dashboard")) {
-      getDayReportApi(startDate, endDate)
-        .then((res) => {
-          setArrResult(res.arrResult);
-          setTotalMoneyChart(res?.total_money);
-          getDates(startDate, endDate);
-        })
-        .catch((err) => {});
-    }
-    if (checkElement?.includes("connection_service_dashboard")) {
-      dispatch(getServiceConnect.getServiceConnectRequest());
-    }
-    if (checkElement?.includes("history_activity_dashboard")) {
-      dispatch(
-        getHistoryActivity.getHistoryActivityRequest({
-          lang: lang,
-          start: 0,
-          length: 20,
-        })
-      );
-    }
-    if (checkElement?.includes("lastest_services_dashboard")) {
-      dispatch(
-        getLastestService.getLastestServiceRequest({ start: 0, length: 5 })
-      );
-    }
-    if (checkElement?.includes("top_collaborator_dashboard")) {
-      dispatch(
-        getTopCollaborator.getTopCollaboratorRequest({
-          startDate: startDate,
-          endDate: endDate,
-          start: 0,
-          length: 10,
-        })
-      );
-    }
-    if (checkElement?.includes("total_customer_monthly_dashboard")) {
-      getTotalCustomerYear(moment().year())
-        .then((res) => {
-          setDataUser(res);
-        })
-        .catch((err) => {});
-    }
+      dispatch(getActiveUser.getActiveUserRequest());
+      setCodeCity(province[1]?.code);
+      setNameCity(province[1]?.name);
 
-    dispatch(getActiveUser.getActiveUserRequest());
-    setCodeCity(province[1]?.code);
-    setNameCity(province[1]?.name);
+      if (checkElement?.includes("report_detail_service_dashboard")) {
+        getReportServiceDetails(startDate, endDate, "")
+          .then((res) => {
+            setDataChartServiceDetails(res?.detailData);
+          })
+          .catch((err) => {});
+      }
 
-    if (checkElement?.includes("report_detail_service_dashboard")) {
-      getReportServiceDetails(startDate, endDate, "")
-        .then((res) => {
-          setDataChartServiceDetails(res?.detailData);
-        })
-        .catch((err) => {});
+      if (checkElement?.includes("report_cancel_order_dashboard")) {
+        getReportCancelReport(startDate, endDate, "", "")
+          .then((res) => {
+            setDataChartCancel(res?.percent);
+            setDataTotalChartCancel(res);
+          })
+          .catch((err) => {});
+      }
     }
-
-    if (checkElement?.includes("report_cancel_order_dashboard")) {
-      getReportCancelReport(startDate, endDate, "", "")
-        .then((res) => {
-          setDataChartCancel(res?.percent);
-          setDataTotalChartCancel(res);
-        })
-        .catch((err) => {});
-    }
-  }
   }, [startDate]);
 
   useEffect(() => {
@@ -1757,26 +1746,23 @@ export default function Home() {
       </text>
     );
   };
-
   return (
     <div className="container-dash">
       {checkElement?.includes("get_general_total_report_dashboard") && (
         <Header />
       )}
-
       <div>
         <div className="div-chart_total_service_collaborator">
           <div className="chart">
             <div className="div-head-chart">
               <div className="div-date">
-
-              <RangeDatePicker
-              setStartDate={setStartDate}
-              setEndDate={setEndDate}
-              onCancel={() => { }}
-              defaults={"thirty_last"}
-            />
-
+                {/*Date Picker For Statistic*/}
+                <RangeDatePicker
+                  setStartDate={setStartDate}
+                  setEndDate={setEndDate}
+                  onCancel={() => {}}
+                  defaults={"thirty_last"}
+                />
                 {/* <CustomDatePicker
                   setStartDate={setStartDate}
                   setEndDate={setEndDate}
@@ -1785,6 +1771,7 @@ export default function Home() {
                   setSameStart={() => {}}
                   setSameEnd={() => {}}
                 /> */}
+                {/*Date Text*/}
                 {startDate && (
                   <a className="text-date">
                     {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
@@ -1792,6 +1779,7 @@ export default function Home() {
                   </a>
                 )}
               </div>
+              {/*Total Money*/}
               {checkElement?.includes("total_finance_job_dashboard") && (
                 <a className="text-total-money">
                   {`${i18n.t("sales", { lng: lang })}`}:{" "}
@@ -1813,6 +1801,7 @@ export default function Home() {
                 }
               />
             </div> */}
+            {/*Dashboard Money Receive*/}
             {checkElement?.includes("total_finance_job_dashboard") && (
               <div>
                 <ResponsiveContainer
@@ -1834,9 +1823,7 @@ export default function Home() {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis
                       dataKey="_id"
-                      tickFormatter={(tickItem) =>
-                        tickItem.slice(0,5)
-                      }
+                      tickFormatter={(tickItem) => tickItem.slice(0, 5)}
                     />
                     <YAxis
                       dataKey="total_gross_income"
@@ -1856,16 +1843,19 @@ export default function Home() {
               </div>
             )}
             <div>
+              {/*Header For Percentage Online or Offline*/}
               <p className="label-persen-active">{`${i18n.t(
                 "percentage_of_activity",
                 { lng: lang }
               )}`}</p>
               <div className="div-persen">
+                {/*ActivUser in Percent*/}
                 <p className="label-persen">{activeUser?.donePercent}%</p>
                 <p className="label-total">{`${i18n.t("total", {
                   lng: lang,
                 })}`}</p>
               </div>
+              {/*Process Bar*/}
               <Progress
                 percent={activeUser?.donePercent}
                 showInfo={false}
@@ -1874,6 +1864,7 @@ export default function Home() {
                 strokeWidth={15}
               />
               <div className="div-container-on">
+                {/*Online User*/}
                 <div className="div-on">
                   <div className="line-on" />
                   <div className="total-div-on">
@@ -1881,7 +1872,7 @@ export default function Home() {
                     <a className="text-total-on">{activeUser?.ActiveUsers}</a>
                   </div>
                 </div>
-
+                {/*Offline User*/}
                 <div className="div-on">
                   <div className="line-off" />
                   <div className="total-div-on">
@@ -1894,6 +1885,7 @@ export default function Home() {
           </div>
           <div className="div-right-conection-dashboard">
             <div className="div-right">
+              {/*Tỉ lệ dịch vụ kết nối*/}
               {checkElement?.includes("connection_service_dashboard") && (
                 <div className="div-connect-service">
                   <div className="div-progress">
@@ -1936,6 +1928,7 @@ export default function Home() {
                   </div>
                 </div>
               )}
+              {/*Top CTV*/}
               {checkElement?.includes("top_collaborator_dashboard") && (
                 <>
                   {topCollaborator.length > 0 && (
@@ -2016,6 +2009,7 @@ export default function Home() {
                 </>
               )}
             </div>
+            {/*Hoạt động gần đây nhất*/}
             {checkElement?.includes("history_activity_dashboard") && (
               <div className="col-activity-dashboard">
                 <p className="label-activity">{`${i18n.t("history_acivity", {
@@ -2165,7 +2159,7 @@ export default function Home() {
             )}
           </div>
         </div>
-
+        {/*Dịch vụ gần đây nhất*/}
         {checkElement?.includes("total_finance_job_dashboard") && (
           <div>
             <p className="label-service">{`${i18n.t("nearest_service", {
@@ -2196,6 +2190,7 @@ export default function Home() {
           </div>
         )}
         <div className="div-total-report-dashboard">
+          {/*Thống kê đơn hàng*/}
           {checkElement?.includes("report_detail_service_dashboard") && (
             <div className="div-chart-pie-total-dash">
               <a className="title-chart-area">{`${i18n.t("order_statistic", {
@@ -2272,6 +2267,7 @@ export default function Home() {
               </div>
             </div>
           )}
+          {/*Tổng lượt đăng kí*/}
           {checkElement?.includes("total_customer_monthly_dashboard") && (
             <div className="div-chart-user">
               <h4>{`${i18n.t("total_register", {
@@ -2381,6 +2377,7 @@ export default function Home() {
           )}
         </div>
         <div>
+          {/*Thống kê đơn hủy*/}
           {checkElement?.includes("report_cancel_order_dashboard") && (
             <div className="div-chart-pie-total-cancel-dash">
               <a className="title-chart">

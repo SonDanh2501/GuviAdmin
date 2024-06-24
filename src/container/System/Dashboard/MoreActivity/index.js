@@ -57,13 +57,14 @@ const MoreActivity = () => {
 
   return (
     <>
+      {/*More Activity Text*/}
       <div onClick={showDrawer} className="btn-see-activity">
         {`${i18n.t("see_more", {
           lng: lang,
         })}`}{" "}
         <i class="uil uil-angle-right"></i>
       </div>
-
+      {/*More Activity Drawer*/}
       <Drawer
         title="Chi tiết hoạt động"
         width={width > 490 ? 500 : 300}
