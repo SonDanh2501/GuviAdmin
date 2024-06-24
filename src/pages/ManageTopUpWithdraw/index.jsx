@@ -516,15 +516,7 @@ const columns = [
   {
     title: "Nạp vào tài khoản",
     dataIndex: "",
-    key: "subject_transaction_top_up",
-    width: 90,
-    fontSize: "text-size-M",
-  },
-
-  {
-    title: "Rút từ tài khoản",
-    dataIndex: "",
-    key: "subject_transaction_withdraw",
+    key: "subject_transaction",
     width: 90,
     fontSize: "text-size-M",
   },

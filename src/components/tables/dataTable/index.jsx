@@ -382,7 +382,7 @@ const DataTable = (props) => {
             );
             break;
           }
-          case "subject_transaction_top_up": {
+          case "subject_transaction": {
             let _type_wallet = "";
             if (data?.type_transfer === "top_up") {
               if (data?.subject === "customer") {
@@ -407,122 +407,7 @@ const DataTable = (props) => {
                 }
               } else if (data?.subject === "other") {
               }
-            }
-            // else if (data?.type_transfer === "withdraw") {
-            //   if (data?.subject === "customer") {
-            //     _type_wallet = (
-            //       <p>
-            //         Rút từ: <strong>Pay-Point</strong>
-            //       </p>
-            //     );
-            //   } else if (data?.subject === "collaborator") {
-            //     if (data?.type_wallet === "work_wallet") {
-            //       _type_wallet = (
-            //         <p>
-            //           Rút từ: <strong>Ví Công việc</strong>
-            //         </p>
-            //       );
-            //     } else {
-            //       _type_wallet = (
-            //         <p>
-            //           Rút từ: <strong>Ví CTV</strong>
-            //         </p>
-            //       );
-            //     }
-            //   } else if (data?.subject === "other") {
-            //   }
-            // }
-            return (
-              <>
-                {data?.type_transfer === "top_up" && (
-                  <div className="div-collaborator">
-                    {data?.id_customer && (
-                      <div className="div-name-star">
-                        <Link
-                          to={`/profile-customer/${
-                            data?.id_customer?._id || data?._id
-                          }`}
-                          target="_blank"
-                        >
-                          <div className="div-name">
-                            <p className={`${item?.fontSize}`}>
-                              KH - {data?.id_customer?.full_name}
-                            </p>
-                          </div>
-                          <div className="div-phone-star">
-                            <p className={`${item?.fontSize}`}>
-                              {data?.id_customer?.phone}
-                            </p>
-                          </div>
-                          <div>
-                            <p>{_type_wallet}</p>
-                          </div>
-                        </Link>
-                      </div>
-                    )}
-                    {data?.id_collaborator && (
-                      <>
-                        <Link
-                          to={`/details-collaborator/${data?.id_collaborator?._id}`}
-                          className="div-name-star"
-                          target="_blank"
-                        >
-                          <div className="div-name">
-                            <p className={`${item?.fontSize}`}>
-                              CTV - {data?.id_collaborator?.full_name}
-                            </p>
-                          </div>
-                          <div className="div-phone-star">
-                            <p className={`${item?.fontSize}`}>
-                              {data?.id_collaborator?.phone}
-                            </p>
-                          </div>
-                          <div>
-                            <p>{_type_wallet}</p>
-                          </div>
-                        </Link>
-                      </>
-                    )}
-                    {!data?.id_collaborator && !data?.id_customer && (
-                      <div className="div-name">
-                        <p className={`${item?.fontSize}`}>
-                          Khác - {data?.id_admin_action?.full_name}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </>
-            );
-            break;
-          }
-          case "subject_transaction_withdraw": {
-            let _type_wallet = "";
-            // if (data?.type_transfer === "top_up") {
-            //   if (data?.subject === "customer") {
-            //     _type_wallet = (
-            //       <p>
-            //         Nạp vào: <strong>Pay-Point</strong>
-            //       </p>
-            //     );
-            //   } else if (data?.subject === "collaborator") {
-            //     if (data?.type_wallet === "work_wallet") {
-            //       _type_wallet = (
-            //         <p>
-            //           Nạp vào: <strong>Ví Công việc</strong>
-            //         </p>
-            //       );
-            //     } else {
-            //       _type_wallet = (
-            //         <p>
-            //           Nạp vào: <strong>Ví CTV</strong>
-            //         </p>
-            //       );
-            //     }
-            //   } else if (data?.subject === "other") {
-            //   }
-            // } else
-            if (data?.type_transfer === "withdraw") {
+            } else if (data?.type_transfer === "withdraw") {
               if (data?.subject === "customer") {
                 _type_wallet = (
                   <p>
@@ -548,64 +433,62 @@ const DataTable = (props) => {
             }
             return (
               <>
-                {data?.type_transfer === "withdraw" && (
-                  <div className="div-collaborator">
-                    {data?.id_customer && (
-                      <div className="div-name-star">
-                        <Link
-                          to={`/profile-customer/${
-                            data?.id_customer?._id || data?._id
-                          }`}
-                          target="_blank"
-                        >
-                          <div className="div-name">
-                            <p className={`${item?.fontSize}`}>
-                              KH - {data?.id_customer?.full_name}
-                            </p>
-                          </div>
-                          <div className="div-phone-star">
-                            <p className={`${item?.fontSize}`}>
-                              {data?.id_customer?.phone}
-                            </p>
-                          </div>
-                          <div>
-                            <p>{_type_wallet}</p>
-                          </div>
-                        </Link>
-                      </div>
-                    )}
-                    {data?.id_collaborator && (
-                      <>
-                        <Link
-                          to={`/details-collaborator/${data?.id_collaborator?._id}`}
-                          className="div-name-star"
-                          target="_blank"
-                        >
-                          <div className="div-name">
-                            <p className={`${item?.fontSize}`}>
-                              CTV - {data?.id_collaborator?.full_name}
-                            </p>
-                          </div>
-                          <div className="div-phone-star">
-                            <p className={`${item?.fontSize}`}>
-                              {data?.id_collaborator?.phone}
-                            </p>
-                          </div>
-                          <div>
-                            <p>{_type_wallet}</p>
-                          </div>
-                        </Link>
-                      </>
-                    )}
-                    {!data?.id_collaborator && !data?.id_customer && (
-                      <div className="div-name">
-                        <p className={`${item?.fontSize}`}>
-                          Khác - {data?.id_admin_action?.full_name}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
+                <div className="div-collaborator">
+                  {data?.id_customer && (
+                    <div className="div-name-star">
+                      <Link
+                        to={`/profile-customer/${
+                          data?.id_customer?._id || data?._id
+                        }`}
+                        target="_blank"
+                      >
+                        <div className="div-name">
+                          <p className={`${item?.fontSize}`}>
+                            KH - {data?.id_customer?.full_name}
+                          </p>
+                        </div>
+                        <div className="div-phone-star">
+                          <p className={`${item?.fontSize}`}>
+                            {data?.id_customer?.phone}
+                          </p>
+                        </div>
+                        <div>
+                          <p>{_type_wallet}</p>
+                        </div>
+                      </Link>
+                    </div>
+                  )}
+                  {data?.id_collaborator && (
+                    <>
+                      <Link
+                        to={`/details-collaborator/${data?.id_collaborator?._id}`}
+                        className="div-name-star"
+                        target="_blank"
+                      >
+                        <div className="div-name">
+                          <p className={`${item?.fontSize}`}>
+                            CTV - {data?.id_collaborator?.full_name}
+                          </p>
+                        </div>
+                        <div className="div-phone-star">
+                          <p className={`${item?.fontSize}`}>
+                            {data?.id_collaborator?.phone}
+                          </p>
+                        </div>
+                        <div>
+                          <p>{_type_wallet}</p>
+                        </div>
+                      </Link>
+                    </>
+                  )}
+                  {!data?.id_collaborator && !data?.id_customer && (
+                    <div className="div-name">
+                      <p className={`${item?.fontSize}`}>
+                        Khác - {data?.id_admin_action?.full_name}
+                      </p>
+                    </div>
+                  )}
+                </div>
               </>
             );
             break;
