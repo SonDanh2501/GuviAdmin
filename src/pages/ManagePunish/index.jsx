@@ -22,7 +22,9 @@ import { Link } from "react-router-dom";
 import CommonFilter from "../../components/commonFilter";
 import Tabs from "../../components/tabs/tabs1";
 import ModalCustom from "../../components/modalCustom";
+import useWindowDimensions from "../../helper/useWindowDimensions";
 const ManagePunish = () => {
+  let { width } = useWindowDimensions();
   const [startPage, setStartPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [item, setItem] = useState();
@@ -52,6 +54,7 @@ const ManagePunish = () => {
     {
       key: "1",
       label: <div onClick={() => setOpenModalRevoke(true)}>Thu hồi</div>,
+      disabled: false,
     },
     {
       key: "2",
@@ -68,6 +71,34 @@ const ManagePunish = () => {
           xoá
         </p>
       ),
+      disabled: false,
+    },
+    {
+      key: "3",
+      label:
+        width < 900 ? (
+          <a
+            onClick={() => setOpenModalChangeStatus(true)}
+            style={{ margin: 0 }}
+          >
+            Xác Nhận
+          </a>
+        ) : (
+          false
+        ),
+      disabled: false,
+    },
+    {
+      key: "4",
+      label:
+        width < 900 ? (
+          <a onClick={() => setOpenModalCancel(true)} style={{ margin: 0 }}>
+            Hủy Bỏ
+          </a>
+        ) : (
+          false
+        ),
+      disabled: false,
     },
   ];
 
@@ -76,16 +107,76 @@ const ManagePunish = () => {
     dataIndex: "action",
     key: "action",
     fixed: "right",
-    width: 20,
-    render: () => (
-      <Space size="middle">
-        <Dropdown menu={{ items }} trigger={["click"]}>
-          <a>
-            <UilEllipsisV />
-          </a>
-        </Dropdown>
-      </Space>
-    ),
+    width: width > 900 ? 60 : 20,
+    render: (_, record) => {
+      // console.log("CHECK STATUS", record?.status);
+      const _isDisableVerify =
+        record?.status === "done" ||
+        record?.status === "cancel" ||
+        record?.status === "revoke" ||
+        record?.status === "waiting" ||
+        record?.status === "doing" ||
+        record?.status === "processing";
+      // Set disabled = true nếu status là một trong các trường hợp trên
+      if (_isDisableVerify) {
+        items?.map((el) => {
+          // console.log("CHECK DISABLED >>> ", el?.disabled);
+          if (+el?.key === 3 || +el?.key === 4) {
+            el.disabled = true;
+            // console.log("CHECK DISABLED >>> ", el?.disabled);
+          }
+        });
+      }
+      // Nếu không có thì phải trả lại giá trị initial là disabled = false
+      else {
+        items?.map((el) => {
+          el.disabled = false;
+        });
+      }
+      return (
+        <div style={{ display: "flex" }}>
+          {width < 900 ? (
+            <>
+              <Space size="middle">
+                <Dropdown menu={{ items }} trigger={["click"]}>
+                  <a>
+                    <UilEllipsisV />
+                  </a>
+                </Dropdown>
+              </Space>
+            </>
+          ) : (
+            <>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "4px" }}
+              >
+                <Button
+                  disabled={_isDisableVerify}
+                  onClick={() => setOpenModalChangeStatus(true)}
+                >
+                  Xác nhận
+                </Button>
+                <Button
+                  disabled={_isDisableVerify}
+                  type="primary"
+                  danger
+                  onClick={() => setOpenModalCancel(true)}
+                >
+                  Huỷ
+                </Button>
+              </div>
+              <Space size="middle">
+                <Dropdown menu={{ items }} trigger={["click"]}>
+                  <a>
+                    <UilEllipsisV />
+                  </a>
+                </Dropdown>
+              </Space>
+            </>
+          )}
+        </div>
+      );
+    },
   };
   // ----------------------------- xử lý  action ----------------------------------- //
   const onChangePage = (value) => {
