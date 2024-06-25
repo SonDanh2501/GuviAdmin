@@ -50,11 +50,13 @@ const HistoryTransition = ({ id }) => {
       <div className="div-list">
         {data?.map((item, index) => {
           const money = item?.value?.toString();
-
           return (
             <div className="div-item-list" key={index}>
+              {/*Container Header*/}
               <div className="div-column-1">
+                {/*Header giao dịch */}
                 <p className="text-title">{item?.title?.[lang]}</p>
+                {/*Header tiền vào/ra*/}
                 <p
                   className={
                     money.slice(0, 1) === "-"
@@ -67,11 +69,13 @@ const HistoryTransition = ({ id }) => {
                     : "+" + formatMoney(item?.value)}
                 </p>
               </div>
+              {/*Ngày giờ giao dịch */}
               <p className="text-date-t">
                 {moment(new Date(item?.date_create)).format(
                   "DD/MM/yyy - HH:mm"
                 )}
               </p>
+              {/*Container số dư*/}
               <div
                 style={{
                   display: "flex",
@@ -79,13 +83,16 @@ const HistoryTransition = ({ id }) => {
                   alignItems: "center",
                 }}
               >
+                {/*Số dư*/}
                 <p className="text-title-surplus">
                   {`${i18n.t("surplus", { lng: lang })}`}:{" "}
                   {item?.current_pay_point
                     ? formatMoney(item?.current_pay_point)
                     : formatMoney(0)}
                 </p>
+
                 <p className="text-surplus"></p>
+                {/*Icon */}
                 {item?.status_current_pay_point === "down" ? (
                   <i class="uil uil-arrow-down icon-deduction"></i>
                 ) : item?.status_current_pay_point === "up" ? (
@@ -98,7 +105,7 @@ const HistoryTransition = ({ id }) => {
           );
         })}
       </div>
-
+      {/*Pagination */}
       {data.length > 0 && (
         <div className="div-pagination-customer-history p-2">
           <p>
