@@ -194,6 +194,7 @@ const [phoneNumber, setPhoneNumber] = useState(data?.phone);
             <p className="text-name">{data?.full_name}</p>
             {/*Số điện thoại*/}
             <p
+              style={{ cursor: "pointer" }}
               onClick={() => setIsShowPhone(!isShowPhone)}
               className="text-phone"
             >
