@@ -150,12 +150,17 @@ const HistoryActivity = (props) => {
                             <i
                               style={{ color: "red" }}
                               class="uil uil-arrow-down icon-deduction"
-                            ></i>
+                            />
                           ) : item?.status_current_work_wallet === "up" ? (
                             <i
                               style={{ color: "green" }}
                               class="uil uil-arrow-up icon-plus"
-                            ></i>
+                            />
+                          ) : item?.status_current_work_wallet === "none" ? (
+                            <i
+                              style={{ color: "black", paddingLeft: "1px" }}
+                              class="uil uil-minus icon-plus"
+                            />
                           ) : (
                             <></>
                           )}
@@ -171,13 +176,19 @@ const HistoryActivity = (props) => {
                             <i
                               style={{ color: "red" }}
                               class="uil uil-arrow-down icon-deduction"
-                            ></i>
+                            />
                           ) : item?.status_current_collaborator_wallet ===
                             "up" ? (
                             <i
                               style={{ color: "green" }}
                               class="uil uil-arrow-up icon-plus"
-                            ></i>
+                            />
+                          ) : item?.status_current_collaborator_wallet ===
+                            "none" ? (
+                            <i
+                              style={{ color: "black", paddingLeft: "1px" }}
+                              class="uil uil-minus icon-plus"
+                            />
                           ) : (
                             <></>
                           )}
@@ -207,12 +218,17 @@ const HistoryActivity = (props) => {
                           <i
                             style={{ color: "red" }}
                             class="uil uil-arrow-down icon-deduction"
-                          ></i>
+                          />
                         ) : item?.status_current_work_wallet === "up" ? (
                           <i
                             style={{ color: "green" }}
                             class="uil uil-arrow-up icon-plus"
-                          ></i>
+                          />
+                        ) : item?.status_current_work_wallet === "none" ? (
+                          <i
+                            style={{ color: "black", paddingLeft: "1px" }}
+                            class="uil uil-minus icon-plus"
+                          />
                         ) : (
                           <></>
                         )}
@@ -229,13 +245,19 @@ const HistoryActivity = (props) => {
                           <i
                             style={{ color: "red" }}
                             class="uil uil-arrow-down icon-deduction"
-                          ></i>
+                          />
                         ) : item?.status_current_collaborator_wallet ===
                           "up" ? (
                           <i
                             style={{ color: "green" }}
                             class="uil uil-arrow-up icon-plus"
-                          ></i>
+                          />
+                        ) : item?.status_current_collaborator_wallet ===
+                          "none" ? (
+                          <i
+                            style={{ color: "black", paddingLeft: "1px" }}
+                            class="uil uil-minus icon-plus"
+                          />
                         ) : (
                           <></>
                         )}
