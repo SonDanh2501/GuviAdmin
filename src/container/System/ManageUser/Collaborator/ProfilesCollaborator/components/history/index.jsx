@@ -67,12 +67,14 @@ const History = ({ id }) => {
   return (
     <>
       <div className="div-monney">
+        {/*Tổng tiền ví nạp*/}
         <div style={{ display: "flex", flexDirection: "row" }}>
           <p className="text-title-monney">
             {`${i18n.t("work_wallet", { lng: lang })}`}:
           </p>
           <p className="text-monney"> {formatMoney(work_wallet)}</p>
         </div>
+        {/*Tổng tiền CTV*/}
         <div style={{ display: "flex", flexDirection: "row" }}>
           <p className="text-title-monney">
             {`${i18n.t("collaborator_wallet", { lng: lang })}`}:{" "}
@@ -81,6 +83,7 @@ const History = ({ id }) => {
         </div>
       </div>
       <div className="div-list-collaborator mt-3">
+        {/*List các đơn giao dịch */}
         <HistoryActivity data={data} />
         {/* {data?.map((item, index) => {
           const money = item?.value?.toString();
@@ -231,6 +234,7 @@ const History = ({ id }) => {
           );
         })} */}
       </div>
+      {/*Pagination*/}
       <div className="div-pagination p-2">
         <p>
           {`${i18n.t("total", { lng: lang })}`}: {totalData}

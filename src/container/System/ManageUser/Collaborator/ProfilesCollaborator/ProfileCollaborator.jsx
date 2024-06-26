@@ -38,6 +38,8 @@ const ProfileCollaborator = () => {
   const lang = useSelector(getLanguageState);
   const [saveToCookie, readCookie] = useCookies();
   const [activeKey, setActiveKey] = useState("1");
+const [isShowPhone, setIsShowPhone] = useState(false);
+const [phoneNumber, setPhoneNumber] = useState(data?.phone);
   const tabCookie = readCookie("tab-detail-ctv");
 
   useEffect(() => {
@@ -98,7 +100,14 @@ const ProfileCollaborator = () => {
     saveToCookie("tab-detail-ctv", key);
     setActiveKey(key);
   };
-
+  const hidePhoneNumber = (phone) => {
+    if(phone) {
+      let hidePhone = phone.toString().substring(0, 3);
+      hidePhone = hidePhone + "xxxxxxx"
+      return hidePhone;
+    }
+  }
+// console.log("CHECK DATA", data?.phone);
   return (
     <div className="div-container-profile-ctv">
       <div className="div-tab-profile-collaborator">
@@ -144,7 +153,7 @@ const ProfileCollaborator = () => {
           </Tabs.TabPane>
         </Tabs>
       </div>
-
+      {/*Card Profile*/}
       <div className="div-card-profile">
         <div className="headerCard">
           <Image
@@ -181,13 +190,26 @@ const ProfileCollaborator = () => {
                 {data?.password_default}
               </p>
             )}
+            {/*Họ và tên*/}
+            <p className="text-name">{data?.full_name}</p>
+            {/*Số điện thoại*/}
+            <p
+              onClick={() => setIsShowPhone(!isShowPhone)}
+              className="text-phone"
+            >
+              SĐT:{" "}
+              {isShowPhone
+                ? `${data?.phone}`
+                : `${hidePhoneNumber(data?.phone)}`}
+            </p>
+            {/*Mã giới thiệu*/}
             {data?.invite_code && (
-              <p style={{ margin: 0 }}>
+              <p className="text-sub">
                 {`${i18n.t("code_invite", { lng: lang })}`}: {data?.invite_code}
               </p>
             )}
-            <p className="text-name">{data?.full_name}</p>
-            <p style={{ margin: 0 }}>
+            {/*Tuổi*/}
+            <p className="text-sub">
               {!data?.birthday
                 ? ""
                 : `${i18n.t("age", { lng: lang })}` +
@@ -197,7 +219,6 @@ const ProfileCollaborator = () => {
           </div>
         </div>
       </div>
-
       <FloatButton.BackTop />
     </div>
   );
