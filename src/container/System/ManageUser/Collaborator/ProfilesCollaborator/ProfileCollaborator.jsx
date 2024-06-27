@@ -24,8 +24,10 @@ import Overview from "./components/overview";
 import Review from "./components/review";
 import TestExam from "./components/testExam";
 import WithdrawTopup from "./components/withdrawTopup";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const ProfileCollaborator = () => {
+  const { width } = useWindowDimensions();
   const [data, setData] = useState({
     avatar: "",
     birthday: "2000-06-07T00:00:00.000Z",
@@ -212,8 +214,8 @@ const [isShowMore, setIsShowMore] = useState(false);
               </p>
             )}
             {/*Tuổi*/}
-            {isShowMore && (
-              <p className="text-sub">
+            {(width > 900 || isShowMore) && (
+              <p className="text-sub-customer">
                 {!data?.birthday
                   ? ""
                   : `${i18n.t("age", { lng: lang })}` +
@@ -222,9 +224,14 @@ const [isShowMore, setIsShowMore] = useState(false);
               </p>
             )}
             {/*Show More*/}
-            <p className="text-showmore" onClick={() => setIsShowMore(!isShowMore)}>
-              {isShowMore ? "Thu gọn" : "Xem thêm"}
-            </p>
+            {width < 900 && (
+              <p
+                className="text-showmore"
+                onClick={() => setIsShowMore(!isShowMore)}
+              >
+                {isShowMore ? "Thu gọn" : "Xem thêm"}
+              </p>
+            )}
           </div>
         </div>
       </div>
