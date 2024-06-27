@@ -47,7 +47,6 @@ const HistoryTransition = ({ id }) => {
         setIsLoading(false);
       });
   };
-  console.log("DATA CỦA KHÁCH HÀNG", data);
   return (
     <div>
       <div className="div-list">
