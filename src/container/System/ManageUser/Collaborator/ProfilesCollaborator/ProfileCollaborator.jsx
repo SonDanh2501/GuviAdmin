@@ -40,6 +40,8 @@ const ProfileCollaborator = () => {
   const [activeKey, setActiveKey] = useState("1");
 const [isShowPhone, setIsShowPhone] = useState(false);
 const [phoneNumber, setPhoneNumber] = useState(data?.phone);
+const [isShowMore, setIsShowMore] = useState(false);
+
   const tabCookie = readCookie("tab-detail-ctv");
 
   useEffect(() => {
@@ -155,7 +157,7 @@ const [phoneNumber, setPhoneNumber] = useState(data?.phone);
       </div>
       {/*Card Profile*/}
       <div className="div-card-profile">
-        <div className="headerCard">
+        <div className="headerCard ">
           <Image
             style={{
               width: 100,
@@ -182,8 +184,8 @@ const [phoneNumber, setPhoneNumber] = useState(data?.phone);
             </>
           )}
         </div>
-        <div className="mt-2">
-          <div className="text-body">
+        <div style={{ marginTop: "8px" }}>
+          <div className="text-body ">
             {data?.password_default && (
               <p style={{ margin: 0 }}>
                 {`${i18n.t("default_password", { lng: lang })}`}:{" "}
@@ -210,12 +212,18 @@ const [phoneNumber, setPhoneNumber] = useState(data?.phone);
               </p>
             )}
             {/*Tuổi*/}
-            <p className="text-sub">
-              {!data?.birthday
-                ? ""
-                : `${i18n.t("age", { lng: lang })}` +
-                  ": " +
-                  moment().diff(data?.birthday, "years")}
+            {isShowMore && (
+              <p className="text-sub">
+                {!data?.birthday
+                  ? ""
+                  : `${i18n.t("age", { lng: lang })}` +
+                    ": " +
+                    moment().diff(data?.birthday, "years")}
+              </p>
+            )}
+            {/*Show More*/}
+            <p className="text-showmore" onClick={() => setIsShowMore(!isShowMore)}>
+              {isShowMore ? "Thu gọn" : "Xem thêm"}
             </p>
           </div>
         </div>
