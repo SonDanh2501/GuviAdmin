@@ -5,6 +5,7 @@
   display: flex;
   width: 100%;
   background: linear-gradient(90deg, #b75bfc 30%, #dbacfb 80%);
+
   .div-card-login {
     display: flex;
     flex-direction: row;
@@ -17,7 +18,7 @@
 
     .div-card-left {
       width: 50%;
-      padding-top: 10%;
+      padding-top: 7%;
 
       .text-wel-login {
         color: #000000;
@@ -27,6 +28,7 @@
         text-decoration: none;
         margin-left: 10%;
         margin: 0;
+        text-align: center;
       }
 
       .image-login {
@@ -45,11 +47,14 @@
       width: 50%;
       padding-left: 5%;
       padding-right: 5%;
-      padding-top: 10%;
+      padding-top: 8%;
+
       .div-head-card {
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 1rem;
+
         .img-logo {
           width: 100px;
           height: 100px;
@@ -66,6 +71,7 @@
           text-decoration: none;
         }
       }
+
       .div-body-login {
         padding-left: 20px;
         padding-right: 20px;
@@ -81,6 +87,7 @@
         padding: 10px;
         width: auto;
       }
+
       .btn-login:hover {
         background-color: rgb(132, 112, 244);
       }
@@ -107,6 +114,7 @@
     display: flex;
     width: 100%;
     background: linear-gradient(90deg, #b75bfc 30%, #dbacfb 80%);
+
     .div-card-login {
       display: flex;
       flex-direction: row;
@@ -129,6 +137,8 @@
           text-decoration: none;
           margin-left: 10%;
           margin: 0;
+          text-align: center;
+
         }
 
         .image-login {
@@ -148,10 +158,12 @@
         padding-left: 5%;
         padding-right: 5%;
         padding-top: 10%;
+
         .div-head-card {
           display: flex;
           flex-direction: column;
           align-items: center;
+
           .img-logo {
             width: 100px;
             height: 100px;
@@ -168,10 +180,12 @@
             text-decoration: none;
           }
         }
+
         .div-body-login {
           padding-left: 20px;
           padding-right: 20px;
         }
+
         .btn-login {
           background-color: #e265e2;
           border: none;
@@ -182,6 +196,7 @@
           padding: 10px;
           width: auto;
         }
+
         .btn-login:hover {
           background-color: rgb(132, 112, 244);
         }
@@ -209,6 +224,7 @@
     display: flex;
     width: 100%;
     background: linear-gradient(90deg, #b75bfc 30%, #dbacfb 80%);
+
     .div-card-login {
       display: flex;
       flex-direction: row;
@@ -232,6 +248,8 @@
           text-decoration: none;
           margin-left: 10%;
           margin: 0;
+          text-align: center;
+
         }
 
         .image-login {
@@ -251,11 +269,13 @@
         width: 100%;
         padding-left: 5%;
         padding-right: 5%;
-        padding-top: 10%;
+        padding-top: 13%;
+
         .div-head-card {
           display: flex;
           flex-direction: column;
           align-items: center;
+
           .img-logo {
             width: 100px;
             height: 100px;
@@ -272,10 +292,12 @@
             text-decoration: none;
           }
         }
+
         .div-body-login {
           padding-left: 20px;
           padding-right: 20px;
         }
+
         .btn-login {
           background-color: #e265e2;
           border: none;
@@ -286,6 +308,7 @@
           padding: 10px;
           width: auto;
         }
+
         .btn-login:hover {
           background-color: rgb(132, 112, 244);
         }
@@ -313,6 +336,7 @@
     display: flex;
     width: 100%;
     background: linear-gradient(90deg, #b75bfc 30%, #dbacfb 80%);
+
     .div-card-login {
       display: flex;
       flex-direction: row;
@@ -336,6 +360,8 @@
           text-decoration: none;
           margin-left: 10%;
           margin: 0;
+          text-align: center;
+
         }
 
         .image-login {
@@ -355,10 +381,13 @@
         width: 100%;
         padding-left: 5%;
         padding-right: 5%;
+        padding-bottom: 13%;
+
         .div-head-card {
           display: flex;
           flex-direction: column;
           align-items: center;
+
           .img-logo {
             width: 100px;
             height: 100px;
@@ -375,10 +404,12 @@
             text-decoration: none;
           }
         }
+
         .div-body-login {
           padding-left: 20px;
           padding-right: 20px;
         }
+
         .btn-login {
           background-color: #e265e2;
           border: none;
@@ -389,6 +420,7 @@
           padding: 10px;
           width: auto;
         }
+
         .btn-login:hover {
           background-color: rgb(132, 112, 244);
         }

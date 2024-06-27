@@ -62,6 +62,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 
     .text-name {
       font-family: "Roboto";
@@ -90,6 +91,18 @@
       color: #11263c !important;
       text-decoration: none;
       margin: 5px 0 0 0;
+    }
+    
+    .text-showmore{
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 13px;
+      color: #11263c !important;
+      text-decoration: none;
+      margin: 5px 0 0 0;
+      text-decoration: underline;
+      cursor: pointer;
     }
   }
 
@@ -213,6 +226,17 @@
         color: #11263c !important;
         text-decoration: none;
         margin: 1px 10px;
+      }
+
+      .text-showmore { 
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 15px;
+        color: #11263c !important;
+        text-decoration: none;
+        margin: 1px 10px;
+        text-decoration: underline;
       }
     }
 
