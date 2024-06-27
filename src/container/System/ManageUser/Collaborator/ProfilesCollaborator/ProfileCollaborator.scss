@@ -72,6 +72,25 @@
       text-decoration: none;
       margin: 20px 0 0 0;
     }
+    .text-phone {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 13px;
+      color: #11263c !important;
+      text-decoration: none;
+      margin: 5px 0 0 0;
+    }
+    
+    .text-sub {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 13px;
+      color: #11263c !important;
+      text-decoration: none;
+      margin: 5px 0 0 0;
+    }
   }
 
   .btn-default {
@@ -103,7 +122,7 @@
 @media (max-width: 900px) {
   .div-container-profile-ctv {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     width: 100%;
     justify-content: space-between;
 
@@ -118,14 +137,14 @@
 
     .div-card-profile {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       background-color: white;
       padding: 10px;
       filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
       border-radius: 10px;
       margin-top: 10px;
       width: 100%;
-      height: 300px;
+      height: fit-content;
 
       .headerCard {
         border: none;
@@ -164,16 +183,36 @@
     .text-body {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: normal;
 
       .text-name {
         font-family: "Roboto";
         font-style: normal;
-        font-weight: 400;
-        font-size: 18px;
+        font-weight: bold;
+        font-size: 16px;
         color: #11263c !important;
         text-decoration: none;
-        margin: 20px 0 0 0;
+        margin: 1px 10px;
+      }
+      
+      .text-phone {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 15px;
+        color: #11263c !important;
+        text-decoration: none;
+        margin: 1px 10px;
+      }
+
+      .text-sub {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 15px;
+        color: #11263c !important;
+        text-decoration: none;
+        margin: 1px 10px;
       }
     }
 
