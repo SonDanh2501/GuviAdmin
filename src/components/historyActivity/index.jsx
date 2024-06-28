@@ -29,7 +29,7 @@ const HistoryActivity = (props) => {
     console.log("detailHistoryActivity ", detailHistoryActivity);
     return (
       <div className="detail-history-activity_confirm-order_container">
-        <div className="item-left ">
+        <div className="item-left">
           {/*Đơn hàng, Khách Hàng, CTV*/}
           {id_order?.id_view && (
             <div className="content-container ">

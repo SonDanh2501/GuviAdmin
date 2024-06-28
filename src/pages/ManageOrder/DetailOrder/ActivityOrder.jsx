@@ -8,8 +8,11 @@ import { formatMoney } from "../../../helper/formatMoney";
 import moment from "moment";
 import { Pagination } from "antd";
 import LoadingPagination from "../../../components/paginationLoading";
+import useWindowDimensions from "../../../helper/useWindowDimensions";
+import { DownOutlined } from "@ant-design/icons";
 
 const ActivityOrder = (props) => {
+  const { width } = useWindowDimensions();
   const { id } = props;
   const lang = useSelector(getLanguageState);
   const dispatch = useDispatch();
@@ -145,36 +148,106 @@ const ActivityOrder = (props) => {
                 item?.id_transistion_customer?._id,
                 item?.id_transistion_customer?.transfer_note
               );
-
           return (
-            <div key={index} className="div-item-activity-detail-order">
-              <div className="div-name">
-                <a className="text-title">{object}</a>
-                {item?.type !== "customer_collect_points_order" && (
-                  <a
-                    className={
-                      money.slice(0, 1) === "-"
-                        ? "text-money-deduction"
-                        : "text-money-plus"
-                    }
-                  >
-                    {item?.value === 0
-                      ? ""
-                      : money.slice(0, 1) === "-"
-                      ? formatMoney(item?.value)
-                      : "+" + formatMoney(item?.value)}
-                  </a>
-                )}
+            // <div key={index} className="div-item-activity-detail-order">
+            //   <div className="div-name">
+            //     {/*Title */}
+            //     <a className="text-title">{object}</a>
+            //     {/*Money */}
+            //     {item?.type !== "customer_collect_points_order" && (
+            //       <a
+            //         className={
+            //           money.slice(0, 1) === "-"
+            //             ? "text-money-deduction"
+            //             : "text-money-plus"
+            //         }
+            //       >
+            //         {item?.value === 0
+            //           ? ""
+            //           : money.slice(0, 1) === "-"
+            //           ? formatMoney(item?.value)
+            //           : "+" + formatMoney(item?.value)}
+            //       </a>
+            //     )}
+            //   </div>
+            //   {/*Date, time*/}
+            //   <a className="text-date">
+            //     {moment(new Date(item?.date_create)).format(
+            //       "DD/MM/yyy - HH:mm"
+            //     )}
+            //   </a>
+            // </div>
+            <div className="history-activity_item-container">
+              {/* Line Horizontal*/}
+              {width < 490 && (
+                <div className="item-vertical-line">
+                  <div
+                    className={index === 0 ? `circle` : "circle-black"}
+                  ></div>
+                  {/* {index !== data.length - 1 && <div className="line"></div>} */}
+                  <div className="line"></div>
+                </div>
+              )}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: `${width < 490 ? "row" : "column"}`,
+                  padding: `${width < 490 ? "0px 15px" : "0px 0px"}`,
+                  width: `${width < 490 ? "100%" : "140px"}`,
+                  gap: "4px",
+                }}
+                // className="item-left"
+              >
+                {/*Date*/}
+                <p className="">
+                  {moment(new Date(item?.date_create)).format(
+                    "DD/MM/yyy - HH:mm"
+                  )}
+                </p>
               </div>
-              <a className="text-date">
-                {moment(new Date(item?.date_create)).format(
-                  "DD/MM/yyy - HH:mm"
-                )}
-              </a>
+              {/* Line Vertical*/}
+              {width > 490 && (
+                <div className="item-vertical-line">
+                  <div
+                    className={index === 0 ? `circle` : "circle-black"}
+                  ></div>
+                  {/* {index !== data.length - 1 && <div className="line"></div>} */}
+                  <div className="line"></div>
+                </div>
+              )}
+              {/*Item Info*/}
+              <div className="item-info">
+                <div
+                  className="item-info_title "
+                  // onClick={() => onChooseItem(item)}
+                >
+                  <div className="title_admin">
+                    {/*Đang lấy 75 nếu màn hình lớn và 65 cho màn hình nhỏ */}
+                    <div style={{ width: "100%" }}>
+                      {/*Lấy full của 75% của toàn bộ component*/}
+                      {/*Header mỗi giao dịch */}
+                      <p style={{ fontSize: "14px" }}>{object}</p>
+                    </div>
+                  </div>
+                  {/*Số tiền giao dịch và dropdown icon*/}
+                  <div className="container-drop-down">
+                    <p
+                      className={item?.value > 0 ? "plus-money" : "minus-money"}
+                    >
+                      {item?.value === 0
+                        ? ""
+                        : money.slice(0, 1) === "-"
+                        ? formatMoney(item?.value)
+                        : "+" + formatMoney(item?.value)}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           );
         })}
       </div>
+      {/*Pagination*/}
       <div className="mt-2 div-pagination p-2">
         <a>
           {`${i18n.t("total", { lng: lang })}`}: {totalHistory}
