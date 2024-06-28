@@ -228,7 +228,7 @@ const TransactionDrawer2 = (props) => {
               defaultValue={"bank"}
               style={{ width: "100%" }}
               onChange={(e) => {
-                setState({ ...state, payment_out: e });
+                setState({ ...state, payment_out: e, payment_in: e });
               }}
               options={payments}
               value={state?.payment_out}
