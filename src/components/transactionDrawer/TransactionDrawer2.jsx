@@ -261,9 +261,7 @@ const TransactionDrawer2 = (props) => {
           {subject === "collaborator" && (
             <div className="mt-2">
               {/* <p>Ví: </p> */}
-              {titleButton === "Nạp tiền"
-                ? "Nạp vào tài khoản"
-                : "Rút từ tài khoản"}
+              {titleButton === "Phiếu thu" ? "Nạp vào ví" : "Rút từ ví"}
               <Select
                 defaultValue={defaultWallet ? defaultWallet : "work_wallet"}
                 style={{ width: "100%" }}
