@@ -651,6 +651,8 @@ const DataTable = (props) => {
               _payment_out = "VNPAY";
             } else if (data?.payment_out === "bank") {
               _payment_out = "Ngân hàng";
+            } else if (data?.payment_out === "cash") {
+              _payment_out = "Tiền mặt";
             }
             if (data?.type_transfer === "withdraw") {
               _payment_out = `Tài khoản ${_payment_out} cty`;

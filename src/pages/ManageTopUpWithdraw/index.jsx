@@ -551,7 +551,7 @@ const columns = [
   {
     title: "Phương thức thanh toán",
     dataIndex: "payment_out",
-    key: "payment_out",
+    key: "payment_method",
     width: 60,
     fontSize: "text-size-M",
   },
