@@ -632,6 +632,8 @@ const DataTable = (props) => {
               _payment_in = "VNPAY";
             } else if (data?.payment_in === "bank") {
               _payment_in = "Ngân hàng";
+            } else if (data?.payment_in === "cash") {
+              _payment_in = "Khác";
             }
             if (data?.type_transfer === "withdraw") {
             } else if (data?.type_transfer === "top_up") {
