@@ -382,164 +382,49 @@ const DataTable = (props) => {
             );
             break;
           }
-          case "subject_transaction_top_up": {
+          case "subject": {
             let _type_wallet = "";
             if (data?.type_transfer === "top_up") {
               if (data?.subject === "customer") {
                 _type_wallet = (
                   <p>
-                    Nạp vào: <strong>Pay-Point</strong>
+                    <strong>G-Pay</strong>
                   </p>
                 );
               } else if (data?.subject === "collaborator") {
                 if (data?.type_wallet === "work_wallet") {
                   _type_wallet = (
                     <p>
-                      Nạp vào: <strong>Ví Công việc</strong>
+                      <strong>Ví công việc</strong>
                     </p>
                   );
                 } else {
                   _type_wallet = (
                     <p>
-                      Nạp vào: <strong>Ví CTV</strong>
+                      <strong>Ví CTV</strong>
                     </p>
                   );
                 }
               } else if (data?.subject === "other") {
               }
-            }
-            // else if (data?.type_transfer === "withdraw") {
-            //   if (data?.subject === "customer") {
-            //     _type_wallet = (
-            //       <p>
-            //         Rút từ: <strong>Pay-Point</strong>
-            //       </p>
-            //     );
-            //   } else if (data?.subject === "collaborator") {
-            //     if (data?.type_wallet === "work_wallet") {
-            //       _type_wallet = (
-            //         <p>
-            //           Rút từ: <strong>Ví Công việc</strong>
-            //         </p>
-            //       );
-            //     } else {
-            //       _type_wallet = (
-            //         <p>
-            //           Rút từ: <strong>Ví CTV</strong>
-            //         </p>
-            //       );
-            //     }
-            //   } else if (data?.subject === "other") {
-            //   }
-            // }
-            return (
-              <>
-                {data?.type_transfer === "top_up" && (
-                  <div className="div-collaborator">
-                    {data?.id_customer && (
-                      <div className="div-name-star">
-                        <Link
-                          to={`/profile-customer/${
-                            data?.id_customer?._id || data?._id
-                          }`}
-                          target="_blank"
-                        >
-                          <div className="div-name">
-                            <p className={`${item?.fontSize}`}>
-                              KH - {data?.id_customer?.full_name}
-                            </p>
-                          </div>
-                          <div className="div-phone-star">
-                            <p className={`${item?.fontSize}`}>
-                              {data?.id_customer?.phone}
-                            </p>
-                          </div>
-                          <div>
-                            <p>{_type_wallet}</p>
-                          </div>
-                        </Link>
-                      </div>
-                    )}
-                    {data?.id_collaborator && (
-                      <>
-                        <Link
-                          to={`/details-collaborator/${data?.id_collaborator?._id}`}
-                          className="div-name-star"
-                          target="_blank"
-                        >
-                          <div className="div-name">
-                            <p className={`${item?.fontSize}`}>
-                              CTV - {data?.id_collaborator?.full_name}
-                            </p>
-                          </div>
-                          <div className="div-phone-star">
-                            <p className={`${item?.fontSize}`}>
-                              {data?.id_collaborator?.phone}
-                            </p>
-                          </div>
-                          <div>
-                            <p>{_type_wallet}</p>
-                          </div>
-                        </Link>
-                      </>
-                    )}
-                    {!data?.id_collaborator && !data?.id_customer && (
-                      <div className="div-name">
-                        <p className={`${item?.fontSize}`}>
-                          Khác - {data?.id_admin_action?.full_name}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </>
-            );
-            break;
-          }
-          case "subject_transaction_withdraw": {
-            let _type_wallet = "";
-            // if (data?.type_transfer === "top_up") {
-            //   if (data?.subject === "customer") {
-            //     _type_wallet = (
-            //       <p>
-            //         Nạp vào: <strong>Pay-Point</strong>
-            //       </p>
-            //     );
-            //   } else if (data?.subject === "collaborator") {
-            //     if (data?.type_wallet === "work_wallet") {
-            //       _type_wallet = (
-            //         <p>
-            //           Nạp vào: <strong>Ví Công việc</strong>
-            //         </p>
-            //       );
-            //     } else {
-            //       _type_wallet = (
-            //         <p>
-            //           Nạp vào: <strong>Ví CTV</strong>
-            //         </p>
-            //       );
-            //     }
-            //   } else if (data?.subject === "other") {
-            //   }
-            // } else
-            if (data?.type_transfer === "withdraw") {
+            } else if (data?.type_transfer === "withdraw") {
               if (data?.subject === "customer") {
                 _type_wallet = (
                   <p>
-                    Rút từ: <strong>Pay-Point</strong>
+                    <strong>G-Pay</strong>
                   </p>
                 );
               } else if (data?.subject === "collaborator") {
                 if (data?.type_wallet === "work_wallet") {
                   _type_wallet = (
                     <p>
-                      Rút từ: <strong>Ví Công việc</strong>
+                      <strong>Ví công việc</strong>
                     </p>
                   );
                 } else {
                   _type_wallet = (
                     <p>
-                      Rút từ: <strong>Ví CTV</strong>
+                      <strong>Ví CTV</strong>
                     </p>
                   );
                 }
@@ -548,64 +433,62 @@ const DataTable = (props) => {
             }
             return (
               <>
-                {data?.type_transfer === "withdraw" && (
-                  <div className="div-collaborator">
-                    {data?.id_customer && (
-                      <div className="div-name-star">
-                        <Link
-                          to={`/profile-customer/${
-                            data?.id_customer?._id || data?._id
-                          }`}
-                          target="_blank"
-                        >
-                          <div className="div-name">
-                            <p className={`${item?.fontSize}`}>
-                              KH - {data?.id_customer?.full_name}
-                            </p>
-                          </div>
-                          <div className="div-phone-star">
-                            <p className={`${item?.fontSize}`}>
-                              {data?.id_customer?.phone}
-                            </p>
-                          </div>
-                          <div>
-                            <p>{_type_wallet}</p>
-                          </div>
-                        </Link>
-                      </div>
-                    )}
-                    {data?.id_collaborator && (
-                      <>
-                        <Link
-                          to={`/details-collaborator/${data?.id_collaborator?._id}`}
-                          className="div-name-star"
-                          target="_blank"
-                        >
-                          <div className="div-name">
-                            <p className={`${item?.fontSize}`}>
-                              CTV - {data?.id_collaborator?.full_name}
-                            </p>
-                          </div>
-                          <div className="div-phone-star">
-                            <p className={`${item?.fontSize}`}>
-                              {data?.id_collaborator?.phone}
-                            </p>
-                          </div>
-                          <div>
-                            <p>{_type_wallet}</p>
-                          </div>
-                        </Link>
-                      </>
-                    )}
-                    {!data?.id_collaborator && !data?.id_customer && (
-                      <div className="div-name">
-                        <p className={`${item?.fontSize}`}>
-                          Khác - {data?.id_admin_action?.full_name}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
+                <div className="div-collaborator">
+                  {data?.id_customer && (
+                    <div className="div-name-star">
+                      <Link
+                        to={`/profile-customer/${
+                          data?.id_customer?._id || data?._id
+                        }`}
+                        target="_blank"
+                      >
+                        <div className="div-name">
+                          <p className={`${item?.fontSize}`}>
+                            KH - {data?.id_customer?.full_name}
+                          </p>
+                        </div>
+                        <div className="div-phone-star">
+                          <p className={`${item?.fontSize}`}>
+                            {data?.id_customer?.phone}
+                          </p>
+                        </div>
+                        <div>
+                          <p>{_type_wallet}</p>
+                        </div>
+                      </Link>
+                    </div>
+                  )}
+                  {data?.id_collaborator && (
+                    <>
+                      <Link
+                        to={`/details-collaborator/${data?.id_collaborator?._id}`}
+                        className="div-name-star"
+                        target="_blank"
+                      >
+                        <div className="div-name">
+                          <p className={`${item?.fontSize}`}>
+                            CTV - {data?.id_collaborator?.full_name}
+                          </p>
+                        </div>
+                        <div className="div-phone-star">
+                          <p className={`${item?.fontSize}`}>
+                            {data?.id_collaborator?.phone}
+                          </p>
+                        </div>
+                        <div>
+                          <p>{_type_wallet}</p>
+                        </div>
+                      </Link>
+                    </>
+                  )}
+                  {!data?.id_collaborator && !data?.id_customer && (
+                    <div className="div-name">
+                      <p className={`${item?.fontSize}`}>
+                        Khác - {data?.id_admin_action?.full_name}
+                      </p>
+                    </div>
+                  )}
+                </div>
               </>
             );
             break;
@@ -614,18 +497,29 @@ const DataTable = (props) => {
             let _created_by_customer = false;
             let _created_by_collborator = false;
             let _created_by_admin = false;
+            let _full_name = "";
+            let _subject = "";
             if (data?.id_admin_action) {
               _created_by_admin = true;
+              _full_name = data?.id_admin_action?.full_name;
+              _subject = "ADMIN";
             } else {
               if (data?.id_customer) {
                 _created_by_customer = true;
+                _full_name = data?.id_customer?.full_name;
+                _subject = "KH";
               } else {
                 _created_by_collborator = true;
+                _full_name = data?.id_collaborator?.full_name;
+                _subject = "CTV";
               }
             }
             return (
               <>
-                <div className="div-collaborator">
+                <div className="div-name">
+                  <p className={`${item?.fontSize}`}>{_full_name}</p>
+                </div>
+                {/* <div className="div-collaborator">
                   {_created_by_customer && (
                     <div className="div-name-star">
                       <Link
@@ -677,6 +571,9 @@ const DataTable = (props) => {
                       </p>
                     </div>
                   )}
+                </div> */}
+                <div className={`subject-${_subject}`}>
+                  <span>{_subject}</span>
                 </div>
               </>
             );
@@ -724,6 +621,44 @@ const DataTable = (props) => {
                 <p className={`text-payment-method ${item?.fontSize}`}>
                   {formatMoney(data?.final_fee)}
                 </p>
+              </div>
+            );
+            break;
+          case "payment_in":
+            let _payment_in = "";
+            if (data?.payment_in === "momo") {
+              _payment_in = "MoMo";
+            } else if (data?.payment_in === "vnpay") {
+              _payment_in = "VNPAY";
+            } else if (data?.payment_in === "bank") {
+              _payment_in = "Ngân hàng";
+            }
+            if (data?.type_transfer === "withdraw") {
+            } else if (data?.type_transfer === "top_up") {
+              _payment_in = `Tài khoản ${_payment_in} cty`;
+            }
+            return (
+              <div className="div-name">
+                <p>{_payment_in}</p>
+              </div>
+            );
+            break;
+          case "payment_out":
+            let _payment_out = "";
+            if (data?.payment_out === "momo") {
+              _payment_out = "MoMo";
+            } else if (data?.payment_out === "vnpay") {
+              _payment_out = "VNPAY";
+            } else if (data?.payment_out === "bank") {
+              _payment_out = "Ngân hàng";
+            }
+            if (data?.type_transfer === "withdraw") {
+              _payment_out = `Tài khoản ${_payment_out} cty`;
+            } else if (data?.type_transfer === "top_up") {
+            }
+            return (
+              <div className="div-name">
+                <p>{_payment_out}</p>
               </div>
             );
             break;
@@ -1466,39 +1401,39 @@ const DataTable = (props) => {
               </div>
             );
             break;
-          case "payment_out":
-            let _payment_out = "Chuyển khoản";
+          case "payment_method":
+            let payment_method = "Chuyển khoản";
             switch (data?.payment_out) {
               case "momo":
-                _payment_out = "MoMo";
+                payment_method = "MoMo";
                 break;
               case "vnpay":
-                _payment_out = "VNPAY";
+                payment_method = "VNPAY";
                 break;
               case "viettel_pay":
-                _payment_out = "Viettel Pay";
+                payment_method = "Viettel Pay";
                 break;
               case "collaborator_wallet":
-                _payment_out = "Ví CTV";
+                payment_method = "Ví CTV";
                 break;
               case "work_wallet":
-                _payment_out = "Ví công việc";
+                payment_method = "Ví công việc";
                 break;
               case "pay_point":
-                _payment_out = "G-Pay";
+                payment_method = "G-Pay";
                 break;
               case "cash":
-                _payment_out = "Tiền mặt";
+                payment_method = "Tiền mặt";
                 break;
               case "bank":
-                _payment_out = "Chuyển khoản";
+                payment_method = "Chuyển khoản";
                 break;
               default:
                 break;
             }
             return (
               <div className="div-date-create">
-                <p>{_payment_out}</p>
+                <p>{payment_method}</p>
               </div>
             );
             break;
