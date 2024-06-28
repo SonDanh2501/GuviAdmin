@@ -364,14 +364,14 @@ const ManageTopUpWithdraw = () => {
         <div className="transfer-collaborator_transaction">
           {/*Nạp tiền*/}
           <TransactionDrawer2
-            titleButton="Nạp tiền"
-            titleHeader="Nạp tiền"
+            titleButton="Phiếu thu"
+            titleHeader="Phiếu thu"
             onClick={handleTopUp}
           />
           {/*Rút tiền*/}
           <TransactionDrawer2
-            titleButton="Rút tiền"
-            titleHeader="Rút tiền"
+            titleButton="Phiếu chi"
+            titleHeader="Phiếu chi"
             onClick={handleWithdraw}
           />
         </div>
@@ -488,21 +488,21 @@ const columns = [
     title: "Ngày tạo",
     dataIndex: "date_create",
     key: "date_create",
-    width: 45,
+    width: 55,
     fontSize: "text-size-M",
   },
   {
     title: "Mã giao dịch",
     dataIndex: "code_transaction",
     key: "code_transaction",
-    width: 65,
+    width: 75,
     fontSize: "text-size-M",
   },
   {
     title: "Người tạo",
     dataIndex: "",
     key: "created_by",
-    width: 70,
+    width: 80,
     fontSize: "text-size-M",
   },
   {
@@ -514,21 +514,26 @@ const columns = [
   },
 
   {
-    title: "Nạp vào tài khoản",
+    title: "Tài khoản",
     dataIndex: "",
-    key: "subject_transaction_top_up",
+    key: "subject",
     width: 90,
     fontSize: "text-size-M",
   },
-
   {
-    title: "Rút từ tài khoản",
-    dataIndex: "",
-    key: "subject_transaction_withdraw",
-    width: 90,
+    title: "Nguồn tiền",
+    // dataIndex: "payment_in",
+    key: "payment_out",
+    width: 50,
     fontSize: "text-size-M",
   },
-
+  {
+    title: "Đích đến",
+    // dataIndex: "payment_out",
+    key: "payment_in",
+    width: 50,
+    fontSize: "text-size-M",
+  },
   {
     title: "Loại giao dịch",
     dataIndex: "type_transfer",
@@ -581,20 +586,6 @@ const columns = [
     title: "Ngày duyệt",
     dataIndex: "date_verify_created",
     key: "date_verify",
-    width: 50,
-    fontSize: "text-size-M",
-  },
-  {
-    title: "Nguồn vào",
-    // dataIndex: "payment_in",
-    key: "text",
-    width: 50,
-    fontSize: "text-size-M",
-  },
-  {
-    title: "Nguồn ra",
-    // dataIndex: "payment_out",
-    key: "text",
     width: 50,
     fontSize: "text-size-M",
   },
