@@ -65,6 +65,10 @@
     justify-content: center;
 
     .text-name {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
       font-family: "Roboto";
       font-style: normal;
       font-weight: 400;
@@ -74,6 +78,9 @@
       margin: 20px 0 0 0;
     }
     .text-phone {
+      display: flex;
+      flex-direction: row;
+      gap: 4px;
       font-family: "Roboto";
       font-style: normal;
       font-weight: 400;
@@ -93,6 +100,16 @@
       margin: 5px 0 0 0;
     }
     
+    .text-sub-customer {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 13px;
+      color: #11263c !important;
+      text-decoration: none;
+      margin: 5px 0 0 0;
+    }
+
     .text-showmore{
       font-family: "Roboto";
       font-style: normal;
@@ -199,6 +216,7 @@
       align-items: normal;
 
       .text-name {
+        
         font-family: "Roboto";
         font-style: normal;
         font-weight: bold;
@@ -219,6 +237,16 @@
       }
 
       .text-sub {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 15px;
+        color: #11263c !important;
+        text-decoration: none;
+        margin: 1px 10px;
+      }
+
+      .text-sub-customer {
         font-family: "Roboto";
         font-style: normal;
         font-weight: 400;
