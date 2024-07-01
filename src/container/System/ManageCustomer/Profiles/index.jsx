@@ -16,7 +16,7 @@ import UsedPromotion from "./UsedPromotion";
 import { errorNotify } from "../../../../helper/toast";
 import { fetchCustomerById } from "../../../../api/customer";
 import { loadingAction } from "../../../../redux/actions/loading";
-import "./index.scss"
+import "./index.scss";
 import useWindowDimensions from "../../../../helper/useWindowDimensions";
 
 const Profiles = () => {
@@ -58,27 +58,27 @@ const Profiles = () => {
   //     });
   // }, [id]);
   // With Dispatch
-    useEffect(() => {
-      dispatch(loadingAction.loadingRequest(true));
-      fetchCustomerById(id)
-        .then((res) => {
-          setData(res);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err?.message,
-          });
-          dispatch(loadingAction.loadingRequest(false));
+  useEffect(() => {
+    dispatch(loadingAction.loadingRequest(true));
+    fetchCustomerById(id)
+      .then((res) => {
+        setData(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
         });
-    }, [id, dispatch]);
-    const hidePhoneNumber = (phone) => {
-      if(phone) {
-        let hidePhone = phone.toString().substring(0, 3);
-        hidePhone = hidePhone + "xxxxxxx"
-        return hidePhone;
-      }
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  }, [id, dispatch]);
+  const hidePhoneNumber = (phone) => {
+    if (phone) {
+      let hidePhone = phone.toString().substring(0, 3);
+      hidePhone = hidePhone + "*******";
+      return hidePhone;
     }
+  };
   console.log("CHECK ID CUSTOMER", id);
   console.log("CHECK CUSTOMER INFORMATION", data);
   return (
@@ -135,15 +135,16 @@ const Profiles = () => {
             {/*Họ và tên*/}
             <p className="text-name-customer">{data?.full_name}</p>
             {/*Số điện thoại*/}
-            <p
-              style={{ cursor: "pointer" }}
-              onClick={() => setIsShowPhone(!isShowPhone)}
-              className="text-phone-customer"
-            >
+            <p className="text-phone-customer">
               SĐT:{" "}
               {isShowPhone
                 ? `${data?.phone}`
                 : `${hidePhoneNumber(data?.phone)}`}
+              <i
+                style={{ cursor: "pointer", color: "darkgray"}}
+                onClick={() => setIsShowPhone(!isShowPhone)}
+                className={`${isShowPhone ? "uil-eye-slash" : "uil-eye"}`}
+              ></i>
             </p>
             {/*Mã giới thiệu*/}
             {data?.invite_code && (

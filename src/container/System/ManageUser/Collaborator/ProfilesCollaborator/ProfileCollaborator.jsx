@@ -107,7 +107,7 @@ const [isShowMore, setIsShowMore] = useState(false);
   const hidePhoneNumber = (phone) => {
     if(phone) {
       let hidePhone = phone.toString().substring(0, 3);
-      hidePhone = hidePhone + "xxxxxxx"
+      hidePhone = hidePhone + "*******"
       return hidePhone;
     }
   }
@@ -197,15 +197,16 @@ const [isShowMore, setIsShowMore] = useState(false);
             {/*Họ và tên*/}
             <p className="text-name">{data?.full_name}</p>
             {/*Số điện thoại*/}
-            <p
-              style={{ cursor: "pointer" }}
-              onClick={() => setIsShowPhone(!isShowPhone)}
-              className="text-phone"
-            >
+            <p className="text-phone">
               SĐT:{" "}
               {isShowPhone
                 ? `${data?.phone}`
                 : `${hidePhoneNumber(data?.phone)}`}
+              <i
+                style={{ cursor: "pointer" }}
+                onClick={() => setIsShowPhone(!isShowPhone)}
+                className={`${isShowPhone ? "uil-eye-slash" : "uil-eye"}`}
+              ></i>
             </p>
             {/*Mã giới thiệu*/}
             {data?.invite_code && (
