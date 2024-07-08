@@ -68,7 +68,6 @@ const ManageReport = () => {
           <h4 className="title-cv">{`${i18n.t("report", { lng: lang })}`}</h4>
         </div>
         <div className="btn-action-header">
-
         </div>
       </div>
       <div className="div-flex-row">
