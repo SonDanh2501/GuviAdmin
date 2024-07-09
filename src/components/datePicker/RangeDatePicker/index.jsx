@@ -1,22 +1,13 @@
-import { Button, ConfigProvider, DatePicker, Modal } from "antd";
-import moment, { months } from "moment";
-import { useCallback, useEffect, useState } from "react";
+import { Button } from "antd";
+import moment from "moment";
+import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../redux/selectors/auth";
 import i18n from "../../../i18n";
-import {
-  DoubleLeftOutlined,
-  DoubleRightOutlined,
-  LeftOutlined,
-  RightOutlined,
-} from "@ant-design/icons";
 
 import "./index.scss";
-// import "./style.css";
-// import 'react-calendar/dist/Calendar.css';
 
-const { RangePicker } = DatePicker;
 
 const RangeDatePicker = (props) => {
   const lang = useSelector(getLanguageState);
