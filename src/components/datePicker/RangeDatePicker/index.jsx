@@ -621,8 +621,8 @@ const RangeDatePicker = (props) => {
     );
     setSelectedMonths(sortedMonths);
   };
-  console.log("last term started day", lastTermStartCalendar)
-  console.log("last term ended day", lastTermEndCalendar)
+  console.log("last term started day", lastTermStartCalendar);
+  console.log("last term ended day", lastTermEndCalendar);
 
   return (
     <div>
@@ -667,7 +667,7 @@ const RangeDatePicker = (props) => {
               })}
             </div>
             {/*Right Container*/}
-            <div className="div-right-body-modal ">
+            <div className="div-right-body-modal">
               {/*Các tab chọn ngày, tháng, năm*/}
               <div className="div-tab-time">
                 {OPTION.map((item, index) => {
@@ -701,116 +701,121 @@ const RangeDatePicker = (props) => {
                 })}
               </div>
               {/*Lịch*/}
-              <Calendar
-                onChange={onChange}
-                onClickDay={handleDayChange}
-                onClickMonth={(value) => handleMonthChange(value)}
-                onClickYear={(value) => handleYearChange(value)}
-                value={[startCalendar, endCalendar]}
-                selectRange={true}
-                view={typeView}
-                locale={lang}
-                tileClassName={({ date, view }) => {
-                  // Nếu view là month (date sẽ bao gồm tất cả những ngày có trong tháng đang được hiển thị)
-                  // Nếu view là year (date sẽ là ngày đầu tiên của các tháng đang được hiển thị)
-                  // Nếu view là decade (date sẽ là ngày đầu tiên của tháng đầu tiên của các năm đang được hiển thị)
-                  // Trường hợp xem theo ngày
-                  if (view === "month") {
-                    // Nếu tìm được ngày thuộc kì trước
-                    if (
-                      previousDate?.find(
-                        (x) => x === moment(date).format("DD-MM-YYYY")
-                      )
-                    ) {
-                      // Ngày tìm được là duy nhất
-                      if (previousDate?.length === 1) {
-                        return "one-day-term";
-                      }
-                      // Ngày tìm được là ngày đầu tiên của kì
-                      else if (
-                        previousDate?.find(
-                          (x) => x === moment(date).format("DD-MM-YYYY")
-                        ) === previousDate[previousDate?.length - 1]
-                      ) {
-                        return "first-day-in-term";
-                      }
-                      // Ngày tìm được là ngày cuối cùng của kì
-                      else if (
-                        previousDate?.find(
-                          (x) => x === moment(date).format("DD-MM-YYYY")
-                        ) === previousDate[0]
-                      ) {
-                        return "last-day-in-term";
-                      }
-                      // Ngày còn lại
-                      else {
-                        return "day-in-term";
-                      }
-                    }
-                  }
-                  // Trường hợp xem theo tháng
-                  else if (view === "year") {
-                    // Nếu tìm được tháng có chứa ngày thuộc kì trước
-                    if (
-                      previousDate?.find(
-                        (x) => x === moment(date).format("DD-MM-YYYY")
-                      )
-                    ) {
-                      // Tháng tìm được là duy nhất
+              <div className="">
+                <Calendar
+                  className={""}
+                  onChange={onChange}
+                  onClickDay={handleDayChange}
+                  onClickMonth={(value) => handleMonthChange(value)}
+                  onClickYear={(value) => handleYearChange(value)}
+                  value={[startCalendar, endCalendar]}
+                  selectRange={true}
+                  view={typeView}
+                  locale={lang}
+                  tileClassName={({ date, view }) => {
+                    // Nếu view là month (date sẽ bao gồm tất cả những ngày có trong tháng đang được hiển thị)
+                    // Nếu view là year (date sẽ là ngày đầu tiên của các tháng đang được hiển thị)
+                    // Nếu view là decade (date sẽ là ngày đầu tiên của tháng đầu tiên của các năm đang được hiển thị)
+                    // Trường hợp xem theo ngày
+                    if (view === "month") {
+                      // Nếu tìm được ngày thuộc kì trước
                       if (
-                        moment(lastTermStartCalendar, "DD-MM-YYYY").format(
-                          "M"
-                        ) ===
-                        moment(lastTermEndCalendar, "DD-MM-YYYY").format("M")
-                      ) {
-                        return "one-day-term";
-                      }
-                      // Tháng tìm được là tháng chứa ngày bắt đầu
-                      else if (
                         previousDate?.find(
                           (x) => x === moment(date).format("DD-MM-YYYY")
-                        ) === previousDate[previousDate?.length - 1]
+                        )
                       ) {
-                        return "first-day-in-term";
-                      }
-                      // Tháng tìm được là tháng chứ ngày kết thúc
-                      else if (
-                        previousDate?.find(
-                          (x) =>
-                            x ===
-                            moment(date).endOf("month").format("DD-MM-YYYY")
-                        ) === previousDate[0]
-                      ) {
-                        return "last-day-in-term";
-                      }
-                      // Tháng còn lại
-                      else {
-                        return "day-in-term";
+                        // Ngày tìm được là duy nhất
+                        if (previousDate?.length === 1) {
+                          return "one-day-term";
+                        }
+                        // Ngày tìm được là ngày đầu tiên của kì
+                        else if (
+                          previousDate?.find(
+                            (x) => x === moment(date).format("DD-MM-YYYY")
+                          ) === previousDate[previousDate?.length - 1]
+                        ) {
+                          return "first-day-in-term";
+                        }
+                        // Ngày tìm được là ngày cuối cùng của kì
+                        else if (
+                          previousDate?.find(
+                            (x) => x === moment(date).format("DD-MM-YYYY")
+                          ) === previousDate[0]
+                        ) {
+                          return "last-day-in-term";
+                        }
+                        // Ngày còn lại
+                        else {
+                          return "day-in-term";
+                        }
                       }
                     }
-                  }
-                  // Trường hợp xem theo năm
-                  else if (view === "decade") {
-                    // Nếu tìm được năm có chứa ngày thuộc kì trước
-                    if (
-                      previousDate?.find(
-                        (x) => x === moment(date).format("DD-MM-YYYY")
-                      )
-                    ) {
-                      // Năm tìm được là duy nhất
+                    // Trường hợp xem theo tháng
+                    else if (view === "year") {
+                      // Nếu tìm được tháng có chứa ngày thuộc kì trước
                       if (
-                        moment(lastTermStartCalendar, "DD-MM-YYYY").format(
-                          "YYYY"
-                        ) ===
-                        moment(lastTermEndCalendar, "DD-MM-YYYY").format("YYYY")
+                        previousDate?.find(
+                          (x) => x === moment(date).format("DD-MM-YYYY")
+                        )
                       ) {
-                        return "one-day-term";
+                        // Tháng tìm được là duy nhất
+                        if (
+                          moment(lastTermStartCalendar, "DD-MM-YYYY").format(
+                            "M"
+                          ) ===
+                          moment(lastTermEndCalendar, "DD-MM-YYYY").format("M")
+                        ) {
+                          return "one-day-term";
+                        }
+                        // Tháng tìm được là tháng chứa ngày bắt đầu
+                        else if (
+                          previousDate?.find(
+                            (x) => x === moment(date).format("DD-MM-YYYY")
+                          ) === previousDate[previousDate?.length - 1]
+                        ) {
+                          return "first-day-in-term";
+                        }
+                        // Tháng tìm được là tháng chứ ngày kết thúc
+                        else if (
+                          previousDate?.find(
+                            (x) =>
+                              x ===
+                              moment(date).endOf("month").format("DD-MM-YYYY")
+                          ) === previousDate[0]
+                        ) {
+                          return "last-day-in-term";
+                        }
+                        // Tháng còn lại
+                        else {
+                          return "day-in-term";
+                        }
                       }
                     }
-                  }
-                }}
-                maxDate={disableFutureDay ? new Date() : ""} // Disabled all futured day
-              />
+                    // Trường hợp xem theo năm
+                    else if (view === "decade") {
+                      // Nếu tìm được năm có chứa ngày thuộc kì trước
+                      if (
+                        previousDate?.find(
+                          (x) => x === moment(date).format("DD-MM-YYYY")
+                        )
+                      ) {
+                        // Năm tìm được là duy nhất
+                        if (
+                          moment(lastTermStartCalendar, "DD-MM-YYYY").format(
+                            "YYYY"
+                          ) ===
+                          moment(lastTermEndCalendar, "DD-MM-YYYY").format(
+                            "YYYY"
+                          )
+                        ) {
+                          return "one-day-term";
+                        }
+                      }
+                    }
+                  }}
+                  maxDate={disableFutureDay ? new Date() : ""} // Disabled all futured day
+                />
+              </div>
             </div>
           </div>
           {/*Button Container*/}

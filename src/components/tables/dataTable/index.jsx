@@ -136,6 +136,7 @@ const DataTable = (props) => {
             linkRedirect = `/details-order/${data?.id_group_order}`;
             return (
               <Link
+                target="_blank"
                 onClick={() => saveToCookie("order_scrolly", scrollY)}
                 to={linkRedirect}
               >
@@ -382,26 +383,26 @@ const DataTable = (props) => {
             );
             break;
           }
-          case "subject": {
+          case "subject_transaction": {
             let _type_wallet = "";
             if (data?.type_transfer === "top_up") {
               if (data?.subject === "customer") {
                 _type_wallet = (
                   <p>
-                    <strong>G-Pay</strong>
+                    Nạp vào: <strong>Pay-Point</strong>
                   </p>
                 );
               } else if (data?.subject === "collaborator") {
                 if (data?.type_wallet === "work_wallet") {
                   _type_wallet = (
                     <p>
-                      <strong>Ví công việc</strong>
+                      Nạp vào: <strong>Ví Công việc</strong>
                     </p>
                   );
                 } else {
                   _type_wallet = (
                     <p>
-                      <strong>Ví CTV</strong>
+                      Nạp vào: <strong>Ví CTV</strong>
                     </p>
                   );
                 }
@@ -411,20 +412,20 @@ const DataTable = (props) => {
               if (data?.subject === "customer") {
                 _type_wallet = (
                   <p>
-                    <strong>G-Pay</strong>
+                    Rút từ: <strong>Pay-Point</strong>
                   </p>
                 );
               } else if (data?.subject === "collaborator") {
                 if (data?.type_wallet === "work_wallet") {
                   _type_wallet = (
                     <p>
-                      <strong>Ví công việc</strong>
+                      Rút từ: <strong>Ví Công việc</strong>
                     </p>
                   );
                 } else {
                   _type_wallet = (
                     <p>
-                      <strong>Ví CTV</strong>
+                      Rút từ: <strong>Ví CTV</strong>
                     </p>
                   );
                 }
@@ -497,29 +498,18 @@ const DataTable = (props) => {
             let _created_by_customer = false;
             let _created_by_collborator = false;
             let _created_by_admin = false;
-            let _full_name = "";
-            let _subject = "";
             if (data?.id_admin_action) {
               _created_by_admin = true;
-              _full_name = data?.id_admin_action?.full_name;
-              _subject = "ADMIN";
             } else {
               if (data?.id_customer) {
                 _created_by_customer = true;
-                _full_name = data?.id_customer?.full_name;
-                _subject = "KH";
               } else {
                 _created_by_collborator = true;
-                _full_name = data?.id_collaborator?.full_name;
-                _subject = "CTV";
               }
             }
             return (
               <>
-                <div className="div-name">
-                  <p className={`${item?.fontSize}`}>{_full_name}</p>
-                </div>
-                {/* <div className="div-collaborator">
+                <div className="div-collaborator">
                   {_created_by_customer && (
                     <div className="div-name-star">
                       <Link
@@ -571,9 +561,6 @@ const DataTable = (props) => {
                       </p>
                     </div>
                   )}
-                </div> */}
-                <div className={`subject-${_subject}`}>
-                  <span>{_subject}</span>
                 </div>
               </>
             );
@@ -621,48 +608,6 @@ const DataTable = (props) => {
                 <p className={`text-payment-method ${item?.fontSize}`}>
                   {formatMoney(data?.final_fee)}
                 </p>
-              </div>
-            );
-            break;
-          case "payment_in":
-            let _payment_in = "";
-            if (data?.payment_in === "momo") {
-              _payment_in = "MoMo";
-            } else if (data?.payment_in === "vnpay") {
-              _payment_in = "VNPAY";
-            } else if (data?.payment_in === "bank") {
-              _payment_in = "Ngân hàng";
-            } else if (data?.payment_in === "cash") {
-              _payment_in = "Khác";
-            }
-            if (data?.type_transfer === "withdraw") {
-            } else if (data?.type_transfer === "top_up") {
-              _payment_in = `Tài khoản ${_payment_in} cty`;
-            }
-            return (
-              <div className="div-name">
-                <p>{_payment_in}</p>
-              </div>
-            );
-            break;
-          case "payment_out":
-            let _payment_out = "";
-            if (data?.payment_out === "momo") {
-              _payment_out = "MoMo";
-            } else if (data?.payment_out === "vnpay") {
-              _payment_out = "VNPAY";
-            } else if (data?.payment_out === "bank") {
-              _payment_out = "Ngân hàng";
-            } else if (data?.payment_out === "cash") {
-              _payment_out = "Tiền mặt";
-            }
-            if (data?.type_transfer === "withdraw") {
-              _payment_out = `Tài khoản ${_payment_out} cty`;
-            } else if (data?.type_transfer === "top_up") {
-            }
-            return (
-              <div className="div-name">
-                <p>{_payment_out}</p>
               </div>
             );
             break;
@@ -1009,17 +954,21 @@ const DataTable = (props) => {
             break;
           }
           case "text": {
+            linkRedirect = `/details-order/${data?.id_group_order}`;
             const max = item.maxLength || 75;
             let getDataView = data[item.dataIndex] || "";
             const indexSlice = getDataView.length - max;
             const sliceData =
               indexSlice > 0 ? getDataView.slice(0, max) + "..." : getDataView;
             return (
-              <>
+              <Link target="_blank" to={linkRedirect}>
                 <Tooltip placement="topRight" title={getDataView}>
-                  <span className={`${item?.fontSize}`}> {sliceData}</span>
+                  <span className={`${item?.fontSize} text-id-code-order`}>
+                    {" "}
+                    {sliceData}
+                  </span>
                 </Tooltip>
-              </>
+              </Link>
             );
             break;
           }
@@ -1405,39 +1354,39 @@ const DataTable = (props) => {
               </div>
             );
             break;
-          case "payment_method":
-            let payment_method = "Chuyển khoản";
+          case "payment_out":
+            let _payment_out = "Chuyển khoản";
             switch (data?.payment_out) {
               case "momo":
-                payment_method = "MoMo";
+                _payment_out = "MoMo";
                 break;
               case "vnpay":
-                payment_method = "VNPAY";
+                _payment_out = "VNPAY";
                 break;
               case "viettel_pay":
-                payment_method = "Viettel Pay";
+                _payment_out = "Viettel Pay";
                 break;
               case "collaborator_wallet":
-                payment_method = "Ví CTV";
+                _payment_out = "Ví CTV";
                 break;
               case "work_wallet":
-                payment_method = "Ví công việc";
+                _payment_out = "Ví công việc";
                 break;
               case "pay_point":
-                payment_method = "G-Pay";
+                _payment_out = "G-Pay";
                 break;
               case "cash":
-                payment_method = "Tiền mặt";
+                _payment_out = "Tiền mặt";
                 break;
               case "bank":
-                payment_method = "Chuyển khoản";
+                _payment_out = "Chuyển khoản";
                 break;
               default:
                 break;
             }
             return (
               <div className="div-date-create">
-                <p>{payment_method}</p>
+                <p>{_payment_out}</p>
               </div>
             );
             break;
