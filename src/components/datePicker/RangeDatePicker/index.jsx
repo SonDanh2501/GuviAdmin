@@ -7,9 +7,10 @@ import { getLanguageState } from "../../../redux/selectors/auth";
 import i18n from "../../../i18n";
 
 import "./index.scss";
-
+import useWindowDimensions from "../../../helper/useWindowDimensions";
 
 const RangeDatePicker = (props) => {
+  const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
   const {
     setStartDate,
@@ -189,14 +190,14 @@ const RangeDatePicker = (props) => {
 
     setValueTab(item.value);
     if (item.type_range === "setting") {
-      if (typeView === "month") {
+      if (tempTypeView === "month") {
         setTabTime("days");
       }
-      if (typeView === "year") {
+      if (tempTypeView === "year") {
         setTabTime("months");
       }
-      if (typeView === "decade") {
-        setTabTime("months");
+      if (tempTypeView === "decade") {
+        setTabTime("years");
       }
       setTypeView(tempTypeView);
     } else {
@@ -612,9 +613,6 @@ const RangeDatePicker = (props) => {
     );
     setSelectedMonths(sortedMonths);
   };
-  console.log("last term started day", lastTermStartCalendar);
-  console.log("last term ended day", lastTermEndCalendar);
-
   return (
     <div>
       <div>
@@ -671,8 +669,7 @@ const RangeDatePicker = (props) => {
                           : "div-tab-item"
                       }
                     >
-                      {valueTab !== "setting" &&
-                      (item.value === "months" || item.value === "years") ? (
+                      {valueTab !== "setting" && width > 490 && (item.value === "months" || item.value === "years") ? (
                         <a
                           style={{ color: "lightgray", cursor: "not-allowed" }}
                         >
