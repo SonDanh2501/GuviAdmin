@@ -503,34 +503,34 @@ const ManageOrder = () => {
             lng: lang,
           })}`}</h4>
         </div>
-        {/*Button tạo đơn*/}
-        <div className="btn-action-header">
-          {checkElement?.includes("create_guvi_job") ? (
-            <div className="transfer-collaborator_search">
-              <Button
-                className="btn-add"
-                onClick={() =>
-                  navigate("/group-order/manage-order/create-order")
-                }
-              >
-                <i class="uil uil-plus-circle"></i>
-                {`${i18n.t("create_order", { lng: lang })}`}
-              </Button>
-              <Input
-                placeholder={`${i18n.t("search", { lng: lang })}`}
-                // value={valueSearch}
-                prefix={<SearchOutlined />}
-                className="input-search"
-                onChange={(e) => {
-                  handleSearch(e.target.value);
-                  // setValueSearch(e.target.value);
-                }}
-              />
-            </div>
-          ) : (
-            <></>
-          )}
-        </div>
+      </div>
+      {/*Button tạo đơn*/}
+      <div className="btn-action-header ">
+        {checkElement?.includes("create_guvi_job") ? (
+          <div className="transfer-collaborator_search">
+            {/*Tạo đơn*/}
+            <Button
+              className="btn-add"
+              onClick={() => navigate("/group-order/manage-order/create-order")}
+            >
+              <i class="uil uil-plus-circle"></i>
+              {`${i18n.t("create_order", { lng: lang })}`}
+            </Button>
+            {/*Thanh tìm kiếm*/}
+            <Input
+              placeholder={`${i18n.t("search", { lng: lang })}`}
+              // value={valueSearch}
+              prefix={<SearchOutlined />}
+              className="input-search"
+              onChange={(e) => {
+                handleSearch(e.target.value);
+                // setValueSearch(e.target.value);
+              }}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       {/*Các tab phân loại đơn hàng*/}
       <div className="div-flex-row">
@@ -623,8 +623,8 @@ const ManageOrder = () => {
               </Space>
             </Dropdown>
           </div>
-          {/*Các giá trị lọc*/}
-          {checkCondition && (
+           {/*Các giá trị lọc*/}
+           {checkCondition && (
             <div className="filter-container">
               {/*Dịch vụ*/}
               <div className="iteServicem-select">
@@ -689,7 +689,6 @@ const ManageOrder = () => {
             </div>
           )}
         </div>
-        {/*Thanh tìm kiếm*/}
       </div>
       {/*Table đơn hàng*/}
       <div>
