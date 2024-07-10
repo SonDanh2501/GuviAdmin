@@ -635,7 +635,7 @@ const ReportOrder = () => {
     {
       customTitle: <HeaderInfo title="Mã đơn" />,
       dataIndex: "id_view",
-      key: "text",
+      key: "text_link",
       width: 90,
       fontSize: "text-size-M text-color-black text-weight-500",
     },
