@@ -79,8 +79,6 @@ const Profiles = () => {
       return hidePhone;
     }
   };
-  console.log("CHECK ID CUSTOMER", id);
-  console.log("CHECK CUSTOMER INFORMATION", data);
   return (
     <div className="div-container-customer">
       <div className="div-tab-customer">
