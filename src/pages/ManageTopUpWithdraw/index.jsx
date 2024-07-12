@@ -52,7 +52,7 @@ import {
 import { LENGTH_ITEM } from "../../constants";
 import { errorNotify, successNotify } from "../../helper/toast";
 import CommonFilter from "../../components/commonFilter";
-import { getElementState } from "../../redux/selectors/auth";
+import { getElementState, getLanguageState } from "../../redux/selectors/auth";
 import TransactionDrawer from "../../components/transactionDrawer";
 import DataTable from "../../components/tables/dataTable";
 import ModalCustom from "../../components/modalCustom";
@@ -60,9 +60,11 @@ import { formatMoney } from "../../helper/formatMoney";
 import TransactionDrawer2 from "../../components/transactionDrawer/TransactionDrawer2";
 import Tabs from "../../components/tabs/tabs1";
 import useWindowDimensions from "../../helper/useWindowDimensions";
-import { EditLocationOutlined } from "@material-ui/icons";
+import i18n from "../../i18n";
+
 const ManageTopUpWithdraw = () => {
   let { width } = useWindowDimensions();
+  const lang = useSelector(getLanguageState);
   const [tab, setTab] = useState(itemTabStatus[0].value);
   const checkElement = useSelector(getElementState);
   const [data, setData] = useState([]);
@@ -377,7 +379,7 @@ const ManageTopUpWithdraw = () => {
         </div>
         {/*Input search field*/}
         <Input
-          placeholder={"Tìm kiếm"}
+          placeholder={`${i18n.t("search_transaction", { lng: lang })}`}
           prefix={<SearchOutlined />}
           className="input-search"
           onChange={(e) => {
