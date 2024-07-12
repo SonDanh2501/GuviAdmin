@@ -960,14 +960,12 @@ const DataTable = (props) => {
             const sliceData =
               indexSlice > 0 ? getDataView.slice(0, max) + "..." : getDataView;
             return (
-              <>
-                <Tooltip placement="topRight" title={getDataView}>
-                  <span className={`${item?.fontSize} text-id-code-order`}>
-                    {" "}
-                    {sliceData}
-                  </span>
-                </Tooltip>
-              </>
+              <Tooltip placement="topRight" title={getDataView}>
+                <span className={`${item?.fontSize} `}>
+                  {" "}
+                  {sliceData}
+                </span>
+              </Tooltip>
             );
             break;
           }
