@@ -271,7 +271,7 @@ const ReportOrderByCustomer = () => {
     },
     {
       customTitle: <CustomHeaderDatatable title="Số ĐH"
-        subValue={dataTotal.total_item} />,
+        subValue={dataTotal?.total_item} />,
       dataIndex: 'total_item',
       key: "number",
       width: 50,
@@ -280,7 +280,7 @@ const ReportOrderByCustomer = () => {
     },
     {
       customTitle: <CustomHeaderDatatable title="Tổng giá trị giao dịch"
-        subValue={dataTotal.total_gross_income}
+        subValue={dataTotal?.total_gross_income}
         typeSubValue="money"
         textToolTip="GMV - Gross Merchandise Volume" />,
       dataIndex: 'total_gross_income',
@@ -291,7 +291,7 @@ const ReportOrderByCustomer = () => {
     },
     {
       customTitle: <CustomHeaderDatatable title="Thu hộ dịch vụ"
-        subValue={dataTotal.total_collabotator_fee}
+        subValue={dataTotal?.total_collabotator_fee}
         typeSubValue="money"
         textToolTip="Bao gồm phí dịch vụ trả cho CTV, tiền tip từ khách,…" />,
       dataIndex: 'total_collabotator_fee',
@@ -302,7 +302,7 @@ const ReportOrderByCustomer = () => {
     },
     {
       customTitle: <CustomHeaderDatatable title="Doanh thu"
-        subValue={dataTotal.total_income}
+        subValue={dataTotal?.total_income}
         typeSubValue="money"
         textToolTip="" />,
       dataIndex: 'total_income',
@@ -313,7 +313,7 @@ const ReportOrderByCustomer = () => {
     },
     {
       customTitle: <CustomHeaderDatatable title="Giảm giá"
-        subValue={dataTotal.total_discount}
+        subValue={dataTotal?.total_discount}
         typeSubValue="money"
         textToolTip="Tổng số tiền giảm giá từ giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,…" />,
       dataIndex: 'total_discount',
@@ -325,7 +325,7 @@ const ReportOrderByCustomer = () => {
 
     {
       customTitle: <CustomHeaderDatatable title="Doanh thu thuần"
-        subValue={dataTotal.total_net_income}
+        subValue={dataTotal?.total_net_income}
         typeSubValue="money"
         textToolTip="Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần = Doanh thu (-) Giảm giá." />,
       dataIndex: 'total_net_income',
@@ -336,7 +336,7 @@ const ReportOrderByCustomer = () => {
     },
     {
       customTitle: <CustomHeaderDatatable title="Tổng hoá đơn"
-        subValue={dataTotal.total_order_fee}
+        subValue={dataTotal?.total_order_fee}
         typeSubValue="money"
         textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá." />,
       dataIndex: 'total_order_fee',
@@ -346,7 +346,7 @@ const ReportOrderByCustomer = () => {
     },
     {
       customTitle: <CustomHeaderDatatable title="Giá vốn"
-        subValue={dataTotal.cost_price}
+        subValue={dataTotal?.cost_price}
         typeSubValue="money" />,
       dataIndex: 'cost_price',
       key: "money",
@@ -355,7 +355,7 @@ const ReportOrderByCustomer = () => {
     },
     {
       customTitle: <CustomHeaderDatatable title="Thu nhập khác"
-        subValue={dataTotal.punish}
+        subValue={dataTotal?.punish}
         typeSubValue="money"
         textToolTip="Bao gồm phí phạt trễ và huỷ ca" />,
       dataIndex: 'punish',
@@ -365,7 +365,7 @@ const ReportOrderByCustomer = () => {
     },
     {
       customTitle: <CustomHeaderDatatable title="Tổng lợi nhuận"
-        subValue={dataTotal.total_net_income_business}
+        subValue={dataTotal?.total_net_income_business}
         typeSubValue="money"
         textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác" />,
       dataIndex: 'total_net_income_business',
@@ -375,7 +375,7 @@ const ReportOrderByCustomer = () => {
     },
     {
       customTitle: <CustomHeaderDatatable title="% Lợi nhuận"
-        subValue={dataTotal.percent_income}
+        subValue={dataTotal?.percent_income}
         typeSubValue="percent"
         textToolTip="% Lợi nhuận = Tổng lợi nhuận (/) Doanh thu." />,
       dataIndex: 'percent_income',
@@ -385,7 +385,7 @@ const ReportOrderByCustomer = () => {
     },
     {
       customTitle: <CustomHeaderDatatable title="Phí áp dụng"
-        subValue={dataTotal.total_service_fee}
+        subValue={dataTotal?.total_service_fee}
         typeSubValue="money" />,
       title: 'Phí áp dụng',
       dataIndex: 'total_service_fee',

@@ -95,7 +95,7 @@
 //         // },
 //         {
 //           customTitle: <CustomHeaderDatatable title="Số đơn hàng"
-//             subValue={dataTotal.total_item} />,
+//             subValue={dataTotal?.total_item} />,
 //           dataIndex: 'total_item',
 //           key: "number",
 //           width: 50,
@@ -103,7 +103,7 @@
 //         },
 //         {
 //           customTitle: <CustomHeaderDatatable title="Tổng giá trị giao dịch"
-//             subValue={dataTotal.total_gross_income}
+//             subValue={dataTotal?.total_gross_income}
 //             typeSubValue="money"
 //             textToolTip="GMV - Gross Merchandise Volume" />,
 //           dataIndex: 'total_gross_income',
@@ -114,7 +114,7 @@
 //         },
 //         {
 //           customTitle: <CustomHeaderDatatable title="Thu hộ dịch vụ"
-//             subValue={dataTotal.total_collabotator_fee}
+//             subValue={dataTotal?.total_collabotator_fee}
 //             typeSubValue="money"
 //             textToolTip="Bao gồm phí dịch vụ trả cho CTV, tiền tip từ khách,…" />,
 //           dataIndex: 'total_collabotator_fee',
@@ -125,7 +125,7 @@
 //         },
 //         {
 //           customTitle: <CustomHeaderDatatable title="Doanh thu"
-//             subValue={dataTotal.total_income}
+//             subValue={dataTotal?.total_income}
 //             typeSubValue="money"
 //             textToolTip="" />,
 //           dataIndex: 'total_income',
@@ -136,7 +136,7 @@
 //         },
 //         {
 //           customTitle: <CustomHeaderDatatable title="Giảm giá"
-//             subValue={dataTotal.total_discount}
+//             subValue={dataTotal?.total_discount}
 //             typeSubValue="money"
 //             textToolTip="Tổng số tiền giảm giá từ giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,…" />,
 //           dataIndex: 'total_discount',
@@ -148,7 +148,7 @@
 
 //         {
 //           customTitle: <CustomHeaderDatatable title="Doanh thu thuần"
-//             subValue={dataTotal.total_net_income}
+//             subValue={dataTotal?.total_net_income}
 //             typeSubValue="money"
 //             textToolTip="Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần = Doanh thu (-) Giảm giá." />,
 //           dataIndex: 'total_net_income',
@@ -159,7 +159,7 @@
 //         },
 //         {
 //           customTitle: <CustomHeaderDatatable title="Tổng hoá đơn"
-//             subValue={dataTotal.total_order_fee}
+//             subValue={dataTotal?.total_order_fee}
 //             typeSubValue="money"
 //             textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá." />,
 //           dataIndex: 'total_order_fee',
@@ -169,7 +169,7 @@
 //         },
 //         {
 //           customTitle: <CustomHeaderDatatable title="Giá vốn"
-//             subValue={dataTotal.cost_price}
+//             subValue={dataTotal?.cost_price}
 //             typeSubValue="money" />,
 //           dataIndex: 'cost_price',
 //           key: "money",
@@ -178,7 +178,7 @@
 //         },
 //         {
 //           customTitle: <CustomHeaderDatatable title="Thu nhập khác"
-//             subValue={dataTotal.punish}
+//             subValue={dataTotal?.punish}
 //             typeSubValue="money"
 //             textToolTip="Bao gồm phí phạt trễ và huỷ ca" />,
 //           dataIndex: 'punish',
@@ -188,7 +188,7 @@
 //         },
 //         {
 //           customTitle: <CustomHeaderDatatable title="Tổng lợi nhuận"
-//             subValue={dataTotal.total_net_income_business}
+//             subValue={dataTotal?.total_net_income_business}
 //             typeSubValue="money"
 //             textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác" />,
 //           dataIndex: 'total_net_income_business',
@@ -198,7 +198,7 @@
 //         },
 //         {
 //           customTitle: <CustomHeaderDatatable title="% Lợi nhuận"
-//             subValue={dataTotal.percent_income}
+//             subValue={dataTotal?.percent_income}
 //             typeSubValue="percent"
 //             textToolTip="% Lợi nhuận = Tổng lợi nhuận (/) Doanh thu." />,
 //           dataIndex: 'percent_income',
@@ -208,7 +208,7 @@
 //         },
 //         {
 //           customTitle: <CustomHeaderDatatable title="Phí áp dụng"
-//             subValue={dataTotal.total_service_fee}
+//             subValue={dataTotal?.total_service_fee}
 //             typeSubValue="money" />,
 //           title: 'Phí áp dụng',
 //           dataIndex: 'total_service_fee',
@@ -401,14 +401,16 @@ const DetailReportOrderByCollaborator = () => {
       endDate,
       selectStatus
     );
+    console.log("CHECK response", res);
     setData(res?.data);
     setTotal(res?.totalItem);
     setDataTotal(res?.total[0]);
+    
     setOrderStatus({
-      total_item: res?.total[0].total_item,
-      total_order_confirm: res?.total[0].total_order_confirm,
-      total_order_done: res?.total[0].total_order_done,
-      total_order_doing: res?.total[0].total_order_doing,
+      total_item: res?.total[0]?.total_item,
+      total_order_confirm: res?.total[0]?.total_order_confirm,
+      total_order_done: res?.total[0]?.total_order_done,
+      total_order_doing: res?.total[0]?.total_order_doing,
     });
   };
 
@@ -495,7 +497,7 @@ const DetailReportOrderByCollaborator = () => {
       customTitle: (
         <HeaderInfo
           title="Tổng giá trị giao dịch"
-          subValue={dataTotal.total_gross_income}
+          subValue={dataTotal?.total_gross_income}
           typeSubValue="money"
           textToolTip="GMV - Gross Merchandise Volume"
         />
@@ -509,7 +511,7 @@ const DetailReportOrderByCollaborator = () => {
       customTitle: (
         <HeaderInfo
           title="Thu hộ dịch vụ"
-          subValue={dataTotal.total_collabotator_fee}
+          subValue={dataTotal?.total_collabotator_fee}
           typeSubValue="money"
           textToolTip="Bao gồm phí dịch vụ trả cho CTV, tiền tip từ khách,…"
         />
@@ -523,7 +525,7 @@ const DetailReportOrderByCollaborator = () => {
       customTitle: (
         <HeaderInfo
           title="Doanh thu"
-          subValue={dataTotal.total_income}
+          subValue={dataTotal?.total_income}
           typeSubValue="money"
           textToolTip=""
         />
@@ -537,7 +539,7 @@ const DetailReportOrderByCollaborator = () => {
       customTitle: (
         <HeaderInfo
           title="Giảm giá"
-          subValue={dataTotal.total_discount}
+          subValue={dataTotal?.total_discount}
           typeSubValue="money"
           textToolTip="Tổng số tiền giảm giá từ giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,…"
         />
@@ -552,7 +554,7 @@ const DetailReportOrderByCollaborator = () => {
       customTitle: (
         <HeaderInfo
           title="Doanh thu thuần"
-          subValue={dataTotal.total_net_income}
+          subValue={dataTotal?.total_net_income}
           typeSubValue="money"
           textToolTip="Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần = Doanh thu (-) Giảm giá."
         />
@@ -566,7 +568,7 @@ const DetailReportOrderByCollaborator = () => {
       customTitle: (
         <HeaderInfo
           title="Tổng hoá đơn"
-          subValue={dataTotal.total_order_fee}
+          subValue={dataTotal?.total_order_fee}
           typeSubValue="money"
           textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."
         />
@@ -580,7 +582,7 @@ const DetailReportOrderByCollaborator = () => {
       customTitle: (
         <HeaderInfo
           title="Giá vốn"
-          subValue={dataTotal.punishss}
+          subValue={dataTotal?.punishss}
           typeSubValue="money"
         />
       ),
@@ -593,7 +595,7 @@ const DetailReportOrderByCollaborator = () => {
       customTitle: (
         <HeaderInfo
           title="Thu nhập khác"
-          subValue={dataTotal.punish}
+          subValue={dataTotal?.punish}
           typeSubValue="money"
           textToolTip="Bao gồm phí phạt trễ và huỷ ca"
         />
@@ -607,7 +609,7 @@ const DetailReportOrderByCollaborator = () => {
       customTitle: (
         <HeaderInfo
           title="Tổng lợi nhuận"
-          subValue={dataTotal.total_net_income_business}
+          subValue={dataTotal?.total_net_income_business}
           typeSubValue="money"
           textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác"
         />
@@ -621,7 +623,7 @@ const DetailReportOrderByCollaborator = () => {
       customTitle: (
         <HeaderInfo
           title="% Lợi nhuận"
-          subValue={dataTotal.percent_income}
+          subValue={dataTotal?.percent_income}
           typeSubValue="percent"
           textToolTip="% Lợi nhuận = Tổng lợi nhuận (/) Doanh thu."
         />
@@ -635,7 +637,7 @@ const DetailReportOrderByCollaborator = () => {
       customTitle: (
         <HeaderInfo
           title="Phí áp dụng"
-          subValue={dataTotal.total_service_fee}
+          subValue={dataTotal?.total_service_fee}
           typeSubValue="money"
         />
       ),

@@ -51,7 +51,6 @@ const HistoryTransition = ({ id }) => {
     <div>
       <div className="div-list">
         <HistoryActivity data={data} />
-
         {/* Old code */}
         {data?.map((item, index) => {
           // const money = item?.value?.toString();
