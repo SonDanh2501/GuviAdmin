@@ -935,7 +935,7 @@ const ManagePromotions = () => {
           onChange={(e, item) => onChangeGroupPromotion(e)}
         />
         <Input
-          placeholder={`${i18n.t("search", { lng: lang })}`}
+          placeholder={`${i18n.t("search_coupon", { lng: lang })}`}
           type="text"
           prefix={<SearchOutlined />}
           className="input-search-promotion"

@@ -23,8 +23,12 @@ import CommonFilter from "../../components/commonFilter";
 import Tabs from "../../components/tabs/tabs1";
 import ModalCustom from "../../components/modalCustom";
 import useWindowDimensions from "../../helper/useWindowDimensions";
+import { getLanguageState } from "../../redux/selectors/auth";
+import i18n from "../../i18n";
+import { useSelector } from "react-redux";
 const ManagePunish = () => {
   let { width } = useWindowDimensions();
+  const lang = useSelector(getLanguageState);
   const [startPage, setStartPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [item, setItem] = useState();
@@ -101,6 +105,8 @@ const ManagePunish = () => {
       disabled: false,
     },
   ];
+  // Lọc bỏ những items không có label
+  items = items.filter((x) => x.label !== false);
 
   const addActionColumn = {
     i18n_title: "",
@@ -318,7 +324,7 @@ const ManagePunish = () => {
           />
         </div>
         <Input
-          placeholder={"Tìm kiếm"}
+          placeholder={`${i18n.t("search-punish", { lng: lang })}`}
           prefix={<SearchOutlined />}
           className="input-search"
           onChange={(e) => {

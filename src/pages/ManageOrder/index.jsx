@@ -518,7 +518,7 @@ const ManageOrder = () => {
             </Button>
             {/*Thanh tìm kiếm*/}
             <Input
-              placeholder={`${i18n.t("search", { lng: lang })}`}
+              placeholder={`${i18n.t("search_order", { lng: lang })}`}
               // value={valueSearch}
               prefix={<SearchOutlined />}
               className="input-search"
