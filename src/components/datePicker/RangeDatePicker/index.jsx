@@ -37,6 +37,54 @@ const RangeDatePicker = (props) => {
 
   const timeZone = 0;
 
+  const toIsoString = (date)  => {
+    var tzo = -date?.getTimezoneOffset(),
+      dif = tzo >= 0 ? "+" : "-",
+      pad = function (num) {
+        return (num < 10 ? "0" : "") + num;
+      };
+  
+    return (
+      date?.getFullYear() +
+      "-" +
+      pad(date?.getMonth() + 1) +
+      "-" +
+      pad(date?.getDate()) +
+      "T" +
+      pad(date?.getHours()) +
+      ":" +
+      pad(date?.getMinutes()) +
+      ":" +
+      pad(date?.getSeconds()) +
+      dif +
+      pad(Math.floor(Math.abs(tzo) / 60)) +
+      ":" +
+      pad(Math.abs(tzo) % 60)
+    );
+  }
+  
+  function toEndOfDayIsoString(date) {
+    var tzo = -date.getTimezoneOffset(),
+        dif = tzo >= 0 ? '+' : '-',
+        pad = function(num) {
+            return (num < 10 ? '0' : '') + num;
+        };
+  
+    // Set hours, minutes, seconds, and milliseconds to the end of the day
+    date.setHours(23);
+    date.setMinutes(59);
+    date.setSeconds(59);
+    date.setMilliseconds(999);
+  
+    return date.getFullYear() +
+        '-' + pad(date.getMonth() + 1) +
+        '-' + pad(date.getDate()) +
+        'T' + pad(date.getHours()) +
+        ':' + pad(date.getMinutes()) +
+        ':' + pad(date.getSeconds()) +
+        dif + pad(Math.floor(Math.abs(tzo) / 60)) +
+        ':' + pad(Math.abs(tzo) % 60);
+  }
   useEffect(() => {
     // var lenghtDaySelectedConvert;
     // Nếu truyền vào rangeDateDefaults (30 ngày trước)
@@ -51,8 +99,9 @@ const RangeDatePicker = (props) => {
         setEnd(rangeDateDefaults[1]);
         setStartCalendar(rangeDateDefaults[0]);
         setEndCalendar(rangeDateDefaults[1]);
-        setStartDate(rangeDateDefaults[0]);
-        setEndDate(rangeDateDefaults[1]);
+        console.log("CHAY HAM THU NHAT")
+        setStartDate(toIsoString(rangeDateDefaults[0]._d));
+        setEndDate(toEndOfDayIsoString(rangeDateDefaults[1]._d));
       } else {
         // Tìm giá trị trong các option có value tương ứng rangeDateDefaults
         const item = DATA_TAB.find((x) => x.value === rangeDateDefaults);
@@ -66,8 +115,11 @@ const RangeDatePicker = (props) => {
           setEnd(endDate);
           setStartCalendar(startDate);
           setEndCalendar(endDate);
-          setStartDate(startDate.toISOString());
-          setEndDate(endDate.toISOString());
+          // setStartDate(startDate.toISOString());
+          // setEndDate(endDate.toISOString());
+          console.log("CHAY HAM THU HAI")
+          setStartDate(toIsoString(startDate._d));
+          setEndDate(toEndOfDayIsoString(endDate._d));
           setTitle(`${i18n.t(item.title, { lng: lang })}`);
           setValueTab(item.value);
           calculateRangeDateLastTerm(
@@ -89,8 +141,12 @@ const RangeDatePicker = (props) => {
       setEnd(endDate);
       setStartCalendar(startDate);
       setEndCalendar(endDate);
-      setStartDate(startDate.toISOString());
-      setEndDate(endDate.toISOString());
+          // setStartDate(startDate.toISOString());
+          // setEndDate(endDate.toISOString());
+          console.log("CHAY HAM THU BA")
+          setStartDate(toIsoString(startDate._d));
+          setEndDate(toEndOfDayIsoString(endDate._d));
+
       setTitle(`${i18n.t(item.title, { lng: lang })}`);
       setValueTab(item.value);
       calculateRangeDateLastTerm(
@@ -115,8 +171,11 @@ const RangeDatePicker = (props) => {
   }
   const handleOk = () => {
     setOpen(false);
-    setStartDate(start.toISOString());
-    setEndDate(end.toISOString());
+    console.log("CHẠY HÀM THỨ TƯ")
+    // setStartDate(start.toISOString());
+    // setEndDate(end.toISOString());
+    setStartDate(toIsoString(start._d));
+    setEndDate(toEndOfDayIsoString(end._d));
   };
 
   {
@@ -261,6 +320,7 @@ const RangeDatePicker = (props) => {
       } else {
         lengthDaySelectedConvert = lengthDaySelected + 1;
       }
+      console.log("lengthDaySelectedConvert", lengthDaySelectedConvert);
     } else if (item.type_range === "months" && selectedMonths?.length < 2) {
       if (lengthDaySelected < 0) {
         lengthDaySelectedConvert = (-lengthDaySelected + 1) * 2;
@@ -336,10 +396,11 @@ const RangeDatePicker = (props) => {
       } else {
         // General case for day-wise calculations
         const start = lengthDayToCurrent
-          ? lengthDayToCurrent + lengthDaySelectedConvert / 2
-          : lengthDaySelectedConvert / 2 + 1;
+          ? lengthDayToCurrent + lengthDaySelectedConvert / 2 
+          : lengthDaySelectedConvert / 2 ;
         //
-        for (let i = start; i <= lengthDayFinal; i++) {
+        console.log("check start", start);
+        for (let i = start; i <= lengthDayFinal - 1; i++) {
           var previousDay = moment()
             .subtract(i, item.type_range)
             .format("DD-MM-YYYY");
@@ -450,6 +511,13 @@ const RangeDatePicker = (props) => {
       // setLastTermEndCalendar(previousDateTemp[0]);
       setPreviousDate(previousDateTemp);
     }
+
+
+    console.log(lengthDaySelected);
+    console.log(item);
+    console.log(lengthToCurrent);
+    console.log(lengthDayToCurrent);
+    console.log(lengthDaySelected);
 
     setLastTermStartCalendar(previousDateTemp[previousDateTemp.length - 1]);
     setLastTermEndCalendar(previousDateTemp[0]);
@@ -613,7 +681,11 @@ const RangeDatePicker = (props) => {
     );
     setSelectedMonths(sortedMonths);
   };
-  return (
+
+// console.log("check started date", sta)
+// console.log("check started date")
+
+  return ( 
     <div>
       <div>
         <div className="btn-date-picker" onClick={() => setOpen(!open)}>
@@ -845,20 +917,20 @@ const DATA_TAB = [
     title: "seven_ago",
     value: "seven_last",
     type_range: "days",
-    range: [7, 1],
+    range: [6, 0],
   },
   {
     title: "thirty_ago",
     value: "thirty_last",
     type_range: "days",
-    range: [30, 1],
+    range: [29, 0],
   },
   {
     title: "ninety_ago",
     value: "last_ninety",
     type_range: "days",
     // range: [90, 1],
-    range: [90, 1],
+    range: [89, 0],
   },
   {
     title: "this_month",
