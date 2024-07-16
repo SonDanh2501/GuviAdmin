@@ -51,7 +51,7 @@ const Header = ({ onClick, hide }) => {
       key: "0",
       label: (
         <div
-          onClick={() => handleChange("vn")}
+          onClick={() => handleChange("vi")}
           className="flex gap-2 items-center cursor-pointer hover:bg-blue-200 p-2 rounded-md duration-300"
         >
           <img className="h-[30px]" src={logoVN}></img>
@@ -127,7 +127,7 @@ const Header = ({ onClick, hide }) => {
         >
           <img
             src={
-              selectedLanguage === "vn"
+              selectedLanguage === "vi"
                 ? logoCircleVN
                 : selectedLanguage === "en"
                 ? logoCircleUS
