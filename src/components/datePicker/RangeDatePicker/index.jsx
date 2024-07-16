@@ -63,28 +63,37 @@ const RangeDatePicker = (props) => {
     );
   }
   
-  function toEndOfDayIsoString(date) {
-    var tzo = -date.getTimezoneOffset(),
-        dif = tzo >= 0 ? '+' : '-',
-        pad = function(num) {
-            return (num < 10 ? '0' : '') + num;
-        };
-  
+  const toEndOfDayIsoString = (date) => {
+    var tzo = -date?.getTimezoneOffset(),
+      dif = tzo >= 0 ? "+" : "-",
+      pad = function (num) {
+        return (num < 10 ? "0" : "") + num;
+      };
+
     // Set hours, minutes, seconds, and milliseconds to the end of the day
-    date.setHours(23);
-    date.setMinutes(59);
-    date.setSeconds(59);
-    date.setMilliseconds(999);
-  
-    return date.getFullYear() +
-        '-' + pad(date.getMonth() + 1) +
-        '-' + pad(date.getDate()) +
-        'T' + pad(date.getHours()) +
-        ':' + pad(date.getMinutes()) +
-        ':' + pad(date.getSeconds()) +
-        dif + pad(Math.floor(Math.abs(tzo) / 60)) +
-        ':' + pad(Math.abs(tzo) % 60);
-  }
+    date?.setHours(23);
+    date?.setMinutes(59);
+    date?.setSeconds(59);
+    date?.setMilliseconds(999);
+
+    return (
+      date?.getFullYear() +
+      "-" +
+      pad(date?.getMonth() + 1) +
+      "-" +
+      pad(date?.getDate()) +
+      "T" +
+      pad(date?.getHours()) +
+      ":" +
+      pad(date?.getMinutes()) +
+      ":" +
+      pad(date?.getSeconds()) +
+      dif +
+      pad(Math.floor(Math.abs(tzo) / 60)) +
+      ":" +
+      pad(Math.abs(tzo) % 60)
+    );
+  };
   useEffect(() => {
     // var lenghtDaySelectedConvert;
     // Nếu truyền vào rangeDateDefaults (30 ngày trước)
@@ -171,11 +180,17 @@ const RangeDatePicker = (props) => {
   }
   const handleOk = () => {
     setOpen(false);
-    console.log("CHẠY HÀM THỨ TƯ")
-    // setStartDate(start.toISOString());
-    // setEndDate(end.toISOString());
-    setStartDate(toIsoString(start._d));
-    setEndDate(toEndOfDayIsoString(end._d));
+    console.log("CHẠY HÀM THỨ TƯ");
+    if (start._d) {
+      setStartDate(toIsoString(start._d));
+    } else {
+      setStartDate(toIsoString(start));
+    }
+    if (end._d) {
+      setEndDate(toEndOfDayIsoString(end._d));
+    } else {
+      setEndDate(toEndOfDayIsoString(end));
+    }
   };
 
   {
