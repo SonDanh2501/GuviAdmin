@@ -134,33 +134,7 @@
 //     }
 //   }
 
-.ant-menu {
-  .ant-menu-item {
-    height: 50px;
-    padding-left: 10px !important;
 
-    .ant-menu-title-content {
-      font-family: $fontFamily;
-      font-style: $fontStyleNormal;
-      font-weight: $fontWeightXL;
-      font-size: $textFontSizeL;
-    }
-  }
-
-  .ant-menu-submenu {
-    .ant-menu-submenu-title {
-      padding-left: 10px !important;
-      height: 50px;
-
-      .ant-menu-title-content {
-        font-family: $fontFamily;
-        font-style: $fontStyleNormal;
-        font-weight: $fontWeightXL;
-        font-size: $textFontSizeL;
-      }
-    }
-  }
-}
 
 .div-current-status-handle {
   display: flex;
@@ -267,7 +241,157 @@
 .ant-btn-primary:not([disabled]):hover {
   background: #1f4ce0 !important;
 }
+
+.ant-layout-sider-children {
+  background-color: #1B2034;
+}
+
+.ant-menu {
+  background-color: #1B2034;
+  padding: 15px 0 10px 0px;
+
+  /* ~~~ Css của một item ~~~ */
+  .ant-menu-item {
+    // color: #909FAB;
+    // height: fit-content !important;
+    // padding-top: 14px !important;
+    // padding-bottom: 14px !important;
+
+    // Label
+    .ant-menu-title-content {
+      font-family: $fontFamily;
+      font-style: $fontStyleNormal;
+      font-weight: $fontWeightXL;
+      font-size: $textFontSizeL;
+    }
+
+    // Icon
+    .ant-menu-item-icon {}
+  }
+
+  /* ~~~ Css của item selected ~~~ */
+  .ant-menu-item-selected {
+
+    // background-color: #143299;
+    // Label
+    .ant-menu-title-content {
+      // color: #FD7B3C;
+      font-family: $fontFamily;
+      font-style: $fontStyleNormal;
+      font-weight: $fontWeightXL;
+      font-size: $textFontSizeL;
+    }
+
+    // Icon
+    .ant-menu-item-icon {
+      color: #FD7B3C;
+    }
+  }
+
+  /* ~~~ Css của item là submenu ~~~ */
+  .ant-menu-submenu {
+    :hover {
+      color: #FFFFFF;
+    }
+
+    // Label và cả icon
+    .ant-menu-submenu-title {
+      // color: red;
+      // height: fit-content !important;
+      // padding-top: 14px !important;
+      // padding-bottom: 14px !important;
+
+      // Label
+      .ant-menu-title-content {
+        font-family: $fontFamily;
+        font-style: $fontStyleNormal;
+        font-weight: $fontWeightXL;
+        font-size: $textFontSizeL;
+      }
+
+      // icon
+      .ant-menu-item-icon {}
+
+    }
+  }
+
+  /* ~~~ Css của item là submenu selected ~~~ */
+  .ant-menu-submenu-selected {
+
+    // Label và cả icon
+    .ant-menu-submenu-title {
+      color: #FD7B3C;
+      // height: fit-content !important;
+      // padding-top: 14px !important;
+      // padding-bottom: 14px !important;
+
+      // Label
+      .ant-menu-title-content {
+        // color: #FD7B3C;
+        font-family: $fontFamily;
+        font-style: $fontStyleNormal;
+        font-weight: $fontWeightXL;
+        font-size: $textFontSizeL;
+      }
+
+      // icon
+      .ant-menu-item-icon {
+        // color: #FD7B3C;
+      }
+
+    }
+  }
+}
+
+.ant-layout-sider-collapsed {
+
+  // background-color: red;
+  .ant-menu-item {
+    // height: fit-content !important;
+    // padding-top: 6px !important;
+    // padding-bottom: 2px !important;
+    // padding-right: 4px !important;
+    // padding-left: 8px !important;
+    // background: red !important;
+
+    // Label
+    .ant-menu-title-content {
+      font-family: $fontFamily;
+      font-style: $fontStyleNormal;
+      font-weight: $fontWeightXL;
+      font-size: $textFontSizeL;
+    }
+
+    // Icon
+    .ant-menu-item-icon {}
+
+
+  }
+}
+
 .ant-dropdown-menu {
   max-height: 250px;
   overflow: auto;
 }
+
+
+.ant-select {
+  width: fit-content !important;
+  .ant-select-selector {
+    background: yellow;
+  }
+  // background-color: transparent !important;
+  // background: transparent !important;
+}
+
+// ::-webkit-scrollbar {
+//   width: 5px;
+// }
+
+// ::-webkit-scrollbar-thumb {
+//   background: #fff;
+//   border-radius: 10px;
+// }
+// ::-webkit-scrollbar-track {
+//   background: red;
+// }

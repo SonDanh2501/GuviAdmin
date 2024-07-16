@@ -26,14 +26,33 @@ import ManageConfiguration from "../container/System/ManageConfiguration/ManageC
 import ManageRequestService from "../container/System/ManageRequestService";
 
 import {
-  AppstoreOutlined,
-  ContainerOutlined,
-  DesktopOutlined,
-  MailOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  PieChartOutlined,
+  Appstored,
+  Containerd,
+  Desktopd,
+  Maild,
+  MenuFoldd,
+  MenuUnfoldd,
+  PieChartd,
 } from "@ant-design/icons";
+
+import {
+  IoHome,
+  IoBagHandle,
+  IoRadio,
+  IoPeople,
+  IoPerson,
+  IoCall,
+  IoMegaphone,
+  IoHeadset,
+  IoMail,
+  IoNotifications,
+  IoSettings,
+  IoTrendingUp,
+  IoBarChart,
+  IoStatsChart,
+  IoReader,
+  IoEllipse,
+} from "react-icons/io5";
 
 // const router = [
 //   {
@@ -531,7 +550,6 @@ import {
 //   // },
 // ];
 
-
 {
   /*Function: Label: tên hiển thị, Key: link navigate, Icon: icon hiển thị, Children: link sub nếu có, type: loại */
 }
@@ -544,7 +562,9 @@ function getItem(label, key, icon, children, type) {
     type,
   };
 }
-{/*Return Icon*/}
+{
+  /*Return Icon*/
+}
 const IconCustom = ({ icon }) => {
   return (
     <span className="anticon anticon-desktop ant-menu-item-icon">
@@ -554,34 +574,28 @@ const IconCustom = ({ icon }) => {
 };
 
 const router = [
-  getItem("Tổng quan", "/", <IconCustom icon={home} />, null, "dashboard"),
+  getItem("Tổng quan", "/", <IoHome />, null, "dashboard"),
   getItem(
-    "GUVIJOBS",
+    "GUVI Jobs",
     "/group-order/manage-order",
-    <IconCustom icon={bag} />,
+    <IoBagHandle />,
     null,
     "guvi_job"
   ),
   getItem(
     "Yêu cầu dịch vụ",
     "/system/request-service-manage",
-    <IconCustom icon={request} />,
+    <IoRadio />,
     null,
     "request_service"
   ),
-  getItem(
-    "Khách hàng",
-    "/system/user-manage",
-    <IconCustom icon={customer} />,
-    null,
-    "customer"
-  ),
+  getItem("Khách hàng", "/system/user-manage", <IoPeople />, null, "customer"),
   // getItem('Cộng tác viên', '/system/collaborator-manage', <IconCustom icon={collaborator} />, null, "collaborator"),
 
   getItem(
-    "Cộng tác viên",
+    "Đối tác",
     "/system/collaborator-manage",
-    <IconCustom icon={collaborator} />,
+    <IoPerson />,
     [
       getItem(
         "Đang hoạt động",
@@ -604,14 +618,14 @@ const router = [
   getItem(
     "Dịch vụ",
     "/services/manage-group-service/service",
-    <IconCustom icon={service} />,
+    <IoHeadset />,
     null,
     "service"
   ),
   getItem(
     "Marketing",
     "sub1",
-    <IconCustom icon={ticket} />,
+    <IoMegaphone />,
     [
       getItem("Khuyến mãi", "/promotion/manage-setting", null, null),
       "promotion",
@@ -635,7 +649,7 @@ const router = [
   getItem(
     "CSKH",
     "/feedback/manage-feedback",
-    <IconCustom icon={like} />,
+    <IoMail />,
     [
       getItem(
         "Đánh giá CTV",
@@ -657,14 +671,14 @@ const router = [
   getItem(
     "Tài chính",
     "/finance/manage-finance",
-    <IconCustom icon={finance} />,
+    <IoTrendingUp />,
     null,
     "finance"
   ),
   getItem(
     "Sổ quỹ",
     "transaction",
-    <IconCustom icon={cards} />,
+    <IoReader />,
     [
       // getItem(
       //   "CTV",
@@ -691,24 +705,18 @@ const router = [
     ],
     "cash_book"
   ),
-  getItem(
-    "Báo cáo",
-    "/report/manage-report",
-    <IconCustom icon={document} />,
-    null,
-    "report"
-  ),
+  getItem("Báo cáo", "/report/manage-report", <IoStatsChart />, null, "report"),
   getItem(
     "Thông báo",
     "/notification/manage-push-notification",
-    <IconCustom icon={notification} />,
+    <IoNotifications />,
     null,
     "notification"
   ),
   getItem(
     "Cấu hình",
     "/adminManage/manage-configuration",
-    <IconCustom icon={setting} />,
+    <IoSettings />,
     null,
     "setting"
   ),

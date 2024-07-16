@@ -16,48 +16,65 @@
 
 .div-container-customer {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
   background-color: white;
-  border-radius: 15px;
-  margin: 10px;
-  padding: 10px;
-
-  /* width */
 
   .div-tab-customer {
+    padding: 10px 10px 20px 10px;
+    background-color: white;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+    border-radius: 10px;
+    margin-top: 10px;
+    width: 79%;
+  }
+  .div-card-profile-customer {
     display: flex;
-    flex-direction: row;
-    overflow: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
+    flex-direction: column;
+    background-color: red;
+    padding: 10px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+    border-radius: 10px;
+    margin-top: 10px;
+    width: 19%;
+    height: 300px;
 
-    .div-item-tab {
-      padding: 5px;
+    .headerCard-customer {
+      border: none;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      background-color: transparent;
+      flex-direction: column;
 
-      .text-tab {
-        color: rgb(159, 159, 159);
-        font-weight: 400;
-        font-size: 14px;
+      label {
+        cursor: pointer;
         font-family: "Roboto";
-        text-decoration: none;
-        margin: 0;
+        font-style: normal;
+        font-weight: 200;
+        font-size: 14px;
+        line-height: 16px;
+        color: #11263c;
+        margin-top: 20px;
       }
-    }
 
-    .div-item-tab-select {
-      padding: 5px;
-      border-bottom: 1px solid blue;
+      #choose-image {
+        opacity: 0;
+        position: absolute;
+        z-index: -1;
+      }
 
-      .text-tab {
-        color: rgb(0, 0, 0);
-        font-weight: 400;
-        font-size: 14px;
-        font-family: "Roboto";
-        text-decoration: none;
-        margin: 0;
+      .rounded-circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 50px;
+        border: 1px solid rgb(15, 73, 182);
+        cursor: pointer;
       }
     }
   }
+
   .div-tab-customer::-webkit-scrollbar {
     height: 2px;
   }

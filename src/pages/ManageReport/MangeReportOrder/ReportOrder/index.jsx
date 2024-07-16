@@ -90,10 +90,10 @@ const ReportOrder = () => {
     setTotal(res?.totalItem);
     setDataTotal(res?.total[0]);
     setOrderStatus({
-      total_item: res?.total[0].total_item,
-      total_order_confirm: res?.total[0].total_order_confirm,
-      total_order_done: res?.total[0].total_order_done,
-      total_order_doing: res?.total[0].total_order_doing,
+      total_item: res?.total[0]?.total_item,
+      total_order_confirm: res?.total[0]?.total_order_confirm,
+      total_order_done: res?.total[0]?.total_order_done,
+      total_order_doing: res?.total[0]?.total_order_doing,
     });
   };
 
@@ -650,7 +650,7 @@ const ReportOrder = () => {
       customTitle: (
         <HeaderInfo
           title="Tổng giá trị giao dịch"
-          subValue={dataTotal.total_gross_income}
+          subValue={dataTotal?.total_gross_income}
           typeSubValue="money"
           textToolTip="GMV - Gross Merchandise Volume"
         />
@@ -664,7 +664,7 @@ const ReportOrder = () => {
       customTitle: (
         <HeaderInfo
           title="Thu hộ dịch vụ"
-          subValue={dataTotal.total_collabotator_fee}
+          subValue={dataTotal?.total_collabotator_fee}
           typeSubValue="money"
           textToolTip="Bao gồm phí dịch vụ trả cho CTV, tiền tip từ khách,…"
         />
@@ -678,7 +678,7 @@ const ReportOrder = () => {
       customTitle: (
         <HeaderInfo
           title="Doanh thu"
-          subValue={dataTotal.total_income}
+          subValue={dataTotal?.total_income}
           typeSubValue="money"
           textToolTip=""
         />
@@ -692,7 +692,7 @@ const ReportOrder = () => {
       customTitle: (
         <HeaderInfo
           title="Giảm giá"
-          subValue={dataTotal.total_discount}
+          subValue={dataTotal?.total_discount}
           typeSubValue="money"
           textToolTip="Tổng số tiền giảm giá từ giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,…"
         />
@@ -707,7 +707,7 @@ const ReportOrder = () => {
       customTitle: (
         <HeaderInfo
           title="Doanh thu thuần"
-          subValue={dataTotal.total_net_income}
+          subValue={dataTotal?.total_net_income}
           typeSubValue="money"
           textToolTip="Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần = Doanh thu (-) Giảm giá."
         />
@@ -721,7 +721,7 @@ const ReportOrder = () => {
       customTitle: (
         <HeaderInfo
           title="Tổng hoá đơn"
-          subValue={dataTotal.total_order_fee}
+          subValue={dataTotal?.total_order_fee}
           typeSubValue="money"
           textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."
         />
@@ -735,7 +735,7 @@ const ReportOrder = () => {
       customTitle: (
         <HeaderInfo
           title="Giá vốn"
-          subValue={dataTotal.punishss}
+          subValue={dataTotal?.punishss}
           typeSubValue="money"
         />
       ),
@@ -748,7 +748,7 @@ const ReportOrder = () => {
       customTitle: (
         <HeaderInfo
           title="Thu nhập khác"
-          subValue={dataTotal.punish}
+          subValue={dataTotal?.punish}
           typeSubValue="money"
           textToolTip="Bao gồm phí phạt trễ và huỷ ca"
         />
@@ -762,7 +762,7 @@ const ReportOrder = () => {
       customTitle: (
         <HeaderInfo
           title="Tổng lợi nhuận"
-          subValue={dataTotal.total_net_income_business}
+          subValue={dataTotal?.total_net_income_business}
           typeSubValue="money"
           textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác"
         />
@@ -776,7 +776,7 @@ const ReportOrder = () => {
       customTitle: (
         <HeaderInfo
           title="% Lợi nhuận"
-          subValue={dataTotal.percent_income}
+          subValue={dataTotal?.percent_income}
           typeSubValue="percent"
           textToolTip="% Lợi nhuận = Tổng lợi nhuận (/) Doanh thu."
         />
@@ -790,7 +790,7 @@ const ReportOrder = () => {
       customTitle: (
         <HeaderInfo
           title="Phí áp dụng"
-          subValue={dataTotal.total_service_fee}
+          subValue={dataTotal?.total_service_fee}
           typeSubValue="money"
         />
       ),
@@ -869,7 +869,6 @@ const ReportOrder = () => {
             />
       </div> */}
       </div>
-      <h4>aksudgahs</h4>
       <div className="div-flex-row">
         <div class="card">
           <img src="/static/media/add.1c86de41.png" class="img" />

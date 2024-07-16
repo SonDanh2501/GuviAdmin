@@ -312,3 +312,30 @@ span {
   display: flex;
   flex-direction: column;
 }
+.subject-ADMIN {
+  span {
+    // border: 1px solid $color1;
+    border-radius: 4px;
+    padding: 3px 10px;
+    background-color: #fff5da;
+    color: rgb(255 188 10);
+  }
+}
+.subject-KH {
+  span {
+    // border: 1px solid $color1;
+    border-radius: 4px;
+    padding: 3px 10px;
+    background-color: #d9f5f0;
+    color: rgb(0 189 157);
+  }
+}
+.subject-CTV {
+  span {
+    // border: 1px solid $color1;
+    border-radius: 4px;
+    padding: 3px 10px;
+    background-color: #def1fb;
+    color: rgb(37 160 226);
+  }
+}

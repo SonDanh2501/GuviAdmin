@@ -505,7 +505,7 @@ const ManageOrder = () => {
         </div>
       </div>
       {/*Button tạo đơn*/}
-      <div className="btn-action-header ">
+      <div className="btn-action-header">
         {checkElement?.includes("create_guvi_job") ? (
           <div className="transfer-collaborator_search">
             {/*Tạo đơn*/}
@@ -518,7 +518,7 @@ const ManageOrder = () => {
             </Button>
             {/*Thanh tìm kiếm*/}
             <Input
-              placeholder={`${i18n.t("search", { lng: lang })}`}
+              placeholder={`${i18n.t("search_order", { lng: lang })}`}
               // value={valueSearch}
               prefix={<SearchOutlined />}
               className="input-search"

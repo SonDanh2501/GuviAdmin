@@ -24,8 +24,10 @@ import Overview from "./components/overview";
 import Review from "./components/review";
 import TestExam from "./components/testExam";
 import WithdrawTopup from "./components/withdrawTopup";
+import useWindowDimensions from "../../../../../helper/useWindowDimensions";
 
 const ProfileCollaborator = () => {
+  const { width } = useWindowDimensions();
   const [data, setData] = useState({
     avatar: "",
     birthday: "2000-06-07T00:00:00.000Z",
@@ -38,6 +40,10 @@ const ProfileCollaborator = () => {
   const lang = useSelector(getLanguageState);
   const [saveToCookie, readCookie] = useCookies();
   const [activeKey, setActiveKey] = useState("1");
+const [isShowPhone, setIsShowPhone] = useState(false);
+const [phoneNumber, setPhoneNumber] = useState(data?.phone);
+const [isShowMore, setIsShowMore] = useState(false);
+
   const tabCookie = readCookie("tab-detail-ctv");
 
   useEffect(() => {
@@ -98,7 +104,14 @@ const ProfileCollaborator = () => {
     saveToCookie("tab-detail-ctv", key);
     setActiveKey(key);
   };
-
+  const hidePhoneNumber = (phone) => {
+    if(phone) {
+      let hidePhone = phone.toString().substring(0, 3);
+      hidePhone = hidePhone + "*******"
+      return hidePhone;
+    }
+  }
+// console.log("CHECK DATA", data?.phone);
   return (
     <div className="div-container-profile-ctv">
       <div className="div-tab-profile-collaborator">
@@ -144,9 +157,9 @@ const ProfileCollaborator = () => {
           </Tabs.TabPane>
         </Tabs>
       </div>
-
+      {/*Card Profile*/}
       <div className="div-card-profile">
-        <div className="headerCard">
+        <div className="headerCard ">
           <Image
             style={{
               width: 100,
@@ -173,31 +186,56 @@ const ProfileCollaborator = () => {
             </>
           )}
         </div>
-        <div className="mt-2">
-          <div className="text-body">
+        <div style={{ marginTop: "8px" }}>
+          <div className="text-body ">
             {data?.password_default && (
               <p style={{ margin: 0 }}>
                 {`${i18n.t("default_password", { lng: lang })}`}:{" "}
                 {data?.password_default}
               </p>
             )}
+            {/*Họ và tên*/}
+            <p className="text-name">{data?.full_name}</p>
+            {/*Số điện thoại*/}
+            <p className="text-phone">
+              SĐT:{" "}
+              {isShowPhone
+                ? `${data?.phone}`
+                : `${hidePhoneNumber(data?.phone)}`}
+              <i
+                style={{ cursor: "pointer" }}
+                onClick={() => setIsShowPhone(!isShowPhone)}
+                className={`${isShowPhone ? "uil-eye-slash" : "uil-eye"}`}
+              ></i>
+            </p>
+            {/*Mã giới thiệu*/}
             {data?.invite_code && (
-              <p style={{ margin: 0 }}>
+              <p className="text-sub">
                 {`${i18n.t("code_invite", { lng: lang })}`}: {data?.invite_code}
               </p>
             )}
-            <p className="text-name">{data?.full_name}</p>
-            <p style={{ margin: 0 }}>
-              {!data?.birthday
-                ? ""
-                : `${i18n.t("age", { lng: lang })}` +
-                  ": " +
-                  moment().diff(data?.birthday, "years")}
-            </p>
+            {/*Tuổi*/}
+            {(width > 900 || isShowMore) && (
+              <p className="text-sub-customer">
+                {!data?.birthday
+                  ? ""
+                  : `${i18n.t("age", { lng: lang })}` +
+                    ": " +
+                    moment().diff(data?.birthday, "years")}
+              </p>
+            )}
+            {/*Show More*/}
+            {width < 900 && (
+              <p
+                className="text-showmore"
+                onClick={() => setIsShowMore(!isShowMore)}
+              >
+                {isShowMore ? "Thu gọn" : "Xem thêm"}
+              </p>
+            )}
           </div>
         </div>
       </div>
-
       <FloatButton.BackTop />
     </div>
   );

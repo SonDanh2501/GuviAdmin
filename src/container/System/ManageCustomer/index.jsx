@@ -283,7 +283,7 @@ const ManageCustomer = () => {
           <div></div>
           <div className="div-search">
             <Input
-              placeholder={`${i18n.t("search", { lng: lang })}`}
+              placeholder={`${i18n.t("search_customer", { lng: lang })}`}
               prefix={<SearchOutlined />}
               className="input-search"
               onChange={(e) => {

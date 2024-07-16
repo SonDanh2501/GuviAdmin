@@ -1306,10 +1306,10 @@ export default function Home() {
   const [dataTotalChartCancel, setDataTotalChartCancel] = useState([]);
   const [codeCity, setCodeCity] = useState();
   const [nameCity, setNameCity] = useState("");
-
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-
+  const [startDatePrevious, setStartDatePrevious] = useState("");
+  const [endDatePrevious, setEndDatePrevious] = useState("");
   // const [startDate, setStartDate] = useState(
   //   moment().subtract(30, "days").startOf("days").add(7, "hours").toISOString()
   // );
@@ -1746,6 +1746,10 @@ export default function Home() {
       </text>
     );
   };
+//   console.log("START >>> ", startDate)
+//   console.log("END >>> ", endDate);
+// console.log("START 2 >>> ",moment(startDate).format("DD/MM/YYYY"))
+// console.log("END 2 >>> ", moment(endDate).format("DD/MM/YYYY"));
   return (
     <div className="container-dash">
       {checkElement?.includes("get_general_total_report_dashboard") && (
@@ -1756,13 +1760,16 @@ export default function Home() {
           <div className="chart">
             <div className="div-head-chart">
               <div className="div-date">
-                {/*Date Picker For Statistic*/}
-                <RangeDatePicker
-                  setStartDate={setStartDate}
-                  setEndDate={setEndDate}
-                  onCancel={() => {}}
-                  defaults={"thirty_last"}
-                />
+                <div className="date-picker">
+                  {/*Date Picker For Statistic*/}
+                  <RangeDatePicker
+                    setStartDate={setStartDate}
+                    setEndDate={setEndDate}
+                    rangeDateDefaults={"thirty_last"}
+                    rangeDatePrevious
+                    disableFutureDay
+                  />
+                </div>
                 {/* <CustomDatePicker
                   setStartDate={setStartDate}
                   setEndDate={setEndDate}
@@ -1772,20 +1779,35 @@ export default function Home() {
                   setSameEnd={() => {}}
                 /> */}
                 {/*Date Text*/}
-                {startDate && (
-                  <a className="text-date">
-                    {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-                    {moment(endDate).utc().format("DD/MM/YYYY")}
-                  </a>
+                <div className="div-same">
+                  <p className="text-date-same">
+                    Kỳ này: {moment(startDate).format("DD/MM/YYYY")}-
+                    {moment(endDate).format("DD/MM/YYYY")}
+                  </p>
+                </div>
+                {startDatePrevious && (
+                  <div className="div-same">
+                    <p className="text-date-same">
+                      Kỳ trước: {moment(startDate).format("DD/MM/YYYY")}-
+                      {moment(endDate).format("DD/MM/YYYY")}
+                    </p>
+                  </div>
                 )}
+
+                {/* {startDate && (
+                  <a className="text-date">
+                    {moment(startDate).format("DD/MM/YYYY")} -{" "}
+                    {moment(endDate).format("DD/MM/YYYY")}
+                  </a>
+                )} */}
               </div>
               {/*Total Money*/}
-              {checkElement?.includes("total_finance_job_dashboard") && (
+              {/* {checkElement?.includes("total_finance_job_dashboard") && (
                 <a className="text-total-money">
                   {`${i18n.t("sales", { lng: lang })}`}:{" "}
                   {formatMoney(totalMoneyChart)}
                 </a>
-              )}
+              )} */}
             </div>
             {/* <div className="div-select-city mb-3">
               <Select
