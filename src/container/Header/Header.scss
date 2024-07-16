@@ -11,7 +11,7 @@
     background-color: rgb(156 163 175 / 0.3);
     cursor: pointer;
     padding: 0.5rem;
-    border-radius: 100%;
+    border-radius: 7px;
     transition-duration: 300ms;
   }
 
@@ -57,7 +57,7 @@
       background-color: rgb(156 163 175 / 0.3);
       cursor: pointer;
       padding: 0.5rem;
-      border-radius: 100%;
+      border-radius: 7px;
       transition-duration: 300ms;
 
       .icon {
@@ -84,9 +84,9 @@
       display: flex;
       background-color: rgb(156 163 175 / 0.3);
       justify-content: center;
-      height: 33.6px;
+      height: 36.8px;
       padding: 0.375rem;
-      border-radius: 100%;
+      border-radius: 7px;
       transition-duration: 300ms;
       cursor: pointer;
     }

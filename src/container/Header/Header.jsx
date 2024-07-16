@@ -89,7 +89,7 @@ const Header = ({ onClick, hide }) => {
     <div className="div-container-header">
       {/*Icon open or close sidebar menu*/}
       <div className="menu-icon" onClick={onClick}>
-        <IoMenu size={"1.1rem"} />
+        <IoMenu size={"1.3rem"} />
       </div>
       <div className="nav-header">
         {/*Notification Drop Down Menu*/}
@@ -103,7 +103,7 @@ const Header = ({ onClick, hide }) => {
           className="div-noti"
           onClick={() => setStatus(!status)}
         >
-          <IoNotifications size={"1.1rem"} />
+          <IoNotifications size={"1.3rem"} />
         </div>
         {status && (
           <div className="list shadow-blue-400">
