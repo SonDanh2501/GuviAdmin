@@ -213,7 +213,7 @@ const Main = ({ hide }) => {
           style={{
             padding: 0,
             background: "#023E8A",
-            borderBottom: "2px solid #E6EAEC",
+            borderBottom: "1px solid gray",
           }}
         >
           {/*Component for header*/}

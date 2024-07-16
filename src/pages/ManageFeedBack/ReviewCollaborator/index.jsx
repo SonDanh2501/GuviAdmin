@@ -21,12 +21,20 @@ import { OPTIONS_SELECT_STATUS_HANDLE_REVIEW } from "../../../@core/constant/con
 
 import "./index.scss";
 import DeleteModal from "./components/DeleteModal";
+import { IoStar } from "react-icons/io5";
 
 const ReviewCollaborator = () => {
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [data, setData] = useState([]);
   const [startPage, setStartPage] = useState(0);
+  const [totalRating, setTotalRating] = useState({
+    totalFiveStar: 0,
+    totalFourStar: 0,
+    totalThreeStar: 0,
+    totalTwoStar: 0,
+    totalOneStar: 0,
+  });
   const [lengthPage, setLengthPage] = useState(25);
   const [valueSearch, setValueSearch] = useState("");
   const [detectLoading, setDetectLoading] = useState(null);
@@ -52,6 +60,16 @@ const ReviewCollaborator = () => {
     []
   );
 
+  const getAllReviewCollaborator = async (lengthData) => {
+    const res = await getDataReviewCollaborator(
+      startPage,
+      lengthData,
+      startDate,
+      endDate
+    );
+    calculateRating(res);
+  };
+
   const getReviewCollaborator = async () => {
     const res = await getDataReviewCollaborator(
       startPage,
@@ -59,7 +77,7 @@ const ReviewCollaborator = () => {
       startDate,
       endDate
     );
-    const clearData = [];
+
     for (let i = 0; i < res.data.length; i++) {
       res.data[i]["service_title"] =
         res.data[i].service._id._id === "654dd5598b3f1a21b7011e3f"
@@ -77,6 +95,7 @@ const ReviewCollaborator = () => {
       // res.data[i]["name_service"] = res.data[i].service._id.title.vi
     }
     // console.log(res?.data, 'res?.data');
+    getAllReviewCollaborator(res?.totalItem);
     setData(res?.data);
     setTotalItem(res?.totalItem);
   };
@@ -224,6 +243,35 @@ const ReviewCollaborator = () => {
     ),
   };
 
+  const calculateRating = (data) => {
+    // console.log("CHECK DATA ", data);
+    let totalFiveStarTemp = 0;
+    let totalFourStarTemp = 0;
+    let totalThreeStarTemp = 0;
+    let totalTwoStarTemp = 0;
+    let totalOneStarTemp = 0;
+    // Vòng lặp từng page
+    data?.data.forEach((rating) => {
+      if (rating.star === 5) totalFiveStarTemp += 1;
+      if (rating.star === 4) totalFourStarTemp += 1;
+      if (rating.star === 3) totalThreeStarTemp += 1;
+      if (rating.star === 2) totalTwoStarTemp += 1;
+      if (rating.star === 1) totalOneStarTemp += 1;
+    });
+    setTotalRating({
+      ...totalRating,
+      totalFiveStar: totalFiveStarTemp,
+      totalFourStar: totalFourStarTemp,
+      totalThreeStar: totalThreeStarTemp,
+      totalTwoStar: totalTwoStarTemp,
+      totalOneStar: totalOneStarTemp,
+    });
+  };
+  const calculateRatingPercent = (total, child) => {
+    const percent = child / total;
+    return percent ? percent : 0;
+  };
+  console.log("total", totalRating);
   return (
     <React.Fragment>
       <div className="div-container-content">
@@ -231,16 +279,46 @@ const ReviewCollaborator = () => {
           <div className="div-header-container">
             <h4 className="title-cv">Đánh giá CTV</h4>
           </div>
-          <div className="btn-action-header"></div>
+          {/* <div className="btn-action-header"></div> */}
         </div>
-
-        <div className="div-flex-row">
-          {/* <Tabs
-            itemTab={itemTab}
-            onValueChangeTab={onChangeTab}
-          /> */}
-        </div>
-
+        {/* Container cho total đánh giá */}
+        {/* <div className="flex flex-row gap-8">
+          <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
+            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-yellow-400/25 rounded-md ">
+              <IoStar size={"1rem"} color="orange"/>
+              <span className=" uppercase font-bold">Đánh giá 5 sao</span>
+            </div>
+            <div className="h-2/3 flex my-2">
+              <span className="w-1/2 flex flex-col items-center justify-center border-r-2">
+                <span>Số lượng</span>
+                <span className="font-bold">{totalRating.totalFiveStar}</span>
+              </span>
+              <span className="w-1/2 flex flex-col items-center justify-center">
+                <span>Chiếm</span>
+                <span className="font-bold">
+                  {calculateRatingPercent(totalItem, totalRating.totalFiveStar)}{" "}
+                  %
+                </span>
+              </span>
+            </div>
+          </div>
+          <div className="w-1/5 h-[63px] rounded-2xl shadow-xl">
+            Số đánh giá 4 sao: {totalRating.totalFourStar}, chiếm{" "}
+            {calculateRatingPercent(totalItem, totalRating.totalFourStar)} %
+          </div>
+          <div className="w-1/5 h-[63px] rounded-2xl shadow-xl">
+            Số đánh giá 3 sao: {totalRating.totalThreeStar},chiếm{" "}
+            {calculateRatingPercent(totalItem, totalRating.totalThreeStar)} %
+          </div>
+          <div className="w-1/5 h-[63px] rounded-2xl shadow-xl">
+            Số đánh giá 2 sao: {totalRating.totalTwoStar}, chiếm{" "}
+            {calculateRatingPercent(totalItem, totalRating.totalTwoStar)} %
+          </div>
+          <div className="w-1/5 h-[63px] rounded-2xl shadow-xl">
+            Số đánh giá 1 sao: {totalRating.totalOneStar}, chiếm{" "}
+            {calculateRatingPercent(totalItem, totalRating.totalOneStar)} %
+          </div>
+        </div> */}
         <div className="div-flex-row-flex-start">
           <div className="date-picker">
             <RangeDatePicker
@@ -289,7 +367,6 @@ const ReviewCollaborator = () => {
           />
         </div>
       </div>
-
       <ModalNoteAdmin
         isShow={modal === "update_handle_review" ? true : false}
         item={item}

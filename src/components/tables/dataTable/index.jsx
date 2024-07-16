@@ -954,6 +954,22 @@ const DataTable = (props) => {
             break;
           }
           case "text": {
+            const max = item.maxLength || 75;
+            let getDataView = data[item.dataIndex] || "";
+            const indexSlice = getDataView.length - max;
+            const sliceData =
+              indexSlice > 0 ? getDataView.slice(0, max) + "..." : getDataView;
+            return (
+              <Tooltip placement="topRight" title={getDataView}>
+                <span className={`${item?.fontSize} `}>
+                  {" "}
+                  {sliceData}
+                </span>
+              </Tooltip>
+            );
+            break;
+          }
+          case "text_link": {
             linkRedirect = `/details-order/${data?.id_group_order}`;
             const max = item.maxLength || 75;
             let getDataView = data[item.dataIndex] || "";

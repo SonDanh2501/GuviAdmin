@@ -79,7 +79,7 @@ const RangeDatePicker = (props) => {
       }
     } else {
       // Tìm giá trị trong các option có value tương ứng rangeDateDefaults
-      const item = DATA_TAB[0];
+      const item = DATA_TAB[3];
       // Nếu có thì tính
       const { startDate, endDate } = calculateRangeDate(
         item.range,

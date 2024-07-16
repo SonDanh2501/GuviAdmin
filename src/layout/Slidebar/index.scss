@@ -1,8 +1,8 @@
 .div-logo {
     display: flex;
     justify-content: center;
-    height: 80px;
-    // border-bottom: 3px solid #274C8D;
+    height: 64px;
+    border-bottom: 1px solid gray;
 
     img {
         --tw-scale-x: 1.2;
@@ -14,9 +14,8 @@
 .div-logo-collapse {
     display: flex;
     justify-content: center;
-    height: 80px;
-    // border-bottom: 3px solid white  ;
-
+    height: 64px;
+    border-bottom: 1px solid gray;
     img {
         --tw-scale-x: 0.8;
         --tw-scale-y: 0.8;

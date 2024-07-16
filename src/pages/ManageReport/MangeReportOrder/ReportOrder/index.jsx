@@ -90,10 +90,10 @@ const ReportOrder = () => {
     setTotal(res?.totalItem);
     setDataTotal(res?.total[0]);
     setOrderStatus({
-      total_item: res?.total[0].total_item,
-      total_order_confirm: res?.total[0].total_order_confirm,
-      total_order_done: res?.total[0].total_order_done,
-      total_order_doing: res?.total[0].total_order_doing,
+      total_item: res?.total[0]?.total_item,
+      total_order_confirm: res?.total[0]?.total_order_confirm,
+      total_order_done: res?.total[0]?.total_order_done,
+      total_order_doing: res?.total[0]?.total_order_doing,
     });
   };
 
@@ -635,7 +635,7 @@ const ReportOrder = () => {
     {
       customTitle: <HeaderInfo title="Mã đơn" />,
       dataIndex: "id_view",
-      key: "text",
+      key: "text_link",
       width: 90,
       fontSize: "text-size-M text-color-black text-weight-500",
     },
