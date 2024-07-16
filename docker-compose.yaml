@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+  # webadmin
+  web: 
+    build: .
+    container_name: guvico-admin
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - ${PORT}:${PORT}
+    restart: always
+    command: serve -s build
+    env_file:
+      - .env
