@@ -593,7 +593,7 @@ const router = [
   // getItem('Cộng tác viên', '/system/collaborator-manage', <IconCustom icon={collaborator} />, null, "collaborator"),
 
   getItem(
-    "Cộng tác viên",
+    "Đối tác",
     "/system/collaborator-manage",
     <IoPerson />,
     [
