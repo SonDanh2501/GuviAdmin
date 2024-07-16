@@ -52,7 +52,7 @@ import {
 import { LENGTH_ITEM } from "../../constants";
 import { errorNotify, successNotify } from "../../helper/toast";
 import CommonFilter from "../../components/commonFilter";
-import { getElementState } from "../../redux/selectors/auth";
+import { getElementState, getLanguageState } from "../../redux/selectors/auth";
 import TransactionDrawer from "../../components/transactionDrawer";
 import DataTable from "../../components/tables/dataTable";
 import ModalCustom from "../../components/modalCustom";
@@ -60,9 +60,11 @@ import { formatMoney } from "../../helper/formatMoney";
 import TransactionDrawer2 from "../../components/transactionDrawer/TransactionDrawer2";
 import Tabs from "../../components/tabs/tabs1";
 import useWindowDimensions from "../../helper/useWindowDimensions";
-import { EditLocationOutlined } from "@material-ui/icons";
+import i18n from "../../i18n";
+
 const ManageTopUpWithdraw = () => {
   let { width } = useWindowDimensions();
+  const lang = useSelector(getLanguageState);
   const [tab, setTab] = useState(itemTabStatus[0].value);
   const checkElement = useSelector(getElementState);
   const [data, setData] = useState([]);
@@ -364,20 +366,20 @@ const ManageTopUpWithdraw = () => {
         <div className="transfer-collaborator_transaction">
           {/*Nạp tiền*/}
           <TransactionDrawer2
-            titleButton="Nạp tiền"
-            titleHeader="Nạp tiền"
+            titleButton="Phiếu thu"
+            titleHeader="Phiếu thu"
             onClick={handleTopUp}
           />
           {/*Rút tiền*/}
           <TransactionDrawer2
-            titleButton="Rút tiền"
-            titleHeader="Rút tiền"
+            titleButton="Phiếu chi"
+            titleHeader="Phiếu chi"
             onClick={handleWithdraw}
           />
         </div>
         {/*Input search field*/}
         <Input
-          placeholder={"Tìm kiếm"}
+          placeholder={`${i18n.t("search_transaction", { lng: lang })}`}
           prefix={<SearchOutlined />}
           className="input-search"
           onChange={(e) => {
@@ -488,21 +490,21 @@ const columns = [
     title: "Ngày tạo",
     dataIndex: "date_create",
     key: "date_create",
-    width: 45,
+    width: 55,
     fontSize: "text-size-M",
   },
   {
     title: "Mã giao dịch",
     dataIndex: "code_transaction",
     key: "code_transaction",
-    width: 65,
+    width: 75,
     fontSize: "text-size-M",
   },
   {
     title: "Người tạo",
     dataIndex: "",
     key: "created_by",
-    width: 70,
+    width: 80,
     fontSize: "text-size-M",
   },
   {
@@ -514,21 +516,26 @@ const columns = [
   },
 
   {
-    title: "Nạp vào tài khoản",
+    title: "Tài khoản",
     dataIndex: "",
-    key: "subject_transaction_top_up",
+    key: "subject",
     width: 90,
     fontSize: "text-size-M",
   },
-
   {
-    title: "Rút từ tài khoản",
-    dataIndex: "",
-    key: "subject_transaction_withdraw",
-    width: 90,
+    title: "Nguồn tiền",
+    // dataIndex: "payment_in",
+    key: "payment_out",
+    width: 50,
     fontSize: "text-size-M",
   },
-
+  {
+    title: "Đích đến",
+    // dataIndex: "payment_out",
+    key: "payment_in",
+    width: 50,
+    fontSize: "text-size-M",
+  },
   {
     title: "Loại giao dịch",
     dataIndex: "type_transfer",
@@ -546,7 +553,7 @@ const columns = [
   {
     title: "Phương thức thanh toán",
     dataIndex: "payment_out",
-    key: "payment_out",
+    key: "payment_method",
     width: 60,
     fontSize: "text-size-M",
   },
@@ -581,20 +588,6 @@ const columns = [
     title: "Ngày duyệt",
     dataIndex: "date_verify_created",
     key: "date_verify",
-    width: 50,
-    fontSize: "text-size-M",
-  },
-  {
-    title: "Nguồn vào",
-    // dataIndex: "payment_in",
-    key: "text",
-    width: 50,
-    fontSize: "text-size-M",
-  },
-  {
-    title: "Nguồn ra",
-    // dataIndex: "payment_out",
-    key: "text",
     width: 50,
     fontSize: "text-size-M",
   },

@@ -29,7 +29,7 @@ const HistoryActivity = (props) => {
     console.log("detailHistoryActivity ", detailHistoryActivity);
     return (
       <div className="detail-history-activity_confirm-order_container">
-        <div className="item-left ">
+        <div className="item-left">
           {/*Đơn hàng, Khách Hàng, CTV*/}
           {id_order?.id_view && (
             <div className="content-container ">
@@ -134,65 +134,104 @@ const HistoryActivity = (props) => {
                 onClick={() => onChooseItem(item)}
               >
                 <div className="title_admin">
-                  <div style={{ width: "100%" }}>
+                  {/*Đang lấy 75 nếu màn hình lớn và 65 cho màn hình nhỏ */}
+                  <div className="" style={{ width: "100%" }}>
+                    {/*Lấy full của 75% của toàn bộ component*/}
                     {/*Header mỗi giao dịch */}
                     <p style={{ fontSize: "14px" }}>{title?.vi}</p>
                     {/*Container for web*/}
                     {width > 490 && (
-                      <div className="container-wallet">
-                        {/*Tiền ví nạp sau giao dịch*/}
-                        <p style={{ width: "50%" }}>
-                          <span className="title-wallet">Ví Nạp:</span>{" "}
-                          <span className="">
-                            {formatMoney(item?.current_work_wallet)}
-                          </span>
-                          {item?.status_current_work_wallet === "down" ? (
-                            <i
-                              style={{ color: "red" }}
-                              class="uil uil-arrow-down icon-deduction"
-                            />
-                          ) : item?.status_current_work_wallet === "up" ? (
-                            <i
-                              style={{ color: "green" }}
-                              class="uil uil-arrow-up icon-plus"
-                            />
-                          ) : item?.status_current_work_wallet === "none" ? (
-                            <i
-                              style={{ color: "black", paddingLeft: "1px" }}
-                              class="uil uil-minus icon-plus"
-                            />
-                          ) : (
-                            <></>
-                          )}
-                        </p>
-                        {/*Tiền ví CTV sau giao dịch*/}
-                        <p style={{ width: "50%" }}>
-                          <span className="title-wallet"> Ví CTV: </span>{" "}
-                          <span>
-                            {formatMoney(item?.current_collaborator_wallet)}
-                          </span>
-                          {item?.status_current_collaborator_wallet ===
-                          "down" ? (
-                            <i
-                              style={{ color: "red" }}
-                              class="uil uil-arrow-down icon-deduction"
-                            />
-                          ) : item?.status_current_collaborator_wallet ===
-                            "up" ? (
-                            <i
-                              style={{ color: "green" }}
-                              class="uil uil-arrow-up icon-plus"
-                            />
-                          ) : item?.status_current_collaborator_wallet ===
-                            "none" ? (
-                            <i
-                              style={{ color: "black", paddingLeft: "1px" }}
-                              class="uil uil-minus icon-plus"
-                            />
-                          ) : (
-                            <></>
-                          )}
-                        </p>
+                      <div className="container-wallet ">
+                        {/*Wallet*/}
+                        {item?.id_collaborator && (
+                          <>
+                            {/*Tiền ví nạp sau giao dịch CTV*/}
+                            <p style={{ width: "50%" }}>
+                              <span className="title-wallet">Ví Nạp:</span>{" "}
+                              <span className="">
+                                {formatMoney(item?.current_work_wallet)}
+                              </span>
+                              {item?.status_current_work_wallet === "down" ? (
+                                <i
+                                  style={{ color: "red" }}
+                                  class="uil uil-arrow-down icon-deduction"
+                                />
+                              ) : item?.status_current_work_wallet === "up" ? (
+                                <i
+                                  style={{ color: "green" }}
+                                  class="uil uil-arrow-up icon-plus"
+                                />
+                              ) : item?.status_current_work_wallet ===
+                                "none" ? (
+                                <i
+                                  style={{ color: "black", paddingLeft: "1px" }}
+                                  class="uil uil-minus icon-plus"
+                                />
+                              ) : (
+                                <></>
+                              )}
+                            </p>
+                            {/*Tiền ví CTV sau giao dịch CTV */}
+                            <p style={{ width: "50%" }}>
+                              <span className="title-wallet">Ví CTV:</span>
+                              <span>
+                                {formatMoney(item?.current_collaborator_wallet)}
+                              </span>
+                              {item?.status_current_collaborator_wallet ===
+                              "down" ? (
+                                <i
+                                  style={{ color: "red" }}
+                                  class="uil uil-arrow-down icon-deduction"
+                                />
+                              ) : item?.status_current_collaborator_wallet ===
+                                "up" ? (
+                                <i
+                                  style={{ color: "green" }}
+                                  class="uil uil-arrow-up icon-plus"
+                                />
+                              ) : item?.status_current_collaborator_wallet ===
+                                "none" ? (
+                                <i
+                                  style={{ color: "black", paddingLeft: "1px" }}
+                                  class="uil uil-minus icon-plus"
+                                />
+                              ) : (
+                                <></>
+                              )}
+                            </p>
+                          </>
+                        )}
+                        {item?.id_customer && (
+                          <>
+                            {/*Tiền ví nạp sau giao dịch CTV*/}
+                            <p className="" style={{ width: "100%" }}>
+                              <span className="title-wallet">
+                                Số dư tài khoản:
+                              </span>{" "}
+                              <span className="">
+                                {formatMoney(item?.current_pay_point)}
+                              </span>
+                              {item?.status_current_pay_point === "down" ? (
+                                <i
+                                  style={{ color: "red" }}
+                                  class="uil uil-arrow-down icon-deduction"
+                                />
+                              ) : item?.status_current_pay_point === "up" ? (
+                                <i
+                                  style={{ color: "green" }}
+                                  class="uil uil-arrow-up icon-plus"
+                                />
+                              ) : item?.status_current_pay_point === "none" ? (
+                                <i
+                                  style={{ color: "black", paddingLeft: "1px" }}
+                                  class="uil uil-minus icon-plus"
+                                />
+                              ) : (
+                                <></>
+                              )}
+                            </p>
+                          </>
+                        )}
                       </div>
                     )}
                   </div>
@@ -202,77 +241,136 @@ const HistoryActivity = (props) => {
                   <p className={item?.value > 0 ? "plus-money" : "minus-money"}>
                     {`${item?.value > 0 ? "+" : ""}` + formatMoney(item?.value)}
                   </p>
-                  {width > 490 && <DownOutlined style={{ color: "blue" }} />}
+                  {width > 490 && item?.id_collaborator && (
+                    <DownOutlined style={{ color: "blue" }} />
+                  )}
                   {/*Container for mobile*/}
                   {width < 490 && (
                     <div className="">
-                      {/*Tiền ví nạp sau giao dịch*/}
-                      <p className="">
-                        <span style={{ color: "#a9afc3", fontSize: "12px" }}>
-                          Ví Nạp:
-                        </span>{" "}
-                        <span style={{ fontSize: "12px" }}>
-                          {formatMoney(item?.current_work_wallet)}
-                        </span>
-                        {item?.status_current_work_wallet === "down" ? (
-                          <i
-                            style={{ color: "red" }}
-                            class="uil uil-arrow-down icon-deduction"
-                          />
-                        ) : item?.status_current_work_wallet === "up" ? (
-                          <i
-                            style={{ color: "green" }}
-                            class="uil uil-arrow-up icon-plus"
-                          />
-                        ) : item?.status_current_work_wallet === "none" ? (
-                          <i
-                            style={{ color: "black", paddingLeft: "1px" }}
-                            class="uil uil-minus icon-plus"
-                          />
-                        ) : (
-                          <></>
-                        )}
-                      </p>
-                      {/*Tiền ví CTV sau giao dịch*/}
-                      <p className="">
-                        <span style={{ color: "#a9afc3", fontSize: "12px" }}>
-                          Ví CTV:
-                        </span>{" "}
-                        <span style={{ fontSize: "12px" }}>
-                          {formatMoney(item?.current_collaborator_wallet)}
-                        </span>
-                        {item?.status_current_collaborator_wallet === "down" ? (
-                          <i
-                            style={{ color: "red" }}
-                            class="uil uil-arrow-down icon-deduction"
-                          />
-                        ) : item?.status_current_collaborator_wallet ===
-                          "up" ? (
-                          <i
-                            style={{ color: "green" }}
-                            class="uil uil-arrow-up icon-plus"
-                          />
-                        ) : item?.status_current_collaborator_wallet ===
-                          "none" ? (
-                          <i
-                            style={{ color: "black", paddingLeft: "1px" }}
-                            class="uil uil-minus icon-plus"
-                          />
-                        ) : (
-                          <></>
-                        )}
-                      </p>
+                      {item?.id_collaborator && (
+                        <>
+                          {/*Tiền ví nạp sau giao dịch*/}
+                          <p className="">
+                            <span
+                              style={{
+                                color: "#a9afc3",
+                                fontSize: "12px",
+                                marginRight: "2px",
+                              }}
+                            >
+                              Ví Nạp:
+                            </span>
+                            <span style={{ fontSize: "12px" }}>
+                              {formatMoney(item?.current_work_wallet)}
+                            </span>
+                            {item?.status_current_work_wallet === "down" ? (
+                              <i
+                                style={{ color: "red" }}
+                                class="uil uil-arrow-down icon-deduction"
+                              />
+                            ) : item?.status_current_work_wallet === "up" ? (
+                              <i
+                                style={{ color: "green" }}
+                                class="uil uil-arrow-up icon-plus"
+                              />
+                            ) : item?.status_current_work_wallet === "none" ? (
+                              <i
+                                style={{ color: "black", paddingLeft: "1px" }}
+                                class="uil uil-minus icon-plus"
+                              />
+                            ) : (
+                              <></>
+                            )}
+                          </p>
+                          {/*Tiền ví CTV sau giao dịch*/}
+                          <p className="">
+                            <span
+                              style={{
+                                color: "#a9afc3",
+                                fontSize: "12px",
+                                marginRight: "2px",
+                              }}
+                            >
+                              Ví CTV:
+                            </span>
+                            <span style={{ fontSize: "12px" }}>
+                              {formatMoney(item?.current_collaborator_wallet)}
+                            </span>
+                            {item?.status_current_collaborator_wallet ===
+                            "down" ? (
+                              <i
+                                style={{ color: "red" }}
+                                class="uil uil-arrow-down icon-deduction"
+                              />
+                            ) : item?.status_current_collaborator_wallet ===
+                              "up" ? (
+                              <i
+                                style={{ color: "green" }}
+                                class="uil uil-arrow-up icon-plus"
+                              />
+                            ) : item?.status_current_collaborator_wallet ===
+                              "none" ? (
+                              <i
+                                style={{ color: "black", paddingLeft: "1px" }}
+                                class="uil uil-minus icon-plus"
+                              />
+                            ) : (
+                              <></>
+                            )}
+                          </p>
+                        </>
+                      )}
+                      {item?.id_customer && (
+                        <>
+                          {/*Tiền ví nạp sau giao dịch của khách hàng*/}
+                          <p className="flex flex-col items-center ">
+                            <span
+                              style={{
+                                color: "#a9afc3",
+                                fontSize: "12px",
+                                marginRight: "2px",
+                              }}
+                              className="title-wallet"
+                            >
+                              Số dư tài khoản:
+                            </span>
+                            <span style={{ fontSize: "12px" }}>
+                              {formatMoney(item?.current_pay_point)}
+                              {item?.status_current_pay_point === "down" ? (
+                                <i
+                                  style={{ color: "red" }}
+                                  class="uil uil-arrow-down icon-deduction"
+                                />
+                              ) : item?.status_current_pay_point === "up" ? (
+                                <i
+                                  style={{ color: "green" }}
+                                  class="uil uil-arrow-up icon-plus"
+                                />
+                              ) : item?.status_current_pay_point === "none" ? (
+                                <i
+                                  style={{ color: "black", paddingLeft: "1px" }}
+                                  class="uil uil-minus icon-plus"
+                                />
+                              ) : (
+                                <></>
+                              )}
+                            </span>
+                          </p>
+                        </>
+                      )}
                     </div>
                   )}
                   {/* <DownOutlined color="#000" /> */}
                 </div>
               </div>
               {/*Dropdown detail info*/}
-              <div className="item-info_detail">
-                {chooseItem?._id === item?._id && (
-                  <DetailHistoryConfirmOrder detailHistoryActivity={item} />
-                )}
-              </div>
+              {item?.id_collaborator && (
+                <div className="item-info_detail">
+                  {chooseItem?._id === item?._id && (
+                    <DetailHistoryConfirmOrder detailHistoryActivity={item} />
+                  )}
+                </div>
+              )}
             </div>
           </div>
         );

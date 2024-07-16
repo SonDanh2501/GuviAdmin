@@ -228,7 +228,7 @@ const TransactionDrawer2 = (props) => {
               defaultValue={"bank"}
               style={{ width: "100%" }}
               onChange={(e) => {
-                setState({ ...state, payment_out: e });
+                setState({ ...state, payment_out: e, payment_in: e });
               }}
               options={payments}
               value={state?.payment_out}
@@ -261,9 +261,7 @@ const TransactionDrawer2 = (props) => {
           {subject === "collaborator" && (
             <div className="mt-2">
               {/* <p>Ví: </p> */}
-              {titleButton === "Nạp tiền"
-                ? "Nạp vào tài khoản"
-                : "Rút từ tài khoản"}
+              {titleButton === "Phiếu thu" ? "Nạp vào ví" : "Rút từ ví"}
               <Select
                 defaultValue={defaultWallet ? defaultWallet : "work_wallet"}
                 style={{ width: "100%" }}

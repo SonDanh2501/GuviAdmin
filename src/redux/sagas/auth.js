@@ -46,7 +46,7 @@ function* loginSaga(action) {
     yield put(loginAction.loginFailure(err));
     yield put(loadingAction.loadingRequest(false));
     errorNotify({
-      message: err || "Đăng nhập không thành công, vui lòng thử lại sau.",
+      message: err.message ? err.message  : "Đăng nhập không thành công, vui lòng thử lại sau.",
     });
   }
 }

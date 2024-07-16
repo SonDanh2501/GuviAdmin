@@ -172,8 +172,8 @@ const ReportOverview = () => {
     const tempIncome = [];
     for (let i = 0; i < data.data.length; i++) {
       const payload = {
-        total_gross_income: data.data[i].total_gross_income,
-        date_report: data.data[i]._id.slice(0, 5),
+        total_gross_income: data.data[i]?.total_gross_income,
+        date_report: data.data[i]?._id.slice(0, 5),
         total_gross_income_same: dataInsame.data[i]?.total_gross_income,
         date_report_same: dataInsame.data[i]?._id.slice(0, 5),
       };
@@ -202,8 +202,8 @@ const ReportOverview = () => {
     const tempOrder = [];
     for (let i = 0; i < data.data.length; i++) {
       const payload = {
-        total_item: data.data[i].total_item,
-        date_report: data.data[i]._id.slice(0, 5),
+        total_item: data.data[i]?.total_item,
+        date_report: data.data[i]?._id.slice(0, 5),
         total_item_same: dataInsame.data[i]?.total_item,
         date_report_same: dataInsame.data[i]?._id.slice(0, 5),
       };
@@ -229,8 +229,8 @@ const ReportOverview = () => {
     const temp = [];
     for (let i = 0; i < data.data.length; i++) {
       const payload = {
-        total_net_income: data.data[i].total_net_income,
-        date_report: data.data[i]._id.slice(0, 5),
+        total_net_income: data.data[i]?.total_net_income,
+        date_report: data.data[i]?._id.slice(0, 5),
         total_net_income_same: dataInsame.data[i]?.total_net_income,
         date_report_same: dataInsame.data[i]?._id.slice(0, 5),
       };
@@ -256,8 +256,8 @@ const ReportOverview = () => {
     const temp = [];
     for (let i = 0; i < data.data.length; i++) {
       const payload = {
-        total_profit: data.data[i].total_net_income_business,
-        date_report: data.data[i]._id.slice(0, 5),
+        total_profit: data.data[i]?.total_net_income_business,
+        date_report: data.data[i]?._id.slice(0, 5),
         total_profit_same: dataInsame.data[i]?.total_net_income_business,
         date_report_same: dataInsame.data[i]?._id.slice(0, 5),
       };
@@ -315,26 +315,26 @@ const ReportOverview = () => {
     const payload = [];
     for (let i = 0; i < arrGetResult[0].data.length; i++) {
       const percentIncome =
-        (arrGetResult[0].data[i].total_income /
-          (arrGetResult[0].data[i].total_income +
-            arrGetResult[1].data[i].total_income)) *
+        (arrGetResult[0].data[i]?.total_income /
+          (arrGetResult[0].data[i]?.total_income +
+            arrGetResult[1].data[i]?.total_income)) *
         100;
       const percentIncomeSame =
-        (arrGetResult[1].data[i].total_income /
-          (arrGetResult[0].data[i].total_income +
-            arrGetResult[1].data[i].total_income)) *
+        (arrGetResult[1].data[i]?.total_income /
+          (arrGetResult[0].data[i]?.total_income +
+            arrGetResult[1].data[i]?.total_income)) *
         100;
       const levelPercentIncome = (percentIncome - percentIncomeSame).toFixed(2);
 
       const percentNetIncome =
-        (arrGetResult[0].data[i].total_net_income /
-          (arrGetResult[0].data[i].total_net_income +
-            arrGetResult[1].data[i].total_net_income)) *
+        (arrGetResult[0].data[i]?.total_net_income /
+          (arrGetResult[0].data[i]?.total_net_income +
+            arrGetResult[1].data[i]?.total_net_income)) *
         100;
       const percentNetIncomeSame =
-        (arrGetResult[1].data[i].total_net_income /
-          (arrGetResult[0].data[i].total_net_income +
-            arrGetResult[1].data[i].total_net_income)) *
+        (arrGetResult[1].data[i]?.total_net_income /
+          (arrGetResult[0].data[i]?.total_net_income +
+            arrGetResult[1].data[i]?.total_net_income)) *
         100;
       const levelPercentNetIncome = (
         percentNetIncome - percentNetIncomeSame
@@ -345,14 +345,14 @@ const ReportOverview = () => {
           ? levelPercentIncome
           : levelPercentNetIncome;
       payload.push({
-        title: arrGetResult[0].data[i].title,
-        thumbnail: arrGetResult[0].data[i].thumbnail,
-        total_net_income: arrGetResult[0].data[i].total_net_income,
-        total_net_income_same: arrGetResult[1].data[i].total_net_income,
-        total_income: arrGetResult[0].data[i].total_income,
-        total_income_same: arrGetResult[1].data[i].total_income,
-        total_order: arrGetResult[0].data[i].total_order,
-        total_order_same: arrGetResult[1].data[i].total_order,
+        title: arrGetResult[0].data[i]?.title,
+        thumbnail: arrGetResult[0].data[i]?.thumbnail,
+        total_net_income: arrGetResult[0].data[i]?.total_net_income,
+        total_net_income_same: arrGetResult[1].data[i]?.total_net_income,
+        total_income: arrGetResult[0].data[i]?.total_income,
+        total_income_same: arrGetResult[1].data[i]?.total_income,
+        total_order: arrGetResult[0].data[i]?.total_order,
+        total_order_same: arrGetResult[1].data[i]?.total_order,
         percent_total_income: isNaN(levelPercentIncome)
           ? 0
           : levelPercentIncome,
@@ -362,8 +362,8 @@ const ReportOverview = () => {
         percent_view: isNaN(percentView) ? 0 : percentView,
         value_view:
           typePriceService === configSelectTopService[0].value
-            ? arrGetResult[0].data[i].total_income
-            : arrGetResult[0].data[i].total_net_income,
+            ? arrGetResult[0].data[i]?.total_income
+            : arrGetResult[0].data[i]?.total_net_income,
       });
     }
     setDataTopService(payload);

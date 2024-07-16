@@ -505,7 +505,7 @@ const ManageOrder = () => {
         </div>
       </div>
       {/*Button tạo đơn*/}
-      <div className="btn-action-header ">
+      <div className="btn-action-header">
         {checkElement?.includes("create_guvi_job") ? (
           <div className="transfer-collaborator_search">
             {/*Tạo đơn*/}
@@ -518,7 +518,7 @@ const ManageOrder = () => {
             </Button>
             {/*Thanh tìm kiếm*/}
             <Input
-              placeholder={`${i18n.t("search", { lng: lang })}`}
+              placeholder={`${i18n.t("search_order", { lng: lang })}`}
               // value={valueSearch}
               prefix={<SearchOutlined />}
               className="input-search"
@@ -540,7 +540,6 @@ const ManageOrder = () => {
           dataTotal={totalOrder}
         />
       </div>
-
       {/*Container tìm kiếm và bộ lọc*/}
       <div className="div-flex-row">
         <div className="div-filter box-filter">
@@ -624,6 +623,71 @@ const ManageOrder = () => {
               </Space>
             </Dropdown>
           </div>
+           {/*Các giá trị lọc*/}
+           {checkCondition && (
+            <div className="filter-container">
+              {/*Dịch vụ*/}
+              <div className="iteServicem-select">
+                <span>Dịch vụ</span>
+                <Select
+                  style={{ width: "100%", marginRight: 10 }}
+                  options={optionsService}
+                  value={kind}
+                  onChange={(e, item) => {
+                    setKind(e); // Trả về value của dịch vụ, lọc theo id của dịch vụ
+                    setName(item?.label); // Not using
+                    setArrFilter({
+                      // Not using
+                      key: "service",
+                      value: item.value,
+                      label: item.label,
+                    });
+                  }}
+                />
+              </div>
+              {/*Thành Phố*/}
+              <div className="item-select">
+                <span>Tỉnh/Thành phố</span>
+                <Select
+                  style={{ width: "100%", marginRight: 10 }}
+                  options={cityOptions}
+                  value={city}
+                  onChange={(e, item) => {
+                    setCity(e);
+                    setDataDistrict(item?.district);
+                    setName(item?.label);
+                  }}
+                  showSearch
+                  filterOption={(input, option) =>
+                    (option?.label ?? "").includes(input)
+                  }
+                  filterSort={(optionA, optionB) =>
+                    (optionA?.label ?? "")
+                      .toLowerCase()
+                      .localeCompare((optionB?.label ?? "").toLowerCase())
+                  }
+                />
+              </div>
+              {/*Huyện*/}
+              <div className="item-select">
+                <span>Quận/Huyện</span>
+                <Select
+                  placeholde="Chọn quận/huyện"
+                  style={{ width: "100%", marginRight: 10, marginTop: 10 }}
+                  mode="multiple"
+                  options={districtOption}
+                  value={district}
+                  onChange={(e, item) => {
+                    setDistrict(e);
+                  }}
+                  showSearch
+                  filterOption={(input, option) =>
+                    (option?.label ?? "").includes(input)
+                  }
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
       {/*Table đơn hàng*/}

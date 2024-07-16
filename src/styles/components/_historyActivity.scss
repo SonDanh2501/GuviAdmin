@@ -15,7 +15,7 @@
       border: 2px solid var(--text-color);
       padding: 10px 5px;
       border-radius: 6px;
-
+      min-height: 70px;
       .title_admin {
         width: 75%;
         @include flexbox(space-between, center);
