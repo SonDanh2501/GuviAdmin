@@ -268,7 +268,7 @@ const ReviewCollaborator = () => {
     });
   };
   const calculateRatingPercent = (total, child) => {
-    const percent = child / total;
+    const percent = Math.round((child / total) * 100);
     return percent ? percent : 0;
   };
   console.log("total", totalRating);
@@ -282,11 +282,10 @@ const ReviewCollaborator = () => {
           {/* <div className="btn-action-header"></div> */}
         </div>
         {/* Container cho total đánh giá */}
-        {/* <div className="flex flex-row gap-8">
+        <div className="flex flex-row gap-8">
           <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
-            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-yellow-400/25 rounded-md ">
-              <IoStar size={"1rem"} color="orange"/>
-              <span className=" uppercase font-bold">Đánh giá 5 sao</span>
+            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-green-500/80 rounded-md ">
+              <span className=" uppercase font-bold text-white">Đánh giá 5 sao</span>
             </div>
             <div className="h-2/3 flex my-2">
               <span className="w-1/2 flex flex-col items-center justify-center border-r-2">
@@ -302,23 +301,82 @@ const ReviewCollaborator = () => {
               </span>
             </div>
           </div>
-          <div className="w-1/5 h-[63px] rounded-2xl shadow-xl">
-            Số đánh giá 4 sao: {totalRating.totalFourStar}, chiếm{" "}
-            {calculateRatingPercent(totalItem, totalRating.totalFourStar)} %
+          <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
+            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-lime-500/80 rounded-md ">
+              <span className=" uppercase font-bold">Đánh giá 4 sao</span>
+            </div>
+            <div className="h-2/3 flex my-2">
+              <span className="w-1/2 flex flex-col items-center justify-center border-r-2">
+                <span>Số lượng</span>
+                <span className="font-bold">{totalRating.totalFourStar}</span>
+              </span>
+              <span className="w-1/2 flex flex-col items-center justify-center">
+                <span>Chiếm</span>
+                <span className="font-bold">
+                  {calculateRatingPercent(totalItem, totalRating.totalFourStar)}{" "}
+                  %
+                </span>
+              </span>
+            </div>
           </div>
-          <div className="w-1/5 h-[63px] rounded-2xl shadow-xl">
-            Số đánh giá 3 sao: {totalRating.totalThreeStar},chiếm{" "}
-            {calculateRatingPercent(totalItem, totalRating.totalThreeStar)} %
+          <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
+            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-yellow-500/80 rounded-md ">
+              <span className=" uppercase font-bold">Đánh giá 3 sao</span>
+            </div>
+            <div className="h-2/3 flex my-2">
+              <span className="w-1/2 flex flex-col items-center justify-center border-r-2">
+                <span>Số lượng</span>
+                <span className="font-bold">{totalRating.totalThreeStar}</span>
+              </span>
+              <span className="w-1/2 flex flex-col items-center justify-center">
+                <span>Chiếm</span>
+                <span className="font-bold">
+                  {calculateRatingPercent(
+                    totalItem,
+                    totalRating.totalThreeStar
+                  )}{" "}
+                  %
+                </span>
+              </span>
+            </div>
           </div>
-          <div className="w-1/5 h-[63px] rounded-2xl shadow-xl">
-            Số đánh giá 2 sao: {totalRating.totalTwoStar}, chiếm{" "}
-            {calculateRatingPercent(totalItem, totalRating.totalTwoStar)} %
+          <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
+            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-orange-500/80 rounded-md ">
+              <span className=" uppercase font-bold">Đánh giá 2 sao</span>
+            </div>
+            <div className="h-2/3 flex my-2">
+              <span className="w-1/2 flex flex-col items-center justify-center border-r-2">
+                <span>Số lượng</span>
+                <span className="font-bold">{totalRating.totalTwoStar}</span>
+              </span>
+              <span className="w-1/2 flex flex-col items-center justify-center">
+                <span>Chiếm</span>
+                <span className="font-bold">
+                  {calculateRatingPercent(totalItem, totalRating.totalTwoStar)}{" "}
+                  %
+                </span>
+              </span>
+            </div>
           </div>
-          <div className="w-1/5 h-[63px] rounded-2xl shadow-xl">
-            Số đánh giá 1 sao: {totalRating.totalOneStar}, chiếm{" "}
-            {calculateRatingPercent(totalItem, totalRating.totalOneStar)} %
+          <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
+            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-red-500/80 rounded-md ">
+              <span className=" uppercase font-bold">Đánh giá 1 sao</span>
+            </div>
+            <div className="h-2/3 flex my-2">
+              <span className="w-1/2 flex flex-col items-center justify-center border-r-2">
+                <span>Số lượng</span>
+                <span className="font-bold">{totalRating.totalOneStar}</span>
+              </span>
+              <span className="w-1/2 flex flex-col items-center justify-center">
+                <span>Chiếm</span>
+                <span className="font-bold">
+                  {calculateRatingPercent(totalItem, totalRating.totalOneStar)}{" "}
+                  %
+                </span>
+              </span>
+            </div>
           </div>
-        </div> */}
+        </div>
         <div className="div-flex-row-flex-start">
           <div className="date-picker">
             <RangeDatePicker
