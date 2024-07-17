@@ -556,7 +556,7 @@ const ManageOrder = () => {
               trigger={["click"]}
             >
               <Space>
-                <span>Dịch vụ</span>
+                <span>Dịch vụ: </span>
                 <span className="fw-500">
                   {serviceLabel ? serviceLabel : optionsService[0]?.label}
                 </span>
