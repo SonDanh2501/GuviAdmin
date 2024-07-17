@@ -268,8 +268,8 @@ const ReviewCollaborator = () => {
     });
   };
   const calculateRatingPercent = (total, child) => {
-    const percent = Math.round((child / total) * 100);
-    return percent ? percent : 0;
+    let percent = (child / total) * 100;
+    return percent ? Math.round((percent + Number.EPSILON) * 100) / 100 : 0;
   };
   console.log("total", totalRating);
   return (

@@ -557,7 +557,7 @@ const ManageOrder = () => {
             >
               <Space>
                 <span>Dịch vụ: </span>
-                <span className="fw-500">
+                <span style={{ cursor: "pointer" }} className="fw-500">
                   {serviceLabel ? serviceLabel : optionsService[0]?.label}
                 </span>
                 <CaretDownOutlined />
@@ -579,7 +579,7 @@ const ManageOrder = () => {
             >
               <Space>
                 <span>Thành Phố:</span>
-                <span className="fw-500">
+                <span style={{ cursor: "pointer" }} className="fw-500">
                   {cityLabel ? cityLabel : "Tất cả"}
                 </span>
                 <CaretDownOutlined />
@@ -603,7 +603,7 @@ const ManageOrder = () => {
               <Space>
                 <span>Quận/Huyện:</span>
                 <div>
-                  {districtLabel?.map((el, index) => {
+                  {/* { districtLabel?.map((el, index) => {
                     if (index < 3) {
                       return (
                         <span className="fw-500" style={{ marginRight: 4 }}>
@@ -617,14 +617,41 @@ const ManageOrder = () => {
                     } else {
                       return <span></span>;
                     }
-                  })}
+                  })} */}
+                  {districtLabel && districtLabel.length > 0 ? (
+                    districtLabel.map((el, index) => {
+                      if (index < 3) {
+                        return (
+                          <span className="fw-500" style={{ marginRight: 4 }}>
+                            {el},
+                          </span>
+                        );
+                      } else if (index === 3) {
+                        return <span className="fw-500">{el}</span>;
+                      } else if (index === 4) {
+                        return <span className="fw-500">,...</span>;
+                      } else {
+                        return <span></span>;
+                      }
+                    })
+                  ) : (
+                    <span
+                      className={`fw-500 duration-500 ${
+                        cityLabel && cityLabel !== "Tất cả"
+                          ? "text-black cursor-pointer"
+                          : "text-black/25 cursor-not-allowed"
+                      } `}
+                    >
+                      Tất cả
+                    </span>
+                  )}
                 </div>
                 <CaretDownOutlined />
               </Space>
             </Dropdown>
           </div>
-           {/*Các giá trị lọc*/}
-           {checkCondition && (
+          {/*Các giá trị lọc*/}
+          {checkCondition && (
             <div className="filter-container">
               {/*Dịch vụ*/}
               <div className="iteServicem-select">
