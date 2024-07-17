@@ -109,7 +109,13 @@ const Header = ({ onClick, hide }) => {
             }}
           >
             <IoGlobeOutline size={"1.3rem"} />
-            <span style={{ fontWeight: "bold", fontSize: "1rem" }}>VN</span>
+            <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
+              {selectedLanguage === "vi"
+                ? "VN"
+                : selectedLanguage === "en"
+                ? "EN"
+                : "VN"}
+            </span>
           </div>
         </Tooltip>
         {isSelectLanguage && (
