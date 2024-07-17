@@ -313,6 +313,7 @@ const ManageTopUpWithdraw = () => {
   const getList = () => {
     getListTransactionV2Api(startPage, LENGTH_ITEM, query, valueSearch)
       .then((res) => {
+        console.log("data", data);
         setData(res?.data);
         setTotal(res?.totalItem);
         getTotal();

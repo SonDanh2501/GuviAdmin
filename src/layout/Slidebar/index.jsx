@@ -42,7 +42,7 @@ const Sidebar = ({ hide }) => {
   const typeDate = window.location.pathname;
   return (
     <>
-      <div className={`${hide ? "div-logo" : "div-logo-collapse"} `}>
+      <div className="div-logo">
         <img src={logo} />
       </div>
       {/* <div className="demo-logo-vertical" /> */}
@@ -51,20 +51,20 @@ const Sidebar = ({ hide }) => {
           components: {
             Menu: {
               iconMarginInlineEnd: 12, // Space between icon and text {default 10}
-              iconSize: 18, // Icon size {default 14}
-              collapsedIconSize: 20, // Icon size when collapse
-              itemBorderRadius: 4, // Border của item
-              itemMarginInline: 12, // Margin của item
+              iconSize: 22, // Icon size {default 14}
+              collapsedIconSize: 22, // Icon size when collapse
+              itemBorderRadius: 6, // Border của item
+              itemMarginInline: hide ? 8 : 12, // Margin của item
               /* ~~~ Only color ~~~ */
-              itemColor: "#B5B4BB", // Màu của item
+              itemColor: "#000000", // Màu của item
               /* Color hover*/
-              itemHoverColor: "#FFFFFF", // Màu của icon và text
-              itemHoverBg: "#50435f", // Màu của background
+              itemHoverColor: "#000000", // Màu của icon và text
+              itemHoverBg: "#ebe0f8", // Màu của background
               /* Color for active (khi đè chuột xuống)*/
-              itemActiveBg: "#9E68DF", // Màu background
+              itemActiveBg: "#ebe0f8", // Màu background
               /* Color for selected item */
-              itemSelectedBg: "#9E68DF", // Màu của item
-              itemSelectedColor: "#FFFFFF", // Màu của icon và text
+              itemSelectedBg: "#d8c2f2", // Màu của item
+              itemSelectedColor: "#000000", // Màu của icon và text
             },
           },
         }}

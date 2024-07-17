@@ -174,23 +174,14 @@ const Main = ({ hide }) => {
     dispatch(getUserAction.getUserRequest());
   }, [dispatch, navigate]);
 
-  useEffect(() => {
-    // Responsive cho thanh side bar
-    if (width > 900) {
-      setCollapsed(true);
-    } else {
-      setCollapsed(false);
-    }
-  }, [width]);
-
   return (
     <Layout hasSider style={{ overflowX: "hidden" }}>
       <Sider
         trigger={null}
         collapsible
-        collapsed={!collapsed}
-        width={250}
-        collapsedWidth={80}
+        collapsed={collapsed}
+        width={200}
+        collapsedWidth={70}
         style={{
           overflow: "auto",
           height: "100vh",
@@ -198,6 +189,7 @@ const Main = ({ hide }) => {
           left: 0,
           top: 0,
           bottom: 0,
+          boxShadow: "0 3px 12px rgba(57, 63, 72, 0.3)",
         }}
       >
         {/*Sider content*/}
@@ -205,15 +197,17 @@ const Main = ({ hide }) => {
       </Sider>
       <Layout
         style={{
-          marginLeft: collapsed ? 250 : 80,
-          transitionDuration: "300ms",  
+          marginLeft: collapsed ? 70 : 200,
+          transitionDuration: "100ms",
+          height: "100vh",
         }}
       >
         <Header
           style={{
             padding: 0,
-            background: "#023E8A",
-            borderBottom: "1px solid gray",
+            background: "#FFFFFF",
+            // borderBottom: "2px solid silver",
+            boxShadow: "0 3px 5px rgba(57, 63, 72, 0.3)",
           }}
         >
           {/*Component for header*/}
