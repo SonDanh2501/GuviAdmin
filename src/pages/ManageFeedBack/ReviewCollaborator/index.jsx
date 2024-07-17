@@ -284,8 +284,13 @@ const ReviewCollaborator = () => {
         {/* Container cho total đánh giá */}
         <div className="flex flex-row gap-8">
           <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
-            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-green-500/80 rounded-md ">
-              <span className=" uppercase font-bold text-white">Đánh giá 5 sao</span>
+            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-green-500/25 rounded-lg">
+              <IoStar
+                size="1.2rem"
+                color="#008000" // green
+                style={{ marginBottom: "2px" }}
+              />
+              <span className=" uppercase font-bold">Đánh giá 5 sao</span>
             </div>
             <div className="h-2/3 flex my-2">
               <span className="w-1/2 flex flex-col items-center justify-center border-r-2">
@@ -302,7 +307,12 @@ const ReviewCollaborator = () => {
             </div>
           </div>
           <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
-            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-lime-500/80 rounded-md ">
+            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-lime-500/25 rounded-lg">
+              <IoStar
+                size="1.2rem"
+                color="#2fc22f" // light green
+                style={{ marginBottom: "2px" }}
+              />
               <span className=" uppercase font-bold">Đánh giá 4 sao</span>
             </div>
             <div className="h-2/3 flex my-2">
@@ -320,7 +330,12 @@ const ReviewCollaborator = () => {
             </div>
           </div>
           <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
-            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-yellow-500/80 rounded-md ">
+            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-yellow-500/25 rounded-lg">
+              <IoStar
+                size="1.2rem"
+                color="#FFD700"
+                style={{ marginBottom: "2px" }}
+              />
               <span className=" uppercase font-bold">Đánh giá 3 sao</span>
             </div>
             <div className="h-2/3 flex my-2">
@@ -341,7 +356,12 @@ const ReviewCollaborator = () => {
             </div>
           </div>
           <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
-            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-orange-500/80 rounded-md ">
+            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-orange-500/25 rounded-lg">
+              <IoStar
+                size="1.2rem"
+                color="#FFA500" // orange
+                style={{ marginBottom: "2px" }}
+              />
               <span className=" uppercase font-bold">Đánh giá 2 sao</span>
             </div>
             <div className="h-2/3 flex my-2">
@@ -359,7 +379,12 @@ const ReviewCollaborator = () => {
             </div>
           </div>
           <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
-            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-red-500/80 rounded-md ">
+            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-red-500/25 rounded-md ">
+              <IoStar
+                size="1.2rem"
+                color="red"
+                style={{ marginBottom: "2px" }}
+              />
               <span className=" uppercase font-bold">Đánh giá 1 sao</span>
             </div>
             <div className="h-2/3 flex my-2">
