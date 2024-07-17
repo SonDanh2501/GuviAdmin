@@ -244,12 +244,13 @@
 
 .ant-layout-sider-children {
   background-color: #FFFFFF;
-  border-right: 1px solid silver;
+  // box-shadow: 10px 0 10px -5px #333;
+  // border-right: 1px solid silver;
 }
 
 .ant-menu {
   background-color: #FFFFFF;
-  padding: 15px 0 10px 0px;
+  padding: 0 0 10px 0;
 
   /* ~~~ Css của một item ~~~ */
   .ant-menu-item {

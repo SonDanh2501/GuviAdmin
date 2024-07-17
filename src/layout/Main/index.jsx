@@ -189,6 +189,7 @@ const Main = ({ hide }) => {
           left: 0,
           top: 0,
           bottom: 0,
+          boxShadow: "0 3px 12px rgba(57, 63, 72, 0.3)",
         }}
       >
         {/*Sider content*/}
@@ -204,7 +205,8 @@ const Main = ({ hide }) => {
           style={{
             padding: 0,
             background: "#FFFFFF",
-            borderBottom: "2px solid silver",
+            // borderBottom: "2px solid silver",
+            boxShadow: "0 3px 5px rgba(57, 63, 72, 0.3)",
           }}
         >
           {/*Component for header*/}
