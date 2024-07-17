@@ -238,7 +238,6 @@ const DataTable = (props) => {
               </div>
             );
             break;
-
           case "service":
             return (
               <div>
@@ -383,7 +382,7 @@ const DataTable = (props) => {
             );
             break;
           }
-          case "subject_transaction": {
+          case "subject": {
             let _type_wallet = "";
             if (data?.type_transfer === "top_up") {
               if (data?.subject === "customer") {
@@ -961,10 +960,7 @@ const DataTable = (props) => {
               indexSlice > 0 ? getDataView.slice(0, max) + "..." : getDataView;
             return (
               <Tooltip placement="topRight" title={getDataView}>
-                <span className={`${item?.fontSize} `}>
-                  {" "}
-                  {sliceData}
-                </span>
+                <span className={`${item?.fontSize} `}> {sliceData}</span>
               </Tooltip>
             );
             break;
