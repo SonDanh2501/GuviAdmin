@@ -243,11 +243,12 @@
 }
 
 .ant-layout-sider-children {
-  background-color: #1B2034;
+  background-color: #FFFFFF;
+  border-right: 1px solid silver;
 }
 
 .ant-menu {
-  background-color: #1B2034;
+  background-color: #FFFFFF;
   padding: 15px 0 10px 0px;
 
   /* ~~~ Css của một item ~~~ */
@@ -266,7 +267,10 @@
     }
 
     // Icon
-    .ant-menu-item-icon {}
+    .ant-menu-item-icon {
+      color: #9e68df;
+
+    }
   }
 
   /* ~~~ Css của item selected ~~~ */
@@ -284,16 +288,11 @@
 
     // Icon
     .ant-menu-item-icon {
-      color: #FD7B3C;
     }
   }
 
   /* ~~~ Css của item là submenu ~~~ */
   .ant-menu-submenu {
-    :hover {
-      color: #FFFFFF;
-    }
-
     // Label và cả icon
     .ant-menu-submenu-title {
       // color: red;
@@ -310,17 +309,19 @@
       }
 
       // icon
-      .ant-menu-item-icon {}
+      .ant-menu-item-icon {
+        color: #9e68df;
+      }
 
     }
   }
 
   /* ~~~ Css của item là submenu selected ~~~ */
   .ant-menu-submenu-selected {
-
     // Label và cả icon
     .ant-menu-submenu-title {
-      color: #FD7B3C;
+      background-color: #d8c2f2;
+      // color: #FD7B3C;
       // height: fit-content !important;
       // padding-top: 14px !important;
       // padding-bottom: 14px !important;
