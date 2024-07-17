@@ -199,6 +199,7 @@ const Main = ({ hide }) => {
         style={{
           marginLeft: collapsed ? 70 : 200,
           transitionDuration: "100ms",
+          height: "100vh",
         }}
       >
         <Header
