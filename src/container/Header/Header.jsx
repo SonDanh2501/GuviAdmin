@@ -28,6 +28,7 @@ import {
 
 import logoVN from "../../assets/images/vn.svg";
 import logoUS from "../../assets/images/en.svg";
+import defaultAvatar from '../../assets/images/avatar.png'
 const { Option } = Select;
 
 const Header = ({ onClick, hide }) => {
@@ -204,14 +205,14 @@ const Header = ({ onClick, hide }) => {
           }}
           trigger={["click"]}
         >
-          <div>
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                <a className="text-name">Xin chào, {user?.full_name}</a>
-                <CaretDownOutlined className="icon-down" />
-              </Space>
-            </a>
-          </div>
+          <span
+            className=" flex items-center justify-center gap-2"
+            onClick={(e) => e.preventDefault()}
+          >
+            <img style={{ height: "26px" }} src={defaultAvatar}></img>
+            <a className="text-name">{user?.full_name}</a>
+            <CaretDownOutlined className="icon-down" />
+          </span>
         </Dropdown>
       </div>
     </div>
