@@ -38,9 +38,7 @@ import useWindowDimensions from "../../helper/useWindowDimensions";
 import { useCookies } from "../../helper/useCookies";
 import Tabs from "../../components/tabs/tabs1";
 import "./index.scss";
-import icons from '../../utils/icons'
 
-const {IoAddCircleOutline } = icons
 const ManageOrder = () => {
   const itemTab = [
     {
