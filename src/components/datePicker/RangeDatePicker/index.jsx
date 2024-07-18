@@ -108,7 +108,6 @@ const RangeDatePicker = (props) => {
         setEnd(rangeDateDefaults[1]);
         setStartCalendar(rangeDateDefaults[0]);
         setEndCalendar(rangeDateDefaults[1]);
-        console.log("CHAY HAM THU NHAT")
         setStartDate(toIsoString(rangeDateDefaults[0]._d));
         setEndDate(toEndOfDayIsoString(rangeDateDefaults[1]._d));
       } else {
@@ -126,7 +125,6 @@ const RangeDatePicker = (props) => {
           setEndCalendar(endDate);
           // setStartDate(startDate.toISOString());
           // setEndDate(endDate.toISOString());
-          console.log("CHAY HAM THU HAI")
           setStartDate(toIsoString(startDate._d));
           setEndDate(toEndOfDayIsoString(endDate._d));
           setTitle(`${i18n.t(item.title, { lng: lang })}`);
@@ -152,7 +150,6 @@ const RangeDatePicker = (props) => {
       setEndCalendar(endDate);
           // setStartDate(startDate.toISOString());
           // setEndDate(endDate.toISOString());
-          console.log("CHAY HAM THU BA")
           setStartDate(toIsoString(startDate._d));
           setEndDate(toEndOfDayIsoString(endDate._d));
 
@@ -180,7 +177,6 @@ const RangeDatePicker = (props) => {
   }
   const handleOk = () => {
     setOpen(false);
-    console.log("CHẠY HÀM THỨ TƯ");
     if (start._d) {
       setStartDate(toIsoString(start._d));
     } else {
@@ -700,7 +696,7 @@ const RangeDatePicker = (props) => {
 // console.log("check started date", sta)
 // console.log("check started date")
 
-  return ( 
+  return (
     <div>
       <div>
         <div className="btn-date-picker" onClick={() => setOpen(!open)}>
@@ -756,7 +752,9 @@ const RangeDatePicker = (props) => {
                           : "div-tab-item"
                       }
                     >
-                      {valueTab !== "setting" && width > 490 && (item.value === "months" || item.value === "years") ? (
+                      {valueTab !== "setting" &&
+                      width > 490 &&
+                      (item.value === "months" || item.value === "years") ? (
                         <a
                           style={{ color: "lightgray", cursor: "not-allowed" }}
                         >
@@ -779,6 +777,7 @@ const RangeDatePicker = (props) => {
               <div className="">
                 <Calendar
                   className={""}
+                  // showDoubleView
                   onChange={onChange}
                   onClickDay={handleDayChange}
                   onClickMonth={(value) => handleMonthChange(value)}
@@ -890,6 +889,7 @@ const RangeDatePicker = (props) => {
                   }}
                   maxDate={disableFutureDay ? new Date() : ""} // Disabled all futured day
                 />
+
               </div>
             </div>
           </div>

@@ -3,7 +3,7 @@ import {
   UilFileExport,
   UilTimes,
 } from "@iconscout/react-unicons";
-import { SearchOutlined, CaretDownOutlined } from "@ant-design/icons";
+import { SearchOutlined, CaretDownOutlined, PoweroffOutlined, PlusCircleOutlined, } from "@ant-design/icons";
 import {
   Button,
   DatePicker,
@@ -38,7 +38,9 @@ import useWindowDimensions from "../../helper/useWindowDimensions";
 import { useCookies } from "../../helper/useCookies";
 import Tabs from "../../components/tabs/tabs1";
 import "./index.scss";
+import icons from '../../utils/icons'
 
+const {IoAddCircleOutline } = icons
 const ManageOrder = () => {
   const itemTab = [
     {
@@ -511,9 +513,10 @@ const ManageOrder = () => {
             {/*Tạo đơn*/}
             <Button
               className="btn-add"
+              icon={<PlusCircleOutlined />}
               onClick={() => navigate("/group-order/manage-order/create-order")}
             >
-              <i class="uil uil-plus-circle"></i>
+              {/* <i class="uil uil-plus-circle"></i> */}
               {`${i18n.t("create_order", { lng: lang })}`}
             </Button>
             {/*Thanh tìm kiếm*/}

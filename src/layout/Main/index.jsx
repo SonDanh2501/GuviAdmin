@@ -174,30 +174,56 @@ const Main = ({ hide }) => {
     dispatch(getUserAction.getUserRequest());
   }, [dispatch, navigate]);
 
+  useEffect(() => {
+    // Responsive cho thanh side bar
+    if (width > 900) {
+      setCollapsed(true);
+    } else {
+      setCollapsed(false);
+    }
+  }, [width]);
   return (
     <Layout hasSider style={{ overflowX: "hidden" }}>
-      <Sider
-        trigger={null}
-        collapsible
-        collapsed={collapsed}
-        width={200}
-        collapsedWidth={70}
-        style={{
-          overflow: "auto",
-          height: "100vh",
-          position: "fixed",
-          left: 0,
-          top: 0,
-          bottom: 0,
-          boxShadow: "0 3px 12px rgba(57, 63, 72, 0.3)",
-        }}
-      >
-        {/*Sider content*/}
-        <Sidebar hide={collapsed} />
-      </Sider>
+      {width > 900 ? (
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          width={200}
+          collapsedWidth={70}
+          style={{
+            overflow: "auto",
+            height: "100vh",
+            position: "fixed",
+            left: 0,
+            top: 0,
+            bottom: 0,
+            boxShadow: "0 3px 12px rgba(57, 63, 72, 0.3)",
+          }}
+        >
+          {/*Sider content*/}
+          <Sidebar hide={collapsed} />
+        </Sider>
+      ) : (
+        <Drawer
+          open={collapsed}
+          width={250}
+          onClose={() => setCollapsed(false)}
+          placement="left"
+          headerStyle={{
+            height: 30,
+            paddingLeft: 0,
+            display: "none",
+            margin: 0,
+          }}
+        >
+          {/*Drawler content*/}
+          <Sidebar hide={true} />
+        </Drawer>
+      )}
       <Layout
         style={{
-          marginLeft: collapsed ? 70 : 200,
+          marginLeft: width > 900 ? (collapsed ? 70 : 200) : 0,
           transitionDuration: "100ms",
           height: "100vh",
         }}
