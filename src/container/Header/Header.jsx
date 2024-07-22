@@ -24,12 +24,12 @@ import {
   IoSunny,
   IoSunnyOutline,
   IoGlobeOutline,
-  IoCaretForwardOutline 
+  IoCaretForwardOutline,
+  IoPersonCircle ,
 } from "react-icons/io5";
 
 import logoVN from "../../assets/images/vn.svg";
 import logoUS from "../../assets/images/en.svg";
-import defaultAvatar from '../../assets/images/avatar.png'
 import Sidebar from "../../layout/Slidebar";
 const { Option } = Select;
 
@@ -218,7 +218,8 @@ const Header = ({ onClick, hide }) => {
             className=" flex items-center justify-center gap-2"
             onClick={(e) => e.preventDefault()}
           >
-            <img style={{ height: "26px" }} src={defaultAvatar}></img>
+            {/* <img style={{ height: "26px" }} src={defaultAvatar}></img> */}
+            <IoPersonCircle size="1.5rem" color="#9e68df" />
             <a className="text-name">{user?.full_name}</a>
             <CaretDownOutlined className="icon-down" />
           </span>
